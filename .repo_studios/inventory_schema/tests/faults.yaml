@@ -1,0 +1,64 @@
+- id: tests.faults.aggregate_and_gate
+  name: "Fault Aggregate And Gate Test"
+  path: .repo_studios_legacy/repo_tests/test_fault_aggregate_and_gate.py
+  asset_kind: test
+  roles:
+    - test_case
+  maturity: legacy
+  description: "Placeholder for validating fault aggregation gating once diagnostics pipeline is restored."
+  dependencies:
+    internal_paths: []
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.generate_fault_artifacts
+  tags:
+    - faults
+    - diagnostics
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Legacy test body removed pending new aggregate-and-gate implementation."
+    decisions:
+      - "Keep file tracked to preserve historical coverage expectations."
+    blockers:
+      - "Awaiting revived aggregation script in new repo layout."
+- id: tests.faults.generate_fault_artifacts
+  name: "Generate Fault Artifacts Test"
+  path: .repo_studios_legacy/repo_tests/test_generate_fault_artifacts.py
+  asset_kind: test
+  roles:
+    - test_case
+  maturity: legacy
+  description: "Placeholder to exercise artifact bundling logic once migration completes."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_scripts/generate_fault_artifacts.py
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.generate_fault_artifacts
+    - scripts.health.dump_faulthandler_once
+  tags:
+    - faults
+    - diagnostics
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Test currently empty; retains slot to capture regression coverage for artifact bundling."
+    decisions:
+      - "Mark dependency on helper modules for migration planning."
+    blockers:
+      - "Requires new assertions after porting scripts to `.repo_studios/`."

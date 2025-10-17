@@ -1,0 +1,557 @@
+- id: scripts.health.anchor_health_report
+  name: "Anchor Health Report"
+  path: .repo_studios_legacy/repo_scripts/anchor_health_report.py
+  asset_kind: script
+  roles:
+    - report_generator
+    - validator
+  maturity: legacy
+  description: "Generates composite anchor health metrics across documentation sets."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_docs/anchor_health_playbook.md
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - human_developer
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.anchor_inventory
+    - docs.anchor_validation_protocol
+  tags:
+    - health
+    - anchors
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Assumes `.copilot_instructions` anchor manifests; align with new docs catalog."
+    decisions:
+      - "Integrate with health suite orchestrator once ported."
+    blockers: []
+- id: scripts.health.anchor_inventory
+  name: "Anchor Inventory"
+  path: .repo_studios_legacy/repo_scripts/anchor_inventory.py
+  asset_kind: script
+  roles:
+    - report_generator
+    - validator
+  maturity: legacy
+  description: "Enumerates anchors discovered in documentation and classifies by reliability."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_docs/anchor_inventory_playbook.md
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.anchor_health_report
+  tags:
+    - health
+    - anchors
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Needs integration with new documentation catalog to improve accuracy."
+    decisions:
+      - "Plan to emit YAML to feed future dashboards."
+    blockers: []
+- id: scripts.health.health_suite_orchestrator
+  name: "Health Suite Orchestrator"
+  path: .repo_studios_legacy/repo_scripts/health_suite_orchestrator.py
+  asset_kind: script
+  roles:
+    - orchestrator
+    - validator
+  maturity: legacy
+  description: "Coordinates execution of all health checks and aggregates their results."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_scripts/health_suite_summary.py
+      - .repo_studios_legacy/repo_docs/health_suite_overview.md
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.health_suite_summary
+    - scripts.health.dep_hygiene_report
+    - scripts.health.lizard_report
+  tags:
+    - health
+    - orchestrator
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Designed for sequential CLI execution; consider modular tasks for new pipelines."
+    decisions:
+      - "Use inventory schema outputs to define orchestrated runs."
+    blockers: []
+- id: scripts.health.health_suite_summary
+  name: "Health Suite Summary"
+  path: .repo_studios_legacy/repo_scripts/health_suite_summary.py
+  asset_kind: script
+  roles:
+    - summarizer
+    - report_generator
+  maturity: legacy
+  description: "Summarizes health suite execution into a consolidated report."
+  dependencies:
+    internal_paths: []
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - human_developer
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.health_suite_orchestrator
+  tags:
+    - health
+    - reporting
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Outputs Markdown; evaluate YAML summary for inventory ingestion."
+    decisions:
+      - "Coordinate with reporting layer from inventory spec."
+    blockers: []
+- id: scripts.health.churn_complexity_heatmap
+  name: "Churn Complexity Heatmap"
+  path: .repo_studios_legacy/repo_scripts/churn_complexity_heatmap.py
+  asset_kind: script
+  roles:
+    - report_generator
+    - validator
+  maturity: legacy
+  description: "Produces code churn versus complexity heatmaps from Git history."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_data/churn_complexity.csv
+    external_tools:
+      - git
+    inputs: []
+  consumers:
+    - human_developer
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - docs.health_suite_overview
+  tags:
+    - health
+    - analytics
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Relies on manually curated CSV; plan to automate via new reports pipeline."
+    decisions:
+      - "Port visualization output to inventory dashboard workspace."
+    blockers: []
+- id: scripts.health.dep_hygiene_report
+  name: "Dependency Hygiene Report"
+  path: .repo_studios_legacy/repo_scripts/dep_hygiene_report.py
+  asset_kind: script
+  roles:
+    - report_generator
+    - validator
+  maturity: legacy
+  description: "Scores dependency hygiene and surfaces risky packages."
+  dependencies:
+    internal_paths: []
+    external_tools:
+      - pip
+    inputs: []
+  consumers:
+    - coding_agent
+    - human_developer
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.health_suite_orchestrator
+  tags:
+    - health
+    - dependencies
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Currently scans legacy requirements files; update to new environment inventory."
+    decisions:
+      - "Tie into automated Trivy runs for comprehensive coverage."
+    blockers: []
+- id: scripts.health.import_graph_report
+  name: "Import Graph Report"
+  path: .repo_studios_legacy/repo_scripts/import_graph_report.py
+  asset_kind: script
+  roles:
+    - report_generator
+    - validator
+  maturity: legacy
+  description: "Builds a module import graph and highlights cycles."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_docs/import_graph_schema.md
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - human_developer
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.check_import_boundaries
+  tags:
+    - health
+    - imports
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Should integrate with new boundary validation outputs."
+    decisions:
+      - "Consider Graphviz export for visualization pipeline."
+    blockers: []
+- id: scripts.health.lizard_report
+  name: "Lizard Report"
+  path: .repo_studios_legacy/repo_scripts/lizard_report.py
+  asset_kind: script
+  roles:
+    - report_generator
+    - validator
+  maturity: legacy
+  description: "Runs Lizard complexity analysis and formats the results."
+  dependencies:
+    internal_paths: []
+    external_tools:
+      - lizard
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.health_suite_orchestrator
+  tags:
+    - health
+    - complexity
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Depends on lizard CLI availability; document within new tooling matrix."
+    decisions:
+      - "Offer JSON output for downstream automation."
+    blockers: []
+- id: scripts.health.typecheck_report
+  name: "Typecheck Report"
+  path: .repo_studios_legacy/repo_scripts/typecheck_report.py
+  asset_kind: script
+  roles:
+    - report_generator
+    - validator
+  maturity: legacy
+  description: "Summarizes mypy runs and surfaces problematic modules."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_scripts/mypy_refresh_baselines.py
+    external_tools:
+      - mypy
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.mypy_refresh_baselines
+  tags:
+    - health
+    - typing
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Outputs plain text; capture structured results for inventory pipeline."
+    decisions:
+      - "Bundle with new type coverage tracking targets."
+    blockers: []
+- id: scripts.health.mypy_refresh_baselines
+  name: "Mypy Refresh Baselines"
+  path: .repo_studios_legacy/repo_scripts/mypy_refresh_baselines.py
+  asset_kind: script
+  roles:
+    - orchestrator
+    - validator
+  maturity: legacy
+  description: "Recomputes stored mypy baselines used for regression detection."
+  dependencies:
+    internal_paths: []
+    external_tools:
+      - mypy
+    inputs: []
+  consumers:
+    - coding_agent
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.typecheck_report
+  tags:
+    - health
+    - typing
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Relies on legacy baseline directory; align with new inventory storage."
+    decisions:
+      - "Explore parameterization via inventory metadata."
+    blockers: []
+- id: scripts.health.compare_monkey_patch_trends
+  name: "Compare Monkey Patch Trends"
+  path: .repo_studios_legacy/repo_scripts/compare_monkey_patch_trends.py
+  asset_kind: script
+  roles:
+    - report_generator
+    - validator
+  maturity: legacy
+  description: "Analyzes monkey patch classifications over time to detect regressions."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_scripts/monkey_patch_classify.py
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - human_developer
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.monkey_patch_classify
+    - scripts.health.scan_monkey_patches
+  tags:
+    - health
+    - monkey_patch
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Depends on legacy serialization format; update to inventory schema."
+    decisions:
+      - "Integrate with dashboards once data normalized."
+    blockers: []
+- id: scripts.health.monkey_patch_classify
+  name: "Monkey Patch Classify"
+  path: .repo_studios_legacy/repo_scripts/monkey_patch_classify.py
+  asset_kind: script
+  roles:
+    - report_generator
+    - validator
+  maturity: legacy
+  description: "Classifies discovered monkey patches by risk and category."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_scripts/scan_monkey_patches.py
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.compare_monkey_patch_trends
+  tags:
+    - health
+    - monkey_patch
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Leverages rule sets stored under `.copilot_instructions`; port to standards inventory."
+    decisions:
+      - "Define consistent risk scoring in new schema."
+    blockers: []
+- id: scripts.health.scan_monkey_patches
+  name: "Scan Monkey Patches"
+  path: .repo_studios_legacy/repo_scripts/scan_monkey_patches.py
+  asset_kind: script
+  roles:
+    - validator
+  maturity: legacy
+  description: "Scans the codebase for monkey patch patterns and outputs findings."
+  dependencies:
+    internal_paths: []
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.monkey_patch_classify
+  tags:
+    - health
+    - monkey_patch
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Uses regex heuristics that need validation under new module layout."
+    decisions:
+      - "Plan to surface output via inventory dashboards."
+    blockers: []
+- id: scripts.health.pytest_log_runner
+  name: "Pytest Log Runner"
+  path: .repo_studios_legacy/repo_scripts/pytest_log_runner.py
+  asset_kind: script
+  roles:
+    - report_generator
+    - validator
+  maturity: legacy
+  description: "Executes pytest with logging hooks to capture structured diagnostics."
+  dependencies:
+    internal_paths: []
+    external_tools:
+      - pytest
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets: []
+  tags:
+    - health
+    - testing
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Integrate with health suite orchestrator for unified reporting."
+    decisions:
+      - "Adopt inventory schema for result storage."
+    blockers: []
+- id: scripts.health.generate_fault_artifacts
+  name: "Generate Fault Artifacts"
+  path: .repo_studios_legacy/repo_scripts/generate_fault_artifacts.py
+  asset_kind: script
+  roles:
+    - report_generator
+    - validator
+  maturity: legacy
+  description: "Collects fault handler output into artifact bundles."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_scripts/faulthandler.py
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.dump_faulthandler_once
+  tags:
+    - health
+    - faults
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Assumes artifacts directory in legacy layout; update to new observability storage."
+    decisions:
+      - "Standardize artifact naming to inventory schema."
+    blockers: []
+- id: scripts.health.dump_faulthandler_once
+  name: "Dump Fault Handler Once"
+  path: .repo_studios_legacy/repo_scripts/dump_faulthandler_once.py
+  asset_kind: script
+  roles:
+    - validator
+  maturity: legacy
+  description: "Triggers Python faulthandler to capture a single diagnostic dump."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_scripts/faulthandler.py
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.generate_fault_artifacts
+  tags:
+    - health
+    - faults
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Serves as helper for diagnostics; confirm compatibility with new runner flows."
+    decisions:
+      - "Expose via CLI flag in orchestrator once migrated."
+    blockers: []
+- id: scripts.health.faulthandler_module
+  name: "Fault Handler Module"
+  path: .repo_studios_legacy/repo_scripts/faulthandler.py
+  asset_kind: script
+  roles:
+    - validator
+  maturity: legacy
+  description: "Shared helper module encapsulating faulthandler setup."
+  dependencies:
+    internal_paths: []
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.dump_faulthandler_once
+    - scripts.health.generate_fault_artifacts
+  tags:
+    - health
+    - faults
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Centralizes helper code; verify packaging approach post-migration."
+    decisions:
+      - "Consider relocating to shared module under `.repo_studios`."
+    blockers: []

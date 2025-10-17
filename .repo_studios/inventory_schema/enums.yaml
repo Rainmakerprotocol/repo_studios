@@ -1,0 +1,34 @@
+asset_kind:
+  - document
+  - script
+  - report_artifact
+  - test
+  - config
+  - template
+  - data_sample
+roles:
+  - orchestrator
+  - summarizer
+  - report_generator
+  - standards
+  - validator
+  - cli
+  - test_case
+  - config_provider
+  - artifact_sample
+  - playbook
+maturity:
+  - incubating
+  - stable
+  - legacy
+  - deprecated
+consumers:
+  - coding_agent
+  - human_developer
+  - ci_pipeline
+  - docs_generator
+  - external_tool
+status:
+  - active
+  - needs_review
+  - archived

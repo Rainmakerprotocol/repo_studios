@@ -1,0 +1,43 @@
+title: "Secondary views and validation plan for inventory"
+timestamp: "2025-10-17T20:50:00Z"
+author: copilot
+phase: phase-1-foundation
+summary: >-
+  Outlined how to derive filtered views from the authoritative inventory YAML and
+  proposed validation tooling (schema checks, lint gates) to keep the catalog
+  healthy without duplicating data.
+details:
+  - **Secondary views**:
+    - Generate role-filtered exports (e.g., `inventory_views/scripts.yaml`, `inventory_views/docs.yaml`) via automation that reads the master index and emits subsets on demand.
+    - Provide a lightweight Markdown summary for humans (`inventory_views/summary.md`) listing key counts by role, maturity, and status.
+    - Produce a dependency graph JSON (nodes/edges) so agents can visualize relationships without scanning the full YAML.
+  - **Generation approach**: implement a `studio-inventory-export` CLI (Python script) that loads the canonical YAML, applies filters, and writes outputs under `.repo_studios/inventory_views/` with timestamps.
+  - **Validation tooling**:
+    - Maintain a JSON Schema (or Yamale) definition for the inventory to validate required fields/enums.
+    - Add a `studio-inventory-validate` Make target that runs schema checks and ensures all referenced paths exist.
+    - Integrate lint checks (YAML formatting, duplicated IDs) and surface results in CI.
+    - Plan for an optional "staleness" check highlighting entries where `last_reviewed` exceeds a configurable threshold.
+  - **Maintenance practices**:
+    - Regenerate secondary views after any inventory edit (Make target can chain validation and exports).
+    - Include the view outputs in `.gitignore` if they are purely generated, or keep a curated `summary.md` under version control for quick browsing.
+inputs:
+  sources:
+    - path: agent_notes/inventory/inventory_schema_draft_2025-10-17_204200.yaml
+      description: Schema draft informing which fields to expose in derived views.
+outputs:
+  artifacts: []
+status: complete
+follow_up:
+  - Implement the `studio-inventory-export` and `studio-inventory-validate` tooling in a future phase.
+  - Decide whether generated views should reside in version control or be treated as build artifacts.
+tags:
+  - inventory
+  - schema
+  - views
+  - phase1
+notes:
+  context: "Group 3 of Phase 1 — planning derived outputs and health checks."
+  decisions:
+    - Favor automation that reads from the canonical YAML instead of maintaining multiple sources.
+    - Use schema validation plus path existence checks to prevent drift.
+  blockers: []

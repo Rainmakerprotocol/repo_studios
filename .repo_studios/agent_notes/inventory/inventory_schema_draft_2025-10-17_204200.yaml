@@ -1,0 +1,66 @@
+title: "Draft of Repo Studios inventory schema"
+timestamp: "2025-10-17T20:42:00Z"
+author: copilot
+phase: phase-1-foundation
+summary: >-
+  Proposed the structure for the authoritative YAML inventory, covering required
+  metadata for documents, scripts, reports, tests, and supporting assets along
+  with enumerations for roles, maturity, consumers, and artifact formats.
+details:
+  - **Core identity fields**: each record carries `id` (slug), `name`, `path`, and `asset_kind` (document, script, report_artifact, test, config, template).
+  - **Role taxonomy**: `roles` list drawn from canonical tags (`orchestrator`, `summarizer`, `report_generator`, `standards`, `validator`, `cli`, `test_case`, `config_provider`, `artifact_sample`).
+  - **Maturity model**: `maturity` enum with `incubating`, `stable`, `legacy`, `deprecated`; optional `introduced` and `last_reviewed` ISO timestamps.
+  - **Dependencies**: nested structure distinguishing `internal_paths`, `external_tools`, and `inputs` (data files or directories) so we can reason about execution requirements.
+  - **Consumers**: `consumers` array noting who/what uses the asset (`coding_agent`, `human_developer`, `ci_pipeline`, `docs_generator`).
+  - **Status + lifecycle**: `status` (`active`, `needs_review`, `archived`) and optional `governance_flags` for retention or compliance notes.
+  - **Format metadata**: `artifact_type` (e.g., `py`, `md`, `yaml`, `json`, `tsv`, `log`) and `description` summarizing purpose.
+  - **Linkage**: `related_assets` list referencing other inventory `id`s (e.g., scripts generating reports, tests covering scripts).
+  - **Tagging**: free-form `tags` plus `phase_origin` to track when/where the asset entered the plan.
+  - **Provenance**: `source_repo` (legacy/new) and `notes` for clarifications or migration history.
+  - **Example entry**:
+    ```yaml
+    - id: "scripts.standards_index_cli"
+      name: "Standards Index CLI"
+      path: ".repo_studios_legacy/repo_scripts/standards_index_cli.py"
+      asset_kind: "script"
+      roles: ["cli", "orchestrator"]
+      maturity: "stable"
+      introduced: "2023-11-05T00:00:00Z"
+      last_reviewed: "2025-09-12T18:00:00Z"
+      dependencies:
+        internal_paths: [".repo_studios_legacy/repo_files/copilot_standards_index.yaml"]
+        external_tools: []
+        inputs: []
+      consumers: ["coding_agent", "ci_pipeline"]
+      status: "needs_review"
+      governance_flags: ["pending_migration"]
+      artifact_type: "py"
+      description: "CLI wrapper to query the consolidated standards index."
+      related_assets: ["docs.standards_index_schema", "scripts.standards_index_diff"]
+      tags: ["standards", "inventory", "phase1"]
+      phase_origin: "legacy"
+      source_repo: "repo_studios_legacy"
+      notes: "Adapt paths after migration to .repo_studios/scripts."
+    ```
+inputs:
+  sources:
+    - path: .repo_studios_legacy/
+      description: Asset audit results informing field coverage.
+    - path: repo_studios_build_plan.md
+      description: Phase 1 directives for inventory schema design.
+outputs:
+  artifacts: []
+status: complete
+follow_up:
+  - Validate schema coverage with you and identify any missing attributes (e.g., execution frequency, owners).
+  - Plan secondary views and validation tooling (Group 3).
+tags:
+  - inventory
+  - schema
+  - phase1
+notes:
+  context: "Group 2 of Phase 1 — schema definition based on baseline audit."
+  decisions:
+    - Adopt role and maturity enumerations to support filtering and governance.
+    - Store provenance and migration hints to help future agents adjust paths.
+  blockers: []

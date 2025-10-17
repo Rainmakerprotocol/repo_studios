@@ -1,0 +1,17 @@
+summary: "Inventoried legacy scripts into standards, health, and utility catalogs following inventory schema."
+context:
+  phase: "phase-1-step-1"
+  focus_area: scripts_catalog
+  related_tasks:
+    - inventory_schema_population
+    - migration_readiness
+observations:
+  - "Standards tooling tightly coupled to legacy `.copilot_instructions` paths that require redirection."
+  - "Health suite assets span diagnostics, typing, and monkey patch monitoring; grouped for orchestrator planning."
+  - "Utility validators share documentation governance concerns and will link to docs catalog."
+decisions:
+  - "Track each script with unique `scripts.<group>.<name>` ids for migration traceability."
+  - "Leave dependencies empty arrays when unknown to maintain schema compatibility."
+next_steps:
+  - "Populate test inventories mirroring script grouping structure."
+  - "Map shared helper modules to avoid duplication across catalogs."

@@ -1,0 +1,189 @@
+- id: scripts.utilities.check_doc_anchors
+  name: "Check Doc Anchors"
+  path: .repo_studios_legacy/repo_scripts/check_doc_anchors.py
+  asset_kind: script
+  roles:
+    - validator
+  maturity: legacy
+  description: "Validates that documented anchors exist and conform to expectations."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_docs/anchor_health_playbook.md
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.utilities.verify_docs_integrity
+  tags:
+    - docs
+    - validation
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Currently targets Markdown in legacy `docs/`; align with new catalog paths."
+    decisions:
+      - "Hook into documentation inventory for scope definition."
+    blockers: []
+- id: scripts.utilities.check_markdown_anchors
+  name: "Check Markdown Anchors"
+  path: .repo_studios_legacy/repo_scripts/check_markdown_anchors.py
+  asset_kind: script
+  roles:
+    - validator
+  maturity: legacy
+  description: "Parses Markdown to verify anchor formatting and detect duplicates."
+  dependencies:
+    internal_paths: []
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.utilities.check_doc_anchors
+  tags:
+    - docs
+    - validation
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Assumes GitHub-style anchors; update rules based on alignment protocol."
+    decisions:
+      - "Adopt shared configuration from standards inventory."
+    blockers: []
+- id: scripts.utilities.check_import_boundaries
+  name: "Check Import Boundaries"
+  path: .repo_studios_legacy/repo_scripts/check_import_boundaries.py
+  asset_kind: script
+  roles:
+    - validator
+    - standards
+  maturity: legacy
+  description: "Ensures imports respect defined layering rules."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_docs/import_graph_schema.md
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.import_graph_report
+  tags:
+    - architecture
+    - validation
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Relies on hardcoded module lists; pull values from inventory enums."
+    decisions:
+      - "Integrate with new dependency governance controls."
+    blockers: []
+- id: scripts.utilities.batch_clean
+  name: "Batch Clean"
+  path: .repo_studios_legacy/repo_scripts/batch_clean.py
+  asset_kind: script
+  roles:
+    - orchestrator
+  maturity: legacy
+  description: "Applies clean-up transformations across multiple files."
+  dependencies:
+    internal_paths: []
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets: []
+  tags:
+    - maintenance
+    - automation
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "General purpose helper; define guardrails before re-enabling."
+    decisions:
+      - "Document supported transformations within standards inventory."
+    blockers: []
+- id: scripts.utilities.find_placeholders
+  name: "Find Placeholders"
+  path: .repo_studios_legacy/repo_scripts/find_placeholders.py
+  asset_kind: script
+  roles:
+    - validator
+  maturity: legacy
+  description: "Scans for unresolved TODO placeholders across the repo."
+  dependencies:
+    internal_paths: []
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - human_developer
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets: []
+  tags:
+    - docs
+    - hygiene
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Offers quick audit for backlog tasks; pair with documentation catalog."
+    decisions:
+      - "Route findings into governance reporting."
+    blockers: []
+- id: scripts.utilities.verify_docs_integrity
+  name: "Verify Docs Integrity"
+  path: .repo_studios_legacy/repo_scripts/verify_docs_integrity.py
+  asset_kind: script
+  roles:
+    - orchestrator
+    - validator
+  maturity: legacy
+  description: "Runs composite checks to ensure documentation integrity (anchors, links, structure)."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_scripts/check_doc_anchors.py
+      - .repo_studios_legacy/repo_scripts/check_markdown_anchors.py
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.anchor_health_report
+  tags:
+    - docs
+    - validation
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Acts as wrapper for other doc validators; update to new path layout."
+    decisions:
+      - "Include schema validation for new documentation catalog."
+    blockers: []

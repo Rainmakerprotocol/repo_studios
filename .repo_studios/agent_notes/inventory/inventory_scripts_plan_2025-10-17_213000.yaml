@@ -1,0 +1,31 @@
+title: "Script catalog grouping strategy"
+timestamp: "2025-10-17T21:30:00Z"
+author: copilot
+phase: phase-1-foundation
+summary: >-
+  Defined how Repo Studios scripts will be inventoried, grouped by function, and
+  stored under dedicated schema folders.
+details:
+  - Create grouped catalogs under `.repo_studios/inventory_schema/scripts/` for standards tooling, health/report generators, and utility/validation helpers.
+  - Apply the inventory template with roles, maturity, consumers, and migration notes for each script.
+  - Document dependencies (internal paths, external tools) when known; otherwise leave arrays empty for later enrichment.
+  - Ensure each catalog highlights scripts requiring refactors (hard-coded paths, legacy dependencies) in the `notes` section.
+inputs:
+  sources:
+    - path: .repo_studios_legacy/repo_scripts/
+      description: Source directory for legacy scripts.
+outputs:
+  artifacts: []
+status: complete
+follow_up:
+  - Populate `scripts/standards.yaml`, `scripts/health_reports.yaml`, and `scripts/utilities.yaml` with inventory entries.
+  - Capture additional notes if new groupings emerge (e.g., nightly automation).
+tags:
+  - inventory
+  - scripts
+  - phase1
+notes:
+  context: "Preparation for detailed script mapping."
+  decisions:
+    - Store grouped catalogs in dedicated folders per request.
+  blockers: []

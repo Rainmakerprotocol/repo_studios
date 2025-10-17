@@ -1,0 +1,233 @@
+- id: scripts.standards.build_index
+  name: "Build Standards Index"
+  path: .repo_studios_legacy/repo_scripts/build_standards_index.py
+  asset_kind: script
+  roles:
+    - orchestrator
+    - standards
+  maturity: legacy
+  description: "Aggregates standards inputs and writes the consolidated index."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_files/copilot_standards_index.yaml
+      - .repo_studios_legacy/repo_docs/standards_index_schema.md
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - docs.standards_extraction_spec
+    - repo_files.copilot_standards_index
+  tags:
+    - standards
+    - inventory
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Relies on legacy `.copilot_instructions` paths that must migrate."
+    decisions:
+      - "Plan to rewire paths to new `.repo_studios/` standards directory."
+    blockers: []
+- id: scripts.standards.extraction
+  name: "Standards Extraction"
+  path: .repo_studios_legacy/repo_scripts/standards_extraction.py
+  asset_kind: script
+  roles:
+    - orchestrator
+    - standards
+  maturity: legacy
+  description: "Runs heuristic extraction flow to propose new standards entries."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_docs/standards_extraction_spec.md
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - docs.standards_extraction_spec
+    - scripts.standards.build_index
+  tags:
+    - standards
+    - extraction
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Auto-accept flow still references `.copilot_instructions`; needs path update."
+    decisions:
+      - "Keep heuristics but modernize configuration handling."
+    blockers: []
+- id: scripts.standards.index_cli
+  name: "Standards Index CLI"
+  path: .repo_studios_legacy/repo_scripts/standards_index_cli.py
+  asset_kind: script
+  roles:
+    - cli
+    - orchestrator
+  maturity: legacy
+  description: "CLI wrapper to query or summarize the standards index."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_files/copilot_standards_index.yaml
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - human_developer
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - docs.standards_index_schema
+    - scripts.standards.build_index
+  tags:
+    - standards
+    - cli
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Currently imports modules via legacy path assumptions."
+    decisions:
+      - "Update to read from relocated inventory files post-migration."
+    blockers: []
+- id: scripts.standards.index_diff
+  name: "Standards Index Diff"
+  path: .repo_studios_legacy/repo_scripts/standards_index_diff.py
+  asset_kind: script
+  roles:
+    - validator
+    - standards
+  maturity: legacy
+  description: "Compares two index files and reports added/removed directives."
+  dependencies:
+    internal_paths: []
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.standards.index_cli
+  tags:
+    - standards
+    - diff
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Ensure output paths align with new inventory views."
+    decisions:
+      - "Consider JSON diff output for machine parsing."
+    blockers: []
+- id: scripts.standards.index_gap
+  name: "Standards Index Gap"
+  path: .repo_studios_legacy/repo_scripts/standards_index_gap.py
+  asset_kind: script
+  roles:
+    - validator
+    - standards
+  maturity: legacy
+  description: "Detects potential directives missing from the standards index."
+  dependencies:
+    internal_paths: []
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.standards.build_index
+  tags:
+    - standards
+    - gap_analysis
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Outputs currently stored under `.copilot_instructions`; relocate to new reports folder."
+    decisions:
+      - "Pair with inventory validation pipeline once implemented."
+    blockers: []
+- id: scripts.standards.prompt_seed
+  name: "Standards Prompt Seed"
+  path: .repo_studios_legacy/repo_scripts/standards_prompt_seed.py
+  asset_kind: script
+  roles:
+    - summarizer
+    - standards
+  maturity: legacy
+  description: "Generates prompt seed outputs from the standards index."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_files/copilot_standards_index.yaml
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - docs.copilot_prompt_engineering_standards
+  tags:
+    - standards
+    - prompts
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Output format may shift to YAML to align with new prompt catalog plans."
+    decisions:
+      - "Keep CLI flexibility but update default paths."
+    blockers: []
+- id: scripts.standards.summary
+  name: "Standards Summary"
+  path: .repo_studios_legacy/repo_scripts/standards_summary.py
+  asset_kind: script
+  roles:
+    - summarizer
+    - standards
+  maturity: legacy
+  description: "Produces summary reports describing current standards coverage."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_files/copilot_standards_index.yaml
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - human_developer
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.standards.build_index
+    - scripts.standards.index_gap
+  tags:
+    - standards
+    - reporting
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Currently emits Markdown summaries; evaluate YAML export for inventory views."
+    decisions:
+      - "Maintain as quick human-readable snapshot post-migration."
+    blockers: []

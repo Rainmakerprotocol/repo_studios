@@ -1,0 +1,34 @@
+title: "Plan for comprehensive inventory mapping"
+timestamp: "2025-10-17T21:15:00Z"
+author: copilot
+phase: phase-1-foundation
+summary: >-
+  Established the approach for representing every Repo Studios asset in the
+  inventory, beginning with documentation and extending to scripts, reports, and
+  tests.
+details:
+  - Produce category-specific catalogs (`docs_catalog.yaml`, `scripts_catalog.yaml`, etc.) derived from the legacy workspace and new `.repo_studios/` assets.
+  - Use the canonical schema template so each entry captures roles, maturity, consumers, and migration guidance.
+  - Capture insights and open questions in accompanying agent notes per category.
+  - Flag items needing reformatting or upgrades (e.g., report structures) in the `notes` block for future phases.
+inputs:
+  sources:
+    - path: .repo_studios_legacy/
+      description: Legacy asset tree for mapping.
+    - path: repo_studios_build_plan.md
+      description: Phase 1 requirement for authoritative inventory.
+outputs:
+  artifacts: []
+status: complete
+follow_up:
+  - Create documentation catalog using the schema template.
+  - Plan subsequent catalogs for scripts, reports, tests, configs.
+tags:
+  - inventory
+  - mapping
+  - phase1
+notes:
+  context: "Sets the agenda for detailed mapping of every file/doc."
+  decisions:
+    - Treat mapping deliverables as machine-readable catalogs under `.repo_studios/inventory_schema/`.
+  blockers: []

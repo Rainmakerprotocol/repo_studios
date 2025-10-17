@@ -1,0 +1,276 @@
+- id: tests.health_suite.orchestrator_cli
+  name: "Health Suite Orchestrator CLI Test"
+  path: .repo_studios_legacy/repo_tests/test_health_suite_orchestrator.py
+  asset_kind: test
+  roles:
+    - test_case
+    - validator
+  maturity: legacy
+  description: "Invokes the orchestrator CLI and asserts the typecheck step is recorded with status metadata."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_scripts/health_suite_orchestrator.py
+      - .repo_studios_legacy/repo_scripts/typecheck_report.py
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.health_suite_orchestrator
+    - scripts.health.typecheck_report
+  tags:
+    - health_suite
+    - orchestration
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Loads `.repo_studios/health_suite_orchestrator.py` via subprocess expecting migrated path."
+    decisions:
+      - "Retain log cleanup until new orchestrator location is finalized."
+    blockers:
+      - "Script relocation to `.repo_studios/` not yet completed."
+- id: tests.health_suite.summary_render
+  name: "Health Suite Summary Render Test"
+  path: .repo_studios_legacy/repo_tests/test_health_suite_summary.py
+  asset_kind: test
+  roles:
+    - test_case
+    - validator
+  maturity: legacy
+  description: "Synthesizes a typecheck report and verifies the summary renderer surfaces key metrics."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_scripts/health_suite_summary.py
+      - .repo_studios_legacy/repo_scripts/typecheck_report.py
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.health_suite_summary
+    - scripts.health.typecheck_report
+  tags:
+    - health_suite
+    - reporting
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Writes intermediate artifacts under `.repo_studios/` directories that are not yet under source control."
+    decisions:
+      - "Use fixture-generated JSON to avoid depending on existing reports."
+    blockers:
+      - "Needs updated output paths post-migration."
+- id: tests.health_suite.lizard_report
+  name: "Lizard Report Flow Test"
+  path: .repo_studios_legacy/repo_tests/test_lizard_report.py
+  asset_kind: test
+  roles:
+    - test_case
+    - validator
+  maturity: legacy
+  description: "Mocks lizard CLI output to confirm reporting artifacts are generated and parsed."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_scripts/lizard_report.py
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.lizard_report
+  tags:
+    - health_suite
+    - complexity
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Dynamic import expects `.repo_studios/lizard_report.py`; update once migration lands."
+    decisions:
+      - "Continue mocking subprocess to avoid executing lizard in CI."
+    blockers:
+      - "Actual script relocation outstanding."
+- id: tests.health_suite.typecheck_report
+  name: "Typecheck Report Test"
+  path: .repo_studios_legacy/repo_tests/test_typecheck_report.py
+  asset_kind: test
+  roles:
+    - test_case
+    - validator
+  maturity: legacy
+  description: "Intercepts mypy subprocess calls to validate error aggregation and reporting structure."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_scripts/typecheck_report.py
+      - .repo_studios_legacy/repo_scripts/mypy_refresh_baselines.py
+    external_tools:
+      - mypy
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.typecheck_report
+    - scripts.health.mypy_refresh_baselines
+  tags:
+    - health_suite
+    - typing
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Loads module from `.repo_studios/typecheck_report.py`; shim required until scripts migrate."
+    decisions:
+      - "Use fake subprocess responses to keep test deterministic."
+    blockers:
+      - "Migration to new script path pending."
+- id: tests.health_suite.typecheck_fast_mode
+  name: "Typecheck Fast Mode Test"
+  path: .repo_studios_legacy/repo_tests/test_typecheck_report_fast_mode.py
+  asset_kind: test
+  roles:
+    - test_case
+    - validator
+  maturity: legacy
+  description: "Verifies fast mode target curation using a synthetic pyproject configuration."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_scripts/typecheck_report.py
+    external_tools:
+      - mypy
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.typecheck_report
+  tags:
+    - health_suite
+    - typing
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Ensures fast mode respects curated target list while relying on temporary fixtures."
+    decisions:
+      - "Persist temporary directories inside pytest tmp_path to avoid repo pollution."
+    blockers:
+      - "Awaiting canonical script location update."
+- id: tests.health_suite.pytest_log_runner
+  name: "Pytest Log Runner Smoke Test"
+  path: .repo_studios_legacy/repo_tests/test_pytest_log_runner.py
+  asset_kind: test
+  roles:
+    - test_case
+  maturity: legacy
+  description: "Placeholder test reserved for validating pytest log runner behaviors post-migration."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_scripts/pytest_log_runner.py
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.pytest_log_runner
+  tags:
+    - health_suite
+    - testing
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "File currently empty; retains slot for future regression coverage once runner settles."
+    decisions:
+      - "Keep placeholder to signal missing assertions."
+    blockers:
+      - "Requires new test cases after toolchain migration."
+- id: tests.health_suite.pytest_log_runner_paths
+  name: "Pytest Log Runner Paths Test"
+  path: .repo_studios_legacy/repo_tests/test_pytest_log_runner_paths.py
+  asset_kind: test
+  roles:
+    - test_case
+    - validator
+  maturity: legacy
+  description: "Confirms default log directory resolution honors CI workspace conventions."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_scripts/pytest_log_runner.py
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - scripts.health.pytest_log_runner
+  tags:
+    - health_suite
+    - testing
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Dynamically imports `.repo_studios/pytest_log_runner.py` to exercise CLI arg handling."
+    decisions:
+      - "Retain environment variable monkeypatching until new runner config lands."
+    blockers:
+      - "Runner relocation to `.repo_studios/` pending."
+- id: tests.health_suite.test_log_health_report_pick_best
+  name: "Test Log Health Report Selection Test"
+  path: .repo_studios_legacy/repo_tests/test_test_log_health_report_pick_best.py
+  asset_kind: test
+  roles:
+    - test_case
+    - validator
+  maturity: legacy
+  description: "Validates the heuristics for choosing the most representative junit artifact from test runs."
+  dependencies:
+    internal_paths: []
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets: []
+  tags:
+    - health_suite
+    - testing
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Imports `.repo_studios/test_log_health_report.py`, which has not yet been migrated from legacy scripts."
+    decisions:
+      - "Keep focused on selection heuristic independent of downstream reporting."
+    blockers:
+      - "Target script missing in new repo layout; add inventory entry once created."

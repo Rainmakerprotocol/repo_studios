@@ -1,0 +1,36 @@
+title: "Documentation catalog compiled"
+timestamp: "2025-10-17T21:25:00Z"
+author: copilot
+phase: phase-1-foundation
+summary: >-
+  Captured every Repo Studios guidance file—legacy and new—into the inventory
+  schema using the freshly defined template, including migration guidance and
+  consumer roles.
+details:
+  - Added 22 entries to `.repo_studios/inventory_schema/docs_catalog.yaml` covering legacy standards, prompts, and the new build plan/alignment docs.
+  - Annotated each record with roles, maturity, consumer targets, and migration notes to flag future actions.
+  - Highlighted documents that should merge or elevate (e.g., mission parameters, alignment ledger) in their `notes` blocks.
+inputs:
+  sources:
+    - path: .repo_studios_legacy/repo_docs/
+      description: Legacy documentation corpus.
+    - path: .repo_studios/
+      description: New alignment/build plan documents.
+outputs:
+  artifacts:
+    - path: .repo_studios/inventory_schema/docs_catalog.yaml
+      description: Machine-readable mapping of all documentation assets.
+status: complete
+follow_up:
+  - Repeat the process for scripts, reports, tests, and configs.
+  - Use catalog entries to guide folder reorganization in later phases.
+tags:
+  - inventory
+  - documentation
+  - phase1
+notes:
+  context: "Documentation portion of comprehensive inventory mapping."
+  decisions:
+    - Keep status `needs_review` for legacy docs until migration tasks are done.
+    - Mark living documents (alignment protocol, build plan, inventory spec) as `active` and `incubating` maturity.
+  blockers: []

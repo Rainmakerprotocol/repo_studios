@@ -1,0 +1,37 @@
+- id: category.asset_name
+  name: "Human readable asset name"
+  path: .repo_studios_legacy/repo_scripts/example.py
+  asset_kind: script
+  roles:
+    - orchestrator
+  maturity: incubating
+  introduced: 2025-10-17T00:00:00Z
+  last_reviewed: 2025-10-17T00:00:00Z
+  description: "Short purpose statement."
+  dependencies:
+    internal_paths:
+      - .repo_studios_legacy/repo_files/copilot_standards_index.yaml
+    external_tools:
+      - mypy
+    inputs:
+      - path: .repo_studios_legacy/repo_reports/health_suite/
+        description: Health suite reports consumed for summary generation
+  consumers:
+    - coding_agent
+  status: active
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - docs.example_asset
+  tags:
+    - standards
+    - phase1
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Additional context for maintainers."
+    decisions:
+      - "Outline key decisions here."
+    blockers:
+      - "List unresolved blockers here."

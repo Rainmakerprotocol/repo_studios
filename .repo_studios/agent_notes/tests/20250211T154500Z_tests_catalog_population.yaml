@@ -1,0 +1,17 @@
+summary: "Cataloged legacy test suite coverage for health and fault diagnostics, mapping gaps to migration blockers."
+context:
+  phase: "phase-1-step-1"
+  focus_area: tests_catalog
+  related_tasks:
+    - inventory_schema_population
+    - migration_readiness
+observations:
+  - "Health suite tests dynamically import `.repo_studios` targets that have not yet been relocated, creating immediate blockers."
+  - "Multiple test files remain placeholders with empty bodies, reflecting lost regression coverage."
+  - "Fault diagnostics coverage depends on the same artifact pipeline slated for refactor."
+decisions:
+  - "Grouped tests by health and fault domains to mirror script catalogs for cross-referencing."
+  - "Flagged missing target modules in blockers to drive migration backlog."
+next_steps:
+  - "Author migration plan to restore `.repo_studios` script entry points referenced by tests."
+  - "Backfill assertions for empty placeholder tests once scripts stabilize."

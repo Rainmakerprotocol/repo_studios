@@ -1,0 +1,39 @@
+title: "Baseline asset audit for inventory schema"
+timestamp: "2025-10-17T20:35:00Z"
+author: copilot
+phase: phase-1-foundation
+summary: >-
+  Reviewed current Repo Studios assets (new workspace and legacy staging area) to
+  quantify documents, scripts, reports, and test resources that the inventory
+  schema must cover.
+details:
+  - New `.repo_studios/` currently holds collaboration docs (`alignment_protocol.md`), the build plan, and the freshly created `agent_notes/` taxonomy.
+  - Legacy `.repo_studios_legacy/` contains the substantive tooling corpus:
+    - `repo_docs/`: 18 guidance and standards markdown files (agents guide, mission parameters, multi-format standards, extraction specs).
+    - `repo_files/`: 2 YAML indexes (`copilot_standards_index.yaml`, `copilot_standards_pending.yaml`).
+    - `repo_scripts/`: 31 Python utilities spanning health reports, standards orchestration, monkey patch scanning, and verification helpers.
+    - `repo_reports/`: 12 report families (anchor health, churn complexity, cleanup logs, dependency health, faulthandler, health suite, import graph, lizard, monkey patch, pytest logs, test health, typecheck) with timestamped subdirectories and latest snapshots.
+    - `repo_tests/`: QA assets including 11 pytest modules, configuration files (ruff, import allowlists, standards seeds), and inventory CSV/MD references.
+  - Observed that reports combine JSON, TSV, MD, and log formats—inventory schema needs flexible artifact typing.
+  - Makefile references remain in legacy root; no active scripts in the new `.repo_studios/` yet.
+inputs:
+  sources:
+    - path: .repo_studios/
+      description: Current workspace structure.
+    - path: .repo_studios_legacy/
+      description: Legacy asset tree containing scripts, docs, reports, and tests.
+outputs:
+  artifacts: []
+status: complete
+follow_up:
+  - Draft inventory schema fields covering roles, maturity, dependencies, consumers, and artifact formats (Group 2).
+  - Decide how legacy assets migrate into the new `.repo_studios/` structure.
+tags:
+  - inventory
+  - audit
+  - phase1
+notes:
+  context: "Group 1 of Phase 1 — establishing factual baseline for schema design."
+  decisions:
+    - Treat `.repo_studios_legacy/` as authoritative source for initial indexing until assets are migrated.
+  blockers: []
