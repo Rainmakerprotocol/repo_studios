@@ -1,0 +1,4 @@
+
+[stderr]
+usage: lizard [options] [PATH or FILE] [PATH] ...
+/home/founder/miniconda3/lib/python3.13/site-packages/lizard.py: error: unrecognized arguments: --json

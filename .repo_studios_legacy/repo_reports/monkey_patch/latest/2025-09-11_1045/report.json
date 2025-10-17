@@ -1,0 +1,36 @@
+[
+  {
+    "file": "faulthandler.py",
+    "line": 93,
+    "code": "      _fcntl = None  # type: ignore",
+    "category": "attribute_reassignment_on_import",
+    "intent": "override third-party behavior",
+    "import_base": "fcntl",
+    "is_test": false,
+    "is_module_scope": true,
+    "function": null,
+    "class_name": null,
+    "nearby_comment": null,
+    "context": "    1:       import fcntl as _fcntl  # POSIX-only\n    2:     except Exception:  # pragma: no cover - non-POSIX\n    3:       _fcntl = None  # type: ignore\n    4: \n    5:     _lock = _threading.Lock()",
+    "git_author": null,
+    "git_commit": null,
+    "git_commit_date": null
+  },
+  {
+    "file": "dep_hygiene_report.py",
+    "line": 24,
+    "code": "    tomllib = None  # type: ignore",
+    "category": "attribute_reassignment_on_import",
+    "intent": "override third-party behavior",
+    "import_base": "tomllib",
+    "is_test": false,
+    "is_module_scope": true,
+    "function": null,
+    "class_name": null,
+    "nearby_comment": null,
+    "context": "    1:     import tomllib  # Python 3.11+\n    2: except ModuleNotFoundError:  # pragma: no cover\n    3:     tomllib = None  # type: ignore\n    4: \n    5: ",
+    "git_author": null,
+    "git_commit": null,
+    "git_commit_date": null
+  }
+]

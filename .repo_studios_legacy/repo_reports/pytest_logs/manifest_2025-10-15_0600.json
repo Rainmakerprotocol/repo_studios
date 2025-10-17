@@ -1,0 +1,48 @@
+{
+  "timestamp": "2025-10-15T06:00:48",
+  "cwd": "/home/founder/jarvis2",
+  "python": "3.13.5",
+  "platform": "Linux-6.14.0-33-generic-x86_64-with-glibc2.39",
+  "pytest_cmd": [
+    "/home/founder/miniconda3/bin/python",
+    "-m",
+    "pytest",
+    "-vv",
+    "-ra",
+    "-rs",
+    "--color=no",
+    "--show-capture=all",
+    "--durations=25",
+    "--durations-min=0.50",
+    "--junitxml=/home/founder/jarvis2/.repo_studios/pytest_logs/junit_2025-10-15_0600.xml",
+    "--cov=.",
+    "--cov-report",
+    "xml:/home/founder/jarvis2/.repo_studios/pytest_logs/coverage_2025-10-15_0600.xml",
+    "--cov-report",
+    "html:/home/founder/jarvis2/.repo_studios/pytest_logs/coverage_html_2025-10-15_0600"
+  ],
+  "artifacts": {
+    "full_log": "/home/founder/jarvis2/.repo_studios/pytest_logs/pytest_2025-10-15_0600.txt",
+    "junit_xml": "/home/founder/jarvis2/.repo_studios/pytest_logs/junit_2025-10-15_0600.xml",
+    "reportlog": null,
+    "html_report": null,
+    "coverage_xml": "/home/founder/jarvis2/.repo_studios/pytest_logs/coverage_2025-10-15_0600.xml",
+    "coverage_html": "/home/founder/jarvis2/.repo_studios/pytest_logs/coverage_html_2025-10-15_0600"
+  },
+  "plugins": {
+    "xdist": false,
+    "cov": true,
+    "reruns": false,
+    "reportlog": false,
+    "html": false
+  },
+  "exit_code": 2,
+  "terminated": false,
+  "junit": {
+    "tests": 3,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 2,
+    "time": 4.324
+  }
+}

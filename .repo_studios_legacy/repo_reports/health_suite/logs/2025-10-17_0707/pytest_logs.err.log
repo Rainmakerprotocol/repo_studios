@@ -1,0 +1,6 @@
+2025-10-17 07:08:09,729 INFO Running: /mnt/jarvis2/.venv/bin/python -m pytest -vv -ra -rs --color=no --show-capture=all --durations=25 --durations-min=0.50 --junitxml=/home/founder/jarvis2/.repo_studios/pytest_logs/junit_2025-10-17_0708.xml --cov=. --cov-report xml:/home/founder/jarvis2/.repo_studios/pytest_logs/coverage_2025-10-17_0708.xml --cov-report html:/home/founder/jarvis2/.repo_studios/pytest_logs/coverage_html_2025-10-17_0708 (cwd=/home/founder/jarvis2)
+2025-10-17 07:15:04,563 INFO Saved full log: /home/founder/jarvis2/.repo_studios/pytest_logs/pytest_2025-10-17_0708.txt
+2025-10-17 07:15:04,566 INFO Saved failed summary: /home/founder/jarvis2/.repo_studios/pytest_logs/pytest_failed_logs/pytest_failed_2025-10-17_0708.txt
+2025-10-17 07:15:04,566 INFO Saved skipped summary: /home/founder/jarvis2/.repo_studios/pytest_logs/pytest_skip_logs/pytest_skip_2025-10-17_0708.txt
+2025-10-17 07:15:04,567 INFO Saved JUnit XML: /home/founder/jarvis2/.repo_studios/pytest_logs/junit_2025-10-17_0708.xml
+2025-10-17 07:15:04,575 INFO Saved manifest: /home/founder/jarvis2/.repo_studios/pytest_logs/manifest_2025-10-17_0708.json

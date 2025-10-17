@@ -1,0 +1,4 @@
+[check-imports] Violations detected:
+  - static-import: api -> agents/interface (api/anomaly_badges.py)
+  - static-import: api -> agents/interface (api/ui_data.py)
+  - static-import: api -> agents/interface (api/routers/ui/handlers.py)

@@ -1,0 +1,103 @@
+{
+  "status": "ERROR",
+  "mypy_version": "mypy 1.10.0 (compiled: yes)",
+  "checked_paths": [
+    "agents/interface/chainlit",
+    "api/models",
+    "api/utils",
+    "api/ui_data.py",
+    "api/routers/ui.py",
+    "agents/core/monitoring/metrics_storage/storage/hybrid_storage/factory.py"
+  ],
+  "total_errors": 12,
+  "files_with_issues": 6,
+  "error_samples": [
+    {
+      "path": "api/ui_data.py",
+      "line": 571,
+      "code": "valid-type",
+      "message": "Variable \"api.ui_data.HistoricalTrendPayload\" is not valid as a type"
+    },
+    {
+      "path": "api/ui_data.py",
+      "line": 583,
+      "code": "valid-type",
+      "message": "Variable \"api.ui_data.ModelComparisonPayload\" is not valid as a type"
+    },
+    {
+      "path": "api/ui_data.py",
+      "line": 595,
+      "code": "valid-type",
+      "message": "Variable \"api.ui_data.PerformanceDashboardPayload\" is not valid as a type"
+    },
+    {
+      "path": "agents/interface/chainlit/widgets/trends.py",
+      "line": 460,
+      "code": "override",
+      "message": "Signature of \"__getitem__\" incompatible with supertype \"Sequence\""
+    },
+    {
+      "path": "agents/interface/chainlit/widgets/trends.py",
+      "line": 477,
+      "code": "override",
+      "message": "Signature of \"__getitem__\" incompatible with supertype \"Sequence\""
+    },
+    {
+      "path": "agents/interface/chainlit/widgets/model_comparison.py",
+      "line": 376,
+      "code": "arg-type",
+      "message": "Argument 1 to \"float\" has incompatible type \"Any | None\"; expected \"str | Buffer | SupportsFloat | SupportsIndex\""
+    },
+    {
+      "path": "agents/interface/chainlit/widgets/model_comparison.py",
+      "line": 495,
+      "code": "arg-type",
+      "message": "Argument 1 to \"float\" has incompatible type \"Any | None\"; expected \"str | Buffer | SupportsFloat | SupportsIndex\""
+    },
+    {
+      "path": "agents/interface/chainlit/widgets/performance_dashboard.py",
+      "line": 147,
+      "code": "arg-type",
+      "message": "Argument 1 to \"float\" has incompatible type \"Any | None\"; expected \"str | Buffer | SupportsFloat | SupportsIndex\""
+    },
+    {
+      "path": "agents/interface/chainlit/widgets/performance_dashboard.py",
+      "line": 223,
+      "code": "arg-type",
+      "message": "Argument 1 to \"int\" has incompatible type \"Any | None\"; expected \"str | Buffer | SupportsInt | SupportsIndex | SupportsTrunc\""
+    },
+    {
+      "path": "agents/interface/chainlit/api_client.py",
+      "line": 26,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": "agents/interface/chainlit/toast_sink.py",
+      "line": 14,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": "agents/interface/chainlit/toast_sink.py",
+      "line": 16,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    }
+  ],
+  "invocation": [
+    "/mnt/jarvis2/.venv/bin/python",
+    "-m",
+    "mypy",
+    "--show-error-codes",
+    "--no-color-output",
+    "--hide-error-context",
+    "agents/interface/chainlit",
+    "api/models",
+    "api/utils",
+    "api/ui_data.py",
+    "api/routers/ui.py",
+    "agents/core/monitoring/metrics_storage/storage/hybrid_storage/factory.py"
+  ],
+  "timestamp": "2025-10-17_0707"
+}

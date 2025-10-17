@@ -1,0 +1,9 @@
+FAILED tests
+Generated: 2025-10-13T05:33:27
+Total: 1
+
+Grouped by file (count desc):
+     1  tests/docs/test_global_anchors.py
+
+Items:
+- tests/docs/test_global_anchors.py::test_top_level_anchor_slug_uniqueness

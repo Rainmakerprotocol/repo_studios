@@ -1,0 +1,47 @@
+SKIPPED tests
+Generated: 2025-10-04T15:11:20
+Total: 23
+
+Grouped by file (count desc):
+     4  tests/visualization/test_chart_schema_validation.py
+     3  tests/agents/orchestrator/test_config_perf_phase14.py
+     2  tests/api/test_agent_instance_metrics.py
+     1  agents/core/monitoring/metrics_storage/tests/retention/test_metadata.py
+     1  tests/agents/core/test_agent_template.py
+     1  tests/agents/core/test_intent_router_phase3.py
+     1  tests/agents/service_management/test_service_start_metrics_tier.py
+     1  tests/agents/service_management/test_service_start_probe_metrics_exposition.py
+     1  tests/agents/service_management/test_service_start_unified_flag_config.py
+     1  tests/api/test_cache_invariants.py
+     1  tests/api/test_events_sse.py
+     1  tests/api/test_ui_ws_metrics_exposure.py
+     1  tests/api/test_ws_ui_scaffold.py
+     1  tests/e2e/test_events_end_to_end.py
+     1  tests/voice/test_config_defaults.py
+     1  tests/voice/test_latency_contract_smoke.py
+     1  tests/voice/test_whisper_cli_smoke.py
+
+Items:
+- tests/agents/core/test_agent_template.py::test_filter_resubscribe_via_ws_json_control
+- tests/agents/core/test_intent_router_phase3.py::test_performance_compiled_regex_path_is_not_worse
+- tests/agents/orchestrator/test_config_perf_phase14.py::test_registry_parse_200_agents_under_100ms
+- tests/agents/orchestrator/test_config_perf_phase14.py::test_registry_parse_500_agents_under_120ms
+- tests/agents/orchestrator/test_config_perf_phase14.py::test_registry_parse_distribution_200_agents
+- tests/agents/service_management/test_service_start_metrics_tier.py::test_api_start_metrics_tier_probes_and_debug_logging
+- tests/agents/service_management/test_service_start_probe_metrics_exposition.py::test_api_start_probe_metrics_exposed
+- tests/agents/service_management/test_service_start_unified_flag_config.py::test_startup_unified_flag_dataclass_dry_run_json_manifest_hash
+- tests/api/test_agent_instance_metrics.py::test_agent_instance_register_heartbeat_metrics_delete
+- tests/api/test_agent_instance_metrics.py::test_agent_instance_duplicate_register_conflict
+- tests/api/test_cache_invariants.py::test_cross_scope_hit_counter_zero_if_present
+- tests/api/test_events_sse.py::test_sse_stream_burst_via_uvicorn_integration
+- tests/api/test_ui_ws_metrics_exposure.py::test_ui_ws_counters_increment_on_connect_and_ping
+- tests/api/test_ws_ui_scaffold.py::test_ws_ui_basic  # websocke...
+- tests/e2e/test_events_end_to_end.py::test_sse_streaming_variant_skipped
+- tests/visualization/test_chart_schema_validation.py::test_chart_schema_validation[ResourceUsageChartGenerator-kwargs0]
+- tests/visualization/test_chart_schema_validation.py::test_chart_schema_validation[SystemHealthChartGenerator-kwargs1]
+- tests/visualization/test_chart_schema_validation.py::test_chart_schema_validation[BatchSizeOptimizationChartGenerator-kwargs2]
+- tests/visualization/test_chart_schema_validation.py::test_chart_schema_validation[ModelPerformanceChartGenerator-kwargs3]
+- tests/voice/test_config_defaults.py::test_defaults_mirror_current_literals
+- tests/voice/test_latency_contract_smoke.py::test_latency_smoke_with_flips
+- tests/voice/test_whisper_cli_smoke.py::test_whisper_cli_end_to_end
+- agents/core/monitoring/metrics_storage/tests/retention/test_metadata.py::TestCleanupMetadataTracker::test_record_cleanup_with_audit_trail

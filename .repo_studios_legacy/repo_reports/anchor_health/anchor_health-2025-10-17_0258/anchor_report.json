@@ -1,0 +1,462 @@
+{
+  "baseline_cross_file_duplicates": 60,
+  "clusters": [
+    {
+      "file_count": 10,
+      "files": [
+        "docs/adr/0002-retention-decomposition.md",
+        "docs/adr/0010-agent-slice-design.md",
+        "docs/adr/0011-scaling-cli-scaffold.md",
+        "docs/adr/0012-watchdog-escalation-and-status.md",
+        "docs/adr/0013-ui-schema-versioning.md",
+        "docs/agents/agent_frameworks_101.md",
+        "docs/agents/hands_on_pairing_tracks.md",
+        "docs/deep_dives/deep_dive_perf_cache_memory_voice.md",
+        "docs/fault_diagnostics_runbook.md",
+        "docs/roadmaps/monitoring_roadmap.md"
+      ],
+      "slug": "references"
+    },
+    {
+      "file_count": 7,
+      "files": [
+        "docs/ops/scale_out_systemd.md",
+        "docs/ops/systemd_inventory_governance.md",
+        "docs/ops/watchdog_recommendations.md",
+        "docs/roadmaps/Node-RED_roadmap.md",
+        "docs/roadmaps/micro_agent_roadmap.md",
+        "docs/roadmaps/template_roadmap.md",
+        "docs/standards/clean_log_retention.md"
+      ],
+      "slug": "open-questions"
+    },
+    {
+      "file_count": 7,
+      "files": [
+        "docs/agents/ledger.md",
+        "docs/metrics/watchdog_metrics.md",
+        "docs/standards/clean_log_retention.md",
+        "docs/standards/dashboard_instrumentation_standards.md",
+        "docs/standards/trend_aggregation_standards.md",
+        "docs/standards/trend_pipeline.md",
+        "docs/systemd/scale_out_systemd.md"
+      ],
+      "slug": "purpose"
+    },
+    {
+      "file_count": 5,
+      "files": [
+        "docs/adr/0002-retention-decomposition.md",
+        "docs/adr/0010-agent-slice-design.md",
+        "docs/adr/0011-scaling-cli-scaffold.md",
+        "docs/adr/0012-watchdog-escalation-and-status.md",
+        "docs/adr/0013-ui-schema-versioning.md"
+      ],
+      "slug": "context"
+    },
+    {
+      "file_count": 5,
+      "files": [
+        "docs/adr/0002-retention-decomposition.md",
+        "docs/adr/0010-agent-slice-design.md",
+        "docs/adr/0011-scaling-cli-scaffold.md",
+        "docs/adr/0012-watchdog-escalation-and-status.md",
+        "docs/adr/0013-ui-schema-versioning.md"
+      ],
+      "slug": "decision"
+    },
+    {
+      "file_count": 5,
+      "files": [
+        "docs/events/lifecycle_events.md",
+        "docs/extending/warmers.md",
+        "docs/operations/flag_matrix_reference.md",
+        "docs/operations/preflight_checks.md",
+        "docs/operations/restart_policy.md"
+      ],
+      "slug": "intent"
+    },
+    {
+      "file_count": 5,
+      "files": [
+        "docs/adr/0010-agent-slice-design.md",
+        "docs/adr/0011-scaling-cli-scaffold.md",
+        "docs/adr/0012-watchdog-escalation-and-status.md",
+        "docs/adr/0013-ui-schema-versioning.md",
+        "docs/metrics_storage_path_update.md"
+      ],
+      "slug": "rationale"
+    },
+    {
+      "file_count": 5,
+      "files": [
+        "docs/api/orchestrator_overview.md",
+        "docs/standards/repo_standards_http.md",
+        "docs/voice_conversation_mode.md",
+        "docs/voice_intent_router.md",
+        "docs/voice_orchestrator_quickstart.md"
+      ],
+      "slug": "see-also"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        "docs/adr/0010-agent-slice-design.md",
+        "docs/adr/0011-scaling-cli-scaffold.md",
+        "docs/adr/0012-watchdog-escalation-and-status.md",
+        "docs/adr/0013-ui-schema-versioning.md"
+      ],
+      "slug": "alternatives-considered"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        "docs/adr/0002-retention-decomposition.md",
+        "docs/adr/0010-agent-slice-design.md",
+        "docs/adr/0011-scaling-cli-scaffold.md",
+        "docs/adr/0013-ui-schema-versioning.md"
+      ],
+      "slug": "consequences"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        "docs/agents/shared_state.md",
+        "docs/api/memory_endpoints.md",
+        "docs/chat_logging_redaction.md",
+        "docs/intent_router.md"
+      ],
+      "slug": "examples"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        "docs/agents/ledger.md",
+        "docs/operations/nightly_commit_workflow.md",
+        "docs/standards/clean_log_retention.md",
+        "docs/standards/storage_refactor_groundwork.md"
+      ],
+      "slug": "next-steps"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        "docs/standards/clean_log_retention.md",
+        "docs/standards/dashboard_instrumentation_standards.md",
+        "docs/standards/trend_aggregation_standards.md",
+        "docs/standards/trend_pipeline.md"
+      ],
+      "slug": "scope"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        "docs/agents/step18_founder_summary.md",
+        "docs/agents/step18_founder_summary_template.md",
+        "docs/agents/step18_rollout_checklist.md"
+      ],
+      "slug": "approvals"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        "docs/agents/messaging.md",
+        "docs/voice_conversation_mode.md",
+        "docs/voice_meeting_mode.md"
+      ],
+      "slug": "configuration"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        "docs/roadmaps/Node-RED_roadmap.md",
+        "docs/roadmaps/micro_agent_roadmap.md",
+        "docs/roadmaps/template_roadmap.md"
+      ],
+      "slug": "context-for-repo"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        "docs/artifacts/startup_debug_dump.md",
+        "docs/coverage_ui.md",
+        "docs/health/degraded_reasons.md"
+      ],
+      "slug": "format"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        "docs/adr/0011-scaling-cli-scaffold.md",
+        "docs/standards/trend_aggregation_standards.md",
+        "docs/standards/trend_pipeline.md"
+      ],
+      "slug": "future-work"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        "docs/ledger_overview.md",
+        "docs/monitoring_overview.md",
+        "docs/standards/glossary.md"
+      ],
+      "slug": "glossary"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        "docs/extending/warmers.md",
+        "docs/standards/trend_aggregation_standards.md",
+        "docs/standards/trend_pipeline.md"
+      ],
+      "slug": "observability-hooks"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        "docs/adr/0008-agent-config-deprecation-and-migration-policy.md",
+        "docs/agents/rag_standards.md",
+        "docs/api/model_selector_registry.md"
+      ],
+      "slug": "observability-metrics"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        "docs/adr/0002-cache-key-segregation.md",
+        "docs/adr/0003-negative-caching-policy.md",
+        "docs/ops/restart_policy.md"
+      ],
+      "slug": "rollback"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        "docs/events/lifecycle_events.md",
+        "docs/metrics/lifecycle_metrics.md",
+        "docs/metrics/watchdog_metrics.md"
+      ],
+      "slug": "stability-policy"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        "docs/standards/dashboard_instrumentation_standards.md",
+        "docs/standards/trend_aggregation_standards.md",
+        "docs/standards/trend_pipeline.md"
+      ],
+      "slug": "standards-alignment"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/agents/step18_pilot_report.md",
+        "docs/agents/step18_pilot_report_template.md"
+      ],
+      "slug": "1-cohort-overview"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/agents/step18_pilot_report.md",
+        "docs/agents/step18_pilot_report_template.md"
+      ],
+      "slug": "2-success-metrics-summary"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/agents/step18_pilot_report.md",
+        "docs/agents/step18_pilot_report_template.md"
+      ],
+      "slug": "3-telemetry-snapshots"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/agents/step18_pilot_report.md",
+        "docs/agents/step18_pilot_report_template.md"
+      ],
+      "slug": "4-standards-and-compliance-checklist"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/agents/step18_pilot_report.md",
+        "docs/agents/step18_pilot_report_template.md"
+      ],
+      "slug": "5-user-feedback-and-backlog"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/agents/step18_pilot_report.md",
+        "docs/agents/step18_pilot_report_template.md"
+      ],
+      "slug": "6-risk-and-rollback-assessment"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/agents/step18_pilot_report.md",
+        "docs/agents/step18_pilot_report_template.md"
+      ],
+      "slug": "7-decision-log"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/standards/trend_aggregation_standards.md",
+        "docs/standards/trend_pipeline.md"
+      ],
+      "slug": "changelog"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/standards/trend_aggregation_standards.md",
+        "docs/standards/trend_pipeline.md"
+      ],
+      "slug": "data-shapes"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/standards/trend_aggregation_standards.md",
+        "docs/standards/trend_pipeline.md"
+      ],
+      "slug": "definitions"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/agents/step18_founder_summary.md",
+        "docs/agents/step18_founder_summary_template.md"
+      ],
+      "slug": "evidence-links"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/agents/step18_founder_summary.md",
+        "docs/agents/step18_founder_summary_template.md"
+      ],
+      "slug": "executive-overview"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/agents/agent_startup_contract.md",
+        "docs/operations/preflight_checks.md"
+      ],
+      "slug": "failure-modes"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/standards/trend_aggregation_standards.md",
+        "docs/standards/trend_pipeline.md"
+      ],
+      "slug": "governance-audit"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/agents/step18_founder_summary.md",
+        "docs/agents/step18_founder_summary_template.md"
+      ],
+      "slug": "highlights-and-risks"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/agents/step18_founder_summary.md",
+        "docs/agents/step18_founder_summary_template.md"
+      ],
+      "slug": "key-outcomes"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/metrics/lifecycle_metrics.md",
+        "docs/operations/flag_matrix_reference.md"
+      ],
+      "slug": "legend"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/standards/trend_aggregation_standards.md",
+        "docs/standards/trend_pipeline.md"
+      ],
+      "slug": "machine-readable-snapshot"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/standards/trend_aggregation_standards.md",
+        "docs/standards/trend_pipeline.md"
+      ],
+      "slug": "policy-and-procedures"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/agents/step18_founder_summary.md",
+        "docs/agents/step18_founder_summary_template.md"
+      ],
+      "slug": "required-actions"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/interface_testing_standards.md",
+        "docs/standards_instructions_ai.md"
+      ],
+      "slug": "risk-lowmediumhigh"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/roadmaps/Node-RED_roadmap.md",
+        "docs/roadmaps/template_roadmap.md"
+      ],
+      "slug": "roadmap-phases"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/memory/mrp_events.md",
+        "docs/memory/observability.md"
+      ],
+      "slug": "rotation-preview"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/roadmaps/micro_agent_roadmap.md",
+        "docs/roadmaps/template_roadmap.md"
+      ],
+      "slug": "section-outline"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/agents/events.md",
+        "docs/agents/memory.md"
+      ],
+      "slug": "timestamps"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/standards/trend_aggregation_standards.md",
+        "docs/standards/trend_pipeline.md"
+      ],
+      "slug": "validation-evidence"
+    }
+  ],
+  "delta_vs_baseline": -10,
+  "schema_version": 1,
+  "strict_duplicate_count": 50
+}

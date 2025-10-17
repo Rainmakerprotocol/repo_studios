@@ -1,0 +1,130 @@
+{
+  "meta": {
+    "generated_at": "2025-10-17T07:15:09.858502",
+    "logs_dir": "/home/founder/jarvis2/.repo_studios/pytest_logs",
+    "junit": "/home/founder/jarvis2/.repo_studios/pytest_logs/junit_2025-10-17_0708.xml",
+    "full_log": "/home/founder/jarvis2/.repo_studios/pytest_logs/pytest_2025-10-17_0708.txt"
+  },
+  "summary": {
+    "total": 1446,
+    "passed": 1417,
+    "skipped": 26,
+    "xfailed": 0,
+    "failed": 3,
+    "errors": 0,
+    "warnings_total": 2,
+    "tracebacks": 0
+  },
+  "warnings": {
+    "by_type": {
+      "PytestAssertRewriteWarning": 1,
+      "RuntimeWarning": 1
+    },
+    "by_file": {
+      "/mnt/jarvis2/.venv/lib/python3.11/site-packages/_pytest/config/__init__.py": 1,
+      "<frozen runpy>": 1
+    }
+  },
+  "slow_tests": [
+    {
+      "seconds": 10.24,
+      "nodeid": ".repo_studios/tests/test_health_suite_orchestrator.py::test_orchestrator_includes_typecheck_step"
+    },
+    {
+      "seconds": 9.42,
+      "nodeid": "tests/api/test_model_selection_histogram_and_endpoint.py::test_model_selection_dedicated_endpoint_and_histogram_lines"
+    },
+    {
+      "seconds": 7.88,
+      "nodeid": "tests/api/test_eventbus_metrics_exposure.py::test_eventbus_metrics_increments_with_publish_and_sse"
+    },
+    {
+      "seconds": 6.64,
+      "nodeid": "tests/lint/test_no_cache_impl_imports.py::test_no_imports_of_api_cache_impl"
+    },
+    {
+      "seconds": 6.25,
+      "nodeid": "tests/api/test_ws_chat.py::test_ws_chat_auth_enforced_when_api_key_set"
+    },
+    {
+      "seconds": 6.04,
+      "nodeid": "tests/agents/service_management/test_service_start_metrics_tier.py::test_api_start_metrics_tier_probes_and_debug_logging"
+    },
+    {
+      "seconds": 6.02,
+      "nodeid": "tests/agents/service_management/test_service_start_probe_metrics_exposition.py::test_api_start_probe_metrics_exposed"
+    },
+    {
+      "seconds": 5.72,
+      "nodeid": "tests/agents/service_management/test_service_start_shutdown_snapshot.py::test_shutdown_timeout_warning"
+    },
+    {
+      "seconds": 4.06,
+      "nodeid": "tests/agents/service_management/test_restart_wrapper.py::test_restart_giveup"
+    },
+    {
+      "seconds": 3.56,
+      "nodeid": "tests/api/test_ws_chat.py::test_ws_chat_backpressure_many_small_deltas_when_low_threshold"
+    },
+    {
+      "seconds": 3.54,
+      "nodeid": "tests/api/test_ws_chat.py::test_ws_chat_backpressure_fewer_deltas_when_large_threshold"
+    },
+    {
+      "seconds": 3.32,
+      "nodeid": "tests/api/test_ws_chat_contract_fake.py::test_ws_fake_idle_soft_emits_once"
+    },
+    {
+      "seconds": 3.3,
+      "nodeid": "tests/test_perf_thresholds.py::test_perf_thresholds"
+    },
+    {
+      "seconds": 3.2,
+      "nodeid": "tests/api/test_ws_chat.py::test_ws_chat_stream_happy_path"
+    },
+    {
+      "seconds": 3.2,
+      "nodeid": "tests/api/test_ws_chat_contract_fake.py::test_ws_fake_happy_path_ack_delta_done"
+    },
+    {
+      "seconds": 3.19,
+      "nodeid": "tests/api/test_ws_chat_contract_fake.py::test_ws_fake_done_contains_elapsed_and_usage"
+    },
+    {
+      "seconds": 2.66,
+      "nodeid": "tests/api/test_model_selection_metrics_exposure.py::test_model_selection_metrics_exposed_when_chat_autoselects"
+    },
+    {
+      "seconds": 2.65,
+      "nodeid": "tests/api/test_model_selection_histogram_and_endpoint.py::test_model_selection_histogram_lines_present_in_metrics"
+    },
+    {
+      "seconds": 2.26,
+      "nodeid": "tests/integration/test_storage_health_rules_hash.py::test_storage_health_exposes_rules_hash_and_detail"
+    },
+    {
+      "seconds": 2.18,
+      "nodeid": "tests/agents/repair/test_repair_orchestrator_tight_loop.py::test_orchestrator_runs_repair_agent_and_updates_snapshot"
+    },
+    {
+      "seconds": 1.87,
+      "nodeid": "tests/agents/service_management/test_service_start_misc_flags.py::test_api_start_timeout_simulated_delay"
+    },
+    {
+      "seconds": 1.82,
+      "nodeid": "tests/api/test_ws_chat.py::test_ws_chat_idle_and_session_timeout_paths"
+    },
+    {
+      "seconds": 1.8,
+      "nodeid": "tests/systemd/test_watchdog_status_updates.py::test_status_emits_periodically"
+    },
+    {
+      "seconds": 1.77,
+      "nodeid": "tests/agents/service_management/test_service_start_shutdown_snapshot.py::test_shutdown_snapshot_written"
+    },
+    {
+      "seconds": 1.74,
+      "nodeid": "tests/agents/service_management/test_restart_wrapper.py::test_restart_wrapper_recovers"
+    }
+  ]
+}

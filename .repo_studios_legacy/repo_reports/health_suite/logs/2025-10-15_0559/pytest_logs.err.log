@@ -1,0 +1,6 @@
+2025-10-15 06:00:43,467 INFO Running: /home/founder/miniconda3/bin/python -m pytest -vv -ra -rs --color=no --show-capture=all --durations=25 --durations-min=0.50 --junitxml=/home/founder/jarvis2/.repo_studios/pytest_logs/junit_2025-10-15_0600.xml --cov=. --cov-report xml:/home/founder/jarvis2/.repo_studios/pytest_logs/coverage_2025-10-15_0600.xml --cov-report html:/home/founder/jarvis2/.repo_studios/pytest_logs/coverage_html_2025-10-15_0600 (cwd=/home/founder/jarvis2)
+2025-10-15 06:00:48,719 INFO Saved full log: /home/founder/jarvis2/.repo_studios/pytest_logs/pytest_2025-10-15_0600.txt
+2025-10-15 06:00:48,720 INFO Saved failed summary: /home/founder/jarvis2/.repo_studios/pytest_logs/pytest_failed_logs/pytest_failed_2025-10-15_0600.txt
+2025-10-15 06:00:48,720 INFO Saved skipped summary: /home/founder/jarvis2/.repo_studios/pytest_logs/pytest_skip_logs/pytest_skip_2025-10-15_0600.txt
+2025-10-15 06:00:48,720 INFO Saved JUnit XML: /home/founder/jarvis2/.repo_studios/pytest_logs/junit_2025-10-15_0600.xml
+2025-10-15 06:00:48,724 INFO Saved manifest: /home/founder/jarvis2/.repo_studios/pytest_logs/manifest_2025-10-15_0600.json

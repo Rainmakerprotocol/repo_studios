@@ -1,0 +1,5 @@
+[INFO] [gate] outdir=.repo_studios/faulthandler/2025-10-17_0707 rows=0 dumps=0
+[INFO] [gate] config paths: blocklist=.repo_studios/faulthandler_blocklist.json exceptions=.repo_studios/faulthandler_exceptions.json
+[INFO] [gate] loaded blocklist=1 exceptions=0
+[INFO] [gate] signatures present: 
+[INFO] [gate] PASS — no critical conditions detected

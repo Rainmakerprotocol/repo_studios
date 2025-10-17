@@ -1,0 +1,243 @@
+{
+  "timestamp": "2025-10-13_1040",
+  "started_at": 1760366456.6857626,
+  "steps": [
+    {
+      "name": "batch_clean",
+      "argv": [
+        "/home/founder/miniconda3/bin/python",
+        "/home/founder/jarvis2/.repo_studios/batch_clean.py",
+        "-t",
+        "agents",
+        "-t",
+        "api",
+        "-t",
+        "scripts",
+        "--no-pytest"
+      ],
+      "start": 1760366456.685797,
+      "exit_code": 0,
+      "duration_sec": 47.299,
+      "status": "OK"
+    },
+    {
+      "name": "pytest_logs",
+      "argv": [
+        "/home/founder/miniconda3/bin/python",
+        "/home/founder/jarvis2/.repo_studios/pytest_log_runner.py"
+      ],
+      "start": 1760366503.9848826,
+      "exit_code": 1,
+      "duration_sec": 346.683,
+      "status": "ERROR",
+      "error_log": ".repo_studios/health_suite/logs/2025-10-13_1040/pytest_logs.err.log"
+    },
+    {
+      "name": "scan_monkey_patches",
+      "argv": [
+        "/home/founder/miniconda3/bin/python",
+        "/home/founder/jarvis2/.repo_studios/scan_monkey_patches.py",
+        "--repo-root",
+        ".",
+        "--with-git",
+        "--verbose",
+        "--strict"
+      ],
+      "start": 1760366850.6681588,
+      "exit_code": 0,
+      "duration_sec": 5.097,
+      "status": "OK"
+    },
+    {
+      "name": "dep_health",
+      "argv": [
+        "/home/founder/miniconda3/bin/python",
+        "/home/founder/jarvis2/.repo_studios/dep_hygiene_report.py",
+        "--repo-root",
+        ".",
+        "--output-base",
+        "/home/founder/jarvis2/.repo_studios/dep_health"
+      ],
+      "start": 1760366855.7647038,
+      "exit_code": 0,
+      "duration_sec": 0.035,
+      "status": "OK"
+    },
+    {
+      "name": "compare_monkey_patch_trends",
+      "argv": [
+        "/home/founder/miniconda3/bin/python",
+        "/home/founder/jarvis2/.repo_studios/compare_monkey_patch_trends.py"
+      ],
+      "start": 1760366855.8001556,
+      "exit_code": 0,
+      "duration_sec": 0.045,
+      "status": "OK"
+    },
+    {
+      "name": "check_import_boundaries",
+      "argv": [
+        "/home/founder/miniconda3/bin/python",
+        "/home/founder/jarvis2/.repo_studios/check_import_boundaries.py"
+      ],
+      "start": 1760366855.844931,
+      "exit_code": 1,
+      "duration_sec": 0.17,
+      "status": "ERROR",
+      "error_log": ".repo_studios/health_suite/logs/2025-10-13_1040/check_import_boundaries.err.log"
+    },
+    {
+      "name": "test_log_health_report",
+      "argv": [
+        "/home/founder/miniconda3/bin/python",
+        "/home/founder/jarvis2/.repo_studios/test_log_health_report.py",
+        "--logs-dir",
+        "/home/founder/jarvis2/.repo_studios/pytest_logs",
+        "--output-base",
+        "/home/founder/jarvis2/.repo_studios/test_health"
+      ],
+      "start": 1760366856.014957,
+      "exit_code": 0,
+      "duration_sec": 0.057,
+      "status": "OK"
+    },
+    {
+      "name": "typecheck_report",
+      "argv": [
+        "/home/founder/miniconda3/bin/python",
+        "/home/founder/jarvis2/.repo_studios/typecheck_report.py",
+        "--repo-root",
+        ".",
+        "--output-base",
+        "/home/founder/jarvis2/.repo_studios/typecheck",
+        "--timestamp",
+        "2025-10-13_1040"
+      ],
+      "start": 1760366856.0719075,
+      "exit_code": 0,
+      "duration_sec": 0.582,
+      "status": "OK"
+    },
+    {
+      "name": "import_graph_report",
+      "argv": [
+        "/home/founder/miniconda3/bin/python",
+        "/home/founder/jarvis2/.repo_studios/import_graph_report.py",
+        "--repo-root",
+        ".",
+        "--output-base",
+        "/home/founder/jarvis2/.repo_studios/import_graph"
+      ],
+      "start": 1760366856.6542504,
+      "exit_code": 0,
+      "duration_sec": 0.794,
+      "status": "OK"
+    },
+    {
+      "name": "churn_complexity_heatmap",
+      "argv": [
+        "/home/founder/miniconda3/bin/python",
+        "/home/founder/jarvis2/.repo_studios/churn_complexity_heatmap.py",
+        "--repo-root",
+        ".",
+        "--output-base",
+        "/home/founder/jarvis2/.repo_studios/churn_complexity",
+        "--logs-dir",
+        "/home/founder/jarvis2/.repo_studios/pytest_logs"
+      ],
+      "start": 1760366857.4483051,
+      "exit_code": 0,
+      "duration_sec": 4.671,
+      "status": "OK"
+    },
+    {
+      "name": "lizard_report",
+      "argv": [
+        "/home/founder/miniconda3/bin/python",
+        "/home/founder/jarvis2/.repo_studios/lizard_report.py",
+        "--repo-root",
+        ".",
+        "--timestamp",
+        "2025-10-13_1040"
+      ],
+      "start": 1760366862.1193702,
+      "exit_code": 0,
+      "duration_sec": 2.907,
+      "status": "OK"
+    },
+    {
+      "name": "fault_dump_once",
+      "argv": [
+        "/home/founder/miniconda3/bin/python",
+        "/home/founder/jarvis2/.repo_studios/dump_faulthandler_once.py"
+      ],
+      "start": 1760366865.026311,
+      "exit_code": 0,
+      "duration_sec": 0.012,
+      "status": "OK"
+    },
+    {
+      "name": "fault_artifacts",
+      "argv": [
+        "/home/founder/miniconda3/bin/python",
+        "/home/founder/jarvis2/.repo_studios/generate_fault_artifacts.py"
+      ],
+      "start": 1760366865.0384126,
+      "exit_code": 0,
+      "duration_sec": 0.043,
+      "status": "OK"
+    },
+    {
+      "name": "fault_aggregate",
+      "argv": [
+        "/home/founder/miniconda3/bin/python",
+        "scripts/health/faulthandler_aggregate.py"
+      ],
+      "start": 1760366865.0809474,
+      "exit_code": 0,
+      "duration_sec": 0.039,
+      "status": "OK"
+    },
+    {
+      "name": "fault_gate",
+      "argv": [
+        "/home/founder/miniconda3/bin/python",
+        "scripts/ci_faulthandler_gate.py"
+      ],
+      "start": 1760366865.1200204,
+      "exit_code": 0,
+      "duration_sec": 0.041,
+      "status": "OK"
+    },
+    {
+      "name": "anchor_health",
+      "argv": [
+        "/home/founder/miniconda3/bin/python",
+        "/home/founder/jarvis2/.repo_studios/anchor_health_report.py"
+      ],
+      "start": 1760366865.161498,
+      "exit_code": 0,
+      "duration_sec": 0.07,
+      "status": "OK"
+    },
+    {
+      "name": "health_suite_summary",
+      "argv": [
+        "/home/founder/miniconda3/bin/python",
+        "/home/founder/jarvis2/.repo_studios/health_suite_summary.py",
+        "--repo-root",
+        ".",
+        "--output-dir",
+        "/home/founder/jarvis2/.repo_studios/health_suite",
+        "--timestamp",
+        "2025-10-13_1040"
+      ],
+      "start": 1760366865.2315106,
+      "exit_code": 0,
+      "duration_sec": 0.028,
+      "status": "OK"
+    }
+  ],
+  "fault_outdir": "/home/founder/jarvis2/.repo_studios/faulthandler/2025-10-13_1040",
+  "finished_at": 1760366865.2595847
+}

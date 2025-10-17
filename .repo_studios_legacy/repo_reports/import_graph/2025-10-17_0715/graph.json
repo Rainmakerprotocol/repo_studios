@@ -1,0 +1,28 @@
+{
+  "tests": [
+    "agents",
+    "api",
+    "jarvis2",
+    "scripts",
+    "tests"
+  ],
+  "api": [
+    "agents",
+    "api",
+    "scripts"
+  ],
+  "agents": [
+    "agents",
+    "api",
+    "jarvis2"
+  ],
+  "scripts": [
+    "agents",
+    "api",
+    "scripts"
+  ],
+  "metrics_storage": [
+    "agents",
+    "metrics_storage"
+  ]
+}

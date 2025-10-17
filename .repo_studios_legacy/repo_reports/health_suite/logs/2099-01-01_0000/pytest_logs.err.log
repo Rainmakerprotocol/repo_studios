@@ -1,0 +1,3 @@
+2025-10-17 07:14:04,521 INFO Running: /mnt/jarvis2/.venv/bin/python -m pytest -vv -ra -rs --color=no --show-capture=all --durations=25 --durations-min=0.50 --junitxml=/home/founder/jarvis2/.repo_studios/pytest_logs/junit_2025-10-17_0714.xml --cov=. --cov-report xml:/home/founder/jarvis2/.repo_studios/pytest_logs/coverage_2025-10-17_0714.xml --cov-report html:/home/founder/jarvis2/.repo_studios/pytest_logs/coverage_html_2025-10-17_0714 (cwd=/home/founder/jarvis2)
+
+[TIMEOUT]

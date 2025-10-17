@@ -1,0 +1,358 @@
+{
+  "scans": [
+    {
+      "ts": "2025-09-29_1620",
+      "dir": "/home/founder/jarvis2/.repo_studios/monkey_patch/2025-09-29_1620",
+      "total": 156,
+      "by_category": {
+        "global_env_mutation": 15,
+        "attribute_reassignment_on_import": 131,
+        "sys_modules_assignment": 4,
+        "import_time_side_effect": 6
+      },
+      "policy_total": 137,
+      "policy_by_category": {
+        "global_env_mutation": 7,
+        "attribute_reassignment_on_import": 121,
+        "sys_modules_assignment": 3,
+        "import_time_side_effect": 6
+      }
+    },
+    {
+      "ts": "2025-10-02_1921",
+      "dir": "/home/founder/jarvis2/.repo_studios/monkey_patch/2025-10-02_1921",
+      "total": 158,
+      "by_category": {
+        "global_env_mutation": 15,
+        "attribute_reassignment_on_import": 131,
+        "sys_modules_assignment": 6,
+        "import_time_side_effect": 6
+      },
+      "policy_total": 137,
+      "policy_by_category": {
+        "global_env_mutation": 7,
+        "attribute_reassignment_on_import": 121,
+        "sys_modules_assignment": 3,
+        "import_time_side_effect": 6
+      }
+    },
+    {
+      "ts": "2025-10-02_1930",
+      "dir": "/home/founder/jarvis2/.repo_studios/monkey_patch/2025-10-02_1930",
+      "total": 158,
+      "by_category": {
+        "global_env_mutation": 15,
+        "attribute_reassignment_on_import": 131,
+        "sys_modules_assignment": 6,
+        "import_time_side_effect": 6
+      },
+      "policy_total": 137,
+      "policy_by_category": {
+        "global_env_mutation": 7,
+        "attribute_reassignment_on_import": 121,
+        "sys_modules_assignment": 3,
+        "import_time_side_effect": 6
+      }
+    },
+    {
+      "ts": "2025-10-04_1511",
+      "dir": "/home/founder/jarvis2/.repo_studios/monkey_patch/2025-10-04_1511",
+      "total": 159,
+      "by_category": {
+        "global_env_mutation": 15,
+        "attribute_reassignment_on_import": 132,
+        "sys_modules_assignment": 6,
+        "import_time_side_effect": 6
+      },
+      "policy_total": 138,
+      "policy_by_category": {
+        "global_env_mutation": 7,
+        "attribute_reassignment_on_import": 122,
+        "sys_modules_assignment": 3,
+        "import_time_side_effect": 6
+      }
+    },
+    {
+      "ts": "2025-10-04_1827",
+      "dir": "/home/founder/jarvis2/.repo_studios/monkey_patch/2025-10-04_1827",
+      "total": 162,
+      "by_category": {
+        "global_env_mutation": 15,
+        "attribute_reassignment_on_import": 132,
+        "sys_modules_assignment": 9,
+        "import_time_side_effect": 6
+      },
+      "policy_total": 141,
+      "policy_by_category": {
+        "global_env_mutation": 7,
+        "attribute_reassignment_on_import": 122,
+        "sys_modules_assignment": 6,
+        "import_time_side_effect": 6
+      }
+    },
+    {
+      "ts": "2025-10-09_0624",
+      "dir": "/home/founder/jarvis2/.repo_studios/monkey_patch/2025-10-09_0624",
+      "total": 179,
+      "by_category": {
+        "global_env_mutation": 15,
+        "attribute_reassignment_on_import": 150,
+        "sys_modules_assignment": 7,
+        "import_time_side_effect": 7
+      },
+      "policy_total": 157,
+      "policy_by_category": {
+        "global_env_mutation": 7,
+        "attribute_reassignment_on_import": 138,
+        "sys_modules_assignment": 6,
+        "import_time_side_effect": 6
+      }
+    },
+    {
+      "ts": "2025-10-09_0701",
+      "dir": "/home/founder/jarvis2/.repo_studios/monkey_patch/2025-10-09_0701",
+      "total": 179,
+      "by_category": {
+        "global_env_mutation": 15,
+        "attribute_reassignment_on_import": 150,
+        "sys_modules_assignment": 7,
+        "import_time_side_effect": 7
+      },
+      "policy_total": 157,
+      "policy_by_category": {
+        "global_env_mutation": 7,
+        "attribute_reassignment_on_import": 138,
+        "sys_modules_assignment": 6,
+        "import_time_side_effect": 6
+      }
+    },
+    {
+      "ts": "2025-10-09_0718",
+      "dir": "/home/founder/jarvis2/.repo_studios/monkey_patch/2025-10-09_0718",
+      "total": 179,
+      "by_category": {
+        "global_env_mutation": 15,
+        "attribute_reassignment_on_import": 150,
+        "sys_modules_assignment": 7,
+        "import_time_side_effect": 7
+      },
+      "policy_total": 157,
+      "policy_by_category": {
+        "global_env_mutation": 7,
+        "attribute_reassignment_on_import": 138,
+        "sys_modules_assignment": 6,
+        "import_time_side_effect": 6
+      }
+    },
+    {
+      "ts": "2025-10-09_0842",
+      "dir": "/home/founder/jarvis2/.repo_studios/monkey_patch/2025-10-09_0842",
+      "total": 179,
+      "by_category": {
+        "global_env_mutation": 15,
+        "attribute_reassignment_on_import": 150,
+        "sys_modules_assignment": 7,
+        "import_time_side_effect": 7
+      },
+      "policy_total": 157,
+      "policy_by_category": {
+        "global_env_mutation": 7,
+        "attribute_reassignment_on_import": 138,
+        "sys_modules_assignment": 6,
+        "import_time_side_effect": 6
+      }
+    },
+    {
+      "ts": "2025-10-10_0622",
+      "dir": "/home/founder/jarvis2/.repo_studios/monkey_patch/2025-10-10_0622",
+      "total": 182,
+      "by_category": {
+        "global_env_mutation": 15,
+        "attribute_reassignment_on_import": 153,
+        "sys_modules_assignment": 7,
+        "import_time_side_effect": 7
+      },
+      "policy_total": 160,
+      "policy_by_category": {
+        "global_env_mutation": 7,
+        "attribute_reassignment_on_import": 141,
+        "sys_modules_assignment": 6,
+        "import_time_side_effect": 6
+      }
+    },
+    {
+      "ts": "2025-10-13_0533",
+      "dir": "/home/founder/jarvis2/.repo_studios/monkey_patch/2025-10-13_0533",
+      "total": 187,
+      "by_category": {
+        "global_env_mutation": 15,
+        "attribute_reassignment_on_import": 156,
+        "sys_modules_assignment": 8,
+        "setattr_on_import_or_class": 1,
+        "import_time_side_effect": 7
+      },
+      "policy_total": 164,
+      "policy_by_category": {
+        "global_env_mutation": 7,
+        "attribute_reassignment_on_import": 144,
+        "sys_modules_assignment": 6,
+        "setattr_on_import_or_class": 1,
+        "import_time_side_effect": 6
+      }
+    },
+    {
+      "ts": "2025-10-13_1047",
+      "dir": "/home/founder/jarvis2/.repo_studios/monkey_patch/2025-10-13_1047",
+      "total": 189,
+      "by_category": {
+        "global_env_mutation": 15,
+        "attribute_reassignment_on_import": 158,
+        "sys_modules_assignment": 8,
+        "import_time_side_effect": 7,
+        "setattr_on_import_or_class": 1
+      },
+      "policy_total": 166,
+      "policy_by_category": {
+        "global_env_mutation": 7,
+        "attribute_reassignment_on_import": 146,
+        "sys_modules_assignment": 6,
+        "import_time_side_effect": 6,
+        "setattr_on_import_or_class": 1
+      }
+    },
+    {
+      "ts": "2025-10-15_0600",
+      "dir": "/home/founder/jarvis2/.repo_studios/monkey_patch/2025-10-15_0600",
+      "total": 190,
+      "by_category": {
+        "global_env_mutation": 15,
+        "attribute_reassignment_on_import": 160,
+        "sys_modules_assignment": 8,
+        "import_time_side_effect": 4,
+        "setattr_on_import_or_class": 1,
+        "builtins_mutation": 2
+      },
+      "policy_total": 167,
+      "policy_by_category": {
+        "global_env_mutation": 7,
+        "attribute_reassignment_on_import": 148,
+        "sys_modules_assignment": 6,
+        "import_time_side_effect": 3,
+        "setattr_on_import_or_class": 1,
+        "builtins_mutation": 2
+      }
+    },
+    {
+      "ts": "2025-10-17_0715",
+      "dir": "/home/founder/jarvis2/.repo_studios/monkey_patch/2025-10-17_0715",
+      "total": 190,
+      "by_category": {
+        "global_env_mutation": 15,
+        "attribute_reassignment_on_import": 160,
+        "sys_modules_assignment": 8,
+        "setattr_on_import_or_class": 1,
+        "builtins_mutation": 2,
+        "import_time_side_effect": 4
+      },
+      "policy_total": 167,
+      "policy_by_category": {
+        "global_env_mutation": 7,
+        "attribute_reassignment_on_import": 148,
+        "sys_modules_assignment": 6,
+        "setattr_on_import_or_class": 1,
+        "builtins_mutation": 2,
+        "import_time_side_effect": 3
+      }
+    }
+  ],
+  "latest_vs_prev": {
+    "prev": {
+      "ts": "2025-10-15_0600",
+      "total": 190,
+      "policy_total": 167
+    },
+    "cur": {
+      "ts": "2025-10-17_0715",
+      "total": 190,
+      "policy_total": 167
+    },
+    "by_category_rows": [
+      [
+        "attribute_reassignment_on_import",
+        160,
+        160,
+        0
+      ],
+      [
+        "builtins_mutation",
+        2,
+        2,
+        0
+      ],
+      [
+        "global_env_mutation",
+        15,
+        15,
+        0
+      ],
+      [
+        "import_time_side_effect",
+        4,
+        4,
+        0
+      ],
+      [
+        "setattr_on_import_or_class",
+        1,
+        1,
+        0
+      ],
+      [
+        "sys_modules_assignment",
+        8,
+        8,
+        0
+      ]
+    ],
+    "top_import_deltas": [],
+    "top_file_deltas": [],
+    "policy_by_category_rows": [
+      [
+        "attribute_reassignment_on_import",
+        148,
+        148,
+        0
+      ],
+      [
+        "builtins_mutation",
+        2,
+        2,
+        0
+      ],
+      [
+        "global_env_mutation",
+        7,
+        7,
+        0
+      ],
+      [
+        "import_time_side_effect",
+        3,
+        3,
+        0
+      ],
+      [
+        "setattr_on_import_or_class",
+        1,
+        1,
+        0
+      ],
+      [
+        "sys_modules_assignment",
+        6,
+        6,
+        0
+      ]
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "ts": "2025-09-11T02:26:00+00:00",
+  "pid": null,
+  "python": null,
+  "platform": null,
+  "flags": {},
+  "writer": null,
+  "totals": {
+    "observations": 0,
+    "unique_signatures": 0,
+    "dumps_count": 0
+  },
+  "stability": "OK",
+  "warnings": [],
+  "aggregated_at": "2025-09-11T02:26:00+00:00",
+  "metrics": {
+    "fault_dumps_total": 0,
+    "unique_signatures_count": 0,
+    "top_signature_repeat_count": 0,
+    "dump_rate_per_minute": 0.0
+  }
+}

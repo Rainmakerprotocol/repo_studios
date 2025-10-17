@@ -1,0 +1,34 @@
+FAILED tests
+Generated: 2025-10-04T15:11:20
+Total: 16
+
+Grouped by file (count desc):
+     4  tests/systemd/test_watchdog_interval_config.py
+     2  tests/agents/service_management/test_service_start_lifecycle_state.py
+     2  tests/agents/service_management/test_service_start_misc_flags.py
+     1  tests/agents/service_management/test_agents_metrics_exposition.py
+     1  tests/agents/service_management/test_agents_start_phase.py
+     1  tests/agents/service_management/test_service_start_exit_code_policy.py
+     1  tests/docs/test_global_anchors.py
+     1  tests/docs/test_ops_docs_metadata.py
+     1  tests/systemd/test_service_start_shim_deprecation.py
+     1  tests/systemd/test_watchdog_metrics.py
+     1  tests/systemd/test_watchdog_simulation.py
+
+Items:
+- tests/agents/service_management/test_agents_metrics_exposition.py::test_lifecycle_agents_enabled_metric_present
+- tests/agents/service_management/test_agents_start_phase.py::test_agents_start_skipped_with_no_agents_flag
+- tests/agents/service_management/test_service_start_exit_code_policy.py::test_exit_code_policy_constants_stable
+- tests/agents/service_management/test_service_start_lifecycle_state.py::test_lifecycle_state_agents_and_degraded
+- tests/agents/service_management/test_service_start_lifecycle_state.py::test_lifecycle_state_ready_full_run
+- tests/agents/service_management/test_service_start_misc_flags.py::test_service_start_invalid_phase_exit_code
+- tests/agents/service_management/test_service_start_misc_flags.py::test_api_start_timeout_simulated_delay
+- tests/docs/test_global_anchors.py::test_top_level_anchor_slug_uniqueness
+- tests/docs/test_ops_docs_metadata.py::test_ops_docs_metadata_contract
+- tests/systemd/test_service_start_shim_deprecation.py::test_service_start_shim_emits_single_deprecation_warning
+- tests/systemd/test_watchdog_interval_config.py::test_interval_accepted_when_above_floor
+- tests/systemd/test_watchdog_interval_config.py::test_interval_clamped_to_floor_prod
+- tests/systemd/test_watchdog_interval_config.py::test_interval_floor_test_mode
+- tests/systemd/test_watchdog_interval_config.py::test_negative_interval_fallback
+- tests/systemd/test_watchdog_metrics.py::test_heartbeat_write_and_mismatch
+- tests/systemd/test_watchdog_simulation.py::test_watchdog_interval_mismatch_warning

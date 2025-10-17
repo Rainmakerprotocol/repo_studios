@@ -1,0 +1,26 @@
+{
+  "status": "error",
+  "timestamp": "2025-10-17_0707",
+  "max_ccn": 15,
+  "max_length": 80,
+  "targets": [
+    "/home/founder/jarvis2/agents",
+    "/home/founder/jarvis2/api",
+    "/home/founder/jarvis2/scripts"
+  ],
+  "command": [
+    "/mnt/jarvis2/.venv/bin/python",
+    "-m",
+    "lizard",
+    "-C",
+    "15",
+    "-L",
+    "80",
+    "/home/founder/jarvis2/agents",
+    "/home/founder/jarvis2/api",
+    "/home/founder/jarvis2/scripts"
+  ],
+  "command_str": "/mnt/jarvis2/.venv/bin/python -m lizard -C 15 -L 80 /home/founder/jarvis2/agents /home/founder/jarvis2/api /home/founder/jarvis2/scripts",
+  "issue_count": 0,
+  "notes": "lizard command failed (rc=1)"
+}

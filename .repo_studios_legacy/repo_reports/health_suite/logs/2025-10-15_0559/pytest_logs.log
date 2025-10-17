@@ -1,0 +1,33 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.5, pytest-8.4.1, pluggy-1.5.0 -- /home/founder/miniconda3/bin/python
+cachedir: .pytest_cache
+rootdir: /home/founder/jarvis2
+configfile: pytest.ini
+testpaths: tests, agents/interface/chainlit/tests, agents/core/autonomy/tests, .repo_studios/tests, agents/core/monitoring/metrics_storage/tests
+plugins: anyio-4.9.0, cov-6.2.1, asyncio-1.1.0
+asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 1336 items / 1 error / 2 skipped
+
+==================================== ERRORS ====================================
+______________ ERROR collecting tests/monitoring/test_db_pool.py _______________
+ImportError while importing test module '/home/founder/jarvis2/tests/monitoring/test_db_pool.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../miniconda3/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/monitoring/test_db_pool.py:9: in <module>
+    from agents.core.monitoring.metrics_storage.storage.exceptions import DatabaseException
+E   ModuleNotFoundError: No module named 'agents.core.monitoring.metrics_storage.storage.exceptions'
+=============================== warnings summary ===============================
+../miniconda3/lib/python3.13/site-packages/_pytest/config/__init__.py:833
+  /home/founder/miniconda3/lib/python3.13/site-packages/_pytest/config/__init__.py:833: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; conftest_app_builder
+    self.import_plugin(import_spec)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: /home/founder/jarvis2/.repo_studios/pytest_logs/junit_2025-10-15_0600.xml -
+=========================== short test summary info ============================
+SKIPPED [1] tests/api/ui/test_ui_control_metrics_and_status.py:19: Py3.13 EBADF during asyncio selector teardown in plugin; skipping module to keep suite stable. Set UI_CONTROL_METRICS_EBADF_STRICT=1 to force-run.
+SKIPPED [1] agents/core/monitoring/metrics_storage/tests/retention/test_tombstone.py:13: Legacy tombstone tests were replaced by modular suites under tests/retention/tombstones/
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+==================== 2 skipped, 1 warning, 1 error in 4.32s ====================

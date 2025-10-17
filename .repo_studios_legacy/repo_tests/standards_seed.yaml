@@ -1,0 +1,223 @@
+# Manual curated seed rules (Phase 1). Heuristic extraction will later augment / replace.
+# Fields: id, category_ids, summary, rationale, severity, applies_to, source {file, anchor}, last_updated
+# NOTE: anchors are provisional; adjust to match actual heading slugs in source docs.
+
+schema_version: 1
+version: 2025.09.0
+rules:
+  - id: project-use-semantic-versioning
+    category_ids: [project]
+    summary: Use semantic versioning for public artifacts
+    rationale: Predictable versioning improves dependency management and upgrade safety.
+    severity: warn
+    applies_to: ["**/*"]
+    source: {file: .repo_studios/repo_standards_project.md, anchor: semantic-versioning}
+    last_updated: 2025-09-28
+  - id: project-pin-dependencies
+    category_ids: [project]
+    summary: Pin critical runtime dependencies
+    rationale: Unpinned versions introduce non-deterministic builds and latent breakage risk.
+    severity: error
+    applies_to: ["**/pyproject.toml","**/requirements*.txt"]
+    source: {file: .repo_studios/repo_standards_project.md, anchor: dependency-management}
+    last_updated: 2025-09-28
+  - id: project-avoid-broad-except
+    category_ids: [project, python_coding]
+    summary: Avoid broad bare except blocks
+    rationale: Bare exceptions mask real errors and complicate debugging.
+    severity: error
+    applies_to: ["**/*.py"]
+    source: {file: .repo_studios/repo_standards_python.md, anchor: error-handling}
+    last_updated: 2025-09-28
+  - id: python-coding-prefer-pathlib
+    category_ids: [python_coding]
+    summary: Prefer pathlib over os.path for path operations
+    rationale: pathlib provides clearer, object-oriented path manipulation and reduces bugs.
+    severity: warn
+    applies_to: ["**/*.py"]
+    source: {file: .repo_studios/repo_standards_python.md, anchor: filesystem}
+    last_updated: 2025-09-28
+  - id: python-coding-use-type-hints
+    category_ids: [python_coding]
+    summary: Use type hints for public functions
+    rationale: Type annotations improve readability and enable static analysis.
+    severity: warn
+    applies_to: ["**/*.py"]
+    source: {file: .repo_studios/repo_standards_python.md, anchor: typing}
+    last_updated: 2025-09-28
+  - id: python-coding-no-print-logging
+    category_ids: [python_coding]
+    summary: Do not use print for production logging
+    rationale: Structured logging enables filtering and observability pipelines.
+    severity: error
+    applies_to: ["**/*.py"]
+    source: {file: .repo_studios/repo_standards_python.md, anchor: logging}
+    last_updated: 2025-09-28
+  - id: python-coding-avoid-sql-injection-risk
+    category_ids: [python_coding]
+    summary: Use parameterized queries to avoid SQL injection
+    rationale: String concatenation with user input exposes injection vulnerabilities.
+    severity: critical
+    applies_to: ["**/*.py"]
+    source: {file: .repo_studios/repo_standards_python.md, anchor: security}
+    last_updated: 2025-09-28
+  - id: python-coding-limit-function-length
+    category_ids: [python_coding]
+    summary: Keep function bodies focused and small
+    rationale: Short functions are easier to test and reason about.
+    severity: info
+    applies_to: ["**/*.py"]
+    source: {file: .repo_studios/repo_standards_python.md, anchor: function-structure}
+    last_updated: 2025-09-28
+  - id: markdown-front-matter-required
+    category_ids: [markdown]
+    summary: Include standard front matter block in standards docs
+    rationale: Consistent metadata enables automated indexing and governance.
+    severity: error
+    applies_to: ["**/*.md"]
+    source: {file: .repo_studios/repo_standards_markdown.md, anchor: front-matter}
+    last_updated: 2025-09-28
+  - id: markdown-single-h1
+    category_ids: [markdown]
+    summary: Use a single H1 per document
+    rationale: Multiple top-level headings confuse navigation and anchor generation.
+    severity: warn
+    applies_to: ["**/*.md"]
+    source: {file: .repo_studios/repo_standards_markdown.md, anchor: heading-structure}
+    last_updated: 2025-09-28
+  - id: markdown-keep-lines-short
+    category_ids: [markdown]
+    summary: Wrap markdown lines at ~100 characters
+    rationale: Improves diff readability and tooling compatibility.
+    severity: info
+    applies_to: ["**/*.md"]
+    source: {file: .repo_studios/repo_standards_markdown.md, anchor: formatting}
+    last_updated: 2025-09-28
+  - id: markdown-relative-links
+    category_ids: [markdown]
+    summary: Prefer relative links within the repository
+    rationale: Relative links remain valid across forks and mirrors.
+    severity: warn
+    applies_to: ["**/*.md"]
+    source: {file: .repo_studios/repo_standards_markdown.md, anchor: links}
+    last_updated: 2025-09-28
+  - id: markdown-avoid-empty-headings
+    category_ids: [markdown]
+    summary: Avoid empty placeholder headings
+    rationale: Placeholder headings create noise and mislead indexing.
+    severity: warn
+    applies_to: ["**/*.md"]
+    source: {file: .repo_studios/repo_standards_markdown.md, anchor: heading-quality}
+    last_updated: 2025-09-28
+  - id: monkey-patch-reduction-detect-early
+    category_ids: [monkey_patch_reduction]
+    summary: Detect monkey patches early via scanning scripts
+    rationale: Early detection reduces runtime risk and hidden coupling.
+    severity: warn
+    applies_to: ["**/*.py"]
+    source: {file: .repo_studios/repo_standards_monkey_patch.md, anchor: detection}
+    last_updated: 2025-09-28
+  - id: monkey-patch-reduction-avoid-builtins-patch
+    category_ids: [monkey_patch_reduction]
+    summary: Avoid patching Python builtins at runtime
+    rationale: Builtin mutations create unpredictable global side effects.
+    severity: critical
+    applies_to: ["**/*.py"]
+    source: {file: .repo_studios/repo_standards_monkey_patch.md, anchor: high-risk}
+    last_updated: 2025-09-28
+  - id: monkey-patch-reduction-scope-tests
+    category_ids: [monkey_patch_reduction]
+    summary: Scope necessary patches to test fixtures
+    rationale: Limiting patch lifetime reduces production leakage risk.
+    severity: error
+    applies_to: ["**/tests/**/*.py"]
+    source: {file: .repo_studios/repo_standards_monkey_patch.md, anchor: testing}
+    last_updated: 2025-09-28
+  - id: cleanup-refactor-small-increments
+    category_ids: [cleanup_refactor]
+    summary: Perform cleanup in small reviewable increments
+    rationale: Small diffs reduce merge conflict risk and ease code review.
+    severity: info
+    applies_to: ["**/*.py"]
+    source: {file: .repo_studios/repo_studios_clean.md, anchor: incremental}
+    last_updated: 2025-09-28
+  - id: cleanup-refactor-decompose-large-files
+    category_ids: [cleanup_refactor]
+    summary: Decompose Python files exceeding complexity thresholds
+    rationale: Breaking large modules improves navigability and reduces cognitive load.
+    severity: warn
+    applies_to: ["**/*.py"]
+    source: {file: .repo_studios/repo_studios_clean.md, anchor: decomposition}
+    last_updated: 2025-09-28
+  - id: cleanup-refactor-avoid-driveby-changes
+    category_ids: [cleanup_refactor]
+    summary: Avoid drive-by unrelated changes in focused PRs
+    rationale: Focused changesets aid review clarity and traceability.
+    severity: warn
+    applies_to: ["**/*"]
+    source: {file: .repo_studios/repo_studios_clean.md, anchor: scope}
+    last_updated: 2025-09-28
+  - id: mission-define-role-scope
+    category_ids: [mission]
+    summary: Clearly define agent role scope before execution
+    rationale: Scope clarity prevents unintended actions and reduces governance risk.
+    severity: error
+    applies_to: ["**/*"]
+    source: {file: .repo_studios/repo_mission_parameters.md, anchor: role-scope}
+    last_updated: 2025-09-28
+  - id: mission-record-critical-decisions
+    category_ids: [mission]
+    summary: Record critical architectural decisions in a decisions log
+    rationale: Decision logs support auditability and future rationale lookup.
+    severity: warn
+    applies_to: ["**/*.md"]
+    source: {file: .repo_studios/repo_mission_parameters.md, anchor: decisions-log}
+    last_updated: 2025-09-28
+  - id: mission-enforce-guardrails
+    category_ids: [mission]
+    summary: Enforce guardrails via explicit allow/deny lists
+    rationale: Guardrails reduce accidental use of restricted operations or data.
+    severity: critical
+    applies_to: ["**/*"]
+    source: {file: .repo_studios/repo_mission_parameters.md, anchor: guardrails}
+    last_updated: 2025-09-28
+  - id: mission-avoid-silent-failures
+    category_ids: [mission]
+    summary: Avoid silent task failures; escalate with context
+    rationale: Surfacing failures promptly enables corrective action and transparency.
+    severity: error
+    applies_to: ["**/*"]
+    source: {file: .repo_studios/repo_mission_parameters.md, anchor: failure-handling}
+    last_updated: 2025-09-28
+  - id: project-document-make-targets
+    category_ids: [project]
+    summary: Document new Make targets alongside code changes
+    rationale: Up-to-date task docs improve discoverability and reproducibility.
+    severity: info
+    applies_to: ["Makefile","**/*.md"]
+    source: {file: .repo_studios/repo_standards_project.md, anchor: tasks}
+    last_updated: 2025-09-28
+  - id: python-coding-avoid-wildcard-imports
+    category_ids: [python_coding]
+    summary: Avoid wildcard imports
+    rationale: Wildcard imports obscure namespace origins and hinder static analysis.
+    severity: warn
+    applies_to: ["**/*.py"]
+    source: {file: .repo_studios/repo_standards_python.md, anchor: imports}
+    last_updated: 2025-09-28
+  - id: python-coding-prefer-explicit-timeouts
+    category_ids: [python_coding]
+    summary: Prefer explicit timeouts for I/O and network calls
+    rationale: Explicit timeouts prevent indefinite hangs and improve resilience.
+    severity: error
+    applies_to: ["**/*.py"]
+    source: {file: .repo_studios/repo_standards_python.md, anchor: timeouts}
+    last_updated: 2025-09-28
+  - id: markdown-validate-links
+    category_ids: [markdown]
+    summary: Validate markdown links during CI
+    rationale: Early detection prevents broken documentation navigation.
+    severity: info
+    applies_to: ["**/*.md"]
+    source: {file: .repo_studios/repo_standards_markdown.md, anchor: link-validation}
+    last_updated: 2025-09-28

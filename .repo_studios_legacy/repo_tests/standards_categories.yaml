@@ -1,0 +1,53 @@
+# Category seed mapping for standards index generation
+# This file is manually curated; build script will read it to populate categories & sources.
+# Do not auto-generate. Update when adding/removing standards markdown sources.
+
+schema_version: 1
+version: 2025.09.0
+updated_at: 2025-09-28
+
+categories:
+  project:
+    title: Project & Repository
+    description: Global repository conventions, layout, dependency and build practices.
+    tags: [foundational]
+  markdown:
+    title: Markdown Authoring
+    description: Documentation structure, metadata, formatting, and link hygiene.
+    tags: [docs]
+  python_coding:
+    title: Python Coding Standards
+    description: Style, typing, error handling, performance, and test patterns.
+    tags: [python]
+  monkey_patch_reduction:
+    title: Monkey Patch Reduction
+    description: Policies to detect, isolate, and eliminate risky runtime patches.
+    tags: [risk]
+  cleanup_refactor:
+    title: Cleanup & Refactor Workflow
+    description: Systematic improvement, decomposition, and hygiene protocols.
+    tags: [maintenance]
+  mission:
+    title: Mission Parameters & Roles
+    description: Behavioral boundaries, roles, and mission scoping semantics for agents.
+    tags: [governance]
+
+sources:
+  - path: .repo_studios/repo_standards_project.md
+    categories: [project]
+  - path: .repo_studios/repo_standards_markdown.md
+    categories: [markdown]
+  - path: .repo_studios/repo_standards_python.md
+    categories: [python_coding]
+  - path: .repo_studios/repo_standards_monkey_patch.md
+    categories: [monkey_patch_reduction]
+  - path: .repo_studios/repo_studios_clean.md
+    categories: [cleanup_refactor]
+  - path: .repo_studios/repo_mission_parameters.md
+    categories: [mission]
+
+# Validation expectations (informational; not machine-enforced here):
+# - All listed source paths must exist.
+# - Each source must map to >=1 category.
+# - No empty category lists.
+# - Category IDs align with those in the roadmap & schema spec.

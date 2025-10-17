@@ -1,0 +1,13 @@
+FAILED tests
+Generated: 2025-10-17T07:15:04
+Total: 3
+
+Grouped by file (count desc):
+     1  tests/docs/test_global_anchors.py
+     1  tests/messaging/test_integration_event_emissions.py
+     1  tests/visualization/error_analytics/test_components.py
+
+Items:
+- tests/docs/test_global_anchors.py::test_top_level_anchor_slug_uniqueness
+- tests/messaging/test_integration_event_emissions.py::test_collector_service_emits_metrics_and_alerts
+- tests/visualization/error_analytics/test_components.py::test_error_trend_builder_when_errors_present

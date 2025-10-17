@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/typecheck/report.schema.json",
+  "title": "Typecheck Report",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "status",
+    "mypy_version",
+    "checked_paths",
+    "total_errors",
+    "files_with_issues",
+    "error_samples"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["OK", "ERROR"]
+    },
+    "mypy_version": {
+      "type": "string"
+    },
+    "checked_paths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "total_errors": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "files_with_issues": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "error_samples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "line", "code", "message"],
+        "properties": {
+          "path": { "type": "string" },
+          "line": { "type": "integer", "minimum": 1 },
+          "code": { "type": "string" },
+          "message": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "invocation": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "duration_sec": {
+      "type": "number"
+    },
+    "summary": {
+      "type": "string"
+    }
+  }
+}

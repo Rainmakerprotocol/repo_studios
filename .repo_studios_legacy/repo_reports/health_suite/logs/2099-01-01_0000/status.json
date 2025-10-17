@@ -1,0 +1,249 @@
+{
+  "timestamp": "2099-01-01_0000",
+  "started_at": 1760699642.7358425,
+  "steps": [
+    {
+      "name": "batch_clean",
+      "argv": [
+        "/mnt/jarvis2/.venv/bin/python",
+        "/home/founder/jarvis2/.repo_studios/batch_clean.py",
+        "-t",
+        "agents",
+        "-t",
+        "api",
+        "-t",
+        "scripts",
+        "--no-pytest"
+      ],
+      "start": 1760699642.7360144,
+      "exit_code": 124,
+      "duration_sec": 1.006,
+      "status": "ERROR",
+      "error_log": ".repo_studios/health_suite/logs/2099-01-01_0000/batch_clean.err.log"
+    },
+    {
+      "name": "pytest_logs",
+      "argv": [
+        "/mnt/jarvis2/.venv/bin/python",
+        "/home/founder/jarvis2/.repo_studios/pytest_log_runner.py"
+      ],
+      "start": 1760699643.7419968,
+      "exit_code": 124,
+      "duration_sec": 1.005,
+      "status": "ERROR",
+      "error_log": ".repo_studios/health_suite/logs/2099-01-01_0000/pytest_logs.err.log"
+    },
+    {
+      "name": "scan_monkey_patches",
+      "argv": [
+        "/mnt/jarvis2/.venv/bin/python",
+        "/home/founder/jarvis2/.repo_studios/scan_monkey_patches.py",
+        "--repo-root",
+        ".",
+        "--with-git",
+        "--verbose",
+        "--strict"
+      ],
+      "start": 1760699644.7468476,
+      "exit_code": 124,
+      "duration_sec": 1.005,
+      "status": "ERROR",
+      "error_log": ".repo_studios/health_suite/logs/2099-01-01_0000/scan_monkey_patches.err.log"
+    },
+    {
+      "name": "dep_health",
+      "argv": [
+        "/mnt/jarvis2/.venv/bin/python",
+        "/home/founder/jarvis2/.repo_studios/dep_hygiene_report.py",
+        "--repo-root",
+        ".",
+        "--output-base",
+        "/home/founder/jarvis2/.repo_studios/dep_health"
+      ],
+      "start": 1760699645.7516637,
+      "exit_code": 0,
+      "duration_sec": 0.277,
+      "status": "OK"
+    },
+    {
+      "name": "compare_monkey_patch_trends",
+      "argv": [
+        "/mnt/jarvis2/.venv/bin/python",
+        "/home/founder/jarvis2/.repo_studios/compare_monkey_patch_trends.py"
+      ],
+      "start": 1760699646.0283706,
+      "exit_code": 0,
+      "duration_sec": 0.285,
+      "status": "OK"
+    },
+    {
+      "name": "check_import_boundaries",
+      "argv": [
+        "/mnt/jarvis2/.venv/bin/python",
+        "/home/founder/jarvis2/.repo_studios/check_import_boundaries.py"
+      ],
+      "start": 1760699646.3135881,
+      "exit_code": 1,
+      "duration_sec": 0.463,
+      "status": "ERROR",
+      "error_log": ".repo_studios/health_suite/logs/2099-01-01_0000/check_import_boundaries.err.log"
+    },
+    {
+      "name": "test_log_health_report",
+      "argv": [
+        "/mnt/jarvis2/.venv/bin/python",
+        "/home/founder/jarvis2/.repo_studios/test_log_health_report.py",
+        "--logs-dir",
+        "/home/founder/jarvis2/.repo_studios/pytest_logs",
+        "--output-base",
+        "/home/founder/jarvis2/.repo_studios/test_health"
+      ],
+      "start": 1760699646.7764502,
+      "exit_code": 0,
+      "duration_sec": 0.316,
+      "status": "OK"
+    },
+    {
+      "name": "typecheck_report",
+      "argv": [
+        "/mnt/jarvis2/.venv/bin/python",
+        "/home/founder/jarvis2/.repo_studios/typecheck_report.py",
+        "--repo-root",
+        ".",
+        "--output-base",
+        "/home/founder/jarvis2/.repo_studios/typecheck",
+        "--timestamp",
+        "2099-01-01_0000"
+      ],
+      "start": 1760699647.092314,
+      "exit_code": 124,
+      "duration_sec": 1.006,
+      "status": "ERROR",
+      "error_log": ".repo_studios/health_suite/logs/2099-01-01_0000/typecheck_report.err.log"
+    },
+    {
+      "name": "import_graph_report",
+      "argv": [
+        "/mnt/jarvis2/.venv/bin/python",
+        "/home/founder/jarvis2/.repo_studios/import_graph_report.py",
+        "--repo-root",
+        ".",
+        "--output-base",
+        "/home/founder/jarvis2/.repo_studios/import_graph"
+      ],
+      "start": 1760699648.0984082,
+      "exit_code": 124,
+      "duration_sec": 1.005,
+      "status": "ERROR",
+      "error_log": ".repo_studios/health_suite/logs/2099-01-01_0000/import_graph_report.err.log"
+    },
+    {
+      "name": "churn_complexity_heatmap",
+      "argv": [
+        "/mnt/jarvis2/.venv/bin/python",
+        "/home/founder/jarvis2/.repo_studios/churn_complexity_heatmap.py",
+        "--repo-root",
+        ".",
+        "--output-base",
+        "/home/founder/jarvis2/.repo_studios/churn_complexity",
+        "--logs-dir",
+        "/home/founder/jarvis2/.repo_studios/pytest_logs"
+      ],
+      "start": 1760699649.1035433,
+      "exit_code": 124,
+      "duration_sec": 1.005,
+      "status": "ERROR",
+      "error_log": ".repo_studios/health_suite/logs/2099-01-01_0000/churn_complexity_heatmap.err.log"
+    },
+    {
+      "name": "lizard_report",
+      "argv": [
+        "/mnt/jarvis2/.venv/bin/python",
+        "/home/founder/jarvis2/.repo_studios/lizard_report.py",
+        "--repo-root",
+        ".",
+        "--timestamp",
+        "2099-01-01_0000"
+      ],
+      "start": 1760699650.1084204,
+      "exit_code": 124,
+      "duration_sec": 1.005,
+      "status": "ERROR",
+      "error_log": ".repo_studios/health_suite/logs/2099-01-01_0000/lizard_report.err.log"
+    },
+    {
+      "name": "fault_dump_once",
+      "argv": [
+        "/mnt/jarvis2/.venv/bin/python",
+        "/home/founder/jarvis2/.repo_studios/dump_faulthandler_once.py"
+      ],
+      "start": 1760699651.114072,
+      "exit_code": 0,
+      "duration_sec": 0.252,
+      "status": "OK"
+    },
+    {
+      "name": "fault_artifacts",
+      "argv": [
+        "/mnt/jarvis2/.venv/bin/python",
+        "/home/founder/jarvis2/.repo_studios/generate_fault_artifacts.py"
+      ],
+      "start": 1760699651.3656273,
+      "exit_code": 0,
+      "duration_sec": 0.255,
+      "status": "OK"
+    },
+    {
+      "name": "fault_aggregate",
+      "argv": [
+        "/mnt/jarvis2/.venv/bin/python",
+        "scripts/health/faulthandler_aggregate.py"
+      ],
+      "start": 1760699651.6208518,
+      "exit_code": 0,
+      "duration_sec": 0.262,
+      "status": "OK"
+    },
+    {
+      "name": "fault_gate",
+      "argv": [
+        "/mnt/jarvis2/.venv/bin/python",
+        "scripts/ci_faulthandler_gate.py"
+      ],
+      "start": 1760699651.882676,
+      "exit_code": 0,
+      "duration_sec": 0.251,
+      "status": "OK"
+    },
+    {
+      "name": "anchor_health",
+      "argv": [
+        "/mnt/jarvis2/.venv/bin/python",
+        "/home/founder/jarvis2/.repo_studios/anchor_health_report.py"
+      ],
+      "start": 1760699652.1338196,
+      "exit_code": 0,
+      "duration_sec": 0.292,
+      "status": "OK"
+    },
+    {
+      "name": "health_suite_summary",
+      "argv": [
+        "/mnt/jarvis2/.venv/bin/python",
+        "/home/founder/jarvis2/.repo_studios/health_suite_summary.py",
+        "--repo-root",
+        ".",
+        "--output-dir",
+        "/home/founder/jarvis2/.repo_studios/health_suite",
+        "--timestamp",
+        "2099-01-01_0000"
+      ],
+      "start": 1760699652.4262319,
+      "exit_code": 0,
+      "duration_sec": 0.253,
+      "status": "OK"
+    }
+  ],
+  "fault_outdir": "/home/founder/jarvis2/.repo_studios/faulthandler/2099-01-01_0000",
+  "finished_at": 1760699652.6790752
+}

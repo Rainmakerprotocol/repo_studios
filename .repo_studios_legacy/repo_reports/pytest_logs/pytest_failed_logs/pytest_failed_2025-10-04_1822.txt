@@ -1,0 +1,30 @@
+FAILED tests
+Generated: 2025-10-04T18:27:40
+Total: 16
+
+Grouped by file (count desc):
+     4  tests/systemd/test_watchdog_interval_config.py
+     4  tests/systemd/test_watchdog_mismatch_degraded.py
+     4  tests/systemd/test_watchdog_simulation.py
+     1  tests/docs/test_global_anchors.py
+     1  tests/docs/test_ops_docs_metadata.py
+     1  tests/systemd/test_service_start_shim_deprecation.py
+     1  tests/systemd/test_watchdog_metrics.py
+
+Items:
+- tests/docs/test_global_anchors.py::test_top_level_anchor_slug_uniqueness
+- tests/docs/test_ops_docs_metadata.py::test_ops_docs_metadata_contract
+- tests/systemd/test_service_start_shim_deprecation.py::test_service_start_shim_emits_single_deprecation_warning
+- tests/systemd/test_watchdog_interval_config.py::test_interval_accepted_when_above_floor
+- tests/systemd/test_watchdog_interval_config.py::test_interval_clamped_to_floor_prod
+- tests/systemd/test_watchdog_interval_config.py::test_interval_floor_test_mode
+- tests/systemd/test_watchdog_interval_config.py::test_negative_interval_fallback
+- tests/systemd/test_watchdog_metrics.py::test_heartbeat_write_and_mismatch
+- tests/systemd/test_watchdog_mismatch_degraded.py::test_escalation_triggers_at_threshold
+- tests/systemd/test_watchdog_mismatch_degraded.py::test_escalation_suppression
+- tests/systemd/test_watchdog_mismatch_degraded.py::test_reset_on_compliant_interval
+- tests/systemd/test_watchdog_mismatch_degraded.py::test_threshold_zero_disables
+- tests/systemd/test_watchdog_simulation.py::test_heartbeat_stale_detection_basic
+- tests/systemd/test_watchdog_simulation.py::test_heartbeat_stale_when_missing
+- tests/systemd/test_watchdog_simulation.py::test_watchdog_interval_mismatch_warning
+- tests/systemd/test_watchdog_simulation.py::test_watchdog_thread_sends

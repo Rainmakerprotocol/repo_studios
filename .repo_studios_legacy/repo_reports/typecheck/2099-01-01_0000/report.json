@@ -1,0 +1,30 @@
+{
+  "status": "ERROR",
+  "mypy_version": "mypy 1.x",
+  "checked_paths": [
+    "agents/core/jarvis_api.py"
+  ],
+  "total_errors": 3,
+  "files_with_issues": 2,
+  "error_samples": [
+    {
+      "path": "a.py",
+      "line": 1,
+      "code": "attr-defined",
+      "message": "x has no attribute y"
+    },
+    {
+      "path": "b.py",
+      "line": 2,
+      "code": "return-value",
+      "message": "Incompatible return value"
+    }
+  ],
+  "invocation": [
+    "/mnt/jarvis2/.venv/bin/python",
+    "-m",
+    "mypy",
+    "agents"
+  ],
+  "timestamp": "2099-01-01_0000"
+}

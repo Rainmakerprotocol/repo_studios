@@ -1,0 +1,7 @@
+[
+  {
+    "signature_id": "example1234567890",
+    "expires": "2099-12-31T00:00:00Z",
+    "reason": "example allowlisted pattern"
+  }
+]

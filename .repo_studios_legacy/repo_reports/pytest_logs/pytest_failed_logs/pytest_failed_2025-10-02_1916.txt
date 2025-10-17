@@ -1,0 +1,130 @@
+FAILED tests
+Generated: 2025-10-02T19:21:46
+Total: 81
+
+Grouped by file (count desc):
+     5  tests/agents/service_management/test_service_start_misc_flags.py
+     5  tests/systemd/test_watchdog_interval_config.py
+     4  tests/agents/service_management/test_service_start_cache_warm.py
+     4  tests/systemd/test_watchdog_mismatch_degraded.py
+     3  tests/agents/service_management/test_cache_warm_filters_and_timeout.py
+     3  tests/agents/service_management/test_restart_wrapper.py
+     3  tests/agents/service_management/test_service_start_instrumentation.py
+     3  tests/agents/service_management/test_service_start_preflight.py
+     3  tests/agents/service_management/test_service_start_preflight_json.py
+     3  tests/agents/service_management/test_service_start_unified_flag_config.py
+     3  tests/systemd/test_watchdog_status_updates.py
+     2  tests/agents/service_management/test_service_start_json_output.py
+     2  tests/agents/service_management/test_service_start_lifecycle_state.py
+     2  tests/agents/service_management/test_service_start_list_phases_flag.py
+     2  tests/agents/service_management/test_service_start_metrics_tier.py
+     2  tests/agents/service_management/test_service_start_only_flag.py
+     2  tests/agents/service_management/test_service_start_preflight_timeout.py
+     2  tests/agents/service_management/test_service_start_strict_mode.py
+     2  tests/systemd/test_logging_modes.py
+     2  tests/systemd/test_restart_alignment.py
+     2  tests/systemd/test_supervision_mode_logging.py
+     2  tests/systemd/test_watchdog_metrics.py
+     1  tests/agents/service_management/test_agents_metrics_exposition.py
+     1  tests/agents/service_management/test_agents_start_phase.py
+     1  tests/agents/service_management/test_pid_file_plumbing.py
+     1  tests/agents/service_management/test_service_start_capabilities_artifact.py
+     1  tests/agents/service_management/test_service_start_dry_run.py
+     1  tests/agents/service_management/test_service_start_dry_run_schema.py
+     1  tests/agents/service_management/test_service_start_dynamic_agent_registry.py
+     1  tests/agents/service_management/test_service_start_exit_code_policy.py
+     1  tests/agents/service_management/test_service_start_phase_timings_until_agents.py
+     1  tests/agents/service_management/test_service_start_phase_trace.py
+     1  tests/agents/service_management/test_service_start_preflight_disable.py
+     1  tests/agents/service_management/test_service_start_preflight_schema.py
+     1  tests/agents/service_management/test_service_start_probe_metrics_exposition.py
+     1  tests/agents/service_management/test_service_start_shutdown_snapshot.py
+     1  tests/agents/service_management/test_shutdown_integration.py
+     1  tests/docs/test_global_anchors.py
+     1  tests/docs/test_ops_docs_metadata.py
+     1  tests/systemd/test_service_start_notify_integration.py
+     1  tests/systemd/test_watchdog_simulation.py
+     1  tests/systemd/test_watchdog_stale_detection.py
+
+Items:
+- tests/agents/service_management/test_agents_metrics_exposition.py::test_lifecycle_agents_enabled_metric_present
+- tests/agents/service_management/test_agents_start_phase.py::test_agents_start_skipped_with_no_agents_flag
+- tests/agents/service_management/test_cache_warm_filters_and_timeout.py::test_cache_warm_include_exclude[negative_cache_selfcheck--expect_present0-expect_absent0]
+- tests/agents/service_management/test_cache_warm_filters_and_timeout.py::test_cache_warm_include_exclude[-embedding_viability_probe-expect_present1-expect_absent1]
+- tests/agents/service_management/test_cache_warm_filters_and_timeout.py::test_cache_warm_per_warmer_timeout
+- tests/agents/service_management/test_pid_file_plumbing.py::test_pid_file_created_and_removed
+- tests/agents/service_management/test_restart_wrapper.py::test_fail_once_without_restart
+- tests/agents/service_management/test_restart_wrapper.py::test_restart_wrapper_recovers
+- tests/agents/service_management/test_restart_wrapper.py::test_restart_giveup
+- tests/agents/service_management/test_service_start_cache_warm.py::test_cache_warm_success_only_phase
+- tests/agents/service_management/test_service_start_cache_warm.py::test_cache_warm_forced_failure_marks_degraded
+- tests/agents/service_management/test_service_start_cache_warm.py::test_cache_warm_slow_threshold_marks_degraded
+- tests/agents/service_management/test_service_start_cache_warm.py::test_cache_warm_disable_flag_noop
+- tests/agents/service_management/test_service_start_capabilities_artifact.py::test_capabilities_artifact_written
+- tests/agents/service_management/test_service_start_dry_run.py::test_service_start_dry_run_lists_phases
+- tests/agents/service_management/test_service_start_dry_run_schema.py::test_service_start_dry_run_json_matches_schema_minimal
+- tests/agents/service_management/test_service_start_dynamic_agent_registry.py::test_dynamic_agent_registration
+- tests/agents/service_management/test_service_start_exit_code_policy.py::test_exit_code_policy_constants_stable
+- tests/agents/service_management/test_service_start_instrumentation.py::test_phase_duration_logged[api_start]
+- tests/agents/service_management/test_service_start_instrumentation.py::test_phase_duration_logged[cache_warm]
+- tests/agents/service_management/test_service_start_instrumentation.py::test_warmer_result_lines_present
+- tests/agents/service_management/test_service_start_json_output.py::test_service_start_dry_run_json_basic
+- tests/agents/service_management/test_service_start_json_output.py::test_service_start_dry_run_json_with_manifest_hash
+- tests/agents/service_management/test_service_start_lifecycle_state.py::test_lifecycle_state_agents_and_degraded
+- tests/agents/service_management/test_service_start_lifecycle_state.py::test_lifecycle_state_ready_full_run
+- tests/agents/service_management/test_service_start_list_phases_flag.py::test_service_start_list_phases_flag_text_output
+- tests/agents/service_management/test_service_start_list_phases_flag.py::test_service_start_list_phases_supersedes_dry_run
+- tests/agents/service_management/test_service_start_metrics_tier.py::test_api_start_metrics_tier_enabled_assume_ready_bypass
+- tests/agents/service_management/test_service_start_metrics_tier.py::test_api_start_metrics_tier_probes_and_debug_logging
+- tests/agents/service_management/test_service_start_misc_flags.py::test_service_start_until_phase_text
+- tests/agents/service_management/test_service_start_misc_flags.py::test_service_start_invalid_phase_exit_code
+- tests/agents/service_management/test_service_start_misc_flags.py::test_api_start_success_only_phase
+- tests/agents/service_management/test_service_start_misc_flags.py::test_api_start_timeout_simulated_delay
+- tests/agents/service_management/test_service_start_misc_flags.py::test_service_start_manifest_hash_text
+- tests/agents/service_management/test_service_start_only_flag.py::test_service_start_only_single_phase_text
+- tests/agents/service_management/test_service_start_only_flag.py::test_service_start_only_single_phase_json
+- tests/agents/service_management/test_service_start_phase_timings_until_agents.py::test_until_agents_includes_preflight_cache
+- tests/agents/service_management/test_service_start_phase_trace.py::test_phase_trace_until_agents
+- tests/agents/service_management/test_service_start_preflight.py::test_preflight_only_success
+- tests/agents/service_management/test_service_start_preflight.py::test_preflight_forced_failure_exit_code_10
+- tests/agents/service_management/test_service_start_preflight.py::test_preflight_disk_space_failure_exit_code_10
+- tests/agents/service_management/test_service_start_preflight_disable.py::test_preflight_disable_env_flags_allows_missing_internal_api_key
+- tests/agents/service_management/test_service_start_preflight_json.py::test_preflight_json_output_structure
+- tests/agents/service_management/test_service_start_preflight_json.py::test_preflight_json_warn_only_downgrade
+- tests/agents/service_management/test_service_start_preflight_json.py::test_preflight_json_failure_exit
+- tests/agents/service_management/test_service_start_preflight_schema.py::test_preflight_json_matches_schema
+- tests/agents/service_management/test_service_start_preflight_timeout.py::test_preflight_per_check_timeout_failure
+- tests/agents/service_management/test_service_start_preflight_timeout.py::test_preflight_per_check_timeout_warn_only
+- tests/agents/service_management/test_service_start_probe_metrics_exposition.py::test_api_start_probe_metrics_exposed
+- tests/agents/service_management/test_service_start_shutdown_snapshot.py::test_shutdown_snapshot_written
+- tests/agents/service_management/test_service_start_strict_mode.py::test_strict_mode_failure_on_degraded
+- tests/agents/service_management/test_service_start_strict_mode.py::test_strict_mode_success_without_degraded
+- tests/agents/service_management/test_service_start_unified_flag_config.py::test_startup_unified_flag_dataclass_list_phases_equivalence[text]
+- tests/agents/service_management/test_service_start_unified_flag_config.py::test_startup_unified_flag_dataclass_list_phases_equivalence[json]
+- tests/agents/service_management/test_service_start_unified_flag_config.py::test_startup_unified_flag_dataclass_dry_run_json_manifest_hash
+- tests/agents/service_management/test_shutdown_integration.py::test_stay_alive_shutdown_via_signal
+- tests/docs/test_global_anchors.py::test_top_level_anchor_slug_uniqueness
+- tests/docs/test_ops_docs_metadata.py::test_ops_docs_metadata_contract
+- tests/systemd/test_logging_modes.py::test_text_logging_default_mode
+- tests/systemd/test_logging_modes.py::test_json_logging_mode_includes_session_id
+- tests/systemd/test_restart_alignment.py::test_dev_single_retry_path
+- tests/systemd/test_restart_alignment.py::test_dev_restart_wrapper_enabled
+- tests/systemd/test_service_start_notify_integration.py::test_service_start_emits_ready_and_status_when_notify_enabled
+- tests/systemd/test_supervision_mode_logging.py::test_supervision_mode_systemd_disabled_internal
+- tests/systemd/test_supervision_mode_logging.py::test_supervision_mode_internal_single_retry
+- tests/systemd/test_watchdog_interval_config.py::test_interval_accepted_when_above_floor
+- tests/systemd/test_watchdog_interval_config.py::test_interval_clamped_to_floor_prod
+- tests/systemd/test_watchdog_interval_config.py::test_interval_floor_test_mode
+- tests/systemd/test_watchdog_interval_config.py::test_negative_interval_fallback
+- tests/systemd/test_watchdog_interval_config.py::test_stale_config_metrics
+- tests/systemd/test_watchdog_metrics.py::test_notify_send_counter_increments
+- tests/systemd/test_watchdog_metrics.py::test_heartbeat_write_and_mismatch
+- tests/systemd/test_watchdog_mismatch_degraded.py::test_escalation_triggers_at_threshold
+- tests/systemd/test_watchdog_mismatch_degraded.py::test_escalation_suppression
+- tests/systemd/test_watchdog_mismatch_degraded.py::test_reset_on_compliant_interval
+- tests/systemd/test_watchdog_mismatch_degraded.py::test_threshold_zero_disables
+- tests/systemd/test_watchdog_simulation.py::test_watchdog_interval_mismatch_warning
+- tests/systemd/test_watchdog_stale_detection.py::test_stale_event_and_gauge
+- tests/systemd/test_watchdog_status_updates.py::test_status_emits_periodically
+- tests/systemd/test_watchdog_status_updates.py::test_status_disable_flag
+- tests/systemd/test_watchdog_status_updates.py::test_status_custom_interval

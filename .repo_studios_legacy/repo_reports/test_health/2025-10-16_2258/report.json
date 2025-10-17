@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "generated_at": "2025-10-16T22:58:27.819419",
+    "logs_dir": "/home/founder/jarvis2/.repo_studios/pytest_logs",
+    "junit": "/home/founder/jarvis2/.repo_studios/pytest_logs/junit_2025-10-13_1041.xml",
+    "full_log": "/home/founder/jarvis2/.repo_studios/pytest_logs/pytest_2025-10-15_0600.txt"
+  },
+  "summary": {
+    "total": 1260,
+    "passed": 1232,
+    "skipped": 27,
+    "xfailed": 0,
+    "failed": 1,
+    "errors": 0,
+    "warnings_total": 1,
+    "tracebacks": 0
+  },
+  "warnings": {
+    "by_type": {
+      "PytestAssertRewriteWarning": 1
+    },
+    "by_file": {
+      "/home/founder/miniconda3/lib/python3.13/site-packages/_pytest/config/__init__.py": 1
+    }
+  },
+  "slow_tests": []
+}

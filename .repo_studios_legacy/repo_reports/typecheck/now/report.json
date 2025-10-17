@@ -1,0 +1,329 @@
+{
+  "status": "ERROR",
+  "mypy_version": "mypy 1.17.1 (compiled: yes)",
+  "checked_paths": [
+    "agents/interface/chainlit",
+    "api/models",
+    "api/utils",
+    "api/ui_data.py",
+    "api/routers/ui.py"
+  ],
+  "total_errors": 1242,
+  "files_with_issues": 166,
+  "error_samples": [
+    {
+      "path": "api/cache/invalidation.py",
+      "line": 110,
+      "code": "attr-defined",
+      "message": "Module \"api_cache_shared\" has no attribute \"NEGATIVE_PATHS_SHARED\""
+    },
+    {
+      "path": "agents/core/monitoring/exceptions.py",
+      "line": 164,
+      "code": "union-attr",
+      "message": "Item \"None\" of \"FrameType | None\" has no attribute \"f_back\""
+    },
+    {
+      "path": "api/metrics_range.py",
+      "line": 80,
+      "code": "arg-type",
+      "message": "Argument 1 to \"int\" has incompatible type \"float | int | Any | dict[Any, Any]\"; expected \"str | Buffer | SupportsInt | SupportsIndex | SupportsTrunc\""
+    },
+    {
+      "path": "api/metrics_range.py",
+      "line": 82,
+      "code": "arg-type",
+      "message": "Argument 1 to \"append\" of \"list\" has incompatible type \"float | int | Any | dict[Any, Any]\"; expected \"float\""
+    },
+    {
+      "path": "api/chat_logging.py",
+      "line": 258,
+      "code": "assignment",
+      "message": "Incompatible types in assignment (expression has type \"dict[str, Any | None]\", target has type \"str\")"
+    },
+    {
+      "path": "api/chat_logging.py",
+      "line": 324,
+      "code": "dict-item",
+      "message": "Dict entry 0 has incompatible type \"str\": \"Any | None\"; expected \"str\": \"str\""
+    },
+    {
+      "path": "api/chat_logging.py",
+      "line": 325,
+      "code": "dict-item",
+      "message": "Dict entry 1 has incompatible type \"str\": \"Any | None\"; expected \"str\": \"str\""
+    },
+    {
+      "path": "api/chat_logging.py",
+      "line": 326,
+      "code": "dict-item",
+      "message": "Dict entry 2 has incompatible type \"str\": \"Any | None\"; expected \"str\": \"str\""
+    },
+    {
+      "path": "agents/system/diagnostic_agent/__init__.py",
+      "line": 62,
+      "code": "misc",
+      "message": "Cannot assign to a type"
+    },
+    {
+      "path": "agents/system/diagnostic_agent/__init__.py",
+      "line": 63,
+      "code": "misc",
+      "message": "Cannot assign to a type"
+    },
+    {
+      "path": "agents/system/diagnostic_agent/__init__.py",
+      "line": 64,
+      "code": "misc",
+      "message": "Cannot assign to a type"
+    },
+    {
+      "path": "agents/system/diagnostic_agent/__init__.py",
+      "line": 65,
+      "code": "misc",
+      "message": "Cannot assign to a type"
+    },
+    {
+      "path": "agents/system/diagnostic_agent/__init__.py",
+      "line": 66,
+      "code": "misc",
+      "message": "Cannot assign to a type"
+    },
+    {
+      "path": "agents/system/diagnostic_agent/__init__.py",
+      "line": 37,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": "agents/system/diagnostic_agent/__init__.py",
+      "line": 67,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": "agents/system/diagnostic_agent/__init__.py",
+      "line": 68,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": "agents/system/diagnostic_agent/__init__.py",
+      "line": 69,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": "agents/system/diagnostic_agent/__init__.py",
+      "line": 70,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": "agents/core/monitoring/visualization/utils/data_processing.py",
+      "line": 151,
+      "code": "assignment",
+      "message": "Incompatible types in assignment (expression has type \"float\", variable has type \"int\")"
+    },
+    {
+      "path": "agents/core/monitoring/visualization/utils/data_processing.py",
+      "line": 170,
+      "code": "arg-type",
+      "message": "Argument 1 to \"fromkeys\" of \"dict\" has incompatible type \"list[float]\"; expected \"Iterable[int]\""
+    },
+    {
+      "path": "agents/core/monitoring/visualization/utils/data_processing.py",
+      "line": 192,
+      "code": "return-value",
+      "message": "Incompatible return value type (got \"dict[float, float]\", expected \"dict[int, float]\")"
+    },
+    {
+      "path": "agents/core/monitoring/visualization/utils/data_processing.py",
+      "line": 325,
+      "code": "type-var",
+      "message": "Value of type variable \"SupportsRichComparisonT\" of \"sorted\" cannot be \"Any | None\""
+    },
+    {
+      "path": "agents/core/monitoring/visualization/utils/data_processing.py",
+      "line": 326,
+      "code": "type-var",
+      "message": "Value of type variable \"SupportsRichComparisonT\" of \"sorted\" cannot be \"Any | None\""
+    },
+    {
+      "path": "agents/core/monitoring/visualization/utils/data_processing.py",
+      "line": 331,
+      "code": "var-annotated",
+      "message": "Need type annotation for \"grouped\""
+    },
+    {
+      "path": "agents/core/monitoring/visualization/utils/data_processing.py",
+      "line": 343,
+      "code": "return-value",
+      "message": "Incompatible return value type (got \"tuple[list[Any | None], list[Any | None], list[list[float]]]\", expected \"tuple[list[str], list[str], list[list[float]]]\")"
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/time_series/models.py",
+      "line": 357,
+      "code": "operator",
+      "message": "Unsupported left operand type for - (\"T\")"
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/time_series/models.py",
+      "line": 386,
+      "code": "var-annotated",
+      "message": "Need type annotation for \"points\""
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/db_storage/query_builder.py",
+      "line": 110,
+      "code": "assignment",
+      "message": "Incompatible default for argument \"metrics\" (default has type \"None\", argument has type \"list[str]\")"
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/db_storage/query_builder.py",
+      "line": 230,
+      "code": "assignment",
+      "message": "Incompatible default for argument \"metrics\" (default has type \"None\", argument has type \"list[str]\")"
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/db_storage/query_builder.py",
+      "line": 334,
+      "code": "arg-type",
+      "message": "Argument 1 to \"append\" of \"list\" has incompatible type \"int\"; expected \"str\""
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/db_storage/query_builder.py",
+      "line": 335,
+      "code": "arg-type",
+      "message": "Argument 1 to \"append\" of \"list\" has incompatible type \"int\"; expected \"str\""
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/db_storage/query_builder.py",
+      "line": 339,
+      "code": "arg-type",
+      "message": "Argument 1 to \"append\" of \"list\" has incompatible type \"int\"; expected \"str\""
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/db_storage/query_builder.py",
+      "line": 374,
+      "code": "arg-type",
+      "message": "Argument 1 to \"append\" of \"list\" has incompatible type \"int\"; expected \"str\""
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/db_storage/query_builder.py",
+      "line": 391,
+      "code": "assignment",
+      "message": "Incompatible default for argument \"partitions\" (default has type \"None\", argument has type \"list[str]\")"
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/db_storage/query_builder.py",
+      "line": 470,
+      "code": "assignment",
+      "message": "Incompatible default for argument \"aggregations\" (default has type \"None\", argument has type \"dict[str, str]\")"
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/db_storage/query_builder.py",
+      "line": 534,
+      "code": "no-redef",
+      "message": "Name \"build_batch_query\" already defined on line 83"
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/db_storage/query_builder.py",
+      "line": 538,
+      "code": "assignment",
+      "message": "Incompatible default for argument \"id_ranges\" (default has type \"None\", argument has type \"list[tuple[int, int]]\")"
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/db_storage/query_builder.py",
+      "line": 602,
+      "code": "assignment",
+      "message": "Incompatible types in assignment (expression has type \"tuple[str]\", variable has type \"tuple[str, str]\")"
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/db_storage/query_builder.py",
+      "line": 653,
+      "code": "arg-type",
+      "message": "Argument 1 to \"append\" of \"list\" has incompatible type \"int\"; expected \"str\""
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/db_storage/query_builder.py",
+      "line": 677,
+      "code": "no-redef",
+      "message": "Name \"get_recommended_indexes\" already defined on line 56"
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/storage/db_runtime/pagination.py",
+      "line": 59,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/storage/db_runtime/pagination.py",
+      "line": 73,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/storage/db_runtime/pagination.py",
+      "line": 75,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/storage/db_runtime/analyzer.py",
+      "line": 47,
+      "code": "arg-type",
+      "message": "Argument 1 to \"dict\" has incompatible type \"enumerate[Any]\"; expected \"Iterable[tuple[str, Any]]\""
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/exceptions.py",
+      "line": 205,
+      "code": "assignment",
+      "message": "Incompatible types in assignment (expression has type \"dict[str, Any]\", target has type \"str | int\")"
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/exceptions.py",
+      "line": 208,
+      "code": "assignment",
+      "message": "Incompatible types in assignment (expression has type \"dict[str, str]\", target has type \"str | int\")"
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/exceptions.py",
+      "line": 426,
+      "code": "assignment",
+      "message": "Incompatible types in assignment (expression has type \"dict[str, Any]\", target has type \"str\")"
+    },
+    {
+      "path": "agents/core/monitoring/metrics_storage/exceptions.py",
+      "line": 610,
+      "code": "assignment",
+      "message": "Incompatible types in assignment (expression has type \"str\", target has type \"dict[str, str]\")"
+    },
+    {
+      "path": "agents/core/persistence.py",
+      "line": 61,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": "agents/core/persistence.py",
+      "line": 80,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    }
+  ],
+  "invocation": [
+    "/home/founder/miniconda3/bin/python",
+    "-m",
+    "mypy",
+    "--show-error-codes",
+    "--no-color-output",
+    "--hide-error-context",
+    "agents/interface/chainlit",
+    "api/models",
+    "api/utils",
+    "api/ui_data.py",
+    "api/routers/ui.py"
+  ],
+  "timestamp": "now"
+}

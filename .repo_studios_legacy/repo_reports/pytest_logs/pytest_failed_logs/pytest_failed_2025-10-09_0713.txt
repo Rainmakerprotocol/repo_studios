@@ -1,0 +1,13 @@
+FAILED tests
+Generated: 2025-10-09T07:18:43
+Total: 3
+
+Grouped by file (count desc):
+     1  tests/api/test_ui_schema_versions.py
+     1  tests/docs/test_global_anchors.py
+     1  tests/lint/test_no_cache_impl_imports.py
+
+Items:
+- tests/api/test_ui_schema_versions.py::test_model_comparison_serialization_and_validation
+- tests/docs/test_global_anchors.py::test_top_level_anchor_slug_uniqueness
+- tests/lint/test_no_cache_impl_imports.py::test_no_imports_of_api_cache_impl

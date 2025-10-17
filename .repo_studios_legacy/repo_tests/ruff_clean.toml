@@ -1,0 +1,19 @@
+# Ruff config for targeted cleanup in metrics_storage/storage
+# Overrides repo-level excludes to allow lint/format on storage modules.
+
+line-length = 100
+src = ["metrics_storage/storage"]
+
+[format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+docstring-code-format = true
+
+[lint]
+select = ["E","F","W","I","N","UP","B","BLE","C4","PIE","T20","PYI","SIM","PERF","ARG","TRY","PTH","DTZ","RUF","PT"]
+ignore = ["BLE001"]
+
+[lint.per-file-ignores]
+# Allow prints in tests (if any are colocated)
+"**/tests/*.py" = ["T201","E501","I001"]

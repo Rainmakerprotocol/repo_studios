@@ -1,0 +1,228 @@
+generated_at: '2025-10-17T11:15:19.218106+00:00'
+auto_accept: false
+extracted_count: 15
+notes: Pending extracted standards rules (not yet merged into main index)
+rules:
+- id: markdown-blank-line-spacing
+  category_ids:
+  - markdown
+  summary: Surround headings and lists with required blank lines
+  rationale: Consistent spacing ensures parser stability and diff readability.
+  severity: info
+  applies_to:
+  - '**/*.md'
+  source:
+    file: .repo_studios/repo_standards_markdown.md
+    anchor: markdown-blank-line-spacing
+  last_updated: '2025-10-17'
+- id: markdown-fenced-code-language
+  category_ids:
+  - markdown
+  summary: All fenced code blocks must declare a language
+  rationale: Language tags enable syntax highlighting, accurate tokenization, and security scanning.
+  severity: error
+  applies_to:
+  - '**/*.md'
+  source:
+    file: .repo_studios/repo_standards_markdown.md
+    anchor: markdown-fenced-code-language
+  last_updated: '2025-10-17'
+- id: markdown-final-newline
+  category_ids:
+  - markdown
+  summary: Ensure file ends with a single trailing newline
+  rationale: Final newline prevents concatenation issues and normalizes POSIX tooling behavior.
+  severity: info
+  applies_to:
+  - '**/*.md'
+  source:
+    file: .repo_studios/repo_standards_markdown.md
+    anchor: markdown-final-newline
+  last_updated: '2025-10-17'
+- id: markdown-heading-first-h1
+  category_ids:
+  - markdown
+  summary: Documents must begin with a single top-level heading (or YAML front matter then heading)
+  rationale: A canonical first heading enables stable anchors, navigation, and deterministic indexing.
+  severity: error
+  applies_to:
+  - '**/*.md'
+  source:
+    file: .repo_studios/repo_standards_markdown.md
+    anchor: markdown-heading-first-h1
+  last_updated: '2025-10-17'
+- id: markdown-heading-hierarchy
+  category_ids:
+  - markdown
+  summary: Maintain proper heading level progression without skipping levels
+  rationale: Predictable hierarchy improves automated TOC generation and agent context slicing.
+  severity: warn
+  applies_to:
+  - '**/*.md'
+  source:
+    file: .repo_studios/repo_standards_markdown.md
+    anchor: markdown-heading-hierarchy
+  last_updated: '2025-10-17'
+- id: markdown-lists-blank-line-separation
+  category_ids:
+  - markdown
+  summary: Lists must be preceded and followed by a blank line unless at file start/end
+  rationale: Blank line separation prevents unintended list merging and aids visual scanning.
+  severity: info
+  applies_to:
+  - '**/*.md'
+  source:
+    file: .repo_studios/repo_standards_markdown.md
+    anchor: markdown-lists-blank-line-separation
+  last_updated: '2025-10-17'
+- id: markdown-no-bare-urls
+  category_ids:
+  - markdown
+  summary: Replace bare URLs with descriptive link text
+  rationale: Descriptive anchors improve accessibility and retrieval context scoring.
+  severity: warn
+  applies_to:
+  - '**/*.md'
+  source:
+    file: .repo_studios/repo_standards_markdown.md
+    anchor: markdown-no-bare-urls
+  last_updated: '2025-10-17'
+- id: markdown-no-consecutive-blank-lines
+  category_ids:
+  - markdown
+  summary: Disallow runs of consecutive blank lines
+  rationale: Excess vertical whitespace obscures structure and inflates diffs.
+  severity: info
+  applies_to:
+  - '**/*.md'
+  source:
+    file: .repo_studios/repo_standards_markdown.md
+    anchor: markdown-no-consecutive-blank-lines
+  last_updated: '2025-10-17'
+- id: markdown-no-duplicate-headings
+  category_ids:
+  - markdown
+  summary: Avoid duplicate same-level headings within a document
+  rationale: Duplicate slugs fragment inbound links and reduce anchor uniqueness.
+  severity: warn
+  applies_to:
+  - '**/*.md'
+  source:
+    file: .repo_studios/repo_standards_markdown.md
+    anchor: markdown-no-duplicate-headings
+  last_updated: '2025-10-17'
+- id: markdown-no-empty-headings
+  category_ids:
+  - markdown
+  summary: Prohibit empty headings without accompanying descriptive content
+  rationale: Empty headings create noise and degrade retrieval precision.
+  severity: warn
+  applies_to:
+  - '**/*.md'
+  source:
+    file: .repo_studios/repo_standards_markdown.md
+    anchor: markdown-no-empty-headings
+  last_updated: '2025-10-17'
+- id: markdown-no-hard-tabs
+  category_ids:
+  - markdown
+  summary: Disallow hard tab characters; use spaces for indentation
+  rationale: Tabs render inconsistently across viewers and break alignment heuristics.
+  severity: warn
+  applies_to:
+  - '**/*.md'
+  source:
+    file: .repo_studios/repo_standards_markdown.md
+    anchor: markdown-no-hard-tabs
+  last_updated: '2025-10-17'
+- id: markdown-no-inline-html
+  category_ids:
+  - markdown
+  summary: Avoid raw inline HTML except sanctioned automation comments
+  rationale: Raw HTML complicates rendering portability and increases parsing variance.
+  severity: warn
+  applies_to:
+  - '**/*.md'
+  source:
+    file: .repo_studios/repo_standards_markdown.md
+    anchor: markdown-no-inline-html
+  last_updated: '2025-10-17'
+- id: markdown-no-trailing-spaces
+  category_ids:
+  - markdown
+  summary: Strip trailing spaces at line ends
+  rationale: Trailing whitespace causes noisy diffs and accidental semantic changes in some processors.
+  severity: info
+  applies_to:
+  - '**/*.md'
+  source:
+    file: .repo_studios/repo_standards_markdown.md
+    anchor: markdown-no-trailing-spaces
+  last_updated: '2025-10-17'
+- id: markdown-prefer-soft-wrap-100
+  category_ids:
+  - markdown
+  summary: Prefer soft wraps at roughly 100 characters
+  rationale: Moderate line length optimizes diff clarity without forcing unnatural hard breaks.
+  severity: info
+  applies_to:
+  - '**/*.md'
+  source:
+    file: .repo_studios/repo_standards_markdown.md
+    anchor: markdown-prefer-soft-wrap-100
+  last_updated: '2025-10-17'
+- id: markdown-section-not-empty
+  category_ids:
+  - markdown
+  summary: Sections introduced by a heading must contain substantive content
+  rationale: Placeholder sections reduce document signal-to-noise and mislead agents about coverage.
+  severity: warn
+  applies_to:
+  - '**/*.md'
+  source:
+    file: .repo_studios/repo_standards_markdown.md
+    anchor: markdown-section-not-empty
+  last_updated: '2025-10-17'
+diagnostics:
+- rules_found: 0
+  skipped_conflicts: []
+  duplicate_ids: []
+  notes:
+  - marker_blocks=0
+  - heading_rules=0
+  file: /home/founder/jarvis2/.repo_studios/repo_standards_project.md
+- rules_found: 15
+  skipped_conflicts: []
+  duplicate_ids: []
+  notes:
+  - marker_blocks=15
+  - heading_rules=0
+  file: /home/founder/jarvis2/.repo_studios/repo_standards_markdown.md
+- rules_found: 0
+  skipped_conflicts: []
+  duplicate_ids: []
+  notes:
+  - marker_blocks=0
+  - heading_rules=0
+  file: /home/founder/jarvis2/.repo_studios/repo_standards_python.md
+- rules_found: 0
+  skipped_conflicts: []
+  duplicate_ids: []
+  notes:
+  - marker_blocks=0
+  - heading_rules=0
+  file: /home/founder/jarvis2/.repo_studios/repo_standards_monkey_patch.md
+- rules_found: 0
+  skipped_conflicts: []
+  duplicate_ids: []
+  notes:
+  - marker_blocks=0
+  - heading_rules=0
+  file: /home/founder/jarvis2/.repo_studios/repo_studios_clean.md
+- rules_found: 0
+  skipped_conflicts: []
+  duplicate_ids: []
+  notes:
+  - marker_blocks=0
+  - heading_rules=0
+  file: /home/founder/jarvis2/.repo_studios/repo_mission_parameters.md

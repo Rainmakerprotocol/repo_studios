@@ -1,0 +1,3 @@
+Current thread 0x0000796f84c07600 (most recent call first):
+  File "/home/founder/jarvis2/.repo_studios/dump_faulthandler_once.py", line 31 in main
+  File "/home/founder/jarvis2/.repo_studios/dump_faulthandler_once.py", line 36 in <module>
