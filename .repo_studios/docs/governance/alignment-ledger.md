@@ -1,4 +1,24 @@
-# Alignment Ledger
+title: Repo Studios Alignment Ledger
+audience:
+  - coding_agent
+<!-- markdownlint-disable MD024 MD032 MD025 MD032 MD004 MD022 -->
+
+  - human_developer
+owners:
+  - repo_studios_ai
+  - repo_studios_team@rainmakerprotocol.dev
+status: active
+version: 1.0.0
+updated: 2025-10-18
+summary: >-
+  Append-only ledger capturing documentation alignment batches and follow-up actions.
+tags:
+  - governance
+  - alignment
+legacy_source: .repo_studios_legacy/repo_docs/alignment_ledger.md
+---
+
+# Repo Studios Alignment Ledger
 
 Append-only log of documentation review batches processed oldest to newest per `docs_inventory.csv`.
 

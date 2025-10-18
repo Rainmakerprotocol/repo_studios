@@ -1,436 +1,336 @@
 - id: docs.agents_guide
-  name: "Agents Guide"
-  path: .repo_studios_legacy/repo_docs/AGENTS_GUIDE.md
+  name: "Agent Operations Playbook"
+  path: .repo_studios/docs/playbooks/playbook-agent-operations.md
   asset_kind: document
   roles:
     - playbook
-  maturity: legacy
-  description: "Operational handbook for coding agents working in Repo Studios."
+  maturity: incubating
+  description: "Operational handbook for Repo Studios agents and collaborators."
   consumers:
     - coding_agent
     - human_developer
   status: needs_review
   governance_flags:
-    - pending_migration
+    - awaiting_signoff
   artifact_type: md
   related_assets:
     - docs.align_protocol
+    - docs.copilot_standards_project
   tags:
     - instructions
     - repo_studios
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
+  phase_origin: phase1
+  source_repo: repo_studios
   notes:
-    context: "Requires refresh to align with new folder layout and schema terminology."
+    context: "Aligns with new standards stack and inventory automation."
     decisions:
-      - "Keep as canonical agent handbook post-migration."
+      - "Replaces legacy AGENTS_GUIDE.md."
     blockers: []
 - id: docs.prompt_library_usage
-  name: "Prompt Library Usage"
-  path: .repo_studios_legacy/repo_docs/PROMPT_LIBRARY_USAGE.md
+  name: "Prompt Library Playbook"
+  path: .repo_studios/docs/playbooks/playbook-prompt-library.md
   asset_kind: document
   roles:
     - playbook
-    - standards
-  maturity: legacy
-  description: "Guidelines for accessing and maintaining the prompt library."
+  maturity: incubating
+  description: "Guidance for selecting and updating prompts from the shared library."
   consumers:
     - coding_agent
+    - human_developer
   status: needs_review
   governance_flags:
-    - pending_migration
+    - awaiting_signoff
   artifact_type: md
   related_assets:
     - docs.copilot_prompts
+    - docs.copilot_prompt_engineering_standards
   tags:
     - prompts
     - repo_studios
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
+  phase_origin: phase1
+  source_repo: repo_studios
   notes:
-    context: "Ensure references to legacy paths are updated after relocation."
+    context: "Captures prompt workflow post-migration."
     decisions:
-      - "Retain as supplementary guide for prompt best practices."
+      - "Replaces legacy PROMPT_LIBRARY_USAGE.md."
     blockers: []
 - id: docs.agent_memory_workflow
-  name: "Agent Memory Workflow"
-  path: .repo_studios_legacy/repo_docs/agent_memory_workflow.md
+  name: "Memory Refresh Playbook"
+  path: .repo_studios/docs/playbooks/playbook-memory-refresh.md
   asset_kind: document
   roles:
     - playbook
-  maturity: legacy
-  description: "Explains memory handling strategies for agents running in Repo Studios."
+  maturity: incubating
+  description: "Operational workflow for refreshing Repo Studios memory stores."
   consumers:
     - coding_agent
+    - human_developer
   status: needs_review
   governance_flags:
-    - pending_migration
+    - awaiting_signoff
   artifact_type: md
   related_assets:
     - docs.alignment_protocol
+    - docs.prompt_library_usage
   tags:
     - memory
     - repo_studios
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
+  phase_origin: phase1
+  source_repo: repo_studios
   notes:
-    context: "May merge with alignment protocol updates during migration."
+    context: "Modernized to align with new automation logs and metrics."
     decisions:
-      - "Review for redundancy with new collaboration protocol."
+      - "Replaces legacy agent_memory_workflow.md."
     blockers: []
 - id: docs.alignment_ledger
-  name: "Alignment Ledger"
-  path: .repo_studios_legacy/repo_docs/alignment_ledger.md
+  name: "Repo Studios Alignment Ledger"
+  path: .repo_studios/docs/governance/alignment-ledger.md
   asset_kind: document
   roles:
-    - standards
-  maturity: legacy
-  description: "Ledger capturing alignment decisions and their outcomes."
+    - governance
+  maturity: incubating
+  description: "Append-only ledger capturing documentation alignment batches and follow-up actions."
   consumers:
     - coding_agent
     - human_developer
   status: needs_review
   governance_flags:
-    - pending_migration
+    - awaiting_signoff
   artifact_type: md
   related_assets:
     - docs.alignment_protocol
+    - docs.repo_studios_build_plan
   tags:
     - alignment
     - governance
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
-  notes:
-    context: "Could be folded into the new alignment protocol once updated."
-    decisions:
-      - "Flag items that need historical preservation."
-    blockers: []
-- id: docs.copilot_instructions_clean
-  name: "Copilot Instructions (Clean)"
-  path: .repo_studios_legacy/repo_docs/copilot_instructions_clean.md
-  asset_kind: document
-  roles:
-    - standards
-  maturity: legacy
-  description: "Base set of clean instructions for Copilot agents."
-  consumers:
-    - coding_agent
-  status: needs_review
-  governance_flags:
-    - pending_migration
-  artifact_type: md
-  related_assets:
-    - docs.copilot_instructions_python
-    - docs.copilot_mission_parameters
-  tags:
-    - instructions
-    - standards
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
-- id: docs.repo_studios_code_cleanup
-  name: "Repo Studios Code Cleanup Instructions"
-  path: .repo_studios/docs/standards/global/std-global-code-cleanup.md
-  asset_kind: document
-  roles:
-    - standards
-    - playbook
-  maturity: incubating
-  description: "Canonical cleanup playbook for Repo Studios automation."
-  consumers:
-    - coding_agent
-    - human_developer
-  status: needs_review
-  governance_flags:
-    - awaiting_signoff
-  artifact_type: md
-  related_assets:
-    - docs.markdown_authoring_standards
-  tags:
-    - cleanup
-    - standards
   phase_origin: phase1
   source_repo: repo_studios
   notes:
-    context: "Track adoption once CI health checks enable gating."
+    context: "Migrated from legacy ledger to preserve audit trail."
     decisions:
-      - "Replaces legacy cleanup instructions." 
-    blockers: []
-  notes:
-    context: "Needs diff against pending YAML to ensure parity."
-    decisions:
-      - "Act as foundation for new global standards folder."
-    blockers: []
-- id: docs.copilot_instructions_python
-  name: "Copilot Instructions (Python)"
-  path: .repo_studios_legacy/repo_docs/copilot_instructions_python.md
-  asset_kind: document
-  roles:
-    - standards
-  maturity: legacy
-  description: "Python-specific instructions for Copilot agents."
-  consumers:
-    - coding_agent
-  status: needs_review
-  governance_flags:
-    - pending_migration
-  artifact_type: md
-  related_assets:
-    - docs.copilot_standards_python
-  tags:
-    - python
-    - standards
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
-  notes:
-    context: "Cross-check against standards index during migration."
-    decisions:
-      - "Keep Python directives separate from language-agnostic instructions."
-    blockers: []
-- id: docs.copilot_mission_parameters
-  name: "Repo Studios Mission Parameters"
-  path: .repo_studios/docs/standards/global/std-global-mission-parameters.md
-  asset_kind: document
-  roles:
-    - standards
-    - playbook
-  maturity: incubating
-  description: "Defines mission parameters and scope expectations for Repo Studios automation."
-  consumers:
-    - coding_agent
-    - human_developer
-  status: needs_review
-  governance_flags:
-    - awaiting_signoff
-  artifact_type: md
-  related_assets:
-    - docs.repo_studios_code_cleanup
-  tags:
-    - mission
-    - alignment
-  phase_origin: phase1
-  source_repo: repo_studios
-  notes:
-    context: "Review updated mission framing with standards leads."
-    decisions:
-      - "Adopt Repo Studios naming and references."
-    blockers: []
-- id: docs.copilot_prompt_engineering_standards
-  name: "Prompt Engineering Standards"
-  path: .repo_studios/docs/standards/global/std-global-prompt-engineering.md
-  asset_kind: document
-  roles:
-    - standards
-  maturity: incubating
-  description: "Repo Studios-wide guidance for prompt and agent instruction authoring."
-  consumers:
-    - coding_agent
-    - human_developer
-  status: needs_review
-  governance_flags:
-    - awaiting_signoff
-  artifact_type: md
-  related_assets:
-    - docs.copilot_prompts
-  tags:
-    - prompts
-    - standards
-  phase_origin: phase1
-  source_repo: repo_studios
-  notes:
-    context: "Update terminology to match new schema fields."
-    decisions:
-      - "Migrate into standards/global prompts section."
-    blockers: []
-- id: docs.copilot_prompts
-  name: "Copilot Prompts"
-  path: .repo_studios_legacy/repo_docs/copilot_prompts.md
-  asset_kind: document
-  roles:
-    - artifact_sample
-  maturity: legacy
-  description: "Collection of curated prompts for reuse."
-  consumers:
-    - coding_agent
-  status: needs_review
-  governance_flags:
-    - pending_migration
-  artifact_type: md
-  related_assets:
-    - docs.prompt_library_usage
-  tags:
-    - prompts
-    - samples
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
-  notes:
-    context: "Determine storage approach (global vs project-specific)."
-    decisions:
-      - "Consider splitting into YAML-based prompt registry for machine parsing."
+      - "Retain historical batches; append future entries in new location."
     blockers: []
 - id: docs.copilot_standards_chainlit
   name: "Chainlit UI Standards"
-  path: .repo_studios/docs/standards/global/std-global-chainlit-ui.md
+  - id: docs.copilot_prompt_engineering_standards
+    name: "Prompt Engineering Standards"
+    path: .repo_studios/docs/standards/global/std-global-prompt-engineering.md
+    asset_kind: document
+    roles:
+      - standards
+    maturity: incubating
+    description: "Repo Studios-wide guidance for prompt and agent instruction authoring."
+    consumers:
+      - coding_agent
+      - human_developer
+    status: needs_review
+    governance_flags:
+      - awaiting_signoff
+    artifact_type: md
+    related_assets:
+      - docs.copilot_prompts
+    tags:
+      - prompts
+      - standards
+    phase_origin: phase1
+    source_repo: repo_studios
+    notes:
+      context: "Update terminology to match new schema fields."
+      decisions:
+        - "Migrate into standards/global prompts section."
+      blockers: []
+  - id: docs.copilot_prompts
+    name: "Copilot Prompts"
+    path: .repo_studios_legacy/repo_docs/copilot_prompts.md
+    asset_kind: document
+    roles:
+      - artifact_sample
+    maturity: legacy
+    description: "Collection of curated prompts for reuse."
+    consumers:
+      - coding_agent
+    status: needs_review
+    governance_flags:
+      - pending_migration
+    artifact_type: md
+    related_assets:
+      - docs.prompt_library_usage
+    tags:
+      - prompts
+      - samples
+    phase_origin: legacy
+    source_repo: repo_studios_legacy
+    notes:
+      context: "Determine storage approach (global vs project-specific)."
+      decisions:
+        - "Consider splitting into YAML-based prompt registry for machine parsing."
+      blockers: []
+  - id: docs.copilot_standards_chainlit
+    name: "Chainlit UI Standards"
+    path: .repo_studios/docs/standards/global/std-global-chainlit-ui.md
+    asset_kind: document
+    roles:
+      - standards
+    maturity: incubating
+    description: "Chainlit-specific standards covering async flows, state, and message semantics."
+    consumers:
+      - coding_agent
+      - ci_pipeline
+    status: needs_review
+    governance_flags:
+      - awaiting_signoff
+    artifact_type: md
+    related_assets:
+      - docs.copilot_standards_project
+    tags:
+      - chainlit
+      - standards
+    phase_origin: phase1
+    source_repo: repo_studios
+    notes:
+      context: "Verify relevance for new projects; may become optional module."
+      decisions:
+        - "Mark as optional add-on in standards/project subset."
+      blockers: []
+  - id: docs.copilot_standards_html
+    name: "HTML Engineering Standards"
+    path: .repo_studios/docs/standards/global/std-global-html-coding.md
+    asset_kind: document
+    roles:
+      - standards
+    maturity: incubating
+    description: "HTML authoring and sanitation standards for Repo Studios outputs."
+    consumers:
+      - coding_agent
+      - docs_generator
+    status: needs_review
+    governance_flags:
+      - awaiting_signoff
+    artifact_type: md
+    related_assets:
+      - docs.copilot_standards_markdown
+    tags:
+      - html
+      - standards
+    phase_origin: phase1
+    source_repo: repo_studios
+    notes:
+      context: "Verify HTML sanitization patterns remain aligned with Markdown authoring guidance."
+      decisions:
+        - "Treat as optional module for projects exposing rendered HTML."
+      blockers: []
+  - id: docs.copilot_standards_markdown
+    name: "Markdown Authoring Standards"
+    path: .repo_studios/docs/standards/global/std-global-markdown-authoring.md
+    asset_kind: document
+    roles:
+      - standards
+    maturity: incubating
+    description: "Markdown formatting standards for Repo Studios documentation."
+    consumers:
+      - coding_agent
+      - human_developer
+      - docs_generator
+    status: needs_review
+    governance_flags:
+      - awaiting_signoff
+    artifact_type: md
+    related_assets:
+      - docs.copilot_standards_html
+      - docs.inventory_spec
+    tags:
+      - markdown
+      - standards
+    phase_origin: phase1
+    source_repo: repo_studios
+    notes:
+      context: "Consider elevation to global standards baseline."
+      decisions:
+        - "Keep as required reference for Repo Studios."
+      blockers: []
+  - id: docs.copilot_standards_python
+    name: "Python Engineering Standards"
+    path: .repo_studios/docs/standards/global/std-global-python-engineering.md
+    asset_kind: document
+    roles:
+      - standards
+    maturity: incubating
+    description: "Python-specific engineering guardrails for Repo Studios automation."
+    consumers:
+      - coding_agent
+      - human_developer
+    status: needs_review
+    governance_flags:
+      - awaiting_signoff
+    artifact_type: md
+    related_assets:
+      - docs.copilot_instructions_python
+      - docs.repo_studios_code_cleanup
+    tags:
+      - python
+      - standards
+    phase_origin: phase1
+    source_repo: repo_studios
+    notes:
+      context: "Ensure cross-references with cleanup and mission standards stay current."
+      decisions:
+        - "Adopt as baseline Python guardrail once CI gating finalizes."
+      blockers: []
+- id: docs.copilot_standards_monkey_patch
+  name: "Monkey Patch Governance"
+  path: .repo_studios/docs/standards/global/std-global-monkey-patching.md
   asset_kind: document
   roles:
     - standards
   maturity: incubating
-  description: "Chainlit-specific standards covering async flows, state, and message semantics."
+  description: "Guardrails for introducing, auditing, and retiring monkey patches."
   consumers:
     - coding_agent
     - ci_pipeline
   status: needs_review
   governance_flags:
     - awaiting_signoff
-  artifact_type: md
-  related_assets:
-    - docs.copilot_standards_project
-  tags:
-    - chainlit
-    - standards
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
-  notes:
-    context: "Verify relevance for new projects; may become optional module."
-    decisions:
-      - "Mark as optional add-on in standards/project subset."
-    blockers: []
-- id: docs.copilot_standards_html
-  name: "Copilot Standards (HTML)"
-  path: .repo_studios_legacy/repo_docs/copilot_standards_html.md
-  asset_kind: document
-  roles:
-    - standards
-  maturity: legacy
-  description: "HTML authoring standards for Copilot outputs."
-  consumers:
-    - coding_agent
-    - docs_generator
-  status: needs_review
-  governance_flags:
-    - pending_migration
-  artifact_type: md
-  related_assets:
-    - docs.copilot_standards_markdown
-  tags:
-    - html
-    - standards
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
-  notes:
-    context: "Evaluate if HTML standards should move to standards/project/html."
-    decisions:
-      - "Retain as optional module with references to Markdown standards."
-    blockers: []
-- id: docs.copilot_standards_markdown
-  name: "Copilot Standards (Markdown)"
-  path: .repo_studios_legacy/repo_docs/copilot_standards_markdown.md
-  asset_kind: document
-  roles:
-    - standards
-  maturity: legacy
-  description: "Markdown formatting standards for Repo Studios documentation."
-  consumers:
-    - coding_agent
-    - human_developer
-    - docs_generator
-  status: needs_review
-  governance_flags:
-    - pending_migration
-  artifact_type: md
-  related_assets:
-    - docs.copilot_standards_html
-    - docs.inventory_spec
-  tags:
-    - markdown
-    - standards
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
-  notes:
-    context: "Consider elevation to global standards baseline."
-    decisions:
-      - "Keep as required reference for Repo Studios."
-    blockers: []
-- id: docs.copilot_standards_monkey_patch
-  name: "Copilot Standards (Monkey Patch)"
-  path: .repo_studios_legacy/repo_docs/copilot_standards_monkey_patch.md
-  asset_kind: document
-  roles:
-    - standards
-  maturity: legacy
-  description: "Rules governing monkey patch usage and hygiene."
-  consumers:
-    - coding_agent
-    - ci_pipeline
-  status: needs_review
-  governance_flags:
-    - pending_migration
   artifact_type: md
   related_assets:
     - scripts.scan_monkey_patches
+    - docs.copilot_standards_project
   tags:
     - monkey_patch
     - standards
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
+  phase_origin: phase1
+  source_repo: repo_studios
   notes:
-    context: "May link directly with secret-handling templates later."
+    context: "Couple with future automation that scans active patches."
     decisions:
-      - "Keep as enforceable standard once automation migrates."
+      - "Require expiry plans and telemetry before approval."
     blockers: []
 - id: docs.copilot_standards_project
-  name: "Copilot Standards (Project)"
-  path: .repo_studios_legacy/repo_docs/copilot_standards_project.md
+  name: "Project Operating Standard"
+  path: .repo_studios/docs/standards/project/std-project-operating-standard.md
   asset_kind: document
   roles:
     - standards
-  maturity: legacy
-  description: "Project-level standards template for Repo Studios deployments."
+  maturity: incubating
+  description: "Project-level guardrails covering technology stack and behavioral expectations."
   consumers:
     - coding_agent
     - human_developer
   status: needs_review
   governance_flags:
-    - pending_migration
+    - awaiting_signoff
   artifact_type: md
   related_assets:
     - docs.copilot_standards_chainlit
+    - docs.copilot_standards_monkey_patch
   tags:
     - project
     - standards
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
+  phase_origin: phase1
+  source_repo: repo_studios
   notes:
-    context: "Use as starting point for standards/project global split."
+    context: "Use as baseline for project overrides and onboarding decks."
     decisions:
-      - "Annotate mandatory vs optional directives."
-    blockers: []
-- id: docs.copilot_standards_markdown
-  name: "Markdown Authoring Standards"
-  path: .repo_studios/docs/standards/global/std-global-markdown-authoring.md
-  asset_kind: document
-  roles:
-    - standards
-  maturity: incubating
-  description: "Markdown authoring guidance for AI-integrated documentation within Repo Studios."
-  consumers:
-    - coding_agent
-    - human_developer
-    - ci_pipeline
-  status: needs_review
-    - awaiting_signoff
-    - pending_migration
-  artifact_type: md
-  related_assets:
-    - docs.copilot_instructions_python
-  tags:
-    - python
-    - standards
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
-  notes:
-    context: "Coordinate with future tooling for lint/type gates."
-    decisions:
-      - "Mark critical rules for enforcement once pipelines migrate."
+      - "Keep aligned with global standards updates and CI guardrails."
     blockers: []
 - id: docs.docs_inventory_notes
   name: "Docs Inventory Notes"

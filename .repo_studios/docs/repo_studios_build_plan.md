@@ -25,8 +25,8 @@ This plan converts the alignment worksheet into a phased roadmap for establishin
    - Completed: standardized `.repo_studios/` subfolders to `docs/`, `scripts/`, `reports/`, and `tests/` to aid agent discovery, retaining legacy content read-only under `.repo_studios_legacy/`.
    - Documented legacy-to-current path mapping for human developers in `docs/directory_layout.md`, including notes on historical references.
 3. **Documentation Scope Split** _(In progress)_
-   - Completed: scaffolding for `docs/standards/global/` and `docs/standards/project/` with authoring guidance, metadata headers, and migrated standards (`std-global-code-cleanup.md`, `std-global-markdown-authoring.md`, `std-global-mission-parameters.md`, `std-global-prompt-engineering.md`).
-   - Outstanding: migrate remaining legacy standards content (for example, Chainlit/UI variants) and record per-document ownership.
+   - Completed: scaffolding for `docs/standards/global/` and `docs/standards/project/` with authoring guidance, metadata headers, and migrated standards (`std-global-code-cleanup.md`, `std-global-markdown-authoring.md`, `std-global-mission-parameters.md`, `std-global-prompt-engineering.md`, `std-global-chainlit-ui.md`, `std-global-html-coding.md`, `std-global-python-engineering.md`).
+   - Outstanding: document any project-specific overrides that diverge from global standards and note rationale where they exist.
 4. **Naming Conventions** _(Completed)_
    - Documented patterns in `docs/naming_conventions.md` covering files, scripts, tests, and inventory identifiers.
 5. **Plan Artifacts** _(Completed)_
