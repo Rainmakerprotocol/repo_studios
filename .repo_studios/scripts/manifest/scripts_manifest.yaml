@@ -1,0 +1,163 @@
+version: 0.1.0
+generated: 2025-10-18
+notes: |
+  Migration manifest for relocating the legacy Repo Studios scripts into the refreshed
+  `.repo_studios/scripts/` layout. Update each entry as files move, keeping the
+  `status` field in sync so agents know what still needs attention.
+categories:
+  collectors:
+    description: Raw data generators that gather logs, metrics, or baseline artifacts.
+    target_dir: .repo_studios/scripts/collectors
+    planned_moves:
+      - legacy_path: .repo_studios_legacy/repo_scripts/anchor_inventory.py
+        proposed_module: anchor_inventory_collector.py
+        status: pending
+        comments: "Feeds anchor coverage datasets for downstream reports."
+      - legacy_path: .repo_studios_legacy/repo_scripts/dump_faulthandler_once.py
+        proposed_module: faulthandler_dump_once.py
+        status: pending
+        comments: "One-off faulthandler trigger that seeds crash diagnostics."
+      - legacy_path: .repo_studios_legacy/repo_scripts/faulthandler.py
+        proposed_module: faulthandler_collector.py
+        status: pending
+        comments: "Primary crash trace collector; adopt prune_logs during move."
+      - legacy_path: .repo_studios_legacy/repo_scripts/generate_fault_artifacts.py
+        proposed_module: fault_artifact_collector.py
+        status: pending
+        comments: "Builds artifact bundles consumed by fault reporters."
+      - legacy_path: .repo_studios_legacy/repo_scripts/scan_monkey_patches.py
+        proposed_module: monkey_patch_scan_collector.py
+        status: pending
+        comments: "Scans source tree for monkey patch usage."
+  processors:
+    description: Normalization layers that clean or transform collector output.
+    target_dir: .repo_studios/scripts/processors
+    planned_moves:
+      - legacy_path: .repo_studios_legacy/repo_scripts/batch_clean.py
+        proposed_module: batch_log_sanitizer.py
+        status: pending
+        comments: "Normalizes batch job logs prior to reporting."
+      - legacy_path: .repo_studios_legacy/repo_scripts/check_import_boundaries.py
+        proposed_module: import_boundary_guard.py
+        status: pending
+        comments: "Evaluates cross-module import boundaries."
+      - legacy_path: .repo_studios_legacy/repo_scripts/monkey_patch_classify.py
+        proposed_module: monkey_patch_classifier.py
+        status: pending
+        comments: "Categorizes monkey patch findings for trend analysis."
+      - legacy_path: .repo_studios_legacy/repo_scripts/mypy_refresh_baselines.py
+        proposed_module: typecheck_baseline_refresh.py
+        status: pending
+        comments: "Refreshes mypy fixture baselines after rule changes."
+  reporters:
+    description: Presentation builders that assemble multi-section reports.
+    target_dir: .repo_studios/scripts/reporters
+    planned_moves:
+      - legacy_path: .repo_studios_legacy/repo_scripts/anchor_health_report.py
+        proposed_module: anchor_health_reporter.py
+        status: pending
+        comments: "Generates anchor link health rollups."
+      - legacy_path: .repo_studios_legacy/repo_scripts/churn_complexity_heatmap.py
+        proposed_module: churn_complexity_heatmap_reporter.py
+        status: pending
+        comments: "Produces churn vs complexity visual summaries."
+      - legacy_path: .repo_studios_legacy/repo_scripts/compare_monkey_patch_trends.py
+        proposed_module: monkey_patch_trend_reporter.py
+        status: pending
+        comments: "Contrasts monkey patch usage over time."
+      - legacy_path: .repo_studios_legacy/repo_scripts/dep_hygiene_report.py
+        proposed_module: dependency_hygiene_reporter.py
+        status: pending
+        comments: "Summarizes dependency freshness and risks."
+      - legacy_path: .repo_studios_legacy/repo_scripts/health_suite_summary.py
+        proposed_module: health_suite_summary_reporter.py
+        status: pending
+        comments: "Aggregates health-suite run results into a digest."
+      - legacy_path: .repo_studios_legacy/repo_scripts/import_graph_report.py
+        proposed_module: import_graph_reporter.py
+        status: pending
+        comments: "Visualizes project import graph changes."
+      - legacy_path: .repo_studios_legacy/repo_scripts/lizard_report.py
+        proposed_module: lizard_complexity_reporter.py
+        status: pending
+        comments: "Builds code complexity report via Lizard."
+      - legacy_path: .repo_studios_legacy/repo_scripts/test_log_health_report.py
+        proposed_module: test_log_health_reporter.py
+        status: pending
+        comments: "Summarizes pytest log hygiene."
+      - legacy_path: .repo_studios_legacy/repo_scripts/typecheck_report.py
+        proposed_module: typecheck_status_reporter.py
+        status: pending
+        comments: "Wraps type-check outcomes for dashboards."
+  orchestrators:
+    description: Top-level entry points that coordinate multiple script layers.
+    target_dir: .repo_studios/scripts/orchestrators
+    planned_moves:
+      - legacy_path: .repo_studios_legacy/repo_scripts/health_suite_orchestrator.py
+        proposed_module: studio_health_suite.py
+        status: pending
+        comments: "Primary suite runner; will publish `studio-health-suite` target."
+      - legacy_path: .repo_studios_legacy/repo_scripts/pytest_log_runner.py
+        proposed_module: studio_pytest_runner.py
+        status: pending
+        comments: "Drives pytest capture for reporting pipelines."
+      - legacy_path: .repo_studios_legacy/repo_scripts/standards_index_cli.py
+        proposed_module: studio_standards_cli.py
+        status: pending
+        comments: "Convenience CLI that triggers standards workflows."
+  utilities:
+    description: Ad-hoc helpers and maintenance tools that support pipelines.
+    target_dir: .repo_studios/scripts/utilities
+    planned_moves:
+      - legacy_path: .repo_studios_legacy/repo_scripts/find_placeholders.py
+        proposed_module: placeholder_audit_utility.py
+        status: pending
+        comments: "Surfaces TODO-style placeholders for cleanup."
+      - legacy_path: .repo_studios_legacy/repo_scripts/verify_docs_integrity.py
+        proposed_module: docs_integrity_guard.py
+        status: pending
+        comments: "Ensures docs adhere to repo studio standards."
+      - legacy_path: .repo_studios_legacy/repo_scripts/standards_index_gap.py
+        proposed_module: standards_gap_checker.py
+        status: pending
+        comments: "Flags missing sections in standards corpus."
+  docops:
+    description: Documentation-focused scripts for standards generation and upkeep.
+    target_dir: .repo_studios/scripts/docops
+    planned_moves:
+      - legacy_path: .repo_studios_legacy/repo_scripts/build_standards_index.py
+        proposed_module: standards_index_builder.py
+        status: pending
+        comments: "Core index builder feeding inventory views."
+      - legacy_path: .repo_studios_legacy/repo_scripts/check_doc_anchors.py
+        proposed_module: doc_anchor_validator.py
+        status: pending
+        comments: "Validates anchor tags across documentation."
+      - legacy_path: .repo_studios_legacy/repo_scripts/check_markdown_anchors.py
+        proposed_module: markdown_anchor_validator.py
+        status: pending
+        comments: "Pre-flight markdown anchor audit."
+      - legacy_path: .repo_studios_legacy/repo_scripts/standards_extraction.py
+        proposed_module: standards_extractor.py
+        status: pending
+        comments: "Pulls standards snippets into downstream views."
+      - legacy_path: .repo_studios_legacy/repo_scripts/standards_index_diff.py
+        proposed_module: standards_index_diff.py
+        status: pending
+        comments: "Highlights differences between index revisions."
+      - legacy_path: .repo_studios_legacy/repo_scripts/standards_prompt_seed.py
+        proposed_module: standards_prompt_seed.py
+        status: pending
+        comments: "Seeds prompt corpora for agents."
+      - legacy_path: .repo_studios_legacy/repo_scripts/standards_summary.py
+        proposed_module: standards_summary_compiler.py
+        status: pending
+        comments: "Generates digest views of standards evolution."
+  inventory:
+    description: Active scripts already living in the new layout that manage inventory schemas.
+    target_dir: .repo_studios/scripts/inventory
+    existing_modules:
+      - check_inventory_health.py
+      - render_inventory_views.py
+      - validate_inventory.py
+      - README.md
