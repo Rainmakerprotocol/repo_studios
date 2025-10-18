@@ -24,13 +24,13 @@ This plan converts the alignment worksheet into a phased roadmap for establishin
 2. **Directory Layout Confirmation** _(Completed)_
    - Completed: standardized `.repo_studios/` subfolders to `docs/`, `scripts/`, `reports/`, and `tests/` to aid agent discovery, retaining legacy content read-only under `.repo_studios_legacy/`.
    - Documented legacy-to-current path mapping for human developers in `docs/directory_layout.md`, including notes on historical references.
-3. **Documentation Scope Split**
-   - Introduce `standards/global/` vs `standards/project/` (or equivalent) to house reusable vs per-repo guidance.
-   - Embed version metadata (timestamp, change summary) inside document headers.
-4. **Naming Conventions**
-   - Define filename patterns (e.g., `std-global-*.md`, `std-project-*.md`) and `studio-*` prefixes for automation targets and scripts.
-5. **Plan Artifacts**
-   - Produce templates for `agent_notes` entries and structural checklists that future repos can adapt.
+3. **Documentation Scope Split** _(In progress)_
+   - Completed: scaffolding for `docs/standards/global/` and `docs/standards/project/` with authoring guidance, metadata headers, and migrated standards (`std-global-code-cleanup.md`, `std-global-markdown-authoring.md`, `std-global-mission-parameters.md`, `std-global-prompt-engineering.md`).
+   - Outstanding: migrate remaining legacy standards content (for example, Chainlit/UI variants) and record per-document ownership.
+4. **Naming Conventions** _(Completed)_
+   - Documented patterns in `docs/naming_conventions.md` covering files, scripts, tests, and inventory identifiers.
+5. **Plan Artifacts** _(Completed)_
+   - Added reusable templates in `docs/templates/` for agent notes and Repo Studios structural checklists, plus `docs/automation/ci_metrics_checks.md` documenting health guardrails.
 
 ## Phase 2 — Migration & Normalization
 

@@ -127,6 +127,34 @@
     - standards
   phase_origin: legacy
   source_repo: repo_studios_legacy
+- id: docs.repo_studios_code_cleanup
+  name: "Repo Studios Code Cleanup Instructions"
+  path: .repo_studios/docs/standards/global/std-global-code-cleanup.md
+  asset_kind: document
+  roles:
+    - standards
+    - playbook
+  maturity: incubating
+  description: "Canonical cleanup playbook for Repo Studios automation."
+  consumers:
+    - coding_agent
+    - human_developer
+  status: needs_review
+  governance_flags:
+    - awaiting_signoff
+  artifact_type: md
+  related_assets:
+    - docs.markdown_authoring_standards
+  tags:
+    - cleanup
+    - standards
+  phase_origin: phase1
+  source_repo: repo_studios
+  notes:
+    context: "Track adoption once CI health checks enable gating."
+    decisions:
+      - "Replaces legacy cleanup instructions." 
+    blockers: []
   notes:
     context: "Needs diff against pending YAML to ensure parity."
     decisions:
@@ -159,54 +187,55 @@
       - "Keep Python directives separate from language-agnostic instructions."
     blockers: []
 - id: docs.copilot_mission_parameters
-  name: "Copilot Mission Parameters"
-  path: .repo_studios_legacy/repo_docs/copilot_mission_parameters.md
+  name: "Repo Studios Mission Parameters"
+  path: .repo_studios/docs/standards/global/std-global-mission-parameters.md
   asset_kind: document
   roles:
     - standards
     - playbook
-  maturity: legacy
-  description: "Defines mission parameters and scope expectations for agents."
+  maturity: incubating
+  description: "Defines mission parameters and scope expectations for Repo Studios automation."
   consumers:
     - coding_agent
     - human_developer
   status: needs_review
   governance_flags:
-    - pending_migration
+    - awaiting_signoff
   artifact_type: md
   related_assets:
-    - docs.copilot_instructions_clean
+    - docs.repo_studios_code_cleanup
   tags:
     - mission
     - alignment
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
+  phase_origin: phase1
+  source_repo: repo_studios
   notes:
-    context: "Consider merging with build plan section on goals."
+    context: "Review updated mission framing with standards leads."
     decisions:
-      - "Keep mission scope clear in standards/global subset."
+      - "Adopt Repo Studios naming and references."
     blockers: []
 - id: docs.copilot_prompt_engineering_standards
-  name: "Copilot Prompt Engineering Standards"
-  path: .repo_studios_legacy/repo_docs/copilot_prompt_engineering_standards.md
+  name: "Prompt Engineering Standards"
+  path: .repo_studios/docs/standards/global/std-global-prompt-engineering.md
   asset_kind: document
   roles:
     - standards
-  maturity: legacy
-  description: "Standards governing prompt engineering practices."
+  maturity: incubating
+  description: "Repo Studios-wide guidance for prompt and agent instruction authoring."
   consumers:
     - coding_agent
+    - human_developer
   status: needs_review
   governance_flags:
-    - pending_migration
+    - awaiting_signoff
   artifact_type: md
   related_assets:
     - docs.copilot_prompts
   tags:
     - prompts
     - standards
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
+  phase_origin: phase1
+  source_repo: repo_studios
   notes:
     context: "Update terminology to match new schema fields."
     decisions:
@@ -239,19 +268,19 @@
       - "Consider splitting into YAML-based prompt registry for machine parsing."
     blockers: []
 - id: docs.copilot_standards_chainlit
-  name: "Copilot Standards (Chainlit)"
-  path: .repo_studios_legacy/repo_docs/copilot_standards_chainlit.md
+  name: "Chainlit UI Standards"
+  path: .repo_studios/docs/standards/global/std-global-chainlit-ui.md
   asset_kind: document
   roles:
     - standards
-  maturity: legacy
-  description: "Chainlit-specific standards and guidance."
+  maturity: incubating
+  description: "Chainlit-specific standards covering async flows, state, and message semantics."
   consumers:
     - coding_agent
     - ci_pipeline
   status: needs_review
   governance_flags:
-    - pending_migration
+    - awaiting_signoff
   artifact_type: md
   related_assets:
     - docs.copilot_standards_project
@@ -375,20 +404,20 @@
     decisions:
       - "Annotate mandatory vs optional directives."
     blockers: []
-- id: docs.copilot_standards_python
-  name: "Copilot Standards (Python)"
-  path: .repo_studios_legacy/repo_docs/copilot_standards_python.md
+- id: docs.copilot_standards_markdown
+  name: "Markdown Authoring Standards"
+  path: .repo_studios/docs/standards/global/std-global-markdown-authoring.md
   asset_kind: document
   roles:
     - standards
-  maturity: legacy
-  description: "Python-specific coding standards for Repo Studios."
+  maturity: incubating
+  description: "Markdown authoring guidance for AI-integrated documentation within Repo Studios."
   consumers:
     - coding_agent
     - human_developer
     - ci_pipeline
   status: needs_review
-  governance_flags:
+    - awaiting_signoff
     - pending_migration
   artifact_type: md
   related_assets:

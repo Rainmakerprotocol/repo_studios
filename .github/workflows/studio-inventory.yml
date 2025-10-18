@@ -1,0 +1,47 @@
+name: Repo Studios Inventory Health
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  inventory-health:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          pip install -r requirements.txt || true
+
+      - name: Render inventory reports
+        run: |
+          . .venv/bin/activate
+          make -C .repo_studios studio-render-views
+
+      - name: Validate inventory
+        run: |
+          . .venv/bin/activate
+          make -C .repo_studios studio-validate-inventory
+
+      - name: Check inventory health thresholds
+        run: |
+          . .venv/bin/activate
+          make -C .repo_studios studio-check-inventory-health
+
+      - name: Upload inventory reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: inventory-reports-latest
+          path: .repo_studios/reports
+          if-no-files-found: warn

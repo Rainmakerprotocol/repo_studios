@@ -25,7 +25,7 @@ The command regenerates all reports and refreshes the compatibility stubs in `in
 - `reports/summary/latest/summary.json`
   - Aggregated totals by asset kind, maturity, status, consumer, plus derived metrics such as `status_by_asset_kind`, `maturity_by_asset_kind`, and ranked `top_tags`.
 - `reports/summary/latest/dashboard.json`
-  - CI-focused snapshot highlighting maturity totals per asset kind, role prevalence, and artifact type distribution.
+  - Metrics snapshot intended for future dashboards or health summaries (no UI is bundled with this starter repo).
 
 Each topic folder always exposes its most recent snapshot under `latest/`; historical archives can be introduced later without changing downstream integration points.
 

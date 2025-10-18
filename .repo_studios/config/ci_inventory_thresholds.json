@@ -1,0 +1,11 @@
+{
+  "status_limits": {
+    "unknown": 0
+  },
+  "minimum_assets": {
+    "document": 20,
+    "script": 20,
+    "test": 10
+  },
+  "consumer_required": ["coding_agent"]
+}

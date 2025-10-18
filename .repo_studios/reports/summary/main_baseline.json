@@ -1,0 +1,50 @@
+{
+  "generated_at": "2025-10-18T00:49:43.978169+00:00",
+  "total": 62,
+  "by_asset_kind": {
+    "document": 21,
+    "script": 31,
+    "test": 10
+  },
+  "by_maturity": {
+    "legacy": 59,
+    "incubating": 3
+  },
+  "by_status": {
+    "needs_review": 58,
+    "archived": 1,
+    "active": 3
+  },
+  "status_by_asset_kind": {
+    "document": {
+      "needs_review": 17,
+      "archived": 1,
+      "active": 3
+    },
+    "script": {
+      "needs_review": 31
+    },
+    "test": {
+      "needs_review": 10
+    }
+  },
+  "maturity_by_asset_kind": {
+    "document": {
+      "legacy": 18,
+      "incubating": 3
+    },
+    "script": {
+      "legacy": 31
+    },
+    "test": {
+      "legacy": 10
+    }
+  },
+  "consumers": {
+    "coding_agent": 61,
+    "human_developer": 18,
+    "ci_pipeline": 29,
+    "docs_generator": 3
+  },
+  "top_tags": []
+}
