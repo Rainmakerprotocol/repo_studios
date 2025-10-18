@@ -105,6 +105,30 @@ Use these commands locally before opening pull requests to prevent CI churn.
 
 ---
 
+## Operational Checklists
+
+### New feature or refactor
+
+- [ ] Align code changes with the paired global standards (Python, HTML, Chainlit, Markdown).
+- [ ] Update docs, ADRs, or agent notes for new flags, metrics, or services.
+- [ ] Run `make qa`, `make studio-check-inventory-health`, and anchor checks.
+- [ ] Capture follow-up tasks in the cleanup ledger if debt remains.
+
+### Documentation migration or rename
+
+- [ ] Apply migration playbook front matter template.
+- [ ] Update relevant inventory catalog entries and rerun health checks.
+- [ ] Verify cross-links (README, prompts, plan checklists) still resolve.
+- [ ] Remove or archive the legacy source in `.repo_studios_legacy/`.
+
+---
+
+## Anchor Health Reminder
+
+When reworking headings or TOC structure, run `make anchor-health` and confirm `.repo_studios/anchor_health/anchor_report_latest.json` has no duplicate slug regressions.
+
+---
+
 ## Agent Block (Machine-Readable)
 
 <!-- agents:begin:agent_instructions -->

@@ -1,36 +1,45 @@
 ---
-title: repo Instructions — Python
-description: Python-specific error handling, corrections, and approved patterns for the Jarvis2 repository.
+title: Repo Studios Python Remediation Instructions
+audience:
+  - coding_agent
+  - human_developer
+owners:
+  - repo_studios_ai
+status: draft
+version: 0.1.0
+updated: 2025-10-18
+summary: >-
+  Repository-specific Python cleanup patterns, quick fixes, and approved practices preserved from the Jarvis2 remediation guide.
+tags:
+  - python
+  - remediation
+  - standards
+legacy_source: .repo_studios_legacy/repo_docs/copilot_instructions_python.md
 ---
 
-This file is a structured reference for GitHub repo to consult when cleaning or
-generating Python code. It contains known patterns, anti-patterns, best practices,
-and approved fixes. repo should scan this file after analyzing the last 10
-cleanup logs and use it to:
+<!-- markdownlint-disable MD025 -->
+# Repo Studios Python Remediation Instructions
 
-* Prevent repetition of known mistakes
-* Apply pre-approved solutions
-* Learn new resolutions when new error types emerge
+This structured reference equips Repo Studios automation and collaborators with vetted Python patterns, anti-patterns, and fixes derived from the Jarvis2 remediation log. Any references to the legacy agent name (`repo`) map to Repo Studios automation in the current workflow.
 
-repo may append to this file if a new recurring issue appears and a fix
-can be clearly defined.
+Use this guide to prevent repeated mistakes, apply pre-approved solutions, and capture new recurring issues with precise remediation steps. Agents may append to this document when a new recurring issue emerges and a fix can be clearly defined.
 
-## 🚦 Project‑Specific Quick Rules (Jarvis2)
+---
 
-repo must also follow these repo policies when generating or fixing Python code:
+## Project-Specific Quick Rules (Jarvis2)
 
-* Prefer Make targets for validation: `make qa` (runs lint, typecheck, tests).
-* Never hardcode secrets or tokens. Read from environment (for example,
-  `METRICS_API_TOKEN`, `INTERNAL_API_KEYS`).
-* For FastAPI tests, use `httpx.ASGITransport` + `httpx.AsyncClient` with `api.server:app`.
-* Use `api.server.get_db_path()` (or the injected dependency) instead of
-  hardcoding DB paths.
-* Keep public APIs stable; minimize diffs; avoid reformatting unrelated code.
-* Add tests for behavioral changes and run them locally before finishing.
+- Prefer Make targets for validation: `make qa` (runs lint, type-check, tests).
+- Never hardcode secrets or tokens; read from environment variables such as `METRICS_API_TOKEN` or `INTERNAL_API_KEYS`.
+- For FastAPI tests, use `httpx.ASGITransport` plus `httpx.AsyncClient` with `api.server:app`.
+- Use `api.server.get_db_path()` (or the injected dependency) instead of hardcoding database paths.
+- Keep public APIs stable; minimize diffs; avoid reformatting unrelated code.
+- Add tests for behavioral changes and run them locally before finishing.
 
-## ✅ Format for Adding New Entries
+---
 
-repo must follow the format below for every new entry:
+## Format for Adding New Entries
+
+Repo Studios automation must follow the format below for every new entry:
 
 ````md
 ## Issue: [Short name for pattern or bug]
@@ -44,19 +53,21 @@ repo must follow the format below for every new entry:
 # Show the clean, modern, or approved pattern here
 ```
 
-**Style Rules repo Must Follow When Adding Examples:**
+**Style Rules to Follow When Adding Examples:**
 
 * Use clear function or variable names (for example, `convert_to_inches` not `x`).
 * Always add type hints when known (for example, `def add(a: int, b: int) -> int:`).
 * Include docstrings for public functions.
-* Use logging instead of `print`.
+* Use logging instead of `print` for production paths.
 * Use list comprehensions where appropriate.
 * Break large or nested functions into smaller ones with meaningful names.
 * Apply PEP 8 spacing and indentation.
 * Maintain readability: one logical idea per function or block.
 ````
 
-## Example Entries
+---
+
+## Issue Catalog
 
 ### ✅ Issue: Unused variables or imports
 
@@ -181,7 +192,7 @@ def convert_to_inches(length_in_feet: float) -> float:
 
 ---
 
-### ✅ Issue: Mixed indentation (2 vs 4 spaces) causing IndentationError
+### ✅ Issue: Mixed indentation causing `IndentationError`
 
 **Example Pattern:**
 
@@ -238,7 +249,7 @@ assert resp.status_code == 200
 
 ---
 
-### ✅ Issue: SQLite OperationalError: unable to open database file
+### ✅ Issue: SQLite `OperationalError: unable to open database file`
 
 **Example Pattern:**
 
@@ -261,7 +272,7 @@ conn = sqlite3.connect(db_path)
 
 ---
 
-### ✅ Issue: Cached global DB path across tests (stale _DB_PATH)
+### ✅ Issue: Cached global DB path across tests (stale `_DB_PATH`)
 
 **Example Pattern:**
 
@@ -315,7 +326,7 @@ raise HTTPException(status_code=400, detail='Invalid labels JSON')
 
 ---
 
-### ✅ Issue: Prefer pathlib over os and builtins for file I/O (PTH103, PTH123)
+### ✅ Issue: Prefer `pathlib` over `os` for file I/O (Ruff PTH103, PTH123)
 
 **Example Pattern:**
 
@@ -352,7 +363,7 @@ with Path(path).open("w", encoding="utf-8") as f:
 
 ---
 
-### ✅ Issue: Replace try/except/pass with contextlib.suppress (SIM105)
+### ✅ Issue: Replace `try/except/pass` with `contextlib.suppress` (SIM105)
 
 **Example Pattern:**
 
@@ -374,7 +385,7 @@ with suppress(Exception):
 
 ---
 
-### ✅ Issue: Ambiguous single-letter names and E741 (l, O, I)
+### ✅ Issue: Ambiguous single-letter names and E741 (`l`, `O`, `I`)
 
 **Example Pattern:**
 
@@ -395,11 +406,11 @@ with Path(path).open(encoding="utf-8") as f:
 
 ---
 
-### ✅ Issue: Unicode punctuation in docstrings (RUF002 non‑breaking hyphen)
+### ✅ Issue: Unicode punctuation in docstrings (RUF002 non-breaking hyphen)
 
 **Example Pattern:**
 
-```python
+```text
 """
 Logic intentionally simple and side‑effect free.
 """
@@ -461,7 +472,7 @@ for _kv in storage.values():
 
 ---
 
-### ✅ Issue: Optional defaults must be annotated as Optional (mypy no_implicit_optional)
+### ✅ Issue: Optional defaults must be annotated as Optional (mypy `no_implicit_optional`)
 
 **Example Pattern:**
 
@@ -478,14 +489,13 @@ from typing import Optional
 def make(task_type: Optional[str] = None) -> str:
     ...
 # or, with Python 3.10+
-
 def make(task_type: str | None = None) -> str:
     ...
 ```
 
 ---
 
-### ✅ Issue: Don’t index Collection[...] — use Sequence[...] or materialize to list
+### ✅ Issue: Don’t index `Collection[...]` — use `Sequence[...]` or materialize to list
 
 **Example Pattern:**
 
@@ -510,7 +520,7 @@ first = list(names)[0]
 
 ---
 
-### ✅ Issue: Remove unused type: ignore and prefer targeted ignores
+### ✅ Issue: Remove unused `type: ignore` and prefer targeted ignores
 
 **Example Pattern:**
 
@@ -527,7 +537,7 @@ result = 42  # no ignore needed
 
 ---
 
-### ✅ Issue: Use typing.Any, not any, in type positions
+### ✅ Issue: Use `typing.Any`, not `any`, in type positions
 
 **Example Pattern:**
 
@@ -567,7 +577,7 @@ def compute_delta(current: float, baseline: Optional[float]) -> float:
 
 ---
 
-### ✅ Issue: Requests type stubs missing in tests (mypy import-untyped)
+### ✅ Issue: Requests type stubs missing in tests (`mypy import-untyped`)
 
 **Example Pattern:**
 
@@ -602,3 +612,7 @@ class UnsupportedFormatError(ValueError):
 raise UnsupportedFormatError()
 # In small test shims, a short ValueError is acceptable; keep messages brief.
 ```
+
+---
+
+<!-- markdownlint-enable MD025 -->

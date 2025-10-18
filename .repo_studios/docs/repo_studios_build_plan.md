@@ -34,9 +34,9 @@ This plan converts the alignment worksheet into a phased roadmap for establishin
 
 ## Phase 2 — Migration & Normalization
 
-1. **Migration Playbook**
-   - Author a structured guide covering scope, prerequisites, execution steps, validation, and rollback for moving assets from `repo_studios_legacy/` to `.repo_studios/`.
-   - Encourage agents to log major moves in `agent_notes/` using the timestamped convention.
+1. **Migration Playbook** _(Completed)_
+   - Completed: authored `.repo_studios/docs/playbooks/playbook-migration.md` capturing scope, validation, rollback, and governance logging requirements for every asset move.
+   - Outstanding: socialize playbook adoption across contributors and fold feedback into a 1.0 release.
 2. **Directory Restructuring**
    - Relocate or recreate assets in the new `.repo_studios/` layout while keeping the legacy copy read-only for reference.
    - Update imports, relative paths, and config references to match the new structure.

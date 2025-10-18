@@ -82,6 +82,34 @@
     decisions:
       - "Replaces legacy agent_memory_workflow.md."
     blockers: []
+- id: docs.migration_playbook
+  name: "Repo Studios Migration Playbook"
+  path: .repo_studios/docs/playbooks/playbook-migration.md
+  asset_kind: document
+  roles:
+    - playbook
+  maturity: incubating
+  description: "Step-by-step guidance for migrating assets from the legacy layout into Repo Studios."
+  consumers:
+    - coding_agent
+    - human_developer
+  status: needs_review
+  governance_flags:
+    - awaiting_signoff
+  artifact_type: md
+  related_assets:
+    - docs.copilot_prompts
+    - docs.repo_studios_build_plan
+  tags:
+    - migration
+    - repo_studios
+  phase_origin: phase1
+  source_repo: repo_studios
+  notes:
+    context: "Codifies migration workflow replacing ad-hoc checklists."
+    decisions:
+      - "Requires validation and governance logging after each migration."
+    blockers: []
 - id: docs.alignment_ledger
   name: "Repo Studios Alignment Ledger"
   path: .repo_studios/docs/governance/alignment-ledger.md
@@ -140,30 +168,31 @@
         - "Migrate into standards/global prompts section."
       blockers: []
   - id: docs.copilot_prompts
-    name: "Copilot Prompts"
-    path: .repo_studios_legacy/repo_docs/copilot_prompts.md
+    name: "Repo Studios Prompt Library"
+    path: repo_prompts.md
     asset_kind: document
     roles:
       - artifact_sample
-    maturity: legacy
+    maturity: incubating
     description: "Collection of curated prompts for reuse."
     consumers:
       - coding_agent
+      - human_developer
     status: needs_review
     governance_flags:
-      - pending_migration
+      - awaiting_signoff
     artifact_type: md
     related_assets:
       - docs.prompt_library_usage
     tags:
       - prompts
       - samples
-    phase_origin: legacy
-    source_repo: repo_studios_legacy
+    phase_origin: phase1
+    source_repo: repo_studios
     notes:
-      context: "Determine storage approach (global vs project-specific)."
+      context: "Migrated into canonical root library with structured sections."
       decisions:
-        - "Consider splitting into YAML-based prompt registry for machine parsing."
+        - "Retain Markdown format while evaluating future YAML registry."
       blockers: []
   - id: docs.copilot_standards_chainlit
     name: "Chainlit UI Standards"
@@ -332,87 +361,115 @@
     decisions:
       - "Keep aligned with global standards updates and CI guardrails."
     blockers: []
+- id: docs.copilot_instructions_python
+  name: "Python Remediation Instructions"
+  path: .repo_studios/docs/standards/project/std-project-python-instructions.md
+  asset_kind: document
+  roles:
+    - standards
+  maturity: incubating
+  description: "Project-scoped remediation catalog for recurring Python cleanup issues."
+  consumers:
+    - coding_agent
+    - human_developer
+  status: needs_review
+  governance_flags:
+    - awaiting_signoff
+  artifact_type: md
+  related_assets:
+    - docs.copilot_standards_python
+    - docs.copilot_standards_project
+  tags:
+    - python
+    - remediation
+  phase_origin: phase1
+  source_repo: repo_studios
+  notes:
+    context: "Migrated from Jarvis2 remediation guide; keep updated with new recurring issues."
+    decisions:
+      - "Agents may append new catalog entries after documenting repeat fixes."
+    blockers: []
 - id: docs.docs_inventory_notes
   name: "Docs Inventory Notes"
-  path: .repo_studios_legacy/repo_docs/docs_inventory_notes.md
+  path: .repo_studios/docs/inventory/inventory-notes.md
   asset_kind: document
   roles:
     - artifact_sample
-  maturity: legacy
+  maturity: incubating
   description: "Historical notes on documentation inventory and governance."
   consumers:
     - coding_agent
     - human_developer
-  status: archived
+  status: needs_review
   governance_flags:
-    - pending_migration
+    - awaiting_signoff
   artifact_type: md
   related_assets:
     - docs.inventory_spec
   tags:
     - inventory
     - history
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
+  phase_origin: phase1
+  source_repo: repo_studios
   notes:
-    context: "May be superseded by new inventory schema documentation."
+    context: "Migrated into `.repo_studios/docs/inventory/` with refreshed metadata and action list."
     decisions:
-      - "Retain for reference until new process is stable."
+      - "Track ongoing inventory governance tasks in this file until superseded."
     blockers: []
 - id: docs.standards_extraction_spec
   name: "Standards Extraction Spec"
-  path: .repo_studios_legacy/repo_docs/standards_extraction_spec.md
+  path: .repo_studios/docs/automation/standards-extraction-spec.md
   asset_kind: document
   roles:
     - standards
     - playbook
-  maturity: legacy
+  maturity: incubating
   description: "Specification for extracting and consolidating standards."
   consumers:
     - coding_agent
     - ci_pipeline
   status: needs_review
   governance_flags:
-    - pending_migration
+    - awaiting_signoff
   artifact_type: md
   related_assets:
     - scripts.standards_extraction
   tags:
     - standards
     - extraction
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
+  phase_origin: phase1
+  source_repo: repo_studios
   notes:
-    context: "Cross-link with new inventory spec to avoid duplication."
+    context: "Resides under automation docs with refreshed metadata."
     decisions:
-      - "Retain as technical reference for extraction tooling."
+      - "Keep as technical reference for rule extraction tooling."
     blockers: []
 - id: docs.standards_index_schema
   name: "Standards Index Schema"
-  path: .repo_studios_legacy/repo_docs/standards_index_schema.md
+  path: .repo_studios/docs/automation/standards-index-schema.md
   asset_kind: document
   roles:
     - standards
-  maturity: legacy
+  maturity: incubating
   description: "Schema description for the consolidated standards index."
   consumers:
     - coding_agent
     - ci_pipeline
   status: needs_review
   governance_flags:
-    - pending_migration
+    - awaiting_signoff
   artifact_type: md
   related_assets:
     - repo_files.copilot_standards_index
   tags:
     - standards
     - schema
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
+  phase_origin: phase1
+  source_repo: repo_studios
   notes:
-    context: "Align with inventory schema spec to prevent overlap."
+    context: "Migrated into automation docs with refreshed schema guidance."
     decisions:
-      - "Reference from inventory validation tooling once implemented."
+      - "Supersedes legacy standards index schema reference."
     blockers: []
 - id: docs.alignment_protocol
   name: "Alignment Protocol"

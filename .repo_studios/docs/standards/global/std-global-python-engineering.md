@@ -167,6 +167,16 @@ def get_settings() -> Settings:
 
 ---
 
+## Packaging & Dependencies
+
+- Manage first-party requirements via `pyproject.toml` or `requirements-dev.txt`; keep production and dev dependencies separated.
+- Favor lightweight libraries with active maintenance; document additions in ADRs or agent notes.
+- For optional features, gate imports behind feature flags and document fallbacks.
+- Pin minimum versions in CI to expose breaking changes early; avoid blanket version upper bounds unless mandated by security policies.
+- After modifying dependencies, run `make studio-check-inventory-health` plus Codacy Trivy scans to confirm no new vulnerabilities.
+
+---
+
 ## Error Handling Expectations
 
 - Raise explicit exceptions with contextual messages; catch only what you can remediate.
@@ -200,6 +210,16 @@ def connect(db_path: str) -> sqlite3.Connection:
 - Include success, edge, and error-path assertions; use fixtures to isolate external dependencies.
 - Make tests deterministic, idempotent, and automation-friendly.
 - When refactoring, add regression tests capturing the improved behavior.
+
+---
+
+## Validation Commands & CI Gates
+
+- `make qa` bundles Ruff, Mypy, Pytest, and anchor checks; run locally before opening PRs.
+- Execute `python .repo_studios/scripts/check_markdown_anchors.py` (or `make docs-anchors`) whenever documentation or docstrings introduce new headings.
+- For services touching inventory artifacts, run `python .repo_studios/scripts/check_inventory_health.py` and capture deltas.
+- Ensure CI workflows mirror local commands; update pipeline definitions when adding new required validation steps.
+- Upload coverage artifacts and lint reports so agents can audit regressions asynchronously.
 
 ---
 
@@ -248,6 +268,12 @@ def _filter_valid(records: Iterable[Record]) -> list[Record]:
 - Update this standard when new automation surfaces recurring issues.
 - Log debt in `repo_clean_log/` or project ADRs if you must defer improvements.
 - Cross-link additions to mission parameters when scope or policy changes.
+
+---
+
+## Anchor Health Reminder
+
+When adjusting headings or large docstrings, run `make anchor-health` and review `.repo_studios/anchor_health/anchor_report_latest.json` for duplicate slug regressions.
 
 ---
 

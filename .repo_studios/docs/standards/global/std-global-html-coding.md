@@ -17,7 +17,9 @@ tags:
 legacy_source: .repo_studios_legacy/repo_docs/copilot_standards_html.md
 ---
 
-## 🧱 HTML Coding Practices
+<!-- markdownlint-disable MD025 -->
+# Repo Studios HTML Coding Practices
+<!-- markdownlint-enable MD025 -->
 
 Audience: Repo Studios | Agents | Developers | All
 
@@ -99,6 +101,28 @@ This document defines clear and enforceable HTML coding standards for Repo Studi
   - Add the issue and corrected solution to this file using the established format.
   - Cross-reference supporting standards in Markdown or Python if helpful.
 
+## ✅ Quick Checklists
+
+### Shipping new HTML
+
+- [ ] Start with semantic containers and a single `<h1>`.
+- [ ] Ensure every interactive control has labels and keyboard focus support.
+- [ ] Avoid inline styles; prefer Tailwind or shared utility classes.
+- [ ] Document complex blocks with HTML comments so agents can target them.
+
+### Reviewing or refactoring existing HTML
+
+- [ ] Replace anonymous `<div>` stacks with semantic tags.
+- [ ] Confirm accessibility metadata (`aria-*`, `role`, `lang`) remains accurate.
+- [ ] Verify responsive behavior using container utilities and flex/grid layouts.
+- [ ] Update related standards or inventory notes if new patterns emerge.
+
+## 📚 References
+
+- `.repo_studios/docs/standards/global/std-global-markdown-authoring.md`
+- `.repo_studios/docs/standards/project/std-project-operating-standard.md`
+- `.repo_studios/docs/playbooks/playbook-migration.md`
+
 ## 🤖 Agent Block (machine-readable)
 
 ````markdown
@@ -123,6 +147,11 @@ agents:
 ```
 <!-- agents:end:agent_instructions -->
 ````
+
+## 🗂️ Change History
+
+- 2025-10-18: Migrated into `.repo_studios/docs/standards/global/` with quick checklists and references.
+- 2025-08-22: Initial Repo Studios-aligned revision of HTML coding standards.
 
 ## Anchor Health Cross-Link
 
