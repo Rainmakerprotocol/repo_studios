@@ -17,12 +17,13 @@ This plan converts the alignment worksheet into a phased roadmap for establishin
 - Outcome: shared understanding of goals, constraints, and desired tooling behavior.
 
 ## Phase 1 — Foundation & Inventory
-1. **Inventory Schema**
-   - Design a single authoritative YAML index tagging each asset by role (orchestrator, summarizer, report, standards, test, etc.), maturity, dependencies, and consumer.
-   - Generate secondary views (if helpful) for docs/scripts without duplicating the source of truth.
-2. **Directory Layout Confirmation**
-   - Decide on concise folder names under `.repo_studios/` (e.g., `docs/`, `scripts/`, `reports/`, `tests/`) optimized for agent traversal.
-   - Document mapping for human developers and ensure legacy references are noted.
+
+1. **Inventory Schema** _(In progress)_
+   - Completed: published `inventory_schema_spec.md`, machine-readable enums, authoring template, docs/scripts/tests catalogs with Codacy validation, the `studio-validate-inventory` CLI + Make target with docs, and the `render_inventory_views.py` pipeline generating docs/scripts/tests summaries.
+   - Outstanding: extend validator with path-existence + suppression logic, iterate on richer secondary views (dashboards, CI surfacing), and move generated views into `reports/<topic>/` once validator exclusions are in place.
+2. **Directory Layout Confirmation** _(Completed)_
+   - Completed: standardized `.repo_studios/` subfolders to `docs/`, `scripts/`, `reports/`, and `tests/` to aid agent discovery, retaining legacy content read-only under `.repo_studios_legacy/`.
+   - Documented legacy-to-current path mapping for human developers in `docs/directory_layout.md`, including notes on historical references.
 3. **Documentation Scope Split**
    - Introduce `standards/global/` vs `standards/project/` (or equivalent) to house reusable vs per-repo guidance.
    - Embed version metadata (timestamp, change summary) inside document headers.
@@ -32,6 +33,7 @@ This plan converts the alignment worksheet into a phased roadmap for establishin
    - Produce templates for `agent_notes` entries and structural checklists that future repos can adapt.
 
 ## Phase 2 — Migration & Normalization
+
 1. **Migration Playbook**
    - Author a structured guide covering scope, prerequisites, execution steps, validation, and rollback for moving assets from `repo_studios_legacy/` to `.repo_studios/`.
    - Encourage agents to log major moves in `agent_notes/` using the timestamped convention.
@@ -45,6 +47,7 @@ This plan converts the alignment worksheet into a phased roadmap for establishin
    - Fill the inventory YAML with entries for docs, scripts, reports, tests, and standards, marking mandatory vs optional components.
 
 ## Phase 3 — Automation & Quality Gates
+
 1. **Testing Strategy**
    - Keep tests isolated inside `.repo_studios/tests` (or renamed folder) and document how CI jobs should invoke them.
    - Review existing pytest suites for path assumptions; fix or mark legacy items that require updates.
@@ -58,6 +61,7 @@ This plan converts the alignment worksheet into a phased roadmap for establishin
    - Propose layered configuration (default config file + environment variables + CLI flags) so restrictions can tighten as projects mature.
 
 ## Phase 4 — Reporting & Observability Enhancements
+
 1. **Report Normalization**
    - Upgrade legacy report samples to meet Repo Studios standards (formatting, lint, clarity).
    - Convert multi-section, AI-centric reports to YAML for structured consumption while retaining lighter formats where appropriate.
@@ -69,6 +73,7 @@ This plan converts the alignment worksheet into a phased roadmap for establishin
    - Provide automated comparisons between global standards and project overrides, highlighting additions, removals, and severity shifts.
 
 ## Phase 5 — Governance & Onboarding Assets
+
 1. **Project Maturity Checklist**
    - Draft staged governance (scaffold → growth → mature) with entry criteria, required automation, retention policies, and secret handling expectations.
 2. **Alignment Protocol Evolution**
@@ -79,11 +84,13 @@ This plan converts the alignment worksheet into a phased roadmap for establishin
    - Evaluate whether to automate notifications for new `agent_notes/` entries or rely on manual review.
 
 ## Parallel Workstreams
+
 - **Sample Data Refresh**: Improve or regenerate sample fixtures to meet current lint and formatting standards while keeping curated examples in-repo.
 - **Hard-Coded Path Cleanup**: Identify stale paths (e.g., `/home/founder/jarvis2`) and replace them with configurable settings.
 - **Legacy Dependency Audit**: Confirm which scripts rely on external tools (mypy, ruff, lizard, etc.) and note bootstrap requirements.
 
 ## Deliverables Snapshot
+
 - Inventory YAML (authoritative catalog)
 - Structured migration playbook
 - Updated directory layout with namespaced Make targets

@@ -1,0 +1,371 @@
+- id: scripts.health.anchor_health_report
+  name: Anchor Health Report
+  roles:
+  - report_generator
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - anchors
+  related_assets:
+  - scripts.health.anchor_inventory
+  - docs.anchor_validation_protocol
+- id: scripts.health.anchor_inventory
+  name: Anchor Inventory
+  roles:
+  - report_generator
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - anchors
+  related_assets:
+  - scripts.health.anchor_health_report
+- id: scripts.health.health_suite_orchestrator
+  name: Health Suite Orchestrator
+  roles:
+  - orchestrator
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - orchestrator
+  related_assets:
+  - scripts.health.health_suite_summary
+  - scripts.health.dep_hygiene_report
+  - scripts.health.lizard_report
+- id: scripts.health.health_suite_summary
+  name: Health Suite Summary
+  roles:
+  - summarizer
+  - report_generator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - reporting
+  related_assets:
+  - scripts.health.health_suite_orchestrator
+- id: scripts.health.churn_complexity_heatmap
+  name: Churn Complexity Heatmap
+  roles:
+  - report_generator
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - analytics
+  related_assets:
+  - docs.health_suite_overview
+- id: scripts.health.dep_hygiene_report
+  name: Dependency Hygiene Report
+  roles:
+  - report_generator
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - dependencies
+  related_assets:
+  - scripts.health.health_suite_orchestrator
+- id: scripts.health.import_graph_report
+  name: Import Graph Report
+  roles:
+  - report_generator
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - imports
+  related_assets:
+  - scripts.health.check_import_boundaries
+- id: scripts.health.lizard_report
+  name: Lizard Report
+  roles:
+  - report_generator
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - complexity
+  related_assets:
+  - scripts.health.health_suite_orchestrator
+- id: scripts.health.typecheck_report
+  name: Typecheck Report
+  roles:
+  - report_generator
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - typing
+  related_assets:
+  - scripts.health.mypy_refresh_baselines
+- id: scripts.health.mypy_refresh_baselines
+  name: Mypy Refresh Baselines
+  roles:
+  - orchestrator
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - typing
+  related_assets:
+  - scripts.health.typecheck_report
+- id: scripts.health.compare_monkey_patch_trends
+  name: Compare Monkey Patch Trends
+  roles:
+  - report_generator
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - monkey_patch
+  related_assets:
+  - scripts.health.monkey_patch_classify
+  - scripts.health.scan_monkey_patches
+- id: scripts.health.monkey_patch_classify
+  name: Monkey Patch Classify
+  roles:
+  - report_generator
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - monkey_patch
+  related_assets:
+  - scripts.health.compare_monkey_patch_trends
+- id: scripts.health.scan_monkey_patches
+  name: Scan Monkey Patches
+  roles:
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - monkey_patch
+  related_assets:
+  - scripts.health.monkey_patch_classify
+- id: scripts.health.test_log_health_report
+  name: Test Log Health Report
+  roles:
+  - report_generator
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - testing
+  related_assets:
+  - tests.health_suite.test_log_health_report_pick_best
+- id: scripts.health.pytest_log_runner
+  name: Pytest Log Runner
+  roles:
+  - report_generator
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - testing
+  related_assets: []
+- id: scripts.health.generate_fault_artifacts
+  name: Generate Fault Artifacts
+  roles:
+  - report_generator
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - faults
+  related_assets:
+  - scripts.health.dump_faulthandler_once
+- id: scripts.health.dump_faulthandler_once
+  name: Dump Fault Handler Once
+  roles:
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - faults
+  related_assets:
+  - scripts.health.generate_fault_artifacts
+- id: scripts.health.faulthandler_module
+  name: Fault Handler Module
+  roles:
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - health
+  - faults
+  related_assets:
+  - scripts.health.dump_faulthandler_once
+  - scripts.health.generate_fault_artifacts
+- id: scripts.standards.build_index
+  name: Build Standards Index
+  roles:
+  - orchestrator
+  - standards
+  maturity: legacy
+  status: needs_review
+  tags:
+  - standards
+  - inventory
+  related_assets:
+  - docs.standards_extraction_spec
+  - repo_files.copilot_standards_index
+- id: scripts.standards.extraction
+  name: Standards Extraction
+  roles:
+  - orchestrator
+  - standards
+  maturity: legacy
+  status: needs_review
+  tags:
+  - standards
+  - extraction
+  related_assets:
+  - docs.standards_extraction_spec
+  - scripts.standards.build_index
+- id: scripts.standards.index_cli
+  name: Standards Index CLI
+  roles:
+  - cli
+  - orchestrator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - standards
+  - cli
+  related_assets:
+  - docs.standards_index_schema
+  - scripts.standards.build_index
+- id: scripts.standards.index_diff
+  name: Standards Index Diff
+  roles:
+  - validator
+  - standards
+  maturity: legacy
+  status: needs_review
+  tags:
+  - standards
+  - diff
+  related_assets:
+  - scripts.standards.index_cli
+- id: scripts.standards.index_gap
+  name: Standards Index Gap
+  roles:
+  - validator
+  - standards
+  maturity: legacy
+  status: needs_review
+  tags:
+  - standards
+  - gap_analysis
+  related_assets:
+  - scripts.standards.build_index
+- id: scripts.standards.prompt_seed
+  name: Standards Prompt Seed
+  roles:
+  - summarizer
+  - standards
+  maturity: legacy
+  status: needs_review
+  tags:
+  - standards
+  - prompts
+  related_assets:
+  - docs.copilot_prompt_engineering_standards
+- id: scripts.standards.summary
+  name: Standards Summary
+  roles:
+  - summarizer
+  - standards
+  maturity: legacy
+  status: needs_review
+  tags:
+  - standards
+  - reporting
+  related_assets:
+  - scripts.standards.build_index
+  - scripts.standards.index_gap
+- id: scripts.utilities.check_doc_anchors
+  name: Check Doc Anchors
+  roles:
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - docs
+  - validation
+  related_assets:
+  - scripts.utilities.verify_docs_integrity
+- id: scripts.utilities.check_markdown_anchors
+  name: Check Markdown Anchors
+  roles:
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - docs
+  - validation
+  related_assets:
+  - scripts.utilities.check_doc_anchors
+- id: scripts.utilities.check_import_boundaries
+  name: Check Import Boundaries
+  roles:
+  - validator
+  - standards
+  maturity: legacy
+  status: needs_review
+  tags:
+  - architecture
+  - validation
+  related_assets:
+  - scripts.health.import_graph_report
+- id: scripts.utilities.batch_clean
+  name: Batch Clean
+  roles:
+  - orchestrator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - maintenance
+  - automation
+  related_assets: []
+- id: scripts.utilities.find_placeholders
+  name: Find Placeholders
+  roles:
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - docs
+  - hygiene
+  related_assets: []
+- id: scripts.utilities.verify_docs_integrity
+  name: Verify Docs Integrity
+  roles:
+  - orchestrator
+  - validator
+  maturity: legacy
+  status: needs_review
+  tags:
+  - docs
+  - validation
+  related_assets:
+  - scripts.health.anchor_health_report

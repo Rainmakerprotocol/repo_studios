@@ -514,7 +514,7 @@
     blockers: []
 - id: docs.repo_studios_build_plan
   name: "Repo Studios Build Plan"
-  path: .repo_studios/repo_docs/repo_studios_build_plan.md
+  path: .repo_studios/docs/repo_studios_build_plan.md
   asset_kind: document
   roles:
     - playbook
@@ -541,7 +541,7 @@
     blockers: []
 - id: docs.inventory_spec
   name: "Inventory Schema Specification"
-  path: .repo_studios/repo_docs/inventory_schema_spec.md
+  path: .repo_studios/docs/inventory_schema_spec.md
   asset_kind: document
   roles:
     - standards

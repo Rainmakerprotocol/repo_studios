@@ -427,6 +427,40 @@
     decisions:
       - "Plan to surface output via inventory dashboards."
     blockers: []
+- id: scripts.health.test_log_health_report
+  name: "Test Log Health Report"
+  path: .repo_studios_legacy/repo_scripts/test_log_health_report.py
+  asset_kind: script
+  roles:
+    - report_generator
+    - validator
+  maturity: legacy
+  description: "Analyzes pytest artifacts to summarize warnings, errors, and slowest tests into structured reports."
+  dependencies:
+    internal_paths:
+      - .repo_studios/pytest_logs
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - pending_migration
+  artifact_type: py
+  related_assets:
+    - tests.health_suite.test_log_health_report_pick_best
+  tags:
+    - health
+    - testing
+  phase_origin: legacy
+  source_repo: repo_studios_legacy
+  notes:
+    context: "Currently reads legacy log layout; update to new observability storage during migration."
+    decisions:
+      - "Emit YAML alongside JSON/Markdown once inventory-driven reports are in place."
+    blockers:
+      - "Requires relocation to `.repo_studios/` scripts directory."
 - id: scripts.health.pytest_log_runner
   name: "Pytest Log Runner"
   path: .repo_studios_legacy/repo_scripts/pytest_log_runner.py

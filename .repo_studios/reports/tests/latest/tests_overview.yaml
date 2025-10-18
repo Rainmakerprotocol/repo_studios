@@ -1,0 +1,54 @@
+- id: tests.faults.aggregate_and_gate
+  name: Fault Aggregate And Gate Test
+  status: needs_review
+  related_assets:
+  - scripts.health.generate_fault_artifacts
+- id: tests.faults.generate_fault_artifacts
+  name: Generate Fault Artifacts Test
+  status: needs_review
+  related_assets:
+  - scripts.health.generate_fault_artifacts
+  - scripts.health.dump_faulthandler_once
+- id: tests.health_suite.orchestrator_cli
+  name: Health Suite Orchestrator CLI Test
+  status: needs_review
+  related_assets:
+  - scripts.health.health_suite_orchestrator
+  - scripts.health.typecheck_report
+- id: tests.health_suite.summary_render
+  name: Health Suite Summary Render Test
+  status: needs_review
+  related_assets:
+  - scripts.health.health_suite_summary
+  - scripts.health.typecheck_report
+- id: tests.health_suite.lizard_report
+  name: Lizard Report Flow Test
+  status: needs_review
+  related_assets:
+  - scripts.health.lizard_report
+- id: tests.health_suite.typecheck_report
+  name: Typecheck Report Test
+  status: needs_review
+  related_assets:
+  - scripts.health.typecheck_report
+  - scripts.health.mypy_refresh_baselines
+- id: tests.health_suite.typecheck_fast_mode
+  name: Typecheck Fast Mode Test
+  status: needs_review
+  related_assets:
+  - scripts.health.typecheck_report
+- id: tests.health_suite.pytest_log_runner
+  name: Pytest Log Runner Smoke Test
+  status: needs_review
+  related_assets:
+  - scripts.health.pytest_log_runner
+- id: tests.health_suite.pytest_log_runner_paths
+  name: Pytest Log Runner Paths Test
+  status: needs_review
+  related_assets:
+  - scripts.health.pytest_log_runner
+- id: tests.health_suite.test_log_health_report_pick_best
+  name: Test Log Health Report Selection Test
+  status: needs_review
+  related_assets:
+  - scripts.health.test_log_health_report

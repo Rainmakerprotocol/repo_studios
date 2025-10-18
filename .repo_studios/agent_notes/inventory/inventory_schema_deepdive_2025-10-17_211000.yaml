@@ -7,7 +7,7 @@ summary: >-
   machine-readable enums, entry template) to support future validation tooling
   and catalog population.
 details:
-  - Authored `repo_docs/inventory_schema_spec.md` describing every field, enum, and validation rule with examples.
+  - Authored `docs/inventory_schema_spec.md` describing every field, enum, and validation rule with examples.
   - Published `.repo_studios/inventory_schema/enums.yaml` to give agents a single source for enumerated values.
   - Added `.repo_studios/inventory_schema/inventory_entry_template.yaml` so new catalog entries can be authored consistently.
   - Ensured markdown formatting meets lint requirements (headings, code fences, bullet spacing).
@@ -17,7 +17,7 @@ inputs:
       description: Schema structure established in the previous step.
 outputs:
   artifacts:
-    - path: .repo_studios/repo_docs/inventory_schema_spec.md
+  - path: .repo_studios/docs/inventory_schema_spec.md
       description: Canonical schema specification.
     - path: .repo_studios/inventory_schema/enums.yaml
       description: Machine-readable enumerations for schema fields.

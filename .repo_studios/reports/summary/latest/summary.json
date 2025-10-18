@@ -1,0 +1,17 @@
+{
+  "total": 62,
+  "by_asset_kind": {
+    "document": 21,
+    "script": 31,
+    "test": 10
+  },
+  "by_maturity": {
+    "legacy": 59,
+    "incubating": 3
+  },
+  "by_status": {
+    "needs_review": 58,
+    "archived": 1,
+    "active": 3
+  }
+}

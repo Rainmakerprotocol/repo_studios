@@ -6,11 +6,11 @@ This document is a scratch pad for understanding the transplanted tooling. We wi
 
 ## Snapshot (read-only observations)
 - Root contains `.repo_studios/`, `.git/`, and `README.md`; all migrated assets live under `.repo_studios/`.
-- Hidden `.repo_studios/` holds `repo_docs/`, `repo_scripts/`, `repo_reports/`, and `repo_tests/` along with a legacy `Makefile` referencing prior project paths.
-- Standards artifacts (mix of `copilot_standards_*` and `repo_standards_*` naming) currently reside under `.repo_studios/repo_docs` and `.repo_studios/repo_files`.
-- Operational scripts (health, standards, monkey patch scanning, etc.) sit under `.repo_studios/repo_scripts`, but the Makefile still points to former locations like `scripts/` and `.repo_studios/`.
-- `repo_reports/` includes historical outputs (anchor health, churn complexity, lizard, monkey patch, pytest logs, typecheck, etc.) likely generated in the original repo.
-- `repo_tests/` mixes pytest suites and config files that expect the old directory layout and may rely on missing data directories.
+- Hidden `.repo_studios/` now holds `docs/`, `scripts/`, `reports/`, and `tests/` along with a legacy `Makefile` referencing prior project paths.
+- Standards artifacts (mix of `copilot_standards_*` and `repo_standards_*` naming) currently reside under `.repo_studios/docs` and the archived `.repo_studios_legacy/repo_docs` tree.
+- Operational scripts (health, standards, monkey patch scanning, etc.) sit under `.repo_studios/scripts`, but the Makefile still points to former locations like `scripts/` and `.repo_studios/`.
+- `reports/` includes historical outputs (anchor health, churn complexity, lizard, monkey patch, pytest logs, typecheck, etc.) likely generated in the original repo.
+- `tests/` mixes pytest suites and config files that expect the old directory layout and may rely on missing data directories.
 
 ## Open Questions (please answer inline)
 1. Which portions of this tool suite are mandatory for every new project versus optional add-ons we can keep modular?

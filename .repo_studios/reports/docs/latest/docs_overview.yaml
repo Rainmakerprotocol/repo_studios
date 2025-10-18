@@ -1,0 +1,207 @@
+- id: docs.agents_guide
+  name: Agents Guide
+  maturity: legacy
+  status: needs_review
+  consumers:
+  - coding_agent
+  - human_developer
+  tags:
+  - instructions
+  - repo_studios
+- id: docs.prompt_library_usage
+  name: Prompt Library Usage
+  maturity: legacy
+  status: needs_review
+  consumers:
+  - coding_agent
+  tags:
+  - prompts
+  - repo_studios
+- id: docs.agent_memory_workflow
+  name: Agent Memory Workflow
+  maturity: legacy
+  status: needs_review
+  consumers:
+  - coding_agent
+  tags:
+  - memory
+  - repo_studios
+- id: docs.alignment_ledger
+  name: Alignment Ledger
+  maturity: legacy
+  status: needs_review
+  consumers:
+  - coding_agent
+  - human_developer
+  tags:
+  - alignment
+  - governance
+- id: docs.copilot_instructions_clean
+  name: Copilot Instructions (Clean)
+  maturity: legacy
+  status: needs_review
+  consumers:
+  - coding_agent
+  tags:
+  - instructions
+  - standards
+- id: docs.copilot_instructions_python
+  name: Copilot Instructions (Python)
+  maturity: legacy
+  status: needs_review
+  consumers:
+  - coding_agent
+  tags:
+  - python
+  - standards
+- id: docs.copilot_mission_parameters
+  name: Copilot Mission Parameters
+  maturity: legacy
+  status: needs_review
+  consumers:
+  - coding_agent
+  - human_developer
+  tags:
+  - mission
+  - alignment
+- id: docs.copilot_prompt_engineering_standards
+  name: Copilot Prompt Engineering Standards
+  maturity: legacy
+  status: needs_review
+  consumers:
+  - coding_agent
+  tags:
+  - prompts
+  - standards
+- id: docs.copilot_prompts
+  name: Copilot Prompts
+  maturity: legacy
+  status: needs_review
+  consumers:
+  - coding_agent
+  tags:
+  - prompts
+  - samples
+- id: docs.copilot_standards_chainlit
+  name: Copilot Standards (Chainlit)
+  maturity: legacy
+  status: needs_review
+  consumers:
+  - coding_agent
+  - ci_pipeline
+  tags:
+  - chainlit
+  - standards
+- id: docs.copilot_standards_html
+  name: Copilot Standards (HTML)
+  maturity: legacy
+  status: needs_review
+  consumers:
+  - coding_agent
+  - docs_generator
+  tags:
+  - html
+  - standards
+- id: docs.copilot_standards_markdown
+  name: Copilot Standards (Markdown)
+  maturity: legacy
+  status: needs_review
+  consumers:
+  - coding_agent
+  - human_developer
+  - docs_generator
+  tags:
+  - markdown
+  - standards
+- id: docs.copilot_standards_monkey_patch
+  name: Copilot Standards (Monkey Patch)
+  maturity: legacy
+  status: needs_review
+  consumers:
+  - coding_agent
+  - ci_pipeline
+  tags:
+  - monkey_patch
+  - standards
+- id: docs.copilot_standards_project
+  name: Copilot Standards (Project)
+  maturity: legacy
+  status: needs_review
+  consumers:
+  - coding_agent
+  - human_developer
+  tags:
+  - project
+  - standards
+- id: docs.copilot_standards_python
+  name: Copilot Standards (Python)
+  maturity: legacy
+  status: needs_review
+  consumers:
+  - coding_agent
+  - human_developer
+  - ci_pipeline
+  tags:
+  - python
+  - standards
+- id: docs.docs_inventory_notes
+  name: Docs Inventory Notes
+  maturity: legacy
+  status: archived
+  consumers:
+  - coding_agent
+  - human_developer
+  tags:
+  - inventory
+  - history
+- id: docs.standards_extraction_spec
+  name: Standards Extraction Spec
+  maturity: legacy
+  status: needs_review
+  consumers:
+  - coding_agent
+  - ci_pipeline
+  tags:
+  - standards
+  - extraction
+- id: docs.standards_index_schema
+  name: Standards Index Schema
+  maturity: legacy
+  status: needs_review
+  consumers:
+  - coding_agent
+  - ci_pipeline
+  tags:
+  - standards
+  - schema
+- id: docs.alignment_protocol
+  name: Alignment Protocol
+  maturity: incubating
+  status: active
+  consumers:
+  - coding_agent
+  - human_developer
+  tags:
+  - alignment
+  - collaboration
+- id: docs.repo_studios_build_plan
+  name: Repo Studios Build Plan
+  maturity: incubating
+  status: active
+  consumers:
+  - coding_agent
+  - human_developer
+  tags:
+  - roadmap
+  - planning
+- id: docs.inventory_spec
+  name: Inventory Schema Specification
+  maturity: incubating
+  status: active
+  consumers:
+  - coding_agent
+  - ci_pipeline
+  - docs_generator
+  tags:
+  - inventory
+  - schema

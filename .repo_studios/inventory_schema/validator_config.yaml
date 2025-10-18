@@ -1,0 +1,3 @@
+path_existence:
+  # No suppressions active; tighten checks by allowing empty configuration stub.
+  ignore_prefixes: []

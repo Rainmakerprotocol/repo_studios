@@ -1,0 +1,36 @@
+summary: "Outlined the approach for automated validation of inventory YAML files."
+context:
+  phase: "phase-1-step-1"
+  substep: "1.1 schema validation"
+  related_assets:
+    - inventory_schema_spec.md
+    - inventory_schema/enums.yaml
+    - inventory_schema/docs_catalog.yaml
+    - inventory_schema/scripts/**/*.yaml
+    - inventory_schema/tests/**/*.yaml
+requirements:
+  - "Ensure every inventory record supplies required fields and enumerated values per the spec."
+  - "Validate that `id` values are unique across all catalogs."
+  - "Confirm paths referenced in `path` and `dependencies.internal_paths` exist or are intentionally flagged for migration."
+  - "Check optional fields, when present, conform to expected types (lists vs scalars)."
+  - "Emit machine-readable report (JSON/YAML) plus human-friendly summary for agent consumption."
+plan:
+  milestones:
+    - milestone_1: "Draft validation ruleset covering required fields, enums, uniqueness, and structure."
+    - milestone_2: "Prototype Python validator in `.repo_studios/tools/validate_inventory.py` with CLI and exit codes."
+    - milestone_3: "Integrate validator with Codacy-compatible output artifact under `.repo_studios/reports/`."
+    - milestone_4: "Add Make target `studio-validate-inventory` to drive local executions."
+  tasks:
+    - task_1: "Create shared loader that scans `.repo_studios/inventory_schema/**/*.yaml` excluding enums/template."
+    - task_2: "Implement structural checks against enums (`roles`, `asset_kind`, etc.) referencing `enums.yaml`."
+    - task_3: "Record unresolved legacy paths as warnings, escalate to errors once migration completes."
+    - task_4: "Write unit tests under `.repo_studios/tests/schema_validation/` to cover pass/fail scenarios."
+  - task_5: "Document usage and troubleshooting in `docs/inventory_validation.md`."
+risks:
+  - "Existing legacy references may intentionally point to missing files; need suppression mechanism."
+  - "YAML anchors/aliases (if introduced later) require safe loader configuration."
+  - "Large catalogs could slow validation; consider caching enumerations."
+next_steps:
+  - "Collect sample failure cases from current catalogs to define test fixtures."
+  - "Stub validator CLI with argparse and logging conventions matching Repo Studios tooling."
+  - "Review with user before implementing full path-existence enforcement."

@@ -252,7 +252,8 @@
   maturity: legacy
   description: "Validates the heuristics for choosing the most representative junit artifact from test runs."
   dependencies:
-    internal_paths: []
+    internal_paths:
+      - .repo_studios_legacy/repo_scripts/test_log_health_report.py
     external_tools: []
     inputs: []
   consumers:
@@ -262,15 +263,16 @@
   governance_flags:
     - pending_migration
   artifact_type: py
-  related_assets: []
+  related_assets:
+    - scripts.health.test_log_health_report
   tags:
     - health_suite
     - testing
   phase_origin: legacy
   source_repo: repo_studios_legacy
   notes:
-    context: "Imports `.repo_studios/test_log_health_report.py`, which has not yet been migrated from legacy scripts."
+    context: "Imports `.repo_studios/test_log_health_report.py`, still pointing at legacy location pending migration."
     decisions:
       - "Keep focused on selection heuristic independent of downstream reporting."
     blockers:
-      - "Target script missing in new repo layout; add inventory entry once created."
+      - "Requires script relocation to `.repo_studios/` before path assumptions can be removed."
