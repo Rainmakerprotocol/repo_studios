@@ -1,4 +1,5 @@
 {
+  "generated_at": "2025-10-18T00:49:43.978169+00:00",
   "total": 62,
   "by_asset_kind": {
     "document": 21,
@@ -13,5 +14,218 @@
     "needs_review": 58,
     "archived": 1,
     "active": 3
-  }
+  },
+  "status_by_asset_kind": {
+    "document": {
+      "needs_review": 17,
+      "archived": 1,
+      "active": 3
+    },
+    "script": {
+      "needs_review": 31
+    },
+    "test": {
+      "needs_review": 10
+    }
+  },
+  "maturity_by_asset_kind": {
+    "document": {
+      "legacy": 18,
+      "incubating": 3
+    },
+    "script": {
+      "legacy": 31
+    },
+    "test": {
+      "legacy": 10
+    }
+  },
+  "consumers": {
+    "coding_agent": 61,
+    "human_developer": 18,
+    "ci_pipeline": 29,
+    "docs_generator": 3
+  },
+  "top_tags": [
+    {
+      "tag": "standards",
+      "count": 18
+    },
+    {
+      "tag": "health",
+      "count": 18
+    },
+    {
+      "tag": "health_suite",
+      "count": 8
+    },
+    {
+      "tag": "testing",
+      "count": 5
+    },
+    {
+      "tag": "faults",
+      "count": 5
+    },
+    {
+      "tag": "prompts",
+      "count": 4
+    },
+    {
+      "tag": "monkey_patch",
+      "count": 4
+    },
+    {
+      "tag": "typing",
+      "count": 4
+    },
+    {
+      "tag": "docs",
+      "count": 4
+    },
+    {
+      "tag": "validation",
+      "count": 4
+    },
+    {
+      "tag": "repo_studios",
+      "count": 3
+    },
+    {
+      "tag": "alignment",
+      "count": 3
+    },
+    {
+      "tag": "inventory",
+      "count": 3
+    },
+    {
+      "tag": "reporting",
+      "count": 3
+    },
+    {
+      "tag": "instructions",
+      "count": 2
+    },
+    {
+      "tag": "python",
+      "count": 2
+    },
+    {
+      "tag": "extraction",
+      "count": 2
+    },
+    {
+      "tag": "schema",
+      "count": 2
+    },
+    {
+      "tag": "anchors",
+      "count": 2
+    },
+    {
+      "tag": "complexity",
+      "count": 2
+    },
+    {
+      "tag": "diagnostics",
+      "count": 2
+    },
+    {
+      "tag": "memory",
+      "count": 1
+    },
+    {
+      "tag": "governance",
+      "count": 1
+    },
+    {
+      "tag": "mission",
+      "count": 1
+    },
+    {
+      "tag": "samples",
+      "count": 1
+    },
+    {
+      "tag": "chainlit",
+      "count": 1
+    },
+    {
+      "tag": "html",
+      "count": 1
+    },
+    {
+      "tag": "markdown",
+      "count": 1
+    },
+    {
+      "tag": "project",
+      "count": 1
+    },
+    {
+      "tag": "history",
+      "count": 1
+    },
+    {
+      "tag": "collaboration",
+      "count": 1
+    },
+    {
+      "tag": "roadmap",
+      "count": 1
+    },
+    {
+      "tag": "planning",
+      "count": 1
+    },
+    {
+      "tag": "orchestrator",
+      "count": 1
+    },
+    {
+      "tag": "analytics",
+      "count": 1
+    },
+    {
+      "tag": "dependencies",
+      "count": 1
+    },
+    {
+      "tag": "imports",
+      "count": 1
+    },
+    {
+      "tag": "cli",
+      "count": 1
+    },
+    {
+      "tag": "diff",
+      "count": 1
+    },
+    {
+      "tag": "gap_analysis",
+      "count": 1
+    },
+    {
+      "tag": "architecture",
+      "count": 1
+    },
+    {
+      "tag": "maintenance",
+      "count": 1
+    },
+    {
+      "tag": "automation",
+      "count": 1
+    },
+    {
+      "tag": "hygiene",
+      "count": 1
+    },
+    {
+      "tag": "orchestration",
+      "count": 1
+    }
+  ]
 }

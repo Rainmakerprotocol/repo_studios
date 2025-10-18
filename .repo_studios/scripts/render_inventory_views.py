@@ -46,10 +46,12 @@ def docs_view(entries: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
             {
                 "id": record.get("id"),
                 "name": record.get("name"),
+                "path": record.get("path"),
                 "maturity": record.get("maturity"),
                 "status": record.get("status"),
                 "consumers": record.get("consumers", []),
                 "tags": record.get("tags", []),
+                "artifact_type": record.get("artifact_type"),
             }
         )
     return out
@@ -64,11 +66,13 @@ def scripts_view(entries: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
             {
                 "id": record.get("id"),
                 "name": record.get("name"),
+                "path": record.get("path"),
                 "roles": record.get("roles", []),
                 "maturity": record.get("maturity"),
                 "status": record.get("status"),
                 "tags": record.get("tags", []),
                 "related_assets": record.get("related_assets", []),
+                "artifact_type": record.get("artifact_type"),
             }
         )
     return out
@@ -83,8 +87,10 @@ def tests_view(entries: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
             {
                 "id": record.get("id"),
                 "name": record.get("name"),
+                "path": record.get("path"),
                 "status": record.get("status"),
                 "related_assets": record.get("related_assets", []),
+                "artifact_type": record.get("artifact_type"),
             }
         )
     return out
@@ -93,16 +99,57 @@ def tests_view(entries: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
 def summary_view(entries: Iterable[Dict[str, Any]]) -> Dict[str, Any]:
     counters: Dict[str, Counter] = defaultdict(Counter)
     total = 0
+    status_by_kind: Dict[str, Counter] = defaultdict(Counter)
+    maturity_by_kind: Dict[str, Counter] = defaultdict(Counter)
+    consumer_counts: Counter = Counter()
+    tag_counts: Counter = Counter()
     for record in entries:
         total += 1
         counters["asset_kind"][record.get("asset_kind", "unknown")] += 1
         counters["maturity"][record.get("maturity", "unknown")] += 1
         counters["status"][record.get("status", "unknown")] += 1
+        asset_kind = record.get("asset_kind", "unknown")
+        status = record.get("status", "unknown")
+        maturity = record.get("maturity", "unknown")
+        status_by_kind[asset_kind][status] += 1
+        maturity_by_kind[asset_kind][maturity] += 1
+        for consumer in record.get("consumers", []):
+            consumer_counts[consumer] += 1
+        for tag in record.get("tags", []):
+            tag_counts[tag] += 1
+    generated_at = datetime.now(timezone.utc).isoformat()
     return {
+        "generated_at": generated_at,
         "total": total,
         "by_asset_kind": dict(counters["asset_kind"]),
         "by_maturity": dict(counters["maturity"]),
         "by_status": dict(counters["status"]),
+        "status_by_asset_kind": {kind: dict(counter) for kind, counter in status_by_kind.items()},
+        "maturity_by_asset_kind": {kind: dict(counter) for kind, counter in maturity_by_kind.items()},
+        "consumers": dict(consumer_counts),
+        "top_tags": [
+            {"tag": tag, "count": count}
+            for tag, count in tag_counts.most_common()
+        ],
+    }
+
+
+def summary_dashboard(entries: Iterable[Dict[str, Any]]) -> Dict[str, Any]:
+    maturity_totals: Dict[str, Counter] = defaultdict(Counter)
+    role_counts: Counter = Counter()
+    artifact_types: Counter = Counter()
+    for record in entries:
+        maturity = record.get("maturity", "unknown")
+        asset_kind = record.get("asset_kind", "unknown")
+        maturity_totals[asset_kind][maturity] += 1
+        for role in record.get("roles", []):
+            role_counts[role] += 1
+        artifact_types[record.get("artifact_type", "unknown")] += 1
+
+    return {
+        "maturity_totals_by_asset_kind": {kind: dict(counter) for kind, counter in maturity_totals.items()},
+        "roles": dict(role_counts),
+        "artifact_types": dict(artifact_types),
     }
 
 
@@ -176,7 +223,10 @@ def main() -> int:
     write_stub(views_dir / "tests_overview.yaml", tests_path)
 
     summary_path = topic_paths["summary"] / "summary.json"
-    write_json(summary_path, summary_view(entries))
+    summary_data = summary_view(entries)
+    write_json(summary_path, summary_data)
+    dashboard_path = topic_paths["summary"] / "dashboard.json"
+    write_json(dashboard_path, summary_dashboard(entries))
     write_stub(views_dir / "summary.json", summary_path)
 
     return 0

@@ -1,5 +1,6 @@
 - id: docs.agents_guide
   name: Agents Guide
+  path: .repo_studios_legacy/repo_docs/AGENTS_GUIDE.md
   maturity: legacy
   status: needs_review
   consumers:
@@ -8,8 +9,10 @@
   tags:
   - instructions
   - repo_studios
+  artifact_type: md
 - id: docs.prompt_library_usage
   name: Prompt Library Usage
+  path: .repo_studios_legacy/repo_docs/PROMPT_LIBRARY_USAGE.md
   maturity: legacy
   status: needs_review
   consumers:
@@ -17,8 +20,10 @@
   tags:
   - prompts
   - repo_studios
+  artifact_type: md
 - id: docs.agent_memory_workflow
   name: Agent Memory Workflow
+  path: .repo_studios_legacy/repo_docs/agent_memory_workflow.md
   maturity: legacy
   status: needs_review
   consumers:
@@ -26,8 +31,10 @@
   tags:
   - memory
   - repo_studios
+  artifact_type: md
 - id: docs.alignment_ledger
   name: Alignment Ledger
+  path: .repo_studios_legacy/repo_docs/alignment_ledger.md
   maturity: legacy
   status: needs_review
   consumers:
@@ -36,8 +43,10 @@
   tags:
   - alignment
   - governance
+  artifact_type: md
 - id: docs.copilot_instructions_clean
   name: Copilot Instructions (Clean)
+  path: .repo_studios_legacy/repo_docs/copilot_instructions_clean.md
   maturity: legacy
   status: needs_review
   consumers:
@@ -45,8 +54,10 @@
   tags:
   - instructions
   - standards
+  artifact_type: md
 - id: docs.copilot_instructions_python
   name: Copilot Instructions (Python)
+  path: .repo_studios_legacy/repo_docs/copilot_instructions_python.md
   maturity: legacy
   status: needs_review
   consumers:
@@ -54,8 +65,10 @@
   tags:
   - python
   - standards
+  artifact_type: md
 - id: docs.copilot_mission_parameters
   name: Copilot Mission Parameters
+  path: .repo_studios_legacy/repo_docs/copilot_mission_parameters.md
   maturity: legacy
   status: needs_review
   consumers:
@@ -64,8 +77,10 @@
   tags:
   - mission
   - alignment
+  artifact_type: md
 - id: docs.copilot_prompt_engineering_standards
   name: Copilot Prompt Engineering Standards
+  path: .repo_studios_legacy/repo_docs/copilot_prompt_engineering_standards.md
   maturity: legacy
   status: needs_review
   consumers:
@@ -73,8 +88,10 @@
   tags:
   - prompts
   - standards
+  artifact_type: md
 - id: docs.copilot_prompts
   name: Copilot Prompts
+  path: .repo_studios_legacy/repo_docs/copilot_prompts.md
   maturity: legacy
   status: needs_review
   consumers:
@@ -82,8 +99,10 @@
   tags:
   - prompts
   - samples
+  artifact_type: md
 - id: docs.copilot_standards_chainlit
   name: Copilot Standards (Chainlit)
+  path: .repo_studios_legacy/repo_docs/copilot_standards_chainlit.md
   maturity: legacy
   status: needs_review
   consumers:
@@ -92,8 +111,10 @@
   tags:
   - chainlit
   - standards
+  artifact_type: md
 - id: docs.copilot_standards_html
   name: Copilot Standards (HTML)
+  path: .repo_studios_legacy/repo_docs/copilot_standards_html.md
   maturity: legacy
   status: needs_review
   consumers:
@@ -102,8 +123,10 @@
   tags:
   - html
   - standards
+  artifact_type: md
 - id: docs.copilot_standards_markdown
   name: Copilot Standards (Markdown)
+  path: .repo_studios_legacy/repo_docs/copilot_standards_markdown.md
   maturity: legacy
   status: needs_review
   consumers:
@@ -113,8 +136,10 @@
   tags:
   - markdown
   - standards
+  artifact_type: md
 - id: docs.copilot_standards_monkey_patch
   name: Copilot Standards (Monkey Patch)
+  path: .repo_studios_legacy/repo_docs/copilot_standards_monkey_patch.md
   maturity: legacy
   status: needs_review
   consumers:
@@ -123,8 +148,10 @@
   tags:
   - monkey_patch
   - standards
+  artifact_type: md
 - id: docs.copilot_standards_project
   name: Copilot Standards (Project)
+  path: .repo_studios_legacy/repo_docs/copilot_standards_project.md
   maturity: legacy
   status: needs_review
   consumers:
@@ -133,8 +160,10 @@
   tags:
   - project
   - standards
+  artifact_type: md
 - id: docs.copilot_standards_python
   name: Copilot Standards (Python)
+  path: .repo_studios_legacy/repo_docs/copilot_standards_python.md
   maturity: legacy
   status: needs_review
   consumers:
@@ -144,8 +173,10 @@
   tags:
   - python
   - standards
+  artifact_type: md
 - id: docs.docs_inventory_notes
   name: Docs Inventory Notes
+  path: .repo_studios_legacy/repo_docs/docs_inventory_notes.md
   maturity: legacy
   status: archived
   consumers:
@@ -154,8 +185,10 @@
   tags:
   - inventory
   - history
+  artifact_type: md
 - id: docs.standards_extraction_spec
   name: Standards Extraction Spec
+  path: .repo_studios_legacy/repo_docs/standards_extraction_spec.md
   maturity: legacy
   status: needs_review
   consumers:
@@ -164,8 +197,10 @@
   tags:
   - standards
   - extraction
+  artifact_type: md
 - id: docs.standards_index_schema
   name: Standards Index Schema
+  path: .repo_studios_legacy/repo_docs/standards_index_schema.md
   maturity: legacy
   status: needs_review
   consumers:
@@ -174,8 +209,10 @@
   tags:
   - standards
   - schema
+  artifact_type: md
 - id: docs.alignment_protocol
   name: Alignment Protocol
+  path: .repo_studios/alignment_protocol.md
   maturity: incubating
   status: active
   consumers:
@@ -184,8 +221,10 @@
   tags:
   - alignment
   - collaboration
+  artifact_type: md
 - id: docs.repo_studios_build_plan
   name: Repo Studios Build Plan
+  path: .repo_studios/docs/repo_studios_build_plan.md
   maturity: incubating
   status: active
   consumers:
@@ -194,8 +233,10 @@
   tags:
   - roadmap
   - planning
+  artifact_type: md
 - id: docs.inventory_spec
   name: Inventory Schema Specification
+  path: .repo_studios/docs/inventory_schema_spec.md
   maturity: incubating
   status: active
   consumers:
@@ -205,3 +246,4 @@
   tags:
   - inventory
   - schema
+  artifact_type: md

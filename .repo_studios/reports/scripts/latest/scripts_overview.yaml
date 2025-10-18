@@ -1,5 +1,6 @@
 - id: scripts.health.anchor_health_report
   name: Anchor Health Report
+  path: .repo_studios_legacy/repo_scripts/anchor_health_report.py
   roles:
   - report_generator
   - validator
@@ -11,8 +12,10 @@
   related_assets:
   - scripts.health.anchor_inventory
   - docs.anchor_validation_protocol
+  artifact_type: py
 - id: scripts.health.anchor_inventory
   name: Anchor Inventory
+  path: .repo_studios_legacy/repo_scripts/anchor_inventory.py
   roles:
   - report_generator
   - validator
@@ -23,8 +26,10 @@
   - anchors
   related_assets:
   - scripts.health.anchor_health_report
+  artifact_type: py
 - id: scripts.health.health_suite_orchestrator
   name: Health Suite Orchestrator
+  path: .repo_studios_legacy/repo_scripts/health_suite_orchestrator.py
   roles:
   - orchestrator
   - validator
@@ -37,8 +42,10 @@
   - scripts.health.health_suite_summary
   - scripts.health.dep_hygiene_report
   - scripts.health.lizard_report
+  artifact_type: py
 - id: scripts.health.health_suite_summary
   name: Health Suite Summary
+  path: .repo_studios_legacy/repo_scripts/health_suite_summary.py
   roles:
   - summarizer
   - report_generator
@@ -49,8 +56,10 @@
   - reporting
   related_assets:
   - scripts.health.health_suite_orchestrator
+  artifact_type: py
 - id: scripts.health.churn_complexity_heatmap
   name: Churn Complexity Heatmap
+  path: .repo_studios_legacy/repo_scripts/churn_complexity_heatmap.py
   roles:
   - report_generator
   - validator
@@ -61,8 +70,10 @@
   - analytics
   related_assets:
   - docs.health_suite_overview
+  artifact_type: py
 - id: scripts.health.dep_hygiene_report
   name: Dependency Hygiene Report
+  path: .repo_studios_legacy/repo_scripts/dep_hygiene_report.py
   roles:
   - report_generator
   - validator
@@ -73,8 +84,10 @@
   - dependencies
   related_assets:
   - scripts.health.health_suite_orchestrator
+  artifact_type: py
 - id: scripts.health.import_graph_report
   name: Import Graph Report
+  path: .repo_studios_legacy/repo_scripts/import_graph_report.py
   roles:
   - report_generator
   - validator
@@ -85,8 +98,10 @@
   - imports
   related_assets:
   - scripts.health.check_import_boundaries
+  artifact_type: py
 - id: scripts.health.lizard_report
   name: Lizard Report
+  path: .repo_studios_legacy/repo_scripts/lizard_report.py
   roles:
   - report_generator
   - validator
@@ -97,8 +112,10 @@
   - complexity
   related_assets:
   - scripts.health.health_suite_orchestrator
+  artifact_type: py
 - id: scripts.health.typecheck_report
   name: Typecheck Report
+  path: .repo_studios_legacy/repo_scripts/typecheck_report.py
   roles:
   - report_generator
   - validator
@@ -109,8 +126,10 @@
   - typing
   related_assets:
   - scripts.health.mypy_refresh_baselines
+  artifact_type: py
 - id: scripts.health.mypy_refresh_baselines
   name: Mypy Refresh Baselines
+  path: .repo_studios_legacy/repo_scripts/mypy_refresh_baselines.py
   roles:
   - orchestrator
   - validator
@@ -121,8 +140,10 @@
   - typing
   related_assets:
   - scripts.health.typecheck_report
+  artifact_type: py
 - id: scripts.health.compare_monkey_patch_trends
   name: Compare Monkey Patch Trends
+  path: .repo_studios_legacy/repo_scripts/compare_monkey_patch_trends.py
   roles:
   - report_generator
   - validator
@@ -134,8 +155,10 @@
   related_assets:
   - scripts.health.monkey_patch_classify
   - scripts.health.scan_monkey_patches
+  artifact_type: py
 - id: scripts.health.monkey_patch_classify
   name: Monkey Patch Classify
+  path: .repo_studios_legacy/repo_scripts/monkey_patch_classify.py
   roles:
   - report_generator
   - validator
@@ -146,8 +169,10 @@
   - monkey_patch
   related_assets:
   - scripts.health.compare_monkey_patch_trends
+  artifact_type: py
 - id: scripts.health.scan_monkey_patches
   name: Scan Monkey Patches
+  path: .repo_studios_legacy/repo_scripts/scan_monkey_patches.py
   roles:
   - validator
   maturity: legacy
@@ -157,8 +182,10 @@
   - monkey_patch
   related_assets:
   - scripts.health.monkey_patch_classify
+  artifact_type: py
 - id: scripts.health.test_log_health_report
   name: Test Log Health Report
+  path: .repo_studios_legacy/repo_scripts/test_log_health_report.py
   roles:
   - report_generator
   - validator
@@ -169,8 +196,10 @@
   - testing
   related_assets:
   - tests.health_suite.test_log_health_report_pick_best
+  artifact_type: py
 - id: scripts.health.pytest_log_runner
   name: Pytest Log Runner
+  path: .repo_studios_legacy/repo_scripts/pytest_log_runner.py
   roles:
   - report_generator
   - validator
@@ -180,8 +209,10 @@
   - health
   - testing
   related_assets: []
+  artifact_type: py
 - id: scripts.health.generate_fault_artifacts
   name: Generate Fault Artifacts
+  path: .repo_studios_legacy/repo_scripts/generate_fault_artifacts.py
   roles:
   - report_generator
   - validator
@@ -192,8 +223,10 @@
   - faults
   related_assets:
   - scripts.health.dump_faulthandler_once
+  artifact_type: py
 - id: scripts.health.dump_faulthandler_once
   name: Dump Fault Handler Once
+  path: .repo_studios_legacy/repo_scripts/dump_faulthandler_once.py
   roles:
   - validator
   maturity: legacy
@@ -203,8 +236,10 @@
   - faults
   related_assets:
   - scripts.health.generate_fault_artifacts
+  artifact_type: py
 - id: scripts.health.faulthandler_module
   name: Fault Handler Module
+  path: .repo_studios_legacy/repo_scripts/faulthandler.py
   roles:
   - validator
   maturity: legacy
@@ -215,8 +250,10 @@
   related_assets:
   - scripts.health.dump_faulthandler_once
   - scripts.health.generate_fault_artifacts
+  artifact_type: py
 - id: scripts.standards.build_index
   name: Build Standards Index
+  path: .repo_studios_legacy/repo_scripts/build_standards_index.py
   roles:
   - orchestrator
   - standards
@@ -228,8 +265,10 @@
   related_assets:
   - docs.standards_extraction_spec
   - repo_files.copilot_standards_index
+  artifact_type: py
 - id: scripts.standards.extraction
   name: Standards Extraction
+  path: .repo_studios_legacy/repo_scripts/standards_extraction.py
   roles:
   - orchestrator
   - standards
@@ -241,8 +280,10 @@
   related_assets:
   - docs.standards_extraction_spec
   - scripts.standards.build_index
+  artifact_type: py
 - id: scripts.standards.index_cli
   name: Standards Index CLI
+  path: .repo_studios_legacy/repo_scripts/standards_index_cli.py
   roles:
   - cli
   - orchestrator
@@ -254,8 +295,10 @@
   related_assets:
   - docs.standards_index_schema
   - scripts.standards.build_index
+  artifact_type: py
 - id: scripts.standards.index_diff
   name: Standards Index Diff
+  path: .repo_studios_legacy/repo_scripts/standards_index_diff.py
   roles:
   - validator
   - standards
@@ -266,8 +309,10 @@
   - diff
   related_assets:
   - scripts.standards.index_cli
+  artifact_type: py
 - id: scripts.standards.index_gap
   name: Standards Index Gap
+  path: .repo_studios_legacy/repo_scripts/standards_index_gap.py
   roles:
   - validator
   - standards
@@ -278,8 +323,10 @@
   - gap_analysis
   related_assets:
   - scripts.standards.build_index
+  artifact_type: py
 - id: scripts.standards.prompt_seed
   name: Standards Prompt Seed
+  path: .repo_studios_legacy/repo_scripts/standards_prompt_seed.py
   roles:
   - summarizer
   - standards
@@ -290,8 +337,10 @@
   - prompts
   related_assets:
   - docs.copilot_prompt_engineering_standards
+  artifact_type: py
 - id: scripts.standards.summary
   name: Standards Summary
+  path: .repo_studios_legacy/repo_scripts/standards_summary.py
   roles:
   - summarizer
   - standards
@@ -303,8 +352,10 @@
   related_assets:
   - scripts.standards.build_index
   - scripts.standards.index_gap
+  artifact_type: py
 - id: scripts.utilities.check_doc_anchors
   name: Check Doc Anchors
+  path: .repo_studios_legacy/repo_scripts/check_doc_anchors.py
   roles:
   - validator
   maturity: legacy
@@ -314,8 +365,10 @@
   - validation
   related_assets:
   - scripts.utilities.verify_docs_integrity
+  artifact_type: py
 - id: scripts.utilities.check_markdown_anchors
   name: Check Markdown Anchors
+  path: .repo_studios_legacy/repo_scripts/check_markdown_anchors.py
   roles:
   - validator
   maturity: legacy
@@ -325,8 +378,10 @@
   - validation
   related_assets:
   - scripts.utilities.check_doc_anchors
+  artifact_type: py
 - id: scripts.utilities.check_import_boundaries
   name: Check Import Boundaries
+  path: .repo_studios_legacy/repo_scripts/check_import_boundaries.py
   roles:
   - validator
   - standards
@@ -337,8 +392,10 @@
   - validation
   related_assets:
   - scripts.health.import_graph_report
+  artifact_type: py
 - id: scripts.utilities.batch_clean
   name: Batch Clean
+  path: .repo_studios_legacy/repo_scripts/batch_clean.py
   roles:
   - orchestrator
   maturity: legacy
@@ -347,8 +404,10 @@
   - maintenance
   - automation
   related_assets: []
+  artifact_type: py
 - id: scripts.utilities.find_placeholders
   name: Find Placeholders
+  path: .repo_studios_legacy/repo_scripts/find_placeholders.py
   roles:
   - validator
   maturity: legacy
@@ -357,8 +416,10 @@
   - docs
   - hygiene
   related_assets: []
+  artifact_type: py
 - id: scripts.utilities.verify_docs_integrity
   name: Verify Docs Integrity
+  path: .repo_studios_legacy/repo_scripts/verify_docs_integrity.py
   roles:
   - orchestrator
   - validator
@@ -369,3 +430,4 @@
   - validation
   related_assets:
   - scripts.health.anchor_health_report
+  artifact_type: py

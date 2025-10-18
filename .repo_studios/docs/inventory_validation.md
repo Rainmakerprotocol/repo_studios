@@ -1,6 +1,6 @@
 # Inventory Validation Guide
 
-Last updated: 2025-10-17
+Last updated: 2025-10-18
 
 Use the inventory validator to ensure every catalog entry in `.repo_studios/inventory_schema/` conforms to the schema specification and enum definitions.
 
@@ -52,9 +52,12 @@ The validator currently enforces:
 - Structure of the `dependencies` block, ensuring lists for `internal_paths`, `external_tools`, and `inputs`, plus a `path` key for each input mapping.
 - Unique `id` values across all catalogs.
 - Automatic exclusion of derived views under `inventory_schema/views/` so generated summaries do not trigger schema errors during migration.
+- Path existence checks for every record `path` entry, resolving references relative to the repository root and honoring overrides in `inventory_schema/validator_config.yaml`.
+
+## Configuration Notes
+
+- Adjust `inventory_schema/validator_config.yaml` to ignore or suppress paths only when migration work is in flight. The default configuration ships with no suppressions so truthy failures bubble up quickly.
 
 ## Roadmap
 
-- Add configurable suppression for legacy paths that are intentionally missing until migration completes.
-- Extend checks to verify file existence once migration stabilizes.
 - Surface validation results inside future CI pipelines and dashboards.

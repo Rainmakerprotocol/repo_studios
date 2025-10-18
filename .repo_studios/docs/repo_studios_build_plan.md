@@ -19,8 +19,8 @@ This plan converts the alignment worksheet into a phased roadmap for establishin
 ## Phase 1 — Foundation & Inventory
 
 1. **Inventory Schema** _(In progress)_
-   - Completed: published `inventory_schema_spec.md`, machine-readable enums, authoring template, docs/scripts/tests catalogs with Codacy validation, the `studio-validate-inventory` CLI + Make target with docs, and the `render_inventory_views.py` pipeline generating docs/scripts/tests summaries.
-   - Outstanding: extend validator with path-existence + suppression logic, iterate on richer secondary views (dashboards, CI surfacing), and move generated views into `reports/<topic>/` once validator exclusions are in place.
+   - Completed: published `inventory_schema_spec.md`, machine-readable enums, authoring template, docs/scripts/tests catalogs with Codacy validation, the `studio-validate-inventory` CLI + Make target with docs, the `render_inventory_views.py` pipeline generating docs/scripts/tests summaries and dashboard metrics, validator path-existence enforcement with config support, report artifacts relocated to `reports/<topic>/latest` with compat stubs, and `inventory_reports.md` documenting CI consumption.
+   - Outstanding: expand secondary views with additional dashboards (e.g., dependency graphs) and wire reports into CI smoke jobs.
 2. **Directory Layout Confirmation** _(Completed)_
    - Completed: standardized `.repo_studios/` subfolders to `docs/`, `scripts/`, `reports/`, and `tests/` to aid agent discovery, retaining legacy content read-only under `.repo_studios_legacy/`.
    - Documented legacy-to-current path mapping for human developers in `docs/directory_layout.md`, including notes on historical references.
