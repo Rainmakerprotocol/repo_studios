@@ -1,10 +1,11 @@
 # Temporary Alignment Notes
 
-_Last updated: 2025-10-17_
+## Last updated: 2025-10-17
 
 This document is a scratch pad for understanding the transplanted tooling. We will delete it once alignment is complete.
 
 ## Snapshot (read-only observations)
+
 - Root contains `.repo_studios/`, `.git/`, and `README.md`; all migrated assets live under `.repo_studios/`.
 - Hidden `.repo_studios/` now holds `docs/`, `scripts/`, `reports/`, and `tests/` along with a legacy `Makefile` referencing prior project paths.
 - Standards artifacts (mix of `copilot_standards_*` and `repo_standards_*` naming) currently reside under `.repo_studios/docs` and the archived `.repo_studios_legacy/repo_docs` tree.
@@ -13,12 +14,13 @@ This document is a scratch pad for understanding the transplanted tooling. We wi
 - `tests/` mixes pytest suites and config files that expect the old directory layout and may rely on missing data directories.
 
 ## Open Questions (please answer inline)
+
 1. Which portions of this tool suite are mandatory for every new project versus optional add-ons we can keep modular?
    Answer: There are different focuses for the files. Some .py files are running cli and routing the reports to certain folder locations, some .py files are summerizing the report, some .py files are orchistrating and triggering other .py files, some .py files are tests of the other .py files. Docs are part explaination docs, some are standards docs, some are instructions docs, some are reports, some are itineraries, some are repo indexes. All are made for the coding agent to see history and the repo health with a snapshot from many angles and importances. Then to see over duration. Then to learn from repeated flags and issues and errors to then update the standards and instructions. Plus more
    Assistant response: Got it. I will build the inventory with categorical tags for each asset (orchestrator, CLI generator, summarizer, test, standards, history) so we can mark which ones belong in the always-on core and which we can toggle per project.
 
 2. Should `.repo_studios` remain a hidden staging area, or do you want these assets promoted into visible top-level folders (`scripts/`, `docs/`, `reports/`, `tests/`, etc.)?
-   Answer: My intention is for the projects that this is used for later for development that these attributes and functions remain separated from the actual repo  itself. They dont need to be lost in the shuffle of many repo functional files to be intertwined. 
+   Answer: My intention is for the projects that this is used for later for development that these attributes and functions remain separated from the actual repo  itself. They dont need to be lost in the shuffle of many repo functional files to be intertwined.
    Assistant response: Understood. We will treat `.repo_studios/` as the canonical home for the utility suite so it stays distinct from the product code. I will plan the layout assuming we keep tools, docs, reports, and tests under that hidden root.
 
 3. Among the documentation files (e.g. `AGENTS_GUIDE.md`, `repo_standards_markdown.md`, `repo_standards_project.md`), which should we treat as canonical references in the template and which are historical/background only?
@@ -34,7 +36,7 @@ This document is a scratch pad for understanding the transplanted tooling. We wi
    Assistant response: Perfect. I will mark the existing reports as reference samples and note which formats we intend to evolve to YAML so we can build cleanup rules without losing the illustrative artifacts.
 
 6. What Python version and dependency set should the template assume? Do we have an existing `requirements.txt`, `pyproject.toml`, or similar we should port over?
-   Answer: All of my projects will be python based and we will conversate about other aspects that we can decide as we move thourgh the project. You will understand why as we progress through this jouorney. 
+   Answer: All of my projects will be python based and we will conversate about other aspects that we can decide as we move thourgh the project. You will understand why as we progress through this jouorney.
    Assistant response: Understood. I will wait for your lead on the baseline Python version and dependency strategy, but I will keep a placeholder in the plan so we don’t forget to lock that down before templating.
 
 7. Are the tests in `.repo_studios/repo_tests/` intended to stay as active CI coverage for the template, or are they legacy checks that we can refactor/retire?
@@ -54,6 +56,7 @@ This document is a scratch pad for understanding the transplanted tooling. We wi
      Assistant response: Excellent. I will verify the new hidden `.repo_studios/` scaffold, treat the legacy copy as read-only reference material, and draft a phased plan that starts with directory layout and gradual automation rewire.
 
 ## Follow-up Questions (round 2)
+
 1. Does it make sense to maintain an explicit catalog that tags every script and document with its role (orchestrator, report generator, summarizer, standards, instructions, tests)?
    Answer: yes - indexing, catelogs, file tree are all important. Schemas--- we desire consistency
    Assistant response: Perfect. I will design the inventory schema to capture role tags, maturity stage, and dependencies so we can keep everything consistent and searchable for the AI-first workflows.
@@ -63,7 +66,7 @@ This document is a scratch pad for understanding the transplanted tooling. We wi
    Assistant response: Understood. I will optimize the layout for machine discoverability first—likely shortening folder names while keeping rich metadata so agents can traverse quickly, and we can document the mapping for human developers afterward.
 
 3. To support reusable standards across projects, should we split the documentation into `global/` and `project/` subsets, or handle project-specific overrides via a separate folder?
-   Answer: I like that 
+   Answer: I like that
    Assistant response: Great. I will sketch a two-tier structure (`standards/global` vs `standards/project`) with an override mechanism so each repo can extend without duplicating the core corpus.
 
 4. Among the sample reports you retained, which ones should be converted to YAML (e.g., health suites, monkey patch trends) versus kept in their existing text/JSON formats?
@@ -71,11 +74,11 @@ This document is a scratch pad for understanding the transplanted tooling. We wi
    Assistant response: Noted. I will flag multi-section, AI-centric reports for YAML conversion and keep routine logs in their lighter existing formats unless there is a strong benefit to normalize them.
 
 5. When we reorganize tests, should they remain Python modules inside `.repo_studios/repo_tests/`, or do you want a parallel `tests/` tree (with symlinks or references) for CI tools that expect conventional locations?
-   Answer: We will keep repo_studios as a separate studio and quarantined from future projects 
+   Answer: We will keep repo_studios as a separate studio and quarantined from future projects
    Assistant response: Understood. I will plan for tests to live entirely inside `.repo_studios/` and document how CI should point to that quarantined suite when needed.
 
 6. For cleansing hard-coded paths, do you prefer environment variables, a central config file, or a command-line flag approach for the scripts?
-   Answer: That depends on the use, doesn't it? We have to consider that when a project is young and being scaffolded then there are less restrictions and the restrictions are throttled as the project matures. 
+   Answer: That depends on the use, doesn't it? We have to consider that when a project is young and being scaffolded then there are less restrictions and the restrictions are throttled as the project matures.
    Assistant response: Makes sense. I will propose a layered approach: defaults in a config file, overridable by env vars or CLI flags so the guardrails can tighten as the project matures.
 
 7. Before we bake this into future repos, should we define a minimal bootstrap doc (e.g., `SETUP.md`) outlining Python version, virtualenv instructions, and required prerequisites for the tool suite?
@@ -83,11 +86,13 @@ This document is a scratch pad for understanding the transplanted tooling. We wi
    Assistant response: Great. I will earmark a living `SETUP.md` (or similar) as part of the roadmap, ensuring we capture evolving bootstrap instructions once the structure settles.
 
 ## Next Steps (pending your guidance)--- NOT YET
+
 - Confirm the target layout and canonical assets.
 - Map each existing tool/doc/report to its future home.
 - Plan cleanup and migration tasks for stale or environment-specific data.
 
 ## Follow-up Questions (round 3)
+
 1. For the inventory schema you want, do you prefer a single YAML index or a docs+scripts split (e.g., `inventory_scripts.yaml`, `inventory_docs.yaml`)?
    Answer: Preferance is to AI
    Assistant response: Copy that. I will prioritize whatever gives agents the fastest lookups—likely a single authoritative YAML for the AI to query, supplemented by generated per-domain views if we find they help with tooling or human review.
@@ -116,8 +121,8 @@ This document is a scratch pad for understanding the transplanted tooling. We wi
    Answer: How would that work?
    Assistant response: We can draft a staged checklist (scaffold → growth → mature) with entry criteria and required actions—once a repo hits each stage, agents enforce tighter policies, retain more history, and enable additional checks. Let me know if you’d like me to mock up the first pass.
 
-
 ## Follow-up Questions (round 4)
+
 1. Should the inventory capture which agents or workflows consume each asset so we can map dependencies and avoid breaking critical paths?
    Answer: Repo-studios will not have agents per say, it will have the coding agent, like you
    Assistant response: Understood. I’ll frame the inventory around coding-agent consumption patterns so we can document which utilities I (or future coding agents) rely on while keeping space to add other automation personas later if needed.
@@ -127,11 +132,11 @@ This document is a scratch pad for understanding the transplanted tooling. We wi
    Assistant response: Yes, that pattern will work nicely. I’ll outline a migration playbook that encourages agents to log substantial moves in that timestamped format so we maintain provenance while modernizing.
 
 3. How should Make/automation entry points be exposed to agents—single umbrella target (e.g., `make studio`) or multiple task-specific commands?
-   Answer: Correct. However, each level of automation would have a make target. 
+   Answer: Correct. However, each level of automation would have a make target.
    Assistant response: Got it. I’ll craft a tiered Make structure—high-level umbrella targets plus granular subcommands—so automation stays discoverable and composable.
 
 4. Would you like a naming convention for documentation files (e.g., `std-global-*.md`, `std-project-*.md`) so agents can infer scope from filenames alone?
-   Answer: Yes!!! 
+   Answer: Yes!!!
    Assistant response: Excellent. I’ll draft a filename scheme that bakes scope into the prefix/suffix so agents can infer coverage before opening the file.
 
 5. For sample data and fixtures bundled with the studio, should we keep lightweight examples in-repo or rely on generated-on-demand fixtures to reduce clutter?
@@ -146,10 +151,10 @@ This document is a scratch pad for understanding the transplanted tooling. We wi
    Answer: I would like you to start another file (your choice of the file type) and begin building the "alignment_protocol" for “AI and Developer Collaboration” so when we are working that you can update the plan "Blueprint" doc (such as I am giving an implementation prompt from inside of a document)
    Assistant response: Perfect. I’ll spin up an `alignment_protocol` document capturing this collaboration blueprint so we can reference and evolve it alongside future projects.
 
-   
 ## Follow-up Questions (round 5)
+
 1. How formal should the migration playbook be—lightweight checklist inside `agent_notes/` or a structured doc with sections (scope, steps, validation, rollback)?
-   Answer: Structured. The new repo can alter, if needed based on the needs of the project. 
+   Answer: Structured. The new repo can alter, if needed based on the needs of the project.
    Assistant response: Great. I’ll outline a structured playbook template with sections for scope, dependencies, execution steps, validation, and rollback so each repo can adapt it while keeping a consistent backbone.
 
 2. For the tiered Make targets, do you want a manifest (e.g., `make studio-help`) that lists all levels and their purposes for quick agent lookup?
@@ -169,15 +174,16 @@ This document is a scratch pad for understanding the transplanted tooling. We wi
    Assistant response: Starter templates and clear guidance should keep secrets out of code paths, which will in turn reduce the need for monkey patches that hide or rewrite sensitive data.
 
 6. In the new `alignment_protocol` document, should we trace each collaboration step (questions, answers, decisions) chronologically or organize by phases (alignment, planning, implementation, review)?
-   Answer: I like where you are going already. In time, we will continue this. 
+   Answer: I like where you are going already. In time, we will continue this.
    Assistant response: Sounds good. I’ll keep the phased structure and expand it as our collaboration pattern evolves.
 
 7. Do you want automation to notify when agents add new entries to `agent_notes/` (e.g., via git hooks or summary reports), or is manual review sufficient for now?
    Answer: Manuel is fine for now
    Assistant response: Understood. We’ll rely on manual review for the time being and revisit automation later if needed.
 
-***18OCT2025- From Founder to Copilot***
-I enjoy the folder structure as exampled in `/.repo_studios/docs/` - 
+___18OCT2025- From Founder to Copilot___
+
+I enjoy the folder structure as exampled in `/.repo_studios/docs/` -
    so when I turn my attention to `/.repo_studios/scripts/` my thoughts go to emulating with modifications, the concept and applying this concept to `/.repo_studios/scripts/`
 Moving attention to `/.repo_studios/scripts/`, we will have 31 scripts to relocate from legacy `/repo_scripts/` to find a new permanant home for.
 The scripts can be divided by use case and grouped into topic groups
