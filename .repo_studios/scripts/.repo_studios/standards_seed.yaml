@@ -1,0 +1,97 @@
+# Curated seed rules for Repo Studios standards index.
+# Fields: id, category_ids, summary, rationale, severity, applies_to, source {file, anchor}, last_updated.
+# Replace or augment these entries as the standards documentation matures.
+
+schema_version: 1
+version: 2025.10.0
+rules:
+  - id: project-pin-critical-dependencies
+    category_ids: [project]
+    summary: Pin critical runtime dependencies in lockfiles
+    rationale: Locked versions ensure deterministic builds and simplify incident response.
+    severity: error
+    applies_to: ["**/requirements*.txt", "**/pyproject.toml"]
+    source:
+      file: docs/standards/project/std-project-operating-standard.md
+      anchor: dependency-management
+    last_updated: 2025-10-23
+  - id: project-document-new-automation
+    category_ids: [project]
+    summary: Document new automation targets when introducing them
+    rationale: Clear task documentation improves reproducibility across contributors.
+    severity: warn
+    applies_to: ["Makefile", "docs/**/*.md"]
+    source:
+      file: docs/standards/project/std-project-operating-standard.md
+      anchor: automation-visibility
+    last_updated: 2025-10-23
+  - id: python-avoid-bare-except
+    category_ids: [python_coding, project]
+    summary: Avoid bare except blocks in Python code
+    rationale: Catching all exceptions hides defects and complicates debugging.
+    severity: error
+    applies_to: ["**/*.py"]
+    source:
+      file: docs/standards/global/std-global-python-engineering.md
+      anchor: error-handling
+    last_updated: 2025-10-23
+  - id: python-prefer-structured-logging
+    category_ids: [python_coding]
+    summary: Prefer structured logging utilities over print statements
+    rationale: Structured logs enable filtering, aggregation, and production observability.
+    severity: warn
+    applies_to: ["**/*.py"]
+    source:
+      file: docs/standards/global/std-global-python-engineering.md
+      anchor: logging
+    last_updated: 2025-10-23
+  - id: markdown-require-front-matter
+    category_ids: [markdown]
+    summary: Include standard front matter in markdown standards documents
+    rationale: Front matter metadata powers indexing and standards governance automation.
+    severity: error
+    applies_to: ["docs/standards/**/*.md"]
+    source:
+      file: docs/standards/global/std-global-markdown-authoring.md
+      anchor: front-matter
+    last_updated: 2025-10-23
+  - id: monkey-patch-avoid-builtins
+    category_ids: [monkey_patch_reduction]
+    summary: Avoid monkey patching Python builtins outside controlled tests
+    rationale: Mutating builtins introduces global side effects that are hard to reason about.
+    severity: critical
+    applies_to: ["**/*.py"]
+    source:
+      file: docs/standards/global/std-global-monkey-patching.md
+      anchor: builtin-constraints
+    last_updated: 2025-10-23
+  - id: cleanup-prefer-small-increments
+    category_ids: [cleanup_refactor]
+    summary: Execute cleanup efforts in small, reviewable increments
+    rationale: Focused changes reduce merge conflicts and keep reviews efficient.
+    severity: warn
+    applies_to: ["**/*"]
+    source:
+      file: docs/standards/global/std-global-code-cleanup.md
+      anchor: incremental-workflows
+    last_updated: 2025-10-23
+  - id: mission-log-critical-decisions
+    category_ids: [mission]
+    summary: Log critical architectural decisions in the shared decision record
+    rationale: Transparent decision logs aid auditability and future context sharing.
+    severity: error
+    applies_to: ["docs/**/*.md", "memory-bank/**/*.md"]
+    source:
+      file: docs/standards/global/std-global-mission-parameters.md
+      anchor: decisions
+    last_updated: 2025-10-23
+  - id: prompting-include-evaluation-cases
+    category_ids: [prompting]
+    summary: Include evaluation cases when authoring prompt changes
+    rationale: Evaluation examples make prompt regressions easier to detect.
+    severity: warn
+    applies_to: ["**/*.md", "**/*.prompt"]
+    source:
+      file: docs/standards/global/std-global-prompt-engineering.md
+      anchor: evaluation-cases
+    last_updated: 2025-10-23

@@ -138,173 +138,171 @@
     decisions:
       - "Retain historical batches; append future entries in new location."
     blockers: []
+- id: docs.copilot_prompt_engineering_standards
+  name: "Prompt Engineering Standards"
+  path: .repo_studios/docs/standards/global/std-global-prompt-engineering.md
+  asset_kind: document
+  roles:
+    - standards
+  maturity: incubating
+  description: "Repo Studios-wide guidance for prompt and agent instruction authoring."
+  consumers:
+    - coding_agent
+    - human_developer
+  status: needs_review
+  governance_flags:
+    - awaiting_signoff
+  artifact_type: md
+  related_assets:
+    - docs.copilot_prompts
+  tags:
+    - prompts
+    - standards
+  phase_origin: phase1
+  source_repo: repo_studios
+  notes:
+    context: "Update terminology to match new schema fields."
+    decisions:
+      - "Migrate into standards/global prompts section."
+    blockers: []
+- id: docs.copilot_prompts
+  name: "Repo Studios Prompt Library"
+  path: repo_prompts.md
+  asset_kind: document
+  roles:
+    - artifact_sample
+  maturity: incubating
+  description: "Collection of curated prompts for reuse."
+  consumers:
+    - coding_agent
+    - human_developer
+  status: needs_review
+  governance_flags:
+    - awaiting_signoff
+  artifact_type: md
+  related_assets:
+    - docs.prompt_library_usage
+  tags:
+    - prompts
+    - samples
+  phase_origin: phase1
+  source_repo: repo_studios
+  notes:
+    context: "Migrated into canonical root library with structured sections."
+    decisions:
+      - "Retain Markdown format while evaluating future YAML registry."
+    blockers: []
 - id: docs.copilot_standards_chainlit
   name: "Chainlit UI Standards"
-  - id: docs.copilot_prompt_engineering_standards
-    name: "Prompt Engineering Standards"
-    path: .repo_studios/docs/standards/global/std-global-prompt-engineering.md
-    asset_kind: document
-    roles:
-      - standards
-    maturity: incubating
-    description: "Repo Studios-wide guidance for prompt and agent instruction authoring."
-    consumers:
-      - coding_agent
-      - human_developer
-    status: needs_review
-    governance_flags:
-      - awaiting_signoff
-    artifact_type: md
-    related_assets:
-      - docs.copilot_prompts
-    tags:
-      - prompts
-      - standards
-    phase_origin: phase1
-    source_repo: repo_studios
-    notes:
-      context: "Update terminology to match new schema fields."
-      decisions:
-        - "Migrate into standards/global prompts section."
-      blockers: []
-  - id: docs.copilot_prompts
-    name: "Repo Studios Prompt Library"
-    path: repo_prompts.md
-    asset_kind: document
-    roles:
-      - artifact_sample
-    maturity: incubating
-    description: "Collection of curated prompts for reuse."
-    consumers:
-      - coding_agent
-      - human_developer
-    status: needs_review
-    governance_flags:
-      - awaiting_signoff
-    artifact_type: md
-    related_assets:
-      - docs.prompt_library_usage
-    tags:
-      - prompts
-      - samples
-    phase_origin: phase1
-    source_repo: repo_studios
-    notes:
-      context: "Migrated into canonical root library with structured sections."
-      decisions:
-        - "Retain Markdown format while evaluating future YAML registry."
-      blockers: []
-  - id: docs.copilot_standards_chainlit
-    name: "Chainlit UI Standards"
-    path: .repo_studios/docs/standards/global/std-global-chainlit-ui.md
-    asset_kind: document
-    roles:
-      - standards
-    maturity: incubating
-    description: "Chainlit-specific standards covering async flows, state, and message semantics."
-    consumers:
-      - coding_agent
-      - ci_pipeline
-    status: needs_review
-    governance_flags:
-      - awaiting_signoff
-    artifact_type: md
-    related_assets:
-      - docs.copilot_standards_project
-    tags:
-      - chainlit
-      - standards
-    phase_origin: phase1
-    source_repo: repo_studios
-    notes:
-      context: "Verify relevance for new projects; may become optional module."
-      decisions:
-        - "Mark as optional add-on in standards/project subset."
-      blockers: []
-  - id: docs.copilot_standards_html
-    name: "HTML Engineering Standards"
-    path: .repo_studios/docs/standards/global/std-global-html-coding.md
-    asset_kind: document
-    roles:
-      - standards
-    maturity: incubating
-    description: "HTML authoring and sanitation standards for Repo Studios outputs."
-    consumers:
-      - coding_agent
-      - docs_generator
-    status: needs_review
-    governance_flags:
-      - awaiting_signoff
-    artifact_type: md
-    related_assets:
-      - docs.copilot_standards_markdown
-    tags:
-      - html
-      - standards
-    phase_origin: phase1
-    source_repo: repo_studios
-    notes:
-      context: "Verify HTML sanitization patterns remain aligned with Markdown authoring guidance."
-      decisions:
-        - "Treat as optional module for projects exposing rendered HTML."
-      blockers: []
-  - id: docs.copilot_standards_markdown
-    name: "Markdown Authoring Standards"
-    path: .repo_studios/docs/standards/global/std-global-markdown-authoring.md
-    asset_kind: document
-    roles:
-      - standards
-    maturity: incubating
-    description: "Markdown formatting standards for Repo Studios documentation."
-    consumers:
-      - coding_agent
-      - human_developer
-      - docs_generator
-    status: needs_review
-    governance_flags:
-      - awaiting_signoff
-    artifact_type: md
-    related_assets:
-      - docs.copilot_standards_html
-      - docs.inventory_spec
-    tags:
-      - markdown
-      - standards
-    phase_origin: phase1
-    source_repo: repo_studios
-    notes:
-      context: "Consider elevation to global standards baseline."
-      decisions:
-        - "Keep as required reference for Repo Studios."
-      blockers: []
-  - id: docs.copilot_standards_python
-    name: "Python Engineering Standards"
-    path: .repo_studios/docs/standards/global/std-global-python-engineering.md
-    asset_kind: document
-    roles:
-      - standards
-    maturity: incubating
-    description: "Python-specific engineering guardrails for Repo Studios automation."
-    consumers:
-      - coding_agent
-      - human_developer
-    status: needs_review
-    governance_flags:
-      - awaiting_signoff
-    artifact_type: md
-    related_assets:
-      - docs.copilot_instructions_python
-      - docs.repo_studios_code_cleanup
-    tags:
-      - python
-      - standards
-    phase_origin: phase1
-    source_repo: repo_studios
-    notes:
-      context: "Ensure cross-references with cleanup and mission standards stay current."
-      decisions:
-        - "Adopt as baseline Python guardrail once CI gating finalizes."
-      blockers: []
+  path: .repo_studios/docs/standards/global/std-global-chainlit-ui.md
+  asset_kind: document
+  roles:
+    - standards
+  maturity: incubating
+  description: "Chainlit-specific standards covering async flows, state, and message semantics."
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: needs_review
+  governance_flags:
+    - awaiting_signoff
+  artifact_type: md
+  related_assets:
+    - docs.copilot_standards_project
+  tags:
+    - chainlit
+    - standards
+  phase_origin: phase1
+  source_repo: repo_studios
+  notes:
+    context: "Verify relevance for new projects; may become optional module."
+    decisions:
+      - "Mark as optional add-on in standards/project subset."
+    blockers: []
+- id: docs.copilot_standards_html
+  name: "HTML Engineering Standards"
+  path: .repo_studios/docs/standards/global/std-global-html-coding.md
+  asset_kind: document
+  roles:
+    - standards
+  maturity: incubating
+  description: "HTML authoring and sanitation standards for Repo Studios outputs."
+  consumers:
+    - coding_agent
+    - docs_generator
+  status: needs_review
+  governance_flags:
+    - awaiting_signoff
+  artifact_type: md
+  related_assets:
+    - docs.copilot_standards_markdown
+  tags:
+    - html
+    - standards
+  phase_origin: phase1
+  source_repo: repo_studios
+  notes:
+    context: "Verify HTML sanitization patterns remain aligned with Markdown authoring guidance."
+    decisions:
+      - "Treat as optional module for projects exposing rendered HTML."
+    blockers: []
+- id: docs.copilot_standards_markdown
+  name: "Markdown Authoring Standards"
+  path: .repo_studios/docs/standards/global/std-global-markdown-authoring.md
+  asset_kind: document
+  roles:
+    - standards
+  maturity: incubating
+  description: "Markdown formatting standards for Repo Studios documentation."
+  consumers:
+    - coding_agent
+    - human_developer
+    - docs_generator
+  status: needs_review
+  governance_flags:
+    - awaiting_signoff
+  artifact_type: md
+  related_assets:
+    - docs.copilot_standards_html
+    - docs.inventory_spec
+  tags:
+    - markdown
+    - standards
+  phase_origin: phase1
+  source_repo: repo_studios
+  notes:
+    context: "Consider elevation to global standards baseline."
+    decisions:
+      - "Keep as required reference for Repo Studios."
+    blockers: []
+- id: docs.copilot_standards_python
+  name: "Python Engineering Standards"
+  path: .repo_studios/docs/standards/global/std-global-python-engineering.md
+  asset_kind: document
+  roles:
+    - standards
+  maturity: incubating
+  description: "Python-specific engineering guardrails for Repo Studios automation."
+  consumers:
+    - coding_agent
+    - human_developer
+  status: needs_review
+  governance_flags:
+    - awaiting_signoff
+  artifact_type: md
+  related_assets:
+    - docs.copilot_instructions_python
+    - docs.repo_studios_code_cleanup
+  tags:
+    - python
+    - standards
+  phase_origin: phase1
+  source_repo: repo_studios
+  notes:
+    context: "Ensure cross-references with cleanup and mission standards stay current."
+    decisions:
+      - "Adopt as baseline Python guardrail once CI gating finalizes."
+    blockers: []
 - id: docs.copilot_standards_monkey_patch
   name: "Monkey Patch Governance"
   path: .repo_studios/docs/standards/global/std-global-monkey-patching.md

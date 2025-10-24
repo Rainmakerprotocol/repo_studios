@@ -14,7 +14,7 @@ tags:
   - prompts
   - library
   - repo-studios
-legacy_source: .repo_studios_legacy/repo_docs/copilot_prompts.md
+legacy_source: legacy/repo_docs/copilot_prompts.md
 ---
 
 <!-- markdownlint-disable MD025 -->

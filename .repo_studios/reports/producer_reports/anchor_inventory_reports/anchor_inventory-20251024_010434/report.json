@@ -1,0 +1,141 @@
+{
+  "allow_generic": [
+    "faq",
+    "introduction",
+    "notes",
+    "overview"
+  ],
+  "allowlist_size": null,
+  "docs_root": "C:\\Users\\genet\\repo_studios\\docs",
+  "duplicates": [],
+  "generated_utc": "2025-10-24T01:04:34.545944+00:00",
+  "schema_version": 1,
+  "slugs": [
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\project\\std-project-operating-standard.md"
+      ],
+      "slug": "automation-visibility"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-monkey-patching.md"
+      ],
+      "slug": "builtin-constraints"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-mission-parameters.md"
+      ],
+      "slug": "decisions"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\project\\std-project-operating-standard.md"
+      ],
+      "slug": "dependency-management"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-docs-integrity-handbook.md"
+      ],
+      "slug": "docs-integrity-handbook"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-python-engineering.md"
+      ],
+      "slug": "error-handling"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-prompt-engineering.md"
+      ],
+      "slug": "evaluation-cases"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-markdown-authoring.md"
+      ],
+      "slug": "front-matter"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-chainlit-ui.md"
+      ],
+      "slug": "global-chainlit-ui-standard"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-html-coding.md"
+      ],
+      "slug": "global-html-coding-standard"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-code-cleanup.md"
+      ],
+      "slug": "incremental-workflows"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-python-engineering.md"
+      ],
+      "slug": "logging"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\project\\std-project-python-instructions.md"
+      ],
+      "slug": "project-python-instructions"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\docs_index.md"
+      ],
+      "slug": "repo-studios-documentation-index"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-markdown-authoring.md"
+      ],
+      "slug": "style-essentials"
+    }
+  ],
+  "summary": {
+    "allowlist_size": null,
+    "cross_file_duplicates": 0,
+    "generic_allow_size": 4,
+    "total_slugs": 15
+  }
+}

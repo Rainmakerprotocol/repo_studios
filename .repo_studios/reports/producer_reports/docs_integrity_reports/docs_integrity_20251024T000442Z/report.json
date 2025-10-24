@@ -1,0 +1,30 @@
+{
+  "errors": [],
+  "exit_code": 0,
+  "message": "All governed JSON blocks verified.",
+  "mismatches": [],
+  "missing_documents": [],
+  "options": {
+    "artifacts_to_keep": 10,
+    "log_level": "INFO",
+    "regen_table": true,
+    "update": false
+  },
+  "output_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\docs_integrity_reports",
+  "paths": {
+    "index_path": "docs/standards/docs_index.md",
+    "repo_root": "C:\\Users\\genet\\repo_studios"
+  },
+  "run_id": "docs_integrity_20251024T000442Z",
+  "schema_version": 1,
+  "status": "ok",
+  "summary": {
+    "documents_processed": 1,
+    "documents_updated": 0,
+    "index_blocks_checked": 1,
+    "json_blocks_checked": 2,
+    "mismatched_blocks": 0,
+    "table_regenerated": true
+  },
+  "timestamp": "2025-10-24T00:04:42.880674+00:00"
+}

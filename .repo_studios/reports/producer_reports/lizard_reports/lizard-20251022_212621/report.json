@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "status": "issues",
+  "timestamp": "20251022_212621",
+  "generated_utc": "2025-10-22T21:26:21.012215+00:00",
+  "max_ccn": 15,
+  "max_length": 80,
+  "targets": [
+    "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\producers"
+  ],
+  "command": [
+    "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+    "-m",
+    "lizard",
+    "-C",
+    "15",
+    "-L",
+    "80",
+    "-Ejson",
+    "-i",
+    "-1",
+    "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\producers"
+  ],
+  "command_str": "'C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe' -m lizard -C 15 -L 80 -Ejson -i -1 'C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\producers'",
+  "issue_count": 7,
+  "files_scanned": 19,
+  "offenders": [
+    {
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\producers\\generate_typecheck_report.py",
+      "name": "main",
+      "cyclomatic_complexity": 13,
+      "length": 82
+    },
+    {
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\producers\\scan_monkey_patches.py",
+      "name": "visit_Call",
+      "cyclomatic_complexity": 20,
+      "length": 63
+    },
+    {
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\producers\\scan_monkey_patches.py",
+      "name": "_handle_assignment",
+      "cyclomatic_complexity": 28,
+      "length": 91
+    },
+    {
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\producers\\scan_monkey_patches.py",
+      "name": "write_reports",
+      "cyclomatic_complexity": 14,
+      "length": 99
+    },
+    {
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\producers\\scan_monkey_patches.py",
+      "name": "main",
+      "cyclomatic_complexity": 12,
+      "length": 95
+    },
+    {
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\producers\\validate_import_boundaries.py",
+      "name": "_scan_static_imports",
+      "cyclomatic_complexity": 17,
+      "length": 71
+    },
+    {
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\producers\\validate_markdown_anchors.py",
+      "name": "main",
+      "cyclomatic_complexity": 8,
+      "length": 83
+    }
+  ],
+  "notes": ""
+}

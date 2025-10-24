@@ -1,6 +1,6 @@
 - id: scripts.standards.build_index
   name: "Build Standards Index"
-  path: .repo_studios_legacy/repo_scripts/build_standards_index.py
+  path: .repo_studios/scripts/producers/generate_standards_index.py
   asset_kind: script
   roles:
     - orchestrator
@@ -35,7 +35,7 @@
     blockers: []
 - id: scripts.standards.extraction
   name: "Standards Extraction"
-  path: .repo_studios_legacy/repo_scripts/standards_extraction.py
+  path: .repo_studios/scripts/producers/extract_standards_rules.py
   asset_kind: script
   roles:
     - orchestrator
@@ -69,7 +69,7 @@
     blockers: []
 - id: scripts.standards.index_cli
   name: "Standards Index CLI"
-  path: .repo_studios_legacy/repo_scripts/standards_index_cli.py
+  path: .repo_studios/scripts/orchestrators/run_standards_index_cli.py
   asset_kind: script
   roles:
     - cli
@@ -103,7 +103,7 @@
     blockers: []
 - id: scripts.standards.index_diff
   name: "Standards Index Diff"
-  path: .repo_studios_legacy/repo_scripts/standards_index_diff.py
+  path: .repo_studios/scripts/producers/diff_standards_index.py
   asset_kind: script
   roles:
     - validator
@@ -135,7 +135,7 @@
     blockers: []
 - id: scripts.standards.index_gap
   name: "Standards Index Gap"
-  path: .repo_studios_legacy/repo_scripts/standards_index_gap.py
+  path: .repo_studios/scripts/producers/analyze_standards_index_gaps.py
   asset_kind: script
   roles:
     - validator
@@ -167,7 +167,7 @@
     blockers: []
 - id: scripts.standards.prompt_seed
   name: "Standards Prompt Seed"
-  path: .repo_studios_legacy/repo_scripts/standards_prompt_seed.py
+  path: .repo_studios/scripts/producers/seed_standards_prompts.py
   asset_kind: script
   roles:
     - summarizer
@@ -199,7 +199,7 @@
     blockers: []
 - id: scripts.standards.summary
   name: "Standards Summary"
-  path: .repo_studios_legacy/repo_scripts/standards_summary.py
+  path: .repo_studios/scripts/summarizers/summarize_standards.py
   asset_kind: script
   roles:
     - summarizer

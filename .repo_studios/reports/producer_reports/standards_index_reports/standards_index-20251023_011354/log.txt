@@ -1,0 +1,15 @@
+status=error
+timestamp=20251023_011354
+integrity_hash=None
+index_path=.repo_studios\scripts\repo_standards_index.yaml
+output_dir=.repo_studios\reports\producer_reports\standards_index_reports
+summary_rule_count=0
+summary_category_count=0
+summary_source_count=0
+summary_extracted_count=0
+summary_accepted_count=0
+extraction_enabled=false
+extraction_auto_accept=false
+extraction_extracted_count=0
+extraction_pending_written=false
+notes=Missing source files: C:\Users\genet\docs\standards\project\std-project-operating-standard.md, C:\Users\genet\docs\standards\project\std-project-python-instructions.md, C:\Users\genet\docs\standards\global\std-global-python-engineering.md, C:\Users\genet\docs\standards\global\std-global-code-cleanup.md, C:\Users\genet\docs\standards\global\std-global-markdown-authoring.md, C:\Users\genet\docs\standards\global\std-global-monkey-patching.md, C:\Users\genet\docs\standards\global\std-global-mission-parameters.md, C:\Users\genet\docs\standards\global\std-global-prompt-engineering.md, C:\Users\genet\docs\standards\global\std-global-chainlit-ui.md, C:\Users\genet\docs\standards\global\std-global-html-coding.md

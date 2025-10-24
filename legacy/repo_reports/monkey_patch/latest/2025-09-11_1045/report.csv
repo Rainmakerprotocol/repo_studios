@@ -1,0 +1,3 @@
+file,line,category,import_base,is_test,is_module_scope,intent,code
+faulthandler.py,93,attribute_reassignment_on_import,fcntl,False,True,override third-party behavior,      _fcntl = None  # type: ignore
+dep_hygiene_report.py,24,attribute_reassignment_on_import,tomllib,False,True,override third-party behavior,    tomllib = None  # type: ignore

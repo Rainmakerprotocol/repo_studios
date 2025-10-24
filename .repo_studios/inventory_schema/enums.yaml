@@ -17,6 +17,7 @@ roles:
   - config_provider
   - artifact_sample
   - playbook
+  - governance
 maturity:
   - incubating
   - stable

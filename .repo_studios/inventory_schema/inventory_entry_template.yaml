@@ -1,6 +1,6 @@
 - id: category.asset_name
   name: "Human readable asset name"
-  path: .repo_studios_legacy/repo_scripts/example.py
+  path: .repo_studios/scripts/producers/example.py
   asset_kind: script
   roles:
     - orchestrator
@@ -10,11 +10,11 @@
   description: "Short purpose statement."
   dependencies:
     internal_paths:
-      - .repo_studios_legacy/repo_files/copilot_standards_index.yaml
+      - .repo_studios/reports/producer_reports/example/latest/report.json
     external_tools:
       - mypy
     inputs:
-      - path: .repo_studios_legacy/repo_reports/health_suite/
+      - path: .repo_studios/reports/health_suite/latest/
         description: Health suite reports consumed for summary generation
   consumers:
     - coding_agent

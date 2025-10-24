@@ -1,0 +1,74 @@
+.repo_studios\scripts\summarizers\summarize_health_suite.py:104: error: No overload variant of "int" matches argument type "object"  [call-overload]
+.repo_studios\scripts\summarizers\summarize_health_suite.py:104: note: Error code "call-overload" not covered by "type: ignore" comment
+.repo_studios\scripts\summarizers\summarize_health_suite.py:104: note: Possible overload variants:
+.repo_studios\scripts\summarizers\summarize_health_suite.py:104: note:     def int(str | Buffer | SupportsInt | SupportsIndex | SupportsTrunc = ..., /) -> int
+.repo_studios\scripts\summarizers\summarize_health_suite.py:104: note:     def int(str | bytes | bytearray, /, base: SupportsIndex) -> int
+.repo_studios\scripts\producers\validate_inventory.py:20: error: Library stubs not installed for "yaml"  [import-untyped]
+.repo_studios\scripts\producers\validate_inventory.py:196: error: Argument 2 to "ensure" of "EnumRegistry" has incompatible type "list[Any | None]"; expected "Iterable[str]"  [arg-type]
+.repo_studios\scripts\producers\validate_inventory.py:196: error: Argument 5 to "ensure" of "EnumRegistry" has incompatible type "Any | None"; expected "str"  [arg-type]
+.repo_studios\scripts\producers\validate_inventory.py:199: error: Argument 5 to "ensure" of "EnumRegistry" has incompatible type "Any | None"; expected "str"  [arg-type]
+.repo_studios\scripts\producers\validate_inventory.py:201: error: Argument 5 to "ensure" of "EnumRegistry" has incompatible type "Any | None"; expected "str"  [arg-type]
+.repo_studios\scripts\producers\render_inventory_views.py:12: error: Library stubs not installed for "yaml"  [import-untyped]
+.repo_studios\scripts\producers\extract_standards_rules.py:243: error: Argument "summary" to "ParsedRule" has incompatible type "str | None"; expected "str"  [arg-type]
+.repo_studios\scripts\producers\extract_standards_rules.py:244: error: Argument "rationale" to "ParsedRule" has incompatible type "str | None"; expected "str"  [arg-type]
+.repo_studios\scripts\producers\extract_standards_rules.py:245: error: Item "None" of "str | None" has no attribute "lower"  [union-attr]
+.repo_studios\scripts\producers\extract_standards_rules.py:246: error: List item 0 has incompatible type "str | None"; expected "str"  [list-item]
+.repo_studios\scripts\utilities\configure_faulthandler_runtime.py:115: error: Module has no attribute "flock"  [attr-defined]
+.repo_studios\scripts\utilities\configure_faulthandler_runtime.py:115: error: Module has no attribute "LOCK_EX"  [attr-defined]
+.repo_studios\scripts\utilities\configure_faulthandler_runtime.py:124: error: Module has no attribute "flock"  [attr-defined]
+.repo_studios\scripts\utilities\configure_faulthandler_runtime.py:124: error: Module has no attribute "LOCK_UN"  [attr-defined]
+.repo_studios\scripts\utilities\configure_faulthandler_runtime.py:179: error: Module has no attribute "register"  [attr-defined]
+.repo_studios\scripts\summarizers\summarize_standards.py:55: error: Value of type variable "SupportsRichComparisonT" of "sorted" cannot be "Any | None"  [type-var]
+.repo_studios\scripts\summarizers\summarize_standards.py:60: error: Argument 1 to "join" of "str" has incompatible type "list[Any | None]"; expected "Iterable[str]"  [arg-type]
+.repo_studios\scripts\producers\seed_standards_prompts.py:29: error: Library stubs not installed for "yaml"  [import-untyped]
+.repo_studios\scripts\producers\scan_monkey_patches.py:545: error: Incompatible types in assignment (expression has type "str | None", variable has type "str")  [assignment]
+.repo_studios\scripts\producers\scan_monkey_patches.py:569: error: Incompatible types in assignment (expression has type "str | None", variable has type "str")  [assignment]
+.repo_studios\scripts\producers\generate_standards_index.py:223: error: Argument 1 to "append" of "list" has incompatible type "ExtractDiagnostics"; expected "dict[str, Any]"  [arg-type]
+.repo_studios\scripts\producers\generate_lizard_report.py:106: error: Argument 1 to "Path" has incompatible type "str | None"; expected "str | PathLike[str]"  [arg-type]
+.repo_studios\scripts\producers\diff_standards_index.py:14: error: Library stubs not installed for "yaml"  [import-untyped]
+.repo_studios\scripts\producers\analyze_standards_index_gaps.py:31: error: Library stubs not installed for "yaml"  [import-untyped]
+.repo_studios\scripts\orchestrators\run_standards_index_cli.py:44: error: Library stubs not installed for "yaml"  [import-untyped]
+.repo_studios\scripts\orchestrators\run_standards_index_cli.py:44: note: Hint: "python3 -m pip install types-PyYAML"
+.repo_studios\scripts\orchestrators\run_pytest_log_capture.py:49: error: Library stubs not installed for "defusedxml"  [import-untyped]
+.repo_studios\scripts\orchestrators\run_pytest_log_capture.py:163: error: Module has no attribute "SIGUSR1"  [attr-defined]
+.repo_studios\scripts\orchestrators\orchestrate_health_suite.py:483: error: Incompatible types in assignment (expression has type "CompletedProcess[str]", variable has type "Popen[str]")  [assignment]
+.repo_studios\scripts\orchestrators\orchestrate_health_suite.py:498: error: Incompatible types in assignment (expression has type "str", variable has type "bytes | None")  [assignment]
+.repo_studios\scripts\orchestrators\orchestrate_health_suite.py:500: error: Incompatible types in assignment (expression has type "str", variable has type "bytes | None")  [assignment]
+.repo_studios\scripts\orchestrators\orchestrate_health_suite.py:503: error: Incompatible types in assignment (expression has type "str", variable has type "bytes | None")  [assignment]
+.repo_studios\scripts\orchestrators\orchestrate_health_suite.py:505: error: Incompatible types in assignment (expression has type "str", variable has type "bytes | None")  [assignment]
+.repo_studios\scripts\orchestrators\orchestrate_health_suite.py:507: error: Argument 1 to "write_text" of "Path" has incompatible type "bytes | str"; expected "str"  [arg-type]
+.repo_studios\scripts\orchestrators\orchestrate_health_suite.py:507: error: Unsupported operand types for + ("bytes" and "str")  [operator]
+.repo_studios\scripts\orchestrators\orchestrate_health_suite.py:507: note: Left operand is of type "bytes | str"
+.repo_studios\scripts\orchestrators\orchestrate_health_suite.py:510: error: Argument 1 to "write_text" of "Path" has incompatible type "bytes | str"; expected "str"  [arg-type]
+.repo_studios\scripts\orchestrators\orchestrate_health_suite.py:510: error: Unsupported operand types for + ("bytes" and "str")  [operator]
+.repo_studios\scripts\orchestrators\orchestrate_health_suite.py:510: note: Left operand is of type "bytes | str"
+.repo_studios\scripts\orchestrators\orchestrate_health_suite.py:515: error: Incompatible types in assignment (expression has type "_Proc", variable has type "Popen[str]")  [assignment]
+.repo_studios\scripts\orchestrators\orchestrate_health_suite.py:518: error: Argument 1 to "write_text" of "Path" has incompatible type "IO[str] | str"; expected "str"  [arg-type]
+.repo_studios\scripts\orchestrators\orchestrate_health_suite.py:519: error: Argument 1 to "write_text" of "Path" has incompatible type "IO[str] | str"; expected "str"  [arg-type]
+.repo_studios\scripts\orchestrators\orchestrate_health_suite.py:634: error: Incompatible types in assignment (expression has type "str", variable has type "Path")  [assignment]
+.repo_studios\scripts\consumers\generate_test_log_health_report.py:95: error: Library stubs not installed for "defusedxml"  [import-untyped]
+.repo_studios\scripts\consumers\generate_test_log_health_report.py:269: error: Value of type "object" is not indexable  [index]
+.repo_studios\scripts\consumers\generate_test_log_health_report.py:273: error: Value of type "object" is not indexable  [index]
+.repo_studios\scripts\consumers\generate_test_log_health_report.py:275: error: Value of type "object" is not indexable  [index]
+.repo_studios\scripts\consumers\generate_fault_artifacts.py:74: error: Need type annotation for "manifest"  [var-annotated]
+.repo_studios\scripts\consumers\generate_fault_artifacts.py:233: error: No overload variant of "int" matches argument type "object"  [call-overload]
+.repo_studios\scripts\consumers\generate_fault_artifacts.py:233: note: Possible overload variants:
+.repo_studios\scripts\consumers\generate_fault_artifacts.py:233: note:     def int(str | Buffer | SupportsInt | SupportsIndex | SupportsTrunc = ..., /) -> int
+.repo_studios\scripts\consumers\generate_fault_artifacts.py:233: note:     def int(str | bytes | bytearray, /, base: SupportsIndex) -> int
+.repo_studios\scripts\consumers\generate_fault_artifacts.py:245: error: No overload variant of "sorted" matches argument type "object"  [call-overload]
+.repo_studios\scripts\consumers\generate_fault_artifacts.py:245: note: Error code "call-overload" not covered by "type: ignore" comment
+.repo_studios\scripts\consumers\generate_fault_artifacts.py:245: note: Possible overload variants:
+.repo_studios\scripts\consumers\generate_fault_artifacts.py:245: note:     def [SupportsRichComparisonT: SupportsDunderLT[Any] | SupportsDunderGT[Any]] sorted(Iterable[SupportsRichComparisonT], /, *, key: None = ..., reverse: bool = ...) -> list[SupportsRichComparisonT]
+.repo_studios\scripts\consumers\generate_fault_artifacts.py:245: note:     def [_T] sorted(Iterable[_T], /, *, key: Callable[[_T], SupportsDunderLT[Any] | SupportsDunderGT[Any]], reverse: bool = ...) -> list[_T]
+.repo_studios\scripts\consumers\generate_fault_artifacts.py:270: error: No overload variant of "int" matches argument type "object"  [call-overload]
+.repo_studios\scripts\consumers\generate_fault_artifacts.py:270: note: Possible overload variants:
+.repo_studios\scripts\consumers\generate_fault_artifacts.py:270: note:     def int(str | Buffer | SupportsInt | SupportsIndex | SupportsTrunc = ..., /) -> int
+.repo_studios\scripts\consumers\generate_fault_artifacts.py:270: note:     def int(str | bytes | bytearray, /, base: SupportsIndex) -> int
+.repo_studios\scripts\aggregators\generate_churn_complexity_heatmap.py:93: error: Library stubs not installed for "defusedxml"  [import-untyped]
+.repo_studios\scripts\aggregators\generate_churn_complexity_heatmap.py:93: note: Hint: "python3 -m pip install types-defusedxml"
+.repo_studios\scripts\aggregators\generate_churn_complexity_heatmap.py:93: note: (or run "mypy --install-types" to install all missing stub packages)
+.repo_studios\scripts\aggregators\generate_churn_complexity_heatmap.py:93: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+Found 50 errors in 18 files (checked 34 source files)
+
+mypy.ini: Source contains parsing errors: 'mypy.ini'
+	[line 16]: ')\n'

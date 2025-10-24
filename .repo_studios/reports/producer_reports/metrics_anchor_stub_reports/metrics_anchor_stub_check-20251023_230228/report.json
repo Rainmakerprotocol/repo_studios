@@ -1,0 +1,24 @@
+{
+  "allowlist_path": null,
+  "allowlisted_anchors": [],
+  "legacy_anchors": [],
+  "legacy_file": "C:\\Users\\genet\\repo_studios\\docs\\api\\metrics_orchestrator.md",
+  "missing": [],
+  "options": {
+    "artifacts_to_keep": 10
+  },
+  "output_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\metrics_anchor_stub_reports",
+  "referenced_anchors": [],
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "run_id": "metrics_anchor_stub_check-20251023_230228",
+  "schema_version": 1,
+  "status": "ok",
+  "summary": {
+    "allowlisted_count": 0,
+    "anchors_referenced": 0,
+    "files_checked": 97,
+    "legacy_stub_count": 0,
+    "missing_count": 0
+  },
+  "timestamp": "2025-10-23T23:02:28.702856+00:00"
+}

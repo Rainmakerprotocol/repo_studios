@@ -1,16 +1,23 @@
 # Temporary Alignment Notes
 
-## Last updated: 2025-10-17
+## Last updated: 2025-10-21
 
 This document is a scratch pad for understanding the transplanted tooling. We will delete it once alignment is complete.
 
 ## Snapshot (read-only observations)
 
+- Legacy script migration complete: all 31 scripts now live under `.repo_studios/scripts/` with category folders (`collectors/`, `docops/`, `inventory/`, `manifest/`, `orchestrators/`, `processors/`, `reporters/`, `utilities/`).
+- `script_inventory_architecture.md` reflects the new locations for orchestrators, reporters, and utilities; remaining processors table intentionally marked TODO pending refactor.
+- Orchestrator entry points will not function until we rewire imports/paths—flagged for the upcoming refactor phase.
+- Pruning helpers still TODO; current scripts keep historical artifacts until we introduce `prune_logs` (silent) during rewrites.
+
 - Root contains `.repo_studios/`, `.git/`, and `README.md`; all migrated assets live under `.repo_studios/`.
 - Hidden `.repo_studios/` now holds `docs/`, `scripts/`, `reports/`, and `tests/` along with a legacy `Makefile` referencing prior project paths.
-- Standards artifacts (mix of `copilot_standards_*` and `repo_standards_*` naming) currently reside under `.repo_studios/docs` and the archived `.repo_studios_legacy/repo_docs` tree.
+- Standards artifacts (mix of `copilot_standards_*` and `repo_standards_*` naming) currently reside under `.repo_studios/docs` and the archived `legacy/repo_docs` tree.
 - Operational scripts (health, standards, monkey patch scanning, etc.) sit under `.repo_studios/scripts`, but the Makefile still points to former locations like `scripts/` and `.repo_studios/`.
 - `reports/` includes historical outputs (anchor health, churn complexity, lizard, monkey patch, pytest logs, typecheck, etc.) likely generated in the original repo.
+- `.repo_studios/reports/` now mirrors the six-tier script taxonomy (`producer`→`consumer`→`aggregator`→`orchestrator`→`summarizer`→`utility`) plus a `manifest_reports/` lane; each leaf folder is scaffolded for the future artifact destination noted in `reports/README.md`.
+- `scripts_manifest.yaml` upgrades the migration manifest to the six-tier model and records each script's canonical report/log destination under `.repo_studios/reports/`.
 - `tests/` mixes pytest suites and config files that expect the old directory layout and may rely on missing data directories.
 
 ## Open Questions (please answer inline)

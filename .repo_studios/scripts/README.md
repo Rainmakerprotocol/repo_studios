@@ -4,23 +4,23 @@ This directory houses the active automation suite for Repo Studios. Scripts are 
 
 ## Category Map
 
-- `collectors/` – raw data generators that produce baseline logs, metrics, or snapshots for downstream processing.
-- `processors/` – transformation layers that reshape collector outputs into normalized datasets.
-- `reporters/` – presentation builders that compose multi-section reports or artifacts for humans and agents.
-- `orchestrators/` – entry points that coordinate suites of collectors, processors, and reporters.
-- `utilities/` – ad-hoc maintenance helpers or one-off scripts that do not feed standard pipelines.
-- `docops/` – documentation maintenance scripts including standards extraction, summarization, and index refreshers.
-- `inventory/` – catalog automation that keeps Repo Studios inventory schemas and views synchronized.
+- `producers/` – base-layer scripts that gather data directly from source systems and emit raw artifacts for downstream consumers.
+- `consumers/` – single-hop analyzers that operate on one producer’s output to generate targeted reports or validations.
+- `aggregators/` – multi-source combiners that blend several producer/consumer artifacts into higher-order insights.
+- `orchestrators/` – top-level entry points that coordinate producer, consumer, and aggregator scripts into cohesive suites.
+- `summarizers/` – final-mile storytellers that distill suite outputs into executive or machine-readable digests.
+- `utilities/` – cross-cutting helpers (runtime shims, maintenance tasks) that support all tiers.
+- `manifest/` – migration manifest and planning notes retained for historical tracking during the restructure.
 
 ## Operating Notes
 
-- Each category will ship with a local README describing expected inputs, outputs, run cadence, and ownership.
-- When relocating scripts from `.repo_studios_legacy/`, record the origin and new path in `manifest/scripts_manifest.yaml` so we can audit the migration.
-- Log-producing scripts should import the shared `prune_logs` helper (to be introduced) to quietly cap history to the freshest records.
-- Orchestrators that previously lived in legacy Make targets will be renamed with the `studio-` prefix as part of the rewiring phase.
+- Each tier will ship with a local README describing expected inputs, outputs, run cadence, and ownership as we refactor the scripts.
+- Continue recording legacy → new relocations inside `manifest/scripts_manifest.yaml` until the rewrite is complete.
+- Log-producing scripts should adopt the upcoming silent `prune_logs` helper to cap artifact history without noisy output.
+- Orchestrators that previously lived in legacy Make targets will be renamed with the `studio-` prefix when we re-enable automation.
 
 ## Immediate TODOs
 
-- Populate each category folder with the migrated legacy scripts and update their module headers with the new namespace.
-- Author category-specific READMEs once the first script lands in each folder.
+- Backfill tier-level READMEs summarizing responsibilities, inputs, and downstream dependencies.
+- Update `scripts_manifest.yaml` to reference the new tier folders and mark completed moves.
 - Draft the reusable `prune_logs` helper under `utilities/` and retrofit log-heavy scripts during migration.

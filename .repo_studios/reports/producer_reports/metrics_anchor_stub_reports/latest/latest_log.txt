@@ -1,0 +1,6 @@
+status=ok
+timestamp=2025-10-24T01:11:26.013350+00:00
+anchors_referenced=0
+missing_count=0
+allowlisted_count=0
+legacy_file=C:\Users\genet\repo_studios\docs\api\metrics_orchestrator.md

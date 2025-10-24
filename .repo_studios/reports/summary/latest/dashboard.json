@@ -1,8 +1,7 @@
 {
   "maturity_totals_by_asset_kind": {
     "document": {
-      "legacy": 18,
-      "incubating": 3
+      "incubating": 20
     },
     "script": {
       "legacy": 31
@@ -13,7 +12,8 @@
   },
   "roles": {
     "playbook": 8,
-    "standards": 24,
+    "governance": 1,
+    "standards": 20,
     "artifact_sample": 2,
     "report_generator": 13,
     "validator": 31,
@@ -23,7 +23,7 @@
     "test_case": 10
   },
   "artifact_types": {
-    "md": 21,
+    "md": 20,
     "py": 41
   }
 }

@@ -1,0 +1,13 @@
+status=ok
+timestamp=2025-10-23T12:28:59.813560+00:00
+scan_root=.
+total_matches=1175
+patterns=FIXME,NOTE,OPTIMIZE,REVIEW,TODO,XXX
+extensions=.js,.json,.md,.py,.ts,.txt,.yaml,.yml
+allowlist_size=0
+by_pattern_FIXME=32
+by_pattern_NOTE=391
+by_pattern_OPTIMIZE=16
+by_pattern_REVIEW=16
+by_pattern_TODO=657
+by_pattern_XXX=63

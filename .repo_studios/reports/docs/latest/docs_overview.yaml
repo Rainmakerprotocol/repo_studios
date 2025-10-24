@@ -1,7 +1,7 @@
 - id: docs.agents_guide
-  name: Agents Guide
-  path: .repo_studios_legacy/repo_docs/AGENTS_GUIDE.md
-  maturity: legacy
+  name: Agent Operations Playbook
+  path: .repo_studios/docs/playbooks/playbook-agent-operations.md
+  maturity: incubating
   status: needs_review
   consumers:
   - coding_agent
@@ -11,31 +11,45 @@
   - repo_studios
   artifact_type: md
 - id: docs.prompt_library_usage
-  name: Prompt Library Usage
-  path: .repo_studios_legacy/repo_docs/PROMPT_LIBRARY_USAGE.md
-  maturity: legacy
+  name: Prompt Library Playbook
+  path: .repo_studios/docs/playbooks/playbook-prompt-library.md
+  maturity: incubating
   status: needs_review
   consumers:
   - coding_agent
+  - human_developer
   tags:
   - prompts
   - repo_studios
   artifact_type: md
 - id: docs.agent_memory_workflow
-  name: Agent Memory Workflow
-  path: .repo_studios_legacy/repo_docs/agent_memory_workflow.md
-  maturity: legacy
+  name: Memory Refresh Playbook
+  path: .repo_studios/docs/playbooks/playbook-memory-refresh.md
+  maturity: incubating
   status: needs_review
   consumers:
   - coding_agent
+  - human_developer
   tags:
   - memory
   - repo_studios
   artifact_type: md
+- id: docs.migration_playbook
+  name: Repo Studios Migration Playbook
+  path: .repo_studios/docs/playbooks/playbook-migration.md
+  maturity: incubating
+  status: needs_review
+  consumers:
+  - coding_agent
+  - human_developer
+  tags:
+  - migration
+  - repo_studios
+  artifact_type: md
 - id: docs.alignment_ledger
-  name: Alignment Ledger
-  path: .repo_studios_legacy/repo_docs/alignment_ledger.md
-  maturity: legacy
+  name: Repo Studios Alignment Ledger
+  path: .repo_studios/docs/governance/alignment-ledger.md
+  maturity: incubating
   status: needs_review
   consumers:
   - coding_agent
@@ -44,66 +58,34 @@
   - alignment
   - governance
   artifact_type: md
-- id: docs.copilot_instructions_clean
-  name: Copilot Instructions (Clean)
-  path: .repo_studios_legacy/repo_docs/copilot_instructions_clean.md
-  maturity: legacy
-  status: needs_review
-  consumers:
-  - coding_agent
-  tags:
-  - instructions
-  - standards
-  artifact_type: md
-- id: docs.copilot_instructions_python
-  name: Copilot Instructions (Python)
-  path: .repo_studios_legacy/repo_docs/copilot_instructions_python.md
-  maturity: legacy
-  status: needs_review
-  consumers:
-  - coding_agent
-  tags:
-  - python
-  - standards
-  artifact_type: md
-- id: docs.copilot_mission_parameters
-  name: Copilot Mission Parameters
-  path: .repo_studios_legacy/repo_docs/copilot_mission_parameters.md
-  maturity: legacy
+- id: docs.copilot_prompt_engineering_standards
+  name: Prompt Engineering Standards
+  path: .repo_studios/docs/standards/global/std-global-prompt-engineering.md
+  maturity: incubating
   status: needs_review
   consumers:
   - coding_agent
   - human_developer
   tags:
-  - mission
-  - alignment
-  artifact_type: md
-- id: docs.copilot_prompt_engineering_standards
-  name: Copilot Prompt Engineering Standards
-  path: .repo_studios_legacy/repo_docs/copilot_prompt_engineering_standards.md
-  maturity: legacy
-  status: needs_review
-  consumers:
-  - coding_agent
-  tags:
   - prompts
   - standards
   artifact_type: md
 - id: docs.copilot_prompts
-  name: Copilot Prompts
-  path: .repo_studios_legacy/repo_docs/copilot_prompts.md
-  maturity: legacy
+  name: Repo Studios Prompt Library
+  path: repo_prompts.md
+  maturity: incubating
   status: needs_review
   consumers:
   - coding_agent
+  - human_developer
   tags:
   - prompts
   - samples
   artifact_type: md
 - id: docs.copilot_standards_chainlit
-  name: Copilot Standards (Chainlit)
-  path: .repo_studios_legacy/repo_docs/copilot_standards_chainlit.md
-  maturity: legacy
+  name: Chainlit UI Standards
+  path: .repo_studios/docs/standards/global/std-global-chainlit-ui.md
+  maturity: incubating
   status: needs_review
   consumers:
   - coding_agent
@@ -113,9 +95,9 @@
   - standards
   artifact_type: md
 - id: docs.copilot_standards_html
-  name: Copilot Standards (HTML)
-  path: .repo_studios_legacy/repo_docs/copilot_standards_html.md
-  maturity: legacy
+  name: HTML Engineering Standards
+  path: .repo_studios/docs/standards/global/std-global-html-coding.md
+  maturity: incubating
   status: needs_review
   consumers:
   - coding_agent
@@ -125,9 +107,9 @@
   - standards
   artifact_type: md
 - id: docs.copilot_standards_markdown
-  name: Copilot Standards (Markdown)
-  path: .repo_studios_legacy/repo_docs/copilot_standards_markdown.md
-  maturity: legacy
+  name: Markdown Authoring Standards
+  path: .repo_studios/docs/standards/global/std-global-markdown-authoring.md
+  maturity: incubating
   status: needs_review
   consumers:
   - coding_agent
@@ -137,10 +119,22 @@
   - markdown
   - standards
   artifact_type: md
+- id: docs.copilot_standards_python
+  name: Python Engineering Standards
+  path: .repo_studios/docs/standards/global/std-global-python-engineering.md
+  maturity: incubating
+  status: needs_review
+  consumers:
+  - coding_agent
+  - human_developer
+  tags:
+  - python
+  - standards
+  artifact_type: md
 - id: docs.copilot_standards_monkey_patch
-  name: Copilot Standards (Monkey Patch)
-  path: .repo_studios_legacy/repo_docs/copilot_standards_monkey_patch.md
-  maturity: legacy
+  name: Monkey Patch Governance
+  path: .repo_studios/docs/standards/global/std-global-monkey-patching.md
+  maturity: incubating
   status: needs_review
   consumers:
   - coding_agent
@@ -150,9 +144,9 @@
   - standards
   artifact_type: md
 - id: docs.copilot_standards_project
-  name: Copilot Standards (Project)
-  path: .repo_studios_legacy/repo_docs/copilot_standards_project.md
-  maturity: legacy
+  name: Project Operating Standard
+  path: .repo_studios/docs/standards/project/std-project-operating-standard.md
+  maturity: incubating
   status: needs_review
   consumers:
   - coding_agent
@@ -161,24 +155,23 @@
   - project
   - standards
   artifact_type: md
-- id: docs.copilot_standards_python
-  name: Copilot Standards (Python)
-  path: .repo_studios_legacy/repo_docs/copilot_standards_python.md
-  maturity: legacy
+- id: docs.copilot_instructions_python
+  name: Python Remediation Instructions
+  path: .repo_studios/docs/standards/project/std-project-python-instructions.md
+  maturity: incubating
   status: needs_review
   consumers:
   - coding_agent
   - human_developer
-  - ci_pipeline
   tags:
   - python
-  - standards
+  - remediation
   artifact_type: md
 - id: docs.docs_inventory_notes
   name: Docs Inventory Notes
-  path: .repo_studios_legacy/repo_docs/docs_inventory_notes.md
-  maturity: legacy
-  status: archived
+  path: .repo_studios/docs/inventory/inventory-notes.md
+  maturity: incubating
+  status: needs_review
   consumers:
   - coding_agent
   - human_developer
@@ -188,8 +181,8 @@
   artifact_type: md
 - id: docs.standards_extraction_spec
   name: Standards Extraction Spec
-  path: .repo_studios_legacy/repo_docs/standards_extraction_spec.md
-  maturity: legacy
+  path: .repo_studios/docs/automation/standards-extraction-spec.md
+  maturity: incubating
   status: needs_review
   consumers:
   - coding_agent
@@ -200,8 +193,8 @@
   artifact_type: md
 - id: docs.standards_index_schema
   name: Standards Index Schema
-  path: .repo_studios_legacy/repo_docs/standards_index_schema.md
-  maturity: legacy
+  path: .repo_studios/docs/automation/standards-index-schema.md
+  maturity: incubating
   status: needs_review
   consumers:
   - coding_agent

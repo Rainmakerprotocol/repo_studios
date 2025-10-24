@@ -1,0 +1,11 @@
+status=ok
+timestamp=2025-10-23T16:08:51.218994+00:00
+scan_root=.
+files_scanned=73
+files_with_findings=19
+total_findings=29
+parse_errors=0
+by_category_attribute_reassignment_on_import=3
+by_category_global_env_mutation=1
+by_category_setattr_on_import_or_class=9
+by_category_sys_modules_assignment=16

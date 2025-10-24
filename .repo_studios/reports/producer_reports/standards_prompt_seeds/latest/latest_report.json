@@ -1,0 +1,52 @@
+{
+  "artifact_formats": [
+    "text",
+    "yaml",
+    "json"
+  ],
+  "include_warn": false,
+  "index_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\repo_standards_index.yaml",
+  "legacy_format": "text",
+  "output_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\standards_prompt_seeds",
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "run_id": "standards_prompt_seed-20251023_190929",
+  "schema_version": 1,
+  "seed_integrity_hash": "027152012f40771b7406887f5a5678b14c0df6c3b8d2722c4d01624b3269017a",
+  "status": "ok",
+  "summary": {
+    "categories": [
+      {
+        "id": "markdown",
+        "rule_count": 1,
+        "title": "Markdown Authoring"
+      },
+      {
+        "id": "mission",
+        "rule_count": 1,
+        "title": "Mission Parameters & Roles"
+      },
+      {
+        "id": "monkey_patch_reduction",
+        "rule_count": 1,
+        "title": "Monkey Patch Reduction"
+      },
+      {
+        "id": "project",
+        "rule_count": 2,
+        "title": "Project & Repository"
+      },
+      {
+        "id": "python_coding",
+        "rule_count": 1,
+        "title": "Python Engineering"
+      }
+    ],
+    "category_count": 5,
+    "severity_counts": {
+      "critical": 1,
+      "error": 4
+    },
+    "total_rules": 5
+  },
+  "timestamp": "2025-10-23T19:09:29.447318+00:00"
+}

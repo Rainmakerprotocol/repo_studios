@@ -1,0 +1,8 @@
+status=ok
+timestamp=2025-10-23T19:09:29.447318+00:00
+index_path=C:\Users\genet\repo_studios\.repo_studios\scripts\repo_standards_index.yaml
+include_warn=false
+categories=5
+total_rules=5
+severity_critical=1
+severity_error=4

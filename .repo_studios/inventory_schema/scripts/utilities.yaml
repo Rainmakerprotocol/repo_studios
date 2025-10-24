@@ -1,6 +1,6 @@
 - id: scripts.utilities.check_doc_anchors
   name: "Check Doc Anchors"
-  path: .repo_studios_legacy/repo_scripts/check_doc_anchors.py
+  path: .repo_studios/scripts/producers/validate_metrics_anchor_stubs.py
   asset_kind: script
   roles:
     - validator
@@ -32,7 +32,7 @@
     blockers: []
 - id: scripts.utilities.check_markdown_anchors
   name: "Check Markdown Anchors"
-  path: .repo_studios_legacy/repo_scripts/check_markdown_anchors.py
+  path: .repo_studios/scripts/producers/validate_markdown_anchors.py
   asset_kind: script
   roles:
     - validator
@@ -63,7 +63,7 @@
     blockers: []
 - id: scripts.utilities.check_import_boundaries
   name: "Check Import Boundaries"
-  path: .repo_studios_legacy/repo_scripts/check_import_boundaries.py
+  path: .repo_studios/scripts/producers/validate_import_boundaries.py
   asset_kind: script
   roles:
     - validator
@@ -96,7 +96,7 @@
     blockers: []
 - id: scripts.utilities.batch_clean
   name: "Batch Clean"
-  path: .repo_studios_legacy/repo_scripts/batch_clean.py
+  path: .repo_studios/scripts/orchestrators/run_batch_cleanup.py
   asset_kind: script
   roles:
     - orchestrator
@@ -125,7 +125,7 @@
     blockers: []
 - id: scripts.utilities.find_placeholders
   name: "Find Placeholders"
-  path: .repo_studios_legacy/repo_scripts/find_placeholders.py
+  path: .repo_studios/scripts/producers/scan_code_placeholders.py
   asset_kind: script
   roles:
     - validator
@@ -155,7 +155,7 @@
     blockers: []
 - id: scripts.utilities.verify_docs_integrity
   name: "Verify Docs Integrity"
-  path: .repo_studios_legacy/repo_scripts/verify_docs_integrity.py
+  path: .repo_studios/scripts/producers/verify_docs_integrity.py
   asset_kind: script
   roles:
     - orchestrator
@@ -164,8 +164,8 @@
   description: "Runs composite checks to ensure documentation integrity (anchors, links, structure)."
   dependencies:
     internal_paths:
-      - .repo_studios_legacy/repo_scripts/check_doc_anchors.py
-      - .repo_studios_legacy/repo_scripts/check_markdown_anchors.py
+      - .repo_studios/scripts/producers/validate_metrics_anchor_stubs.py
+      - .repo_studios/scripts/producers/validate_markdown_anchors.py
     external_tools: []
     inputs: []
   consumers:

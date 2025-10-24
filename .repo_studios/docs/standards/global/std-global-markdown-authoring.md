@@ -188,6 +188,13 @@ Ordered focus (top = most structurally critical):
 6. Formatting consistency (MD010 tabs, MD013 line length, MD047 final newline).
 7. Section completeness (MD058 – no empty content shells).
 
+### Lint Rule Definitions (MD022 / MD025 / MD032 / MD033)
+
+- **MD022 – Surround headings with blank lines.** Leave a blank line before and after every heading unless the heading is at the very start or end of the file. This keeps the document structure unambiguous for parsers and agents.
+- **MD025 – Enforce a single top-level heading.** Each document may contain at most one `#` heading (after optional YAML front matter). Use lower-level headings (`##`, `###`, and so on) for all other sections to keep anchor generation predictable.
+- **MD032 – Separate lists with blank lines.** Ensure a blank line exists before the first list item and after the final list item (unless the list touches the document boundary). This prevents list concatenation with surrounding paragraphs.
+- **MD033 – Avoid inline HTML.** Do not embed raw HTML in Markdown documents unless a standard explicitly allows it (for example, automation comment sentinels). Prefer pure Markdown constructs so renderers and agents stay consistent.
+
 ### Extraction Rule Blocks
 
 <!-- standards:rule
@@ -197,6 +204,16 @@ severity: error
 applies_to: **/*.md
 summary: Documents must begin with a single top-level heading (or YAML front matter then heading)
 rationale: A canonical first heading enables stable anchors, navigation, and deterministic indexing.
+-->
+<!-- /standards:rule -->
+
+<!-- standards:rule
+id: markdown-single-top-level-heading
+categories: markdown
+severity: error
+applies_to: **/*.md
+summary: Include at most one H1 heading per document after optional YAML front matter
+rationale: Multiple top-level headings create duplicate anchors and confuse navigation.
 -->
 <!-- /standards:rule -->
 

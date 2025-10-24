@@ -187,4 +187,3 @@ agents:
 - 2025-10-18: Migrated to `.repo_studios/docs/standards/global/` with expanded metadata and checklists.
 
 - 2025-09-04: Initial draft captured in legacy repo standards.
-

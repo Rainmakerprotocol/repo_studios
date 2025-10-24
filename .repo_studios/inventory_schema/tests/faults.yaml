@@ -1,6 +1,6 @@
 - id: tests.faults.aggregate_and_gate
   name: "Fault Aggregate And Gate Test"
-  path: .repo_studios_legacy/repo_tests/test_fault_aggregate_and_gate.py
+  path: legacy/repo_tests/test_fault_aggregate_and_gate.py
   asset_kind: test
   roles:
     - test_case
@@ -31,7 +31,7 @@
       - "Awaiting revived aggregation script in new repo layout."
 - id: tests.faults.generate_fault_artifacts
   name: "Generate Fault Artifacts Test"
-  path: .repo_studios_legacy/repo_tests/test_generate_fault_artifacts.py
+  path: legacy/repo_tests/test_generate_fault_artifacts.py
   asset_kind: test
   roles:
     - test_case
@@ -39,7 +39,7 @@
   description: "Placeholder to exercise artifact bundling logic once migration completes."
   dependencies:
     internal_paths:
-      - .repo_studios_legacy/repo_scripts/generate_fault_artifacts.py
+      - .repo_studios/scripts/consumers/generate_fault_artifacts.py
     external_tools: []
     inputs: []
   consumers:

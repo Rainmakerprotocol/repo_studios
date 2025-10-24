@@ -1,0 +1,15 @@
+status=issues
+issue_count=7
+generated_utc=2025-10-22T21:26:21.012215+00:00
+targets=C:\Users\genet\repo_studios\.repo_studios\scripts\producers
+max_ccn=15
+max_length=80
+files_scanned=19
+offenders:
+  C:\Users\genet\repo_studios\.repo_studios\scripts\producers\generate_typecheck_report.py::main ccn=13 length=82
+  C:\Users\genet\repo_studios\.repo_studios\scripts\producers\scan_monkey_patches.py::visit_Call ccn=20 length=63
+  C:\Users\genet\repo_studios\.repo_studios\scripts\producers\scan_monkey_patches.py::_handle_assignment ccn=28 length=91
+  C:\Users\genet\repo_studios\.repo_studios\scripts\producers\scan_monkey_patches.py::write_reports ccn=14 length=99
+  C:\Users\genet\repo_studios\.repo_studios\scripts\producers\scan_monkey_patches.py::main ccn=12 length=95
+  C:\Users\genet\repo_studios\.repo_studios\scripts\producers\validate_import_boundaries.py::_scan_static_imports ccn=17 length=71
+  C:\Users\genet\repo_studios\.repo_studios\scripts\producers\validate_markdown_anchors.py::main ccn=8 length=83

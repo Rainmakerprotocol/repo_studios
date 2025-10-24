@@ -1,0 +1,62 @@
+{
+  "context_lines": 2,
+  "exclude_dirs": [
+    ".founder_files",
+    ".git",
+    ".venv",
+    "__pycache__",
+    "build",
+    "dist",
+    "external",
+    "libraries",
+    "node_modules",
+    "venv",
+    "z_FUTURE_IMPIMENTATIONS",
+    "zzz_agent_repos"
+  ],
+  "exclude_globs": [
+    "**/site-packages/**",
+    "**/zzz_agent_repos/**",
+    ".founder_files/**",
+    "external/**",
+    "libraries/**",
+    "scripts/test_torch_vision_audio.py",
+    "src/audio/**",
+    "src/vision/**"
+  ],
+  "files_scanned": 18,
+  "files_with_findings": 2,
+  "parse_errors": 0,
+  "project_packages": [
+    "legacy",
+    "que_for_integration",
+    "tests"
+  ],
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "run_id": "monkey_patch_scan-20251023_130123",
+  "scan_root": ".repo_studios\\scripts\\producers",
+  "schema_version": 1,
+  "status": "ok",
+  "strict": false,
+  "summary": {
+    "by_category": {
+      "attribute_reassignment_on_import": 2
+    },
+    "by_import_base": {
+      "tomllib": 2
+    },
+    "top_files": [
+      {
+        "count": 1,
+        "path": ".repo_studios\\scripts\\producers\\generate_dependency_hygiene_report.py"
+      },
+      {
+        "count": 1,
+        "path": ".repo_studios\\scripts\\producers\\generate_typecheck_report.py"
+      }
+    ]
+  },
+  "timestamp": "2025-10-23T13:01:23.706927+00:00",
+  "total_findings": 2,
+  "with_git": false
+}

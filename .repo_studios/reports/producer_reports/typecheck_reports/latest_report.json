@@ -1,0 +1,328 @@
+{
+  "schema_version": 1,
+  "status": "error",
+  "timestamp": "20251023_020050",
+  "generated_utc": "2025-10-23T02:00:50.258715+00:00",
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "output_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\typecheck_reports",
+  "invocation": [
+    "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+    "-m",
+    "mypy",
+    "--show-error-codes",
+    "--no-color-output",
+    "--hide-error-context",
+    ".repo_studios/scripts"
+  ],
+  "mypy_version": "mypy 1.18.2 (compiled: yes)",
+  "summary": {
+    "error_count": 50,
+    "files_with_issues": 18,
+    "paths_checked": [
+      ".repo_studios/scripts"
+    ]
+  },
+  "error_samples": [
+    {
+      "path": ".repo_studios\\scripts\\summarizers\\summarize_health_suite.py",
+      "line": 104,
+      "code": "call-overload",
+      "message": "No overload variant of \"int\" matches argument type \"object\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\validate_inventory.py",
+      "line": 20,
+      "code": "import-untyped",
+      "message": "Library stubs not installed for \"yaml\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\validate_inventory.py",
+      "line": 196,
+      "code": "arg-type",
+      "message": "Argument 2 to \"ensure\" of \"EnumRegistry\" has incompatible type \"list[Any | None]\"; expected \"Iterable[str]\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\validate_inventory.py",
+      "line": 196,
+      "code": "arg-type",
+      "message": "Argument 5 to \"ensure\" of \"EnumRegistry\" has incompatible type \"Any | None\"; expected \"str\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\validate_inventory.py",
+      "line": 199,
+      "code": "arg-type",
+      "message": "Argument 5 to \"ensure\" of \"EnumRegistry\" has incompatible type \"Any | None\"; expected \"str\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\validate_inventory.py",
+      "line": 201,
+      "code": "arg-type",
+      "message": "Argument 5 to \"ensure\" of \"EnumRegistry\" has incompatible type \"Any | None\"; expected \"str\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\render_inventory_views.py",
+      "line": 12,
+      "code": "import-untyped",
+      "message": "Library stubs not installed for \"yaml\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\extract_standards_rules.py",
+      "line": 243,
+      "code": "arg-type",
+      "message": "Argument \"summary\" to \"ParsedRule\" has incompatible type \"str | None\"; expected \"str\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\extract_standards_rules.py",
+      "line": 244,
+      "code": "arg-type",
+      "message": "Argument \"rationale\" to \"ParsedRule\" has incompatible type \"str | None\"; expected \"str\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\extract_standards_rules.py",
+      "line": 245,
+      "code": "union-attr",
+      "message": "Item \"None\" of \"str | None\" has no attribute \"lower\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\extract_standards_rules.py",
+      "line": 246,
+      "code": "list-item",
+      "message": "List item 0 has incompatible type \"str | None\"; expected \"str\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py",
+      "line": 115,
+      "code": "attr-defined",
+      "message": "Module has no attribute \"flock\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py",
+      "line": 115,
+      "code": "attr-defined",
+      "message": "Module has no attribute \"LOCK_EX\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py",
+      "line": 124,
+      "code": "attr-defined",
+      "message": "Module has no attribute \"flock\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py",
+      "line": 124,
+      "code": "attr-defined",
+      "message": "Module has no attribute \"LOCK_UN\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py",
+      "line": 179,
+      "code": "attr-defined",
+      "message": "Module has no attribute \"register\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\summarizers\\summarize_standards.py",
+      "line": 55,
+      "code": "type-var",
+      "message": "Value of type variable \"SupportsRichComparisonT\" of \"sorted\" cannot be \"Any | None\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\summarizers\\summarize_standards.py",
+      "line": 60,
+      "code": "arg-type",
+      "message": "Argument 1 to \"join\" of \"str\" has incompatible type \"list[Any | None]\"; expected \"Iterable[str]\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\seed_standards_prompts.py",
+      "line": 29,
+      "code": "import-untyped",
+      "message": "Library stubs not installed for \"yaml\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\scan_monkey_patches.py",
+      "line": 545,
+      "code": "assignment",
+      "message": "Incompatible types in assignment (expression has type \"str | None\", variable has type \"str\")"
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\scan_monkey_patches.py",
+      "line": 569,
+      "code": "assignment",
+      "message": "Incompatible types in assignment (expression has type \"str | None\", variable has type \"str\")"
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\generate_standards_index.py",
+      "line": 223,
+      "code": "arg-type",
+      "message": "Argument 1 to \"append\" of \"list\" has incompatible type \"ExtractDiagnostics\"; expected \"dict[str, Any]\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\generate_lizard_report.py",
+      "line": 106,
+      "code": "arg-type",
+      "message": "Argument 1 to \"Path\" has incompatible type \"str | None\"; expected \"str | PathLike[str]\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\diff_standards_index.py",
+      "line": 14,
+      "code": "import-untyped",
+      "message": "Library stubs not installed for \"yaml\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\analyze_standards_index_gaps.py",
+      "line": 31,
+      "code": "import-untyped",
+      "message": "Library stubs not installed for \"yaml\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\orchestrators\\run_standards_index_cli.py",
+      "line": 44,
+      "code": "import-untyped",
+      "message": "Library stubs not installed for \"yaml\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\orchestrators\\run_pytest_log_capture.py",
+      "line": 49,
+      "code": "import-untyped",
+      "message": "Library stubs not installed for \"defusedxml\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\orchestrators\\run_pytest_log_capture.py",
+      "line": 163,
+      "code": "attr-defined",
+      "message": "Module has no attribute \"SIGUSR1\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\orchestrators\\orchestrate_health_suite.py",
+      "line": 483,
+      "code": "assignment",
+      "message": "Incompatible types in assignment (expression has type \"CompletedProcess[str]\", variable has type \"Popen[str]\")"
+    },
+    {
+      "path": ".repo_studios\\scripts\\orchestrators\\orchestrate_health_suite.py",
+      "line": 498,
+      "code": "assignment",
+      "message": "Incompatible types in assignment (expression has type \"str\", variable has type \"bytes | None\")"
+    },
+    {
+      "path": ".repo_studios\\scripts\\orchestrators\\orchestrate_health_suite.py",
+      "line": 500,
+      "code": "assignment",
+      "message": "Incompatible types in assignment (expression has type \"str\", variable has type \"bytes | None\")"
+    },
+    {
+      "path": ".repo_studios\\scripts\\orchestrators\\orchestrate_health_suite.py",
+      "line": 503,
+      "code": "assignment",
+      "message": "Incompatible types in assignment (expression has type \"str\", variable has type \"bytes | None\")"
+    },
+    {
+      "path": ".repo_studios\\scripts\\orchestrators\\orchestrate_health_suite.py",
+      "line": 505,
+      "code": "assignment",
+      "message": "Incompatible types in assignment (expression has type \"str\", variable has type \"bytes | None\")"
+    },
+    {
+      "path": ".repo_studios\\scripts\\orchestrators\\orchestrate_health_suite.py",
+      "line": 507,
+      "code": "arg-type",
+      "message": "Argument 1 to \"write_text\" of \"Path\" has incompatible type \"bytes | str\"; expected \"str\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\orchestrators\\orchestrate_health_suite.py",
+      "line": 507,
+      "code": "operator",
+      "message": "Unsupported operand types for + (\"bytes\" and \"str\")"
+    },
+    {
+      "path": ".repo_studios\\scripts\\orchestrators\\orchestrate_health_suite.py",
+      "line": 510,
+      "code": "arg-type",
+      "message": "Argument 1 to \"write_text\" of \"Path\" has incompatible type \"bytes | str\"; expected \"str\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\orchestrators\\orchestrate_health_suite.py",
+      "line": 510,
+      "code": "operator",
+      "message": "Unsupported operand types for + (\"bytes\" and \"str\")"
+    },
+    {
+      "path": ".repo_studios\\scripts\\orchestrators\\orchestrate_health_suite.py",
+      "line": 515,
+      "code": "assignment",
+      "message": "Incompatible types in assignment (expression has type \"_Proc\", variable has type \"Popen[str]\")"
+    },
+    {
+      "path": ".repo_studios\\scripts\\orchestrators\\orchestrate_health_suite.py",
+      "line": 518,
+      "code": "arg-type",
+      "message": "Argument 1 to \"write_text\" of \"Path\" has incompatible type \"IO[str] | str\"; expected \"str\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\orchestrators\\orchestrate_health_suite.py",
+      "line": 519,
+      "code": "arg-type",
+      "message": "Argument 1 to \"write_text\" of \"Path\" has incompatible type \"IO[str] | str\"; expected \"str\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\orchestrators\\orchestrate_health_suite.py",
+      "line": 634,
+      "code": "assignment",
+      "message": "Incompatible types in assignment (expression has type \"str\", variable has type \"Path\")"
+    },
+    {
+      "path": ".repo_studios\\scripts\\consumers\\generate_test_log_health_report.py",
+      "line": 95,
+      "code": "import-untyped",
+      "message": "Library stubs not installed for \"defusedxml\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\consumers\\generate_test_log_health_report.py",
+      "line": 269,
+      "code": "index",
+      "message": "Value of type \"object\" is not indexable"
+    },
+    {
+      "path": ".repo_studios\\scripts\\consumers\\generate_test_log_health_report.py",
+      "line": 273,
+      "code": "index",
+      "message": "Value of type \"object\" is not indexable"
+    },
+    {
+      "path": ".repo_studios\\scripts\\consumers\\generate_test_log_health_report.py",
+      "line": 275,
+      "code": "index",
+      "message": "Value of type \"object\" is not indexable"
+    },
+    {
+      "path": ".repo_studios\\scripts\\consumers\\generate_fault_artifacts.py",
+      "line": 74,
+      "code": "var-annotated",
+      "message": "Need type annotation for \"manifest\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\consumers\\generate_fault_artifacts.py",
+      "line": 233,
+      "code": "call-overload",
+      "message": "No overload variant of \"int\" matches argument type \"object\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\consumers\\generate_fault_artifacts.py",
+      "line": 245,
+      "code": "call-overload",
+      "message": "No overload variant of \"sorted\" matches argument type \"object\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\consumers\\generate_fault_artifacts.py",
+      "line": 270,
+      "code": "call-overload",
+      "message": "No overload variant of \"int\" matches argument type \"object\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\aggregators\\generate_churn_complexity_heatmap.py",
+      "line": 93,
+      "code": "import-untyped",
+      "message": "Library stubs not installed for \"defusedxml\""
+    }
+  ],
+  "notes": ""
+}

@@ -1,0 +1,17 @@
+{
+  "status": "ERROR",
+  "mypy_version": "mypy 1.18.2 (compiled: yes)",
+  "checked_paths": [],
+  "total_errors": 0,
+  "files_with_issues": 0,
+  "error_samples": [],
+  "invocation": [
+    "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+    "-m",
+    "mypy",
+    "--show-error-codes",
+    "--no-color-output",
+    "--hide-error-context"
+  ],
+  "timestamp": "2025-10-23T01-20-00"
+}

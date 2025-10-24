@@ -39,6 +39,7 @@ This document captures the working blueprint for collaborative cycles between th
 - **Alignment worksheet**: Temporary scratch pad (e.g., `alignment_notes_temp.md`) capturing questions, answers, and agent responses.
 - **Agent notes**: Timestamped text files under `agent_notes/` logging significant actions, decisions, or blockers.
 - **Protocols & Standards**: Living documents (like this one) that encode the collaboration playbook and standards for reuse.
+- **Templates**: Reusable blueprints under `.repo_studios/docs/templates/` (e.g., `script_inventory_template.md`) that keep inventories, checklists, and notes consistent across projects.
 - **Automation Indexes**: Inventories and manifests that agents can query for roles, dependencies, and ownership.
 
 ## 5. Decision Logging

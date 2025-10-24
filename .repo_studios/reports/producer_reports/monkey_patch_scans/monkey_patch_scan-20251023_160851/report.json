@@ -1,0 +1,98 @@
+{
+  "context_lines": 2,
+  "exclude_dirs": [
+    ".founder_files",
+    ".git",
+    ".venv",
+    "__pycache__",
+    "build",
+    "dist",
+    "external",
+    "libraries",
+    "node_modules",
+    "venv",
+    "z_FUTURE_IMPIMENTATIONS",
+    "zzz_agent_repos"
+  ],
+  "exclude_globs": [
+    "**/site-packages/**",
+    "**/zzz_agent_repos/**",
+    ".founder_files/**",
+    "external/**",
+    "libraries/**",
+    "scripts/test_torch_vision_audio.py",
+    "src/audio/**",
+    "src/vision/**"
+  ],
+  "files_scanned": 73,
+  "files_with_findings": 19,
+  "parse_errors": 0,
+  "project_packages": [
+    "legacy",
+    "que_for_integration",
+    "tests"
+  ],
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "run_id": "monkey_patch_scan-20251023_160851",
+  "scan_root": ".",
+  "schema_version": 1,
+  "status": "ok",
+  "strict": false,
+  "summary": {
+    "by_category": {
+      "attribute_reassignment_on_import": 3,
+      "global_env_mutation": 1,
+      "setattr_on_import_or_class": 9,
+      "sys_modules_assignment": 16
+    },
+    "by_import_base": {
+      "fcntl": 1,
+      "tomllib": 2
+    },
+    "top_files": [
+      {
+        "count": 5,
+        "path": "legacy\\repo_tests\\test_lizard_report.py"
+      },
+      {
+        "count": 3,
+        "path": ".repo_studios\\tests\\tests_producers\\test_generate_typecheck_report.py"
+      },
+      {
+        "count": 2,
+        "path": ".repo_studios\\tests\\tests_producers\\test_generate_lizard_report.py"
+      },
+      {
+        "count": 2,
+        "path": ".repo_studios\\tests\\tests_producers\\test_scan_monkey_patches.py"
+      },
+      {
+        "count": 2,
+        "path": "legacy\\repo_tests\\test_typecheck_report.py"
+      },
+      {
+        "count": 2,
+        "path": "legacy\\repo_tests\\test_typecheck_report_fast_mode.py"
+      },
+      {
+        "count": 1,
+        "path": ".repo_studios\\scripts\\producers\\generate_dependency_hygiene_report.py"
+      },
+      {
+        "count": 1,
+        "path": ".repo_studios\\scripts\\producers\\generate_typecheck_report.py"
+      },
+      {
+        "count": 1,
+        "path": ".repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py"
+      },
+      {
+        "count": 1,
+        "path": ".repo_studios\\tests\\tests_producers\\test_analyze_standards_index_gaps.py"
+      }
+    ]
+  },
+  "timestamp": "2025-10-23T16:08:51.218994+00:00",
+  "total_findings": 29,
+  "with_git": false
+}

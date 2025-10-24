@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "status": "no_changes",
+  "timestamp": "20251022_235537",
+  "generated_utc": "2025-10-22T23:55:37.235200+00:00",
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "old_index": "legacy\\repo_files\\copilot_standards_index.yaml",
+  "new_index": "legacy\\repo_files\\copilot_standards_index.yaml",
+  "fail_policy": "any",
+  "should_fail": false,
+  "change_count": 0,
+  "summary": {},
+  "changes": [],
+  "integrity_hash_old": "13524ef1007a495d28fcca4395fa6a6fa8dbc3c150809a1661ea3156b11c8836",
+  "integrity_hash_new": "13524ef1007a495d28fcca4395fa6a6fa8dbc3c150809a1661ea3156b11c8836",
+  "integrity_hash_changed": false,
+  "notes": ""
+}

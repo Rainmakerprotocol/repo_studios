@@ -1,24 +1,22 @@
 {
-  "generated_at": "2025-10-18T00:49:43.978169+00:00",
-  "total": 62,
+  "generated_at": "2025-10-23T09:47:23.986051+00:00",
+  "total": 61,
   "by_asset_kind": {
-    "document": 21,
+    "document": 20,
     "script": 31,
     "test": 10
   },
   "by_maturity": {
-    "legacy": 59,
-    "incubating": 3
+    "incubating": 20,
+    "legacy": 41
   },
   "by_status": {
     "needs_review": 58,
-    "archived": 1,
     "active": 3
   },
   "status_by_asset_kind": {
     "document": {
       "needs_review": 17,
-      "archived": 1,
       "active": 3
     },
     "script": {
@@ -30,8 +28,7 @@
   },
   "maturity_by_asset_kind": {
     "document": {
-      "legacy": 18,
-      "incubating": 3
+      "incubating": 20
     },
     "script": {
       "legacy": 31
@@ -41,19 +38,19 @@
     }
   },
   "consumers": {
-    "coding_agent": 61,
-    "human_developer": 18,
-    "ci_pipeline": 29,
+    "coding_agent": 60,
+    "human_developer": 23,
+    "ci_pipeline": 28,
     "docs_generator": 3
   },
   "top_tags": [
     {
-      "tag": "standards",
+      "tag": "health",
       "count": 18
     },
     {
-      "tag": "health",
-      "count": 18
+      "tag": "standards",
+      "count": 16
     },
     {
       "tag": "health_suite",
@@ -66,6 +63,10 @@
     {
       "tag": "faults",
       "count": 5
+    },
+    {
+      "tag": "repo_studios",
+      "count": 4
     },
     {
       "tag": "prompts",
@@ -88,14 +89,6 @@
       "count": 4
     },
     {
-      "tag": "repo_studios",
-      "count": 3
-    },
-    {
-      "tag": "alignment",
-      "count": 3
-    },
-    {
       "tag": "inventory",
       "count": 3
     },
@@ -104,7 +97,7 @@
       "count": 3
     },
     {
-      "tag": "instructions",
+      "tag": "alignment",
       "count": 2
     },
     {
@@ -132,15 +125,19 @@
       "count": 2
     },
     {
+      "tag": "instructions",
+      "count": 1
+    },
+    {
       "tag": "memory",
       "count": 1
     },
     {
-      "tag": "governance",
+      "tag": "migration",
       "count": 1
     },
     {
-      "tag": "mission",
+      "tag": "governance",
       "count": 1
     },
     {
@@ -161,6 +158,10 @@
     },
     {
       "tag": "project",
+      "count": 1
+    },
+    {
+      "tag": "remediation",
       "count": 1
     },
     {

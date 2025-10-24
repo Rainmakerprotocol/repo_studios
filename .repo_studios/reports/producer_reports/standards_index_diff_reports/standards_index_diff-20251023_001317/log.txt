@@ -1,0 +1,10 @@
+status=no_changes
+change_count=0
+should_fail=false
+fail_policy=any
+old_index=legacy\repo_files\copilot_standards_index.yaml
+new_index=legacy\repo_files\copilot_standards_index.yaml
+integrity_hash_old=13524ef1007a495d28fcca4395fa6a6fa8dbc3c150809a1661ea3156b11c8836
+integrity_hash_new=13524ef1007a495d28fcca4395fa6a6fa8dbc3c150809a1661ea3156b11c8836
+integrity_hash_changed=False
+summary:
