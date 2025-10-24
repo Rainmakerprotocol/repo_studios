@@ -1,0 +1,64 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.3, pytest-8.4.2, pluggy-1.6.0
+rootdir: C:\Users\genet\repo_studios
+configfile: pytest.ini
+collected 3 items
+
+.repo_studios\tests\schema_validation\test_validate_inventory.py .F.     [100%]
+
+================================== FAILURES ===================================
+____________________ test_validation_detects_duplicate_ids ____________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-78/test_validation_detects_duplic0')
+
+    def test_validation_detects_duplicate_ids(tmp_path: Path):
+        schema_root = tmp_path / "inventory_schema"
+        schema_root.mkdir()
+    
+        enums = {
+            "asset_kind": ["script"],
+            "roles": ["validator"],
+            "maturity": ["legacy"],
+            "consumers": ["coding_agent"],
+            "status": ["needs_review"],
+        }
+        write_yaml(schema_root / "enums.yaml", enums)
+    
+        duplicate_records = [
+            {
+                "id": "scripts.dup",
+                "name": "Dup1",
+                "path": "dup1.py",
+                "asset_kind": "script",
+                "roles": ["validator"],
+                "maturity": "legacy",
+                "description": "Dup",
+                "consumers": ["coding_agent"],
+                "status": "needs_review",
+                "artifact_type": "py",
+            },
+            {
+                "id": "scripts.dup",
+                "name": "Dup2",
+                "path": "dup2.py",
+                "asset_kind": "script",
+                "roles": ["validator"],
+                "maturity": "legacy",
+                "description": "Dup",
+                "consumers": ["coding_agent"],
+                "status": "needs_review",
+                "artifact_type": "py",
+            },
+        ]
+        write_yaml(schema_root / "dup.yaml", duplicate_records)
+    
+        validator = load_validator(tmp_path)
+        rc, stdout = validator()
+        assert rc == 1
+>       assert "Duplicate id" in stdout
+E       AssertionError: assert 'Duplicate id' in ''
+
+.repo_studios\tests\schema_validation\test_validate_inventory.py:92: AssertionError
+=========================== short test summary info ===========================
+FAILED .repo_studios/tests/schema_validation/test_validate_inventory.py::test_validation_detects_duplicate_ids
+========================= 1 failed, 2 passed in 0.50s =========================

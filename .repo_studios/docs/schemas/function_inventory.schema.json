@@ -1,0 +1,204 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Function Inventory Schema",
+  "description": "Schema for the JSON payload emitted by generate_function_inventory.py",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["metadata", "files", "statistics"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "generated_at",
+        "folder_path",
+        "folder_name",
+        "total_files",
+        "total_functions",
+        "total_classes",
+        "scan_depth"
+      ],
+      "properties": {
+        "schema_version": { "type": "integer" },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "folder_path": { "type": "string" },
+        "folder_name": { "type": "string" },
+        "total_files": { "type": "integer", "minimum": 0 },
+        "total_functions": { "type": "integer", "minimum": 0 },
+        "total_classes": { "type": "integer", "minimum": 0 },
+        "scan_depth": { "type": "string" }
+      }
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "relative_path",
+          "line_count",
+          "module_first_line",
+          "functions",
+          "classes",
+          "imports"
+        ],
+        "properties": {
+          "path": { "type": "string" },
+          "relative_path": { "type": "string" },
+          "line_count": { "type": "integer", "minimum": 0 },
+          "module_first_line": {
+            "anyOf": [
+              { "type": "string" },
+              { "type": "null" }
+            ]
+          },
+          "functions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "line",
+                "type",
+                "is_async",
+                "is_private",
+                "docstring",
+                "signature",
+                "line_count"
+              ],
+              "properties": {
+                "name": { "type": "string" },
+                "line": { "type": "integer", "minimum": 0 },
+                "type": { "type": "string" },
+                "is_async": { "type": "boolean" },
+                "is_private": { "type": "boolean" },
+                "docstring": {
+                  "anyOf": [
+                    { "type": "string" },
+                    { "type": "null" }
+                  ]
+                },
+                "signature": {
+                  "anyOf": [
+                    { "type": "string" },
+                    { "type": "null" }
+                  ]
+                },
+                "line_count": {
+                  "anyOf": [
+                    { "type": "integer", "minimum": 0 },
+                    { "type": "null" }
+                  ]
+                }
+              }
+            }
+          },
+          "classes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "line",
+                "docstring",
+                "line_count",
+                "methods"
+              ],
+              "properties": {
+                "name": { "type": "string" },
+                "line": { "type": "integer", "minimum": 0 },
+                "docstring": {
+                  "anyOf": [
+                    { "type": "string" },
+                    { "type": "null" }
+                  ]
+                },
+                "line_count": {
+                  "anyOf": [
+                    { "type": "integer", "minimum": 0 },
+                    { "type": "null" }
+                  ]
+                },
+                "methods": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "name",
+                      "line",
+                      "type",
+                      "is_async",
+                      "is_private",
+                      "docstring",
+                      "signature",
+                      "line_count"
+                    ],
+                    "properties": {
+                      "name": { "type": "string" },
+                      "line": { "type": "integer", "minimum": 0 },
+                      "type": { "type": "string" },
+                      "is_async": { "type": "boolean" },
+                      "is_private": { "type": "boolean" },
+                      "docstring": {
+                        "anyOf": [
+                          { "type": "string" },
+                          { "type": "null" }
+                        ]
+                      },
+                      "signature": {
+                        "anyOf": [
+                          { "type": "string" },
+                          { "type": "null" }
+                        ]
+                      },
+                      "line_count": {
+                        "anyOf": [
+                          { "type": "integer", "minimum": 0 },
+                          { "type": "null" }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "imports": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "total_lines_of_code",
+        "files_by_type",
+        "private_functions",
+        "public_functions",
+        "async_functions"
+      ],
+      "properties": {
+        "total_lines_of_code": { "type": "integer", "minimum": 0 },
+        "files_by_type": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "private_functions": { "type": "integer", "minimum": 0 },
+        "public_functions": { "type": "integer", "minimum": 0 },
+        "async_functions": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

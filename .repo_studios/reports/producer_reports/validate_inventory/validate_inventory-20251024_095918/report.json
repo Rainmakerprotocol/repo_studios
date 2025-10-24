@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "status": "error",
+  "timestamp": "20251024_095918",
+  "generated_utc": "2025-10-24T09:59:18.421635+00:00",
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "output_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\validate_inventory\\validate_inventory-20251024_095918",
+  "inputs": {
+    "schema_root": "C:\\Users\\genet\\repo_studios\\tmp_cli_probe\\inventory_schema",
+    "config_path": "C:\\Users\\genet\\repo_studios\\tmp_cli_probe\\inventory_schema\\validator_config.yaml",
+    "enums_path": "C:\\Users\\genet\\repo_studios\\tmp_cli_probe\\inventory_schema\\enums.yaml"
+  },
+  "summary": {
+    "files_checked": 1,
+    "records_checked": 2,
+    "issue_counts": {
+      "total": 1,
+      "errors": 1,
+      "warnings": 0
+    }
+  }
+}

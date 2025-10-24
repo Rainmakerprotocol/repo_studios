@@ -182,17 +182,18 @@ Ordered focus (top = most structurally critical):
 
 1. Heading structure & first heading (MD001 / MD002 / MD025 / MD041).
 2. Empty / duplicate heading prevention (MD042 / MD043).
-3. Required spacing & blank line hygiene (MD022 / MD032 / MD004).
+3. Required spacing, blank line hygiene, and consistent bullet markers (MD022 / MD032 / MD004).
 4. Code fence quality (MD040) and trailing whitespace (MD008).
 5. Accessibility & link clarity (MD034) and language tags (MD040).
 6. Formatting consistency (MD010 tabs, MD013 line length, MD047 final newline).
 7. Section completeness (MD058 – no empty content shells).
 
-### Lint Rule Definitions (MD022 / MD025 / MD032 / MD033)
+### Lint Rule Definitions (MD022 / MD025 / MD032 / MD004 / MD033)
 
 - **MD022 – Surround headings with blank lines.** Leave a blank line before and after every heading unless the heading is at the very start or end of the file. This keeps the document structure unambiguous for parsers and agents.
 - **MD025 – Enforce a single top-level heading.** Each document may contain at most one `#` heading (after optional YAML front matter). Use lower-level headings (`##`, `###`, and so on) for all other sections to keep anchor generation predictable.
 - **MD032 – Separate lists with blank lines.** Ensure a blank line exists before the first list item and after the final list item (unless the list touches the document boundary). This prevents list concatenation with surrounding paragraphs.
+- **MD004 – Use a consistent unordered list marker.** Prefer asterisks (`*`) for unordered lists across Repo Studios documentation unless a legacy standard explicitly calls for another marker. Staying consistent avoids unnecessary lint suppressions and agent confusion.
 - **MD033 – Avoid inline HTML.** Do not embed raw HTML in Markdown documents unless a standard explicitly allows it (for example, automation comment sentinels). Prefer pure Markdown constructs so renderers and agents stay consistent.
 
 ### Extraction Rule Blocks
@@ -224,6 +225,16 @@ severity: warn
 applies_to: **/*.md
 summary: Maintain proper heading level progression without skipping levels
 rationale: Predictable hierarchy improves automated TOC generation and agent context slicing.
+-->
+<!-- /standards:rule -->
+
+<!-- standards:rule
+id: markdown-unordered-list-marker
+categories: markdown
+severity: warn
+applies_to: **/*.md
+summary: Use asterisks for unordered list bullets and stay consistent within each document
+rationale: Consistent bullet markers satisfy MD004 and keep rendered output uniform across docs.
 -->
 <!-- /standards:rule -->
 

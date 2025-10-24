@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "status": "ok",
+  "timestamp": "20251024_100603",
+  "generated_utc": "2025-10-24T10:06:03.703724+00:00",
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "output_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\validate_inventory\\validate_inventory-20251024_100603",
+  "inputs": {
+    "schema_root": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-79\\test_validation_passes_for_val0\\inventory_schema",
+    "config_path": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-79\\test_validation_passes_for_val0\\inventory_schema\\validator_config.yaml",
+    "enums_path": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-79\\test_validation_passes_for_val0\\inventory_schema\\enums.yaml"
+  },
+  "summary": {
+    "files_checked": 1,
+    "records_checked": 1,
+    "issue_counts": {
+      "total": 0,
+      "errors": 0,
+      "warnings": 0
+    }
+  }
+}

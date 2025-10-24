@@ -1,0 +1,12 @@
+- id: scripts.example
+  name: Example Script
+  path: inventory_schema/enums.yaml
+  asset_kind: script
+  roles:
+    - validator
+  maturity: legacy
+  description: Example
+  consumers:
+    - coding_agent
+  status: needs_review
+  artifact_type: py

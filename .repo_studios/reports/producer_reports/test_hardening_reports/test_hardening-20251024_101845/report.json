@@ -1,0 +1,502 @@
+{
+  "clean_files": [
+    {
+      "path": "legacy/repo_tests/test_fault_aggregate_and_gate.py",
+      "test_count": 0
+    },
+    {
+      "path": "legacy/repo_tests/test_generate_fault_artifacts.py",
+      "test_count": 0
+    },
+    {
+      "path": "legacy/repo_tests/test_pytest_log_runner.py",
+      "test_count": 0
+    },
+    {
+      "path": "que_for_integration/refactor_library/phase_2/test_scan_code_duplicates.py",
+      "test_count": 13
+    }
+  ],
+  "exit_code": 1,
+  "message": "Issues detected.",
+  "options": {
+    "artifacts_to_keep": 10,
+    "log_level": "INFO"
+  },
+  "paths": {
+    "output_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\test_hardening_reports",
+    "repo_root": "C:\\Users\\genet\\repo_studios"
+  },
+  "results": [
+    {
+      "issues": [
+        {
+          "category": "no_assertions",
+          "line_number": 73,
+          "message": "Test 'test_raises_error_on_missing_source' has no assertions.",
+          "severity": "high"
+        },
+        {
+          "category": "no_assertions",
+          "line_number": 81,
+          "message": "Test 'test_raises_error_on_directory_source' has no assertions.",
+          "severity": "high"
+        }
+      ],
+      "long_tests": [],
+      "path": "que_for_integration/refactor_library/phase_3/test_create_latest_link.py",
+      "priority_score": 20,
+      "severity": {
+        "high": 2,
+        "low": 0,
+        "medium": 0
+      },
+      "test_count": 11,
+      "total_lines": 202
+    },
+    {
+      "issues": [
+        {
+          "category": "long_test",
+          "line_number": 25,
+          "message": "Test 'test_lizard_report_records_offenders' is 63 lines long. Consider decomposing.",
+          "severity": "high"
+        },
+        {
+          "category": "long_test",
+          "line_number": 90,
+          "message": "Test 'test_lizard_report_handles_missing_module' is 34 lines. Consider splitting for clarity.",
+          "severity": "medium"
+        }
+      ],
+      "long_tests": [
+        {
+          "lines": 63,
+          "name": "test_lizard_report_records_offenders",
+          "start_line": 25
+        }
+      ],
+      "path": "legacy/repo_tests/test_lizard_report.py",
+      "priority_score": 13,
+      "severity": {
+        "high": 1,
+        "low": 0,
+        "medium": 1
+      },
+      "test_count": 2,
+      "total_lines": 123
+    },
+    {
+      "issues": [
+        {
+          "category": "long_test",
+          "line_number": 7,
+          "message": "Test 'test_summary_includes_typecheck_section' is 54 lines long. Consider decomposing.",
+          "severity": "high"
+        }
+      ],
+      "long_tests": [
+        {
+          "lines": 54,
+          "name": "test_summary_includes_typecheck_section",
+          "start_line": 7
+        }
+      ],
+      "path": "legacy/repo_tests/test_health_suite_summary.py",
+      "priority_score": 10,
+      "severity": {
+        "high": 1,
+        "low": 0,
+        "medium": 0
+      },
+      "test_count": 1,
+      "total_lines": 60
+    },
+    {
+      "issues": [
+        {
+          "category": "long_test",
+          "line_number": 18,
+          "message": "Test 'test_fast_mode_curates_targets' is 56 lines long. Consider decomposing.",
+          "severity": "high"
+        }
+      ],
+      "long_tests": [
+        {
+          "lines": 56,
+          "name": "test_fast_mode_curates_targets",
+          "start_line": 18
+        }
+      ],
+      "path": "legacy/repo_tests/test_typecheck_report_fast_mode.py",
+      "priority_score": 10,
+      "severity": {
+        "high": 1,
+        "low": 0,
+        "medium": 0
+      },
+      "test_count": 1,
+      "total_lines": 73
+    },
+    {
+      "issues": [
+        {
+          "category": "long_test",
+          "line_number": 7,
+          "message": "Test 'test_orchestrator_includes_typecheck_step' is 39 lines. Consider splitting for clarity.",
+          "severity": "medium"
+        }
+      ],
+      "long_tests": [],
+      "path": "legacy/repo_tests/test_health_suite_orchestrator.py",
+      "priority_score": 3,
+      "severity": {
+        "high": 0,
+        "low": 0,
+        "medium": 1
+      },
+      "test_count": 1,
+      "total_lines": 45
+    },
+    {
+      "issues": [
+        {
+          "category": "long_test",
+          "line_number": 15,
+          "message": "Test 'test_logs_dir_defaults_to_workspace_root' is 35 lines. Consider splitting for clarity.",
+          "severity": "medium"
+        }
+      ],
+      "long_tests": [],
+      "path": "legacy/repo_tests/test_pytest_log_runner_paths.py",
+      "priority_score": 3,
+      "severity": {
+        "high": 0,
+        "low": 0,
+        "medium": 1
+      },
+      "test_count": 1,
+      "total_lines": 49
+    },
+    {
+      "issues": [
+        {
+          "category": "long_test",
+          "line_number": 20,
+          "message": "Test 'test_pick_best_junit_prefers_multi_test_over_internal' is 36 lines. Consider splitting for clarity.",
+          "severity": "medium"
+        }
+      ],
+      "long_tests": [],
+      "path": "legacy/repo_tests/test_test_log_health_report_pick_best.py",
+      "priority_score": 3,
+      "severity": {
+        "high": 0,
+        "low": 0,
+        "medium": 1
+      },
+      "test_count": 1,
+      "total_lines": 55
+    },
+    {
+      "issues": [
+        {
+          "category": "long_test",
+          "line_number": 20,
+          "message": "Test 'test_typecheck_report_with_mocked_mypy_output' is 48 lines. Consider splitting for clarity.",
+          "severity": "medium"
+        }
+      ],
+      "long_tests": [],
+      "path": "legacy/repo_tests/test_typecheck_report.py",
+      "priority_score": 3,
+      "severity": {
+        "high": 0,
+        "low": 0,
+        "medium": 1
+      },
+      "test_count": 1,
+      "total_lines": 67
+    },
+    {
+      "issues": [
+        {
+          "category": "debug_code",
+          "line_number": null,
+          "message": "Found 8 print statements; remove debug output.",
+          "severity": "low"
+        },
+        {
+          "category": "commented_code",
+          "line_number": null,
+          "message": "File has 30 commented lines; consider cleanup.",
+          "severity": "low"
+        }
+      ],
+      "long_tests": [],
+      "path": "que_for_integration/test_analyzer_concept/test_analyzer.py",
+      "priority_score": 2,
+      "severity": {
+        "high": 0,
+        "low": 2,
+        "medium": 0
+      },
+      "test_count": 0,
+      "total_lines": 450
+    },
+    {
+      "issues": [],
+      "long_tests": [],
+      "path": "legacy/repo_tests/test_fault_aggregate_and_gate.py",
+      "priority_score": 0,
+      "severity": {
+        "high": 0,
+        "low": 0,
+        "medium": 0
+      },
+      "test_count": 0,
+      "total_lines": 0
+    },
+    {
+      "issues": [],
+      "long_tests": [],
+      "path": "legacy/repo_tests/test_generate_fault_artifacts.py",
+      "priority_score": 0,
+      "severity": {
+        "high": 0,
+        "low": 0,
+        "medium": 0
+      },
+      "test_count": 0,
+      "total_lines": 0
+    },
+    {
+      "issues": [],
+      "long_tests": [],
+      "path": "legacy/repo_tests/test_pytest_log_runner.py",
+      "priority_score": 0,
+      "severity": {
+        "high": 0,
+        "low": 0,
+        "medium": 0
+      },
+      "test_count": 0,
+      "total_lines": 0
+    },
+    {
+      "issues": [],
+      "long_tests": [],
+      "path": "que_for_integration/refactor_library/phase_2/test_scan_code_duplicates.py",
+      "priority_score": 0,
+      "severity": {
+        "high": 0,
+        "low": 0,
+        "medium": 0
+      },
+      "test_count": 13,
+      "total_lines": 275
+    }
+  ],
+  "schema_version": 1,
+  "status": "issues-found",
+  "summary": {
+    "clean_files": 4,
+    "high_priority_files": 4,
+    "severity_totals": {
+      "high": 5,
+      "low": 2,
+      "medium": 5
+    },
+    "total_files": 13,
+    "total_issues": 12,
+    "total_test_functions": 32
+  },
+  "timestamp": "2025-10-24T10:18:45.934739+00:00",
+  "top_priority": [
+    {
+      "issues": [
+        {
+          "category": "no_assertions",
+          "line_number": 73,
+          "message": "Test 'test_raises_error_on_missing_source' has no assertions.",
+          "severity": "high"
+        },
+        {
+          "category": "no_assertions",
+          "line_number": 81,
+          "message": "Test 'test_raises_error_on_directory_source' has no assertions.",
+          "severity": "high"
+        }
+      ],
+      "long_tests": [],
+      "path": "que_for_integration/refactor_library/phase_3/test_create_latest_link.py",
+      "priority_score": 20,
+      "severity": {
+        "high": 2,
+        "low": 0,
+        "medium": 0
+      }
+    },
+    {
+      "issues": [
+        {
+          "category": "long_test",
+          "line_number": 25,
+          "message": "Test 'test_lizard_report_records_offenders' is 63 lines long. Consider decomposing.",
+          "severity": "high"
+        },
+        {
+          "category": "long_test",
+          "line_number": 90,
+          "message": "Test 'test_lizard_report_handles_missing_module' is 34 lines. Consider splitting for clarity.",
+          "severity": "medium"
+        }
+      ],
+      "long_tests": [
+        {
+          "lines": 63,
+          "name": "test_lizard_report_records_offenders",
+          "start_line": 25
+        }
+      ],
+      "path": "legacy/repo_tests/test_lizard_report.py",
+      "priority_score": 13,
+      "severity": {
+        "high": 1,
+        "low": 0,
+        "medium": 1
+      }
+    },
+    {
+      "issues": [
+        {
+          "category": "long_test",
+          "line_number": 7,
+          "message": "Test 'test_summary_includes_typecheck_section' is 54 lines long. Consider decomposing.",
+          "severity": "high"
+        }
+      ],
+      "long_tests": [
+        {
+          "lines": 54,
+          "name": "test_summary_includes_typecheck_section",
+          "start_line": 7
+        }
+      ],
+      "path": "legacy/repo_tests/test_health_suite_summary.py",
+      "priority_score": 10,
+      "severity": {
+        "high": 1,
+        "low": 0,
+        "medium": 0
+      }
+    },
+    {
+      "issues": [
+        {
+          "category": "long_test",
+          "line_number": 18,
+          "message": "Test 'test_fast_mode_curates_targets' is 56 lines long. Consider decomposing.",
+          "severity": "high"
+        }
+      ],
+      "long_tests": [
+        {
+          "lines": 56,
+          "name": "test_fast_mode_curates_targets",
+          "start_line": 18
+        }
+      ],
+      "path": "legacy/repo_tests/test_typecheck_report_fast_mode.py",
+      "priority_score": 10,
+      "severity": {
+        "high": 1,
+        "low": 0,
+        "medium": 0
+      }
+    },
+    {
+      "issues": [
+        {
+          "category": "long_test",
+          "line_number": 7,
+          "message": "Test 'test_orchestrator_includes_typecheck_step' is 39 lines. Consider splitting for clarity.",
+          "severity": "medium"
+        }
+      ],
+      "long_tests": [],
+      "path": "legacy/repo_tests/test_health_suite_orchestrator.py",
+      "priority_score": 3,
+      "severity": {
+        "high": 0,
+        "low": 0,
+        "medium": 1
+      }
+    },
+    {
+      "issues": [
+        {
+          "category": "long_test",
+          "line_number": 15,
+          "message": "Test 'test_logs_dir_defaults_to_workspace_root' is 35 lines. Consider splitting for clarity.",
+          "severity": "medium"
+        }
+      ],
+      "long_tests": [],
+      "path": "legacy/repo_tests/test_pytest_log_runner_paths.py",
+      "priority_score": 3,
+      "severity": {
+        "high": 0,
+        "low": 0,
+        "medium": 1
+      }
+    },
+    {
+      "issues": [
+        {
+          "category": "long_test",
+          "line_number": 20,
+          "message": "Test 'test_pick_best_junit_prefers_multi_test_over_internal' is 36 lines. Consider splitting for clarity.",
+          "severity": "medium"
+        }
+      ],
+      "long_tests": [],
+      "path": "legacy/repo_tests/test_test_log_health_report_pick_best.py",
+      "priority_score": 3,
+      "severity": {
+        "high": 0,
+        "low": 0,
+        "medium": 1
+      }
+    },
+    {
+      "issues": [
+        {
+          "category": "long_test",
+          "line_number": 20,
+          "message": "Test 'test_typecheck_report_with_mocked_mypy_output' is 48 lines. Consider splitting for clarity.",
+          "severity": "medium"
+        }
+      ],
+      "long_tests": [],
+      "path": "legacy/repo_tests/test_typecheck_report.py",
+      "priority_score": 3,
+      "severity": {
+        "high": 0,
+        "low": 0,
+        "medium": 1
+      }
+    },
+    {
+      "issues": [],
+      "long_tests": [],
+      "path": "que_for_integration/test_analyzer_concept/test_analyzer.py",
+      "priority_score": 2,
+      "severity": {
+        "high": 0,
+        "low": 2,
+        "medium": 0
+      }
+    }
+  ]
+}

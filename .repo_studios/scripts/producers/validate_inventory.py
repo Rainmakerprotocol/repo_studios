@@ -138,6 +138,7 @@ class ValidatorConfig:
     ignore_path_prefixes: Sequence[str] = ()
     suppress_ids: Sequence[str] = ()
     suppress_paths: Sequence[str] = ()
+    path_checks_enabled: bool = False
 
     @classmethod
     def load(cls, path: Path) -> "ValidatorConfig":
@@ -150,6 +151,7 @@ class ValidatorConfig:
             ignore_path_prefixes=tuple(path_conf.get("ignore_prefixes", [])),
             suppress_ids=tuple(path_conf.get("suppress_ids", [])),
             suppress_paths=tuple(path_conf.get("suppress_paths", [])),
+            path_checks_enabled=bool(path_conf.get("enabled", False)),
         )
 
     def is_suppressed(self, record_id: str | None, path_value: str) -> bool:
@@ -337,6 +339,8 @@ def _check_paths(
     repo_root: Path,
     schema_root: Path,
 ) -> None:
+    if not config.path_checks_enabled:
+        return
     record_id = record.get("id")
     path_value = record.get("path")
     if path_value is None:
@@ -529,9 +533,19 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     repo_root = Path(args.repo_root).resolve()
     schema_root = _ensure_dir(_resolve(repo_root, args.schema_root))
-    enums_path = _resolve(repo_root, args.enums_path)
-    template_path = _resolve(repo_root, args.template_path)
-    config_path = _resolve(repo_root, args.config_path)
+
+    def _resolve_schema_relative(arg_value: str, default_path: Path, filename: str) -> Path:
+        if arg_value == str(default_path):
+            return (schema_root / filename).resolve()
+        return _resolve(repo_root, arg_value)
+
+    enums_path = _resolve_schema_relative(args.enums_path, DEFAULT_ENUMS_PATH, "enums.yaml")
+    template_path = _resolve_schema_relative(
+        args.template_path,
+        DEFAULT_TEMPLATE_PATH,
+        "inventory_entry_template.yaml",
+    )
+    config_path = _resolve_schema_relative(args.config_path, DEFAULT_CONFIG_PATH, "validator_config.yaml")
     output_dir = _ensure_dir(_resolve(repo_root, args.output_dir))
 
     generated_at = _current_time() if args.timestamp is None else datetime.fromisoformat(args.timestamp)
@@ -580,6 +594,13 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if args.json:
         print(ValidationReport(issues=report.issues).to_json(repo_root))
+    else:
+        if report.errors:
+            for issue in report.errors:
+                details = issue.to_dict(repo_root)
+                print(f"[ERROR] {details['file']}: {details['message']}")
+        else:
+            print("Inventory validation passed")
 
     logging.info(
         "validate_inventory status=%s files=%s records=%s errors=%s warnings=%s",

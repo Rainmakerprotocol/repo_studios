@@ -1,0 +1,2 @@
+INFO: validate_inventory status=error files=1 records=2 errors=1 warnings=0
+[ERROR] tmp_cli_probe/inventory_schema/dup.yaml: Duplicate id detected

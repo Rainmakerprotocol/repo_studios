@@ -1,0 +1,8 @@
+status=issues-found
+exit_code=1
+total_files=13
+total_tests=32
+issues_total=12
+issues_high=5
+issues_medium=5
+issues_low=2

@@ -43,6 +43,16 @@ studio-validate-import-boundaries:
 studio-validate-metrics-anchor-stubs:
 	$(PYTHON) .repo_studios/scripts/producers/validate_metrics_anchor_stubs.py --repo-root .
 
+.PHONY: studio-analyze-test-hardening
+studio-analyze-test-hardening:
+	$(PYTHON) .repo_studios/scripts/producers/analyze_test_hardening.py --repo-root . --output-dir .repo_studios/reports/producer_reports/test_hardening_reports
+
 .PHONY: studio-verify-docs-integrity
 studio-verify-docs-integrity:
 	$(PYTHON) .repo_studios/scripts/producers/verify_docs_integrity.py --repo-root . --output-dir .repo_studios/reports/producer_reports/docs_integrity_reports
+
+.PHONY: studio-generate-function-index
+studio-generate-function-index:
+	@$(PYTHON) -c "import sys; sys.exit(0 if '$(path)' else 1)" || (echo "path variable required (make studio-generate-function-index path=...)" && exit 1)
+	$(PYTHON) .repo_studios/scripts/producers/generate_function_inventory.py --repo-root . "$(path)"
+	$(PYTHON) .repo_studios/scripts/producers/generate_function_analysis.py --repo-root . "$(path)"

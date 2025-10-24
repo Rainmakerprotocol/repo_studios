@@ -1,0 +1,10 @@
+asset_kind:
+  - script
+roles:
+  - validator
+maturity:
+  - legacy
+consumers:
+  - coding_agent
+status:
+  - needs_review

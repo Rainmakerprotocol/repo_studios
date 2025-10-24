@@ -1,0 +1,24 @@
+- id: scripts.dup
+  name: Dup1
+  path: dup1.py
+  asset_kind: script
+  roles:
+    - validator
+  maturity: legacy
+  description: Dup
+  consumers:
+    - coding_agent
+  status: needs_review
+  artifact_type: py
+- id: scripts.dup
+  name: Dup2
+  path: dup2.py
+  asset_kind: script
+  roles:
+    - validator
+  maturity: legacy
+  description: Dup
+  consumers:
+    - coding_agent
+  status: needs_review
+  artifact_type: py

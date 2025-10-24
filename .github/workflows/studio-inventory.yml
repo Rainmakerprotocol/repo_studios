@@ -39,6 +39,11 @@ jobs:
           . .venv/bin/activate
           make -C .repo_studios studio-check-inventory-health
 
+      - name: Analyze test hardening
+        run: |
+          . .venv/bin/activate
+          make -C .repo_studios studio-analyze-test-hardening
+
       - name: Upload inventory reports
         uses: actions/upload-artifact@v4
         with:

@@ -1,0 +1,1 @@
+[ERROR] tmp_cli_probe/inventory_schema/dup.yaml: Duplicate id detected
