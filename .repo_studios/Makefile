@@ -56,3 +56,7 @@ studio-generate-function-index:
 	@$(PYTHON) -c "import sys; sys.exit(0 if '$(path)' else 1)" || (echo "path variable required (make studio-generate-function-index path=...)" && exit 1)
 	$(PYTHON) .repo_studios/scripts/producers/generate_function_inventory.py --repo-root . "$(path)"
 	$(PYTHON) .repo_studios/scripts/producers/generate_function_analysis.py --repo-root . "$(path)"
+
+.PHONY: studio-index
+studio-index: studio-generate-function-index
+	$(PYTHON) .repo_studios/scripts/library_integration/duplicates/scan_duplicates.py --repo-root . --target "$(path)"

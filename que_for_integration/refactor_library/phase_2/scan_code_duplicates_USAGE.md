@@ -1,25 +1,78 @@
-# scan_code_duplicates.py - Usage Guide
+# Duplicate Scanner Integration Notes# Duplicate Scanner Integration Notes# scan_code_duplicates.py - Usage Guide
 
-## Overview
 
-The `scan_code_duplicates.py` tool uses Python AST (Abstract Syntax Tree) analysis to detect exact and near-duplicate functions across your codebase. It generates AI-optimized JSON reports with library extraction recommendations and automated refactoring instructions.
 
----
+The legacy `scan_code_duplicates.py` drop-in script has been retired. The
 
-## Quick Start
+supported, repo-managed tooling now lives under
+
+`.repo_studios/scripts/library_integration/duplicates/scan_duplicates.py`.The legacy `scan_code_duplicates.py` reference script has been superseded by the## Overview
+
+
+
+## Quick Referencerepo-managed tooling located at:
+
+
+
+- Invoke via PowerShell (from repo root):The `scan_code_duplicates.py` tool uses Python AST (Abstract Syntax Tree) analysis to detect exact and near-duplicate functions across your codebase. It generates AI-optimized JSON reports with library extraction recommendations and automated refactoring instructions.
+
+
+
+  ```powershell```
+
+  python .repo_studios/scripts/library_integration/duplicates/scan_duplicates.py --help
+
+  ```.repo_studios/scripts/library_integration/duplicates/scan_duplicates.py---
+
+
+
+- Timestamped reports live under```
+
+  `.repo_studios/library_integration/reports/<timestamp>-duplicate_scan/`.
+
+- A rolling copy is written to## Quick Start
+
+  `.repo_studios/library_integration/reports/code_duplicate_report/latest/`.
+
+- Each run emits `duplicate_matrix.json` (with metadata and merged producersKey changes:
+
+  findings) plus `duplicate_matrix_summary.md` (human-readable recap).
 
 ### Basic Scan
 
-```bash
-# Scan default location (.repo_studios/scripts/)
-python scan_code_duplicates.py
+## Documentation
 
-# Scan specific directories
-python scan_code_duplicates.py \
+- CLI entrypoint now lives within the Repo Studios source tree. Invoke it via
+
+See the protocol references inside `.repo_studios/library_integration/` for
+
+full workflow details:  `python .repo_studios/scripts/library_integration/duplicates/scan_duplicates.py --help`.```bash
+
+
+
+1. `README.md` – end-to-end library integration workflow and reporting cadence.- Reports are written beneath `.repo_studios/library_integration/reports/` with# Scan default location (.repo_studios/scripts/)
+
+2. `docs/duplicate_detection_schema_alignment.md` – field mapping between
+
+   producers analysis, scanner output, and downstream dashboards.  both timestamped folders (e.g., `20251024-173000-duplicate_scan/`) and apython scan_code_duplicates.py
+
+3. `checklists/library_integration_checklist.md` – phase-by-phase plan tracking
+
+   current implementation status.  rolling `code_duplicate_report/latest/` reference copy.
+
+
+- Producers analysis is merged automatically, producing a consolidated# Scan specific directories
+
+  `duplicate_matrix.json` and `duplicate_matrix_summary.md` per run.python scan_code_duplicates.py \
+
     --scan-dirs .repo_studios/scripts/producers \
-                .repo_studios/scripts/consumers
 
-# Specify repo root
+Refer to `.repo_studios/library_integration/README.md` and                .repo_studios/scripts/consumers
+
+`.repo_studios/library_integration/docs/duplicate_detection_schema_alignment.md`
+
+for the up-to-date workflow, schema expectations, and integration steps.# Specify repo root
+
 python scan_code_duplicates.py --repo-root /path/to/repo
 ```
 

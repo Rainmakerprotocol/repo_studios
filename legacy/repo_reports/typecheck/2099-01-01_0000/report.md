@@ -1,2 +1,0 @@
-# Typecheck Report
-- status: ERROR

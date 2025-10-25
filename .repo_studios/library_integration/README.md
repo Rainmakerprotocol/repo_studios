@@ -61,6 +61,18 @@ Use this repeatable loop every time you address duplicate functions.
 4. **Update artifacts** (tests run, imports added, follow-up items) before signaling completion.  
 5. **Leave run notes** in `reports/<timestamp>/SUMMARY.md` or append to the checklist.
 
+### Duplicate Scanner CLI
+
+- Run `python .repo_studios/scripts/library_integration/duplicates/scan_duplicates.py --help`
+   for CLI options (supports target overrides, retention limits, and log level control).
+- Each invocation writes artifacts to a timestamped folder named
+   `<YYYYMMDD-HHMMSS>-duplicate_scan/` under `reports/` **and** mirrors
+   `duplicate_matrix.json` + `duplicate_matrix_summary.md` into
+   `reports/code_duplicates_report/latest/` for quick reference.
+- Default behaviour automatically merges the latest producers analysis, so
+   `duplicate_matrix.json` contains both producer findings and scanner-only
+   groups.
+
 ---
 
 ## References
