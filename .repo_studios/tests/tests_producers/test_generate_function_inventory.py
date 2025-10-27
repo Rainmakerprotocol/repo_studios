@@ -9,6 +9,7 @@ from pathlib import Path
 
 MODULE_PATH = (
     Path(__file__).resolve().parents[2]
+    / "command_center"
     / "scripts"
     / "producers"
     / "generate_function_inventory.py"
@@ -72,14 +73,24 @@ def helper(value):
     output_file = files[0]
     assert output_file.exists()
     assert not (output_dir / "sample_pkg_index.json").exists()
-    latest_pointer = output_dir / "latest.json"
-    assert latest_pointer.exists()
-
     payload = json.loads(output_file.read_text(encoding="utf-8"))
-    pointer_payload = json.loads(latest_pointer.read_text(encoding="utf-8"))
-    assert pointer_payload == payload
+    latest_pointer = output_dir / "latest.json"
+    assert not latest_pointer.exists()
+    reports_dir = (
+        repo_root
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "index_scan"
+        / "sample_pkg_index"
+    )
+    central_files = list(reports_dir.glob("sample_pkg_index-*.json"))
+    assert len(central_files) == 1
+    central_file = central_files[0]
+    assert json.loads(central_file.read_text(encoding="utf-8")) == payload
+    assert not (reports_dir / "latest.json").exists()
     metadata = payload["metadata"]
-    assert metadata["schema_version"] == 1
+    assert metadata["schema_version"] == 2
     assert metadata["folder_name"] == "sample_pkg"
     assert metadata["total_files"] == 3
     assert metadata["total_functions"] == 3  # two methods + one function
@@ -88,23 +99,43 @@ def helper(value):
     files = {entry["relative_path"]: entry for entry in payload["files"]}
     assert "module.py" in files
     module_entry = files["module.py"]
+    assert module_entry["module_id"] == "sample_pkg.module"
+    assert module_entry["imports_detailed"] == []
+    assert module_entry["entrypoints"] == {"has_main_guard": False, "cli_parser": False}
     assert module_entry["module_first_line"] == "def helper(value):"
     function_names = {func["name"] for func in module_entry["functions"]}
     assert function_names == {"helper"}
     helper_entry = module_entry["functions"][0]
     assert helper_entry["signature"] == "def helper(value):"
+    assert helper_entry["qualified_name"] == "sample_pkg.module::helper"
+    assert helper_entry["returns_kind"] == "value"
+    assert helper_entry["locals_summary"]["assign"] == 0
     assert helper_entry["line_count"] == 2
+    assert helper_entry["io_effects"] == {"reads": False, "writes": False, "env": False, "network": False}
     class_names = {cls["name"] for cls in module_entry["classes"]}
     assert class_names == {"Example"}
     class_entry = module_entry["classes"][0]
+    assert class_entry["bases"] == []
     assert class_entry["line_count"] >= 2
     method_entry = class_entry["methods"][0]
     assert method_entry["signature"] == "def method_one(self):"
+    assert method_entry["qualified_name"] == "sample_pkg.module::Example.method_one"
     assert method_entry["line_count"] == 2
     only_entry = files["class_only.py"]
+    assert only_entry["module_id"] == "sample_pkg.class_only"
     assert only_entry["module_first_line"] == "class Only:"
     init_entry = files["__init__.py"]
+    assert init_entry["module_doc"] == "Utility package."
     assert init_entry["module_first_line"] is None
+
+    summary_files = list(output_dir.glob("sample_pkg_screening-*.json"))
+    assert len(summary_files) == 1
+    summary_payload = json.loads(summary_files[0].read_text(encoding="utf-8"))
+    assert "graphs" in summary_payload
+    assert summary_payload["violations"] == {"cycles": False}
+    central_summary = list(reports_dir.glob("sample_pkg_screening-*.json"))
+    assert len(central_summary) == 1
+    assert json.loads(central_summary[0].read_text(encoding="utf-8")) == summary_payload
 
 
 def test_inventory_captures_warnings_for_problem_files(tmp_path: Path) -> None:
@@ -157,6 +188,20 @@ def test_inventory_removes_preexisting_outputs(tmp_path: Path) -> None:
     _write(output_dir / "pkg_index.json", "{}")
     _write(output_dir / "pkg_index-2000-01-01.json", "{}")
     _write(output_dir / "latest.json", "{}")
+    _write(output_dir / "pkg_screening-2000-01-01.json", "{}")
+    reports_dir = (
+        repo_root
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "index_scan"
+        / "pkg_index"
+    )
+    reports_dir.mkdir(parents=True, exist_ok=True)
+    _write(reports_dir / "pkg_index.json", "{}")
+    _write(reports_dir / "pkg_index-1999-12-31.json", "{}")
+    _write(reports_dir / "latest.json", "{}")
+    _write(reports_dir / "pkg_screening-1999-12-31.json", "{}")
 
     exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
     assert exit_code == 0
@@ -168,9 +213,19 @@ def test_inventory_removes_preexisting_outputs(tmp_path: Path) -> None:
     assert output_file.name != "pkg_index-2000-01-01.json"
     assert not (output_dir / "pkg_index.json").exists()
     latest_pointer = output_dir / "latest.json"
-    assert latest_pointer.exists()
-    pointer_payload = json.loads(latest_pointer.read_text(encoding="utf-8"))
-    assert pointer_payload["metadata"]["folder_name"] == "pkg"
+    assert not latest_pointer.exists()
+    central_files = list(reports_dir.glob("pkg_index-*.json"))
+    assert len(central_files) == 1
+    central_file = central_files[0]
+    assert central_file.name != "pkg_index-1999-12-31.json"
+    assert not (reports_dir / "pkg_index.json").exists()
+    assert not (reports_dir / "latest.json").exists()
+    summary_files = list(output_dir.glob("pkg_screening-*.json"))
+    assert len(summary_files) == 1
+    assert summary_files[0].name != "pkg_screening-2000-01-01.json"
+    central_summary = list(reports_dir.glob("pkg_screening-*.json"))
+    assert len(central_summary) == 1
+    assert central_summary[0].name != "pkg_screening-1999-12-31.json"
 
 
 def test_inventory_errors_when_no_python_files(tmp_path: Path) -> None:

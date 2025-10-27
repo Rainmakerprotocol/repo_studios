@@ -20,7 +20,7 @@
         "scan_depth"
       ],
       "properties": {
-        "schema_version": { "type": "integer" },
+        "schema_version": { "type": "integer", "enum": [2] },
         "generated_at": { "type": "string", "format": "date-time" },
         "folder_path": { "type": "string" },
         "folder_name": { "type": "string" },
@@ -38,15 +38,27 @@
         "required": [
           "path",
           "relative_path",
+          "module_id",
+          "module_doc",
           "line_count",
           "module_first_line",
           "functions",
           "classes",
-          "imports"
+          "imports",
+          "imports_detailed",
+          "globals",
+          "entrypoints"
         ],
         "properties": {
           "path": { "type": "string" },
           "relative_path": { "type": "string" },
+          "module_id": { "type": "string" },
+          "module_doc": {
+            "anyOf": [
+              { "type": "string" },
+              { "type": "null" }
+            ]
+          },
           "line_count": { "type": "integer", "minimum": 0 },
           "module_first_line": {
             "anyOf": [
@@ -56,121 +68,26 @@
           },
           "functions": {
             "type": "array",
-            "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "name",
-                "line",
-                "type",
-                "is_async",
-                "is_private",
-                "docstring",
-                "signature",
-                "line_count"
-              ],
-              "properties": {
-                "name": { "type": "string" },
-                "line": { "type": "integer", "minimum": 0 },
-                "type": { "type": "string" },
-                "is_async": { "type": "boolean" },
-                "is_private": { "type": "boolean" },
-                "docstring": {
-                  "anyOf": [
-                    { "type": "string" },
-                    { "type": "null" }
-                  ]
-                },
-                "signature": {
-                  "anyOf": [
-                    { "type": "string" },
-                    { "type": "null" }
-                  ]
-                },
-                "line_count": {
-                  "anyOf": [
-                    { "type": "integer", "minimum": 0 },
-                    { "type": "null" }
-                  ]
-                }
-              }
-            }
+            "items": { "$ref": "#/definitions/functionEntry" }
           },
           "classes": {
             "type": "array",
-            "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "name",
-                "line",
-                "docstring",
-                "line_count",
-                "methods"
-              ],
-              "properties": {
-                "name": { "type": "string" },
-                "line": { "type": "integer", "minimum": 0 },
-                "docstring": {
-                  "anyOf": [
-                    { "type": "string" },
-                    { "type": "null" }
-                  ]
-                },
-                "line_count": {
-                  "anyOf": [
-                    { "type": "integer", "minimum": 0 },
-                    { "type": "null" }
-                  ]
-                },
-                "methods": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": [
-                      "name",
-                      "line",
-                      "type",
-                      "is_async",
-                      "is_private",
-                      "docstring",
-                      "signature",
-                      "line_count"
-                    ],
-                    "properties": {
-                      "name": { "type": "string" },
-                      "line": { "type": "integer", "minimum": 0 },
-                      "type": { "type": "string" },
-                      "is_async": { "type": "boolean" },
-                      "is_private": { "type": "boolean" },
-                      "docstring": {
-                        "anyOf": [
-                          { "type": "string" },
-                          { "type": "null" }
-                        ]
-                      },
-                      "signature": {
-                        "anyOf": [
-                          { "type": "string" },
-                          { "type": "null" }
-                        ]
-                      },
-                      "line_count": {
-                        "anyOf": [
-                          { "type": "integer", "minimum": 0 },
-                          { "type": "null" }
-                        ]
-                      }
-                    }
-                  }
-                }
-              }
-            }
+            "items": { "$ref": "#/definitions/classEntry" }
           },
           "imports": {
             "type": "array",
             "items": { "type": "string" }
+          },
+          "imports_detailed": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/importDetailed" }
+          },
+          "globals": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/globalEntry" }
+          },
+          "entrypoints": {
+            "$ref": "#/definitions/entrypoints"
           }
         }
       }
@@ -199,6 +116,286 @@
     "warnings": {
       "type": "array",
       "items": { "type": "string" }
+    }
+  },
+  "definitions": {
+    "docstring": {
+      "anyOf": [
+        { "type": "string" },
+        { "type": "null" }
+      ]
+    },
+    "nullableString": {
+      "anyOf": [
+        { "type": "string" },
+        { "type": "null" }
+      ]
+    },
+    "functionEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "qualified_name",
+        "line",
+        "type",
+        "is_async",
+        "is_private",
+        "docstring",
+        "signature",
+        "line_count",
+        "args",
+        "annotations",
+        "decorators",
+        "raises",
+        "returns_kind",
+        "locals_summary",
+        "used_globals",
+        "hash",
+        "todo_tags",
+        "first_stmt_kind",
+        "calls",
+        "uses_import",
+        "intra_file_refs",
+        "io_effects",
+        "logging_calls"
+      ],
+      "properties": {
+        "name": { "type": "string" },
+        "qualified_name": { "$ref": "#/definitions/nullableString" },
+        "line": { "type": "integer", "minimum": 0 },
+        "type": { "type": "string" },
+        "is_async": { "type": "boolean" },
+        "is_private": { "type": "boolean" },
+        "docstring": { "$ref": "#/definitions/docstring" },
+        "signature": { "$ref": "#/definitions/nullableString" },
+        "line_count": {
+          "anyOf": [
+            { "type": "integer", "minimum": 0 },
+            { "type": "null" }
+          ]
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["positional", "kwonly", "vararg", "kwvararg"],
+          "properties": {
+            "positional": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "kwonly": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "vararg": { "$ref": "#/definitions/nullableString" },
+            "kwvararg": { "$ref": "#/definitions/nullableString" }
+          }
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["return", "args"],
+          "properties": {
+            "return": { "$ref": "#/definitions/nullableString" },
+            "args": {
+              "type": "object",
+              "additionalProperties": { "$ref": "#/definitions/nullableString" }
+            }
+          }
+        },
+        "decorators": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "raises": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["exception", "lineno"],
+            "properties": {
+              "exception": { "type": "string" },
+              "lineno": { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        "returns_kind": {
+          "type": "string",
+          "enum": ["value", "none", "generator", "async"]
+        },
+        "locals_summary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["assign", "calls", "branches"],
+          "properties": {
+            "assign": { "type": "integer", "minimum": 0 },
+            "calls": { "type": "integer", "minimum": 0 },
+            "branches": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "used_globals": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "hash": { "$ref": "#/definitions/nullableString" },
+        "todo_tags": { "type": "integer", "minimum": 0 },
+        "first_stmt_kind": { "$ref": "#/definitions/nullableString" },
+        "calls": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["callee", "lineno"],
+            "properties": {
+              "callee": { "type": "string" },
+              "lineno": { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        "uses_import": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["symbol", "via", "lineno"],
+            "properties": {
+              "symbol": { "type": "string" },
+              "via": { "type": "string" },
+              "lineno": { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        "intra_file_refs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["callee_func", "lineno"],
+            "properties": {
+              "callee_func": { "type": "string" },
+              "lineno": { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        "io_effects": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["reads", "writes", "env", "network"],
+          "properties": {
+            "reads": { "type": "boolean" },
+            "writes": { "type": "boolean" },
+            "env": { "type": "boolean" },
+            "network": { "type": "boolean" }
+          }
+        },
+        "logging_calls": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["level", "lineno"],
+            "properties": {
+              "level": { "type": "string" },
+              "lineno": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "classEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "line",
+        "docstring",
+        "line_count",
+        "methods",
+        "bases",
+        "decorators",
+        "attributes"
+      ],
+      "properties": {
+        "name": { "type": "string" },
+        "line": { "type": "integer", "minimum": 0 },
+        "docstring": { "$ref": "#/definitions/docstring" },
+        "line_count": {
+          "anyOf": [
+            { "type": "integer", "minimum": 0 },
+            { "type": "null" }
+          ]
+        },
+        "methods": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/functionEntry" }
+        },
+        "bases": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "decorators": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "lineno"],
+            "properties": {
+              "name": { "type": "string" },
+              "lineno": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "importName": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "asname"],
+      "properties": {
+        "name": { "type": "string" },
+        "asname": { "$ref": "#/definitions/nullableString" }
+      }
+    },
+    "importDetailed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "module", "names", "lineno"],
+      "properties": {
+        "kind": { "type": "string", "enum": ["import", "from"] },
+        "module": { "$ref": "#/definitions/nullableString" },
+        "names": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/importName" }
+        },
+        "lineno": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "globalEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "value_kind", "lineno"],
+      "properties": {
+        "name": { "type": "string" },
+        "value_kind": {
+          "type": "string",
+          "enum": ["const", "config", "call", "other"]
+        },
+        "lineno": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "entrypoints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["has_main_guard", "cli_parser"],
+      "properties": {
+        "has_main_guard": { "type": "boolean" },
+        "cli_parser": { "type": "boolean" }
+      }
     }
   }
 }

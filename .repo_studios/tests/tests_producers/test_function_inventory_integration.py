@@ -12,21 +12,23 @@ import pytest
 
 INVENTORY_MODULE_PATH = (
     Path(__file__).resolve().parents[2]
+    / "command_center"
     / "scripts"
     / "producers"
     / "generate_function_inventory.py"
 )
 ANALYSIS_MODULE_PATH = (
     Path(__file__).resolve().parents[2]
+    / "command_center"
     / "scripts"
-    / "producers"
+    / "summarizers"
     / "generate_function_analysis.py"
 )
 INVENTORY_MODULE_NAME = "repo_studios_test.integration_inventory"
 ANALYSIS_MODULE_NAME = "repo_studios_test.integration_analysis"
-SCHEMA_DIR = Path(__file__).resolve().parents[3] / "docs" / "schemas"
+SCHEMA_DIR = Path(__file__).resolve().parents[2] / "docs" / "schemas"
 FIXTURE_ROOT = (
-    Path(__file__).resolve().parents[2]
+    Path(__file__).resolve().parents[1]
     / "fixtures"
     / "function_inventory"
     / "sample_pkg"
@@ -85,11 +87,9 @@ def test_inventory_and_analysis_round_trip(tmp_path: Path) -> None:
     assert inventory_files, "Expected inventory artifact to be created"
     inventory_file = inventory_files[-1]
     latest_pointer = index_dir / "latest.json"
-    assert latest_pointer.exists()
+    assert not latest_pointer.exists()
 
     inventory_payload = _load_json(inventory_file)
-    pointer_payload = _load_json(latest_pointer)
-    assert inventory_payload == pointer_payload
 
     _validate_with_schema(inventory_payload, "function_inventory.schema.json")
 
@@ -100,6 +100,10 @@ def test_inventory_and_analysis_round_trip(tmp_path: Path) -> None:
         item for item in inventory_payload["files"] if item["relative_path"] == "alpha.py"
     )
     assert module_entry["module_first_line"].startswith("def duplicate_helper")
+    screening_files = sorted(index_dir.glob("sample_pkg_screening-*.json"))
+    assert screening_files, "Expected screening summary artifact"
+    screening_payload = _load_json(screening_files[-1])
+    assert "graphs" in screening_payload
 
     exit_code = _run_analysis(["--repo-root", str(workspace), str(target)])
     assert exit_code == 0

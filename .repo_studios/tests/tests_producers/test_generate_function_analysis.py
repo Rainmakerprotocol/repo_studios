@@ -9,14 +9,16 @@ from pathlib import Path
 
 INVENTORY_MODULE_PATH = (
     Path(__file__).resolve().parents[2]
+    / "command_center"
     / "scripts"
     / "producers"
     / "generate_function_inventory.py"
 )
 ANALYSIS_MODULE_PATH = (
     Path(__file__).resolve().parents[2]
+    / "command_center"
     / "scripts"
-    / "producers"
+    / "summarizers"
     / "generate_function_analysis.py"
 )
 INVENTORY_MODULE_NAME = "repo_studios_test.generate_function_inventory"

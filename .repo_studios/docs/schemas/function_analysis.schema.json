@@ -96,6 +96,21 @@
                     { "type": "null" }
                   ]
                 }
+              },
+              "qualified_names": {
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    { "type": "string" },
+                    { "type": "null" }
+                  ]
+                }
+              },
+              "hash": {
+                "anyOf": [
+                  { "type": "string" },
+                  { "type": "null" }
+                ]
               }
             }
           },
@@ -104,7 +119,8 @@
             "additionalProperties": false,
             "required": ["duplicate_count"],
             "properties": {
-              "duplicate_count": { "type": "integer", "minimum": 0 }
+              "duplicate_count": { "type": "integer", "minimum": 0 },
+              "todo_tags": { "type": "integer", "minimum": 0 }
             }
           },
           "action_items": {
@@ -152,6 +168,66 @@
                     { "type": "integer", "minimum": 0 },
                     { "type": "null" }
                   ]
+                },
+                "qualified_name": {
+                  "anyOf": [
+                    { "type": "string" },
+                    { "type": "null" }
+                  ]
+                },
+                "module_id": {
+                  "anyOf": [
+                    { "type": "string" },
+                    { "type": "null" }
+                  ]
+                },
+                "hash": {
+                  "anyOf": [
+                    { "type": "string" },
+                    { "type": "null" }
+                  ]
+                },
+                "returns_kind": {
+                  "anyOf": [
+                    { "type": "string" },
+                    { "type": "null" }
+                  ]
+                },
+                "todo_tags": { "type": "integer", "minimum": 0 },
+                "io_effects": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["reads", "writes", "env", "network"],
+                  "properties": {
+                    "reads": { "type": "boolean" },
+                    "writes": { "type": "boolean" },
+                    "env": { "type": "boolean" },
+                    "network": { "type": "boolean" }
+                  }
+                },
+                "logging_calls": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["level", "lineno"],
+                    "properties": {
+                      "level": { "type": "string" },
+                      "lineno": { "type": "integer", "minimum": 0 }
+                    }
+                  }
+                },
+                "calls": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["callee", "lineno"],
+                    "properties": {
+                      "callee": { "type": "string" },
+                      "lineno": { "type": "integer", "minimum": 0 }
+                    }
+                  }
                 }
               }
             }

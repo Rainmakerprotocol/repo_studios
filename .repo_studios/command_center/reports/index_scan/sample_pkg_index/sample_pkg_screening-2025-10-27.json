@@ -1,0 +1,58 @@
+{
+  "graphs": {
+    "calls": [],
+    "imports": []
+  },
+  "nodes": {
+    "meta": {
+      "sample_pkg.alpha::duplicate_helper": {
+        "hash": "abefa5e83a2bedcd1b9013a4c2341a04206e7cbb",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "sample_pkg.alpha::unique_alpha": {
+        "hash": "ce560d7a184a5be443ebbfb685854f7c8228bd1b",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "sample_pkg.beta::duplicate_helper": {
+        "hash": "a17ba98b166cd6108b9a3573e6edd512789ffed2",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "sample_pkg.gamma::Calculator.multiply": {
+        "hash": "91944766d942d3c3499fc0895971418f44a8d6cd",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "sample_pkg.gamma::standalone": {
+        "hash": "e0e8453daca8618c0241d3f10ec6fcfc4a72b32b",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      }
+    }
+  },
+  "violations": {
+    "cycles": false
+  }
+}

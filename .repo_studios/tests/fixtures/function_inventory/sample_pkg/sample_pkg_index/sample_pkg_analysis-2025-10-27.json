@@ -1,0 +1,98 @@
+{
+  "findings": [
+    {
+      "action_items": [
+        {
+          "description": "Review duplicate implementations for consolidation or reuse.",
+          "targets": [
+            "alpha.py:1",
+            "beta.py:1"
+          ],
+          "type": "review_duplicate_function"
+        }
+      ],
+      "details": {
+        "function_name": "duplicate_helper",
+        "hash": "abefa5e83a2bedcd1b9013a4c2341a04206e7cbb",
+        "line_counts": [
+          3,
+          3
+        ],
+        "qualified_names": [
+          "sample_pkg.alpha::duplicate_helper",
+          "sample_pkg.beta::duplicate_helper"
+        ],
+        "shared_docstring": "Scale value by the provided factor.",
+        "signature": "def duplicate_helper(value: int, scale: int = 2) -> int:"
+      },
+      "id": "duplicate_function::duplicate-def-duplicate-helper-value--int--scale--int---2-----int",
+      "instances": [
+        {
+          "calls": [],
+          "docstring": "Scale value by the provided factor.",
+          "hash": "abefa5e83a2bedcd1b9013a4c2341a04206e7cbb",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 1,
+          "line_count": 3,
+          "logging_calls": [],
+          "module_id": "sample_pkg.alpha",
+          "name": "duplicate_helper",
+          "path": "alpha.py",
+          "qualified_name": "sample_pkg.alpha::duplicate_helper",
+          "returns_kind": "value",
+          "signature": "def duplicate_helper(value: int, scale: int = 2) -> int:",
+          "todo_tags": 0
+        },
+        {
+          "calls": [],
+          "docstring": "Scale value by the provided factor.",
+          "hash": "a17ba98b166cd6108b9a3573e6edd512789ffed2",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 1,
+          "line_count": 3,
+          "logging_calls": [],
+          "module_id": "sample_pkg.beta",
+          "name": "duplicate_helper",
+          "path": "beta.py",
+          "qualified_name": "sample_pkg.beta::duplicate_helper",
+          "returns_kind": "value",
+          "signature": "def duplicate_helper(value: int, scale: int = 2) -> int:",
+          "todo_tags": 0
+        }
+      ],
+      "kind": "duplicate_function",
+      "metrics": {
+        "duplicate_count": 2,
+        "todo_tags": 0
+      },
+      "severity": "medium",
+      "summary": "2 functions share the signature 'def duplicate_helper(value: int, scale: int = 2) -> int:'"
+    }
+  ],
+  "metadata": {
+    "analysis_version": "1.0.0",
+    "folder_name": "sample_pkg",
+    "folder_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\tests\\fixtures\\function_inventory\\sample_pkg",
+    "generated_at": "2025-10-27T00:23:46.197606+00:00",
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "source_index_file": "C:\\Users\\genet\\repo_studios\\.repo_studios\\tests\\fixtures\\function_inventory\\sample_pkg\\sample_pkg_index\\sample_pkg_index-2025-10-27.json",
+    "source_index_generated_at": "2025-10-27T00:21:22.689582+00:00",
+    "source_index_hash": "af2e5eaa65cd486ade0b3e650417ea3a1556c390f5e160817be4eb6bcd8e6d02"
+  },
+  "schema_version": 1,
+  "summary": {
+    "duplicate_groups": 1,
+    "total_duplicate_functions": 8,
+    "total_files_scanned": 4
+  }
+}

@@ -1,0 +1,535 @@
+{
+  "files": [
+    {
+      "classes": [
+        {
+          "docstring": null,
+          "line": 38,
+          "line_count": 18,
+          "methods": [
+            {
+              "docstring": null,
+              "is_async": false,
+              "is_private": false,
+              "line": 47,
+              "line_count": 9,
+              "name": "from_obj",
+              "signature": "def from_obj(o: dict[str, Any]) -> Finding:",
+              "type": "function"
+            }
+          ],
+          "name": "Finding"
+        }
+      ],
+      "functions": [
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": false,
+          "line": 30,
+          "line_count": 5,
+          "name": "latest_scan_dir",
+          "signature": "def latest_scan_dir(root: Path) -> Path:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": false,
+          "line": 58,
+          "line_count": 4,
+          "name": "load_findings",
+          "signature": "def load_findings(report_path: Path) -> list[Finding]:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": false,
+          "line": 64,
+          "line_count": 10,
+          "name": "classify",
+          "signature": "def classify(f: Finding) -> str:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": false,
+          "line": 76,
+          "line_count": 18,
+          "name": "aggregate",
+          "signature": "def aggregate(findings: Iterable[Finding]) -> dict[str, Any]:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": false,
+          "line": 96,
+          "line_count": 19,
+          "name": "write_outputs",
+          "signature": "def write_outputs(scan_dir: Path, agg: dict[str, Any]) -> None:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": false,
+          "line": 117,
+          "line_count": 13,
+          "name": "main",
+          "signature": "def main() -> int:",
+          "type": "function"
+        }
+      ],
+      "imports": [
+        "__future__.annotations",
+        "collections.Counter",
+        "collections.abc.Iterable",
+        "collections.defaultdict",
+        "dataclasses.dataclass",
+        "json",
+        "logging",
+        "os",
+        "pathlib.Path",
+        "sys",
+        "typing.Any"
+      ],
+      "line_count": 133,
+      "module_first_line": "def latest_scan_dir(root: Path) -> Path:",
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\consumers\\classify_monkey_patches.py",
+      "relative_path": "classify_monkey_patches.py"
+    },
+    {
+      "classes": [
+        {
+          "docstring": null,
+          "line": 49,
+          "line_count": 7,
+          "methods": [
+            {
+              "docstring": null,
+              "is_async": false,
+              "is_private": false,
+              "line": 54,
+              "line_count": 2,
+              "name": "file_count",
+              "signature": "def file_count(self) -> int:  # pragma: no cover - trivial",
+              "type": "function"
+            }
+          ],
+          "name": "Cluster"
+        }
+      ],
+      "functions": [
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 39,
+          "line_count": 7,
+          "name": "_slugify",
+          "signature": "def _slugify(raw: str) -> str:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": false,
+          "line": 58,
+          "line_count": 18,
+          "name": "collect_h1_h2_slugs",
+          "signature": "def collect_h1_h2_slugs(skip: set[str] | None = None) -> dict[str, list[str]]:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": false,
+          "line": 78,
+          "line_count": 7,
+          "name": "multi_file_duplicates",
+          "signature": "def multi_file_duplicates(slug_map: dict[str, list[str]]) -> dict[str, list[str]]:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": false,
+          "line": 87,
+          "line_count": 7,
+          "name": "load_baseline",
+          "signature": "def load_baseline() -> dict | None:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": false,
+          "line": 96,
+          "line_count": 24,
+          "name": "build_report",
+          "signature": "def build_report() -> dict:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 122,
+          "line_count": 3,
+          "name": "_run_dir",
+          "signature": "def _run_dir(ts: datetime) -> Path:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": false,
+          "line": 127,
+          "line_count": 62,
+          "name": "write_artifacts",
+          "signature": "def write_artifacts(report: dict, ts: datetime | None = None) -> Path:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": false,
+          "line": 191,
+          "line_count": 10,
+          "name": "main",
+          "signature": "def main() -> None:  # pragma: no cover - CLI side effect",
+          "type": "function"
+        }
+      ],
+      "imports": [
+        "__future__.annotations",
+        "dataclasses.dataclass",
+        "datetime.datetime",
+        "json",
+        "logging",
+        "pathlib.Path",
+        "re"
+      ],
+      "line_count": 204,
+      "module_first_line": "def _slugify(raw: str) -> str:",
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\consumers\\generate_anchor_health_report.py",
+      "relative_path": "generate_anchor_health_report.py"
+    },
+    {
+      "classes": [
+        {
+          "docstring": null,
+          "line": 89,
+          "line_count": 5,
+          "methods": [],
+          "name": "TopFrame"
+        }
+      ],
+      "functions": [
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 43,
+          "line_count": 9,
+          "name": "_find_latest_outdir",
+          "signature": "def _find_latest_outdir() -> Path | None:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 54,
+          "line_count": 7,
+          "name": "_discover_outdir",
+          "signature": "def _discover_outdir(explicit: str | None) -> Path | None:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 63,
+          "line_count": 5,
+          "name": "_read_text",
+          "signature": "def _read_text(p: Path) -> str:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 70,
+          "line_count": 16,
+          "name": "_ensure_manifest",
+          "signature": "def _ensure_manifest(outdir: Path) -> None:",
+          "type": "function"
+        },
+        {
+          "docstring": "Yield lines per thread block, separated by thread headers.",
+          "is_async": false,
+          "is_private": true,
+          "line": 100,
+          "line_count": 15,
+          "name": "_iter_thread_blocks",
+          "signature": "def _iter_thread_blocks(lines: Iterable[str]) -> Iterable[list[str]]:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 117,
+          "line_count": 23,
+          "name": "_extract_top_frames",
+          "signature": "def _extract_top_frames(block: list[str], n: int) -> list[TopFrame]:",
+          "type": "function"
+        },
+        {
+          "docstring": "Build a salt using process python version + platform from MANIFEST if present.",
+          "is_async": false,
+          "is_private": true,
+          "line": 142,
+          "line_count": 27,
+          "name": "_load_process_salt",
+          "signature": "def _load_process_salt(outdir: Path) -> str:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 171,
+          "line_count": 6,
+          "name": "_top_n_from_env",
+          "signature": "def _top_n_from_env() -> int:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 179,
+          "line_count": 21,
+          "name": "_signature_id",
+          "signature": "def _signature_id(frames: list[TopFrame], salt: str) -> str:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 202,
+          "line_count": 73,
+          "name": "_write_stacks_csv",
+          "signature": "def _write_stacks_csv(outdir: Path, stacks_text: str) -> list[dict[str, object]]:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 277,
+          "line_count": 35,
+          "name": "_write_summary",
+          "signature": "def _write_summary(outdir: Path, rows: list[dict[str, object]], dumps_dir: Path) -> None:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": false,
+          "line": 314,
+          "line_count": 33,
+          "name": "main",
+          "signature": "def main(argv: list[str] | None = None) -> int:",
+          "type": "function"
+        }
+      ],
+      "imports": [
+        "__future__.annotations",
+        "argparse",
+        "collections.abc.Iterable",
+        "csv",
+        "dataclasses.dataclass",
+        "datetime.UTC",
+        "datetime.datetime",
+        "hashlib",
+        "json",
+        "logging",
+        "os",
+        "pathlib.Path",
+        "platform",
+        "re",
+        "sys"
+      ],
+      "line_count": 350,
+      "module_first_line": "def _find_latest_outdir() -> Path | None:",
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\consumers\\generate_fault_artifacts.py",
+      "relative_path": "generate_fault_artifacts.py"
+    },
+    {
+      "classes": [
+        {
+          "docstring": null,
+          "line": 84,
+          "line_count": 7,
+          "methods": [],
+          "name": "TestHealth"
+        }
+      ],
+      "functions": [
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 32,
+          "line_count": 3,
+          "name": "_latest",
+          "signature": "def _latest(path: Path, prefix: str, suffix: str) -> Path | None:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 37,
+          "line_count": 3,
+          "name": "_latest_by_prefix",
+          "signature": "def _latest_by_prefix(path: Path, prefix: str) -> Path | None:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 42,
+          "line_count": 5,
+          "name": "_ensure_out",
+          "signature": "def _ensure_out(base: Path) -> Path:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 49,
+          "line_count": 5,
+          "name": "_read",
+          "signature": "def _read(p: Path) -> str:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 61,
+          "line_count": 17,
+          "name": "_extract_block",
+          "signature": "def _extract_block(lines: list[str], start_re: re.Pattern[str]) -> list[str]:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 93,
+          "line_count": 24,
+          "name": "_parse_junit",
+          "signature": "def _parse_junit(path: Path) -> TestHealth:",
+          "type": "function"
+        },
+        {
+          "docstring": "Select the most representative JUnit XML artifact.",
+          "is_async": false,
+          "is_private": true,
+          "line": 119,
+          "line_count": 62,
+          "name": "_pick_best_junit",
+          "signature": "def _pick_best_junit(logs_dir: Path) -> Path | None:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 183,
+          "line_count": 12,
+          "name": "_parse_warnings",
+          "signature": "def _parse_warnings(block: list[str]) -> tuple[Counter[str], Counter[str]]:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 200,
+          "line_count": 7,
+          "name": "_parse_slowest",
+          "signature": "def _parse_slowest(block: list[str]) -> list[dict[str, Any]]:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": true,
+          "line": 209,
+          "line_count": 2,
+          "name": "_count_tracebacks",
+          "signature": "def _count_tracebacks(text: str) -> int:",
+          "type": "function"
+        },
+        {
+          "docstring": null,
+          "is_async": false,
+          "is_private": false,
+          "line": 213,
+          "line_count": 92,
+          "name": "main",
+          "signature": "def main() -> int:",
+          "type": "function"
+        }
+      ],
+      "imports": [
+        "__future__.annotations",
+        "argparse",
+        "collections.Counter",
+        "dataclasses.dataclass",
+        "datetime.datetime",
+        "defusedxml.ElementTree",
+        "json",
+        "logging",
+        "pathlib.Path",
+        "re",
+        "typing.Any"
+      ],
+      "line_count": 308,
+      "module_first_line": "def _latest(path: Path, prefix: str, suffix: str) -> Path | None:",
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\consumers\\generate_test_log_health_report.py",
+      "relative_path": "generate_test_log_health_report.py"
+    }
+  ],
+  "metadata": {
+    "folder_name": "consumers",
+    "folder_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\consumers",
+    "generated_at": "2025-10-25T10:09:33.045932+00:00",
+    "scan_depth": "recursive",
+    "schema_version": 1,
+    "total_classes": 4,
+    "total_files": 4,
+    "total_functions": 39
+  },
+  "statistics": {
+    "async_functions": 0,
+    "files_by_type": {
+      ".py": 4
+    },
+    "private_functions": 23,
+    "public_functions": 16,
+    "total_lines_of_code": 995
+  }
+}

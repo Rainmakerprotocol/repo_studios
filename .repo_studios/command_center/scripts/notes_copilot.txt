@@ -1,0 +1,79 @@
+We currently have:
+producer: `generate_function_inventory.py`
+    - collects the inventory reports in json
+    - collects the inventory reports in json then deposits in target folder location
+        purpose:
+            - index the folder location for ease of locating
+            - exposes where duplicate code is located
+            - exposes duplicate modules
+            - exposes missing code 
+            - exposes gaps in an easy to parse location
+        benefits:
+            - cleaner refactors
+            - cleaned decompositions
+            - reduce bloat
+            - reduce duplicates
+            - increase efficency
+            - ease of coding agents to see the code 
+        Requirements:
+            - create the `<source_folder_name>_index/` folder at location
+            - collect comprehensive data 
+            - organize data in an AI friendly machine readable format
+            - deposits data in folder location with same naming convetions
+
+summarizer:`generate_function_analysis.py
+    - collects the data from `generate_function_inventory.py` outputs
+    - organizes data in a structured way
+        purpose:
+            - prepare the data for higher level reasoning
+            - reduce the complexity of comprehension of data
+            - organize the data from`generate_function_inventory.py` 
+            - keep data structure the same
+        benefits: 
+            - allows for ease of access to richer content
+            - allows for human readability
+            - allows for the understanding of where to look for less comprehensive inventory outputs
+        Requirements:
+            - output to be placed along side the output from `generate_function_inventory.py`
+            - does not generate the folder for the location
+            - reports reagrdless of presence of data 
+            - no data to report is good news, which we want that too
+
+aggregators: `scan_duplicates.py`
+    - collects the data from `generate_function_inventory.py` and`generate_function_inventory.py` outputs
+    - organizes data in a structured way
+        - purpose:
+            - prepare the data for higher level reasoning
+            - reduce the complexity of comprehension of data
+            - prepares the data for diagnostics
+            - keep data structure the 
+            - prepares data for indentifying solutions
+        benefits: 
+            - allows for ease of access to richer content
+            - allows for human readability
+            - allows for the understanding of where to look for less comprehensive and more direct
+        requirements:
+            - output to be placed along side the output from `generate_function_inventory.py`
+            - does not generate the folder for the location folder            
+            - output to be duplicated in `.repo_studios/command_center/reports/duplicates_scan/` folder
+            - does generate the folder for the `.repo_studios/command_center/reports/duplicates_scan/` location folder
+            - reports reagrdless of presence of data 
+            - no data to report is good news, which we want that too
+
+orchestrators: unknown
+    - triggers the scripts to cycle the producers, then summarizers, then aggregators
+    - organizes data in a structured way
+        purpose:
+            - prepares data for actions for remediation
+                - code_library canidates
+                - comparing of code quality
+                - single source of truth
+                - surgical exploaration of codebase 
+                - pinpoint opportunities
+        benfits:
+            - easier for a human readability
+            - noise reduction
+            - high data quality
+            - traceability through data channels to reach the source
+        requirements:
+            - still working on that

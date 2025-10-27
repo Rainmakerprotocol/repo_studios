@@ -6,7 +6,7 @@ The legacy `scan_code_duplicates.py` drop-in script has been retired. The
 
 supported, repo-managed tooling now lives under
 
-`.repo_studios/scripts/library_integration/duplicates/scan_duplicates.py`.The legacy `scan_code_duplicates.py` reference script has been superseded by the## Overview
+`.repo_studios/scripts/command_center/duplicates/scan_duplicates.py`.The legacy `scan_code_duplicates.py` reference script has been superseded by the## Overview
 
 
 
@@ -20,19 +20,19 @@ supported, repo-managed tooling now lives under
 
   ```powershell```
 
-  python .repo_studios/scripts/library_integration/duplicates/scan_duplicates.py --help
+  python .repo_studios/scripts/command_center/duplicates/scan_duplicates.py --help
 
-  ```.repo_studios/scripts/library_integration/duplicates/scan_duplicates.py---
+  ```.repo_studios/scripts/command_center/duplicates/scan_duplicates.py---
 
 
 
 - Timestamped reports live under```
 
-  `.repo_studios/library_integration/reports/<timestamp>-duplicate_scan/`.
+  `.repo_studios/command_center/reports/<timestamp>-duplicate_scan/`.
 
 - A rolling copy is written to## Quick Start
 
-  `.repo_studios/library_integration/reports/code_duplicate_report/latest/`.
+  `.repo_studios/command_center/reports/code_duplicate_report/latest/`.
 
 - Each run emits `duplicate_matrix.json` (with metadata and merged producersKey changes:
 
@@ -44,19 +44,19 @@ supported, repo-managed tooling now lives under
 
 - CLI entrypoint now lives within the Repo Studios source tree. Invoke it via
 
-See the protocol references inside `.repo_studios/library_integration/` for
+See the protocol references inside `.repo_studios/command_center/` for
 
-full workflow details:  `python .repo_studios/scripts/library_integration/duplicates/scan_duplicates.py --help`.```bash
+full workflow details:  `python .repo_studios/scripts/command_center/duplicates/scan_duplicates.py --help`.```bash
 
 
 
-1. `README.md` – end-to-end library integration workflow and reporting cadence.- Reports are written beneath `.repo_studios/library_integration/reports/` with# Scan default location (.repo_studios/scripts/)
+1. `README.md` – end-to-end library integration workflow and reporting cadence.- Reports are written beneath `.repo_studios/command_center/reports/` with# Scan default location (.repo_studios/scripts/)
 
 2. `docs/duplicate_detection_schema_alignment.md` – field mapping between
 
    producers analysis, scanner output, and downstream dashboards.  both timestamped folders (e.g., `20251024-173000-duplicate_scan/`) and apython scan_code_duplicates.py
 
-3. `checklists/library_integration_checklist.md` – phase-by-phase plan tracking
+3. `checklists/command_center_checklist.md` – phase-by-phase plan tracking
 
    current implementation status.  rolling `code_duplicate_report/latest/` reference copy.
 
@@ -67,9 +67,9 @@ full workflow details:  `python .repo_studios/scripts/library_integration/duplic
 
     --scan-dirs .repo_studios/scripts/producers \
 
-Refer to `.repo_studios/library_integration/README.md` and                .repo_studios/scripts/consumers
+Refer to `.repo_studios/command_center/README.md` and                .repo_studios/scripts/consumers
 
-`.repo_studios/library_integration/docs/duplicate_detection_schema_alignment.md`
+`.repo_studios/command_center/docs/duplicate_detection_schema_alignment.md`
 
 for the up-to-date workflow, schema expectations, and integration steps.# Specify repo root
 

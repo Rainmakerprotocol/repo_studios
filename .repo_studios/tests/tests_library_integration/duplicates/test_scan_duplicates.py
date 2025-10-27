@@ -1,4 +1,4 @@
-"""Tests for the library integration duplicate scanning module."""
+"""Tests for the Command Center duplicate scanning module."""
 
 from __future__ import annotations
 
@@ -9,7 +9,13 @@ from textwrap import dedent
 
 import pytest
 
-MODULE_DIR = Path(__file__).resolve().parents[4] / ".repo_studios" / "scripts" / "library_integration" / "duplicates"
+MODULE_DIR = (
+    Path(__file__).resolve().parents[4]
+    / ".repo_studios"
+    / "command_center"
+    / "scripts"
+    / "aggregators"
+)
 if str(MODULE_DIR) not in sys.path:
     sys.path.insert(0, str(MODULE_DIR))
 
