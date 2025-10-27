@@ -1,0 +1,19 @@
+{
+  "findings": [],
+  "metadata": {
+    "analysis_version": "1.0.0",
+    "folder_name": "summarizers",
+    "folder_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\summarizers",
+    "generated_at": "2025-10-27T10:12:26.804017+00:00",
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "source_index_file": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\summarizers\\summarizers_index\\summarizers_index-2025-10-27.json",
+    "source_index_generated_at": "2025-10-27T10:12:19.792972+00:00",
+    "source_index_hash": "e4acf8d6acc440507389677fcc94f35153c7779f5d4da5a778773f8a0469eabd"
+  },
+  "schema_version": 1,
+  "summary": {
+    "duplicate_groups": 0,
+    "total_duplicate_functions": 0,
+    "total_files_scanned": 2
+  }
+}

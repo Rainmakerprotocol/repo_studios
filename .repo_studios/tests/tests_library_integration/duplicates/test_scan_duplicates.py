@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ast
+import os
 import sys
 from pathlib import Path
 from textwrap import dedent
@@ -22,9 +23,16 @@ if str(MODULE_DIR) not in sys.path:
 from scan_duplicates import (  # type: ignore  # noqa: E402
     FunctionExtractor,
     FunctionInfo,
+    Options,
+    Paths,
+    RunPaths,
     compute_ast_similarity,
     group_duplicates,
+    scan_python_files,
+    write_outputs,
+    apply_retention,
     _extract_top_offenders,
+    _slugify_relative,
 )
 
 
@@ -231,3 +239,89 @@ class TestTopOffenders:
         assert detail["line_end"] == 2
         assert detail["line_count"] == 2
         assert detail["sample_line"].startswith("def foo")
+
+
+class TestFileScanning:
+    def test_skips_hidden_and_ignored_directories(self, tmp_path: Path) -> None:
+        target = tmp_path / "target"
+        target.mkdir()
+        allowed_pkg = target / "pkg"
+        allowed_pkg.mkdir()
+        (allowed_pkg / "__init__.py").write_text("", encoding="utf-8")
+        ignored = target / "__pycache__"
+        ignored.mkdir()
+        (ignored / "ignored.py").write_text("# cache", encoding="utf-8")
+        hidden = target / ".hidden"
+        hidden.mkdir()
+        (hidden / "hidden.py").write_text("# hidden", encoding="utf-8")
+
+        discovered = scan_python_files(target)
+
+        assert allowed_pkg / "__init__.py" in discovered
+        assert all(path.name != "ignored.py" for path in discovered)
+        assert all(path.name != "hidden.py" for path in discovered)
+
+
+class TestOutputMirroring:
+    def _build_paths(self, repo_root: Path, target: Path, run_root: Path) -> Paths:
+        slug = _slugify_relative(target.relative_to(repo_root))
+        index_dir = target / f"{target.name}_index"
+        return Paths(
+            repo_root=repo_root,
+            target=target,
+            run_root=run_root,
+            target_slug=slug,
+            source_name=target.name,
+            target_index_dir=index_dir,
+        )
+
+    def test_write_outputs_mirrors_to_slugged_directory(self, tmp_path: Path) -> None:
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        target = repo_root / "src"
+        target.mkdir()
+        run_root = repo_root / "reports"
+        paths = self._build_paths(repo_root, target, run_root)
+        run_paths = RunPaths(
+            output_dir=run_root / f"{paths.target_slug}_duplicate_scan",
+            index_dir=paths.target_index_dir,
+        )
+        payload = {"metadata": {"target": "src"}, "stats": {}, "entries": []}
+        summary = "# Summary\n"
+
+        artifacts = write_outputs(payload, summary, run_paths, paths)
+
+        for path in (*artifacts.matrix_paths, *artifacts.summary_paths):
+            assert path.exists()
+            assert path.read_text(encoding="utf-8")
+
+        mirror_matrix = artifacts.matrix_paths[0].read_text(encoding="utf-8")
+        index_matrix = artifacts.matrix_paths[-1].read_text(encoding="utf-8")
+        assert mirror_matrix == index_matrix
+
+    def test_apply_retention_prunes_old_runs(self, tmp_path: Path) -> None:
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        target = repo_root / "src"
+        target.mkdir()
+        run_root = repo_root / "reports"
+        paths = self._build_paths(repo_root, target, run_root)
+        run_paths = RunPaths(
+            output_dir=run_root / f"{paths.target_slug}_duplicate_scan",
+            index_dir=paths.target_index_dir,
+        )
+        run_paths.output_dir.mkdir(parents=True, exist_ok=True)
+        for offset in range(5):
+            matrix = run_paths.output_dir / f"{paths.source_name}_duplicate_matrix-2025-10-{20 + offset}.json"
+            summary = run_paths.output_dir / f"{paths.source_name}_duplicate_summary-2025-10-{20 + offset}.md"
+            matrix.write_text("{}", encoding="utf-8")
+            summary.write_text("# summary", encoding="utf-8")
+            timestamp = 1_000_000 + offset
+            os.utime(matrix, (timestamp, timestamp))
+            os.utime(summary, (timestamp, timestamp))
+
+        options = Options(keep_runs=2)
+        apply_retention(run_paths, paths, options)
+
+        remaining_matrices = sorted(run_paths.output_dir.glob(f"{paths.source_name}_duplicate_matrix-*.json"))
+        assert len(remaining_matrices) == options.keep_runs

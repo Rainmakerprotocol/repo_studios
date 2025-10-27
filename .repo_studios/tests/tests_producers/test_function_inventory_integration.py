@@ -68,6 +68,15 @@ def _load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _slugify_relative(path: Path) -> str:
+    parts: list[str] = []
+    for part in path.parts:
+        slug = "".join(ch.lower() if ch.isalnum() else "-" for ch in part)
+        slug = slug.strip("-") or "segment"
+        parts.append(slug)
+    return "__".join(parts) or "root"
+
+
 def _validate_with_schema(payload: dict, schema_name: str) -> None:
     schema_path = SCHEMA_DIR / schema_name
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
@@ -104,6 +113,14 @@ def test_inventory_and_analysis_round_trip(tmp_path: Path) -> None:
     assert screening_files, "Expected screening summary artifact"
     screening_payload = _load_json(screening_files[-1])
     assert "graphs" in screening_payload
+    slug = _slugify_relative(target.relative_to(workspace))
+    reports_root = workspace / ".repo_studios" / "command_center" / "reports"
+    mirror_index_dir = reports_root / "index_scan" / f"{slug}_index"
+    mirror_index_files = sorted(mirror_index_dir.glob("sample_pkg_index-*.json"))
+    assert mirror_index_files
+    assert _load_json(mirror_index_files[-1]) == inventory_payload
+    mirror_screening = sorted(mirror_index_dir.glob("sample_pkg_screening-*.json"))
+    assert mirror_screening
 
     exit_code = _run_analysis(["--repo-root", str(workspace), str(target)])
     assert exit_code == 0
@@ -116,6 +133,13 @@ def test_inventory_and_analysis_round_trip(tmp_path: Path) -> None:
     analysis_summary = analysis_payload["summary"]
     assert analysis_summary["duplicate_groups"] == 1
     assert analysis_summary["total_duplicate_functions"] == 2
+
+    mirror_dir = reports_root / "index_scan_analysis" / f"{slug}_analysis"
+    mirror_files = sorted(mirror_dir.glob("sample_pkg_analysis-*.json"))
+    assert mirror_files, "Expected mirrored analysis artifact"
+    mirror_payload = _load_json(mirror_files[-1])
+    assert mirror_payload == analysis_payload
+    assert not (mirror_dir / "latest.json").exists()
 
     finding = analysis_payload["findings"][0]
     assert finding["details"]["signature"].startswith("def duplicate_helper")

@@ -3,110 +3,98 @@
     {
       "function_name": "configure_logging",
       "id": "duplicate_function::duplicate-def-configure-logging-level--str-----none",
-      "producer_duplicate_count": 16,
+      "producer_duplicate_count": 14,
       "producer_instances": [
         {
           "line": 107,
           "line_count": 2,
           "name": "configure_logging",
-          "path": "analyze_test_hardening.py"
+          "path": "producers/analyze_test_hardening.py"
         },
         {
           "line": 274,
           "line_count": 3,
           "name": "configure_logging",
-          "path": "check_inventory_health.py"
+          "path": "producers/check_inventory_health.py"
         },
         {
           "line": 453,
           "line_count": 3,
           "name": "configure_logging",
-          "path": "diff_standards_index.py"
+          "path": "producers/diff_standards_index.py"
         },
         {
           "line": 327,
           "line_count": 3,
           "name": "configure_logging",
-          "path": "generate_dependency_hygiene_report.py"
-        },
-        {
-          "line": 81,
-          "line_count": 2,
-          "name": "configure_logging",
-          "path": "generate_function_analysis.py"
-        },
-        {
-          "line": 76,
-          "line_count": 2,
-          "name": "configure_logging",
-          "path": "generate_function_inventory.py"
+          "path": "producers/generate_dependency_hygiene_report.py"
         },
         {
           "line": 360,
           "line_count": 3,
           "name": "configure_logging",
-          "path": "generate_import_graph_report.py"
+          "path": "producers/generate_import_graph_report.py"
         },
         {
           "line": 603,
           "line_count": 3,
           "name": "configure_logging",
-          "path": "generate_lizard_report.py"
+          "path": "producers/generate_lizard_report.py"
         },
         {
           "line": 623,
           "line_count": 3,
           "name": "configure_logging",
-          "path": "generate_standards_index.py"
+          "path": "producers/generate_standards_index.py"
         },
         {
           "line": 370,
           "line_count": 2,
           "name": "configure_logging",
-          "path": "generate_typecheck_report.py"
+          "path": "producers/generate_typecheck_report.py"
         },
         {
           "line": 347,
           "line_count": 2,
           "name": "configure_logging",
-          "path": "scan_code_placeholders.py"
+          "path": "producers/scan_code_placeholders.py"
         },
         {
           "line": 1187,
           "line_count": 2,
           "name": "configure_logging",
-          "path": "scan_monkey_patches.py"
+          "path": "producers/scan_monkey_patches.py"
         },
         {
           "line": 87,
           "line_count": 2,
           "name": "configure_logging",
-          "path": "seed_standards_prompts.py"
+          "path": "producers/seed_standards_prompts.py"
         },
         {
           "line": 91,
           "line_count": 2,
           "name": "configure_logging",
-          "path": "validate_import_boundaries.py"
+          "path": "producers/validate_import_boundaries.py"
         },
         {
           "line": 81,
           "line_count": 2,
           "name": "configure_logging",
-          "path": "validate_metrics_anchor_stubs.py"
+          "path": "producers/validate_metrics_anchor_stubs.py"
         },
         {
           "line": 120,
           "line_count": 2,
           "name": "configure_logging",
-          "path": "verify_docs_integrity.py"
+          "path": "producers/verify_docs_integrity.py"
         }
       ],
       "scanner_groups": [
         {
           "canonical_name": "configure_logging",
           "duplicate_type": "exact_duplicate",
-          "group_id": "dup_004",
+          "group_id": "dup_005",
           "occurrences": [
             {
               "code_hash": "687032cf00e9",
@@ -166,241 +154,97 @@
       "signature": "def configure_logging(level: str) -> None:"
     },
     {
-      "function_name": "write_artifacts",
-      "id": "duplicate_function::duplicate-def-write-artifacts",
-      "producer_duplicate_count": 11,
+      "function_name": "main",
+      "id": "duplicate_function::duplicate-def-main-argv--list-str----none---none-----int",
+      "producer_duplicate_count": 14,
       "producer_instances": [
         {
-          "line": 238,
-          "line_count": 34,
-          "name": "write_artifacts",
-          "path": "check_inventory_health.py"
-        },
-        {
-          "line": 420,
-          "line_count": 31,
-          "name": "write_artifacts",
-          "path": "diff_standards_index.py"
-        },
-        {
-          "line": 234,
-          "line_count": 38,
-          "name": "write_artifacts",
-          "path": "generate_anchor_inventory.py"
-        },
-        {
-          "line": 291,
-          "line_count": 34,
-          "name": "write_artifacts",
-          "path": "generate_dependency_hygiene_report.py"
+          "line": 259,
+          "line_count": 32,
+          "name": "main",
+          "path": "aggregators/analyze_monkey_patch_trends.py"
         },
         {
           "line": 314,
-          "line_count": 44,
-          "name": "write_artifacts",
-          "path": "generate_import_graph_report.py"
+          "line_count": 33,
+          "name": "main",
+          "path": "consumers/generate_fault_artifacts.py"
         },
         {
-          "line": 346,
-          "line_count": 30,
-          "name": "write_artifacts",
-          "path": "generate_lizard_report.py"
+          "line": 376,
+          "line_count": 258,
+          "name": "main",
+          "path": "orchestrators/run_pytest_log_capture.py"
         },
         {
-          "line": 568,
-          "line_count": 53,
-          "name": "write_artifacts",
-          "path": "generate_standards_index.py"
+          "line": 197,
+          "line_count": 20,
+          "name": "main",
+          "path": "orchestrators/run_standards_index_cli.py"
         },
-        {
-          "line": 296,
-          "line_count": 21,
-          "name": "write_artifacts",
-          "path": "scan_code_placeholders.py"
-        },
-        {
-          "line": 959,
-          "line_count": 43,
-          "name": "write_artifacts",
-          "path": "scan_monkey_patches.py"
-        },
-        {
-          "line": 291,
-          "line_count": 17,
-          "name": "write_artifacts",
-          "path": "seed_standards_prompts.py"
-        },
-        {
-          "line": 344,
-          "line_count": 17,
-          "name": "write_artifacts",
-          "path": "validate_import_boundaries.py"
-        }
-      ],
-      "scanner_groups": [],
-      "signature": "def write_artifacts("
-    },
-    {
-      "function_name": "main",
-      "id": "duplicate_function::duplicate-def-main-argv--list-str----none---none-----int",
-      "producer_duplicate_count": 10,
-      "producer_instances": [
         {
           "line": 353,
           "line_count": 30,
           "name": "main",
-          "path": "analyze_standards_index_gaps.py"
+          "path": "producers/analyze_standards_index_gaps.py"
         },
         {
           "line": 458,
           "line_count": 102,
           "name": "main",
-          "path": "diff_standards_index.py"
+          "path": "producers/diff_standards_index.py"
         },
         {
           "line": 608,
           "line_count": 56,
           "name": "main",
-          "path": "generate_lizard_report.py"
+          "path": "producers/generate_lizard_report.py"
         },
         {
           "line": 660,
           "line_count": 50,
           "name": "main",
-          "path": "generate_standards_index.py"
+          "path": "producers/generate_standards_index.py"
         },
         {
           "line": 391,
           "line_count": 79,
           "name": "main",
-          "path": "generate_typecheck_report.py"
+          "path": "producers/generate_typecheck_report.py"
         },
         {
           "line": 376,
           "line_count": 3,
           "name": "main",
-          "path": "scan_code_placeholders.py"
+          "path": "producers/scan_code_placeholders.py"
         },
         {
           "line": 1270,
           "line_count": 8,
           "name": "main",
-          "path": "scan_monkey_patches.py"
+          "path": "producers/scan_monkey_patches.py"
         },
         {
           "line": 400,
           "line_count": 3,
           "name": "main",
-          "path": "seed_standards_prompts.py"
+          "path": "producers/seed_standards_prompts.py"
         },
         {
           "line": 470,
           "line_count": 3,
           "name": "main",
-          "path": "validate_import_boundaries.py"
+          "path": "producers/validate_import_boundaries.py"
         },
         {
           "line": 381,
           "line_count": 3,
           "name": "main",
-          "path": "validate_metrics_anchor_stubs.py"
+          "path": "producers/validate_metrics_anchor_stubs.py"
         }
       ],
       "scanner_groups": [],
       "signature": "def main(argv: list[str] | None = None) -> int:"
-    },
-    {
-      "function_name": "build_paths",
-      "id": "duplicate_function::duplicate-def-build-paths-args--argparse-namespace-----paths",
-      "producer_duplicate_count": 9,
-      "producer_instances": [
-        {
-          "line": 93,
-          "line_count": 5,
-          "name": "build_paths",
-          "path": "analyze_test_hardening.py"
-        },
-        {
-          "line": 64,
-          "line_count": 10,
-          "name": "build_paths",
-          "path": "generate_function_analysis.py"
-        },
-        {
-          "line": 60,
-          "line_count": 10,
-          "name": "build_paths",
-          "path": "generate_function_inventory.py"
-        },
-        {
-          "line": 115,
-          "line_count": 5,
-          "name": "build_paths",
-          "path": "scan_code_placeholders.py"
-        },
-        {
-          "line": 1191,
-          "line_count": 11,
-          "name": "build_paths",
-          "path": "scan_monkey_patches.py"
-        },
-        {
-          "line": 91,
-          "line_count": 19,
-          "name": "build_paths",
-          "path": "seed_standards_prompts.py"
-        },
-        {
-          "line": 95,
-          "line_count": 25,
-          "name": "build_paths",
-          "path": "validate_import_boundaries.py"
-        },
-        {
-          "line": 85,
-          "line_count": 27,
-          "name": "build_paths",
-          "path": "validate_metrics_anchor_stubs.py"
-        },
-        {
-          "line": 124,
-          "line_count": 15,
-          "name": "build_paths",
-          "path": "verify_docs_integrity.py"
-        }
-      ],
-      "scanner_groups": [
-        {
-          "canonical_name": "build_paths",
-          "duplicate_type": "exact_duplicate",
-          "group_id": "dup_014",
-          "occurrences": [
-            {
-              "code_hash": "1402b825940a",
-              "file": ".repo_studios/scripts/producers/generate_function_analysis.py",
-              "function_name": "build_paths",
-              "is_function": true,
-              "line_end": 73,
-              "line_span": 10,
-              "line_start": 64,
-              "sample_line": "def build_paths(args: argparse.Namespace) -> Paths:"
-            },
-            {
-              "code_hash": "1402b825940a",
-              "file": ".repo_studios/scripts/producers/generate_function_inventory.py",
-              "function_name": "build_paths",
-              "is_function": true,
-              "line_end": 69,
-              "line_span": 10,
-              "line_start": 60,
-              "sample_line": "def build_paths(args: argparse.Namespace) -> Paths:"
-            }
-          ],
-          "signature_hash": "1402b825940a",
-          "similarity_score": 1.0
-        }
-      ],
-      "signature": "def build_paths(args: argparse.Namespace) -> Paths:"
     },
     {
       "function_name": "prune_old_runs",
@@ -411,62 +255,62 @@
           "line": 124,
           "line_count": 17,
           "name": "prune_old_runs",
-          "path": "check_inventory_health.py"
+          "path": "producers/check_inventory_health.py"
         },
         {
           "line": 83,
           "line_count": 17,
           "name": "prune_old_runs",
-          "path": "diff_standards_index.py"
+          "path": "producers/diff_standards_index.py"
         },
         {
           "line": 272,
           "line_count": 17,
           "name": "prune_old_runs",
-          "path": "generate_dependency_hygiene_report.py"
+          "path": "producers/generate_dependency_hygiene_report.py"
         },
         {
           "line": 173,
           "line_count": 14,
           "name": "prune_old_runs",
-          "path": "generate_import_graph_report.py"
+          "path": "producers/generate_import_graph_report.py"
         },
         {
           "line": 167,
           "line_count": 17,
           "name": "prune_old_runs",
-          "path": "generate_lizard_report.py"
+          "path": "producers/generate_lizard_report.py"
         },
         {
           "line": 408,
           "line_count": 17,
           "name": "prune_old_runs",
-          "path": "generate_standards_index.py"
+          "path": "producers/generate_standards_index.py"
         },
         {
           "line": 78,
           "line_count": 13,
           "name": "prune_old_runs",
-          "path": "generate_typecheck_report.py"
+          "path": "producers/generate_typecheck_report.py"
         },
         {
           "line": 75,
           "line_count": 13,
           "name": "prune_old_runs",
-          "path": "render_inventory_views.py"
+          "path": "producers/render_inventory_views.py"
         },
         {
           "line": 195,
           "line_count": 13,
           "name": "prune_old_runs",
-          "path": "validate_inventory.py"
+          "path": "producers/validate_inventory.py"
         }
       ],
       "scanner_groups": [
         {
           "canonical_name": "prune_old_runs",
           "duplicate_type": "exact_duplicate",
-          "group_id": "dup_001",
+          "group_id": "dup_002",
           "occurrences": [
             {
               "code_hash": "fca981bad22e",
@@ -495,7 +339,7 @@
         {
           "canonical_name": "prune_old_runs",
           "duplicate_type": "exact_duplicate",
-          "group_id": "dup_003",
+          "group_id": "dup_004",
           "occurrences": [
             {
               "code_hash": "c28e7d5f1afe",
@@ -563,7 +407,7 @@
         {
           "canonical_name": "prune_old_runs",
           "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_028",
+          "group_id": "dup_030",
           "occurrences": [
             {
               "code_hash": "4637c6f67c90",
@@ -621,56 +465,56 @@
           "line": 102,
           "line_count": 7,
           "name": "_copy_latest",
-          "path": "diff_standards_index.py"
+          "path": "producers/diff_standards_index.py"
         },
         {
           "line": 263,
           "line_count": 7,
           "name": "_copy_latest",
-          "path": "generate_dependency_hygiene_report.py"
+          "path": "producers/generate_dependency_hygiene_report.py"
         },
         {
           "line": 164,
           "line_count": 7,
           "name": "_copy_latest",
-          "path": "generate_import_graph_report.py"
+          "path": "producers/generate_import_graph_report.py"
         },
         {
           "line": 158,
           "line_count": 7,
           "name": "_copy_latest",
-          "path": "generate_lizard_report.py"
+          "path": "producers/generate_lizard_report.py"
         },
         {
           "line": 427,
           "line_count": 7,
           "name": "_copy_latest",
-          "path": "generate_standards_index.py"
+          "path": "producers/generate_standards_index.py"
         },
         {
           "line": 356,
           "line_count": 7,
           "name": "_copy_latest",
-          "path": "generate_typecheck_report.py"
+          "path": "producers/generate_typecheck_report.py"
         },
         {
           "line": 277,
           "line_count": 7,
           "name": "_copy_latest",
-          "path": "render_inventory_views.py"
+          "path": "producers/render_inventory_views.py"
         },
         {
           "line": 210,
           "line_count": 7,
           "name": "_copy_latest",
-          "path": "validate_inventory.py"
+          "path": "producers/validate_inventory.py"
         }
       ],
       "scanner_groups": [
         {
           "canonical_name": "copy_latest",
           "duplicate_type": "exact_duplicate",
-          "group_id": "dup_008",
+          "group_id": "dup_009",
           "occurrences": [
             {
               "code_hash": "2fcebe9cbce3",
@@ -760,61 +604,277 @@
       "signature": "def _copy_latest(src: Path, dest: Path) -> None:"
     },
     {
-      "function_name": "compose_payload",
-      "id": "duplicate_function::duplicate-def-compose-payload",
-      "producer_duplicate_count": 8,
+      "function_name": "build_paths",
+      "id": "duplicate_function::duplicate-def-build-paths-args--argparse-namespace-----paths",
+      "producer_duplicate_count": 7,
       "producer_instances": [
         {
-          "line": 177,
-          "line_count": 32,
-          "name": "compose_payload",
-          "path": "generate_function_analysis.py"
+          "line": 93,
+          "line_count": 5,
+          "name": "build_paths",
+          "path": "producers/analyze_test_hardening.py"
         },
+        {
+          "line": 115,
+          "line_count": 5,
+          "name": "build_paths",
+          "path": "producers/scan_code_placeholders.py"
+        },
+        {
+          "line": 1191,
+          "line_count": 11,
+          "name": "build_paths",
+          "path": "producers/scan_monkey_patches.py"
+        },
+        {
+          "line": 91,
+          "line_count": 19,
+          "name": "build_paths",
+          "path": "producers/seed_standards_prompts.py"
+        },
+        {
+          "line": 95,
+          "line_count": 25,
+          "name": "build_paths",
+          "path": "producers/validate_import_boundaries.py"
+        },
+        {
+          "line": 85,
+          "line_count": 27,
+          "name": "build_paths",
+          "path": "producers/validate_metrics_anchor_stubs.py"
+        },
+        {
+          "line": 124,
+          "line_count": 15,
+          "name": "build_paths",
+          "path": "producers/verify_docs_integrity.py"
+        }
+      ],
+      "scanner_groups": [],
+      "signature": "def build_paths(args: argparse.Namespace) -> Paths:"
+    },
+    {
+      "function_name": "compose_payload",
+      "id": "duplicate_function::duplicate-def-compose-payload",
+      "producer_duplicate_count": 7,
+      "producer_instances": [
         {
           "line": 214,
           "line_count": 27,
           "name": "compose_payload",
-          "path": "scan_code_placeholders.py"
+          "path": "producers/scan_code_placeholders.py"
         },
         {
           "line": 826,
           "line_count": 46,
           "name": "compose_payload",
-          "path": "scan_monkey_patches.py"
+          "path": "producers/scan_monkey_patches.py"
         },
         {
           "line": 336,
           "line_count": 23,
           "name": "compose_payload",
-          "path": "seed_standards_prompts.py"
+          "path": "producers/seed_standards_prompts.py"
         },
         {
           "line": 382,
           "line_count": 30,
           "name": "compose_payload",
-          "path": "validate_import_boundaries.py"
+          "path": "producers/validate_import_boundaries.py"
         },
         {
           "line": 458,
           "line_count": 36,
           "name": "compose_payload",
-          "path": "validate_inventory.py"
+          "path": "producers/validate_inventory.py"
         },
         {
           "line": 202,
           "line_count": 37,
           "name": "compose_payload",
-          "path": "validate_metrics_anchor_stubs.py"
+          "path": "producers/validate_metrics_anchor_stubs.py"
         },
         {
           "line": 362,
           "line_count": 73,
           "name": "compose_payload",
-          "path": "verify_docs_integrity.py"
+          "path": "producers/verify_docs_integrity.py"
         }
       ],
       "scanner_groups": [],
       "signature": "def compose_payload("
+    },
+    {
+      "function_name": "main",
+      "id": "duplicate_function::duplicate-def-main-argv--sequence-str----none---none-----int",
+      "producer_duplicate_count": 7,
+      "producer_instances": [
+        {
+          "line": 578,
+          "line_count": 91,
+          "name": "main",
+          "path": "orchestrators/orchestrate_health_suite.py"
+        },
+        {
+          "line": 594,
+          "line_count": 3,
+          "name": "main",
+          "path": "producers/analyze_test_hardening.py"
+        },
+        {
+          "line": 343,
+          "line_count": 34,
+          "name": "main",
+          "path": "producers/generate_anchor_inventory.py"
+        },
+        {
+          "line": 332,
+          "line_count": 80,
+          "name": "main",
+          "path": "producers/generate_dependency_hygiene_report.py"
+        },
+        {
+          "line": 365,
+          "line_count": 64,
+          "name": "main",
+          "path": "producers/generate_import_graph_report.py"
+        },
+        {
+          "line": 528,
+          "line_count": 87,
+          "name": "main",
+          "path": "producers/validate_inventory.py"
+        },
+        {
+          "line": 590,
+          "line_count": 3,
+          "name": "main",
+          "path": "producers/verify_docs_integrity.py"
+        }
+      ],
+      "scanner_groups": [
+        {
+          "canonical_name": "main",
+          "duplicate_type": "exact_duplicate",
+          "group_id": "dup_021",
+          "occurrences": [
+            {
+              "code_hash": "131aab9af12c",
+              "file": ".repo_studios/scripts/producers/seed_standards_prompts.py",
+              "function_name": "main",
+              "is_function": true,
+              "line_end": 402,
+              "line_span": 3,
+              "line_start": 400,
+              "sample_line": "def main(argv: list[str] | None = None) -> int:"
+            },
+            {
+              "code_hash": "131aab9af12c",
+              "file": ".repo_studios/scripts/producers/validate_import_boundaries.py",
+              "function_name": "main",
+              "is_function": true,
+              "line_end": 472,
+              "line_span": 3,
+              "line_start": 470,
+              "sample_line": "def main(argv: list[str] | None = None) -> int:"
+            },
+            {
+              "code_hash": "131aab9af12c",
+              "file": ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py",
+              "function_name": "main",
+              "is_function": true,
+              "line_end": 383,
+              "line_span": 3,
+              "line_start": 381,
+              "sample_line": "def main(argv: list[str] | None = None) -> int:"
+            }
+          ],
+          "signature_hash": "131aab9af12c",
+          "similarity_score": 1.0
+        },
+        {
+          "canonical_name": "main",
+          "duplicate_type": "near_duplicate_with_variations",
+          "group_id": "dup_028",
+          "occurrences": [
+            {
+              "code_hash": "53c85b0cee21",
+              "file": ".repo_studios/scripts/producers/analyze_test_hardening.py",
+              "function_name": "main",
+              "is_function": true,
+              "line_end": 596,
+              "line_span": 3,
+              "line_start": 594,
+              "sample_line": "def main(argv: Sequence[str] | None = None) -> int:"
+            },
+            {
+              "code_hash": "7a7d08b5af97",
+              "file": ".repo_studios/scripts/producers/verify_docs_integrity.py",
+              "function_name": "main",
+              "is_function": true,
+              "line_end": 592,
+              "line_span": 3,
+              "line_start": 590,
+              "sample_line": "def main(argv: Sequence[str] | None = None) -> int:"
+            }
+          ],
+          "signature_hash": "53c85b0cee21",
+          "similarity_score": 0.9375
+        }
+      ],
+      "signature": "def main(argv: Sequence[str] | None = None) -> int:"
+    },
+    {
+      "function_name": "write_artifacts",
+      "id": "duplicate_function::duplicate-def-write-artifacts",
+      "producer_duplicate_count": 7,
+      "producer_instances": [
+        {
+          "line": 420,
+          "line_count": 31,
+          "name": "write_artifacts",
+          "path": "producers/diff_standards_index.py"
+        },
+        {
+          "line": 346,
+          "line_count": 30,
+          "name": "write_artifacts",
+          "path": "producers/generate_lizard_report.py"
+        },
+        {
+          "line": 568,
+          "line_count": 53,
+          "name": "write_artifacts",
+          "path": "producers/generate_standards_index.py"
+        },
+        {
+          "line": 296,
+          "line_count": 21,
+          "name": "write_artifacts",
+          "path": "producers/scan_code_placeholders.py"
+        },
+        {
+          "line": 959,
+          "line_count": 43,
+          "name": "write_artifacts",
+          "path": "producers/scan_monkey_patches.py"
+        },
+        {
+          "line": 291,
+          "line_count": 17,
+          "name": "write_artifacts",
+          "path": "producers/seed_standards_prompts.py"
+        },
+        {
+          "line": 344,
+          "line_count": 17,
+          "name": "write_artifacts",
+          "path": "producers/validate_import_boundaries.py"
+        }
+      ],
+      "scanner_groups": [],
+      "signature": "def write_artifacts("
     },
     {
       "function_name": "_parse_timestamp",
@@ -825,44 +885,44 @@
           "line": 294,
           "line_count": 7,
           "name": "_parse_timestamp",
-          "path": "analyze_standards_index_gaps.py"
+          "path": "producers/analyze_standards_index_gaps.py"
         },
         {
           "line": 326,
           "line_count": 7,
           "name": "_parse_timestamp",
-          "path": "generate_anchor_inventory.py"
+          "path": "producers/generate_anchor_inventory.py"
         },
         {
           "line": 249,
           "line_count": 7,
           "name": "_parse_timestamp",
-          "path": "generate_dependency_hygiene_report.py"
+          "path": "producers/generate_dependency_hygiene_report.py"
         },
         {
           "line": 150,
           "line_count": 7,
           "name": "_parse_timestamp",
-          "path": "generate_import_graph_report.py"
+          "path": "producers/generate_import_graph_report.py"
         },
         {
           "line": 52,
           "line_count": 7,
           "name": "_parse_timestamp",
-          "path": "render_inventory_views.py"
+          "path": "producers/render_inventory_views.py"
         },
         {
           "line": 247,
           "line_count": 7,
           "name": "_parse_timestamp",
-          "path": "validate_markdown_anchors.py"
+          "path": "producers/validate_markdown_anchors.py"
         }
       ],
       "scanner_groups": [
         {
           "canonical_name": "parse_timestamp",
           "duplicate_type": "exact_duplicate",
-          "group_id": "dup_002",
+          "group_id": "dup_003",
           "occurrences": [
             {
               "code_hash": "50759a73ff0d",
@@ -901,7 +961,7 @@
         {
           "canonical_name": "parse_timestamp",
           "duplicate_type": "exact_duplicate",
-          "group_id": "dup_012",
+          "group_id": "dup_013",
           "occurrences": [
             {
               "code_hash": "c9fea8b0cd79",
@@ -931,49 +991,49 @@
       "signature": "def _parse_timestamp(raw: str | None) -> datetime:"
     },
     {
-      "function_name": "build_options",
-      "id": "duplicate_function::duplicate-def-build-options-args--argparse-namespace-----options",
+      "function_name": "build_parser",
+      "id": "duplicate_function::duplicate-def-build-parser------argparse-argumentparser",
       "producer_duplicate_count": 6,
       "producer_instances": [
         {
-          "line": 100,
-          "line_count": 5,
-          "name": "build_options",
-          "path": "analyze_test_hardening.py"
+          "line": 151,
+          "line_count": 35,
+          "name": "build_parser",
+          "path": "orchestrators/run_standards_index_cli.py"
         },
         {
-          "line": 76,
-          "line_count": 3,
-          "name": "build_options",
-          "path": "generate_function_analysis.py"
+          "line": 303,
+          "line_count": 48,
+          "name": "build_parser",
+          "path": "producers/analyze_standards_index_gaps.py"
         },
         {
-          "line": 72,
-          "line_count": 2,
-          "name": "build_options",
-          "path": "generate_function_inventory.py"
+          "line": 218,
+          "line_count": 43,
+          "name": "build_parser",
+          "path": "producers/diff_standards_index.py"
         },
         {
-          "line": 112,
-          "line_count": 11,
-          "name": "build_options",
-          "path": "seed_standards_prompts.py"
+          "line": 628,
+          "line_count": 16,
+          "name": "build_parser",
+          "path": "producers/generate_standards_index.py"
         },
         {
-          "line": 114,
-          "line_count": 2,
-          "name": "build_options",
-          "path": "validate_metrics_anchor_stubs.py"
+          "line": 374,
+          "line_count": 15,
+          "name": "build_parser",
+          "path": "producers/generate_typecheck_report.py"
         },
         {
-          "line": 141,
-          "line_count": 7,
-          "name": "build_options",
-          "path": "verify_docs_integrity.py"
+          "line": 510,
+          "line_count": 16,
+          "name": "build_parser",
+          "path": "producers/validate_inventory.py"
         }
       ],
       "scanner_groups": [],
-      "signature": "def build_options(args: argparse.Namespace) -> Options:"
+      "signature": "def build_parser() -> argparse.ArgumentParser:"
     },
     {
       "function_name": "build_report",
@@ -984,86 +1044,41 @@
           "line": 145,
           "line_count": 34,
           "name": "build_report",
-          "path": "analyze_standards_index_gaps.py"
+          "path": "producers/analyze_standards_index_gaps.py"
         },
         {
           "line": 143,
           "line_count": 40,
           "name": "build_report",
-          "path": "check_inventory_health.py"
+          "path": "producers/check_inventory_health.py"
         },
         {
           "line": 162,
           "line_count": 24,
           "name": "build_report",
-          "path": "generate_anchor_inventory.py"
+          "path": "producers/generate_anchor_inventory.py"
         },
         {
           "line": 159,
           "line_count": 31,
           "name": "build_report",
-          "path": "generate_dependency_hygiene_report.py"
+          "path": "producers/generate_dependency_hygiene_report.py"
         },
         {
           "line": 193,
           "line_count": 50,
           "name": "build_report",
-          "path": "generate_import_graph_report.py"
+          "path": "producers/generate_import_graph_report.py"
         },
         {
           "line": 67,
           "line_count": 28,
           "name": "build_report",
-          "path": "validate_markdown_anchors.py"
+          "path": "producers/validate_markdown_anchors.py"
         }
       ],
       "scanner_groups": [],
       "signature": "def build_report("
-    },
-    {
-      "function_name": "main",
-      "id": "duplicate_function::duplicate-def-main-argv--sequence-str----none---none-----int",
-      "producer_duplicate_count": 6,
-      "producer_instances": [
-        {
-          "line": 594,
-          "line_count": 3,
-          "name": "main",
-          "path": "analyze_test_hardening.py"
-        },
-        {
-          "line": 343,
-          "line_count": 34,
-          "name": "main",
-          "path": "generate_anchor_inventory.py"
-        },
-        {
-          "line": 332,
-          "line_count": 80,
-          "name": "main",
-          "path": "generate_dependency_hygiene_report.py"
-        },
-        {
-          "line": 365,
-          "line_count": 64,
-          "name": "main",
-          "path": "generate_import_graph_report.py"
-        },
-        {
-          "line": 528,
-          "line_count": 87,
-          "name": "main",
-          "path": "validate_inventory.py"
-        },
-        {
-          "line": 590,
-          "line_count": 3,
-          "name": "main",
-          "path": "verify_docs_integrity.py"
-        }
-      ],
-      "scanner_groups": [],
-      "signature": "def main(argv: Sequence[str] | None = None) -> int:"
     },
     {
       "function_name": "prune_history",
@@ -1074,37 +1089,37 @@
           "line": 335,
           "line_count": 10,
           "name": "prune_history",
-          "path": "scan_code_placeholders.py"
+          "path": "producers/scan_code_placeholders.py"
         },
         {
           "line": 1004,
           "line_count": 11,
           "name": "prune_history",
-          "path": "scan_monkey_patches.py"
+          "path": "producers/scan_monkey_patches.py"
         },
         {
           "line": 310,
           "line_count": 11,
           "name": "prune_history",
-          "path": "seed_standards_prompts.py"
+          "path": "producers/seed_standards_prompts.py"
         },
         {
           "line": 363,
           "line_count": 17,
           "name": "prune_history",
-          "path": "validate_import_boundaries.py"
+          "path": "producers/validate_import_boundaries.py"
         },
         {
           "line": 315,
           "line_count": 17,
           "name": "prune_history",
-          "path": "validate_metrics_anchor_stubs.py"
+          "path": "producers/validate_metrics_anchor_stubs.py"
         },
         {
           "line": 520,
           "line_count": 21,
           "name": "prune_history",
-          "path": "verify_docs_integrity.py"
+          "path": "producers/verify_docs_integrity.py"
         }
       ],
       "scanner_groups": [
@@ -1140,7 +1155,7 @@
         {
           "canonical_name": "prune_history",
           "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_038",
+          "group_id": "dup_041",
           "occurrences": [
             {
               "code_hash": "60225e537f1d",
@@ -1178,38 +1193,38 @@
           "line": 152,
           "line_count": 4,
           "name": "_sanitize_slug",
-          "path": "generate_lizard_report.py"
+          "path": "producers/generate_lizard_report.py"
         },
         {
           "line": 394,
           "line_count": 5,
           "name": "_sanitize_slug",
-          "path": "generate_standards_index.py"
+          "path": "producers/generate_standards_index.py"
         },
         {
           "line": 65,
           "line_count": 5,
           "name": "_sanitize_slug",
-          "path": "generate_typecheck_report.py"
+          "path": "producers/generate_typecheck_report.py"
         },
         {
           "line": 65,
           "line_count": 2,
           "name": "_sanitize_slug",
-          "path": "render_inventory_views.py"
+          "path": "producers/render_inventory_views.py"
         },
         {
           "line": 173,
           "line_count": 2,
           "name": "_sanitize_slug",
-          "path": "validate_inventory.py"
+          "path": "producers/validate_inventory.py"
         }
       ],
       "scanner_groups": [
         {
           "canonical_name": "sanitize_slug",
           "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_030",
+          "group_id": "dup_033",
           "occurrences": [
             {
               "code_hash": "6e7a7c24aa6f",
@@ -1239,43 +1254,43 @@
       "signature": "def _sanitize_slug(slug: str) -> str:"
     },
     {
-      "function_name": "build_parser",
-      "id": "duplicate_function::duplicate-def-build-parser------argparse-argumentparser",
+      "function_name": "main",
+      "id": "duplicate_function::duplicate-def-main------int",
       "producer_duplicate_count": 5,
       "producer_instances": [
         {
-          "line": 303,
-          "line_count": 48,
-          "name": "build_parser",
-          "path": "analyze_standards_index_gaps.py"
+          "line": 112,
+          "line_count": 66,
+          "name": "main",
+          "path": "aggregators/generate_churn_complexity_heatmap.py"
         },
         {
-          "line": 218,
-          "line_count": 43,
-          "name": "build_parser",
-          "path": "diff_standards_index.py"
+          "line": 117,
+          "line_count": 13,
+          "name": "main",
+          "path": "consumers/classify_monkey_patches.py"
         },
         {
-          "line": 628,
-          "line_count": 16,
-          "name": "build_parser",
-          "path": "generate_standards_index.py"
+          "line": 213,
+          "line_count": 92,
+          "name": "main",
+          "path": "consumers/generate_test_log_health_report.py"
         },
         {
-          "line": 374,
-          "line_count": 15,
-          "name": "build_parser",
-          "path": "generate_typecheck_report.py"
+          "line": 572,
+          "line_count": 62,
+          "name": "main",
+          "path": "summarizers/summarize_health_suite.py"
         },
         {
-          "line": 510,
-          "line_count": 16,
-          "name": "build_parser",
-          "path": "validate_inventory.py"
+          "line": 14,
+          "line_count": 19,
+          "name": "main",
+          "path": "utilities/dump_faulthandler_snapshot.py"
         }
       ],
       "scanner_groups": [],
-      "signature": "def build_parser() -> argparse.ArgumentParser:"
+      "signature": "def main() -> int:"
     },
     {
       "function_name": "_current_utc",
@@ -1286,25 +1301,25 @@
           "line": 39,
           "line_count": 2,
           "name": "_current_utc",
-          "path": "diff_standards_index.py"
+          "path": "producers/diff_standards_index.py"
         },
         {
           "line": 122,
           "line_count": 2,
           "name": "_current_utc",
-          "path": "generate_lizard_report.py"
+          "path": "producers/generate_lizard_report.py"
         },
         {
           "line": 366,
           "line_count": 2,
           "name": "_current_utc",
-          "path": "generate_standards_index.py"
+          "path": "producers/generate_standards_index.py"
         },
         {
           "line": 49,
           "line_count": 5,
           "name": "_current_utc",
-          "path": "generate_typecheck_report.py"
+          "path": "producers/generate_typecheck_report.py"
         }
       ],
       "scanner_groups": [],
@@ -1319,25 +1334,25 @@
           "line": 76,
           "line_count": 5,
           "name": "_prepare_run_dir",
-          "path": "diff_standards_index.py"
+          "path": "producers/diff_standards_index.py"
         },
         {
           "line": 186,
           "line_count": 6,
           "name": "_prepare_run_dir",
-          "path": "generate_lizard_report.py"
+          "path": "producers/generate_lizard_report.py"
         },
         {
           "line": 401,
           "line_count": 5,
           "name": "_prepare_run_dir",
-          "path": "generate_standards_index.py"
+          "path": "producers/generate_standards_index.py"
         },
         {
           "line": 72,
           "line_count": 4,
           "name": "_prepare_run_dir",
-          "path": "generate_typecheck_report.py"
+          "path": "producers/generate_typecheck_report.py"
         }
       ],
       "scanner_groups": [],
@@ -1352,32 +1367,32 @@
           "line": 319,
           "line_count": 14,
           "name": "_write_latest_artifacts",
-          "path": "scan_code_placeholders.py"
+          "path": "producers/scan_code_placeholders.py"
         },
         {
           "line": 943,
           "line_count": 14,
           "name": "_write_latest_artifacts",
-          "path": "scan_monkey_patches.py"
+          "path": "producers/scan_monkey_patches.py"
         },
         {
           "line": 274,
           "line_count": 15,
           "name": "_write_latest_artifacts",
-          "path": "seed_standards_prompts.py"
+          "path": "producers/seed_standards_prompts.py"
         },
         {
           "line": 329,
           "line_count": 13,
           "name": "_write_latest_artifacts",
-          "path": "validate_import_boundaries.py"
+          "path": "producers/validate_import_boundaries.py"
         }
       ],
       "scanner_groups": [
         {
           "canonical_name": "write_latest_artifacts",
           "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_033",
+          "group_id": "dup_036",
           "occurrences": [
             {
               "code_hash": "6f5d5c73782a",
@@ -1427,6 +1442,39 @@
       "signature": "def _write_latest_artifacts(run_dir: Path, output_dir: Path) -> None:"
     },
     {
+      "function_name": "build_options",
+      "id": "duplicate_function::duplicate-def-build-options-args--argparse-namespace-----options",
+      "producer_duplicate_count": 4,
+      "producer_instances": [
+        {
+          "line": 100,
+          "line_count": 5,
+          "name": "build_options",
+          "path": "producers/analyze_test_hardening.py"
+        },
+        {
+          "line": 112,
+          "line_count": 11,
+          "name": "build_options",
+          "path": "producers/seed_standards_prompts.py"
+        },
+        {
+          "line": 114,
+          "line_count": 2,
+          "name": "build_options",
+          "path": "producers/validate_metrics_anchor_stubs.py"
+        },
+        {
+          "line": 141,
+          "line_count": 7,
+          "name": "build_options",
+          "path": "producers/verify_docs_integrity.py"
+        }
+      ],
+      "scanner_groups": [],
+      "signature": "def build_options(args: argparse.Namespace) -> Options:"
+    },
+    {
       "function_name": "render_log",
       "id": "duplicate_function::duplicate-def-render-log-payload--dict-str--any------str",
       "producer_duplicate_count": 4,
@@ -1435,32 +1483,32 @@
           "line": 258,
           "line_count": 14,
           "name": "render_log",
-          "path": "seed_standards_prompts.py"
+          "path": "producers/seed_standards_prompts.py"
         },
         {
           "line": 313,
           "line_count": 14,
           "name": "render_log",
-          "path": "validate_import_boundaries.py"
+          "path": "producers/validate_import_boundaries.py"
         },
         {
           "line": 272,
           "line_count": 13,
           "name": "render_log",
-          "path": "validate_metrics_anchor_stubs.py"
+          "path": "producers/validate_metrics_anchor_stubs.py"
         },
         {
           "line": 472,
           "line_count": 18,
           "name": "render_log",
-          "path": "verify_docs_integrity.py"
+          "path": "producers/verify_docs_integrity.py"
         }
       ],
       "scanner_groups": [
         {
           "canonical_name": "render_log",
           "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_031",
+          "group_id": "dup_034",
           "occurrences": [
             {
               "code_hash": "bd86abbe41df",
@@ -1498,29 +1546,89 @@
           "line": 224,
           "line_count": 32,
           "name": "render_markdown_report",
-          "path": "seed_standards_prompts.py"
+          "path": "producers/seed_standards_prompts.py"
         },
         {
           "line": 275,
           "line_count": 36,
           "name": "render_markdown_report",
-          "path": "validate_import_boundaries.py"
+          "path": "producers/validate_import_boundaries.py"
         },
         {
           "line": 241,
           "line_count": 29,
           "name": "render_markdown_report",
-          "path": "validate_metrics_anchor_stubs.py"
+          "path": "producers/validate_metrics_anchor_stubs.py"
         },
         {
           "line": 437,
           "line_count": 33,
           "name": "render_markdown_report",
-          "path": "verify_docs_integrity.py"
+          "path": "producers/verify_docs_integrity.py"
         }
       ],
       "scanner_groups": [],
       "signature": "def render_markdown_report(payload: dict[str, Any]) -> str:"
+    },
+    {
+      "function_name": "write_artifacts",
+      "id": "duplicate_function::duplicate-def-write-artifacts",
+      "producer_duplicate_count": 4,
+      "producer_instances": [
+        {
+          "line": 238,
+          "line_count": 34,
+          "name": "write_artifacts",
+          "path": "producers/check_inventory_health.py"
+        },
+        {
+          "line": 234,
+          "line_count": 38,
+          "name": "write_artifacts",
+          "path": "producers/generate_anchor_inventory.py"
+        },
+        {
+          "line": 291,
+          "line_count": 34,
+          "name": "write_artifacts",
+          "path": "producers/generate_dependency_hygiene_report.py"
+        },
+        {
+          "line": 314,
+          "line_count": 44,
+          "name": "write_artifacts",
+          "path": "producers/generate_import_graph_report.py"
+        }
+      ],
+      "scanner_groups": [],
+      "signature": "def write_artifacts("
+    },
+    {
+      "function_name": "_build_parser",
+      "id": "duplicate_function::duplicate-def--build-parser------argparse-argumentparser",
+      "producer_duplicate_count": 3,
+      "producer_instances": [
+        {
+          "line": 552,
+          "line_count": 41,
+          "name": "_build_parser",
+          "path": "producers/generate_lizard_report.py"
+        },
+        {
+          "line": 405,
+          "line_count": 14,
+          "name": "_build_parser",
+          "path": "producers/render_inventory_views.py"
+        },
+        {
+          "line": 564,
+          "line_count": 6,
+          "name": "_build_parser",
+          "path": "summarizers/summarize_health_suite.py"
+        }
+      ],
+      "scanner_groups": [],
+      "signature": "def _build_parser() -> argparse.ArgumentParser:"
     },
     {
       "function_name": "_compose_report_payload",
@@ -1531,19 +1639,19 @@
           "line": 276,
           "line_count": 33,
           "name": "_compose_report_payload",
-          "path": "diff_standards_index.py"
+          "path": "producers/diff_standards_index.py"
         },
         {
           "line": 490,
           "line_count": 22,
           "name": "_compose_report_payload",
-          "path": "generate_lizard_report.py"
+          "path": "producers/generate_lizard_report.py"
         },
         {
           "line": 456,
           "line_count": 46,
           "name": "_compose_report_payload",
-          "path": "generate_standards_index.py"
+          "path": "producers/generate_standards_index.py"
         }
       ],
       "scanner_groups": [],
@@ -1558,19 +1666,19 @@
           "line": 60,
           "line_count": 3,
           "name": "_ensure_dir",
-          "path": "generate_typecheck_report.py"
+          "path": "producers/generate_typecheck_report.py"
         },
         {
           "line": 40,
           "line_count": 3,
           "name": "_ensure_dir",
-          "path": "render_inventory_views.py"
+          "path": "producers/render_inventory_views.py"
         },
         {
           "line": 177,
           "line_count": 3,
           "name": "_ensure_dir",
-          "path": "validate_inventory.py"
+          "path": "producers/validate_inventory.py"
         }
       ],
       "scanner_groups": [
@@ -1625,26 +1733,26 @@
           "line": 62,
           "line_count": 3,
           "name": "_ensure_directory",
-          "path": "diff_standards_index.py"
+          "path": "producers/diff_standards_index.py"
         },
         {
           "line": 147,
           "line_count": 3,
           "name": "_ensure_directory",
-          "path": "generate_lizard_report.py"
+          "path": "producers/generate_lizard_report.py"
         },
         {
           "line": 389,
           "line_count": 3,
           "name": "_ensure_directory",
-          "path": "generate_standards_index.py"
+          "path": "producers/generate_standards_index.py"
         }
       ],
       "scanner_groups": [
         {
           "canonical_name": "ensure_directory",
           "duplicate_type": "exact_duplicate",
-          "group_id": "dup_006",
+          "group_id": "dup_007",
           "occurrences": [
             {
               "code_hash": "ff6601194d3c",
@@ -1692,19 +1800,19 @@
           "line": 43,
           "line_count": 2,
           "name": "_format_run_slug",
-          "path": "diff_standards_index.py"
+          "path": "producers/diff_standards_index.py"
         },
         {
           "line": 126,
           "line_count": 2,
           "name": "_format_run_slug",
-          "path": "generate_lizard_report.py"
+          "path": "producers/generate_lizard_report.py"
         },
         {
           "line": 370,
           "line_count": 2,
           "name": "_format_run_slug",
-          "path": "generate_standards_index.py"
+          "path": "producers/generate_standards_index.py"
         }
       ],
       "scanner_groups": [],
@@ -1719,19 +1827,19 @@
           "line": 56,
           "line_count": 2,
           "name": "_format_slug",
-          "path": "generate_typecheck_report.py"
+          "path": "producers/generate_typecheck_report.py"
         },
         {
           "line": 61,
           "line_count": 2,
           "name": "_format_slug",
-          "path": "render_inventory_views.py"
+          "path": "producers/render_inventory_views.py"
         },
         {
           "line": 169,
           "line_count": 2,
           "name": "_format_slug",
-          "path": "validate_inventory.py"
+          "path": "producers/validate_inventory.py"
         }
       ],
       "scanner_groups": [],
@@ -1746,26 +1854,26 @@
           "line": 47,
           "line_count": 13,
           "name": "_resolve_timestamp",
-          "path": "diff_standards_index.py"
+          "path": "producers/diff_standards_index.py"
         },
         {
           "line": 130,
           "line_count": 15,
           "name": "_resolve_timestamp",
-          "path": "generate_lizard_report.py"
+          "path": "producers/generate_lizard_report.py"
         },
         {
           "line": 374,
           "line_count": 13,
           "name": "_resolve_timestamp",
-          "path": "generate_standards_index.py"
+          "path": "producers/generate_standards_index.py"
         }
       ],
       "scanner_groups": [
         {
           "canonical_name": "resolve_timestamp",
           "duplicate_type": "exact_duplicate",
-          "group_id": "dup_005",
+          "group_id": "dup_006",
           "occurrences": [
             {
               "code_hash": "08d703843b76",
@@ -1813,19 +1921,19 @@
           "line": 290,
           "line_count": 4,
           "name": "ensure_run_directory",
-          "path": "scan_code_placeholders.py"
+          "path": "producers/scan_code_placeholders.py"
         },
         {
           "line": 937,
           "line_count": 4,
           "name": "ensure_run_directory",
-          "path": "scan_monkey_patches.py"
+          "path": "producers/scan_monkey_patches.py"
         },
         {
           "line": 203,
           "line_count": 4,
           "name": "ensure_run_directory",
-          "path": "seed_standards_prompts.py"
+          "path": "producers/seed_standards_prompts.py"
         }
       ],
       "scanner_groups": [
@@ -1880,19 +1988,19 @@
           "line": 67,
           "line_count": 24,
           "name": "parse_args",
-          "path": "analyze_test_hardening.py"
+          "path": "producers/analyze_test_hardening.py"
         },
         {
           "line": 96,
           "line_count": 23,
           "name": "parse_args",
-          "path": "generate_anchor_inventory.py"
+          "path": "producers/generate_anchor_inventory.py"
         },
         {
           "line": 76,
           "line_count": 42,
           "name": "parse_args",
-          "path": "verify_docs_integrity.py"
+          "path": "producers/verify_docs_integrity.py"
         }
       ],
       "scanner_groups": [],
@@ -1907,52 +2015,22 @@
           "line": 42,
           "line_count": 43,
           "name": "parse_args",
-          "path": "seed_standards_prompts.py"
+          "path": "producers/seed_standards_prompts.py"
         },
         {
           "line": 52,
           "line_count": 37,
           "name": "parse_args",
-          "path": "validate_import_boundaries.py"
+          "path": "producers/validate_import_boundaries.py"
         },
         {
           "line": 44,
           "line_count": 35,
           "name": "parse_args",
-          "path": "validate_metrics_anchor_stubs.py"
+          "path": "producers/validate_metrics_anchor_stubs.py"
         }
       ],
-      "scanner_groups": [
-        {
-          "canonical_name": "parse_args",
-          "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_023",
-          "occurrences": [
-            {
-              "code_hash": "6c1d365e86b2",
-              "file": ".repo_studios/scripts/producers/analyze_test_hardening.py",
-              "function_name": "parse_args",
-              "is_function": true,
-              "line_end": 90,
-              "line_span": 24,
-              "line_start": 67,
-              "sample_line": "def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:"
-            },
-            {
-              "code_hash": "12b20c330590",
-              "file": ".repo_studios/scripts/producers/generate_function_inventory.py",
-              "function_name": "parse_args",
-              "is_function": true,
-              "line_end": 57,
-              "line_span": 27,
-              "line_start": 31,
-              "sample_line": "def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:"
-            }
-          ],
-          "signature_hash": "6c1d365e86b2",
-          "similarity_score": 0.865
-        }
-      ],
+      "scanner_groups": [],
       "signature": "def parse_args(argv: list[str] | None) -> argparse.Namespace:"
     },
     {
@@ -1964,19 +2042,19 @@
           "line": 361,
           "line_count": 37,
           "name": "run",
-          "path": "seed_standards_prompts.py"
+          "path": "producers/seed_standards_prompts.py"
         },
         {
           "line": 414,
           "line_count": 54,
           "name": "run",
-          "path": "validate_import_boundaries.py"
+          "path": "producers/validate_import_boundaries.py"
         },
         {
           "line": 334,
           "line_count": 45,
           "name": "run",
-          "path": "validate_metrics_anchor_stubs.py"
+          "path": "producers/validate_metrics_anchor_stubs.py"
         }
       ],
       "scanner_groups": [],
@@ -1991,44 +2069,44 @@
           "line": 181,
           "line_count": 36,
           "name": "write_markdown",
-          "path": "analyze_standards_index_gaps.py"
+          "path": "producers/analyze_standards_index_gaps.py"
         },
         {
           "line": 192,
           "line_count": 36,
           "name": "write_markdown",
-          "path": "generate_dependency_hygiene_report.py"
+          "path": "producers/generate_dependency_hygiene_report.py"
         },
         {
           "line": 245,
           "line_count": 45,
           "name": "write_markdown",
-          "path": "generate_import_graph_report.py"
+          "path": "producers/generate_import_graph_report.py"
         }
       ],
       "scanner_groups": [],
       "signature": "def write_markdown(report: dict[str, Any]) -> str:"
     },
     {
-      "function_name": "_build_parser",
-      "id": "duplicate_function::duplicate-def--build-parser------argparse-argumentparser",
+      "function_name": "ImportResolver.__init__",
+      "id": "duplicate_function::duplicate-def---init---self-----none",
       "producer_duplicate_count": 2,
       "producer_instances": [
         {
-          "line": 552,
-          "line_count": 41,
-          "name": "_build_parser",
-          "path": "generate_lizard_report.py"
+          "line": 162,
+          "line_count": 4,
+          "name": "ImportResolver.__init__",
+          "path": "producers/scan_monkey_patches.py"
         },
         {
-          "line": 405,
-          "line_count": 14,
-          "name": "_build_parser",
-          "path": "render_inventory_views.py"
+          "line": 189,
+          "line_count": 2,
+          "name": "ScopeTracker.__init__",
+          "path": "producers/scan_monkey_patches.py"
         }
       ],
       "scanner_groups": [],
-      "signature": "def _build_parser() -> argparse.ArgumentParser:"
+      "signature": "def __init__(self) -> None:"
     },
     {
       "function_name": "_current_time",
@@ -2039,17 +2117,68 @@
           "line": 36,
           "line_count": 2,
           "name": "_current_time",
-          "path": "render_inventory_views.py"
+          "path": "producers/render_inventory_views.py"
         },
         {
           "line": 165,
           "line_count": 2,
           "name": "_current_time",
-          "path": "validate_inventory.py"
+          "path": "producers/validate_inventory.py"
         }
       ],
       "scanner_groups": [],
       "signature": "def _current_time() -> datetime:"
+    },
+    {
+      "function_name": "_ensure_out",
+      "id": "duplicate_function::duplicate-def--ensure-out-base--path-----path",
+      "producer_duplicate_count": 2,
+      "producer_instances": [
+        {
+          "line": 40,
+          "line_count": 5,
+          "name": "_ensure_out",
+          "path": "aggregators/generate_churn_complexity_heatmap.py"
+        },
+        {
+          "line": 42,
+          "line_count": 5,
+          "name": "_ensure_out",
+          "path": "consumers/generate_test_log_health_report.py"
+        }
+      ],
+      "scanner_groups": [
+        {
+          "canonical_name": "ensure_out",
+          "duplicate_type": "exact_duplicate",
+          "group_id": "dup_001",
+          "occurrences": [
+            {
+              "code_hash": "dfa5515e5723",
+              "file": ".repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py",
+              "function_name": "_ensure_out",
+              "is_function": true,
+              "line_end": 44,
+              "line_span": 5,
+              "line_start": 40,
+              "sample_line": "def _ensure_out(base: Path) -> Path:"
+            },
+            {
+              "code_hash": "dfa5515e5723",
+              "file": ".repo_studios/scripts/consumers/generate_test_log_health_report.py",
+              "function_name": "_ensure_out",
+              "is_function": true,
+              "line_end": 46,
+              "line_span": 5,
+              "line_start": 42,
+              "sample_line": "def _ensure_out(base: Path) -> Path:"
+            }
+          ],
+          "signature_hash": "dfa5515e5723",
+          "similarity_score": 1.0
+        }
+      ],
+      "signature": "def _ensure_out(base: Path) -> Path:"
     },
     {
       "function_name": "_ensure_output_dir",
@@ -2060,20 +2189,20 @@
           "line": 258,
           "line_count": 3,
           "name": "_ensure_output_dir",
-          "path": "generate_dependency_hygiene_report.py"
+          "path": "producers/generate_dependency_hygiene_report.py"
         },
         {
           "line": 159,
           "line_count": 3,
           "name": "_ensure_output_dir",
-          "path": "generate_import_graph_report.py"
+          "path": "producers/generate_import_graph_report.py"
         }
       ],
       "scanner_groups": [
         {
           "canonical_name": "ensure_output_dir",
           "duplicate_type": "exact_duplicate",
-          "group_id": "dup_013",
+          "group_id": "dup_014",
           "occurrences": [
             {
               "code_hash": "cabb9d565338",
@@ -2111,20 +2240,20 @@
           "line": 69,
           "line_count": 4,
           "name": "_prepare_run_dir",
-          "path": "render_inventory_views.py"
+          "path": "producers/render_inventory_views.py"
         },
         {
           "line": 189,
           "line_count": 4,
           "name": "_prepare_run_dir",
-          "path": "validate_inventory.py"
+          "path": "producers/validate_inventory.py"
         }
       ],
       "scanner_groups": [
         {
           "canonical_name": "prepare_run_dir",
           "duplicate_type": "exact_duplicate",
-          "group_id": "dup_007",
+          "group_id": "dup_008",
           "occurrences": [
             {
               "code_hash": "7dfc2b641691",
@@ -2191,20 +2320,20 @@
           "line": 126,
           "line_count": 5,
           "name": "_rel_to_repo",
-          "path": "diff_standards_index.py"
+          "path": "producers/diff_standards_index.py"
         },
         {
           "line": 436,
           "line_count": 5,
           "name": "_rel_to_repo",
-          "path": "generate_standards_index.py"
+          "path": "producers/generate_standards_index.py"
         }
       ],
       "scanner_groups": [
         {
           "canonical_name": "rel_to_repo",
           "duplicate_type": "exact_duplicate",
-          "group_id": "dup_010",
+          "group_id": "dup_011",
           "occurrences": [
             {
               "code_hash": "2fc9d77290f1",
@@ -2242,13 +2371,13 @@
           "line": 45,
           "line_count": 5,
           "name": "_resolve",
-          "path": "render_inventory_views.py"
+          "path": "producers/render_inventory_views.py"
         },
         {
           "line": 182,
           "line_count": 5,
           "name": "_resolve",
-          "path": "validate_inventory.py"
+          "path": "producers/validate_inventory.py"
         }
       ],
       "scanner_groups": [
@@ -2293,20 +2422,20 @@
           "line": 111,
           "line_count": 6,
           "name": "_resolve_output_dir",
-          "path": "diff_standards_index.py"
+          "path": "producers/diff_standards_index.py"
         },
         {
           "line": 595,
           "line_count": 6,
           "name": "_resolve_output_dir",
-          "path": "generate_lizard_report.py"
+          "path": "producers/generate_lizard_report.py"
         }
       ],
       "scanner_groups": [
         {
           "canonical_name": "resolve_output_dir",
           "duplicate_type": "exact_duplicate",
-          "group_id": "dup_009",
+          "group_id": "dup_010",
           "occurrences": [
             {
               "code_hash": "db5e16172dad",
@@ -2344,20 +2473,20 @@
           "line": 95,
           "line_count": 5,
           "name": "_resolve_path",
-          "path": "generate_standards_index.py"
+          "path": "producers/generate_standards_index.py"
         },
         {
           "line": 93,
           "line_count": 3,
           "name": "_resolve_path",
-          "path": "generate_typecheck_report.py"
+          "path": "producers/generate_typecheck_report.py"
         }
       ],
       "scanner_groups": [
         {
           "canonical_name": "resolve_path",
           "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_029",
+          "group_id": "dup_031",
           "occurrences": [
             {
               "code_hash": "cab92922a2aa",
@@ -2387,117 +2516,6 @@
       "signature": "def _resolve_path(base: Path, value: str | Path) -> Path:"
     },
     {
-      "function_name": "main",
-      "id": "duplicate_function::duplicate-def-main------none",
-      "producer_duplicate_count": 2,
-      "producer_instances": [
-        {
-          "line": 285,
-          "line_count": 2,
-          "name": "main",
-          "path": "generate_function_analysis.py"
-        },
-        {
-          "line": 370,
-          "line_count": 2,
-          "name": "main",
-          "path": "generate_function_inventory.py"
-        }
-      ],
-      "scanner_groups": [
-        {
-          "canonical_name": "main",
-          "duplicate_type": "exact_duplicate",
-          "group_id": "dup_021",
-          "occurrences": [
-            {
-              "code_hash": "131aab9af12c",
-              "file": ".repo_studios/scripts/producers/seed_standards_prompts.py",
-              "function_name": "main",
-              "is_function": true,
-              "line_end": 402,
-              "line_span": 3,
-              "line_start": 400,
-              "sample_line": "def main(argv: list[str] | None = None) -> int:"
-            },
-            {
-              "code_hash": "131aab9af12c",
-              "file": ".repo_studios/scripts/producers/validate_import_boundaries.py",
-              "function_name": "main",
-              "is_function": true,
-              "line_end": 472,
-              "line_span": 3,
-              "line_start": 470,
-              "sample_line": "def main(argv: list[str] | None = None) -> int:"
-            },
-            {
-              "code_hash": "131aab9af12c",
-              "file": ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py",
-              "function_name": "main",
-              "is_function": true,
-              "line_end": 383,
-              "line_span": 3,
-              "line_start": 381,
-              "sample_line": "def main(argv: list[str] | None = None) -> int:"
-            }
-          ],
-          "signature_hash": "131aab9af12c",
-          "similarity_score": 1.0
-        },
-        {
-          "canonical_name": "main",
-          "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_026",
-          "occurrences": [
-            {
-              "code_hash": "53c85b0cee21",
-              "file": ".repo_studios/scripts/producers/analyze_test_hardening.py",
-              "function_name": "main",
-              "is_function": true,
-              "line_end": 596,
-              "line_span": 3,
-              "line_start": 594,
-              "sample_line": "def main(argv: Sequence[str] | None = None) -> int:"
-            },
-            {
-              "code_hash": "7a7d08b5af97",
-              "file": ".repo_studios/scripts/producers/verify_docs_integrity.py",
-              "function_name": "main",
-              "is_function": true,
-              "line_end": 592,
-              "line_span": 3,
-              "line_start": 590,
-              "sample_line": "def main(argv: Sequence[str] | None = None) -> int:"
-            }
-          ],
-          "signature_hash": "53c85b0cee21",
-          "similarity_score": 0.9375
-        }
-      ],
-      "signature": "def main() -> None:"
-    },
-    {
-      "function_name": "parse_args",
-      "id": "duplicate_function::duplicate-def-parse-args-argv--iterable-str----none---none-----argparse-namespace",
-      "producer_duplicate_count": 2,
-      "producer_instances": [
-        {
-          "line": 31,
-          "line_count": 31,
-          "name": "parse_args",
-          "path": "generate_function_analysis.py"
-        },
-        {
-          "line": 31,
-          "line_count": 27,
-          "name": "parse_args",
-          "path": "generate_function_inventory.py"
-        }
-      ],
-      "scanner_groups": [],
-      "signature": "def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:"
-    },
-    {
       "function_name": "parse_args",
       "id": "duplicate_function::duplicate-def-parse-args-argv--list-str----none---none-----argparse-namespace",
       "producer_duplicate_count": 2,
@@ -2506,13 +2524,13 @@
           "line": 73,
           "line_count": 40,
           "name": "parse_args",
-          "path": "scan_code_placeholders.py"
+          "path": "producers/scan_code_placeholders.py"
         },
         {
           "line": 1120,
           "line_count": 65,
           "name": "parse_args",
-          "path": "scan_monkey_patches.py"
+          "path": "producers/scan_monkey_patches.py"
         }
       ],
       "scanner_groups": [],
@@ -2527,13 +2545,13 @@
           "line": 258,
           "line_count": 20,
           "name": "prune_old_runs",
-          "path": "analyze_standards_index_gaps.py"
+          "path": "producers/analyze_standards_index_gaps.py"
         },
         {
           "line": 274,
           "line_count": 20,
           "name": "prune_old_runs",
-          "path": "generate_anchor_inventory.py"
+          "path": "producers/generate_anchor_inventory.py"
         }
       ],
       "scanner_groups": [],
@@ -2548,13 +2566,13 @@
           "line": 384,
           "line_count": 12,
           "name": "render_log",
-          "path": "render_inventory_views.py"
+          "path": "producers/render_inventory_views.py"
         },
         {
           "line": 436,
           "line_count": 13,
           "name": "render_log",
-          "path": "validate_inventory.py"
+          "path": "producers/validate_inventory.py"
         }
       ],
       "scanner_groups": [],
@@ -2569,13 +2587,13 @@
           "line": 274,
           "line_count": 14,
           "name": "render_log",
-          "path": "scan_code_placeholders.py"
+          "path": "producers/scan_code_placeholders.py"
         },
         {
           "line": 920,
           "line_count": 15,
           "name": "render_log",
-          "path": "scan_monkey_patches.py"
+          "path": "producers/scan_monkey_patches.py"
         }
       ],
       "scanner_groups": [],
@@ -2590,38 +2608,17 @@
           "line": 354,
           "line_count": 28,
           "name": "render_markdown",
-          "path": "render_inventory_views.py"
+          "path": "producers/render_inventory_views.py"
         },
         {
           "line": 417,
           "line_count": 17,
           "name": "render_markdown",
-          "path": "validate_inventory.py"
+          "path": "producers/validate_inventory.py"
         }
       ],
       "scanner_groups": [],
       "signature": "def render_markdown(report_payload: Dict[str, Any]) -> str:"
-    },
-    {
-      "function_name": "run",
-      "id": "duplicate_function::duplicate-def-run-argv--iterable-str----none---none-----int",
-      "producer_duplicate_count": 2,
-      "producer_instances": [
-        {
-          "line": 246,
-          "line_count": 37,
-          "name": "run",
-          "path": "generate_function_analysis.py"
-        },
-        {
-          "line": 323,
-          "line_count": 45,
-          "name": "run",
-          "path": "generate_function_inventory.py"
-        }
-      ],
-      "scanner_groups": [],
-      "signature": "def run(argv: Iterable[str] | None = None) -> int:"
     },
     {
       "function_name": "run",
@@ -2632,13 +2629,13 @@
           "line": 351,
           "line_count": 23,
           "name": "run",
-          "path": "scan_code_placeholders.py"
+          "path": "producers/scan_code_placeholders.py"
         },
         {
           "line": 1204,
           "line_count": 64,
           "name": "run",
-          "path": "scan_monkey_patches.py"
+          "path": "producers/scan_monkey_patches.py"
         }
       ],
       "scanner_groups": [],
@@ -2653,20 +2650,20 @@
           "line": 48,
           "line_count": 7,
           "name": "slugify",
-          "path": "generate_anchor_inventory.py"
+          "path": "producers/generate_anchor_inventory.py"
         },
         {
           "line": 160,
           "line_count": 9,
           "name": "slugify",
-          "path": "validate_markdown_anchors.py"
+          "path": "producers/validate_markdown_anchors.py"
         }
       ],
       "scanner_groups": [
         {
           "canonical_name": "slugify",
           "duplicate_type": "exact_duplicate",
-          "group_id": "dup_011",
+          "group_id": "dup_012",
           "occurrences": [
             {
               "code_hash": "1dac1028de89",
@@ -2704,13 +2701,13 @@
           "line": 286,
           "line_count": 10,
           "name": "update_latest_artifacts",
-          "path": "render_inventory_views.py"
+          "path": "producers/render_inventory_views.py"
         },
         {
           "line": 219,
           "line_count": 9,
           "name": "update_latest_artifacts",
-          "path": "validate_inventory.py"
+          "path": "producers/validate_inventory.py"
         }
       ],
       "scanner_groups": [],
@@ -2725,20 +2722,20 @@
           "line": 287,
           "line_count": 26,
           "name": "write_artifacts",
-          "path": "validate_metrics_anchor_stubs.py"
+          "path": "producers/validate_metrics_anchor_stubs.py"
         },
         {
           "line": 492,
           "line_count": 26,
           "name": "write_artifacts",
-          "path": "verify_docs_integrity.py"
+          "path": "producers/verify_docs_integrity.py"
         }
       ],
       "scanner_groups": [
         {
           "canonical_name": "write_artifacts",
           "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_027",
+          "group_id": "dup_029",
           "occurrences": [
             {
               "code_hash": "d153db153b2d",
@@ -2767,7 +2764,7 @@
         {
           "canonical_name": "write_artifacts",
           "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_040",
+          "group_id": "dup_043",
           "occurrences": [
             {
               "code_hash": "f768abc451b9",
@@ -2805,13 +2802,13 @@
           "line": 230,
           "line_count": 17,
           "name": "write_log",
-          "path": "generate_dependency_hygiene_report.py"
+          "path": "producers/generate_dependency_hygiene_report.py"
         },
         {
           "line": 292,
           "line_count": 20,
           "name": "write_log",
-          "path": "generate_import_graph_report.py"
+          "path": "producers/generate_import_graph_report.py"
         }
       ],
       "scanner_groups": [],
@@ -2826,13 +2823,13 @@
           "line": 398,
           "line_count": 5,
           "name": "write_run_artifacts",
-          "path": "render_inventory_views.py"
+          "path": "producers/render_inventory_views.py"
         },
         {
           "line": 451,
           "line_count": 5,
           "name": "write_run_artifacts",
-          "path": "validate_inventory.py"
+          "path": "producers/validate_inventory.py"
         }
       ],
       "scanner_groups": [
@@ -2869,15 +2866,167 @@
       "signature": "def write_run_artifacts(run_dir: Path, report_payload: Dict[str, Any], raw_payload: Dict[str, Any]) -> None:"
     },
     {
+      "function_name": "append_table",
+      "id": "scanner_only::dup_044",
+      "producer_duplicate_count": 0,
+      "producer_instances": [],
+      "scanner_groups": [
+        {
+          "canonical_name": "append_table",
+          "duplicate_type": "near_duplicate_with_variations",
+          "group_id": "dup_044",
+          "occurrences": [
+            {
+              "code_hash": "aa3de7c8cbb6",
+              "file": ".repo_studios/scripts/summarizers/summarize_health_suite.py",
+              "function_name": "_append_table",
+              "is_function": true,
+              "line_end": 89,
+              "line_span": 7,
+              "line_start": 83,
+              "sample_line": "def _append_table(lines: list[str], rows: list[str]) -> None:"
+            },
+            {
+              "code_hash": "0ea605185d16",
+              "file": ".repo_studios/scripts/summarizers/summarize_health_suite.py",
+              "function_name": "_append_blockquote",
+              "is_function": true,
+              "line_end": 99,
+              "line_span": 8,
+              "line_start": 92,
+              "sample_line": "def _append_blockquote(lines: list[str], rows: list[str]) -> None:"
+            }
+          ],
+          "signature_hash": "aa3de7c8cbb6",
+          "similarity_score": 0.8958
+        }
+      ],
+      "signature": null
+    },
+    {
+      "function_name": "as_int",
+      "id": "scanner_only::dup_032",
+      "producer_duplicate_count": 0,
+      "producer_instances": [],
+      "scanner_groups": [
+        {
+          "canonical_name": "as_int",
+          "duplicate_type": "near_duplicate_with_variations",
+          "group_id": "dup_032",
+          "occurrences": [
+            {
+              "code_hash": "7c3962e81688",
+              "file": ".repo_studios/scripts/producers/generate_lizard_report.py",
+              "function_name": "_as_int",
+              "is_function": true,
+              "line_end": 410,
+              "line_span": 5,
+              "line_start": 406,
+              "sample_line": "def _as_int(value: Any, default: int = 0) -> int:"
+            },
+            {
+              "code_hash": "351ee4e854b2",
+              "file": ".repo_studios/scripts/summarizers/summarize_health_suite.py",
+              "function_name": "_to_int",
+              "is_function": true,
+              "line_end": 106,
+              "line_span": 5,
+              "line_start": 102,
+              "sample_line": "def _to_int(value: object, default: int = 0) -> int:"
+            }
+          ],
+          "signature_hash": "7c3962e81688",
+          "similarity_score": 0.9778
+        }
+      ],
+      "signature": null
+    },
+    {
+      "function_name": "children",
+      "id": "scanner_only::dup_024",
+      "producer_duplicate_count": 0,
+      "producer_instances": [],
+      "scanner_groups": [
+        {
+          "canonical_name": "children",
+          "duplicate_type": "near_duplicate_with_variations",
+          "group_id": "dup_024",
+          "occurrences": [
+            {
+              "code_hash": "dffbe1fe0412",
+              "file": ".repo_studios/scripts/orchestrators/run_batch_cleanup.py",
+              "function_name": "_children",
+              "is_function": true,
+              "line_end": 191,
+              "line_span": 5,
+              "line_start": 187,
+              "sample_line": "def _children(d: Path) -> list[Path]:"
+            },
+            {
+              "code_hash": "01838e357580",
+              "file": ".repo_studios/scripts/producers/scan_monkey_patches.py",
+              "function_name": "read_lines",
+              "is_function": true,
+              "line_end": 222,
+              "line_span": 5,
+              "line_start": 218,
+              "sample_line": "def read_lines(path: Path) -> list[str]:"
+            }
+          ],
+          "signature_hash": "dffbe1fe0412",
+          "similarity_score": 0.8528
+        }
+      ],
+      "signature": null
+    },
+    {
+      "function_name": "cmd_list",
+      "id": "scanner_only::dup_025",
+      "producer_duplicate_count": 0,
+      "producer_instances": [],
+      "scanner_groups": [
+        {
+          "canonical_name": "cmd_list",
+          "duplicate_type": "near_duplicate_with_variations",
+          "group_id": "dup_025",
+          "occurrences": [
+            {
+              "code_hash": "fc5b07b162f5",
+              "file": ".repo_studios/scripts/orchestrators/run_standards_index_cli.py",
+              "function_name": "cmd_list",
+              "is_function": true,
+              "line_end": 117,
+              "line_span": 6,
+              "line_start": 112,
+              "sample_line": "def cmd_list(index: dict[str, Any], args: argparse.Namespace) -> int:"
+            },
+            {
+              "code_hash": "faf4a66ee879",
+              "file": ".repo_studios/scripts/orchestrators/run_standards_index_cli.py",
+              "function_name": "cmd_search",
+              "is_function": true,
+              "line_end": 124,
+              "line_span": 5,
+              "line_start": 120,
+              "sample_line": "def cmd_search(index: dict[str, Any], args: argparse.Namespace) -> int:"
+            }
+          ],
+          "signature_hash": "fc5b07b162f5",
+          "similarity_score": 0.975
+        }
+      ],
+      "signature": null
+    },
+    {
       "function_name": "detect_cycles",
-      "id": "scanner_only::dup_039",
+      "id": "scanner_only::dup_042",
       "producer_duplicate_count": 0,
       "producer_instances": [],
       "scanner_groups": [
         {
           "canonical_name": "detect_cycles",
           "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_039",
+          "group_id": "dup_042",
           "occurrences": [
             {
               "code_hash": "2dd4cb551d46",
@@ -2908,14 +3057,14 @@
     },
     {
       "function_name": "docs_view",
-      "id": "scanner_only::dup_032",
+      "id": "scanner_only::dup_035",
       "producer_duplicate_count": 0,
       "producer_instances": [],
       "scanner_groups": [
         {
           "canonical_name": "docs_view",
           "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_032",
+          "group_id": "dup_035",
           "occurrences": [
             {
               "code_hash": "96a4b030c151",
@@ -2956,14 +3105,14 @@
     },
     {
       "function_name": "has_assertions",
-      "id": "scanner_only::dup_024",
+      "id": "scanner_only::dup_026",
       "producer_duplicate_count": 0,
       "producer_instances": [],
       "scanner_groups": [
         {
           "canonical_name": "has_assertions",
           "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_024",
+          "group_id": "dup_026",
           "occurrences": [
             {
               "code_hash": "23976ea3345f",
@@ -2994,14 +3143,14 @@
     },
     {
       "function_name": "is_os_environ",
-      "id": "scanner_only::dup_037",
+      "id": "scanner_only::dup_040",
       "producer_duplicate_count": 0,
       "producer_instances": [],
       "scanner_groups": [
         {
           "canonical_name": "is_os_environ",
           "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_037",
+          "group_id": "dup_040",
           "occurrences": [
             {
               "code_hash": "f6540115cd6a",
@@ -3031,15 +3180,53 @@
       "signature": null
     },
     {
+      "function_name": "read",
+      "id": "scanner_only::dup_023",
+      "producer_duplicate_count": 0,
+      "producer_instances": [],
+      "scanner_groups": [
+        {
+          "canonical_name": "read",
+          "duplicate_type": "near_duplicate_with_variations",
+          "group_id": "dup_023",
+          "occurrences": [
+            {
+              "code_hash": "adce1f77bf46",
+              "file": ".repo_studios/scripts/consumers/generate_fault_artifacts.py",
+              "function_name": "_read_text",
+              "is_function": true,
+              "line_end": 67,
+              "line_span": 5,
+              "line_start": 63,
+              "sample_line": "def _read_text(p: Path) -> str:"
+            },
+            {
+              "code_hash": "0070f1843690",
+              "file": ".repo_studios/scripts/consumers/generate_test_log_health_report.py",
+              "function_name": "_read",
+              "is_function": true,
+              "line_end": 53,
+              "line_span": 5,
+              "line_start": 49,
+              "sample_line": "def _read(p: Path) -> str:"
+            }
+          ],
+          "signature_hash": "adce1f77bf46",
+          "similarity_score": 1.0
+        }
+      ],
+      "signature": null
+    },
+    {
       "function_name": "relativize",
-      "id": "scanner_only::dup_025",
+      "id": "scanner_only::dup_027",
       "producer_duplicate_count": 0,
       "producer_instances": [],
       "scanner_groups": [
         {
           "canonical_name": "relativize",
           "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_025",
+          "group_id": "dup_027",
           "occurrences": [
             {
               "code_hash": "e7ef77484b3c",
@@ -3080,14 +3267,14 @@
     },
     {
       "function_name": "visit_assign",
-      "id": "scanner_only::dup_035",
+      "id": "scanner_only::dup_038",
       "producer_duplicate_count": 0,
       "producer_instances": [],
       "scanner_groups": [
         {
           "canonical_name": "visit_assign",
           "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_035",
+          "group_id": "dup_038",
           "occurrences": [
             {
               "code_hash": "4432f638c51f",
@@ -3128,14 +3315,14 @@
     },
     {
       "function_name": "visit_classdef",
-      "id": "scanner_only::dup_034",
+      "id": "scanner_only::dup_037",
       "producer_duplicate_count": 0,
       "producer_instances": [],
       "scanner_groups": [
         {
           "canonical_name": "visit_classdef",
           "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_034",
+          "group_id": "dup_037",
           "occurrences": [
             {
               "code_hash": "31a4892e5f0c",
@@ -3176,14 +3363,14 @@
     },
     {
       "function_name": "visit_classdef",
-      "id": "scanner_only::dup_036",
+      "id": "scanner_only::dup_039",
       "producer_duplicate_count": 0,
       "producer_instances": [],
       "scanner_groups": [
         {
           "canonical_name": "visit_classdef",
           "duplicate_type": "near_duplicate_with_variations",
-          "group_id": "dup_036",
+          "group_id": "dup_039",
           "occurrences": [
             {
               "code_hash": "84584030c342",
@@ -3214,17 +3401,17 @@
     }
   ],
   "metadata": {
-    "analysis_source": ".repo_studios/scripts/producers/producers_index/producers_analysis-2025-10-24.json",
-    "functions_scanned": 496,
-    "generated_at": "2025-10-25T02:57:01.120708+00:00",
-    "python_files_scanned": 22,
+    "analysis_source": ".repo_studios/scripts/scripts_index/scripts_analysis-2025-10-27.json",
+    "functions_scanned": 611,
+    "generated_at": "2025-10-27T12:08:34.036713+00:00",
+    "python_files_scanned": 35,
     "repo_root": "C:\\Users\\genet\\repo_studios",
-    "target": ".repo_studios/scripts/producers"
+    "target": ".repo_studios/scripts"
   },
   "stats": {
-    "matched_groups": 32,
-    "producer_groups": 52,
-    "scanner_groups": 40,
-    "scanner_only_groups": 8
+    "matched_groups": 31,
+    "producer_groups": 53,
+    "scanner_groups": 44,
+    "scanner_only_groups": 13
   }
 }

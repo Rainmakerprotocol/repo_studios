@@ -1,0 +1,1693 @@
+{
+  "findings": [
+    {
+      "action_items": [
+        {
+          "description": "Review duplicate implementations for consolidation or reuse.",
+          "targets": [
+            "aggregators/scan_duplicates.py:156",
+            "producers/generate_function_inventory.py:126",
+            "summarizers/generate_function_analysis.py:34"
+          ],
+          "type": "review_duplicate_function"
+        }
+      ],
+      "details": {
+        "function_name": "parse_args",
+        "hash": "dabffcea786a1270ec6d67e7a1e54d36e92498e0",
+        "line_counts": [
+          60,
+          34,
+          38
+        ],
+        "qualified_names": [
+          "scripts.aggregators.scan_duplicates::parse_args",
+          "scripts.producers.generate_function_inventory::parse_args",
+          "scripts.summarizers.generate_function_analysis::parse_args"
+        ],
+        "shared_docstring": "",
+        "signature": "def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:"
+      },
+      "id": "duplicate_function::duplicate-def-parse-args-argv--iterable-str----none---none-----argparse-namespace",
+      "instances": [
+        {
+          "calls": [
+            {
+              "callee": "argparse.ArgumentParser",
+              "lineno": 157
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 162
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 167
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 171
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 176
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 182
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 188
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 194
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 199
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 204
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 210
+            },
+            {
+              "callee": "parser.parse_args",
+              "lineno": 215
+            },
+            {
+              "callee": "str",
+              "lineno": 164
+            },
+            {
+              "callee": "str",
+              "lineno": 173
+            }
+          ],
+          "docstring": null,
+          "hash": "dabffcea786a1270ec6d67e7a1e54d36e92498e0",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 156,
+          "line_count": 60,
+          "logging_calls": [],
+          "module_id": "scripts.aggregators.scan_duplicates",
+          "name": "parse_args",
+          "path": "aggregators/scan_duplicates.py",
+          "qualified_name": "scripts.aggregators.scan_duplicates::parse_args",
+          "returns_kind": "value",
+          "signature": "def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:",
+          "todo_tags": 0
+        },
+        {
+          "calls": [
+            {
+              "callee": "argparse.ArgumentParser",
+              "lineno": 127
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 132
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 136
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 140
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 146
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 152
+            },
+            {
+              "callee": "parser.parse_args",
+              "lineno": 159
+            }
+          ],
+          "docstring": null,
+          "hash": "05529385c5b924582d8eff816c3ad322321bc58d",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 126,
+          "line_count": 34,
+          "logging_calls": [],
+          "module_id": "scripts.producers.generate_function_inventory",
+          "name": "parse_args",
+          "path": "producers/generate_function_inventory.py",
+          "qualified_name": "scripts.producers.generate_function_inventory::parse_args",
+          "returns_kind": "value",
+          "signature": "def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:",
+          "todo_tags": 0
+        },
+        {
+          "calls": [
+            {
+              "callee": "argparse.ArgumentParser",
+              "lineno": 35
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 40
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 44
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 48
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 55
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 61
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 67
+            },
+            {
+              "callee": "parser.parse_args",
+              "lineno": 71
+            }
+          ],
+          "docstring": null,
+          "hash": "a8c2a763bf5ef5f5de8e2ad83291cc2605d71258",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 34,
+          "line_count": 38,
+          "logging_calls": [],
+          "module_id": "scripts.summarizers.generate_function_analysis",
+          "name": "parse_args",
+          "path": "summarizers/generate_function_analysis.py",
+          "qualified_name": "scripts.summarizers.generate_function_analysis::parse_args",
+          "returns_kind": "value",
+          "signature": "def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:",
+          "todo_tags": 0
+        }
+      ],
+      "kind": "duplicate_function",
+      "metrics": {
+        "duplicate_count": 3,
+        "todo_tags": 0
+      },
+      "severity": "medium",
+      "summary": "3 functions share the signature 'def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:'"
+    },
+    {
+      "action_items": [
+        {
+          "description": "Review duplicate implementations for consolidation or reuse.",
+          "targets": [
+            "aggregators/scan_duplicates.py:218",
+            "producers/generate_function_inventory.py:199",
+            "summarizers/generate_function_analysis.py:112"
+          ],
+          "type": "review_duplicate_function"
+        }
+      ],
+      "details": {
+        "function_name": "configure_logging",
+        "hash": "f2d2ffd57ce5b2e7a242e487a65e31267b30173d",
+        "line_counts": [
+          2,
+          2,
+          2
+        ],
+        "qualified_names": [
+          "scripts.aggregators.scan_duplicates::configure_logging",
+          "scripts.producers.generate_function_inventory::configure_logging",
+          "scripts.summarizers.generate_function_analysis::configure_logging"
+        ],
+        "shared_docstring": "",
+        "signature": "def configure_logging(level: str) -> None:"
+      },
+      "id": "duplicate_function::duplicate-def-configure-logging-level--str-----none",
+      "instances": [
+        {
+          "calls": [
+            {
+              "callee": "logging.basicConfig",
+              "lineno": 219
+            },
+            {
+              "callee": "getattr",
+              "lineno": 219
+            },
+            {
+              "callee": "level.upper",
+              "lineno": 219
+            }
+          ],
+          "docstring": null,
+          "hash": "f2d2ffd57ce5b2e7a242e487a65e31267b30173d",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 218,
+          "line_count": 2,
+          "logging_calls": [],
+          "module_id": "scripts.aggregators.scan_duplicates",
+          "name": "configure_logging",
+          "path": "aggregators/scan_duplicates.py",
+          "qualified_name": "scripts.aggregators.scan_duplicates::configure_logging",
+          "returns_kind": "none",
+          "signature": "def configure_logging(level: str) -> None:",
+          "todo_tags": 0
+        },
+        {
+          "calls": [
+            {
+              "callee": "logging.basicConfig",
+              "lineno": 200
+            },
+            {
+              "callee": "getattr",
+              "lineno": 200
+            },
+            {
+              "callee": "level.upper",
+              "lineno": 200
+            }
+          ],
+          "docstring": null,
+          "hash": "f2d2ffd57ce5b2e7a242e487a65e31267b30173d",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 199,
+          "line_count": 2,
+          "logging_calls": [],
+          "module_id": "scripts.producers.generate_function_inventory",
+          "name": "configure_logging",
+          "path": "producers/generate_function_inventory.py",
+          "qualified_name": "scripts.producers.generate_function_inventory::configure_logging",
+          "returns_kind": "none",
+          "signature": "def configure_logging(level: str) -> None:",
+          "todo_tags": 0
+        },
+        {
+          "calls": [
+            {
+              "callee": "logging.basicConfig",
+              "lineno": 113
+            },
+            {
+              "callee": "getattr",
+              "lineno": 113
+            },
+            {
+              "callee": "level.upper",
+              "lineno": 113
+            }
+          ],
+          "docstring": null,
+          "hash": "f2d2ffd57ce5b2e7a242e487a65e31267b30173d",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 112,
+          "line_count": 2,
+          "logging_calls": [],
+          "module_id": "scripts.summarizers.generate_function_analysis",
+          "name": "configure_logging",
+          "path": "summarizers/generate_function_analysis.py",
+          "qualified_name": "scripts.summarizers.generate_function_analysis::configure_logging",
+          "returns_kind": "none",
+          "signature": "def configure_logging(level: str) -> None:",
+          "todo_tags": 0
+        }
+      ],
+      "kind": "duplicate_function",
+      "metrics": {
+        "duplicate_count": 3,
+        "todo_tags": 0
+      },
+      "severity": "medium",
+      "summary": "3 functions share the signature 'def configure_logging(level: str) -> None:'"
+    },
+    {
+      "action_items": [
+        {
+          "description": "Review duplicate implementations for consolidation or reuse.",
+          "targets": [
+            "aggregators/scan_duplicates.py:222",
+            "producers/generate_function_inventory.py:171",
+            "summarizers/generate_function_analysis.py:83"
+          ],
+          "type": "review_duplicate_function"
+        }
+      ],
+      "details": {
+        "function_name": "build_paths",
+        "hash": "c6efca37220da61b57dcafbe0630727595fc6972",
+        "line_counts": [
+          23,
+          22,
+          22
+        ],
+        "qualified_names": [
+          "scripts.aggregators.scan_duplicates::build_paths",
+          "scripts.producers.generate_function_inventory::build_paths",
+          "scripts.summarizers.generate_function_analysis::build_paths"
+        ],
+        "shared_docstring": "",
+        "signature": "def build_paths(args: argparse.Namespace) -> Paths:"
+      },
+      "id": "duplicate_function::duplicate-def-build-paths-args--argparse-namespace-----paths",
+      "instances": [
+        {
+          "calls": [
+            {
+              "callee": "_resolve_within_repo",
+              "lineno": 228
+            },
+            {
+              "callee": "_resolve_within_repo",
+              "lineno": 229
+            },
+            {
+              "callee": "_slugify_relative",
+              "lineno": 233
+            },
+            {
+              "callee": "run_root.mkdir",
+              "lineno": 235
+            },
+            {
+              "callee": "target_index_dir.mkdir",
+              "lineno": 236
+            },
+            {
+              "callee": "Paths",
+              "lineno": 237
+            },
+            {
+              "callee": "Path(args.repo_root).resolve",
+              "lineno": 224
+            },
+            {
+              "callee": "Path",
+              "lineno": 228
+            },
+            {
+              "callee": "Path",
+              "lineno": 229
+            },
+            {
+              "callee": "FileNotFoundError",
+              "lineno": 231
+            },
+            {
+              "callee": "target.relative_to",
+              "lineno": 233
+            },
+            {
+              "callee": "target.exists",
+              "lineno": 230
+            },
+            {
+              "callee": "target.is_dir",
+              "lineno": 230
+            },
+            {
+              "callee": "Path",
+              "lineno": 224
+            },
+            {
+              "callee": "Path(__file__).resolve",
+              "lineno": 226
+            },
+            {
+              "callee": "Path",
+              "lineno": 226
+            }
+          ],
+          "docstring": null,
+          "hash": "c6efca37220da61b57dcafbe0630727595fc6972",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 222,
+          "line_count": 23,
+          "logging_calls": [],
+          "module_id": "scripts.aggregators.scan_duplicates",
+          "name": "build_paths",
+          "path": "aggregators/scan_duplicates.py",
+          "qualified_name": "scripts.aggregators.scan_duplicates::build_paths",
+          "returns_kind": "value",
+          "signature": "def build_paths(args: argparse.Namespace) -> Paths:",
+          "todo_tags": 0
+        },
+        {
+          "calls": [
+            {
+              "callee": "Path",
+              "lineno": 173
+            },
+            {
+              "callee": "target.resolve",
+              "lineno": 175
+            },
+            {
+              "callee": "target.relative_to",
+              "lineno": 180
+            },
+            {
+              "callee": "reports_root.resolve",
+              "lineno": 186
+            },
+            {
+              "callee": "reports_root.mkdir",
+              "lineno": 191
+            },
+            {
+              "callee": "Paths",
+              "lineno": 192
+            },
+            {
+              "callee": "Path(args.repo_root).resolve",
+              "lineno": 172
+            },
+            {
+              "callee": "target_candidate.is_absolute",
+              "lineno": 174
+            },
+            {
+              "callee": "target.relative_to",
+              "lineno": 177
+            },
+            {
+              "callee": "Path",
+              "lineno": 182
+            },
+            {
+              "callee": "reports_root.relative_to",
+              "lineno": 188
+            },
+            {
+              "callee": "ValueError",
+              "lineno": 179
+            },
+            {
+              "callee": "reports_candidate.is_absolute",
+              "lineno": 183
+            },
+            {
+              "callee": "ValueError",
+              "lineno": 190
+            },
+            {
+              "callee": "Path",
+              "lineno": 172
+            },
+            {
+              "callee": "Path(__file__).resolve",
+              "lineno": 172
+            },
+            {
+              "callee": "Path",
+              "lineno": 172
+            }
+          ],
+          "docstring": null,
+          "hash": "3ce31586cb01ef9cb4186d56e79bede5531fdda3",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 171,
+          "line_count": 22,
+          "logging_calls": [],
+          "module_id": "scripts.producers.generate_function_inventory",
+          "name": "build_paths",
+          "path": "producers/generate_function_inventory.py",
+          "qualified_name": "scripts.producers.generate_function_inventory::build_paths",
+          "returns_kind": "value",
+          "signature": "def build_paths(args: argparse.Namespace) -> Paths:",
+          "todo_tags": 0
+        },
+        {
+          "calls": [
+            {
+              "callee": "Path",
+              "lineno": 85
+            },
+            {
+              "callee": "target.resolve",
+              "lineno": 87
+            },
+            {
+              "callee": "target.relative_to",
+              "lineno": 92
+            },
+            {
+              "callee": "getattr",
+              "lineno": 93
+            },
+            {
+              "callee": "reports_root.resolve",
+              "lineno": 98
+            },
+            {
+              "callee": "reports_root.mkdir",
+              "lineno": 103
+            },
+            {
+              "callee": "Paths",
+              "lineno": 104
+            },
+            {
+              "callee": "Path(args.repo_root).resolve",
+              "lineno": 84
+            },
+            {
+              "callee": "target_candidate.is_absolute",
+              "lineno": 86
+            },
+            {
+              "callee": "target.relative_to",
+              "lineno": 89
+            },
+            {
+              "callee": "Path",
+              "lineno": 94
+            },
+            {
+              "callee": "reports_root.relative_to",
+              "lineno": 100
+            },
+            {
+              "callee": "ValueError",
+              "lineno": 91
+            },
+            {
+              "callee": "reports_candidate.is_absolute",
+              "lineno": 95
+            },
+            {
+              "callee": "ValueError",
+              "lineno": 102
+            },
+            {
+              "callee": "Path",
+              "lineno": 84
+            },
+            {
+              "callee": "Path(__file__).resolve",
+              "lineno": 84
+            },
+            {
+              "callee": "Path",
+              "lineno": 84
+            }
+          ],
+          "docstring": null,
+          "hash": "2712fe00f9b9d72c2d6539d5aeeaf5cf9f907e0e",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 83,
+          "line_count": 22,
+          "logging_calls": [],
+          "module_id": "scripts.summarizers.generate_function_analysis",
+          "name": "build_paths",
+          "path": "summarizers/generate_function_analysis.py",
+          "qualified_name": "scripts.summarizers.generate_function_analysis::build_paths",
+          "returns_kind": "value",
+          "signature": "def build_paths(args: argparse.Namespace) -> Paths:",
+          "todo_tags": 0
+        }
+      ],
+      "kind": "duplicate_function",
+      "metrics": {
+        "duplicate_count": 3,
+        "todo_tags": 0
+      },
+      "severity": "medium",
+      "summary": "3 functions share the signature 'def build_paths(args: argparse.Namespace) -> Paths:'"
+    },
+    {
+      "action_items": [
+        {
+          "description": "Review duplicate implementations for consolidation or reuse.",
+          "targets": [
+            "aggregators/scan_duplicates.py:247",
+            "producers/generate_function_inventory.py:195",
+            "summarizers/generate_function_analysis.py:107"
+          ],
+          "type": "review_duplicate_function"
+        }
+      ],
+      "details": {
+        "function_name": "build_options",
+        "hash": "c37c8547abd1008a3d48ec414fc0a4f9e44137a4",
+        "line_counts": [
+          10,
+          2,
+          3
+        ],
+        "qualified_names": [
+          "scripts.aggregators.scan_duplicates::build_options",
+          "scripts.producers.generate_function_inventory::build_options",
+          "scripts.summarizers.generate_function_analysis::build_options"
+        ],
+        "shared_docstring": "",
+        "signature": "def build_options(args: argparse.Namespace) -> Options:"
+      },
+      "id": "duplicate_function::duplicate-def-build-options-args--argparse-namespace-----options",
+      "instances": [
+        {
+          "calls": [
+            {
+              "callee": "Options",
+              "lineno": 249
+            },
+            {
+              "callee": "Path(args.analysis_file).resolve",
+              "lineno": 248
+            },
+            {
+              "callee": "float",
+              "lineno": 250
+            },
+            {
+              "callee": "int",
+              "lineno": 251
+            },
+            {
+              "callee": "int",
+              "lineno": 252
+            },
+            {
+              "callee": "bool",
+              "lineno": 255
+            },
+            {
+              "callee": "Path",
+              "lineno": 248
+            }
+          ],
+          "docstring": null,
+          "hash": "c37c8547abd1008a3d48ec414fc0a4f9e44137a4",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 247,
+          "line_count": 10,
+          "logging_calls": [],
+          "module_id": "scripts.aggregators.scan_duplicates",
+          "name": "build_options",
+          "path": "aggregators/scan_duplicates.py",
+          "qualified_name": "scripts.aggregators.scan_duplicates::build_options",
+          "returns_kind": "value",
+          "signature": "def build_options(args: argparse.Namespace) -> Options:",
+          "todo_tags": 0
+        },
+        {
+          "calls": [
+            {
+              "callee": "Options",
+              "lineno": 196
+            },
+            {
+              "callee": "int",
+              "lineno": 196
+            }
+          ],
+          "docstring": null,
+          "hash": "6d39e05c2a5dbc6bdfc34cac38a58df9bffd7183",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 195,
+          "line_count": 2,
+          "logging_calls": [],
+          "module_id": "scripts.producers.generate_function_inventory",
+          "name": "build_options",
+          "path": "producers/generate_function_inventory.py",
+          "qualified_name": "scripts.producers.generate_function_inventory::build_options",
+          "returns_kind": "value",
+          "signature": "def build_options(args: argparse.Namespace) -> Options:",
+          "todo_tags": 0
+        },
+        {
+          "calls": [
+            {
+              "callee": "Options",
+              "lineno": 109
+            },
+            {
+              "callee": "Path(args.inventory_file).resolve",
+              "lineno": 108
+            },
+            {
+              "callee": "int",
+              "lineno": 109
+            },
+            {
+              "callee": "Path",
+              "lineno": 108
+            }
+          ],
+          "docstring": null,
+          "hash": "2beab56b81eb1577e0f3ddbd255f4c09ceab267a",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 107,
+          "line_count": 3,
+          "logging_calls": [],
+          "module_id": "scripts.summarizers.generate_function_analysis",
+          "name": "build_options",
+          "path": "summarizers/generate_function_analysis.py",
+          "qualified_name": "scripts.summarizers.generate_function_analysis::build_options",
+          "returns_kind": "value",
+          "signature": "def build_options(args: argparse.Namespace) -> Options:",
+          "todo_tags": 0
+        }
+      ],
+      "kind": "duplicate_function",
+      "metrics": {
+        "duplicate_count": 3,
+        "todo_tags": 0
+      },
+      "severity": "medium",
+      "summary": "3 functions share the signature 'def build_options(args: argparse.Namespace) -> Options:'"
+    },
+    {
+      "action_items": [
+        {
+          "description": "Review duplicate implementations for consolidation or reuse.",
+          "targets": [
+            "aggregators/scan_duplicates.py:348",
+            "producers/generate_function_inventory.py:162",
+            "summarizers/generate_function_analysis.py:74"
+          ],
+          "type": "review_duplicate_function"
+        }
+      ],
+      "details": {
+        "function_name": "_slugify_relative",
+        "hash": "59c59db01efcd6ec41f84110e31d04f6c8e7a396",
+        "line_counts": [
+          7,
+          7,
+          7
+        ],
+        "qualified_names": [
+          "scripts.aggregators.scan_duplicates::_slugify_relative",
+          "scripts.producers.generate_function_inventory::_slugify_relative",
+          "scripts.summarizers.generate_function_analysis::_slugify_relative"
+        ],
+        "shared_docstring": "",
+        "signature": "def _slugify_relative(relative_path: Path) -> str:"
+      },
+      "id": "duplicate_function::duplicate-def--slugify-relative-relative-path--path-----str",
+      "instances": [
+        {
+          "calls": [
+            {
+              "callee": "''.join",
+              "lineno": 351
+            },
+            {
+              "callee": "parts.append",
+              "lineno": 353
+            },
+            {
+              "callee": "'__'.join",
+              "lineno": 354
+            },
+            {
+              "callee": "slug.strip",
+              "lineno": 352
+            },
+            {
+              "callee": "ch.isalnum",
+              "lineno": 351
+            },
+            {
+              "callee": "ch.lower",
+              "lineno": 351
+            }
+          ],
+          "docstring": null,
+          "hash": "59c59db01efcd6ec41f84110e31d04f6c8e7a396",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 348,
+          "line_count": 7,
+          "logging_calls": [],
+          "module_id": "scripts.aggregators.scan_duplicates",
+          "name": "_slugify_relative",
+          "path": "aggregators/scan_duplicates.py",
+          "qualified_name": "scripts.aggregators.scan_duplicates::_slugify_relative",
+          "returns_kind": "value",
+          "signature": "def _slugify_relative(relative_path: Path) -> str:",
+          "todo_tags": 0
+        },
+        {
+          "calls": [
+            {
+              "callee": "''.join",
+              "lineno": 165
+            },
+            {
+              "callee": "parts.append",
+              "lineno": 167
+            },
+            {
+              "callee": "'__'.join",
+              "lineno": 168
+            },
+            {
+              "callee": "slug.strip",
+              "lineno": 166
+            },
+            {
+              "callee": "ch.isalnum",
+              "lineno": 165
+            },
+            {
+              "callee": "ch.lower",
+              "lineno": 165
+            }
+          ],
+          "docstring": null,
+          "hash": "59c59db01efcd6ec41f84110e31d04f6c8e7a396",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 162,
+          "line_count": 7,
+          "logging_calls": [],
+          "module_id": "scripts.producers.generate_function_inventory",
+          "name": "_slugify_relative",
+          "path": "producers/generate_function_inventory.py",
+          "qualified_name": "scripts.producers.generate_function_inventory::_slugify_relative",
+          "returns_kind": "value",
+          "signature": "def _slugify_relative(relative_path: Path) -> str:",
+          "todo_tags": 0
+        },
+        {
+          "calls": [
+            {
+              "callee": "''.join",
+              "lineno": 77
+            },
+            {
+              "callee": "parts.append",
+              "lineno": 79
+            },
+            {
+              "callee": "'__'.join",
+              "lineno": 80
+            },
+            {
+              "callee": "slug.strip",
+              "lineno": 78
+            },
+            {
+              "callee": "ch.isalnum",
+              "lineno": 77
+            },
+            {
+              "callee": "ch.lower",
+              "lineno": 77
+            }
+          ],
+          "docstring": null,
+          "hash": "59c59db01efcd6ec41f84110e31d04f6c8e7a396",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 74,
+          "line_count": 7,
+          "logging_calls": [],
+          "module_id": "scripts.summarizers.generate_function_analysis",
+          "name": "_slugify_relative",
+          "path": "summarizers/generate_function_analysis.py",
+          "qualified_name": "scripts.summarizers.generate_function_analysis::_slugify_relative",
+          "returns_kind": "value",
+          "signature": "def _slugify_relative(relative_path: Path) -> str:",
+          "todo_tags": 0
+        }
+      ],
+      "kind": "duplicate_function",
+      "metrics": {
+        "duplicate_count": 3,
+        "todo_tags": 0
+      },
+      "severity": "medium",
+      "summary": "3 functions share the signature 'def _slugify_relative(relative_path: Path) -> str:'"
+    },
+    {
+      "action_items": [
+        {
+          "description": "Review duplicate implementations for consolidation or reuse.",
+          "targets": [
+            "aggregators/scan_duplicates.py:848",
+            "summarizers/generate_function_analysis.py:234"
+          ],
+          "type": "review_duplicate_function"
+        }
+      ],
+      "details": {
+        "function_name": "compose_payload",
+        "hash": "95782e9382f0d3ebb1549fac60c13e23a8776f29",
+        "line_counts": [
+          20,
+          32
+        ],
+        "qualified_names": [
+          "scripts.aggregators.scan_duplicates::compose_payload",
+          "scripts.summarizers.generate_function_analysis::compose_payload"
+        ],
+        "shared_docstring": "",
+        "signature": "def compose_payload("
+      },
+      "id": "duplicate_function::duplicate-def-compose-payload",
+      "instances": [
+        {
+          "calls": [
+            {
+              "callee": "datetime.now(timezone.utc).isoformat",
+              "lineno": 855
+            },
+            {
+              "callee": "datetime.now",
+              "lineno": 855
+            },
+            {
+              "callee": "_to_repo_relative",
+              "lineno": 859
+            },
+            {
+              "callee": "str",
+              "lineno": 860
+            },
+            {
+              "callee": "_to_repo_relative",
+              "lineno": 861
+            }
+          ],
+          "docstring": null,
+          "hash": "95782e9382f0d3ebb1549fac60c13e23a8776f29",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 848,
+          "line_count": 20,
+          "logging_calls": [],
+          "module_id": "scripts.aggregators.scan_duplicates",
+          "name": "compose_payload",
+          "path": "aggregators/scan_duplicates.py",
+          "qualified_name": "scripts.aggregators.scan_duplicates::compose_payload",
+          "returns_kind": "value",
+          "signature": "def compose_payload(",
+          "todo_tags": 0
+        },
+        {
+          "calls": [
+            {
+              "callee": "inventory_payload.get",
+              "lineno": 242
+            },
+            {
+              "callee": "datetime.now(timezone.utc).isoformat",
+              "lineno": 243
+            },
+            {
+              "callee": "sum",
+              "lineno": 244
+            },
+            {
+              "callee": "len",
+              "lineno": 246
+            },
+            {
+              "callee": "len",
+              "lineno": 248
+            },
+            {
+              "callee": "datetime.now",
+              "lineno": 243
+            },
+            {
+              "callee": "len",
+              "lineno": 244
+            },
+            {
+              "callee": "inventory_payload.get",
+              "lineno": 248
+            },
+            {
+              "callee": "str",
+              "lineno": 255
+            },
+            {
+              "callee": "str",
+              "lineno": 257
+            },
+            {
+              "callee": "str",
+              "lineno": 258
+            },
+            {
+              "callee": "metadata.get",
+              "lineno": 259
+            },
+            {
+              "callee": "finding.get",
+              "lineno": 244
+            }
+          ],
+          "docstring": null,
+          "hash": "3c9a00303bb8da2d0bf70e9aea6ec868a1aa584d",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 234,
+          "line_count": 32,
+          "logging_calls": [],
+          "module_id": "scripts.summarizers.generate_function_analysis",
+          "name": "compose_payload",
+          "path": "summarizers/generate_function_analysis.py",
+          "qualified_name": "scripts.summarizers.generate_function_analysis::compose_payload",
+          "returns_kind": "value",
+          "signature": "def compose_payload(",
+          "todo_tags": 0
+        }
+      ],
+      "kind": "duplicate_function",
+      "metrics": {
+        "duplicate_count": 2,
+        "todo_tags": 0
+      },
+      "severity": "medium",
+      "summary": "2 functions share the signature 'def compose_payload('"
+    },
+    {
+      "action_items": [
+        {
+          "description": "Review duplicate implementations for consolidation or reuse.",
+          "targets": [
+            "aggregators/scan_duplicates.py:932",
+            "producers/generate_function_inventory.py:845",
+            "summarizers/generate_function_analysis.py:320"
+          ],
+          "type": "review_duplicate_function"
+        }
+      ],
+      "details": {
+        "function_name": "run",
+        "hash": "1fe99b59958c9e0a400c565a5b0ad394e7065643",
+        "line_counts": [
+          44,
+          46,
+          38
+        ],
+        "qualified_names": [
+          "scripts.aggregators.scan_duplicates::run",
+          "scripts.producers.generate_function_inventory::run",
+          "scripts.summarizers.generate_function_analysis::run"
+        ],
+        "shared_docstring": "",
+        "signature": "def run(argv: Iterable[str] | None = None) -> int:"
+      },
+      "id": "duplicate_function::duplicate-def-run-argv--iterable-str----none---none-----int",
+      "instances": [
+        {
+          "calls": [
+            {
+              "callee": "parse_args",
+              "lineno": 933
+            },
+            {
+              "callee": "build_options",
+              "lineno": 934
+            },
+            {
+              "callee": "configure_logging",
+              "lineno": 935
+            },
+            {
+              "callee": "scan_target",
+              "lineno": 953
+            },
+            {
+              "callee": "load_source_duplicates",
+              "lineno": 954
+            },
+            {
+              "callee": "merge_duplicates",
+              "lineno": 955
+            },
+            {
+              "callee": "compose_payload",
+              "lineno": 956
+            },
+            {
+              "callee": "generate_summary",
+              "lineno": 957
+            },
+            {
+              "callee": "initialise_run_paths",
+              "lineno": 958
+            },
+            {
+              "callee": "write_outputs",
+              "lineno": 959
+            },
+            {
+              "callee": "apply_retention",
+              "lineno": 960
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 961
+            },
+            {
+              "callee": "logging.debug",
+              "lineno": 968
+            },
+            {
+              "callee": "build_paths",
+              "lineno": 937
+            },
+            {
+              "callee": "replace",
+              "lineno": 947
+            },
+            {
+              "callee": "locate_analysis",
+              "lineno": 949
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 939
+            },
+            {
+              "callee": "orchestrate_upstream",
+              "lineno": 943
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 951
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 945
+            }
+          ],
+          "docstring": null,
+          "hash": "1fe99b59958c9e0a400c565a5b0ad394e7065643",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 932,
+          "line_count": 44,
+          "logging_calls": [
+            {
+              "level": "info",
+              "lineno": 961
+            },
+            {
+              "level": "debug",
+              "lineno": 968
+            },
+            {
+              "level": "error",
+              "lineno": 939
+            },
+            {
+              "level": "error",
+              "lineno": 951
+            },
+            {
+              "level": "error",
+              "lineno": 945
+            }
+          ],
+          "module_id": "scripts.aggregators.scan_duplicates",
+          "name": "run",
+          "path": "aggregators/scan_duplicates.py",
+          "qualified_name": "scripts.aggregators.scan_duplicates::run",
+          "returns_kind": "value",
+          "signature": "def run(argv: Iterable[str] | None = None) -> int:",
+          "todo_tags": 0
+        },
+        {
+          "calls": [
+            {
+              "callee": "parse_args",
+              "lineno": 846
+            },
+            {
+              "callee": "build_options",
+              "lineno": 847
+            },
+            {
+              "callee": "configure_logging",
+              "lineno": 848
+            },
+            {
+              "callee": "discover_python_files",
+              "lineno": 863
+            },
+            {
+              "callee": "compose_inventory",
+              "lineno": 879
+            },
+            {
+              "callee": "build_screening_summary",
+              "lineno": 880
+            },
+            {
+              "callee": "write_inventory",
+              "lineno": 881
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 882
+            },
+            {
+              "callee": "build_paths",
+              "lineno": 851
+            },
+            {
+              "callee": "paths.target.exists",
+              "lineno": 856
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 857
+            },
+            {
+              "callee": "paths.target.is_dir",
+              "lineno": 859
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 860
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 865
+            },
+            {
+              "callee": "analyze_python_file",
+              "lineno": 871
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 876
+            },
+            {
+              "callee": "len",
+              "lineno": 888
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 853
+            },
+            {
+              "callee": "collected.append",
+              "lineno": 873
+            }
+          ],
+          "docstring": null,
+          "hash": "f21c4cfb6ad5d014a723d068abda5d04053c229e",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 845,
+          "line_count": 46,
+          "logging_calls": [
+            {
+              "level": "info",
+              "lineno": 882
+            },
+            {
+              "level": "error",
+              "lineno": 857
+            },
+            {
+              "level": "error",
+              "lineno": 860
+            },
+            {
+              "level": "error",
+              "lineno": 865
+            },
+            {
+              "level": "error",
+              "lineno": 876
+            },
+            {
+              "level": "error",
+              "lineno": 853
+            }
+          ],
+          "module_id": "scripts.producers.generate_function_inventory",
+          "name": "run",
+          "path": "producers/generate_function_inventory.py",
+          "qualified_name": "scripts.producers.generate_function_inventory::run",
+          "returns_kind": "value",
+          "signature": "def run(argv: Iterable[str] | None = None) -> int:",
+          "todo_tags": 0
+        },
+        {
+          "calls": [
+            {
+              "callee": "parse_args",
+              "lineno": 321
+            },
+            {
+              "callee": "build_options",
+              "lineno": 322
+            },
+            {
+              "callee": "configure_logging",
+              "lineno": 323
+            },
+            {
+              "callee": "collect_functions",
+              "lineno": 345
+            },
+            {
+              "callee": "identify_duplicate_groups",
+              "lineno": 346
+            },
+            {
+              "callee": "build_findings",
+              "lineno": 347
+            },
+            {
+              "callee": "compose_payload",
+              "lineno": 348
+            },
+            {
+              "callee": "write_analysis",
+              "lineno": 349
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 350
+            },
+            {
+              "callee": "build_paths",
+              "lineno": 325
+            },
+            {
+              "callee": "paths.target.exists",
+              "lineno": 329
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 330
+            },
+            {
+              "callee": "paths.target.is_dir",
+              "lineno": 332
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 333
+            },
+            {
+              "callee": "locate_inventory_file",
+              "lineno": 336
+            },
+            {
+              "callee": "read_inventory",
+              "lineno": 341
+            },
+            {
+              "callee": "len",
+              "lineno": 354
+            },
+            {
+              "callee": "sum",
+              "lineno": 355
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 327
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 338
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 343
+            },
+            {
+              "callee": "len",
+              "lineno": 355
+            }
+          ],
+          "docstring": null,
+          "hash": "5f035a213ae1dfe840f5ca7647214eddf6ea1b07",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 320,
+          "line_count": 38,
+          "logging_calls": [
+            {
+              "level": "info",
+              "lineno": 350
+            },
+            {
+              "level": "error",
+              "lineno": 330
+            },
+            {
+              "level": "error",
+              "lineno": 333
+            },
+            {
+              "level": "error",
+              "lineno": 327
+            },
+            {
+              "level": "error",
+              "lineno": 338
+            },
+            {
+              "level": "error",
+              "lineno": 343
+            }
+          ],
+          "module_id": "scripts.summarizers.generate_function_analysis",
+          "name": "run",
+          "path": "summarizers/generate_function_analysis.py",
+          "qualified_name": "scripts.summarizers.generate_function_analysis::run",
+          "returns_kind": "value",
+          "signature": "def run(argv: Iterable[str] | None = None) -> int:",
+          "todo_tags": 0
+        }
+      ],
+      "kind": "duplicate_function",
+      "metrics": {
+        "duplicate_count": 3,
+        "todo_tags": 0
+      },
+      "severity": "medium",
+      "summary": "3 functions share the signature 'def run(argv: Iterable[str] | None = None) -> int:'"
+    },
+    {
+      "action_items": [
+        {
+          "description": "Review duplicate implementations for consolidation or reuse.",
+          "targets": [
+            "producers/generate_function_inventory.py:893",
+            "summarizers/generate_function_analysis.py:360"
+          ],
+          "type": "review_duplicate_function"
+        }
+      ],
+      "details": {
+        "function_name": "main",
+        "hash": "519b1f384dc644318f2b895597ccc8f4f64169a0",
+        "line_counts": [
+          2,
+          2
+        ],
+        "qualified_names": [
+          "scripts.producers.generate_function_inventory::main",
+          "scripts.summarizers.generate_function_analysis::main"
+        ],
+        "shared_docstring": "",
+        "signature": "def main() -> None:"
+      },
+      "id": "duplicate_function::duplicate-def-main------none",
+      "instances": [
+        {
+          "calls": [
+            {
+              "callee": "SystemExit",
+              "lineno": 894
+            },
+            {
+              "callee": "run",
+              "lineno": 894
+            }
+          ],
+          "docstring": null,
+          "hash": "519b1f384dc644318f2b895597ccc8f4f64169a0",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 893,
+          "line_count": 2,
+          "logging_calls": [],
+          "module_id": "scripts.producers.generate_function_inventory",
+          "name": "main",
+          "path": "producers/generate_function_inventory.py",
+          "qualified_name": "scripts.producers.generate_function_inventory::main",
+          "returns_kind": "none",
+          "signature": "def main() -> None:",
+          "todo_tags": 0
+        },
+        {
+          "calls": [
+            {
+              "callee": "SystemExit",
+              "lineno": 361
+            },
+            {
+              "callee": "run",
+              "lineno": 361
+            }
+          ],
+          "docstring": null,
+          "hash": "519b1f384dc644318f2b895597ccc8f4f64169a0",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 360,
+          "line_count": 2,
+          "logging_calls": [],
+          "module_id": "scripts.summarizers.generate_function_analysis",
+          "name": "main",
+          "path": "summarizers/generate_function_analysis.py",
+          "qualified_name": "scripts.summarizers.generate_function_analysis::main",
+          "returns_kind": "none",
+          "signature": "def main() -> None:",
+          "todo_tags": 0
+        }
+      ],
+      "kind": "duplicate_function",
+      "metrics": {
+        "duplicate_count": 2,
+        "todo_tags": 0
+      },
+      "severity": "medium",
+      "summary": "2 functions share the signature 'def main() -> None:'"
+    }
+  ],
+  "metadata": {
+    "analysis_version": "1.0.0",
+    "folder_name": "scripts",
+    "folder_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts",
+    "generated_at": "2025-10-27T12:26:28.979364+00:00",
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "source_index_file": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\scripts_index\\scripts_index-2025-10-27.json",
+    "source_index_generated_at": "2025-10-27T12:25:59.582256+00:00",
+    "source_index_hash": "1d15ee251494e1ddcbf51b311627c3e1a6445e497d1d62557fc25b397cc4df07"
+  },
+  "schema_version": 1,
+  "summary": {
+    "duplicate_groups": 8,
+    "total_duplicate_functions": 22,
+    "total_files_scanned": 4
+  }
+}

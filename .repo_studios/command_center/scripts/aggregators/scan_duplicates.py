@@ -34,7 +34,19 @@ DEFAULT_SIMILARITY_THRESHOLD = 0.85
 DEFAULT_MIN_LINES = 3
 DEFAULT_KEEP_RUNS = 3
 DEFAULT_TARGET_RELATIVE = Path(".repo_studios/command_center/scripts/producers")
-DEFAULT_RUN_ROOT_RELATIVE = Path(".repo_studios/command_center/reports")
+DEFAULT_RUN_ROOT_RELATIVE = Path(".repo_studios/command_center/reports/duplicates_scan")
+DEFAULT_IGNORE_DIRS = {
+    "__pycache__",
+    ".git",
+    ".hg",
+    ".svn",
+    ".venv",
+    "venv",
+    "node_modules",
+    "build",
+    "dist",
+    ".tox",
+}
 INVENTORY_SCRIPT_RELATIVE = Path(
     ".repo_studios/command_center/scripts/producers/generate_function_inventory.py"
 )
@@ -50,6 +62,7 @@ class Paths:
     repo_root: Path
     target: Path
     run_root: Path
+    target_slug: str
     source_name: str
     target_index_dir: Path
 
@@ -132,6 +145,14 @@ class ScanResult:
     duplicate_groups: list[DuplicateGroup]
 
 
+@dataclass(frozen=True)
+class RunArtifacts:
+    """File paths emitted for a duplicate scan run."""
+
+    matrix_paths: tuple[Path, ...]
+    summary_paths: tuple[Path, ...]
+
+
 def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="scan_duplicates",
@@ -209,6 +230,7 @@ def build_paths(args: argparse.Namespace) -> Paths:
     if not target.exists() or not target.is_dir():
         raise FileNotFoundError(f"Target directory not found or not a directory: {target}")
     source_name = target.name
+    target_slug = _slugify_relative(target.relative_to(repo_root))
     target_index_dir = target / f"{source_name}_index"
     run_root.mkdir(parents=True, exist_ok=True)
     target_index_dir.mkdir(parents=True, exist_ok=True)
@@ -216,6 +238,7 @@ def build_paths(args: argparse.Namespace) -> Paths:
         repo_root=repo_root,
         target=target,
         run_root=run_root,
+        target_slug=target_slug,
         source_name=source_name,
         target_index_dir=target_index_dir,
     )
@@ -322,6 +345,15 @@ def _resolve_within_repo(repo_root: Path, candidate: Path) -> Path:
     return resolved
 
 
+def _slugify_relative(relative_path: Path) -> str:
+    parts: list[str] = []
+    for part in relative_path.parts:
+        slug = "".join(ch.lower() if ch.isalnum() else "-" for ch in part)
+        slug = slug.strip("-") or "segment"
+        parts.append(slug)
+    return "__".join(parts) or "root"
+
+
 def _to_repo_relative(path: Path, repo_root: Path) -> str:
     try:
         rel = path.relative_to(repo_root)
@@ -396,10 +428,14 @@ def _build_signature(node: ast.AST) -> str:
 
 
 def scan_python_files(directory: Path, ignore_patterns: Sequence[str] | None = None) -> list[Path]:
-    ignore_patterns = list(ignore_patterns or ("__pycache__", ".git", "venv"))
+    ignore_dirs = set(ignore_patterns or DEFAULT_IGNORE_DIRS)
     results: list[Path] = []
     for path in directory.rglob("*.py"):
-        if any(part in path.parts for part in ignore_patterns):
+        try:
+            relative_parts = path.relative_to(directory).parts
+        except ValueError:
+            continue
+        if any(part in ignore_dirs or part.startswith(".") for part in relative_parts[:-1]):
             continue
         results.append(path)
     return sorted(results)
@@ -838,10 +874,18 @@ class RunPaths:
 
 
 def initialise_run_paths(paths: Paths) -> RunPaths:
-    output_dir = paths.run_root / f"{paths.source_name}_duplicate_scan"
+    output_dir = paths.run_root / f"{paths.target_slug}_duplicate_scan"
     output_dir.mkdir(parents=True, exist_ok=True)
     paths.target_index_dir.mkdir(parents=True, exist_ok=True)
     return RunPaths(output_dir=output_dir, index_dir=paths.target_index_dir)
+
+
+def _atomic_write_bytes(destination: Path, payload: bytes) -> Path:
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    temp_path = destination.with_suffix(destination.suffix + ".tmp")
+    temp_path.write_bytes(payload)
+    temp_path.replace(destination)
+    return destination
 
 
 def write_outputs(
@@ -849,15 +893,18 @@ def write_outputs(
     summary: str,
     run_paths: RunPaths,
     paths: Paths,
-) -> None:
+) -> RunArtifacts:
     json_bytes = json.dumps(payload, indent=2, sort_keys=True).encode("utf-8")
     summary_bytes = summary.encode("utf-8")
     date_stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     matrix_name = f"{paths.source_name}_duplicate_matrix-{date_stamp}.json"
     summary_name = f"{paths.source_name}_duplicate_summary-{date_stamp}.md"
+    matrix_paths: list[Path] = []
+    summary_paths: list[Path] = []
     for root in (run_paths.output_dir, run_paths.index_dir):
-        (root / matrix_name).write_bytes(json_bytes)
-        (root / summary_name).write_bytes(summary_bytes)
+        matrix_paths.append(_atomic_write_bytes(root / matrix_name, json_bytes))
+        summary_paths.append(_atomic_write_bytes(root / summary_name, summary_bytes))
+    return RunArtifacts(matrix_paths=tuple(matrix_paths), summary_paths=tuple(summary_paths))
 
 
 def apply_retention(run_paths: RunPaths, paths: Paths, options: Options) -> None:
@@ -909,7 +956,7 @@ def run(argv: Iterable[str] | None = None) -> int:
     payload = compose_payload(matrix, stats, scan_result, paths, analysis_path)
     summary = generate_summary(stats, scan_result, analysis_path, paths, matrix)
     run_paths = initialise_run_paths(paths)
-    write_outputs(payload, summary, run_paths, paths)
+    artifacts = write_outputs(payload, summary, run_paths, paths)
     apply_retention(run_paths, paths, options)
     logging.info(
         "Duplicate scan complete: files=%d functions=%d scanner_groups=%d producers=%d",
@@ -917,6 +964,13 @@ def run(argv: Iterable[str] | None = None) -> int:
         scan_result.functions_scanned,
         stats["scanner_groups"],
         stats["producer_groups"],
+    )
+    logging.debug(
+        "Artifacts mirrored: run_matrix=%s index_matrix=%s run_summary=%s index_summary=%s",
+        artifacts.matrix_paths[0],
+        artifacts.matrix_paths[-1],
+        artifacts.summary_paths[0],
+        artifacts.summary_paths[-1],
     )
     return 0
 

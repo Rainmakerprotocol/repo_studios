@@ -113,6 +113,7 @@ def _extract_imports_detailed(tree: ast.AST) -> tuple[list[dict[str, Any]], dict
 class Paths:
     repo_root: Path
     target: Path
+    target_relative: Path
     reports_root: Path
 
 
@@ -158,6 +159,15 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def _slugify_relative(relative_path: Path) -> str:
+    parts: list[str] = []
+    for part in relative_path.parts:
+        slug = "".join(ch.lower() if ch.isalnum() else "-" for ch in part)
+        slug = slug.strip("-") or "segment"
+        parts.append(slug)
+    return "__".join(parts) or "root"
+
+
 def build_paths(args: argparse.Namespace) -> Paths:
     repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[4]
     target_candidate = Path(args.target)
@@ -167,6 +177,7 @@ def build_paths(args: argparse.Namespace) -> Paths:
         target.relative_to(repo_root)
     except ValueError as exc:
         raise ValueError(f"Target path must reside within repo root: {target}") from exc
+    target_relative = target.relative_to(repo_root)
     if args.reports_root:
         reports_candidate = Path(args.reports_root)
         reports_root = reports_candidate if reports_candidate.is_absolute() else repo_root / reports_candidate
@@ -178,7 +189,7 @@ def build_paths(args: argparse.Namespace) -> Paths:
     except ValueError as exc:
         raise ValueError(f"Reports root must reside within repo root: {reports_root}") from exc
     reports_root.mkdir(parents=True, exist_ok=True)
-    return Paths(repo_root=repo_root, target=target, reports_root=reports_root)
+    return Paths(repo_root=repo_root, target=target, target_relative=target_relative, reports_root=reports_root)
 
 
 def build_options(args: argparse.Namespace) -> Options:
@@ -822,7 +833,8 @@ def _write_screening_copy(directory: Path, source_name: str, summary: dict[str, 
 def write_inventory(paths: Paths, payload: dict[str, Any], summary: dict[str, Any]) -> Path:
     source_name = paths.target.name
     primary_dir = paths.target / f"{source_name}_index"
-    secondary_dir = paths.reports_root / f"{source_name}_index"
+    reports_slug = _slugify_relative(paths.target_relative)
+    secondary_dir = paths.reports_root / f"{reports_slug}_index"
     primary = _write_inventory_copy(primary_dir, source_name, payload)
     _write_inventory_copy(secondary_dir, source_name, payload)
     _write_screening_copy(primary_dir, source_name, summary)

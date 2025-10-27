@@ -61,6 +61,15 @@ def _load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _slugify_relative(path: Path) -> str:
+    parts: list[str] = []
+    for part in path.parts:
+        slug = "".join(ch.lower() if ch.isalnum() else "-" for ch in part)
+        slug = slug.strip("-") or "segment"
+        parts.append(slug)
+    return "__".join(parts) or "root"
+
+
 def test_analysis_detects_duplicate_functions(tmp_path: Path) -> None:
     repo_root = tmp_path
     target = repo_root / "sample_pkg"
@@ -92,6 +101,21 @@ def test_analysis_detects_duplicate_functions(tmp_path: Path) -> None:
     assert len(analysis_files) == 1
     analysis_file = analysis_files[0]
     analysis_payload = _load_json(analysis_file)
+    slug = _slugify_relative(target.relative_to(repo_root))
+    mirror_dir = (
+        repo_root
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "index_scan_analysis"
+        / f"{slug}_analysis"
+    )
+    mirror_files = list(mirror_dir.glob("sample_pkg_analysis-*.json"))
+    assert len(mirror_files) == 1
+    mirror_payload = _load_json(mirror_files[0])
+    assert mirror_payload == analysis_payload
+    assert not (inventory_dir / "latest.json").exists()
+    assert not (mirror_dir / "latest.json").exists()
 
     inv_generated_at = inventory_payload["metadata"]["generated_at"]
     analysis_metadata = analysis_payload["metadata"]
@@ -140,10 +164,23 @@ def test_analysis_replaces_existing_outputs(tmp_path: Path) -> None:
     assert run_inventory(["--repo-root", str(repo_root), str(target)]) == 0
 
     index_dir = target / "pkg_index"
+    slug = _slugify_relative(target.relative_to(repo_root))
+    mirror_dir = (
+        repo_root
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "index_scan_analysis"
+        / f"{slug}_analysis"
+    )
     old_file = index_dir / "pkg_analysis-2000-01-01.json"
     _write(old_file, "{}")
     legacy_file = index_dir / "pkg_analysis.json"
     _write(legacy_file, "{}")
+    old_mirror = mirror_dir / "pkg_analysis-1999-12-31.json"
+    _write(old_mirror, "{}")
+    legacy_mirror = mirror_dir / "pkg_analysis.json"
+    _write(legacy_mirror, "{}")
 
     assert run_analysis(["--repo-root", str(repo_root), str(target)]) == 0
 
@@ -152,3 +189,9 @@ def test_analysis_replaces_existing_outputs(tmp_path: Path) -> None:
     analysis_file = analysis_files[0]
     assert analysis_file.name != old_file.name
     assert not legacy_file.exists()
+    mirror_files = list(mirror_dir.glob("pkg_analysis-*.json"))
+    assert len(mirror_files) == 1
+    mirror_file = mirror_files[0]
+    assert mirror_file.name != old_mirror.name
+    assert not legacy_mirror.exists()
+    assert not (mirror_dir / "latest.json").exists()

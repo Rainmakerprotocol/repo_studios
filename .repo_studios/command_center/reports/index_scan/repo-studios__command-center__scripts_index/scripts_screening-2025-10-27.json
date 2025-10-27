@@ -130,6 +130,22 @@
         "zip"
       ],
       [
+        "scripts.aggregators.scan_duplicates::_atomic_write_bytes",
+        "destination.parent.mkdir"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_atomic_write_bytes",
+        "destination.with_suffix"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_atomic_write_bytes",
+        "temp_path.replace"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_atomic_write_bytes",
+        "temp_path.write_bytes"
+      ],
+      [
         "scripts.aggregators.scan_duplicates::_average_pairwise_similarity",
         "_pairwise"
       ],
@@ -482,6 +498,30 @@
         "str"
       ],
       [
+        "scripts.aggregators.scan_duplicates::_slugify_relative",
+        "''.join"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_slugify_relative",
+        "'__'.join"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_slugify_relative",
+        "ch.isalnum"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_slugify_relative",
+        "ch.lower"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_slugify_relative",
+        "parts.append"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_slugify_relative",
+        "slug.strip"
+      ],
+      [
         "scripts.aggregators.scan_duplicates::_text_similarity",
         "'\\n'.join"
       ],
@@ -619,6 +659,10 @@
       ],
       [
         "scripts.aggregators.scan_duplicates::build_paths",
+        "_slugify_relative"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::build_paths",
         "run_root.mkdir"
       ],
       [
@@ -627,11 +671,19 @@
       ],
       [
         "scripts.aggregators.scan_duplicates::build_paths",
+        "scripts.aggregators.scan_duplicates::_slugify_relative"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::build_paths",
         "target.exists"
       ],
       [
         "scripts.aggregators.scan_duplicates::build_paths",
         "target.is_dir"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::build_paths",
+        "target.relative_to"
       ],
       [
         "scripts.aggregators.scan_duplicates::build_paths",
@@ -1003,6 +1055,10 @@
       ],
       [
         "scripts.aggregators.scan_duplicates::run",
+        "logging.debug"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::run",
         "logging.error"
       ],
       [
@@ -1099,11 +1155,19 @@
       ],
       [
         "scripts.aggregators.scan_duplicates::scan_python_files",
-        "list"
+        "part.startswith"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::scan_python_files",
+        "path.relative_to"
       ],
       [
         "scripts.aggregators.scan_duplicates::scan_python_files",
         "results.append"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::scan_python_files",
+        "set"
       ],
       [
         "scripts.aggregators.scan_duplicates::scan_python_files",
@@ -1147,11 +1211,11 @@
       ],
       [
         "scripts.aggregators.scan_duplicates::write_outputs",
-        "(root / matrix_name).write_bytes"
+        "RunArtifacts"
       ],
       [
         "scripts.aggregators.scan_duplicates::write_outputs",
-        "(root / summary_name).write_bytes"
+        "_atomic_write_bytes"
       ],
       [
         "scripts.aggregators.scan_duplicates::write_outputs",
@@ -1171,7 +1235,23 @@
       ],
       [
         "scripts.aggregators.scan_duplicates::write_outputs",
+        "matrix_paths.append"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::write_outputs",
+        "scripts.aggregators.scan_duplicates::_atomic_write_bytes"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::write_outputs",
         "summary.encode"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::write_outputs",
+        "summary_paths.append"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::write_outputs",
+        "tuple"
       ],
       [
         "scripts.producers.generate_function_inventory::_annotation_map",
@@ -1564,6 +1644,30 @@
       [
         "scripts.producers.generate_function_inventory::_signature_structure",
         "_names"
+      ],
+      [
+        "scripts.producers.generate_function_inventory::_slugify_relative",
+        "''.join"
+      ],
+      [
+        "scripts.producers.generate_function_inventory::_slugify_relative",
+        "'__'.join"
+      ],
+      [
+        "scripts.producers.generate_function_inventory::_slugify_relative",
+        "ch.isalnum"
+      ],
+      [
+        "scripts.producers.generate_function_inventory::_slugify_relative",
+        "ch.lower"
+      ],
+      [
+        "scripts.producers.generate_function_inventory::_slugify_relative",
+        "parts.append"
+      ],
+      [
+        "scripts.producers.generate_function_inventory::_slugify_relative",
+        "slug.strip"
       ],
       [
         "scripts.producers.generate_function_inventory::_write_inventory_copy",
@@ -2127,6 +2231,10 @@
       ],
       [
         "scripts.producers.generate_function_inventory::write_inventory",
+        "_slugify_relative"
+      ],
+      [
+        "scripts.producers.generate_function_inventory::write_inventory",
         "_write_inventory_copy"
       ],
       [
@@ -2135,11 +2243,87 @@
       ],
       [
         "scripts.producers.generate_function_inventory::write_inventory",
+        "scripts.producers.generate_function_inventory::_slugify_relative"
+      ],
+      [
+        "scripts.producers.generate_function_inventory::write_inventory",
         "scripts.producers.generate_function_inventory::_write_inventory_copy"
       ],
       [
         "scripts.producers.generate_function_inventory::write_inventory",
         "scripts.producers.generate_function_inventory::_write_screening_copy"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_slugify_relative",
+        "''.join"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_slugify_relative",
+        "'__'.join"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_slugify_relative",
+        "ch.isalnum"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_slugify_relative",
+        "ch.lower"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_slugify_relative",
+        "parts.append"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_slugify_relative",
+        "slug.strip"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
+        "directory.glob"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
+        "directory.mkdir"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
+        "existing.is_file"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
+        "existing.unlink"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
+        "json.dumps"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
+        "latest_pointer.exists"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
+        "latest_pointer.unlink"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
+        "legacy.exists"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
+        "legacy.unlink"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
+        "output_file.with_suffix"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
+        "temp_file.replace"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
+        "temp_file.write_text"
       ],
       [
         "scripts.summarizers.generate_function_analysis::analysis_date",
@@ -2187,6 +2371,10 @@
       ],
       [
         "scripts.summarizers.generate_function_analysis::build_findings",
+        "int"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::build_findings",
         "item.get"
       ],
       [
@@ -2200,6 +2388,10 @@
       [
         "scripts.summarizers.generate_function_analysis::build_findings",
         "slugify"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::build_findings",
+        "sum"
       ],
       [
         "scripts.summarizers.generate_function_analysis::build_options",
@@ -2239,6 +2431,26 @@
       ],
       [
         "scripts.summarizers.generate_function_analysis::build_paths",
+        "getattr"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::build_paths",
+        "reports_candidate.is_absolute"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::build_paths",
+        "reports_root.mkdir"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::build_paths",
+        "reports_root.relative_to"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::build_paths",
+        "reports_root.resolve"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::build_paths",
         "target.relative_to"
       ],
       [
@@ -2251,15 +2463,23 @@
       ],
       [
         "scripts.summarizers.generate_function_analysis::collect_functions",
+        "_append"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::collect_functions",
+        "cls.get"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::collect_functions",
         "entry.get"
       ],
       [
         "scripts.summarizers.generate_function_analysis::collect_functions",
-        "func.get"
+        "inventory.get"
       ],
       [
         "scripts.summarizers.generate_function_analysis::collect_functions",
-        "inventory.get"
+        "module.get"
       ],
       [
         "scripts.summarizers.generate_function_analysis::collect_functions",
@@ -2272,6 +2492,10 @@
       [
         "scripts.summarizers.generate_function_analysis::compose_payload",
         "datetime.now(timezone.utc).isoformat"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::compose_payload",
+        "finding.get"
       ],
       [
         "scripts.summarizers.generate_function_analysis::compose_payload",
@@ -2307,6 +2531,10 @@
       ],
       [
         "scripts.summarizers.generate_function_analysis::identify_duplicate_groups",
+        "(item.get('docstring') or '').strip"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::identify_duplicate_groups",
         "buckets.setdefault"
       ],
       [
@@ -2316,10 +2544,6 @@
       [
         "scripts.summarizers.generate_function_analysis::identify_duplicate_groups",
         "buckets.values"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::identify_duplicate_groups",
-        "doc_key.strip"
       ],
       [
         "scripts.summarizers.generate_function_analysis::identify_duplicate_groups",
@@ -2527,47 +2751,27 @@
       ],
       [
         "scripts.summarizers.generate_function_analysis::write_analysis",
+        "_slugify_relative"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::write_analysis",
+        "_write_analysis_copy"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::write_analysis",
         "analysis_date"
       ],
       [
         "scripts.summarizers.generate_function_analysis::write_analysis",
-        "existing.is_file"
+        "scripts.summarizers.generate_function_analysis::_slugify_relative"
       ],
       [
         "scripts.summarizers.generate_function_analysis::write_analysis",
-        "existing.unlink"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::write_analysis",
-        "index_dir.glob"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::write_analysis",
-        "json.dumps"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::write_analysis",
-        "legacy.exists"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::write_analysis",
-        "legacy.unlink"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::write_analysis",
-        "output_file.with_suffix"
+        "scripts.summarizers.generate_function_analysis::_write_analysis_copy"
       ],
       [
         "scripts.summarizers.generate_function_analysis::write_analysis",
         "scripts.summarizers.generate_function_analysis::analysis_date"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::write_analysis",
-        "temp_file.replace"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::write_analysis",
-        "temp_file.write_text"
       ]
     ],
     "imports": [
@@ -2814,6 +3018,15 @@
           "writes": false
         }
       },
+      "scripts.aggregators.scan_duplicates::_atomic_write_bytes": {
+        "hash": "f5473569d3ec1f0b38669809786835d8c66da7d4",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
       "scripts.aggregators.scan_duplicates::_average_pairwise_similarity": {
         "hash": "5130774cedd172e7fc6cfb339846b232bec5cf61",
         "io_effects": {
@@ -2949,6 +3162,15 @@
           "writes": false
         }
       },
+      "scripts.aggregators.scan_duplicates::_slugify_relative": {
+        "hash": "59c59db01efcd6ec41f84110e31d04f6c8e7a396",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
       "scripts.aggregators.scan_duplicates::_text_similarity": {
         "hash": "2e16ec749089923a865ae7eff22d61988a4799e2",
         "io_effects": {
@@ -2995,7 +3217,7 @@
         }
       },
       "scripts.aggregators.scan_duplicates::build_paths": {
-        "hash": "608f35dc88cf0e3f635e6e9baafef30aed5d92bf",
+        "hash": "c6efca37220da61b57dcafbe0630727595fc6972",
         "io_effects": {
           "env": false,
           "network": false,
@@ -3058,7 +3280,7 @@
         }
       },
       "scripts.aggregators.scan_duplicates::initialise_run_paths": {
-        "hash": "5413eea06c41531f6c83c282237c5c499c3bc455",
+        "hash": "c4e3f1aa53681412c117f347b647ed38a3afdff2",
         "io_effects": {
           "env": false,
           "network": false,
@@ -3121,7 +3343,7 @@
         }
       },
       "scripts.aggregators.scan_duplicates::run": {
-        "hash": "0b034e34e8af8559e34f2317921190371c222f23",
+        "hash": "1fe99b59958c9e0a400c565a5b0ad394e7065643",
         "io_effects": {
           "env": false,
           "network": false,
@@ -3130,7 +3352,7 @@
         }
       },
       "scripts.aggregators.scan_duplicates::scan_python_files": {
-        "hash": "1ec8a72d8de6039ee062fbce8aa919644d2161ca",
+        "hash": "49aac2eed401d94c5bd6d0fcd8b503ade28fd68b",
         "io_effects": {
           "env": false,
           "network": false,
@@ -3148,7 +3370,7 @@
         }
       },
       "scripts.aggregators.scan_duplicates::write_outputs": {
-        "hash": "c74b99fc3d9c4c2f619d983bd131a204a70f277c",
+        "hash": "5a3cffc9dbf5feda3b51c163f00e835a3e28e8f4",
         "io_effects": {
           "env": false,
           "network": false,
@@ -3291,6 +3513,15 @@
           "writes": false
         }
       },
+      "scripts.producers.generate_function_inventory::_slugify_relative": {
+        "hash": "59c59db01efcd6ec41f84110e31d04f6c8e7a396",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
       "scripts.producers.generate_function_inventory::_write_inventory_copy": {
         "hash": "f72a5aa463ea0ea1f653bd5b01196fc5ef7200c2",
         "io_effects": {
@@ -3328,7 +3559,7 @@
         }
       },
       "scripts.producers.generate_function_inventory::build_paths": {
-        "hash": "20b0ad871bae327da3ca72757d2793537d95e108",
+        "hash": "3ce31586cb01ef9cb4186d56e79bede5531fdda3",
         "io_effects": {
           "env": false,
           "network": false,
@@ -3400,7 +3631,25 @@
         }
       },
       "scripts.producers.generate_function_inventory::write_inventory": {
-        "hash": "e00608e00eddbb9df642823914054216d51a8a37",
+        "hash": "b5083ef875ac1470d6cb5cfe05556e2f2f7317ee",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "scripts.summarizers.generate_function_analysis::_slugify_relative": {
+        "hash": "59c59db01efcd6ec41f84110e31d04f6c8e7a396",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "scripts.summarizers.generate_function_analysis::_write_analysis_copy": {
+        "hash": "7b5694bd6cb7fb18928b5f8876f2a72e88a42d88",
         "io_effects": {
           "env": false,
           "network": false,
@@ -3418,7 +3667,7 @@
         }
       },
       "scripts.summarizers.generate_function_analysis::build_findings": {
-        "hash": "9ca5f455f9c8e0cd41eb16365930f13c489ac35e",
+        "hash": "ba752085da224156f17875323a98a4961d2fac98",
         "io_effects": {
           "env": false,
           "network": false,
@@ -3436,7 +3685,7 @@
         }
       },
       "scripts.summarizers.generate_function_analysis::build_paths": {
-        "hash": "e4c540365aafe4d026614f94f54824bc74ae063a",
+        "hash": "2712fe00f9b9d72c2d6539d5aeeaf5cf9f907e0e",
         "io_effects": {
           "env": false,
           "network": false,
@@ -3445,7 +3694,7 @@
         }
       },
       "scripts.summarizers.generate_function_analysis::collect_functions": {
-        "hash": "60ddf944ced7cb348105d96ef4807818cd16cb16",
+        "hash": "bcc08fb3e47d1a31bfe361e46b1c7022c44157d9",
         "io_effects": {
           "env": false,
           "network": false,
@@ -3454,7 +3703,7 @@
         }
       },
       "scripts.summarizers.generate_function_analysis::compose_payload": {
-        "hash": "3b83e9d2c503e1bd59a81df7be90d6b70b78f7a2",
+        "hash": "3c9a00303bb8da2d0bf70e9aea6ec868a1aa584d",
         "io_effects": {
           "env": false,
           "network": false,
@@ -3472,7 +3721,7 @@
         }
       },
       "scripts.summarizers.generate_function_analysis::identify_duplicate_groups": {
-        "hash": "985f0d5f612431e8e1d9a0895180de578e219c42",
+        "hash": "ba2ab0236a7e1afc9daafc0364450ab4b4736ea0",
         "io_effects": {
           "env": false,
           "network": false,
@@ -3499,7 +3748,7 @@
         }
       },
       "scripts.summarizers.generate_function_analysis::parse_args": {
-        "hash": "5a0fe8a0e5f25beabacf5bc5af37b146d0aa2404",
+        "hash": "a8c2a763bf5ef5f5de8e2ad83291cc2605d71258",
         "io_effects": {
           "env": false,
           "network": false,
@@ -3517,7 +3766,7 @@
         }
       },
       "scripts.summarizers.generate_function_analysis::run": {
-        "hash": "8b56a7d825c3e34aba3d08ef74c91beb303f9f07",
+        "hash": "5f035a213ae1dfe840f5ca7647214eddf6ea1b07",
         "io_effects": {
           "env": false,
           "network": false,
@@ -3535,7 +3784,7 @@
         }
       },
       "scripts.summarizers.generate_function_analysis::write_analysis": {
-        "hash": "0c5bd22ed855e6622d24eeef0dfbac100221cf7c",
+        "hash": "f74fb1cb48e9e55d181962a5b5c337d652d6abf2",
         "io_effects": {
           "env": false,
           "network": false,

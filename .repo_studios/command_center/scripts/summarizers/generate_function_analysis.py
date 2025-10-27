@@ -13,12 +13,15 @@ from typing import Any, Iterable
 
 DEFAULT_SCHEMA_VERSION = 1
 ANALYSIS_VERSION = "1.0.0"
+DEFAULT_REPORTS_ROOT_RELATIVE = Path(".repo_studios/command_center/reports/index_scan_analysis")
 
 
 @dataclass(frozen=True)
 class Paths:
     repo_root: Path
     target: Path
+    target_relative: Path
+    reports_root: Path
 
 
 @dataclass(frozen=True)
@@ -43,6 +46,13 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
         help="Repository root. Defaults to script's grandparent directory.",
     )
     parser.add_argument(
+        "--reports-root",
+        help=(
+            "Optional directory for centralized analysis copies. Defaults to "
+            ".repo_studios/command_center/reports/duplicates_scan within the repo root."
+        ),
+    )
+    parser.add_argument(
         "--schema-version",
         type=int,
         default=DEFAULT_SCHEMA_VERSION,
@@ -61,6 +71,15 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def _slugify_relative(relative_path: Path) -> str:
+    parts: list[str] = []
+    for part in relative_path.parts:
+        slug = "".join(ch.lower() if ch.isalnum() else "-" for ch in part)
+        slug = slug.strip("-") or "segment"
+        parts.append(slug)
+    return "__".join(parts) or "root"
+
+
 def build_paths(args: argparse.Namespace) -> Paths:
     repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[4]
     target_candidate = Path(args.target)
@@ -70,7 +89,19 @@ def build_paths(args: argparse.Namespace) -> Paths:
         target.relative_to(repo_root)
     except ValueError as exc:
         raise ValueError(f"Target path must reside within repo root: {target}") from exc
-    return Paths(repo_root=repo_root, target=target)
+    target_relative = target.relative_to(repo_root)
+    if getattr(args, "reports_root", None):
+        reports_candidate = Path(args.reports_root)
+        reports_root = reports_candidate if reports_candidate.is_absolute() else repo_root / reports_candidate
+    else:
+        reports_root = repo_root / DEFAULT_REPORTS_ROOT_RELATIVE
+    reports_root = reports_root.resolve()
+    try:
+        reports_root.relative_to(repo_root)
+    except ValueError as exc:
+        raise ValueError(f"Reports root must reside within repo root: {reports_root}") from exc
+    reports_root.mkdir(parents=True, exist_ok=True)
+    return Paths(repo_root=repo_root, target=target, target_relative=target_relative, reports_root=reports_root)
 
 
 def build_options(args: argparse.Namespace) -> Options:
@@ -234,6 +265,24 @@ def compose_payload(
     return payload
 
 
+def _write_analysis_copy(directory: Path, source_name: str, payload: dict[str, Any], date_stamp: str) -> Path:
+    directory.mkdir(parents=True, exist_ok=True)
+    legacy = directory / f"{source_name}_analysis.json"
+    if legacy.exists():
+        legacy.unlink()
+    for existing in directory.glob(f"{source_name}_analysis-*.json"):
+        if existing.is_file():
+            existing.unlink()
+    output_file = directory / f"{source_name}_analysis-{date_stamp}.json"
+    temp_file = output_file.with_suffix(".json.tmp")
+    temp_file.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+    temp_file.replace(output_file)
+    latest_pointer = directory / "latest.json"
+    if latest_pointer.exists():
+        latest_pointer.unlink()
+    return output_file
+
+
 def analysis_date(inventory_path: Path, inventory_payload: dict[str, Any]) -> str:
     stem = inventory_path.stem
     parts = stem.split("-")
@@ -252,21 +301,20 @@ def analysis_date(inventory_path: Path, inventory_payload: dict[str, Any]) -> st
     return datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 
-def write_analysis(paths: Paths, inventory_path: Path, inventory_payload: dict[str, Any], payload: dict[str, Any]) -> Path:
+def write_analysis(
+    paths: Paths,
+    inventory_path: Path,
+    inventory_payload: dict[str, Any],
+    payload: dict[str, Any],
+) -> tuple[Path, Path]:
     index_dir = inventory_path.parent
     target_stem = paths.target.name
-    legacy = index_dir / f"{target_stem}_analysis.json"
-    if legacy.exists():
-        legacy.unlink()
-    for existing in index_dir.glob(f"{target_stem}_analysis-*.json"):
-        if existing.is_file():
-            existing.unlink()
     date_stamp = analysis_date(inventory_path, inventory_payload)
-    output_file = index_dir / f"{target_stem}_analysis-{date_stamp}.json"
-    temp_file = output_file.with_suffix(".json.tmp")
-    temp_file.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
-    temp_file.replace(output_file)
-    return output_file
+    primary = _write_analysis_copy(index_dir, target_stem, payload, date_stamp)
+    reports_slug = _slugify_relative(paths.target_relative)
+    mirror_dir = paths.reports_root / f"{reports_slug}_analysis"
+    mirror = _write_analysis_copy(mirror_dir, target_stem, payload, date_stamp)
+    return primary, mirror
 
 
 def run(argv: Iterable[str] | None = None) -> int:
@@ -298,10 +346,11 @@ def run(argv: Iterable[str] | None = None) -> int:
     duplicate_groups = identify_duplicate_groups(functions)
     findings = build_findings(duplicate_groups)
     analysis_payload = compose_payload(paths, options, inventory_path, inventory_payload, inventory_hash, findings)
-    output_file = write_analysis(paths, inventory_path, inventory_payload, analysis_payload)
+    primary_file, mirror_file = write_analysis(paths, inventory_path, inventory_payload, analysis_payload)
     logging.info(
-        "Analysis generated: path=%s duplicate_groups=%d duplicates=%d",
-        output_file,
+        "Analysis generated: primary=%s mirror=%s duplicate_groups=%d duplicates=%d",
+        primary_file,
+        mirror_file,
         len(findings),
         sum(len(group) for group in duplicate_groups),
     )
