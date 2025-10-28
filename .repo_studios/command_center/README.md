@@ -1,6 +1,6 @@
 # Library Integration Protocol
 
-**Status:** Draft (2025-10-27)
+**Status:** Draft (2025-10-28)
 
 **Purpose:** Provide a dedicated home for duplicate-analysis artifacts and the step-by-step playbook that Repo Studios agents follow when extracting shared utilities into `.repo_studios/library/`. Point any AI coding agent to this folder before asking for remediation so they ingest the full workflow.
 
@@ -20,13 +20,25 @@
 
 ---
 
+## Shared Helper Modules
+
+Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation:
+
+- `pathing.py` – exports `slugify_relative` for building slug-safe report directories; scripts keep `_slugify_relative` aliases for backward compatibility.
+- `artifacts.py` – exports `copy_latest_artifact` (hardlink-first mirror helper) and is the landing spot for the upcoming `write_report_artifacts` wrapper that consolidates JSON/Markdown writers.
+- `__init__.py` – re-exports available helpers so dynamic imports in tests/orchestrators stay simple (`from libraries import slugify_relative, copy_latest_artifact`).
+
+When adding new helpers, keep them importable without mutating `sys.path` (matching current dynamic-import fallback) and backfill unit tests under `.repo_studios/tests/tests_library_integration/libraries/`.
+
+---
+
 ## Micro-Cycle Blueprint
 
 Use this repeatable loop every time you address duplicate functions.
 
 1. **Detect & Stage**  
    - Run the orchestrator (or individual scripts) to refresh the inventory, analysis, and duplicate scan for the current target.  
-   - Inspect outputs under `<target>/<name>_index/` and `.repo_studios/command_center/reports/<slug>_duplicate_scan/`. Each run rewrites the same date-stamped files, so retain history via commits rather than appending folders.
+   - Inspect outputs under `<target>/<name>_index/` and `.repo_studios/command_center/reports/<slug>_duplicate_scan/`. Each run rewrites a single timestamped matrix/summary pair and removes stale siblings before mirroring the fresh files into both locations, so capture history via commits rather than adding new folders.
 2. **Align & Plan**  
    - Update `checklists/command_center_checklist.md` (or paste a dated copy) with detected groups, priorities, and decisions.  
    - Cross-reference naming conventions to pick the target library path.
@@ -49,21 +61,26 @@ Use this repeatable loop every time you address duplicate functions.
 ### `orchestrators/run_command_center_pipeline.py`
 
 - **Purpose:** Offer a single make-style trigger that refreshes the function inventory, analysis, and duplicate scan for any repository subfolder.
-- **How it works:** Dynamically loads each script's `run(argv)` helper, executes them sequentially (inventory → analysis → duplicate scan), applies a shared log level, and aborts on the first non-zero exit code.
-- **Outputs:** Emits no new artifacts; it simply rewrites the producer inventory and analysis within `<target>/<name>_index/` and mirrors duplicate matrices/markdown into `.repo_studios/command_center/reports/<slug>_duplicate_scan/`.
-- **Triggers:** `producers/generate_function_inventory.py`, `summarizers/generate_function_analysis.py`, and `aggregators/scan_duplicates.py` (with `--skip-upstream`).
-- **Benefits:** Guarantees consistent sequencing, keeps slug retention tidy, and creates the one-shot command we need before Phase 3 extraction begins.
+- **How it works:** Dynamically loads each script's `run(argv)` helper, executes them sequentially (inventory → analysis → duplicate scan), applies a shared log level, and aborts on the first non-zero exit code. The orchestrator captures the freshly written inventory and analysis paths and threads the analysis file into the duplicate scan so the aggregator always consumes the current dataset.
+- **Outputs:** Emits no new standalone artifacts; it rewrites the producer inventory and analysis within `<target>/<name>_index/`, then mirrors timestamped duplicate matrices/markdown into both `<target>/<name>_index/` and `.repo_studios/command_center/reports/<slug>_duplicate_scan/`, pruning older siblings in each location.
+- **Triggers:** `producers/generate_function_inventory.py`, `summarizers/generate_function_analysis.py`, and `aggregators/scan_duplicates.py` (called with `--skip-upstream` because upstream work already ran).
+- **Benefits:** Guarantees consistent sequencing, keeps slug retention tidy, and logs the mirrored artifact paths so humans and agents can locate outputs immediately before Phase 3 extraction begins.
 
 ```bash
 python .repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py \
     .repo_studios/command_center/scripts --repo-root . --log-level INFO
 ```
 
+```powershell
+make -C .repo_studios command-center COMMAND_CENTER_TARGET=/.repo_studios/scripts/summarizers/ `
+   PYTHON=.venv/Scripts/python.exe
+```
+
 ### Direct script usage
 
 - `producers/generate_function_inventory.py <target>` refreshes `<target>/<name>_index/<name>_index-YYYY-MM-DD.json` and the screening summary in both the target and slugged mirror.
 - `summarizers/generate_function_analysis.py <target>` consumes the latest inventory (or an explicit `--inventory-file`) and mirrors analysis payloads to `<target>/<name>_analysis-YYYY-MM-DD.json` and `.repo_studios/command_center/reports/<slug>_analysis/`.
-- `aggregators/scan_duplicates.py --target <target>` merges scanner output with the analysis and mirrors duplicate matrices/markdown to `.repo_studios/command_center/reports/<slug>_duplicate_scan/`. Add `--skip-upstream` when inventory and analysis were already run.
+- `aggregators/scan_duplicates.py --target <target>` merges scanner output with the analysis and mirrors duplicate matrices/markdown to `.repo_studios/command_center/reports/<slug>_duplicate_scan/`. Add `--skip-upstream` when inventory and analysis were already run; the helper now removes stale timestamped outputs before writing the new pair in both locations.
 
 ---
 

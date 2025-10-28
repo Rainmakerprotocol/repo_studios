@@ -8,6 +8,7 @@ import json
 import logging
 import re
 import shutil
+import sys
 from collections import defaultdict
 from collections.abc import Iterable, Sequence
 from datetime import datetime, timezone
@@ -23,6 +24,16 @@ OWNED_DEFAULT = {
     ".repo_studios",
     "legacy",
 }
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
+
+try:
+    from libraries import copy_latest_artifact
+except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import copy_latest_artifact
 
 
 IMPORT_RE = re.compile(r"^(?:from\s+([\w\.]+)\s+import\s+|import\s+([\w\.]+))")
@@ -161,13 +172,7 @@ def _ensure_output_dir(path: Path) -> Path:
     return path
 
 
-def _copy_latest(src: Path, dest: Path) -> None:
-    try:
-        if dest.exists():
-            dest.unlink()
-        dest.hardlink_to(src)
-    except OSError:
-        dest.write_bytes(src.read_bytes())
+_copy_latest = copy_latest_artifact
 
 
 def prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> None:

@@ -39,6 +39,16 @@ DEFAULT_ARTIFACTS_TO_KEEP = 10
 DEFAULT_LIZARD_EXTRA_ARGS = ("-Ejson", "-i", "-1")
 VENDOR_DIR = Path(__file__).resolve().parents[2] / "vendor"
 VENDOR_LIZARD_JSON_PATH = VENDOR_DIR / "lizard_ext" / "lizardjson.py"
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
+
+try:
+    from libraries import copy_latest_artifact
+except ModuleNotFoundError:  # pragma: no cover - fallback for direct script execution
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import copy_latest_artifact
 LIZARD_JSON_EXTENSION_SOURCE = '''"""JSON output extension for lizard (auto-installed)."""
 
 from __future__ import annotations
@@ -155,13 +165,7 @@ def _sanitize_slug(slug: str) -> str:
     return sanitized
 
 
-def _copy_latest(src: Path, dest: Path) -> None:
-    try:
-        if dest.exists():
-            dest.unlink()
-        dest.hardlink_to(src)
-    except OSError:
-        dest.write_bytes(src.read_bytes())
+_copy_latest = copy_latest_artifact
 
 
 def prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> None:

@@ -3,20 +3,36 @@
 from __future__ import annotations
 
 import ast
+import importlib
 import os
 import sys
 from pathlib import Path
 from textwrap import dedent
+from typing import Callable
 
 import pytest
 
-MODULE_DIR = (
+SCRIPTS_ROOT = (
     Path(__file__).resolve().parents[4]
     / ".repo_studios"
     / "command_center"
     / "scripts"
-    / "aggregators"
 )
+
+
+def _load_slugify() -> Callable[[Path], str]:
+    try:
+        module = importlib.import_module("libraries")
+    except ModuleNotFoundError:  # pragma: no cover - test sandbox fallback
+        if str(SCRIPTS_ROOT) not in sys.path:
+            sys.path.insert(0, str(SCRIPTS_ROOT))
+        module = importlib.import_module("libraries")
+    return module.slugify_relative
+
+
+slugify_relative = _load_slugify()
+
+MODULE_DIR = SCRIPTS_ROOT / "aggregators"
 if str(MODULE_DIR) not in sys.path:
     sys.path.insert(0, str(MODULE_DIR))
 
@@ -34,6 +50,10 @@ from scan_duplicates import (  # type: ignore  # noqa: E402
     _extract_top_offenders,
     _slugify_relative,
 )
+
+
+def test_slugify_relative_aliases_library() -> None:
+    assert _slugify_relative is slugify_relative
 
 
 class TestFunctionExtraction:
@@ -264,7 +284,7 @@ class TestFileScanning:
 
 class TestOutputMirroring:
     def _build_paths(self, repo_root: Path, target: Path, run_root: Path) -> Paths:
-        slug = _slugify_relative(target.relative_to(repo_root))
+        slug = slugify_relative(target.relative_to(repo_root))
         index_dir = target / f"{target.name}_index"
         return Paths(
             repo_root=repo_root,

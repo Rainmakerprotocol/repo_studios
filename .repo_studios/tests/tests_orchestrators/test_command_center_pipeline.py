@@ -1,6 +1,7 @@
 """Integration coverage for the command center pipeline orchestrator."""
 from __future__ import annotations
 
+import importlib
 import importlib.util
 import sys
 import time
@@ -13,6 +14,20 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[3]
 ORCHESTRATOR_DIR = REPO_ROOT / ".repo_studios" / "command_center" / "scripts" / "orchestrators"
 AGGREGATOR_DIR = REPO_ROOT / ".repo_studios" / "command_center" / "scripts" / "aggregators"
+SCRIPTS_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
+
+
+def _load_slugify() -> Callable[[Path], str]:
+    try:
+        module = importlib.import_module("libraries")
+    except ModuleNotFoundError:  # pragma: no cover - test sandbox fallback
+        if str(SCRIPTS_ROOT) not in sys.path:
+            sys.path.insert(0, str(SCRIPTS_ROOT))
+        module = importlib.import_module("libraries")
+    return module.slugify_relative
+
+
+slugify_relative = _load_slugify()
 
 
 def _load_module(module_path: Path, module_name: str) -> ModuleType:
@@ -42,12 +57,13 @@ if not callable(_slugify_relative_callable):
     raise AttributeError("Aggregator module is missing _slugify_relative().")
 orchestrator_run_fn: Callable[[list[str] | None], int] = orchestrator_run  # type: ignore[assignment]
 _slugify_relative: Callable[[Path], str] = _slugify_relative_callable  # type: ignore[assignment]
+assert _slugify_relative is slugify_relative
 
 TARGET_DIR = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 
 def _duplicate_run_dir(repo_root: Path, target: Path) -> Path:
-    slug = _slugify_relative(target.relative_to(repo_root))
+    slug = slugify_relative(target.relative_to(repo_root))
     return repo_root / ".repo_studios" / "command_center" / "reports" / "duplicates_scan" / f"{slug}_duplicate_scan"
 
 

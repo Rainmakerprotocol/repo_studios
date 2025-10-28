@@ -1,10 +1,10 @@
 # Library Integration Alignment Plan
 
-**Status:** Active alignment (refreshed 2025-10-27)
+**Status:** Active alignment (refreshed 2025-10-28)
 
 **Purpose:** Mirror the process used for `integration_checklist.md` by capturing phase-by-phase intentions, current evidence, and open decisions before any implementation work begins. All statuses reflect planning only.
 
-**Duplicate Snapshot:** Latest Command Center pipeline run (`scripts_duplicate_matrix-2025-10-27.json`) against `.repo_studios/command_center/scripts` reports 3 duplicate groups across 4 scripts (99 functions). Historical reference data from `producers_analysis-2025-10-24.json` (360 occurrences across 22 producer scripts) remains available for broader cross-checks.
+**Duplicate Snapshot:** 2025-10-28 orchestrator runs now succeed end-to-end for `.repo_studios/scripts/summarizers` (matrix `summarizers_duplicate_matrix-2025-10-28-1340.json`, 1 scanner-only group across 2 files) and `.repo_studios/scripts/utilities` (matrix `utilities_duplicate_matrix-2025-10-28-1344.json`, no duplicate groups). Historical reference data from `scripts_duplicate_matrix-2025-10-27.json` (Command Center root scan: 3 groups across 4 scripts / 99 functions) and `producers_analysis-2025-10-24.json` (360 occurrences across 22 producer scripts) remain available for broader cross-checks.
 
 **Run Workspace:** `.repo_studios/command_center/`
 
@@ -20,8 +20,8 @@
 |-------|-------|--------|-------|
 | Phase 1 | Foundation Setup | Complete | Baseline diff confirmed no conflicting `.repo_studios/library/` tree; naming conventions and README adjustments captured for future drops. |
 | Phase 2 | Duplicate Detection Tool | In progress | Command Center scanner adopted; verifying remaining integration work against slugged reports and retention helper. |
-| Phase 2.5 | Orchestrator Bootstrap | Not started | Plan single-entry orchestrator that calls inventory → analysis → duplicate scan without emitting extra reports. |
-| Phase 3 | Manual Extraction Validation | Not started | `_copy_latest` walkthrough documented; need to confirm duplicates still present and select priority order. |
+| Phase 2.5 | Orchestrator Bootstrap | In progress | Orchestrator in place and validated through make target (summarizers/utilities); documentation updates still pending. |
+| Phase 3 | Manual Extraction Validation | In progress | `_slugify_relative` and `_copy_latest` now centralized with tests; prepping `write_artifacts` implementation plan. |
 | Phase 4 | Automated Extraction | Not started | Requires manual validation results and guardrail design. |
 | Phase 5 | Integration with Repo Studios | Not started | Make/CI wiring dependent on outcomes from earlier phases. |
 | Phase 6 | AI Prompt Engineering | Not started | Must align with existing `repo_prompts.md` governance. |
@@ -64,23 +64,54 @@ Notes: Companion analysis already enumerates duplicates; the integrated `scripts
 
 ## Phase 2.5 – Orchestrator Bootstrap
 
-- [ ] **Finalize CLI & sequencing contract** so the orchestrator mirrors a make target: accept `--repo-root`, `--target`, optional logging flags, and guarantee sequential execution (`generate_function_inventory` → `generate_function_analysis` → `scan_duplicates`). *(Joint → confirm flag defaults and failure propagation.)*  
-- [ ] **Implement orchestrator module** under `.repo_studios/command_center/scripts/orchestrators/` that imports each script’s `run(argv)` helper, aborts on the first non-zero code, and emits no additional artifacts beyond the delegated scripts. *(Agent → draft; Developer → review.)*  
-- [ ] **Extend integration tests** with a Windows smoke test (successful run against `.repo_studios/command_center/scripts`) and at least one failure-path assertion to verify exit-code propagation. *(Agent → add tests; Developer → approve.)*  
+- [x] **Finalize CLI & sequencing contract** so the orchestrator mirrors a make target: accept `--repo-root`, `--target`, optional logging flags, and guarantee sequential execution (`generate_function_inventory` → `generate_function_analysis` → `scan_duplicates`). *(Joint → confirm flag defaults and failure propagation.)* — Contract validated via `make command-center` runs on summarizers and utilities targets; scan stage now consumes the freshly produced analysis path.
+- [x] **Implement orchestrator module** under `.repo_studios/command_center/scripts/orchestrators/` that imports each script’s `run(argv)` helper, aborts on the first non-zero code, and emits no additional artifacts beyond the delegated scripts. *(Agent → draft; Developer → review.)* — `run_command_center_pipeline.py` now captures upstream artifacts, threads them downstream, and logs mirrored matrix/summary locations.
+- [x] **Extend integration tests** with a Windows smoke test (successful run against `.repo_studios/command_center/scripts`) and at least one failure-path assertion to verify exit-code propagation. *(Agent → add tests; Developer → approve.)* — `test_pipeline_smoke_updates_artifacts` and failure-path coverage pass on Windows under `.venv/`.
 - [ ] **Document usage & intent** across `.repo_studios/command_center/README.md`, `.repo_studios/README.md`, and `.github/copilot-instructions.md`, covering purpose, inputs, outputs, triggered files, benefits, and rationale. *(Agent → author docs; Developer → review messaging.)*  
+
+Notes: Orchestrator reliability confirmed on 2025-10-28 with fresh matrices mirrored to both target index and slugged duplicate report directories; outstanding work is consolidating documentation updates.
 
 Notes: Completing this phase delivers the single-trigger workflow users can point at any target directory. The orchestrator must behave like a make target, respect existing retention behaviour, and leave logging/report emission to the underlying scripts.
 
 ## Phase 3 – Manual Extraction Validation
 
-- [ ] **Confirm live duplicates** for `_slugify_relative`, `build_paths`, `build_options`, `_copy_latest`, and `configure_logging` using the 2025-10-27 Command Center index *(Developer → provide folder-level index snapshots; Agent → verify occurrences).*  
-- [ ] **Establish priority order** for first extractions (candidate sequence updated to `_slugify_relative`, `_copy_latest`, `write_artifacts`, `build_paths`, `configure_logging`) *(Joint → finalize order in Decisions section).*  
-- [ ] **Map each target** to a library destination path following naming conventions (e.g., `artifact_lifecycle/versioning/create_latest_link.py`) *(Agent → propose, Developer → sign off).*  
-- [ ] **Define test coverage approach** for each extraction (mirror Phase 3 guide: dedicated tests under `tests/tests_library/` plus targeted producer tests) *(Agent → outline test matrix).*  
-- [ ] **Capture manual checklist** (from `PHASE_3_MANUAL_EXTRACTION_GUIDE.md`) customized for Repo Studios scripts and Windows tooling *(Agent → adapt guide, include cross-platform notes).*
-- [ ] **Create run-folder template** (`reports/<timestamp>/SUMMARY.md`) capturing duplicates addressed, tests run, and follow-up items *(Agent → template, Developer → confirm).*
+- [x] **Confirm live duplicates** for `_slugify_relative`, `build_paths`, `build_options`, `_copy_latest`, and `configure_logging` using the 2025-10-28 Command Center matrix *(Developer → provide folder-level index snapshots; Agent → verify occurrences).* — `scripts_duplicate_matrix-2025-10-28-1355.json` captures counts across producers, summarizer, aggregator, and orchestrator; targeted helper functions remain duplicated verbatim (exact matches for `_slugify_relative`, `_load_cli_module`, `_latest_artifact`).
+- [x] **Establish priority order** for first extractions (candidate sequence updated to `_slugify_relative`, `_copy_latest`, `write_artifacts`, `build_paths`, `configure_logging`) *(Joint → finalize order in Decisions section).* — Order reconfirmed to prioritise exact duplicates first, then shared artifact writers, followed by CLI wiring helpers.
+- [x] **Map each target** to a library destination path following naming conventions (e.g., `artifact_lifecycle/versioning/create_latest_link.py`) *(Agent → propose, Developer → sign off).* — Proposed mapping recorded below; awaiting approval before scaffolding modules.
+- [x] **Define test coverage approach** for each extraction (mirror Phase 3 guide: dedicated tests under `tests/tests_library/` plus targeted producer tests) *(Agent → outline test matrix).* — Test strategy drafted below aligning library unit tests with spot producer regressions.
+- [x] **Capture manual checklist** (from `PHASE_3_MANUAL_EXTRACTION_GUIDE.md`) customized for Repo Studios scripts and Windows tooling *(Agent → adapt guide, include cross-platform notes).* — Landed at `.repo_studios/command_center/docs/manual_extraction_checklist.md`; covers Windows make targets and shared test commands.
+- [x] **Create run-folder template** (`reports/<timestamp>/SUMMARY.md`) capturing duplicates addressed, tests run, and follow-up items *(Agent → template, Developer → confirm).* — Added `.repo_studios/command_center/docs/run_folder_summary_template.md` with lint-compliant fences and usage notes.
+- [x] **Pilot shared helper extraction for `_slugify_relative`** to establish library patterns before touching other duplicates *(Agent → implement, Developer → review).* — Helper now lives in `.repo_studios/command_center/scripts/libraries/pathing.py` with scripts wired through dynamic imports and refreshed tests.
+- [x] **Centralize `_copy_latest` helper** inside `.repo_studios/command_center/scripts/libraries/artifacts.py`, update producers to alias the shared helper, and add focused tests *(Agent → implement, Developer → review).* — Producers now import `copy_latest_artifact`, library tests cover hardlink fallback (`tests/tests_library_integration/libraries/test_artifacts.py`), and the producer suite passed on Windows after wiring the alias.
+
+### Phase 3 Planning Snapshot (2025-10-28)
+
+| Target helper | Current locations | Proposed library path | Primary exports | Test coverage plan |
+| --- | --- | --- | --- | --- |
+| `_slugify_relative(relative_path: Path) -> str` | Aggregator, producer, summarizer | `.repo_studios/command_center/scripts/libraries/pathing.py` (Phase 3 landing); future library path `filesystem/path_operations/slugify_relative_path.py` | `slugify_relative(relative_path: Path) -> str` re-exported via `libraries/__init__.py`; scripts keep `_slugify_relative` alias | Library-style tests added in-place (integration suites now assert alias equality); follow-up once core library scaffold exists |
+| `_copy_latest(src: Path, dest: Path) -> None` | Producers (inventory reports, standards diff, etc.) | `artifact_lifecycle/versioning/copy_latest_artifact.py` | `copy_latest_artifact(src: Path, dest: Path) -> None` with safe fallback to copy | Library test using temporary directories to ensure timestamp replacement; targeted producer smoke test (e.g., `generate_import_graph_report`) verifying latest pointer rewrite |
+| `write_artifacts(...)` (dict payload + run metadata writers) | Multiple producers (reports) | `artifact_lifecycle/structured_output/write_report_artifacts.py` | `write_report_artifacts(payload: dict[str, Any], run_dir: Path, mirror_dir: Path, *, stem: str) -> tuple[Path, Path]` | Parameterized library tests confirming JSON/Markdown sync and pruning; producer fixture adjustments to assert mirrored filenames |
+| `build_paths(args: argparse.Namespace) -> Paths` & `build_options(args: argparse.Namespace) -> Options` | All Command Center CLIs | `cli_patterns/command_center/build_paths_and_options.py` | `build_paths`/`build_options` (names preserved) returning shared dataclasses | Library tests stubbing temp repo roots and verifying guardrails; orchestrator + producer integration tests updated to import shared helpers |
+| `configure_logging(level: str) -> None` | Command Center CLIs | `logging_setup/configure_basic_logging.py` | `configure_basic_logging(level: str) -> None` plus alias for backwards compatibility | Library test ensuring idempotent logging config; spot check orchestrator test for custom log level |
+
+**Next actions:**
+
+1. Socialize checklist/template with manual operators and fold feedback into docs after first real extraction run.
+2. Draft `write_artifacts` extraction plan (library destination, API surface, and regression tests) now that `_copy_latest` is centralized.
+3. Confirm documentation updates for the new helpers before scheduling the next extraction pass (README and protocol touchpoints).
 
 Notes: Rollout remains manual; automation explicitly deferred until manual validation succeeds.
+
+### `write_artifacts` Extraction Plan (Draft — 2025-10-28)
+
+- **Target module path:** Land initial implementation in `.repo_studios/command_center/scripts/libraries/artifacts.py` beside `copy_latest_artifact`, then mirror it into the long-term library blueprint at `artifact_lifecycle/structured_output/write_report_artifacts.py` when the shared library tree is formalised.
+- **API surface:** Introduce `write_report_artifacts(*, payload: dict[str, Any], run_dir: Path, mirror_dir: Path, stem: str, summary: dict[str, Any] | None = None, log: logging.Logger | None = None) -> dict[str, Path]`. The helper writes JSON (and optional Markdown) artifacts into both primary and mirror directories, returns path handles, and reuses `copy_latest_artifact` for pointer upkeep.
+- **Behavioural guarantees:** Consistent timestamp suffix formatting, atomic writes via temporary files, retention-friendly pruning (respect `.keep` markers, keep latest N matching producer defaults), and idempotent reruns when payload is unchanged.
+- **Regression tests:**
+	- Extend `.repo_studios/tests/tests_library_integration/libraries/test_artifacts.py` with parametrised cases covering JSON-only vs. JSON+Markdown flows, mirror directory mirroring, pointer reuse, and simulated hardlink failures.
+	- Update producer tests (starting with `tests/tests_producers/test_generate_dependency_hygiene_report.py`, `test_generate_standards_index.py`, `test_generate_typecheck_report.py`) to assert imports reference the shared helper and that mirrored artifacts remain byte-identical.
+	- Refresh orchestrator smoke test (`tests/tests_orchestrators/test_command_center_pipeline.py`) to confirm the pipeline still locates artifacts via the helper’s return mapping when stitched into downstream steps.
+- **Migration notes:** Remove inline `write_artifacts` variants only after confirming docs/tests pass; keep `_write_*` aliases during transition to reduce diff noise and ease rollbacks.
 
 ## Phase 4 – Automated Extraction
 
@@ -128,6 +159,7 @@ Notes: Will proceed only after library structure and extraction workflow stabili
 - Initial extraction priority will focus on highest-impact duplicates: `_slugify_relative`, `_copy_latest`, `write_artifacts`, `build_paths`, `configure_logging` (subject to confirmation).
 - Companion analysis results (360 duplicates / 22 files) serve as the baseline dataset for planning.
 - Run workspace anchored at `.repo_studios/command_center/` for reports, checklists, and protocol documentation.
+- Shared helper modules now live under `.repo_studios/command_center/scripts/libraries/`; `_slugify_relative` and `_copy_latest` are centralized with legacy aliases maintained in each script.
 
 ---
 
@@ -136,7 +168,7 @@ Notes: Will proceed only after library structure and extraction workflow stabili
 1. **Library Structure Diff** – Baseline comparison complete (no existing tree); continue using the blueprint as a guide and document each new folder as it lands in reports.
 2. **Schema Compatibility** – Aggregation and translation rules live in `docs/duplicate_detection_schema_alignment.md`; next step is wiring derived summaries into health-suite outputs so dashboards stay in sync with richer scanner data.
 3. **Data Consolidation** – Latest matrix resides at `reports/duplicates_scan/repo-studios__command-center__scripts_duplicate_scan/scripts_duplicate_matrix-2025-10-27.json`; rerun when additional targets are scanned.
-4. **Testing Footprint** – Library tests will live alongside the library in a mirrored branch structure (per reference bundle); current integration coverage validates the slugged pipeline on Windows.
+4. **Testing Footprint** – Library tests will live alongside the library in a mirrored branch structure (per reference bundle); current integration coverage validates the slugged pipeline on Windows and asserts helper alias reuse.
 5. **Tooling Cross-Platform** – Manual scripts and test commands must succeed on Windows, Linux, and macOS; add validation steps for each target shell.
 6. **Governance Alignment** – Single approver confirmed (you). Capture this in rollout notes so future contributors know who signs off.
 7. **Report Retention & Pruning** – `scan_duplicates.py` now enforces retention (default keep three runs). Capture policy details in the protocol README and replicate across other report-producing scripts.

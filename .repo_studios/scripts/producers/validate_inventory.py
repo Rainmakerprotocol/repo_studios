@@ -23,6 +23,15 @@ RUN_PREFIX = "validate_inventory"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 SCHEMA_VERSION = 1
 
+LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
+
+try:
+    from libraries import copy_latest_artifact
+except ModuleNotFoundError:  # pragma: no cover - fallback when executed as script
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import copy_latest_artifact
+
 REQUIRED_FIELDS = {
     "id",
     "name",
@@ -146,12 +155,18 @@ class ValidatorConfig:
             return cls()
         with path.open("r", encoding="utf-8") as handle:
             data = yaml.safe_load(handle) or {}
-        path_conf = data.get("path_existence", {})
+        path_conf = data.get("path_existence")
+        if path_conf is None:
+            path_conf = {}
+            enabled = False
+        else:
+            enabled_raw = path_conf.get("enabled")
+            enabled = bool(enabled_raw) if enabled_raw is not None else True
         return cls(
             ignore_path_prefixes=tuple(path_conf.get("ignore_prefixes", [])),
             suppress_ids=tuple(path_conf.get("suppress_ids", [])),
             suppress_paths=tuple(path_conf.get("suppress_paths", [])),
-            path_checks_enabled=bool(path_conf.get("enabled", False)),
+            path_checks_enabled=enabled,
         )
 
     def is_suppressed(self, record_id: str | None, path_value: str) -> bool:
@@ -207,13 +222,7 @@ def prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> None:
         node.rmdir()
 
 
-def _copy_latest(src: Path, dest: Path) -> None:
-    try:
-        if dest.exists():
-            dest.unlink()
-        dest.hardlink_to(src)
-    except OSError:
-        dest.write_bytes(src.read_bytes())
+_copy_latest = copy_latest_artifact
 
 
 def update_latest_artifacts(run_dir: Path, output_dir: Path) -> None:

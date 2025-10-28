@@ -322,6 +322,26 @@
         "spec.loader.exec_module"
       ],
       [
+        "scripts.aggregators.scan_duplicates::_load_slugify",
+        "Path"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_load_slugify",
+        "Path(__file__).resolve"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_load_slugify",
+        "importlib.import_module"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_load_slugify",
+        "str"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_load_slugify",
+        "sys.path.insert"
+      ],
+      [
         "scripts.aggregators.scan_duplicates::_load_source_line",
         "(repo_root / path).resolve"
       ],
@@ -498,30 +518,6 @@
         "str"
       ],
       [
-        "scripts.aggregators.scan_duplicates::_slugify_relative",
-        "''.join"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::_slugify_relative",
-        "'__'.join"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::_slugify_relative",
-        "ch.isalnum"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::_slugify_relative",
-        "ch.lower"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::_slugify_relative",
-        "parts.append"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::_slugify_relative",
-        "slug.strip"
-      ],
-      [
         "scripts.aggregators.scan_duplicates::_text_similarity",
         "'\\n'.join"
       ],
@@ -668,10 +664,6 @@
       [
         "scripts.aggregators.scan_duplicates::build_paths",
         "scripts.aggregators.scan_duplicates::_resolve_within_repo"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::build_paths",
-        "scripts.aggregators.scan_duplicates::_slugify_relative"
       ],
       [
         "scripts.aggregators.scan_duplicates::build_paths",
@@ -1260,6 +1252,30 @@
       [
         "scripts.aggregators.scan_duplicates::write_outputs",
         "tuple"
+      ],
+      [
+        "scripts.libraries.pathing::slugify_relative",
+        "''.join"
+      ],
+      [
+        "scripts.libraries.pathing::slugify_relative",
+        "'__'.join"
+      ],
+      [
+        "scripts.libraries.pathing::slugify_relative",
+        "ch.isalnum"
+      ],
+      [
+        "scripts.libraries.pathing::slugify_relative",
+        "ch.lower"
+      ],
+      [
+        "scripts.libraries.pathing::slugify_relative",
+        "parts.append"
+      ],
+      [
+        "scripts.libraries.pathing::slugify_relative",
+        "slug.strip"
       ],
       [
         "scripts.orchestrators.run_command_center_pipeline::_latest_artifact",
@@ -1966,6 +1982,26 @@
         "getattr"
       ],
       [
+        "scripts.producers.generate_function_inventory::_load_slugify",
+        "Path"
+      ],
+      [
+        "scripts.producers.generate_function_inventory::_load_slugify",
+        "Path(__file__).resolve"
+      ],
+      [
+        "scripts.producers.generate_function_inventory::_load_slugify",
+        "importlib.import_module"
+      ],
+      [
+        "scripts.producers.generate_function_inventory::_load_slugify",
+        "str"
+      ],
+      [
+        "scripts.producers.generate_function_inventory::_load_slugify",
+        "sys.path.insert"
+      ],
+      [
         "scripts.producers.generate_function_inventory::_relative_module_id",
         "'.'.join"
       ],
@@ -1996,30 +2032,6 @@
       [
         "scripts.producers.generate_function_inventory::_signature_structure",
         "_names"
-      ],
-      [
-        "scripts.producers.generate_function_inventory::_slugify_relative",
-        "''.join"
-      ],
-      [
-        "scripts.producers.generate_function_inventory::_slugify_relative",
-        "'__'.join"
-      ],
-      [
-        "scripts.producers.generate_function_inventory::_slugify_relative",
-        "ch.isalnum"
-      ],
-      [
-        "scripts.producers.generate_function_inventory::_slugify_relative",
-        "ch.lower"
-      ],
-      [
-        "scripts.producers.generate_function_inventory::_slugify_relative",
-        "parts.append"
-      ],
-      [
-        "scripts.producers.generate_function_inventory::_slugify_relative",
-        "slug.strip"
       ],
       [
         "scripts.producers.generate_function_inventory::_write_inventory_copy",
@@ -2595,10 +2607,6 @@
       ],
       [
         "scripts.producers.generate_function_inventory::write_inventory",
-        "scripts.producers.generate_function_inventory::_slugify_relative"
-      ],
-      [
-        "scripts.producers.generate_function_inventory::write_inventory",
         "scripts.producers.generate_function_inventory::_write_inventory_copy"
       ],
       [
@@ -2606,28 +2614,24 @@
         "scripts.producers.generate_function_inventory::_write_screening_copy"
       ],
       [
-        "scripts.summarizers.generate_function_analysis::_slugify_relative",
-        "''.join"
+        "scripts.summarizers.generate_function_analysis::_load_slugify",
+        "Path"
       ],
       [
-        "scripts.summarizers.generate_function_analysis::_slugify_relative",
-        "'__'.join"
+        "scripts.summarizers.generate_function_analysis::_load_slugify",
+        "Path(__file__).resolve"
       ],
       [
-        "scripts.summarizers.generate_function_analysis::_slugify_relative",
-        "ch.isalnum"
+        "scripts.summarizers.generate_function_analysis::_load_slugify",
+        "importlib.import_module"
       ],
       [
-        "scripts.summarizers.generate_function_analysis::_slugify_relative",
-        "ch.lower"
+        "scripts.summarizers.generate_function_analysis::_load_slugify",
+        "str"
       ],
       [
-        "scripts.summarizers.generate_function_analysis::_slugify_relative",
-        "parts.append"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::_slugify_relative",
-        "slug.strip"
+        "scripts.summarizers.generate_function_analysis::_load_slugify",
+        "sys.path.insert"
       ],
       [
         "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
@@ -3115,10 +3119,6 @@
       ],
       [
         "scripts.summarizers.generate_function_analysis::write_analysis",
-        "scripts.summarizers.generate_function_analysis::_slugify_relative"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::write_analysis",
         "scripts.summarizers.generate_function_analysis::_write_analysis_copy"
       ],
       [
@@ -3169,6 +3169,10 @@
       ],
       [
         "scripts.aggregators.scan_duplicates",
+        "importlib"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates",
         "importlib.util"
       ],
       [
@@ -3193,6 +3197,10 @@
       ],
       [
         "scripts.aggregators.scan_duplicates",
+        "typing.Callable"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates",
         "typing.Iterable"
       ],
       [
@@ -3202,6 +3210,18 @@
       [
         "scripts.aggregators.scan_duplicates",
         "typing.Sequence"
+      ],
+      [
+        "scripts.libraries",
+        "pathing.slugify_relative"
+      ],
+      [
+        "scripts.libraries.pathing",
+        "__future__.annotations"
+      ],
+      [
+        "scripts.libraries.pathing",
+        "pathlib.Path"
       ],
       [
         "scripts.orchestrators.run_command_center_pipeline",
@@ -3273,6 +3293,10 @@
       ],
       [
         "scripts.producers.generate_function_inventory",
+        "importlib"
+      ],
+      [
+        "scripts.producers.generate_function_inventory",
         "json"
       ],
       [
@@ -3289,7 +3313,15 @@
       ],
       [
         "scripts.producers.generate_function_inventory",
+        "sys"
+      ],
+      [
+        "scripts.producers.generate_function_inventory",
         "typing.Any"
+      ],
+      [
+        "scripts.producers.generate_function_inventory",
+        "typing.Callable"
       ],
       [
         "scripts.producers.generate_function_inventory",
@@ -3321,6 +3353,10 @@
       ],
       [
         "scripts.summarizers.generate_function_analysis",
+        "importlib"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis",
         "json"
       ],
       [
@@ -3333,7 +3369,15 @@
       ],
       [
         "scripts.summarizers.generate_function_analysis",
+        "sys"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis",
         "typing.Any"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis",
+        "typing.Callable"
       ],
       [
         "scripts.summarizers.generate_function_analysis",
@@ -3478,6 +3522,15 @@
           "writes": false
         }
       },
+      "scripts.aggregators.scan_duplicates::_load_slugify": {
+        "hash": "a2662757358b45de5af79b59920a5bf298d0e561",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
       "scripts.aggregators.scan_duplicates::_load_source_line": {
         "hash": "f80638cddf057bafadb475bf75205c1005d73dec",
         "io_effects": {
@@ -3543,15 +3596,6 @@
       },
       "scripts.aggregators.scan_duplicates::_run_inventory": {
         "hash": "5161b5f6276d775b002c12a6c9a83f6f248bc418",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "scripts.aggregators.scan_duplicates::_slugify_relative": {
-        "hash": "59c59db01efcd6ec41f84110e31d04f6c8e7a396",
         "io_effects": {
           "env": false,
           "network": false,
@@ -3759,6 +3803,15 @@
       },
       "scripts.aggregators.scan_duplicates::write_outputs": {
         "hash": "1c3ab2cff351eb85241b2b64f286e4afddda82cb",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "scripts.libraries.pathing::slugify_relative": {
+        "hash": "14b17e31a83535fb7a5800fb31622ce3ae6627cc",
         "io_effects": {
           "env": false,
           "network": false,
@@ -3982,6 +4035,15 @@
           "writes": false
         }
       },
+      "scripts.producers.generate_function_inventory::_load_slugify": {
+        "hash": "a2662757358b45de5af79b59920a5bf298d0e561",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
       "scripts.producers.generate_function_inventory::_relative_module_id": {
         "hash": "cf42fe89c0c9b74ccdef1609b2d398aea1ce767c",
         "io_effects": {
@@ -4011,15 +4073,6 @@
       },
       "scripts.producers.generate_function_inventory::_signature_structure": {
         "hash": "48f2792fe20f456192fe93a4f3e380ac53d74802",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "scripts.producers.generate_function_inventory::_slugify_relative": {
-        "hash": "59c59db01efcd6ec41f84110e31d04f6c8e7a396",
         "io_effects": {
           "env": false,
           "network": false,
@@ -4144,8 +4197,8 @@
           "writes": false
         }
       },
-      "scripts.summarizers.generate_function_analysis::_slugify_relative": {
-        "hash": "59c59db01efcd6ec41f84110e31d04f6c8e7a396",
+      "scripts.summarizers.generate_function_analysis::_load_slugify": {
+        "hash": "a2662757358b45de5af79b59920a5bf298d0e561",
         "io_effects": {
           "env": false,
           "network": false,

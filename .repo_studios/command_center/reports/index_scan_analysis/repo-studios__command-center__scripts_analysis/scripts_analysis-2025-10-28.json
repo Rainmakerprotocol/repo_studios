@@ -5,10 +5,199 @@
         {
           "description": "Review duplicate implementations for consolidation or reuse.",
           "targets": [
-            "aggregators/scan_duplicates.py:156",
+            "aggregators/scan_duplicates.py:36",
+            "producers/generate_function_inventory.py:20",
+            "summarizers/generate_function_analysis.py:17"
+          ],
+          "type": "review_duplicate_function"
+        }
+      ],
+      "details": {
+        "function_name": "_load_slugify",
+        "hash": "a2662757358b45de5af79b59920a5bf298d0e561",
+        "line_counts": [
+          10,
+          10,
+          10
+        ],
+        "qualified_names": [
+          "scripts.aggregators.scan_duplicates::_load_slugify",
+          "scripts.producers.generate_function_inventory::_load_slugify",
+          "scripts.summarizers.generate_function_analysis::_load_slugify"
+        ],
+        "shared_docstring": "",
+        "signature": "def _load_slugify() -> Callable[[Path], str]:"
+      },
+      "id": "duplicate_function::duplicate-def--load-slugify------callable--path---str",
+      "instances": [
+        {
+          "calls": [
+            {
+              "callee": "importlib.import_module",
+              "lineno": 38
+            },
+            {
+              "callee": "importlib.import_module",
+              "lineno": 44
+            },
+            {
+              "callee": "Path(__file__).resolve",
+              "lineno": 40
+            },
+            {
+              "callee": "str",
+              "lineno": 42
+            },
+            {
+              "callee": "sys.path.insert",
+              "lineno": 43
+            },
+            {
+              "callee": "str",
+              "lineno": 43
+            },
+            {
+              "callee": "Path",
+              "lineno": 40
+            }
+          ],
+          "docstring": null,
+          "hash": "a2662757358b45de5af79b59920a5bf298d0e561",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 36,
+          "line_count": 10,
+          "logging_calls": [],
+          "module_id": "scripts.aggregators.scan_duplicates",
+          "name": "_load_slugify",
+          "path": "aggregators/scan_duplicates.py",
+          "qualified_name": "scripts.aggregators.scan_duplicates::_load_slugify",
+          "returns_kind": "value",
+          "signature": "def _load_slugify() -> Callable[[Path], str]:",
+          "todo_tags": 0
+        },
+        {
+          "calls": [
+            {
+              "callee": "importlib.import_module",
+              "lineno": 22
+            },
+            {
+              "callee": "importlib.import_module",
+              "lineno": 28
+            },
+            {
+              "callee": "Path(__file__).resolve",
+              "lineno": 24
+            },
+            {
+              "callee": "str",
+              "lineno": 26
+            },
+            {
+              "callee": "sys.path.insert",
+              "lineno": 27
+            },
+            {
+              "callee": "str",
+              "lineno": 27
+            },
+            {
+              "callee": "Path",
+              "lineno": 24
+            }
+          ],
+          "docstring": null,
+          "hash": "a2662757358b45de5af79b59920a5bf298d0e561",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 20,
+          "line_count": 10,
+          "logging_calls": [],
+          "module_id": "scripts.producers.generate_function_inventory",
+          "name": "_load_slugify",
+          "path": "producers/generate_function_inventory.py",
+          "qualified_name": "scripts.producers.generate_function_inventory::_load_slugify",
+          "returns_kind": "value",
+          "signature": "def _load_slugify() -> Callable[[Path], str]:",
+          "todo_tags": 0
+        },
+        {
+          "calls": [
+            {
+              "callee": "importlib.import_module",
+              "lineno": 19
+            },
+            {
+              "callee": "importlib.import_module",
+              "lineno": 25
+            },
+            {
+              "callee": "Path(__file__).resolve",
+              "lineno": 21
+            },
+            {
+              "callee": "str",
+              "lineno": 23
+            },
+            {
+              "callee": "sys.path.insert",
+              "lineno": 24
+            },
+            {
+              "callee": "str",
+              "lineno": 24
+            },
+            {
+              "callee": "Path",
+              "lineno": 21
+            }
+          ],
+          "docstring": null,
+          "hash": "a2662757358b45de5af79b59920a5bf298d0e561",
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "line": 17,
+          "line_count": 10,
+          "logging_calls": [],
+          "module_id": "scripts.summarizers.generate_function_analysis",
+          "name": "_load_slugify",
+          "path": "summarizers/generate_function_analysis.py",
+          "qualified_name": "scripts.summarizers.generate_function_analysis::_load_slugify",
+          "returns_kind": "value",
+          "signature": "def _load_slugify() -> Callable[[Path], str]:",
+          "todo_tags": 0
+        }
+      ],
+      "kind": "duplicate_function",
+      "metrics": {
+        "duplicate_count": 3,
+        "todo_tags": 0
+      },
+      "severity": "medium",
+      "summary": "3 functions share the signature 'def _load_slugify() -> Callable[[Path], str]:'"
+    },
+    {
+      "action_items": [
+        {
+          "description": "Review duplicate implementations for consolidation or reuse.",
+          "targets": [
+            "aggregators/scan_duplicates.py:173",
             "orchestrators/run_command_center_pipeline.py:41",
-            "producers/generate_function_inventory.py:126",
-            "summarizers/generate_function_analysis.py:34"
+            "producers/generate_function_inventory.py:143",
+            "summarizers/generate_function_analysis.py:50"
           ],
           "type": "review_duplicate_function"
         }
@@ -37,27 +226,15 @@
           "calls": [
             {
               "callee": "argparse.ArgumentParser",
-              "lineno": 157
+              "lineno": 174
             },
             {
               "callee": "parser.add_argument",
-              "lineno": 162
+              "lineno": 179
             },
             {
               "callee": "parser.add_argument",
-              "lineno": 167
-            },
-            {
-              "callee": "parser.add_argument",
-              "lineno": 171
-            },
-            {
-              "callee": "parser.add_argument",
-              "lineno": 176
-            },
-            {
-              "callee": "parser.add_argument",
-              "lineno": 182
+              "lineno": 184
             },
             {
               "callee": "parser.add_argument",
@@ -65,7 +242,7 @@
             },
             {
               "callee": "parser.add_argument",
-              "lineno": 194
+              "lineno": 193
             },
             {
               "callee": "parser.add_argument",
@@ -73,23 +250,35 @@
             },
             {
               "callee": "parser.add_argument",
-              "lineno": 204
+              "lineno": 205
             },
             {
               "callee": "parser.add_argument",
-              "lineno": 210
+              "lineno": 211
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 216
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 221
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 227
             },
             {
               "callee": "parser.parse_args",
-              "lineno": 215
+              "lineno": 232
             },
             {
               "callee": "str",
-              "lineno": 164
+              "lineno": 181
             },
             {
               "callee": "str",
-              "lineno": 173
+              "lineno": 190
             }
           ],
           "docstring": null,
@@ -100,7 +289,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 156,
+          "line": 173,
           "line_count": 60,
           "logging_calls": [],
           "module_id": "scripts.aggregators.scan_duplicates",
@@ -157,31 +346,31 @@
           "calls": [
             {
               "callee": "argparse.ArgumentParser",
-              "lineno": 127
+              "lineno": 144
             },
             {
               "callee": "parser.add_argument",
-              "lineno": 132
+              "lineno": 149
             },
             {
               "callee": "parser.add_argument",
-              "lineno": 136
+              "lineno": 153
             },
             {
               "callee": "parser.add_argument",
-              "lineno": 140
+              "lineno": 157
             },
             {
               "callee": "parser.add_argument",
-              "lineno": 146
+              "lineno": 163
             },
             {
               "callee": "parser.add_argument",
-              "lineno": 152
+              "lineno": 169
             },
             {
               "callee": "parser.parse_args",
-              "lineno": 159
+              "lineno": 176
             }
           ],
           "docstring": null,
@@ -192,7 +381,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 126,
+          "line": 143,
           "line_count": 34,
           "logging_calls": [],
           "module_id": "scripts.producers.generate_function_inventory",
@@ -207,35 +396,35 @@
           "calls": [
             {
               "callee": "argparse.ArgumentParser",
-              "lineno": 35
+              "lineno": 51
             },
             {
               "callee": "parser.add_argument",
-              "lineno": 40
+              "lineno": 56
             },
             {
               "callee": "parser.add_argument",
-              "lineno": 44
+              "lineno": 60
             },
             {
               "callee": "parser.add_argument",
-              "lineno": 48
+              "lineno": 64
             },
             {
               "callee": "parser.add_argument",
-              "lineno": 55
+              "lineno": 71
             },
             {
               "callee": "parser.add_argument",
-              "lineno": 61
+              "lineno": 77
             },
             {
               "callee": "parser.add_argument",
-              "lineno": 67
+              "lineno": 83
             },
             {
               "callee": "parser.parse_args",
-              "lineno": 71
+              "lineno": 87
             }
           ],
           "docstring": null,
@@ -246,7 +435,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 34,
+          "line": 50,
           "line_count": 38,
           "logging_calls": [],
           "module_id": "scripts.summarizers.generate_function_analysis",
@@ -271,10 +460,10 @@
         {
           "description": "Review duplicate implementations for consolidation or reuse.",
           "targets": [
-            "aggregators/scan_duplicates.py:218",
+            "aggregators/scan_duplicates.py:235",
             "orchestrators/run_command_center_pipeline.py:68",
-            "producers/generate_function_inventory.py:199",
-            "summarizers/generate_function_analysis.py:112"
+            "producers/generate_function_inventory.py:210",
+            "summarizers/generate_function_analysis.py:122"
           ],
           "type": "review_duplicate_function"
         }
@@ -303,15 +492,15 @@
           "calls": [
             {
               "callee": "logging.basicConfig",
-              "lineno": 219
+              "lineno": 236
             },
             {
               "callee": "getattr",
-              "lineno": 219
+              "lineno": 236
             },
             {
               "callee": "level.upper",
-              "lineno": 219
+              "lineno": 236
             }
           ],
           "docstring": null,
@@ -322,7 +511,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 218,
+          "line": 235,
           "line_count": 2,
           "logging_calls": [],
           "module_id": "scripts.aggregators.scan_duplicates",
@@ -371,15 +560,15 @@
           "calls": [
             {
               "callee": "logging.basicConfig",
-              "lineno": 200
+              "lineno": 211
             },
             {
               "callee": "getattr",
-              "lineno": 200
+              "lineno": 211
             },
             {
               "callee": "level.upper",
-              "lineno": 200
+              "lineno": 211
             }
           ],
           "docstring": null,
@@ -390,7 +579,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 199,
+          "line": 210,
           "line_count": 2,
           "logging_calls": [],
           "module_id": "scripts.producers.generate_function_inventory",
@@ -405,15 +594,15 @@
           "calls": [
             {
               "callee": "logging.basicConfig",
-              "lineno": 113
+              "lineno": 123
             },
             {
               "callee": "getattr",
-              "lineno": 113
+              "lineno": 123
             },
             {
               "callee": "level.upper",
-              "lineno": 113
+              "lineno": 123
             }
           ],
           "docstring": null,
@@ -424,7 +613,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 112,
+          "line": 122,
           "line_count": 2,
           "logging_calls": [],
           "module_id": "scripts.summarizers.generate_function_analysis",
@@ -449,10 +638,10 @@
         {
           "description": "Review duplicate implementations for consolidation or reuse.",
           "targets": [
-            "aggregators/scan_duplicates.py:222",
+            "aggregators/scan_duplicates.py:239",
             "orchestrators/run_command_center_pipeline.py:82",
-            "producers/generate_function_inventory.py:171",
-            "summarizers/generate_function_analysis.py:83"
+            "producers/generate_function_inventory.py:182",
+            "summarizers/generate_function_analysis.py:93"
           ],
           "type": "review_duplicate_function"
         }
@@ -481,67 +670,67 @@
           "calls": [
             {
               "callee": "_resolve_within_repo",
-              "lineno": 228
+              "lineno": 245
             },
             {
               "callee": "_resolve_within_repo",
-              "lineno": 229
+              "lineno": 246
             },
             {
               "callee": "_slugify_relative",
-              "lineno": 233
+              "lineno": 250
             },
             {
               "callee": "run_root.mkdir",
-              "lineno": 235
+              "lineno": 252
             },
             {
               "callee": "target_index_dir.mkdir",
-              "lineno": 236
+              "lineno": 253
             },
             {
               "callee": "Paths",
-              "lineno": 237
+              "lineno": 254
             },
             {
               "callee": "Path(args.repo_root).resolve",
-              "lineno": 224
+              "lineno": 241
             },
             {
               "callee": "Path",
-              "lineno": 228
+              "lineno": 245
             },
             {
               "callee": "Path",
-              "lineno": 229
+              "lineno": 246
             },
             {
               "callee": "FileNotFoundError",
-              "lineno": 231
+              "lineno": 248
             },
             {
               "callee": "target.relative_to",
-              "lineno": 233
+              "lineno": 250
             },
             {
               "callee": "target.exists",
-              "lineno": 230
+              "lineno": 247
             },
             {
               "callee": "target.is_dir",
-              "lineno": 230
+              "lineno": 247
             },
             {
               "callee": "Path",
-              "lineno": 224
+              "lineno": 241
             },
             {
               "callee": "Path(__file__).resolve",
-              "lineno": 226
+              "lineno": 243
             },
             {
               "callee": "Path",
-              "lineno": 226
+              "lineno": 243
             }
           ],
           "docstring": null,
@@ -552,7 +741,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 222,
+          "line": 239,
           "line_count": 23,
           "logging_calls": [],
           "module_id": "scripts.aggregators.scan_duplicates",
@@ -629,71 +818,71 @@
           "calls": [
             {
               "callee": "Path",
-              "lineno": 173
+              "lineno": 184
             },
             {
               "callee": "target.resolve",
-              "lineno": 175
-            },
-            {
-              "callee": "target.relative_to",
-              "lineno": 180
-            },
-            {
-              "callee": "reports_root.resolve",
               "lineno": 186
             },
             {
-              "callee": "reports_root.mkdir",
+              "callee": "target.relative_to",
               "lineno": 191
             },
             {
+              "callee": "reports_root.resolve",
+              "lineno": 197
+            },
+            {
+              "callee": "reports_root.mkdir",
+              "lineno": 202
+            },
+            {
               "callee": "Paths",
-              "lineno": 192
+              "lineno": 203
             },
             {
               "callee": "Path(args.repo_root).resolve",
-              "lineno": 172
+              "lineno": 183
             },
             {
               "callee": "target_candidate.is_absolute",
-              "lineno": 174
+              "lineno": 185
             },
             {
               "callee": "target.relative_to",
-              "lineno": 177
-            },
-            {
-              "callee": "Path",
-              "lineno": 182
-            },
-            {
-              "callee": "reports_root.relative_to",
               "lineno": 188
             },
             {
-              "callee": "ValueError",
-              "lineno": 179
+              "callee": "Path",
+              "lineno": 193
             },
             {
-              "callee": "reports_candidate.is_absolute",
-              "lineno": 183
+              "callee": "reports_root.relative_to",
+              "lineno": 199
             },
             {
               "callee": "ValueError",
               "lineno": 190
             },
             {
+              "callee": "reports_candidate.is_absolute",
+              "lineno": 194
+            },
+            {
+              "callee": "ValueError",
+              "lineno": 201
+            },
+            {
               "callee": "Path",
-              "lineno": 172
+              "lineno": 183
             },
             {
               "callee": "Path(__file__).resolve",
-              "lineno": 172
+              "lineno": 183
             },
             {
               "callee": "Path",
-              "lineno": 172
+              "lineno": 183
             }
           ],
           "docstring": null,
@@ -704,7 +893,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 171,
+          "line": 182,
           "line_count": 22,
           "logging_calls": [],
           "module_id": "scripts.producers.generate_function_inventory",
@@ -719,75 +908,75 @@
           "calls": [
             {
               "callee": "Path",
-              "lineno": 85
+              "lineno": 95
             },
             {
               "callee": "target.resolve",
-              "lineno": 87
+              "lineno": 97
             },
             {
               "callee": "target.relative_to",
-              "lineno": 92
+              "lineno": 102
             },
             {
               "callee": "getattr",
-              "lineno": 93
-            },
-            {
-              "callee": "reports_root.resolve",
-              "lineno": 98
-            },
-            {
-              "callee": "reports_root.mkdir",
               "lineno": 103
             },
             {
+              "callee": "reports_root.resolve",
+              "lineno": 108
+            },
+            {
+              "callee": "reports_root.mkdir",
+              "lineno": 113
+            },
+            {
               "callee": "Paths",
-              "lineno": 104
+              "lineno": 114
             },
             {
               "callee": "Path(args.repo_root).resolve",
-              "lineno": 84
+              "lineno": 94
             },
             {
               "callee": "target_candidate.is_absolute",
-              "lineno": 86
+              "lineno": 96
             },
             {
               "callee": "target.relative_to",
-              "lineno": 89
+              "lineno": 99
+            },
+            {
+              "callee": "Path",
+              "lineno": 104
+            },
+            {
+              "callee": "reports_root.relative_to",
+              "lineno": 110
+            },
+            {
+              "callee": "ValueError",
+              "lineno": 101
+            },
+            {
+              "callee": "reports_candidate.is_absolute",
+              "lineno": 105
+            },
+            {
+              "callee": "ValueError",
+              "lineno": 112
             },
             {
               "callee": "Path",
               "lineno": 94
             },
             {
-              "callee": "reports_root.relative_to",
-              "lineno": 100
-            },
-            {
-              "callee": "ValueError",
-              "lineno": 91
-            },
-            {
-              "callee": "reports_candidate.is_absolute",
-              "lineno": 95
-            },
-            {
-              "callee": "ValueError",
-              "lineno": 102
-            },
-            {
-              "callee": "Path",
-              "lineno": 84
-            },
-            {
               "callee": "Path(__file__).resolve",
-              "lineno": 84
+              "lineno": 94
             },
             {
               "callee": "Path",
-              "lineno": 84
+              "lineno": 94
             }
           ],
           "docstring": null,
@@ -798,7 +987,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 83,
+          "line": 93,
           "line_count": 22,
           "logging_calls": [],
           "module_id": "scripts.summarizers.generate_function_analysis",
@@ -823,10 +1012,10 @@
         {
           "description": "Review duplicate implementations for consolidation or reuse.",
           "targets": [
-            "aggregators/scan_duplicates.py:247",
+            "aggregators/scan_duplicates.py:264",
             "orchestrators/run_command_center_pipeline.py:64",
-            "producers/generate_function_inventory.py:195",
-            "summarizers/generate_function_analysis.py:107"
+            "producers/generate_function_inventory.py:206",
+            "summarizers/generate_function_analysis.py:117"
           ],
           "type": "review_duplicate_function"
         }
@@ -855,31 +1044,31 @@
           "calls": [
             {
               "callee": "Options",
-              "lineno": 249
+              "lineno": 266
             },
             {
               "callee": "Path(args.analysis_file).resolve",
-              "lineno": 248
+              "lineno": 265
             },
             {
               "callee": "float",
-              "lineno": 250
+              "lineno": 267
             },
             {
               "callee": "int",
-              "lineno": 251
+              "lineno": 268
             },
             {
               "callee": "int",
-              "lineno": 252
+              "lineno": 269
             },
             {
               "callee": "bool",
-              "lineno": 255
+              "lineno": 272
             },
             {
               "callee": "Path",
-              "lineno": 248
+              "lineno": 265
             }
           ],
           "docstring": null,
@@ -890,7 +1079,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 247,
+          "line": 264,
           "line_count": 10,
           "logging_calls": [],
           "module_id": "scripts.aggregators.scan_duplicates",
@@ -931,11 +1120,11 @@
           "calls": [
             {
               "callee": "Options",
-              "lineno": 196
+              "lineno": 207
             },
             {
               "callee": "int",
-              "lineno": 196
+              "lineno": 207
             }
           ],
           "docstring": null,
@@ -946,7 +1135,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 195,
+          "line": 206,
           "line_count": 2,
           "logging_calls": [],
           "module_id": "scripts.producers.generate_function_inventory",
@@ -961,19 +1150,19 @@
           "calls": [
             {
               "callee": "Options",
-              "lineno": 109
+              "lineno": 119
             },
             {
               "callee": "Path(args.inventory_file).resolve",
-              "lineno": 108
+              "lineno": 118
             },
             {
               "callee": "int",
-              "lineno": 109
+              "lineno": 119
             },
             {
               "callee": "Path",
-              "lineno": 108
+              "lineno": 118
             }
           ],
           "docstring": null,
@@ -984,7 +1173,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 107,
+          "line": 117,
           "line_count": 3,
           "logging_calls": [],
           "module_id": "scripts.summarizers.generate_function_analysis",
@@ -1009,7 +1198,7 @@
         {
           "description": "Review duplicate implementations for consolidation or reuse.",
           "targets": [
-            "aggregators/scan_duplicates.py:266",
+            "aggregators/scan_duplicates.py:283",
             "orchestrators/run_command_center_pipeline.py:93"
           ],
           "type": "review_duplicate_function"
@@ -1035,19 +1224,19 @@
           "calls": [
             {
               "callee": "importlib.util.spec_from_file_location",
-              "lineno": 269
+              "lineno": 286
             },
             {
               "callee": "importlib.util.module_from_spec",
-              "lineno": 272
+              "lineno": 289
             },
             {
               "callee": "spec.loader.exec_module",
-              "lineno": 274
+              "lineno": 291
             },
             {
               "callee": "ImportError",
-              "lineno": 271
+              "lineno": 288
             }
           ],
           "docstring": null,
@@ -1058,7 +1247,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 266,
+          "line": 283,
           "line_count": 10,
           "logging_calls": [],
           "module_id": "scripts.aggregators.scan_duplicates",
@@ -1121,7 +1310,7 @@
         {
           "description": "Review duplicate implementations for consolidation or reuse.",
           "targets": [
-            "aggregators/scan_duplicates.py:278",
+            "aggregators/scan_duplicates.py:295",
             "orchestrators/run_command_center_pipeline.py:115"
           ],
           "type": "review_duplicate_function"
@@ -1147,15 +1336,15 @@
           "calls": [
             {
               "callee": "sorted",
-              "lineno": 279
+              "lineno": 296
             },
             {
               "callee": "directory.glob",
-              "lineno": 279
+              "lineno": 296
             },
             {
               "callee": "FileNotFoundError",
-              "lineno": 281
+              "lineno": 298
             }
           ],
           "docstring": null,
@@ -1166,7 +1355,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 278,
+          "line": 295,
           "line_count": 7,
           "logging_calls": [],
           "module_id": "scripts.aggregators.scan_duplicates",
@@ -1225,7 +1414,7 @@
         {
           "description": "Review duplicate implementations for consolidation or reuse.",
           "targets": [
-            "aggregators/scan_duplicates.py:339",
+            "aggregators/scan_duplicates.py:356",
             "orchestrators/run_command_center_pipeline.py:72"
           ],
           "type": "review_duplicate_function"
@@ -1251,23 +1440,23 @@
           "calls": [
             {
               "callee": "candidate.is_absolute",
-              "lineno": 340
+              "lineno": 357
             },
             {
               "callee": "candidate.resolve",
-              "lineno": 340
+              "lineno": 357
             },
             {
               "callee": "(repo_root / candidate).resolve",
-              "lineno": 340
+              "lineno": 357
             },
             {
               "callee": "resolved.relative_to",
-              "lineno": 342
+              "lineno": 359
             },
             {
               "callee": "ValueError",
-              "lineno": 344
+              "lineno": 361
             }
           ],
           "docstring": null,
@@ -1278,7 +1467,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 339,
+          "line": 356,
           "line_count": 7,
           "logging_calls": [],
           "module_id": "scripts.aggregators.scan_duplicates",
@@ -1341,185 +1530,8 @@
         {
           "description": "Review duplicate implementations for consolidation or reuse.",
           "targets": [
-            "aggregators/scan_duplicates.py:348",
-            "producers/generate_function_inventory.py:162",
-            "summarizers/generate_function_analysis.py:74"
-          ],
-          "type": "review_duplicate_function"
-        }
-      ],
-      "details": {
-        "function_name": "_slugify_relative",
-        "hash": "59c59db01efcd6ec41f84110e31d04f6c8e7a396",
-        "line_counts": [
-          7,
-          7,
-          7
-        ],
-        "qualified_names": [
-          "scripts.aggregators.scan_duplicates::_slugify_relative",
-          "scripts.producers.generate_function_inventory::_slugify_relative",
-          "scripts.summarizers.generate_function_analysis::_slugify_relative"
-        ],
-        "shared_docstring": "",
-        "signature": "def _slugify_relative(relative_path: Path) -> str:"
-      },
-      "id": "duplicate_function::duplicate-def--slugify-relative-relative-path--path-----str",
-      "instances": [
-        {
-          "calls": [
-            {
-              "callee": "''.join",
-              "lineno": 351
-            },
-            {
-              "callee": "parts.append",
-              "lineno": 353
-            },
-            {
-              "callee": "'__'.join",
-              "lineno": 354
-            },
-            {
-              "callee": "slug.strip",
-              "lineno": 352
-            },
-            {
-              "callee": "ch.isalnum",
-              "lineno": 351
-            },
-            {
-              "callee": "ch.lower",
-              "lineno": 351
-            }
-          ],
-          "docstring": null,
-          "hash": "59c59db01efcd6ec41f84110e31d04f6c8e7a396",
-          "io_effects": {
-            "env": false,
-            "network": false,
-            "reads": false,
-            "writes": false
-          },
-          "line": 348,
-          "line_count": 7,
-          "logging_calls": [],
-          "module_id": "scripts.aggregators.scan_duplicates",
-          "name": "_slugify_relative",
-          "path": "aggregators/scan_duplicates.py",
-          "qualified_name": "scripts.aggregators.scan_duplicates::_slugify_relative",
-          "returns_kind": "value",
-          "signature": "def _slugify_relative(relative_path: Path) -> str:",
-          "todo_tags": 0
-        },
-        {
-          "calls": [
-            {
-              "callee": "''.join",
-              "lineno": 165
-            },
-            {
-              "callee": "parts.append",
-              "lineno": 167
-            },
-            {
-              "callee": "'__'.join",
-              "lineno": 168
-            },
-            {
-              "callee": "slug.strip",
-              "lineno": 166
-            },
-            {
-              "callee": "ch.isalnum",
-              "lineno": 165
-            },
-            {
-              "callee": "ch.lower",
-              "lineno": 165
-            }
-          ],
-          "docstring": null,
-          "hash": "59c59db01efcd6ec41f84110e31d04f6c8e7a396",
-          "io_effects": {
-            "env": false,
-            "network": false,
-            "reads": false,
-            "writes": false
-          },
-          "line": 162,
-          "line_count": 7,
-          "logging_calls": [],
-          "module_id": "scripts.producers.generate_function_inventory",
-          "name": "_slugify_relative",
-          "path": "producers/generate_function_inventory.py",
-          "qualified_name": "scripts.producers.generate_function_inventory::_slugify_relative",
-          "returns_kind": "value",
-          "signature": "def _slugify_relative(relative_path: Path) -> str:",
-          "todo_tags": 0
-        },
-        {
-          "calls": [
-            {
-              "callee": "''.join",
-              "lineno": 77
-            },
-            {
-              "callee": "parts.append",
-              "lineno": 79
-            },
-            {
-              "callee": "'__'.join",
-              "lineno": 80
-            },
-            {
-              "callee": "slug.strip",
-              "lineno": 78
-            },
-            {
-              "callee": "ch.isalnum",
-              "lineno": 77
-            },
-            {
-              "callee": "ch.lower",
-              "lineno": 77
-            }
-          ],
-          "docstring": null,
-          "hash": "59c59db01efcd6ec41f84110e31d04f6c8e7a396",
-          "io_effects": {
-            "env": false,
-            "network": false,
-            "reads": false,
-            "writes": false
-          },
-          "line": 74,
-          "line_count": 7,
-          "logging_calls": [],
-          "module_id": "scripts.summarizers.generate_function_analysis",
-          "name": "_slugify_relative",
-          "path": "summarizers/generate_function_analysis.py",
-          "qualified_name": "scripts.summarizers.generate_function_analysis::_slugify_relative",
-          "returns_kind": "value",
-          "signature": "def _slugify_relative(relative_path: Path) -> str:",
-          "todo_tags": 0
-        }
-      ],
-      "kind": "duplicate_function",
-      "metrics": {
-        "duplicate_count": 3,
-        "todo_tags": 0
-      },
-      "severity": "medium",
-      "summary": "3 functions share the signature 'def _slugify_relative(relative_path: Path) -> str:'"
-    },
-    {
-      "action_items": [
-        {
-          "description": "Review duplicate implementations for consolidation or reuse.",
-          "targets": [
-            "aggregators/scan_duplicates.py:848",
-            "summarizers/generate_function_analysis.py:234"
+            "aggregators/scan_duplicates.py:859",
+            "summarizers/generate_function_analysis.py:244"
           ],
           "type": "review_duplicate_function"
         }
@@ -1544,23 +1556,23 @@
           "calls": [
             {
               "callee": "datetime.now(timezone.utc).isoformat",
-              "lineno": 855
+              "lineno": 866
             },
             {
               "callee": "datetime.now",
-              "lineno": 855
+              "lineno": 866
             },
             {
               "callee": "_to_repo_relative",
-              "lineno": 859
+              "lineno": 870
             },
             {
               "callee": "str",
-              "lineno": 860
+              "lineno": 871
             },
             {
               "callee": "_to_repo_relative",
-              "lineno": 861
+              "lineno": 872
             }
           ],
           "docstring": null,
@@ -1571,7 +1583,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 848,
+          "line": 859,
           "line_count": 20,
           "logging_calls": [],
           "module_id": "scripts.aggregators.scan_duplicates",
@@ -1586,55 +1598,55 @@
           "calls": [
             {
               "callee": "inventory_payload.get",
-              "lineno": 242
+              "lineno": 252
             },
             {
               "callee": "datetime.now(timezone.utc).isoformat",
-              "lineno": 243
+              "lineno": 253
             },
             {
               "callee": "sum",
-              "lineno": 244
+              "lineno": 254
             },
             {
               "callee": "len",
-              "lineno": 246
+              "lineno": 256
             },
             {
               "callee": "len",
-              "lineno": 248
-            },
-            {
-              "callee": "datetime.now",
-              "lineno": 243
-            },
-            {
-              "callee": "len",
-              "lineno": 244
-            },
-            {
-              "callee": "inventory_payload.get",
-              "lineno": 248
-            },
-            {
-              "callee": "str",
-              "lineno": 255
-            },
-            {
-              "callee": "str",
-              "lineno": 257
-            },
-            {
-              "callee": "str",
               "lineno": 258
             },
             {
+              "callee": "datetime.now",
+              "lineno": 253
+            },
+            {
+              "callee": "len",
+              "lineno": 254
+            },
+            {
+              "callee": "inventory_payload.get",
+              "lineno": 258
+            },
+            {
+              "callee": "str",
+              "lineno": 265
+            },
+            {
+              "callee": "str",
+              "lineno": 267
+            },
+            {
+              "callee": "str",
+              "lineno": 268
+            },
+            {
               "callee": "metadata.get",
-              "lineno": 259
+              "lineno": 269
             },
             {
               "callee": "finding.get",
-              "lineno": 244
+              "lineno": 254
             }
           ],
           "docstring": null,
@@ -1645,7 +1657,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 234,
+          "line": 244,
           "line_count": 32,
           "logging_calls": [],
           "module_id": "scripts.summarizers.generate_function_analysis",
@@ -1670,10 +1682,10 @@
         {
           "description": "Review duplicate implementations for consolidation or reuse.",
           "targets": [
-            "aggregators/scan_duplicates.py:945",
+            "aggregators/scan_duplicates.py:956",
             "orchestrators/run_command_center_pipeline.py:203",
-            "producers/generate_function_inventory.py:845",
-            "summarizers/generate_function_analysis.py:320"
+            "producers/generate_function_inventory.py:856",
+            "summarizers/generate_function_analysis.py:330"
           ],
           "type": "review_duplicate_function"
         }
@@ -1702,83 +1714,83 @@
           "calls": [
             {
               "callee": "parse_args",
-              "lineno": 946
+              "lineno": 957
             },
             {
               "callee": "build_options",
-              "lineno": 947
+              "lineno": 958
             },
             {
               "callee": "configure_logging",
-              "lineno": 948
+              "lineno": 959
             },
             {
               "callee": "scan_target",
-              "lineno": 966
+              "lineno": 977
             },
             {
               "callee": "load_source_duplicates",
-              "lineno": 967
+              "lineno": 978
             },
             {
               "callee": "merge_duplicates",
-              "lineno": 968
+              "lineno": 979
             },
             {
               "callee": "compose_payload",
-              "lineno": 969
+              "lineno": 980
             },
             {
               "callee": "generate_summary",
-              "lineno": 970
-            },
-            {
-              "callee": "initialise_run_paths",
-              "lineno": 971
-            },
-            {
-              "callee": "write_outputs",
-              "lineno": 972
-            },
-            {
-              "callee": "apply_retention",
-              "lineno": 973
-            },
-            {
-              "callee": "logging.info",
-              "lineno": 974
-            },
-            {
-              "callee": "logging.debug",
               "lineno": 981
             },
             {
+              "callee": "initialise_run_paths",
+              "lineno": 982
+            },
+            {
+              "callee": "write_outputs",
+              "lineno": 983
+            },
+            {
+              "callee": "apply_retention",
+              "lineno": 984
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 985
+            },
+            {
+              "callee": "logging.debug",
+              "lineno": 992
+            },
+            {
               "callee": "build_paths",
-              "lineno": 950
+              "lineno": 961
             },
             {
               "callee": "replace",
-              "lineno": 960
+              "lineno": 971
             },
             {
               "callee": "locate_analysis",
-              "lineno": 962
+              "lineno": 973
             },
             {
               "callee": "logging.error",
-              "lineno": 952
+              "lineno": 963
             },
             {
               "callee": "orchestrate_upstream",
-              "lineno": 956
+              "lineno": 967
             },
             {
               "callee": "logging.error",
-              "lineno": 964
+              "lineno": 975
             },
             {
               "callee": "logging.error",
-              "lineno": 958
+              "lineno": 969
             }
           ],
           "docstring": null,
@@ -1789,28 +1801,28 @@
             "reads": false,
             "writes": false
           },
-          "line": 945,
+          "line": 956,
           "line_count": 44,
           "logging_calls": [
             {
               "level": "info",
-              "lineno": 974
+              "lineno": 985
             },
             {
               "level": "debug",
-              "lineno": 981
+              "lineno": 992
             },
             {
               "level": "error",
-              "lineno": 952
+              "lineno": 963
             },
             {
               "level": "error",
-              "lineno": 964
+              "lineno": 975
             },
             {
               "level": "error",
-              "lineno": 958
+              "lineno": 969
             }
           ],
           "module_id": "scripts.aggregators.scan_duplicates",
@@ -2016,62 +2028,54 @@
           "calls": [
             {
               "callee": "parse_args",
-              "lineno": 846
-            },
-            {
-              "callee": "build_options",
-              "lineno": 847
-            },
-            {
-              "callee": "configure_logging",
-              "lineno": 848
-            },
-            {
-              "callee": "discover_python_files",
-              "lineno": 863
-            },
-            {
-              "callee": "compose_inventory",
-              "lineno": 879
-            },
-            {
-              "callee": "build_screening_summary",
-              "lineno": 880
-            },
-            {
-              "callee": "write_inventory",
-              "lineno": 881
-            },
-            {
-              "callee": "logging.info",
-              "lineno": 882
-            },
-            {
-              "callee": "build_paths",
-              "lineno": 851
-            },
-            {
-              "callee": "paths.target.exists",
-              "lineno": 856
-            },
-            {
-              "callee": "logging.error",
               "lineno": 857
             },
             {
-              "callee": "paths.target.is_dir",
+              "callee": "build_options",
+              "lineno": 858
+            },
+            {
+              "callee": "configure_logging",
               "lineno": 859
             },
             {
-              "callee": "logging.error",
-              "lineno": 860
+              "callee": "discover_python_files",
+              "lineno": 874
+            },
+            {
+              "callee": "compose_inventory",
+              "lineno": 890
+            },
+            {
+              "callee": "build_screening_summary",
+              "lineno": 891
+            },
+            {
+              "callee": "write_inventory",
+              "lineno": 892
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 893
+            },
+            {
+              "callee": "build_paths",
+              "lineno": 862
+            },
+            {
+              "callee": "paths.target.exists",
+              "lineno": 867
             },
             {
               "callee": "logging.error",
-              "lineno": 865
+              "lineno": 868
             },
             {
-              "callee": "analyze_python_file",
+              "callee": "paths.target.is_dir",
+              "lineno": 870
+            },
+            {
+              "callee": "logging.error",
               "lineno": 871
             },
             {
@@ -2079,16 +2083,24 @@
               "lineno": 876
             },
             {
-              "callee": "len",
-              "lineno": 888
+              "callee": "analyze_python_file",
+              "lineno": 882
             },
             {
               "callee": "logging.error",
-              "lineno": 853
+              "lineno": 887
+            },
+            {
+              "callee": "len",
+              "lineno": 899
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 864
             },
             {
               "callee": "collected.append",
-              "lineno": 873
+              "lineno": 884
             }
           ],
           "docstring": null,
@@ -2099,24 +2111,20 @@
             "reads": false,
             "writes": false
           },
-          "line": 845,
+          "line": 856,
           "line_count": 46,
           "logging_calls": [
             {
               "level": "info",
-              "lineno": 882
+              "lineno": 893
             },
             {
               "level": "error",
-              "lineno": 857
+              "lineno": 868
             },
             {
               "level": "error",
-              "lineno": 860
-            },
-            {
-              "level": "error",
-              "lineno": 865
+              "lineno": 871
             },
             {
               "level": "error",
@@ -2124,7 +2132,11 @@
             },
             {
               "level": "error",
-              "lineno": 853
+              "lineno": 887
+            },
+            {
+              "level": "error",
+              "lineno": 864
             }
           ],
           "module_id": "scripts.producers.generate_function_inventory",
@@ -2139,91 +2151,91 @@
           "calls": [
             {
               "callee": "parse_args",
-              "lineno": 321
+              "lineno": 331
             },
             {
               "callee": "build_options",
-              "lineno": 322
-            },
-            {
-              "callee": "configure_logging",
-              "lineno": 323
-            },
-            {
-              "callee": "collect_functions",
-              "lineno": 345
-            },
-            {
-              "callee": "identify_duplicate_groups",
-              "lineno": 346
-            },
-            {
-              "callee": "build_findings",
-              "lineno": 347
-            },
-            {
-              "callee": "compose_payload",
-              "lineno": 348
-            },
-            {
-              "callee": "write_analysis",
-              "lineno": 349
-            },
-            {
-              "callee": "logging.info",
-              "lineno": 350
-            },
-            {
-              "callee": "build_paths",
-              "lineno": 325
-            },
-            {
-              "callee": "paths.target.exists",
-              "lineno": 329
-            },
-            {
-              "callee": "logging.error",
-              "lineno": 330
-            },
-            {
-              "callee": "paths.target.is_dir",
               "lineno": 332
             },
             {
-              "callee": "logging.error",
+              "callee": "configure_logging",
               "lineno": 333
             },
             {
-              "callee": "locate_inventory_file",
-              "lineno": 336
-            },
-            {
-              "callee": "read_inventory",
-              "lineno": 341
-            },
-            {
-              "callee": "len",
-              "lineno": 354
-            },
-            {
-              "callee": "sum",
+              "callee": "collect_functions",
               "lineno": 355
             },
             {
-              "callee": "logging.error",
-              "lineno": 327
+              "callee": "identify_duplicate_groups",
+              "lineno": 356
+            },
+            {
+              "callee": "build_findings",
+              "lineno": 357
+            },
+            {
+              "callee": "compose_payload",
+              "lineno": 358
+            },
+            {
+              "callee": "write_analysis",
+              "lineno": 359
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 360
+            },
+            {
+              "callee": "build_paths",
+              "lineno": 335
+            },
+            {
+              "callee": "paths.target.exists",
+              "lineno": 339
             },
             {
               "callee": "logging.error",
-              "lineno": 338
+              "lineno": 340
+            },
+            {
+              "callee": "paths.target.is_dir",
+              "lineno": 342
             },
             {
               "callee": "logging.error",
               "lineno": 343
             },
             {
+              "callee": "locate_inventory_file",
+              "lineno": 346
+            },
+            {
+              "callee": "read_inventory",
+              "lineno": 351
+            },
+            {
               "callee": "len",
-              "lineno": 355
+              "lineno": 364
+            },
+            {
+              "callee": "sum",
+              "lineno": 365
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 337
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 348
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 353
+            },
+            {
+              "callee": "len",
+              "lineno": 365
             }
           ],
           "docstring": null,
@@ -2234,32 +2246,32 @@
             "reads": false,
             "writes": false
           },
-          "line": 320,
+          "line": 330,
           "line_count": 38,
           "logging_calls": [
             {
               "level": "info",
-              "lineno": 350
+              "lineno": 360
             },
             {
               "level": "error",
-              "lineno": 330
-            },
-            {
-              "level": "error",
-              "lineno": 333
-            },
-            {
-              "level": "error",
-              "lineno": 327
-            },
-            {
-              "level": "error",
-              "lineno": 338
+              "lineno": 340
             },
             {
               "level": "error",
               "lineno": 343
+            },
+            {
+              "level": "error",
+              "lineno": 337
+            },
+            {
+              "level": "error",
+              "lineno": 348
+            },
+            {
+              "level": "error",
+              "lineno": 353
             }
           ],
           "module_id": "scripts.summarizers.generate_function_analysis",
@@ -2285,8 +2297,8 @@
           "description": "Review duplicate implementations for consolidation or reuse.",
           "targets": [
             "orchestrators/run_command_center_pipeline.py:267",
-            "producers/generate_function_inventory.py:893",
-            "summarizers/generate_function_analysis.py:360"
+            "producers/generate_function_inventory.py:904",
+            "summarizers/generate_function_analysis.py:370"
           ],
           "type": "review_duplicate_function"
         }
@@ -2343,11 +2355,11 @@
           "calls": [
             {
               "callee": "SystemExit",
-              "lineno": 894
+              "lineno": 905
             },
             {
               "callee": "run",
-              "lineno": 894
+              "lineno": 905
             }
           ],
           "docstring": null,
@@ -2358,7 +2370,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 893,
+          "line": 904,
           "line_count": 2,
           "logging_calls": [],
           "module_id": "scripts.producers.generate_function_inventory",
@@ -2373,11 +2385,11 @@
           "calls": [
             {
               "callee": "SystemExit",
-              "lineno": 361
+              "lineno": 371
             },
             {
               "callee": "run",
-              "lineno": 361
+              "lineno": 371
             }
           ],
           "docstring": null,
@@ -2388,7 +2400,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 360,
+          "line": 370,
           "line_count": 2,
           "logging_calls": [],
           "module_id": "scripts.summarizers.generate_function_analysis",
@@ -2413,16 +2425,16 @@
     "analysis_version": "1.0.0",
     "folder_name": "scripts",
     "folder_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts",
-    "generated_at": "2025-10-28T13:55:22.918257+00:00",
+    "generated_at": "2025-10-28T21:07:56.859842+00:00",
     "repo_root": "C:\\Users\\genet\\repo_studios",
     "source_index_file": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\scripts_index\\scripts_index-2025-10-28.json",
-    "source_index_generated_at": "2025-10-28T13:55:22.896815+00:00",
-    "source_index_hash": "1948c4cf71fd42250338ca0a2a6e1b644af75ad9a2e43c6d15954d99b5713c47"
+    "source_index_generated_at": "2025-10-28T21:07:56.831635+00:00",
+    "source_index_hash": "66495777d995f91be4916a7256bf6fa1a5b05c2469102f986a12127d2bcb9e6e"
   },
   "schema_version": 1,
   "summary": {
     "duplicate_groups": 11,
     "total_duplicate_functions": 34,
-    "total_files_scanned": 5
+    "total_files_scanned": 7
   }
 }

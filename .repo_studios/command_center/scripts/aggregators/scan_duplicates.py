@@ -20,7 +20,9 @@ from __future__ import annotations
 
 import argparse
 import ast
+import importlib
 import importlib.util
+
 import json
 import logging
 import sys
@@ -28,7 +30,22 @@ from collections import Counter, OrderedDict, defaultdict
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable, Iterator, Sequence
+from typing import Any, Callable, Iterable, Iterator, Sequence
+
+
+def _load_slugify() -> Callable[[Path], str]:
+    try:
+        module = importlib.import_module("libraries")
+    except ModuleNotFoundError:  # pragma: no cover - CLI fallback
+        script_dir = Path(__file__).resolve().parent
+        scripts_root = script_dir.parent
+        if str(scripts_root) not in sys.path:
+            sys.path.insert(0, str(scripts_root))
+        module = importlib.import_module("libraries")
+    return module.slugify_relative
+
+
+slugify_relative = _load_slugify()
 
 DEFAULT_SIMILARITY_THRESHOLD = 0.85
 DEFAULT_MIN_LINES = 3
@@ -345,13 +362,7 @@ def _resolve_within_repo(repo_root: Path, candidate: Path) -> Path:
     return resolved
 
 
-def _slugify_relative(relative_path: Path) -> str:
-    parts: list[str] = []
-    for part in relative_path.parts:
-        slug = "".join(ch.lower() if ch.isalnum() else "-" for ch in part)
-        slug = slug.strip("-") or "segment"
-        parts.append(slug)
-    return "__".join(parts) or "root"
+_slugify_relative = slugify_relative
 
 
 def _to_repo_relative(path: Path, repo_root: Path) -> str:

@@ -26,6 +26,15 @@ RUN_PREFIX = "typecheck"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 SCHEMA_VERSION = 1
 
+LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
+
+try:
+    from libraries import copy_latest_artifact
+except ModuleNotFoundError:  # pragma: no cover - fallback when executed directly
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import copy_latest_artifact
+
 
 @dataclass
 class ErrorSample:
@@ -353,13 +362,7 @@ def _write_artifacts(
     return report_json, report_md, log_txt, raw_txt
 
 
-def _copy_latest(src: Path, dest: Path) -> None:
-    try:
-        if dest.exists():
-            dest.unlink()
-        dest.hardlink_to(src)
-    except OSError:
-        dest.write_bytes(src.read_bytes())
+_copy_latest = copy_latest_artifact
 
 
 def _update_latest(paths: list[tuple[Path, Path]]) -> None:

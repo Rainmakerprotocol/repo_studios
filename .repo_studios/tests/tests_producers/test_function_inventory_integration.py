@@ -1,11 +1,13 @@
 """Integration tests for inventory and analysis producers."""
 from __future__ import annotations
 
+import importlib
 import importlib.util
 import json
 import shutil
 import sys
 from pathlib import Path
+from typing import Callable
 
 import jsonschema
 import pytest
@@ -33,6 +35,21 @@ FIXTURE_ROOT = (
     / "function_inventory"
     / "sample_pkg"
 )
+
+SCRIPTS_ROOT = Path(__file__).resolve().parents[2] / "command_center" / "scripts"
+
+
+def _load_slugify() -> Callable[[Path], str]:
+    try:
+        module = importlib.import_module("libraries")
+    except ModuleNotFoundError:  # pragma: no cover - test sandbox fallback
+        if str(SCRIPTS_ROOT) not in sys.path:
+            sys.path.insert(0, str(SCRIPTS_ROOT))
+        module = importlib.import_module("libraries")
+    return module.slugify_relative
+
+
+slugify_relative = _load_slugify()
 
 
 def _load_module(module_path: Path, module_name: str):
@@ -66,15 +83,6 @@ def _run_analysis(args: list[str]) -> int:
 
 def _load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _slugify_relative(path: Path) -> str:
-    parts: list[str] = []
-    for part in path.parts:
-        slug = "".join(ch.lower() if ch.isalnum() else "-" for ch in part)
-        slug = slug.strip("-") or "segment"
-        parts.append(slug)
-    return "__".join(parts) or "root"
 
 
 def _validate_with_schema(payload: dict, schema_name: str) -> None:
@@ -113,7 +121,7 @@ def test_inventory_and_analysis_round_trip(tmp_path: Path) -> None:
     assert screening_files, "Expected screening summary artifact"
     screening_payload = _load_json(screening_files[-1])
     assert "graphs" in screening_payload
-    slug = _slugify_relative(target.relative_to(workspace))
+    slug = slugify_relative(target.relative_to(workspace))
     reports_root = workspace / ".repo_studios" / "command_center" / "reports"
     mirror_index_dir = reports_root / "index_scan" / f"{slug}_index"
     mirror_index_files = sorted(mirror_index_dir.glob("sample_pkg_index-*.json"))

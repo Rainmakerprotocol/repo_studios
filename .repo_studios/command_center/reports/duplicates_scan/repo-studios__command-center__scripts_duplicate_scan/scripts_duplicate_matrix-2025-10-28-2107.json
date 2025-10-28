@@ -6,7 +6,7 @@
       "producer_duplicate_count": 4,
       "producer_instances": [
         {
-          "line": 247,
+          "line": 264,
           "line_count": 10,
           "name": "build_options",
           "path": "aggregators/scan_duplicates.py"
@@ -18,13 +18,13 @@
           "path": "orchestrators/run_command_center_pipeline.py"
         },
         {
-          "line": 195,
+          "line": 206,
           "line_count": 2,
           "name": "build_options",
           "path": "producers/generate_function_inventory.py"
         },
         {
-          "line": 107,
+          "line": 117,
           "line_count": 3,
           "name": "build_options",
           "path": "summarizers/generate_function_analysis.py"
@@ -39,7 +39,7 @@
       "producer_duplicate_count": 4,
       "producer_instances": [
         {
-          "line": 222,
+          "line": 239,
           "line_count": 23,
           "name": "build_paths",
           "path": "aggregators/scan_duplicates.py"
@@ -51,13 +51,13 @@
           "path": "orchestrators/run_command_center_pipeline.py"
         },
         {
-          "line": 171,
+          "line": 182,
           "line_count": 22,
           "name": "build_paths",
           "path": "producers/generate_function_inventory.py"
         },
         {
-          "line": 83,
+          "line": 93,
           "line_count": 22,
           "name": "build_paths",
           "path": "summarizers/generate_function_analysis.py"
@@ -74,9 +74,9 @@
               "file": ".repo_studios/command_center/scripts/producers/generate_function_inventory.py",
               "function_name": "build_paths",
               "is_function": true,
-              "line_end": 192,
+              "line_end": 203,
               "line_span": 22,
-              "line_start": 171,
+              "line_start": 182,
               "sample_line": "def build_paths(args: argparse.Namespace) -> Paths:"
             },
             {
@@ -84,9 +84,9 @@
               "file": ".repo_studios/command_center/scripts/summarizers/generate_function_analysis.py",
               "function_name": "build_paths",
               "is_function": true,
-              "line_end": 104,
+              "line_end": 114,
               "line_span": 22,
-              "line_start": 83,
+              "line_start": 93,
               "sample_line": "def build_paths(args: argparse.Namespace) -> Paths:"
             }
           ],
@@ -102,7 +102,7 @@
       "producer_duplicate_count": 4,
       "producer_instances": [
         {
-          "line": 218,
+          "line": 235,
           "line_count": 2,
           "name": "configure_logging",
           "path": "aggregators/scan_duplicates.py"
@@ -114,13 +114,13 @@
           "path": "orchestrators/run_command_center_pipeline.py"
         },
         {
-          "line": 199,
+          "line": 210,
           "line_count": 2,
           "name": "configure_logging",
           "path": "producers/generate_function_inventory.py"
         },
         {
-          "line": 112,
+          "line": 122,
           "line_count": 2,
           "name": "configure_logging",
           "path": "summarizers/generate_function_analysis.py"
@@ -135,7 +135,7 @@
       "producer_duplicate_count": 4,
       "producer_instances": [
         {
-          "line": 156,
+          "line": 173,
           "line_count": 60,
           "name": "parse_args",
           "path": "aggregators/scan_duplicates.py"
@@ -147,13 +147,13 @@
           "path": "orchestrators/run_command_center_pipeline.py"
         },
         {
-          "line": 126,
+          "line": 143,
           "line_count": 34,
           "name": "parse_args",
           "path": "producers/generate_function_inventory.py"
         },
         {
-          "line": 34,
+          "line": 50,
           "line_count": 38,
           "name": "parse_args",
           "path": "summarizers/generate_function_analysis.py"
@@ -168,7 +168,7 @@
       "producer_duplicate_count": 4,
       "producer_instances": [
         {
-          "line": 945,
+          "line": 956,
           "line_count": 44,
           "name": "run",
           "path": "aggregators/scan_duplicates.py"
@@ -180,13 +180,13 @@
           "path": "orchestrators/run_command_center_pipeline.py"
         },
         {
-          "line": 845,
+          "line": 856,
           "line_count": 46,
           "name": "run",
           "path": "producers/generate_function_inventory.py"
         },
         {
-          "line": 320,
+          "line": 330,
           "line_count": 38,
           "name": "run",
           "path": "summarizers/generate_function_analysis.py"
@@ -196,71 +196,71 @@
       "signature": "def run(argv: Iterable[str] | None = None) -> int:"
     },
     {
-      "function_name": "_slugify_relative",
-      "id": "duplicate_function::duplicate-def--slugify-relative-relative-path--path-----str",
+      "function_name": "_load_slugify",
+      "id": "duplicate_function::duplicate-def--load-slugify------callable--path---str",
       "producer_duplicate_count": 3,
       "producer_instances": [
         {
-          "line": 348,
-          "line_count": 7,
-          "name": "_slugify_relative",
+          "line": 36,
+          "line_count": 10,
+          "name": "_load_slugify",
           "path": "aggregators/scan_duplicates.py"
         },
         {
-          "line": 162,
-          "line_count": 7,
-          "name": "_slugify_relative",
+          "line": 20,
+          "line_count": 10,
+          "name": "_load_slugify",
           "path": "producers/generate_function_inventory.py"
         },
         {
-          "line": 74,
-          "line_count": 7,
-          "name": "_slugify_relative",
+          "line": 17,
+          "line_count": 10,
+          "name": "_load_slugify",
           "path": "summarizers/generate_function_analysis.py"
         }
       ],
       "scanner_groups": [
         {
-          "canonical_name": "slugify_relative",
+          "canonical_name": "load_slugify",
           "duplicate_type": "exact_duplicate",
-          "group_id": "dup_003",
+          "group_id": "dup_001",
           "occurrences": [
             {
-              "code_hash": "abec3ac08d0d",
+              "code_hash": "c9577d5bb09f",
               "file": ".repo_studios/command_center/scripts/aggregators/scan_duplicates.py",
-              "function_name": "_slugify_relative",
+              "function_name": "_load_slugify",
               "is_function": true,
-              "line_end": 354,
-              "line_span": 7,
-              "line_start": 348,
-              "sample_line": "def _slugify_relative(relative_path: Path) -> str:"
+              "line_end": 45,
+              "line_span": 10,
+              "line_start": 36,
+              "sample_line": "def _load_slugify() -> Callable[[Path], str]:"
             },
             {
-              "code_hash": "abec3ac08d0d",
+              "code_hash": "c9577d5bb09f",
               "file": ".repo_studios/command_center/scripts/producers/generate_function_inventory.py",
-              "function_name": "_slugify_relative",
+              "function_name": "_load_slugify",
               "is_function": true,
-              "line_end": 168,
-              "line_span": 7,
-              "line_start": 162,
-              "sample_line": "def _slugify_relative(relative_path: Path) -> str:"
+              "line_end": 29,
+              "line_span": 10,
+              "line_start": 20,
+              "sample_line": "def _load_slugify() -> Callable[[Path], str]:"
             },
             {
-              "code_hash": "abec3ac08d0d",
+              "code_hash": "c9577d5bb09f",
               "file": ".repo_studios/command_center/scripts/summarizers/generate_function_analysis.py",
-              "function_name": "_slugify_relative",
+              "function_name": "_load_slugify",
               "is_function": true,
-              "line_end": 80,
-              "line_span": 7,
-              "line_start": 74,
-              "sample_line": "def _slugify_relative(relative_path: Path) -> str:"
+              "line_end": 26,
+              "line_span": 10,
+              "line_start": 17,
+              "sample_line": "def _load_slugify() -> Callable[[Path], str]:"
             }
           ],
-          "signature_hash": "abec3ac08d0d",
+          "signature_hash": "c9577d5bb09f",
           "similarity_score": 1.0
         }
       ],
-      "signature": "def _slugify_relative(relative_path: Path) -> str:"
+      "signature": "def _load_slugify() -> Callable[[Path], str]:"
     },
     {
       "function_name": "main",
@@ -274,13 +274,13 @@
           "path": "orchestrators/run_command_center_pipeline.py"
         },
         {
-          "line": 893,
+          "line": 904,
           "line_count": 2,
           "name": "main",
           "path": "producers/generate_function_inventory.py"
         },
         {
-          "line": 360,
+          "line": 370,
           "line_count": 2,
           "name": "main",
           "path": "summarizers/generate_function_analysis.py"
@@ -295,7 +295,7 @@
       "producer_duplicate_count": 2,
       "producer_instances": [
         {
-          "line": 278,
+          "line": 295,
           "line_count": 7,
           "name": "_latest_artifact",
           "path": "aggregators/scan_duplicates.py"
@@ -311,16 +311,16 @@
         {
           "canonical_name": "latest_artifact",
           "duplicate_type": "exact_duplicate",
-          "group_id": "dup_002",
+          "group_id": "dup_003",
           "occurrences": [
             {
               "code_hash": "376323710e88",
               "file": ".repo_studios/command_center/scripts/aggregators/scan_duplicates.py",
               "function_name": "_latest_artifact",
               "is_function": true,
-              "line_end": 284,
+              "line_end": 301,
               "line_span": 7,
-              "line_start": 278,
+              "line_start": 295,
               "sample_line": "def _latest_artifact(directory: Path, pattern: str, label: str) -> Path:"
             },
             {
@@ -346,7 +346,7 @@
       "producer_duplicate_count": 2,
       "producer_instances": [
         {
-          "line": 266,
+          "line": 283,
           "line_count": 10,
           "name": "_load_cli_module",
           "path": "aggregators/scan_duplicates.py"
@@ -362,16 +362,16 @@
         {
           "canonical_name": "load_cli_module",
           "duplicate_type": "exact_duplicate",
-          "group_id": "dup_001",
+          "group_id": "dup_002",
           "occurrences": [
             {
               "code_hash": "f2924107eec5",
               "file": ".repo_studios/command_center/scripts/aggregators/scan_duplicates.py",
               "function_name": "_load_cli_module",
               "is_function": true,
-              "line_end": 275,
+              "line_end": 292,
               "line_span": 10,
-              "line_start": 266,
+              "line_start": 283,
               "sample_line": "def _load_cli_module(script_path: Path, module_name: str):"
             },
             {
@@ -397,7 +397,7 @@
       "producer_duplicate_count": 2,
       "producer_instances": [
         {
-          "line": 339,
+          "line": 356,
           "line_count": 7,
           "name": "_resolve_within_repo",
           "path": "aggregators/scan_duplicates.py"
@@ -418,13 +418,13 @@
       "producer_duplicate_count": 2,
       "producer_instances": [
         {
-          "line": 848,
+          "line": 859,
           "line_count": 20,
           "name": "compose_payload",
           "path": "aggregators/scan_duplicates.py"
         },
         {
-          "line": 234,
+          "line": 244,
           "line_count": 32,
           "name": "compose_payload",
           "path": "summarizers/generate_function_analysis.py"
@@ -449,9 +449,9 @@
               "file": ".repo_studios/command_center/scripts/aggregators/scan_duplicates.py",
               "function_name": "visit_FunctionDef",
               "is_function": true,
-              "line_end": 377,
+              "line_end": 388,
               "line_span": 3,
-              "line_start": 375,
+              "line_start": 386,
               "sample_line": "def visit_FunctionDef(self, node: ast.FunctionDef) -> None:  # noqa: D401 - docstring inherited"
             },
             {
@@ -459,9 +459,9 @@
               "file": ".repo_studios/command_center/scripts/aggregators/scan_duplicates.py",
               "function_name": "visit_AsyncFunctionDef",
               "is_function": true,
-              "line_end": 381,
+              "line_end": 392,
               "line_span": 3,
-              "line_start": 379,
+              "line_start": 390,
               "sample_line": "def visit_AsyncFunctionDef(self, node: ast.AsyncFunctionDef) -> None:  # noqa: D401"
             }
           ],
@@ -474,9 +474,9 @@
   ],
   "metadata": {
     "analysis_source": ".repo_studios/command_center/scripts/scripts_index/scripts_analysis-2025-10-28.json",
-    "functions_scanned": 112,
-    "generated_at": "2025-10-28T13:55:22.988497+00:00",
-    "python_files_scanned": 5,
+    "functions_scanned": 113,
+    "generated_at": "2025-10-28T21:07:56.941186+00:00",
+    "python_files_scanned": 7,
     "repo_root": "C:\\Users\\genet\\repo_studios",
     "target": ".repo_studios/command_center/scripts"
   },

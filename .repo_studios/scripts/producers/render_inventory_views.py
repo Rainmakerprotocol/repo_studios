@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import sys
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -22,6 +23,15 @@ RUN_PREFIX = "render_inventory_views"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 SCHEMA_VERSION = 1
 IGNORED_FILES = {"enums.yaml", "inventory_entry_template.yaml"}
+
+LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
+
+try:
+    from libraries import copy_latest_artifact
+except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import copy_latest_artifact
 
 
 @dataclass(frozen=True)
@@ -274,13 +284,7 @@ def write_stub(path: Path, destination: Path, *, generated_at: datetime, repo_ro
         write_yaml(path, payload)
 
 
-def _copy_latest(src: Path, dest: Path) -> None:
-    try:
-        if dest.exists():
-            dest.unlink()
-        dest.hardlink_to(src)
-    except OSError:
-        dest.write_bytes(src.read_bytes())
+_copy_latest = copy_latest_artifact
 
 
 def update_latest_artifacts(run_dir: Path, output_dir: Path) -> None:

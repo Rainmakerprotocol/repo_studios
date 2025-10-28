@@ -7,6 +7,7 @@ import argparse
 import json
 import logging
 import os
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -30,6 +31,16 @@ DEFAULT_OUTPUT_DIR = Path(
 )
 RUN_PREFIX = "standards_index_diff"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
+
+try:
+    from libraries import copy_latest_artifact
+except ModuleNotFoundError:  # pragma: no cover - fallback when run as script
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import copy_latest_artifact
 
 
 class DiffError(Exception):
@@ -99,13 +110,7 @@ def prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> None:
         path.rmdir()
 
 
-def _copy_latest(src: Path, dest: Path) -> None:
-    try:
-        if dest.exists():
-            dest.unlink()
-        dest.hardlink_to(src)
-    except OSError:
-        dest.write_bytes(src.read_bytes())
+_copy_latest = copy_latest_artifact
 
 
 def _resolve_output_dir(output_value: str | None, repo_root: Path) -> Path:

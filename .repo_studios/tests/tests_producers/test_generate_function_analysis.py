@@ -1,10 +1,12 @@
 """Tests for generate_function_analysis producer."""
 from __future__ import annotations
 
+import importlib
 import importlib.util
 import json
 import sys
 from pathlib import Path
+from typing import Callable
 
 
 INVENTORY_MODULE_PATH = (
@@ -23,6 +25,21 @@ ANALYSIS_MODULE_PATH = (
 )
 INVENTORY_MODULE_NAME = "repo_studios_test.generate_function_inventory"
 ANALYSIS_MODULE_NAME = "repo_studios_test.generate_function_analysis"
+
+SCRIPTS_ROOT = Path(__file__).resolve().parents[2] / "command_center" / "scripts"
+
+
+def _load_slugify() -> Callable[[Path], str]:
+    try:
+        module = importlib.import_module("libraries")
+    except ModuleNotFoundError:  # pragma: no cover - test sandbox fallback
+        if str(SCRIPTS_ROOT) not in sys.path:
+            sys.path.insert(0, str(SCRIPTS_ROOT))
+        module = importlib.import_module("libraries")
+    return module.slugify_relative
+
+
+slugify_relative = _load_slugify()
 
 
 def _load_module(module_path: Path, module_name: str):
@@ -61,15 +78,6 @@ def _load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def _slugify_relative(path: Path) -> str:
-    parts: list[str] = []
-    for part in path.parts:
-        slug = "".join(ch.lower() if ch.isalnum() else "-" for ch in part)
-        slug = slug.strip("-") or "segment"
-        parts.append(slug)
-    return "__".join(parts) or "root"
-
-
 def test_analysis_detects_duplicate_functions(tmp_path: Path) -> None:
     repo_root = tmp_path
     target = repo_root / "sample_pkg"
@@ -101,7 +109,7 @@ def test_analysis_detects_duplicate_functions(tmp_path: Path) -> None:
     assert len(analysis_files) == 1
     analysis_file = analysis_files[0]
     analysis_payload = _load_json(analysis_file)
-    slug = _slugify_relative(target.relative_to(repo_root))
+    slug = slugify_relative(target.relative_to(repo_root))
     mirror_dir = (
         repo_root
         / ".repo_studios"
@@ -164,7 +172,7 @@ def test_analysis_replaces_existing_outputs(tmp_path: Path) -> None:
     assert run_inventory(["--repo-root", str(repo_root), str(target)]) == 0
 
     index_dir = target / "pkg_index"
-    slug = _slugify_relative(target.relative_to(repo_root))
+    slug = slugify_relative(target.relative_to(repo_root))
     mirror_dir = (
         repo_root
         / ".repo_studios"
