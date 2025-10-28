@@ -1,0 +1,1782 @@
+{
+  "graphs": {
+    "calls": [
+      [
+        "consumers.classify_monkey_patches::Finding.from_obj",
+        "Finding"
+      ],
+      [
+        "consumers.classify_monkey_patches::Finding.from_obj",
+        "bool"
+      ],
+      [
+        "consumers.classify_monkey_patches::Finding.from_obj",
+        "int"
+      ],
+      [
+        "consumers.classify_monkey_patches::Finding.from_obj",
+        "o.get"
+      ],
+      [
+        "consumers.classify_monkey_patches::Finding.from_obj",
+        "str"
+      ],
+      [
+        "consumers.classify_monkey_patches::aggregate",
+        "Counter"
+      ],
+      [
+        "consumers.classify_monkey_patches::aggregate",
+        "Counter((f.category for f in findings)).most_common"
+      ],
+      [
+        "consumers.classify_monkey_patches::aggregate",
+        "buckets.items"
+      ],
+      [
+        "consumers.classify_monkey_patches::aggregate",
+        "buckets[classify(f)].append"
+      ],
+      [
+        "consumers.classify_monkey_patches::aggregate",
+        "classify"
+      ],
+      [
+        "consumers.classify_monkey_patches::aggregate",
+        "consumers.classify_monkey_patches::classify"
+      ],
+      [
+        "consumers.classify_monkey_patches::aggregate",
+        "defaultdict"
+      ],
+      [
+        "consumers.classify_monkey_patches::aggregate",
+        "file_counts.most_common"
+      ],
+      [
+        "consumers.classify_monkey_patches::aggregate",
+        "len"
+      ],
+      [
+        "consumers.classify_monkey_patches::latest_scan_dir",
+        "FileNotFoundError"
+      ],
+      [
+        "consumers.classify_monkey_patches::latest_scan_dir",
+        "p.is_dir"
+      ],
+      [
+        "consumers.classify_monkey_patches::latest_scan_dir",
+        "p.name[0].isdigit"
+      ],
+      [
+        "consumers.classify_monkey_patches::latest_scan_dir",
+        "root.iterdir"
+      ],
+      [
+        "consumers.classify_monkey_patches::latest_scan_dir",
+        "sorted"
+      ],
+      [
+        "consumers.classify_monkey_patches::load_findings",
+        "Finding.from_obj"
+      ],
+      [
+        "consumers.classify_monkey_patches::load_findings",
+        "consumers.classify_monkey_patches::Finding.from_obj"
+      ],
+      [
+        "consumers.classify_monkey_patches::load_findings",
+        "json.load"
+      ],
+      [
+        "consumers.classify_monkey_patches::load_findings",
+        "report_path.open"
+      ],
+      [
+        "consumers.classify_monkey_patches::main",
+        "Path"
+      ],
+      [
+        "consumers.classify_monkey_patches::main",
+        "aggregate"
+      ],
+      [
+        "consumers.classify_monkey_patches::main",
+        "consumers.classify_monkey_patches::aggregate"
+      ],
+      [
+        "consumers.classify_monkey_patches::main",
+        "consumers.classify_monkey_patches::latest_scan_dir"
+      ],
+      [
+        "consumers.classify_monkey_patches::main",
+        "consumers.classify_monkey_patches::load_findings"
+      ],
+      [
+        "consumers.classify_monkey_patches::main",
+        "consumers.classify_monkey_patches::write_outputs"
+      ],
+      [
+        "consumers.classify_monkey_patches::main",
+        "json.dumps"
+      ],
+      [
+        "consumers.classify_monkey_patches::main",
+        "latest_scan_dir"
+      ],
+      [
+        "consumers.classify_monkey_patches::main",
+        "load_findings"
+      ],
+      [
+        "consumers.classify_monkey_patches::main",
+        "logging.basicConfig"
+      ],
+      [
+        "consumers.classify_monkey_patches::main",
+        "os.environ.get"
+      ],
+      [
+        "consumers.classify_monkey_patches::main",
+        "str"
+      ],
+      [
+        "consumers.classify_monkey_patches::main",
+        "sys.stdout.write"
+      ],
+      [
+        "consumers.classify_monkey_patches::main",
+        "write_outputs"
+      ],
+      [
+        "consumers.classify_monkey_patches::write_outputs",
+        "'\\n'.join"
+      ],
+      [
+        "consumers.classify_monkey_patches::write_outputs",
+        "(scan_dir / 'RISK_SUMMARY.json').open"
+      ],
+      [
+        "consumers.classify_monkey_patches::write_outputs",
+        "(scan_dir / 'RISK_SUMMARY.md').write_text"
+      ],
+      [
+        "consumers.classify_monkey_patches::write_outputs",
+        "counts.get"
+      ],
+      [
+        "consumers.classify_monkey_patches::write_outputs",
+        "int"
+      ],
+      [
+        "consumers.classify_monkey_patches::write_outputs",
+        "json.dump"
+      ],
+      [
+        "consumers.classify_monkey_patches::write_outputs",
+        "md.append"
+      ],
+      [
+        "consumers.generate_anchor_health_report::Cluster.file_count",
+        "len"
+      ],
+      [
+        "consumers.generate_anchor_health_report::_run_dir",
+        "ts.strftime"
+      ],
+      [
+        "consumers.generate_anchor_health_report::_slugify",
+        "raw.strip"
+      ],
+      [
+        "consumers.generate_anchor_health_report::_slugify",
+        "raw.strip().lower"
+      ],
+      [
+        "consumers.generate_anchor_health_report::_slugify",
+        "re.sub"
+      ],
+      [
+        "consumers.generate_anchor_health_report::_slugify",
+        "s.strip"
+      ],
+      [
+        "consumers.generate_anchor_health_report::build_report",
+        "Cluster"
+      ],
+      [
+        "consumers.generate_anchor_health_report::build_report",
+        "baseline.get"
+      ],
+      [
+        "consumers.generate_anchor_health_report::build_report",
+        "baseline.get('summary', {}).get"
+      ],
+      [
+        "consumers.generate_anchor_health_report::build_report",
+        "clusters.append"
+      ],
+      [
+        "consumers.generate_anchor_health_report::build_report",
+        "clusters.sort"
+      ],
+      [
+        "consumers.generate_anchor_health_report::build_report",
+        "collect_h1_h2_slugs"
+      ],
+      [
+        "consumers.generate_anchor_health_report::build_report",
+        "consumers.generate_anchor_health_report::collect_h1_h2_slugs"
+      ],
+      [
+        "consumers.generate_anchor_health_report::build_report",
+        "consumers.generate_anchor_health_report::load_baseline"
+      ],
+      [
+        "consumers.generate_anchor_health_report::build_report",
+        "consumers.generate_anchor_health_report::multi_file_duplicates"
+      ],
+      [
+        "consumers.generate_anchor_health_report::build_report",
+        "len"
+      ],
+      [
+        "consumers.generate_anchor_health_report::build_report",
+        "load_baseline"
+      ],
+      [
+        "consumers.generate_anchor_health_report::build_report",
+        "loc.split"
+      ],
+      [
+        "consumers.generate_anchor_health_report::build_report",
+        "multi_file_duplicates"
+      ],
+      [
+        "consumers.generate_anchor_health_report::build_report",
+        "sorted"
+      ],
+      [
+        "consumers.generate_anchor_health_report::build_report",
+        "strict_dupes.items"
+      ],
+      [
+        "consumers.generate_anchor_health_report::collect_h1_h2_slugs",
+        "HEADING_RE.match"
+      ],
+      [
+        "consumers.generate_anchor_health_report::collect_h1_h2_slugs",
+        "Path"
+      ],
+      [
+        "consumers.generate_anchor_health_report::collect_h1_h2_slugs",
+        "_slugify"
+      ],
+      [
+        "consumers.generate_anchor_health_report::collect_h1_h2_slugs",
+        "any"
+      ],
+      [
+        "consumers.generate_anchor_health_report::collect_h1_h2_slugs",
+        "consumers.generate_anchor_health_report::_slugify"
+      ],
+      [
+        "consumers.generate_anchor_health_report::collect_h1_h2_slugs",
+        "enumerate"
+      ],
+      [
+        "consumers.generate_anchor_health_report::collect_h1_h2_slugs",
+        "len"
+      ],
+      [
+        "consumers.generate_anchor_health_report::collect_h1_h2_slugs",
+        "m.group"
+      ],
+      [
+        "consumers.generate_anchor_health_report::collect_h1_h2_slugs",
+        "mapping.setdefault"
+      ],
+      [
+        "consumers.generate_anchor_health_report::collect_h1_h2_slugs",
+        "mapping.setdefault(slug, []).append"
+      ],
+      [
+        "consumers.generate_anchor_health_report::collect_h1_h2_slugs",
+        "md.read_text"
+      ],
+      [
+        "consumers.generate_anchor_health_report::collect_h1_h2_slugs",
+        "md.read_text(encoding='utf-8', errors='replace').splitlines"
+      ],
+      [
+        "consumers.generate_anchor_health_report::collect_h1_h2_slugs",
+        "root.exists"
+      ],
+      [
+        "consumers.generate_anchor_health_report::collect_h1_h2_slugs",
+        "root.rglob"
+      ],
+      [
+        "consumers.generate_anchor_health_report::load_baseline",
+        "BASELINE_PATH.exists"
+      ],
+      [
+        "consumers.generate_anchor_health_report::load_baseline",
+        "BASELINE_PATH.read_text"
+      ],
+      [
+        "consumers.generate_anchor_health_report::load_baseline",
+        "json.loads"
+      ],
+      [
+        "consumers.generate_anchor_health_report::main",
+        "build_report"
+      ],
+      [
+        "consumers.generate_anchor_health_report::main",
+        "consumers.generate_anchor_health_report::build_report"
+      ],
+      [
+        "consumers.generate_anchor_health_report::main",
+        "consumers.generate_anchor_health_report::write_artifacts"
+      ],
+      [
+        "consumers.generate_anchor_health_report::main",
+        "logging.basicConfig"
+      ],
+      [
+        "consumers.generate_anchor_health_report::main",
+        "logging.info"
+      ],
+      [
+        "consumers.generate_anchor_health_report::main",
+        "write_artifacts"
+      ],
+      [
+        "consumers.generate_anchor_health_report::multi_file_duplicates",
+        "len"
+      ],
+      [
+        "consumers.generate_anchor_health_report::multi_file_duplicates",
+        "loc.split"
+      ],
+      [
+        "consumers.generate_anchor_health_report::multi_file_duplicates",
+        "slug_map.items"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "','.join"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "'\\n'.join"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "(OUTPUT_DIR / 'runs.log').open"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "(run_dir / 'anchor_report.json').write_text"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "(run_dir / 'anchor_report.md').write_text"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "(run_dir / 'clusters.tsv').write_text"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "OUTPUT_DIR.mkdir"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "_run_dir"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "consumers.generate_anchor_health_report::_run_dir"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "datetime.utcnow"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "dest.exists"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "dest.hardlink_to"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "dest.unlink"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "dest.write_bytes"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "fh.write"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "json.dumps"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "lines.append"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "run_dir.mkdir"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "src.read_bytes"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "ts.isoformat"
+      ],
+      [
+        "consumers.generate_anchor_health_report::write_artifacts",
+        "tsv_lines.append"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_discover_outdir",
+        "Path"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_discover_outdir",
+        "_find_latest_outdir"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_discover_outdir",
+        "consumers.generate_fault_artifacts::_find_latest_outdir"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_discover_outdir",
+        "os.getenv"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_ensure_manifest",
+        "datetime.now"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_ensure_manifest",
+        "datetime.now(UTC).isoformat"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_ensure_manifest",
+        "json.dumps"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_ensure_manifest",
+        "mf.exists"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_ensure_manifest",
+        "mf.write_text"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_extract_top_frames",
+        "FRAME_RE.match"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_extract_top_frames",
+        "Path"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_extract_top_frames",
+        "TopFrame"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_extract_top_frames",
+        "frames.append"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_extract_top_frames",
+        "int"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_extract_top_frames",
+        "len"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_extract_top_frames",
+        "m.group"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_extract_top_frames",
+        "m.group('func').strip"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_find_latest_outdir",
+        "RUNS_BASE.exists"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_find_latest_outdir",
+        "RUNS_BASE.iterdir"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_find_latest_outdir",
+        "candidates.sort"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_find_latest_outdir",
+        "p.is_dir"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_find_latest_outdir",
+        "p.stat"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_iter_thread_blocks",
+        "THREAD_HEADER_RE.match"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_iter_thread_blocks",
+        "buf.append"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_load_process_salt",
+        "_platform.platform"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_load_process_salt",
+        "_sys.version.split"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_load_process_salt",
+        "data.get"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_load_process_salt",
+        "isinstance"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_load_process_salt",
+        "json.loads"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_load_process_salt",
+        "mf.exists"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_load_process_salt",
+        "mf.read_text"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_read_text",
+        "p.read_text"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_signature_id",
+        "'::'.join"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_signature_id",
+        "'|'.join"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_signature_id",
+        "Path"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_signature_id",
+        "hashlib.sha256"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_signature_id",
+        "hashlib.sha256(raw.encode('utf-8')).hexdigest"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_signature_id",
+        "len"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_signature_id",
+        "parts.append"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_signature_id",
+        "raw.encode"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_signature_id",
+        "str"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_top_n_from_env",
+        "int"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_top_n_from_env",
+        "max"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_top_n_from_env",
+        "min"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_top_n_from_env",
+        "os.getenv"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_top_n_from_env",
+        "str"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "','.join"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "_extract_top_frames"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "_iter_thread_blocks"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "_load_process_salt"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "_signature_id"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "_top_n_from_env"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "block[0].strip"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "consumers.generate_fault_artifacts::_extract_top_frames"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "consumers.generate_fault_artifacts::_iter_thread_blocks"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "consumers.generate_fault_artifacts::_load_process_salt"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "consumers.generate_fault_artifacts::_signature_id"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "consumers.generate_fault_artifacts::_top_n_from_env"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "csv.DictWriter"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "csv_path.open"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "datetime.now"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "datetime.now(UTC).isoformat"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "int"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "isinstance"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "rows.append"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "rows_map.values"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "set"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "sorted"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "stacks_text.splitlines"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "str"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "th_set.add"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "v.pop"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "writer.writeheader"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_stacks_csv",
+        "writer.writerow"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_summary",
+        "'\\n'.join"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_summary",
+        "(outdir / 'SUMMARY.md').write_text"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_summary",
+        "datetime.now"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_summary",
+        "datetime.now(UTC).isoformat"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_summary",
+        "dumps_dir.glob"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_summary",
+        "lines.append"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_summary",
+        "r.get"
+      ],
+      [
+        "consumers.generate_fault_artifacts::_write_summary",
+        "sorted"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "(dumps_dir / 'combined.txt').write_text"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "_discover_outdir"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "_ensure_manifest"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "_read_text"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "_write_stacks_csv"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "_write_summary"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "ap.add_argument"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "ap.parse_args"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "argparse.ArgumentParser"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "consumers.generate_fault_artifacts::_discover_outdir"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "consumers.generate_fault_artifacts::_ensure_manifest"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "consumers.generate_fault_artifacts::_read_text"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "consumers.generate_fault_artifacts::_write_stacks_csv"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "consumers.generate_fault_artifacts::_write_summary"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "dumps_dir.mkdir"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "log.info"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "logging.basicConfig"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "logging.getLogger"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "outdir.exists"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "outdir.is_dir"
+      ],
+      [
+        "consumers.generate_fault_artifacts::main",
+        "outdir.mkdir"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_count_tracebacks",
+        "text.count"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_ensure_out",
+        "datetime.now"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_ensure_out",
+        "datetime.now().strftime"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_ensure_out",
+        "out_dir.mkdir"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_extract_block",
+        "enumerate"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_extract_block",
+        "line.rstrip"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_extract_block",
+        "line.strip"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_extract_block",
+        "line.strip().startswith"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_extract_block",
+        "out.append"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_extract_block",
+        "start_re.match"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_latest",
+        "p.is_file"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_latest",
+        "path.glob"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_latest",
+        "sorted"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_latest_by_prefix",
+        "p.is_file"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_latest_by_prefix",
+        "path.glob"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_latest_by_prefix",
+        "sorted"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_junit",
+        "(sk.get('message') or '').lower"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_junit",
+        "ElementTree.parse"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_junit",
+        "ElementTree.parse(path).getroot"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_junit",
+        "TestHealth"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_junit",
+        "int"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_junit",
+        "max"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_junit",
+        "root.findall"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_junit",
+        "root.iterfind"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_junit",
+        "sk.get"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_junit",
+        "suite.get"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_junit",
+        "tc.find"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_slowest",
+        "_SLOW_LINE_RE.match"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_slowest",
+        "float"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_slowest",
+        "line.strip"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_slowest",
+        "m.group"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_slowest",
+        "out.append"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_warnings",
+        "Counter"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_warnings",
+        "_WARN_LINE_RE.match"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_warnings",
+        "line.strip"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_parse_warnings",
+        "m.group"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_pick_best_junit",
+        "ElementTree.parse"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_pick_best_junit",
+        "ElementTree.parse(path).getroot"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_pick_best_junit",
+        "_latest_by_prefix"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_pick_best_junit",
+        "_totals_and_internal_only"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_pick_best_junit",
+        "best.stat"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_pick_best_junit",
+        "consumers.generate_test_log_health_report::_latest_by_prefix"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_pick_best_junit",
+        "int"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_pick_best_junit",
+        "logs_dir.glob"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_pick_best_junit",
+        "p.is_file"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_pick_best_junit",
+        "p.stat"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_pick_best_junit",
+        "root.findall"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_pick_best_junit",
+        "root.iterfind"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_pick_best_junit",
+        "sorted"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_pick_best_junit",
+        "suite.get"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_pick_best_junit",
+        "tc.get"
+      ],
+      [
+        "consumers.generate_test_log_health_report::_read",
+        "p.read_text"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "'\\n'.join"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "(Path(args.logs_dir) if Path(args.logs_dir).is_absolute() else repo_root / args.logs_dir).resolve"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "(Path(args.output_base) if Path(args.output_base).is_absolute() else repo_root / args.output_base).resolve"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "(out_dir / 'report.json').write_text"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "(out_dir / 'report.md').write_text"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "Path"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "Path('.').resolve"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "Path(args.logs_dir).is_absolute"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "Path(args.output_base).is_absolute"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "TestHealth"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "_count_tracebacks"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "_ensure_out"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "_extract_block"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "_latest"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "_latest_by_prefix"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "_parse_junit"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "_parse_slowest"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "_parse_warnings"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "_pick_best_junit"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "_read"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "ap.add_argument"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "ap.parse_args"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "argparse.ArgumentParser"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "consumers.generate_test_log_health_report::_count_tracebacks"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "consumers.generate_test_log_health_report::_ensure_out"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "consumers.generate_test_log_health_report::_extract_block"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "consumers.generate_test_log_health_report::_latest"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "consumers.generate_test_log_health_report::_latest_by_prefix"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "consumers.generate_test_log_health_report::_parse_junit"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "consumers.generate_test_log_health_report::_parse_slowest"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "consumers.generate_test_log_health_report::_parse_warnings"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "consumers.generate_test_log_health_report::_pick_best_junit"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "consumers.generate_test_log_health_report::_read"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "datetime.now"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "datetime.now().isoformat"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "dict"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "int"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "json.dumps"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "json.loads"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "log_text.splitlines"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "logging.info"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "md.append"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "str"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "sum"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "warn_by_file.most_common"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "warn_by_type.most_common"
+      ],
+      [
+        "consumers.generate_test_log_health_report::main",
+        "warn_by_type.values"
+      ]
+    ],
+    "imports": [
+      [
+        "consumers.classify_monkey_patches",
+        "__future__.annotations"
+      ],
+      [
+        "consumers.classify_monkey_patches",
+        "collections.Counter"
+      ],
+      [
+        "consumers.classify_monkey_patches",
+        "collections.abc.Iterable"
+      ],
+      [
+        "consumers.classify_monkey_patches",
+        "collections.defaultdict"
+      ],
+      [
+        "consumers.classify_monkey_patches",
+        "dataclasses.dataclass"
+      ],
+      [
+        "consumers.classify_monkey_patches",
+        "json"
+      ],
+      [
+        "consumers.classify_monkey_patches",
+        "logging"
+      ],
+      [
+        "consumers.classify_monkey_patches",
+        "os"
+      ],
+      [
+        "consumers.classify_monkey_patches",
+        "pathlib.Path"
+      ],
+      [
+        "consumers.classify_monkey_patches",
+        "typing.Any"
+      ],
+      [
+        "consumers.generate_anchor_health_report",
+        "__future__.annotations"
+      ],
+      [
+        "consumers.generate_anchor_health_report",
+        "dataclasses.dataclass"
+      ],
+      [
+        "consumers.generate_anchor_health_report",
+        "datetime.datetime"
+      ],
+      [
+        "consumers.generate_anchor_health_report",
+        "json"
+      ],
+      [
+        "consumers.generate_anchor_health_report",
+        "logging"
+      ],
+      [
+        "consumers.generate_anchor_health_report",
+        "pathlib.Path"
+      ],
+      [
+        "consumers.generate_anchor_health_report",
+        "re"
+      ],
+      [
+        "consumers.generate_fault_artifacts",
+        "__future__.annotations"
+      ],
+      [
+        "consumers.generate_fault_artifacts",
+        "argparse"
+      ],
+      [
+        "consumers.generate_fault_artifacts",
+        "collections.abc.Iterable"
+      ],
+      [
+        "consumers.generate_fault_artifacts",
+        "csv"
+      ],
+      [
+        "consumers.generate_fault_artifacts",
+        "dataclasses.dataclass"
+      ],
+      [
+        "consumers.generate_fault_artifacts",
+        "datetime.UTC"
+      ],
+      [
+        "consumers.generate_fault_artifacts",
+        "datetime.datetime"
+      ],
+      [
+        "consumers.generate_fault_artifacts",
+        "hashlib"
+      ],
+      [
+        "consumers.generate_fault_artifacts",
+        "json"
+      ],
+      [
+        "consumers.generate_fault_artifacts",
+        "logging"
+      ],
+      [
+        "consumers.generate_fault_artifacts",
+        "os"
+      ],
+      [
+        "consumers.generate_fault_artifacts",
+        "pathlib.Path"
+      ],
+      [
+        "consumers.generate_fault_artifacts",
+        "re"
+      ],
+      [
+        "consumers.generate_test_log_health_report",
+        "__future__.annotations"
+      ],
+      [
+        "consumers.generate_test_log_health_report",
+        "argparse"
+      ],
+      [
+        "consumers.generate_test_log_health_report",
+        "collections.Counter"
+      ],
+      [
+        "consumers.generate_test_log_health_report",
+        "dataclasses.dataclass"
+      ],
+      [
+        "consumers.generate_test_log_health_report",
+        "datetime.datetime"
+      ],
+      [
+        "consumers.generate_test_log_health_report",
+        "json"
+      ],
+      [
+        "consumers.generate_test_log_health_report",
+        "logging"
+      ],
+      [
+        "consumers.generate_test_log_health_report",
+        "pathlib.Path"
+      ],
+      [
+        "consumers.generate_test_log_health_report",
+        "re"
+      ],
+      [
+        "consumers.generate_test_log_health_report",
+        "typing.Any"
+      ]
+    ]
+  },
+  "nodes": {
+    "meta": {
+      "consumers.classify_monkey_patches::Finding.from_obj": {
+        "hash": "df5f1abd77c351117ea91b1a12b368fef44eccc6",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.classify_monkey_patches::aggregate": {
+        "hash": "010a9c93942fecd19a01f75ef81d7783c79d9680",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.classify_monkey_patches::classify": {
+        "hash": "ea70748ccfe322f889b69ccab1aab9e10a2919b5",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.classify_monkey_patches::latest_scan_dir": {
+        "hash": "2cc513ca51937596162c452834c3b4c53e73a304",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.classify_monkey_patches::load_findings": {
+        "hash": "783ed50b66182d88bc5d7a0648d3127c3ae8eb64",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": true,
+          "writes": false
+        }
+      },
+      "consumers.classify_monkey_patches::main": {
+        "hash": "766335dd4449215ccc44155c8fd9460471c0cdcd",
+        "io_effects": {
+          "env": true,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.classify_monkey_patches::write_outputs": {
+        "hash": "e6cd92d38b022f6662b598e1e40a3bd299984d60",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": true,
+          "writes": false
+        }
+      },
+      "consumers.generate_anchor_health_report::Cluster.file_count": {
+        "hash": "cc3b80140a61a1a3957a95cdd7eba0a49e25ef61",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_anchor_health_report::_run_dir": {
+        "hash": "364c00e59686faa88953298f507e5169ac421aa1",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_anchor_health_report::_slugify": {
+        "hash": "c2c19c72e4c328b5b5046c200ee5fcee5f077b85",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_anchor_health_report::build_report": {
+        "hash": "85a8e39cff516c9eb833ea46e61f71bcff10b384",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_anchor_health_report::collect_h1_h2_slugs": {
+        "hash": "3ee73e56d1bbbe870db47903914f3bf9fd73121c",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_anchor_health_report::load_baseline": {
+        "hash": "2d579ae1bd7b27f14e0fded8bb6b01aa31eb291c",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_anchor_health_report::main": {
+        "hash": "67c830cdf6b1116eb81c5edd35a8c2fb1e8dbf4c",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_anchor_health_report::multi_file_duplicates": {
+        "hash": "131941fecb6c6a785e89c422a0ad7a0bf4ee9f3a",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_anchor_health_report::write_artifacts": {
+        "hash": "2c7dbcaf81b78e3d8583a756ff55c3207269f3e4",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": true,
+          "writes": false
+        }
+      },
+      "consumers.generate_fault_artifacts::_discover_outdir": {
+        "hash": "a896858877ab1c09c5145e482827c92c2008314b",
+        "io_effects": {
+          "env": true,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_fault_artifacts::_ensure_manifest": {
+        "hash": "bb2d84840143946279d5a8a677132c38c7694c4b",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_fault_artifacts::_extract_top_frames": {
+        "hash": "7eda8ed41ec6e2f2f1c4337bc8c68eb65513ac58",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_fault_artifacts::_find_latest_outdir": {
+        "hash": "8578ac85a4ca9ffdc10c95b91208285c8b5b09d3",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_fault_artifacts::_iter_thread_blocks": {
+        "hash": "aa4ab190c1794ec3d5f110fe70f0454cd6f61f7c",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_fault_artifacts::_load_process_salt": {
+        "hash": "b37c6af93ce680d3918fb1b6c9cbeb9374023c8c",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_fault_artifacts::_read_text": {
+        "hash": "5161aaec2a8825f3ba407dc92623acc67f31564b",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_fault_artifacts::_signature_id": {
+        "hash": "fe5f0cacd3969b3af3b81db92c175bea9a90665a",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_fault_artifacts::_top_n_from_env": {
+        "hash": "d6f33530a1f970025a211e37084891eb2f3a1433",
+        "io_effects": {
+          "env": true,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_fault_artifacts::_write_stacks_csv": {
+        "hash": "06f1877e4ffa579257568becff0424780e2b4589",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": true,
+          "writes": false
+        }
+      },
+      "consumers.generate_fault_artifacts::_write_summary": {
+        "hash": "a1f2a7abca42175228d5fb39f6c7263ee1f3a1d8",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_fault_artifacts::main": {
+        "hash": "0cc7be634e5e2af71a3a94bbcfe39beda290cc4b",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_test_log_health_report::_count_tracebacks": {
+        "hash": "f4d1830dd76cbbea48c08205e714cd6401ecd278",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_test_log_health_report::_ensure_out": {
+        "hash": "62a106686bb39576c3fba1eed2a15b6ab967f16d",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_test_log_health_report::_extract_block": {
+        "hash": "602c953cfcece026fbe4c65562473d0ff22ab426",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_test_log_health_report::_latest": {
+        "hash": "dd44823c3ff9597637b43d58514f660c0fa89c2f",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_test_log_health_report::_latest_by_prefix": {
+        "hash": "cfa9a5e5a7c4bc5a17f0a6df0b8198d7b995b0da",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_test_log_health_report::_parse_junit": {
+        "hash": "40565ed65c52c76bcb99db85e3bb36af747a9f70",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_test_log_health_report::_parse_slowest": {
+        "hash": "6506a0baa9e17e6e2b3d5bb92d633abab4c89fd2",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_test_log_health_report::_parse_warnings": {
+        "hash": "28eac997a4048d7d5ede87192e8771833a2abee7",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_test_log_health_report::_pick_best_junit": {
+        "hash": "e504dd88be6f0c9d8535d74255828ed837281a42",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_test_log_health_report::_read": {
+        "hash": "e65154b536392d0defa05793c08bcade29b1a469",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "consumers.generate_test_log_health_report::main": {
+        "hash": "e7c88e6a38503a9a692c2f6867aae6333eb2db06",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      }
+    }
+  },
+  "violations": {
+    "cycles": false
+  }
+}

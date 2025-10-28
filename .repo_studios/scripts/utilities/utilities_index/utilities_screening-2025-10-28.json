@@ -1,0 +1,163 @@
+{
+  "graphs": {
+    "calls": [
+      [
+        "utilities.configure_faulthandler_runtime::_is_ci",
+        "os.getenv"
+      ],
+      [
+        "utilities.dump_faulthandler_snapshot::main",
+        "faulthandler.dump_traceback"
+      ],
+      [
+        "utilities.dump_faulthandler_snapshot::main",
+        "faulthandler.enable"
+      ],
+      [
+        "utilities.dump_faulthandler_snapshot::main",
+        "getattr"
+      ],
+      [
+        "utilities.dump_faulthandler_snapshot::main",
+        "getattr(faulthandler, 'is_enabled', lambda: False)"
+      ],
+      [
+        "utilities.dump_faulthandler_snapshot::main",
+        "suppress"
+      ],
+      [
+        "utilities.refresh_mypy_baselines::refresh",
+        "logging.info"
+      ],
+      [
+        "utilities.refresh_mypy_baselines::refresh",
+        "outfile.write_text"
+      ],
+      [
+        "utilities.refresh_mypy_baselines::refresh",
+        "run"
+      ],
+      [
+        "utilities.refresh_mypy_baselines::refresh",
+        "time.gmtime"
+      ],
+      [
+        "utilities.refresh_mypy_baselines::refresh",
+        "time.strftime"
+      ],
+      [
+        "utilities.refresh_mypy_baselines::refresh",
+        "utilities.refresh_mypy_baselines::run"
+      ],
+      [
+        "utilities.refresh_mypy_baselines::run",
+        "subprocess.run"
+      ]
+    ],
+    "imports": [
+      [
+        "utilities.configure_faulthandler_runtime",
+        "__future__.annotations"
+      ],
+      [
+        "utilities.configure_faulthandler_runtime",
+        "datetime.UTC"
+      ],
+      [
+        "utilities.configure_faulthandler_runtime",
+        "datetime.datetime"
+      ],
+      [
+        "utilities.configure_faulthandler_runtime",
+        "os"
+      ],
+      [
+        "utilities.configure_faulthandler_runtime",
+        "pathlib.Path"
+      ],
+      [
+        "utilities.configure_faulthandler_runtime",
+        "sys"
+      ],
+      [
+        "utilities.configure_faulthandler_runtime",
+        "warnings"
+      ],
+      [
+        "utilities.dump_faulthandler_snapshot",
+        "__future__.annotations"
+      ],
+      [
+        "utilities.dump_faulthandler_snapshot",
+        "contextlib.suppress"
+      ],
+      [
+        "utilities.dump_faulthandler_snapshot",
+        "sys"
+      ],
+      [
+        "utilities.refresh_mypy_baselines",
+        "__future__.annotations"
+      ],
+      [
+        "utilities.refresh_mypy_baselines",
+        "logging"
+      ],
+      [
+        "utilities.refresh_mypy_baselines",
+        "pathlib.Path"
+      ],
+      [
+        "utilities.refresh_mypy_baselines",
+        "subprocess"
+      ],
+      [
+        "utilities.refresh_mypy_baselines",
+        "time"
+      ]
+    ]
+  },
+  "nodes": {
+    "meta": {
+      "utilities.configure_faulthandler_runtime::_is_ci": {
+        "hash": "91b2ae90dcfb7b6495fa5fe358d2489d9df1cec6",
+        "io_effects": {
+          "env": true,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "utilities.dump_faulthandler_snapshot::main": {
+        "hash": "c37b5d863f8b2178e2b958a3a872175da504aa4a",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "utilities.refresh_mypy_baselines::refresh": {
+        "hash": "012114f07bfb40b2bc2f27aaf03b2557e186e98b",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "utilities.refresh_mypy_baselines::run": {
+        "hash": "3be5e28f97f2446d25e2da18d19627cf17136a16",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      }
+    }
+  },
+  "violations": {
+    "cycles": false
+  }
+}

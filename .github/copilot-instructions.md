@@ -6,9 +6,16 @@
 - Outputs are timestamped JSON/markdown assets co-located with the source folder (for example `scripts/aggregators/aggregators_index/aggregators_index-YYYY-MM-DD.json`) with history pruning rather than mutable pointers.
 
 ## Core Workflows
-- Use `make -C .repo_studios studio-index path=<target>` to run the end-to-end inventory → analysis → duplicate scan pipeline; `scan_duplicates.py` now orchestrates upstream steps unless `--skip-upstream` is supplied.
+- Prefer `.repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py <target> --repo-root .` (or `make -C .repo_studios studio-index path=<target>`) to refresh the inventory → analysis → duplicate scan pipeline; the orchestrator chains the three scripts with a shared log level and aborts on the first failure. `scan_duplicates.py` still accepts `--skip-upstream` when you need to reuse existing producer artifacts directly.
 - Producers write inventories to `<target>/<name>_index/` and analyses alongside them; the duplicate scanner mirrors its matrix/summary into both the index directory and `.repo_studios/command_center/reports/<name>_duplicate_scan/`.
 - When scripting locally prefer dynamic imports plus `run(argv)` invocations over spawning subprocesses, matching how `scan_duplicates.py` calls the inventory and analysis producers.
+
+## Command Center Orchestrator
+- **Purpose:** Provide a single make-style command for refreshing the staged artifacts that underpin manual duplicate remediation.
+- **How it works:** Loads each CLI’s `run(argv)` helper (inventory → analysis → duplicate scan), applies a shared `--log-level`, and stops on the first non-zero exit so partial runs do not slip through.
+- **Outputs:** Emits no new files; it updates `<target>/<name>_index/`, `.repo_studios/command_center/reports/<slug>_analysis/`, and `.repo_studios/command_center/reports/<slug>_duplicate_scan/` via the delegated scripts.
+- **Triggers:** `producers/generate_function_inventory.py`, `summarizers/generate_function_analysis.py`, and `aggregators/scan_duplicates.py` with `--skip-upstream` to avoid redundant producer work.
+- **Benefits:** Keeps sequencing deterministic, aligns with the library-integration micro-cycle, and ensures today’s slug-based retention stays tidy even when the pipeline is run repeatedly in a single day.
 
 ## Conventions & Patterns
 - Logging goes through `logging` with level control, never `print`; honor the `--log-level` flag for every CLI.

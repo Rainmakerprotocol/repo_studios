@@ -1,10 +1,10 @@
 # Library Integration Alignment Plan
 
-**Status:** Draft alignment notes (2025-10-24)
+**Status:** Active alignment (refreshed 2025-10-27)
 
 **Purpose:** Mirror the process used for `integration_checklist.md` by capturing phase-by-phase intentions, current evidence, and open decisions before any implementation work begins. All statuses reflect planning only.
 
-**Duplicate Snapshot:** Companion analysis and `producers_analysis-2025-10-24.json` both flag 360 duplicate occurrences across 22 producer scripts. Initial manual candidates include `_copy_latest`, `write_artifacts`, `parse_args`, and `configure_logging`.
+**Duplicate Snapshot:** Latest Command Center pipeline run (`scripts_duplicate_matrix-2025-10-27.json`) against `.repo_studios/command_center/scripts` reports 3 duplicate groups across 4 scripts (99 functions). Historical reference data from `producers_analysis-2025-10-24.json` (360 occurrences across 22 producer scripts) remains available for broader cross-checks.
 
 **Run Workspace:** `.repo_studios/command_center/`
 
@@ -18,8 +18,9 @@
 
 | Phase | Focus | Status | Notes |
 |-------|-------|--------|-------|
-| Phase 1 | Foundation Setup | In discovery | Existing library tree in Repo Studios differs; need diff audit before running generator. |
-| Phase 2 | Duplicate Detection Tool | Referenced bundle | Tool exists in drop-in package; overlap with current health reports under review. |
+| Phase 1 | Foundation Setup | Complete | Baseline diff confirmed no conflicting `.repo_studios/library/` tree; naming conventions and README adjustments captured for future drops. |
+| Phase 2 | Duplicate Detection Tool | In progress | Command Center scanner adopted; verifying remaining integration work against slugged reports and retention helper. |
+| Phase 2.5 | Orchestrator Bootstrap | Not started | Plan single-entry orchestrator that calls inventory → analysis → duplicate scan without emitting extra reports. |
 | Phase 3 | Manual Extraction Validation | Not started | `_copy_latest` walkthrough documented; need to confirm duplicates still present and select priority order. |
 | Phase 4 | Automated Extraction | Not started | Requires manual validation results and guardrail design. |
 | Phase 5 | Integration with Repo Studios | Not started | Make/CI wiring dependent on outcomes from earlier phases. |
@@ -43,18 +44,13 @@ Notes: `.repo_studios/library/` is not yet present—each extraction will introd
 
 ## Phase 2 – Duplicate Detection Tool
 
-- [x] **Compare `scan_code_duplicates.py` outputs** to current health suite duplicate metrics (360 occurrences dataset) for compatibility *(Agent → produce comparison matrix).* — Findings captured in `reports/2025-10-24-duplicate-tool-review/summary.md`; scanner output covers and extends companion export fields.  
-- [x] **Validate schema alignment** between `example.json` and Repo Studios reporting expectations *(Agent → note translation needs; ties into new duplicate-focused script requirements).* — Field mapping recorded in `docs/duplicate_detection_schema_alignment.md` with translation steps for legacy dashboards.  
-- [x] **Assess testing harness import paths** for the relocated scanner tests (`tests/tests_command_center/duplicates/test_scan_duplicates.py`) to satisfy Repo Studios layout and Windows CI expectations *(Agent → flag adaptations for cross-platform).*  
-- [ ] **Decide if we integrate or reuse existing detection pipeline** instead of introducing another AST scanner *(Agent → recommendation feeds Design Decisions).*
-- [x] **Define report retention** in `.repo_studios/command_center/reports/` (naming, pruning cadence) *(Agent → proposal, Developer → approve).* — Default keep count set to three timestamped runs with `.keep` override respected via `scan_duplicates.py` retention helper.
+- [x] **Compare scanner outputs** to current health suite duplicate metrics *(Agent → produce comparison matrix).* — Findings captured in `reports/2025-10-24-duplicate-tool-review/summary.md`; the new scanner output covers and extends companion export fields.  
+- [x] **Validate schema alignment** between `example.json` and Repo Studios reporting expectations *(Agent → note translation needs).* — Field mapping recorded in `docs/duplicate_detection_schema_alignment.md` with translation steps for legacy dashboards.  
+- [x] **Assess testing harness import paths** for the relocated scanner tests (`tests/tests_library_integration/duplicates/test_scan_duplicates.py`) to satisfy Repo Studios layout and Windows CI expectations *(Agent → flag adaptations for cross-platform).*  
+- [x] **Decide on detector adoption** so we avoid parallel pipelines *(Agent → recommendation feeds Design Decisions).* — Adopted `scripts/aggregators/scan_duplicates.py` as the canonical detector; upstream producers run automatically unless `--skip-upstream` is set.
+- [x] **Define report retention** in `.repo_studios/command_center/reports/` *(Agent → proposal, Developer → approve).* — Default keep count set to three timestamped runs with `.keep` override respected via the retention helper.
 
-Notes: Companion analysis already enumerates duplicates; the integrated
-`.repo_studios/scripts/command_center/duplicates/scan_duplicates.py`
-module now generates the canonical matrix while merging producers findings.
-The producers index (see `.repo_studios/scripts/producers/producers_index`)
-provides per-folder context when assembling the final duplicate matrix; first
-pass lives at `reports/2025-10-24-duplicate-tool-review/duplicate_matrix.json`.
+Notes: Companion analysis already enumerates duplicates; the integrated `scripts/aggregators/scan_duplicates.py` module now produces the canonical matrix while merging producer findings. The producers index (see `.repo_studios/scripts/producers/producers_index`) remains available when assembling broader matrices; the latest Command Center run (2025-10-27) lives at `reports/duplicates_scan/repo-studios__command-center__scripts_duplicate_scan/`.
 
 ### Implementation Plan – Phase 2 Duplicate Tool Integration
 
@@ -66,10 +62,19 @@ pass lives at `reports/2025-10-24-duplicate-tool-review/duplicate_matrix.json`.
 - [x] **Document usage** in `.repo_studios/command_center/README.md` and add a runbook snippet to `docs/duplicate_detection_schema_alignment.md` covering invocation examples and expected outputs.
 - [x] **Update checklist & decisions** once the relocation, reporting flow, and retention script are merged so downstream phases inherit the finalized tooling baseline.
 
+## Phase 2.5 – Orchestrator Bootstrap
+
+- [ ] **Finalize CLI & sequencing contract** so the orchestrator mirrors a make target: accept `--repo-root`, `--target`, optional logging flags, and guarantee sequential execution (`generate_function_inventory` → `generate_function_analysis` → `scan_duplicates`). *(Joint → confirm flag defaults and failure propagation.)*  
+- [ ] **Implement orchestrator module** under `.repo_studios/command_center/scripts/orchestrators/` that imports each script’s `run(argv)` helper, aborts on the first non-zero code, and emits no additional artifacts beyond the delegated scripts. *(Agent → draft; Developer → review.)*  
+- [ ] **Extend integration tests** with a Windows smoke test (successful run against `.repo_studios/command_center/scripts`) and at least one failure-path assertion to verify exit-code propagation. *(Agent → add tests; Developer → approve.)*  
+- [ ] **Document usage & intent** across `.repo_studios/command_center/README.md`, `.repo_studios/README.md`, and `.github/copilot-instructions.md`, covering purpose, inputs, outputs, triggered files, benefits, and rationale. *(Agent → author docs; Developer → review messaging.)*  
+
+Notes: Completing this phase delivers the single-trigger workflow users can point at any target directory. The orchestrator must behave like a make target, respect existing retention behaviour, and leave logging/report emission to the underlying scripts.
+
 ## Phase 3 – Manual Extraction Validation
 
-- [ ] **Confirm live duplicates** for `_copy_latest`, `write_artifacts`, `parse_args`, `configure_logging` using latest index results *(Developer → provide folder-level index snapshots; Agent → verify occurrences).*  
-- [ ] **Establish priority order** for first extractions (candidate sequence: `_copy_latest`, `write_artifacts`, `parse_args`, `configure_logging` pending confirmation) *(Joint → finalize order in Decisions section).*  
+- [ ] **Confirm live duplicates** for `_slugify_relative`, `build_paths`, `build_options`, `_copy_latest`, and `configure_logging` using the 2025-10-27 Command Center index *(Developer → provide folder-level index snapshots; Agent → verify occurrences).*  
+- [ ] **Establish priority order** for first extractions (candidate sequence updated to `_slugify_relative`, `_copy_latest`, `write_artifacts`, `build_paths`, `configure_logging`) *(Joint → finalize order in Decisions section).*  
 - [ ] **Map each target** to a library destination path following naming conventions (e.g., `artifact_lifecycle/versioning/create_latest_link.py`) *(Agent → propose, Developer → sign off).*  
 - [ ] **Define test coverage approach** for each extraction (mirror Phase 3 guide: dedicated tests under `tests/tests_library/` plus targeted producer tests) *(Agent → outline test matrix).*  
 - [ ] **Capture manual checklist** (from `PHASE_3_MANUAL_EXTRACTION_GUIDE.md`) customized for Repo Studios scripts and Windows tooling *(Agent → adapt guide, include cross-platform notes).*
@@ -119,7 +124,8 @@ Notes: Will proceed only after library structure and extraction workflow stabili
 
 - Library remains a manual extraction target first; automation is out of scope until Phase 3 validates the workflow.
 - Naming conventions from `.repo_studios/command_center/docs/naming_conventions.md` (training-mode copy of canonical rules) establish the library structure; no alternative hierarchy approved yet.
-- Initial extraction priority will focus on highest-impact duplicates: `_copy_latest`, `write_artifacts`, `parse_args`, `configure_logging` (subject to confirmation).
+- Phase 2.5 will deliver a single-trigger orchestrator that chains inventory → analysis → duplicate scan before any library extraction begins.
+- Initial extraction priority will focus on highest-impact duplicates: `_slugify_relative`, `_copy_latest`, `write_artifacts`, `build_paths`, `configure_logging` (subject to confirmation).
 - Companion analysis results (360 duplicates / 22 files) serve as the baseline dataset for planning.
 - Run workspace anchored at `.repo_studios/command_center/` for reports, checklists, and protocol documentation.
 
@@ -128,12 +134,13 @@ Notes: Will proceed only after library structure and extraction workflow stabili
 ## Outstanding Considerations
 
 1. **Library Structure Diff** – Baseline comparison complete (no existing tree); continue using the blueprint as a guide and document each new folder as it lands in reports.
-2. **Schema Compatibility** – Aggregation and translation rules now live in `docs/duplicate_detection_schema_alignment.md`; next step is to wire the derived summaries into health-suite outputs so the existing dashboards retain parity while benefiting from the richer scanner data.
-3. **Data Consolidation** – Initial matrix generated at `reports/2025-10-24-duplicate-tool-review/duplicate_matrix.json`; rerun with full `scan_duplicates.py` output to populate the remaining signatures before extractions begin.
-4. **Testing Footprint** – Library tests will live alongside the library in a mirrored branch structure (per reference bundle). Confirm fixture needs and ensure the mirrored layout meshes with current test runners.
+2. **Schema Compatibility** – Aggregation and translation rules live in `docs/duplicate_detection_schema_alignment.md`; next step is wiring derived summaries into health-suite outputs so dashboards stay in sync with richer scanner data.
+3. **Data Consolidation** – Latest matrix resides at `reports/duplicates_scan/repo-studios__command-center__scripts_duplicate_scan/scripts_duplicate_matrix-2025-10-27.json`; rerun when additional targets are scanned.
+4. **Testing Footprint** – Library tests will live alongside the library in a mirrored branch structure (per reference bundle); current integration coverage validates the slugged pipeline on Windows.
 5. **Tooling Cross-Platform** – Manual scripts and test commands must succeed on Windows, Linux, and macOS; add validation steps for each target shell.
 6. **Governance Alignment** – Single approver confirmed (you). Capture this in rollout notes so future contributors know who signs off.
-7. **Report Retention & Pruning** – Retention helper now keeps the latest three runs (respecting `.keep` pins); confirm the policy meets repo constraints and document any refinements in the protocol README.
+7. **Report Retention & Pruning** – `scan_duplicates.py` now enforces retention (default keep three runs). Capture policy details in the protocol README and replicate across other report-producing scripts.
+8. **Orchestrator Contract** – Finalise argument handling, exit codes, and documentation expectations before implementing the Phase 2.5 runner.
 
 ---
 
@@ -142,9 +149,10 @@ Notes: Will proceed only after library structure and extraction workflow stabili
 | Decision | Current Direction | Next Step | Owner |
 |----------|-------------------|-----------|-------|
 | Library Generator Adoption Strategy | Treat `setup_library_structure.py` as the canonical blueprint; create modules on demand to avoid placeholder clutter (no conflicts found in baseline scan). | Developer to review/approve blueprint-only stance before first extraction. | Developer → approve |
-| Detection Tool Strategy | Introduce additional duplicate-report workflow tuned to specific data needs, pruning unused fields, and aligning with existing detectors. | Agent to outline workflow architecture and integration touchpoints; Developer to confirm scope. | Agent → propose; Developer → sign off |
-| Manual Extraction Pilot Scope | Pilot must define inaugural targets, test/backups, and acceptance criteria before automation. | Agent to produce pilot brief (targets, test matrix, success criteria) informed by `docs/duplicate_target_mappings.md`; Developer to approve and schedule. | Agent → draft; Developer → approve |
-| Run Artifact Retention Policy | Need guidelines for how many `reports/<timestamp>/` folders and checklist snapshots to retain. | Agent to recommend pruning cadence aligned with repo size constraints; Developer to approve. | Agent → draft; Developer → approve |
+| Detection Tool Strategy | Adopt `scripts/aggregators/scan_duplicates.py` as the canonical detector with slugged mirrors and retention. | Agent to document integration touchpoints with orchestrators/Make targets; Developer to confirm when to broaden beyond Command Center scope. | Agent → document; Developer → review |
+| Orchestrator Strategy | Build a Phase 2.5 runner that chains inventory → analysis → duplicate scan with shared CLI flags and no extra artifacts. | Agent to draft implementation plan/tests; Developer to approve contract and naming. | Agent → draft; Developer → approve |
+| Manual Extraction Pilot Scope | Pilot must define inaugural targets, test/backups, and acceptance criteria before automation. | Agent to produce pilot brief (targets now `_slugify_relative`, `_copy_latest`, `write_artifacts`, `build_paths`, `configure_logging`) informed by `docs/duplicate_target_mappings.md`; Developer to approve and schedule. | Agent → draft; Developer → approve |
+| Run Artifact Retention Policy | Retention handled in `scan_duplicates.py` (keep three runs by default); other producers still need alignment. | Agent to extend retention guidance to inventory/analysis runners and update protocol README. | Agent → draft; Developer → approve |
 
 ---
 

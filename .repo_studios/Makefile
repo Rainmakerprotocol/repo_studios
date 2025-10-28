@@ -1,4 +1,12 @@
 PYTHON ?= python3
+REPO_ROOT := $(abspath $(CURDIR)/..)
+
+.PHONY: command-center
+command-center:
+ifeq ($(strip $(COMMAND_CENTER_TARGET)),)
+	$(error COMMAND_CENTER_TARGET variable required (make command-center COMMAND_CENTER_TARGET=...))
+endif
+	$(PYTHON) "$(CURDIR)/command_center/scripts/orchestrators/run_command_center_pipeline.py" --repo-root "$(REPO_ROOT)" "$(COMMAND_CENTER_TARGET)"
 
 .PHONY: studio-render-views
 studio-render-views:
@@ -57,7 +65,3 @@ studio-generate-function-index:
 	$(PYTHON) scripts/producers/generate_function_inventory.py --repo-root .. "$(path)"
 	$(PYTHON) scripts/producers/generate_function_analysis.py --repo-root .. "$(path)"
 
-.PHONY: studio-index
-studio-index:
-	@$(PYTHON) -c "import sys; sys.exit(0 if '$(path)' else 1)" || (echo "path variable required (make studio-index path=...)" && exit 1)
-	$(PYTHON) scripts/command_center/duplicates/scan_duplicates.py --repo-root .. --target "$(path)"

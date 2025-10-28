@@ -299,6 +299,14 @@ class TestOutputMirroring:
         index_matrix = artifacts.matrix_paths[-1].read_text(encoding="utf-8")
         assert mirror_matrix == index_matrix
 
+        for root in (run_paths.output_dir, run_paths.index_dir):
+            matrices = list(root.glob(f"{paths.source_name}_duplicate_matrix-*.json"))
+            summaries = list(root.glob(f"{paths.source_name}_duplicate_summary-*.md"))
+            assert len(matrices) == 1
+            assert len(summaries) == 1
+            assert matrices[0].stem.count("-") == 4  # includes YYYY, MM, DD, HHMM parts
+            assert summaries[0].stem.count("-") == 4
+
     def test_apply_retention_prunes_old_runs(self, tmp_path: Path) -> None:
         repo_root = tmp_path / "repo"
         repo_root.mkdir()

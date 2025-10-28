@@ -1,0 +1,77 @@
+{
+  "entries": [
+    {
+      "function_name": "main",
+      "id": "duplicate_function::duplicate-def-main-argv--list-str----none---none-----int",
+      "producer_duplicate_count": 2,
+      "producer_instances": [
+        {
+          "line": 376,
+          "line_count": 258,
+          "name": "main",
+          "path": "run_pytest_log_capture.py"
+        },
+        {
+          "line": 197,
+          "line_count": 20,
+          "name": "main",
+          "path": "run_standards_index_cli.py"
+        }
+      ],
+      "scanner_groups": [],
+      "signature": "def main(argv: list[str] | None = None) -> int:"
+    },
+    {
+      "function_name": "cmd_list",
+      "id": "scanner_only::dup_001",
+      "producer_duplicate_count": 0,
+      "producer_instances": [],
+      "scanner_groups": [
+        {
+          "canonical_name": "cmd_list",
+          "duplicate_type": "near_duplicate_with_variations",
+          "group_id": "dup_001",
+          "occurrences": [
+            {
+              "code_hash": "fc5b07b162f5",
+              "file": ".repo_studios/scripts/orchestrators/run_standards_index_cli.py",
+              "function_name": "cmd_list",
+              "is_function": true,
+              "line_end": 117,
+              "line_span": 6,
+              "line_start": 112,
+              "sample_line": "def cmd_list(index: dict[str, Any], args: argparse.Namespace) -> int:"
+            },
+            {
+              "code_hash": "faf4a66ee879",
+              "file": ".repo_studios/scripts/orchestrators/run_standards_index_cli.py",
+              "function_name": "cmd_search",
+              "is_function": true,
+              "line_end": 124,
+              "line_span": 5,
+              "line_start": 120,
+              "sample_line": "def cmd_search(index: dict[str, Any], args: argparse.Namespace) -> int:"
+            }
+          ],
+          "signature_hash": "fc5b07b162f5",
+          "similarity_score": 0.975
+        }
+      ],
+      "signature": null
+    }
+  ],
+  "metadata": {
+    "analysis_source": ".repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_analysis-2025-10-28.json",
+    "functions_scanned": 44,
+    "generated_at": "2025-10-28T09:55:41.212901+00:00",
+    "python_files_scanned": 4,
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "target": ".repo_studios/scripts/orchestrators"
+  },
+  "stats": {
+    "matched_groups": 0,
+    "producer_groups": 1,
+    "scanner_groups": 1,
+    "scanner_only_groups": 1
+  }
+}

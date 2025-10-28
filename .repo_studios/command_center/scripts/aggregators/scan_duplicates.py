@@ -896,12 +896,25 @@ def write_outputs(
 ) -> RunArtifacts:
     json_bytes = json.dumps(payload, indent=2, sort_keys=True).encode("utf-8")
     summary_bytes = summary.encode("utf-8")
-    date_stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    matrix_name = f"{paths.source_name}_duplicate_matrix-{date_stamp}.json"
-    summary_name = f"{paths.source_name}_duplicate_summary-{date_stamp}.md"
+    now = datetime.now(timezone.utc)
+    date_stamp = now.strftime("%Y-%m-%d")
+    time_stamp = now.strftime("%H%M")
+    suffix = f"{date_stamp}-{time_stamp}"
+    matrix_name = f"{paths.source_name}_duplicate_matrix-{suffix}.json"
+    summary_name = f"{paths.source_name}_duplicate_summary-{suffix}.md"
     matrix_paths: list[Path] = []
     summary_paths: list[Path] = []
     for root in (run_paths.output_dir, run_paths.index_dir):
+        for stale in root.glob(f"{paths.source_name}_duplicate_matrix-*.json"):
+            try:
+                stale.unlink()
+            except FileNotFoundError:
+                continue
+        for stale in root.glob(f"{paths.source_name}_duplicate_summary-*.md"):
+            try:
+                stale.unlink()
+            except FileNotFoundError:
+                continue
         matrix_paths.append(_atomic_write_bytes(root / matrix_name, json_bytes))
         summary_paths.append(_atomic_write_bytes(root / summary_name, summary_bytes))
     return RunArtifacts(matrix_paths=tuple(matrix_paths), summary_paths=tuple(summary_paths))

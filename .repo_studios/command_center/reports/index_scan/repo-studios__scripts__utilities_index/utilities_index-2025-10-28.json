@@ -1,0 +1,615 @@
+{
+  "files": [
+    {
+      "classes": [],
+      "entrypoints": {
+        "cli_parser": false,
+        "has_main_guard": false
+      },
+      "functions": [
+        {
+          "annotations": {
+            "args": {},
+            "return": "bool"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "os.getenv",
+              "lineno": 57
+            },
+            {
+              "callee": "os.getenv",
+              "lineno": 57
+            }
+          ],
+          "decorators": [],
+          "docstring": "Best-effort CI detection (GitHub Actions, generic CI).",
+          "first_stmt_kind": "expr",
+          "hash": "91b2ae90dcfb7b6495fa5fe358d2489d9df1cec6",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": true,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 55,
+          "line_count": 3,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 0,
+            "calls": 2
+          },
+          "logging_calls": [],
+          "name": "_is_ci",
+          "qualified_name": "utilities.configure_faulthandler_runtime::_is_ci",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _is_ci() -> bool:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 57,
+              "symbol": "os",
+              "via": "os"
+            }
+          ]
+        }
+      ],
+      "globals": [
+        {
+          "lineno": 25,
+          "name": "root",
+          "value_kind": "other"
+        },
+        {
+          "lineno": 26,
+          "name": "root_str",
+          "value_kind": "call"
+        },
+        {
+          "lineno": 61,
+          "name": "_FAULT_ENABLE",
+          "value_kind": "call"
+        },
+        {
+          "lineno": 62,
+          "name": "_FAULT_MIN_INTERVAL_SEC",
+          "value_kind": "call"
+        },
+        {
+          "lineno": 63,
+          "name": "_FAULT_DUMP_TIMEOUT",
+          "value_kind": "call"
+        },
+        {
+          "lineno": 64,
+          "name": "_FAULT_MAX_DUMPS_PER_RUN",
+          "value_kind": "call"
+        },
+        {
+          "lineno": 65,
+          "name": "_FAULT_DUMP_LATER",
+          "value_kind": "call"
+        },
+        {
+          "lineno": 66,
+          "name": "_FAULT_REDACT_PATHS",
+          "value_kind": "call"
+        },
+        {
+          "lineno": 67,
+          "name": "_FAULT_OUTDIR",
+          "value_kind": "call"
+        }
+      ],
+      "imports": [
+        "__future__.annotations",
+        "datetime.UTC",
+        "datetime.datetime",
+        "os",
+        "pathlib.Path",
+        "sys",
+        "warnings"
+      ],
+      "imports_detailed": [
+        {
+          "kind": "from",
+          "lineno": 17,
+          "module": "__future__",
+          "names": [
+            {
+              "asname": null,
+              "name": "annotations"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 19,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "os"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 20,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "sys"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 21,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "warnings"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 22,
+          "module": "datetime",
+          "names": [
+            {
+              "asname": null,
+              "name": "UTC"
+            },
+            {
+              "asname": null,
+              "name": "datetime"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 23,
+          "module": "pathlib",
+          "names": [
+            {
+              "asname": null,
+              "name": "Path"
+            }
+          ]
+        }
+      ],
+      "line_count": 219,
+      "module_doc": "Repository bootstrap and warning filters (relocated from sitecustomize.py).",
+      "module_first_line": "def _is_ci() -> bool:",
+      "module_id": "utilities.configure_faulthandler_runtime",
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py",
+      "relative_path": "configure_faulthandler_runtime.py"
+    },
+    {
+      "classes": [],
+      "entrypoints": {
+        "cli_parser": false,
+        "has_main_guard": true
+      },
+      "functions": [
+        {
+          "annotations": {
+            "args": {},
+            "return": "int"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "suppress",
+              "lineno": 15
+            },
+            {
+              "callee": "getattr(faulthandler, 'is_enabled', lambda: False)",
+              "lineno": 22
+            },
+            {
+              "callee": "suppress",
+              "lineno": 30
+            },
+            {
+              "callee": "faulthandler.dump_traceback",
+              "lineno": 31
+            },
+            {
+              "callee": "getattr",
+              "lineno": 22
+            },
+            {
+              "callee": "suppress",
+              "lineno": 25
+            },
+            {
+              "callee": "faulthandler.enable",
+              "lineno": 26
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "with",
+          "hash": "c37b5d863f8b2178e2b958a3a872175da504aa4a",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 14,
+          "line_count": 19,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 5,
+            "calls": 7
+          },
+          "logging_calls": [],
+          "name": "main",
+          "qualified_name": "utilities.dump_faulthandler_snapshot::main",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def main() -> int:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 15,
+              "symbol": "contextlib.suppress",
+              "via": "suppress"
+            },
+            {
+              "lineno": 30,
+              "symbol": "contextlib.suppress",
+              "via": "suppress"
+            },
+            {
+              "lineno": 25,
+              "symbol": "contextlib.suppress",
+              "via": "suppress"
+            }
+          ]
+        }
+      ],
+      "globals": [],
+      "imports": [
+        "__future__.annotations",
+        "contextlib.suppress",
+        "sys"
+      ],
+      "imports_detailed": [
+        {
+          "kind": "from",
+          "lineno": 8,
+          "module": "__future__",
+          "names": [
+            {
+              "asname": null,
+              "name": "annotations"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 10,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "sys"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 11,
+          "module": "contextlib",
+          "names": [
+            {
+              "asname": null,
+              "name": "suppress"
+            }
+          ]
+        }
+      ],
+      "line_count": 36,
+      "module_doc": "Best-effort: dump all Python thread stacks once to stderr if faulthandler is enabled.",
+      "module_first_line": "def main() -> int:",
+      "module_id": "utilities.dump_faulthandler_snapshot",
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\utilities\\dump_faulthandler_snapshot.py",
+      "relative_path": "dump_faulthandler_snapshot.py"
+    },
+    {
+      "classes": [],
+      "entrypoints": {
+        "cli_parser": false,
+        "has_main_guard": true
+      },
+      "functions": [
+        {
+          "annotations": {
+            "args": {
+              "cmd": "list[str]"
+            },
+            "return": "str"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "cmd"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "subprocess.run",
+              "lineno": 37
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "try",
+          "hash": "3be5e28f97f2446d25e2da18d19627cf17136a16",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 35,
+          "line_count": 6,
+          "locals_summary": {
+            "assign": 1,
+            "branches": 1,
+            "calls": 1
+          },
+          "logging_calls": [],
+          "name": "run",
+          "qualified_name": "utilities.refresh_mypy_baselines::run",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def run(cmd: list[str]) -> str:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 37,
+              "symbol": "subprocess",
+              "via": "subprocess"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {},
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "time.strftime",
+              "lineno": 44
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 49
+            },
+            {
+              "callee": "time.gmtime",
+              "lineno": 44
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 46
+            },
+            {
+              "callee": "run",
+              "lineno": 47
+            },
+            {
+              "callee": "outfile.write_text",
+              "lineno": 48
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "012114f07bfb40b2bc2f27aaf03b2557e186e98b",
+          "intra_file_refs": [
+            {
+              "callee_func": "run",
+              "lineno": 47
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 43,
+          "line_count": 7,
+          "locals_summary": {
+            "assign": 2,
+            "branches": 1,
+            "calls": 6
+          },
+          "logging_calls": [
+            {
+              "level": "info",
+              "lineno": 49
+            },
+            {
+              "level": "info",
+              "lineno": 46
+            }
+          ],
+          "name": "refresh",
+          "qualified_name": "utilities.refresh_mypy_baselines::refresh",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def refresh() -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 44,
+              "symbol": "time",
+              "via": "time"
+            },
+            {
+              "lineno": 49,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 46,
+              "symbol": "logging",
+              "via": "logging"
+            }
+          ]
+        }
+      ],
+      "globals": [
+        {
+          "lineno": 21,
+          "name": "TARGETS",
+          "value_kind": "config"
+        },
+        {
+          "lineno": 26,
+          "name": "MYPY_BASE_CMD",
+          "value_kind": "config"
+        }
+      ],
+      "imports": [
+        "__future__.annotations",
+        "logging",
+        "pathlib.Path",
+        "subprocess",
+        "time"
+      ],
+      "imports_detailed": [
+        {
+          "kind": "from",
+          "lineno": 14,
+          "module": "__future__",
+          "names": [
+            {
+              "asname": null,
+              "name": "annotations"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 16,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "logging"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 17,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "subprocess"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 18,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "time"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 19,
+          "module": "pathlib",
+          "names": [
+            {
+              "asname": null,
+              "name": "Path"
+            }
+          ]
+        }
+      ],
+      "line_count": 54,
+      "module_doc": "Refresh mypy baselines for agents and monitoring scopes.",
+      "module_first_line": "def run(cmd: list[str]) -> str:",
+      "module_id": "utilities.refresh_mypy_baselines",
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\utilities\\refresh_mypy_baselines.py",
+      "relative_path": "refresh_mypy_baselines.py"
+    }
+  ],
+  "metadata": {
+    "folder_name": "utilities",
+    "folder_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\utilities",
+    "generated_at": "2025-10-28T13:44:35.013806+00:00",
+    "scan_depth": "recursive",
+    "schema_version": 2,
+    "total_classes": 0,
+    "total_files": 3,
+    "total_functions": 4
+  },
+  "statistics": {
+    "async_functions": 0,
+    "files_by_type": {
+      ".py": 3
+    },
+    "private_functions": 1,
+    "public_functions": 3,
+    "total_lines_of_code": 309
+  }
+}

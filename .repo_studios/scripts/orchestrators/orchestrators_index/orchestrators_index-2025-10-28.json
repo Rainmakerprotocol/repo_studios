@@ -1,0 +1,6099 @@
+{
+  "files": [
+    {
+      "classes": [
+        {
+          "attributes": [
+            {
+              "lineno": 70,
+              "name": "name"
+            },
+            {
+              "lineno": 71,
+              "name": "argv"
+            },
+            {
+              "lineno": 72,
+              "name": "optional"
+            },
+            {
+              "lineno": 73,
+              "name": "env"
+            },
+            {
+              "lineno": 74,
+              "name": "timeout_sec"
+            },
+            {
+              "lineno": 75,
+              "name": "heartbeat_sec"
+            }
+          ],
+          "bases": [],
+          "decorators": [
+            "dataclass"
+          ],
+          "docstring": null,
+          "line": 69,
+          "line_count": 7,
+          "methods": [],
+          "name": "Step"
+        }
+      ],
+      "entrypoints": {
+        "cli_parser": true,
+        "has_main_guard": true
+      },
+      "functions": [
+        {
+          "annotations": {
+            "args": {},
+            "return": "str"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "time.strftime",
+              "lineno": 53
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "return",
+          "hash": "84ffadde578d0c9d6a6c2825938560b898b68178",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 52,
+          "line_count": 2,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 0,
+            "calls": 1
+          },
+          "logging_calls": [],
+          "name": "_ts_default",
+          "qualified_name": "orchestrators.orchestrate_health_suite::_ts_default",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _ts_default() -> str:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 53,
+              "symbol": "time",
+              "via": "time"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {},
+            "return": "str"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [],
+            "vararg": null
+          },
+          "calls": [],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "return",
+          "hash": "ee7bb4ec063d932cbb4200c90136c9914c67e618",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 56,
+          "line_count": 2,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 0,
+            "calls": 0
+          },
+          "logging_calls": [],
+          "name": "exe",
+          "qualified_name": "orchestrators.orchestrate_health_suite::exe",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def exe() -> str:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 57,
+              "symbol": "sys",
+              "via": "sys"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "candidates": "str"
+            },
+            "return": "Path | None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [],
+            "vararg": "candidates"
+          },
+          "calls": [
+            {
+              "callee": "p.exists",
+              "lineno": 63
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "for",
+          "hash": "669d7403f0b7e11ac7813a5c0d400d6b3c43c1f9",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 60,
+          "line_count": 6,
+          "locals_summary": {
+            "assign": 1,
+            "branches": 2,
+            "calls": 1
+          },
+          "logging_calls": [],
+          "name": "find_script",
+          "qualified_name": "orchestrators.orchestrate_health_suite::find_script",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def find_script(*candidates: str) -> Path | None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 60,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "ts": "str"
+            },
+            "return": "list[Step]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "ts"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "exe",
+              "lineno": 79
+            },
+            {
+              "callee": "find_script",
+              "lineno": 96
+            },
+            {
+              "callee": "find_script",
+              "lineno": 114
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 115
+            },
+            {
+              "callee": "find_script",
+              "lineno": 124
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 125
+            },
+            {
+              "callee": "find_script",
+              "lineno": 136
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 137
+            },
+            {
+              "callee": "find_script",
+              "lineno": 155
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 156
+            },
+            {
+              "callee": "find_script",
+              "lineno": 165
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 166
+            },
+            {
+              "callee": "find_script",
+              "lineno": 175
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 176
+            },
+            {
+              "callee": "find_script",
+              "lineno": 194
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 195
+            },
+            {
+              "callee": "find_script",
+              "lineno": 221
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 222
+            },
+            {
+              "callee": "find_script",
+              "lineno": 240
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 241
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 262
+            },
+            {
+              "callee": "find_script",
+              "lineno": 280
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 281
+            },
+            {
+              "callee": "find_script",
+              "lineno": 291
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 292
+            },
+            {
+              "callee": "Path",
+              "lineno": 302
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 303
+            },
+            {
+              "callee": "Path",
+              "lineno": 315
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 316
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 329
+            },
+            {
+              "callee": "find_script",
+              "lineno": 338
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 340
+            },
+            {
+              "callee": "fault_base.mkdir",
+              "lineno": 85
+            },
+            {
+              "callee": "str",
+              "lineno": 90
+            },
+            {
+              "callee": "os.getenv",
+              "lineno": 92
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 98
+            },
+            {
+              "callee": "steps.append",
+              "lineno": 105
+            },
+            {
+              "callee": "Step",
+              "lineno": 116
+            },
+            {
+              "callee": "Step",
+              "lineno": 126
+            },
+            {
+              "callee": "Step",
+              "lineno": 138
+            },
+            {
+              "callee": "Step",
+              "lineno": 157
+            },
+            {
+              "callee": "Step",
+              "lineno": 167
+            },
+            {
+              "callee": "Step",
+              "lineno": 177
+            },
+            {
+              "callee": "Step",
+              "lineno": 196
+            },
+            {
+              "callee": "Step",
+              "lineno": 223
+            },
+            {
+              "callee": "Step",
+              "lineno": 242
+            },
+            {
+              "callee": "Step",
+              "lineno": 263
+            },
+            {
+              "callee": "Step",
+              "lineno": 282
+            },
+            {
+              "callee": "Step",
+              "lineno": 293
+            },
+            {
+              "callee": "Step",
+              "lineno": 304
+            },
+            {
+              "callee": "Step",
+              "lineno": 317
+            },
+            {
+              "callee": "Step",
+              "lineno": 330
+            },
+            {
+              "callee": "Step",
+              "lineno": 341
+            },
+            {
+              "callee": "Step",
+              "lineno": 99
+            },
+            {
+              "callee": "Step",
+              "lineno": 106
+            },
+            {
+              "callee": "lizard_script.exists",
+              "lineno": 273
+            },
+            {
+              "callee": "lizard_script.exists",
+              "lineno": 275
+            },
+            {
+              "callee": "agg_script.exists",
+              "lineno": 307
+            },
+            {
+              "callee": "agg_script.exists",
+              "lineno": 309
+            },
+            {
+              "callee": "gate_script.exists",
+              "lineno": 320
+            },
+            {
+              "callee": "gate_script.exists",
+              "lineno": 322
+            },
+            {
+              "callee": "anchor_script.exists",
+              "lineno": 332
+            },
+            {
+              "callee": "anchor_script.exists",
+              "lineno": 333
+            },
+            {
+              "callee": "str",
+              "lineno": 101
+            },
+            {
+              "callee": "str",
+              "lineno": 118
+            },
+            {
+              "callee": "str",
+              "lineno": 128
+            },
+            {
+              "callee": "str",
+              "lineno": 142
+            },
+            {
+              "callee": "str",
+              "lineno": 146
+            },
+            {
+              "callee": "str",
+              "lineno": 159
+            },
+            {
+              "callee": "str",
+              "lineno": 169
+            },
+            {
+              "callee": "str",
+              "lineno": 181
+            },
+            {
+              "callee": "str",
+              "lineno": 183
+            },
+            {
+              "callee": "str",
+              "lineno": 185
+            },
+            {
+              "callee": "str",
+              "lineno": 200
+            },
+            {
+              "callee": "str",
+              "lineno": 227
+            },
+            {
+              "callee": "str",
+              "lineno": 231
+            },
+            {
+              "callee": "str",
+              "lineno": 246
+            },
+            {
+              "callee": "str",
+              "lineno": 250
+            },
+            {
+              "callee": "str",
+              "lineno": 252
+            },
+            {
+              "callee": "str",
+              "lineno": 267
+            },
+            {
+              "callee": "str",
+              "lineno": 284
+            },
+            {
+              "callee": "str",
+              "lineno": 295
+            },
+            {
+              "callee": "str",
+              "lineno": 306
+            },
+            {
+              "callee": "str",
+              "lineno": 319
+            },
+            {
+              "callee": "str",
+              "lineno": 332
+            },
+            {
+              "callee": "str",
+              "lineno": 345
+            },
+            {
+              "callee": "str",
+              "lineno": 206
+            },
+            {
+              "callee": "str",
+              "lineno": 351
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "e536b5e2532d922485b2be7e3fb7b6574461429e",
+          "intra_file_refs": [
+            {
+              "callee_func": "exe",
+              "lineno": 79
+            },
+            {
+              "callee_func": "find_script",
+              "lineno": 96
+            },
+            {
+              "callee_func": "find_script",
+              "lineno": 114
+            },
+            {
+              "callee_func": "find_script",
+              "lineno": 124
+            },
+            {
+              "callee_func": "find_script",
+              "lineno": 136
+            },
+            {
+              "callee_func": "find_script",
+              "lineno": 155
+            },
+            {
+              "callee_func": "find_script",
+              "lineno": 165
+            },
+            {
+              "callee_func": "find_script",
+              "lineno": 175
+            },
+            {
+              "callee_func": "find_script",
+              "lineno": 194
+            },
+            {
+              "callee_func": "find_script",
+              "lineno": 221
+            },
+            {
+              "callee_func": "find_script",
+              "lineno": 240
+            },
+            {
+              "callee_func": "find_script",
+              "lineno": 280
+            },
+            {
+              "callee_func": "find_script",
+              "lineno": 291
+            },
+            {
+              "callee_func": "find_script",
+              "lineno": 338
+            }
+          ],
+          "io_effects": {
+            "env": true,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 78,
+          "line_count": 288,
+          "locals_summary": {
+            "assign": 22,
+            "branches": 2,
+            "calls": 88
+          },
+          "logging_calls": [],
+          "name": "make_steps",
+          "qualified_name": "orchestrators.orchestrate_health_suite::make_steps",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def make_steps(ts: str) -> list[Step]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 302,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 315,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 92,
+              "symbol": "os",
+              "via": "os"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "default_heartbeat_sec": "float | None",
+              "default_timeout_sec": "float | None",
+              "env": "dict | None",
+              "live": "bool",
+              "log_dir": "Path",
+              "step": "Step"
+            },
+            "return": "dict"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "step",
+              "env",
+              "log_dir",
+              "live",
+              "default_timeout_sec",
+              "default_heartbeat_sec"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "Path",
+              "lineno": 371
+            },
+            {
+              "callee": "time.time",
+              "lineno": 376
+            },
+            {
+              "callee": "log_dir.mkdir",
+              "lineno": 377
+            },
+            {
+              "callee": "step.name.replace",
+              "lineno": 378
+            },
+            {
+              "callee": "status.update",
+              "lineno": 389
+            },
+            {
+              "callee": "current_path.write_text",
+              "lineno": 396
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 397
+            },
+            {
+              "callee": "status.update",
+              "lineno": 522
+            },
+            {
+              "callee": "' '.join",
+              "lineno": 388
+            },
+            {
+              "callee": "log_path.open",
+              "lineno": 390
+            },
+            {
+              "callee": "f.write",
+              "lineno": 391
+            },
+            {
+              "callee": "time.time",
+              "lineno": 521
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 526
+            },
+            {
+              "callee": "str",
+              "lineno": 529
+            },
+            {
+              "callee": "logging.warning",
+              "lineno": 530
+            },
+            {
+              "callee": "status.update",
+              "lineno": 539
+            },
+            {
+              "callee": "err_path.write_text",
+              "lineno": 546
+            },
+            {
+              "callee": "logging.exception",
+              "lineno": 547
+            },
+            {
+              "callee": "log_path.open",
+              "lineno": 402
+            },
+            {
+              "callee": "err_path.open",
+              "lineno": 403
+            },
+            {
+              "callee": "subprocess.Popen",
+              "lineno": 405
+            },
+            {
+              "callee": "threading.Event",
+              "lineno": 422
+            },
+            {
+              "callee": "stop_evt.set",
+              "lineno": 473
+            },
+            {
+              "callee": "proc.wait",
+              "lineno": 476
+            },
+            {
+              "callee": "subprocess.run",
+              "lineno": 483
+            },
+            {
+              "callee": "log_path.write_text",
+              "lineno": 518
+            },
+            {
+              "callee": "err_path.write_text",
+              "lineno": 519
+            },
+            {
+              "callee": "round",
+              "lineno": 522
+            },
+            {
+              "callee": "round",
+              "lineno": 526
+            },
+            {
+              "callee": "err_path.relative_to",
+              "lineno": 529
+            },
+            {
+              "callee": "round",
+              "lineno": 534
+            },
+            {
+              "callee": "time.time",
+              "lineno": 538
+            },
+            {
+              "callee": "threading.Thread",
+              "lineno": 462
+            },
+            {
+              "callee": "hb_thread.start",
+              "lineno": 465
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 469
+            },
+            {
+              "callee": "out_f.write",
+              "lineno": 471
+            },
+            {
+              "callee": "hb_thread.join",
+              "lineno": 475
+            },
+            {
+              "callee": "err_f.write",
+              "lineno": 479
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 496
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 501
+            },
+            {
+              "callee": "log_path.write_text",
+              "lineno": 506
+            },
+            {
+              "callee": "err_path.write_text",
+              "lineno": 510
+            },
+            {
+              "callee": "_Proc",
+              "lineno": 515
+            },
+            {
+              "callee": "repr",
+              "lineno": 542
+            },
+            {
+              "callee": "round",
+              "lineno": 543
+            },
+            {
+              "callee": "str",
+              "lineno": 407
+            },
+            {
+              "callee": "stop_evt.wait",
+              "lineno": 426
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 431
+            },
+            {
+              "callee": "line.rstrip",
+              "lineno": 469
+            },
+            {
+              "callee": "str",
+              "lineno": 485
+            },
+            {
+              "callee": "proc.poll",
+              "lineno": 427
+            },
+            {
+              "callee": "time.time",
+              "lineno": 429
+            },
+            {
+              "callee": "out_f.write",
+              "lineno": 433
+            },
+            {
+              "callee": "out_f.flush",
+              "lineno": 434
+            },
+            {
+              "callee": "logging.warning",
+              "lineno": 441
+            },
+            {
+              "callee": "so.decode",
+              "lineno": 498
+            },
+            {
+              "callee": "se.decode",
+              "lineno": 503
+            },
+            {
+              "callee": "int",
+              "lineno": 430
+            },
+            {
+              "callee": "proc.poll",
+              "lineno": 437
+            },
+            {
+              "callee": "err_f.write",
+              "lineno": 443
+            },
+            {
+              "callee": "err_f.flush",
+              "lineno": 444
+            },
+            {
+              "callee": "proc.terminate",
+              "lineno": 448
+            },
+            {
+              "callee": "proc.wait",
+              "lineno": 452
+            },
+            {
+              "callee": "int",
+              "lineno": 439
+            },
+            {
+              "callee": "int",
+              "lineno": 507
+            },
+            {
+              "callee": "proc.kill",
+              "lineno": 455
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "8540d6083b82832ed0c50cce1a1e384e8a41ae4b",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": true,
+            "network": false,
+            "reads": true,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 368,
+          "line_count": 181,
+          "locals_summary": {
+            "assign": 30,
+            "branches": 23,
+            "calls": 66
+          },
+          "logging_calls": [
+            {
+              "level": "info",
+              "lineno": 397
+            },
+            {
+              "level": "info",
+              "lineno": 526
+            },
+            {
+              "level": "warning",
+              "lineno": 530
+            },
+            {
+              "level": "exception",
+              "lineno": 547
+            },
+            {
+              "level": "info",
+              "lineno": 469
+            },
+            {
+              "level": "info",
+              "lineno": 431
+            },
+            {
+              "level": "warning",
+              "lineno": 441
+            }
+          ],
+          "name": "run_step",
+          "qualified_name": "orchestrators.orchestrate_health_suite::run_step",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def run_step(",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 371,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 376,
+              "symbol": "time",
+              "via": "time"
+            },
+            {
+              "lineno": 397,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 521,
+              "symbol": "time",
+              "via": "time"
+            },
+            {
+              "lineno": 526,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 530,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 547,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 405,
+              "symbol": "subprocess",
+              "via": "subprocess"
+            },
+            {
+              "lineno": 422,
+              "symbol": "threading",
+              "via": "threading"
+            },
+            {
+              "lineno": 483,
+              "symbol": "subprocess",
+              "via": "subprocess"
+            },
+            {
+              "lineno": 538,
+              "symbol": "time",
+              "via": "time"
+            },
+            {
+              "lineno": 462,
+              "symbol": "threading",
+              "via": "threading"
+            },
+            {
+              "lineno": 469,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 492,
+              "symbol": "subprocess",
+              "via": "subprocess"
+            },
+            {
+              "lineno": 431,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 409,
+              "symbol": "subprocess",
+              "via": "subprocess"
+            },
+            {
+              "lineno": 410,
+              "symbol": "subprocess",
+              "via": "subprocess"
+            },
+            {
+              "lineno": 429,
+              "symbol": "time",
+              "via": "time"
+            },
+            {
+              "lineno": 441,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 408,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 486,
+              "symbol": "os",
+              "via": "os"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "log_dir": "Path",
+              "run_status": "dict"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "log_dir",
+              "run_status"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "(log_dir / 'status.json').write_text",
+              "lineno": 552
+            },
+            {
+              "callee": "run_status.get",
+              "lineno": 556
+            },
+            {
+              "callee": "enumerate",
+              "lineno": 564
+            },
+            {
+              "callee": "(log_dir / 'status.md').write_text",
+              "lineno": 575
+            },
+            {
+              "callee": "json.dumps",
+              "lineno": 552
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 557
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 558
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 559
+            },
+            {
+              "callee": "gate_fail.exists",
+              "lineno": 561
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 563
+            },
+            {
+              "callee": "run_status.get",
+              "lineno": 564
+            },
+            {
+              "callee": "s.get",
+              "lineno": 565
+            },
+            {
+              "callee": "s.get",
+              "lineno": 566
+            },
+            {
+              "callee": "s.get",
+              "lineno": 567
+            },
+            {
+              "callee": "s.get",
+              "lineno": 568
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 570
+            },
+            {
+              "callee": "s.get",
+              "lineno": 571
+            },
+            {
+              "callee": "s.get",
+              "lineno": 573
+            },
+            {
+              "callee": "Path",
+              "lineno": 560
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 562
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 572
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 574
+            },
+            {
+              "callee": "'\\n'.join",
+              "lineno": 575
+            },
+            {
+              "callee": "s.get",
+              "lineno": 569
+            },
+            {
+              "callee": "Path",
+              "lineno": 559
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "expr",
+          "hash": "3a05d185839d793c952811ca5c8dab6c6b65eecd",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 551,
+          "line_count": 25,
+          "locals_summary": {
+            "assign": 8,
+            "branches": 5,
+            "calls": 25
+          },
+          "logging_calls": [],
+          "name": "write_status",
+          "qualified_name": "orchestrators.orchestrate_health_suite::write_status",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def write_status(log_dir: Path, run_status: dict) -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 551,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 552,
+              "symbol": "json",
+              "via": "json"
+            },
+            {
+              "lineno": 560,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 559,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "argv": "Sequence[str] | None"
+            },
+            "return": "int"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "argv"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "argparse.ArgumentParser",
+              "lineno": 579
+            },
+            {
+              "callee": "ap.add_argument",
+              "lineno": 582
+            },
+            {
+              "callee": "ap.add_argument",
+              "lineno": 588
+            },
+            {
+              "callee": "ap.add_argument",
+              "lineno": 593
+            },
+            {
+              "callee": "ap.add_argument",
+              "lineno": 599
+            },
+            {
+              "callee": "ap.parse_args",
+              "lineno": 605
+            },
+            {
+              "callee": "log_dir.mkdir",
+              "lineno": 609
+            },
+            {
+              "callee": "make_steps",
+              "lineno": 611
+            },
+            {
+              "callee": "str",
+              "lineno": 618
+            },
+            {
+              "callee": "logging.basicConfig",
+              "lineno": 621
+            },
+            {
+              "callee": "enumerate",
+              "lineno": 642
+            },
+            {
+              "callee": "time.time",
+              "lineno": 664
+            },
+            {
+              "callee": "write_status",
+              "lineno": 665
+            },
+            {
+              "callee": "time.time",
+              "lineno": 614
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 643
+            },
+            {
+              "callee": "run_step",
+              "lineno": 644
+            },
+            {
+              "callee": "run['steps'].append",
+              "lineno": 662
+            },
+            {
+              "callee": "_ts_default",
+              "lineno": 585
+            },
+            {
+              "callee": "float",
+              "lineno": 596
+            },
+            {
+              "callee": "float",
+              "lineno": 602
+            },
+            {
+              "callee": "triage_dir.mkdir",
+              "lineno": 626
+            },
+            {
+              "callee": "len",
+              "lineno": 643
+            },
+            {
+              "callee": "os.getenv",
+              "lineno": 596
+            },
+            {
+              "callee": "os.getenv",
+              "lineno": 602
+            },
+            {
+              "callee": "listing.open",
+              "lineno": 628
+            },
+            {
+              "callee": "f.write",
+              "lineno": 629
+            },
+            {
+              "callee": "sorted",
+              "lineno": 630
+            },
+            {
+              "callee": "status.get",
+              "lineno": 654
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 656
+            },
+            {
+              "callee": "Path",
+              "lineno": 656
+            },
+            {
+              "callee": "fault_outdir.exists",
+              "lineno": 658
+            },
+            {
+              "callee": "_capture_fault_gate_triage",
+              "lineno": 659
+            },
+            {
+              "callee": "outdir.rglob",
+              "lineno": 630
+            },
+            {
+              "callee": "f.write",
+              "lineno": 637
+            },
+            {
+              "callee": "run.get",
+              "lineno": 656
+            },
+            {
+              "callee": "str",
+              "lineno": 661
+            },
+            {
+              "callee": "p.relative_to",
+              "lineno": 632
+            },
+            {
+              "callee": "p.exists",
+              "lineno": 635
+            },
+            {
+              "callee": "p.stat",
+              "lineno": 635
+            },
+            {
+              "callee": "listing.relative_to",
+              "lineno": 661
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "1cd656fda69673c1b88e6a7ef8ba69854a9a030d",
+          "intra_file_refs": [
+            {
+              "callee_func": "make_steps",
+              "lineno": 611
+            },
+            {
+              "callee_func": "write_status",
+              "lineno": 665
+            },
+            {
+              "callee_func": "run_step",
+              "lineno": 644
+            },
+            {
+              "callee_func": "_ts_default",
+              "lineno": 585
+            }
+          ],
+          "io_effects": {
+            "env": true,
+            "network": false,
+            "reads": true,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 578,
+          "line_count": 91,
+          "locals_summary": {
+            "assign": 18,
+            "branches": 8,
+            "calls": 40
+          },
+          "logging_calls": [
+            {
+              "level": "info",
+              "lineno": 643
+            }
+          ],
+          "name": "main",
+          "qualified_name": "orchestrators.orchestrate_health_suite::main",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def main(argv: Sequence[str] | None = None) -> int:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 579,
+              "symbol": "argparse",
+              "via": "argparse"
+            },
+            {
+              "lineno": 621,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 664,
+              "symbol": "time",
+              "via": "time"
+            },
+            {
+              "lineno": 614,
+              "symbol": "time",
+              "via": "time"
+            },
+            {
+              "lineno": 623,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 643,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 578,
+              "symbol": "collections.abc.Sequence",
+              "via": "Sequence"
+            },
+            {
+              "lineno": 596,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 602,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 656,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        }
+      ],
+      "globals": [
+        {
+          "lineno": 47,
+          "name": "ROOT",
+          "value_kind": "other"
+        },
+        {
+          "lineno": 48,
+          "name": "repo_DIR",
+          "value_kind": "other"
+        },
+        {
+          "lineno": 49,
+          "name": "LOG_BASE",
+          "value_kind": "other"
+        }
+      ],
+      "imports": [
+        "__future__.annotations",
+        "argparse",
+        "collections.abc.Sequence",
+        "dataclasses.dataclass",
+        "json",
+        "logging",
+        "os",
+        "pathlib.Path",
+        "subprocess",
+        "sys",
+        "threading",
+        "time"
+      ],
+      "imports_detailed": [
+        {
+          "kind": "from",
+          "lineno": 33,
+          "module": "__future__",
+          "names": [
+            {
+              "asname": null,
+              "name": "annotations"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 35,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "argparse"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 36,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "json"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 37,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "logging"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 38,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "os"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 39,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "subprocess"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 40,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "sys"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 41,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "threading"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 42,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "time"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 43,
+          "module": "collections.abc",
+          "names": [
+            {
+              "asname": null,
+              "name": "Sequence"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 44,
+          "module": "dataclasses",
+          "names": [
+            {
+              "asname": null,
+              "name": "dataclass"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 45,
+          "module": "pathlib",
+          "names": [
+            {
+              "asname": null,
+              "name": "Path"
+            }
+          ]
+        }
+      ],
+      "line_count": 672,
+      "module_doc": "Health Suite Orchestrator",
+      "module_first_line": "def _ts_default() -> str:",
+      "module_id": "orchestrators.orchestrate_health_suite",
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\orchestrators\\orchestrate_health_suite.py",
+      "relative_path": "orchestrate_health_suite.py"
+    },
+    {
+      "classes": [],
+      "entrypoints": {
+        "cli_parser": true,
+        "has_main_guard": true
+      },
+      "functions": [
+        {
+          "annotations": {
+            "args": {
+              "targets": "list[str]"
+            },
+            "return": "list[str]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "targets"
+            ],
+            "vararg": null
+          },
+          "calls": [],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "return",
+          "hash": "55ec25914194290a58288d4357a39dc43fcbd1a2",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 29,
+          "line_count": 8,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 0,
+            "calls": 0
+          },
+          "logging_calls": [],
+          "name": "ruff_format_cmd",
+          "qualified_name": "orchestrators.run_batch_cleanup::ruff_format_cmd",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def ruff_format_cmd(targets: list[str]) -> list[str]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": []
+        },
+        {
+          "annotations": {
+            "args": {
+              "targets": "list[str]"
+            },
+            "return": "list[str]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "targets"
+            ],
+            "vararg": null
+          },
+          "calls": [],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "return",
+          "hash": "17fda2d6c10c44132b98fcb0160049ff9ff9c675",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 39,
+          "line_count": 9,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 0,
+            "calls": 0
+          },
+          "logging_calls": [],
+          "name": "ruff_fix_cmd",
+          "qualified_name": "orchestrators.run_batch_cleanup::ruff_fix_cmd",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def ruff_fix_cmd(targets: list[str]) -> list[str]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": []
+        },
+        {
+          "annotations": {
+            "args": {
+              "cmd": "list[str]",
+              "label": "str"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "cmd",
+              "label"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "open",
+              "lineno": 78
+            },
+            {
+              "callee": "log.write",
+              "lineno": 79
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 94
+            },
+            {
+              "callee": "log.write",
+              "lineno": 81
+            },
+            {
+              "callee": "subprocess.run",
+              "lineno": 84
+            },
+            {
+              "callee": "log.write",
+              "lineno": 90
+            },
+            {
+              "callee": "log.write",
+              "lineno": 91
+            },
+            {
+              "callee": "str",
+              "lineno": 88
+            },
+            {
+              "callee": "' '.join",
+              "lineno": 81
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "with",
+          "hash": "a20aec9ef9fcfc50544f7b59c5bbbeabaa32a994",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": true
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 77,
+          "line_count": 18,
+          "locals_summary": {
+            "assign": 2,
+            "branches": 2,
+            "calls": 9
+          },
+          "logging_calls": [
+            {
+              "level": "info",
+              "lineno": 94
+            }
+          ],
+          "name": "run_command",
+          "qualified_name": "orchestrators.run_batch_cleanup::run_command",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def run_command(cmd: list[str], label: str) -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 84,
+              "symbol": "subprocess",
+              "via": "subprocess"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "targets": "list[str]"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "targets"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "logging.info",
+              "lineno": 113
+            },
+            {
+              "callee": "os.path.isfile",
+              "lineno": 101
+            },
+            {
+              "callee": "os.walk",
+              "lineno": 105
+            },
+            {
+              "callee": "target.endswith",
+              "lineno": 102
+            },
+            {
+              "callee": "shutil.copy2",
+              "lineno": 103
+            },
+            {
+              "callee": "file.endswith",
+              "lineno": 107
+            },
+            {
+              "callee": "os.path.join",
+              "lineno": 108
+            },
+            {
+              "callee": "os.path.join",
+              "lineno": 109
+            },
+            {
+              "callee": "shutil.copy2",
+              "lineno": 110
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "import",
+          "hash": "1fe6c765fde0894a2b8abb66fe74c4884b8150c4",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 97,
+          "line_count": 17,
+          "locals_summary": {
+            "assign": 2,
+            "branches": 6,
+            "calls": 9
+          },
+          "logging_calls": [
+            {
+              "level": "info",
+              "lineno": 113
+            }
+          ],
+          "name": "backup_files",
+          "qualified_name": "orchestrators.run_batch_cleanup::backup_files",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def backup_files(targets: list[str]) -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 101,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 105,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 103,
+              "symbol": "shutil",
+              "via": "shutil"
+            },
+            {
+              "lineno": 108,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 109,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 110,
+              "symbol": "shutil",
+              "via": "shutil"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {},
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "shutil.which",
+              "lineno": 125
+            },
+            {
+              "callee": "shutil.which",
+              "lineno": 131
+            },
+            {
+              "callee": "_logging.info",
+              "lineno": 155
+            },
+            {
+              "callee": "open",
+              "lineno": 118
+            },
+            {
+              "callee": "log.write",
+              "lineno": 119
+            },
+            {
+              "callee": "run_command",
+              "lineno": 122
+            },
+            {
+              "callee": "_run",
+              "lineno": 126
+            },
+            {
+              "callee": "_run",
+              "lineno": 127
+            },
+            {
+              "callee": "_run",
+              "lineno": 132
+            },
+            {
+              "callee": "_run",
+              "lineno": 142
+            }
+          ],
+          "decorators": [],
+          "docstring": "Run markdownlint fix and check if tooling is available.",
+          "first_stmt_kind": "expr",
+          "hash": "ddffb54a6cb24c1a5c16dbcc5ee717bd671750a0",
+          "intra_file_refs": [
+            {
+              "callee_func": "run_command",
+              "lineno": 122
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": true
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 116,
+          "line_count": 43,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 3,
+            "calls": 10
+          },
+          "logging_calls": [],
+          "name": "run_markdownlint",
+          "qualified_name": "orchestrators.run_batch_cleanup::run_markdownlint",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def run_markdownlint() -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 125,
+              "symbol": "shutil",
+              "via": "shutil"
+            },
+            {
+              "lineno": 131,
+              "symbol": "shutil",
+              "via": "shutil"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "exclude": "tuple[str, ...]",
+              "max_depth": "int",
+              "md_file": "Path",
+              "root_dir": "Path"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "md_file",
+              "root_dir",
+              "max_depth",
+              "exclude"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "md_file.read_text",
+              "lineno": 228
+            },
+            {
+              "callee": "text.find",
+              "lineno": 229
+            },
+            {
+              "callee": "text.find",
+              "lineno": 230
+            },
+            {
+              "callee": "_render_tree",
+              "lineno": 237
+            },
+            {
+              "callee": "datetime.now().strftime",
+              "lineno": 240
+            },
+            {
+              "callee": "re.compile",
+              "lineno": 244
+            },
+            {
+              "callee": "pattern.sub",
+              "lineno": 248
+            },
+            {
+              "callee": "set",
+              "lineno": 184
+            },
+            {
+              "callee": "any",
+              "lineno": 185
+            },
+            {
+              "callee": "enumerate",
+              "lineno": 215
+            },
+            {
+              "callee": "md_file.exists",
+              "lineno": 222
+            },
+            {
+              "callee": "_logging.info",
+              "lineno": 225
+            },
+            {
+              "callee": "_logging.info",
+              "lineno": 234
+            },
+            {
+              "callee": "'\\n'.join",
+              "lineno": 238
+            },
+            {
+              "callee": "md_file.write_text",
+              "lineno": 250
+            },
+            {
+              "callee": "sorted",
+              "lineno": 189
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 198
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 217
+            },
+            {
+              "callee": "lines.extend",
+              "lineno": 219
+            },
+            {
+              "callee": "datetime.now",
+              "lineno": 240
+            },
+            {
+              "callee": "open",
+              "lineno": 251
+            },
+            {
+              "callee": "log.write",
+              "lineno": 252
+            },
+            {
+              "callee": "log.write",
+              "lineno": 253
+            },
+            {
+              "callee": "open",
+              "lineno": 255
+            },
+            {
+              "callee": "log.write",
+              "lineno": 256
+            },
+            {
+              "callee": "log.write",
+              "lineno": 257
+            },
+            {
+              "callee": "_children",
+              "lineno": 199
+            },
+            {
+              "callee": "p.is_dir",
+              "lineno": 200
+            },
+            {
+              "callee": "p.is_file",
+              "lineno": 201
+            },
+            {
+              "callee": "_render_tree",
+              "lineno": 219
+            },
+            {
+              "callee": "_is_excluded",
+              "lineno": 199
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 213
+            },
+            {
+              "callee": "d.iterdir",
+              "lineno": 189
+            },
+            {
+              "callee": "p.name.startswith",
+              "lineno": 189
+            },
+            {
+              "callee": "len",
+              "lineno": 216
+            }
+          ],
+          "decorators": [],
+          "docstring": "Regenerate the folder tree block between markers in the given markdown file.",
+          "first_stmt_kind": "expr",
+          "hash": "ad219e5415e1fa2e6de9a6efc2b4c41407bcffa9",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": true
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 161,
+          "line_count": 97,
+          "locals_summary": {
+            "assign": 17,
+            "branches": 12,
+            "calls": 35
+          },
+          "logging_calls": [],
+          "name": "refresh_project_tree",
+          "qualified_name": "orchestrators.run_batch_cleanup::refresh_project_tree",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def refresh_project_tree(",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 244,
+              "symbol": "re",
+              "via": "re"
+            },
+            {
+              "lineno": 162,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 163,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 187,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 183,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 193,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 240,
+              "symbol": "datetime.datetime",
+              "via": "datetime"
+            },
+            {
+              "lineno": 246,
+              "symbol": "re",
+              "via": "re"
+            }
+          ]
+        }
+      ],
+      "globals": [
+        {
+          "lineno": 10,
+          "name": "PROJECT_ROOT",
+          "value_kind": "other"
+        },
+        {
+          "lineno": 13,
+          "name": "DEFAULT_TARGET",
+          "value_kind": "call"
+        },
+        {
+          "lineno": 14,
+          "name": "CLEAN_LOG_DIR",
+          "value_kind": "other"
+        },
+        {
+          "lineno": 16,
+          "name": "LOG_FILE",
+          "value_kind": "other"
+        },
+        {
+          "lineno": 17,
+          "name": "RUFF_CONFIG",
+          "value_kind": "call"
+        },
+        {
+          "lineno": 18,
+          "name": "BACKUP",
+          "value_kind": "const"
+        },
+        {
+          "lineno": 21,
+          "name": "RUN_MODE",
+          "value_kind": "call"
+        },
+        {
+          "lineno": 24,
+          "name": "MARKDOWNLINT_CONFIG",
+          "value_kind": "const"
+        },
+        {
+          "lineno": 25,
+          "name": "MARKDOWN_GLOB",
+          "value_kind": "const"
+        },
+        {
+          "lineno": 50,
+          "name": "MYPY",
+          "value_kind": "config"
+        },
+        {
+          "lineno": 51,
+          "name": "PYTEST",
+          "value_kind": "config"
+        },
+        {
+          "lineno": 54,
+          "name": "MARKDOWNLINT_FIX",
+          "value_kind": "config"
+        },
+        {
+          "lineno": 63,
+          "name": "MARKDOWNLINT_CHECK",
+          "value_kind": "config"
+        },
+        {
+          "lineno": 74,
+          "name": "DRY_RUN",
+          "value_kind": "const"
+        }
+      ],
+      "imports": [
+        "argparse",
+        "datetime.datetime",
+        "os",
+        "pathlib.Path",
+        "re",
+        "shutil",
+        "subprocess"
+      ],
+      "imports_detailed": [
+        {
+          "kind": "import",
+          "lineno": 1,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "argparse"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 2,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "os"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 3,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "re"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 4,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "shutil"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 5,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "subprocess"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 6,
+          "module": "datetime",
+          "names": [
+            {
+              "asname": null,
+              "name": "datetime"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 7,
+          "module": "pathlib",
+          "names": [
+            {
+              "asname": null,
+              "name": "Path"
+            }
+          ]
+        }
+      ],
+      "line_count": 364,
+      "module_doc": null,
+      "module_first_line": "def ruff_format_cmd(targets: list[str]) -> list[str]:",
+      "module_id": "orchestrators.run_batch_cleanup",
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\orchestrators\\run_batch_cleanup.py",
+      "relative_path": "run_batch_cleanup.py"
+    },
+    {
+      "classes": [],
+      "entrypoints": {
+        "cli_parser": true,
+        "has_main_guard": true
+      },
+      "functions": [
+        {
+          "annotations": {
+            "args": {},
+            "return": "str"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "datetime.now().strftime",
+              "lineno": 63
+            },
+            {
+              "callee": "datetime.now",
+              "lineno": 63
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "return",
+          "hash": "1b93dda2cae87b60ec15abef4df43c9f4734fa6e",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 62,
+          "line_count": 2,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 0,
+            "calls": 2
+          },
+          "logging_calls": [],
+          "name": "timestamp",
+          "qualified_name": "orchestrators.run_pytest_log_capture::timestamp",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def timestamp() -> str:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 63,
+              "symbol": "datetime.datetime",
+              "via": "datetime"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "mod_name": "str"
+            },
+            "return": "bool"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "mod_name"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_util.find_spec",
+              "lineno": 71
+            }
+          ],
+          "decorators": [],
+          "docstring": "Return True if a Python module (pytest plugin) is importable.",
+          "first_stmt_kind": "expr",
+          "hash": "a4d6f47dc2e14598f7ce932b3e6411d1ca0f8578",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 66,
+          "line_count": 8,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 1,
+            "calls": 1
+          },
+          "logging_calls": [],
+          "name": "plugin_available",
+          "qualified_name": "orchestrators.run_pytest_log_capture::plugin_available",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def plugin_available(mod_name: str) -> bool:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": []
+        },
+        {
+          "annotations": {
+            "args": {
+              "base": "Path"
+            },
+            "return": "tuple[Path, Path, Path]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "base"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "logs_dir.mkdir",
+              "lineno": 80
+            },
+            {
+              "callee": "failed_dir.mkdir",
+              "lineno": 81
+            },
+            {
+              "callee": "skip_dir.mkdir",
+              "lineno": 82
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "47830ecca0d132873b0b2e5f9c3a2dee2af70a71",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 76,
+          "line_count": 8,
+          "locals_summary": {
+            "assign": 3,
+            "branches": 0,
+            "calls": 3
+          },
+          "logging_calls": [],
+          "name": "ensure_dirs",
+          "qualified_name": "orchestrators.run_pytest_log_capture::ensure_dirs",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def ensure_dirs(base: Path) -> tuple[Path, Path, Path]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 76,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "default": "bool",
+              "name": "str"
+            },
+            "return": "bool"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "name",
+              "default"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "os.environ.get",
+              "lineno": 87
+            },
+            {
+              "callee": "val.strip().lower",
+              "lineno": 90
+            },
+            {
+              "callee": "val.strip",
+              "lineno": 90
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "8440725165f8d782e3b455fc962441fa6410f755",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": true,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 86,
+          "line_count": 6,
+          "locals_summary": {
+            "assign": 2,
+            "branches": 1,
+            "calls": 3
+          },
+          "logging_calls": [],
+          "name": "_env_flag",
+          "qualified_name": "orchestrators.run_pytest_log_capture::_env_flag",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _env_flag(name: str, default: bool = True) -> bool:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 87,
+              "symbol": "os",
+              "via": "os"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "cmd": "list[str]",
+              "cwd": "Path"
+            },
+            "return": "tuple[str, int, bool]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "cmd",
+              "cwd"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "os.environ.copy",
+              "lineno": 96
+            },
+            {
+              "callee": "env.get",
+              "lineno": 101
+            },
+            {
+              "callee": "env.setdefault",
+              "lineno": 106
+            },
+            {
+              "callee": "subprocess.Popen",
+              "lineno": 107
+            },
+            {
+              "callee": "_env_flag",
+              "lineno": 117
+            },
+            {
+              "callee": "float",
+              "lineno": 120
+            },
+            {
+              "callee": "float",
+              "lineno": 121
+            },
+            {
+              "callee": "_env_flag",
+              "lineno": 124
+            },
+            {
+              "callee": "time.time",
+              "lineno": 125
+            },
+            {
+              "callee": "','.join",
+              "lineno": 102
+            },
+            {
+              "callee": "','.join",
+              "lineno": 104
+            },
+            {
+              "callee": "proc.wait",
+              "lineno": 203
+            },
+            {
+              "callee": "''.join",
+              "lineno": 209
+            },
+            {
+              "callee": "str",
+              "lineno": 109
+            },
+            {
+              "callee": "os.environ.get",
+              "lineno": 120
+            },
+            {
+              "callee": "os.environ.get",
+              "lineno": 121
+            },
+            {
+              "callee": "proc.stdout.close",
+              "lineno": 206
+            },
+            {
+              "callee": "_select.select",
+              "lineno": 138
+            },
+            {
+              "callee": "proc.stdout.readline",
+              "lineno": 144
+            },
+            {
+              "callee": "time.time",
+              "lineno": 151
+            },
+            {
+              "callee": "proc.poll",
+              "lineno": 154
+            },
+            {
+              "callee": "proc.stdout.readline",
+              "lineno": 140
+            },
+            {
+              "callee": "sys.stdout.write",
+              "lineno": 149
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 150
+            },
+            {
+              "callee": "time.time",
+              "lineno": 158
+            },
+            {
+              "callee": "time.sleep",
+              "lineno": 202
+            },
+            {
+              "callee": "any",
+              "lineno": 148
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 174
+            },
+            {
+              "callee": "sys.stdout.write",
+              "lineno": 175
+            },
+            {
+              "callee": "proc.terminate",
+              "lineno": 180
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 181
+            },
+            {
+              "callee": "sys.stdout.write",
+              "lineno": 184
+            },
+            {
+              "callee": "proc.wait",
+              "lineno": 188
+            },
+            {
+              "callee": "os.kill",
+              "lineno": 163
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 164
+            },
+            {
+              "callee": "sys.stdout.write",
+              "lineno": 167
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 169
+            },
+            {
+              "callee": "sys.stdout.write",
+              "lineno": 170
+            },
+            {
+              "callee": "proc.kill",
+              "lineno": 191
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 192
+            },
+            {
+              "callee": "sys.stdout.write",
+              "lineno": 195
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "efbfaed5fc2e10ee95ecaa126a08b75b89eba425",
+          "intra_file_refs": [
+            {
+              "callee_func": "_env_flag",
+              "lineno": 117
+            },
+            {
+              "callee_func": "_env_flag",
+              "lineno": 124
+            }
+          ],
+          "io_effects": {
+            "env": true,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 94,
+          "line_count": 116,
+          "locals_summary": {
+            "assign": 26,
+            "branches": 18,
+            "calls": 41
+          },
+          "logging_calls": [],
+          "name": "run_pytest_and_capture",
+          "qualified_name": "orchestrators.run_pytest_log_capture::run_pytest_and_capture",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def run_pytest_and_capture(cmd: list[str], cwd: Path) -> tuple[str, int, bool]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 96,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 107,
+              "symbol": "subprocess",
+              "via": "subprocess"
+            },
+            {
+              "lineno": 125,
+              "symbol": "time",
+              "via": "time"
+            },
+            {
+              "lineno": 94,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 120,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 121,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 111,
+              "symbol": "subprocess",
+              "via": "subprocess"
+            },
+            {
+              "lineno": 112,
+              "symbol": "subprocess",
+              "via": "subprocess"
+            },
+            {
+              "lineno": 151,
+              "symbol": "time",
+              "via": "time"
+            },
+            {
+              "lineno": 149,
+              "symbol": "sys",
+              "via": "sys"
+            },
+            {
+              "lineno": 158,
+              "symbol": "time",
+              "via": "time"
+            },
+            {
+              "lineno": 202,
+              "symbol": "time",
+              "via": "time"
+            },
+            {
+              "lineno": 175,
+              "symbol": "sys",
+              "via": "sys"
+            },
+            {
+              "lineno": 184,
+              "symbol": "sys",
+              "via": "sys"
+            },
+            {
+              "lineno": 163,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 167,
+              "symbol": "sys",
+              "via": "sys"
+            },
+            {
+              "lineno": 170,
+              "symbol": "sys",
+              "via": "sys"
+            },
+            {
+              "lineno": 195,
+              "symbol": "sys",
+              "via": "sys"
+            },
+            {
+              "lineno": 163,
+              "symbol": "signal",
+              "via": "signal"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "all_lines": "list[str]"
+            },
+            "return": "Iterable[str]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "all_lines"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "range",
+              "lineno": 224
+            },
+            {
+              "callee": "_SUMMARY_HDR_RE.search",
+              "lineno": 225
+            },
+            {
+              "callee": "out.append",
+              "lineno": 235
+            },
+            {
+              "callee": "len",
+              "lineno": 224
+            },
+            {
+              "callee": "line.strip",
+              "lineno": 233
+            },
+            {
+              "callee": "line.rstrip",
+              "lineno": 235
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "cd84b5c2e8974211306539fc30406248bf6a1d26",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 221,
+          "line_count": 16,
+          "locals_summary": {
+            "assign": 3,
+            "branches": 5,
+            "calls": 6
+          },
+          "logging_calls": [],
+          "name": "_iter_summary_lines",
+          "qualified_name": "orchestrators.run_pytest_log_capture::_iter_summary_lines",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _iter_summary_lines(all_lines: list[str]) -> Iterable[str]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 221,
+              "symbol": "collections.abc.Iterable",
+              "via": "Iterable"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "full_output": "str"
+            },
+            "return": "tuple[list[tuple[str, str | None]], list[tuple[str, str | None]]]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "full_output"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "full_output.splitlines",
+              "lineno": 248
+            },
+            {
+              "callee": "list",
+              "lineno": 249
+            },
+            {
+              "callee": "_iter_summary_lines",
+              "lineno": 249
+            },
+            {
+              "callee": "_FAILED_LINE_RE.match",
+              "lineno": 254
+            },
+            {
+              "callee": "_SKIPPED_LINE_RE.match",
+              "lineno": 259
+            },
+            {
+              "callee": "failed.append",
+              "lineno": 257
+            },
+            {
+              "callee": "skipped.append",
+              "lineno": 262
+            },
+            {
+              "callee": "_PROG_FAILED_RE.match",
+              "lineno": 268
+            },
+            {
+              "callee": "_PROG_SKIPPED_RE.match",
+              "lineno": 273
+            },
+            {
+              "callee": "m_fail.group",
+              "lineno": 256
+            },
+            {
+              "callee": "m_fail.group",
+              "lineno": 256
+            },
+            {
+              "callee": "m_skip.group",
+              "lineno": 261
+            },
+            {
+              "callee": "m_skip.group",
+              "lineno": 261
+            },
+            {
+              "callee": "m_pf.group",
+              "lineno": 270
+            },
+            {
+              "callee": "failed.append",
+              "lineno": 271
+            },
+            {
+              "callee": "m_ps.group",
+              "lineno": 275
+            },
+            {
+              "callee": "m_ps.group",
+              "lineno": 276
+            },
+            {
+              "callee": "skipped.append",
+              "lineno": 277
+            }
+          ],
+          "decorators": [],
+          "docstring": "Parse failures/skips from pytest output.",
+          "first_stmt_kind": "expr",
+          "hash": "df6cca58e6a29fe70b1eb73dc57456ac4bd26ebc",
+          "intra_file_refs": [
+            {
+              "callee_func": "_iter_summary_lines",
+              "lineno": 249
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 239,
+          "line_count": 41,
+          "locals_summary": {
+            "assign": 13,
+            "branches": 7,
+            "calls": 18
+          },
+          "logging_calls": [],
+          "name": "parse_failed_and_skipped",
+          "qualified_name": "orchestrators.run_pytest_log_capture::parse_failed_and_skipped",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def parse_failed_and_skipped(",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": []
+        },
+        {
+          "annotations": {
+            "args": {
+              "junit_path": "Path"
+            },
+            "return": "tuple[list[tuple[str, str | None]], list[tuple[str, str | None]]]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "junit_path"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "root.findall",
+              "lineno": 296
+            },
+            {
+              "callee": "ElementTree.parse(junit_path).getroot",
+              "lineno": 293
+            },
+            {
+              "callee": "suite.findall",
+              "lineno": 297
+            },
+            {
+              "callee": "tc.get",
+              "lineno": 298
+            },
+            {
+              "callee": "tc.get",
+              "lineno": 299
+            },
+            {
+              "callee": "tc.find",
+              "lineno": 306
+            },
+            {
+              "callee": "tc.find",
+              "lineno": 313
+            },
+            {
+              "callee": "ElementTree.parse",
+              "lineno": 293
+            },
+            {
+              "callee": "tc.get",
+              "lineno": 300
+            },
+            {
+              "callee": "tc.find",
+              "lineno": 308
+            },
+            {
+              "callee": "failed.append",
+              "lineno": 311
+            },
+            {
+              "callee": "skipped.append",
+              "lineno": 316
+            },
+            {
+              "callee": "f_el.get",
+              "lineno": 310
+            },
+            {
+              "callee": "s_el.get",
+              "lineno": 315
+            },
+            {
+              "callee": "classname.replace",
+              "lineno": 302
+            },
+            {
+              "callee": "f_el.text.strip",
+              "lineno": 310
+            },
+            {
+              "callee": "s_el.text.strip",
+              "lineno": 315
+            }
+          ],
+          "decorators": [],
+          "docstring": "Parse failures/skips from a pytest-generated JUnit XML file.",
+          "first_stmt_kind": "expr",
+          "hash": "862cbc5e7d337c2c0109aa9e4cda5a3e550421d6",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 282,
+          "line_count": 36,
+          "locals_summary": {
+            "assign": 13,
+            "branches": 6,
+            "calls": 17
+          },
+          "logging_calls": [],
+          "name": "parse_junit_failed_and_skipped",
+          "qualified_name": "orchestrators.run_pytest_log_capture::parse_junit_failed_and_skipped",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def parse_junit_failed_and_skipped(",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 283,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 293,
+              "symbol": "defusedxml.ElementTree",
+              "via": "ElementTree"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "entries": "list[tuple[str, str | None]]"
+            },
+            "return": "dict[str, list[tuple[str, str | None]]]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "entries"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "defaultdict",
+              "lineno": 321
+            },
+            {
+              "callee": "groups[file_part].append",
+              "lineno": 324
+            },
+            {
+              "callee": "nodeid.split",
+              "lineno": 323
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "annassign",
+          "hash": "80459521f8316a3655c8d192009fbeda5d67a16b",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 320,
+          "line_count": 6,
+          "locals_summary": {
+            "assign": 2,
+            "branches": 1,
+            "calls": 3
+          },
+          "logging_calls": [],
+          "name": "group_by_file",
+          "qualified_name": "orchestrators.run_pytest_log_capture::group_by_file",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def group_by_file(entries: list[tuple[str, str | None]]) -> dict[str, list[tuple[str, str | None]]]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 321,
+              "symbol": "collections.defaultdict",
+              "via": "defaultdict"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "entries": "list[tuple[str, str | None]]",
+              "path": "Path",
+              "title": "str"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "path",
+              "title",
+              "entries"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "group_by_file",
+              "lineno": 330
+            },
+            {
+              "callee": "Counter",
+              "lineno": 331
+            },
+            {
+              "callee": "sorted",
+              "lineno": 332
+            },
+            {
+              "callee": "counts.items",
+              "lineno": 332
+            },
+            {
+              "callee": "path.open",
+              "lineno": 334
+            },
+            {
+              "callee": "f.write",
+              "lineno": 335
+            },
+            {
+              "callee": "f.write",
+              "lineno": 336
+            },
+            {
+              "callee": "f.write",
+              "lineno": 337
+            },
+            {
+              "callee": "f.write",
+              "lineno": 341
+            },
+            {
+              "callee": "f.write",
+              "lineno": 344
+            },
+            {
+              "callee": "len",
+              "lineno": 331
+            },
+            {
+              "callee": "f.write",
+              "lineno": 339
+            },
+            {
+              "callee": "f.write",
+              "lineno": 343
+            },
+            {
+              "callee": "groups.items",
+              "lineno": 331
+            },
+            {
+              "callee": "f.write",
+              "lineno": 347
+            },
+            {
+              "callee": "f.write",
+              "lineno": 349
+            },
+            {
+              "callee": "datetime.now().isoformat",
+              "lineno": 336
+            },
+            {
+              "callee": "len",
+              "lineno": 337
+            },
+            {
+              "callee": "datetime.now",
+              "lineno": 336
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "bb74f6f75764eda0575c38aa87235448e498042a",
+          "intra_file_refs": [
+            {
+              "callee_func": "group_by_file",
+              "lineno": 330
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": true,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 328,
+          "line_count": 22,
+          "locals_summary": {
+            "assign": 3,
+            "branches": 5,
+            "calls": 19
+          },
+          "logging_calls": [],
+          "name": "write_summary",
+          "qualified_name": "orchestrators.run_pytest_log_capture::write_summary",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def write_summary(path: Path, title: str, entries: list[tuple[str, str | None]]) -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 331,
+              "symbol": "collections.Counter",
+              "via": "Counter"
+            },
+            {
+              "lineno": 328,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 336,
+              "symbol": "datetime.datetime",
+              "via": "datetime"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "cwd": "Path",
+              "options": "list[str]"
+            },
+            "return": "dict[str, bool]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "options",
+              "cwd"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "subprocess.run",
+              "lineno": 355
+            },
+            {
+              "callee": "str",
+              "lineno": 357
+            }
+          ],
+          "decorators": [],
+          "docstring": "Return a map of option -> supported (based on `pytest --help` text).",
+          "first_stmt_kind": "expr",
+          "hash": "9701d52bb41cb94a0b68f70ebfeb3c437c1b7c2a",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 352,
+          "line_count": 22,
+          "locals_summary": {
+            "assign": 6,
+            "branches": 3,
+            "calls": 2
+          },
+          "logging_calls": [],
+          "name": "_pytest_help_supports",
+          "qualified_name": "orchestrators.run_pytest_log_capture::_pytest_help_supports",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _pytest_help_supports(options: list[str], cwd: Path) -> dict[str, bool]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 352,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 355,
+              "symbol": "subprocess",
+              "via": "subprocess"
+            },
+            {
+              "lineno": 356,
+              "symbol": "sys",
+              "via": "sys"
+            },
+            {
+              "lineno": 359,
+              "symbol": "subprocess",
+              "via": "subprocess"
+            },
+            {
+              "lineno": 360,
+              "symbol": "subprocess",
+              "via": "subprocess"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "argv": "list[str] | None"
+            },
+            "return": "int"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "argv"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "argparse.ArgumentParser",
+              "lineno": 377
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 380
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 387
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 394
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 399
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 405
+            },
+            {
+              "callee": "parser.parse_args",
+              "lineno": 411
+            },
+            {
+              "callee": "Path",
+              "lineno": 419
+            },
+            {
+              "callee": "ensure_dirs",
+              "lineno": 420
+            },
+            {
+              "callee": "timestamp",
+              "lineno": 421
+            },
+            {
+              "callee": "_pytest_help_supports",
+              "lineno": 447
+            },
+            {
+              "callee": "supports.get",
+              "lineno": 451
+            },
+            {
+              "callee": "supports.get",
+              "lineno": 460
+            },
+            {
+              "callee": "supports.get",
+              "lineno": 470
+            },
+            {
+              "callee": "supports.get",
+              "lineno": 474
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 524
+            },
+            {
+              "callee": "run_pytest_and_capture",
+              "lineno": 525
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 530
+            },
+            {
+              "callee": "parse_failed_and_skipped",
+              "lineno": 533
+            },
+            {
+              "callee": "write_summary",
+              "lineno": 534
+            },
+            {
+              "callee": "write_summary",
+              "lineno": 535
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 536
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 537
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 538
+            },
+            {
+              "callee": "Path",
+              "lineno": 420
+            },
+            {
+              "callee": "supports.get",
+              "lineno": 455
+            },
+            {
+              "callee": "supports.get",
+              "lineno": 477
+            },
+            {
+              "callee": "_env_flag",
+              "lineno": 477
+            },
+            {
+              "callee": "os.environ.get",
+              "lineno": 478
+            },
+            {
+              "callee": "os.environ.get",
+              "lineno": 479
+            },
+            {
+              "callee": "write_summary",
+              "lineno": 517
+            },
+            {
+              "callee": "write_summary",
+              "lineno": 518
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 519
+            },
+            {
+              "callee": "' '.join",
+              "lineno": 524
+            },
+            {
+              "callee": "full_log_path.open",
+              "lineno": 528
+            },
+            {
+              "callee": "f.write",
+              "lineno": 529
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 542
+            },
+            {
+              "callee": "_env_flag",
+              "lineno": 546
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 628
+            },
+            {
+              "callee": "str",
+              "lineno": 452
+            },
+            {
+              "callee": "_env_flag",
+              "lineno": 456
+            },
+            {
+              "callee": "_env_flag",
+              "lineno": 461
+            },
+            {
+              "callee": "_env_flag",
+              "lineno": 471
+            },
+            {
+              "callee": "str",
+              "lineno": 475
+            },
+            {
+              "callee": "str",
+              "lineno": 480
+            },
+            {
+              "callee": "re.search",
+              "lineno": 487
+            },
+            {
+              "callee": "re.search",
+              "lineno": 491
+            },
+            {
+              "callee": "Path",
+              "lineno": 494
+            },
+            {
+              "callee": "Path",
+              "lineno": 495
+            },
+            {
+              "callee": "Path(args.from_log).read_text",
+              "lineno": 499
+            },
+            {
+              "callee": "parse_failed_and_skipped",
+              "lineno": 502
+            },
+            {
+              "callee": "failed.extend",
+              "lineno": 503
+            },
+            {
+              "callee": "skipped.extend",
+              "lineno": 504
+            },
+            {
+              "callee": "Path(junit_path).exists",
+              "lineno": 505
+            },
+            {
+              "callee": "parse_junit_failed_and_skipped",
+              "lineno": 506
+            },
+            {
+              "callee": "set",
+              "lineno": 508
+            },
+            {
+              "callee": "set",
+              "lineno": 512
+            },
+            {
+              "callee": "logging.warning",
+              "lineno": 549
+            },
+            {
+              "callee": "_strip_after_flag",
+              "lineno": 569
+            },
+            {
+              "callee": "run_pytest_and_capture",
+              "lineno": 570
+            },
+            {
+              "callee": "datetime.now().isoformat",
+              "lineno": 586
+            },
+            {
+              "callee": "str",
+              "lineno": 587
+            },
+            {
+              "callee": "_platform.platform",
+              "lineno": 589
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 610
+            },
+            {
+              "callee": "abs",
+              "lineno": 611
+            },
+            {
+              "callee": "ElementTree.parse(junit_path).getroot().find",
+              "lineno": 613
+            },
+            {
+              "callee": "manifest_path.open",
+              "lineno": 626
+            },
+            {
+              "callee": "_json.dump",
+              "lineno": 627
+            },
+            {
+              "callee": "logging.warning",
+              "lineno": 630
+            },
+            {
+              "callee": "os.environ.get",
+              "lineno": 382
+            },
+            {
+              "callee": "os.environ.get",
+              "lineno": 383
+            },
+            {
+              "callee": "str",
+              "lineno": 384
+            },
+            {
+              "callee": "os.environ.get",
+              "lineno": 389
+            },
+            {
+              "callee": "str",
+              "lineno": 390
+            },
+            {
+              "callee": "m_ts.group",
+              "lineno": 489
+            },
+            {
+              "callee": "m_ts2.group",
+              "lineno": 493
+            },
+            {
+              "callee": "Path",
+              "lineno": 506
+            },
+            {
+              "callee": "full_log_path.open",
+              "lineno": 572
+            },
+            {
+              "callee": "f.write",
+              "lineno": 573
+            },
+            {
+              "callee": "f.write",
+              "lineno": 574
+            },
+            {
+              "callee": "logging.exception",
+              "lineno": 578
+            },
+            {
+              "callee": "sys.version.split",
+              "lineno": 588
+            },
+            {
+              "callee": "str",
+              "lineno": 592
+            },
+            {
+              "callee": "str",
+              "lineno": 593
+            },
+            {
+              "callee": "supports.get",
+              "lineno": 603
+            },
+            {
+              "callee": "supports.get",
+              "lineno": 604
+            },
+            {
+              "callee": "logging.warning",
+              "lineno": 623
+            },
+            {
+              "callee": "Path.cwd",
+              "lineno": 384
+            },
+            {
+              "callee": "Path",
+              "lineno": 499
+            },
+            {
+              "callee": "Path",
+              "lineno": 505
+            },
+            {
+              "callee": "failed.append",
+              "lineno": 511
+            },
+            {
+              "callee": "skipped.append",
+              "lineno": 515
+            },
+            {
+              "callee": "out.append",
+              "lineno": 566
+            },
+            {
+              "callee": "datetime.now",
+              "lineno": 586
+            },
+            {
+              "callee": "plugin_available",
+              "lineno": 594
+            },
+            {
+              "callee": "str",
+              "lineno": 594
+            },
+            {
+              "callee": "supports.get",
+              "lineno": 595
+            },
+            {
+              "callee": "str",
+              "lineno": 595
+            },
+            {
+              "callee": "str",
+              "lineno": 596
+            },
+            {
+              "callee": "str",
+              "lineno": 597
+            },
+            {
+              "callee": "ElementTree.parse(junit_path).getroot",
+              "lineno": 613
+            },
+            {
+              "callee": "int",
+              "lineno": 616
+            },
+            {
+              "callee": "int",
+              "lineno": 617
+            },
+            {
+              "callee": "int",
+              "lineno": 618
+            },
+            {
+              "callee": "int",
+              "lineno": 619
+            },
+            {
+              "callee": "float",
+              "lineno": 620
+            },
+            {
+              "callee": "Path",
+              "lineno": 390
+            },
+            {
+              "callee": "suite.get",
+              "lineno": 616
+            },
+            {
+              "callee": "suite.get",
+              "lineno": 617
+            },
+            {
+              "callee": "suite.get",
+              "lineno": 618
+            },
+            {
+              "callee": "suite.get",
+              "lineno": 619
+            },
+            {
+              "callee": "suite.get",
+              "lineno": 620
+            },
+            {
+              "callee": "ElementTree.parse",
+              "lineno": 613
+            },
+            {
+              "callee": "os.environ.get",
+              "lineno": 390
+            },
+            {
+              "callee": "Path.cwd",
+              "lineno": 390
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "16016024a1ef8e0b3b425efe71a1b9ef5abe0082",
+          "intra_file_refs": [
+            {
+              "callee_func": "ensure_dirs",
+              "lineno": 420
+            },
+            {
+              "callee_func": "timestamp",
+              "lineno": 421
+            },
+            {
+              "callee_func": "_pytest_help_supports",
+              "lineno": 447
+            },
+            {
+              "callee_func": "run_pytest_and_capture",
+              "lineno": 525
+            },
+            {
+              "callee_func": "parse_failed_and_skipped",
+              "lineno": 533
+            },
+            {
+              "callee_func": "write_summary",
+              "lineno": 534
+            },
+            {
+              "callee_func": "write_summary",
+              "lineno": 535
+            },
+            {
+              "callee_func": "_env_flag",
+              "lineno": 477
+            },
+            {
+              "callee_func": "write_summary",
+              "lineno": 517
+            },
+            {
+              "callee_func": "write_summary",
+              "lineno": 518
+            },
+            {
+              "callee_func": "_env_flag",
+              "lineno": 546
+            },
+            {
+              "callee_func": "_env_flag",
+              "lineno": 456
+            },
+            {
+              "callee_func": "_env_flag",
+              "lineno": 461
+            },
+            {
+              "callee_func": "_env_flag",
+              "lineno": 471
+            },
+            {
+              "callee_func": "parse_failed_and_skipped",
+              "lineno": 502
+            },
+            {
+              "callee_func": "parse_junit_failed_and_skipped",
+              "lineno": 506
+            },
+            {
+              "callee_func": "run_pytest_and_capture",
+              "lineno": 570
+            },
+            {
+              "callee_func": "plugin_available",
+              "lineno": 594
+            }
+          ],
+          "io_effects": {
+            "env": true,
+            "network": false,
+            "reads": true,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 376,
+          "line_count": 258,
+          "locals_summary": {
+            "assign": 63,
+            "branches": 33,
+            "calls": 115
+          },
+          "logging_calls": [
+            {
+              "level": "info",
+              "lineno": 524
+            },
+            {
+              "level": "info",
+              "lineno": 530
+            },
+            {
+              "level": "info",
+              "lineno": 536
+            },
+            {
+              "level": "info",
+              "lineno": 537
+            },
+            {
+              "level": "info",
+              "lineno": 538
+            },
+            {
+              "level": "info",
+              "lineno": 519
+            },
+            {
+              "level": "info",
+              "lineno": 628
+            },
+            {
+              "level": "warning",
+              "lineno": 549
+            },
+            {
+              "level": "warning",
+              "lineno": 630
+            },
+            {
+              "level": "exception",
+              "lineno": 578
+            },
+            {
+              "level": "warning",
+              "lineno": 623
+            }
+          ],
+          "name": "main",
+          "qualified_name": "orchestrators.run_pytest_log_capture::main",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def main(argv: list[str] | None = None) -> int:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 377,
+              "symbol": "argparse",
+              "via": "argparse"
+            },
+            {
+              "lineno": 419,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 524,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 530,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 536,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 537,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 538,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 420,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 478,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 479,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 519,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 628,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 433,
+              "symbol": "sys",
+              "via": "sys"
+            },
+            {
+              "lineno": 487,
+              "symbol": "re",
+              "via": "re"
+            },
+            {
+              "lineno": 491,
+              "symbol": "re",
+              "via": "re"
+            },
+            {
+              "lineno": 494,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 495,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 499,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 505,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 549,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 630,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 382,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 383,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 389,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 396,
+              "symbol": "argparse",
+              "via": "argparse"
+            },
+            {
+              "lineno": 506,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 578,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 588,
+              "symbol": "sys",
+              "via": "sys"
+            },
+            {
+              "lineno": 623,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 384,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 586,
+              "symbol": "datetime.datetime",
+              "via": "datetime"
+            },
+            {
+              "lineno": 390,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 613,
+              "symbol": "defusedxml.ElementTree",
+              "via": "ElementTree"
+            },
+            {
+              "lineno": 390,
+              "symbol": "os",
+              "via": "os"
+            }
+          ]
+        }
+      ],
+      "globals": [
+        {
+          "lineno": 52,
+          "name": "_SUPPRESS_LINE_SUBSTR",
+          "value_kind": "config"
+        },
+        {
+          "lineno": 212,
+          "name": "_SUMMARY_HDR_RE",
+          "value_kind": "call"
+        },
+        {
+          "lineno": 214,
+          "name": "_FAILED_LINE_RE",
+          "value_kind": "call"
+        },
+        {
+          "lineno": 215,
+          "name": "_SKIPPED_LINE_RE",
+          "value_kind": "call"
+        },
+        {
+          "lineno": 217,
+          "name": "_PROG_FAILED_RE",
+          "value_kind": "call"
+        },
+        {
+          "lineno": 218,
+          "name": "_PROG_SKIPPED_RE",
+          "value_kind": "call"
+        }
+      ],
+      "imports": [
+        "__future__.annotations",
+        "argparse",
+        "collections.Counter",
+        "collections.abc.Iterable",
+        "collections.defaultdict",
+        "datetime.datetime",
+        "defusedxml.ElementTree",
+        "logging",
+        "os",
+        "pathlib.Path",
+        "re",
+        "signal",
+        "subprocess",
+        "sys",
+        "time"
+      ],
+      "imports_detailed": [
+        {
+          "kind": "from",
+          "lineno": 34,
+          "module": "__future__",
+          "names": [
+            {
+              "asname": null,
+              "name": "annotations"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 36,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "argparse"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 37,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "logging"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 38,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "os"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 39,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "re"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 40,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "signal"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 41,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "subprocess"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 42,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "sys"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 43,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "time"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 44,
+          "module": "collections",
+          "names": [
+            {
+              "asname": null,
+              "name": "Counter"
+            },
+            {
+              "asname": null,
+              "name": "defaultdict"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 45,
+          "module": "collections.abc",
+          "names": [
+            {
+              "asname": null,
+              "name": "Iterable"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 46,
+          "module": "datetime",
+          "names": [
+            {
+              "asname": null,
+              "name": "datetime"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 47,
+          "module": "pathlib",
+          "names": [
+            {
+              "asname": null,
+              "name": "Path"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 49,
+          "module": "defusedxml",
+          "names": [
+            {
+              "asname": null,
+              "name": "ElementTree"
+            }
+          ]
+        }
+      ],
+      "line_count": 641,
+      "module_doc": "Pytest log runner and summarizer.",
+      "module_first_line": "def timestamp() -> str:",
+      "module_id": "orchestrators.run_pytest_log_capture",
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\orchestrators\\run_pytest_log_capture.py",
+      "relative_path": "run_pytest_log_capture.py"
+    },
+    {
+      "classes": [],
+      "entrypoints": {
+        "cli_parser": true,
+        "has_main_guard": true
+      },
+      "functions": [
+        {
+          "annotations": {
+            "args": {},
+            "return": "dict[str, Any]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "INDEX_PATH.exists",
+              "lineno": 54
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 55
+            },
+            {
+              "callee": "sys.exit",
+              "lineno": 56
+            },
+            {
+              "callee": "yaml.safe_load",
+              "lineno": 58
+            },
+            {
+              "callee": "logging.exception",
+              "lineno": 60
+            },
+            {
+              "callee": "sys.exit",
+              "lineno": 61
+            },
+            {
+              "callee": "INDEX_PATH.read_text",
+              "lineno": 58
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "if",
+          "hash": "1e704a115493321d39e6e59f9bf256a51cfec6d5",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 53,
+          "line_count": 10,
+          "locals_summary": {
+            "assign": 1,
+            "branches": 2,
+            "calls": 7
+          },
+          "logging_calls": [
+            {
+              "level": "error",
+              "lineno": 55
+            },
+            {
+              "level": "exception",
+              "lineno": 60
+            }
+          ],
+          "name": "load_index",
+          "qualified_name": "orchestrators.run_standards_index_cli::load_index",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def load_index() -> dict[str, Any]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 55,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 56,
+              "symbol": "sys",
+              "via": "sys"
+            },
+            {
+              "lineno": 53,
+              "symbol": "typing.Any",
+              "via": "Any"
+            },
+            {
+              "lineno": 58,
+              "symbol": "yaml",
+              "via": "yaml"
+            },
+            {
+              "lineno": 60,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 61,
+              "symbol": "sys",
+              "via": "sys"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "s": "str"
+            },
+            "return": "str"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "s"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "s.lower().strip",
+              "lineno": 66
+            },
+            {
+              "callee": "s.lower",
+              "lineno": 66
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "return",
+          "hash": "156e5280ac353a26025061604ba7004c443bdc3e",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 65,
+          "line_count": 2,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 0,
+            "calls": 2
+          },
+          "logging_calls": [],
+          "name": "_norm",
+          "qualified_name": "orchestrators.run_standards_index_cli::_norm",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _norm(s: str) -> str:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": []
+        },
+        {
+          "annotations": {
+            "args": {
+              "sev": "str | None"
+            },
+            "return": "str | None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "sev"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_norm",
+              "lineno": 72
+            },
+            {
+              "callee": "logging.warning",
+              "lineno": 74
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "if",
+          "hash": "5baf56a8d815fdcb130ca3740e698616b06682ec",
+          "intra_file_refs": [
+            {
+              "callee_func": "_norm",
+              "lineno": 72
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 69,
+          "line_count": 10,
+          "locals_summary": {
+            "assign": 2,
+            "branches": 2,
+            "calls": 2
+          },
+          "logging_calls": [
+            {
+              "level": "warning",
+              "lineno": 74
+            }
+          ],
+          "name": "_canonical_severity",
+          "qualified_name": "orchestrators.run_standards_index_cli::_canonical_severity",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _canonical_severity(sev: str | None) -> str | None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 74,
+              "symbol": "logging",
+              "via": "logging"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "args": "argparse.Namespace",
+              "rules": "Iterable[dict[str, Any]]"
+            },
+            "return": "list[dict[str, Any]]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "rules",
+              "args"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_canonical_severity",
+              "lineno": 83
+            },
+            {
+              "callee": "out.sort",
+              "lineno": 108
+            },
+            {
+              "callee": "getattr",
+              "lineno": 83
+            },
+            {
+              "callee": "getattr",
+              "lineno": 96
+            },
+            {
+              "callee": "out.append",
+              "lineno": 106
+            },
+            {
+              "callee": "' '.join([r.get('id', ''), r.get('summary', ''), r.get('rationale', '')]).lower",
+              "lineno": 97
+            },
+            {
+              "callee": "_norm",
+              "lineno": 85
+            },
+            {
+              "callee": "r.get",
+              "lineno": 87
+            },
+            {
+              "callee": "all",
+              "lineno": 90
+            },
+            {
+              "callee": "args.applies.lower",
+              "lineno": 92
+            },
+            {
+              "callee": "' '.join(r.get('applies_to', [])).lower",
+              "lineno": 92
+            },
+            {
+              "callee": "args.source_frag.lower",
+              "lineno": 94
+            },
+            {
+              "callee": "r.get('source', '').lower",
+              "lineno": 94
+            },
+            {
+              "callee": "args.text.lower",
+              "lineno": 104
+            },
+            {
+              "callee": "x.get",
+              "lineno": 108
+            },
+            {
+              "callee": "r.get",
+              "lineno": 85
+            },
+            {
+              "callee": "' '.join",
+              "lineno": 97
+            },
+            {
+              "callee": "' '.join",
+              "lineno": 92
+            },
+            {
+              "callee": "r.get",
+              "lineno": 94
+            },
+            {
+              "callee": "r.get",
+              "lineno": 90
+            },
+            {
+              "callee": "r.get",
+              "lineno": 92
+            },
+            {
+              "callee": "r.get",
+              "lineno": 99
+            },
+            {
+              "callee": "r.get",
+              "lineno": 100
+            },
+            {
+              "callee": "r.get",
+              "lineno": 101
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "annassign",
+          "hash": "da0d05bab896196dd17bfcde649c472126d7540e",
+          "intra_file_refs": [
+            {
+              "callee_func": "_canonical_severity",
+              "lineno": 83
+            },
+            {
+              "callee_func": "_norm",
+              "lineno": 85
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 81,
+          "line_count": 29,
+          "locals_summary": {
+            "assign": 3,
+            "branches": 9,
+            "calls": 24
+          },
+          "logging_calls": [],
+          "name": "filter_rules",
+          "qualified_name": "orchestrators.run_standards_index_cli::filter_rules",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def filter_rules(rules: Iterable[dict[str, Any]], args: argparse.Namespace) -> list[dict[str, Any]]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 81,
+              "symbol": "collections.abc.Iterable",
+              "via": "Iterable"
+            },
+            {
+              "lineno": 81,
+              "symbol": "argparse",
+              "via": "argparse"
+            },
+            {
+              "lineno": 81,
+              "symbol": "typing.Any",
+              "via": "Any"
+            },
+            {
+              "lineno": 82,
+              "symbol": "typing.Any",
+              "via": "Any"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "args": "argparse.Namespace",
+              "index": "dict[str, Any]"
+            },
+            "return": "int"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "index",
+              "args"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "filter_rules",
+              "lineno": 113
+            },
+            {
+              "callee": "index.get",
+              "lineno": 113
+            },
+            {
+              "callee": "sys.stdout.write",
+              "lineno": 116
+            },
+            {
+              "callee": "r.get",
+              "lineno": 116
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "113cbe833d63899ec8a181964be53c7d6f64d7ad",
+          "intra_file_refs": [
+            {
+              "callee_func": "filter_rules",
+              "lineno": 113
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 112,
+          "line_count": 6,
+          "locals_summary": {
+            "assign": 1,
+            "branches": 1,
+            "calls": 4
+          },
+          "logging_calls": [],
+          "name": "cmd_list",
+          "qualified_name": "orchestrators.run_standards_index_cli::cmd_list",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def cmd_list(index: dict[str, Any], args: argparse.Namespace) -> int:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 116,
+              "symbol": "sys",
+              "via": "sys"
+            },
+            {
+              "lineno": 112,
+              "symbol": "argparse",
+              "via": "argparse"
+            },
+            {
+              "lineno": 112,
+              "symbol": "typing.Any",
+              "via": "Any"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "args": "argparse.Namespace",
+              "index": "dict[str, Any]"
+            },
+            "return": "int"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "index",
+              "args"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "filter_rules",
+              "lineno": 121
+            },
+            {
+              "callee": "index.get",
+              "lineno": 121
+            },
+            {
+              "callee": "sys.stdout.write",
+              "lineno": 123
+            },
+            {
+              "callee": "r.get",
+              "lineno": 123
+            },
+            {
+              "callee": "r.get",
+              "lineno": 123
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "cd55df366ddb7ed2832f61de798bbc91daa41a1f",
+          "intra_file_refs": [
+            {
+              "callee_func": "filter_rules",
+              "lineno": 121
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 120,
+          "line_count": 5,
+          "locals_summary": {
+            "assign": 1,
+            "branches": 1,
+            "calls": 5
+          },
+          "logging_calls": [],
+          "name": "cmd_search",
+          "qualified_name": "orchestrators.run_standards_index_cli::cmd_search",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def cmd_search(index: dict[str, Any], args: argparse.Namespace) -> int:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 123,
+              "symbol": "sys",
+              "via": "sys"
+            },
+            {
+              "lineno": 120,
+              "symbol": "argparse",
+              "via": "argparse"
+            },
+            {
+              "lineno": 120,
+              "symbol": "typing.Any",
+              "via": "Any"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "args": "argparse.Namespace",
+              "index": "dict[str, Any]"
+            },
+            "return": "int"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "index",
+              "args"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "index.get",
+              "lineno": 129
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 134
+            },
+            {
+              "callee": "r.get",
+              "lineno": 130
+            },
+            {
+              "callee": "sys.stdout.write",
+              "lineno": 132
+            },
+            {
+              "callee": "yaml.safe_dump",
+              "lineno": 132
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "67df7dd45ccb88b5929d7566389b0b782b74af5c",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 127,
+          "line_count": 9,
+          "locals_summary": {
+            "assign": 1,
+            "branches": 2,
+            "calls": 5
+          },
+          "logging_calls": [
+            {
+              "level": "error",
+              "lineno": 134
+            }
+          ],
+          "name": "cmd_show",
+          "qualified_name": "orchestrators.run_standards_index_cli::cmd_show",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def cmd_show(index: dict[str, Any], args: argparse.Namespace) -> int:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 134,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 127,
+              "symbol": "argparse",
+              "via": "argparse"
+            },
+            {
+              "lineno": 132,
+              "symbol": "sys",
+              "via": "sys"
+            },
+            {
+              "lineno": 127,
+              "symbol": "typing.Any",
+              "via": "Any"
+            },
+            {
+              "lineno": 132,
+              "symbol": "yaml",
+              "via": "yaml"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "args": "argparse.Namespace",
+              "index": "dict[str, Any]"
+            },
+            "return": "int"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "index",
+              "args"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "index.get",
+              "lineno": 139
+            },
+            {
+              "callee": "sys.stdout.write",
+              "lineno": 144
+            },
+            {
+              "callee": "sorted",
+              "lineno": 145
+            },
+            {
+              "callee": "sys.stdout.write",
+              "lineno": 147
+            },
+            {
+              "callee": "r.get",
+              "lineno": 142
+            },
+            {
+              "callee": "sys.stdout.write",
+              "lineno": 146
+            },
+            {
+              "callee": "per_sev.get",
+              "lineno": 143
+            },
+            {
+              "callee": "len",
+              "lineno": 144
+            },
+            {
+              "callee": "index.get",
+              "lineno": 147
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "e2127cc1afdd7dbaac91313db5f3f74362625df6",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 138,
+          "line_count": 11,
+          "locals_summary": {
+            "assign": 4,
+            "branches": 2,
+            "calls": 9
+          },
+          "logging_calls": [],
+          "name": "cmd_stats",
+          "qualified_name": "orchestrators.run_standards_index_cli::cmd_stats",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def cmd_stats(index: dict[str, Any], args: argparse.Namespace) -> int:  # noqa: ARG001",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 144,
+              "symbol": "sys",
+              "via": "sys"
+            },
+            {
+              "lineno": 147,
+              "symbol": "sys",
+              "via": "sys"
+            },
+            {
+              "lineno": 146,
+              "symbol": "sys",
+              "via": "sys"
+            },
+            {
+              "lineno": 138,
+              "symbol": "argparse",
+              "via": "argparse"
+            },
+            {
+              "lineno": 138,
+              "symbol": "typing.Any",
+              "via": "Any"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {},
+            "return": "argparse.ArgumentParser"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "argparse.ArgumentParser",
+              "lineno": 152
+            },
+            {
+              "callee": "p.add_subparsers",
+              "lineno": 157
+            },
+            {
+              "callee": "sub.add_parser",
+              "lineno": 171
+            },
+            {
+              "callee": "add_common",
+              "lineno": 172
+            },
+            {
+              "callee": "sub.add_parser",
+              "lineno": 174
+            },
+            {
+              "callee": "add_common",
+              "lineno": 175
+            },
+            {
+              "callee": "sp_search.add_argument",
+              "lineno": 176
+            },
+            {
+              "callee": "sub.add_parser",
+              "lineno": 180
+            },
+            {
+              "callee": "sp_show.add_argument",
+              "lineno": 181
+            },
+            {
+              "callee": "sub.add_parser",
+              "lineno": 183
+            },
+            {
+              "callee": "sp.add_argument",
+              "lineno": 160
+            },
+            {
+              "callee": "sp.add_argument",
+              "lineno": 161
+            },
+            {
+              "callee": "sp.add_argument",
+              "lineno": 162
+            },
+            {
+              "callee": "sp.add_argument",
+              "lineno": 168
+            },
+            {
+              "callee": "sp.add_argument",
+              "lineno": 169
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "eca81a4dc0fe06f283816c8fac3e44993dd26c5b",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 151,
+          "line_count": 35,
+          "locals_summary": {
+            "assign": 5,
+            "branches": 0,
+            "calls": 15
+          },
+          "logging_calls": [],
+          "name": "build_parser",
+          "qualified_name": "orchestrators.run_standards_index_cli::build_parser",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def build_parser() -> argparse.ArgumentParser:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 152,
+              "symbol": "argparse",
+              "via": "argparse"
+            },
+            {
+              "lineno": 151,
+              "symbol": "argparse",
+              "via": "argparse"
+            },
+            {
+              "lineno": 154,
+              "symbol": "argparse",
+              "via": "argparse"
+            },
+            {
+              "lineno": 159,
+              "symbol": "argparse",
+              "via": "argparse"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "args": "argparse.Namespace"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "args"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_norm",
+              "lineno": 190
+            },
+            {
+              "callee": "ALIAS_SEVERITY_MAP.get",
+              "lineno": 191
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 193
+            },
+            {
+              "callee": "SystemExit",
+              "lineno": 194
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "if",
+          "hash": "1dabcbb6f9480e89006d345f8b102a32126d24c0",
+          "intra_file_refs": [
+            {
+              "callee_func": "_norm",
+              "lineno": 190
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 188,
+          "line_count": 7,
+          "locals_summary": {
+            "assign": 2,
+            "branches": 2,
+            "calls": 4
+          },
+          "logging_calls": [
+            {
+              "level": "error",
+              "lineno": 193
+            }
+          ],
+          "name": "validate_args",
+          "qualified_name": "orchestrators.run_standards_index_cli::validate_args",
+          "raises": [
+            {
+              "exception": "SystemExit(f'invalid severity: {args.severity}')",
+              "lineno": 194
+            }
+          ],
+          "returns_kind": "none",
+          "signature": "def validate_args(args: argparse.Namespace) -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 188,
+              "symbol": "argparse",
+              "via": "argparse"
+            },
+            {
+              "lineno": 193,
+              "symbol": "logging",
+              "via": "logging"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "argv": "list[str] | None"
+            },
+            "return": "int"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "argv"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "build_parser",
+              "lineno": 198
+            },
+            {
+              "callee": "parser.parse_args",
+              "lineno": 199
+            },
+            {
+              "callee": "load_index",
+              "lineno": 206
+            },
+            {
+              "callee": "logging.error",
+              "lineno": 215
+            },
+            {
+              "callee": "validate_args",
+              "lineno": 201
+            },
+            {
+              "callee": "cmd_list",
+              "lineno": 208
+            },
+            {
+              "callee": "cmd_search",
+              "lineno": 210
+            },
+            {
+              "callee": "cmd_show",
+              "lineno": 212
+            },
+            {
+              "callee": "cmd_stats",
+              "lineno": 214
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "67af657fd458290823423d052ef461ab5eb3743a",
+          "intra_file_refs": [
+            {
+              "callee_func": "build_parser",
+              "lineno": 198
+            },
+            {
+              "callee_func": "load_index",
+              "lineno": 206
+            },
+            {
+              "callee_func": "validate_args",
+              "lineno": 201
+            },
+            {
+              "callee_func": "cmd_list",
+              "lineno": 208
+            },
+            {
+              "callee_func": "cmd_search",
+              "lineno": 210
+            },
+            {
+              "callee_func": "cmd_show",
+              "lineno": 212
+            },
+            {
+              "callee_func": "cmd_stats",
+              "lineno": 214
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 197,
+          "line_count": 20,
+          "locals_summary": {
+            "assign": 3,
+            "branches": 6,
+            "calls": 9
+          },
+          "logging_calls": [
+            {
+              "level": "error",
+              "lineno": 215
+            }
+          ],
+          "name": "main",
+          "qualified_name": "orchestrators.run_standards_index_cli::main",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def main(argv: list[str] | None = None) -> int:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 215,
+              "symbol": "logging",
+              "via": "logging"
+            }
+          ]
+        }
+      ],
+      "globals": [
+        {
+          "lineno": 46,
+          "name": "ROOT",
+          "value_kind": "other"
+        },
+        {
+          "lineno": 47,
+          "name": "INDEX_PATH",
+          "value_kind": "other"
+        },
+        {
+          "lineno": 48,
+          "name": "CANONICAL_SEVERITIES",
+          "value_kind": "config"
+        },
+        {
+          "lineno": 49,
+          "name": "ALIAS_SEVERITY_MAP",
+          "value_kind": "config"
+        }
+      ],
+      "imports": [
+        "__future__.annotations",
+        "argparse",
+        "collections.abc.Iterable",
+        "logging",
+        "pathlib.Path",
+        "sys",
+        "typing.Any",
+        "yaml"
+      ],
+      "imports_detailed": [
+        {
+          "kind": "from",
+          "lineno": 35,
+          "module": "__future__",
+          "names": [
+            {
+              "asname": null,
+              "name": "annotations"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 37,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "argparse"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 38,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "logging"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 39,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "sys"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 40,
+          "module": "collections.abc",
+          "names": [
+            {
+              "asname": null,
+              "name": "Iterable"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 41,
+          "module": "pathlib",
+          "names": [
+            {
+              "asname": null,
+              "name": "Path"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 42,
+          "module": "typing",
+          "names": [
+            {
+              "asname": null,
+              "name": "Any"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 44,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "yaml"
+            }
+          ]
+        }
+      ],
+      "line_count": 220,
+      "module_doc": "CLI helper for querying `repo_standards_index.yaml`.",
+      "module_first_line": "def load_index() -> dict[str, Any]:",
+      "module_id": "orchestrators.run_standards_index_cli",
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\orchestrators\\run_standards_index_cli.py",
+      "relative_path": "run_standards_index_cli.py"
+    }
+  ],
+  "metadata": {
+    "folder_name": "orchestrators",
+    "folder_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\orchestrators",
+    "generated_at": "2025-10-28T09:54:25.771244+00:00",
+    "scan_depth": "recursive",
+    "schema_version": 2,
+    "total_classes": 1,
+    "total_files": 4,
+    "total_functions": 36
+  },
+  "statistics": {
+    "async_functions": 0,
+    "files_by_type": {
+      ".py": 4
+    },
+    "private_functions": 6,
+    "public_functions": 30,
+    "total_lines_of_code": 1897
+  }
+}
