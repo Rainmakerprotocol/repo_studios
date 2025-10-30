@@ -26,11 +26,27 @@ SCHEMA_VERSION = 1
 LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 try:
-    from libraries import copy_latest_artifact
+    from libraries import (
+        KeepSpec,
+        PathSpec,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        copy_latest_artifact,
+        resolve_path,
+        resolve_repo_root,
+    )
 except ModuleNotFoundError:  # pragma: no cover - fallback when executed as script
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import copy_latest_artifact
+    from libraries import (  # type: ignore
+        KeepSpec,
+        PathSpec,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        copy_latest_artifact,
+        resolve_path,
+        resolve_repo_root,
+    )
 
 REQUIRED_FIELDS = {
     "id",
@@ -187,11 +203,6 @@ def _format_slug(moment: datetime) -> str:
 
 def _sanitize_slug(slug: str) -> str:
     return slug.replace("/", "_").replace("\\", "_")
-
-
-def _ensure_dir(path: Path) -> Path:
-    path.mkdir(parents=True, exist_ok=True)
-    return path
 
 
 def _resolve(repo_root: Path, value: str | Path) -> Path:
@@ -534,44 +545,132 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+@dataclass(frozen=True)
+class Paths:
+    repo_root: Path
+    schema_root: Path
+    enums_path: Path
+    template_path: Path
+    config_path: Path
+    output_dir: Path
+
+
+@dataclass(frozen=True)
+class Options:
+    artifacts_to_keep: int
+    timestamp: str | None
+    emit_json: bool
+    log_level: str
+
+
+PATH_SPECS: dict[str, PathSpec] = {
+    "schema_root": PathSpec(
+        field="schema_root",
+        default=DEFAULT_SCHEMA_ROOT,
+        ensure_dir=True,
+        within_repo=False,
+    ),
+    "output_dir": PathSpec(
+        field="output_dir",
+        default=DEFAULT_OUTPUT_DIR,
+        ensure_dir=True,
+        within_repo=False,
+    ),
+}
+
+
+KEEP_SPECS: dict[str, KeepSpec] = {
+    "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
+}
+
+
+def _resolve_with_schema_dependency(
+    *,
+    raw_value: str | None,
+    default_path: Path,
+    schema_root: Path,
+    filename: str,
+    repo_root: Path,
+) -> Path:
+    if raw_value is None:
+        raw_value = str(default_path)
+    if raw_value == str(default_path):
+        return (schema_root / filename).resolve()
+    return resolve_path(raw_value, repo_root=repo_root, default=default_path, within_repo=False)
+
+
+def build_paths(args: argparse.Namespace) -> Paths:
+    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
+    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
+    schema_root = resolved["schema_root"]
+    output_dir = resolved["output_dir"]
+
+    enums_path = _resolve_with_schema_dependency(
+        raw_value=getattr(args, "enums_path", None),
+        default_path=DEFAULT_ENUMS_PATH,
+        schema_root=schema_root,
+        filename="enums.yaml",
+        repo_root=repo_root,
+    )
+    template_path = _resolve_with_schema_dependency(
+        raw_value=getattr(args, "template_path", None),
+        default_path=DEFAULT_TEMPLATE_PATH,
+        schema_root=schema_root,
+        filename="inventory_entry_template.yaml",
+        repo_root=repo_root,
+    )
+    config_path = _resolve_with_schema_dependency(
+        raw_value=getattr(args, "config_path", None),
+        default_path=DEFAULT_CONFIG_PATH,
+        schema_root=schema_root,
+        filename="validator_config.yaml",
+        repo_root=repo_root,
+    )
+
+    return Paths(
+        repo_root=repo_root,
+        schema_root=schema_root,
+        enums_path=enums_path,
+        template_path=template_path,
+        config_path=config_path,
+        output_dir=output_dir,
+    )
+
+
+def build_options(args: argparse.Namespace) -> Options:
+    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
+    return Options(
+        artifacts_to_keep=keep_counts["artifacts_to_keep"],
+        timestamp=getattr(args, "timestamp", None),
+        emit_json=bool(getattr(args, "json", False)),
+        log_level=str(getattr(args, "log_level", "INFO")),
+    )
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
 
-    logging.basicConfig(level=getattr(logging, args.log_level.upper(), logging.INFO), format="%(levelname)s: %(message)s")
+    paths = build_paths(args)
+    options = build_options(args)
 
-    repo_root = Path(args.repo_root).resolve()
-    schema_root = _ensure_dir(_resolve(repo_root, args.schema_root))
+    logging.basicConfig(level=getattr(logging, options.log_level.upper(), logging.INFO), format="%(levelname)s: %(message)s")
 
-    def _resolve_schema_relative(arg_value: str, default_path: Path, filename: str) -> Path:
-        if arg_value == str(default_path):
-            return (schema_root / filename).resolve()
-        return _resolve(repo_root, arg_value)
-
-    enums_path = _resolve_schema_relative(args.enums_path, DEFAULT_ENUMS_PATH, "enums.yaml")
-    template_path = _resolve_schema_relative(
-        args.template_path,
-        DEFAULT_TEMPLATE_PATH,
-        "inventory_entry_template.yaml",
-    )
-    config_path = _resolve_schema_relative(args.config_path, DEFAULT_CONFIG_PATH, "validator_config.yaml")
-    output_dir = _ensure_dir(_resolve(repo_root, args.output_dir))
-
-    generated_at = _current_time() if args.timestamp is None else datetime.fromisoformat(args.timestamp)
+    generated_at = _current_time() if options.timestamp is None else datetime.fromisoformat(options.timestamp)
     slug = _format_slug(generated_at)
-    run_dir = _prepare_run_dir(output_dir, slug)
+    run_dir = _prepare_run_dir(paths.output_dir, slug)
 
-    registry = EnumRegistry.load(enums_path)
-    config = ValidatorConfig.load(config_path)
+    registry = EnumRegistry.load(paths.enums_path)
+    config = ValidatorConfig.load(paths.config_path)
     report = ValidationReport()
     stats = ValidationStats()
     seen_ids: Dict[str, Path] = {}
 
     for file in iterate_inventory_files(
-        schema_root,
-        enums_path=enums_path,
-        template_path=template_path,
-        config_path=config_path,
+        paths.schema_root,
+        enums_path=paths.enums_path,
+        template_path=paths.template_path,
+        config_path=paths.config_path,
     ):
         validate_file(
             file,
@@ -579,34 +678,34 @@ def main(argv: Sequence[str] | None = None) -> int:
             report=report,
             seen_ids=seen_ids,
             config=config,
-            repo_root=repo_root,
-            schema_root=schema_root,
+            repo_root=paths.repo_root,
+            schema_root=paths.schema_root,
             stats=stats,
         )
 
     report_payload = compose_payload(
-        repo_root=repo_root,
+        repo_root=paths.repo_root,
         run_dir=run_dir,
         slug=slug,
         generated_at=generated_at,
         stats=stats,
         report=report,
-        schema_root=schema_root,
-        config_path=config_path,
-        enums_path=enums_path,
+        schema_root=paths.schema_root,
+        config_path=paths.config_path,
+        enums_path=paths.enums_path,
     )
-    raw_payload = compose_raw_payload(report_payload, report, repo_root)
+    raw_payload = compose_raw_payload(report_payload, report, paths.repo_root)
 
     write_run_artifacts(run_dir, report_payload, raw_payload)
-    update_latest_artifacts(run_dir, output_dir)
-    prune_old_runs(output_dir, keep=args.artifacts_to_keep, current_run=run_dir)
+    update_latest_artifacts(run_dir, paths.output_dir)
+    prune_old_runs(paths.output_dir, keep=options.artifacts_to_keep, current_run=run_dir)
 
-    if args.json:
-        print(ValidationReport(issues=report.issues).to_json(repo_root))
+    if options.emit_json:
+        print(ValidationReport(issues=report.issues).to_json(paths.repo_root))
     else:
         if report.errors:
             for issue in report.errors:
-                details = issue.to_dict(repo_root)
+                details = issue.to_dict(paths.repo_root)
                 print(f"[ERROR] {details['file']}: {details['message']}")
         else:
             print("Inventory validation passed")

@@ -19,20 +19,88 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, NamedTuple
+
+LIBRARIES_ROOT = (
+    Path(__file__).resolve().parents[3]
+    / ".repo_studios"
+    / "command_center"
+    / "scripts"
+)
+
+try:
+    from libraries import (  # type: ignore
+        KeepSpec,
+        PathSpec,
+        ReportArtifact,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+        write_report_artifacts,
+    )
+except ModuleNotFoundError:  # pragma: no cover - fallback during standalone execution
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import (  # type: ignore
+        KeepSpec,
+        PathSpec,
+        ReportArtifact,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+        write_report_artifacts,
+    )
 
 ROOT = Path(__file__).resolve().parents[2]
-SUMMARY_LATEST = ROOT / "reports" / "summary" / "latest" / "summary.json"
-BASELINE_PATH = ROOT / "reports" / "summary" / "main_baseline.json"
-THRESHOLD_PATH = ROOT / "config" / "ci_inventory_thresholds.json"
-
-DEFAULT_OUTPUT_DIR = Path(
+DEFAULT_SUMMARY_PATH = Path("reports/summary/latest/summary.json")
+DEFAULT_BASELINE_PATH = Path("reports/summary/main_baseline.json")
+DEFAULT_THRESHOLDS_PATH = Path("config/ci_inventory_thresholds.json")
+DEFAULT_OUTPUT_PATH = Path(
     ".repo_studios/reports/producer_reports/inventory_health_reports"
 )
+
+SUMMARY_LATEST = ROOT / DEFAULT_SUMMARY_PATH
+BASELINE_PATH = ROOT / DEFAULT_BASELINE_PATH
+THRESHOLD_PATH = ROOT / DEFAULT_THRESHOLDS_PATH
+
+DEFAULT_OUTPUT_DIR = DEFAULT_OUTPUT_PATH
 RUN_PREFIX = "inventory_health"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
+
+
+class Paths(NamedTuple):
+    repo_root: Path
+    summary: Path
+    baseline: Path
+    thresholds: Path
+    output_dir: Path
+
+
+class Options(NamedTuple):
+    artifacts_to_keep: int
+    timestamp: str | None
+    log_level: str
+
+
+PATH_SPECS: dict[str, PathSpec] = {
+    "summary": PathSpec(field="summary", default=DEFAULT_SUMMARY_PATH, within_repo=False),
+    "baseline": PathSpec(field="baseline", default=DEFAULT_BASELINE_PATH, within_repo=False),
+    "thresholds": PathSpec(field="thresholds", default=DEFAULT_THRESHOLDS_PATH, within_repo=False),
+    "output_dir": PathSpec(
+        field="output_dir",
+        default=DEFAULT_OUTPUT_PATH,
+        ensure_dir=True,
+        within_repo=False,
+    ),
+}
+
+
+KEEP_SPECS: dict[str, KeepSpec] = {
+    "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
+}
 
 JsonDict = Dict[str, Any]
 
@@ -105,39 +173,6 @@ def parse_timestamp(raw: str | None) -> datetime:
     if parsed.tzinfo is None:
         return parsed.replace(tzinfo=timezone.utc)
     return parsed.astimezone(timezone.utc)
-
-
-def ensure_output_dir(path: Path) -> Path:
-    path.mkdir(parents=True, exist_ok=True)
-    return path
-
-
-def copy_latest(src: Path, dest: Path) -> None:
-    try:
-        if dest.exists():
-            dest.unlink()
-        dest.hardlink_to(src)
-    except OSError:
-        dest.write_bytes(src.read_bytes())
-
-
-def prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> None:
-    keep = max(keep, 1)
-    if not output_dir.exists():
-        return
-    candidates = [
-        path
-        for path in output_dir.iterdir()
-        if path.is_dir() and path.name.startswith(f"{RUN_PREFIX}-")
-    ]
-    candidates.sort(key=lambda p: p.name, reverse=True)
-    for index, path in enumerate(candidates):
-        if index < keep or path == current_run:
-            continue
-        for child in path.iterdir():
-            if child.is_file():
-                child.unlink(missing_ok=True)  # type: ignore[attr-defined]
-        path.rmdir()
 
 
 def build_report(
@@ -235,64 +270,53 @@ def write_log(report: JsonDict) -> str:
     return "\n".join(lines) + "\n"
 
 
-def write_artifacts(
-    report: JsonDict,
-    *,
-    output_dir: Path,
-    keep: int,
-) -> Path:
-    ensure_output_dir(output_dir)
-    generated_ts = datetime.fromisoformat(report["generated_utc"]).astimezone(
-        timezone.utc
-    )
-    run_dir = output_dir / f"{RUN_PREFIX}-{generated_ts.strftime('%Y%m%d_%H%M%S')}"
-    run_dir.mkdir(parents=True, exist_ok=True)
-
-    json_path = run_dir / "report.json"
-    json_path.write_text(
-        json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
-
-    md_path = run_dir / "report.md"
-    md_path.write_text(write_markdown(report), encoding="utf-8")
-
-    log_path = run_dir / "log.txt"
-    log_path.write_text(write_log(report), encoding="utf-8")
-
-    latest_pairs = [
-        (json_path, output_dir / "latest_report.json"),
-        (md_path, output_dir / "latest_report.md"),
-        (log_path, output_dir / "latest_report.log"),
-    ]
-    for src, dest in latest_pairs:
-        copy_latest(src, dest)
-
-    prune_old_runs(output_dir, keep=keep, current_run=run_dir)
-    return run_dir
-
-
 def configure_logging(level: str) -> None:
     numeric_level = getattr(logging, level.upper(), logging.INFO)
     logging.basicConfig(level=numeric_level, format="%(levelname)s: %(message)s")
 
 
-def main(argv: Any = None) -> int:
+def build_paths(args: argparse.Namespace) -> Paths:
+    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
+    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
+    return Paths(
+        repo_root=repo_root,
+        summary=resolved["summary"],
+        baseline=resolved["baseline"],
+        thresholds=resolved["thresholds"],
+        output_dir=resolved["output_dir"],
+    )
+
+
+def build_options(args: argparse.Namespace) -> Options:
+    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
+    return Options(
+        artifacts_to_keep=keep_counts["artifacts_to_keep"],
+        timestamp=getattr(args, "timestamp", None),
+        log_level=str(getattr(args, "log_level", "INFO")),
+    )
+
+
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Validate Repo Studios inventory health thresholds."
     )
     parser.add_argument(
+        "--repo-root",
+        help="Repository root (defaults to project root)",
+    )
+    parser.add_argument(
         "--summary",
-        default=str(SUMMARY_LATEST),
+        default=str(DEFAULT_SUMMARY_PATH),
         help="Path to summary JSON to validate",
     )
     parser.add_argument(
         "--baseline",
-        default=str(BASELINE_PATH),
+        default=str(DEFAULT_BASELINE_PATH),
         help="Path to baseline summary JSON",
     )
     parser.add_argument(
         "--thresholds",
-        default=str(THRESHOLD_PATH),
+        default=str(DEFAULT_THRESHOLDS_PATH),
         help="Path to CI threshold configuration",
     )
     parser.add_argument(
@@ -317,12 +341,15 @@ def main(argv: Any = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    configure_logging(args.log_level)
+    paths = build_paths(args)
+    options = build_options(args)
 
-    summary_path = Path(args.summary).resolve()
-    baseline_path = Path(args.baseline).resolve()
-    thresholds_path = Path(args.thresholds).resolve()
-    output_dir = Path(args.output_dir).resolve()
+    configure_logging(options.log_level)
+
+    summary_path = paths.summary
+    baseline_path = paths.baseline
+    thresholds_path = paths.thresholds
+    output_dir = paths.output_dir
 
     if not summary_path.exists():
         logging.error("summary file not found: %s", summary_path)
@@ -333,7 +360,7 @@ def main(argv: Any = None) -> int:
     thresholds = load_json(thresholds_path)
 
     status, issues, deltas = evaluate(current, baseline, thresholds)
-    generated_ts = parse_timestamp(args.timestamp)
+    generated_ts = parse_timestamp(options.timestamp)
 
     report = build_report(
         status=status,
@@ -348,12 +375,35 @@ def main(argv: Any = None) -> int:
         thresholds_path=thresholds_path,
     )
 
-    run_dir = write_artifacts(
-        report,
+    artifacts = [
+        ReportArtifact(
+            filename="report.json",
+            pointer="latest_report.json",
+            kind="json",
+            content=lambda: report,
+        ),
+        ReportArtifact(
+            filename="report.md",
+            pointer="latest_report.md",
+            kind="text",
+            content=lambda: write_markdown(report),
+        ),
+        ReportArtifact(
+            filename="log.txt",
+            pointer="latest_report.log",
+            kind="text",
+            content=lambda: write_log(report),
+        ),
+    ]
+
+    result = write_report_artifacts(
+        stem=RUN_PREFIX,
+        timestamp=generated_ts,
         output_dir=output_dir,
-        keep=args.artifacts_to_keep,
+        artifacts=artifacts,
+        keep=options.artifacts_to_keep,
     )
-    logging.info("inventory health artifacts written to %s", run_dir)
+    logging.info("inventory health artifacts written to %s", result.run_dir)
 
     return 1 if status == "failed" else 0
 

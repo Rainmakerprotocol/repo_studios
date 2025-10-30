@@ -36,6 +36,32 @@ DEFAULT_EXTENSIONS = (
 DEFAULT_PATTERNS = ("TODO", "FIXME", "NOTE", "XXX", "OPTIMIZE", "REVIEW")
 COMMENT_ANCHORS = ("#", "//", "<!--", "/*", "*")
 
+LIBRARIES_ROOT = (
+    Path(__file__).resolve().parents[3]
+    / ".repo_studios"
+    / "command_center"
+    / "scripts"
+)
+
+try:
+    from libraries import (
+        KeepSpec,
+        PathSpec,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+    )
+except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import (  # type: ignore
+        KeepSpec,
+        PathSpec,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+    )
+
 
 @dataclass(frozen=True)
 class Paths:
@@ -50,6 +76,21 @@ class ScanOptions:
     patterns: tuple[str, ...]
     allowlist: set[tuple[str, int]]
     artifacts_to_keep: int
+
+
+PATH_SPECS: dict[str, PathSpec] = {
+    "scan_root": PathSpec(field="root", default=Path("."), within_repo=False),
+    "output_dir": PathSpec(
+        field="output_dir",
+        default=DEFAULT_OUTPUT_DIR,
+        ensure_dir=True,
+        within_repo=False,
+    ),
+}
+
+KEEP_SPECS: dict[str, KeepSpec] = {
+    "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
+}
 
 
 @dataclass
@@ -113,10 +154,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[3]
-    scan_root = (repo_root / args.root).resolve()
-    output_dir = Path(args.output_dir).resolve() if args.output_dir else (repo_root / DEFAULT_OUTPUT_DIR)
-    return Paths(repo_root=repo_root, scan_root=scan_root, output_dir=output_dir)
+    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
+    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
+    return Paths(
+        repo_root=repo_root,
+        scan_root=resolved["scan_root"],
+        output_dir=resolved["output_dir"],
+    )
 
 
 def load_allowlist(path: str | None, repo_root: Path) -> set[tuple[str, int]]:
@@ -356,11 +400,12 @@ def run(argv: list[str] | None = None) -> dict[str, object]:
     patterns = normalize_patterns(args.patterns)
     extensions = normalize_extensions(args.include_ext)
     allowlist = load_allowlist(args.allowlist_file, paths.repo_root)
+    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
     options = ScanOptions(
         extensions=extensions,
         patterns=patterns,
         allowlist=allowlist,
-        artifacts_to_keep=args.artifacts_to_keep,
+        artifacts_to_keep=keep_counts["artifacts_to_keep"],
     )
     compiled_patterns = compile_pattern_regex(patterns)
     timestamp = datetime.now(timezone.utc)

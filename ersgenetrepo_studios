@@ -1,0 +1,255 @@
+#!/usr/bin/env python3
+"""Lizard Complexity Report Generator.
+
+Runs `python -m lizard` with repo conventions and emits timestamped artifacts under
+`.repo_studios/reports/producer_reports/lizard_reports/<timestamp>/`:
+
+- `report.json`: machine-readable summary (status, counts, offending functions)
+- `report.md`: human summary with top offenders and reproduction hints
+- `raw.json`: full JSON output from Lizard when available
+- `raw.txt`: stdout/stderr when invocation fails
+- `log.txt`: structured key/value summary for automation
+
+The script is tolerant: it always exits 0, encoding failures in the JSON summary.
+"""
+
+from __future__ import annotations
+
+import argparse
+import importlib
+import json
+import logging
+import os
+import shlex
+import subprocess
+import sys
+import traceback
+from collections.abc import Iterable
+from dataclasses import dataclass
+from pathlib import Path
+from datetime import datetime, timezone
+from typing import Any
+
+DEFAULT_TARGETS = ("agents", "api", "scripts")
+DEFAULT_OUTPUT_DIR = Path(
+    ".repo_studios/reports/producer_reports/lizard_reports"
+)
+RUN_PREFIX = "lizard"
+DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_LIZARD_EXTRA_ARGS = ("-Ejson", "-i", "-1")
+VENDOR_DIR = Path(__file__).resolve().parents[2] / "vendor"
+VENDOR_LIZARD_JSON_PATH = VENDOR_DIR / "lizard_ext" / "lizardjson.py"
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
+
+try:
+    from libraries import copy_latest_artifact
+except ModuleNotFoundError:  # pragma: no cover - fallback for direct script execution
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import copy_latest_artifact
+LIZARD_JSON_EXTENSION_SOURCE = '''"""JSON output extension for lizard (auto-installed)."""
+
+from __future__ import annotations
+
+import json
+from typing import Iterable
+
+from lizard import get_warnings
+
+
+def _serialize_function(func):
+    return {
+        "name": getattr(func, "name", None),
+        "long_name": getattr(func, "long_name", None),
+        "cyclomatic_complexity": getattr(func, "cyclomatic_complexity", None),
+        "token_count": getattr(func, "token_count", None),
+        "parameter_count": getattr(func, "parameter_count", None),
+        "length": getattr(func, "length", None),
+        "nloc": getattr(func, "nloc", None),
+        "start_line": getattr(func, "start_line", None),
+        "end_line": getattr(func, "end_line", None),
+        "file": getattr(func, "filename", None),
+    }
+
+
+def _serialize_module(module):
+    return {
+        "filename": getattr(module, "filename", None),
+        "nloc": getattr(module, "nloc", None),
+        "cyclomatic_complexity": getattr(module, "CCN", None),
+        "token_count": getattr(module, "token_count", None),
+        "function_list": [_serialize_function(func) for func in getattr(module, "function_list", [])],
+    }
+
+
+def print_json(result: Iterable, option, scheme, total_factory):
+    modules = [module for module in result if module]
+    print(json.dumps([_serialize_module(module) for module in modules], indent=2))
+    warnings = list(get_warnings(modules, option))
+    warning_count = len(warnings)
+    if getattr(option, "number", -1) >= 0 and warning_count > option.number:
+        return warning_count
+    return warning_count
+
+
+class LizardExtension:  # pragma: no cover - compatibility shim
+    ordering_index = 10_000
+
+    def set_args(self, parser):
+        parser.set_defaults(printer=print_json)
+
+    def __call__(self, tokens, reader):
+        for token in tokens:
+            yield token
+'''
+
+
+def _ensure_lizard_json_extension() -> None:
+    try:
+        lizard_ext = importlib.import_module("lizard_ext")
+    except ModuleNotFoundError:
+        logging.warning("lizard_ext package not found; JSON extension unavailable")
+        return
+
+    module_path = Path(lizard_ext.__file__).parent / "lizardjson.py"
+    if module_path.exists():
+        return
+
+    source_text: str
+    if VENDOR_LIZARD_JSON_PATH.exists():
+        source_text = VENDOR_LIZARD_JSON_PATH.read_text(encoding="utf-8")
+    else:
+        source_text = LIZARD_JSON_EXTENSION_SOURCE
+
+    try:
+        module_path.write_text(source_text, encoding="utf-8")
+    except OSError as exc:
+        logging.warning("Failed to install lizard JSON extension: %s", exc)
+
+
+def _current_utc() -> datetime:
+    return datetime.now(timezone.utc)
+
+
+def _format_run_slug(moment: datetime) -> str:
+    return moment.strftime("%Y%m%d_%H%M%S")
+
+
+def _resolve_timestamp(raw: str | None) -> tuple[str, datetime]:
+    if not raw:
+        now = _current_utc()
+        return _format_run_slug(now), now
+
+    try:
+        parsed = datetime.fromisoformat(raw)
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        else:
+            parsed = parsed.astimezone(timezone.utc)
+        return _format_run_slug(parsed), parsed
+    except ValueError:
+        # Preserve provided slug but still capture current UTC for metadata.
+        return raw, _current_utc()
+
+
+def _ensure_directory(path: Path) -> Path:
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
+def _sanitize_slug(slug: str) -> str:
+    sanitized = slug.replace(os.sep, "_")
+    sanitized = sanitized.replace("/", "_")
+    return sanitized
+
+
+_copy_latest = copy_latest_artifact
+
+
+def prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> None:
+    keep = max(keep, 1)
+    if not output_dir.exists():
+        return
+    candidates = [
+        path
+        for path in output_dir.iterdir()
+        if path.is_dir() and path.name.startswith(f"{RUN_PREFIX}-")
+    ]
+    candidates.sort(key=lambda p: p.name, reverse=True)
+    for index, path in enumerate(candidates):
+        if index < keep or path == current_run:
+            continue
+        for child in path.iterdir():
+            if child.is_file():
+                child.unlink(missing_ok=True)  # type: ignore[attr-defined]
+        path.rmdir()
+
+
+def _prepare_run_dir(output_dir: Path, run_slug: str) -> Path:
+    _ensure_directory(output_dir)
+    safe_slug = _sanitize_slug(run_slug)
+    run_dir = output_dir / f"{RUN_PREFIX}-{safe_slug}"
+    run_dir.mkdir(parents=True, exist_ok=True)
+    return run_dir
+
+
+@dataclass
+class Offender:
+    path: str
+    name: str
+    complexity: int
+    length: int
+
+
+def _has_flag(args: list[str], flag: str, long_flag: str | None = None) -> bool:
+    for item in args:
+        if item == flag or (long_flag and item == long_flag):
+            return True
+        if item.startswith(flag) and item != flag:
+            return True
+        if long_flag and item.startswith(long_flag) and item != long_flag:
+            return True
+    return False
+
+
+def _apply_default_extra_args(extra: Iterable[str]) -> list[str]:
+    extra_list = [str(arg) for arg in extra if str(arg)]
+
+    defaults: list[str] = []
+    if not _has_flag(extra_list, "-Ejson"):
+        defaults.append(DEFAULT_LIZARD_EXTRA_ARGS[0])
+
+    if not (_has_flag(extra_list, "-i") or _has_flag(extra_list, "--ignore_warnings")):
+        defaults.extend(DEFAULT_LIZARD_EXTRA_ARGS[1:])
+
+    return defaults + extra_list
+
+
+def _build_command(max_ccn: int, max_length: int, targets: Iterable[str], extra: Iterable[str]) -> list[str]:
+    cmd: list[str] = [sys.executable, "-m", "lizard", "-C", str(max_ccn), "-L", str(max_length)]
+    cmd.extend(_apply_default_extra_args(extra))
+    cmd.extend(targets)
+    return cmd
+
+
+def _select_targets(repo_root: Path, provided: Iterable[str]) -> list[str]:
+    targets = [t for t in provided if t]
+    if targets:
+        return [str((repo_root / t).resolve()) if not Path(t).is_absolute() else str(Path(t)) for t in targets]
+    resolved: list[str] = []
+    for rel in DEFAULT_TARGETS:
+        path = repo_root / rel
+        if path.exists():
+            resolved.append(str(path.resolve()))
+    return resolved
+
+
+def _build_offender(file_path: str, func: dict, *, max_ccn: int, max_length: int) -> Offender | None:
+    ccn = _as_int(func.get("cyclomatic_complexity", 0))
+    length = _as_int(func.get("length", 0))
+    if ccn <= max_ccn and length <= max_length:
+        return None
+
+    name = func.get("name") or func.get("l

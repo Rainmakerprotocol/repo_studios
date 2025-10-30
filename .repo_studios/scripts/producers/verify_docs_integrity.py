@@ -26,6 +26,32 @@ RUN_PREFIX = 'docs_integrity'
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 SCHEMA_VERSION = 1
 
+LIBRARIES_ROOT = (
+    Path(__file__).resolve().parents[3]
+    / ".repo_studios"
+    / "command_center"
+    / "scripts"
+)
+
+try:
+    from libraries import (
+        KeepSpec,
+        PathSpec,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+    )
+except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import (  # type: ignore
+        KeepSpec,
+        PathSpec,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+    )
+
 
 @dataclass
 class JsonBlockResult:
@@ -48,6 +74,26 @@ class Options:
     regen_table: bool
     artifacts_to_keep: int
     log_level: str
+
+
+PATH_SPECS: dict[str, PathSpec] = {
+    "output_dir": PathSpec(
+        field="output_dir",
+        default=DEFAULT_OUTPUT_DIR,
+        ensure_dir=True,
+        within_repo=False,
+    ),
+    "index_path": PathSpec(
+        field="index",
+        default=DEFAULT_INDEX_PATH,
+        within_repo=False,
+    ),
+}
+
+
+KEEP_SPECS: dict[str, KeepSpec] = {
+    "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
+}
 
 
 @dataclass
@@ -122,27 +168,21 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = (
-        Path(args.repo_root).resolve()
-        if args.repo_root
-        else Path(__file__).resolve().parents[3]
+    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
+    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
+    return Paths(
+        repo_root=repo_root,
+        output_dir=resolved["output_dir"],
+        index_path=resolved["index_path"],
     )
-    output_dir = (
-        Path(args.output_dir).resolve()
-        if args.output_dir
-        else (repo_root / DEFAULT_OUTPUT_DIR).resolve()
-    )
-    index_path = Path(args.index)
-    if not index_path.is_absolute():
-        index_path = (repo_root / index_path).resolve()
-    return Paths(repo_root=repo_root, output_dir=output_dir, index_path=index_path)
 
 
 def build_options(args: argparse.Namespace) -> Options:
+    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
     return Options(
         update=bool(args.update),
         regen_table=not bool(args.no_table),
-        artifacts_to_keep=max(1, int(args.artifacts_to_keep)),
+        artifacts_to_keep=keep_counts["artifacts_to_keep"],
         log_level=str(args.log_level),
     )
 

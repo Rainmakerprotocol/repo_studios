@@ -8,6 +8,7 @@ import datetime as dt
 import json
 import logging
 import re
+import sys
 from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -20,6 +21,32 @@ SCHEMA_VERSION = 1
 TEST_PATTERNS = ("test_*.py", "*_test.py", "test*.py")
 IGNORED_PARTS = {".git", ".repo_studios", ".venv", "__pycache__"}
 
+LIBRARIES_ROOT = (
+    Path(__file__).resolve().parents[3]
+    / ".repo_studios"
+    / "command_center"
+    / "scripts"
+)
+
+try:
+    from libraries import (
+        KeepSpec,
+        PathSpec,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+    )
+except ModuleNotFoundError:  # pragma: no cover - fallback when package path isn't configured
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import (  # type: ignore
+        KeepSpec,
+        PathSpec,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+    )
+
 
 @dataclass(frozen=True)
 class Paths:
@@ -31,6 +58,21 @@ class Paths:
 class Options:
     artifacts_to_keep: int
     log_level: str
+
+
+PATH_SPECS: dict[str, PathSpec] = {
+    "output_dir": PathSpec(
+        field="output_dir",
+        default=DEFAULT_OUTPUT_DIR,
+        ensure_dir=True,
+        within_repo=False,
+    ),
+}
+
+
+KEEP_SPECS: dict[str, KeepSpec] = {
+    "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
+}
 
 
 @dataclass
@@ -91,15 +133,15 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[3]
-    output_dir_arg = Path(args.output_dir) if args.output_dir else DEFAULT_OUTPUT_DIR
-    output_dir = (output_dir_arg if output_dir_arg.is_absolute() else repo_root / output_dir_arg).resolve()
-    return Paths(repo_root=repo_root, output_dir=output_dir)
+    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
+    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
+    return Paths(repo_root=repo_root, output_dir=resolved["output_dir"])
 
 
 def build_options(args: argparse.Namespace) -> Options:
+    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
     return Options(
-        artifacts_to_keep=max(1, int(args.artifacts_to_keep)),
+        artifacts_to_keep=keep_counts["artifacts_to_keep"],
         log_level=str(args.log_level),
     )
 

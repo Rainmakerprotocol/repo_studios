@@ -38,7 +38,33 @@ import sys
 from collections.abc import Iterable
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import NamedTuple
+from typing import List, NamedTuple
+
+LIBRARIES_ROOT = (
+    Path(__file__).resolve().parents[3]
+    / ".repo_studios"
+    / "command_center"
+    / "scripts"
+)
+
+try:
+    from libraries import (  # type: ignore
+        KeepSpec,
+        PathSpec,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+    )
+except ModuleNotFoundError:  # pragma: no cover - fallback during standalone execution
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import (  # type: ignore
+        KeepSpec,
+        PathSpec,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+    )
 
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")  # capture link target
@@ -47,6 +73,11 @@ DEFAULT_OUTPUT_DIR = Path(
         ".repo_studios/reports/producer_reports/markdown_anchor_validation_reports"
 )
 RUN_PREFIX = "markdown_anchor_validation"
+DEFAULT_PATTERNS = [
+    "README.md",
+    "docs/agents/config_quickstart.md",
+    "docs/agents/step5_agent_config_system.md",
+]
 
 
 class Issue(NamedTuple):
@@ -55,6 +86,35 @@ class Issue(NamedTuple):
     kind: str
     target: str
     message: str
+
+
+class Paths(NamedTuple):
+    repo_root: Path
+    scan_root: Path
+    output_dir: Path
+
+
+class Options(NamedTuple):
+    patterns: List[str]
+    artifacts_to_keep: int
+    timestamp: str | None
+    log_level: str
+
+
+PATH_SPECS: dict[str, PathSpec] = {
+    "scan_root": PathSpec(field="root", default=Path("."), within_repo=False),
+    "output_dir": PathSpec(
+        field="output_dir",
+        default=DEFAULT_OUTPUT_DIR,
+        ensure_dir=True,
+        within_repo=False,
+    ),
+}
+
+
+KEEP_SPECS: dict[str, KeepSpec] = {
+    "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
+}
 
 
 def _relativize(path: Path, root: Path) -> str:
@@ -253,8 +313,26 @@ def _parse_timestamp(raw: str | None) -> datetime:
         raise SystemExit(f"Invalid --timestamp value: {exc}")
 
 
-def main(argv: list[str]) -> int:
+def build_paths(args: argparse.Namespace) -> Paths:
+    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
+    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
+    return Paths(repo_root=repo_root, scan_root=resolved["scan_root"], output_dir=resolved["output_dir"])
+
+
+def build_options(args: argparse.Namespace) -> Options:
+    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
+    patterns = list(args.globs) if args.globs else list(DEFAULT_PATTERNS)
+    return Options(
+        patterns=patterns,
+        artifacts_to_keep=keep_counts["artifacts_to_keep"],
+        timestamp=getattr(args, "timestamp", None),
+        log_level=str(getattr(args, "log_level", "INFO")),
+    )
+
+
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Check markdown internal links & anchors")
+    parser.add_argument("--repo-root", help="Repository root (defaults to project root)")
     parser.add_argument("--root", default=".")
     parser.add_argument(
         "--glob",
@@ -285,16 +363,15 @@ def main(argv: list[str]) -> int:
     )
 
     args = parser.parse_args(argv)
-    logging.basicConfig(level=getattr(logging, args.log_level.upper()), format="%(levelname)s %(message)s")
+    paths = build_paths(args)
+    options = build_options(args)
 
-    root = Path(args.root).resolve()
-    output_dir = Path(args.output_dir).resolve()
-    patterns = args.globs or [
-        "README.md",
-        "docs/agents/config_quickstart.md",
-        "docs/agents/step5_agent_config_system.md",
-    ]
-    ts = _parse_timestamp(args.timestamp)
+    logging.basicConfig(level=getattr(logging, options.log_level.upper()), format="%(levelname)s %(message)s")
+
+    root = paths.scan_root
+    output_dir = paths.output_dir
+    patterns = options.patterns
+    ts = _parse_timestamp(options.timestamp)
 
     anchors_cache: dict[Path, set[str]] = {}
     all_issues: list[Issue] = []
@@ -311,7 +388,7 @@ def main(argv: list[str]) -> int:
         ts=ts,
     )
     run_dir = write_artifacts(report, output_dir)
-    pruned = prune_old_runs(output_dir, keep=args.artifacts_to_keep)
+    pruned = prune_old_runs(output_dir, keep=options.artifacts_to_keep)
     if pruned:
         logging.info("Pruned %d old report folder(s)", len(pruned))
 

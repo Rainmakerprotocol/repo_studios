@@ -16,7 +16,6 @@ Exit codes:
 from __future__ import annotations
 
 import argparse
-import json
 import logging
 import re
 import sys
@@ -37,11 +36,11 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 try:
-    from libraries import copy_latest_artifact
+    from libraries import ReportArtifact, write_report_artifacts
 except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import copy_latest_artifact
+    from libraries import ReportArtifact, write_report_artifacts
 
 DEFAULT_OUTPUT_DIR = Path(
     ".repo_studios/reports/producer_reports/dependency_hygiene_reports"
@@ -266,69 +265,6 @@ def _parse_timestamp(raw: str | None) -> datetime:
     return parsed.astimezone(timezone.utc)
 
 
-def _ensure_output_dir(path: Path) -> Path:
-    path.mkdir(parents=True, exist_ok=True)
-    return path
-
-
-_copy_latest = copy_latest_artifact
-
-
-def prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> None:
-    keep = max(keep, 1)
-    if not output_dir.exists():
-        return
-    candidates = [
-        path
-        for path in output_dir.iterdir()
-        if path.is_dir() and path.name.startswith(f"{RUN_PREFIX}-")
-    ]
-    candidates.sort(key=lambda p: p.name, reverse=True)
-    for index, path in enumerate(candidates):
-        if index < keep or path == current_run:
-            continue
-        for child in path.iterdir():
-            if child.is_file():
-                child.unlink(missing_ok=True)  # type: ignore[attr-defined]
-        path.rmdir()
-
-
-def write_artifacts(
-    report: dict[str, Any],
-    *,
-    output_dir: Path,
-    keep: int,
-) -> Path:
-    _ensure_output_dir(output_dir)
-    generated_ts = datetime.fromisoformat(report["generated_utc"]).astimezone(
-        timezone.utc
-    )
-    run_dir = output_dir / f"{RUN_PREFIX}-{generated_ts.strftime('%Y%m%d_%H%M%S')}"
-    run_dir.mkdir(parents=True, exist_ok=True)
-
-    json_path = run_dir / "report.json"
-    json_path.write_text(
-        json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
-
-    md_path = run_dir / "report.md"
-    md_path.write_text(write_markdown(report), encoding="utf-8")
-
-    log_path = run_dir / "log.txt"
-    log_path.write_text(write_log(report), encoding="utf-8")
-
-    latest_pairs = [
-        (json_path, output_dir / "latest_report.json"),
-        (md_path, output_dir / "latest_report.md"),
-        (log_path, output_dir / "latest_report.log"),
-    ]
-    for src, dest in latest_pairs:
-        _copy_latest(src, dest)
-
-    prune_old_runs(output_dir, keep=keep, current_run=run_dir)
-    return run_dir
-
-
 def configure_logging(level: str) -> None:
     numeric_level = getattr(logging, level.upper(), logging.INFO)
     logging.basicConfig(level=numeric_level, format="%(levelname)s: %(message)s")
@@ -406,12 +342,33 @@ def main(argv: Sequence[str] | None = None) -> int:
         patterns=patterns,
     )
 
-    run_dir = write_artifacts(
-        report,
+    result = write_report_artifacts(
+        stem=RUN_PREFIX,
+        timestamp=generated_ts,
         output_dir=output_dir,
         keep=args.artifacts_to_keep,
+        artifacts=[
+            ReportArtifact(
+                filename="report.json",
+                kind="json",
+                content=report,
+                pointer="latest_report.json",
+            ),
+            ReportArtifact(
+                filename="report.md",
+                kind="text",
+                content=write_markdown(report),
+                pointer="latest_report.md",
+            ),
+            ReportArtifact(
+                filename="log.txt",
+                kind="text",
+                content=write_log(report),
+                pointer="latest_report.log",
+            ),
+        ],
     )
-    logging.info("Dependency hygiene report written to %s", run_dir)
+    logging.info("Dependency hygiene report written to %s", result.run_dir)
 
     return 1 if issues else 0
 

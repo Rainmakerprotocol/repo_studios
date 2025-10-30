@@ -8,6 +8,7 @@ import datetime as dt
 import json
 import logging
 import os
+import sys
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
@@ -26,6 +27,32 @@ RUN_PREFIX = "import_boundary_check"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 SCHEMA_VERSION = 1
 
+LIBRARIES_ROOT = (
+    Path(__file__).resolve().parents[3]
+    / ".repo_studios"
+    / "command_center"
+    / "scripts"
+)
+
+try:
+    from libraries import (
+        KeepSpec,
+        PathSpec,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+    )
+except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import (  # type: ignore
+        KeepSpec,
+        PathSpec,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+    )
+
 
 @dataclass(frozen=True)
 class Paths:
@@ -40,6 +67,26 @@ class Options:
     graph_path: Path | None
     artifacts_to_keep: int
     strict: bool
+
+
+PATH_SPECS: dict[str, PathSpec] = {
+    "output_dir": PathSpec(
+        field="output_dir",
+        default=DEFAULT_OUTPUT_DIR,
+        ensure_dir=True,
+        within_repo=False,
+    ),
+    "allowlist_path": PathSpec(
+        field="allowlist_path",
+        default=DEFAULT_ALLOWLIST,
+        within_repo=False,
+    ),
+}
+
+
+KEEP_SPECS: dict[str, KeepSpec] = {
+    "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
+}
 
 
 @dataclass
@@ -93,29 +140,21 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = (
-        Path(args.repo_root).resolve()
-        if args.repo_root
-        else Path(__file__).resolve().parents[3]
-    )
-    output_dir = (
-        Path(args.output_dir).resolve()
-        if args.output_dir
-        else (repo_root / DEFAULT_OUTPUT_DIR).resolve()
-    )
+    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
+    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
     graph_dir = (repo_root / DEFAULT_RELATIVE_GRAPH_DIR).resolve()
-    if args.graph_path:
-        graph_dir = Path(args.graph_path).resolve().parent
-    allowlist_path = (
-        Path(args.allowlist_path).resolve()
-        if args.allowlist_path
-        else (repo_root / DEFAULT_ALLOWLIST).resolve()
-    )
+    if getattr(args, "graph_path", None):
+        graph_candidate = Path(args.graph_path)
+        if not graph_candidate.is_absolute():
+            graph_candidate = (repo_root / graph_candidate).resolve()
+        else:
+            graph_candidate = graph_candidate.resolve()
+        graph_dir = graph_candidate.parent
     return Paths(
         repo_root=repo_root,
-        output_dir=output_dir,
+        output_dir=resolved["output_dir"],
         graph_dir=graph_dir,
-        allowlist_path=allowlist_path,
+        allowlist_path=resolved["allowlist_path"],
     )
 
 
@@ -125,9 +164,9 @@ def build_options(args: argparse.Namespace, paths: Paths) -> Options:
         graph_path = Path(args.graph_path)
         if not graph_path.is_absolute():
             graph_path = (paths.repo_root / graph_path).resolve()
-    artifacts_to_keep = max(1, int(args.artifacts_to_keep))
+    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
     strict = bool(args.strict or os.getenv("STRICT") in {"1", "true", "TRUE"})
-    return Options(graph_path=graph_path, artifacts_to_keep=artifacts_to_keep, strict=strict)
+    return Options(graph_path=graph_path, artifacts_to_keep=keep_counts["artifacts_to_keep"], strict=strict)
 
 
 def _latest_graph_json(graph_dir: Path) -> Path | None:

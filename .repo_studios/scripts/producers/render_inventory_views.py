@@ -10,7 +10,7 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, Iterable, List
+from typing import Any, Dict, Iterable, List, NamedTuple
 
 import yaml
 
@@ -27,11 +27,27 @@ IGNORED_FILES = {"enums.yaml", "inventory_entry_template.yaml"}
 LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 try:
-    from libraries import copy_latest_artifact
+    from libraries import (  # type: ignore
+        KeepSpec,
+        PathSpec,
+        ReportArtifact,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+        write_report_artifacts,
+    )
 except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import copy_latest_artifact
+    from libraries import (  # type: ignore
+        KeepSpec,
+        PathSpec,
+        ReportArtifact,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+        write_report_artifacts,
+    )
 
 
 @dataclass(frozen=True)
@@ -45,11 +61,6 @@ class ViewBundle:
 
 def _current_time() -> datetime:
     return datetime.now(timezone.utc)
-
-
-def _ensure_dir(path: Path) -> Path:
-    path.mkdir(parents=True, exist_ok=True)
-    return path
 
 
 def _resolve(repo_root: Path, value: str | Path) -> Path:
@@ -70,31 +81,6 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 def _format_slug(moment: datetime) -> str:
     return moment.strftime("%Y%m%d_%H%M%S")
-
-
-def _sanitize_slug(slug: str) -> str:
-    return slug.replace("/", "_").replace("\\", "_")
-
-
-def _prepare_run_dir(output_dir: Path, slug: str) -> Path:
-    run_dir = output_dir / f"{RUN_PREFIX}-{_sanitize_slug(slug)}"
-    run_dir.mkdir(parents=True, exist_ok=True)
-    return run_dir
-
-
-def prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> None:
-    keep = max(keep, 1)
-    if not output_dir.exists():
-        return
-    runs = [node for node in output_dir.iterdir() if node.is_dir() and node.name.startswith(f"{RUN_PREFIX}-")]
-    runs.sort(key=lambda node: node.name, reverse=True)
-    for index, node in enumerate(runs):
-        if index < keep or node == current_run:
-            continue
-        for child in node.iterdir():
-            if child.is_file():
-                child.unlink(missing_ok=True)
-        node.rmdir()
 
 
 def load_inventory(schema_root: Path, views_dir: Path) -> List[Dict[str, Any]]:
@@ -283,22 +269,6 @@ def write_stub(path: Path, destination: Path, *, generated_at: datetime, repo_ro
         ]
         write_yaml(path, payload)
 
-
-_copy_latest = copy_latest_artifact
-
-
-def update_latest_artifacts(run_dir: Path, output_dir: Path) -> None:
-    mapping = {
-        "latest_report.json": run_dir / "report.json",
-        "latest_report.md": run_dir / "report.md",
-        "latest_report.log": run_dir / "log.txt",
-        "latest_raw.json": run_dir / "raw.json",
-    }
-    for filename, src in mapping.items():
-        dest = output_dir / filename
-        _copy_latest(src, dest)
-
-
 def compose_report_payload(
     *,
     repo_root: Path,
@@ -399,19 +369,12 @@ def render_log(report_payload: Dict[str, Any]) -> str:
     ) + "\n"
 
 
-def write_run_artifacts(run_dir: Path, report_payload: Dict[str, Any], raw_payload: Dict[str, Any]) -> None:
-    (run_dir / "report.json").write_text(json.dumps(report_payload, indent=2) + "\n", encoding="utf-8")
-    (run_dir / "report.md").write_text(render_markdown(report_payload), encoding="utf-8")
-    (run_dir / "log.txt").write_text(render_log(report_payload), encoding="utf-8")
-    (run_dir / "raw.json").write_text(json.dumps(raw_payload, indent=2) + "\n", encoding="utf-8")
-
-
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Render inventory secondary views and emit structured artifacts",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument("--repo-root", default=str(DEFAULT_REPO_ROOT), help="Repository root used to resolve relative paths")
+    parser.add_argument("--repo-root", help="Repository root used to resolve relative paths")
     parser.add_argument("--schema-root", default=str(DEFAULT_SCHEMA_ROOT), help="Path to inventory schema directory")
     parser.add_argument("--views-dir", default=str(DEFAULT_VIEWS_DIR), help="Legacy compatibility directory for views")
     parser.add_argument("--reports-root", default=str(DEFAULT_REPORTS_ROOT), help="Destination root for topic reports")
@@ -422,21 +385,72 @@ def _build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+class Paths(NamedTuple):
+    repo_root: Path
+    schema_root: Path
+    views_dir: Path
+    reports_root: Path
+    output_dir: Path
+
+
+class Options(NamedTuple):
+    artifacts_to_keep: int
+    timestamp: str | None
+    log_level: str
+
+
+PATH_SPECS: dict[str, PathSpec] = {
+    "schema_root": PathSpec(field="schema_root", default=DEFAULT_SCHEMA_ROOT, ensure_dir=False, within_repo=False),
+    "views_dir": PathSpec(field="views_dir", default=DEFAULT_VIEWS_DIR, ensure_dir=True, within_repo=False),
+    "reports_root": PathSpec(field="reports_root", default=DEFAULT_REPORTS_ROOT, ensure_dir=True, within_repo=False),
+    "output_dir": PathSpec(field="output_dir", default=DEFAULT_OUTPUT_DIR, ensure_dir=True, within_repo=False),
+}
+
+
+KEEP_SPECS: dict[str, KeepSpec] = {
+    "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
+}
+
+
+def build_paths(args: argparse.Namespace) -> Paths:
+    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
+    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
+    return Paths(
+        repo_root=repo_root,
+        schema_root=resolved["schema_root"],
+        views_dir=resolved["views_dir"],
+        reports_root=resolved["reports_root"],
+        output_dir=resolved["output_dir"],
+    )
+
+
+def build_options(args: argparse.Namespace) -> Options:
+    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
+    return Options(
+        artifacts_to_keep=keep_counts["artifacts_to_keep"],
+        timestamp=getattr(args, "timestamp", None),
+        log_level=str(getattr(args, "log_level", "INFO")),
+    )
+
+
 def main(argv: List[str] | None = None) -> int:
     parser = _build_parser()
     args = parser.parse_args(argv)
 
-    logging.basicConfig(level=getattr(logging, args.log_level.upper(), logging.INFO), format="%(levelname)s: %(message)s")
+    paths = build_paths(args)
+    options = build_options(args)
 
-    repo_root = Path(args.repo_root).resolve()
-    schema_root = _resolve(repo_root, args.schema_root)
-    views_dir = _ensure_dir(_resolve(repo_root, args.views_dir))
-    reports_root = _ensure_dir(_resolve(repo_root, args.reports_root))
-    output_dir = _ensure_dir(_resolve(repo_root, args.output_dir))
+    logging.basicConfig(level=getattr(logging, options.log_level.upper(), logging.INFO), format="%(levelname)s: %(message)s")
 
-    generated_at = _parse_timestamp(args.timestamp)
+    repo_root = paths.repo_root
+    schema_root = _resolve(repo_root, paths.schema_root)
+    views_dir = _resolve(repo_root, paths.views_dir)
+    reports_root = _resolve(repo_root, paths.reports_root)
+    output_dir = paths.output_dir
+
+    generated_at = _parse_timestamp(options.timestamp)
     slug = _format_slug(generated_at)
-    run_dir = _prepare_run_dir(output_dir, slug)
+    run_dir = output_dir / f"{RUN_PREFIX}-{slug}"
 
     entries = load_inventory(schema_root, views_dir)
     bundle = build_views(entries, generated_at=generated_at)
@@ -452,8 +466,40 @@ def main(argv: List[str] | None = None) -> int:
         reports_root=reports_root,
     )
 
-    write_run_artifacts(run_dir, report_payload, raw_payload)
-    update_latest_artifacts(run_dir, output_dir)
+    artifacts = [
+        ReportArtifact(
+            filename="report.json",
+            pointer="latest_report.json",
+            kind="json",
+            content=lambda: report_payload,
+        ),
+        ReportArtifact(
+            filename="report.md",
+            pointer="latest_report.md",
+            kind="text",
+            content=lambda: render_markdown(report_payload),
+        ),
+        ReportArtifact(
+            filename="log.txt",
+            pointer="latest_report.log",
+            kind="text",
+            content=lambda: render_log(report_payload),
+        ),
+        ReportArtifact(
+            filename="raw.json",
+            pointer="latest_raw.json",
+            kind="json",
+            content=lambda: raw_payload,
+        ),
+    ]
+
+    result = write_report_artifacts(
+        stem=RUN_PREFIX,
+        timestamp=generated_at,
+        output_dir=output_dir,
+        artifacts=artifacts,
+        keep=options.artifacts_to_keep,
+    )
 
     topic_paths = ensure_report_topics(reports_root)
 
@@ -474,10 +520,9 @@ def main(argv: List[str] | None = None) -> int:
     write_stub(views_dir / "tests_overview.yaml", tests_path, generated_at=generated_at, repo_root=repo_root)
     write_stub(views_dir / "summary.json", summary_path, generated_at=generated_at, repo_root=repo_root)
 
-    prune_old_runs(output_dir, keep=args.artifacts_to_keep, current_run=run_dir)
-
     logging.info(
-        "render_inventory_views status=%s total=%s docs=%s scripts=%s tests=%s",
+        "render_inventory_views run_dir=%s status=%s total=%s docs=%s scripts=%s tests=%s",
+        result.run_dir,
         report_payload["status"],
         report_payload["counts"]["totals"]["total"],
         report_payload["counts"]["totals"]["docs"],

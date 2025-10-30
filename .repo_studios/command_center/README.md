@@ -22,13 +22,14 @@
 
 ## Shared Helper Modules
 
-Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation:
+Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical `.repo_studios/library/` hierarchy exists, so every addition must comply with the naming blueprint in `que_for_integration/refactor_library/phase_1/naming_conventions.md` (training copy at `docs/naming_conventions.md`) and retain a documented destination for the eventual promotion step.
 
 - `pathing.py` – exports `slugify_relative` for building slug-safe report directories; scripts keep `_slugify_relative` aliases for backward compatibility.
-- `artifacts.py` – exports `copy_latest_artifact` (hardlink-first mirror helper) and is the landing spot for the upcoming `write_report_artifacts` wrapper that consolidates JSON/Markdown writers.
-- `__init__.py` – re-exports available helpers so dynamic imports in tests/orchestrators stay simple (`from libraries import slugify_relative, copy_latest_artifact`).
+- `artifacts.py` – exports `copy_latest_artifact` (hardlink-first mirror helper) and `write_report_artifacts`, which centralises JSON/Markdown/log writers, mirrors `latest_*` pointers, and enforces timestamped run retention (respecting `.keep` sentinels).
+- `cli.py` – exports path/keep-count configuration helpers (`resolve_repo_root`, `resolve_path`, `build_paths`, `build_keep_counts`) so duplicated CLI glue can converge before extraction.
+- `__init__.py` – re-exports available helpers so dynamic imports in tests/orchestrators stay simple (`from libraries import slugify_relative, copy_latest_artifact, build_paths, …`).
 
-When adding new helpers, keep them importable without mutating `sys.path` (matching current dynamic-import fallback) and backfill unit tests under `.repo_studios/tests/tests_library_integration/libraries/`.
+When adding new helpers, keep them importable without mutating `sys.path` (matching current dynamic-import fallback), log the staging decision in the active checklist, and backfill unit tests under `.repo_studios/tests/tests_library_integration/libraries/`.
 
 ---
 
@@ -38,7 +39,7 @@ Use this repeatable loop every time you address duplicate functions.
 
 1. **Detect & Stage**  
    - Run the orchestrator (or individual scripts) to refresh the inventory, analysis, and duplicate scan for the current target.  
-   - Inspect outputs under `<target>/<name>_index/` and `.repo_studios/command_center/reports/<slug>_duplicate_scan/`. Each run rewrites a single timestamped matrix/summary pair and removes stale siblings before mirroring the fresh files into both locations, so capture history via commits rather than adding new folders.
+   - Inspect outputs under `<target>/<name>_index/` and `.repo_studios/command_center/reports/<slug>_duplicate_scan/`. Each run rewrites a single timestamped matrix/summary pair and removes stale siblings before mirroring the fresh files into both locations (helpers default to keeping the latest three runs and honor `.keep` guards), so capture history via commits rather than adding new folders.
 2. **Align & Plan**  
    - Update `checklists/command_center_checklist.md` (or paste a dated copy) with detected groups, priorities, and decisions.  
    - Cross-reference naming conventions to pick the target library path.
@@ -91,15 +92,17 @@ make -C .repo_studios command-center COMMAND_CENTER_TARGET=/.repo_studios/script
 1. **Point the agent here** when requesting duplicate remediation.
 2. **Trigger the orchestrator** (or run scripts manually) so the chosen target’s slug directories refresh.
 3. **Review the mirrored artifacts** under `<target>/<name>_index/` and `.repo_studios/command_center/reports/<slug>_duplicate_scan/` before prioritising work.
-4. **Annotate the checklist** with decisions, edge cases, or approvals, then review changes before sign-off.
+4. **Check the naming guides** (`que_for_integration/refactor_library/naming_conventions.md` and `docs/naming_conventions.md`) before adding or moving shared helpers so promotion to `.repo_studios/library/` stays frictionless.
+5. **Annotate the checklist** with decisions, edge cases, or approvals, then review changes before sign-off.
 
 ### For AI Coding Agents
 
 1. **Read this README** to ingest expectations.  
 2. **Inspect the latest slugged mirrors** (`<target>/<name>_index/` and `.repo_studios/command_center/reports/<slug>_duplicate_scan/`) to understand duplicate groups and stock decisions.  
-3. **Follow the micro-cycle**: extract → test → replace → document.  
-4. **Update artifacts** (tests run, imports added, follow-up items) before signaling completion.  
-5. **Leave run notes** in the duplicate summary markdown (`<target>/<name>_duplicate_summary-YYYY-MM-DD.md`) or append to the checklist.
+3. **Consult the naming guides** (`que_for_integration/refactor_library/naming_conventions.md` and `docs/naming_conventions.md`) before drafting new helpers; keep modules `verb_noun` and record the eventual library destination.  
+4. **Follow the micro-cycle**: extract → test → replace → document.  
+5. **Update artifacts** (tests run, imports added, follow-up items) before signaling completion.  
+6. **Leave run notes** in the duplicate summary markdown (`<target>/<name>_duplicate_summary-YYYY-MM-DD.md`) or append to the checklist.
 
 ---
 
@@ -107,7 +110,7 @@ make -C .repo_studios command-center COMMAND_CENTER_TARGET=/.repo_studios/script
 
 - `que_for_integration/refactor_library/command_center_checklist.md` – alignment plan with phase status and decisions.  
 - `docs/templates/command_center_alignment_template.md` – reusable template for future initiatives.  
-- `que_for_integration/refactor_library/naming_conventions.md` – canonical folder/file naming rules.  
+- `que_for_integration/refactor_library/naming_conventions.md` – canonical folder/file naming rules (training copy at `docs/naming_conventions.md`).  
 - `que_for_integration/refactor_library/phase_3/PHASE_3_MANUAL_EXTRACTION_GUIDE.md` – detailed manual extraction walkthrough.
 
 ---

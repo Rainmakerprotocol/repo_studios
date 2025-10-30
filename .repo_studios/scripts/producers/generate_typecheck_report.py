@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import json
 import logging
 import os
 import re
@@ -12,7 +11,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, NamedTuple
 
 try:  # pragma: no cover - Python 3.11+
     import tomllib
@@ -29,11 +28,27 @@ SCHEMA_VERSION = 1
 LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 try:
-    from libraries import copy_latest_artifact
+    from libraries import (  # type: ignore
+        KeepSpec,
+        PathSpec,
+        ReportArtifact,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+        write_report_artifacts,
+    )
 except ModuleNotFoundError:  # pragma: no cover - fallback when executed directly
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import copy_latest_artifact
+    from libraries import (  # type: ignore
+        KeepSpec,
+        PathSpec,
+        ReportArtifact,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+        write_report_artifacts,
+    )
 
 
 @dataclass
@@ -64,44 +79,6 @@ def _current_utc() -> datetime:
 
 def _format_slug(moment: datetime) -> str:
     return moment.strftime("%Y%m%d_%H%M%S")
-
-
-def _ensure_dir(path: Path) -> Path:
-    path.mkdir(parents=True, exist_ok=True)
-    return path
-
-
-def _sanitize_slug(slug: str) -> str:
-    safe = slug.replace("/", "_").replace("\\", "_")
-    if os.sep not in {"/", "\\"}:
-        safe = safe.replace(os.sep, "_")
-    return safe
-
-
-def _prepare_run_dir(output_dir: Path, run_slug: str) -> Path:
-    run_dir = output_dir / f"{RUN_PREFIX}-{_sanitize_slug(run_slug)}"
-    run_dir.mkdir(parents=True, exist_ok=True)
-    return run_dir
-
-
-def prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> None:
-    keep = max(keep, 1)
-    if not output_dir.exists():
-        return
-    runs = [child for child in output_dir.iterdir() if child.is_dir() and child.name.startswith(f"{RUN_PREFIX}-")]
-    runs.sort(key=lambda node: node.name, reverse=True)
-    for index, node in enumerate(runs):
-        if index < keep or node == current_run:
-            continue
-        for item in node.iterdir():
-            if item.is_file():
-                item.unlink(missing_ok=True)
-        node.rmdir()
-
-
-def _resolve_path(base: Path, value: str | Path) -> Path:
-    path = Path(value)
-    return path if path.is_absolute() else (base / path).resolve()
 
 
 def _load_pyproject(repo_root: Path) -> dict[str, Any]:
@@ -341,35 +318,6 @@ def _render_log(payload: dict[str, Any]) -> str:
     ) + "\n"
 
 
-def _write_artifacts(
-    *,
-    run_dir: Path,
-    payload: dict[str, Any],
-    stdout_combined: str,
-) -> tuple[Path, Path, Path, Path]:
-    report_json = run_dir / "report.json"
-    report_json.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-
-    report_md = run_dir / "report.md"
-    report_md.write_text(_render_markdown(payload), encoding="utf-8")
-
-    log_txt = run_dir / "log.txt"
-    log_txt.write_text(_render_log(payload), encoding="utf-8")
-
-    raw_txt = run_dir / "raw.txt"
-    raw_txt.write_text(stdout_combined, encoding="utf-8")
-
-    return report_json, report_md, log_txt, raw_txt
-
-
-_copy_latest = copy_latest_artifact
-
-
-def _update_latest(paths: list[tuple[Path, Path]]) -> None:
-    for src, dest in paths:
-        _copy_latest(src, dest)
-
-
 def configure_logging(level: str) -> None:
     logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s: %(message)s")
 
@@ -379,7 +327,7 @@ def build_parser() -> argparse.ArgumentParser:
         description="Run mypy and emit structured artifacts for typecheck monitoring",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument("--repo-root", default=str(DEFAULT_REPO_ROOT), help="Repository root used to resolve paths")
+    parser.add_argument("--repo-root", help="Repository root used to resolve paths")
     parser.add_argument(
         "--output-dir",
         default=str(DEFAULT_OUTPUT_DIR),
@@ -391,17 +339,56 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+class Paths(NamedTuple):
+    repo_root: Path
+    output_dir: Path
+
+
+class Options(NamedTuple):
+    artifacts_to_keep: int
+    timestamp: str | None
+    log_level: str
+
+
+PATH_SPECS: dict[str, PathSpec] = {
+    "output_dir": PathSpec(field="output_dir", default=DEFAULT_OUTPUT_DIR, ensure_dir=True, within_repo=False),
+}
+
+
+KEEP_SPECS: dict[str, KeepSpec] = {
+    "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
+}
+
+
+def build_paths(args: argparse.Namespace) -> Paths:
+    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
+    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
+    return Paths(repo_root=repo_root, output_dir=resolved["output_dir"])
+
+
+def build_options(args: argparse.Namespace) -> Options:
+    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
+    return Options(
+        artifacts_to_keep=keep_counts["artifacts_to_keep"],
+        timestamp=getattr(args, "timestamp", None),
+        log_level=str(getattr(args, "log_level", "INFO")),
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
-    configure_logging(args.log_level)
+    paths = build_paths(args)
+    options = build_options(args)
+    configure_logging(options.log_level)
 
-    repo_root = Path(args.repo_root).resolve()
-    output_dir = _ensure_dir(_resolve_path(repo_root, args.output_dir))
+    repo_root = paths.repo_root
+    output_dir = paths.output_dir
 
-    if args.timestamp:
+    timestamp_arg = options.timestamp
+    if timestamp_arg:
         try:
-            generated_at = datetime.fromisoformat(args.timestamp)
+            generated_at = datetime.fromisoformat(timestamp_arg)
             if generated_at.tzinfo is None:
                 generated_at = generated_at.replace(tzinfo=timezone.utc)
         except ValueError:
@@ -410,7 +397,7 @@ def main(argv: list[str] | None = None) -> int:
         generated_at = _current_utc()
 
     run_slug = _format_slug(generated_at)
-    run_dir = _prepare_run_dir(output_dir, run_slug)
+    run_dir = output_dir / f"{RUN_PREFIX}-{run_slug}"
 
     targets = _discover_targets(repo_root)
     strict = _env_bool("TYPECHECK_STRICT")
@@ -450,24 +437,47 @@ def main(argv: list[str] | None = None) -> int:
         stats=stats,
     )
 
-    report_json, report_md, log_txt, raw_txt = _write_artifacts(
-        run_dir=run_dir,
-        payload=payload,
-        stdout_combined=stdout_combined,
+    artifacts = [
+        ReportArtifact(
+            filename="report.json",
+            pointer="latest_report.json",
+            kind="json",
+            content=lambda: payload,
+        ),
+        ReportArtifact(
+            filename="report.md",
+            pointer="latest_report.md",
+            kind="text",
+            content=lambda: _render_markdown(payload),
+        ),
+        ReportArtifact(
+            filename="log.txt",
+            pointer="latest_report.log",
+            kind="text",
+            content=lambda: _render_log(payload),
+        ),
+        ReportArtifact(
+            filename="raw.txt",
+            pointer="latest_raw.txt",
+            kind="text",
+            content=lambda: stdout_combined,
+        ),
+    ]
+
+    result = write_report_artifacts(
+        stem=RUN_PREFIX,
+        timestamp=generated_at,
+        output_dir=output_dir,
+        artifacts=artifacts,
+        keep=options.artifacts_to_keep,
     )
 
-    latest_mappings = [
-        (report_json, output_dir / "latest_report.json"),
-        (report_md, output_dir / "latest_report.md"),
-        (log_txt, output_dir / "latest_report.log"),
-        (raw_txt, output_dir / "latest_raw.txt"),
-    ]
-    _update_latest(latest_mappings)
-
-    prune_old_runs(output_dir, keep=args.artifacts_to_keep, current_run=run_dir)
-
     logging.info(
-        "Typecheck status=%s errors=%d files=%d", status, total_errors, files_with_issues
+        "Typecheck run_dir=%s status=%s errors=%d files=%d",
+        result.run_dir,
+        status,
+        total_errors,
+        files_with_issues,
     )
     return 0
 

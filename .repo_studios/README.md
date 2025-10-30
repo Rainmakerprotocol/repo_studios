@@ -9,7 +9,7 @@ This directory houses the automation runtime that keeps Repo Studios scripts, re
 ## What lives here
 
 - `command_center/` – duplicate remediation protocol, reports, checklists, and the new pipeline orchestrator.
-- `command_center/scripts/libraries/` – shared helpers (`slugify_relative`, `copy_latest_artifact`, upcoming `write_report_artifacts`) used across Command Center producers and aggregators.
+- `command_center/scripts/libraries/` – staging area for shared helpers (`slugify_relative`, `copy_latest_artifact`, `write_report_artifacts`, CLI utilities) used across Command Center producers and aggregators; the artifact helper mirrors `latest_*` pointers and prunes historical runs. Naming and staging must follow `que_for_integration/refactor_library/phase_1/naming_conventions.md` (training copy at `.repo_studios/command_center/docs/naming_conventions.md`) so modules can move cleanly into `.repo_studios/library/` when that hierarchy lands.
 - `scripts/` – tiered automation (producers, consumers, aggregators, orchestrators, summarizers, utilities).
 - `tests/` – pytest suites mirroring the script tiers (unit, integration, and smoke coverage).
 - `reports/` – shared mirrors that slug targets for repeatable artifact names (inventory, analysis, duplicate scans).
@@ -51,3 +51,9 @@ make -C .repo_studios command-center COMMAND_CENTER_TARGET=/.repo_studios/script
 - Prefer importing the `run(argv)` helpers over shelling out so automated tests and orchestrators remain lightweight.
 - Logging flows through the `--log-level` flag; avoid `print` and rely on structured log lines for traceability.
 - When adding new automation, update this README plus the relevant tier-specific documentation so future contributors can discover it quickly.
+
+### Library staging & naming conventions
+
+- Treat `.repo_studios/command_center/scripts/libraries/` as a temporary staging ground for helpers until the canonical `.repo_studios/library/` tree is created.
+- Follow the naming contract in `que_for_integration/refactor_library/phase_1/naming_conventions.md` (training copy at `.repo_studios/command_center/docs/naming_conventions.md`): three-level hierarchy, `verb_noun.py` modules, and primary functions that match filenames.
+- When introducing or relocating a shared helper, update the relevant checklist entry and note the eventual library destination so the promotion step stays traceable.

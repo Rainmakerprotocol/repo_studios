@@ -21,7 +21,7 @@
 | Phase 1 | Foundation Setup | Complete | Baseline diff confirmed no conflicting `.repo_studios/library/` tree; naming conventions and README adjustments captured for future drops. |
 | Phase 2 | Duplicate Detection Tool | In progress | Command Center scanner adopted; verifying remaining integration work against slugged reports and retention helper. |
 | Phase 2.5 | Orchestrator Bootstrap | In progress | Orchestrator in place and validated through make target (summarizers/utilities); documentation updates still pending. |
-| Phase 3 | Manual Extraction Validation | In progress | `_slugify_relative` and `_copy_latest` now centralized with tests; prepping `write_artifacts` implementation plan. |
+| Phase 3 | Manual Extraction Validation | In progress | `_slugify_relative`, `_copy_latest`, and new `write_report_artifacts` helper landed; dependency hygiene & import graph producers migrated while docs sweep remains. |
 | Phase 4 | Automated Extraction | Not started | Requires manual validation results and guardrail design. |
 | Phase 5 | Integration with Repo Studios | Not started | Make/CI wiring dependent on outcomes from earlier phases. |
 | Phase 6 | AI Prompt Engineering | Not started | Must align with existing `repo_prompts.md` governance. |
@@ -83,6 +83,18 @@ Notes: Completing this phase delivers the single-trigger workflow users can poin
 - [x] **Create run-folder template** (`reports/<timestamp>/SUMMARY.md`) capturing duplicates addressed, tests run, and follow-up items *(Agent → template, Developer → confirm).* — Added `.repo_studios/command_center/docs/run_folder_summary_template.md` with lint-compliant fences and usage notes.
 - [x] **Pilot shared helper extraction for `_slugify_relative`** to establish library patterns before touching other duplicates *(Agent → implement, Developer → review).* — Helper now lives in `.repo_studios/command_center/scripts/libraries/pathing.py` with scripts wired through dynamic imports and refreshed tests.
 - [x] **Centralize `_copy_latest` helper** inside `.repo_studios/command_center/scripts/libraries/artifacts.py`, update producers to alias the shared helper, and add focused tests *(Agent → implement, Developer → review).* — Producers now import `copy_latest_artifact`, library tests cover hardlink fallback (`tests/tests_library_integration/libraries/test_artifacts.py`), and the producer suite passed on Windows after wiring the alias.
+- [x] **Implement shared `write_report_artifacts` helper** within `.repo_studios/command_center/scripts/libraries/artifacts.py`, expand library tests, and migrate `generate_dependency_hygiene_report.py` plus `generate_import_graph_report.py` to consume it *(Agent → implement, Developer → review).* — Helper now owns pointer mirroring and retention; both producers write artifacts via the shared API pending documentation refresh.
+- [x] **Land shared CLI helper utilities** in `.repo_studios/command_center/scripts/libraries/cli.py`, cover repo-root/path resolution with dedicated tests, and migrate `validate_metrics_anchor_stubs.py` to consume the helpers while keeping `build_paths`/`build_options` semantics intact *(Agent → implement, Developer → review).* — New helper powers config-driven path + retention resolution with library tests guarding path validation and the producer suite reaffirming behaviour.
+- [x] **Adopt CLI helper in `analyze_test_hardening.py`** so test-hardening reports reuse the shared path/keep configuration *(Agent → implement, Developer → review).* — `build_paths`/`build_options` now delegate to the library specs, preserving custom output directories while unit + producer suites confirm no regression.
+- [x] **Adopt CLI helper in `scan_monkey_patches.py`** so the monkey-patch scan aligns with shared repo-root and retention logic *(Agent → implement, Developer → review).* — New config maps drive `build_paths`, keep-count normalization flows through the library, and targeted producer tests still pass on Windows.
+- [x] **Adopt CLI helper in `validate_import_boundaries.py`** so import-boundary checks share the same path/keep resolution *(Agent → implement, Developer → review).* — Shared specs now resolve output + allowlist paths, graph overrides still honored, and regression tests remain green.
+- [x] **Adopt CLI helper in `verify_docs_integrity.py`** so documentation integrity runs reuse shared path + retention contracts *(Agent → implement, Developer → review).* — `build_paths`/`build_options` now pull from the library specs, default index resolution still works with overrides, and producer tests remain green.
+- [x] **Adopt CLI helper in `seed_standards_prompts.py`** so standards prompt bundles reuse shared repo-root/path/retention semantics *(Agent → implement, Developer → review).* — Paths/options now flow through the library configs, defaults stay aligned with the repo workspace, and the producer regression suite (`test_seed_standards_prompts.py`) remains green.
+- [x] **Adopt CLI helper in `validate_inventory.py`** so inventory validation leverages shared repo-root resolution and retention settings *(Agent → implement, Developer → review).* — New path/keep builders honour schema-root overrides while keeping defaults intact, and the producer regression test (`test_validate_inventory.py`) stays green.
+- [x] **Adopt CLI helper in `validate_markdown_anchors.py`** so markdown anchor validation aligns with shared repo-root/path/retention logic *(Agent → implement, Developer → review).* — Paths/options now flow through the library configs, default glob handling remains intact, Windows absolute roots stay supported, and the producer regression test (`test_validate_markdown_anchors.py`) passes.
+- [x] **Adopt CLI helper in `check_inventory_health.py`** so inventory health reports reuse shared repo-root/path resolution and artifact retention *(Agent → implement, Developer → review).* — Paths now respect `--repo-root`, report emission uses the shared artifact writer for JSON/Markdown/log outputs, and the producer regression suite (`test_check_inventory_health.py`) remains green.
+- [x] **Adopt CLI helper in `render_inventory_views.py`** so inventory view rendering shares repo-root resolution and artifact management *(Agent → implement, Developer → review).* — Relative defaults now flow through the helper, structured outputs rely on `write_report_artifacts` for latest pointers and pruning, and the producer regression test (`test_render_inventory_views.py`) stays green.
+- [x] **Adopt CLI helper in `generate_typecheck_report.py`** so typecheck reporting reuses shared repo-root resolution and artifact retention *(Agent → implement, Developer → review).* — Output directories now flow through the helper, latest pointers/retention ride on `write_report_artifacts`, and the producer regression test (`test_generate_typecheck_report.py`) remains green.
 
 ### Phase 3 Planning Snapshot (2025-10-28)
 
@@ -91,27 +103,41 @@ Notes: Completing this phase delivers the single-trigger workflow users can poin
 | `_slugify_relative(relative_path: Path) -> str` | Aggregator, producer, summarizer | `.repo_studios/command_center/scripts/libraries/pathing.py` (Phase 3 landing); future library path `filesystem/path_operations/slugify_relative_path.py` | `slugify_relative(relative_path: Path) -> str` re-exported via `libraries/__init__.py`; scripts keep `_slugify_relative` alias | Library-style tests added in-place (integration suites now assert alias equality); follow-up once core library scaffold exists |
 | `_copy_latest(src: Path, dest: Path) -> None` | Producers (inventory reports, standards diff, etc.) | `artifact_lifecycle/versioning/copy_latest_artifact.py` | `copy_latest_artifact(src: Path, dest: Path) -> None` with safe fallback to copy | Library test using temporary directories to ensure timestamp replacement; targeted producer smoke test (e.g., `generate_import_graph_report`) verifying latest pointer rewrite |
 | `write_artifacts(...)` (dict payload + run metadata writers) | Multiple producers (reports) | `artifact_lifecycle/structured_output/write_report_artifacts.py` | `write_report_artifacts(payload: dict[str, Any], run_dir: Path, mirror_dir: Path, *, stem: str) -> tuple[Path, Path]` | Parameterized library tests confirming JSON/Markdown sync and pruning; producer fixture adjustments to assert mirrored filenames |
-| `build_paths(args: argparse.Namespace) -> Paths` & `build_options(args: argparse.Namespace) -> Options` | All Command Center CLIs | `cli_patterns/command_center/build_paths_and_options.py` | `build_paths`/`build_options` (names preserved) returning shared dataclasses | Library tests stubbing temp repo roots and verifying guardrails; orchestrator + producer integration tests updated to import shared helpers |
+| `build_paths(args: argparse.Namespace) -> Paths` & `build_options(args: argparse.Namespace) -> Options` | All Command Center CLIs | `.repo_studios/command_center/scripts/libraries/cli.py` | Resolver utilities (`resolve_repo_root`, `resolve_output_dir`, `normalize_keep_count`) plus optional config-driven builders | Library tests for path resolution + producer smoke tests ensuring helper parity |
 | `configure_logging(level: str) -> None` | Command Center CLIs | `logging_setup/configure_basic_logging.py` | `configure_basic_logging(level: str) -> None` plus alias for backwards compatibility | Library test ensuring idempotent logging config; spot check orchestrator test for custom log level |
 
 **Next actions:**
 
 1. Socialize checklist/template with manual operators and fold feedback into docs after first real extraction run.
-2. Draft `write_artifacts` extraction plan (library destination, API surface, and regression tests) now that `_copy_latest` is centralized.
-3. Confirm documentation updates for the new helpers before scheduling the next extraction pass (README and protocol touchpoints).
+2. Keep README/protocol references in sync as additional producers migrate to `write_report_artifacts`.
+3. Line up the next extraction candidate (`build_paths` / `build_options`) once helper docs settle and producer tests stay green.
 
 Notes: Rollout remains manual; automation explicitly deferred until manual validation succeeds.
 
-### `write_artifacts` Extraction Plan (Draft — 2025-10-28)
+### `write_report_artifacts` Implementation Summary (2025-10-28)
 
-- **Target module path:** Land initial implementation in `.repo_studios/command_center/scripts/libraries/artifacts.py` beside `copy_latest_artifact`, then mirror it into the long-term library blueprint at `artifact_lifecycle/structured_output/write_report_artifacts.py` when the shared library tree is formalised.
-- **API surface:** Introduce `write_report_artifacts(*, payload: dict[str, Any], run_dir: Path, mirror_dir: Path, stem: str, summary: dict[str, Any] | None = None, log: logging.Logger | None = None) -> dict[str, Path]`. The helper writes JSON (and optional Markdown) artifacts into both primary and mirror directories, returns path handles, and reuses `copy_latest_artifact` for pointer upkeep.
-- **Behavioural guarantees:** Consistent timestamp suffix formatting, atomic writes via temporary files, retention-friendly pruning (respect `.keep` markers, keep latest N matching producer defaults), and idempotent reruns when payload is unchanged.
-- **Regression tests:**
-	- Extend `.repo_studios/tests/tests_library_integration/libraries/test_artifacts.py` with parametrised cases covering JSON-only vs. JSON+Markdown flows, mirror directory mirroring, pointer reuse, and simulated hardlink failures.
-	- Update producer tests (starting with `tests/tests_producers/test_generate_dependency_hygiene_report.py`, `test_generate_standards_index.py`, `test_generate_typecheck_report.py`) to assert imports reference the shared helper and that mirrored artifacts remain byte-identical.
-	- Refresh orchestrator smoke test (`tests/tests_orchestrators/test_command_center_pipeline.py`) to confirm the pipeline still locates artifacts via the helper’s return mapping when stitched into downstream steps.
-- **Migration notes:** Remove inline `write_artifacts` variants only after confirming docs/tests pass; keep `_write_*` aliases during transition to reduce diff noise and ease rollbacks.
+- **Landing spot:** Helper now lives in `.repo_studios/command_center/scripts/libraries/artifacts.py` alongside `copy_latest_artifact`, exported via `libraries/__init__.py` for producer consumption.
+- **API surface:** `write_report_artifacts(*, stem, timestamp, output_dir, artifacts, keep)` delegates serialization to `ReportArtifact` descriptors, mirrors latest pointers, and prunes historical runs while respecting `.keep` sentinels.
+- **Behavioural checks:** Library tests in `tests/tests_library_integration/libraries/test_artifacts.py` cover JSON/text callbacks, pruning, and pointer mirroring; producers confirm helper wiring via targeted fixtures (dependency hygiene suite already exercised, import graph run pending retest).
+- **Migration status:** `generate_dependency_hygiene_report.py` and `generate_import_graph_report.py` now call the shared helper; legacy inline `write_artifacts` logic removed with run-directory metadata threaded through the report payload.
+- **Follow-ups:** Monitor docs/tests as remaining producers onboard the helper and evaluate whether orchestrator smoke tests should assert helper return metadata once additional migrations land.
+
+### `build_paths` / `build_options` Extraction Plan (Draft — 2025-10-28)
+
+- **Duplicate landscape:** Seven producers ship near-identical `build_paths` helpers (placeholders, metrics anchors, import boundaries, docs integrity, test hardening, monkey patch scan, standards prompts) with variations limited to which optional arguments map to repo-root-relative defaults. Five of those also expose parallel `build_options` wrappers that primarily clamp `artifacts_to_keep` and toggle booleans like `--strict`.
+- **Proposed landing spot:** Add `.repo_studios/command_center/scripts/libraries/cli.py` exporting `resolve_repo_root`, `resolve_output_dir`, `resolve_optional_path`, and `normalize_keep_count` utilities plus thin orchestrators `build_standard_paths` / `build_standard_options` that accept a small config dataclass. Re-export via `libraries/__init__.py` for parity with existing helpers.
+- **API sketch:**
+  - `resolve_repo_root(explicit: str | None) -> Path` (defaults to three levels up from the caller module).
+  - `resolve_path(explicit: str | None, repo_root: Path, default: Path, *, ensure_exists: bool = False) -> Path` covering both required and optional paths.
+  - `resolve_output_dir(explicit: str | None, repo_root: Path, default: Path) -> Path` returning an absolute directory.
+  - `normalize_keep_count(raw: int | None, minimum: int = 1) -> int` factoring environment overrides like `STRICT` when needed.
+  - Optional `build_paths_from_config(config: PathsConfig, args: argparse.Namespace) -> dataclass` helper that maps config entries (`field -> default relative path`) to resolved absolute `Path` objects so producers can keep their existing `Paths` dataclass but delegate the resolution mechanics.
+- **Migration sequence:**
+  1. Introduce helper module + unit tests under `tests/tests_library_integration/libraries/test_cli.py` covering repo-root detection, default fallbacks, relative/absolute inputs, and error handling.
+  2. Update a pilot producer (e.g., `validate_metrics_anchor_stubs.py`) to consume the helper while preserving the existing `Paths` dataclass; extend its tests to assert equivalence.
+  3. Sweep remaining producers family-by-family, replacing duplicated `build_paths`/`build_options` logic with calls into the helper while keeping script-specific semantics (e.g., `STRICT` environment guard) centralized in the library when feasible.
+  4. Backfill orchestrator or smoke tests if they rely on these helpers indirectly, ensuring repo-root resolution stays deterministic on Windows paths.
+- **Documentation & comms:** Once the first migration lands, document usage in `.repo_studios/command_center/README.md` and update the Copilot instructions to point at the new CLI helper utilities. Capture any producer-specific overrides in the runbook.
 
 ## Phase 4 – Automated Extraction
 
@@ -171,7 +197,7 @@ Notes: Will proceed only after library structure and extraction workflow stabili
 4. **Testing Footprint** – Library tests will live alongside the library in a mirrored branch structure (per reference bundle); current integration coverage validates the slugged pipeline on Windows and asserts helper alias reuse.
 5. **Tooling Cross-Platform** – Manual scripts and test commands must succeed on Windows, Linux, and macOS; add validation steps for each target shell.
 6. **Governance Alignment** – Single approver confirmed (you). Capture this in rollout notes so future contributors know who signs off.
-7. **Report Retention & Pruning** – `scan_duplicates.py` now enforces retention (default keep three runs). Capture policy details in the protocol README and replicate across other report-producing scripts.
+7. **Report Retention & Pruning** – `scan_duplicates.py` and the shared `write_report_artifacts` helper enforce retention (default keep three runs). Capture policy details in the protocol README and extend adoption across remaining report producers.
 8. **Orchestrator Contract** – Finalise argument handling, exit codes, and documentation expectations before implementing the Phase 2.5 runner.
 
 ---

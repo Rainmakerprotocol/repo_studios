@@ -8,6 +8,7 @@ import datetime as dt
 import json
 import logging
 import shutil
+import sys
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
@@ -21,6 +22,32 @@ RUN_PREFIX = "standards_prompt_seed"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 FORMAT_CHOICES = ("text", "yaml", "json")
 SCHEMA_VERSION = 1
+
+LIBRARIES_ROOT = (
+    Path(__file__).resolve().parents[3]
+    / ".repo_studios"
+    / "command_center"
+    / "scripts"
+)
+
+try:
+    from libraries import (
+        KeepSpec,
+        PathSpec,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+    )
+except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import (  # type: ignore
+        KeepSpec,
+        PathSpec,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+    )
 
 
 @dataclass(frozen=True)
@@ -37,6 +64,22 @@ class Options:
     artifacts_to_keep: int
     legacy_format: str | None
     legacy_output: str | None
+
+
+PATH_SPECS: dict[str, PathSpec] = {
+    "index_path": PathSpec(field="index_path", default=DEFAULT_RELATIVE_INDEX, within_repo=False),
+    "output_dir": PathSpec(
+        field="output_dir",
+        default=DEFAULT_OUTPUT_DIR,
+        ensure_dir=True,
+        within_repo=False,
+    ),
+}
+
+
+KEEP_SPECS: dict[str, KeepSpec] = {
+    "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
+}
 
 
 def parse_args(argv: list[str] | None) -> argparse.Namespace:
@@ -89,34 +132,24 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = (
-        Path(args.repo_root).resolve()
-        if args.repo_root
-        else Path(__file__).resolve().parents[3]
+    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
+    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
+    return Paths(
+        repo_root=repo_root,
+        index_path=resolved["index_path"],
+        output_dir=resolved["output_dir"],
     )
-    if args.index_path:
-        index_path = Path(args.index_path)
-        if not index_path.is_absolute():
-            index_path = (repo_root / index_path).resolve()
-    else:
-        index_path = (repo_root / DEFAULT_RELATIVE_INDEX).resolve()
-    if args.output_dir:
-        output_dir = Path(args.output_dir)
-        if not output_dir.is_absolute():
-            output_dir = (repo_root / output_dir).resolve()
-    else:
-        output_dir = (repo_root / DEFAULT_OUTPUT_DIR).resolve()
-    return Paths(repo_root=repo_root, index_path=index_path, output_dir=output_dir)
 
 
 def build_options(args: argparse.Namespace) -> Options:
     artifact_formats = tuple(dict.fromkeys(args.artifact_formats))  # preserve order, dedupe
     if not artifact_formats:
         raise SystemExit("--artifact-formats must include at least one format")
+    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
     return Options(
         include_warn=bool(args.include_warn),
         artifact_formats=artifact_formats,
-        artifacts_to_keep=max(1, int(args.artifacts_to_keep)),
+        artifacts_to_keep=keep_counts["artifacts_to_keep"],
         legacy_format=args.format,
         legacy_output=args.out,
     )

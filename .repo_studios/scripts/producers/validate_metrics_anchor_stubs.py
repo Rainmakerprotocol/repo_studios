@@ -8,6 +8,7 @@ import datetime as dt
 import json
 import logging
 import re
+import sys
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
@@ -27,6 +28,32 @@ RUN_PREFIX = "metrics_anchor_stub_check"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 SCHEMA_VERSION = 1
 
+LIBRARIES_ROOT = (
+    Path(__file__).resolve().parents[3]
+    / ".repo_studios"
+    / "command_center"
+    / "scripts"
+)
+
+try:
+    from libraries import (
+        KeepSpec,
+        PathSpec,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+    )
+except ModuleNotFoundError:  # pragma: no cover - fallback for script execution without package path
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import (  # type: ignore
+        KeepSpec,
+        PathSpec,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+    )
+
 
 @dataclass(frozen=True)
 class Paths:
@@ -39,6 +66,17 @@ class Paths:
 @dataclass(frozen=True)
 class Options:
     artifacts_to_keep: int
+
+
+PATH_SPECS: dict[str, PathSpec] = {
+    "output_dir": PathSpec(field="output_dir", default=DEFAULT_OUTPUT_DIR, ensure_dir=True, within_repo=False),
+    "legacy_file": PathSpec(field="legacy_file", default=DEFAULT_LEGACY_FILE, within_repo=False),
+    "allowlist_path": PathSpec(field="allowlist_path", default=DEFAULT_ALLOWLIST_PATH, within_repo=False),
+}
+
+KEEP_SPECS: dict[str, KeepSpec] = {
+    "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
+}
 
 
 def parse_args(argv: list[str] | None) -> argparse.Namespace:
@@ -83,36 +121,19 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = (
-        Path(args.repo_root).resolve()
-        if args.repo_root
-        else Path(__file__).resolve().parents[3]
-    )
-    output_dir = (
-        Path(args.output_dir).resolve()
-        if args.output_dir
-        else (repo_root / DEFAULT_OUTPUT_DIR).resolve()
-    )
-    legacy_file = (
-        Path(args.legacy_file).resolve()
-        if args.legacy_file
-        else (repo_root / DEFAULT_LEGACY_FILE).resolve()
-    )
-    allowlist_path = (
-        Path(args.allowlist_path).resolve()
-        if args.allowlist_path
-        else (repo_root / DEFAULT_ALLOWLIST_PATH).resolve()
-    )
+    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
+    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
     return Paths(
         repo_root=repo_root,
-        output_dir=output_dir,
-        legacy_file=legacy_file,
-        allowlist_path=allowlist_path,
+        output_dir=resolved["output_dir"],
+        legacy_file=resolved["legacy_file"],
+        allowlist_path=resolved["allowlist_path"],
     )
 
 
 def build_options(args: argparse.Namespace) -> Options:
-    return Options(artifacts_to_keep=max(1, int(args.artifacts_to_keep)))
+    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
+    return Options(artifacts_to_keep=keep_counts["artifacts_to_keep"])
 
 
 def _normalize_anchor(text: str) -> str:

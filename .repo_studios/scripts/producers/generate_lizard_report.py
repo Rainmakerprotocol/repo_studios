@@ -44,11 +44,27 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 try:
-    from libraries import copy_latest_artifact
+    from libraries import (  # type: ignore
+        KeepSpec,
+        PathSpec,
+        ReportArtifact,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+        write_report_artifacts,
+    )
 except ModuleNotFoundError:  # pragma: no cover - fallback for direct script execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import copy_latest_artifact
+    from libraries import (  # type: ignore
+        KeepSpec,
+        PathSpec,
+        ReportArtifact,
+        build_keep_counts as library_build_keep_counts,
+        build_paths as library_build_paths,
+        resolve_repo_root,
+        write_report_artifacts,
+    )
 LIZARD_JSON_EXTENSION_SOURCE = '''"""JSON output extension for lizard (auto-installed)."""
 
 from __future__ import annotations
@@ -157,14 +173,10 @@ def _resolve_timestamp(raw: str | None) -> tuple[str, datetime]:
 def _ensure_directory(path: Path) -> Path:
     path.mkdir(parents=True, exist_ok=True)
     return path
-
-
 def _sanitize_slug(slug: str) -> str:
     sanitized = slug.replace(os.sep, "_")
     sanitized = sanitized.replace("/", "_")
     return sanitized
-
-
 _copy_latest = copy_latest_artifact
 
 
@@ -185,8 +197,6 @@ def prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> None:
             if child.is_file():
                 child.unlink(missing_ok=True)  # type: ignore[attr-defined]
         path.rmdir()
-
-
 def _prepare_run_dir(output_dir: Path, run_slug: str) -> Path:
     _ensure_directory(output_dir)
     safe_slug = _sanitize_slug(run_slug)
@@ -235,42 +245,6 @@ def _build_command(max_ccn: int, max_length: int, targets: Iterable[str], extra:
 
 
 def _select_targets(repo_root: Path, provided: Iterable[str]) -> list[str]:
-    targets = [t for t in provided if t]
-    if targets:
-        return [str((repo_root / t).resolve()) if not Path(t).is_absolute() else str(Path(t)) for t in targets]
-    resolved: list[str] = []
-    for rel in DEFAULT_TARGETS:
-        path = repo_root / rel
-        if path.exists():
-            resolved.append(str(path.resolve()))
-    return resolved
-
-
-def _build_offender(file_path: str, func: dict, *, max_ccn: int, max_length: int) -> Offender | None:
-    ccn = _as_int(func.get("cyclomatic_complexity", 0))
-    length = _as_int(func.get("length", 0))
-    if ccn <= max_ccn and length <= max_length:
-        return None
-
-    name = func.get("name") or func.get("long_name") or "<unnamed>"
-    return Offender(
-        path=file_path,
-        name=str(name),
-        complexity=ccn,
-        length=length,
-    )
-
-
-def _extract_file_path(entry: dict) -> str | None:
-    for key in ("filename", "file_name", "file"):
-        value = entry.get(key)
-        if isinstance(value, str) and value:
-            return value
-    return None
-
-
-def _parse_offenders(payload: list[dict], *, max_ccn: int, max_length: int) -> list[Offender]:
-    offenders: list[Offender] = []
     for entry in payload:
         file_path = _extract_file_path(entry)
         if not file_path:
@@ -286,8 +260,6 @@ def _write_json(run_dir: Path, payload: dict) -> Path:
     path = run_dir / "report.json"
     path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     return path
-
-
 def _write_md(run_dir: Path, payload: dict, offenders: list[Offender], *, max_rows: int = 25) -> Path:
     lines: list[str] = []
     lines.append("# Lizard Complexity Report\n\n")
@@ -319,8 +291,6 @@ def _write_md(run_dir: Path, payload: dict, offenders: list[Offender], *, max_ro
     path = run_dir / "report.md"
     path.write_text("".join(lines), encoding="utf-8")
     return path
-
-
 def _write_log(run_dir: Path, payload: dict, offenders: list[Offender]) -> Path:
     lines = [
         f"status={payload['status']}",
@@ -353,6 +323,9 @@ def write_artifacts(
     *,
     run_dir: Path,
     output_dir: Path,
+    def _extract_file_path(entry: dict) -> str | None:
+        for key in ("filename", "file_name", "file"):
+            value = entry.get(key)
     keep: int,
 ) -> None:
     _ensure_directory(output_dir)
@@ -378,7 +351,6 @@ def write_artifacts(
 
     prune_old_runs(output_dir, keep=keep, current_run=run_dir)
 
-
 def _write_raw(raw_path: Path, stdout: str, stderr: str | None = None) -> None:
     lines: list[str] = []
     if stdout:
@@ -387,6 +359,21 @@ def _write_raw(raw_path: Path, stdout: str, stderr: str | None = None) -> None:
         if stripped:
             try:
                 formatted_stdout = json.dumps(json.loads(stripped), indent=2)
+
+        def _build_offender(file_path: str, func: dict, *, max_ccn: int, max_length: int) -> Offender | None:
+            ccn = _as_int(func.get("cyclomatic_complexity", 0))
+            length = _as_int(func.get("length", 0))
+            if ccn <= max_ccn and length <= max_length:
+                return None
+
+            name = func.get("name") or func.get("long_name") or "<unnamed>"
+            return Offender(
+                path=file_path,
+                name=str(name),
+                complexity=ccn,
+                length=length,
+            )
+
             except json.JSONDecodeError:
                 formatted_stdout = stdout
         lines.append(formatted_stdout)
@@ -394,6 +381,93 @@ def _write_raw(raw_path: Path, stdout: str, stderr: str | None = None) -> None:
         lines.append("\n[stderr]\n")
         lines.append(stderr)
     raw_path.write_text("".join(lines), encoding="utf-8")
+def _render_markdown(payload: dict, offenders: list[Offender], *, max_rows: int = 25) -> str:
+    lines: list[str] = []
+    lines.append("# Lizard Complexity Report\n\n")
+    lines.append(f"- generated_utc: {payload['generated_utc']}\n")
+    lines.append(f"- status: {payload['status']}\n")
+    targets = " ".join(payload.get("targets", [])) if payload.get("targets") else "(none)"
+    lines.append(f"- targets: {targets}\n")
+    lines.append(f"- max cyclomatic complexity: {payload['max_ccn']}\n")
+    lines.append(f"- max function length: {payload['max_length']}\n")
+    lines.append(f"- offenders: {len(offenders)}\n\n")
+
+    if offenders:
+        lines.append("## Top Offenders\n\n")
+        lines.append("| Function | File | CCN | Length |\n")
+        lines.append("|---|---|---:|---:|\n")
+        for off in offenders[:max_rows]:
+            lines.append(
+                f"| `{off.name}` | `{off.path}` | {off.complexity} | {off.length} |\n"
+            )
+        lines.append("\n")
+    else:
+        lines.append("No functions exceeded the configured thresholds.\n\n")
+
+    lines.append("## How to Reproduce\n\n")
+
+        def _parse_offenders(payload: list[dict], *, max_ccn: int, max_length: int) -> list[Offender]:
+            offenders: list[Offender] = []
+            for entry in payload:
+                file_path = _extract_file_path(entry)
+                if not file_path:
+                    continue
+                for func in entry.get("function_list", []):
+                    offender = _build_offender(
+                        file_path,
+                        func,
+                        max_ccn=max_ccn,
+                        max_length=max_length,
+                    )
+                    if offender:
+                        offenders.append(offender)
+            return offenders
+
+    lines.append("```bash\n")
+    lines.append(f"{payload.get('command_str', '(unavailable)')}\n")
+    lines.append("```\n")
+    return "".join(lines)
+
+
+def _render_log(payload: dict, offenders: list[Offender]) -> str:
+    lines = [
+        f"status={payload['status']}",
+        f"issue_count={payload['issue_count']}",
+        f"generated_utc={payload['generated_utc']}",
+        f"targets={' '.join(payload.get('targets', [])) if payload.get('targets') else '(none)'}",
+        f"max_ccn={payload['max_ccn']}",
+        f"max_length={payload['max_length']}",
+        f"files_scanned={payload.get('files_scanned', 0)}",
+    ]
+    if payload.get("notes"):
+        lines.append(f"notes={payload['notes']}")
+    if offenders:
+        lines.append("offenders:")
+        for offender in offenders:
+            lines.append(
+                f"  {offender.path}::{offender.name} ccn={offender.complexity} length={offender.length}"
+            )
+    else:
+        lines.append("offenders=(none)")
+    return "\n".join(lines) + "\n"
+
+
+def _format_raw_output(stdout: str, stderr: str | None = None) -> str:
+    segments: list[str] = []
+    if stdout:
+        stripped = stdout.strip()
+        if stripped:
+            try:
+                formatted = json.dumps(json.loads(stripped), indent=2)
+            except json.JSONDecodeError:
+                formatted = stdout
+        else:
+            formatted = stdout
+        segments.append(formatted)
+    if stderr:
+        segments.append("\n[stderr]\n")
+        segments.append(stderr)
+    return "".join(segments)
 
 
 def _sanitize_command(cmd: Iterable[str]) -> list[str]:
@@ -407,114 +481,75 @@ def _sanitize_command(cmd: Iterable[str]) -> list[str]:
     return sanitized
 
 
-def _as_int(value: Any, default: int = 0) -> int:
-    try:
-        return int(value)
-    except Exception:
-        return default
+def _render_markdown(payload: dict, offenders: list[Offender], *, max_rows: int = 25) -> str:
+    lines: list[str] = []
+    lines.append("# Lizard Complexity Report\n\n")
+    lines.append(f"- generated_utc: {payload['generated_utc']}\n")
+    lines.append(f"- status: {payload['status']}\n")
+    targets = " ".join(payload.get("targets", [])) if payload.get("targets") else "(none)"
+    lines.append(f"- targets: {targets}\n")
+    lines.append(f"- max cyclomatic complexity: {payload['max_ccn']}\n")
+    lines.append(f"- max function length: {payload['max_length']}\n")
+    lines.append(f"- offenders: {len(offenders)}\n\n")
+
+    if offenders:
+        lines.append("## Top Offenders\n\n")
+        lines.append("| Function | File | CCN | Length |\n")
+        lines.append("|---|---|---:|---:|\n")
+        for off in offenders[:max_rows]:
+            lines.append(
+                f"| `{off.name}` | `{off.path}` | {off.complexity} | {off.length} |\n"
+            )
+        lines.append("\n")
+    else:
+        lines.append("No functions exceeded the configured thresholds.\n\n")
+
+    lines.append("## How to Reproduce\n\n")
+    lines.append("```bash\n")
+    lines.append(f"{payload.get('command_str', '(unavailable)')}\n")
+    lines.append("```\n")
+    return "".join(lines)
 
 
-def _generate_report(
-    run_dir: Path,
-    raw_json_path: Path,
-    raw_txt_path: Path,
-    targets: list[str],
-    max_ccn: int,
-    max_length: int,
-    report_payload: dict,
-    cmd: list[str],
-) -> tuple[dict, list[Offender]]:
-    offenders: list[Offender] = []
-
-    if not targets:
-        report_payload["status"] = "no_targets"
-        report_payload["notes"] = "No targets resolved for lizard run"
-        _write_raw(raw_txt_path, "", None)
-        return report_payload, offenders
-
-    try:
-        proc = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-        )
-    except Exception as exc:  # noqa: BLE001
-        report_payload["notes"] = f"lizard invocation failed: {exc}"
-        _write_raw(raw_txt_path, "", traceback.format_exc())
-        return report_payload, offenders
-
-    stdout = proc.stdout or ""
-    stderr = proc.stderr or ""
-
-    if proc.returncode != 0:
-        note = "lizard module not installed" if "No module named lizard" in stderr else f"lizard command failed (rc={proc.returncode})"
-        report_payload["notes"] = note
-        report_payload["status"] = "error"
-        _write_raw(raw_txt_path, stdout, stderr)
-        return report_payload, offenders
-
-    if not stdout.strip():
-        report_payload["notes"] = "lizard produced empty output"
-        report_payload["status"] = "error"
-        _write_raw(raw_txt_path, stdout, stderr)
-        return report_payload, offenders
-
-    try:
-        parsed = json.loads(stdout)
-    except json.JSONDecodeError as exc:
-        report_payload["notes"] = f"Failed to parse lizard JSON output: {exc}"
-        report_payload["status"] = "error"
-        _write_raw(raw_txt_path, stdout, stderr)
-        return report_payload, offenders
-
-    raw_json_path.write_text(json.dumps(parsed, indent=2), encoding="utf-8")
-    _write_raw(raw_txt_path, stdout, stderr if stderr.strip() else None)
-
-    offenders = _parse_offenders(parsed, max_ccn=max_ccn, max_length=max_length)
-    report_payload.update(
-        {
-            "status": "ok" if not offenders else "issues",
-            "issue_count": len(offenders),
-            "files_scanned": len(parsed) if isinstance(parsed, list) else 0,
-        }
-    )
-    report_payload["offenders"] = [
-        {
-            "path": offender.path,
-            "name": offender.name,
-            "cyclomatic_complexity": offender.complexity,
-            "length": offender.length,
-        }
-        for offender in offenders
+def _render_log(payload: dict, offenders: list[Offender]) -> str:
+    lines = [
+        f"status={payload['status']}",
+        f"issue_count={payload['issue_count']}",
+        f"generated_utc={payload['generated_utc']}",
+        f"targets={' '.join(payload.get('targets', [])) if payload.get('targets') else '(none)'}",
+        f"max_ccn={payload['max_ccn']}",
+        f"max_length={payload['max_length']}",
+        f"files_scanned={payload.get('files_scanned', 0)}",
     ]
-
-    return report_payload, offenders
-
-
-def _compose_report_payload(
-    run_slug: str,
-    generated_at: datetime,
-    args: argparse.Namespace,
-    targets: list[str],
-    cmd: list[str],
-) -> dict:
-    return {
-        "schema_version": 1,
-        "status": "error",
-        "timestamp": run_slug,
-        "generated_utc": generated_at.isoformat(),
-        "max_ccn": args.max_ccn,
-        "max_length": args.max_length,
-        "targets": targets,
-        "command": cmd,
-        "command_str": shlex.join(cmd),
-        "issue_count": 0,
-        "files_scanned": 0,
-        "offenders": [],
-        "notes": "",
-    }
+    if payload.get("notes"):
+        lines.append(f"notes={payload['notes']}")
+    if offenders:
+        lines.append("offenders:")
+        for offender in offenders:
+            lines.append(
+                f"  {offender.path}::{offender.name} ccn={offender.complexity} length={offender.length}"
+            )
+    else:
+        lines.append("offenders=(none)")
+    return "\n".join(lines) + "\n"
 
 
+def _format_raw_output(stdout: str, stderr: str | None = None) -> str:
+    segments: list[str] = []
+    if stdout:
+        stripped = stdout.strip()
+        if stripped:
+            try:
+                formatted = json.dumps(json.loads(stripped), indent=2)
+            except json.JSONDecodeError:
+                formatted = stdout
+        else:
+            formatted = stdout
+        segments.append(formatted)
+    if stderr:
+        segments.append("\n[stderr]\n")
+        segments.append(stderr)
+    return "".join(segments)
 def _handle_unsafe_arguments(
     run_dir: Path,
     output_dir: Path,
