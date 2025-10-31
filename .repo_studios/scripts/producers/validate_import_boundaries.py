@@ -10,7 +10,7 @@ import logging
 import os
 import sys
 from collections import Counter
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any
 
@@ -38,9 +38,10 @@ try:
     from libraries import (
         KeepSpec,
         PathSpec,
-        build_keep_counts as library_build_keep_counts,
-        build_paths as library_build_paths,
-        resolve_repo_root,
+        OptionsConfig,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -48,9 +49,10 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
     from libraries import (  # type: ignore
         KeepSpec,
         PathSpec,
-        build_keep_counts as library_build_keep_counts,
-        build_paths as library_build_paths,
-        resolve_repo_root,
+        OptionsConfig,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
     )
 
 
@@ -58,35 +60,42 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
 class Paths:
     repo_root: Path
     output_dir: Path
-    graph_dir: Path
     allowlist_path: Path
+    graph_dir: Path | None = None
 
 
 @dataclass(frozen=True)
 class Options:
-    graph_path: Path | None
     artifacts_to_keep: int
-    strict: bool
+    graph_path: Path | None = None
+    strict: bool = False
 
 
-PATH_SPECS: dict[str, PathSpec] = {
-    "output_dir": PathSpec(
-        field="output_dir",
-        default=DEFAULT_OUTPUT_DIR,
-        ensure_dir=True,
-        within_repo=False,
-    ),
-    "allowlist_path": PathSpec(
-        field="allowlist_path",
-        default=DEFAULT_ALLOWLIST,
-        within_repo=False,
-    ),
-}
+PATH_CONFIG = PathsConfig(
+    dataclass_type=Paths,
+    path_specs={
+        "output_dir": PathSpec(
+            field="output_dir",
+            default=DEFAULT_OUTPUT_DIR,
+            ensure_dir=True,
+            within_repo=False,
+        ),
+        "allowlist_path": PathSpec(
+            field="allowlist_path",
+            default=DEFAULT_ALLOWLIST,
+            within_repo=False,
+        ),
+    },
+    repo_root_depth=4,
+)
 
 
-KEEP_SPECS: dict[str, KeepSpec] = {
-    "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
-}
+OPTIONS_CONFIG = OptionsConfig(
+    dataclass_type=Options,
+    keep_specs={
+        "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
+    },
+)
 
 
 @dataclass
@@ -140,8 +149,8 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
-    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
+    paths = build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    repo_root = paths.repo_root
     graph_dir = (repo_root / DEFAULT_RELATIVE_GRAPH_DIR).resolve()
     if getattr(args, "graph_path", None):
         graph_candidate = Path(args.graph_path)
@@ -150,12 +159,7 @@ def build_paths(args: argparse.Namespace) -> Paths:
         else:
             graph_candidate = graph_candidate.resolve()
         graph_dir = graph_candidate.parent
-    return Paths(
-        repo_root=repo_root,
-        output_dir=resolved["output_dir"],
-        graph_dir=graph_dir,
-        allowlist_path=resolved["allowlist_path"],
-    )
+    return replace(paths, graph_dir=graph_dir)
 
 
 def build_options(args: argparse.Namespace, paths: Paths) -> Options:
@@ -164,9 +168,9 @@ def build_options(args: argparse.Namespace, paths: Paths) -> Options:
         graph_path = Path(args.graph_path)
         if not graph_path.is_absolute():
             graph_path = (paths.repo_root / graph_path).resolve()
-    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
     strict = bool(args.strict or os.getenv("STRICT") in {"1", "true", "TRUE"})
-    return Options(graph_path=graph_path, artifacts_to_keep=keep_counts["artifacts_to_keep"], strict=strict)
+    base_options = build_standard_options(args, OPTIONS_CONFIG)
+    return replace(base_options, graph_path=graph_path, strict=strict)
 
 
 def _latest_graph_json(graph_dir: Path) -> Path | None:

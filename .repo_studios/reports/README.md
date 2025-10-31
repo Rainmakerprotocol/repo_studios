@@ -26,7 +26,7 @@ This directory now mirrors the producer → consumer → aggregator → orchestr
 - `standards_prompt_reports/` – prompt seed bundles exported for AI consumption.
 - `dependency_hygiene_reports/` – dependency audit findings (pins, duplicates, VCS refs).
 - `import_graph_reports/` – module graph JSON/markdown outputs from topology scans.
-- `lizard_metrics_reports/` – complexity reports emitted by `generate_lizard_report.py`.
+- `lizard_metrics_reports/` – complexity reports emitted by `generate_lizard_report.py`; each run now includes a ranked top-10 offender table (path, line, delta over thresholds, recommended remediation) alongside JSON/log artifacts for planning manual extractions.
 - `typecheck_reports/` – mypy error snapshots and summaries.
 - `monkey_patch_scan_reports/` – raw inventory of monkey patches prior to risk classification.
 - `placeholder_scan_reports/` – TODO/FIXME placeholder scans for hygiene dashboards.

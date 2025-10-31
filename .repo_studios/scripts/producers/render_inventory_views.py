@@ -31,9 +31,10 @@ try:
         KeepSpec,
         PathSpec,
         ReportArtifact,
-        build_keep_counts as library_build_keep_counts,
-        build_paths as library_build_paths,
-        resolve_repo_root,
+        OptionsConfig,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
         write_report_artifacts,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
@@ -43,9 +44,10 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
         KeepSpec,
         PathSpec,
         ReportArtifact,
-        build_keep_counts as library_build_keep_counts,
-        build_paths as library_build_paths,
-        resolve_repo_root,
+        OptionsConfig,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
         write_report_artifacts,
     )
 
@@ -395,8 +397,8 @@ class Paths(NamedTuple):
 
 class Options(NamedTuple):
     artifacts_to_keep: int
-    timestamp: str | None
-    log_level: str
+    timestamp: str | None = None
+    log_level: str = "INFO"
 
 
 PATH_SPECS: dict[str, PathSpec] = {
@@ -412,22 +414,26 @@ KEEP_SPECS: dict[str, KeepSpec] = {
 }
 
 
+PATH_CONFIG = PathsConfig(
+    dataclass_type=Paths,
+    path_specs=PATH_SPECS,
+    repo_root_depth=4,
+)
+
+
+OPTIONS_CONFIG = OptionsConfig(
+    dataclass_type=Options,
+    keep_specs=KEEP_SPECS,
+)
+
+
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
-    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
-    return Paths(
-        repo_root=repo_root,
-        schema_root=resolved["schema_root"],
-        views_dir=resolved["views_dir"],
-        reports_root=resolved["reports_root"],
-        output_dir=resolved["output_dir"],
-    )
+    return build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
 
 
 def build_options(args: argparse.Namespace) -> Options:
-    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
-    return Options(
-        artifacts_to_keep=keep_counts["artifacts_to_keep"],
+    base_options = build_standard_options(args, OPTIONS_CONFIG)
+    return base_options._replace(
         timestamp=getattr(args, "timestamp", None),
         log_level=str(getattr(args, "log_level", "INFO")),
     )

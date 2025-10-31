@@ -4,6 +4,7 @@ import importlib
 import sys
 from types import SimpleNamespace
 from pathlib import Path
+from dataclasses import dataclass
 
 import pytest
 
@@ -31,6 +32,10 @@ build_keep_counts = libraries.build_keep_counts
 build_paths = libraries.build_paths
 resolve_path = libraries.resolve_path
 resolve_repo_root = libraries.resolve_repo_root
+PathsConfig = libraries.PathsConfig
+OptionsConfig = libraries.OptionsConfig
+build_standard_paths = libraries.build_standard_paths
+build_standard_options = libraries.build_standard_options
 
 
 def test_resolve_repo_root_explicit(tmp_path: Path) -> None:
@@ -97,4 +102,61 @@ def test_build_keep_counts_respects_env(monkeypatch: pytest.MonkeyPatch) -> None
     args_override = SimpleNamespace(artifacts=None)
     result_override = build_keep_counts(config, args=args_override)
     assert result_override["artifacts"] == 2
+    monkeypatch.delenv("FORCE_KEEP", raising=False)
+
+
+@dataclass(frozen=True)
+class SamplePaths:
+    repo_root: Path
+    reports_root: Path
+    output_dir: Path
+
+
+@dataclass(frozen=True)
+class SampleOptions:
+    artifacts: int
+
+
+def test_build_standard_paths_wraps_builders(tmp_path: Path) -> None:
+    origin = tmp_path / ".repo_studios" / "command_center" / "scripts" / "producer.py"
+    origin.parent.mkdir(parents=True)
+    origin.write_text("", encoding="utf-8")
+    config = PathsConfig(
+        dataclass_type=SamplePaths,
+        path_specs={
+            "reports_root": PathSpec(field="reports_root", default=Path("reports"), ensure_dir=True),
+            "output_dir": PathSpec(
+                field="output_dir",
+                default=Path("fallback"),
+                ensure_dir=True,
+                within_repo=False,
+            ),
+        },
+        repo_root_depth=4,
+    )
+    custom_output = tmp_path / "custom-output"
+    args = SimpleNamespace(repo_root=None, reports_root=None, output_dir=str(custom_output))
+    result = build_standard_paths(args, config, origin=origin)
+    assert isinstance(result, SamplePaths)
+    assert result.repo_root == tmp_path.resolve()
+    assert result.reports_root == (tmp_path / "reports").resolve()
+    assert result.output_dir == custom_output.resolve()
+    assert result.output_dir.is_dir()
+
+
+def test_build_standard_options_wraps_keep_counts(monkeypatch: pytest.MonkeyPatch) -> None:
+    config = OptionsConfig(
+        dataclass_type=SampleOptions,
+        keep_specs={
+            "artifacts": KeepSpec(field="artifacts", minimum=1, env_override="FORCE_KEEP", env_truthy=frozenset({"true"})),
+        },
+    )
+    args = SimpleNamespace(artifacts="3")
+    result = build_standard_options(args, config)
+    assert isinstance(result, SampleOptions)
+    assert result.artifacts == 3
+    monkeypatch.setenv("FORCE_KEEP", "true")
+    override_args = SimpleNamespace(artifacts=None)
+    override_result = build_standard_options(override_args, config)
+    assert override_result.artifacts == 1
     monkeypatch.delenv("FORCE_KEEP", raising=False)

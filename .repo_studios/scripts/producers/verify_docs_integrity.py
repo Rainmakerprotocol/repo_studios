@@ -10,7 +10,7 @@ import logging
 import re
 import sys
 from collections.abc import Sequence
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any
 
@@ -37,9 +37,10 @@ try:
     from libraries import (
         KeepSpec,
         PathSpec,
-        build_keep_counts as library_build_keep_counts,
-        build_paths as library_build_paths,
-        resolve_repo_root,
+        OptionsConfig,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -47,9 +48,10 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
     from libraries import (  # type: ignore
         KeepSpec,
         PathSpec,
-        build_keep_counts as library_build_keep_counts,
-        build_paths as library_build_paths,
-        resolve_repo_root,
+        OptionsConfig,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
     )
 
 
@@ -70,30 +72,37 @@ class Paths:
 
 @dataclass(frozen=True)
 class Options:
-    update: bool
-    regen_table: bool
-    artifacts_to_keep: int
-    log_level: str
+    update: bool = False
+    regen_table: bool = True
+    artifacts_to_keep: int = 1
+    log_level: str = "INFO"
 
 
-PATH_SPECS: dict[str, PathSpec] = {
-    "output_dir": PathSpec(
-        field="output_dir",
-        default=DEFAULT_OUTPUT_DIR,
-        ensure_dir=True,
-        within_repo=False,
-    ),
-    "index_path": PathSpec(
-        field="index",
-        default=DEFAULT_INDEX_PATH,
-        within_repo=False,
-    ),
-}
+PATH_CONFIG = PathsConfig(
+    dataclass_type=Paths,
+    path_specs={
+        "output_dir": PathSpec(
+            field="output_dir",
+            default=DEFAULT_OUTPUT_DIR,
+            ensure_dir=True,
+            within_repo=False,
+        ),
+        "index_path": PathSpec(
+            field="index",
+            default=DEFAULT_INDEX_PATH,
+            within_repo=False,
+        ),
+    },
+    repo_root_depth=4,
+)
 
 
-KEEP_SPECS: dict[str, KeepSpec] = {
-    "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
-}
+OPTIONS_CONFIG = OptionsConfig(
+    dataclass_type=Options,
+    keep_specs={
+        "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
+    },
+)
 
 
 @dataclass
@@ -168,21 +177,15 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
-    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
-    return Paths(
-        repo_root=repo_root,
-        output_dir=resolved["output_dir"],
-        index_path=resolved["index_path"],
-    )
+    return build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
 
 
 def build_options(args: argparse.Namespace) -> Options:
-    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
-    return Options(
+    base_options = build_standard_options(args, OPTIONS_CONFIG)
+    return replace(
+        base_options,
         update=bool(args.update),
         regen_table=not bool(args.no_table),
-        artifacts_to_keep=keep_counts["artifacts_to_keep"],
         log_level=str(args.log_level),
     )
 

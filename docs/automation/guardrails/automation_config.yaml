@@ -1,0 +1,12 @@
+# Command Center automation guardrail configuration
+metadata:
+  version: 1
+  updated: "2025-10-31"
+  notes: Initial configuration seeded during Phase 4 planning.
+allow_list:
+  source: docs/automation/guardrails/allowed_targets.yaml
+constraints:
+  max_files_per_run: 15
+  max_groups_per_run: 5
+  require_lock_check: true
+  allow_override_flag: allow-ignore

@@ -26,7 +26,7 @@ Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libr
 
 - `pathing.py` – exports `slugify_relative` for building slug-safe report directories; scripts keep `_slugify_relative` aliases for backward compatibility.
 - `artifacts.py` – exports `copy_latest_artifact` (hardlink-first mirror helper) and `write_report_artifacts`, which centralises JSON/Markdown/log writers, mirrors `latest_*` pointers, and enforces timestamped run retention (respecting `.keep` sentinels).
-- `cli.py` – exports path/keep-count configuration helpers (`resolve_repo_root`, `resolve_path`, `build_paths`, `build_keep_counts`) so duplicated CLI glue can converge before extraction.
+- `cli.py` – exports path/keep-count configuration helpers (`resolve_repo_root`, `resolve_path`, `build_paths`, `build_keep_counts`) and config-driven shims (`PathsConfig`, `OptionsConfig`, `build_standard_paths`, `build_standard_options`) so duplicated CLI glue can converge before extraction. All Command Center producers now consume these configs, which means timestamped outputs, repo-root guards, and retention rules stay consistent across scripts.
 - `__init__.py` – re-exports available helpers so dynamic imports in tests/orchestrators stay simple (`from libraries import slugify_relative, copy_latest_artifact, build_paths, …`).
 
 When adding new helpers, keep them importable without mutating `sys.path` (matching current dynamic-import fallback), log the staging decision in the active checklist, and backfill unit tests under `.repo_studios/tests/tests_library_integration/libraries/`.
@@ -77,6 +77,13 @@ make -C .repo_studios command-center COMMAND_CENTER_TARGET=/.repo_studios/script
    PYTHON=.venv/Scripts/python.exe
 ```
 
+#### Operations Notes
+
+- **Invocation patterns:** Prefer the `make -C .repo_studios command-center` wrapper for day-to-day runs so the virtual environment path stays consistent; fall back to the Python module invocation when scripting bespoke targets or running from CI. Always pass `--repo-root .` when launching outside the repo root to keep path resolution deterministic.
+- **Logging:** The orchestrator shares a single `--log-level` across all delegate scripts (`DEBUG`, `INFO`, `WARNING`, etc.). Logs stream to stdout; set `--log-level DEBUG` when investigating failures so each delegate echoes the resolved inventory/analysis paths before execution.
+- **Retention behaviour:** Delegate scripts rely on `write_report_artifacts`, which keeps the latest three timestamped runs in both the target index and slugged report directories while respecting `.keep` sentinels. The orchestrator does not create additional artifacts—it simply surfaces the paths pruned/written during each stage.
+- **Failure diagnostics:** A non-zero exit from any delegate stops the pipeline immediately and propagates the exit code. Check the preceding log lines for the failing script, inspect the partially written artifacts in `<target>/<name>_index/`, and re-run with `--skip-upstream` if only the duplicate scan failed so you can reuse the fresh inventory/analysis outputs.
+
 ### Direct script usage
 
 - `producers/generate_function_inventory.py <target>` refreshes `<target>/<name>_index/<name>_index-YYYY-MM-DD.json` and the screening summary in both the target and slugged mirror.
@@ -92,17 +99,19 @@ make -C .repo_studios command-center COMMAND_CENTER_TARGET=/.repo_studios/script
 1. **Point the agent here** when requesting duplicate remediation.
 2. **Trigger the orchestrator** (or run scripts manually) so the chosen target’s slug directories refresh.
 3. **Review the mirrored artifacts** under `<target>/<name>_index/` and `.repo_studios/command_center/reports/<slug>_duplicate_scan/` before prioritising work.
-4. **Check the naming guides** (`que_for_integration/refactor_library/naming_conventions.md` and `docs/naming_conventions.md`) before adding or moving shared helpers so promotion to `.repo_studios/library/` stays frictionless.
-5. **Annotate the checklist** with decisions, edge cases, or approvals, then review changes before sign-off.
+4. **Consult the latest lizard complexity report** in `.repo_studios/reports/producer_reports/lizard_reports/latest_report.md`—the top-offender table now lists the highest risk functions with file locations, line numbers, and remediation suggestions to help sequence extractions.
+5. **Check the naming guides** (`que_for_integration/refactor_library/naming_conventions.md` and `docs/naming_conventions.md`) before adding or moving shared helpers so promotion to `.repo_studios/library/` stays frictionless.
+6. **Annotate the checklist** with decisions, edge cases, or approvals, then review changes before sign-off.
 
 ### For AI Coding Agents
 
 1. **Read this README** to ingest expectations.  
 2. **Inspect the latest slugged mirrors** (`<target>/<name>_index/` and `.repo_studios/command_center/reports/<slug>_duplicate_scan/`) to understand duplicate groups and stock decisions.  
-3. **Consult the naming guides** (`que_for_integration/refactor_library/naming_conventions.md` and `docs/naming_conventions.md`) before drafting new helpers; keep modules `verb_noun` and record the eventual library destination.  
-4. **Follow the micro-cycle**: extract → test → replace → document.  
-5. **Update artifacts** (tests run, imports added, follow-up items) before signaling completion.  
-6. **Leave run notes** in the duplicate summary markdown (`<target>/<name>_duplicate_summary-YYYY-MM-DD.md`) or append to the checklist.
+3. **Review `.repo_studios/reports/producer_reports/lizard_reports/latest_report.md`** for a ranked list of the top 10 complexity offenders (with over-threshold deltas and recommended remediation actions) so extraction plans prioritise the highest pay-off targets.
+4. **Consult the naming guides** (`que_for_integration/refactor_library/naming_conventions.md` and `docs/naming_conventions.md`) before drafting new helpers; keep modules `verb_noun` and record the eventual library destination.  
+5. **Follow the micro-cycle**: extract → test → replace → document.  
+6. **Update artifacts** (tests run, imports added, follow-up items) before signaling completion.  
+7. **Leave run notes** in the duplicate summary markdown (`<target>/<name>_duplicate_summary-YYYY-MM-DD.md`) or append to the checklist.
 
 ---
 

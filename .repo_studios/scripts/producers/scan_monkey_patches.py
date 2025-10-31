@@ -73,9 +73,10 @@ try:
     from libraries import (
         KeepSpec,
         PathSpec,
-        build_keep_counts as library_build_keep_counts,
-        build_paths as library_build_paths,
-        resolve_repo_root,
+        OptionsConfig,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -83,9 +84,10 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
     from libraries import (  # type: ignore
         KeepSpec,
         PathSpec,
-        build_keep_counts as library_build_keep_counts,
-        build_paths as library_build_paths,
-        resolve_repo_root,
+        OptionsConfig,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
     )
 
 # Defaults (workspace-relative)
@@ -150,6 +152,11 @@ class Paths:
 
 
 @dataclass(frozen=True)
+class Options:
+    artifacts_to_keep: int
+
+
+@dataclass(frozen=True)
 class ScanOptions:
     project_packages: set[str]
     exclude_dirs: set[str]
@@ -193,9 +200,19 @@ PATH_SPECS: dict[str, PathSpec] = {
 }
 
 
-KEEP_SPECS: dict[str, KeepSpec] = {
-    "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
-}
+PATH_CONFIG = PathsConfig(
+    dataclass_type=Paths,
+    path_specs=PATH_SPECS,
+    repo_root_depth=4,
+)
+
+
+OPTIONS_CONFIG = OptionsConfig(
+    dataclass_type=Options,
+    keep_specs={
+        "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
+    },
+)
 
 
 class ImportResolver(ast.NodeVisitor):
@@ -1231,13 +1248,7 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
-    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
-    return Paths(
-        repo_root=repo_root,
-        scan_root=resolved["scan_root"],
-        output_dir=resolved["output_dir"],
-    )
+    return build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
 
 
 def run(argv: list[str] | None = None) -> dict[str, object]:
@@ -1265,7 +1276,7 @@ def run(argv: list[str] | None = None) -> dict[str, object]:
     exclude_globs = (
         set(args.exclude_globs) if args.exclude_globs is not None else set(DEFAULT_EXCLUDE_GLOBS)
     )
-    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
+    resolved_options = build_standard_options(args, OPTIONS_CONFIG)
 
     options = ScanOptions(
         project_packages=project_packages,
@@ -1274,7 +1285,7 @@ def run(argv: list[str] | None = None) -> dict[str, object]:
         context_lines=int(args.context_lines),
         with_git=bool(args.with_git),
         strict=bool(args.strict),
-        artifacts_to_keep=keep_counts["artifacts_to_keep"],
+        artifacts_to_keep=resolved_options.artifacts_to_keep,
     )
 
     logging.info("Scanning repo: %s", paths.repo_root)

@@ -67,7 +67,7 @@ Notes: Companion analysis already enumerates duplicates; the integrated `scripts
 - [x] **Finalize CLI & sequencing contract** so the orchestrator mirrors a make target: accept `--repo-root`, `--target`, optional logging flags, and guarantee sequential execution (`generate_function_inventory` → `generate_function_analysis` → `scan_duplicates`). *(Joint → confirm flag defaults and failure propagation.)* — Contract validated via `make command-center` runs on summarizers and utilities targets; scan stage now consumes the freshly produced analysis path.
 - [x] **Implement orchestrator module** under `.repo_studios/command_center/scripts/orchestrators/` that imports each script’s `run(argv)` helper, aborts on the first non-zero code, and emits no additional artifacts beyond the delegated scripts. *(Agent → draft; Developer → review.)* — `run_command_center_pipeline.py` now captures upstream artifacts, threads them downstream, and logs mirrored matrix/summary locations.
 - [x] **Extend integration tests** with a Windows smoke test (successful run against `.repo_studios/command_center/scripts`) and at least one failure-path assertion to verify exit-code propagation. *(Agent → add tests; Developer → approve.)* — `test_pipeline_smoke_updates_artifacts` and failure-path coverage pass on Windows under `.venv/`.
-- [ ] **Document usage & intent** across `.repo_studios/command_center/README.md`, `.repo_studios/README.md`, and `.github/copilot-instructions.md`, covering purpose, inputs, outputs, triggered files, benefits, and rationale. *(Agent → author docs; Developer → review messaging.)*  
+- [x] **Document usage & intent** across `.repo_studios/command_center/README.md`, `.repo_studios/README.md`, and `.github/copilot-instructions.md`, covering purpose, inputs, outputs, triggered files, benefits, and rationale. *(Agent → author docs; Developer → review messaging.)* — Added guidance that every Command Center producer now consumes the shared CLI configs (`PathsConfig`/`OptionsConfig`) and updated docs/instructions accordingly. (Docs only)
 
 Notes: Orchestrator reliability confirmed on 2025-10-28 with fresh matrices mirrored to both target index and slugged duplicate report directories; outstanding work is consolidating documentation updates.
 
@@ -90,11 +90,13 @@ Notes: Completing this phase delivers the single-trigger workflow users can poin
 - [x] **Adopt CLI helper in `validate_import_boundaries.py`** so import-boundary checks share the same path/keep resolution *(Agent → implement, Developer → review).* — Shared specs now resolve output + allowlist paths, graph overrides still honored, and regression tests remain green.
 - [x] **Adopt CLI helper in `verify_docs_integrity.py`** so documentation integrity runs reuse shared path + retention contracts *(Agent → implement, Developer → review).* — `build_paths`/`build_options` now pull from the library specs, default index resolution still works with overrides, and producer tests remain green.
 - [x] **Adopt CLI helper in `seed_standards_prompts.py`** so standards prompt bundles reuse shared repo-root/path/retention semantics *(Agent → implement, Developer → review).* — Paths/options now flow through the library configs, defaults stay aligned with the repo workspace, and the producer regression suite (`test_seed_standards_prompts.py`) remains green.
-- [x] **Adopt CLI helper in `validate_inventory.py`** so inventory validation leverages shared repo-root resolution and retention settings *(Agent → implement, Developer → review).* — New path/keep builders honour schema-root overrides while keeping defaults intact, and the producer regression test (`test_validate_inventory.py`) stays green.
+- [x] **Adopt CLI helper in `validate_inventory.py`** so inventory validation leverages shared repo-root resolution and retention settings *(Agent → implement, Developer → review).* — New path/keep builders honour schema-root overrides while keeping defaults intact, and `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_validate_inventory.py` passes on the Windows virtual environment.
 - [x] **Adopt CLI helper in `validate_markdown_anchors.py`** so markdown anchor validation aligns with shared repo-root/path/retention logic *(Agent → implement, Developer → review).* — Paths/options now flow through the library configs, default glob handling remains intact, Windows absolute roots stay supported, and the producer regression test (`test_validate_markdown_anchors.py`) passes.
-- [x] **Adopt CLI helper in `check_inventory_health.py`** so inventory health reports reuse shared repo-root/path resolution and artifact retention *(Agent → implement, Developer → review).* — Paths now respect `--repo-root`, report emission uses the shared artifact writer for JSON/Markdown/log outputs, and the producer regression suite (`test_check_inventory_health.py`) remains green.
-- [x] **Adopt CLI helper in `render_inventory_views.py`** so inventory view rendering shares repo-root resolution and artifact management *(Agent → implement, Developer → review).* — Relative defaults now flow through the helper, structured outputs rely on `write_report_artifacts` for latest pointers and pruning, and the producer regression test (`test_render_inventory_views.py`) stays green.
-- [x] **Adopt CLI helper in `generate_typecheck_report.py`** so typecheck reporting reuses shared repo-root resolution and artifact retention *(Agent → implement, Developer → review).* — Output directories now flow through the helper, latest pointers/retention ride on `write_report_artifacts`, and the producer regression test (`test_generate_typecheck_report.py`) remains green.
+- [x] **Adopt CLI helper in `check_inventory_health.py`** so inventory health reports reuse shared repo-root/path resolution and artifact retention *(Agent → implement, Developer → review).* — Paths now respect `--repo-root`, report emission uses the shared artifact writer for JSON/Markdown/log outputs, and `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_check_inventory_health.py` passes on the Windows virtual environment.
+- [x] **Adopt CLI helper in `render_inventory_views.py`** so inventory view rendering shares repo-root resolution and artifact management *(Agent → implement, Developer → review).* — Relative defaults now flow through the helper, structured outputs rely on `write_report_artifacts` for latest pointers and pruning, and `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_render_inventory_views.py` passes on the Windows virtual environment.
+- [x] **Adopt CLI helper in `generate_typecheck_report.py`** so typecheck reporting reuses shared repo-root resolution and artifact retention *(Agent → implement, Developer → review).* — Output directories now flow through the helper, latest pointers/retention ride on `write_report_artifacts`, and `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_generate_typecheck_report.py` passes on the Windows virtual environment.
+- [x] **Adopt CLI helper in `scan_code_placeholders.py`** so placeholder scans share repo-root/path resolution and keep-count normalization *(Agent → implement, Developer → review).* — `build_paths`/`build_standard_options` now drive scan roots and retention, and `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_scan_code_placeholders.py` passes on the Windows virtual environment.
+- [x] **Adopt CLI helper in `seed_standards_prompts.py`** so standards prompt seeding shares repo-root/path resolution and keep-count normalization *(Agent → implement, Developer → review).* — Shared configs now drive index/output paths, retention flows through `build_standard_options`, and `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_seed_standards_prompts.py` passes on the Windows virtual environment.
 
 ### Phase 3 Planning Snapshot (2025-10-28)
 
@@ -108,9 +110,51 @@ Notes: Completing this phase delivers the single-trigger workflow users can poin
 
 **Next actions:**
 
-1. Socialize checklist/template with manual operators and fold feedback into docs after first real extraction run.
-2. Keep README/protocol references in sync as additional producers migrate to `write_report_artifacts`.
-3. Line up the next extraction candidate (`build_paths` / `build_options`) once helper docs settle and producer tests stay green.
+### 2025-10-30 Implementation Update
+
+- Executed `.repo_studios/scripts/producers/generate_lizard_report.py --repo-root . --targets .repo_studios/scripts`, confirming the refactored producer surfaces the top 10 offenders with line-level context and remediation guidance (`lizard-20251030_103208/`). Output highlights orchestrator scripts and recently centralized helpers as highest priorities for manual extraction.
+- Verified `generate_lizard_report.py` now delegates artifact handling to `write_report_artifacts` and aligns with the shared CLI utilities, keeping Phase 3 migrations consistent across producers.
+- Authored an operator handoff brief at `.repo_studios/command_center/docs/manual_extraction_operator_brief.md` to guide checklist execution and highlight how to consume the lizard offender table; updated `.repo_studios/command_center/README.md` so both humans and agents know to consult the new report outputs.
+- Updated `.repo_studios/reports/README.md` to describe the enriched lizard report artifacts, ensuring downstream documentation reflects the ranked offender table and remediation guidance.
+- Refined the manual extraction checklist to match the current staging workflow—helpers now land in `.repo_studios/command_center/scripts/libraries/` with tests under `tests/tests_library_integration/libraries/` until promotion criteria are satisfied.
+- Drafted the `build_paths` / `build_options` extraction brief (`.repo_studios/command_center/docs/build_paths_extraction_brief.md`) detailing objectives, pilot scope, test strategy, and migration sequence so implementation can begin immediately.
+- Authored a reusable run-log template at `.repo_studios/command_center/docs/run_log_template.md` so every remediation cycle captures commands, artifacts, tests, and follow-ups in a consistent, auditable format.
+- Added a review & sign-off workflow to `docs/automation/guardrails/library_extraction_guardrails.md`, including distribution steps and an approval table covering stewards, producers, QA, and optional automation stakeholders.
+- Reviewed guardrail and metrics open questions, documenting dated working responses plus follow-up actions for CI locks, run-size caps, manifest metrics, helper audit tooling, long-term storage, and severity weighting.
+- Recorded self-approval in the guardrail review table so the blueprint is ready for Phase 4 automation planning.
+- Captured Phase 4 automation planning notes (`phase_4/AUTOMATION_PLANNING_NOTES.md`) covering guardrail follow-ups, metrics integration tasks, automation design considerations, and outstanding questions.
+- Assigned metric ownership to Genet across the catalog in `docs/automation/metrics/library_integration_metrics.md`, keeping cadence expectations intact.
+- Expanded the Phase 4 planning notes with a manual execution charter, sprint sequencing roadmap, and a finalized metrics storage decision (weekly in-repo snapshots with manual monthly aggregates).
+- Developed a manual automation design brief detailing objectives, scope, deliverables, risks, and acceptance criteria for the upcoming automation pilots.
+- Drafted a CI lock status check workflow design (reusable GitHub Action) in `phase_4/AUTOMATION_PLANNING_NOTES.md` pending validation against the repository structure.
+ 
+### 2025-10-31 Implementation Update
+
+- Introduced config-driven helpers (`PathsConfig`, `OptionsConfig`, `build_standard_paths`, `build_standard_options`) inside `.repo_studios/command_center/scripts/libraries/cli.py`, preserving ASCII-only staging style while enabling dataclass-friendly resolution.
+- Migrated `.repo_studios/scripts/producers/validate_metrics_anchor_stubs.py` to the new helpers; the script now delegates repo-root, path, and keep-count construction entirely to the shared module with existing dataclasses intact.
+- Expanded library integration tests (`.repo_studios/tests/tests_library_integration/libraries/test_cli.py`) to cover the new helpers using representative dataclasses and environment overrides, ensuring Windows-safe path generation.
+- Ran `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_library_integration/libraries/test_cli.py` to confirm the updated suite passes on the configured virtual environment.
+- Migrated `.repo_studios/scripts/producers/analyze_test_hardening.py` onto the shared CLI helpers while preserving custom log-level handling, then verified the producer with `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_analyze_test_hardening.py`.
+- Migrated `.repo_studios/scripts/producers/scan_monkey_patches.py` to the shared CLI helpers, centralizing repo-root/path/keep resolution, and confirmed parity via `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_scan_monkey_patches.py`.
+- Migrated `.repo_studios/scripts/producers/validate_import_boundaries.py` to the shared CLI helpers, including graph-path/strict overrides, and verified with `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_validate_import_boundaries.py`.
+- Migrated `.repo_studios/scripts/producers/verify_docs_integrity.py` onto the shared CLI helpers while preserving update/table toggles, then validated with `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_verify_docs_integrity.py`.
+- Migrated `.repo_studios/scripts/producers/validate_markdown_anchors.py` to the shared CLI helpers, keeping glob/timestamp controls intact, and confirmed via `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_validate_markdown_anchors.py`.
+- Expanded `.repo_studios/command_center/README.md` with an orchestrator operations section documenting invocation patterns, logging controls, retention behaviour, and failure diagnostics so operators share a consistent playbook.
+- Authored a metrics specification at `docs/automation/metrics/library_integration_metrics.md`, detailing the Phase 3 reporting catalog, data collection workflow, and actionability triggers for duplicate remediation.
+- Added guardrail configuration loader and run-size validation helper (`libraries/guardrails.py`) plus integration tests (`test_guardrails.py`) to prepare automation for `max_files_per_run` enforcement.
+- Landed reusable CI lock workflow at `.github/workflows/verify-command-center-locks.yaml`, matching guardrail requirements for blocking automation when lock files are present.
+- Drafted automation metrics summary schema and validation checklist in `phase_4/AUTOMATION_PLANNING_NOTES.md`, with canonical reference stored at `docs/automation/metrics/metrics_summary_schema.md` for future implementation.
+- Authored helper adoption audit CLI specification (`phase_4/HELPER_ADOPTION_CLI_SPEC.md`) outlining goals, contract, outputs, and open questions for developer review.
+- Created automation PR checklist template (`phase_4/PR_CHECKLIST_TEMPLATE.md`) to standardize guardrail confirmation and evidence capture in future automation pull requests.
+- Drafted weighted progress briefing template at `docs/automation/metrics/weighted_progress_briefing_template.md` to replace manual weekly reporting with weighted metrics.
+- Documented automation post-run test matrix (`phase_4/POST_RUN_TEST_MATRIX.md`) covering required pytest suites and conditional commands for future automation runs.
+- Added planning sprint success criteria section in `phase_4/AUTOMATION_PLANNING_NOTES.md` to align success thresholds and dependency readiness before configuration work begins.
+- Logged new open question tying weighted progress to future helper adoption metrics to ensure reporting stays consistent once automation launches.
+
+**Next actions:**
+
+1. Flesh out the automation design brief (`phase_4/AUTOMATION_PLANNING_NOTES.md`) into a full Phase 4 plan with detailed deliverables, risks, and manual acceptance criteria.
+2. Kick off the configuration sprint: draft the CI lock status check design and outline the `max_files_per_run` configuration changes for review.
 
 Notes: Rollout remains manual; automation explicitly deferred until manual validation succeeds.
 
@@ -141,11 +185,52 @@ Notes: Rollout remains manual; automation explicitly deferred until manual valid
 
 ## Phase 4 – Automated Extraction
 
-- [ ] **Outline guardrails** required before implementing any `refactor_from_report.py` equivalent (dry-run mode, backups, code review checkpoints) *(Agent → draft guardrail doc for future approval).*  
-- [ ] **Determine success criteria** for automation based on manual extraction outcomes (e.g., number of functions migrated without regressions) *(Agent → capture metrics once Phase 3 pilots complete).*  
-- [ ] **Identify dependencies** (schema stability, detection accuracy, library structure completeness) that must be met beforehand *(Agent → maintain dependency checklist).*
+**Intent:** Translate the approved guardrails and metrics plan into an automation design that can run safe, auditable refactors once Phase 3 manual validation is complete. Deliverables include updated configuration, prototype tooling, and dry-run rehearsals.
 
-Notes: No assets provided yet; this phase stays conceptual until Phases 1–3 finish.
+### Planning & Alignment
+
+- [x] **Guardrail approval captured** (see `docs/automation/guardrails/library_extraction_guardrails.md`). *(Completed 2025-10-31 – Genet self-approval recorded in table.)*
+- [x] **Document automation design brief** consolidating guardrails, sequencing, and rollback expectations (`phase_4/AUTOMATION_PLANNING_NOTES.md`). *(Completed 2025-10-31 – brief now covers objectives, scope, deliverables, risks, and acceptance criteria.)*
+- [ ] **Define automation success criteria** (manual extraction coverage, regression-free streak, duplicate reduction targets). *(Drafted 2025-10-31 in `phase_4/AUTOMATION_PLANNING_NOTES.md` — awaiting ratification.)*
+- Progress: planning sprint success criteria expanded 2025-10-31 in the same notes; pending developer review and checklist sign-off.
+- [ ] **Confirm dependency readiness** (fresh inventory/analysis pipeline, library structure slots, test coverage). *(Checklist drafted 2025-10-31 in `phase_4/AUTOMATION_PLANNING_NOTES.md`; pending developer sign-off.)*
+
+### Configuration & Infrastructure Tasks
+
+- [ ] **Prototype CI lock status check** that reads `.repo_studios/command_center/run_locks/*.lock` and blocks concurrent automation runs. *(Agent → design/status; Developer → wire into GitHub environment.)*
+- Progress: workflow committed 2025-10-31 at `.github/workflows/verify-command-center-locks.yaml`; guardrail doc updated with enforcement guidance, branch protection wiring still outstanding.
+- [ ] **Add `max_files_per_run` setting** alongside the allow-list and enforce during pre-flight validation (target default: 15). *(Agent → extend config + guardrail doc; Developer → approve threshold.)*
+- Progress: documentation updated 2025-10-31 outlining `constraints.max_files_per_run` enforcement; baseline config files (`docs/automation/guardrails/automation_config.yaml`, `docs/automation/guardrails/allowed_targets.yaml`) created, guardrail helper + tests landed (`libraries/guardrails.py`, `test_guardrails.py`), automation wiring still pending.
+- [x] **Decide long-term metrics storage** (in-repo vs telemetry workspace) and note the outcome in `phase_4/AUTOMATION_PLANNING_NOTES.md`. *(Completed 2025-10-31 – weekly snapshots stay in-repo; monthly aggregates exported manually.)*
+- [ ] **Create weighted progress reporting template** that combines duplicate counts with lizard complexity deltas. *(Agent → draft weekly briefing update; Developer → review.)*
+- Progress: template drafted 2025-10-31 at `docs/automation/metrics/weighted_progress_briefing_template.md` and summarized in planning notes; awaiting developer validation.
+
+### Tooling & Implementation Prep
+
+- [ ] **Extend automation manifest** to emit `metrics_summary.json` (lines touched, groups resolved) during dry runs. *(Agent → design schema; Developer → review.)*
+- Progress: schema drafted 2025-10-31 in `phase_4/AUTOMATION_PLANNING_NOTES.md` with canonical spec captured at `docs/automation/metrics/metrics_summary_schema.md`; implementation still pending.
+- [ ] **Specify helper adoption audit CLI** (inputs, outputs, integration points) to replace manual spreadsheets. *(Agent → outline spec; Developer → validate before build.)*
+- Progress: specification drafted 2025-10-31 in `phase_4/HELPER_ADOPTION_CLI_SPEC.md` and summarized in the planning notes; awaiting developer review.
+- [ ] **Script dry-run rehearsal** reusing rollback bundle layout; store rehearsal results under `.repo_studios/command_center/reports/<slug>_automation_run/`. *(Agent → pilot; Developer → evaluate logs/tests.)*
+- [ ] **Enumerate required post-run test suites** (library integration, producer suites, any new automation smoke tests) and bake them into the automation checklist. *(Agent → list commands; Developer → approve.)*
+- Progress: test matrix drafted 2025-10-31 in `phase_4/POST_RUN_TEST_MATRIX.md` and referenced in planning notes; awaiting developer approval and tooling integration.
+- [ ] **Draft PR checklist template** ensuring each automated run links to guardrails, manifest, tests, and manual review notes. *(Agent → create template in repo docs; Developer → sign off.)*
+- Progress: template drafted 2025-10-31 (`phase_4/PR_CHECKLIST_TEMPLATE.md`) and referenced in planning notes; pending developer review and integration.
+
+### Manual Execution Charter (Summary)
+
+- Phase 4 work stays manual: humans and coding agents run every script, update every config, and record every artifact until automation is formally approved.
+- Guardrails from `docs/automation/guardrails/library_extraction_guardrails.md` apply to all rehearsals (fresh artifacts, lock checks, rollback bundles, documented approvals).
+- Outputs land under `phase_4/` with immediate checklist updates so future automation inherits a complete audit trail.
+
+### Sequencing Roadmap (Manual Team)
+
+1. **Planning sprint:** Finalize success criteria and dependency checklist; align on risks and acceptance criteria.
+2. **Configuration sprint:** Deliver CI lock check design, `max_files_per_run` configuration, and updated allow-list/metrics storage docs.
+3. **Tooling sprint:** Produce helper audit CLI spec, manifest schema updates, and weighted reporting template draft.
+4. **Dry-run sprint:** Execute rehearsal in a disposable worktree, capture bundle/test results, and iterate on the PR checklist template.
+
+Notes: Phase 4 work remains in planning while manual extraction continues, but artifacts above must be completed before implementing any code-mod automation.
 
 ## Phase 5 – Integration with Repo Studios
 

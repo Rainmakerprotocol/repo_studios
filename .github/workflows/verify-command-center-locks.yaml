@@ -1,0 +1,41 @@
+name: verify-command-center-locks
+
+on:
+  workflow_call:
+    inputs:
+      allow-ignore:
+        description: 'Set to true to bypass lock validation (manual overrides only)'
+        required: false
+        default: 'false'
+        type: string
+
+jobs:
+  lock-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect command center lockfiles
+        id: detect-locks
+        shell: bash
+        run: |
+          LOCK_DIR=.repo_studios/command_center/run_locks
+          if [ "${{ inputs.allow-ignore }}" = "true" ]; then
+            echo "override enabled; skipping lock check"
+            exit 0
+          fi
+          if [ -d "$LOCK_DIR" ] && ls "$LOCK_DIR"/*.lock 1> /dev/null 2>&1; then
+            echo "Detected active automation lock(s):"
+            ls "$LOCK_DIR"/*.lock
+            exit 1
+          fi
+          echo "no lockfiles present"
+
+      - name: Upload lock snapshot on failure
+        if: failure() && steps.detect-locks.conclusion == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: active-locks
+          path: .repo_studios/command_center/run_locks/*.lock
+          if-no-files-found: ignore

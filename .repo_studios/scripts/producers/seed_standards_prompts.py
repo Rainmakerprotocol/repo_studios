@@ -12,7 +12,7 @@ import sys
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, NamedTuple
 
 import yaml
 
@@ -34,9 +34,10 @@ try:
     from libraries import (
         KeepSpec,
         PathSpec,
-        build_keep_counts as library_build_keep_counts,
-        build_paths as library_build_paths,
-        resolve_repo_root,
+        OptionsConfig,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -44,9 +45,10 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
     from libraries import (  # type: ignore
         KeepSpec,
         PathSpec,
-        build_keep_counts as library_build_keep_counts,
-        build_paths as library_build_paths,
-        resolve_repo_root,
+        OptionsConfig,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
     )
 
 
@@ -80,6 +82,23 @@ PATH_SPECS: dict[str, PathSpec] = {
 KEEP_SPECS: dict[str, KeepSpec] = {
     "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
 }
+
+
+PATH_CONFIG = PathsConfig(
+    dataclass_type=Paths,
+    path_specs=PATH_SPECS,
+    repo_root_depth=4,
+)
+
+
+class KeepOptions(NamedTuple):
+    artifacts_to_keep: int
+
+
+OPTIONS_CONFIG = OptionsConfig(
+    dataclass_type=KeepOptions,
+    keep_specs=KEEP_SPECS,
+)
 
 
 def parse_args(argv: list[str] | None) -> argparse.Namespace:
@@ -132,24 +151,18 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
-    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
-    return Paths(
-        repo_root=repo_root,
-        index_path=resolved["index_path"],
-        output_dir=resolved["output_dir"],
-    )
+    return build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
 
 
 def build_options(args: argparse.Namespace) -> Options:
     artifact_formats = tuple(dict.fromkeys(args.artifact_formats))  # preserve order, dedupe
     if not artifact_formats:
         raise SystemExit("--artifact-formats must include at least one format")
-    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
+    base_options = build_standard_options(args, OPTIONS_CONFIG)
     return Options(
         include_warn=bool(args.include_warn),
         artifact_formats=artifact_formats,
-        artifacts_to_keep=keep_counts["artifacts_to_keep"],
+        artifacts_to_keep=base_options.artifacts_to_keep,
         legacy_format=args.format,
         legacy_output=args.out,
     )

@@ -94,14 +94,16 @@ def test_structured_artifacts_success(monkeypatch: pytest.MonkeyPatch, tmp_path:
     assert report["issue_count"] == 1
     assert report["files_scanned"] == 1
     assert report["generated_utc"].startswith("2024-01-01T00:00:00")
-    assert report["offenders"] == [
-        {
-            "path": str(target_dir / "module.py"),
-            "name": "complex_fn",
-            "cyclomatic_complexity": 30,
-            "length": 120,
-        }
-    ]
+    offenders = report["offenders"]
+    assert len(offenders) == 1
+    offender = offenders[0]
+    assert offender["path"] == str(target_dir / "module.py")
+    assert offender["name"] == "complex_fn"
+    assert offender["cyclomatic_complexity"] == 30
+    assert offender["length"] == 120
+    # Helper now records threshold deltas for tooling; ensure they are non-negative
+    assert offender["ccn_over_limit"] >= 0
+    assert offender["length_over_limit"] >= 0
 
     markdown = (run_dir / "report.md").read_text(encoding="utf-8")
     assert "# Lizard Complexity Report" in markdown
@@ -109,7 +111,8 @@ def test_structured_artifacts_success(monkeypatch: pytest.MonkeyPatch, tmp_path:
 
     log_text = (run_dir / "log.txt").read_text(encoding="utf-8")
     assert "status=issues" in log_text
-    assert "offenders:" in log_text
+    assert "complex_fn" in log_text
+    assert "delta_ccn" in log_text
 
     raw_json = json.loads((run_dir / "raw.json").read_text(encoding="utf-8"))
     assert raw_json == payload

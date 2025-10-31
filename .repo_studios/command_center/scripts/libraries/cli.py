@@ -5,7 +5,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Mapping, Type
 
 
 @dataclass(frozen=True)
@@ -28,6 +28,21 @@ class KeepSpec:
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "env_truthy", frozenset(self.env_truthy))
+
+
+@dataclass(frozen=True)
+class PathsConfig:
+    dataclass_type: Type[Any]
+    path_specs: Mapping[str, PathSpec]
+    repo_root_depth: int = 3
+    include_repo_root: bool = True
+    repo_root_field: str = "repo_root"
+
+
+@dataclass(frozen=True)
+class OptionsConfig:
+    dataclass_type: Type[Any]
+    keep_specs: Mapping[str, KeepSpec]
 
 
 def _source_value(source: Any, field: str) -> Any:
@@ -100,3 +115,19 @@ def build_keep_counts(config: Mapping[str, KeepSpec], *, args: Any) -> dict[str,
         raw_value = _source_value(args, spec.field)
         resolved[alias] = normalize_keep_count(raw_value, minimum=spec.minimum, env_override=spec.env_override, env_truthy=spec.env_truthy)
     return resolved
+
+
+def build_standard_paths(args: Any, config: PathsConfig, *, origin: Path) -> Any:
+    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=config.repo_root_depth, origin=origin)
+    resolved = build_paths(config.path_specs, args=args, repo_root=repo_root)
+    payload: dict[str, Any] = {}
+    if config.include_repo_root:
+        payload[config.repo_root_field] = repo_root
+    for alias, value in resolved.items():
+        payload[alias] = value
+    return config.dataclass_type(**payload)
+
+
+def build_standard_options(args: Any, config: OptionsConfig) -> Any:
+    resolved = build_keep_counts(config.keep_specs, args=args)
+    return config.dataclass_type(**resolved)

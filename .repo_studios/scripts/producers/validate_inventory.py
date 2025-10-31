@@ -9,7 +9,7 @@ import sys
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Sequence
+from typing import Any, Dict, Iterable, List, NamedTuple, Sequence
 
 import yaml
 
@@ -29,11 +29,12 @@ try:
     from libraries import (
         KeepSpec,
         PathSpec,
-        build_keep_counts as library_build_keep_counts,
-        build_paths as library_build_paths,
+        OptionsConfig,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
         copy_latest_artifact,
         resolve_path,
-        resolve_repo_root,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback when executed as script
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -41,11 +42,12 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when executed as scri
     from libraries import (  # type: ignore
         KeepSpec,
         PathSpec,
-        build_keep_counts as library_build_keep_counts,
-        build_paths as library_build_paths,
+        OptionsConfig,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
         copy_latest_artifact,
         resolve_path,
-        resolve_repo_root,
     )
 
 REQUIRED_FIELDS = {
@@ -555,6 +557,12 @@ class Paths:
     output_dir: Path
 
 
+class BasePaths(NamedTuple):
+    repo_root: Path
+    schema_root: Path
+    output_dir: Path
+
+
 @dataclass(frozen=True)
 class Options:
     artifacts_to_keep: int
@@ -584,6 +592,23 @@ KEEP_SPECS: dict[str, KeepSpec] = {
 }
 
 
+PATH_CONFIG = PathsConfig(
+    dataclass_type=BasePaths,
+    path_specs=PATH_SPECS,
+    repo_root_depth=4,
+)
+
+
+class KeepOptions(NamedTuple):
+    artifacts_to_keep: int
+
+
+OPTIONS_CONFIG = OptionsConfig(
+    dataclass_type=KeepOptions,
+    keep_specs=KEEP_SPECS,
+)
+
+
 def _resolve_with_schema_dependency(
     *,
     raw_value: str | None,
@@ -600,10 +625,10 @@ def _resolve_with_schema_dependency(
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
-    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
-    schema_root = resolved["schema_root"]
-    output_dir = resolved["output_dir"]
+    base_paths = build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    repo_root = base_paths.repo_root
+    schema_root = base_paths.schema_root
+    output_dir = base_paths.output_dir
 
     enums_path = _resolve_with_schema_dependency(
         raw_value=getattr(args, "enums_path", None),
@@ -638,9 +663,9 @@ def build_paths(args: argparse.Namespace) -> Paths:
 
 
 def build_options(args: argparse.Namespace) -> Options:
-    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
+    base_options = build_standard_options(args, OPTIONS_CONFIG)
     return Options(
-        artifacts_to_keep=keep_counts["artifacts_to_keep"],
+        artifacts_to_keep=base_options.artifacts_to_keep,
         timestamp=getattr(args, "timestamp", None),
         emit_json=bool(getattr(args, "json", False)),
         log_level=str(getattr(args, "log_level", "INFO")),

@@ -28,15 +28,15 @@ Use this checklist whenever you migrate a duplicated helper into `.repo_studios/
 
 ## 2. Library Module Authoring
 
-- [ ] Create the folder structure under `.repo_studios/library/` if it does not yet exist (max three levels deep).
-- [ ] Add the new module with a public function that matches the filename (`verb_noun`).
+- [ ] Work within the staged `libraries` package (`.repo_studios/command_center/scripts/libraries/`) for the initial implementation; only promote into `.repo_studios/library/` once the pilot extraction criteria are satisfied.
+- [ ] Add the new module/function using `verb_noun` naming and document the intended future library destination in the checklist log.
 - [ ] Copy (and adapt as needed) the canonical implementation into the new module.
 - [ ] Provide a focused docstring describing inputs/outputs; keep implementation comments minimal.
 - [ ] Export the function via `__all__` if appropriate.
 
 ## 3. Test Coverage
 
-- [ ] Add or extend a unit test in `.repo_studios/tests/tests_library/…` covering primary behaviours and edge cases.
+- [ ] Add or extend a unit test in `.repo_studios/tests/tests_library_integration/libraries/…` covering primary behaviours and edge cases.
 - [ ] Identify the producer/consumer/orchestrator tests affected and update fixtures or expectations.
 - [ ] Run targeted tests locally:
 

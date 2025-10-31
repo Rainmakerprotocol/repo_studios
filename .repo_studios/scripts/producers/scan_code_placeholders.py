@@ -17,7 +17,7 @@ from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, NamedTuple
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/code_placeholder_scans")
 RUN_PREFIX = "placeholder_scan"
@@ -47,9 +47,10 @@ try:
     from libraries import (
         KeepSpec,
         PathSpec,
-        build_keep_counts as library_build_keep_counts,
-        build_paths as library_build_paths,
-        resolve_repo_root,
+        OptionsConfig,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -57,9 +58,10 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
     from libraries import (  # type: ignore
         KeepSpec,
         PathSpec,
-        build_keep_counts as library_build_keep_counts,
-        build_paths as library_build_paths,
-        resolve_repo_root,
+        OptionsConfig,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
     )
 
 
@@ -78,6 +80,10 @@ class ScanOptions:
     artifacts_to_keep: int
 
 
+class Options(NamedTuple):
+    artifacts_to_keep: int
+
+
 PATH_SPECS: dict[str, PathSpec] = {
     "scan_root": PathSpec(field="root", default=Path("."), within_repo=False),
     "output_dir": PathSpec(
@@ -91,6 +97,19 @@ PATH_SPECS: dict[str, PathSpec] = {
 KEEP_SPECS: dict[str, KeepSpec] = {
     "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
 }
+
+
+PATH_CONFIG = PathsConfig(
+    dataclass_type=Paths,
+    path_specs=PATH_SPECS,
+    repo_root_depth=4,
+)
+
+
+OPTIONS_CONFIG = OptionsConfig(
+    dataclass_type=Options,
+    keep_specs=KEEP_SPECS,
+)
 
 
 @dataclass
@@ -154,13 +173,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=4, origin=Path(__file__))
-    resolved = library_build_paths(PATH_SPECS, args=args, repo_root=repo_root)
-    return Paths(
-        repo_root=repo_root,
-        scan_root=resolved["scan_root"],
-        output_dir=resolved["output_dir"],
-    )
+    return build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
 
 
 def load_allowlist(path: str | None, repo_root: Path) -> set[tuple[str, int]]:
@@ -400,12 +413,12 @@ def run(argv: list[str] | None = None) -> dict[str, object]:
     patterns = normalize_patterns(args.patterns)
     extensions = normalize_extensions(args.include_ext)
     allowlist = load_allowlist(args.allowlist_file, paths.repo_root)
-    keep_counts = library_build_keep_counts(KEEP_SPECS, args=args)
+    base_options = build_standard_options(args, OPTIONS_CONFIG)
     options = ScanOptions(
         extensions=extensions,
         patterns=patterns,
         allowlist=allowlist,
-        artifacts_to_keep=keep_counts["artifacts_to_keep"],
+        artifacts_to_keep=base_options.artifacts_to_keep,
     )
     compiled_patterns = compile_pattern_regex(patterns)
     timestamp = datetime.now(timezone.utc)
