@@ -12,8 +12,8 @@
   - *Progress (2025-10-31):* Guardrail doc updated (Implementation Note 7) and reusable workflow committed at `.github/workflows/verify-command-center-locks.yaml`; branch protection wiring still pending.
 - [ ] **Max files per run** – Add a `max_files_per_run` setting alongside the allow-list and enforce it during pre-flight validation (default: 15 files).
   - *Progress (2025-10-31):* Guardrail doc now documents `constraints.max_files_per_run` budget and enforcement steps (Implementation Note 8); seeded `docs/automation/guardrails/automation_config.yaml` and `allowed_targets.yaml` with baseline data, leaving validator wiring as the remaining task.
-- [ ] **Manifest metrics summary** – Extend the automation manifest to emit `metrics_summary.json` including lines touched and duplicate groups resolved.
-  - *Progress (2025-10-31):* Draft schema captured below with validation checklist and canonical spec published at `docs/automation/metrics/metrics_summary_schema.md`; implementation will wire writer + tests alongside manifest generator.
+- [x] **Manifest metrics summary** – Extend the automation manifest to emit `metrics_summary.json` including lines touched and duplicate groups resolved.
+  - *Progress (2025-11-03):* Automation manifest bundle now produced by `.repo_studios/command_center/scripts/aggregators/generate_automation_manifest.py`, which writes `manifest.json` and `metrics_summary.json` via the new library helper (`.repo_studios/command_center/scripts/libraries/manifest.py`) with tests covering guardrail snapshots and pointer retention; schema documented at `docs/automation/guardrails/automation_manifest_schema.md`.
 
 ### CI Lock Status Check Draft (2025-10-31)
 
@@ -125,6 +125,10 @@ jobs:
 - **Matrix reference:** `phase_4/POST_RUN_TEST_MATRIX.md` enumerates mandatory and conditional pytest suites to execute after every automation run.
 - **Purpose:** Ensure library, producer, and orchestrator regressions are caught before PR submission and provide structured commands for operators.
 - **Next steps:** Integrate the matrix with the PR checklist template and surface commands in future automation tooling (e.g., auto-suggest in logs).
+
+### 2025-11-02 Implementation Update
+
+- Added metrics summary generator CLI (`.repo_studios/command_center/scripts/aggregators/generate_metrics_summary.py`) that produces timestamped `metrics_summary.json` artifacts with retention and pointer mirroring; companion tests live at `.repo_studios/tests/tests_command_center/aggregators/test_generate_metrics_summary.py` to guard the new workflow.
 
 - **Goal:** Limit automated refactors to a reviewable number of files while the allow-list remains authoritative.
 - **Configuration approach:** extend the guardrail config with a scalar limit and enforce it in pre-flight validation.

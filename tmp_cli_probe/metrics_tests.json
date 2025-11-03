@@ -1,0 +1,17 @@
+{
+  "library_integration": {
+    "status": "passed",
+    "duration_seconds": 120.5,
+    "artifacts": ["reports/library_integration.xml"]
+  },
+  "producer_suite": {
+    "status": "passed",
+    "duration_seconds": 240.0,
+    "artifacts": ["reports/producers.xml"]
+  },
+  "automation_smoke": {
+    "status": "skipped",
+    "duration_seconds": 0,
+    "artifacts": []
+  }
+}

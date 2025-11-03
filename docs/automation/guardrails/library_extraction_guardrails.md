@@ -47,7 +47,7 @@ These guardrails apply to any automation that modifies source files based on dup
    - `originals/` – copies of files before modification.
    - `patches/changes.patch` – unified diff generated post-run.
    - `pytest_results.json` – structured report of executed tests.
-   - `manifest.json` – summary of touched files, referencing duplicate group IDs.
+   - `manifest.json` – summary of touched files, referencing duplicate group IDs (see `docs/automation/guardrails/automation_manifest_schema.md`).
    - `metrics_summary.json` – impact snapshot that follows `docs/automation/metrics/metrics_summary_schema.md`.
    - `README.md` – instructions to apply the patch or restore originals.
 

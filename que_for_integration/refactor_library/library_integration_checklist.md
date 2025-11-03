@@ -158,6 +158,16 @@ Notes: Completing this phase delivers the single-trigger workflow users can poin
 
 Notes: Rollout remains manual; automation explicitly deferred until manual validation succeeds.
 
+### 2025-11-02 Implementation Update
+
+- Implemented metrics summary helper (`.repo_studios/command_center/scripts/libraries/metrics.py`) with companion tests (`.repo_studios/tests/command_center/libraries/test_metrics.py`) and landed the automation metrics generator (`.repo_studios/command_center/scripts/aggregators/generate_metrics_summary.py`) with integration tests (`.repo_studios/tests/tests_command_center/aggregators/test_generate_metrics_summary.py`) so Phase 4 dry runs can emit `metrics_summary.json` bundles ahead of manifest wiring.
+
+### 2025-11-03 Implementation Update
+
+- Added automation manifest helper (`.repo_studios/command_center/scripts/libraries/manifest.py`) and CLI (`.repo_studios/command_center/scripts/aggregators/generate_automation_manifest.py`) that write paired `manifest.json` and `metrics_summary.json` artifacts with guardrail snapshots.
+- Backfilled library and CLI tests (`.repo_studios/tests/command_center/libraries/test_manifest.py`, `.repo_studios/tests/tests_command_center/aggregators/test_generate_automation_manifest.py`) to validate schema enforcement, guardrail metadata, and pointer mirroring.
+- Updated planning docs to reflect manifest completion and captured the schema in repository documentation for Phase 4 operators.
+
 ### `write_report_artifacts` Implementation Summary (2025-10-28)
 
 - **Landing spot:** Helper now lives in `.repo_studios/command_center/scripts/libraries/artifacts.py` alongside `copy_latest_artifact`, exported via `libraries/__init__.py` for producer consumption.
@@ -207,7 +217,8 @@ Notes: Rollout remains manual; automation explicitly deferred until manual valid
 
 ### Tooling & Implementation Prep
 
-- [ ] **Extend automation manifest** to emit `metrics_summary.json` (lines touched, groups resolved) during dry runs. *(Agent → design schema; Developer → review.)*
+- [x] **Extend automation manifest** to emit `metrics_summary.json` (lines touched, groups resolved) during dry runs. *(Agent → design schema; Developer → review.)*
+- Progress (2025-11-03): Automation manifest helper (`.repo_studios/command_center/scripts/libraries/manifest.py`) and aggregator CLI (`.repo_studios/command_center/scripts/aggregators/generate_automation_manifest.py`) now emit both `manifest.json` and `metrics_summary.json` bundles with retention; tests guard the library and CLI at `.repo_studios/tests/command_center/libraries/test_manifest.py` and `.repo_studios/tests/tests_command_center/aggregators/test_generate_automation_manifest.py`.
 - Progress: schema drafted 2025-10-31 in `phase_4/AUTOMATION_PLANNING_NOTES.md` with canonical spec captured at `docs/automation/metrics/metrics_summary_schema.md`; implementation still pending.
 - [ ] **Specify helper adoption audit CLI** (inputs, outputs, integration points) to replace manual spreadsheets. *(Agent → outline spec; Developer → validate before build.)*
 - Progress: specification drafted 2025-10-31 in `phase_4/HELPER_ADOPTION_CLI_SPEC.md` and summarized in the planning notes; awaiting developer review.

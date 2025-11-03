@@ -28,6 +28,19 @@ from .guardrails import (
 	enforce_run_size_limit,
 	load_guardrail_config,
 )
+from .manifest import (
+	AutomationManifest,
+	GuardrailState,
+	ManifestFile,
+	build_automation_manifest,
+	write_automation_manifest,
+)
+from .metrics import (
+	MetricsSummary,
+	TestRunResult,
+	build_metrics_summary,
+	write_metrics_summary,
+)
 
 __all__ = [
 	"slugify_relative",
@@ -52,4 +65,13 @@ __all__ = [
 	"GuardrailViolationError",
 	"load_guardrail_config",
 	"enforce_run_size_limit",
+	"AutomationManifest",
+	"GuardrailState",
+	"ManifestFile",
+	"build_automation_manifest",
+	"write_automation_manifest",
+	"MetricsSummary",
+	"TestRunResult",
+	"build_metrics_summary",
+	"write_metrics_summary",
 ]
