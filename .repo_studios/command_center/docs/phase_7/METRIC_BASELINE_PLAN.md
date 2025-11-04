@@ -34,14 +34,35 @@
 3. **Post-run reconciliation**: Update weighted progress briefing template with new metrics; log decision entries citing artifacts.
 4. **Baseline ledger**: Append new measurements to `phase_7/METRIC_BASELINE_LOG.csv` (to be created once data collection begins).
 
+## Validation Cadence & Responsibilities
+
+- **Weekly metric review (Tuesdays by 18:00 UTC)**
+  - *Owner:* Genet (Command Center steward).
+  - *Inputs:* Fresh duplicate scan (or automation dry run), updated automation manifest bundle, appended entries in `phase_7/METRIC_BASELINE_LOG.csv`.
+  - *Outputs:* Updated weighted progress briefing draft, decision log note if thresholds breached, confirmation that guardrail checklist remained green.
+  - *Checks:* Ensure duplicate groups resolved metric moves in the expected direction; flag any guardrail exceptions for same-week remediation.
+- **Monthly deep-dive (first Thursday)**
+  - *Owners:* Genet + rotating QA partner.
+  - *Inputs:* Aggregated weekly ledger entries, latest lizard complexity report, helper adoption snapshot.
+  - *Outputs:* Monthly synopsis stored with the weighted briefing archive, backlog adjustments, refreshed risk register items (if needed).
+  - *Checks:* Validate that coverage deltas remain within ±1% of baseline; trigger follow-up tickets if helper adoption stalls for two consecutive months.
+- **Prompt drift audit (quarterly)**
+  - *Owner:* Prompt steward (per `repo_prompts.md`).
+  - *Inputs:* Ledger totals, prompt validation transcripts, guardrail feedback log.
+  - *Outputs:* Quarterly note in `memory-bank/decisionLog.md` summarizing prompt efficacy vs. metrics movement.
+- **Cadence tooling**
+  - Capture cadence results in the ledger (new rows tagged with `cadence_review`), and cite review timestamps in the weighted briefing template for traceability.
+  - Maintain a rolling four-week retention of briefing drafts; archive monthly deep-dive decks alongside automation run bundles.
+
 ## Acceptance Criteria
 
 - Initial metric values captured for duplicate occurrences, groups, and test coverage before Phase 7 hardening tasks commence.
 - Owners acknowledge cadence expectations and storage locations.
 - Checklist references updated to point at this plan and upcoming log file.
+- Weekly, monthly, and quarterly review schedule documented with named owners and required artifacts.
 
 ## Next Steps
 
 1. **Completed 2025-11-04:** Created `METRIC_BASELINE_LOG.csv` capturing duplicate matrix totals and the 2025-11-03 automation metrics summary snapshot.
-2. Thread metric updates into `docs/automation/metrics/weighted_progress_briefing_template.md` for weekly reporting.
+2. **Completed 2025-11-04:** Documented validation cadence (weekly, monthly, quarterly) with owners and artifact expectations.
 3. Align CI integration plan with metrics to ensure pass/fail thresholds use the same data sources.

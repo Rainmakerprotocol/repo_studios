@@ -273,7 +273,7 @@ Each sprint remains manual: tasks may use scripts, but operators review, commit,
 - **Orchestrator contract:** Retain `run_command_center_pipeline.py` as the inventory → analysis → duplicate-scan entry point and lock the current flag/exit-code semantics for downstream tooling.
 - **Pilot helper scope:** Prioritise `_slugify_relative`, `_copy_latest`, `write_report_artifacts`, shared CLI helpers, and logging/bootstrap helpers in the first extraction wave.
 - **Artifact retention policy:** Standardise on `write_report_artifacts` with `keep=3` by default, allowing `.keep` overrides for longer retention where justified.
-- **Automation success gate:** Require the accepted four-week regression streak, ≥80 % duplicate reduction, and 100 % manifest/guardrail compliance before enabling automated writes.
+- **Automation success gate:** Require the accepted four-week regression streak, ≥80% duplicate reduction, and 100% manifest/guardrail compliance before enabling automated writes.
 - **Dry-run rehearsal path:** Keep `run_automation_dry_run.py` as a checklist-driven manual command until guardrails mature; a Make wrapper can follow once the process proves out.
 
 ## Decisions & Assumptions

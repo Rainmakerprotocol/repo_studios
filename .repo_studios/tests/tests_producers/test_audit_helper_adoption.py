@@ -33,7 +33,14 @@ def test_generates_helper_adoption_report(tmp_path):
 	repo_root = tmp_path / "repo"
 	scope_dir = repo_root / "sources"
 	scope_dir.mkdir(parents=True)
-	allowed_targets = repo_root / "docs" / "automation" / "guardrails" / "allowed_targets.yaml"
+	allowed_targets = (
+		repo_root
+		/ ".repo_studios"
+		/ "command_center"
+		/ "docs"
+		/ "guardrails"
+		/ "allowed_targets.yaml"
+	)
 	_write(
 		allowed_targets,
 		"targets:\n  - slug: sample\n    path: sources\n",
@@ -99,7 +106,14 @@ def test_format_filter_and_custom_helpers(tmp_path):
 	repo_root = tmp_path / "workspace"
 	scope_dir = repo_root / "targets"
 	scope_dir.mkdir(parents=True)
-	allowed_targets = repo_root / "docs" / "automation" / "guardrails" / "allowed_targets.yaml"
+	allowed_targets = (
+		repo_root
+		/ ".repo_studios"
+		/ "command_center"
+		/ "docs"
+		/ "guardrails"
+		/ "allowed_targets.yaml"
+	)
 	_write(
 		allowed_targets,
 		"targets:\n  - slug: sample\n    path: targets\n",

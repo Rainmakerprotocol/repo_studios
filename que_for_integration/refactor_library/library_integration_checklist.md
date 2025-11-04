@@ -25,7 +25,7 @@
 | Phase 4 | Automated Extraction | Complete | Guardrails, manifest/metrics bundles, test matrix, and reporting templates accepted; automation awaiting go/no-go. |
 | Phase 5 | Integration with Repo Studios | In progress | Make/CI wiring scoped; Make target design drafted for review before implementation. |
 | Phase 6 | AI Prompt Engineering | Complete | Prompts updated (v1.3.0) with guardrail references, validation dry-runs archived, and rollback/versioning playbook established. |
-| Phase 7 | Validation & Hardening | In progress | Metric baseline plan and ledger established; validation cadence definition pending. |
+| Phase 7 | Validation & Hardening | In progress | Metric baseline plan, ledger, and cadence documented; next focus is operationalizing monitoring checkpoints. |
 | Phase 8 | Scale to New Projects | Deferred | Outside current sidebar mission scope. |
 | 2025-11-03 | Hardened weighted progress briefing template and requested developer review; evidence at `docs/automation/metrics/weighted_progress_briefing_template.md`. | Adds governance notes, metrics summary linkage, and decision log hooks so weekly briefings stay auditable once reviews start. | Complete |
 
@@ -156,13 +156,15 @@ Notes: Completing this phase delivers the single-trigger workflow users can poin
 
 1. Completed automation design brief and dependency review (2025-10-31 to 2025-11-03; see `phase_4/AUTOMATION_PLANNING_NOTES.md`).
 2. Completed configuration sprint guardrail updates, including lock workflow and `max_files_per_run` enforcement (2025-11-03; see `.github/workflows/verify-command-center-locks.yaml` and `docs/automation/guardrails/library_extraction_guardrails.md`).
-3. In progress: Developer review of the Phase 5 Make target design (`phase_5/MAKE_TARGET_DESIGN.md`) to confirm naming, flags, and artifact messaging.
+3. In progress: Developer review of the Phase 5 Make target design (`.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md`) to confirm naming, flags, and artifact messaging.
 4. Completed: Windows `make` availability guidance documented 2025-11-04 with install/fallback instructions (see design draft Windows Tooling Validation).
 5. Completed: Make target contract, guardrail surfacing, and CI rehearsal plan documented 2025-11-04 within the design draft; pending developer approval before implementation.
 6. Upcoming: Summarize health suite orchestrator impacts and update documentation cross-links once the targets are approved.
 7. Completed: Phase 6 prompt guardrail matrix, instruction deltas, change-control workflow, validation plan, rollback playbook, and dry-run execution documented 2025-11-04; guardrail-aware updates published in `repo_prompts.md` v1.3.0 with PASS validation results.
 8. Completed: Phase 7 baseline dataset recorded 2025-11-04 in `phase_7/METRIC_BASELINE_LOG.csv`, aligning duplicate matrices with automation metrics for weekly briefings.
-9. In progress: Define validation cadence and reporting checkpoints for Phase 7 metrics, then monitor prompt usage for drift and schedule the next validation rerun at the next prompt version change or quarterly checkpoint.
+9. Completed: Validation cadence documented 2025-11-04 in `phase_7/METRIC_BASELINE_PLAN.md` with weekly, monthly, and quarterly review duties plus ledger tagging guidance.
+10. In progress: Prepare the first scheduled weekly review (target 2025-11-11) by staging updated duplicate scans and automation manifest snapshots.
+11. Upcoming: Monitor prompt usage for drift and schedule the next validation rerun at the next prompt version change or quarterly checkpoint.
 
 Notes: Rollout remains manual; automation explicitly deferred until manual validation succeeds.
 
@@ -187,26 +189,26 @@ Notes: Rollout remains manual; automation explicitly deferred until manual valid
 
 ### 2025-11-04 Implementation Update
 
-- Authored Make target design draft at `que_for_integration/refactor_library/phase_5/MAKE_TARGET_DESIGN.md`, covering `studio-detect-duplicates` and `studio-refactor-duplicates` flows, prerequisites, artifact destinations, and Windows-friendly invocation examples.
+- Authored Make target design draft at `.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md`, covering `studio-detect-duplicates` and `studio-refactor-duplicates` flows, prerequisites, artifact destinations, and Windows-friendly invocation examples.
 - Documented dependencies, guardrail integration touchpoints, and next steps so the design can move straight into developer review without additional discovery.
 - Highlighted future hooks for post-run test matrices and lock verification to keep the design aligned with Phase 4 guardrails once implementation starts.
 - Added Windows tooling validation guidance within the design draft, including GNU `make` detection commands, Chocolatey/MSYS installation steps, and a PowerShell fallback script plan for environments lacking GNU `make`.
 - Formalized the Make target contract (env vars, flags, operator prompts) and guardrail surfacing expectations in the design draft so Makefile wiring stays consistent with automation guardrails.
 - Outlined a cross-platform CI rehearsal job that runs the forthcoming Make targets on Ubuntu and Windows, installs GNU `make`, executes dry-run flows, uploads artifacts, and enforces guardrail checks.
 - Cross-linked the script inventory blueprint and tier README (`.repo_studios/scripts/README.md`) to `.repo_studios/command_center/README.md` so agents and operators land on the protocol before editing catalog docs.
-- Audited `repo_prompts.md`, capturing guardrail alignment gaps, command center discoverability issues, and automation readiness follow-ups in `que_for_integration/refactor_library/phase_6/PROMPT_AUDIT_NOTES.md` ahead of Phase 6 prompt updates.
-- Compiled guardrail coverage matrix per prompt in `que_for_integration/refactor_library/phase_6/PROMPT_GUARDRAIL_MATRIX.md`, tagging gaps for command center references, automation artifacts, and evidence logging.
-- Drafted candidate prompt instruction deltas in `que_for_integration/refactor_library/phase_6/PROMPT_DELTA_DRAFTS.md`, inserting command center pointers and guardrail reminders for key atomic and bundle prompts.
-- Outlined prompt change-control workflow in `que_for_integration/refactor_library/phase_6/PROMPT_CHANGE_CONTROL_WORKFLOW.md`, defining roles, review sequence, publication steps, and rollback expectations.
+- Audited `repo_prompts.md`, capturing guardrail alignment gaps, command center discoverability issues, and automation readiness follow-ups in `.repo_studios/command_center/docs/phase_6/PROMPT_AUDIT_NOTES.md` ahead of Phase 6 prompt updates.
+- Compiled guardrail coverage matrix per prompt in `.repo_studios/command_center/docs/phase_6/PROMPT_GUARDRAIL_MATRIX.md`, tagging gaps for command center references, automation artifacts, and evidence logging.
+- Drafted candidate prompt instruction deltas in `.repo_studios/command_center/docs/phase_6/PROMPT_DELTA_DRAFTS.md`, inserting command center pointers and guardrail reminders for key atomic and bundle prompts.
+- Outlined prompt change-control workflow in `.repo_studios/command_center/docs/phase_6/PROMPT_CHANGE_CONTROL_WORKFLOW.md`, defining roles, review sequence, publication steps, and rollback expectations.
 - Published prompt updates in `repo_prompts.md` v1.3.0 to surface command center guardrails, lock checks, automation evidence expectations, and decision-log reminders across session, guardrail, and bundle prompts.
-- Drafted prompt validation dry-run plan (`phase_6/PROMPT_VALIDATION_PLAN.md`) outlining four guardrail-focused scenarios with acceptance criteria and execution checklist.
-- Created prompt rollback/versioning playbook (`phase_6/PROMPT_ROLLBACK_PLAYBOOK.md`) covering semantic versioning, artifact archiving, rollback procedure, and safeguards.
-- Executed validation dry-runs on 2025-11-04 with transcripts under `phase_6/validation_runs/` and consolidated PASS results in `phase_6/PROMPT_VALIDATION_RESULTS.md`.
-- Authored Phase 7 metric baseline plan (`phase_7/METRIC_BASELINE_PLAN.md`) establishing sources, owners, and cadence for duplicate, coverage, and guardrail metrics.
-- Drafted CI integration strategy (`phase_7/CI_INTEGRATION_STRATEGY.md`) detailing pipeline stages, rollout phases, and guardrail enforcement modes.
-- Defined false-positive feedback loop (`phase_7/FALSE_POSITIVE_FEEDBACK_LOOP.md`) with intake channels, roles, and resolution metrics.
-- Published retention policy update (`phase_7/RETENTION_POLICY_UPDATE.md`) to extend pruning rules to automation bundles, run logs, and validation archives.
-- Sketched reporting interface plan (`phase_7/REPORTING_INTERFACE_PLAN.md`) outlining data flow from manifests and metrics into briefings, dashboards, and decision logs.
+- Drafted prompt validation dry-run plan (`.repo_studios/command_center/docs/phase_6/PROMPT_VALIDATION_PLAN.md`) outlining four guardrail-focused scenarios with acceptance criteria and execution checklist.
+- Created prompt rollback/versioning playbook (`.repo_studios/command_center/docs/phase_6/PROMPT_ROLLBACK_PLAYBOOK.md`) covering semantic versioning, artifact archiving, rollback procedure, and safeguards.
+- Executed validation dry-runs on 2025-11-04 with transcripts under `.repo_studios/command_center/docs/phase_6/validation_runs/` and consolidated PASS results in `.repo_studios/command_center/docs/phase_6/PROMPT_VALIDATION_RESULTS.md`.
+- Authored Phase 7 metric baseline plan (`.repo_studios/command_center/docs/phase_7/METRIC_BASELINE_PLAN.md`) establishing sources, owners, and cadence for duplicate, coverage, and guardrail metrics.
+- Drafted CI integration strategy (`.repo_studios/command_center/docs/phase_7/CI_INTEGRATION_STRATEGY.md`) detailing pipeline stages, rollout phases, and guardrail enforcement modes.
+- Defined false-positive feedback loop (`.repo_studios/command_center/docs/phase_7/FALSE_POSITIVE_FEEDBACK_LOOP.md`) with intake channels, roles, and resolution metrics.
+- Published retention policy update (`.repo_studios/command_center/docs/phase_7/RETENTION_POLICY_UPDATE.md`) to extend pruning rules to automation bundles, run logs, and validation archives.
+- Sketched reporting interface plan (`.repo_studios/command_center/docs/phase_7/REPORTING_INTERFACE_PLAN.md`) outlining data flow from manifests and metrics into briefings, dashboards, and decision logs.
 
 ### `write_report_artifacts` Implementation Summary (2025-10-28)
 
@@ -286,12 +288,12 @@ Notes: Phase 4 work remains in planning while manual extraction continues, but a
 
 ## Phase 5 – Integration with Repo Studios
 
-- [x] **Sketch Make target design** mirroring reference plan (`studio-detect-duplicates`, `studio-refactor-duplicates`) without implementation *(Agent → architect command flow for later review).* — Draft captured 2025-11-04 in `phase_5/MAKE_TARGET_DESIGN.md`; awaiting developer review before wiring Make/CI targets.  
-- [x] **Validate Windows `make` availability** or document an equivalent fallback workflow *(Agent → confirm developer tooling; Developer → approve guidance).* — Validation recorded 2025-11-04 in `phase_5/MAKE_TARGET_DESIGN.md` (Windows Tooling Validation section) with Chocolatey/MSYS install guidance and PowerShell fallback script plan awaiting developer confirmation.  
-- [x] **Lock down Make target contract** documenting required env vars (`PYTHON`, `TARGET`, `RUN_STAMP`), default values, and override semantics *(Agent → draft contract; Developer → sign off).* — Contract captured 2025-11-04 in `phase_5/MAKE_TARGET_DESIGN.md` under “Target Contract and Guardrail Surfacing”; awaiting developer sign-off before wiring the Makefile.  
+- [x] **Sketch Make target design** mirroring reference plan (`studio-detect-duplicates`, `studio-refactor-duplicates`) without implementation *(Agent → architect command flow for later review).* — Draft captured 2025-11-04 in `.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md`; awaiting developer review before wiring Make/CI targets.  
+- [x] **Validate Windows `make` availability** or document an equivalent fallback workflow *(Agent → confirm developer tooling; Developer → approve guidance).* — Validation recorded 2025-11-04 in `.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md` (Windows Tooling Validation section) with Chocolatey/MSYS install guidance and PowerShell fallback script plan awaiting developer confirmation.  
+- [x] **Lock down Make target contract** documenting required env vars (`PYTHON`, `TARGET`, `RUN_STAMP`), default values, and override semantics *(Agent → draft contract; Developer → sign off).* — Contract captured 2025-11-04 in `.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md` under “Target Contract and Guardrail Surfacing”; awaiting developer sign-off before wiring the Makefile.  
 - [x] **Map guardrail surfacing** so targets emit lock-check, `max_files_per_run`, and post-run pytest reminders *(Agent → document flow; Developer → approve wiring).* — Guardrail prompts, bubble-up expectations, and operator reminders detailed 2025-11-04 in the same section.  
-- [x] **Design CI rehearsal job** that executes `studio-detect-duplicates` / `studio-refactor-duplicates` on Linux + Windows and reports guardrail status *(Agent → outline job; Developer → confirm feasibility).* — Outline added 2025-11-04 to `phase_5/MAKE_TARGET_DESIGN.md` (“CI Rehearsal Job Outline”) covering matrix, install steps, and artifact uploads.  
-- [x] **Review health suite orchestrator impacts** if duplicate detection becomes part of remediation pipeline *(Agent → summarize integration points; Developer → approve or defer).* — Impact summary drafted 2025-11-04 in `phase_5/MAKE_TARGET_DESIGN.md`, clarifying that Make targets wrap the orchestrator without altering health suite flows and noting future decision points for automation.  
+- [x] **Design CI rehearsal job** that executes `studio-detect-duplicates` / `studio-refactor-duplicates` on Linux + Windows and reports guardrail status *(Agent → outline job; Developer → confirm feasibility).* — Outline added 2025-11-04 to `.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md` (“CI Rehearsal Job Outline”) covering matrix, install steps, and artifact uploads.  
+- [x] **Review health suite orchestrator impacts** if duplicate detection becomes part of remediation pipeline *(Agent → summarize integration points; Developer → approve or defer).* — Impact summary drafted 2025-11-04 in `.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md`, clarifying that Make targets wrap the orchestrator without altering health suite flows and noting future decision points for automation.  
 - [x] **Plan documentation updates** (command center README, automation FAQ, metrics briefs) contingent on Make target rollout *(Agent → identify docs; Developer → confirm sequencing).* — Cross-link plan captured 2025-11-04 in the same design doc, enumerating README updates, guardrail callouts, and prompt references to publish with the Makefile changes.  
 - [x] **Cross-link protocol** from key docs (e.g., script inventory blueprint) so agents discover `.repo_studios/command_center/` quickly *(Agent → propose links, Developer → approve).* — Added 2025-11-04 references in `.repo_studios/scripts/script_inventory_architecture.md` and `.repo_studios/scripts/README.md`, directing operators to `.repo_studios/command_center/README.md` before updating inventories or tier docs; awaiting developer sign-off.  
 
@@ -299,24 +301,24 @@ Notes: Implementation deferred; alignment requires understanding of existing aut
 
 ## Phase 6 – AI Prompt Engineering
 
-- [x] **Audit existing prompts** in `repo_prompts.md` to avoid conflicting guidance *(Agent → inventory current instructions).* — Completed 2025-11-04; findings logged in `que_for_integration/refactor_library/phase_6/PROMPT_AUDIT_NOTES.md` covering guardrail, command center visibility, and automation readiness gaps.  
-- [x] **Capture guardrail coverage matrix** aligning each prompt with command center guardrail requirements before drafting edits *(Agent → compile table; Developer → review).* — Completed 2025-11-04; matrix recorded in `que_for_integration/refactor_library/phase_6/PROMPT_GUARDRAIL_MATRIX.md` with prompt-by-prompt coverage and follow-ups.  
-- [x] **Draft candidate instruction deltas** based on naming conventions, manual extraction lessons, and the new protocol workspace (stored separately until approved) *(Agent → produce proposal once library structure decisions settle).* — Drafts captured 2025-11-04 in `que_for_integration/refactor_library/phase_6/PROMPT_DELTA_DRAFTS.md`, ready for developer review.  
+- [x] **Audit existing prompts** in `repo_prompts.md` to avoid conflicting guidance *(Agent → inventory current instructions).* — Completed 2025-11-04; findings logged in `.repo_studios/command_center/docs/phase_6/PROMPT_AUDIT_NOTES.md` covering guardrail, command center visibility, and automation readiness gaps.  
+- [x] **Capture guardrail coverage matrix** aligning each prompt with command center guardrail requirements before drafting edits *(Agent → compile table; Developer → review).* — Completed 2025-11-04; matrix recorded in `.repo_studios/command_center/docs/phase_6/PROMPT_GUARDRAIL_MATRIX.md` with prompt-by-prompt coverage and follow-ups.  
+- [x] **Draft candidate instruction deltas** based on naming conventions, manual extraction lessons, and the new protocol workspace (stored separately until approved) *(Agent → produce proposal once library structure decisions settle).* — Drafts captured 2025-11-04 in `.repo_studios/command_center/docs/phase_6/PROMPT_DELTA_DRAFTS.md`, ready for developer review.  
 - [x] **Embed explicit pointer** to `.repo_studios/command_center/` and its README once prompts are updated *(Agent → ensure prompts direct agents to the protocol, Developer → approve wording).* — Completed 2025-11-04; `repo_prompts.md` v1.3.0 now references command center guardrails, lock checks, and evidence requirements.  
-- [x] **Document prompt change-control workflow** (approvers, decision log entry, rollout checklist) *(Agent → draft; Developer → ratify).* — Approved 2025-11-04; workflow stored in `que_for_integration/refactor_library/phase_6/PROMPT_CHANGE_CONTROL_WORKFLOW.md` and ready for use alongside prompt updates.  
-- [x] **Plan validation dry-runs** with sample conversations and acceptance criteria to confirm prompts steer agents toward the protocol *(Agent → outline scenarios; Developer → review).* — Plan drafted 2025-11-04 in `que_for_integration/refactor_library/phase_6/PROMPT_VALIDATION_PLAN.md`, covering scenarios, criteria, and execution steps.  
-- [x] **Prepare rollback/versioning approach** for prompt updates, including storage location and diff tracking *(Agent → document plan; Developer → approve).* — Draft playbook added 2025-11-04 in `que_for_integration/refactor_library/phase_6/PROMPT_ROLLBACK_PLAYBOOK.md`; pending reviewer approval before finalization.  
-- [x] **Execute validation dry-runs** and archive transcripts under `phase_6/validation_runs/` *(Agent → simulate scenarios; Developer → review outcomes).* — Completed 2025-11-04 with PASS results logged in `phase_6/PROMPT_VALIDATION_RESULTS.md` and transcripts stored per scenario.  
+- [x] **Document prompt change-control workflow** (approvers, decision log entry, rollout checklist) *(Agent → draft; Developer → ratify).* — Approved 2025-11-04; workflow stored in `.repo_studios/command_center/docs/phase_6/PROMPT_CHANGE_CONTROL_WORKFLOW.md` and ready for use alongside prompt updates.  
+- [x] **Plan validation dry-runs** with sample conversations and acceptance criteria to confirm prompts steer agents toward the protocol *(Agent → outline scenarios; Developer → review).* — Plan drafted 2025-11-04 in `.repo_studios/command_center/docs/phase_6/PROMPT_VALIDATION_PLAN.md`, covering scenarios, criteria, and execution steps.  
+- [x] **Prepare rollback/versioning approach** for prompt updates, including storage location and diff tracking *(Agent → document plan; Developer → approve).* — Draft playbook added 2025-11-04 in `.repo_studios/command_center/docs/phase_6/PROMPT_ROLLBACK_PLAYBOOK.md`; pending reviewer approval before finalization.  
+- [x] **Execute validation dry-runs** and archive transcripts under `.repo_studios/command_center/docs/phase_6/validation_runs/` *(Agent → simulate scenarios; Developer → review outcomes).* — Completed 2025-11-04 with PASS results logged in `.repo_studios/command_center/docs/phase_6/PROMPT_VALIDATION_RESULTS.md` and transcripts stored per scenario.  
 
 Notes: Will proceed only after library structure and extraction workflow stabilize.
 
-- [x] **Define metrics** (lines deduplicated, duplicate groups resolved, test coverage increase) aligned with 360-occurrence baseline *(Agent → draft metric sheet).* — Completed 2025-11-04; baseline plan recorded in `que_for_integration/refactor_library/phase_7/METRIC_BASELINE_PLAN.md` with sources, owners, and cadence.  
-- [x] **Plan CI integration strategy** (warning-only vs. blocking) pending automation readiness *(Agent → outline options based on automation guardrails).* — Drafted 2025-11-04 in `phase_7/CI_INTEGRATION_STRATEGY.md`, outlining pipeline stages, rollout phases, and gating criteria.  
-- [x] **Collect false-positive feedback loop** if we adopt new detection tooling *(Agent → design feedback capture process, Developer → approve).* — Feedback workflow captured 2025-11-04 in `phase_7/FALSE_POSITIVE_FEEDBACK_LOOP.md` with roles, metrics, and log requirements.  
-- [x] **Review retention** of run folders and checklists to ensure repository size stays manageable *(Agent → recommend pruning policy).* — Retention update drafted 2025-11-04 in `phase_7/RETENTION_POLICY_UPDATE.md`, extending keep policies to automation bundles, run logs, and validation transcripts.  
-- [x] **Build baseline dataset** linking metrics to current duplicate matrices and weighted briefing outputs *(Agent → assemble reference bundle; Developer → validate).* — Baseline ledger captured 2025-11-04 in `phase_7/METRIC_BASELINE_LOG.csv` with duplicate matrix totals and automation metrics summary.
-- [ ] **Define validation cadence** (weekly/monthly) with assigned owners responsible for reviewing metric trends *(Agent → propose schedule; Developer → confirm).*  
-- [x] **Draft reporting interface plan** showing how metrics feed dashboards or weekly briefings *(Agent → sketch flow; Developer → approve).* — Interface plan documented 2025-11-04 in `phase_7/REPORTING_INTERFACE_PLAN.md`, covering data flow, interfaces, and success criteria.  
+- [x] **Define metrics** (lines deduplicated, duplicate groups resolved, test coverage increase) aligned with 360-occurrence baseline *(Agent → draft metric sheet).* — Completed 2025-11-04; baseline plan recorded in `.repo_studios/command_center/docs/phase_7/METRIC_BASELINE_PLAN.md` with sources, owners, and cadence.  
+- [x] **Plan CI integration strategy** (warning-only vs. blocking) pending automation readiness *(Agent → outline options based on automation guardrails).* — Drafted 2025-11-04 in `.repo_studios/command_center/docs/phase_7/CI_INTEGRATION_STRATEGY.md`, outlining pipeline stages, rollout phases, and gating criteria.  
+- [x] **Collect false-positive feedback loop** if we adopt new detection tooling *(Agent → design feedback capture process, Developer → approve).* — Feedback workflow captured 2025-11-04 in `.repo_studios/command_center/docs/phase_7/FALSE_POSITIVE_FEEDBACK_LOOP.md` with roles, metrics, and log requirements.  
+- [x] **Review retention** of run folders and checklists to ensure repository size stays manageable *(Agent → recommend pruning policy).* — Retention update drafted 2025-11-04 in `.repo_studios/command_center/docs/phase_7/RETENTION_POLICY_UPDATE.md`, extending keep policies to automation bundles, run logs, and validation transcripts.  
+- [x] **Build baseline dataset** linking metrics to current duplicate matrices and weighted briefing outputs *(Agent → assemble reference bundle; Developer → validate).* — Baseline ledger captured 2025-11-04 in `.repo_studios/command_center/docs/phase_7/METRIC_BASELINE_LOG.csv` with duplicate matrix totals and automation metrics summary.
+- [x] **Define validation cadence** (weekly/monthly) with assigned owners responsible for reviewing metric trends *(Agent → propose schedule; Developer → confirm).* — Cadence schedule recorded 2025-11-04 in `.repo_studios/command_center/docs/phase_7/METRIC_BASELINE_PLAN.md` (weekly Tuesday reviews, monthly deep dives, quarterly prompt audits) with ledger tagging guidance.
+- [x] **Draft reporting interface plan** showing how metrics feed dashboards or weekly briefings *(Agent → sketch flow; Developer → approve).* — Interface plan documented 2025-11-04 in `.repo_studios/command_center/docs/phase_7/REPORTING_INTERFACE_PLAN.md`, covering data flow, interfaces, and success criteria.  
 
 ## Phase 8 – Scale to New Projects
 
@@ -337,13 +339,13 @@ Notes: Will proceed only after library structure and extraction workflow stabili
 - Automation dry-run bundles (`dryrun-probe`, `dryrun-probe-02`) captured 2025-11-03 under `.repo_studios/command_center/reports/repo-studios__command-center__automation_run/`; developer review complete with the expanded library-integration test matrix recorded for the second run.
 - Post-run test matrix (PowerShell commands + orchestrator coverage) revised 2025-11-03 in `phase_4/POST_RUN_TEST_MATRIX.md`; developer review scheduled before automation tooling consumes it.
 - Weighted progress briefing template hardened 2025-11-03 with default weights, metrics summary linkage, and decision log hook; evidence at `docs/automation/metrics/weighted_progress_briefing_template.md` (developer review pending).
-- Phase 5 Make target design drafted 2025-11-04 in `phase_5/MAKE_TARGET_DESIGN.md`, outlining `studio-detect-duplicates` and `studio-refactor-duplicates` flows with guardrail integrations pending developer sign-off.
-- Windows Make tooling validation recorded 2025-11-04 in `phase_5/MAKE_TARGET_DESIGN.md`, providing GNU `make` install guidance and a PowerShell fallback plan awaiting developer confirmation.
-- Make target contract and guardrail surfacing documented 2025-11-04 in `phase_5/MAKE_TARGET_DESIGN.md`, locking env var defaults, operator prompts, and guardrail bubble-up behaviour pending developer review.
-- Cross-platform CI rehearsal plan drafted 2025-11-04 in `phase_5/MAKE_TARGET_DESIGN.md`, detailing GitHub Actions matrix execution, artifact capture, and guardrail enforcement (in review).
+- Phase 5 Make target design drafted 2025-11-04 in `.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md`, outlining `studio-detect-duplicates` and `studio-refactor-duplicates` flows with guardrail integrations pending developer sign-off.
+- Windows Make tooling validation recorded 2025-11-04 in `.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md`, providing GNU `make` install guidance and a PowerShell fallback plan awaiting developer confirmation.
+- Make target contract and guardrail surfacing documented 2025-11-04 in `.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md`, locking env var defaults, operator prompts, and guardrail bubble-up behaviour pending developer review.
+- Cross-platform CI rehearsal plan drafted 2025-11-04 in `.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md`, detailing GitHub Actions matrix execution, artifact capture, and guardrail enforcement (in review).
 - Command center cross-links added 2025-11-04 in `.repo_studios/scripts/script_inventory_architecture.md` and `.repo_studios/scripts/README.md`, ensuring catalog docs direct agents to `.repo_studios/command_center/README.md` before refactor work (developer review pending).
-- Phase 6 prompt audit documented 2025-11-04 in `que_for_integration/refactor_library/phase_6/PROMPT_AUDIT_NOTES.md`, outlining guardrail gaps, command center discoverability issues, and automation readiness follow-ups prior to drafting new instructions.
-- Phase 6 prompt guardrail matrix, instruction delta drafts, and change-control workflow recorded 2025-11-04 in `que_for_integration/refactor_library/phase_6/`, providing the approved foundation for the `repo_prompts.md` update.
+- Phase 6 prompt audit documented 2025-11-04 in `.repo_studios/command_center/docs/phase_6/PROMPT_AUDIT_NOTES.md`, outlining guardrail gaps, command center discoverability issues, and automation readiness follow-ups prior to drafting new instructions.
+- Phase 6 prompt guardrail matrix, instruction delta drafts, and change-control workflow recorded 2025-11-04 in `.repo_studios/command_center/docs/phase_6/`, providing the approved foundation for the `repo_prompts.md` update.
 - Repo prompt library updated to version 1.3.0 on 2025-11-04, embedding command center guardrails, lock checks, automation evidence reminders, and decision-log hooks across session and bundle prompts (`repo_prompts.md`).
 - Prompt validation plan and rollback/versioning playbook published 2025-11-04 in `phase_6/PROMPT_VALIDATION_PLAN.md` and `phase_6/PROMPT_ROLLBACK_PLAYBOOK.md`, establishing acceptance criteria and recovery steps for future prompt changes.
 - Prompt validation dry-runs executed 2025-11-04 with transcripts under `phase_6/validation_runs/` and PASS summary recorded in `phase_6/PROMPT_VALIDATION_RESULTS.md`.
@@ -353,6 +355,7 @@ Notes: Will proceed only after library structure and extraction workflow stabili
 - Phase 7 retention policy update captured 2025-11-04 in `phase_7/RETENTION_POLICY_UPDATE.md`, extending pruning rules to automation bundles, run logs, and validation archives.
 - Phase 7 reporting interface plan outlined 2025-11-04 in `phase_7/REPORTING_INTERFACE_PLAN.md`, describing data flow into weighted briefings, dashboard exports, and decision log enhancements.
 - Phase 7 baseline ledger recorded 2025-11-04 in `phase_7/METRIC_BASELINE_LOG.csv`, linking duplicate matrices and automation metrics to the weighted briefing template for reproducible reporting.
+- Phase 7 validation cadence scheduled 2025-11-04 in `phase_7/METRIC_BASELINE_PLAN.md`, committing to weekly Tuesday reviews, monthly deep dives, and quarterly prompt audits with ledger tagging.
 
 ---
 

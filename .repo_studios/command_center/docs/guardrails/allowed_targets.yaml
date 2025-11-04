@@ -1,0 +1,9 @@
+# Allowed targets for command center automation runs
+# Each entry enumerates a slugged scope that may be modified by Phase 4 automation.
+targets:
+  - slug: scripts-duplicates
+    path: .repo_studios/scripts
+    owners:
+      - genet
+    description: Primary command center scripts covered by the duplicate remediation pipeline.
+    status: active

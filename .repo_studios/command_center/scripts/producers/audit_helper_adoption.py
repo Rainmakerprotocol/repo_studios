@@ -41,7 +41,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running as scrip
     )
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports/helper_adoption")
-DEFAULT_ALLOW_LIST = Path("docs/automation/guardrails/allowed_targets.yaml")
+DEFAULT_ALLOW_LIST = Path(".repo_studios/command_center/docs/guardrails/allowed_targets.yaml")
 DEFAULT_HELPERS: tuple[str, ...] = (
     "slugify_relative",
     "copy_latest_artifact",
@@ -376,7 +376,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--helper", dest="helpers", action="append", help="Helper name to audit (repeatable)")
     parser.add_argument("--helpers", dest="helpers", action="append", help="Helper name to audit (repeatable)")
     parser.add_argument("--format", dest="formats", action="append", help="Report format: json, markdown, or all (repeatable)")
-    parser.add_argument("--allow-list", help="Path to allowed targets YAML (defaults to docs/automation/guardrails/allowed_targets.yaml)")
+    parser.add_argument(
+        "--allow-list",
+        help="Path to allowed targets YAML (defaults to .repo_studios/command_center/docs/guardrails/allowed_targets.yaml)",
+    )
     parser.add_argument("--log-level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], help="Logging verbosity")
     return parser
 
