@@ -26,7 +26,7 @@ Provide a consistent, scriptable way to inventory which Repo Studios scripts imp
 
 1. **Helper catalog** – Import from `libraries/__init__.py` to confirm helper availability; fallback to explicit path list when needed.
 2. **Script inventory** – Reuse the latest Command Center inventory JSON if present; otherwise walk `.repo_studios/scripts/` using the same ignore rules captured in the inventory producer.
-3. **Allow-list integration** – Cross-reference `docs/automation/guardrails/allowed_targets.yaml` to scope which directories require tracking.
+3. **Allow-list integration** – Cross-reference `.repo_studios/command_center/docs/guardrails/allowed_targets.yaml` to scope which directories require tracking.
 
 ## Output Artifacts
 
@@ -79,7 +79,7 @@ Provide a consistent, scriptable way to inventory which Repo Studios scripts imp
 
 - **CLI location:** `.repo_studios/command_center/scripts/producers/audit_helper_adoption.py`
 - **Outputs:** Timestamped `helper_adoption.json` (schema version `1.0`) and optional Markdown summary written via `write_report_artifacts` with latest pointers.
-- **Scope:** Loads allowed targets from `docs/automation/guardrails/allowed_targets.yaml`, audits helper imports vs. legacy definitions, and aggregates counts per slug and helper.
+- **Scope:** Loads allowed targets from `.repo_studios/command_center/docs/guardrails/allowed_targets.yaml`, audits helper imports vs. legacy definitions, and aggregates counts per slug and helper.
 - **Testing:** Covered by `tests/tests_producers/test_audit_helper_adoption.py`, which exercises adoption/legacy detection, format filtering, and pointer mirroring.
 - **Follow-on consumers:** Metrics summary ingestion and weighted briefing template can now source helper adoption data directly from the JSON artifact.
 

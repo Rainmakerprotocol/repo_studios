@@ -3,7 +3,7 @@
 ## Scenario Setup
 
 - Prompt key: `update_docs`
-- Inputs: Need to add guardrail reference to `docs/automation/guardrails/library_extraction_guardrails.md`.
+- Inputs: Need to add guardrail reference to `.repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md`.
 - Objective: Verify agent consults documentation guidance, limits scope, and prepares decision log note.
 
 ## Transcript

@@ -27,7 +27,7 @@
 | Phase 6 | AI Prompt Engineering | Complete | Prompts updated (v1.3.0) with guardrail references, validation dry-runs archived, and rollback/versioning playbook established. |
 | Phase 7 | Validation & Hardening | In progress | Metric baseline plan, ledger, and cadence documented; next focus is operationalizing monitoring checkpoints. |
 | Phase 8 | Scale to New Projects | Deferred | Outside current sidebar mission scope. |
-| 2025-11-03 | Hardened weighted progress briefing template and requested developer review; evidence at `docs/automation/metrics/weighted_progress_briefing_template.md`. | Adds governance notes, metrics summary linkage, and decision log hooks so weekly briefings stay auditable once reviews start. | Complete |
+| 2025-11-03 | Hardened weighted progress briefing template and requested developer review; evidence at `.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md`. | Adds governance notes, metrics summary linkage, and decision log hooks so weekly briefings stay auditable once reviews start. | Complete |
 
 Legend: In discovery = gathering facts, Not started = pending alignment, Deferred = intentionally out of scope for now.
 
@@ -120,11 +120,11 @@ Notes: Completing this phase delivers the single-trigger workflow users can poin
 - Refined the manual extraction checklist to match the current staging workflow—helpers now land in `.repo_studios/command_center/scripts/libraries/` with tests under `tests/tests_library_integration/libraries/` until promotion criteria are satisfied.
 - Drafted the `build_paths` / `build_options` extraction brief (`.repo_studios/command_center/docs/build_paths_extraction_brief.md`) detailing objectives, pilot scope, test strategy, and migration sequence so implementation can begin immediately.
 - Authored a reusable run-log template at `.repo_studios/command_center/docs/run_log_template.md` so every remediation cycle captures commands, artifacts, tests, and follow-ups in a consistent, auditable format.
-- Added a review & sign-off workflow to `docs/automation/guardrails/library_extraction_guardrails.md`, including distribution steps and an approval table covering stewards, producers, QA, and optional automation stakeholders.
+- Added a review & sign-off workflow to `.repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md`, including distribution steps and an approval table covering stewards, producers, QA, and optional automation stakeholders.
 - Reviewed guardrail and metrics open questions, documenting dated working responses plus follow-up actions for CI locks, run-size caps, manifest metrics, helper audit tooling, long-term storage, and severity weighting.
 - Recorded self-approval in the guardrail review table so the blueprint is ready for Phase 4 automation planning.
 - Captured Phase 4 automation planning notes (`phase_4/AUTOMATION_PLANNING_NOTES.md`) covering guardrail follow-ups, metrics integration tasks, automation design considerations, and outstanding questions.
-- Assigned metric ownership to Genet across the catalog in `docs/automation/metrics/library_integration_metrics.md`, keeping cadence expectations intact.
+- Assigned metric ownership to Genet across the catalog in `.repo_studios/command_center/docs/metrics/library_integration_metrics.md`, keeping cadence expectations intact.
 - Expanded the Phase 4 planning notes with a manual execution charter, sprint sequencing roadmap, and a finalized metrics storage decision (weekly in-repo snapshots with manual monthly aggregates).
 - Developed a manual automation design brief detailing objectives, scope, deliverables, risks, and acceptance criteria for the upcoming automation pilots.
 - Drafted a CI lock status check workflow design (reusable GitHub Action) in `phase_4/AUTOMATION_PLANNING_NOTES.md` pending validation against the repository structure.
@@ -141,13 +141,13 @@ Notes: Completing this phase delivers the single-trigger workflow users can poin
 - Migrated `.repo_studios/scripts/producers/verify_docs_integrity.py` onto the shared CLI helpers while preserving update/table toggles, then validated with `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_verify_docs_integrity.py`.
 - Migrated `.repo_studios/scripts/producers/validate_markdown_anchors.py` to the shared CLI helpers, keeping glob/timestamp controls intact, and confirmed via `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_validate_markdown_anchors.py`.
 - Expanded `.repo_studios/command_center/README.md` with an orchestrator operations section documenting invocation patterns, logging controls, retention behaviour, and failure diagnostics so operators share a consistent playbook.
-- Authored a metrics specification at `docs/automation/metrics/library_integration_metrics.md`, detailing the Phase 3 reporting catalog, data collection workflow, and actionability triggers for duplicate remediation.
+- Authored a metrics specification at `.repo_studios/command_center/docs/metrics/library_integration_metrics.md`, detailing the Phase 3 reporting catalog, data collection workflow, and actionability triggers for duplicate remediation.
 - Added guardrail configuration loader and run-size validation helper (`libraries/guardrails.py`) plus integration tests (`test_guardrails.py`) to prepare automation for `max_files_per_run` enforcement.
 - Landed reusable CI lock workflow at `.github/workflows/verify-command-center-locks.yaml`, matching guardrail requirements for blocking automation when lock files are present.
-- Drafted automation metrics summary schema and validation checklist in `phase_4/AUTOMATION_PLANNING_NOTES.md`, with canonical reference stored at `docs/automation/metrics/metrics_summary_schema.md` for future implementation.
+- Drafted automation metrics summary schema and validation checklist in `phase_4/AUTOMATION_PLANNING_NOTES.md`, with canonical reference stored at `.repo_studios/command_center/docs/metrics/metrics_summary_schema.md` for future implementation.
 - Authored helper adoption audit CLI specification (`phase_4/HELPER_ADOPTION_CLI_SPEC.md`) outlining goals, contract, outputs, and open questions for developer review.
 - Created automation PR checklist template (`phase_4/PR_CHECKLIST_TEMPLATE.md`) to standardize guardrail confirmation and evidence capture in future automation pull requests.
-- Drafted weighted progress briefing template at `docs/automation/metrics/weighted_progress_briefing_template.md` to replace manual weekly reporting with weighted metrics.
+- Drafted weighted progress briefing template at `.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md` to replace manual weekly reporting with weighted metrics.
 - Documented automation post-run test matrix (`phase_4/POST_RUN_TEST_MATRIX.md`) covering required pytest suites and conditional commands for future automation runs.
 - Added planning sprint success criteria section in `phase_4/AUTOMATION_PLANNING_NOTES.md` to align success thresholds and dependency readiness before configuration work begins.
 - Logged new open question tying weighted progress to future helper adoption metrics to ensure reporting stays consistent once automation launches.
@@ -155,7 +155,7 @@ Notes: Completing this phase delivers the single-trigger workflow users can poin
 **Next actions:**
 
 1. Completed automation design brief and dependency review (2025-10-31 to 2025-11-03; see `phase_4/AUTOMATION_PLANNING_NOTES.md`).
-2. Completed configuration sprint guardrail updates, including lock workflow and `max_files_per_run` enforcement (2025-11-03; see `.github/workflows/verify-command-center-locks.yaml` and `docs/automation/guardrails/library_extraction_guardrails.md`).
+2. Completed configuration sprint guardrail updates, including lock workflow and `max_files_per_run` enforcement (2025-11-03; see `.github/workflows/verify-command-center-locks.yaml` and `.repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md`).
 3. In progress: Developer review of the Phase 5 Make target design (`.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md`) to confirm naming, flags, and artifact messaging.
 4. Completed: Windows `make` availability guidance documented 2025-11-04 with install/fallback instructions (see design draft Windows Tooling Validation).
 5. Completed: Make target contract, guardrail surfacing, and CI rehearsal plan documented 2025-11-04 within the design draft; pending developer approval before implementation.
@@ -180,11 +180,11 @@ Notes: Rollout remains manual; automation explicitly deferred until manual valid
 - Exercised `run_automation_dry_run.py` manually (`--timestamp 2025-11-03T17:00:00+00:00`) to confirm the generated bundle includes `manifest.json`, `metrics_summary.json`, copied guardrail/input payloads under `inputs/`, and a README summarizing run metadata and operator notes.
 - Updated planning docs to reflect manifest completion and captured the schema in repository documentation for Phase 4 operators.
 - Ratified automation success criteria in `phase_4/AUTOMATION_PLANNING_NOTES.md`, marking them accepted and logging the outcome in the Automation Decision Log.
-- Expanded `docs/automation/guardrails/library_extraction_guardrails.md` to call out run artifact retention in both the overview table and Implementation Note 10.
+- Expanded `.repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md` to call out run artifact retention in both the overview table and Implementation Note 10.
 - Signed off dependency readiness checklist in `phase_4/AUTOMATION_PLANNING_NOTES.md`, marking shared helper coverage, test coverage, and operator playbooks ready for Phase 4 configuration.
 - Updated `.repo_studios/command_center/README.md` to summarize the retention policy so operators and producers can trace the guardrail default (`keep=3`) directly from the protocol overview.
 - Wired `generate_automation_manifest.py` to enforce `max_files_per_run` via the shared guardrail helper and added regression coverage blocking over-budget runs.
-- Hardened the weighted progress briefing template (`docs/automation/metrics/weighted_progress_briefing_template.md`) with usage guidance, helper adoption linkage, and a data source table so weekly reports follow a repeatable script.
+- Hardened the weighted progress briefing template (`.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md`) with usage guidance, helper adoption linkage, and a data source table so weekly reports follow a repeatable script.
 - Promoted the automation PR checklist template (`phase_4/PR_CHECKLIST_TEMPLATE.md`) to ready status with guardrail references, testing prompts, and attachment requirements so manual PRs surface complete evidence bundles.
 
 ### 2025-11-04 Implementation Update
@@ -241,7 +241,7 @@ Notes: Rollout remains manual; automation explicitly deferred until manual valid
 
 ### Planning & Alignment
 
-- [x] **Guardrail approval captured** (see `docs/automation/guardrails/library_extraction_guardrails.md`). *(Completed 2025-10-31 – Genet self-approval recorded in table.)*
+- [x] **Guardrail approval captured** (see `.repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md`). *(Completed 2025-10-31 – Genet self-approval recorded in table.)*
 - [x] **Document automation design brief** consolidating guardrails, sequencing, and rollback expectations (`phase_4/AUTOMATION_PLANNING_NOTES.md`). *(Completed 2025-10-31 – brief now covers objectives, scope, deliverables, risks, and acceptance criteria.)*
 - [x] **Define automation success criteria** (manual extraction coverage, regression-free streak, duplicate reduction targets). *(Completed 2025-11-03 — accepted in `phase_4/AUTOMATION_PLANNING_NOTES.md` with a dated decision log entry.)*
 - Progress: Success criteria ratified 2025-11-03; dependency readiness checklist still awaiting review.
@@ -255,13 +255,13 @@ Notes: Rollout remains manual; automation explicitly deferred until manual valid
 - Progress: documentation updated 2025-11-03 noting manifest enforcement; helper + test suite cover limit and override behaviour for future tooling.
 - [x] **Decide long-term metrics storage** (in-repo vs telemetry workspace) and note the outcome in `phase_4/AUTOMATION_PLANNING_NOTES.md`. *(Completed 2025-10-31 – weekly snapshots stay in-repo; monthly aggregates exported manually.)*
 - [x] **Create weighted progress reporting template** that combines duplicate counts with lizard complexity deltas. *(Completed 2025-11-03 — template finalized with usage guidance and data source catalogue.)*
-- Result: Template now lives at `docs/automation/metrics/weighted_progress_briefing_template.md` with ready status, helper adoption pointers, and briefing workflow instructions; weekly briefings can reuse the standardized layout immediately.
+- Result: Template now lives at `.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md` with ready status, helper adoption pointers, and briefing workflow instructions; weekly briefings can reuse the standardized layout immediately.
 
 ### Tooling & Implementation Prep
 
 - [x] **Extend automation manifest** to emit `metrics_summary.json` (lines touched, groups resolved) during dry runs. *(Agent → design schema; Developer → review.)*
 - Progress (2025-11-03): Automation manifest helper (`.repo_studios/command_center/scripts/libraries/manifest.py`) and aggregator CLI (`.repo_studios/command_center/scripts/aggregators/generate_automation_manifest.py`) now emit both `manifest.json` and `metrics_summary.json` bundles with retention; tests guard the library and CLI at `.repo_studios/tests/command_center/libraries/test_manifest.py` and `.repo_studios/tests/tests_command_center/aggregators/test_generate_automation_manifest.py`.
-- Progress: schema drafted 2025-10-31 in `phase_4/AUTOMATION_PLANNING_NOTES.md` with canonical spec captured at `docs/automation/metrics/metrics_summary_schema.md`; implementation still pending.
+- Progress: schema drafted 2025-10-31 in `phase_4/AUTOMATION_PLANNING_NOTES.md` with canonical spec captured at `.repo_studios/command_center/docs/metrics/metrics_summary_schema.md`; implementation still pending.
 - [x] **Specify helper adoption audit CLI** (inputs, outputs, integration points) to replace manual spreadsheets. *(Completed 2025-11-03 — CLI implemented at `.repo_studios/command_center/scripts/producers/audit_helper_adoption.py` with tests in `tests/tests_producers/test_audit_helper_adoption.py`; spec updated in `phase_4/HELPER_ADOPTION_CLI_SPEC.md`.)*
 - Progress: specification drafted 2025-10-31 in `phase_4/HELPER_ADOPTION_CLI_SPEC.md` and summarized in the planning notes; awaiting developer review.
 - [x] **Script dry-run rehearsal** reusing rollback bundle layout; store rehearsal results under `.repo_studios/command_center/reports/<slug>_automation_run/`. *(Completed 2025-11-03 — bundles captured for `dryrun-probe` and `dryrun-probe-02`, developer approved inputs/tests.)*
@@ -274,7 +274,7 @@ Notes: Rollout remains manual; automation explicitly deferred until manual valid
 ### Manual Execution Charter (Summary)
 
 - Phase 4 work stays manual: humans and coding agents run every script, update every config, and record every artifact until automation is formally approved.
-- Guardrails from `docs/automation/guardrails/library_extraction_guardrails.md` apply to all rehearsals (fresh artifacts, lock checks, rollback bundles, documented approvals).
+- Guardrails from `.repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md` apply to all rehearsals (fresh artifacts, lock checks, rollback bundles, documented approvals).
 - Outputs land under `phase_4/` with immediate checklist updates so future automation inherits a complete audit trail.
 
 ### Sequencing Roadmap (Manual Team)
@@ -338,7 +338,7 @@ Notes: Will proceed only after library structure and extraction workflow stabili
 - Automation success criteria (manual coverage, regression streak, duplicate reduction) accepted 2025-11-03; Phase 4 automation remains gated on those thresholds.
 - Automation dry-run bundles (`dryrun-probe`, `dryrun-probe-02`) captured 2025-11-03 under `.repo_studios/command_center/reports/repo-studios__command-center__automation_run/`; developer review complete with the expanded library-integration test matrix recorded for the second run.
 - Post-run test matrix (PowerShell commands + orchestrator coverage) revised 2025-11-03 in `phase_4/POST_RUN_TEST_MATRIX.md`; developer review scheduled before automation tooling consumes it.
-- Weighted progress briefing template hardened 2025-11-03 with default weights, metrics summary linkage, and decision log hook; evidence at `docs/automation/metrics/weighted_progress_briefing_template.md` (developer review pending).
+- Weighted progress briefing template hardened 2025-11-03 with default weights, metrics summary linkage, and decision log hook; evidence at `.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md` (developer review pending).
 - Phase 5 Make target design drafted 2025-11-04 in `.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md`, outlining `studio-detect-duplicates` and `studio-refactor-duplicates` flows with guardrail integrations pending developer sign-off.
 - Windows Make tooling validation recorded 2025-11-04 in `.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md`, providing GNU `make` install guidance and a PowerShell fallback plan awaiting developer confirmation.
 - Make target contract and guardrail surfacing documented 2025-11-04 in `.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md`, locking env var defaults, operator prompts, and guardrail bubble-up behaviour pending developer review.

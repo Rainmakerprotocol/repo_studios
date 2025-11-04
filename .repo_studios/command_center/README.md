@@ -36,7 +36,7 @@ When adding new helpers, keep them importable without mutating `sys.path` (match
 ## Artifact Retention Policy
 
 - Command Center scripts write artifacts through `write_report_artifacts`, which keeps the latest three timestamped runs by default while honoring `.keep` sentinels for extended history.
-- Automation bundles (manifest, metrics summary, rollback assets) inherit the same default (`keep=3`) per Implementation Note 10 in `docs/automation/guardrails/library_extraction_guardrails.md`; raise overrides in the guardrail log when longer retention is required.
+- Automation bundles (manifest, metrics summary, rollback assets) inherit the same default (`keep=3`) per Implementation Note 10 in `.repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md`; raise overrides in the guardrail log when longer retention is required.
 - When onboarding new producers or aggregators, ensure they call the shared helper (or pass `--keep` overrides deliberately) so duplicate matrices, manifest bundles, and metrics summaries all respect the retention budget and remain reviewable.
 
 ---

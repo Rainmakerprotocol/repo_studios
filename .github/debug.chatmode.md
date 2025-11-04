@@ -141,7 +141,7 @@ The following context from the memory bank informs your debugging process:
 {{memory-bank/systemPatterns.md}}
 
 ### Decision Log
-{{memory-bank/decisionLog.md}}
+{{.repo_studios/command_center/docs/decision_log.md}}
 
 ### Progress
 {{memory-bank/progress.md}}

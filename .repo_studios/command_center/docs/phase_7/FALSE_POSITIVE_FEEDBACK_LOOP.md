@@ -37,7 +37,7 @@
 
 ## Intake Channels
 
-- `memory-bank/decisionLog.md` entries flagged with `false-positive` tag.
+- `.repo_studios/command_center/docs/decision_log.md` entries flagged with `false-positive` tag.
 - CI job annotations linking to `automation_manifest` bundle.
 - Manual run logs stored via `phase_4` run log template with false-positive checkbox.
 

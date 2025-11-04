@@ -13,7 +13,7 @@
 - [x] **Max files per run** – Add a `max_files_per_run` setting alongside the allow-list and enforce it during pre-flight validation (default: 15 files).
   - *Progress (2025-11-03):* `generate_automation_manifest.py` now enforces the configured limit via `enforce_run_size_limit`, rejecting over-budget runs and surfacing the counts in manifest guardrail snapshots.
 - [x] **Manifest metrics summary** – Extend the automation manifest to emit `metrics_summary.json` including lines touched and duplicate groups resolved.
-  - *Progress (2025-11-03):* Automation manifest bundle now produced by `.repo_studios/command_center/scripts/aggregators/generate_automation_manifest.py`, which writes `manifest.json` and `metrics_summary.json` via the new library helper (`.repo_studios/command_center/scripts/libraries/manifest.py`) with tests covering guardrail snapshots and pointer retention; schema documented at `docs/automation/guardrails/automation_manifest_schema.md`.
+  - *Progress (2025-11-03):* Automation manifest bundle now produced by `.repo_studios/command_center/scripts/aggregators/generate_automation_manifest.py`, which writes `manifest.json` and `metrics_summary.json` via the new library helper (`.repo_studios/command_center/scripts/libraries/manifest.py`) with tests covering guardrail snapshots and pointer retention; schema documented at `.repo_studios/command_center/docs/guardrails/automation_manifest_schema.md`.
 
 ### CI Lock Status Check Draft (2025-10-31)
 
@@ -96,7 +96,7 @@ jobs:
 
 #### Validation checklist
 
-- Ensure schema version is pinned and bumped on breaking changes; store canonical schema in `docs/automation/metrics/metrics_summary_schema.md`.
+- Ensure schema version is pinned and bumped on breaking changes; store canonical schema in `.repo_studios/command_center/docs/metrics/metrics_summary_schema.md`.
 - Cross-check `lines_touched` and `files_changed` against the manifest totals before writing to avoid drift.
 - Require at least `library_integration` and `producer_suite` test entries; additional suites may be appended.
 - Emit the metrics summary alongside the manifest and rollback bundle; include the file path in the automation log header for visibility.
@@ -116,7 +116,7 @@ jobs:
 
 ### Weighted Progress Briefing Template (Accepted 2025-11-03)
 
-- **Template reference:** `docs/automation/metrics/weighted_progress_briefing_template.md` documents the weekly reporting structure that combines duplicate groups, lizard complexity, and helper adoption metrics.
+- **Template reference:** `.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md` documents the weekly reporting structure that combines duplicate groups, lizard complexity, and helper adoption metrics.
 - **Purpose:** Replace manual spreadsheets with a consistent briefing that feeds into Phase 4 readiness reviews and highlights overall weighted progress.
 - **Status:** Template finalized with usage workflow, helper adoption linkage, and data source catalogue (2025-11-03).
 - **Follow-up:** Schedule first briefing dry-run using the template and collect feedback for future weighting adjustments.
@@ -132,7 +132,7 @@ jobs:
 
 
 ```yaml
-# docs/automation/guardrails/automation_config.yaml (draft)
+# .repo_studios/command_center/docs/guardrails/automation_config.yaml (draft)
 allowed_targets:
   - slug: scripts-duplicates
     path: .repo_studios/scripts
@@ -166,7 +166,7 @@ constraints:
 
 - Generated the first rehearsal bundle via `run_automation_dry_run.py` (run id `dryrun-probe`, timestamp `2025-11-03T16:00:00Z`) targeting `scripts-duplicates`.
 - Artifacts stored under `.repo_studios/command_center/reports/repo-studios__command-center__automation_run/automation_manifest-20251103_160000/` with mirrored pointers and README.
-- Inputs sourced from `phase_4/dry_run_samples/files_sample.json` and `tests_sample.json`; guardrail snapshot copied from `docs/automation/guardrails/automation_config.yaml`.
+- Inputs sourced from `phase_4/dry_run_samples/files_sample.json` and `tests_sample.json`; guardrail snapshot copied from `.repo_studios/command_center/docs/guardrails/automation_config.yaml`.
 - Metrics summary confirms 42 lines touched, 2 files changed, 1 duplicate group resolved, and captures pytest durations/outputs for post-run verification.
 - Ran expanded rehearsal `dryrun-probe-02` (timestamp `2025-11-03T17:00:00Z`) covering multi-target metrics, guardrail helper updates, and the library integration pytest suite; artifacts live at `automation_manifest-20251103_170000/` with copied inputs and README.
 - Developer reviewed both bundles on 2025-11-03; dry-run step now marked complete in the master checklist.
@@ -199,7 +199,7 @@ constraints:
 | Shared helper coverage | ✅ | Phase 3 helper backlog confirmed 2025-11-03; outstanding targets documented in the checklist and gated by the accepted success criteria before automation writes proceed. |
 | Test coverage | ✅ | Library integration and producer suites green on Windows; automation dry-run regression coverage (`test_run_automation_dry_run.py`) now guards manifest/metrics flows, with cross-platform validation queued during the configuration sprint. |
 | Library namespace slots | ✅ | Naming conventions and mapping recorded in `docs/duplicate_target_mappings.md`; no conflicting `.repo_studios/library/` tree identified. |
-| Guardrail documentation | ✅ | `docs/automation/guardrails/library_extraction_guardrails.md` approved 2025-10-31; follow-up sections pending CI lock and run-size updates. |
+| Guardrail documentation | ✅ | `.repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md` approved 2025-10-31; follow-up sections pending CI lock and run-size updates. |
 | Metrics storage plan | ✅ | Weekly in-repo snapshots with manual monthly aggregates logged in metrics spec and reiterated here. |
 | Operator playbooks | ✅ | Manual execution charter, run-log template, and PR checklist template (`phase_4/PR_CHECKLIST_TEMPLATE.md`) accepted 2025-11-03; operators now have end-to-end guidance. |
 
@@ -248,7 +248,7 @@ Deliver a vetted blueprint for automated duplicate extraction that adheres to Ph
 ### Acceptance Criteria
 
 - All deliverables stored under `phase_4/` with cross-links in the main checklist.
-- Guardrail and metrics decisions reflected in repository docs (`docs/automation/guardrails`, `docs/automation/metrics`).
+- Guardrail and metrics decisions reflected in repository docs (`.repo_studios/command_center/docs/guardrails`, `.repo_studios/command_center/docs/metrics`).
 - Dry-run rehearsal produces artifacts that match the specified rollback bundle without modifying source files.
 
 ## Manual Execution Charter

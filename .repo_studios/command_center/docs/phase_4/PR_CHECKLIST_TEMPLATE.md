@@ -4,7 +4,7 @@
 
 **Usage:** Copy the section below into any PR raised from a Phase 4 automation run, replacing the placeholder values before requesting review.
 
-**References:** Guardrails — `docs/automation/guardrails/library_extraction_guardrails.md`; Post-run suites — `phase_4/POST_RUN_TEST_MATRIX.md`; Manifest bundle — `phase_4/AUTOMATION_PLANNING_NOTES.md`.
+**References:** Guardrails — `.repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md`; Post-run suites — `phase_4/POST_RUN_TEST_MATRIX.md`; Manifest bundle — `phase_4/AUTOMATION_PLANNING_NOTES.md`.
 
 ---
 
@@ -13,9 +13,9 @@
 - [ ] Automation target(s): `scripts-duplicates` / `…`
 - [ ] Run date: `YYYY-MM-DD`
 - [ ] Operator(s): `@handle`
-- [ ] Guardrail configuration version: `docs/automation/guardrails/automation_config.yaml`
-- [ ] Guardrail reference link: `docs/automation/guardrails/library_extraction_guardrails.md`
-- [ ] Weighted progress briefing attached? ☐ N/A ☐ Yes (link to `docs/automation/metrics/weighted_progress_briefing_template.md` instance)
+- [ ] Guardrail configuration version: `.repo_studios/command_center/docs/guardrails/automation_config.yaml`
+- [ ] Guardrail reference link: `.repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md`
+- [ ] Weighted progress briefing attached? ☐ N/A ☐ Yes (link to `.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md` instance)
 
 ## Pre-flight Validation
 
@@ -47,7 +47,7 @@
 
 - [ ] Highlights of duplicate groups resolved (reference matrix IDs and `metrics_summary.json`).
 - [ ] Follow-up actions required (docs, manual verification, etc.).
-- [ ] Approval sign-off (steward / QA) recorded in guardrail log with date (`docs/automation/guardrails/library_extraction_guardrails.md`).
+- [ ] Approval sign-off (steward / QA) recorded in guardrail log with date (`.repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md`).
 - [ ] Weighted progress impact summarized (reference latest briefing).
 
 ---

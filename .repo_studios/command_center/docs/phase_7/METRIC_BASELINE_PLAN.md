@@ -25,7 +25,7 @@
 | Duplicate Groups Resolved | Count of duplicate groups where consolidated helper replaces redundant code | Diff duplicate matrix before/after run; automation manifest `groups_resolved` acts as authoritative record | Genet | Per remediation run, aggregated weekly |
 | Test Coverage Change | Δ in relevant pytest suite results (pass count, duration, coverage %) after remediation | Record pytest run summary (`--maxfail=1 --durations=10`) and coverage report snapshots when available | Genet + assigned QA partner | Per remediation run, aggregated monthly |
 | Guardrail Compliance Rate | Percentage of remediation runs completing guardrail checklist without deviations | Leverage automation manifest status + guardrail prompts captured in run log template | Command Center operator on duty | Weekly |
-| Documentation Drift | Count of doc updates linked to remediation versus outstanding TODOs | Track `memory-bank/decisionLog.md` entries tagged with prompt keys and compare to scheduled doc updates | Documentation steward | Monthly |
+| Documentation Drift | Count of doc updates linked to remediation versus outstanding TODOs | Track `.repo_studios/command_center/docs/decision_log.md` entries tagged with prompt keys and compare to scheduled doc updates | Documentation steward | Monthly |
 
 ## Collection Workflow
 
@@ -49,7 +49,7 @@
 - **Prompt drift audit (quarterly)**
   - *Owner:* Prompt steward (per `repo_prompts.md`).
   - *Inputs:* Ledger totals, prompt validation transcripts, guardrail feedback log.
-  - *Outputs:* Quarterly note in `memory-bank/decisionLog.md` summarizing prompt efficacy vs. metrics movement.
+  - *Outputs:* Quarterly note in `.repo_studios/command_center/docs/decision_log.md` summarizing prompt efficacy vs. metrics movement.
 - **Cadence tooling**
   - Capture cadence results in the ledger (new rows tagged with `cadence_review`), and cite review timestamps in the weighted briefing template for traceability.
   - Maintain a rolling four-week retention of briefing drafts; archive monthly deep-dive decks alongside automation run bundles.

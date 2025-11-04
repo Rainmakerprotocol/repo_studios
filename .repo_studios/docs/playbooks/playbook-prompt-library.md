@@ -66,7 +66,7 @@ make anchor-health                            # generate duplicate slug report
 ## Governance Notes
 
 - Maintain Markdown hygiene to align with `std-global-markdown-authoring.md`.
-- Log substantial prompt changes in `memory-bank/decisionLog.md` with rationale and impacted flows.
+- Log substantial prompt changes in `.repo_studios/command_center/docs/decision_log.md` with rationale and impacted flows.
 - Link prompt updates to the mission parameters or project operating standard when scope changes.
 
 ---
@@ -84,6 +84,6 @@ agents:
         - copy-verbatim: true
         - list-candidates-when-ambiguous: 3
         - run-anchor-check: make anchor-health
-        - log-change: memory-bank/decisionLog.md
+        - log-change: .repo_studios/command_center/docs/decision_log.md
 ```
 <!-- agents:end:agent_instructions -->

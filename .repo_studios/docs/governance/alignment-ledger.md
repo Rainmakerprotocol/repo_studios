@@ -52,7 +52,7 @@ Append-only log of documentation review batches processed oldest to newest per `
 * `docs/ownership/memory_refresh_access.md`
 * `memory-bank/activeContext.md`
 * `memory-bank/progress.md`
-* `memory-bank/decisionLog.md`
+* `.repo_studios/command_center/docs/decision_log.md`
 * `docs/security_hardening.md`
 * `docs/monitoring_notes.md`
 * `memory-bank/productContext.md` *(no content change; verified availability)*

@@ -18,7 +18,7 @@
 
 - **Cross-Link Requirement:**
   - Require checking `.repo_studios/command_center/README.md#documentation-updates` before editing docs related to automation or duplicate remediation.
-  - Add reminder to note doc touch-ups in `memory-bank/decisionLog.md` when they influence guardrails or protocols.
+  - Add reminder to note doc touch-ups in `.repo_studios/command_center/docs/decision_log.md` when they influence guardrails or protocols.
 
 ## `bundle_review`
 

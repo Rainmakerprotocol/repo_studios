@@ -132,8 +132,8 @@ Key notes:
 - **Primary updates once Make targets land:**
 - `.repo_studios/command_center/README.md` → add new section covering Make targets, env var defaults, guardrail reminders, Windows fallback script, and PR checklist references.
 - `.repo_studios/scripts/README.md` → note the availability of studio Make targets alongside existing command center Make invocation guidance.
-- `docs/automation/metrics/weighted_progress_briefing_template.md` → reference the Make targets as a preparation step for weekly automation briefings (ensuring the latest metrics exist).
-- `docs/automation/guardrails/library_extraction_guardrails.md` → mention that Make targets surface guardrail reminders and rely on the same `max_files_per_run` enforcement.
+- `.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md` → reference the Make targets as a preparation step for weekly automation briefings (ensuring the latest metrics exist).
+- `.repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md` → mention that Make targets surface guardrail reminders and rely on the same `max_files_per_run` enforcement.
 - **Additional touchpoints:**
 - `phase_4/POST_RUN_TEST_MATRIX.md` → add a sidebar reminding operators to use the Make targets’ post-run prompts when available.
 - `repo_prompts.md` (Phase 6) → insert pointers to the Make targets so prompt-driven workflows know about the new entry points once prompts are revised.

@@ -27,7 +27,7 @@ Use this repeatable micro-cycle for every script remediation pass:
 2. **Refactor & Harden** – add pruning (cap artifacts at 10 by default), tighten error handling, confirm output paths, and wire or refresh a dedicated Make target in `.repo_studios/Makefile`.
 3. **Execute & Validate** – run the script, inspect generated artifacts for formatting, metadata, and agent readability.
 4. **Test** – add or extend a matching monolithic test in `.repo_studios/tests/tests_<tier>/` and run it locally.
-5. **Document & Log** – refresh this inventory, update supporting docs, and capture notable decisions in `memory-bank/decisionLog.md`.
+5. **Document & Log** – refresh this inventory, update supporting docs, and capture notable decisions in `.repo_studios/command_center/docs/decision_log.md`.
 6. **Repeat** – move on only when the script satisfies pruning, testing, and documentation expectations.
 
 ## How to Use This Template

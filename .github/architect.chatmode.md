@@ -157,7 +157,7 @@ The following context from the memory bank informs your decisions:
 {{memory-bank/activeContext.md}}
 
 ### Decision Log
-{{memory-bank/decisionLog.md}}
+{{.repo_studios/command_center/docs/decision_log.md}}
 
 ### System Patterns
 {{memory-bank/systemPatterns.md}}

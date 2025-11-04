@@ -89,7 +89,7 @@ Always cite the relevant standard in commit summaries or agent notes when deviat
 
 1. Review `alignment_notes_temp.md` or the latest agent note to confirm current objectives.
 2. Announce significant migrations in a new agent note with links to affected inventories or standards.
-3. Close the loop by updating the decision log (`memory-bank/decisionLog.md`) when governance-level changes land.
+3. Close the loop by updating the decision log (`.repo_studios/command_center/docs/decision_log.md`) when governance-level changes land.
 
 ---
 
@@ -111,6 +111,6 @@ agents:
             - std-global-python-engineering.md
             - std-global-markdown-authoring.md
         - update-agent-notes: true
-        - log-decisions: memory-bank/decisionLog.md
+        - log-decisions: .repo_studios/command_center/docs/decision_log.md
 ```
 <!-- agents:end:agent_instructions -->

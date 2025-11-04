@@ -55,4 +55,4 @@ Latest copies are mirrored to `.repo_studios/reports/producer_reports/docs_integ
 
 - The governed docs index lives at `docs/standards/docs_index.md`. Ensure new governed documents include a fenced JSON block so the producer can manage their `content_hash` values.
 - When adding or removing governed docs, update the index JSON block; the script regenerates the markdown table automatically unless `--no-table` is used.
-- Record notable enforcement changes in `memory-bank/decisionLog.md` whenever new documents or policies are added to the governed set.
+- Record notable enforcement changes in `.repo_studios/command_center/docs/decision_log.md` whenever new documents or policies are added to the governed set.

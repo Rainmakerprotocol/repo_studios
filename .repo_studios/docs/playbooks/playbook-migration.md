@@ -61,7 +61,7 @@ This playbook standardizes how we relocate assets from `.repo_studios_legacy/` i
 - `python .repo_studios/scripts/check_inventory_health.py` returns zero deltas.
 - Codacy CLI reports either clean results or unsupported file type notices for each migrated asset.
 - Related playbooks reference the new location without broken anchors (run `python .repo_studios/scripts/check_markdown_anchors.py <file>` when headings change).
-- The decision log (`memory-bank/decisionLog.md`) captures governance-impacting migrations.
+- The decision log (`.repo_studios/command_center/docs/decision_log.md`) captures governance-impacting migrations.
 
 ---
 
@@ -90,7 +90,7 @@ agents:
             - codacy_cli_analyze
         - remove-legacy-copy: true
         - log-governance:
-            - memory-bank/decisionLog.md
+            - .repo_studios/command_center/docs/decision_log.md
             - .repo_studios/agent_notes/
 ```
 <!-- agents:end:agent_instructions -->

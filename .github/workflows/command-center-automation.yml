@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - '.repo_studios/command_center/**'
-      - 'docs/automation/guardrails/**'
+      - '.repo_studios/command_center/docs/guardrails/**'
       - 'phase_4/**'
       - '.github/workflows/verify-command-center-locks.yaml'
   workflow_dispatch:

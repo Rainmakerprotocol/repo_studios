@@ -20,7 +20,7 @@
    - Re-run orchestrator inventory/analysis for the RS summarizers target.
    - Capture duplicate matrix at `.repo_studios/command_center/reports/repo-studios__command-center__scripts_duplicate_scan/scripts_duplicate_matrix-2025-11-04.json`.
    - Generate updated automation manifest/metrics summary using the dry-run helpers.
-   - Record documentation touch-up for RS-DUP-147 in `memory-bank/decisionLog.md`.
+   - Record documentation touch-up for RS-DUP-147 in `.repo_studios/command_center/docs/decision_log.md`.
 4. Logged intended guardrail evidence in session notes: duplicate matrix path, `automation_manifest-20251104_173000/manifest.json`, `metrics_summary.json`, decision log entry, and CI rehearsal checklist reference.
 5. Listed safe wins (≤3) with file/script mapping: align helper adoption audit CLI; cross-link remediation brief; prune stale scan artifacts.
 

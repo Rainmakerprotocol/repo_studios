@@ -4,7 +4,7 @@
 
 - **Author (Agent):** Drafts prompt deltas, guardrail matrix updates, and validation plans.
 - **Reviewer (Developer):** Confirms guardrail coverage, validates wording, and approves rollout.
-- **Recorder:** Updates `memory-bank/decisionLog.md` and `repo_prompts.md` change log after approval (can be author or reviewer).
+- **Recorder:** Updates `.repo_studios/command_center/docs/decision_log.md` and `repo_prompts.md` change log after approval (can be author or reviewer).
 
 ## Change Sequence
 
@@ -15,7 +15,7 @@
    - Reviewer validates guardrail coverage, command center linkage, and doc standards.
    - Feedback captured directly in the draft files or via tracked comments.
 3. **Approval & Logging**
-   - Reviewer records approval in `memory-bank/decisionLog.md` with date, prompts touched, and artifacts cited.
+   - Reviewer records approval in `.repo_studios/command_center/docs/decision_log.md` with date, prompts touched, and artifacts cited.
    - Update `repo_prompts.md` version metadata and add entry to prompt library change log section (new subsection to be added during rollout).
 4. **Publication**
    - Apply approved deltas to `repo_prompts.md` (single commit with referenced artifacts).

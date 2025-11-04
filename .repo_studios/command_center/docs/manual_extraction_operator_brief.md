@@ -50,6 +50,6 @@ python .repo_studios/scripts/producers/generate_lizard_report.py --repo-root . `
 
 ## Feedback Loop
 
-- Capture operator feedback directly in `que_for_integration/refactor_library/library_integration_checklist.md` under Phase 3 updates.
+- Capture operator feedback directly in `.repo_studios/command_center/docs/library_integration_checklist.md` under Phase 3 updates.
 - Raise blockers in the run summary and link supporting artifacts (logs, reports).
 - Update this brief when the manual checklist or report formats change.

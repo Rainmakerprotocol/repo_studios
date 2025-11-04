@@ -64,7 +64,7 @@ weighted_progress = (
 - [ ] Update guardrail checklist with any overrides approved this week.
 - [ ] Schedule dry-run rehearsal if duplicate backlog falls below threshold.
 - [ ] Refresh helper adoption CLI inputs before next briefing.
-- [ ] Log deviations or weight adjustments in `memory-bank/decisionLog.md`.
+- [ ] Log deviations or weight adjustments in `.repo_studios/command_center/docs/decision_log.md`.
 
 ---
 
@@ -86,6 +86,6 @@ weighted_progress = (
 | Automation manifest | `reports/<slug>/automation_manifest/manifest.json` | Provides guardrail metadata, targets touched, and links to post-run test commands. |
 | Helper adoption report | `reports/<slug>/helper_adoption/helper_adoption-YYYY-MM-DD.json` | Tracks helper uptake by target and supports the helper weighting component. |
 | Lizard complexity briefing | `.repo_studios/reports/producer_reports/lizard_reports/<timestamp>/summary.md` | Lists high-complexity functions and changes used in the complexity weighting. |
-| Decision log | `memory-bank/decisionLog.md` | Records approvals, weight adjustments, and rationale for auditability. |
+| Decision log | `.repo_studios/command_center/docs/decision_log.md` | Records approvals, weight adjustments, and rationale for auditability. |
 | Baseline ledger | `.repo_studios/command_center/docs/phase_7/METRIC_BASELINE_LOG.csv` | Anchors metric snapshots to briefing fields so historical comparisons stay reproducible. |
 | Cadence reference | `.repo_studios/command_center/docs/phase_7/METRIC_BASELINE_PLAN.md` | Documents weekly/monthly/quarterly review schedule, owners, and required artifacts for the metric program. |

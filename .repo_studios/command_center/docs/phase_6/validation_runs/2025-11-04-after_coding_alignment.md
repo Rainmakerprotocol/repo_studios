@@ -21,7 +21,7 @@
    - Automation artifacts: `automation_manifest-20251104_181500/manifest.json` and `metrics_summary.json` stored under the same folder.
    - Run-lock status rechecked via `make command-center-check-locks` → `RUN_LOCK_STATUS: clear` before closing the run.
 4. Referenced `.repo_studios/command_center/README.md#guardrails` for follow-up, confirming `max_files_per_run` remained at 15 and retention keep=3 enforced automatically.
-5. Logged decision entry: `memory-bank/decisionLog.md` updated with RS-DUP-147 completion, citing prompt key `after_coding_alignment` and linking guardrail evidence.
+5. Logged decision entry: `.repo_studios/command_center/docs/decision_log.md` updated with RS-DUP-147 completion, citing prompt key `after_coding_alignment` and linking guardrail evidence.
 6. Next micro-fixes (≤3): audit helper adoption diff, schedule manifest dry-run in CI rehearsal, review guardrail prompts for orchestrator docs.
 
 ## Evaluation

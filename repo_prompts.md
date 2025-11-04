@@ -185,7 +185,7 @@ Minimal doc touch-ups:
 - Scope: add cross-links or one-liners; do not rewrite content.
 - Show before→after excerpts (first and last new bullet).
 - Keep under ten lines changed per file; ensure no tabs and reasonable line length.
-- Log guardrail-impacted doc adjustments in `memory-bank/decisionLog.md` with prompt key reference and evidence links.
+- Log guardrail-impacted doc adjustments in `.repo_studios/command_center/docs/decision_log.md` with prompt key reference and evidence links.
 
 ---
 
