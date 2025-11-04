@@ -15,6 +15,7 @@ from typing import Mapping, Sequence
 try:
 	from libraries import (
 		GuardrailState,
+		GuardrailViolationError,
 		KeepSpec,
 		ManifestFile,
 		OptionsConfig,
@@ -22,6 +23,7 @@ try:
 		PathsConfig,
 		ReportArtifact,
 		TestRunResult,
+		enforce_run_size_limit,
 		build_automation_manifest,
 		build_metrics_summary,
 		build_standard_options,
@@ -37,6 +39,7 @@ except ModuleNotFoundError:  # pragma: no cover - CLI fallback for script execut
 		sys.path.insert(0, str(SCRIPTS_ROOT))
 	from libraries import (  # type: ignore  # noqa: E402
 		GuardrailState,
+		GuardrailViolationError,
 		KeepSpec,
 		ManifestFile,
 		OptionsConfig,
@@ -44,6 +47,7 @@ except ModuleNotFoundError:  # pragma: no cover - CLI fallback for script execut
 		PathsConfig,
 		ReportArtifact,
 		TestRunResult,
+		enforce_run_size_limit,
 		build_automation_manifest,
 		build_metrics_summary,
 		build_standard_options,
@@ -55,7 +59,7 @@ except ModuleNotFoundError:  # pragma: no cover - CLI fallback for script execut
 	)
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports/automation_runs")
-DEFAULT_KEEP = 5
+DEFAULT_KEEP = 3
 RUN_STEM = "automation_manifest"
 MANIFEST_FILENAME = "manifest.json"
 MANIFEST_POINTER = "latest_automation_manifest.json"
@@ -271,9 +275,23 @@ def run(argv: Sequence[str] | None = None) -> int:
 		except Exception as exc:
 			logging.error("Failed to load guardrail configuration: %s", exc)
 			return 1
+		candidate_paths = [
+			(paths.repo_root / Path(entry.path)).resolve()
+			for status in ("updated", "conflicted")
+			for entry in files_mapping.get(status, tuple())
+		]
+		try:
+			limit, considered = enforce_run_size_limit(
+				candidate_paths,
+				config,
+				override=bool(args.guardrail_override),
+			)
+		except GuardrailViolationError as exc:
+			logging.error("Guardrail violation: %s", exc)
+			return 1
 		guardrail_state = GuardrailState(
-			max_files_per_run=config.constraints.max_files_per_run,
-			files_considered=total_files,
+			max_files_per_run=limit,
+			files_considered=considered,
 			override_applied=bool(args.guardrail_override),
 			config_path=config.config_path,
 			allow_list_source=config.allow_list_source,

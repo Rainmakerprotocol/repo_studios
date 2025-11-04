@@ -1,0 +1,34 @@
+{
+  "duplicate_groups_resolved": 2,
+  "files_changed": 3,
+  "lines_touched": 84,
+  "notes": "Dry-run rehearsal expanded coverage; no files mutated.",
+  "run_id": "dryrun-probe-02",
+  "runtime_seconds": 312.6,
+  "schema_version": "1.0",
+  "targets": [
+    "scripts-duplicates",
+    "command-center-helpers"
+  ],
+  "tests_executed": {
+    "pytest -m command_center": {
+      "artifacts": [
+        ".repo_studios/tests/reports/pytest-command-center.log"
+      ],
+      "duration_seconds": 92.3,
+      "status": "passed"
+    },
+    "pytest .repo_studios/tests/tests_library_integration": {
+      "artifacts": [
+        ".repo_studios/tests/reports/pytest-library-integration.log"
+      ],
+      "duration_seconds": 148.5,
+      "status": "passed"
+    },
+    "pytest tests/tests_producers/test_audit_helper_adoption.py": {
+      "artifacts": [],
+      "duration_seconds": 12.7,
+      "status": "passed"
+    }
+  }
+}

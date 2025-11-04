@@ -1,0 +1,33 @@
+name: Command Center Automation Guardrails
+
+on:
+  pull_request:
+    paths:
+      - '.repo_studios/command_center/**'
+      - 'docs/automation/guardrails/**'
+      - 'phase_4/**'
+      - '.github/workflows/verify-command-center-locks.yaml'
+  workflow_dispatch:
+    inputs:
+      allow-ignore:
+        description: 'Set to true to bypass lock validation (manual overrides only)'
+        required: false
+        default: 'false'
+        type: string
+
+jobs:
+  verify-locks:
+    name: Verify Command Center Locks
+    uses: ./.github/workflows/verify-command-center-locks.yaml
+    secrets: inherit
+    with:
+      allow-ignore: ${{ github.event.inputs.allow-ignore || 'false' }}
+
+  note-placeholder:
+    name: Automation Placeholder
+    needs: verify-locks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record placeholder status
+        run: |
+          echo 'Command Center automation steps will be added in a future sprint.'

@@ -1,0 +1,16 @@
+{
+  "updated": [
+    {
+      "path": ".repo_studios/command_center/scripts/libraries/manifest.py",
+      "duplicate_groups": [
+        "manifest-writer",
+        "metrics-summary-link"
+      ]
+    },
+    ".repo_studios/command_center/scripts/orchestrators/run_automation_dry_run.py"
+  ],
+  "skipped": [
+    ".repo_studios/command_center/scripts/producers/audit_helper_adoption.py"
+  ],
+  "conflicted": []
+}

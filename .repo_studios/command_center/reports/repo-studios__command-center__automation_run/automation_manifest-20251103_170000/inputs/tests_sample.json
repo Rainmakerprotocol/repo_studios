@@ -1,0 +1,21 @@
+{
+  "pytest -m command_center": {
+    "status": "passed",
+    "duration_seconds": 92.3,
+    "artifacts": [
+      ".repo_studios/tests/reports/pytest-command-center.log"
+    ]
+  },
+  "pytest .repo_studios/tests/tests_library_integration": {
+    "status": "passed",
+    "duration_seconds": 148.5,
+    "artifacts": [
+      ".repo_studios/tests/reports/pytest-library-integration.log"
+    ]
+  },
+  "pytest tests/tests_producers/test_audit_helper_adoption.py": {
+    "status": "passed",
+    "duration_seconds": 12.7,
+    "artifacts": []
+  }
+}

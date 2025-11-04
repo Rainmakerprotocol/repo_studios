@@ -1,0 +1,88 @@
+{
+  "baseline_sha": "26d461e7e6f60d79cf4926c2df71530f13296430",
+  "dry_run": true,
+  "files": {
+    "conflicted": [],
+    "skipped": [
+      {
+        "duplicate_groups": [],
+        "path": ".repo_studios/command_center/scripts/producers/audit_helper_adoption.py"
+      }
+    ],
+    "updated": [
+      {
+        "duplicate_groups": [
+          "manifest-writer",
+          "metrics-summary-link"
+        ],
+        "path": ".repo_studios/command_center/scripts/libraries/manifest.py"
+      },
+      {
+        "duplicate_groups": [
+          "guardrail-enforcement"
+        ],
+        "path": ".repo_studios/command_center/scripts/libraries/guardrails.py"
+      },
+      {
+        "duplicate_groups": [],
+        "path": ".repo_studios/command_center/scripts/orchestrators/run_automation_dry_run.py"
+      }
+    ]
+  },
+  "guardrails": {
+    "allow_list_source": "C:\\Users\\genet\\repo_studios\\docs\\automation\\guardrails\\docs\\automation\\guardrails\\allowed_targets.yaml",
+    "config_path": "C:\\Users\\genet\\repo_studios\\docs\\automation\\guardrails\\automation_config.yaml",
+    "files_considered": 3,
+    "max_files_per_run": 15,
+    "metadata": {
+      "notes": "Initial configuration seeded during Phase 4 planning.",
+      "updated": "2025-10-31",
+      "version": "1"
+    },
+    "override_applied": false
+  },
+  "metrics_summary": {
+    "duplicate_groups_resolved": 2,
+    "files_changed": 3,
+    "lines_touched": 84,
+    "notes": "Dry-run rehearsal expanded coverage; no files mutated.",
+    "run_id": "dryrun-probe-02",
+    "runtime_seconds": 312.6,
+    "schema_version": "1.0",
+    "targets": [
+      "scripts-duplicates",
+      "command-center-helpers"
+    ],
+    "tests_executed": {
+      "pytest -m command_center": {
+        "artifacts": [
+          ".repo_studios/tests/reports/pytest-command-center.log"
+        ],
+        "duration_seconds": 92.3,
+        "status": "passed"
+      },
+      "pytest .repo_studios/tests/tests_library_integration": {
+        "artifacts": [
+          ".repo_studios/tests/reports/pytest-library-integration.log"
+        ],
+        "duration_seconds": 148.5,
+        "status": "passed"
+      },
+      "pytest tests/tests_producers/test_audit_helper_adoption.py": {
+        "artifacts": [],
+        "duration_seconds": 12.7,
+        "status": "passed"
+      }
+    }
+  },
+  "metrics_summary_path": "metrics_summary.json",
+  "notes": "Dry-run rehearsal expanded coverage; no files mutated.",
+  "operator": "genet",
+  "run_id": "dryrun-probe-02",
+  "schema_version": "1.0",
+  "targets": [
+    "scripts-duplicates",
+    "command-center-helpers"
+  ],
+  "timestamp": "2025-11-03T17:00:00+00:00"
+}

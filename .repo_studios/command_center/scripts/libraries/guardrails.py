@@ -97,4 +97,4 @@ def enforce_run_size_limit(
 				f"{config.config_path}."
 			)
 		)
-		return limit, run_size
+	return limit, run_size

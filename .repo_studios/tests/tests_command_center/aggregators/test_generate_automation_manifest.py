@@ -123,7 +123,7 @@ def test_generate_automation_manifest_bundle(tmp_path: Path) -> None:
     assert manifest_payload["metrics_summary_path"] == mod.METRICS_FILENAME
     guardrails = manifest_payload["guardrails"]
     assert guardrails["max_files_per_run"] == 10
-    assert guardrails["files_considered"] == 3
+    assert guardrails["files_considered"] == 2
     assert guardrails["config_path"].endswith("automation_config.yaml")
 
     manifest_pointer = output_dir / mod.MANIFEST_POINTER
@@ -149,6 +149,115 @@ def test_manifest_files_changed_mismatch(tmp_path: Path, caplog: pytest.LogCaptu
     }
     tests_file = tmp_path / "tests.json"
     tests_file.write_text(json.dumps(tests_payload), encoding="utf-8")
+
+    output_dir = tmp_path / "reports"
+
+    with caplog.at_level("ERROR"):
+        exit_code = mod.main(
+            [
+                "--repo-root",
+                str(tmp_path),
+                "--output-dir",
+                str(output_dir),
+                "--tests-file",
+                str(tests_file),
+                "--files-file",
+                str(files_file),
+                "--run-id",
+                "run-mismatch",
+                "--baseline-sha",
+                "deadbeef",
+                "--target",
+                "library",
+                "--lines-touched",
+                "10",
+                "--files-changed",
+                "2",
+                "--duplicate-groups-resolved",
+                "0",
+                "--runtime-seconds",
+                "5.0",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+
+    assert exit_code == 1
+    assert any("Files changed mismatch" in message for message in caplog.messages)
+
+
+def test_guardrail_violation(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
+    mod = _load_module()
+
+    files_payload = {
+        "updated": [f"src/module_{idx}.py" for idx in range(6)],
+        "skipped": [],
+        "conflicted": [],
+    }
+    files_file = tmp_path / "files.json"
+    files_file.write_text(json.dumps(files_payload), encoding="utf-8")
+
+    tests_payload = {
+        "library_integration": {
+            "status": "passed",
+            "duration_seconds": 12.0,
+        }
+    }
+    tests_file = tmp_path / "tests.json"
+    tests_file.write_text(json.dumps(tests_payload), encoding="utf-8")
+
+    allowed_targets = tmp_path / "allowed_targets.yaml"
+    allowed_targets.write_text("targets: []\n", encoding="utf-8")
+    guardrail_config = tmp_path / "automation_config.yaml"
+    guardrail_config.write_text(
+        (
+            "metadata:\n"
+            "  version: 1\n"
+            "allow_list:\n"
+            "  source: allowed_targets.yaml\n"
+            "constraints:\n"
+            "  max_files_per_run: 5\n"
+            "  max_groups_per_run: 5\n"
+        ),
+        encoding="utf-8",
+    )
+
+    output_dir = tmp_path / "reports"
+
+    with caplog.at_level("ERROR"):
+        exit_code = mod.main(
+            [
+                "--repo-root",
+                str(tmp_path),
+                "--output-dir",
+                str(output_dir),
+                "--tests-file",
+                str(tests_file),
+                "--files-file",
+                str(files_file),
+                "--run-id",
+                "guardrail-violation",
+                "--baseline-sha",
+                "deadbeef",
+                "--target",
+                "library",
+                "--lines-touched",
+                "60",
+                "--files-changed",
+                "6",
+                "--duplicate-groups-resolved",
+                "0",
+                "--runtime-seconds",
+                "10.0",
+                "--guardrail-config",
+                str(guardrail_config),
+                "--log-level",
+                "ERROR",
+            ]
+        )
+
+    assert exit_code == 1
+    assert any("Guardrail violation" in message for message in caplog.messages)
 
     output_dir = tmp_path / "reports"
 

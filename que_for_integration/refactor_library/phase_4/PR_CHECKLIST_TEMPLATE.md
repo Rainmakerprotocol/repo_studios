@@ -23,8 +23,9 @@ Use this template when opening a PR generated from Phase 4 automation runs. Copy
 ## Execution Details
 
 - [ ] Dry-run performed first with artifacts attached.
+- [ ] `run_automation_dry_run.py` invocation recorded (command, timestamp slug, bundle path).
 - [ ] Automation executed from clean worktree/worktree slug: `<path>`.
-- [ ] Rollback bundle captured under `.repo_studios/command_center/reports/<slug>_automation_run/`.
+- [ ] Rollback bundle captured under `.repo_studios/command_center/reports/repo-studios__command-center__automation_run/`.
 - [ ] `manifest.json` and `metrics_summary.json` attached to the PR (link or upload).
 
 ## Testing

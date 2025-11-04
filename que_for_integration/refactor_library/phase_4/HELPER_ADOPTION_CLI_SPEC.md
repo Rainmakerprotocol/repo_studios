@@ -1,6 +1,6 @@
 # Helper Adoption Audit CLI Specification
 
-**Status:** Draft (2025-10-31)
+**Status:** Implemented (2025-11-03)
 
 ## Purpose
 
@@ -75,9 +75,16 @@ Provide a consistent, scriptable way to inventory which Repo Studios scripts imp
 - How should we integrate the report into weekly progress briefings (e.g., auto-attach Markdown summary)?
 - When automation begins, should the CLI block runs if adoption falls below a threshold for target helpers?
 
+## Implementation Summary (2025-11-03)
+
+- **CLI location:** `.repo_studios/command_center/scripts/producers/audit_helper_adoption.py`
+- **Outputs:** Timestamped `helper_adoption.json` (schema version `1.0`) and optional Markdown summary written via `write_report_artifacts` with latest pointers.
+- **Scope:** Loads allowed targets from `docs/automation/guardrails/allowed_targets.yaml`, audits helper imports vs. legacy definitions, and aggregates counts per slug and helper.
+- **Testing:** Covered by `tests/tests_producers/test_audit_helper_adoption.py`, which exercises adoption/legacy detection, format filtering, and pointer mirroring.
+- **Follow-on consumers:** Metrics summary ingestion and weighted briefing template can now source helper adoption data directly from the JSON artifact.
+
 ## Next Steps
 
-1. Review this spec with the developer to confirm scope and integration expectations.
-2. Finalize schema fields (especially per-helper `files` section) before implementation to prevent churn.
-3. Create the producer script scaffold with shared CLI helpers and log wiring.
-4. Backfill tests and sample fixtures after schema approval.
+1. Wire the helper adoption report into Phase 4 rehearsal playbooks (e.g., reference in automation dry-run README output).
+2. Evaluate whether to run the CLI inside the command center orchestrator once adoption tracking stabilizes.
+3. Extend the Markdown summary with guardrail guidance before automation writes begin.

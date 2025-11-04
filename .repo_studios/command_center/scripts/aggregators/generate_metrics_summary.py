@@ -45,7 +45,7 @@ except ModuleNotFoundError:  # pragma: no cover - CLI fallback for script execut
     )
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports/automation_metrics")
-DEFAULT_KEEP = 5
+DEFAULT_KEEP = 3
 RUN_STEM = "metrics_summary"
 SUMMARY_FILENAME = "metrics_summary.json"
 LATEST_POINTER = "latest_metrics_summary.json"

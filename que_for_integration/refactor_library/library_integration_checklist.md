@@ -22,11 +22,12 @@
 | Phase 2 | Duplicate Detection Tool | In progress | Command Center scanner adopted; verifying remaining integration work against slugged reports and retention helper. |
 | Phase 2.5 | Orchestrator Bootstrap | In progress | Orchestrator in place and validated through make target (summarizers/utilities); documentation updates still pending. |
 | Phase 3 | Manual Extraction Validation | In progress | `_slugify_relative`, `_copy_latest`, and new `write_report_artifacts` helper landed; dependency hygiene & import graph producers migrated while docs sweep remains. |
-| Phase 4 | Automated Extraction | Not started | Requires manual validation results and guardrail design. |
+| Phase 4 | Automated Extraction | In progress | Success criteria ratified; guardrail retention policy documented across planning notes and guardrail guide. |
 | Phase 5 | Integration with Repo Studios | Not started | Make/CI wiring dependent on outcomes from earlier phases. |
 | Phase 6 | AI Prompt Engineering | Not started | Must align with existing `repo_prompts.md` governance. |
 | Phase 7 | Validation & Hardening | Not started | Triggered after automation decisions. |
 | Phase 8 | Scale to New Projects | Deferred | Outside current sidebar mission scope. |
+| 2025-11-03 | Hardened weighted progress briefing template and requested developer review; evidence at `docs/automation/metrics/weighted_progress_briefing_template.md`. | Adds governance notes, metrics summary linkage, and decision log hooks so weekly briefings stay auditable once reviews start. |
 
 Legend: In discovery = gathering facts, Not started = pending alignment, Deferred = intentionally out of scope for now.
 
@@ -127,7 +128,7 @@ Notes: Completing this phase delivers the single-trigger workflow users can poin
 - Expanded the Phase 4 planning notes with a manual execution charter, sprint sequencing roadmap, and a finalized metrics storage decision (weekly in-repo snapshots with manual monthly aggregates).
 - Developed a manual automation design brief detailing objectives, scope, deliverables, risks, and acceptance criteria for the upcoming automation pilots.
 - Drafted a CI lock status check workflow design (reusable GitHub Action) in `phase_4/AUTOMATION_PLANNING_NOTES.md` pending validation against the repository structure.
- 
+
 ### 2025-10-31 Implementation Update
 
 - Introduced config-driven helpers (`PathsConfig`, `OptionsConfig`, `build_standard_paths`, `build_standard_options`) inside `.repo_studios/command_center/scripts/libraries/cli.py`, preserving ASCII-only staging style while enabling dataclass-friendly resolution.
@@ -166,7 +167,14 @@ Notes: Rollout remains manual; automation explicitly deferred until manual valid
 
 - Added automation manifest helper (`.repo_studios/command_center/scripts/libraries/manifest.py`) and CLI (`.repo_studios/command_center/scripts/aggregators/generate_automation_manifest.py`) that write paired `manifest.json` and `metrics_summary.json` artifacts with guardrail snapshots.
 - Backfilled library and CLI tests (`.repo_studios/tests/command_center/libraries/test_manifest.py`, `.repo_studios/tests/tests_command_center/aggregators/test_generate_automation_manifest.py`) to validate schema enforcement, guardrail metadata, and pointer mirroring.
+- Landed orchestrator dry-run regression coverage in `.repo_studios/tests/tests_command_center/orchestrators/test_run_automation_dry_run.py`, asserting manifest/metrics emission, input snapshotting, README scaffolding, and error propagation for missing scripts.
+- Exercised `run_automation_dry_run.py` manually (`--timestamp 2025-11-03T17:00:00+00:00`) to confirm the generated bundle includes `manifest.json`, `metrics_summary.json`, copied guardrail/input payloads under `inputs/`, and a README summarizing run metadata and operator notes.
 - Updated planning docs to reflect manifest completion and captured the schema in repository documentation for Phase 4 operators.
+- Ratified automation success criteria in `phase_4/AUTOMATION_PLANNING_NOTES.md`, marking them accepted and logging the outcome in the Automation Decision Log.
+- Expanded `docs/automation/guardrails/library_extraction_guardrails.md` to call out run artifact retention in both the overview table and Implementation Note 10.
+- Signed off dependency readiness checklist in `phase_4/AUTOMATION_PLANNING_NOTES.md`, marking shared helper coverage, test coverage, and operator playbooks ready for Phase 4 configuration.
+- Updated `.repo_studios/command_center/README.md` to summarize the retention policy so operators and producers can trace the guardrail default (`keep=3`) directly from the protocol overview.
+- Wired `generate_automation_manifest.py` to enforce `max_files_per_run` via the shared guardrail helper and added regression coverage blocking over-budget runs.
 
 ### `write_report_artifacts` Implementation Summary (2025-10-28)
 
@@ -201,30 +209,31 @@ Notes: Rollout remains manual; automation explicitly deferred until manual valid
 
 - [x] **Guardrail approval captured** (see `docs/automation/guardrails/library_extraction_guardrails.md`). *(Completed 2025-10-31 – Genet self-approval recorded in table.)*
 - [x] **Document automation design brief** consolidating guardrails, sequencing, and rollback expectations (`phase_4/AUTOMATION_PLANNING_NOTES.md`). *(Completed 2025-10-31 – brief now covers objectives, scope, deliverables, risks, and acceptance criteria.)*
-- [ ] **Define automation success criteria** (manual extraction coverage, regression-free streak, duplicate reduction targets). *(Drafted 2025-10-31 in `phase_4/AUTOMATION_PLANNING_NOTES.md` — awaiting ratification.)*
-- Progress: planning sprint success criteria expanded 2025-10-31 in the same notes; pending developer review and checklist sign-off.
-- [ ] **Confirm dependency readiness** (fresh inventory/analysis pipeline, library structure slots, test coverage). *(Checklist drafted 2025-10-31 in `phase_4/AUTOMATION_PLANNING_NOTES.md`; pending developer sign-off.)*
+- [x] **Define automation success criteria** (manual extraction coverage, regression-free streak, duplicate reduction targets). *(Completed 2025-11-03 — accepted in `phase_4/AUTOMATION_PLANNING_NOTES.md` with a dated decision log entry.)*
+- Progress: Success criteria ratified 2025-11-03; dependency readiness checklist still awaiting review.
+- [x] **Confirm dependency readiness** (fresh inventory/analysis pipeline, library structure slots, test coverage). *(Signed off 2025-11-03 — checklist updated in `phase_4/AUTOMATION_PLANNING_NOTES.md` with all dependencies marked ready.)*
 
 ### Configuration & Infrastructure Tasks
 
-- [ ] **Prototype CI lock status check** that reads `.repo_studios/command_center/run_locks/*.lock` and blocks concurrent automation runs. *(Agent → design/status; Developer → wire into GitHub environment.)*
-- Progress: workflow committed 2025-10-31 at `.github/workflows/verify-command-center-locks.yaml`; guardrail doc updated with enforcement guidance, branch protection wiring still outstanding.
-- [ ] **Add `max_files_per_run` setting** alongside the allow-list and enforce during pre-flight validation (target default: 15). *(Agent → extend config + guardrail doc; Developer → approve threshold.)*
-- Progress: documentation updated 2025-10-31 outlining `constraints.max_files_per_run` enforcement; baseline config files (`docs/automation/guardrails/automation_config.yaml`, `docs/automation/guardrails/allowed_targets.yaml`) created, guardrail helper + tests landed (`libraries/guardrails.py`, `test_guardrails.py`), automation wiring still pending.
+- [x] **Prototype CI lock status check** that reads `.repo_studios/command_center/run_locks/*.lock` and blocks concurrent automation runs. *(Agent → design/status; Developer → wire into GitHub environment.)*
+- Progress: Reusable workflow lives at `.github/workflows/verify-command-center-locks.yaml` and is now invoked by `.github/workflows/command-center-automation.yml` (2025-11-03) so the lock gate can be required by branch protection.
+- [x] **Add `max_files_per_run` setting** alongside the allow-list and enforce during pre-flight validation (target default: 15). *(Completed 2025-11-03 — automation manifest CLI now blocks over-budget runs via `enforce_run_size_limit`.)*
+- Progress: documentation updated 2025-11-03 noting manifest enforcement; helper + test suite cover limit and override behaviour for future tooling.
 - [x] **Decide long-term metrics storage** (in-repo vs telemetry workspace) and note the outcome in `phase_4/AUTOMATION_PLANNING_NOTES.md`. *(Completed 2025-10-31 – weekly snapshots stay in-repo; monthly aggregates exported manually.)*
 - [ ] **Create weighted progress reporting template** that combines duplicate counts with lizard complexity deltas. *(Agent → draft weekly briefing update; Developer → review.)*
-- Progress: template drafted 2025-10-31 at `docs/automation/metrics/weighted_progress_briefing_template.md` and summarized in planning notes; awaiting developer validation.
+- Progress: template hardened 2025-11-03 with default weight governance, metrics summary linkage, and decision log hook at `docs/automation/metrics/weighted_progress_briefing_template.md`; developer validation pending.
 
 ### Tooling & Implementation Prep
 
 - [x] **Extend automation manifest** to emit `metrics_summary.json` (lines touched, groups resolved) during dry runs. *(Agent → design schema; Developer → review.)*
 - Progress (2025-11-03): Automation manifest helper (`.repo_studios/command_center/scripts/libraries/manifest.py`) and aggregator CLI (`.repo_studios/command_center/scripts/aggregators/generate_automation_manifest.py`) now emit both `manifest.json` and `metrics_summary.json` bundles with retention; tests guard the library and CLI at `.repo_studios/tests/command_center/libraries/test_manifest.py` and `.repo_studios/tests/tests_command_center/aggregators/test_generate_automation_manifest.py`.
 - Progress: schema drafted 2025-10-31 in `phase_4/AUTOMATION_PLANNING_NOTES.md` with canonical spec captured at `docs/automation/metrics/metrics_summary_schema.md`; implementation still pending.
-- [ ] **Specify helper adoption audit CLI** (inputs, outputs, integration points) to replace manual spreadsheets. *(Agent → outline spec; Developer → validate before build.)*
+- [x] **Specify helper adoption audit CLI** (inputs, outputs, integration points) to replace manual spreadsheets. *(Completed 2025-11-03 — CLI implemented at `.repo_studios/command_center/scripts/producers/audit_helper_adoption.py` with tests in `tests/tests_producers/test_audit_helper_adoption.py`; spec updated in `phase_4/HELPER_ADOPTION_CLI_SPEC.md`.)*
 - Progress: specification drafted 2025-10-31 in `phase_4/HELPER_ADOPTION_CLI_SPEC.md` and summarized in the planning notes; awaiting developer review.
-- [ ] **Script dry-run rehearsal** reusing rollback bundle layout; store rehearsal results under `.repo_studios/command_center/reports/<slug>_automation_run/`. *(Agent → pilot; Developer → evaluate logs/tests.)*
-- [ ] **Enumerate required post-run test suites** (library integration, producer suites, any new automation smoke tests) and bake them into the automation checklist. *(Agent → list commands; Developer → approve.)*
-- Progress: test matrix drafted 2025-10-31 in `phase_4/POST_RUN_TEST_MATRIX.md` and referenced in planning notes; awaiting developer approval and tooling integration.
+- [x] **Script dry-run rehearsal** reusing rollback bundle layout; store rehearsal results under `.repo_studios/command_center/reports/<slug>_automation_run/`. *(Completed 2025-11-03 — bundles captured for `dryrun-probe` and `dryrun-probe-02`, developer approved inputs/tests.)*
+- Progress: second rehearsal (`dryrun-probe-02`) expanded coverage with multi-target metrics and library-integration pytest suite; artifacts mirrored under `.repo_studios/command_center/reports/repo-studios__command-center__automation_run/automation_manifest-20251103_170000/` with README and inputs copied from `phase_4/dry_run_samples/`.
+- [x] **Enumerate required post-run test suites** (library integration, producer suites, any new automation smoke tests) and bake them into the automation checklist. *(Completed 2025-11-03 — matrix updated with PowerShell commands, durations flags, orchestrator coverage.)*
+- Progress: `phase_4/POST_RUN_TEST_MATRIX.md` now spells out PowerShell-friendly commands with `--maxfail`/`--durations` flags plus mandatory orchestrator suite; developer review pending before wiring into tooling.
 - [ ] **Draft PR checklist template** ensuring each automated run links to guardrails, manifest, tests, and manual review notes. *(Agent → create template in repo docs; Developer → sign off.)*
 - Progress: template drafted 2025-10-31 (`phase_4/PR_CHECKLIST_TEMPLATE.md`) and referenced in planning notes; pending developer review and integration.
 
@@ -282,6 +291,10 @@ Notes: Will proceed only after library structure and extraction workflow stabili
 - Companion analysis results (360 duplicates / 22 files) serve as the baseline dataset for planning.
 - Run workspace anchored at `.repo_studios/command_center/` for reports, checklists, and protocol documentation.
 - Shared helper modules now live under `.repo_studios/command_center/scripts/libraries/`; `_slugify_relative` and `_copy_latest` are centralized with legacy aliases maintained in each script.
+- Automation success criteria (manual coverage, regression streak, duplicate reduction) accepted 2025-11-03; Phase 4 automation remains gated on those thresholds.
+- Automation dry-run bundles (`dryrun-probe`, `dryrun-probe-02`) captured 2025-11-03 under `.repo_studios/command_center/reports/repo-studios__command-center__automation_run/`; developer review complete with the expanded library-integration test matrix recorded for the second run.
+- Post-run test matrix (PowerShell commands + orchestrator coverage) revised 2025-11-03 in `phase_4/POST_RUN_TEST_MATRIX.md`; developer review scheduled before automation tooling consumes it.
+- Weighted progress briefing template hardened 2025-11-03 with default weights, metrics summary linkage, and decision log hook; evidence at `docs/automation/metrics/weighted_progress_briefing_template.md` (developer review pending).
 
 ---
 
@@ -293,7 +306,7 @@ Notes: Will proceed only after library structure and extraction workflow stabili
 4. **Testing Footprint** – Library tests will live alongside the library in a mirrored branch structure (per reference bundle); current integration coverage validates the slugged pipeline on Windows and asserts helper alias reuse.
 5. **Tooling Cross-Platform** – Manual scripts and test commands must succeed on Windows, Linux, and macOS; add validation steps for each target shell.
 6. **Governance Alignment** – Single approver confirmed (you). Capture this in rollout notes so future contributors know who signs off.
-7. **Report Retention & Pruning** – `scan_duplicates.py` and the shared `write_report_artifacts` helper enforce retention (default keep three runs). Capture policy details in the protocol README and extend adoption across remaining report producers.
+7. **Report Retention & Pruning** – `scan_duplicates.py` and the shared `write_report_artifacts` helper enforce retention (default keep three runs); guardrail overview now documents the policy (Implementation Note 10). Capture protocol README updates and extend adoption across remaining report producers.
 8. **Orchestrator Contract** – Finalise argument handling, exit codes, and documentation expectations before implementing the Phase 2.5 runner.
 
 ---
@@ -306,7 +319,7 @@ Notes: Will proceed only after library structure and extraction workflow stabili
 | Detection Tool Strategy | Adopt `scripts/aggregators/scan_duplicates.py` as the canonical detector with slugged mirrors and retention. | Agent to document integration touchpoints with orchestrators/Make targets; Developer to confirm when to broaden beyond Command Center scope. | Agent → document; Developer → review |
 | Orchestrator Strategy | Build a Phase 2.5 runner that chains inventory → analysis → duplicate scan with shared CLI flags and no extra artifacts. | Agent to draft implementation plan/tests; Developer to approve contract and naming. | Agent → draft; Developer → approve |
 | Manual Extraction Pilot Scope | Pilot must define inaugural targets, test/backups, and acceptance criteria before automation. | Agent to produce pilot brief (targets now `_slugify_relative`, `_copy_latest`, `write_artifacts`, `build_paths`, `configure_logging`) informed by `docs/duplicate_target_mappings.md`; Developer to approve and schedule. | Agent → draft; Developer → approve |
-| Run Artifact Retention Policy | Retention handled in `scan_duplicates.py` (keep three runs by default); other producers still need alignment. | Agent to extend retention guidance to inventory/analysis runners and update protocol README. | Agent → draft; Developer → approve |
+| Run Artifact Retention Policy | Retention handled in `scan_duplicates.py` (keep three runs by default) and now codified in `library_extraction_guardrails.md` Implementation Note 10; other producers still need alignment. | Agent to extend retention guidance to inventory/analysis runners and update protocol README. | Agent → draft; Developer → approve |
 
 ---
 

@@ -23,6 +23,7 @@ These guardrails apply to any automation that modifies source files based on dup
 | Safety net | **Rollback bundle** | Each run produces a rollback bundle (patch + copied originals) under `.repo_studios/command_center/reports/<slug>_automation_run/`. Bundles include the commit SHA used as baseline and restore instructions. |
 | Logging | **Structured log stream** | Execution logs use key/value pairs (matching producer conventions) and stream to both stdout and a timestamped `automation.log`. Include run metadata, targets touched, actions taken, and exit code. |
 | Logging | **Artifact manifest** | Automation emits a manifest JSON summarising every file touched, grouped by outcome (`updated`, `skipped`, `conflicted`). Manifest lives alongside the rollback bundle. |
+| Reporting | **Run artifact retention** | Automation writes artifacts via `write_report_artifacts` with a default `keep=3`; teams add a `.keep` sentinel or documented override when longer history is required. |
 | Verification | **Post-run pytest** | Automation must trigger the relevant pytest suites (producer regressions + library integration tests) and halt on any failure. Results are stored with the manifest. |
 | Verification | **Manual sign-off checkpoint** | A human reviews the manifest, rollback bundle, and test results before merging changes. Automations conclude by opening a draft PR with a checklist referencing this guardrail document. |
 
@@ -50,6 +51,7 @@ These guardrails apply to any automation that modifies source files based on dup
    - `manifest.json` – summary of touched files, referencing duplicate group IDs (see `docs/automation/guardrails/automation_manifest_schema.md`).
    - `metrics_summary.json` – impact snapshot that follows `docs/automation/metrics/metrics_summary_schema.md`.
    - `README.md` – instructions to apply the patch or restore originals.
+   - Store bundles under `.repo_studios/command_center/reports/repo-studios__command-center__automation_run/` with mirrored `latest_automation_manifest.json` and `latest_metrics_summary.json` pointers for reviewers.
 
 6. **Logging & telemetry**
    - Use the shared logging helper once it moves into the library (`configure_basic_logging`) and integrate with the command center retention utilities so logs are pruned to the latest three runs.
@@ -60,13 +62,14 @@ These guardrails apply to any automation that modifies source files based on dup
    - Require dependent automation jobs to invoke the workflow via `workflow_call` before any destructive step and block merges when it fails.
    - Allow manual overrides only when `allow-ignore: true` is passed alongside a checklist entry referencing who approved the bypass and why.
    - Store lock files in `.repo_studios/command_center/run_locks/` with descriptive names (`<slug>-automation.lock`) and capture snapshots as CI artifacts on failure for auditing.
-   - Workflow landed 2025-10-31; branch protection wiring and consumer jobs must now reference `verify-command-center-locks` before destructive steps.
+   - Workflow landed 2025-10-31; `Command Center Automation Guardrails` (`.github/workflows/command-center-automation.yml`, added 2025-11-03) now invokes `verify-command-center-locks` so branch protection can require the lock check status before automation steps execute.
 
 8. **Run size cap enforcement**
    - Define `constraints.max_files_per_run` inside `docs/automation/guardrails/automation_config.yaml`; default budget set to 15 files until phased review increases the cap.
    - Extend pre-flight validation to count targeted files before patch emission. Abort the run if the budget is exceeded unless `--allow-override` is supplied, in which case log the approving reviewer.
    - Emit the configured limit, actual file count, and override state in the automation manifest and run log header so reviewers can confirm compliance.
    - Helper reference: `.repo_studios/command_center/scripts/libraries/guardrails.py` exposes `load_guardrail_config` and `enforce_run_size_limit` for Phase 4 tooling and includes integration tests under `tests/tests_library_integration/libraries/test_guardrails.py`.
+      - `generate_automation_manifest.py` (2025-11-03) now calls `enforce_run_size_limit` before writing artifacts, rejecting over-budget runs and carrying the enforced counts into manifest guardrail snapshots.
 
 9. **Post-run validation**
    - Mandatory pytest commands:
@@ -77,6 +80,11 @@ These guardrails apply to any automation that modifies source files based on dup
       ```
 
    - Capture exit codes and durations; include them in the manifest.
+
+10. **Artifact retention policy**
+    - Use the shared `write_report_artifacts` helper for all automation outputs; default `keep=3` ensures a short, reviewable history while avoiding report sprawl.
+    - To retain more runs, drop a `.keep` sentinel inside the relevant directory or document an override in the guardrail log; monitor overrides during retrospectives.
+    - Ensure retention expectations are mirrored in the command center README and automation checklist so operators know when additional pruning is required.
 
 ## Review & Sign-off Process
 

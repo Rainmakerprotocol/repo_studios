@@ -10,14 +10,15 @@ Applies to every Phase 4 automation dry-run or write-run. Operators should execu
 
 | Suite | Command | Purpose | Notes |
 | --- | --- | --- | --- |
-| Library integration | `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_library_integration` | Validates shared helper modules and command center libraries. | Run even during dry runs to ensure helper refactors remain safe. |
-| Producer regression | `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers` | Confirms producers consuming shared helpers still behave correctly. | Include `-k` filters only when triaging failures; rerun full suite before sign-off. |
+| Library integration | `pwsh.exe -NoLogo -Command "& .\.venv\Scripts\python.exe -m pytest .repo_studios/tests/tests_library_integration --maxfail=1 --durations=10"` | Validates shared helper modules and command center libraries. | Run even during dry runs to ensure helper refactors remain safe; capture timings for metrics summary. |
+| Producer regression | `pwsh.exe -NoLogo -Command "& .\.venv\Scripts\python.exe -m pytest .repo_studios/tests/tests_producers --maxfail=1 --durations=10"` | Confirms producers consuming shared helpers still behave correctly. | Include `-k` filters only when triaging failures; rerun full suite before sign-off. |
+| Command center orchestrators | `pwsh.exe -NoLogo -Command "& .\.venv\Scripts\python.exe -m pytest .repo_studios/tests/tests_command_center/orchestrators --maxfail=1 --durations=10"` | Smoke-checks orchestrator sequencing when automation touches orchestration helpers or targets. | Mandatory once automation manifests/orchestrators change; log command output in metrics summary. |
 
 ## Conditional Suites
 
 | Condition | Additional Command | Rationale |
 | --- | --- | --- |
-| Automation touched orchestrator modules | `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center` | Ensures orchestrator sequencing and smoke tests remain stable. |
+| Automation touched docs/templates | `pwsh.exe -NoLogo -Command "& .\.venv\Scripts\python.exe -m pytest docs/tests --maxfail=1 --durations=10"` | Placeholder for future documentation validation tooling. |
 | Automation modified docs/templates | `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest docs/tests` (future) | Placeholder for future documentation validation tooling. |
 
 ## Execution Guidance
