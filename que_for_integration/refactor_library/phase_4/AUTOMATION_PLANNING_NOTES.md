@@ -108,18 +108,18 @@ jobs:
 - **Integration plan:** New producer (`audit_helper_adoption.py`) will reuse shared CLI builders, `write_report_artifacts`, and feed stats into future `metrics_summary.json` bundles.
 - **Testing approach:** Add targeted fixtures under `tests/tests_producers/test_audit_helper_adoption.py` once implementation begins.
 
-### Automation PR Checklist Template (Draft 2025-10-31)
+### Automation PR Checklist Template (Accepted 2025-11-03)
 
-- **Template reference:** `phase_4/PR_CHECKLIST_TEMPLATE.md` provides the markdown snippet operators will paste into automation PR descriptions.
-- **Scope:** Covers pre-flight validation, execution details, testing evidence, review notes, and attachment expectations to keep guardrail compliance transparent.
-- **Next steps:** Incorporate the template into the future orchestrator or automation scripts (e.g., output link after runs) and review with the developer for final approval.
+- **Completed:** Hardened the template on 2025-11-03 with guardrail references, manifest/metrics prompts, and attachment requirements (`phase_4/PR_CHECKLIST_TEMPLATE.md`).
+- **In progress:** Operators populate the ready template for every manual Phase 4 run to document guardrails, link evidence, and summarize weighted progress impacts.
+- **Upcoming:** Integrate an automated reminder into future tooling so the checklist link surfaces after each dry run and stays aligned as automation workflows evolve.
 
-### Weighted Progress Briefing Template (Review requested 2025-11-03)
+### Weighted Progress Briefing Template (Accepted 2025-11-03)
 
 - **Template reference:** `docs/automation/metrics/weighted_progress_briefing_template.md` documents the weekly reporting structure that combines duplicate groups, lizard complexity, and helper adoption metrics.
 - **Purpose:** Replace manual spreadsheets with a consistent briefing that feeds into Phase 4 readiness reviews and highlights overall weighted progress.
-- **Status:** Template hardened with default weight governance, metrics summary pointers, and decision log hooks (2025-11-03).
-- **Follow-up:** Developer to validate weighting constants, confirm helper adoption CLI linkage, and approve before the first weekly briefing run.
+- **Status:** Template finalized with usage workflow, helper adoption linkage, and data source catalogue (2025-11-03).
+- **Follow-up:** Schedule first briefing dry-run using the template and collect feedback for future weighting adjustments.
 
 ### Post-Run Test Matrix (Draft 2025-10-31)
 
@@ -160,6 +160,7 @@ constraints:
 - Helper adoption audit CLI now lives at `.repo_studios/command_center/scripts/producers/audit_helper_adoption.py`, producing `helper_adoption.json`/Markdown via shared artifact helpers with per-slug adoption counts and lists.
 - Regression coverage added at `tests/tests_producers/test_audit_helper_adoption.py`, validating adoption vs. legacy detection, format toggles, and pointer mirroring.
 - Planning spec (`phase_4/HELPER_ADOPTION_CLI_SPEC.md`) marked implemented with an execution summary for operators and future automation consumers.
+- Automation PR checklist template promoted to ready status with expanded guardrail/testing prompts so PR reviewers receive consistent evidence without additional manual checklists.
 
 ### 2025-11-03 Dry-Run Rehearsal Pilot
 
@@ -206,7 +207,7 @@ constraints:
 
 - [x] **Helper adoption CLI requirements** – CLI implemented at `.repo_studios/command_center/scripts/producers/audit_helper_adoption.py`, emitting JSON/Markdown summaries with retention via `write_report_artifacts`; coverage captured in `tests/tests_producers/test_audit_helper_adoption.py` (2025-11-03).
 - [x] **Long-term storage decision** – Retain weekly metric snapshots in-repo under `.repo_studios/command_center/reports/<campaign>/metrics-YYYY-MM-DD.json`, then publish a monthly aggregate (`metrics/monthly/metrics-YYYY-MM.md`) to shareable storage once automation matures. *(Decision logged 2025-10-31 — manual team will own exports until an automated pipeline exists.)*
-- [ ] **Weighted progress briefing template** – Update the weekly reporting template to include lizard-weighted progress once the metrics pipeline exists.
+- [x] **Weighted progress briefing template** – Template ready with weighting formula, usage checklist, and artifact source table for weekly briefings (updated 2025-11-03).
 
 ## Automation Design Brief (Manual)
 

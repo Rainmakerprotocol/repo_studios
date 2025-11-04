@@ -92,6 +92,13 @@ make -C .repo_studios command-center COMMAND_CENTER_TARGET=/.repo_studios/script
 - **Retention behaviour:** Delegate scripts rely on `write_report_artifacts`, which keeps the latest three timestamped runs in both the target index and slugged report directories while respecting `.keep` sentinels. The orchestrator does not create additional artifacts—it simply surfaces the paths pruned/written during each stage.
 - **Failure diagnostics:** A non-zero exit from any delegate stops the pipeline immediately and propagates the exit code. Check the preceding log lines for the failing script, inspect the partially written artifacts in `<target>/<name>_index/`, and re-run with `--skip-upstream` if only the duplicate scan failed so you can reuse the fresh inventory/analysis outputs.
 
+### `orchestrators/run_automation_dry_run.py`
+
+- **Purpose:** Capture rehearsal bundles (manifest, metrics summary, inputs, README) before automation writes are allowed.
+- **How it works:** Delegates to `generate_automation_manifest.py`, then snapshots the manifest/metrics outputs alongside the supplied inputs. Pass `--post-run-matrix` (defaults to `que_for_integration/refactor_library/phase_4/POST_RUN_TEST_MATRIX.md`) to copy the latest test matrix into the bundle.
+- **Outputs:** Writes `manifest.json`, `metrics_summary.json`, copied input payloads under `inputs/`, and a README summarising the run metadata. Parsed post-run commands from the matrix are mirrored into both JSON artifacts under `post_run_tests` so operators (and tooling) can launch the suites without re-reading markdown.
+- **Usage tips:** Include `--guardrail-config` to snapshot the active guardrail YAML. When iterating on the matrix, update the markdown first—each dry-run bundles the exact commands, making regressions obvious in diff review.
+
 ### Direct script usage
 
 - `producers/generate_function_inventory.py <target>` refreshes `<target>/<name>_index/<name>_index-YYYY-MM-DD.json` and the screening summary in both the target and slugged mirror.

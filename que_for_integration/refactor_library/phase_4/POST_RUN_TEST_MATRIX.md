@@ -27,3 +27,4 @@ Applies to every Phase 4 automation dry-run or write-run. Operators should execu
 2. Capture output via `pytest --maxfail=1 --durations=10` when diagnosing failures; attach logs to the PR.
 3. Record pass/fail status and duration in `metrics_summary.json` and the PR checklist template.
 4. When failures occur, halt the automation rollout, document remediation steps, and rerun the full matrix before resuming.
+5. `run_automation_dry_run.py` copies this matrix into the run bundle and injects the parsed command lists into both `manifest.json` and `metrics_summary.json` under `post_run_tests`, so operators and automation tooling can trigger the suites directly from the artifacts.

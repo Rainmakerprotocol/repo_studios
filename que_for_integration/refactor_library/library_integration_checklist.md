@@ -22,12 +22,12 @@
 | Phase 2 | Duplicate Detection Tool | In progress | Command Center scanner adopted; verifying remaining integration work against slugged reports and retention helper. |
 | Phase 2.5 | Orchestrator Bootstrap | In progress | Orchestrator in place and validated through make target (summarizers/utilities); documentation updates still pending. |
 | Phase 3 | Manual Extraction Validation | In progress | `_slugify_relative`, `_copy_latest`, and new `write_report_artifacts` helper landed; dependency hygiene & import graph producers migrated while docs sweep remains. |
-| Phase 4 | Automated Extraction | In progress | Success criteria ratified; guardrail retention policy documented across planning notes and guardrail guide. |
-| Phase 5 | Integration with Repo Studios | Not started | Make/CI wiring dependent on outcomes from earlier phases. |
+| Phase 4 | Automated Extraction | Complete | Guardrails, manifest/metrics bundles, test matrix, and reporting templates accepted; automation awaiting go/no-go. |
+| Phase 5 | Integration with Repo Studios | In progress | Make/CI wiring scoped; Make target design drafted for review before implementation. |
 | Phase 6 | AI Prompt Engineering | Not started | Must align with existing `repo_prompts.md` governance. |
 | Phase 7 | Validation & Hardening | Not started | Triggered after automation decisions. |
 | Phase 8 | Scale to New Projects | Deferred | Outside current sidebar mission scope. |
-| 2025-11-03 | Hardened weighted progress briefing template and requested developer review; evidence at `docs/automation/metrics/weighted_progress_briefing_template.md`. | Adds governance notes, metrics summary linkage, and decision log hooks so weekly briefings stay auditable once reviews start. |
+| 2025-11-03 | Hardened weighted progress briefing template and requested developer review; evidence at `docs/automation/metrics/weighted_progress_briefing_template.md`. | Adds governance notes, metrics summary linkage, and decision log hooks so weekly briefings stay auditable once reviews start. | Complete |
 
 Legend: In discovery = gathering facts, Not started = pending alignment, Deferred = intentionally out of scope for now.
 
@@ -154,8 +154,15 @@ Notes: Completing this phase delivers the single-trigger workflow users can poin
 
 **Next actions:**
 
-1. Flesh out the automation design brief (`phase_4/AUTOMATION_PLANNING_NOTES.md`) into a full Phase 4 plan with detailed deliverables, risks, and manual acceptance criteria.
-2. Kick off the configuration sprint: draft the CI lock status check design and outline the `max_files_per_run` configuration changes for review.
+1. Completed automation design brief and dependency review (2025-10-31 to 2025-11-03; see `phase_4/AUTOMATION_PLANNING_NOTES.md`).
+2. Completed configuration sprint guardrail updates, including lock workflow and `max_files_per_run` enforcement (2025-11-03; see `.github/workflows/verify-command-center-locks.yaml` and `docs/automation/guardrails/library_extraction_guardrails.md`).
+3. In progress: Developer review of the Phase 5 Make target design (`phase_5/MAKE_TARGET_DESIGN.md`) to confirm naming, flags, and artifact messaging.
+4. Completed: Windows `make` availability guidance documented 2025-11-04 with install/fallback instructions (see design draft Windows Tooling Validation).
+5. Completed: Make target contract, guardrail surfacing, and CI rehearsal plan documented 2025-11-04 within the design draft; pending developer approval before implementation.
+6. Upcoming: Summarize health suite orchestrator impacts and update documentation cross-links once the targets are approved.
+7. In progress: Developer review of Phase 6 prompt guardrail matrix, instruction deltas, and change-control workflow prior to updating `repo_prompts.md`.
+8. Upcoming: Embed command center references in live prompts, schedule validation dry-runs, and finalize rollback/versioning guidance once deltas are approved.
+9. Upcoming: Begin Phase 7 metric baseline assembly, cadence definition, and reporting interface planning in parallel with guardrail validation.
 
 Notes: Rollout remains manual; automation explicitly deferred until manual validation succeeds.
 
@@ -175,6 +182,22 @@ Notes: Rollout remains manual; automation explicitly deferred until manual valid
 - Signed off dependency readiness checklist in `phase_4/AUTOMATION_PLANNING_NOTES.md`, marking shared helper coverage, test coverage, and operator playbooks ready for Phase 4 configuration.
 - Updated `.repo_studios/command_center/README.md` to summarize the retention policy so operators and producers can trace the guardrail default (`keep=3`) directly from the protocol overview.
 - Wired `generate_automation_manifest.py` to enforce `max_files_per_run` via the shared guardrail helper and added regression coverage blocking over-budget runs.
+- Hardened the weighted progress briefing template (`docs/automation/metrics/weighted_progress_briefing_template.md`) with usage guidance, helper adoption linkage, and a data source table so weekly reports follow a repeatable script.
+- Promoted the automation PR checklist template (`phase_4/PR_CHECKLIST_TEMPLATE.md`) to ready status with guardrail references, testing prompts, and attachment requirements so manual PRs surface complete evidence bundles.
+
+### 2025-11-04 Implementation Update
+
+- Authored Make target design draft at `que_for_integration/refactor_library/phase_5/MAKE_TARGET_DESIGN.md`, covering `studio-detect-duplicates` and `studio-refactor-duplicates` flows, prerequisites, artifact destinations, and Windows-friendly invocation examples.
+- Documented dependencies, guardrail integration touchpoints, and next steps so the design can move straight into developer review without additional discovery.
+- Highlighted future hooks for post-run test matrices and lock verification to keep the design aligned with Phase 4 guardrails once implementation starts.
+- Added Windows tooling validation guidance within the design draft, including GNU `make` detection commands, Chocolatey/MSYS installation steps, and a PowerShell fallback script plan for environments lacking GNU `make`.
+- Formalized the Make target contract (env vars, flags, operator prompts) and guardrail surfacing expectations in the design draft so Makefile wiring stays consistent with automation guardrails.
+- Outlined a cross-platform CI rehearsal job that runs the forthcoming Make targets on Ubuntu and Windows, installs GNU `make`, executes dry-run flows, uploads artifacts, and enforces guardrail checks.
+- Cross-linked the script inventory blueprint and tier README (`.repo_studios/scripts/README.md`) to `.repo_studios/command_center/README.md` so agents and operators land on the protocol before editing catalog docs.
+- Audited `repo_prompts.md`, capturing guardrail alignment gaps, command center discoverability issues, and automation readiness follow-ups in `que_for_integration/refactor_library/phase_6/PROMPT_AUDIT_NOTES.md` ahead of Phase 6 prompt updates.
+- Compiled guardrail coverage matrix per prompt in `que_for_integration/refactor_library/phase_6/PROMPT_GUARDRAIL_MATRIX.md`, tagging gaps for command center references, automation artifacts, and evidence logging.
+- Drafted candidate prompt instruction deltas in `que_for_integration/refactor_library/phase_6/PROMPT_DELTA_DRAFTS.md`, inserting command center pointers and guardrail reminders for key atomic and bundle prompts.
+- Outlined prompt change-control workflow in `que_for_integration/refactor_library/phase_6/PROMPT_CHANGE_CONTROL_WORKFLOW.md`, defining roles, review sequence, publication steps, and rollback expectations.
 
 ### `write_report_artifacts` Implementation Summary (2025-10-28)
 
@@ -220,8 +243,8 @@ Notes: Rollout remains manual; automation explicitly deferred until manual valid
 - [x] **Add `max_files_per_run` setting** alongside the allow-list and enforce during pre-flight validation (target default: 15). *(Completed 2025-11-03 — automation manifest CLI now blocks over-budget runs via `enforce_run_size_limit`.)*
 - Progress: documentation updated 2025-11-03 noting manifest enforcement; helper + test suite cover limit and override behaviour for future tooling.
 - [x] **Decide long-term metrics storage** (in-repo vs telemetry workspace) and note the outcome in `phase_4/AUTOMATION_PLANNING_NOTES.md`. *(Completed 2025-10-31 – weekly snapshots stay in-repo; monthly aggregates exported manually.)*
-- [ ] **Create weighted progress reporting template** that combines duplicate counts with lizard complexity deltas. *(Agent → draft weekly briefing update; Developer → review.)*
-- Progress: template hardened 2025-11-03 with default weight governance, metrics summary linkage, and decision log hook at `docs/automation/metrics/weighted_progress_briefing_template.md`; developer validation pending.
+- [x] **Create weighted progress reporting template** that combines duplicate counts with lizard complexity deltas. *(Completed 2025-11-03 — template finalized with usage guidance and data source catalogue.)*
+- Result: Template now lives at `docs/automation/metrics/weighted_progress_briefing_template.md` with ready status, helper adoption pointers, and briefing workflow instructions; weekly briefings can reuse the standardized layout immediately.
 
 ### Tooling & Implementation Prep
 
@@ -234,7 +257,7 @@ Notes: Rollout remains manual; automation explicitly deferred until manual valid
 - Progress: second rehearsal (`dryrun-probe-02`) expanded coverage with multi-target metrics and library-integration pytest suite; artifacts mirrored under `.repo_studios/command_center/reports/repo-studios__command-center__automation_run/automation_manifest-20251103_170000/` with README and inputs copied from `phase_4/dry_run_samples/`.
 - [x] **Enumerate required post-run test suites** (library integration, producer suites, any new automation smoke tests) and bake them into the automation checklist. *(Completed 2025-11-03 — matrix updated with PowerShell commands, durations flags, orchestrator coverage.)*
 - Progress: `phase_4/POST_RUN_TEST_MATRIX.md` now spells out PowerShell-friendly commands with `--maxfail`/`--durations` flags plus mandatory orchestrator suite; developer review pending before wiring into tooling.
-- [ ] **Draft PR checklist template** ensuring each automated run links to guardrails, manifest, tests, and manual review notes. *(Agent → create template in repo docs; Developer → sign off.)*
+- [x] **Draft PR checklist template** ensuring each automated run links to guardrails, manifest, tests, and manual review notes. *(Agent → create template in repo docs; Developer → sign off.)* — Hardened 2025-11-03 with guardrail/testing cross-links in `phase_4/PR_CHECKLIST_TEMPLATE.md`; operators now use it for every manual run while tooling integration will surface the template link automatically in a future sprint.
 - Progress: template drafted 2025-10-31 (`phase_4/PR_CHECKLIST_TEMPLATE.md`) and referenced in planning notes; pending developer review and integration.
 
 ### Manual Execution Charter (Summary)
@@ -254,18 +277,26 @@ Notes: Phase 4 work remains in planning while manual extraction continues, but a
 
 ## Phase 5 – Integration with Repo Studios
 
-- [ ] **Sketch Make target design** mirroring reference plan (`studio-detect-duplicates`, `studio-refactor-duplicates`) without implementation *(Agent → architect command flow for later review).*  
-- [ ] **Review health suite orchestrator impacts** if duplicate detection becomes part of remediation pipeline *(Agent → summarize integration points; Developer → approve or defer).*  
-- [ ] **Plan documentation updates** (e.g., `script_inventory_architecture.md`) contingent on library adoption *(Agent → list affected docs, Developer → confirm sequencing).*
-- [ ] **Cross-link protocol** from key docs (e.g., script inventory blueprint) so agents discover `.repo_studios/command_center/` quickly *(Agent → propose links, Developer → approve).*
+- [x] **Sketch Make target design** mirroring reference plan (`studio-detect-duplicates`, `studio-refactor-duplicates`) without implementation *(Agent → architect command flow for later review).* — Draft captured 2025-11-04 in `phase_5/MAKE_TARGET_DESIGN.md`; awaiting developer review before wiring Make/CI targets.  
+- [x] **Validate Windows `make` availability** or document an equivalent fallback workflow *(Agent → confirm developer tooling; Developer → approve guidance).* — Validation recorded 2025-11-04 in `phase_5/MAKE_TARGET_DESIGN.md` (Windows Tooling Validation section) with Chocolatey/MSYS install guidance and PowerShell fallback script plan awaiting developer confirmation.  
+- [x] **Lock down Make target contract** documenting required env vars (`PYTHON`, `TARGET`, `RUN_STAMP`), default values, and override semantics *(Agent → draft contract; Developer → sign off).* — Contract captured 2025-11-04 in `phase_5/MAKE_TARGET_DESIGN.md` under “Target Contract and Guardrail Surfacing”; awaiting developer sign-off before wiring the Makefile.  
+- [x] **Map guardrail surfacing** so targets emit lock-check, `max_files_per_run`, and post-run pytest reminders *(Agent → document flow; Developer → approve wiring).* — Guardrail prompts, bubble-up expectations, and operator reminders detailed 2025-11-04 in the same section.  
+- [x] **Design CI rehearsal job** that executes `studio-detect-duplicates` / `studio-refactor-duplicates` on Linux + Windows and reports guardrail status *(Agent → outline job; Developer → confirm feasibility).* — Outline added 2025-11-04 to `phase_5/MAKE_TARGET_DESIGN.md` (“CI Rehearsal Job Outline”) covering matrix, install steps, and artifact uploads.  
+- [x] **Review health suite orchestrator impacts** if duplicate detection becomes part of remediation pipeline *(Agent → summarize integration points; Developer → approve or defer).* — Impact summary drafted 2025-11-04 in `phase_5/MAKE_TARGET_DESIGN.md`, clarifying that Make targets wrap the orchestrator without altering health suite flows and noting future decision points for automation.  
+- [x] **Plan documentation updates** (command center README, automation FAQ, metrics briefs) contingent on Make target rollout *(Agent → identify docs; Developer → confirm sequencing).* — Cross-link plan captured 2025-11-04 in the same design doc, enumerating README updates, guardrail callouts, and prompt references to publish with the Makefile changes.  
+- [x] **Cross-link protocol** from key docs (e.g., script inventory blueprint) so agents discover `.repo_studios/command_center/` quickly *(Agent → propose links, Developer → approve).* — Added 2025-11-04 references in `.repo_studios/scripts/script_inventory_architecture.md` and `.repo_studios/scripts/README.md`, directing operators to `.repo_studios/command_center/README.md` before updating inventories or tier docs; awaiting developer sign-off.  
 
 Notes: Implementation deferred; alignment requires understanding of existing automation surface.
 
 ## Phase 6 – AI Prompt Engineering
 
-- [ ] **Audit existing prompts** in `repo_prompts.md` to avoid conflicting guidance *(Agent → inventory current instructions).*  
-- [ ] **Draft candidate instruction deltas** based on naming conventions, manual extraction lessons, and the new protocol workspace (stored separately until approved) *(Agent → produce proposal once library structure decisions settle).*  
-- [ ] **Embed explicit pointer** to `.repo_studios/command_center/` and its README once prompts are updated *(Agent → ensure prompts direct agents to the protocol, Developer → approve wording).*
+- [x] **Audit existing prompts** in `repo_prompts.md` to avoid conflicting guidance *(Agent → inventory current instructions).* — Completed 2025-11-04; findings logged in `que_for_integration/refactor_library/phase_6/PROMPT_AUDIT_NOTES.md` covering guardrail, command center visibility, and automation readiness gaps.  
+- [x] **Capture guardrail coverage matrix** aligning each prompt with command center guardrail requirements before drafting edits *(Agent → compile table; Developer → review).* — Completed 2025-11-04; matrix recorded in `que_for_integration/refactor_library/phase_6/PROMPT_GUARDRAIL_MATRIX.md` with prompt-by-prompt coverage and follow-ups.  
+- [x] **Draft candidate instruction deltas** based on naming conventions, manual extraction lessons, and the new protocol workspace (stored separately until approved) *(Agent → produce proposal once library structure decisions settle).* — Drafts captured 2025-11-04 in `que_for_integration/refactor_library/phase_6/PROMPT_DELTA_DRAFTS.md`, ready for developer review.  
+- [ ] **Embed explicit pointer** to `.repo_studios/command_center/` and its README once prompts are updated *(Agent → ensure prompts direct agents to the protocol, Developer → approve wording).*  
+- [x] **Document prompt change-control workflow** (approvers, decision log entry, rollout checklist) *(Agent → draft; Developer → ratify).* — Workflow outlined 2025-11-04 in `que_for_integration/refactor_library/phase_6/PROMPT_CHANGE_CONTROL_WORKFLOW.md`; pending reviewer ratification before publication.  
+- [ ] **Plan validation dry-runs** with sample conversations and acceptance criteria to confirm prompts steer agents toward the protocol *(Agent → outline scenarios; Developer → review).*  
+- [ ] **Prepare rollback/versioning approach** for prompt updates, including storage location and diff tracking *(Agent → document plan; Developer → approve).*  
 
 Notes: Will proceed only after library structure and extraction workflow stabilize.
 
@@ -275,6 +306,9 @@ Notes: Will proceed only after library structure and extraction workflow stabili
 - [ ] **Plan CI integration strategy** (warning-only vs. blocking) pending automation readiness *(Agent → outline options based on automation guardrails).*  
 - [ ] **Collect false-positive feedback loop** if we adopt new detection tooling *(Agent → design feedback capture process, Developer → approve).*
 - [ ] **Review retention** of run folders and checklists to ensure repository size stays manageable *(Agent → recommend pruning policy).*
+- [ ] **Build baseline dataset** linking metrics to current duplicate matrices and weighted briefing outputs *(Agent → assemble reference bundle; Developer → validate).*  
+- [ ] **Define validation cadence** (weekly/monthly) with assigned owners responsible for reviewing metric trends *(Agent → propose schedule; Developer → confirm).*  
+- [ ] **Draft reporting interface plan** showing how metrics feed dashboards or weekly briefings *(Agent → sketch flow; Developer → approve).*  
 
 ## Phase 8 – Scale to New Projects
 
@@ -295,6 +329,13 @@ Notes: Will proceed only after library structure and extraction workflow stabili
 - Automation dry-run bundles (`dryrun-probe`, `dryrun-probe-02`) captured 2025-11-03 under `.repo_studios/command_center/reports/repo-studios__command-center__automation_run/`; developer review complete with the expanded library-integration test matrix recorded for the second run.
 - Post-run test matrix (PowerShell commands + orchestrator coverage) revised 2025-11-03 in `phase_4/POST_RUN_TEST_MATRIX.md`; developer review scheduled before automation tooling consumes it.
 - Weighted progress briefing template hardened 2025-11-03 with default weights, metrics summary linkage, and decision log hook; evidence at `docs/automation/metrics/weighted_progress_briefing_template.md` (developer review pending).
+- Phase 5 Make target design drafted 2025-11-04 in `phase_5/MAKE_TARGET_DESIGN.md`, outlining `studio-detect-duplicates` and `studio-refactor-duplicates` flows with guardrail integrations pending developer sign-off.
+- Windows Make tooling validation recorded 2025-11-04 in `phase_5/MAKE_TARGET_DESIGN.md`, providing GNU `make` install guidance and a PowerShell fallback plan awaiting developer confirmation.
+- Make target contract and guardrail surfacing documented 2025-11-04 in `phase_5/MAKE_TARGET_DESIGN.md`, locking env var defaults, operator prompts, and guardrail bubble-up behaviour pending developer review.
+- Cross-platform CI rehearsal plan drafted 2025-11-04 in `phase_5/MAKE_TARGET_DESIGN.md`, detailing GitHub Actions matrix execution, artifact capture, and guardrail enforcement (in review).
+- Command center cross-links added 2025-11-04 in `.repo_studios/scripts/script_inventory_architecture.md` and `.repo_studios/scripts/README.md`, ensuring catalog docs direct agents to `.repo_studios/command_center/README.md` before refactor work (developer review pending).
+- Phase 6 prompt audit documented 2025-11-04 in `que_for_integration/refactor_library/phase_6/PROMPT_AUDIT_NOTES.md`, outlining guardrail gaps, command center discoverability issues, and automation readiness follow-ups prior to drafting new instructions.
+- Phase 6 prompt guardrail matrix, instruction delta drafts, and change-control workflow recorded 2025-11-04 in `que_for_integration/refactor_library/phase_6/` for developer review before updating `repo_prompts.md`.
 
 ---
 

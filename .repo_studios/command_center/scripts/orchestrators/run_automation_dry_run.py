@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import json
 import logging
 import shutil
 import sys
@@ -200,6 +201,8 @@ def _parse_table_rows(rows: Iterable[str]) -> list[tuple[str, str]]:
             continue
         label = cells[0]
         command = cells[1]
+        if not label or not command:
+            continue
         if command.startswith("`") and command.endswith("`"):
             command = command[1:-1]
         parsed.append((label, command))
@@ -238,6 +241,71 @@ def _load_post_run_matrix(matrix_path: Path) -> tuple[list[tuple[str, str]], lis
     required = _parse_table_rows(_trim_table_header(required_rows))
     conditional = _parse_table_rows(_trim_table_header(conditional_rows))
     return required, conditional
+
+
+def _build_post_run_snapshot(
+    required: Sequence[tuple[str, str]],
+    conditional: Sequence[tuple[str, str]],
+    matrix_reference: Path | None,
+) -> dict[str, object] | None:
+    if not required and not conditional and matrix_reference is None:
+        return None
+    snapshot: dict[str, object] = {}
+    if matrix_reference is not None:
+        snapshot["matrix_reference"] = matrix_reference.as_posix()
+    if required:
+        snapshot["required"] = [
+            {"label": label, "command": command}
+            for label, command in required
+        ]
+    if conditional:
+        snapshot["conditional"] = [
+            {"condition": label, "command": command}
+            for label, command in conditional
+        ]
+    return snapshot
+
+
+def _update_json_file(path: Path, mutator) -> None:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        logging.warning("Expected JSON artifact missing: %s", path)
+        return
+    except json.JSONDecodeError as exc:  # pragma: no cover - safety net
+        logging.error("Unable to parse JSON artifact %s: %s", path, exc)
+        return
+
+    changed = mutator(payload)
+    if changed:
+        path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+
+def _embed_post_run_tests(
+    manifest_path: Path,
+    metrics_path: Path,
+    snapshot: dict[str, object],
+) -> None:
+    def mutate_manifest(data: dict[str, object]) -> bool:
+        changed = False
+        if data.get("post_run_tests") != snapshot:
+            data["post_run_tests"] = json.loads(json.dumps(snapshot))
+            changed = True
+        metrics_section = data.get("metrics_summary")
+        if isinstance(metrics_section, dict):
+            if metrics_section.get("post_run_tests") != snapshot:
+                metrics_section["post_run_tests"] = json.loads(json.dumps(snapshot))
+                changed = True
+        return changed
+
+    def mutate_metrics(data: dict[str, object]) -> bool:
+        if data.get("post_run_tests") == snapshot:
+            return False
+        data["post_run_tests"] = json.loads(json.dumps(snapshot))
+        return True
+
+    _update_json_file(manifest_path, mutate_manifest)
+    _update_json_file(metrics_path, mutate_metrics)
 
 
 def run(argv: Sequence[str] | None = None) -> int:
@@ -338,10 +406,22 @@ def run(argv: Sequence[str] | None = None) -> int:
     }
     if guardrail_config:
         copied_files["guardrail"] = _copy_input(guardrail_config, inputs_dir)
-    matrix_reference: Path | None = None
+    matrix_copy: Path | None = None
     if paths.post_run_matrix.exists():
-        matrix_reference = _copy_input(paths.post_run_matrix, inputs_dir)
-        copied_files["post_run_matrix"] = matrix_reference
+        matrix_copy = _copy_input(paths.post_run_matrix, inputs_dir)
+        copied_files["post_run_matrix"] = matrix_copy
+
+    matrix_relative: Path | None = None
+    if matrix_copy:
+        matrix_relative = matrix_copy.relative_to(run_dir)
+
+    post_run_snapshot = _build_post_run_snapshot(
+        required_post_run,
+        conditional_post_run,
+        matrix_relative,
+    )
+    if post_run_snapshot:
+        _embed_post_run_tests(manifest_path, metrics_path, post_run_snapshot)
 
     readme_path = _write_readme(
         run_dir,
@@ -355,7 +435,7 @@ def run(argv: Sequence[str] | None = None) -> int:
         inputs_dir=inputs_dir,
         post_run_required=required_post_run,
         post_run_conditional=conditional_post_run,
-        matrix_reference=matrix_reference.relative_to(run_dir) if matrix_reference else None,
+        matrix_reference=matrix_relative,
     )
 
     logging.info("Automation dry-run bundle created at %s", run_dir)

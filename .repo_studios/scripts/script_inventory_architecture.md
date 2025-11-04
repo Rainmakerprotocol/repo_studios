@@ -13,6 +13,7 @@
 - **Owner:** _repo_studios_ai_
 - **Last Updated:** _2025-10-23_
 - **Scope:** `.repo_studios/scripts/`
+- **Command Center Reference:** Before updating this blueprint, review `.repo_studios/command_center/README.md` for the current library-integration protocol, guardrails, and duplicate remediation workflow. Link that README in handoffs so agents always land in the command center first.
 
 > Once sections stabilize, convert each completed table to YAML blocks using the
 > provided field names. Until then, maintain this Markdown as the human-editable

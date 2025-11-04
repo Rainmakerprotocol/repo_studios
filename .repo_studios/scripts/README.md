@@ -2,6 +2,8 @@
 
 This directory houses the active automation suite for Repo Studios. Scripts are grouped by the role they play in the data and automation pipeline so coding agents can locate the right tool quickly.
 
+> **Start Here:** Point agents to `.repo_studios/command_center/README.md` before requesting script refactors. The command center README documents duplicate-remediation guardrails, shared helpers, and Make targets referenced throughout this directory.
+
 ## Category Map
 
 - `producers/` – base-layer scripts that gather data directly from source systems and emit raw artifacts for downstream consumers.
@@ -18,6 +20,7 @@ This directory houses the active automation suite for Repo Studios. Scripts are 
 - Continue recording legacy → new relocations inside `manifest/scripts_manifest.yaml` until the rewrite is complete.
 - Log-producing scripts should adopt the upcoming silent `prune_logs` helper to cap artifact history without noisy output.
 - Orchestrators that previously lived in legacy Make targets will be renamed with the `studio-` prefix when we re-enable automation.
+- Cross-link significant updates back to the command center protocol so checklist snapshots, guardrail docs, and automation notes stay discoverable from within the script catalog.
 
 ## Immediate TODOs
 

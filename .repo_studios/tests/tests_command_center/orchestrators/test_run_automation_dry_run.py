@@ -158,6 +158,16 @@ def test_run_creates_bundle() -> None:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         assert manifest["baseline_sha"] == "abcdef123456"
         assert manifest["guardrails"]["files_considered"] == 2
+        expected_snapshot = {
+            "matrix_reference": "inputs/post_run_matrix.md",
+            "required": [{"label": "Library Integration", "command": "pytest -m integration"}],
+            "conditional": [{"condition": "Docs touched", "command": "pytest docs/tests"}],
+        }
+        assert manifest["post_run_tests"] == expected_snapshot
+        assert manifest["metrics_summary"]["post_run_tests"] == expected_snapshot
+
+        metrics_payload = json.loads(metrics_path.read_text(encoding="utf-8"))
+        assert metrics_payload["post_run_tests"] == expected_snapshot
 
         readme = readme_path.read_text(encoding="utf-8")
         assert "run_id: `run-123`" in readme
@@ -201,3 +211,44 @@ def test_missing_script(tmp_path: Path) -> None:
         ]
     )
     assert exit_code == 1
+
+
+def test_load_post_run_matrix_missing_sections(tmp_path: Path) -> None:
+    mod = _load_module()
+    matrix = tmp_path / "matrix.md"
+    matrix.write_text("# No tables here\n", encoding="utf-8")
+
+    required, conditional = mod._load_post_run_matrix(matrix)
+
+    assert required == []
+    assert conditional == []
+
+
+def test_load_post_run_matrix_handles_malformed_rows(tmp_path: Path) -> None:
+    mod = _load_module()
+    matrix = tmp_path / "matrix.md"
+    matrix.write_text(
+        (
+            "## Required Suites\n"
+            "| Suite | Command | Purpose |\n"
+            "| --- | --- | --- |\n"
+            "| Missing Command |  | skip this row |\n"
+            "| Valid Run | `pytest valid` | keep |\n"
+            "\n"
+            "## Conditional Suites\n"
+            "| Condition | Additional Command | Rationale |\n"
+            "| --- | --- | --- |\n"
+            "|  | `pytest blank` | skip this row |\n"
+            "| Docs touched | `pytest docs/tests` | ensure docs tooling passes |\n"
+            "| Extra check | plain_command | allow plain commands |\n"
+        ),
+        encoding="utf-8",
+    )
+
+    required, conditional = mod._load_post_run_matrix(matrix)
+
+    assert required == [("Valid Run", "pytest valid")]
+    assert conditional == [
+        ("Docs touched", "pytest docs/tests"),
+        ("Extra check", "plain_command"),
+    ]
