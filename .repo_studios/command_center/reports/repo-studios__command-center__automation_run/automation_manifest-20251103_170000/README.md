@@ -8,7 +8,6 @@
 - inputs: `inputs`
 - operator: `genet`
 
- 
 ## Notes
 
 Dry-run rehearsal expanded coverage; no files mutated.

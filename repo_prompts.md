@@ -6,8 +6,8 @@ audience:
 owners:
   - repo_studios_ai
 status: active
-version: 1.2.0
-updated: 2025-10-18
+version: 1.3.0
+updated: 2025-11-04
 summary: >-
   Canonical catalog of reusable Repo Studios prompts grouped by atomic and bundle flows for local operations.
 tags:
@@ -23,6 +23,8 @@ legacy_source: legacy/repo_docs/copilot_prompts.md
 Audience: Repo Studios automation | Human collaborators
 
 This library centralizes vetted prompts for local-only Repo Studios workflows. Use the index below to select the correct atomic or bundled prompt, copy the full text verbatim, and cite the key in agent notes or decision logs when executed.
+
+Latest update (2025-11-04): Prompts now reference `.repo_studios/command_center/README.md` guardrails, automation evidence requirements, and lock-check workflows established in Phases 4–6.
 
 ---
 
@@ -57,9 +59,11 @@ This library centralizes vetted prompts for local-only Repo Studios workflows. U
 
 You are operating locally only (no internet/CI). Begin by:
 
+- Reviewing `.repo_studios/command_center/README.md#guardrails` so duplicate remediation and automation guardrails are fresh before you act.
 - Reading memory-bank purpose and current state via Make targets and scripts (do not invent commands).
 - Printing a concise plan: goals, what you’ll check, what success looks like (2–4 bullets).
 - Constraints: minimal diffs, bullets-first docs, adhere to style (no tabs, short lines).
+- Confirming command center run-lock status using the documented lock-check command (or fallback script) before making changes.
 
 Do next:
 
@@ -68,6 +72,7 @@ Do next:
   - Active goals, Doing, Next, and last three decisions (or `(none)`).
   - Final `VALIDATION_STATUS` and `VALIDATION_JSON` lines verbatim.
 - List any obvious safe wins (max three), each mapped to a file or script.
+- Record guardrail evidence you intend to produce (duplicate matrix path, manifest/metrics summary, doc links) in the session notes for later reconciliation.
 
 ### quick_status
 
@@ -153,6 +158,8 @@ Operational constraints for this repo:
 - Minimal diffs; bullets-first docs; no tabs; wrap long lines; avoid broad refactors.
 - Prefer Make targets and provided scripts; do not invent file paths or commands—verify before use.
 - Always report `VALIDATION_STATUS` and `VALIDATION_JSON`; on failures, propose concrete, small fixes.
+- Consult `.repo_studios/command_center/README.md` guardrail section before running duplicate remediation or automation flows; confirm run-lock status and respect `max_files_per_run` limits.
+- Surface automation evidence (duplicate matrices, `manifest.json`, `metrics_summary.json`, guardrail notes) alongside your work so reviewers can verify compliance.
 
 ### after_coding_alignment
 
@@ -161,6 +168,7 @@ Post-change alignment:
 - Files changed, why, and the smallest verifiable impact summary.
 - Quality gates: Build (N/A for docs), Lint/Typecheck (PASS/FAIL if applicable), Unit tests (if run), Validator status lines.
 - If any WARN/FAIL remains, list next micro-fixes (max three) with exact file anchors.
+- Confirm command center guardrail evidence is attached (duplicate matrix location, manifest/metrics outputs, run-lock status) and cite `.repo_studios/command_center/README.md` section for follow-up actions.
 
 ### prioritize_next_steps
 
@@ -173,9 +181,11 @@ Pick the top three ROI steps:
 
 Minimal doc touch-ups:
 
+- Review `.repo_studios/command_center/README.md#documentation-updates` before editing docs tied to automation, guardrails, or remediation workflows.
 - Scope: add cross-links or one-liners; do not rewrite content.
 - Show before→after excerpts (first and last new bullet).
 - Keep under ten lines changed per file; ensure no tabs and reasonable line length.
+- Log guardrail-impacted doc adjustments in `memory-bank/decisionLog.md` with prompt key reference and evidence links.
 
 ---
 
@@ -188,6 +198,7 @@ Do a compact review of a local change set:
 - Summarize what changed (files, scripts, Make targets), why it matters (risk ↓, observability ↑), and how to verify.
 - Quote key log/ledger lines (short excerpts).
 - List two to three small, safe follow-ups.
+- Attach command center guardrail evidence (duplicate scan matrix, automation manifest/metrics summary, run-lock confirmation) and confirm the review references `.repo_studios/command_center/README.md` expectations.
 
 ### bundle_memory_update
 
@@ -228,6 +239,8 @@ After-code alignment:
 - Summarize edits and outcomes (ledger lines plus validator lines).
 - Touch docs minimally (cross-links, one-liners).
 - Run `quick_status`; list any remaining WARNs and one to two fixes.
+- Reference `.repo_studios/command_center/README.md#guardrails` to confirm lock status, `max_files_per_run`, and evidence attachments before closing the bundle.
+- Record guardrail artifacts and decision log updates so reviewers can trace the run.
 
 ---
 

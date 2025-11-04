@@ -24,8 +24,8 @@
 | Phase 3 | Manual Extraction Validation | In progress | `_slugify_relative`, `_copy_latest`, and new `write_report_artifacts` helper landed; dependency hygiene & import graph producers migrated while docs sweep remains. |
 | Phase 4 | Automated Extraction | Complete | Guardrails, manifest/metrics bundles, test matrix, and reporting templates accepted; automation awaiting go/no-go. |
 | Phase 5 | Integration with Repo Studios | In progress | Make/CI wiring scoped; Make target design drafted for review before implementation. |
-| Phase 6 | AI Prompt Engineering | Not started | Must align with existing `repo_prompts.md` governance. |
-| Phase 7 | Validation & Hardening | Not started | Triggered after automation decisions. |
+| Phase 6 | AI Prompt Engineering | Complete | Prompts updated (v1.3.0) with guardrail references, validation dry-runs archived, and rollback/versioning playbook established. |
+| Phase 7 | Validation & Hardening | In progress | Metric baseline plan and ledger established; validation cadence definition pending. |
 | Phase 8 | Scale to New Projects | Deferred | Outside current sidebar mission scope. |
 | 2025-11-03 | Hardened weighted progress briefing template and requested developer review; evidence at `docs/automation/metrics/weighted_progress_briefing_template.md`. | Adds governance notes, metrics summary linkage, and decision log hooks so weekly briefings stay auditable once reviews start. | Complete |
 
@@ -160,9 +160,9 @@ Notes: Completing this phase delivers the single-trigger workflow users can poin
 4. Completed: Windows `make` availability guidance documented 2025-11-04 with install/fallback instructions (see design draft Windows Tooling Validation).
 5. Completed: Make target contract, guardrail surfacing, and CI rehearsal plan documented 2025-11-04 within the design draft; pending developer approval before implementation.
 6. Upcoming: Summarize health suite orchestrator impacts and update documentation cross-links once the targets are approved.
-7. In progress: Developer review of Phase 6 prompt guardrail matrix, instruction deltas, and change-control workflow prior to updating `repo_prompts.md`.
-8. Upcoming: Embed command center references in live prompts, schedule validation dry-runs, and finalize rollback/versioning guidance once deltas are approved.
-9. Upcoming: Begin Phase 7 metric baseline assembly, cadence definition, and reporting interface planning in parallel with guardrail validation.
+7. Completed: Phase 6 prompt guardrail matrix, instruction deltas, change-control workflow, validation plan, rollback playbook, and dry-run execution documented 2025-11-04; guardrail-aware updates published in `repo_prompts.md` v1.3.0 with PASS validation results.
+8. Completed: Phase 7 baseline dataset recorded 2025-11-04 in `phase_7/METRIC_BASELINE_LOG.csv`, aligning duplicate matrices with automation metrics for weekly briefings.
+9. In progress: Define validation cadence and reporting checkpoints for Phase 7 metrics, then monitor prompt usage for drift and schedule the next validation rerun at the next prompt version change or quarterly checkpoint.
 
 Notes: Rollout remains manual; automation explicitly deferred until manual validation succeeds.
 
@@ -198,6 +198,15 @@ Notes: Rollout remains manual; automation explicitly deferred until manual valid
 - Compiled guardrail coverage matrix per prompt in `que_for_integration/refactor_library/phase_6/PROMPT_GUARDRAIL_MATRIX.md`, tagging gaps for command center references, automation artifacts, and evidence logging.
 - Drafted candidate prompt instruction deltas in `que_for_integration/refactor_library/phase_6/PROMPT_DELTA_DRAFTS.md`, inserting command center pointers and guardrail reminders for key atomic and bundle prompts.
 - Outlined prompt change-control workflow in `que_for_integration/refactor_library/phase_6/PROMPT_CHANGE_CONTROL_WORKFLOW.md`, defining roles, review sequence, publication steps, and rollback expectations.
+- Published prompt updates in `repo_prompts.md` v1.3.0 to surface command center guardrails, lock checks, automation evidence expectations, and decision-log reminders across session, guardrail, and bundle prompts.
+- Drafted prompt validation dry-run plan (`phase_6/PROMPT_VALIDATION_PLAN.md`) outlining four guardrail-focused scenarios with acceptance criteria and execution checklist.
+- Created prompt rollback/versioning playbook (`phase_6/PROMPT_ROLLBACK_PLAYBOOK.md`) covering semantic versioning, artifact archiving, rollback procedure, and safeguards.
+- Executed validation dry-runs on 2025-11-04 with transcripts under `phase_6/validation_runs/` and consolidated PASS results in `phase_6/PROMPT_VALIDATION_RESULTS.md`.
+- Authored Phase 7 metric baseline plan (`phase_7/METRIC_BASELINE_PLAN.md`) establishing sources, owners, and cadence for duplicate, coverage, and guardrail metrics.
+- Drafted CI integration strategy (`phase_7/CI_INTEGRATION_STRATEGY.md`) detailing pipeline stages, rollout phases, and guardrail enforcement modes.
+- Defined false-positive feedback loop (`phase_7/FALSE_POSITIVE_FEEDBACK_LOOP.md`) with intake channels, roles, and resolution metrics.
+- Published retention policy update (`phase_7/RETENTION_POLICY_UPDATE.md`) to extend pruning rules to automation bundles, run logs, and validation archives.
+- Sketched reporting interface plan (`phase_7/REPORTING_INTERFACE_PLAN.md`) outlining data flow from manifests and metrics into briefings, dashboards, and decision logs.
 
 ### `write_report_artifacts` Implementation Summary (2025-10-28)
 
@@ -293,22 +302,21 @@ Notes: Implementation deferred; alignment requires understanding of existing aut
 - [x] **Audit existing prompts** in `repo_prompts.md` to avoid conflicting guidance *(Agent → inventory current instructions).* — Completed 2025-11-04; findings logged in `que_for_integration/refactor_library/phase_6/PROMPT_AUDIT_NOTES.md` covering guardrail, command center visibility, and automation readiness gaps.  
 - [x] **Capture guardrail coverage matrix** aligning each prompt with command center guardrail requirements before drafting edits *(Agent → compile table; Developer → review).* — Completed 2025-11-04; matrix recorded in `que_for_integration/refactor_library/phase_6/PROMPT_GUARDRAIL_MATRIX.md` with prompt-by-prompt coverage and follow-ups.  
 - [x] **Draft candidate instruction deltas** based on naming conventions, manual extraction lessons, and the new protocol workspace (stored separately until approved) *(Agent → produce proposal once library structure decisions settle).* — Drafts captured 2025-11-04 in `que_for_integration/refactor_library/phase_6/PROMPT_DELTA_DRAFTS.md`, ready for developer review.  
-- [ ] **Embed explicit pointer** to `.repo_studios/command_center/` and its README once prompts are updated *(Agent → ensure prompts direct agents to the protocol, Developer → approve wording).*  
-- [x] **Document prompt change-control workflow** (approvers, decision log entry, rollout checklist) *(Agent → draft; Developer → ratify).* — Workflow outlined 2025-11-04 in `que_for_integration/refactor_library/phase_6/PROMPT_CHANGE_CONTROL_WORKFLOW.md`; pending reviewer ratification before publication.  
-- [ ] **Plan validation dry-runs** with sample conversations and acceptance criteria to confirm prompts steer agents toward the protocol *(Agent → outline scenarios; Developer → review).*  
-- [ ] **Prepare rollback/versioning approach** for prompt updates, including storage location and diff tracking *(Agent → document plan; Developer → approve).*  
+- [x] **Embed explicit pointer** to `.repo_studios/command_center/` and its README once prompts are updated *(Agent → ensure prompts direct agents to the protocol, Developer → approve wording).* — Completed 2025-11-04; `repo_prompts.md` v1.3.0 now references command center guardrails, lock checks, and evidence requirements.  
+- [x] **Document prompt change-control workflow** (approvers, decision log entry, rollout checklist) *(Agent → draft; Developer → ratify).* — Approved 2025-11-04; workflow stored in `que_for_integration/refactor_library/phase_6/PROMPT_CHANGE_CONTROL_WORKFLOW.md` and ready for use alongside prompt updates.  
+- [x] **Plan validation dry-runs** with sample conversations and acceptance criteria to confirm prompts steer agents toward the protocol *(Agent → outline scenarios; Developer → review).* — Plan drafted 2025-11-04 in `que_for_integration/refactor_library/phase_6/PROMPT_VALIDATION_PLAN.md`, covering scenarios, criteria, and execution steps.  
+- [x] **Prepare rollback/versioning approach** for prompt updates, including storage location and diff tracking *(Agent → document plan; Developer → approve).* — Draft playbook added 2025-11-04 in `que_for_integration/refactor_library/phase_6/PROMPT_ROLLBACK_PLAYBOOK.md`; pending reviewer approval before finalization.  
+- [x] **Execute validation dry-runs** and archive transcripts under `phase_6/validation_runs/` *(Agent → simulate scenarios; Developer → review outcomes).* — Completed 2025-11-04 with PASS results logged in `phase_6/PROMPT_VALIDATION_RESULTS.md` and transcripts stored per scenario.  
 
 Notes: Will proceed only after library structure and extraction workflow stabilize.
 
-## Phase 7 – Validation & Hardening
-
-- [ ] **Define metrics** (lines deduplicated, duplicate groups resolved, test coverage increase) aligned with 360-occurrence baseline *(Agent → draft metric sheet).*  
-- [ ] **Plan CI integration strategy** (warning-only vs. blocking) pending automation readiness *(Agent → outline options based on automation guardrails).*  
-- [ ] **Collect false-positive feedback loop** if we adopt new detection tooling *(Agent → design feedback capture process, Developer → approve).*
-- [ ] **Review retention** of run folders and checklists to ensure repository size stays manageable *(Agent → recommend pruning policy).*
-- [ ] **Build baseline dataset** linking metrics to current duplicate matrices and weighted briefing outputs *(Agent → assemble reference bundle; Developer → validate).*  
+- [x] **Define metrics** (lines deduplicated, duplicate groups resolved, test coverage increase) aligned with 360-occurrence baseline *(Agent → draft metric sheet).* — Completed 2025-11-04; baseline plan recorded in `que_for_integration/refactor_library/phase_7/METRIC_BASELINE_PLAN.md` with sources, owners, and cadence.  
+- [x] **Plan CI integration strategy** (warning-only vs. blocking) pending automation readiness *(Agent → outline options based on automation guardrails).* — Drafted 2025-11-04 in `phase_7/CI_INTEGRATION_STRATEGY.md`, outlining pipeline stages, rollout phases, and gating criteria.  
+- [x] **Collect false-positive feedback loop** if we adopt new detection tooling *(Agent → design feedback capture process, Developer → approve).* — Feedback workflow captured 2025-11-04 in `phase_7/FALSE_POSITIVE_FEEDBACK_LOOP.md` with roles, metrics, and log requirements.  
+- [x] **Review retention** of run folders and checklists to ensure repository size stays manageable *(Agent → recommend pruning policy).* — Retention update drafted 2025-11-04 in `phase_7/RETENTION_POLICY_UPDATE.md`, extending keep policies to automation bundles, run logs, and validation transcripts.  
+- [x] **Build baseline dataset** linking metrics to current duplicate matrices and weighted briefing outputs *(Agent → assemble reference bundle; Developer → validate).* — Baseline ledger captured 2025-11-04 in `phase_7/METRIC_BASELINE_LOG.csv` with duplicate matrix totals and automation metrics summary.
 - [ ] **Define validation cadence** (weekly/monthly) with assigned owners responsible for reviewing metric trends *(Agent → propose schedule; Developer → confirm).*  
-- [ ] **Draft reporting interface plan** showing how metrics feed dashboards or weekly briefings *(Agent → sketch flow; Developer → approve).*  
+- [x] **Draft reporting interface plan** showing how metrics feed dashboards or weekly briefings *(Agent → sketch flow; Developer → approve).* — Interface plan documented 2025-11-04 in `phase_7/REPORTING_INTERFACE_PLAN.md`, covering data flow, interfaces, and success criteria.  
 
 ## Phase 8 – Scale to New Projects
 
@@ -335,7 +343,16 @@ Notes: Will proceed only after library structure and extraction workflow stabili
 - Cross-platform CI rehearsal plan drafted 2025-11-04 in `phase_5/MAKE_TARGET_DESIGN.md`, detailing GitHub Actions matrix execution, artifact capture, and guardrail enforcement (in review).
 - Command center cross-links added 2025-11-04 in `.repo_studios/scripts/script_inventory_architecture.md` and `.repo_studios/scripts/README.md`, ensuring catalog docs direct agents to `.repo_studios/command_center/README.md` before refactor work (developer review pending).
 - Phase 6 prompt audit documented 2025-11-04 in `que_for_integration/refactor_library/phase_6/PROMPT_AUDIT_NOTES.md`, outlining guardrail gaps, command center discoverability issues, and automation readiness follow-ups prior to drafting new instructions.
-- Phase 6 prompt guardrail matrix, instruction delta drafts, and change-control workflow recorded 2025-11-04 in `que_for_integration/refactor_library/phase_6/` for developer review before updating `repo_prompts.md`.
+- Phase 6 prompt guardrail matrix, instruction delta drafts, and change-control workflow recorded 2025-11-04 in `que_for_integration/refactor_library/phase_6/`, providing the approved foundation for the `repo_prompts.md` update.
+- Repo prompt library updated to version 1.3.0 on 2025-11-04, embedding command center guardrails, lock checks, automation evidence reminders, and decision-log hooks across session and bundle prompts (`repo_prompts.md`).
+- Prompt validation plan and rollback/versioning playbook published 2025-11-04 in `phase_6/PROMPT_VALIDATION_PLAN.md` and `phase_6/PROMPT_ROLLBACK_PLAYBOOK.md`, establishing acceptance criteria and recovery steps for future prompt changes.
+- Prompt validation dry-runs executed 2025-11-04 with transcripts under `phase_6/validation_runs/` and PASS summary recorded in `phase_6/PROMPT_VALIDATION_RESULTS.md`.
+- Phase 7 metric baseline plan recorded 2025-11-04 in `phase_7/METRIC_BASELINE_PLAN.md`, defining measurement sources, owners, and cadence ahead of validation and hardening tasks.
+- Phase 7 CI integration strategy documented 2025-11-04 in `phase_7/CI_INTEGRATION_STRATEGY.md`, mapping guardrail workflows to GitHub Actions stages with warning-to-blocking rollout gates.
+- Phase 7 false-positive feedback loop defined 2025-11-04 in `phase_7/FALSE_POSITIVE_FEEDBACK_LOOP.md`, establishing intake, triage, and resolution metrics.
+- Phase 7 retention policy update captured 2025-11-04 in `phase_7/RETENTION_POLICY_UPDATE.md`, extending pruning rules to automation bundles, run logs, and validation archives.
+- Phase 7 reporting interface plan outlined 2025-11-04 in `phase_7/REPORTING_INTERFACE_PLAN.md`, describing data flow into weighted briefings, dashboard exports, and decision log enhancements.
+- Phase 7 baseline ledger recorded 2025-11-04 in `phase_7/METRIC_BASELINE_LOG.csv`, linking duplicate matrices and automation metrics to the weighted briefing template for reproducible reporting.
 
 ---
 

@@ -14,6 +14,7 @@ Use this template when compiling the weekly automation readiness briefing. It bl
 - Overall weighted progress: `NN%`
 - Metrics source bundle: `reports/<slug>/automation_manifest/metrics_summary-YYYY-MM-DD.json`
 - Helper adoption snapshot: `reports/<slug>/helper_adoption/helper_adoption-YYYY-MM-DD.json`
+- Baseline ledger: `que_for_integration/refactor_library/phase_7/METRIC_BASELINE_LOG.csv`
 
 ## Weighting Formula
 
@@ -69,7 +70,7 @@ weighted_progress = (
 ## How to Use This Template
 
 1. Retrieve the latest automation dry-run bundle under `reports/<slug>/automation_manifest/automation_manifest-<timestamp>/`.
-2. Copy `metrics_summary.json` into your working folder and extract duplicate, helper, and runtime metrics for the Summary Snapshot and Key Metrics table.
+2. Copy `metrics_summary.json` into your working folder and extract duplicate, helper, and runtime metrics for the Summary Snapshot and Key Metrics table; record the snapshot in `que_for_integration/refactor_library/phase_7/METRIC_BASELINE_LOG.csv` before drafting narrative text.
 3. Run the helper adoption audit CLI if no snapshot exists for the current week, then attach both JSON and Markdown outputs in the Artifact Links section.
 4. Pull the top offenders table from the most recent lizard report to inform Narrative Highlights and adjustments to the weighting conversation.
 5. Capture any weighting changes, overrides, or exceptions in the Decision Log and reference them near the weighting formula.
@@ -84,3 +85,4 @@ weighted_progress = (
 | Helper adoption report | `reports/<slug>/helper_adoption/helper_adoption-YYYY-MM-DD.json` | Tracks helper uptake by target and supports the helper weighting component. |
 | Lizard complexity briefing | `.repo_studios/reports/producer_reports/lizard_reports/<timestamp>/summary.md` | Lists high-complexity functions and changes used in the complexity weighting. |
 | Decision log | `memory-bank/decisionLog.md` | Records approvals, weight adjustments, and rationale for auditability. |
+| Baseline ledger | `que_for_integration/refactor_library/phase_7/METRIC_BASELINE_LOG.csv` | Anchors metric snapshots to briefing fields so historical comparisons stay reproducible. |
