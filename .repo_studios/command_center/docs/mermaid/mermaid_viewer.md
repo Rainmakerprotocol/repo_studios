@@ -9,14 +9,17 @@
 ## Phase 1 · Data Supply & Naming
 
 - [ ] Keep generator outputs aligned with commandview naming (`<source_folder>_commandview_YYYYMMDD-HHMM.json`).
+- [ ] Format selector labels to surface timestamp freshness (derive display value from the slug’s `YYYYMMDD-HHMM` component).
 - [ ] Ensure `generate_function_inventory.py` (future `generate_commandview_inventory.py`) writes mirrored artifacts only under `.repo_studios/command_center/reports/` for viewer discovery, leaving dynamic copies for agents.
 - [ ] Validate inventory payload includes `files[].call_graph` with resolved local/imported/builtin edges.
 - [ ] Confirm dependency summaries, callbacks, IO effects, logging, globals, and docstring metadata remain intact for downstream packs.
 
 ## Phase 2 · Discovery & Refresh Pipeline
 
-- [ ] Build selector bootstrapper that scans the static reports tree only, filtering JSON that matches the commandview slug.
+- [ ] Build selector bootstrapper that scans the static reports tree only, filtering JSON that matches the `*_commandview_YYYYMMDD-HHMM.json` slug.
+- [ ] Populate selector entries with source folder + timestamp so users can judge freshness at a glance.
 - [ ] Implement refresh button that re-runs discovery, updates selector options, and preserves active context when possible.
+- [ ] Ensure refresh routine deduplicates by slug to avoid double-listing static vs dynamic artifacts.
 - [ ] Document refresh workflow in README and add make/CLI recipe to regenerate inventories before viewer launch.
 
 ## Phase 3 · Viewer Core (HTML/JS Shell)
@@ -49,6 +52,7 @@
 - [ ] Generate Mermaid definitions in memory; do not persist `.mmd` files to disk by default.
 - [ ] If temporary `.mmd` artifacts are needed for debugging, place them under a dedicated cache directory and overwrite on reuse.
 - [ ] Implement eviction/expiry policy to prevent stale temp views after refresh runs.
+- [ ] Add export button that writes the currently rendered Mermaid definition (`.mmd`) to disk on demand (image export remains optional).
 
 ## Phase 7 · Selector Views & Packs
 
@@ -65,6 +69,7 @@
 - [ ] Provide node count warnings when thresholds exceeded.
 - [ ] Offer optional search input to jump to module/function.
 - [ ] Consider URL parameters for sharing current zoom state.
+- [ ] Confirm selector, refresh, and export interactions are reflected in UI smoke tests and documented operator notes.
 
 ## Phase 9 · Extension Hooks
 
