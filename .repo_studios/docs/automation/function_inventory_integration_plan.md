@@ -30,13 +30,13 @@ This living checklist captures the sequential work required to integrate the Jar
 * [x] Reconfirm objectives with stakeholders using `inventory_system_phased_plan.yaml` and update scope notes if requirements shift. _(2025-10-24: Objectives affirmed—focus on co-located JSON indices for targeted folders to accelerate Copilot discovery.)_
 * [x] Document the final decision on co-located artifact policy and communicate how it coexists with `.repo_studios/reports` conventions. _(Co-located `<folder>_index/` directories remain source of truth; no shadow copies under `.repo_studios/reports/` are required.)_
 * [x] Capture JSON schema expectations (fields, types, `schema_version`) and circulate for review. _(2025-10-24: v1 schema refreshed to document signatures, line counts, and module-first-line metadata.)_
-  * Schema (v1) overview:
+  * Schema (v2) overview:
     * `schema_version` (int)
-    * `metadata`: `generated_at` (ISO string), `folder_path`, `folder_name`, `total_files`, `total_functions`, `total_classes`, `scan_depth`
-    * `files[]`: `path`, `relative_path`, `line_count`, `module_first_line`, `functions[]`, `classes[]`, `imports[]`
-    * `functions[]` / `methods[]`: `name`, `line`, `type`, `is_async`, `is_private`, `docstring`, `signature`, `line_count`
-    * `classes[]`: `name`, `line`, `docstring`, `line_count`, `methods[]`
-    * `statistics`: `total_lines_of_code`, `files_by_type`, `private_functions`, `public_functions`, `async_functions`
+    * `metadata`: `generated_at` (ISO string), `folder_path`, `folder_name`, `total_files`, `total_functions`, `total_classes`, `scan_depth`, optional `coverage_sources`
+    * `files[]`: `path`, `relative_path`, `line_count`, `module_first_line`, `imports[]`, `imports_detailed[]`, `functions[]`, `classes[]`, optional `call_graph`, `callback_registrations`, `code_smell_summary`, `coverage`, `git_churn`, `unused_imports`, `unreachable_functions`
+    * `functions[]` / `methods[]`: `name`, `line`, `type`, `is_async`, `is_private`, `docstring`, `signature`, `line_count`, `hash`, `returns_kind`, `locals_summary`, `cyclomatic_complexity`, `type_hint_coverage`, `docstring_quality`, `used_globals`, `io_effects`, `raises`, `logging_calls`, `decorators`, `calls`, `intra_file_refs`
+    * `classes[]`: `name`, `line`, `docstring`, `line_count`, `bases`, `methods[]`, `decorators`
+    * `statistics`: `total_lines_of_code`, `files_by_type`, `private_functions`, `public_functions`, `async_functions`, optional `coverage` and `git_churn` summaries capturing executed/missing line totals and churn aggregates
 * [ ] Inventory current manual usages (`tools/generate_inventory.py`) to plan deprecation messaging and overlap timeline.
   * Observed entry point: `python3 tools/generate_inventory.py modules -v` (usage captured in PowerShell command history and developer workflow notes). Deprecation messaging must highlight Make target replacement and CI integration timeline.
 
@@ -44,7 +44,7 @@ This living checklist captures the sequential work required to integrate the Jar
 
 * [x] Port or alias `phase1/generate_inventory.py` into `.repo_studios/scripts/producers/` with a repo-root aware CLI. _(`generate_function_inventory.py` now lives under `.repo_studios/scripts/producers/` with target resolution relative to `--repo-root`.)_
 * [x] Replace ad-hoc printing with structured logging consistent with other producers (INFO summaries, DEBUG diagnostics). _(Logging wired via `logging.basicConfig`; warnings captured and surfaced.)_
-* [x] Add CLI flags for repo root resolution, optional verbose mode, and future-proofing (e.g., `--schema-version`). _(`--repo-root`, positional `target`, `--schema-version`, and `--log-level` implemented.)_
+* [x] Add CLI flags for repo root resolution, optional verbose mode, and future-proofing (e.g., `--schema-version`). _(`--repo-root`, positional `target`, `--schema-version`, `--log-level`, and the new `--coverage-json` option for ingesting coverage reports implemented.)_
 * [x] Introduce explicit exit codes (0 success, non-zero on fatal errors) and ensure error messages surface in CI logs. _(Script returns 1 for validation failures and logs details before exiting.)_
 
 ### Phase C – Artifact Structure & Schema

@@ -10,3 +10,51 @@
 - **Context:** Unlocks the Code Flow and Coupling Insight packs plus cross-module duplicate analysis by providing structured call edges directly in the inventory payload.
 - **Owner:** GitHub Copilot implementation assistant.
 - **Evidence:** Added `_build_call_graph()` in `.repo_studios/command_center/scripts/producers/generate_function_inventory.py`, updated checklist status, and new regression coverage in `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_call_graph_resolves_local_and_imported_calls`.
+- **Decision:** Confirm class inheritance metadata is emitted and guarded by tests.
+- **Context:** Supports upcoming viewer inheritance overlays and CommandView packs relying on base class awareness.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Checklist entry marked complete and regression test `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_inventory_records_class_bases` added.
+- **Decision:** Validate method-to-method call chains resolve to class members in the inventory call graph.
+- **Context:** Required for viewer method chain diagrams and future delegated-call analysis.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Checklist update noting completion and regression test `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_call_graph_resolves_local_and_imported_calls` exercises self-invoked methods.
+- **Decision:** Emit cyclomatic complexity metrics for every function and guard them with regression coverage.
+- **Context:** Enables viewer heatmaps and code smell thresholds keyed to branching complexity.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `_cyclomatic_complexity()` helper in `generate_function_inventory.py`, checklist completion note, and regression test `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_cyclomatic_complexity_counts_branches`.
+- **Decision:** Surface per-function type hint coverage for visualization consumers.
+- **Context:** Required for type coverage packs and viewer overlays that highlight annotation adoption gaps.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `type_hint_coverage` field added in `generate_function_inventory.py`, checklist update, and regression test `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_type_hint_coverage_reports_ratio`.
+- **Decision:** Confirm docstring quality metrics are already exposed and leverage existing coverage.
+- **Context:** Viewer quality packs depend on `docstring_quality` ratios to flag documentation gaps.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Checklist updated to reflect ready state; `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_inventory_generates_structured_output` exercises the serialized docstring quality block.
+- **Decision:** Preserve effect, exception, global usage, and decorator metadata directly in function and class payloads.
+- **Context:** Needed so Mermaid global state, IO effects, logging flow, and decorator packs can consume consistent top-level fields without additional normalization.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Updates to `.repo_studios/command_center/scripts/producers/generate_function_inventory.py`, checklist completion, and regression test `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_function_metadata_persists_effects_and_decorators`.
+- **Decision:** Emit explicit `unused_imports` and `unreachable_functions` collections for each module.
+- **Context:** Enables dead-code mapping views by spotlighting imports without call sites and functions lacking inbound edges in the local call graph.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `_collect_unused_imports()` and `_identify_unreachable_functions()` helpers in `generate_function_inventory.py`, checklist update, and regression test `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_unused_imports_and_unreachable_functions_reported`.
+- **Decision:** Ingest optional `coverage.json` artifacts and expose normalized coverage statistics in the inventory payload.
+- **Context:** Required for the Mermaid risk and assurance packs to correlate executed code paths with test assets and highlight coverage gaps.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `--coverage-json` CLI flag plus `CoverageIndex` loader in `.repo_studios/command_center/scripts/producers/generate_function_inventory.py`, checklist completion note, and regression test `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_inventory_merges_coverage_reports`.
+- **Decision:** Attach git churn metrics (commit counts, additions, deletions) to inventory entries and aggregate repository-level churn stats.
+- **Context:** Enables Mermaid risk visualizations that correlate code volatility with complexity and coverage signals.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Git helpers in `.repo_studios/command_center/scripts/producers/generate_function_inventory.py`, checklist completion note, and regression test `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_inventory_includes_git_churn_summary`.
+- **Decision:** Extend Command Center regression coverage to guard the enriched inventory payload and mirrored artifacts.
+- **Context:** Ensures CLI executions continue emitting coverage and churn metadata while keeping central report mirrors in sync for viewers.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New integration test `.repo_studios/tests/tests_command_center/producers/test_generate_function_inventory_command_center.py` plus checklist update documenting past/present/future stance.
+- **Decision:** Refresh inventory documentation so downstream consumers understand coverage/churn fields and CLI ingestion options.
+- **Context:** Needed to unblock viewer overlays and maintainers who rely on the schema reference while commandview naming work is pending.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Updated `docs/automation/function_inventory_integration_plan.md` (schema + CLI notes) and `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` (coverage/churn overlay expectations), referenced in the mermaid integration checklist progress notes.
+- **Decision:** Capture migration guidance for downstream tools consuming the enriched inventory payload.
+- **Context:** Ensures commandview packs, aggregators, and testing harnesses adapt to coverage and git churn metadata without regressions.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New `.repo_studios/command_center/docs/mermaid/inventory_migration_notes.md` documented and checklist updated with past/present/future status.

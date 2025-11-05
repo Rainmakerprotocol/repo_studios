@@ -10,6 +10,7 @@ import json
 import logging
 import re
 import sys
+import subprocess
 from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -126,6 +127,20 @@ BUILTIN_FUNCTION_NAMES = {
     if callable(value)
 }
 
+_MATCH_NODE = (getattr(ast, "Match"),) if hasattr(ast, "Match") else tuple()
+
+COMPLEXITY_NODE_TYPES = (
+    ast.If,
+    ast.For,
+    ast.AsyncFor,
+    ast.While,
+    ast.Try,
+    ast.IfExp,
+    ast.With,
+    ast.AsyncWith,
+    *_MATCH_NODE,
+)
+
 LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
 
 try:
@@ -226,6 +241,25 @@ def _class_code_smells(line_count: int | None, method_count: int) -> dict[str, b
     if method_count >= CODE_SMELL_METHOD_THRESHOLD:
         smells["method_heavy"] = True
     return smells
+
+
+def _cyclomatic_complexity(node: ast.AST) -> int:
+    complexity = 1
+    for inner in ast.walk(node):
+        if isinstance(inner, COMPLEXITY_NODE_TYPES):
+            complexity += 1
+            if isinstance(inner, ast.Try):
+                complexity += len(inner.handlers)
+        elif isinstance(inner, ast.BoolOp):
+            complexity += max(len(inner.values) - 1, 0)
+        elif isinstance(inner, (ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp)):
+            generators = getattr(inner, "generators", [])
+            for comp in generators:
+                complexity += 1
+                complexity += len(getattr(comp, "ifs", []))
+        elif isinstance(inner, ast.ExceptHandler):
+            complexity += 1
+    return complexity
 
 
 def _normalize_callback_target(node: ast.AST) -> tuple[str | None, str | None]:
@@ -701,6 +735,63 @@ class Paths:
 class Options:
     schema_version: int
     log_level: str
+    coverage_inputs: tuple[str, ...]
+
+
+@dataclass
+class CoverageInfo:
+    path: Path
+    executed: set[int]
+    missing: set[int]
+    contexts: dict[str, set[int]]
+
+
+class CoverageIndex:
+    def __init__(self) -> None:
+        self._by_resolved: dict[str, CoverageInfo] = {}
+        self._by_relative: dict[str, CoverageInfo] = {}
+
+    def __bool__(self) -> bool:  # pragma: no cover - trivial
+        return bool(self._by_resolved)
+
+    def register(self, repo_root: Path, entry_path: str, data: dict[str, Any]) -> None:
+        raw_path = Path(entry_path)
+        resolved = raw_path if raw_path.is_absolute() else (repo_root / raw_path)
+        resolved = resolved.resolve()
+
+        info = self._by_resolved.get(resolved.as_posix())
+        if info is None:
+            info = CoverageInfo(path=resolved, executed=set(), missing=set(), contexts={})
+            self._by_resolved[resolved.as_posix()] = info
+
+        executed_lines = data.get("executed_lines") or []
+        missing_lines = data.get("missing_lines") or []
+        contexts_raw = data.get("contexts") or {}
+
+        info.executed.update(int(line) for line in executed_lines)
+        info.missing.update(int(line) for line in missing_lines)
+        for context_name, lines in contexts_raw.items():
+            bucket = info.contexts.setdefault(str(context_name), set())
+            bucket.update(int(line) for line in lines)
+
+        try:
+            relative = resolved.relative_to(repo_root).as_posix()
+            self._by_relative[relative] = info
+        except ValueError:
+            # Entry does not live under repo root; skip relative index.
+            pass
+
+    def get(self, absolute_path: Path, relative_path: Path | None = None) -> CoverageInfo | None:
+        resolved_key = absolute_path.resolve().as_posix()
+        info = self._by_resolved.get(resolved_key)
+        if info is not None:
+            return info
+        if relative_path is not None:
+            relative_key = relative_path.as_posix()
+            info = self._by_relative.get(relative_key)
+            if info is not None:
+                return info
+        return None
 
 
 def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
@@ -736,6 +827,12 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
             "Defaults to .repo_studios/command_center/reports/index_scan within the repo root."
         ),
     )
+    parser.add_argument(
+        "--coverage-json",
+        action="append",
+        default=[],
+        help="Optional coverage.py JSON report; provide multiple times to merge contexts.",
+    )
     return parser.parse_args(argv)
 
 
@@ -767,11 +864,170 @@ def build_paths(args: argparse.Namespace) -> Paths:
 
 
 def build_options(args: argparse.Namespace) -> Options:
-    return Options(schema_version=int(args.schema_version), log_level=args.log_level)
+    coverage_inputs = tuple(str(item) for item in (args.coverage_json or []))
+    return Options(schema_version=int(args.schema_version), log_level=args.log_level, coverage_inputs=coverage_inputs)
 
 
 def configure_logging(level: str) -> None:
     logging.basicConfig(level=getattr(logging, level.upper()), format="%(levelname)s %(message)s")
+
+
+def load_coverage_reports(paths: Paths, coverage_inputs: tuple[str, ...]) -> tuple[CoverageIndex | None, list[str]]:
+    if not coverage_inputs:
+        return None, []
+    index = CoverageIndex()
+    loaded_sources: list[str] = []
+    for raw in coverage_inputs:
+        candidate = Path(raw)
+        candidate = candidate if candidate.is_absolute() else (paths.repo_root / candidate)
+        candidate = candidate.resolve()
+        if not candidate.exists():
+            logging.warning("Coverage file not found: %s", candidate)
+            continue
+        try:
+            payload = json.loads(candidate.read_text(encoding="utf-8"))
+        except Exception as exc:  # pragma: no cover - defensive
+            logging.warning("Failed to load coverage file %s: %s", candidate, exc)
+            continue
+        files_block = payload.get("files")
+        if not isinstance(files_block, dict):
+            logging.warning("Coverage file %s missing 'files' mapping", candidate)
+            continue
+        for entry_path, data in files_block.items():
+            if isinstance(entry_path, str) and isinstance(data, dict):
+                index.register(paths.repo_root, entry_path, data)
+        try:
+            loaded_sources.append(candidate.relative_to(paths.repo_root).as_posix())
+        except ValueError:
+            loaded_sources.append(candidate.as_posix())
+    if not index:
+        return None, loaded_sources
+    return index, loaded_sources
+
+
+def _run_git_command(repo_root: Path, args: list[str]) -> subprocess.CompletedProcess[str] | None:
+    command = ["git", "-C", str(repo_root), *args]
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, check=False)
+    except OSError as exc:  # pragma: no cover - git missing
+        logging.warning("Failed to execute git command %s: %s", " ".join(command), exc)
+        return None
+    if result.returncode != 0:
+        logging.warning("Git command failed (exit %s): %s", result.returncode, result.stderr.strip())
+        return None
+    return result
+
+
+def _collect_git_churn(repo_root: Path, repo_relative_path: Path) -> dict[str, Any] | None:
+    if repo_relative_path.parts and repo_relative_path.parts[0] == "..":
+        return None
+    if repo_relative_path.as_posix() == ".":
+        return None
+    args = [
+        "log",
+        "--follow",
+        "--numstat",
+        "--date=iso",
+        "--pretty=%ct\t%H",
+        "--",
+        repo_relative_path.as_posix(),
+    ]
+    result = _run_git_command(repo_root, args)
+    if result is None:
+        return None
+
+    commit_count = 0
+    additions = 0
+    deletions = 0
+    latest_hash: str | None = None
+    latest_timestamp: int | None = None
+    for line in result.stdout.splitlines():
+        if not line:
+            continue
+        parts = line.split("\t")
+        if len(parts) == 2:
+            commit_count += 1
+            try:
+                timestamp = int(parts[0])
+            except ValueError:
+                continue
+            commit_hash = parts[1]
+            if latest_timestamp is None or timestamp > latest_timestamp:
+                latest_timestamp = timestamp
+                latest_hash = commit_hash
+            continue
+        if len(parts) >= 3:
+            add_raw, del_raw = parts[0], parts[1]
+            try:
+                additions += int(add_raw) if add_raw.isdigit() else 0
+            except ValueError:  # pragma: no cover - improbable when isdigit
+                pass
+            try:
+                deletions += int(del_raw) if del_raw.isdigit() else 0
+            except ValueError:  # pragma: no cover - improbable when isdigit
+                pass
+
+    if commit_count == 0 and additions == 0 and deletions == 0:
+        return None
+
+    payload: dict[str, Any] = {
+        "commit_count": commit_count,
+        "additions": additions,
+        "deletions": deletions,
+    }
+    if latest_hash and latest_timestamp is not None:
+        payload["latest_commit"] = {
+            "hash": latest_hash,
+            "timestamp": datetime.fromtimestamp(latest_timestamp, timezone.utc).isoformat(),
+        }
+    payload["net_changes"] = additions - deletions
+    return payload
+
+
+def attach_git_churn(paths: Paths, files: list[dict[str, Any]], warnings: list[str]) -> dict[str, Any] | None:
+    summary = {
+        "files_with_data": 0,
+        "total_commits": 0,
+        "total_additions": 0,
+        "total_deletions": 0,
+    }
+    latest_overall: tuple[int, str] | None = None
+    for entry in files:
+        relative_path = entry.get("relative_path")
+        if not relative_path:
+            continue
+        absolute = (paths.target / Path(relative_path)).resolve()
+        try:
+            repo_relative = absolute.relative_to(paths.repo_root)
+        except ValueError:
+            warnings.append(f"File {absolute} falls outside repo root; skipping git churn.")
+            continue
+        churn = _collect_git_churn(paths.repo_root, repo_relative)
+        if churn is None:
+            continue
+        entry["git_churn"] = churn
+        summary["files_with_data"] += 1
+        summary["total_commits"] += int(churn.get("commit_count", 0))
+        summary["total_additions"] += int(churn.get("additions", 0))
+        summary["total_deletions"] += int(churn.get("deletions", 0))
+        latest_payload = churn.get("latest_commit")
+        if latest_payload and "timestamp" in latest_payload:
+            try:
+                ts = datetime.fromisoformat(latest_payload["timestamp"])
+                epoch = int(ts.timestamp())
+                if latest_overall is None or epoch > latest_overall[0]:
+                    latest_overall = (epoch, latest_payload.get("hash", ""))
+            except ValueError:
+                continue
+    if summary["files_with_data"] == 0:
+        return None
+    if latest_overall is not None:
+        summary["latest_commit"] = {
+            "hash": latest_overall[1],
+            "timestamp": datetime.fromtimestamp(latest_overall[0], timezone.utc).isoformat(),
+        }
+    summary["net_changes"] = summary["total_additions"] - summary["total_deletions"]
+    return summary
 
 
 def _is_test_path(relative_parts: tuple[str, ...]) -> bool:
@@ -1155,6 +1411,7 @@ def _extract_function(
         _describe_decorator(deco, import_alias_map, module_id, defined_local_symbols)
         for deco in decorator_nodes
     ]
+    cyclomatic_complexity = _cyclomatic_complexity(node)
 
     result = {
         "name": display_name,
@@ -1181,6 +1438,8 @@ def _extract_function(
         "hash": function_hash,
         "todo_tags": todo_tags,
         "first_stmt_kind": _first_stmt_kind(node),
+        "cyclomatic_complexity": cyclomatic_complexity,
+        "type_hint_coverage": annotation_quality.get("coverage"),
         "calls": calls,
         "uses_import": uses_import,
         "intra_file_refs": intra_file_refs,
@@ -1207,7 +1466,12 @@ def _extract_class(
     if end_lineno is not None:
         line_count = max(0, end_lineno - node.lineno + 1)
     bases = [value for value in (_safe_unparse(base) for base in node.bases) if value]
-    decorators = [value for value in (_safe_unparse(deco) for deco in node.decorator_list) if value]
+    decorator_nodes = list(node.decorator_list)
+    decorators = [value for value in (_safe_unparse(deco) for deco in decorator_nodes) if value]
+    decorators_detailed = [
+        _describe_decorator(deco, import_alias_map, module_id, defined_local_symbols)
+        for deco in decorator_nodes
+    ]
     attributes: list[dict[str, Any]] = []
     methods: list[dict[str, Any]] = []
     for child in node.body:
@@ -1241,6 +1505,7 @@ def _extract_class(
         "line_count": line_count,
         "bases": bases,
         "decorators": decorators,
+        "decorators_detailed": decorators_detailed,
         "attributes": attributes,
         "code_smells": code_smells,
     }
@@ -1387,6 +1652,36 @@ def _collect_function_import_usage(
     return normalized
 
 
+def _collect_unused_imports(import_graph: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    unused: list[dict[str, Any]] = []
+    seen: set[tuple[Any, ...]] = set()
+    for item in import_graph:
+        kind = item.get("kind")
+        module = item.get("module")
+        lineno = item.get("lineno")
+        for edge in item.get("edges", []) or []:
+            if not edge.get("unused"):
+                continue
+            key = (
+                kind,
+                module,
+                lineno,
+                edge.get("target"),
+                edge.get("imported_as"),
+            )
+            if key in seen:
+                continue
+            seen.add(key)
+            unused.append({
+                "target": edge.get("target"),
+                "imported_as": edge.get("imported_as"),
+                "kind": kind,
+                "module": module,
+                "lineno": lineno,
+            })
+    return unused
+
+
 def _build_call_graph(
     module_id: str,
     functions: list[dict[str, Any]],
@@ -1509,6 +1804,43 @@ def _build_call_graph(
     if external_modules:
         call_graph["external_modules"] = external_modules
     return call_graph
+
+
+def _identify_unreachable_functions(
+    functions: list[dict[str, Any]],
+    classes: list[dict[str, Any]],
+    call_graph: dict[str, Any],
+) -> list[dict[str, Any]]:
+    defined_entries: dict[str, dict[str, Any]] = {}
+    for entry in functions:
+        qualified = entry.get("qualified_name")
+        if qualified:
+            defined_entries[qualified] = entry
+    for class_entry in classes:
+        for method in class_entry.get("methods", []) or []:
+            qualified = method.get("qualified_name")
+            if qualified:
+                defined_entries[qualified] = method
+
+    inbound: dict[str, int] = {name: 0 for name in defined_entries}
+    for edge in call_graph.get("edges", []) or []:
+        target = edge.get("target")
+        if target in inbound:
+            inbound[target] += 1
+
+    unreachable: list[dict[str, Any]] = []
+    for qualified, entry in defined_entries.items():
+        if inbound.get(qualified, 0) > 0:
+            continue
+        kind = "method" if entry.get("parent_class") else (entry.get("type") or "function")
+        unreachable.append({
+            "qualified_name": qualified,
+            "name": entry.get("name"),
+            "parent_class": entry.get("parent_class"),
+            "kind": kind,
+            "lineno": entry.get("line"),
+        })
+    return unreachable
 
 
 def _resolve_call_target(
@@ -1794,7 +2126,13 @@ def _summarize_dependency_categories(graph: list[dict[str, Any]]) -> dict[str, A
     return summary
 
 
-def analyze_python_file(path: Path, slice_root: Path, warnings: list[str]) -> dict[str, Any] | None:
+def analyze_python_file(
+    path: Path,
+    slice_root: Path,
+    warnings: list[str],
+    coverage: CoverageIndex | None = None,
+    repo_root: Path | None = None,
+) -> dict[str, Any] | None:
     try:
         text = path.read_text(encoding="utf-8")
     except OSError as exc:
@@ -1916,6 +2254,8 @@ def analyze_python_file(path: Path, slice_root: Path, warnings: list[str]) -> di
     code_smell_summary = _summarize_code_smells(functions, classes)
     coverage_signals = _collect_test_coverage_signals(imports_flat, module_id)
     call_graph = _build_call_graph(module_id, functions, classes, import_alias_map)
+    unused_imports = _collect_unused_imports(import_graph)
+    unreachable_functions = _identify_unreachable_functions(functions, classes, call_graph)
 
     defined_export_candidates: set[str] = set()
     defined_export_candidates.update(func["name"] for func in functions)
@@ -1932,7 +2272,7 @@ def analyze_python_file(path: Path, slice_root: Path, warnings: list[str]) -> di
     else:
         exports_info["missing"] = []
 
-    return {
+    result = {
         "path": str(path),
         "relative_path": relative.as_posix(),
         "module_id": module_id,
@@ -1944,19 +2284,58 @@ def analyze_python_file(path: Path, slice_root: Path, warnings: list[str]) -> di
         "imports_detailed": imports_detailed,
         "import_graph": import_graph,
         "dependency_summary": dependency_summary,
-    "call_graph": call_graph,
+        "call_graph": call_graph,
         "callback_registrations": module_callbacks,
         "code_smell_summary": code_smell_summary,
         "coverage_signals": coverage_signals,
         "globals": globals_block,
         "exports": exports_info,
-    "entrypoints": {"has_main_guard": has_main_guard, "cli_parser": cli_parser},
-    "dynamic_code": dynamic_code,
+        "entrypoints": {"has_main_guard": has_main_guard, "cli_parser": cli_parser},
+        "dynamic_code": dynamic_code,
         "module_first_line": first_statement,
+        "unused_imports": unused_imports,
+        "unreachable_functions": unreachable_functions,
     }
 
+    if coverage is not None:
+        repo_base = repo_root or slice_root
+        relative_repo: Path | None = None
+        try:
+            relative_repo = path.relative_to(repo_base)
+        except ValueError:
+            relative_repo = None
+        info = coverage.get(path, relative_repo)
+        if info is not None:
+            executed_lines = sorted(info.executed)
+            missing_lines = sorted(info.missing)
+            executed_count = len(executed_lines)
+            missing_count = len(missing_lines)
+            tracked_count = executed_count + missing_count
+            coverage_payload: dict[str, Any] = {
+                "executed_lines": executed_lines,
+                "missing_lines": missing_lines,
+                "executed_count": executed_count,
+                "missing_count": missing_count,
+                "tracked_count": tracked_count,
+            }
+            if tracked_count:
+                coverage_payload["line_rate"] = round(executed_count / tracked_count, 4)
+            if info.contexts:
+                coverage_payload["contexts"] = {name: sorted(lines) for name, lines in sorted(info.contexts.items())}
+                coverage_payload["contexts_count"] = {name: len(lines) for name, lines in coverage_payload["contexts"].items()}
+            result["coverage"] = coverage_payload
 
-def compose_inventory(paths: Paths, options: Options, files: list[dict[str, Any]], warnings: list[str]) -> dict[str, Any]:
+    return result
+
+
+def compose_inventory(
+    paths: Paths,
+    options: Options,
+    files: list[dict[str, Any]],
+    warnings: list[str],
+    coverage_sources: list[str] | None = None,
+    git_churn_summary: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     total_functions = 0
     total_classes = 0
     stats_counter = Counter()
@@ -2000,6 +2379,8 @@ def compose_inventory(paths: Paths, options: Options, files: list[dict[str, Any]
         "total_classes": total_classes,
         "scan_depth": "recursive",
     }
+    if coverage_sources:
+        metadata["coverage_sources"] = coverage_sources
 
     statistics = {
         "total_lines_of_code": total_lines,
@@ -2008,6 +2389,32 @@ def compose_inventory(paths: Paths, options: Options, files: list[dict[str, Any]
         "public_functions": public_count,
         "async_functions": async_count,
     }
+
+    coverage_files = 0
+    coverage_executed = 0
+    coverage_missing = 0
+    for entry in files:
+        coverage_block = entry.get("coverage")
+        if not coverage_block:
+            continue
+        coverage_files += 1
+        coverage_executed += int(coverage_block.get("executed_count", 0))
+        coverage_missing += int(coverage_block.get("missing_count", 0))
+    if coverage_sources or coverage_files:
+        tracked = coverage_executed + coverage_missing
+        coverage_summary: dict[str, Any] = {
+            "sources": len(coverage_sources or []),
+            "files_with_data": coverage_files,
+            "executed_lines": coverage_executed,
+            "missing_lines": coverage_missing,
+            "tracked_lines": tracked,
+        }
+        if tracked:
+            coverage_summary["line_rate"] = round(coverage_executed / tracked, 4)
+        statistics["coverage"] = coverage_summary
+
+    if git_churn_summary:
+        statistics["git_churn"] = git_churn_summary
 
     payload = {
         "metadata": metadata,
@@ -2291,10 +2698,18 @@ def run(argv: Iterable[str] | None = None) -> int:
         logging.error("No Python files found under %s", paths.target)
         return 1
 
+    coverage_index, coverage_sources = load_coverage_reports(paths, options.coverage_inputs)
+
     warnings: list[str] = []
     collected: list[dict[str, Any]] = []
     for file_path in python_files:
-        result = analyze_python_file(file_path, paths.target, warnings)
+        result = analyze_python_file(
+            file_path,
+            paths.target,
+            warnings,
+            coverage=coverage_index,
+            repo_root=paths.repo_root,
+        )
         if result:
             collected.append(result)
 
@@ -2302,7 +2717,9 @@ def run(argv: Iterable[str] | None = None) -> int:
         logging.error("All Python files failed to parse under %s", paths.target)
         return 1
 
-    payload = compose_inventory(paths, options, collected, warnings)
+    git_churn_summary = attach_git_churn(paths, collected, warnings)
+
+    payload = compose_inventory(paths, options, collected, warnings, coverage_sources, git_churn_summary)
     summary = build_screening_summary(payload["files"])
     output_file = write_inventory(paths, payload, summary)
     logging.info(

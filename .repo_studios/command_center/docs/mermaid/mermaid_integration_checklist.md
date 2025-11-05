@@ -66,19 +66,54 @@
   - Past: Serialized `call_graph.edges` with resolution metadata (`local_function`, `local_method`, `imported`, `builtin`) and exposed summaries for downstream viewers.
   - Present: Monitoring downstream consumers while we prep base-class capture to unlock richer path visualizations.
   - Future: Feed the viewer adapters once commandview artifacts adopt the new slug and reference schema version 2+.
-- [ ] Record base classes for every class definition in the analysis payload. *(Diff hint: extend class visitor logic to serialize `node.bases` via `_safe_unparse`.)*
-- [ ] Capture method-to-method call chains including bound method targets. *(Diff hint: resolve attribute calls (`ast.Attribute`) to owning class/function before storing in the call graph structure.)*
-  - [ ] Sub-step: Extend resolver to follow chained attributes (e.g., `self.service.run`) once service-object discovery is defined.
-- [ ] Compute cyclomatic complexity per function and attach as `cyclomatic_complexity`. *(Diff hint: add a helper that counts decision points (`if`, `for`, `while`, `try`, `and`, `or`) and integrate within function analysis.)*
-- [ ] Surface per-function type hint coverage (already collected ratios) in a dedicated field for visualization. *(Diff hint: ensure `annotation_ratio` is propagated in the serialized JSON; no structural change needed.)*
-- [ ] Surface docstring quality metrics alongside coverage data for downstream rendering. *(Diff hint: confirm `docstring_quality` block is part of each function record; export if missing.)*
-- [ ] Persist `used_globals`, `io_effects`, `raises`, `logging_calls`, and decorator metadata in consistent top-level keys for consumption. *(Diff hint: revisit serialization to guarantee these collections are emitted unaltered.)*
-- [ ] Capture unused imports and unreachable functions to support dead code mapping. *(Diff hint: integrate the planned call graph with per-module symbol tables to flag never-invoked functions and orphaned imports.)*
-- [ ] Integrate optional coverage artifacts (e.g., `coverage.json`) to map tests to functions. *(Diff hint: add CLI flag to ingest external coverage data and merge into the serialized inventory structure.)*
-- [ ] Thread git churn metrics into the inventory (lines changed, commit frequency). *(Diff hint: introduce a post-processing step that shells out to `git log --stat` and summarizes per-file churn stats.)*
-- [ ] Add accompanying unit and integration tests under `.repo_studios/tests/tests_command_center/producers` to cover each new data field and confirm JSON schema stability.
-- [ ] Update developer documentation (e.g., `.repo_studios/command_center/docs/` and relevant READMEs) describing new metrics, file naming, and expected consumer behaviour.
-- [ ] Record migration notes outlining how downstream tools should adapt to the enriched inventory payload.
+- [x] Record base classes for every class definition in the analysis payload. *(Completed 2025-11-05: class visitors already emit `bases`, and regression coverage in `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_inventory_records_class_bases` safeguards the output.)*
+  - Past: Verified serialized `bases` list for inheritance chains and ensured derived classes surface each parent, adding unit coverage.
+  - Present: Monitoring for downstream consumers that may need normalized base metadata.
+  - Future: Expand relationships block when viewer needs richer inheritance overlays.
+- [x] Capture method-to-method call chains including bound method targets. *(Completed 2025-11-05: call graph resolver maps `self`/`cls` attribute calls to local methods, with coverage in `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_call_graph_resolves_local_and_imported_calls`.)*
+  - Past: Verified method-to-method edges (`self.method()`) resolve to class members and added regression coverage.
+  - Present: Observing real inventories to confirm no regressions when methods are invoked via bound instances.
+  - Future: Extend resolver to follow chained attributes (e.g., `self.service.run`) once service-object discovery is defined so delegating facades are captured.
+- [x] Compute cyclomatic complexity per function and attach as `cyclomatic_complexity`. *(Completed 2025-11-05: `_cyclomatic_complexity()` walks the AST to count branches/loops/bool ops, stored per function/method.)*
+  - Past: Added `_cyclomatic_complexity()` helper, serialized the value, and covered it via `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_cyclomatic_complexity_counts_branches`.
+  - Present: Monitoring outputs for edge cases (e.g., comprehensions, match statements) while viewer binding logic evolves.
+  - Future: Expose thresholds in code smell reporting to flag high-complexity functions once viewer overlays are ready.
+- [x] Surface per-function type hint coverage (already collected ratios) in a dedicated field for visualization. *(Completed 2025-11-05: function records now expose `type_hint_coverage` sourced from `_annotation_quality` coverage ratios.)*
+  - Past: Added `type_hint_coverage` to function payloads and regression coverage in `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_type_hint_coverage_reports_ratio`.
+  - Present: Watching inventories for legacy functions lacking annotations to ensure downstream consumers handle `0`/`None` gracefully.
+  - Future: Feed coverage metrics into viewer overlays and command center reports.
+- [x] Surface docstring quality metrics alongside coverage data for downstream rendering. *(Completed 2025-11-05: `docstring_quality` already emitted keys; checklist now tracks exposure for viewer consumption and `test_inventory_generates_structured_output` asserts presence.)*
+  - Past: Reviewed existing payload ensuring `docstring_quality` dictionary contains counts/sections and verified regression coverage already exercises the field.
+  - Present: Educating downstream consumers to read the structure directly without additional shims.
+  - Future: Feed docstring quality scores into viewer overlays and quality reports.
+- [x] Persist `used_globals`, `io_effects`, `raises`, `logging_calls`, and decorator metadata in consistent top-level keys for consumption. *(Completed 2025-11-05: serialization now retains these collections for functions, methods, and classes, including detailed decorator records and regression coverage in `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_function_metadata_persists_effects_and_decorators`.)*
+  - Past: Hardened `_extract_function` and `_extract_class` so they emit sorted globals, IO effects, raises, logging calls, and decorator metadata without mutation, plus added class-level decorator detail.
+  - Present: Watching freshly generated inventories to confirm downstream consumers read the enriched fields without additional adapters.
+  - Future: Feed these metrics into the global state, IO, logging, and decorator viewer packs as diagram scaffolding lands.
+- [x] Capture unused imports and unreachable functions to support dead code mapping. *(Completed 2025-11-05: module payloads now expose `unused_imports` and `unreachable_functions`, derived from the import graph and call graph, with regression coverage in `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_unused_imports_and_unreachable_functions_reported`.)*
+  - Past: Added `_collect_unused_imports()` and `_identify_unreachable_functions()` helpers so each module entry publishes explicit lists for viewer consumption.
+  - Present: Monitoring real inventories to verify downstream tooling interprets the new collections without additional adapters.
+  - Future: Layer dead-code visualizations once viewer templates ingest the unused symbol feeds.
+- [x] Integrate optional coverage artifacts (e.g., `coverage.json`) to map tests to functions. *(Completed 2025-11-05: `--coverage-json` flag threads coverage reports into the inventory payload with per-module line stats and aggregated metadata.)*
+  - Past: Added `CoverageIndex` loader, attached coverage blocks (executed/missing lines, contexts, counts, line rate) to module entries, surfaced source list plus coverage summary in `metadata`/`statistics`, and introduced regression test `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_inventory_merges_coverage_reports`.
+  - Present: Validating with real coverage exports to ensure relative path resolution remains stable across OS differences and that contexts map cleanly for viewer adapters.
+  - Future: Extend coverage ingestion to stitch executed functions back to individual test nodes once richer context metadata lands in downstream packs.
+- [x] Thread git churn metrics into the inventory (lines changed, commit frequency). *(Completed 2025-11-05: `git log --numstat --follow` summaries now attach per-file churn blocks and aggregated stats for viewer packs.)*
+  - Past: Added git helpers that normalize repo-relative paths, attach `git_churn` blocks (commit counts, additions, deletions, net changes, latest commit metadata) to each module entry, and surfaced summary stats within inventory outputs; regression coverage lives in `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_inventory_includes_git_churn_summary`.
+  - Present: Monitoring inventories generated on large modules to verify command performance and warning handling when files fall outside the repo scope.
+  - Future: Extend churn aggregation with moving-average windows and risk scoring once downstream viewers request finer granularity.
+- [x] Add accompanying unit and integration tests under `.repo_studios/tests/tests_command_center/producers` to cover each new data field and confirm JSON schema stability.
+  - Past: Introduced `.repo_studios/tests/tests_command_center/producers/test_generate_function_inventory_command_center.py` validating coverage metadata, git churn summaries, and mirrored report synchronization via the CLI entry point; refreshed producer tests continue to guard schema fields.
+  - Present: Watching nightly command center runs to ensure git-aware environments satisfy churn expectations and to flag any repositories lacking Git history (warnings already emitted to the payload).
+  - Future: Expand schema validation once viewer schemas stabilize, layering jsonschema assertions over the emitted payloads.
+- [x] Update developer documentation (e.g., `.repo_studios/command_center/docs/` and relevant READMEs) describing new metrics, file naming, and expected consumer behaviour.
+  - Past: Refreshed `docs/automation/function_inventory_integration_plan.md` with the expanded schema (coverage, churn, call graph, decorator, and docstring quality fields) and documented the `--coverage-json` option; amended `mermaid_viewer.md` to capture coverage/churn overlay expectations for packs.
+  - Present: Coordinating with viewer authors to fold the new metadata descriptions into pack-specific design notes and to flag any missing schema anchors.
+  - Future: Extend documentation with JSON schema snippets and operator tutorials once commandview naming lands, ensuring downstream teams have copy-ready references.
+- [x] Record migration notes outlining how downstream tools should adapt to the enriched inventory payload.
+  - Past: Authored `.repo_studios/command_center/docs/mermaid/inventory_migration_notes.md` summarizing coverage and churn additions, consumer action items, and compatibility guidance for commandview packs, aggregators, and tests.
+  - Present: Coordinating with viewer maintainers to fold the migration guidance into pack templates and to gather feedback on any missing schema signals.
+  - Future: Refresh migration notes once commandview artifact naming lands and we introduce schema v3 with finalized viewer overlays.
 - **CommandView Transition (Planned)**
   - [ ] Adopt the new artifact naming pattern `<source_folder>_commandview_YYYYMMDD-HHMM.json` for both target and mirrored outputs. *(Diff hint: update `write_report_artifacts()` invocation in `generate_function_inventory.py` to build filenames with the new slug.)*
   - [ ] Rename `generate_function_inventory.py` to `generate_commandview_inventory.py` and update all imports, CLI entry points, Makefile targets, and orchestrator references accordingly. *(Diff hint: adjust module path exports and ensure tests import the new module name.)*

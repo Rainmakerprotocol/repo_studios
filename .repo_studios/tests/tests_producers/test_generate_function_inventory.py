@@ -6,6 +6,7 @@ import json
 import sys
 from pathlib import Path
 from typing import Any
+import subprocess
 
 
 MODULE_PATH = (
@@ -42,6 +43,12 @@ def teardown_module() -> None:  # pragma: no cover - cleanup hook
 def _write(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
+
+
+def _git(args: list[str], cwd: Path) -> None:
+    completed = subprocess.run(["git", *args], cwd=str(cwd), capture_output=True, text=True)
+    if completed.returncode != 0:
+        raise AssertionError(f"git {' '.join(args)} failed: {completed.stderr}")
 
 
 def test_inventory_generates_structured_output(tmp_path: Path) -> None:
@@ -113,6 +120,8 @@ def helper(value):
     assert helper_entry["locals_summary"]["assign"] == 0
     assert helper_entry["line_count"] == 2
     assert helper_entry["io_effects"] == {"reads": False, "writes": False, "env": False, "network": False}
+    assert helper_entry["cyclomatic_complexity"] == 1
+    assert helper_entry["type_hint_coverage"] == 0
     class_names = {cls["name"] for cls in module_entry["classes"]}
     assert class_names == {"Example"}
     class_entry = module_entry["classes"][0]
@@ -144,6 +153,115 @@ def helper(value):
     central_summary = list(reports_dir.glob("sample_pkg_screening-*.json"))
     assert len(central_summary) == 1
     assert json.loads(central_summary[0].read_text(encoding="utf-8")) == summary_payload
+
+
+def test_inventory_merges_coverage_reports(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    target = repo_root / "pkg"
+    _write(target / "__init__.py", "")
+    _write(
+        target / "module.py",
+        (
+            "def act(value: int) -> int:\n"
+            "    if value > 0:\n"
+            "        return value + 1\n"
+            "    return value - 1\n"
+        ),
+    )
+
+    coverage_payload = {
+        "files": {
+            "pkg/module.py": {
+                "executed_lines": [1, 2, 3],
+                "missing_lines": [4],
+                "contexts": {"tests": [1, 2]},
+            }
+        }
+    }
+    coverage_file = repo_root / "coverage.json"
+    coverage_file.write_text(json.dumps(coverage_payload), encoding="utf-8")
+
+    exit_code = run_inventory(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--coverage-json",
+            str(coverage_file),
+            str(target),
+        ]
+    )
+    assert exit_code == 0
+
+    output_dir = target / "pkg_index"
+    output_file = next(output_dir.glob("pkg_index-*.json"))
+    payload = json.loads(output_file.read_text(encoding="utf-8"))
+
+    metadata = payload["metadata"]
+    assert metadata.get("coverage_sources") == ["coverage.json"]
+
+    statistics = payload["statistics"]
+    coverage_stats = statistics.get("coverage")
+    assert coverage_stats is not None
+    assert coverage_stats["sources"] == 1
+    assert coverage_stats["files_with_data"] == 1
+    assert coverage_stats["executed_lines"] == 3
+    assert coverage_stats["missing_lines"] == 1
+    assert coverage_stats["tracked_lines"] == 4
+    assert coverage_stats["line_rate"] == 0.75
+
+    module_entry = next(entry for entry in payload["files"] if entry["relative_path"] == "module.py")
+    coverage_entry = module_entry.get("coverage")
+    assert coverage_entry is not None
+    assert coverage_entry["executed_lines"] == [1, 2, 3]
+    assert coverage_entry["missing_lines"] == [4]
+    assert coverage_entry["executed_count"] == 3
+    assert coverage_entry["missing_count"] == 1
+    assert coverage_entry["tracked_count"] == 4
+    assert coverage_entry["line_rate"] == 0.75
+    assert coverage_entry["contexts"] == {"tests": [1, 2]}
+    assert coverage_entry["contexts_count"] == {"tests": 2}
+
+
+def test_inventory_includes_git_churn_summary(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    _git(["init"], repo_root)
+    _git(["config", "user.email", "ci@example.com"], repo_root)
+    _git(["config", "user.name", "CI"], repo_root)
+
+    target = repo_root / "pkg"
+    _write(target / "__init__.py", "")
+    _write(target / "module.py", "def act():\n    return 1\n")
+    _git(["add", "pkg/__init__.py", "pkg/module.py"], repo_root)
+    _git(["commit", "-m", "Initial"], repo_root)
+
+    _write(target / "module.py", "def act(value: int) -> int:\n    return value + 1\n")
+    _git(["add", "pkg/module.py"], repo_root)
+    _git(["commit", "-m", "Adjust"], repo_root)
+
+    exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+    assert exit_code == 0
+
+    output_dir = target / "pkg_index"
+    output_file = next(output_dir.glob("pkg_index-*.json"))
+    payload = json.loads(output_file.read_text(encoding="utf-8"))
+
+    module_entry = next(entry for entry in payload["files"] if entry["relative_path"] == "module.py")
+    churn = module_entry.get("git_churn")
+    assert churn is not None
+    assert churn["commit_count"] >= 2
+    assert churn["additions"] >= 1
+    assert churn["deletions"] >= 0
+    assert churn["net_changes"] == churn["additions"] - churn["deletions"]
+    latest = churn["latest_commit"]
+    assert latest["hash"]
+    assert latest["timestamp"].endswith("+00:00")
+
+    stats = payload["statistics"].get("git_churn")
+    assert stats is not None
+    assert stats["files_with_data"] >= 1
+    assert stats["total_commits"] >= churn["commit_count"]
+    assert stats["total_additions"] >= churn["additions"]
+    assert stats["net_changes"] == stats["total_additions"] - stats["total_deletions"]
 
 
 def test_inventory_captures_warnings_for_problem_files(tmp_path: Path) -> None:
@@ -323,6 +441,200 @@ def test_call_graph_resolves_local_and_imported_calls(tmp_path: Path) -> None:
 
     assert set(call_graph.get("external_modules", [])) == {"json", "math"}
     assert call_graph["by_function"][outer_source]["total"] == 4
+
+
+def test_inventory_records_class_bases(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    target = repo_root / "pkg"
+    _write(target / "__init__.py", "")
+    _write(
+        target / "module.py",
+        (
+            "class Base:\n"
+            "    pass\n\n"
+            "class Mixin:\n"
+            "    pass\n\n"
+            "class Derived(Base, Mixin):\n"
+            "    def act(self):\n"
+            "        return super().act() if hasattr(super(), 'act') else None\n"
+        ),
+    )
+
+    exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+    assert exit_code == 0
+
+    output_dir = target / "pkg_index"
+    payload = json.loads(next(output_dir.glob("pkg_index-*.json")).read_text(encoding="utf-8"))
+    module_entry = next(entry for entry in payload["files"] if entry["relative_path"] == "module.py")
+    classes = {cls["name"]: cls for cls in module_entry["classes"]}
+    assert classes["Base"]["bases"] == []
+    assert classes["Mixin"]["bases"] == []
+    assert classes["Derived"]["bases"] == ["Base", "Mixin"]
+
+
+def test_cyclomatic_complexity_counts_branches(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    target = repo_root / "work"
+    _write(target / "__init__.py", "")
+    _write(
+        target / "module.py",
+        (
+            "def decision(value):\n"
+            "    total = 0\n"
+            "    for item in value:\n"
+            "        if item and item > 0:\n"
+            "            total += item\n"
+        
+            "        elif item == 0:\n"
+            "            total += 1\n"
+            "        else:\n"
+            "            total -= item\n"
+            "    while total > 10 and any(v < 0 for v in value):\n"
+            "        total -= 1\n"
+            "    return total\n"
+        ),
+    )
+
+    exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+    assert exit_code == 0
+
+    output_dir = target / "work_index"
+    payload = json.loads(next(output_dir.glob("work_index-*.json")).read_text(encoding="utf-8"))
+    module_entry = next(entry for entry in payload["files"] if entry["relative_path"] == "module.py")
+    decision_entry = module_entry["functions"][0]
+    assert decision_entry["cyclomatic_complexity"] == 8
+    assert decision_entry["type_hint_coverage"] == 0
+
+
+def test_type_hint_coverage_reports_ratio(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    target = repo_root / "annot"
+    _write(target / "__init__.py", "")
+    _write(
+        target / "module.py",
+        (
+            "def fully_typed(a: int, b: str) -> bool:\n"
+            "    return str(a) == b\n\n"
+            "def partially_typed(a: int, b: str, c, d) -> None:\n"
+            "    return None\n"
+        ),
+    )
+
+    exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+    assert exit_code == 0
+
+    output_dir = target / "annot_index"
+    payload = json.loads(next(output_dir.glob("annot_index-*.json")).read_text(encoding="utf-8"))
+    module_entry = next(entry for entry in payload["files"] if entry["relative_path"] == "module.py")
+    by_name = {func["name"]: func for func in module_entry["functions"]}
+    assert by_name["fully_typed"]["type_hint_coverage"] == 1
+    assert by_name["partially_typed"]["type_hint_coverage"] == 0.5
+
+
+def test_function_metadata_persists_effects_and_decorators(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    target = repo_root / "effects"
+    _write(target / "__init__.py", "")
+    _write(
+        target / "module.py",
+        (
+            "import logging\n\n"
+            "GLOBAL = 0\n\n"
+            "def identity(fn):\n"
+            "    return fn\n\n"
+            "@identity\n"
+            "def decorated_function(path):\n"
+            "    global GLOBAL\n"
+            "    logging.info('start')\n"
+            "    with open(path, 'w+') as handle:\n"
+            "        handle.write('data')\n"
+            "    if GLOBAL < 0:\n"
+            "        raise ValueError('bad state')\n"
+            "    return path\n\n"
+            "@identity\n"
+            "class DecoratedClass:\n"
+            "    @classmethod\n"
+            "    def build(cls, filename):\n"
+            "        global GLOBAL\n"
+            "        logging.error('failure')\n"
+            "        with open(filename) as handle:\n"
+            "            data = handle.read()\n"
+            "        if data:\n"
+            "            return data\n"
+            "        raise RuntimeError('empty file')\n"
+        ),
+    )
+
+    exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+    assert exit_code == 0
+
+    output_dir = target / "effects_index"
+    payload = json.loads(next(output_dir.glob("effects_index-*.json")).read_text(encoding="utf-8"))
+    module_entry = next(entry for entry in payload["files"] if entry["relative_path"] == "module.py")
+
+    functions = {func["name"]: func for func in module_entry["functions"]}
+    decorated_func = functions["decorated_function"]
+
+    assert decorated_func["used_globals"] == ["GLOBAL"]
+    assert decorated_func["io_effects"] == {"reads": True, "writes": True, "env": False, "network": False}
+    assert any(item["exception"] == "ValueError('bad state')" for item in decorated_func["raises"])
+    assert any(call["level"] == "info" for call in decorated_func["logging_calls"])
+    assert decorated_func["decorators"] == ["identity"]
+    assert decorated_func["decorators_detailed"]
+
+    decorated_class = next(cls for cls in module_entry["classes"] if cls["name"] == "DecoratedClass")
+    assert decorated_class["decorators"] == ["identity"]
+    assert decorated_class["decorators_detailed"]
+
+    method_entry = next(method for method in decorated_class["methods"] if method["name"].endswith("build"))
+    assert method_entry["used_globals"] == ["GLOBAL"]
+    assert method_entry["io_effects"] == {"reads": True, "writes": False, "env": False, "network": False}
+    assert any(item["exception"] == "RuntimeError('empty file')" for item in method_entry["raises"])
+    assert any(call["level"] == "error" for call in method_entry["logging_calls"])
+    assert "classmethod" in method_entry["decorators"]
+    assert method_entry["decorators_detailed"]
+
+
+def test_unused_imports_and_unreachable_functions_reported(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    target = repo_root / "deadcode"
+    _write(target / "__init__.py", "")
+    _write(
+        target / "module.py",
+        (
+            "import logging\n"
+            "from math import sqrt\n\n"
+            "def used(value):\n"
+            "    return sqrt(value)\n\n"
+            "def execute(value):\n"
+            "    return orchestrate(value)\n\n"
+            "def orchestrate(value):\n"
+            "    helper = Sample()\n"
+            "    return helper.active(value)\n\n"
+            "def unused_helper(value):\n"
+            "    return value + 1\n\n"
+            "class Sample:\n"
+            "    def active(self, value):\n"
+            "        return used(value)\n\n"
+            "    def orphan(self, value):\n"
+            "        return value - 1\n"
+        ),
+    )
+
+    exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+    assert exit_code == 0
+
+    output_dir = target / "deadcode_index"
+    payload = json.loads(next(output_dir.glob("deadcode_index-*.json")).read_text(encoding="utf-8"))
+    module_entry = next(entry for entry in payload["files"] if entry["relative_path"] == "module.py")
+
+    unused_imports = module_entry["unused_imports"]
+    assert any(item["target"] == "logging" for item in unused_imports)
+
+    unreachable = module_entry["unreachable_functions"]
+    unreachable_names = {item["qualified_name"] for item in unreachable}
+    assert any(name.endswith("unused_helper") for name in unreachable_names)
+    assert any(name.endswith("Sample.orphan") for name in unreachable_names)
 
 
 def test_inventory_errors_when_no_python_files(tmp_path: Path) -> None:
