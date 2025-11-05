@@ -12,7 +12,7 @@
 
 ## Inputs
 
-- Analysis dataset: `.repo_studios/scripts/summarizers/summarizers_index/summarizers_analysis-2025-10-28.json`
+- Analysis dataset: `.repo_studios/scripts/summarizers/summarizers_index/summarizers_analysis-2025-11-04.json`
 - Run generated with scan_duplicates CLI
 
 ## Top Duplicate Offenders

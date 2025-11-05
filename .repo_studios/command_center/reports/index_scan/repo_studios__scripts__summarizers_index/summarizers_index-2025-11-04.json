@@ -1,0 +1,3983 @@
+{
+  "files": [
+    {
+      "classes": [],
+      "entrypoints": {
+        "cli_parser": true,
+        "has_main_guard": true
+      },
+      "functions": [
+        {
+          "annotations": {
+            "args": {
+              "default": "str",
+              "path": "Path"
+            },
+            "return": "str"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "path",
+              "default"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "path.read_text",
+              "lineno": 23
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "try",
+          "hash": "20c3c70e1a2a166b0c72d80e4a215b37607c94ac",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 21,
+          "line_count": 5,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 1,
+            "calls": 1
+          },
+          "logging_calls": [],
+          "name": "_read_text",
+          "qualified_name": "summarizers.summarize_health_suite::_read_text",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _read_text(path: Path, default: str = \"(missing)\") -> str:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 21,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "base": "Path"
+            },
+            "return": "Path | None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "base"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "base.exists",
+              "lineno": 29
+            },
+            {
+              "callee": "sorted",
+              "lineno": 34
+            },
+            {
+              "callee": "base.iterdir",
+              "lineno": 31
+            },
+            {
+              "callee": "p.is_dir",
+              "lineno": 31
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "if",
+          "hash": "91ee70b62287d7a6db7e3d81064f54d755db31e6",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 28,
+          "line_count": 7,
+          "locals_summary": {
+            "assign": 1,
+            "branches": 2,
+            "calls": 4
+          },
+          "logging_calls": [],
+          "name": "_latest_dir",
+          "qualified_name": "summarizers.summarize_health_suite::_latest_dir",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _latest_dir(base: Path) -> Path | None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 28,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "base": "Path",
+              "ts": "str"
+            },
+            "return": "Path | None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "base",
+              "ts"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_latest_dir",
+              "lineno": 52
+            },
+            {
+              "callee": "candidate.exists",
+              "lineno": 47
+            },
+            {
+              "callee": "candidate.is_dir",
+              "lineno": 47
+            }
+          ],
+          "decorators": [],
+          "docstring": "Return base/ts if it exists, else fall back to the latest directory.",
+          "first_stmt_kind": "expr",
+          "hash": "06e915f9e3fb9de622cd203a9f21b09a2a4b9c72",
+          "intra_file_refs": [
+            {
+              "callee_func": "_latest_dir",
+              "lineno": 52
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 37,
+          "line_count": 16,
+          "locals_summary": {
+            "assign": 1,
+            "branches": 3,
+            "calls": 3
+          },
+          "logging_calls": [],
+          "name": "_prefer_ts",
+          "qualified_name": "summarizers.summarize_health_suite::_prefer_ts",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _prefer_ts(base: Path, ts: str) -> Path | None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 37,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "lines": "list[str]"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "lines"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "lines[-1].strip",
+              "lineno": 56
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 57
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "if",
+          "hash": "be19fcbaae055b104932993b127ad9233766da96",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 55,
+          "line_count": 3,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 1,
+            "calls": 2
+          },
+          "logging_calls": [],
+          "name": "_ensure_blank_separator",
+          "qualified_name": "summarizers.summarize_health_suite::_ensure_blank_separator",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def _ensure_blank_separator(lines: list[str]) -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": []
+        },
+        {
+          "annotations": {
+            "args": {
+              "level": "int",
+              "lines": "list[str]",
+              "title": "str"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "lines",
+              "level",
+              "title"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_ensure_blank_separator",
+              "lineno": 61
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 62
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 63
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "expr",
+          "hash": "d128d9924640d0148d92955e74f30b8211459ae9",
+          "intra_file_refs": [
+            {
+              "callee_func": "_ensure_blank_separator",
+              "lineno": 61
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 60,
+          "line_count": 4,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 0,
+            "calls": 3
+          },
+          "logging_calls": [],
+          "name": "_append_section_header",
+          "qualified_name": "summarizers.summarize_health_suite::_append_section_header",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def _append_section_header(lines: list[str], level: int, title: str) -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": []
+        },
+        {
+          "annotations": {
+            "args": {
+              "lines": "list[str]",
+              "text": "str"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "lines",
+              "text"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_ensure_blank_separator",
+              "lineno": 69
+            },
+            {
+              "callee": "text.splitlines",
+              "lineno": 70
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 72
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 71
+            },
+            {
+              "callee": "chunk.rstrip",
+              "lineno": 71
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "if",
+          "hash": "3911c80eb2dbd685fcb37ec35f9148977d50af2e",
+          "intra_file_refs": [
+            {
+              "callee_func": "_ensure_blank_separator",
+              "lineno": 69
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 66,
+          "line_count": 7,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 2,
+            "calls": 5
+          },
+          "logging_calls": [],
+          "name": "_append_paragraph",
+          "qualified_name": "summarizers.summarize_health_suite::_append_paragraph",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def _append_paragraph(lines: list[str], text: str) -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": []
+        },
+        {
+          "annotations": {
+            "args": {
+              "items": "list[str]",
+              "lines": "list[str]"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "lines",
+              "items"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_ensure_blank_separator",
+              "lineno": 77
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 80
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 79
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "84515c545a491c147219608b8e785707113d2f2c",
+          "intra_file_refs": [
+            {
+              "callee_func": "_ensure_blank_separator",
+              "lineno": 77
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 75,
+          "line_count": 6,
+          "locals_summary": {
+            "assign": 1,
+            "branches": 1,
+            "calls": 3
+          },
+          "logging_calls": [],
+          "name": "_append_list",
+          "qualified_name": "summarizers.summarize_health_suite::_append_list",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def _append_list(lines: list[str], items: list[str]) -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": []
+        },
+        {
+          "annotations": {
+            "args": {
+              "lines": "list[str]",
+              "rows": "list[str]"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "lines",
+              "rows"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_ensure_blank_separator",
+              "lineno": 86
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 89
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 88
+            },
+            {
+              "callee": "row.rstrip",
+              "lineno": 88
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "if",
+          "hash": "ba55754f7fa2c7cd0413555c458ea894d71ac61a",
+          "intra_file_refs": [
+            {
+              "callee_func": "_ensure_blank_separator",
+              "lineno": 86
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 83,
+          "line_count": 7,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 2,
+            "calls": 4
+          },
+          "logging_calls": [],
+          "name": "_append_table",
+          "qualified_name": "summarizers.summarize_health_suite::_append_table",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def _append_table(lines: list[str], rows: list[str]) -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": []
+        },
+        {
+          "annotations": {
+            "args": {
+              "lines": "list[str]",
+              "rows": "list[str]"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "lines",
+              "rows"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_ensure_blank_separator",
+              "lineno": 95
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 99
+            },
+            {
+              "callee": "row.rstrip",
+              "lineno": 97
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 98
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "if",
+          "hash": "27c6badcdd64e4e306a34b3e400538d6f3007867",
+          "intra_file_refs": [
+            {
+              "callee_func": "_ensure_blank_separator",
+              "lineno": 95
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 92,
+          "line_count": 8,
+          "locals_summary": {
+            "assign": 1,
+            "branches": 2,
+            "calls": 4
+          },
+          "logging_calls": [],
+          "name": "_append_blockquote",
+          "qualified_name": "summarizers.summarize_health_suite::_append_blockquote",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def _append_blockquote(lines: list[str], rows: list[str]) -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": []
+        },
+        {
+          "annotations": {
+            "args": {
+              "default": "int",
+              "value": "object"
+            },
+            "return": "int"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "value",
+              "default"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "int",
+              "lineno": 104
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "try",
+          "hash": "e9f3617fde10e879760a7a0fbbcd33260bb3ff4e",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 102,
+          "line_count": 5,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 1,
+            "calls": 1
+          },
+          "logging_calls": [],
+          "name": "_to_int",
+          "qualified_name": "summarizers.summarize_health_suite::_to_int",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _to_int(value: object, default: int = 0) -> int:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": []
+        },
+        {
+          "annotations": {
+            "args": {
+              "path": "Path"
+            },
+            "return": "dict | None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "path"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "json.loads",
+              "lineno": 111
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 114
+            },
+            {
+              "callee": "path.read_text",
+              "lineno": 111
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "try",
+          "hash": "803134990b0a188f769d48838e223e174d93c62e",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 109,
+          "line_count": 6,
+          "locals_summary": {
+            "assign": 1,
+            "branches": 1,
+            "calls": 3
+          },
+          "logging_calls": [],
+          "name": "_read_json_dict",
+          "qualified_name": "summarizers.summarize_health_suite::_read_json_dict",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _read_json_dict(path: Path) -> dict | None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 109,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 111,
+              "symbol": "json",
+              "via": "json"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "heading": "str",
+              "report": "str"
+            },
+            "return": "list[str]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "report",
+              "heading"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "report.splitlines",
+              "lineno": 120
+            },
+            {
+              "callee": "raw.strip",
+              "lineno": 121
+            },
+            {
+              "callee": "stripped.startswith",
+              "lineno": 122
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 129
+            },
+            {
+              "callee": "raw.rstrip",
+              "lineno": 129
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "annassign",
+          "hash": "099fec01e90b1f2a6ecca4203aa4d00b82f578e0",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 117,
+          "line_count": 14,
+          "locals_summary": {
+            "assign": 4,
+            "branches": 5,
+            "calls": 5
+          },
+          "logging_calls": [],
+          "name": "_extract_section_lines",
+          "qualified_name": "summarizers.summarize_health_suite::_extract_section_lines",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _extract_section_lines(report: str, heading: str) -> list[str]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": []
+        },
+        {
+          "annotations": {
+            "args": {
+              "heading": "str",
+              "limit": "int | None",
+              "report": "str"
+            },
+            "return": "list[str]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "report",
+              "heading",
+              "limit"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "report.splitlines",
+              "lineno": 136
+            },
+            {
+              "callee": "raw.strip",
+              "lineno": 137
+            },
+            {
+              "callee": "stripped.startswith",
+              "lineno": 138
+            },
+            {
+              "callee": "stripped.startswith",
+              "lineno": 144
+            },
+            {
+              "callee": "items.append",
+              "lineno": 145
+            },
+            {
+              "callee": "stripped[2:].strip",
+              "lineno": 145
+            },
+            {
+              "callee": "len",
+              "lineno": 146
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "annassign",
+          "hash": "94d6c6b3f0068811c89d35c3554e9a3866e625c6",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 133,
+          "line_count": 16,
+          "locals_summary": {
+            "assign": 4,
+            "branches": 6,
+            "calls": 7
+          },
+          "logging_calls": [],
+          "name": "_extract_markdown_list",
+          "qualified_name": "summarizers.summarize_health_suite::_extract_markdown_list",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _extract_markdown_list(report: str, heading: str, limit: int | None = None) -> list[str]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": []
+        },
+        {
+          "annotations": {
+            "args": {
+              "root": "Path"
+            },
+            "return": "list[str]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "root"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_read_text(trend_latest, '').strip",
+              "lineno": 153
+            },
+            {
+              "callee": "line.rstrip",
+              "lineno": 156
+            },
+            {
+              "callee": "_read_text",
+              "lineno": 153
+            },
+            {
+              "callee": "trend_txt.splitlines",
+              "lineno": 156
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "b22928c45a8ac301ad4fec2d416c7cf9593ce7db",
+          "intra_file_refs": [
+            {
+              "callee_func": "_read_text",
+              "lineno": 153
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 151,
+          "line_count": 6,
+          "locals_summary": {
+            "assign": 2,
+            "branches": 1,
+            "calls": 4
+          },
+          "logging_calls": [],
+          "name": "_load_trend_head",
+          "qualified_name": "summarizers.summarize_health_suite::_load_trend_head",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _load_trend_head(root: Path) -> list[str]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 151,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "root": "Path",
+              "ts": "str"
+            },
+            "return": "tuple[str, Path | None]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "root",
+              "ts"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_prefer_ts",
+              "lineno": 161
+            },
+            {
+              "callee": "_read_text",
+              "lineno": 162
+            },
+            {
+              "callee": "line.strip",
+              "lineno": 163
+            },
+            {
+              "callee": "'\\n'.join",
+              "lineno": 164
+            },
+            {
+              "callee": "_extract_section_lines",
+              "lineno": 163
+            },
+            {
+              "callee": "line.strip",
+              "lineno": 163
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "7faebe3aca31f6f1c5ea6566656632d01d32f9d9",
+          "intra_file_refs": [
+            {
+              "callee_func": "_prefer_ts",
+              "lineno": 161
+            },
+            {
+              "callee_func": "_read_text",
+              "lineno": 162
+            },
+            {
+              "callee_func": "_extract_section_lines",
+              "lineno": 163
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 159,
+          "line_count": 7,
+          "locals_summary": {
+            "assign": 5,
+            "branches": 0,
+            "calls": 6
+          },
+          "logging_calls": [],
+          "name": "_load_dep_summary",
+          "qualified_name": "summarizers.summarize_health_suite::_load_dep_summary",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _load_dep_summary(root: Path, ts: str) -> tuple[str, Path | None]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 159,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "root": "Path",
+              "ts": "str"
+            },
+            "return": "tuple[list[str], list[str], list[str], Path | None]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "root",
+              "ts"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_prefer_ts",
+              "lineno": 176
+            },
+            {
+              "callee": "_extract_markdown_list",
+              "lineno": 178
+            },
+            {
+              "callee": "_extract_markdown_list",
+              "lineno": 182
+            },
+            {
+              "callee": "_extract_markdown_list",
+              "lineno": 186
+            },
+            {
+              "callee": "_read_text",
+              "lineno": 177
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "1f00a9950fd1e281b47f534c70864197c89beb10",
+          "intra_file_refs": [
+            {
+              "callee_func": "_prefer_ts",
+              "lineno": 176
+            },
+            {
+              "callee_func": "_extract_markdown_list",
+              "lineno": 178
+            },
+            {
+              "callee_func": "_extract_markdown_list",
+              "lineno": 182
+            },
+            {
+              "callee_func": "_extract_markdown_list",
+              "lineno": 186
+            },
+            {
+              "callee_func": "_read_text",
+              "lineno": 177
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 168,
+          "line_count": 26,
+          "locals_summary": {
+            "assign": 7,
+            "branches": 1,
+            "calls": 5
+          },
+          "logging_calls": [],
+          "name": "_load_import_graph",
+          "qualified_name": "summarizers.summarize_health_suite::_load_import_graph",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _load_import_graph(root: Path, ts: str) -> tuple[list[str], list[str], list[str], Path | None]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 168,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "root": "Path",
+              "ts": "str"
+            },
+            "return": "tuple[list[str], Path | None]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "root",
+              "ts"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_prefer_ts",
+              "lineno": 198
+            },
+            {
+              "callee": "_read_text",
+              "lineno": 199
+            },
+            {
+              "callee": "line.lstrip('- ').strip",
+              "lineno": 201
+            },
+            {
+              "callee": "_extract_section_lines",
+              "lineno": 202
+            },
+            {
+              "callee": "line.strip",
+              "lineno": 203
+            },
+            {
+              "callee": "line.lstrip",
+              "lineno": 201
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "9de6b323ad19d7f394ed9286a73d27686b9feda4",
+          "intra_file_refs": [
+            {
+              "callee_func": "_prefer_ts",
+              "lineno": 198
+            },
+            {
+              "callee_func": "_read_text",
+              "lineno": 199
+            },
+            {
+              "callee_func": "_extract_section_lines",
+              "lineno": 202
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 196,
+          "line_count": 10,
+          "locals_summary": {
+            "assign": 4,
+            "branches": 0,
+            "calls": 6
+          },
+          "logging_calls": [],
+          "name": "_load_test_health_summary",
+          "qualified_name": "summarizers.summarize_health_suite::_load_test_health_summary",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _load_test_health_summary(root: Path, ts: str) -> tuple[list[str], Path | None]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 196,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "root": "Path",
+              "ts": "str"
+            },
+            "return": "tuple[list[str], Path | None]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "root",
+              "ts"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_prefer_ts",
+              "lineno": 210
+            },
+            {
+              "callee": "cc_report.splitlines",
+              "lineno": 212
+            },
+            {
+              "callee": "next",
+              "lineno": 213
+            },
+            {
+              "callee": "_read_text",
+              "lineno": 211
+            },
+            {
+              "callee": "raw.strip",
+              "lineno": 221
+            },
+            {
+              "callee": "table_rows.append",
+              "lineno": 224
+            },
+            {
+              "callee": "raw.rstrip",
+              "lineno": 224
+            },
+            {
+              "callee": "len",
+              "lineno": 225
+            },
+            {
+              "callee": "enumerate",
+              "lineno": 214
+            },
+            {
+              "callee": "raw.strip().startswith",
+              "lineno": 214
+            },
+            {
+              "callee": "stripped.startswith",
+              "lineno": 222
+            },
+            {
+              "callee": "raw.strip",
+              "lineno": 214
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "31e3ed2945f7f9275e3b4eb2920dadb193e02256",
+          "intra_file_refs": [
+            {
+              "callee_func": "_prefer_ts",
+              "lineno": 210
+            },
+            {
+              "callee_func": "_read_text",
+              "lineno": 211
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 208,
+          "line_count": 20,
+          "locals_summary": {
+            "assign": 7,
+            "branches": 4,
+            "calls": 12
+          },
+          "logging_calls": [],
+          "name": "_load_churn_table",
+          "qualified_name": "summarizers.summarize_health_suite::_load_churn_table",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _load_churn_table(root: Path, ts: str) -> tuple[list[str], Path | None]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 208,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "root": "Path"
+            },
+            "return": "list[tuple[str, str, float]]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "root"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "tpath.exists",
+              "lineno": 232
+            },
+            {
+              "callee": "json.loads",
+              "lineno": 235
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 240
+            },
+            {
+              "callee": "data[-2].get",
+              "lineno": 240
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 241
+            },
+            {
+              "callee": "data[-1].get",
+              "lineno": 241
+            },
+            {
+              "callee": "results.append",
+              "lineno": 267
+            },
+            {
+              "callee": "tpath.read_text",
+              "lineno": 235
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 238
+            },
+            {
+              "callee": "len",
+              "lineno": 238
+            },
+            {
+              "callee": "float",
+              "lineno": 255
+            },
+            {
+              "callee": "float",
+              "lineno": 257
+            },
+            {
+              "callee": "arrow",
+              "lineno": 270
+            },
+            {
+              "callee": "safe",
+              "lineno": 271
+            },
+            {
+              "callee": "safe",
+              "lineno": 270
+            },
+            {
+              "callee": "safe",
+              "lineno": 270
+            },
+            {
+              "callee": "curr.get",
+              "lineno": 271
+            },
+            {
+              "callee": "curr.get",
+              "lineno": 270
+            },
+            {
+              "callee": "prev.get",
+              "lineno": 270
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "60f744a7e22b0a709733fff339c85b7988f9d33e",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 230,
+          "line_count": 45,
+          "locals_summary": {
+            "assign": 6,
+            "branches": 8,
+            "calls": 19
+          },
+          "logging_calls": [],
+          "name": "_load_fault_trends",
+          "qualified_name": "summarizers.summarize_health_suite::_load_fault_trends",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _load_fault_trends(root: Path) -> list[tuple[str, str, float]]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 230,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 235,
+              "symbol": "json",
+              "via": "json"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "root": "Path",
+              "ts": "str"
+            },
+            "return": "tuple[str, int, int, list[str], Path | None]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "root",
+              "ts"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_prefer_ts",
+              "lineno": 279
+            },
+            {
+              "callee": "_read_json_dict",
+              "lineno": 285
+            },
+            {
+              "callee": "str",
+              "lineno": 289
+            },
+            {
+              "callee": "_to_int",
+              "lineno": 290
+            },
+            {
+              "callee": "_to_int",
+              "lineno": 291
+            },
+            {
+              "callee": "tc_json_path.exists",
+              "lineno": 283
+            },
+            {
+              "callee": "tc_data.get",
+              "lineno": 289
+            },
+            {
+              "callee": "tc_data.get",
+              "lineno": 290
+            },
+            {
+              "callee": "tc_data.get",
+              "lineno": 291
+            },
+            {
+              "callee": "tc_data.get",
+              "lineno": 293
+            },
+            {
+              "callee": "str",
+              "lineno": 296
+            },
+            {
+              "callee": "_to_int",
+              "lineno": 297
+            },
+            {
+              "callee": "str",
+              "lineno": 298
+            },
+            {
+              "callee": "str",
+              "lineno": 299
+            },
+            {
+              "callee": "samples.append",
+              "lineno": 300
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 294
+            },
+            {
+              "callee": "item.get",
+              "lineno": 296
+            },
+            {
+              "callee": "item.get",
+              "lineno": 297
+            },
+            {
+              "callee": "item.get",
+              "lineno": 298
+            },
+            {
+              "callee": "item.get",
+              "lineno": 299
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "eadb29b190ef0647572f10aa1f4228fa00a30dd8",
+          "intra_file_refs": [
+            {
+              "callee_func": "_prefer_ts",
+              "lineno": 279
+            },
+            {
+              "callee_func": "_read_json_dict",
+              "lineno": 285
+            },
+            {
+              "callee_func": "_to_int",
+              "lineno": 290
+            },
+            {
+              "callee_func": "_to_int",
+              "lineno": 291
+            },
+            {
+              "callee_func": "_to_int",
+              "lineno": 297
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 277,
+          "line_count": 25,
+          "locals_summary": {
+            "assign": 12,
+            "branches": 5,
+            "calls": 20
+          },
+          "logging_calls": [],
+          "name": "_load_typecheck_summary",
+          "qualified_name": "summarizers.summarize_health_suite::_load_typecheck_summary",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _load_typecheck_summary(root: Path, ts: str) -> tuple[str, int, int, list[str], Path | None]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 277,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "max_ccn": "int",
+              "max_length": "int",
+              "raw_json_path": "Path",
+              "repo_root": "Path"
+            },
+            "return": "list[tuple[str, str, int, int]]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "raw_json_path",
+              "repo_root",
+              "max_ccn",
+              "max_length"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "offenders.sort",
+              "lineno": 339
+            },
+            {
+              "callee": "json.loads",
+              "lineno": 311
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 314
+            },
+            {
+              "callee": "Path",
+              "lineno": 323
+            },
+            {
+              "callee": "entry.get",
+              "lineno": 328
+            },
+            {
+              "callee": "raw_json_path.read_text",
+              "lineno": 311
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 318
+            },
+            {
+              "callee": "entry.get",
+              "lineno": 320
+            },
+            {
+              "callee": "entry.get",
+              "lineno": 320
+            },
+            {
+              "callee": "entry.get",
+              "lineno": 320
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 321
+            },
+            {
+              "callee": "str",
+              "lineno": 325
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 329
+            },
+            {
+              "callee": "_to_int",
+              "lineno": 335
+            },
+            {
+              "callee": "_to_int",
+              "lineno": 336
+            },
+            {
+              "callee": "file_path.resolve().relative_to",
+              "lineno": 325
+            },
+            {
+              "callee": "str",
+              "lineno": 327
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 332
+            },
+            {
+              "callee": "func.get",
+              "lineno": 334
+            },
+            {
+              "callee": "func.get",
+              "lineno": 334
+            },
+            {
+              "callee": "func.get",
+              "lineno": 335
+            },
+            {
+              "callee": "func.get",
+              "lineno": 336
+            },
+            {
+              "callee": "offenders.append",
+              "lineno": 338
+            },
+            {
+              "callee": "file_path.resolve",
+              "lineno": 325
+            },
+            {
+              "callee": "str",
+              "lineno": 338
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "try",
+          "hash": "b1f30ea1745403138baffffd946a63c620b3b8d7",
+          "intra_file_refs": [
+            {
+              "callee_func": "_to_int",
+              "lineno": 335
+            },
+            {
+              "callee_func": "_to_int",
+              "lineno": 336
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 304,
+          "line_count": 37,
+          "locals_summary": {
+            "assign": 10,
+            "branches": 10,
+            "calls": 25
+          },
+          "logging_calls": [],
+          "name": "_parse_lizard_offenders",
+          "qualified_name": "summarizers.summarize_health_suite::_parse_lizard_offenders",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _parse_lizard_offenders(",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 305,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 306,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 311,
+              "symbol": "json",
+              "via": "json"
+            },
+            {
+              "lineno": 323,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "root": "Path",
+              "ts": "str"
+            },
+            "return": "tuple[str, int, str, list[str], int | None, int | None, list[tuple[str, str, int, int]], Path | None]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "root",
+              "ts"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_prefer_ts",
+              "lineno": 356
+            },
+            {
+              "callee": "_read_json_dict",
+              "lineno": 362
+            },
+            {
+              "callee": "str",
+              "lineno": 365
+            },
+            {
+              "callee": "_to_int",
+              "lineno": 366
+            },
+            {
+              "callee": "str(data.get('notes', '') or '').strip",
+              "lineno": 367
+            },
+            {
+              "callee": "data.get",
+              "lineno": 368
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 370
+            },
+            {
+              "callee": "data.get",
+              "lineno": 377
+            },
+            {
+              "callee": "data.get",
+              "lineno": 378
+            },
+            {
+              "callee": "report_path.exists",
+              "lineno": 360
+            },
+            {
+              "callee": "data.get",
+              "lineno": 365
+            },
+            {
+              "callee": "data.get",
+              "lineno": 366
+            },
+            {
+              "callee": "_to_int",
+              "lineno": 379
+            },
+            {
+              "callee": "_to_int",
+              "lineno": 380
+            },
+            {
+              "callee": "raw_path.exists",
+              "lineno": 383
+            },
+            {
+              "callee": "_parse_lizard_offenders",
+              "lineno": 384
+            },
+            {
+              "callee": "str",
+              "lineno": 367
+            },
+            {
+              "callee": "Path",
+              "lineno": 372
+            },
+            {
+              "callee": "targets.append",
+              "lineno": 374
+            },
+            {
+              "callee": "data.get",
+              "lineno": 367
+            },
+            {
+              "callee": "str",
+              "lineno": 374
+            },
+            {
+              "callee": "targets.append",
+              "lineno": 376
+            },
+            {
+              "callee": "target_path.resolve().relative_to",
+              "lineno": 374
+            },
+            {
+              "callee": "str",
+              "lineno": 376
+            },
+            {
+              "callee": "target_path.resolve",
+              "lineno": 374
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "30f695edbc6a99cbb2d649a601cfe90eef3553d3",
+          "intra_file_refs": [
+            {
+              "callee_func": "_prefer_ts",
+              "lineno": 356
+            },
+            {
+              "callee_func": "_read_json_dict",
+              "lineno": 362
+            },
+            {
+              "callee_func": "_to_int",
+              "lineno": 366
+            },
+            {
+              "callee_func": "_to_int",
+              "lineno": 379
+            },
+            {
+              "callee_func": "_to_int",
+              "lineno": 380
+            },
+            {
+              "callee_func": "_parse_lizard_offenders",
+              "lineno": 384
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 343,
+          "line_count": 43,
+          "locals_summary": {
+            "assign": 17,
+            "branches": 7,
+            "calls": 25
+          },
+          "logging_calls": [],
+          "name": "_load_lizard_summary",
+          "qualified_name": "summarizers.summarize_health_suite::_load_lizard_summary",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _load_lizard_summary(",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 344,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 372,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 353,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "anchor_base": "Path",
+              "ts": "str"
+            },
+            "return": "Path | None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "anchor_base",
+              "ts"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "sorted",
+              "lineno": 391
+            },
+            {
+              "callee": "anchor_base.glob",
+              "lineno": 391
+            },
+            {
+              "callee": "directory.is_dir",
+              "lineno": 392
+            },
+            {
+              "callee": "anchor_base.glob",
+              "lineno": 394
+            },
+            {
+              "callee": "p.is_dir",
+              "lineno": 394
+            },
+            {
+              "callee": "sorted",
+              "lineno": 395
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "if",
+          "hash": "9b565c9aed4af1e0e2ec5c76c559b4c04a6ba3bd",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 388,
+          "line_count": 8,
+          "locals_summary": {
+            "assign": 2,
+            "branches": 3,
+            "calls": 6
+          },
+          "logging_calls": [],
+          "name": "_find_anchor_dir",
+          "qualified_name": "summarizers.summarize_health_suite::_find_anchor_dir",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _find_anchor_dir(anchor_base: Path, ts: str) -> Path | None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 388,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "root": "Path",
+              "ts": "str"
+            },
+            "return": "tuple[dict | None, Path | None]"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "root",
+              "ts"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_find_anchor_dir",
+              "lineno": 401
+            },
+            {
+              "callee": "anchor_latest_json.exists",
+              "lineno": 402
+            },
+            {
+              "callee": "_read_json_dict",
+              "lineno": 402
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "baa25e3c54b5eaeab30c5381952fb74aec875cf5",
+          "intra_file_refs": [
+            {
+              "callee_func": "_find_anchor_dir",
+              "lineno": 401
+            },
+            {
+              "callee_func": "_read_json_dict",
+              "lineno": 402
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 398,
+          "line_count": 6,
+          "locals_summary": {
+            "assign": 4,
+            "branches": 0,
+            "calls": 3
+          },
+          "logging_calls": [],
+          "name": "_load_anchor_data",
+          "qualified_name": "summarizers.summarize_health_suite::_load_anchor_data",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _load_anchor_data(root: Path, ts: str) -> tuple[dict | None, Path | None]:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 398,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "anchor_data": "dict | None",
+              "anchor_dir": "Path | None",
+              "lines": "list[str]"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "lines",
+              "anchor_data",
+              "anchor_dir"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_append_section_header",
+              "lineno": 407
+            },
+            {
+              "callee": "_append_list",
+              "lineno": 417
+            },
+            {
+              "callee": "_append_section_header",
+              "lineno": 425
+            },
+            {
+              "callee": "_append_list",
+              "lineno": 426
+            },
+            {
+              "callee": "_append_paragraph",
+              "lineno": 409
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 419
+            },
+            {
+              "callee": "anchor_data.get",
+              "lineno": 419
+            },
+            {
+              "callee": "_append_paragraph",
+              "lineno": 429
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 423
+            },
+            {
+              "callee": "anchor_data.get",
+              "lineno": 413
+            },
+            {
+              "callee": "anchor_data.get",
+              "lineno": 414
+            },
+            {
+              "callee": "anchor_data.get",
+              "lineno": 415
+            },
+            {
+              "callee": "cluster.get",
+              "lineno": 421
+            },
+            {
+              "callee": "cluster.get",
+              "lineno": 421
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "expr",
+          "hash": "6f215dcf6da5293ed18379ffcc10dc3c422aaa7a",
+          "intra_file_refs": [
+            {
+              "callee_func": "_append_section_header",
+              "lineno": 407
+            },
+            {
+              "callee_func": "_append_list",
+              "lineno": 417
+            },
+            {
+              "callee_func": "_append_section_header",
+              "lineno": 425
+            },
+            {
+              "callee_func": "_append_list",
+              "lineno": 426
+            },
+            {
+              "callee_func": "_append_paragraph",
+              "lineno": 409
+            },
+            {
+              "callee_func": "_append_paragraph",
+              "lineno": 429
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 406,
+          "line_count": 27,
+          "locals_summary": {
+            "assign": 3,
+            "branches": 2,
+            "calls": 14
+          },
+          "logging_calls": [],
+          "name": "_compose_anchor_section",
+          "qualified_name": "summarizers.summarize_health_suite::_compose_anchor_section",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def _compose_anchor_section(lines: list[str], anchor_data: dict | None, anchor_dir: Path | None) -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 406,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "fh_trends": "list[tuple[str, str, float]]",
+              "lines": "list[str]"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "lines",
+              "fh_trends"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_append_section_header",
+              "lineno": 438
+            },
+            {
+              "callee": "_append_list",
+              "lineno": 440
+            },
+            {
+              "callee": "_append_paragraph",
+              "lineno": 441
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "if",
+          "hash": "1a03aa815f231ce30e039539e8b6f240e914ea3a",
+          "intra_file_refs": [
+            {
+              "callee_func": "_append_section_header",
+              "lineno": 438
+            },
+            {
+              "callee_func": "_append_list",
+              "lineno": 440
+            },
+            {
+              "callee_func": "_append_paragraph",
+              "lineno": 441
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 435,
+          "line_count": 7,
+          "locals_summary": {
+            "assign": 1,
+            "branches": 1,
+            "calls": 3
+          },
+          "logging_calls": [],
+          "name": "_compose_fault_handler_section",
+          "qualified_name": "summarizers.summarize_health_suite::_compose_fault_handler_section",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def _compose_fault_handler_section(lines: list[str], fh_trends: list[tuple[str, str, float]]) -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": []
+        },
+        {
+          "annotations": {
+            "args": {
+              "lines": "list[str]",
+              "trend_excerpt": "list[str]"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "lines",
+              "trend_excerpt"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_append_section_header",
+              "lineno": 445
+            },
+            {
+              "callee": "_append_paragraph",
+              "lineno": 450
+            },
+            {
+              "callee": "_append_blockquote",
+              "lineno": 447
+            },
+            {
+              "callee": "_append_paragraph",
+              "lineno": 449
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "expr",
+          "hash": "710e5242f97cde10a1a23a8860c72354d09294ec",
+          "intra_file_refs": [
+            {
+              "callee_func": "_append_section_header",
+              "lineno": 445
+            },
+            {
+              "callee_func": "_append_paragraph",
+              "lineno": 450
+            },
+            {
+              "callee_func": "_append_blockquote",
+              "lineno": 447
+            },
+            {
+              "callee_func": "_append_paragraph",
+              "lineno": 449
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 444,
+          "line_count": 7,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 1,
+            "calls": 4
+          },
+          "logging_calls": [],
+          "name": "_compose_repo_insight_section",
+          "qualified_name": "summarizers.summarize_health_suite::_compose_repo_insight_section",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def _compose_repo_insight_section(lines: list[str], trend_excerpt: list[str]) -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": []
+        },
+        {
+          "annotations": {
+            "args": {
+              "dep_dir": "Path | None",
+              "lines": "list[str]",
+              "summary_text": "str"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "lines",
+              "summary_text",
+              "dep_dir"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_append_section_header",
+              "lineno": 454
+            },
+            {
+              "callee": "_append_paragraph",
+              "lineno": 455
+            },
+            {
+              "callee": "_append_paragraph",
+              "lineno": 457
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "expr",
+          "hash": "61b29950135595367b24781c5b3e4487431c7a19",
+          "intra_file_refs": [
+            {
+              "callee_func": "_append_section_header",
+              "lineno": 454
+            },
+            {
+              "callee_func": "_append_paragraph",
+              "lineno": 455
+            },
+            {
+              "callee_func": "_append_paragraph",
+              "lineno": 457
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 453,
+          "line_count": 8,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 1,
+            "calls": 3
+          },
+          "logging_calls": [],
+          "name": "_compose_dependency_section",
+          "qualified_name": "summarizers.summarize_health_suite::_compose_dependency_section",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def _compose_dependency_section(lines: list[str], summary_text: str, dep_dir: Path | None) -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 453,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "cycles": "list[str]",
+              "fan_in": "list[str]",
+              "fan_out": "list[str]",
+              "ig_dir": "Path | None",
+              "lines": "list[str]"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "lines",
+              "fan_in",
+              "fan_out",
+              "cycles",
+              "ig_dir"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_append_section_header",
+              "lineno": 470
+            },
+            {
+              "callee": "_append_section_header",
+              "lineno": 471
+            },
+            {
+              "callee": "_append_list",
+              "lineno": 472
+            },
+            {
+              "callee": "_append_section_header",
+              "lineno": 473
+            },
+            {
+              "callee": "_append_list",
+              "lineno": 474
+            },
+            {
+              "callee": "_append_section_header",
+              "lineno": 475
+            },
+            {
+              "callee": "_append_list",
+              "lineno": 476
+            },
+            {
+              "callee": "_append_paragraph",
+              "lineno": 478
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "expr",
+          "hash": "b4dbc79b717b21626dae28caec3935b96ba81b05",
+          "intra_file_refs": [
+            {
+              "callee_func": "_append_section_header",
+              "lineno": 470
+            },
+            {
+              "callee_func": "_append_section_header",
+              "lineno": 471
+            },
+            {
+              "callee_func": "_append_list",
+              "lineno": 472
+            },
+            {
+              "callee_func": "_append_section_header",
+              "lineno": 473
+            },
+            {
+              "callee_func": "_append_list",
+              "lineno": 474
+            },
+            {
+              "callee_func": "_append_section_header",
+              "lineno": 475
+            },
+            {
+              "callee_func": "_append_list",
+              "lineno": 476
+            },
+            {
+              "callee_func": "_append_paragraph",
+              "lineno": 478
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 463,
+          "line_count": 19,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 1,
+            "calls": 8
+          },
+          "logging_calls": [],
+          "name": "_compose_import_graph_section",
+          "qualified_name": "summarizers.summarize_health_suite::_compose_import_graph_section",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def _compose_import_graph_section(",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 468,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "lines": "list[str]",
+              "summary_items": "list[str]",
+              "th_dir": "Path | None"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "lines",
+              "summary_items",
+              "th_dir"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_append_section_header",
+              "lineno": 485
+            },
+            {
+              "callee": "_append_list",
+              "lineno": 486
+            },
+            {
+              "callee": "_append_paragraph",
+              "lineno": 488
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "expr",
+          "hash": "bc48cdd92f9fc400fdb72ac6ca52b1d1f4461a12",
+          "intra_file_refs": [
+            {
+              "callee_func": "_append_section_header",
+              "lineno": 485
+            },
+            {
+              "callee_func": "_append_list",
+              "lineno": 486
+            },
+            {
+              "callee_func": "_append_paragraph",
+              "lineno": 488
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 484,
+          "line_count": 8,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 1,
+            "calls": 3
+          },
+          "logging_calls": [],
+          "name": "_compose_test_health_section",
+          "qualified_name": "summarizers.summarize_health_suite::_compose_test_health_section",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def _compose_test_health_section(lines: list[str], summary_items: list[str], th_dir: Path | None) -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 484,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "files_with_issues": "int",
+              "lines": "list[str]",
+              "samples": "list[str]",
+              "status": "str",
+              "tc_dir": "Path | None",
+              "total_errors": "int"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "lines",
+              "status",
+              "total_errors",
+              "files_with_issues",
+              "samples",
+              "tc_dir"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_append_section_header",
+              "lineno": 502
+            },
+            {
+              "callee": "_append_list",
+              "lineno": 508
+            },
+            {
+              "callee": "_append_section_header",
+              "lineno": 509
+            },
+            {
+              "callee": "_append_list",
+              "lineno": 510
+            },
+            {
+              "callee": "_append_paragraph",
+              "lineno": 512
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "expr",
+          "hash": "d244601836eb32062184a6feb4096eee66a8828f",
+          "intra_file_refs": [
+            {
+              "callee_func": "_append_section_header",
+              "lineno": 502
+            },
+            {
+              "callee_func": "_append_list",
+              "lineno": 508
+            },
+            {
+              "callee_func": "_append_section_header",
+              "lineno": 509
+            },
+            {
+              "callee_func": "_append_list",
+              "lineno": 510
+            },
+            {
+              "callee_func": "_append_paragraph",
+              "lineno": 512
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 494,
+          "line_count": 22,
+          "locals_summary": {
+            "assign": 1,
+            "branches": 1,
+            "calls": 5
+          },
+          "logging_calls": [],
+          "name": "_compose_typecheck_section",
+          "qualified_name": "summarizers.summarize_health_suite::_compose_typecheck_section",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def _compose_typecheck_section(",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 500,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "issue_count": "int",
+              "lines": "list[str]",
+              "lizard_dir": "Path | None",
+              "max_ccn": "int | None",
+              "max_length": "int | None",
+              "notes": "str",
+              "offenders": "list[tuple[str, str, int, int]]",
+              "status": "str",
+              "targets": "list[str]"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "lines",
+              "status",
+              "issue_count",
+              "notes",
+              "targets",
+              "max_ccn",
+              "max_length",
+              "offenders",
+              "lizard_dir"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_append_section_header",
+              "lineno": 529
+            },
+            {
+              "callee": "_append_list",
+              "lineno": 537
+            },
+            {
+              "callee": "metrics.append",
+              "lineno": 532
+            },
+            {
+              "callee": "metrics.append",
+              "lineno": 534
+            },
+            {
+              "callee": "metrics.append",
+              "lineno": 536
+            },
+            {
+              "callee": "_append_section_header",
+              "lineno": 539
+            },
+            {
+              "callee": "_append_table",
+              "lineno": 543
+            },
+            {
+              "callee": "_append_paragraph",
+              "lineno": 545
+            },
+            {
+              "callee": "table_rows.append",
+              "lineno": 542
+            },
+            {
+              "callee": "' '.join",
+              "lineno": 532
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "expr",
+          "hash": "8ab0d8a887fd16ec7810985ed808e8047ccf88a4",
+          "intra_file_refs": [
+            {
+              "callee_func": "_append_section_header",
+              "lineno": 529
+            },
+            {
+              "callee_func": "_append_list",
+              "lineno": 537
+            },
+            {
+              "callee_func": "_append_section_header",
+              "lineno": 539
+            },
+            {
+              "callee_func": "_append_table",
+              "lineno": 543
+            },
+            {
+              "callee_func": "_append_paragraph",
+              "lineno": 545
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 518,
+          "line_count": 31,
+          "locals_summary": {
+            "assign": 2,
+            "branches": 6,
+            "calls": 10
+          },
+          "logging_calls": [],
+          "name": "_compose_lizard_section",
+          "qualified_name": "summarizers.summarize_health_suite::_compose_lizard_section",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def _compose_lizard_section(",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 527,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {
+              "cc_dir": "Path | None",
+              "lines": "list[str]",
+              "table_rows": "list[str]"
+            },
+            "return": "None"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "lines",
+              "table_rows",
+              "cc_dir"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_append_section_header",
+              "lineno": 552
+            },
+            {
+              "callee": "_append_table",
+              "lineno": 554
+            },
+            {
+              "callee": "_append_paragraph",
+              "lineno": 556
+            },
+            {
+              "callee": "_append_paragraph",
+              "lineno": 558
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "expr",
+          "hash": "6b9f379138b4336db08727fe9cbc5e466c4e0b8e",
+          "intra_file_refs": [
+            {
+              "callee_func": "_append_section_header",
+              "lineno": 552
+            },
+            {
+              "callee_func": "_append_table",
+              "lineno": 554
+            },
+            {
+              "callee_func": "_append_paragraph",
+              "lineno": 556
+            },
+            {
+              "callee_func": "_append_paragraph",
+              "lineno": 558
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 551,
+          "line_count": 11,
+          "locals_summary": {
+            "assign": 0,
+            "branches": 2,
+            "calls": 4
+          },
+          "logging_calls": [],
+          "name": "_compose_churn_section",
+          "qualified_name": "summarizers.summarize_health_suite::_compose_churn_section",
+          "raises": [],
+          "returns_kind": "none",
+          "signature": "def _compose_churn_section(lines: list[str], table_rows: list[str], cc_dir: Path | None) -> None:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 551,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {},
+            "return": "argparse.ArgumentParser"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "argparse.ArgumentParser",
+              "lineno": 565
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 566
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 567
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 568
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "c5e4df342e017bc5f41fbe933faf9e75b5738227",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": true,
+          "line": 564,
+          "line_count": 6,
+          "locals_summary": {
+            "assign": 1,
+            "branches": 0,
+            "calls": 4
+          },
+          "logging_calls": [],
+          "name": "_build_parser",
+          "qualified_name": "summarizers.summarize_health_suite::_build_parser",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def _build_parser() -> argparse.ArgumentParser:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 565,
+              "symbol": "argparse",
+              "via": "argparse"
+            },
+            {
+              "lineno": 564,
+              "symbol": "argparse",
+              "via": "argparse"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {},
+            "return": "int"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "_build_parser().parse_args",
+              "lineno": 573
+            },
+            {
+              "callee": "Path(args.repo_root).resolve",
+              "lineno": 574
+            },
+            {
+              "callee": "(root / args.output_dir).resolve",
+              "lineno": 575
+            },
+            {
+              "callee": "out_dir.mkdir",
+              "lineno": 576
+            },
+            {
+              "callee": "_load_trend_head",
+              "lineno": 580
+            },
+            {
+              "callee": "_load_dep_summary",
+              "lineno": 581
+            },
+            {
+              "callee": "_load_import_graph",
+              "lineno": 582
+            },
+            {
+              "callee": "_load_test_health_summary",
+              "lineno": 583
+            },
+            {
+              "callee": "_load_churn_table",
+              "lineno": 584
+            },
+            {
+              "callee": "_load_fault_trends",
+              "lineno": 585
+            },
+            {
+              "callee": "_load_typecheck_summary",
+              "lineno": 586
+            },
+            {
+              "callee": "_load_lizard_summary",
+              "lineno": 596
+            },
+            {
+              "callee": "_load_anchor_data",
+              "lineno": 597
+            },
+            {
+              "callee": "_append_section_header",
+              "lineno": 600
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 601
+            },
+            {
+              "callee": "lines.append",
+              "lineno": 602
+            },
+            {
+              "callee": "_compose_anchor_section",
+              "lineno": 604
+            },
+            {
+              "callee": "_compose_fault_handler_section",
+              "lineno": 605
+            },
+            {
+              "callee": "_compose_repo_insight_section",
+              "lineno": 606
+            },
+            {
+              "callee": "_compose_dependency_section",
+              "lineno": 607
+            },
+            {
+              "callee": "_compose_import_graph_section",
+              "lineno": 608
+            },
+            {
+              "callee": "_compose_test_health_section",
+              "lineno": 609
+            },
+            {
+              "callee": "_compose_typecheck_section",
+              "lineno": 610
+            },
+            {
+              "callee": "_compose_lizard_section",
+              "lineno": 618
+            },
+            {
+              "callee": "_compose_churn_section",
+              "lineno": 629
+            },
+            {
+              "callee": "out_path.write_text",
+              "lineno": 632
+            },
+            {
+              "callee": "dt.datetime.now().strftime",
+              "lineno": 577
+            },
+            {
+              "callee": "'\\n'.join(lines).strip",
+              "lineno": 631
+            },
+            {
+              "callee": "_build_parser",
+              "lineno": 573
+            },
+            {
+              "callee": "Path",
+              "lineno": 574
+            },
+            {
+              "callee": "dt.datetime.now",
+              "lineno": 577
+            },
+            {
+              "callee": "dt.datetime.now().isoformat",
+              "lineno": 601
+            },
+            {
+              "callee": "'\\n'.join",
+              "lineno": 631
+            },
+            {
+              "callee": "dt.datetime.now",
+              "lineno": 601
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "44baf26a17da459316eb4ee80f3f6527d0711813",
+          "intra_file_refs": [
+            {
+              "callee_func": "_load_trend_head",
+              "lineno": 580
+            },
+            {
+              "callee_func": "_load_dep_summary",
+              "lineno": 581
+            },
+            {
+              "callee_func": "_load_import_graph",
+              "lineno": 582
+            },
+            {
+              "callee_func": "_load_test_health_summary",
+              "lineno": 583
+            },
+            {
+              "callee_func": "_load_churn_table",
+              "lineno": 584
+            },
+            {
+              "callee_func": "_load_fault_trends",
+              "lineno": 585
+            },
+            {
+              "callee_func": "_load_typecheck_summary",
+              "lineno": 586
+            },
+            {
+              "callee_func": "_load_lizard_summary",
+              "lineno": 596
+            },
+            {
+              "callee_func": "_load_anchor_data",
+              "lineno": 597
+            },
+            {
+              "callee_func": "_append_section_header",
+              "lineno": 600
+            },
+            {
+              "callee_func": "_compose_anchor_section",
+              "lineno": 604
+            },
+            {
+              "callee_func": "_compose_fault_handler_section",
+              "lineno": 605
+            },
+            {
+              "callee_func": "_compose_repo_insight_section",
+              "lineno": 606
+            },
+            {
+              "callee_func": "_compose_dependency_section",
+              "lineno": 607
+            },
+            {
+              "callee_func": "_compose_import_graph_section",
+              "lineno": 608
+            },
+            {
+              "callee_func": "_compose_test_health_section",
+              "lineno": 609
+            },
+            {
+              "callee_func": "_compose_typecheck_section",
+              "lineno": 610
+            },
+            {
+              "callee_func": "_compose_lizard_section",
+              "lineno": 618
+            },
+            {
+              "callee_func": "_compose_churn_section",
+              "lineno": 629
+            },
+            {
+              "callee_func": "_build_parser",
+              "lineno": 573
+            }
+          ],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 572,
+          "line_count": 62,
+          "locals_summary": {
+            "assign": 16,
+            "branches": 0,
+            "calls": 34
+          },
+          "logging_calls": [],
+          "name": "main",
+          "qualified_name": "summarizers.summarize_health_suite::main",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def main() -> int:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 574,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 577,
+              "symbol": "datetime",
+              "via": "dt"
+            },
+            {
+              "lineno": 601,
+              "symbol": "datetime",
+              "via": "dt"
+            }
+          ]
+        }
+      ],
+      "globals": [],
+      "imports": [
+        "__future__.annotations",
+        "argparse",
+        "datetime",
+        "json",
+        "pathlib.Path"
+      ],
+      "imports_detailed": [
+        {
+          "kind": "from",
+          "lineno": 13,
+          "module": "__future__",
+          "names": [
+            {
+              "asname": null,
+              "name": "annotations"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 15,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "argparse"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 16,
+          "module": null,
+          "names": [
+            {
+              "asname": "dt",
+              "name": "datetime"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 17,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "json"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 18,
+          "module": "pathlib",
+          "names": [
+            {
+              "asname": null,
+              "name": "Path"
+            }
+          ]
+        }
+      ],
+      "line_count": 637,
+      "module_doc": "Health Suite Summary \u2014 Compose a compact summary into one markdown from:",
+      "module_first_line": "def _read_text(path: Path, default: str = \"(missing)\") -> str:",
+      "module_id": "summarizers.summarize_health_suite",
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\summarizers\\summarize_health_suite.py",
+      "relative_path": "summarize_health_suite.py"
+    },
+    {
+      "classes": [],
+      "entrypoints": {
+        "cli_parser": true,
+        "has_main_guard": true
+      },
+      "functions": [
+        {
+          "annotations": {
+            "args": {
+              "index_path": "Path",
+              "label": "str",
+              "pending_path": "Path"
+            },
+            "return": "int"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [
+              "label",
+              "index_path",
+              "pending_path"
+            ],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "logging.info",
+              "lineno": 40
+            },
+            {
+              "callee": "index_path.exists",
+              "lineno": 29
+            },
+            {
+              "callee": "logging.warning",
+              "lineno": 30
+            },
+            {
+              "callee": "(data.get('metadata', {}) or {}).get",
+              "lineno": 38
+            },
+            {
+              "callee": "data.get",
+              "lineno": 39
+            },
+            {
+              "callee": "len",
+              "lineno": 43
+            },
+            {
+              "callee": "extraction.get",
+              "lineno": 44
+            },
+            {
+              "callee": "extraction.get",
+              "lineno": 45
+            },
+            {
+              "callee": "extraction.get",
+              "lineno": 46
+            },
+            {
+              "callee": "r.get",
+              "lineno": 50
+            },
+            {
+              "callee": "sorted",
+              "lineno": 55
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 56
+            },
+            {
+              "callee": "extraction.get",
+              "lineno": 63
+            },
+            {
+              "callee": "pending_path.exists",
+              "lineno": 63
+            },
+            {
+              "callee": "yaml.safe_load",
+              "lineno": 33
+            },
+            {
+              "callee": "logging.exception",
+              "lineno": 35
+            },
+            {
+              "callee": "set",
+              "lineno": 55
+            },
+            {
+              "callee": "len",
+              "lineno": 59
+            },
+            {
+              "callee": "', '.join",
+              "lineno": 60
+            },
+            {
+              "callee": "sum",
+              "lineno": 65
+            },
+            {
+              "callee": "logging.info",
+              "lineno": 66
+            },
+            {
+              "callee": "index_path.read_text",
+              "lineno": 33
+            },
+            {
+              "callee": "isinstance",
+              "lineno": 52
+            },
+            {
+              "callee": "str(r.get('id', '')).startswith",
+              "lineno": 52
+            },
+            {
+              "callee": "data.get",
+              "lineno": 38
+            },
+            {
+              "callee": "str",
+              "lineno": 52
+            },
+            {
+              "callee": "pending_path.open",
+              "lineno": 65
+            },
+            {
+              "callee": "r.get",
+              "lineno": 52
+            }
+          ],
+          "decorators": [],
+          "docstring": "Summarize the current standards index and optional pending file.",
+          "first_stmt_kind": "expr",
+          "hash": "b2d9c1910a0f04ff58312cac954fd26c0e75177b",
+          "intra_file_refs": [],
+          "io_effects": {
+            "env": false,
+            "network": false,
+            "reads": true,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 27,
+          "line_count": 43,
+          "locals_summary": {
+            "assign": 6,
+            "branches": 5,
+            "calls": 28
+          },
+          "logging_calls": [
+            {
+              "level": "info",
+              "lineno": 40
+            },
+            {
+              "level": "warning",
+              "lineno": 30
+            },
+            {
+              "level": "info",
+              "lineno": 56
+            },
+            {
+              "level": "exception",
+              "lineno": 35
+            },
+            {
+              "level": "info",
+              "lineno": 66
+            }
+          ],
+          "name": "summarize",
+          "qualified_name": "summarizers.summarize_standards::summarize",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def summarize(label: str, index_path: Path, pending_path: Path) -> int:",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 40,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 27,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 30,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 56,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 35,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 66,
+              "symbol": "logging",
+              "via": "logging"
+            }
+          ]
+        },
+        {
+          "annotations": {
+            "args": {},
+            "return": "int"
+          },
+          "args": {
+            "kwonly": [],
+            "kwvararg": null,
+            "positional": [],
+            "vararg": null
+          },
+          "calls": [
+            {
+              "callee": "argparse.ArgumentParser",
+              "lineno": 73
+            },
+            {
+              "callee": "parser.add_argument",
+              "lineno": 74
+            },
+            {
+              "callee": "parser.parse_args",
+              "lineno": 77
+            },
+            {
+              "callee": "Path",
+              "lineno": 78
+            },
+            {
+              "callee": "Path",
+              "lineno": 79
+            },
+            {
+              "callee": "logging.basicConfig",
+              "lineno": 80
+            },
+            {
+              "callee": "summarize",
+              "lineno": 81
+            },
+            {
+              "callee": "os.environ.get",
+              "lineno": 78
+            },
+            {
+              "callee": "os.environ.get",
+              "lineno": 79
+            },
+            {
+              "callee": "os.environ.get",
+              "lineno": 80
+            }
+          ],
+          "decorators": [],
+          "docstring": null,
+          "first_stmt_kind": "assign",
+          "hash": "251c6a0c0879314787706f3fa37bceb9a9058be3",
+          "intra_file_refs": [
+            {
+              "callee_func": "summarize",
+              "lineno": 81
+            }
+          ],
+          "io_effects": {
+            "env": true,
+            "network": false,
+            "reads": false,
+            "writes": false
+          },
+          "is_async": false,
+          "is_private": false,
+          "line": 72,
+          "line_count": 10,
+          "locals_summary": {
+            "assign": 4,
+            "branches": 0,
+            "calls": 10
+          },
+          "logging_calls": [],
+          "name": "main",
+          "qualified_name": "summarizers.summarize_standards::main",
+          "raises": [],
+          "returns_kind": "value",
+          "signature": "def main() -> int:  # pragma: no cover - tiny wrapper",
+          "todo_tags": 0,
+          "type": "function",
+          "used_globals": [],
+          "uses_import": [
+            {
+              "lineno": 73,
+              "symbol": "argparse",
+              "via": "argparse"
+            },
+            {
+              "lineno": 78,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 79,
+              "symbol": "pathlib.Path",
+              "via": "Path"
+            },
+            {
+              "lineno": 80,
+              "symbol": "logging",
+              "via": "logging"
+            },
+            {
+              "lineno": 78,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 79,
+              "symbol": "os",
+              "via": "os"
+            },
+            {
+              "lineno": 80,
+              "symbol": "os",
+              "via": "os"
+            }
+          ]
+        }
+      ],
+      "globals": [],
+      "imports": [
+        "__future__.annotations",
+        "argparse",
+        "logging",
+        "os",
+        "pathlib.Path",
+        "sys"
+      ],
+      "imports_detailed": [
+        {
+          "kind": "from",
+          "lineno": 12,
+          "module": "__future__",
+          "names": [
+            {
+              "asname": null,
+              "name": "annotations"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 14,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "argparse"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 15,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "logging"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 16,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "os"
+            }
+          ]
+        },
+        {
+          "kind": "import",
+          "lineno": 17,
+          "module": null,
+          "names": [
+            {
+              "asname": null,
+              "name": "sys"
+            }
+          ]
+        },
+        {
+          "kind": "from",
+          "lineno": 18,
+          "module": "pathlib",
+          "names": [
+            {
+              "asname": null,
+              "name": "Path"
+            }
+          ]
+        }
+      ],
+      "line_count": 85,
+      "module_doc": "Print a concise summary of the current standards index / pending file.",
+      "module_first_line": "def summarize(label: str, index_path: Path, pending_path: Path) -> int:",
+      "module_id": "summarizers.summarize_standards",
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\summarizers\\summarize_standards.py",
+      "relative_path": "summarize_standards.py"
+    }
+  ],
+  "metadata": {
+    "folder_name": "summarizers",
+    "folder_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\summarizers",
+    "generated_at": "2025-11-04T20:10:52.008656+00:00",
+    "scan_depth": "recursive",
+    "schema_version": 2,
+    "total_classes": 0,
+    "total_files": 2,
+    "total_functions": 37
+  },
+  "statistics": {
+    "async_functions": 0,
+    "files_by_type": {
+      ".py": 2
+    },
+    "private_functions": 34,
+    "public_functions": 3,
+    "total_lines_of_code": 722
+  }
+}

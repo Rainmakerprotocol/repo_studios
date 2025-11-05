@@ -40,9 +40,9 @@
     }
   ],
   "metadata": {
-    "analysis_source": ".repo_studios/scripts/summarizers/summarizers_index/summarizers_analysis-2025-10-28.json",
+    "analysis_source": ".repo_studios/scripts/summarizers/summarizers_index/summarizers_analysis-2025-11-04.json",
     "functions_scanned": 39,
-    "generated_at": "2025-10-28T13:40:22.542105+00:00",
+    "generated_at": "2025-11-04T20:10:52.050526+00:00",
     "python_files_scanned": 2,
     "repo_root": "C:\\Users\\genet\\repo_studios",
     "target": ".repo_studios/scripts/summarizers"
