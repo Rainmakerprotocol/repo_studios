@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import builtins
 import hashlib
 import json
 import logging
@@ -116,6 +117,14 @@ else:  # pragma: no cover - fallback for older Python versions
         "functools",
         "re",
     }
+
+DEPENDENCY_SUMMARY_BUCKETS = ("internal", "standard_library", "third_party", "unknown")
+
+BUILTIN_FUNCTION_NAMES = {
+    name
+    for name, value in vars(builtins).items()
+    if callable(value)
+}
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
 
@@ -956,7 +965,15 @@ def _collect_function_metrics(
         if isinstance(inner, ast.Call):
             locals_summary["calls"] += 1
             callee = _safe_unparse(inner.func) or "<unknown>"
-            calls.append({
+            is_attribute = isinstance(inner.func, ast.Attribute)
+            attr_root, attr_path = _attribute_chain(inner.func)
+            root_name = attr_root or callee.split("(")[0]
+            binding_root = None
+            binding_expression = None
+            if is_attribute:
+                binding_expression = _safe_unparse(inner.func.value)
+                binding_root = _attribute_root(inner.func.value)
+            call_entry: dict[str, Any] = {
                 "callee": callee,
                 "lineno": inner.lineno,
                 "caller": {
@@ -965,8 +982,18 @@ def _collect_function_metrics(
                     "symbol": caller_context.get("symbol"),
                     "lineno": inner.lineno,
                 },
-            })
-            root_name = _attribute_root(inner.func) or callee.split("(")[0]
+                "root": root_name,
+                "is_attribute": is_attribute,
+            }
+            if attr_path and (is_attribute or (root_name and attr_path != root_name)):
+                call_entry["attribute"] = attr_path
+            if binding_root:
+                call_entry["binding"] = binding_root
+            if binding_expression and binding_expression != binding_root:
+                call_entry["binding_expression"] = binding_expression
+            if binding_root in {"self", "cls"}:
+                call_entry["is_method_like"] = True
+            calls.append(call_entry)
             if root_name in import_alias_map:
                 uses_import.append({
                     "symbol": import_alias_map[root_name],
@@ -1129,7 +1156,7 @@ def _extract_function(
         for deco in decorator_nodes
     ]
 
-    return {
+    result = {
         "name": display_name,
         "qualified_name": qualified_name,
         "line": getattr(node, "lineno", 0),
@@ -1160,6 +1187,9 @@ def _extract_function(
         "io_effects": io_effects,
         "logging_calls": logging_calls,
     }
+    if parent_class:
+        result["parent_class"] = parent_class
+    return result
 
 
 def _extract_class(
@@ -1307,14 +1337,14 @@ def _dependency_category(target: str, package_root: str | None) -> str:
     if not target:
         return "unknown"
     if target.startswith("."):
-        return "project"
+        return "internal"
     normalized = target.split(".")[0]
     if normalized in PROJECT_NAMESPACE_HINTS:
-        return "project"
+        return "internal"
     if package_root and (normalized == package_root or target.startswith(f"{package_root}.")):
-        return "project"
+        return "internal"
     if normalized in STDLIB_MODULE_NAMES:
-        return "stdlib"
+        return "standard_library"
     return "third_party"
 
 
@@ -1355,6 +1385,255 @@ def _collect_function_import_usage(
             "aliases": sorted(info["aliases"]),
         }
     return normalized
+
+
+def _build_call_graph(
+    module_id: str,
+    functions: list[dict[str, Any]],
+    classes: list[dict[str, Any]],
+    import_alias_map: dict[str, str],
+) -> dict[str, Any]:
+    package_root = module_id.split(".", 1)[0] if module_id else None
+    module_basename = module_id.split(".")[-1] if module_id else None
+    local_symbols: dict[str, str] = {}
+    local_nodes: set[str] = set()
+    class_methods: dict[str | None, dict[str, str]] = {}
+
+    def _record_local(entry: dict[str, Any]) -> None:
+        qualified = entry.get("qualified_name")
+        name = entry.get("name")
+        if qualified:
+            local_nodes.add(qualified)
+        if qualified and name:
+            local_symbols[name] = qualified
+
+    for function_entry in functions:
+        _record_local(function_entry)
+
+    for class_entry in classes:
+        class_name = class_entry.get("name")
+        method_lookup = class_methods.setdefault(class_name, {})
+        for method_entry in class_entry.get("methods", []) or []:
+            _record_local(method_entry)
+            qualified = method_entry.get("qualified_name")
+            display_name = method_entry.get("name")
+            if not display_name:
+                continue
+            simple_name = display_name.split(".", 1)[-1]
+            if qualified:
+                method_lookup[simple_name] = qualified
+            # ensure class-qualified lookup is available for expressions like Class.method
+            if qualified and display_name not in local_symbols:
+                local_symbols[display_name] = qualified
+
+    edges: list[dict[str, Any]] = []
+    summary_counter: Counter[str] = Counter()
+    per_function: dict[str, Counter[str]] = {}
+
+    def _iter_entries() -> Iterable[dict[str, Any]]:
+        yield from functions
+        for class_entry in classes:
+            yield from class_entry.get("methods", []) or []
+
+    for entry in _iter_entries():
+        source = entry.get("qualified_name")
+        if not source:
+            continue
+        for call in entry.get("calls", []) or []:
+            resolution = _resolve_call_target(
+                call,
+                entry,
+                module_id,
+                module_basename,
+                class_methods,
+                local_symbols,
+                import_alias_map,
+                package_root,
+            )
+            target = resolution.pop("target", None)
+            if target:
+                local_nodes.add(target)
+            edge: dict[str, Any] = {
+                "source": source,
+                "lineno": call.get("lineno"),
+                "expression": call.get("callee"),
+            }
+            if call.get("attribute"):
+                edge["attribute"] = call.get("attribute")
+            if call.get("root"):
+                edge["root"] = call.get("root")
+            if call.get("binding"):
+                edge["binding"] = call.get("binding")
+            if call.get("binding_expression"):
+                edge["binding_expression"] = call.get("binding_expression")
+            if call.get("is_method_like"):
+                edge["is_method_like"] = True
+            if target:
+                edge["target"] = target
+            filtered_resolution = {k: v for k, v in resolution.items() if v is not None}
+            if filtered_resolution:
+                edge["resolution"] = filtered_resolution
+            edges.append(edge)
+            kind = filtered_resolution.get("kind", "unknown")
+            summary_counter[kind] += 1
+            per_function.setdefault(source, Counter())[kind] += 1
+
+    edges.sort(key=lambda item: (item.get("source") or "", item.get("lineno") or 0, item.get("expression") or ""))
+
+    by_function: dict[str, Any] = {}
+    for source, counter in sorted(per_function.items()):
+        by_function[source] = {
+            "total": sum(counter.values()),
+            "by_kind": dict(sorted(counter.items())),
+        }
+
+    external_modules = sorted({
+        resolution.get("module")
+        for resolution in (
+            edge.get("resolution") for edge in edges
+        )
+        if resolution and resolution.get("kind") == "imported" and resolution.get("module")
+    })
+
+    call_graph: dict[str, Any] = {
+        "edges": edges,
+        "summary": {
+            "total_edges": len(edges),
+            "by_kind": dict(sorted(summary_counter.items())),
+        },
+    }
+    if by_function:
+        call_graph["by_function"] = by_function
+    if local_nodes:
+        call_graph["locals"] = sorted(local_nodes)
+    if external_modules:
+        call_graph["external_modules"] = external_modules
+    return call_graph
+
+
+def _resolve_call_target(
+    call: dict[str, Any],
+    caller_entry: dict[str, Any],
+    module_id: str,
+    module_basename: str | None,
+    class_methods: dict[str | None, dict[str, str]],
+    local_symbols: dict[str, str],
+    import_alias_map: dict[str, str],
+    package_root: str | None,
+) -> dict[str, Any]:
+    resolution: dict[str, Any] = {
+        "kind": "unknown",
+        "module": None,
+        "confidence": "low",
+    }
+    expression = call.get("callee") if isinstance(call.get("callee"), str) else None
+    root = call.get("root") if isinstance(call.get("root"), str) else None
+    if not root and expression:
+        root = expression.split(".", 1)[0]
+    attribute = call.get("attribute") if isinstance(call.get("attribute"), str) else None
+    is_attribute = bool(call.get("is_attribute"))
+    binding_root = call.get("binding") if isinstance(call.get("binding"), str) else None
+    binding_expression = call.get("binding_expression") if isinstance(call.get("binding_expression"), str) else None
+    attr_tail_parts: list[str] = []
+    if is_attribute and attribute:
+        parts = [part for part in attribute.split(".") if part]
+        if parts:
+            if root and parts[0] == root:
+                attr_tail_parts = parts[1:]
+            else:
+                attr_tail_parts = parts
+    caller_name = caller_entry.get("name") or ""
+    caller_class = caller_entry.get("parent_class")
+    if not caller_class and caller_name and "." in caller_name:
+        caller_class = caller_name.split(".", 1)[0]
+
+    def _finalize(target: str | None, kind: str, module: str | None, confidence: str = "high", detail: dict[str, Any] | None = None, extra: dict[str, Any] | None = None) -> dict[str, Any]:
+        resolution.update({
+            "target": target,
+            "kind": kind,
+            "module": module,
+            "confidence": confidence,
+        })
+        if detail:
+            resolution["detail"] = detail
+        if extra:
+            resolution.update(extra)
+        return resolution
+
+    if expression and expression in local_symbols:
+        target = local_symbols[expression]
+        return _finalize(target, "local_method" if "." in expression else "local_function", module_id)
+
+    if root and not is_attribute and root in local_symbols:
+        return _finalize(local_symbols[root], "local_function", module_id)
+
+    if caller_class and (binding_root in {"self", "cls"} or call.get("is_method_like")) and attr_tail_parts:
+        method_candidate = attr_tail_parts[0]
+        target = class_methods.get(caller_class, {}).get(method_candidate)
+        if target:
+            detail: dict[str, Any] | None = None
+            if len(attr_tail_parts) > 1:
+                detail = {"attribute_tail": ".".join(attr_tail_parts[1:])}
+            return _finalize(target, "local_method", module_id, "medium" if detail else "high", detail)
+
+    if root and root in class_methods and attr_tail_parts:
+        method_candidate = attr_tail_parts[0]
+        target = class_methods[root].get(method_candidate)
+        if target:
+            detail = None
+            if len(attr_tail_parts) > 1:
+                detail = {"attribute_tail": ".".join(attr_tail_parts[1:])}
+            return _finalize(target, "local_method", module_id, "medium" if detail else "high", detail)
+
+    if module_basename and root == module_basename and attr_tail_parts:
+        candidate = attr_tail_parts[0]
+        if candidate in local_symbols:
+            detail = None
+            if len(attr_tail_parts) > 1:
+                detail = {"attribute_tail": ".".join(attr_tail_parts[1:])}
+            return _finalize(local_symbols[candidate], "local_function", module_id, "medium" if detail else "high", detail, {"via_module": module_basename})
+        if candidate in class_methods and len(attr_tail_parts) > 1:
+            method_candidate = attr_tail_parts[1]
+            target = class_methods[candidate].get(method_candidate)
+            if target:
+                detail = None
+                if len(attr_tail_parts) > 2:
+                    detail = {"attribute_tail": ".".join(attr_tail_parts[2:])}
+                return _finalize(target, "local_method", module_id, "medium" if detail else "high", detail, {"via_module": module_basename})
+
+    if root and root in import_alias_map:
+        resolved_module = import_alias_map[root]
+        tail = ".".join(attr_tail_parts) if attr_tail_parts else ""
+        resolved_symbol = f"{resolved_module}.{tail}" if tail else resolved_module
+        module_head = resolved_module.split(".", 1)[0] if resolved_module else resolved_module
+        detail = {"alias": root}
+        if tail:
+            detail["attribute_tail"] = tail
+        return _finalize(
+            resolved_symbol,
+            "imported",
+            module_head,
+            "high",
+            detail,
+            {
+                "module_path": resolved_module,
+                "category": _dependency_category(resolved_module, package_root),
+            },
+        )
+
+    if root and not is_attribute and root in BUILTIN_FUNCTION_NAMES:
+        return _finalize(f"builtins.{root}", "builtin", "builtins")
+
+    detail: dict[str, Any] = {}
+    if binding_expression and binding_expression != binding_root:
+        detail["binding_expression"] = binding_expression
+    if attr_tail_parts:
+        detail.setdefault("attribute_tail", ".".join(attr_tail_parts))
+    if binding_root:
+        detail.setdefault("binding", binding_root)
+    if detail:
+        resolution["detail"] = detail
+    return resolution
 
 
 def _collect_callback_registrations(functions: list[dict[str, Any]], classes: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -1499,7 +1778,15 @@ def _summarize_dependency_categories(graph: list[dict[str, Any]]) -> dict[str, A
                 continue
             modules_by_category.setdefault(category, set()).add(target)
     summary: dict[str, Any] = {}
+    for bucket in DEPENDENCY_SUMMARY_BUCKETS:
+        modules = sorted(modules_by_category.get(bucket, set()))
+        summary[bucket] = {
+            "count": len(modules),
+            "modules": modules,
+        }
     for category, modules in modules_by_category.items():
+        if category in DEPENDENCY_SUMMARY_BUCKETS:
+            continue
         summary[category] = {
             "count": len(modules),
             "modules": sorted(modules),
@@ -1628,6 +1915,7 @@ def analyze_python_file(path: Path, slice_root: Path, warnings: list[str]) -> di
     module_callbacks = _collect_callback_registrations(functions, classes)
     code_smell_summary = _summarize_code_smells(functions, classes)
     coverage_signals = _collect_test_coverage_signals(imports_flat, module_id)
+    call_graph = _build_call_graph(module_id, functions, classes, import_alias_map)
 
     defined_export_candidates: set[str] = set()
     defined_export_candidates.update(func["name"] for func in functions)
@@ -1656,6 +1944,7 @@ def analyze_python_file(path: Path, slice_root: Path, warnings: list[str]) -> di
         "imports_detailed": imports_detailed,
         "import_graph": import_graph,
         "dependency_summary": dependency_summary,
+    "call_graph": call_graph,
         "callback_registrations": module_callbacks,
         "code_smell_summary": code_smell_summary,
         "coverage_signals": coverage_signals,

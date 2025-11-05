@@ -5,6 +5,7 @@ import importlib.util
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 
 MODULE_PATH = (
@@ -121,6 +122,13 @@ def helper(value):
     assert method_entry["signature"] == "def method_one(self):"
     assert method_entry["qualified_name"] == "sample_pkg.module::Example.method_one"
     assert method_entry["line_count"] == 2
+    assert method_entry["parent_class"] == "Example"
+    call_graph = module_entry["call_graph"]
+    assert call_graph["summary"]["total_edges"] == 0
+    assert "locals" in call_graph
+    locals_set = set(call_graph["locals"])
+    assert "sample_pkg.module::helper" in locals_set
+    assert "sample_pkg.module::Example.method_one" in locals_set
     only_entry = files["class_only.py"]
     assert only_entry["module_id"] == "sample_pkg.class_only"
     assert only_entry["module_first_line"] == "class Only:"
@@ -226,6 +234,95 @@ def test_inventory_removes_preexisting_outputs(tmp_path: Path) -> None:
     central_summary = list(reports_dir.glob("pkg_screening-*.json"))
     assert len(central_summary) == 1
     assert central_summary[0].name != "pkg_screening-1999-12-31.json"
+
+
+def test_call_graph_resolves_local_and_imported_calls(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    target = repo_root / "sample"
+    _write(target / "__init__.py", "")
+    _write(
+        target / "module.py",
+        (
+            "import json\n"
+            "from math import sqrt\n\n"
+            "def helper(value: int) -> int:\n"
+            "    return value + 1\n\n"
+            "def outer(value: int) -> dict[str, float]:\n"
+            "    total = helper(value)\n"
+            "    encoded = Example.encode({'value': total})\n"
+            "    root = sqrt(total)\n"
+            "    return {'encoded': len(encoded), 'root': root}\n\n"
+            "class Example:\n"
+            "    def method_one(self, payload):\n"
+            "        return self.method_two(payload)\n\n"
+            "    def method_two(self, payload):\n"
+            "        return len(payload)\n\n"
+            "    @staticmethod\n"
+            "    def encode(data):\n"
+            "        return json.dumps(data)\n"
+        ),
+    )
+
+    exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+    assert exit_code == 0
+
+    output_dir = target / "sample_index"
+    output_file = next(output_dir.glob("sample_index-*.json"))
+    payload = json.loads(output_file.read_text(encoding="utf-8"))
+    module_entry = next(entry for entry in payload["files"] if entry["relative_path"] == "module.py")
+    call_graph = module_entry["call_graph"]
+
+    assert call_graph["summary"]["total_edges"] == 7
+    by_kind = call_graph["summary"]["by_kind"]
+    assert by_kind["local_function"] == 1
+    assert by_kind["local_method"] == 2
+    assert by_kind["imported"] == 2
+    assert by_kind["builtin"] == 2
+
+    edges = call_graph["edges"]
+
+    def _find_edge(source: str, target: str | None = None, expression: str | None = None) -> dict[str, Any]:
+        for edge in edges:
+            if edge["source"] != source:
+                continue
+            if target is not None and edge.get("target") != target:
+                continue
+            if expression is not None and edge.get("expression") != expression:
+                continue
+            return edge
+        target_desc = target or expression or "<unknown>"
+        raise AssertionError(f"Edge from {source} to {target_desc} not found")
+
+    outer_source = "sample.module::outer"
+    helper_edge = _find_edge(outer_source, target="sample.module::helper")
+    assert helper_edge["resolution"]["kind"] == "local_function"
+
+    encode_edge = _find_edge(outer_source, target="sample.module::Example.encode")
+    assert encode_edge["resolution"]["kind"] == "local_method"
+
+    sqrt_edge = _find_edge(outer_source, target="math.sqrt")
+    assert sqrt_edge["resolution"]["kind"] == "imported"
+    assert sqrt_edge["resolution"]["category"] == "standard_library"
+    assert sqrt_edge["resolution"]["detail"]["alias"] == "sqrt"
+
+    len_outer_edge = _find_edge(outer_source, target="builtins.len")
+    assert len_outer_edge["resolution"]["kind"] == "builtin"
+
+    method_one_source = "sample.module::Example.method_one"
+    method_edge = _find_edge(method_one_source, target="sample.module::Example.method_two")
+    assert method_edge["resolution"]["kind"] == "local_method"
+
+    method_two_source = "sample.module::Example.method_two"
+    len_method_edge = _find_edge(method_two_source, target="builtins.len")
+    assert len_method_edge["resolution"]["kind"] == "builtin"
+
+    encode_source = "sample.module::Example.encode"
+    json_edge = _find_edge(encode_source, target="json.dumps")
+    assert json_edge["resolution"]["kind"] == "imported"
+    assert json_edge["resolution"]["module"] == "json"
+
+    assert set(call_graph.get("external_modules", [])) == {"json", "math"}
+    assert call_graph["by_function"][outer_source]["total"] == 4
 
 
 def test_inventory_errors_when_no_python_files(tmp_path: Path) -> None:
