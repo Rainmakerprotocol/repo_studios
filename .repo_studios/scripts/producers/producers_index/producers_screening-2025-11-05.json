@@ -887,15 +887,11 @@
       ],
       [
         "producers.analyze_test_hardening::build_options",
-        "Options"
+        "build_standard_options"
       ],
       [
         "producers.analyze_test_hardening::build_options",
-        "int"
-      ],
-      [
-        "producers.analyze_test_hardening::build_options",
-        "max"
+        "replace"
       ],
       [
         "producers.analyze_test_hardening::build_options",
@@ -903,27 +899,11 @@
       ],
       [
         "producers.analyze_test_hardening::build_paths",
-        "(output_dir_arg if output_dir_arg.is_absolute() else repo_root / output_dir_arg).resolve"
-      ],
-      [
-        "producers.analyze_test_hardening::build_paths",
         "Path"
       ],
       [
         "producers.analyze_test_hardening::build_paths",
-        "Path(__file__).resolve"
-      ],
-      [
-        "producers.analyze_test_hardening::build_paths",
-        "Path(args.repo_root).resolve"
-      ],
-      [
-        "producers.analyze_test_hardening::build_paths",
-        "Paths"
-      ],
-      [
-        "producers.analyze_test_hardening::build_paths",
-        "output_dir_arg.is_absolute"
+        "build_standard_paths"
       ],
       [
         "producers.analyze_test_hardening::compose_payload",
@@ -1278,6 +1258,30 @@
         "{'report.json': 'latest_report.json', 'report.md': 'latest_report.md', 'log.txt': 'latest_log.txt'}.items"
       ],
       [
+        "producers.check_inventory_health::build_options",
+        "base_options._replace"
+      ],
+      [
+        "producers.check_inventory_health::build_options",
+        "build_standard_options"
+      ],
+      [
+        "producers.check_inventory_health::build_options",
+        "getattr"
+      ],
+      [
+        "producers.check_inventory_health::build_options",
+        "str"
+      ],
+      [
+        "producers.check_inventory_health::build_paths",
+        "Path"
+      ],
+      [
+        "producers.check_inventory_health::build_paths",
+        "build_standard_paths"
+      ],
+      [
         "producers.check_inventory_health::build_report",
         "current.get"
       ],
@@ -1354,30 +1358,6 @@
         "logging.basicConfig"
       ],
       [
-        "producers.check_inventory_health::copy_latest",
-        "dest.exists"
-      ],
-      [
-        "producers.check_inventory_health::copy_latest",
-        "dest.hardlink_to"
-      ],
-      [
-        "producers.check_inventory_health::copy_latest",
-        "dest.unlink"
-      ],
-      [
-        "producers.check_inventory_health::copy_latest",
-        "dest.write_bytes"
-      ],
-      [
-        "producers.check_inventory_health::copy_latest",
-        "src.read_bytes"
-      ],
-      [
-        "producers.check_inventory_health::ensure_output_dir",
-        "path.mkdir"
-      ],
-      [
         "producers.check_inventory_health::evaluate",
         "check_thresholds"
       ],
@@ -1415,27 +1395,19 @@
       ],
       [
         "producers.check_inventory_health::main",
-        "Path"
-      ],
-      [
-        "producers.check_inventory_health::main",
-        "Path(args.baseline).resolve"
-      ],
-      [
-        "producers.check_inventory_health::main",
-        "Path(args.output_dir).resolve"
-      ],
-      [
-        "producers.check_inventory_health::main",
-        "Path(args.summary).resolve"
-      ],
-      [
-        "producers.check_inventory_health::main",
-        "Path(args.thresholds).resolve"
+        "ReportArtifact"
       ],
       [
         "producers.check_inventory_health::main",
         "argparse.ArgumentParser"
+      ],
+      [
+        "producers.check_inventory_health::main",
+        "build_options"
+      ],
+      [
+        "producers.check_inventory_health::main",
+        "build_paths"
       ],
       [
         "producers.check_inventory_health::main",
@@ -1475,6 +1447,14 @@
       ],
       [
         "producers.check_inventory_health::main",
+        "producers.check_inventory_health::build_options"
+      ],
+      [
+        "producers.check_inventory_health::main",
+        "producers.check_inventory_health::build_paths"
+      ],
+      [
+        "producers.check_inventory_health::main",
         "producers.check_inventory_health::build_report"
       ],
       [
@@ -1495,7 +1475,11 @@
       ],
       [
         "producers.check_inventory_health::main",
-        "producers.check_inventory_health::write_artifacts"
+        "producers.check_inventory_health::write_log"
+      ],
+      [
+        "producers.check_inventory_health::main",
+        "producers.check_inventory_health::write_markdown"
       ],
       [
         "producers.check_inventory_health::main",
@@ -1507,7 +1491,15 @@
       ],
       [
         "producers.check_inventory_health::main",
-        "write_artifacts"
+        "write_log"
+      ],
+      [
+        "producers.check_inventory_health::main",
+        "write_markdown"
+      ],
+      [
+        "producers.check_inventory_health::main",
+        "write_report_artifacts"
       ],
       [
         "producers.check_inventory_health::parse_timestamp",
@@ -1524,122 +1516,6 @@
       [
         "producers.check_inventory_health::parse_timestamp",
         "parsed.replace"
-      ],
-      [
-        "producers.check_inventory_health::prune_old_runs",
-        "candidates.sort"
-      ],
-      [
-        "producers.check_inventory_health::prune_old_runs",
-        "child.is_file"
-      ],
-      [
-        "producers.check_inventory_health::prune_old_runs",
-        "child.unlink"
-      ],
-      [
-        "producers.check_inventory_health::prune_old_runs",
-        "enumerate"
-      ],
-      [
-        "producers.check_inventory_health::prune_old_runs",
-        "max"
-      ],
-      [
-        "producers.check_inventory_health::prune_old_runs",
-        "output_dir.exists"
-      ],
-      [
-        "producers.check_inventory_health::prune_old_runs",
-        "output_dir.iterdir"
-      ],
-      [
-        "producers.check_inventory_health::prune_old_runs",
-        "path.is_dir"
-      ],
-      [
-        "producers.check_inventory_health::prune_old_runs",
-        "path.iterdir"
-      ],
-      [
-        "producers.check_inventory_health::prune_old_runs",
-        "path.name.startswith"
-      ],
-      [
-        "producers.check_inventory_health::prune_old_runs",
-        "path.rmdir"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "copy_latest"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "datetime.fromisoformat"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "datetime.fromisoformat(report['generated_utc']).astimezone"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "ensure_output_dir"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "generated_ts.strftime"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "json.dumps"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "json_path.write_text"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "log_path.write_text"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "md_path.write_text"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "producers.check_inventory_health::copy_latest"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "producers.check_inventory_health::ensure_output_dir"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "producers.check_inventory_health::prune_old_runs"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "producers.check_inventory_health::write_log"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "producers.check_inventory_health::write_markdown"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "prune_old_runs"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "run_dir.mkdir"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "write_log"
-      ],
-      [
-        "producers.check_inventory_health::write_artifacts",
-        "write_markdown"
       ],
       [
         "producers.check_inventory_health::write_log",
@@ -1692,26 +1568,6 @@
       [
         "producers.diff_standards_index::_compose_report_payload",
         "str"
-      ],
-      [
-        "producers.diff_standards_index::_copy_latest",
-        "dest.exists"
-      ],
-      [
-        "producers.diff_standards_index::_copy_latest",
-        "dest.hardlink_to"
-      ],
-      [
-        "producers.diff_standards_index::_copy_latest",
-        "dest.unlink"
-      ],
-      [
-        "producers.diff_standards_index::_copy_latest",
-        "dest.write_bytes"
-      ],
-      [
-        "producers.diff_standards_index::_copy_latest",
-        "src.read_bytes"
       ],
       [
         "producers.diff_standards_index::_current_utc",
@@ -2280,10 +2136,6 @@
       [
         "producers.diff_standards_index::write_artifacts",
         "payload.get"
-      ],
-      [
-        "producers.diff_standards_index::write_artifacts",
-        "producers.diff_standards_index::_copy_latest"
       ],
       [
         "producers.diff_standards_index::write_artifacts",
@@ -3218,30 +3070,6 @@
         "pyproject_path.exists"
       ],
       [
-        "producers.generate_dependency_hygiene_report::_copy_latest",
-        "dest.exists"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::_copy_latest",
-        "dest.hardlink_to"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::_copy_latest",
-        "dest.unlink"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::_copy_latest",
-        "dest.write_bytes"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::_copy_latest",
-        "src.read_bytes"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::_ensure_output_dir",
-        "path.mkdir"
-      ],
-      [
         "producers.generate_dependency_hygiene_report::_issue_counts",
         "counts.get"
       ],
@@ -3491,6 +3319,10 @@
       ],
       [
         "producers.generate_dependency_hygiene_report::main",
+        "ReportArtifact"
+      ],
+      [
+        "producers.generate_dependency_hygiene_report::main",
         "_collect_issues"
       ],
       [
@@ -3547,7 +3379,11 @@
       ],
       [
         "producers.generate_dependency_hygiene_report::main",
-        "producers.generate_dependency_hygiene_report::write_artifacts"
+        "producers.generate_dependency_hygiene_report::write_log"
+      ],
+      [
+        "producers.generate_dependency_hygiene_report::main",
+        "producers.generate_dependency_hygiene_report::write_markdown"
       ],
       [
         "producers.generate_dependency_hygiene_report::main",
@@ -3555,123 +3391,15 @@
       ],
       [
         "producers.generate_dependency_hygiene_report::main",
-        "write_artifacts"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::prune_old_runs",
-        "candidates.sort"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::prune_old_runs",
-        "child.is_file"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::prune_old_runs",
-        "child.unlink"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::prune_old_runs",
-        "enumerate"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::prune_old_runs",
-        "max"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::prune_old_runs",
-        "output_dir.exists"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::prune_old_runs",
-        "output_dir.iterdir"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::prune_old_runs",
-        "path.is_dir"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::prune_old_runs",
-        "path.iterdir"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::prune_old_runs",
-        "path.name.startswith"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::prune_old_runs",
-        "path.rmdir"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
-        "_copy_latest"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
-        "_ensure_output_dir"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
-        "datetime.fromisoformat"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
-        "datetime.fromisoformat(report['generated_utc']).astimezone"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
-        "generated_ts.strftime"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
-        "json.dumps"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
-        "json_path.write_text"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
-        "log_path.write_text"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
-        "md_path.write_text"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
-        "producers.generate_dependency_hygiene_report::_copy_latest"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
-        "producers.generate_dependency_hygiene_report::_ensure_output_dir"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
-        "producers.generate_dependency_hygiene_report::prune_old_runs"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
-        "producers.generate_dependency_hygiene_report::write_log"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
-        "producers.generate_dependency_hygiene_report::write_markdown"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
-        "prune_old_runs"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
-        "run_dir.mkdir"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
         "write_log"
       ],
       [
-        "producers.generate_dependency_hygiene_report::write_artifacts",
+        "producers.generate_dependency_hygiene_report::main",
         "write_markdown"
+      ],
+      [
+        "producers.generate_dependency_hygiene_report::main",
+        "write_report_artifacts"
       ],
       [
         "producers.generate_dependency_hygiene_report::write_log",
@@ -3736,30 +3464,6 @@
       [
         "producers.generate_import_graph_report::_alias_candidates",
         "parts[0].lstrip"
-      ],
-      [
-        "producers.generate_import_graph_report::_copy_latest",
-        "dest.exists"
-      ],
-      [
-        "producers.generate_import_graph_report::_copy_latest",
-        "dest.hardlink_to"
-      ],
-      [
-        "producers.generate_import_graph_report::_copy_latest",
-        "dest.unlink"
-      ],
-      [
-        "producers.generate_import_graph_report::_copy_latest",
-        "dest.write_bytes"
-      ],
-      [
-        "producers.generate_import_graph_report::_copy_latest",
-        "src.read_bytes"
-      ],
-      [
-        "producers.generate_import_graph_report::_ensure_output_dir",
-        "path.mkdir"
       ],
       [
         "producers.generate_import_graph_report::_module_identifier",
@@ -4103,7 +3807,7 @@
       ],
       [
         "producers.generate_import_graph_report::main",
-        "producers.generate_import_graph_report::write_artifacts"
+        "producers.generate_import_graph_report::write_import_graph_artifacts"
       ],
       [
         "producers.generate_import_graph_report::main",
@@ -4119,7 +3823,7 @@
       ],
       [
         "producers.generate_import_graph_report::main",
-        "write_artifacts"
+        "write_import_graph_artifacts"
       ],
       [
         "producers.generate_import_graph_report::parse_imports",
@@ -4154,128 +3858,44 @@
         "set"
       ],
       [
-        "producers.generate_import_graph_report::prune_old_runs",
-        "candidates.sort"
+        "producers.generate_import_graph_report::write_import_graph_artifacts",
+        "ReportArtifact"
       ],
       [
-        "producers.generate_import_graph_report::prune_old_runs",
-        "enumerate"
+        "producers.generate_import_graph_report::write_import_graph_artifacts",
+        "dict"
       ],
       [
-        "producers.generate_import_graph_report::prune_old_runs",
-        "max"
-      ],
-      [
-        "producers.generate_import_graph_report::prune_old_runs",
-        "output_dir.exists"
-      ],
-      [
-        "producers.generate_import_graph_report::prune_old_runs",
-        "output_dir.iterdir"
-      ],
-      [
-        "producers.generate_import_graph_report::prune_old_runs",
-        "path.is_dir"
-      ],
-      [
-        "producers.generate_import_graph_report::prune_old_runs",
-        "path.name.startswith"
-      ],
-      [
-        "producers.generate_import_graph_report::prune_old_runs",
-        "shutil.rmtree"
-      ],
-      [
-        "producers.generate_import_graph_report::write_artifacts",
-        "_copy_latest"
-      ],
-      [
-        "producers.generate_import_graph_report::write_artifacts",
-        "_ensure_output_dir"
-      ],
-      [
-        "producers.generate_import_graph_report::write_artifacts",
-        "_serialize_graph"
-      ],
-      [
-        "producers.generate_import_graph_report::write_artifacts",
-        "datetime.fromisoformat"
-      ],
-      [
-        "producers.generate_import_graph_report::write_artifacts",
-        "datetime.fromisoformat(report['generated_utc']).astimezone"
-      ],
-      [
-        "producers.generate_import_graph_report::write_artifacts",
-        "generated_ts.strftime"
-      ],
-      [
-        "producers.generate_import_graph_report::write_artifacts",
-        "graph_path.write_text"
-      ],
-      [
-        "producers.generate_import_graph_report::write_artifacts",
+        "producers.generate_import_graph_report::write_import_graph_artifacts",
         "json.dumps"
       ],
       [
-        "producers.generate_import_graph_report::write_artifacts",
-        "json.loads"
+        "producers.generate_import_graph_report::write_import_graph_artifacts",
+        "path.write_text"
       ],
       [
-        "producers.generate_import_graph_report::write_artifacts",
-        "json_path.write_text"
-      ],
-      [
-        "producers.generate_import_graph_report::write_artifacts",
-        "log_path.write_text"
-      ],
-      [
-        "producers.generate_import_graph_report::write_artifacts",
-        "md_path.write_text"
-      ],
-      [
-        "producers.generate_import_graph_report::write_artifacts",
-        "producers.generate_import_graph_report::_copy_latest"
-      ],
-      [
-        "producers.generate_import_graph_report::write_artifacts",
-        "producers.generate_import_graph_report::_ensure_output_dir"
-      ],
-      [
-        "producers.generate_import_graph_report::write_artifacts",
-        "producers.generate_import_graph_report::_serialize_graph"
-      ],
-      [
-        "producers.generate_import_graph_report::write_artifacts",
-        "producers.generate_import_graph_report::prune_old_runs"
-      ],
-      [
-        "producers.generate_import_graph_report::write_artifacts",
+        "producers.generate_import_graph_report::write_import_graph_artifacts",
         "producers.generate_import_graph_report::write_log"
       ],
       [
-        "producers.generate_import_graph_report::write_artifacts",
+        "producers.generate_import_graph_report::write_import_graph_artifacts",
         "producers.generate_import_graph_report::write_markdown"
       ],
       [
-        "producers.generate_import_graph_report::write_artifacts",
-        "prune_old_runs"
-      ],
-      [
-        "producers.generate_import_graph_report::write_artifacts",
-        "run_dir.mkdir"
-      ],
-      [
-        "producers.generate_import_graph_report::write_artifacts",
+        "producers.generate_import_graph_report::write_import_graph_artifacts",
         "str"
       ],
       [
-        "producers.generate_import_graph_report::write_artifacts",
+        "producers.generate_import_graph_report::write_import_graph_artifacts",
         "write_log"
       ],
       [
-        "producers.generate_import_graph_report::write_artifacts",
+        "producers.generate_import_graph_report::write_import_graph_artifacts",
         "write_markdown"
+      ],
+      [
+        "producers.generate_import_graph_report::write_import_graph_artifacts",
+        "write_report_artifacts"
       ],
       [
         "producers.generate_import_graph_report::write_log",
@@ -4322,6 +3942,14 @@
         "report.get"
       ],
       [
+        "producers.generate_lizard_report::Offender.to_payload",
+        "max"
+      ],
+      [
+        "producers.generate_lizard_report::_append_note",
+        "payload.get"
+      ],
+      [
         "producers.generate_lizard_report::_apply_default_extra_args",
         "_has_flag"
       ],
@@ -4346,6 +3974,10 @@
         "int"
       ],
       [
+        "producers.generate_lizard_report::_as_optional_int",
+        "int"
+      ],
+      [
         "producers.generate_lizard_report::_build_command",
         "_apply_default_extra_args"
       ],
@@ -4362,26 +3994,6 @@
         "str"
       ],
       [
-        "producers.generate_lizard_report::_build_offender",
-        "Offender"
-      ],
-      [
-        "producers.generate_lizard_report::_build_offender",
-        "_as_int"
-      ],
-      [
-        "producers.generate_lizard_report::_build_offender",
-        "func.get"
-      ],
-      [
-        "producers.generate_lizard_report::_build_offender",
-        "producers.generate_lizard_report::_as_int"
-      ],
-      [
-        "producers.generate_lizard_report::_build_offender",
-        "str"
-      ],
-      [
         "producers.generate_lizard_report::_build_parser",
         "argparse.ArgumentParser"
       ],
@@ -4395,51 +4007,67 @@
       ],
       [
         "producers.generate_lizard_report::_build_parser",
-        "os.getenv('LIZARD_TARGETS', '').split"
-      ],
-      [
-        "producers.generate_lizard_report::_build_parser",
         "parser.add_argument"
       ],
       [
-        "producers.generate_lizard_report::_build_parser",
+        "producers.generate_lizard_report::_collect_offenders",
+        "Offender"
+      ],
+      [
+        "producers.generate_lizard_report::_collect_offenders",
+        "_as_int"
+      ],
+      [
+        "producers.generate_lizard_report::_collect_offenders",
+        "_as_optional_int"
+      ],
+      [
+        "producers.generate_lizard_report::_collect_offenders",
+        "_extract_file_path"
+      ],
+      [
+        "producers.generate_lizard_report::_collect_offenders",
+        "entry.get"
+      ],
+      [
+        "producers.generate_lizard_report::_collect_offenders",
+        "func.get"
+      ],
+      [
+        "producers.generate_lizard_report::_collect_offenders",
+        "offenders.append"
+      ],
+      [
+        "producers.generate_lizard_report::_collect_offenders",
+        "producers.generate_lizard_report::_as_int"
+      ],
+      [
+        "producers.generate_lizard_report::_collect_offenders",
+        "producers.generate_lizard_report::_as_optional_int"
+      ],
+      [
+        "producers.generate_lizard_report::_collect_offenders",
+        "producers.generate_lizard_report::_extract_file_path"
+      ],
+      [
+        "producers.generate_lizard_report::_collect_offenders",
         "str"
       ],
       [
-        "producers.generate_lizard_report::_compose_report_payload",
+        "producers.generate_lizard_report::_compose_report",
         "generated_at.isoformat"
       ],
       [
-        "producers.generate_lizard_report::_compose_report_payload",
+        "producers.generate_lizard_report::_compose_report",
+        "list"
+      ],
+      [
+        "producers.generate_lizard_report::_compose_report",
         "shlex.join"
-      ],
-      [
-        "producers.generate_lizard_report::_copy_latest",
-        "dest.exists"
-      ],
-      [
-        "producers.generate_lizard_report::_copy_latest",
-        "dest.hardlink_to"
-      ],
-      [
-        "producers.generate_lizard_report::_copy_latest",
-        "dest.unlink"
-      ],
-      [
-        "producers.generate_lizard_report::_copy_latest",
-        "dest.write_bytes"
-      ],
-      [
-        "producers.generate_lizard_report::_copy_latest",
-        "src.read_bytes"
       ],
       [
         "producers.generate_lizard_report::_current_utc",
         "datetime.now"
-      ],
-      [
-        "producers.generate_lizard_report::_ensure_directory",
-        "path.mkdir"
       ],
       [
         "producers.generate_lizard_report::_ensure_lizard_json_extension",
@@ -4475,175 +4103,219 @@
       ],
       [
         "producers.generate_lizard_report::_extract_file_path",
-        "isinstance"
+        "str"
       ],
       [
-        "producers.generate_lizard_report::_format_run_slug",
-        "moment.strftime"
+        "producers.generate_lizard_report::_format_metric",
+        "str"
       ],
       [
-        "producers.generate_lizard_report::_generate_report",
-        "_parse_offenders"
+        "producers.generate_lizard_report::_format_raw_output",
+        "''.join"
       ],
       [
-        "producers.generate_lizard_report::_generate_report",
-        "_write_raw"
-      ],
-      [
-        "producers.generate_lizard_report::_generate_report",
-        "isinstance"
-      ],
-      [
-        "producers.generate_lizard_report::_generate_report",
+        "producers.generate_lizard_report::_format_raw_output",
         "json.dumps"
       ],
       [
-        "producers.generate_lizard_report::_generate_report",
+        "producers.generate_lizard_report::_format_raw_output",
         "json.loads"
       ],
       [
-        "producers.generate_lizard_report::_generate_report",
-        "len"
+        "producers.generate_lizard_report::_format_raw_output",
+        "segments.append"
       ],
       [
-        "producers.generate_lizard_report::_generate_report",
-        "producers.generate_lizard_report::_parse_offenders"
-      ],
-      [
-        "producers.generate_lizard_report::_generate_report",
-        "producers.generate_lizard_report::_write_raw"
-      ],
-      [
-        "producers.generate_lizard_report::_generate_report",
-        "raw_json_path.write_text"
-      ],
-      [
-        "producers.generate_lizard_report::_generate_report",
-        "report_payload.update"
-      ],
-      [
-        "producers.generate_lizard_report::_generate_report",
-        "stderr.strip"
-      ],
-      [
-        "producers.generate_lizard_report::_generate_report",
+        "producers.generate_lizard_report::_format_raw_output",
         "stdout.strip"
-      ],
-      [
-        "producers.generate_lizard_report::_generate_report",
-        "subprocess.run"
-      ],
-      [
-        "producers.generate_lizard_report::_generate_report",
-        "traceback.format_exc"
-      ],
-      [
-        "producers.generate_lizard_report::_handle_unsafe_arguments",
-        "generated_at.isoformat"
-      ],
-      [
-        "producers.generate_lizard_report::_handle_unsafe_arguments",
-        "list"
-      ],
-      [
-        "producers.generate_lizard_report::_handle_unsafe_arguments",
-        "producers.generate_lizard_report::write_artifacts"
-      ],
-      [
-        "producers.generate_lizard_report::_handle_unsafe_arguments",
-        "write_artifacts"
       ],
       [
         "producers.generate_lizard_report::_has_flag",
         "item.startswith"
       ],
       [
-        "producers.generate_lizard_report::_parse_offenders",
-        "_build_offender"
-      ],
-      [
-        "producers.generate_lizard_report::_parse_offenders",
-        "_extract_file_path"
-      ],
-      [
-        "producers.generate_lizard_report::_parse_offenders",
-        "entry.get"
-      ],
-      [
-        "producers.generate_lizard_report::_parse_offenders",
-        "offenders.append"
-      ],
-      [
-        "producers.generate_lizard_report::_parse_offenders",
-        "producers.generate_lizard_report::_build_offender"
-      ],
-      [
-        "producers.generate_lizard_report::_parse_offenders",
-        "producers.generate_lizard_report::_extract_file_path"
-      ],
-      [
-        "producers.generate_lizard_report::_prepare_run_dir",
-        "_ensure_directory"
-      ],
-      [
-        "producers.generate_lizard_report::_prepare_run_dir",
-        "_sanitize_slug"
-      ],
-      [
-        "producers.generate_lizard_report::_prepare_run_dir",
-        "producers.generate_lizard_report::_ensure_directory"
-      ],
-      [
-        "producers.generate_lizard_report::_prepare_run_dir",
-        "producers.generate_lizard_report::_sanitize_slug"
-      ],
-      [
-        "producers.generate_lizard_report::_prepare_run_dir",
-        "run_dir.mkdir"
-      ],
-      [
-        "producers.generate_lizard_report::_resolve_output_dir",
-        "(repo_root / out_dir).resolve"
-      ],
-      [
-        "producers.generate_lizard_report::_resolve_output_dir",
-        "Path"
-      ],
-      [
-        "producers.generate_lizard_report::_resolve_output_dir",
-        "out_dir.is_absolute"
-      ],
-      [
-        "producers.generate_lizard_report::_resolve_output_dir",
-        "str"
-      ],
-      [
-        "producers.generate_lizard_report::_resolve_timestamp",
+        "producers.generate_lizard_report::_parse_timestamp",
         "_current_utc"
       ],
       [
-        "producers.generate_lizard_report::_resolve_timestamp",
-        "_format_run_slug"
-      ],
-      [
-        "producers.generate_lizard_report::_resolve_timestamp",
+        "producers.generate_lizard_report::_parse_timestamp",
         "datetime.fromisoformat"
       ],
       [
-        "producers.generate_lizard_report::_resolve_timestamp",
+        "producers.generate_lizard_report::_parse_timestamp",
         "parsed.astimezone"
       ],
       [
-        "producers.generate_lizard_report::_resolve_timestamp",
+        "producers.generate_lizard_report::_parse_timestamp",
         "parsed.replace"
       ],
       [
-        "producers.generate_lizard_report::_resolve_timestamp",
+        "producers.generate_lizard_report::_parse_timestamp",
         "producers.generate_lizard_report::_current_utc"
       ],
       [
-        "producers.generate_lizard_report::_resolve_timestamp",
-        "producers.generate_lizard_report::_format_run_slug"
+        "producers.generate_lizard_report::_rank_offenders",
+        "float"
+      ],
+      [
+        "producers.generate_lizard_report::_rank_offenders",
+        "max"
+      ],
+      [
+        "producers.generate_lizard_report::_rank_offenders",
+        "sorted"
+      ],
+      [
+        "producers.generate_lizard_report::_render_log",
+        "' '.join"
+      ],
+      [
+        "producers.generate_lizard_report::_render_log",
+        "'\\n'.join"
+      ],
+      [
+        "producers.generate_lizard_report::_render_log",
+        "'top{rank}={location}::{name} ccn={ccn} delta_ccn={delta_ccn} length={length} delta_length={delta_length}'.format"
+      ],
+      [
+        "producers.generate_lizard_report::_render_log",
+        "_format_location"
+      ],
+      [
+        "producers.generate_lizard_report::_render_log",
+        "enumerate"
+      ],
+      [
+        "producers.generate_lizard_report::_render_log",
+        "len"
+      ],
+      [
+        "producers.generate_lizard_report::_render_log",
+        "lines.append"
+      ],
+      [
+        "producers.generate_lizard_report::_render_log",
+        "max"
+      ],
+      [
+        "producers.generate_lizard_report::_render_log",
+        "min"
+      ],
+      [
+        "producers.generate_lizard_report::_render_log",
+        "payload.get"
+      ],
+      [
+        "producers.generate_lizard_report::_render_log",
+        "producers.generate_lizard_report::_format_location"
+      ],
+      [
+        "producers.generate_lizard_report::_render_markdown",
+        "' '.join"
+      ],
+      [
+        "producers.generate_lizard_report::_render_markdown",
+        "'\\n'.join"
+      ],
+      [
+        "producers.generate_lizard_report::_render_markdown",
+        "'| {rank} | `{name}` | `{location}` | {ccn} | {length} | {recommendation} |'.format"
+      ],
+      [
+        "producers.generate_lizard_report::_render_markdown",
+        "_format_location"
+      ],
+      [
+        "producers.generate_lizard_report::_render_markdown",
+        "_format_metric"
+      ],
+      [
+        "producers.generate_lizard_report::_render_markdown",
+        "_recommendation"
+      ],
+      [
+        "producers.generate_lizard_report::_render_markdown",
+        "enumerate"
+      ],
+      [
+        "producers.generate_lizard_report::_render_markdown",
+        "len"
+      ],
+      [
+        "producers.generate_lizard_report::_render_markdown",
+        "lines.append"
+      ],
+      [
+        "producers.generate_lizard_report::_render_markdown",
+        "lines.extend"
+      ],
+      [
+        "producers.generate_lizard_report::_render_markdown",
+        "min"
+      ],
+      [
+        "producers.generate_lizard_report::_render_markdown",
+        "payload.get"
+      ],
+      [
+        "producers.generate_lizard_report::_render_markdown",
+        "producers.generate_lizard_report::_format_location"
+      ],
+      [
+        "producers.generate_lizard_report::_render_markdown",
+        "producers.generate_lizard_report::_format_metric"
+      ],
+      [
+        "producers.generate_lizard_report::_render_markdown",
+        "producers.generate_lizard_report::_recommendation"
+      ],
+      [
+        "producers.generate_lizard_report::_resolve_targets",
+        "(repo_root / candidate).resolve"
+      ],
+      [
+        "producers.generate_lizard_report::_resolve_targets",
+        "Path"
+      ],
+      [
+        "producers.generate_lizard_report::_resolve_targets",
+        "candidate.exists"
+      ],
+      [
+        "producers.generate_lizard_report::_resolve_targets",
+        "candidate.is_absolute"
+      ],
+      [
+        "producers.generate_lizard_report::_resolve_targets",
+        "candidate.relative_to"
+      ],
+      [
+        "producers.generate_lizard_report::_resolve_targets",
+        "candidate.resolve"
+      ],
+      [
+        "producers.generate_lizard_report::_resolve_targets",
+        "list"
+      ],
+      [
+        "producers.generate_lizard_report::_resolve_targets",
+        "logging.warning"
+      ],
+      [
+        "producers.generate_lizard_report::_resolve_targets",
+        "resolved.append"
+      ],
+      [
+        "producers.generate_lizard_report::_resolve_targets",
+        "seen.add"
+      ],
+      [
+        "producers.generate_lizard_report::_resolve_targets",
+        "set"
+      ],
+      [
+        "producers.generate_lizard_report::_resolve_targets",
+        "str"
       ],
       [
         "producers.generate_lizard_report::_sanitize_command",
@@ -4655,10 +4327,6 @@
       ],
       [
         "producers.generate_lizard_report::_sanitize_command",
-        "isinstance"
-      ],
-      [
-        "producers.generate_lizard_report::_sanitize_command",
         "sanitized.append"
       ],
       [
@@ -4666,112 +4334,12 @@
         "str"
       ],
       [
-        "producers.generate_lizard_report::_sanitize_slug",
-        "sanitized.replace"
+        "producers.generate_lizard_report::_timestamp_slug",
+        "moment.astimezone"
       ],
       [
-        "producers.generate_lizard_report::_sanitize_slug",
-        "slug.replace"
-      ],
-      [
-        "producers.generate_lizard_report::_select_targets",
-        "(repo_root / t).resolve"
-      ],
-      [
-        "producers.generate_lizard_report::_select_targets",
-        "Path"
-      ],
-      [
-        "producers.generate_lizard_report::_select_targets",
-        "Path(t).is_absolute"
-      ],
-      [
-        "producers.generate_lizard_report::_select_targets",
-        "path.exists"
-      ],
-      [
-        "producers.generate_lizard_report::_select_targets",
-        "path.resolve"
-      ],
-      [
-        "producers.generate_lizard_report::_select_targets",
-        "resolved.append"
-      ],
-      [
-        "producers.generate_lizard_report::_select_targets",
-        "str"
-      ],
-      [
-        "producers.generate_lizard_report::_write_json",
-        "json.dumps"
-      ],
-      [
-        "producers.generate_lizard_report::_write_json",
-        "path.write_text"
-      ],
-      [
-        "producers.generate_lizard_report::_write_log",
-        "' '.join"
-      ],
-      [
-        "producers.generate_lizard_report::_write_log",
-        "'\\n'.join"
-      ],
-      [
-        "producers.generate_lizard_report::_write_log",
-        "lines.append"
-      ],
-      [
-        "producers.generate_lizard_report::_write_log",
-        "path.write_text"
-      ],
-      [
-        "producers.generate_lizard_report::_write_log",
-        "payload.get"
-      ],
-      [
-        "producers.generate_lizard_report::_write_md",
-        "' '.join"
-      ],
-      [
-        "producers.generate_lizard_report::_write_md",
-        "''.join"
-      ],
-      [
-        "producers.generate_lizard_report::_write_md",
-        "len"
-      ],
-      [
-        "producers.generate_lizard_report::_write_md",
-        "lines.append"
-      ],
-      [
-        "producers.generate_lizard_report::_write_md",
-        "path.write_text"
-      ],
-      [
-        "producers.generate_lizard_report::_write_raw",
-        "''.join"
-      ],
-      [
-        "producers.generate_lizard_report::_write_raw",
-        "json.dumps"
-      ],
-      [
-        "producers.generate_lizard_report::_write_raw",
-        "json.loads"
-      ],
-      [
-        "producers.generate_lizard_report::_write_raw",
-        "lines.append"
-      ],
-      [
-        "producers.generate_lizard_report::_write_raw",
-        "raw_path.write_text"
-      ],
-      [
-        "producers.generate_lizard_report::_write_raw",
-        "stdout.strip"
+        "producers.generate_lizard_report::_timestamp_slug",
+        "moment.astimezone(timezone.utc).strftime"
       ],
       [
         "producers.generate_lizard_report::configure_logging",
@@ -4787,11 +4355,35 @@
       ],
       [
         "producers.generate_lizard_report::main",
+        "''.join"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "', '.join"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "(repo_root / output_dir).resolve"
+      ],
+      [
+        "producers.generate_lizard_report::main",
         "Path"
       ],
       [
         "producers.generate_lizard_report::main",
-        "Path(args.repo_root).resolve"
+        "Path(args.repo_root).expanduser"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "Path(args.repo_root).expanduser().resolve"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "ReportArtifact"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "_append_note"
       ],
       [
         "producers.generate_lizard_report::main",
@@ -4807,7 +4399,11 @@
       ],
       [
         "producers.generate_lizard_report::main",
-        "_compose_report_payload"
+        "_collect_offenders"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "_compose_report"
       ],
       [
         "producers.generate_lizard_report::main",
@@ -4815,23 +4411,27 @@
       ],
       [
         "producers.generate_lizard_report::main",
-        "_generate_report"
+        "_format_raw_output"
       ],
       [
         "producers.generate_lizard_report::main",
-        "_handle_unsafe_arguments"
+        "_parse_timestamp"
       ],
       [
         "producers.generate_lizard_report::main",
-        "_prepare_run_dir"
+        "_rank_offenders"
       ],
       [
         "producers.generate_lizard_report::main",
-        "_resolve_output_dir"
+        "_render_log"
       ],
       [
         "producers.generate_lizard_report::main",
-        "_resolve_timestamp"
+        "_render_markdown"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "_resolve_targets"
       ],
       [
         "producers.generate_lizard_report::main",
@@ -4839,7 +4439,11 @@
       ],
       [
         "producers.generate_lizard_report::main",
-        "_select_targets"
+        "_timestamp_slug"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "artifacts.append"
       ],
       [
         "producers.generate_lizard_report::main",
@@ -4847,7 +4451,63 @@
       ],
       [
         "producers.generate_lizard_report::main",
+        "enumerate"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "isinstance"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "json.loads"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "len"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "list"
+      ],
+      [
+        "producers.generate_lizard_report::main",
         "logging.error"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "logging.exception"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "logging.info"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "max"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "offender.to_payload"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "os.getenv"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "os.getenv('LIZARD_TARGETS', '').split"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "output_dir.is_absolute"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "payload.get"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "producers.generate_lizard_report::_append_note"
       ],
       [
         "producers.generate_lizard_report::main",
@@ -4859,7 +4519,11 @@
       ],
       [
         "producers.generate_lizard_report::main",
-        "producers.generate_lizard_report::_compose_report_payload"
+        "producers.generate_lizard_report::_collect_offenders"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "producers.generate_lizard_report::_compose_report"
       ],
       [
         "producers.generate_lizard_report::main",
@@ -4867,23 +4531,27 @@
       ],
       [
         "producers.generate_lizard_report::main",
-        "producers.generate_lizard_report::_generate_report"
+        "producers.generate_lizard_report::_format_raw_output"
       ],
       [
         "producers.generate_lizard_report::main",
-        "producers.generate_lizard_report::_handle_unsafe_arguments"
+        "producers.generate_lizard_report::_parse_timestamp"
       ],
       [
         "producers.generate_lizard_report::main",
-        "producers.generate_lizard_report::_prepare_run_dir"
+        "producers.generate_lizard_report::_rank_offenders"
       ],
       [
         "producers.generate_lizard_report::main",
-        "producers.generate_lizard_report::_resolve_output_dir"
+        "producers.generate_lizard_report::_render_log"
       ],
       [
         "producers.generate_lizard_report::main",
-        "producers.generate_lizard_report::_resolve_timestamp"
+        "producers.generate_lizard_report::_render_markdown"
+      ],
+      [
+        "producers.generate_lizard_report::main",
+        "producers.generate_lizard_report::_resolve_targets"
       ],
       [
         "producers.generate_lizard_report::main",
@@ -4891,7 +4559,7 @@
       ],
       [
         "producers.generate_lizard_report::main",
-        "producers.generate_lizard_report::_select_targets"
+        "producers.generate_lizard_report::_timestamp_slug"
       ],
       [
         "producers.generate_lizard_report::main",
@@ -4899,115 +4567,23 @@
       ],
       [
         "producers.generate_lizard_report::main",
-        "producers.generate_lizard_report::write_artifacts"
+        "stdout.strip"
       ],
       [
         "producers.generate_lizard_report::main",
-        "write_artifacts"
+        "str"
       ],
       [
-        "producers.generate_lizard_report::prune_old_runs",
-        "candidates.sort"
+        "producers.generate_lizard_report::main",
+        "subprocess.run"
       ],
       [
-        "producers.generate_lizard_report::prune_old_runs",
-        "child.is_file"
+        "producers.generate_lizard_report::main",
+        "traceback.format_exception"
       ],
       [
-        "producers.generate_lizard_report::prune_old_runs",
-        "child.unlink"
-      ],
-      [
-        "producers.generate_lizard_report::prune_old_runs",
-        "enumerate"
-      ],
-      [
-        "producers.generate_lizard_report::prune_old_runs",
-        "max"
-      ],
-      [
-        "producers.generate_lizard_report::prune_old_runs",
-        "output_dir.exists"
-      ],
-      [
-        "producers.generate_lizard_report::prune_old_runs",
-        "output_dir.iterdir"
-      ],
-      [
-        "producers.generate_lizard_report::prune_old_runs",
-        "path.is_dir"
-      ],
-      [
-        "producers.generate_lizard_report::prune_old_runs",
-        "path.iterdir"
-      ],
-      [
-        "producers.generate_lizard_report::prune_old_runs",
-        "path.name.startswith"
-      ],
-      [
-        "producers.generate_lizard_report::prune_old_runs",
-        "path.rmdir"
-      ],
-      [
-        "producers.generate_lizard_report::write_artifacts",
-        "_copy_latest"
-      ],
-      [
-        "producers.generate_lizard_report::write_artifacts",
-        "_ensure_directory"
-      ],
-      [
-        "producers.generate_lizard_report::write_artifacts",
-        "_write_json"
-      ],
-      [
-        "producers.generate_lizard_report::write_artifacts",
-        "_write_log"
-      ],
-      [
-        "producers.generate_lizard_report::write_artifacts",
-        "_write_md"
-      ],
-      [
-        "producers.generate_lizard_report::write_artifacts",
-        "latest_pairs.append"
-      ],
-      [
-        "producers.generate_lizard_report::write_artifacts",
-        "producers.generate_lizard_report::_copy_latest"
-      ],
-      [
-        "producers.generate_lizard_report::write_artifacts",
-        "producers.generate_lizard_report::_ensure_directory"
-      ],
-      [
-        "producers.generate_lizard_report::write_artifacts",
-        "producers.generate_lizard_report::_write_json"
-      ],
-      [
-        "producers.generate_lizard_report::write_artifacts",
-        "producers.generate_lizard_report::_write_log"
-      ],
-      [
-        "producers.generate_lizard_report::write_artifacts",
-        "producers.generate_lizard_report::_write_md"
-      ],
-      [
-        "producers.generate_lizard_report::write_artifacts",
-        "producers.generate_lizard_report::prune_old_runs"
-      ],
-      [
-        "producers.generate_lizard_report::write_artifacts",
-        "prune_old_runs"
-      ],
-      [
-        "producers.generate_lizard_report::write_artifacts",
-        "raw_json.exists"
-      ],
-      [
-        "producers.generate_lizard_report::write_artifacts",
-        "raw_txt.exists"
+        "producers.generate_lizard_report::main",
+        "write_report_artifacts"
       ],
       [
         "producers.generate_standards_index::_build_empty_rules_hash",
@@ -5100,26 +4676,6 @@
       [
         "producers.generate_standards_index::_compute_rules_hash",
         "sorted"
-      ],
-      [
-        "producers.generate_standards_index::_copy_latest",
-        "dest.exists"
-      ],
-      [
-        "producers.generate_standards_index::_copy_latest",
-        "dest.hardlink_to"
-      ],
-      [
-        "producers.generate_standards_index::_copy_latest",
-        "dest.unlink"
-      ],
-      [
-        "producers.generate_standards_index::_copy_latest",
-        "dest.write_bytes"
-      ],
-      [
-        "producers.generate_standards_index::_copy_latest",
-        "src.read_bytes"
       ],
       [
         "producers.generate_standards_index::_current_utc",
@@ -5903,10 +5459,6 @@
       ],
       [
         "producers.generate_standards_index::write_artifacts",
-        "producers.generate_standards_index::_copy_latest"
-      ],
-      [
-        "producers.generate_standards_index::write_artifacts",
         "producers.generate_standards_index::_render_log_text"
       ],
       [
@@ -5970,26 +5522,6 @@
         "str"
       ],
       [
-        "producers.generate_typecheck_report::_copy_latest",
-        "dest.exists"
-      ],
-      [
-        "producers.generate_typecheck_report::_copy_latest",
-        "dest.hardlink_to"
-      ],
-      [
-        "producers.generate_typecheck_report::_copy_latest",
-        "dest.unlink"
-      ],
-      [
-        "producers.generate_typecheck_report::_copy_latest",
-        "dest.write_bytes"
-      ],
-      [
-        "producers.generate_typecheck_report::_copy_latest",
-        "src.read_bytes"
-      ],
-      [
         "producers.generate_typecheck_report::_current_utc",
         "datetime.now"
       ],
@@ -6012,10 +5544,6 @@
       [
         "producers.generate_typecheck_report::_discover_targets",
         "producers.generate_typecheck_report::_read_pyproject_targets"
-      ],
-      [
-        "producers.generate_typecheck_report::_ensure_dir",
-        "path.mkdir"
       ],
       [
         "producers.generate_typecheck_report::_env_bool",
@@ -6134,18 +5662,6 @@
         "re.search"
       ],
       [
-        "producers.generate_typecheck_report::_prepare_run_dir",
-        "_sanitize_slug"
-      ],
-      [
-        "producers.generate_typecheck_report::_prepare_run_dir",
-        "producers.generate_typecheck_report::_sanitize_slug"
-      ],
-      [
-        "producers.generate_typecheck_report::_prepare_run_dir",
-        "run_dir.mkdir"
-      ],
-      [
         "producers.generate_typecheck_report::_read_pyproject_targets",
         "_load_pyproject"
       ],
@@ -6218,18 +5734,6 @@
         "summary.get"
       ],
       [
-        "producers.generate_typecheck_report::_resolve_path",
-        "(base / path).resolve"
-      ],
-      [
-        "producers.generate_typecheck_report::_resolve_path",
-        "Path"
-      ],
-      [
-        "producers.generate_typecheck_report::_resolve_path",
-        "path.is_absolute"
-      ],
-      [
         "producers.generate_typecheck_report::_run_mypy",
         "str"
       ],
@@ -6238,60 +5742,20 @@
         "subprocess.run"
       ],
       [
-        "producers.generate_typecheck_report::_sanitize_slug",
-        "safe.replace"
+        "producers.generate_typecheck_report::build_options",
+        "base_options._replace"
       ],
       [
-        "producers.generate_typecheck_report::_sanitize_slug",
-        "slug.replace"
+        "producers.generate_typecheck_report::build_options",
+        "build_standard_options"
       ],
       [
-        "producers.generate_typecheck_report::_sanitize_slug",
-        "slug.replace('/', '_').replace"
+        "producers.generate_typecheck_report::build_options",
+        "getattr"
       ],
       [
-        "producers.generate_typecheck_report::_update_latest",
-        "_copy_latest"
-      ],
-      [
-        "producers.generate_typecheck_report::_update_latest",
-        "producers.generate_typecheck_report::_copy_latest"
-      ],
-      [
-        "producers.generate_typecheck_report::_write_artifacts",
-        "_render_log"
-      ],
-      [
-        "producers.generate_typecheck_report::_write_artifacts",
-        "_render_markdown"
-      ],
-      [
-        "producers.generate_typecheck_report::_write_artifacts",
-        "json.dumps"
-      ],
-      [
-        "producers.generate_typecheck_report::_write_artifacts",
-        "log_txt.write_text"
-      ],
-      [
-        "producers.generate_typecheck_report::_write_artifacts",
-        "producers.generate_typecheck_report::_render_log"
-      ],
-      [
-        "producers.generate_typecheck_report::_write_artifacts",
-        "producers.generate_typecheck_report::_render_markdown"
-      ],
-      [
-        "producers.generate_typecheck_report::_write_artifacts",
-        "raw_txt.write_text"
-      ],
-      [
-        "producers.generate_typecheck_report::_write_artifacts",
-        "report_json.write_text"
-      ],
-      [
-        "producers.generate_typecheck_report::_write_artifacts",
-        "report_md.write_text"
+        "producers.generate_typecheck_report::build_options",
+        "str"
       ],
       [
         "producers.generate_typecheck_report::build_parser",
@@ -6304,6 +5768,14 @@
       [
         "producers.generate_typecheck_report::build_parser",
         "str"
+      ],
+      [
+        "producers.generate_typecheck_report::build_paths",
+        "Path"
+      ],
+      [
+        "producers.generate_typecheck_report::build_paths",
+        "build_standard_paths"
       ],
       [
         "producers.generate_typecheck_report::configure_logging",
@@ -6323,11 +5795,7 @@
       ],
       [
         "producers.generate_typecheck_report::main",
-        "Path"
-      ],
-      [
-        "producers.generate_typecheck_report::main",
-        "Path(args.repo_root).resolve"
+        "ReportArtifact"
       ],
       [
         "producers.generate_typecheck_report::main",
@@ -6348,10 +5816,6 @@
       [
         "producers.generate_typecheck_report::main",
         "_discover_targets"
-      ],
-      [
-        "producers.generate_typecheck_report::main",
-        "_ensure_dir"
       ],
       [
         "producers.generate_typecheck_report::main",
@@ -6379,11 +5843,11 @@
       ],
       [
         "producers.generate_typecheck_report::main",
-        "_prepare_run_dir"
+        "_render_log"
       ],
       [
         "producers.generate_typecheck_report::main",
-        "_resolve_path"
+        "_render_markdown"
       ],
       [
         "producers.generate_typecheck_report::main",
@@ -6391,19 +5855,19 @@
       ],
       [
         "producers.generate_typecheck_report::main",
-        "_update_latest"
-      ],
-      [
-        "producers.generate_typecheck_report::main",
-        "_write_artifacts"
-      ],
-      [
-        "producers.generate_typecheck_report::main",
         "bool"
       ],
       [
         "producers.generate_typecheck_report::main",
+        "build_options"
+      ],
+      [
+        "producers.generate_typecheck_report::main",
         "build_parser"
+      ],
+      [
+        "producers.generate_typecheck_report::main",
+        "build_paths"
       ],
       [
         "producers.generate_typecheck_report::main",
@@ -6459,10 +5923,6 @@
       ],
       [
         "producers.generate_typecheck_report::main",
-        "producers.generate_typecheck_report::_ensure_dir"
-      ],
-      [
-        "producers.generate_typecheck_report::main",
         "producers.generate_typecheck_report::_env_bool"
       ],
       [
@@ -6487,11 +5947,11 @@
       ],
       [
         "producers.generate_typecheck_report::main",
-        "producers.generate_typecheck_report::_prepare_run_dir"
+        "producers.generate_typecheck_report::_render_log"
       ],
       [
         "producers.generate_typecheck_report::main",
-        "producers.generate_typecheck_report::_resolve_path"
+        "producers.generate_typecheck_report::_render_markdown"
       ],
       [
         "producers.generate_typecheck_report::main",
@@ -6499,11 +5959,7 @@
       ],
       [
         "producers.generate_typecheck_report::main",
-        "producers.generate_typecheck_report::_update_latest"
-      ],
-      [
-        "producers.generate_typecheck_report::main",
-        "producers.generate_typecheck_report::_write_artifacts"
+        "producers.generate_typecheck_report::build_options"
       ],
       [
         "producers.generate_typecheck_report::main",
@@ -6511,59 +5967,15 @@
       ],
       [
         "producers.generate_typecheck_report::main",
+        "producers.generate_typecheck_report::build_paths"
+      ],
+      [
+        "producers.generate_typecheck_report::main",
         "producers.generate_typecheck_report::configure_logging"
       ],
       [
         "producers.generate_typecheck_report::main",
-        "producers.generate_typecheck_report::prune_old_runs"
-      ],
-      [
-        "producers.generate_typecheck_report::main",
-        "prune_old_runs"
-      ],
-      [
-        "producers.generate_typecheck_report::prune_old_runs",
-        "child.is_dir"
-      ],
-      [
-        "producers.generate_typecheck_report::prune_old_runs",
-        "child.name.startswith"
-      ],
-      [
-        "producers.generate_typecheck_report::prune_old_runs",
-        "enumerate"
-      ],
-      [
-        "producers.generate_typecheck_report::prune_old_runs",
-        "item.is_file"
-      ],
-      [
-        "producers.generate_typecheck_report::prune_old_runs",
-        "item.unlink"
-      ],
-      [
-        "producers.generate_typecheck_report::prune_old_runs",
-        "max"
-      ],
-      [
-        "producers.generate_typecheck_report::prune_old_runs",
-        "node.iterdir"
-      ],
-      [
-        "producers.generate_typecheck_report::prune_old_runs",
-        "node.rmdir"
-      ],
-      [
-        "producers.generate_typecheck_report::prune_old_runs",
-        "output_dir.exists"
-      ],
-      [
-        "producers.generate_typecheck_report::prune_old_runs",
-        "output_dir.iterdir"
-      ],
-      [
-        "producers.generate_typecheck_report::prune_old_runs",
-        "runs.sort"
+        "write_report_artifacts"
       ],
       [
         "producers.render_inventory_views::_build_parser",
@@ -6590,32 +6002,8 @@
         "str(relative).replace"
       ],
       [
-        "producers.render_inventory_views::_copy_latest",
-        "dest.exists"
-      ],
-      [
-        "producers.render_inventory_views::_copy_latest",
-        "dest.hardlink_to"
-      ],
-      [
-        "producers.render_inventory_views::_copy_latest",
-        "dest.unlink"
-      ],
-      [
-        "producers.render_inventory_views::_copy_latest",
-        "dest.write_bytes"
-      ],
-      [
-        "producers.render_inventory_views::_copy_latest",
-        "src.read_bytes"
-      ],
-      [
         "producers.render_inventory_views::_current_time",
         "datetime.now"
-      ],
-      [
-        "producers.render_inventory_views::_ensure_dir",
-        "path.mkdir"
       ],
       [
         "producers.render_inventory_views::_format_slug",
@@ -6638,18 +6026,6 @@
         "producers.render_inventory_views::_current_time"
       ],
       [
-        "producers.render_inventory_views::_prepare_run_dir",
-        "_sanitize_slug"
-      ],
-      [
-        "producers.render_inventory_views::_prepare_run_dir",
-        "producers.render_inventory_views::_sanitize_slug"
-      ],
-      [
-        "producers.render_inventory_views::_prepare_run_dir",
-        "run_dir.mkdir"
-      ],
-      [
         "producers.render_inventory_views::_resolve",
         "(repo_root / path).resolve"
       ],
@@ -6662,12 +6038,28 @@
         "path.is_absolute"
       ],
       [
-        "producers.render_inventory_views::_sanitize_slug",
-        "slug.replace"
+        "producers.render_inventory_views::build_options",
+        "base_options._replace"
       ],
       [
-        "producers.render_inventory_views::_sanitize_slug",
-        "slug.replace('/', '_').replace"
+        "producers.render_inventory_views::build_options",
+        "build_standard_options"
+      ],
+      [
+        "producers.render_inventory_views::build_options",
+        "getattr"
+      ],
+      [
+        "producers.render_inventory_views::build_options",
+        "str"
+      ],
+      [
+        "producers.render_inventory_views::build_paths",
+        "Path"
+      ],
+      [
+        "producers.render_inventory_views::build_paths",
+        "build_standard_paths"
       ],
       [
         "producers.render_inventory_views::build_views",
@@ -6787,19 +6179,11 @@
       ],
       [
         "producers.render_inventory_views::main",
-        "Path"
-      ],
-      [
-        "producers.render_inventory_views::main",
-        "Path(args.repo_root).resolve"
+        "ReportArtifact"
       ],
       [
         "producers.render_inventory_views::main",
         "_build_parser"
-      ],
-      [
-        "producers.render_inventory_views::main",
-        "_ensure_dir"
       ],
       [
         "producers.render_inventory_views::main",
@@ -6811,15 +6195,15 @@
       ],
       [
         "producers.render_inventory_views::main",
-        "_prepare_run_dir"
-      ],
-      [
-        "producers.render_inventory_views::main",
         "_resolve"
       ],
       [
         "producers.render_inventory_views::main",
-        "args.log_level.upper"
+        "build_options"
+      ],
+      [
+        "producers.render_inventory_views::main",
+        "build_paths"
       ],
       [
         "producers.render_inventory_views::main",
@@ -6851,15 +6235,15 @@
       ],
       [
         "producers.render_inventory_views::main",
+        "options.log_level.upper"
+      ],
+      [
+        "producers.render_inventory_views::main",
         "parser.parse_args"
       ],
       [
         "producers.render_inventory_views::main",
         "producers.render_inventory_views::_build_parser"
-      ],
-      [
-        "producers.render_inventory_views::main",
-        "producers.render_inventory_views::_ensure_dir"
       ],
       [
         "producers.render_inventory_views::main",
@@ -6871,11 +6255,15 @@
       ],
       [
         "producers.render_inventory_views::main",
-        "producers.render_inventory_views::_prepare_run_dir"
+        "producers.render_inventory_views::_resolve"
       ],
       [
         "producers.render_inventory_views::main",
-        "producers.render_inventory_views::_resolve"
+        "producers.render_inventory_views::build_options"
+      ],
+      [
+        "producers.render_inventory_views::main",
+        "producers.render_inventory_views::build_paths"
       ],
       [
         "producers.render_inventory_views::main",
@@ -6895,19 +6283,15 @@
       ],
       [
         "producers.render_inventory_views::main",
-        "producers.render_inventory_views::prune_old_runs"
+        "producers.render_inventory_views::render_log"
       ],
       [
         "producers.render_inventory_views::main",
-        "producers.render_inventory_views::update_latest_artifacts"
+        "producers.render_inventory_views::render_markdown"
       ],
       [
         "producers.render_inventory_views::main",
         "producers.render_inventory_views::write_json"
-      ],
-      [
-        "producers.render_inventory_views::main",
-        "producers.render_inventory_views::write_run_artifacts"
       ],
       [
         "producers.render_inventory_views::main",
@@ -6919,11 +6303,11 @@
       ],
       [
         "producers.render_inventory_views::main",
-        "prune_old_runs"
+        "render_log"
       ],
       [
         "producers.render_inventory_views::main",
-        "update_latest_artifacts"
+        "render_markdown"
       ],
       [
         "producers.render_inventory_views::main",
@@ -6931,7 +6315,7 @@
       ],
       [
         "producers.render_inventory_views::main",
-        "write_run_artifacts"
+        "write_report_artifacts"
       ],
       [
         "producers.render_inventory_views::main",
@@ -6940,50 +6324,6 @@
       [
         "producers.render_inventory_views::main",
         "write_yaml"
-      ],
-      [
-        "producers.render_inventory_views::prune_old_runs",
-        "child.is_file"
-      ],
-      [
-        "producers.render_inventory_views::prune_old_runs",
-        "child.unlink"
-      ],
-      [
-        "producers.render_inventory_views::prune_old_runs",
-        "enumerate"
-      ],
-      [
-        "producers.render_inventory_views::prune_old_runs",
-        "max"
-      ],
-      [
-        "producers.render_inventory_views::prune_old_runs",
-        "node.is_dir"
-      ],
-      [
-        "producers.render_inventory_views::prune_old_runs",
-        "node.iterdir"
-      ],
-      [
-        "producers.render_inventory_views::prune_old_runs",
-        "node.name.startswith"
-      ],
-      [
-        "producers.render_inventory_views::prune_old_runs",
-        "node.rmdir"
-      ],
-      [
-        "producers.render_inventory_views::prune_old_runs",
-        "output_dir.exists"
-      ],
-      [
-        "producers.render_inventory_views::prune_old_runs",
-        "output_dir.iterdir"
-      ],
-      [
-        "producers.render_inventory_views::prune_old_runs",
-        "runs.sort"
       ],
       [
         "producers.render_inventory_views::render_log",
@@ -7090,60 +6430,12 @@
         "record.get"
       ],
       [
-        "producers.render_inventory_views::update_latest_artifacts",
-        "_copy_latest"
-      ],
-      [
-        "producers.render_inventory_views::update_latest_artifacts",
-        "mapping.items"
-      ],
-      [
-        "producers.render_inventory_views::update_latest_artifacts",
-        "producers.render_inventory_views::_copy_latest"
-      ],
-      [
         "producers.render_inventory_views::write_json",
         "json.dumps"
       ],
       [
         "producers.render_inventory_views::write_json",
         "path.write_text"
-      ],
-      [
-        "producers.render_inventory_views::write_run_artifacts",
-        "(run_dir / 'log.txt').write_text"
-      ],
-      [
-        "producers.render_inventory_views::write_run_artifacts",
-        "(run_dir / 'raw.json').write_text"
-      ],
-      [
-        "producers.render_inventory_views::write_run_artifacts",
-        "(run_dir / 'report.json').write_text"
-      ],
-      [
-        "producers.render_inventory_views::write_run_artifacts",
-        "(run_dir / 'report.md').write_text"
-      ],
-      [
-        "producers.render_inventory_views::write_run_artifacts",
-        "json.dumps"
-      ],
-      [
-        "producers.render_inventory_views::write_run_artifacts",
-        "producers.render_inventory_views::render_log"
-      ],
-      [
-        "producers.render_inventory_views::write_run_artifacts",
-        "producers.render_inventory_views::render_markdown"
-      ],
-      [
-        "producers.render_inventory_views::write_run_artifacts",
-        "render_log"
-      ],
-      [
-        "producers.render_inventory_views::write_run_artifacts",
-        "render_markdown"
       ],
       [
         "producers.render_inventory_views::write_stub",
@@ -7215,27 +6507,11 @@
       ],
       [
         "producers.scan_code_placeholders::build_paths",
-        "(repo_root / args.root).resolve"
-      ],
-      [
-        "producers.scan_code_placeholders::build_paths",
         "Path"
       ],
       [
         "producers.scan_code_placeholders::build_paths",
-        "Path(__file__).resolve"
-      ],
-      [
-        "producers.scan_code_placeholders::build_paths",
-        "Path(args.output_dir).resolve"
-      ],
-      [
-        "producers.scan_code_placeholders::build_paths",
-        "Path(args.repo_root).resolve"
-      ],
-      [
-        "producers.scan_code_placeholders::build_paths",
-        "Paths"
+        "build_standard_paths"
       ],
       [
         "producers.scan_code_placeholders::compile_pattern_regex",
@@ -7548,6 +6824,10 @@
       [
         "producers.scan_code_placeholders::run",
         "build_paths"
+      ],
+      [
+        "producers.scan_code_placeholders::run",
+        "build_standard_options"
       ],
       [
         "producers.scan_code_placeholders::run",
@@ -8355,35 +7635,11 @@
       ],
       [
         "producers.scan_monkey_patches::build_paths",
-        "(repo_root / DEFAULT_OUTPUT_DIR).resolve"
-      ],
-      [
-        "producers.scan_monkey_patches::build_paths",
-        "(repo_root / args.root).resolve"
-      ],
-      [
-        "producers.scan_monkey_patches::build_paths",
         "Path"
       ],
       [
         "producers.scan_monkey_patches::build_paths",
-        "Path(__file__).resolve"
-      ],
-      [
-        "producers.scan_monkey_patches::build_paths",
-        "Path(args.repo_root).resolve"
-      ],
-      [
-        "producers.scan_monkey_patches::build_paths",
-        "Paths"
-      ],
-      [
-        "producers.scan_monkey_patches::build_paths",
-        "output_dir.is_absolute"
-      ],
-      [
-        "producers.scan_monkey_patches::build_paths",
-        "output_dir.resolve"
+        "build_standard_paths"
       ],
       [
         "producers.scan_monkey_patches::compose_payload",
@@ -8708,6 +7964,10 @@
       [
         "producers.scan_monkey_patches::run",
         "build_paths"
+      ],
+      [
+        "producers.scan_monkey_patches::run",
+        "build_standard_options"
       ],
       [
         "producers.scan_monkey_patches::run",
@@ -9175,15 +8435,11 @@
       ],
       [
         "producers.seed_standards_prompts::build_options",
+        "build_standard_options"
+      ],
+      [
+        "producers.seed_standards_prompts::build_options",
         "dict.fromkeys"
-      ],
-      [
-        "producers.seed_standards_prompts::build_options",
-        "int"
-      ],
-      [
-        "producers.seed_standards_prompts::build_options",
-        "max"
       ],
       [
         "producers.seed_standards_prompts::build_options",
@@ -9191,43 +8447,11 @@
       ],
       [
         "producers.seed_standards_prompts::build_paths",
-        "(repo_root / DEFAULT_OUTPUT_DIR).resolve"
-      ],
-      [
-        "producers.seed_standards_prompts::build_paths",
-        "(repo_root / DEFAULT_RELATIVE_INDEX).resolve"
-      ],
-      [
-        "producers.seed_standards_prompts::build_paths",
-        "(repo_root / index_path).resolve"
-      ],
-      [
-        "producers.seed_standards_prompts::build_paths",
-        "(repo_root / output_dir).resolve"
-      ],
-      [
-        "producers.seed_standards_prompts::build_paths",
         "Path"
       ],
       [
         "producers.seed_standards_prompts::build_paths",
-        "Path(__file__).resolve"
-      ],
-      [
-        "producers.seed_standards_prompts::build_paths",
-        "Path(args.repo_root).resolve"
-      ],
-      [
-        "producers.seed_standards_prompts::build_paths",
-        "Paths"
-      ],
-      [
-        "producers.seed_standards_prompts::build_paths",
-        "index_path.is_absolute"
-      ],
-      [
-        "producers.seed_standards_prompts::build_paths",
-        "output_dir.is_absolute"
+        "build_standard_paths"
       ],
       [
         "producers.seed_standards_prompts::build_seed",
@@ -9959,10 +9183,6 @@
       ],
       [
         "producers.validate_import_boundaries::build_options",
-        "Options"
-      ],
-      [
-        "producers.validate_import_boundaries::build_options",
         "Path"
       ],
       [
@@ -9971,27 +9191,19 @@
       ],
       [
         "producers.validate_import_boundaries::build_options",
+        "build_standard_options"
+      ],
+      [
+        "producers.validate_import_boundaries::build_options",
         "graph_path.is_absolute"
-      ],
-      [
-        "producers.validate_import_boundaries::build_options",
-        "int"
-      ],
-      [
-        "producers.validate_import_boundaries::build_options",
-        "max"
       ],
       [
         "producers.validate_import_boundaries::build_options",
         "os.getenv"
       ],
       [
-        "producers.validate_import_boundaries::build_paths",
-        "(repo_root / DEFAULT_ALLOWLIST).resolve"
-      ],
-      [
-        "producers.validate_import_boundaries::build_paths",
-        "(repo_root / DEFAULT_OUTPUT_DIR).resolve"
+        "producers.validate_import_boundaries::build_options",
+        "replace"
       ],
       [
         "producers.validate_import_boundaries::build_paths",
@@ -9999,31 +9211,31 @@
       ],
       [
         "producers.validate_import_boundaries::build_paths",
+        "(repo_root / graph_candidate).resolve"
+      ],
+      [
+        "producers.validate_import_boundaries::build_paths",
         "Path"
       ],
       [
         "producers.validate_import_boundaries::build_paths",
-        "Path(__file__).resolve"
+        "build_standard_paths"
       ],
       [
         "producers.validate_import_boundaries::build_paths",
-        "Path(args.allowlist_path).resolve"
+        "getattr"
       ],
       [
         "producers.validate_import_boundaries::build_paths",
-        "Path(args.graph_path).resolve"
+        "graph_candidate.is_absolute"
       ],
       [
         "producers.validate_import_boundaries::build_paths",
-        "Path(args.output_dir).resolve"
+        "graph_candidate.resolve"
       ],
       [
         "producers.validate_import_boundaries::build_paths",
-        "Path(args.repo_root).resolve"
-      ],
-      [
-        "producers.validate_import_boundaries::build_paths",
-        "Paths"
+        "replace"
       ],
       [
         "producers.validate_import_boundaries::compose_payload",
@@ -10566,32 +9778,8 @@
         "sorted"
       ],
       [
-        "producers.validate_inventory::_copy_latest",
-        "dest.exists"
-      ],
-      [
-        "producers.validate_inventory::_copy_latest",
-        "dest.hardlink_to"
-      ],
-      [
-        "producers.validate_inventory::_copy_latest",
-        "dest.unlink"
-      ],
-      [
-        "producers.validate_inventory::_copy_latest",
-        "dest.write_bytes"
-      ],
-      [
-        "producers.validate_inventory::_copy_latest",
-        "src.read_bytes"
-      ],
-      [
         "producers.validate_inventory::_current_time",
         "datetime.now"
-      ],
-      [
-        "producers.validate_inventory::_ensure_dir",
-        "path.mkdir"
       ],
       [
         "producers.validate_inventory::_format_slug",
@@ -10646,12 +9834,44 @@
         "candidate.is_absolute"
       ],
       [
+        "producers.validate_inventory::_resolve_with_schema_dependency",
+        "(schema_root / filename).resolve"
+      ],
+      [
+        "producers.validate_inventory::_resolve_with_schema_dependency",
+        "resolve_path"
+      ],
+      [
+        "producers.validate_inventory::_resolve_with_schema_dependency",
+        "str"
+      ],
+      [
         "producers.validate_inventory::_sanitize_slug",
         "slug.replace"
       ],
       [
         "producers.validate_inventory::_sanitize_slug",
         "slug.replace('/', '_').replace"
+      ],
+      [
+        "producers.validate_inventory::build_options",
+        "Options"
+      ],
+      [
+        "producers.validate_inventory::build_options",
+        "bool"
+      ],
+      [
+        "producers.validate_inventory::build_options",
+        "build_standard_options"
+      ],
+      [
+        "producers.validate_inventory::build_options",
+        "getattr"
+      ],
+      [
+        "producers.validate_inventory::build_options",
+        "str"
       ],
       [
         "producers.validate_inventory::build_parser",
@@ -10664,6 +9884,30 @@
       [
         "producers.validate_inventory::build_parser",
         "str"
+      ],
+      [
+        "producers.validate_inventory::build_paths",
+        "Path"
+      ],
+      [
+        "producers.validate_inventory::build_paths",
+        "Paths"
+      ],
+      [
+        "producers.validate_inventory::build_paths",
+        "_resolve_with_schema_dependency"
+      ],
+      [
+        "producers.validate_inventory::build_paths",
+        "build_standard_paths"
+      ],
+      [
+        "producers.validate_inventory::build_paths",
+        "getattr"
+      ],
+      [
+        "producers.validate_inventory::build_paths",
+        "producers.validate_inventory::_resolve_with_schema_dependency"
       ],
       [
         "producers.validate_inventory::compose_payload",
@@ -10715,19 +9959,7 @@
       ],
       [
         "producers.validate_inventory::main",
-        "(schema_root / filename).resolve"
-      ],
-      [
-        "producers.validate_inventory::main",
         "EnumRegistry.load"
-      ],
-      [
-        "producers.validate_inventory::main",
-        "Path"
-      ],
-      [
-        "producers.validate_inventory::main",
-        "Path(args.repo_root).resolve"
       ],
       [
         "producers.validate_inventory::main",
@@ -10751,10 +9983,6 @@
       ],
       [
         "producers.validate_inventory::main",
-        "_ensure_dir"
-      ],
-      [
-        "producers.validate_inventory::main",
         "_format_slug"
       ],
       [
@@ -10763,19 +9991,15 @@
       ],
       [
         "producers.validate_inventory::main",
-        "_resolve"
-      ],
-      [
-        "producers.validate_inventory::main",
-        "_resolve_schema_relative"
-      ],
-      [
-        "producers.validate_inventory::main",
-        "args.log_level.upper"
+        "build_options"
       ],
       [
         "producers.validate_inventory::main",
         "build_parser"
+      ],
+      [
+        "producers.validate_inventory::main",
+        "build_paths"
       ],
       [
         "producers.validate_inventory::main",
@@ -10811,6 +10035,10 @@
       ],
       [
         "producers.validate_inventory::main",
+        "options.log_level.upper"
+      ],
+      [
+        "producers.validate_inventory::main",
         "parser.parse_args"
       ],
       [
@@ -10831,10 +10059,6 @@
       ],
       [
         "producers.validate_inventory::main",
-        "producers.validate_inventory::_ensure_dir"
-      ],
-      [
-        "producers.validate_inventory::main",
         "producers.validate_inventory::_format_slug"
       ],
       [
@@ -10843,11 +10067,15 @@
       ],
       [
         "producers.validate_inventory::main",
-        "producers.validate_inventory::_resolve"
+        "producers.validate_inventory::build_options"
       ],
       [
         "producers.validate_inventory::main",
         "producers.validate_inventory::build_parser"
+      ],
+      [
+        "producers.validate_inventory::main",
+        "producers.validate_inventory::build_paths"
       ],
       [
         "producers.validate_inventory::main",
@@ -10888,10 +10116,6 @@
       [
         "producers.validate_inventory::main",
         "report_payload['summary']['issue_counts'].get"
-      ],
-      [
-        "producers.validate_inventory::main",
-        "str"
       ],
       [
         "producers.validate_inventory::main",
@@ -10992,10 +10216,6 @@
       [
         "producers.validate_inventory::update_latest_artifacts",
         "mapping.items"
-      ],
-      [
-        "producers.validate_inventory::update_latest_artifacts",
-        "producers.validate_inventory::_copy_latest"
       ],
       [
         "producers.validate_inventory::validate_file",
@@ -11136,6 +10356,38 @@
       [
         "producers.validate_markdown_anchors::_relativize",
         "path.relative_to(root).as_posix"
+      ],
+      [
+        "producers.validate_markdown_anchors::build_options",
+        "Options"
+      ],
+      [
+        "producers.validate_markdown_anchors::build_options",
+        "build_standard_options"
+      ],
+      [
+        "producers.validate_markdown_anchors::build_options",
+        "getattr"
+      ],
+      [
+        "producers.validate_markdown_anchors::build_options",
+        "list"
+      ],
+      [
+        "producers.validate_markdown_anchors::build_options",
+        "str"
+      ],
+      [
+        "producers.validate_markdown_anchors::build_options",
+        "tuple"
+      ],
+      [
+        "producers.validate_markdown_anchors::build_paths",
+        "Path"
+      ],
+      [
+        "producers.validate_markdown_anchors::build_paths",
+        "build_standard_paths"
       ],
       [
         "producers.validate_markdown_anchors::build_report",
@@ -11279,18 +10531,6 @@
       ],
       [
         "producers.validate_markdown_anchors::main",
-        "Path"
-      ],
-      [
-        "producers.validate_markdown_anchors::main",
-        "Path(args.output_dir).resolve"
-      ],
-      [
-        "producers.validate_markdown_anchors::main",
-        "Path(args.root).resolve"
-      ],
-      [
-        "producers.validate_markdown_anchors::main",
         "_parse_timestamp"
       ],
       [
@@ -11307,7 +10547,11 @@
       ],
       [
         "producers.validate_markdown_anchors::main",
-        "args.log_level.upper"
+        "build_options"
+      ],
+      [
+        "producers.validate_markdown_anchors::main",
+        "build_paths"
       ],
       [
         "producers.validate_markdown_anchors::main",
@@ -11343,6 +10587,10 @@
       ],
       [
         "producers.validate_markdown_anchors::main",
+        "options.log_level.upper"
+      ],
+      [
+        "producers.validate_markdown_anchors::main",
         "parser.add_argument"
       ],
       [
@@ -11356,6 +10604,14 @@
       [
         "producers.validate_markdown_anchors::main",
         "producers.validate_markdown_anchors::_relativize"
+      ],
+      [
+        "producers.validate_markdown_anchors::main",
+        "producers.validate_markdown_anchors::build_options"
+      ],
+      [
+        "producers.validate_markdown_anchors::main",
+        "producers.validate_markdown_anchors::build_paths"
       ],
       [
         "producers.validate_markdown_anchors::main",
@@ -11539,27 +10795,7 @@
       ],
       [
         "producers.validate_metrics_anchor_stubs::build_options",
-        "Options"
-      ],
-      [
-        "producers.validate_metrics_anchor_stubs::build_options",
-        "int"
-      ],
-      [
-        "producers.validate_metrics_anchor_stubs::build_options",
-        "max"
-      ],
-      [
-        "producers.validate_metrics_anchor_stubs::build_paths",
-        "(repo_root / DEFAULT_ALLOWLIST_PATH).resolve"
-      ],
-      [
-        "producers.validate_metrics_anchor_stubs::build_paths",
-        "(repo_root / DEFAULT_LEGACY_FILE).resolve"
-      ],
-      [
-        "producers.validate_metrics_anchor_stubs::build_paths",
-        "(repo_root / DEFAULT_OUTPUT_DIR).resolve"
+        "build_standard_options"
       ],
       [
         "producers.validate_metrics_anchor_stubs::build_paths",
@@ -11567,27 +10803,7 @@
       ],
       [
         "producers.validate_metrics_anchor_stubs::build_paths",
-        "Path(__file__).resolve"
-      ],
-      [
-        "producers.validate_metrics_anchor_stubs::build_paths",
-        "Path(args.allowlist_path).resolve"
-      ],
-      [
-        "producers.validate_metrics_anchor_stubs::build_paths",
-        "Path(args.legacy_file).resolve"
-      ],
-      [
-        "producers.validate_metrics_anchor_stubs::build_paths",
-        "Path(args.output_dir).resolve"
-      ],
-      [
-        "producers.validate_metrics_anchor_stubs::build_paths",
-        "Path(args.repo_root).resolve"
-      ],
-      [
-        "producers.validate_metrics_anchor_stubs::build_paths",
-        "Paths"
+        "build_standard_paths"
       ],
       [
         "producers.validate_metrics_anchor_stubs::collect_legacy_stub_anchors",
@@ -12271,19 +11487,15 @@
       ],
       [
         "producers.verify_docs_integrity::build_options",
-        "Options"
-      ],
-      [
-        "producers.verify_docs_integrity::build_options",
         "bool"
       ],
       [
         "producers.verify_docs_integrity::build_options",
-        "int"
+        "build_standard_options"
       ],
       [
         "producers.verify_docs_integrity::build_options",
-        "max"
+        "replace"
       ],
       [
         "producers.verify_docs_integrity::build_options",
@@ -12291,35 +11503,11 @@
       ],
       [
         "producers.verify_docs_integrity::build_paths",
-        "(repo_root / DEFAULT_OUTPUT_DIR).resolve"
-      ],
-      [
-        "producers.verify_docs_integrity::build_paths",
-        "(repo_root / index_path).resolve"
-      ],
-      [
-        "producers.verify_docs_integrity::build_paths",
         "Path"
       ],
       [
         "producers.verify_docs_integrity::build_paths",
-        "Path(__file__).resolve"
-      ],
-      [
-        "producers.verify_docs_integrity::build_paths",
-        "Path(args.output_dir).resolve"
-      ],
-      [
-        "producers.verify_docs_integrity::build_paths",
-        "Path(args.repo_root).resolve"
-      ],
-      [
-        "producers.verify_docs_integrity::build_paths",
-        "Paths"
-      ],
-      [
-        "producers.verify_docs_integrity::build_paths",
-        "index_path.is_absolute"
+        "build_standard_paths"
       ],
       [
         "producers.verify_docs_integrity::compose_payload",
@@ -12937,6 +12125,10 @@
       ],
       [
         "producers.analyze_test_hardening",
+        "dataclasses.replace"
+      ],
+      [
+        "producers.analyze_test_hardening",
         "datetime"
       ],
       [
@@ -12954,6 +12146,10 @@
       [
         "producers.analyze_test_hardening",
         "re"
+      ],
+      [
+        "producers.analyze_test_hardening",
+        "sys"
       ],
       [
         "producers.analyze_test_hardening",
@@ -12993,11 +12189,19 @@
       ],
       [
         "producers.check_inventory_health",
+        "sys"
+      ],
+      [
+        "producers.check_inventory_health",
         "typing.Any"
       ],
       [
         "producers.check_inventory_health",
         "typing.Dict"
+      ],
+      [
+        "producers.check_inventory_health",
+        "typing.NamedTuple"
       ],
       [
         "producers.diff_standards_index",
@@ -13030,6 +12234,10 @@
       [
         "producers.diff_standards_index",
         "pathlib.Path"
+      ],
+      [
+        "producers.diff_standards_index",
+        "sys"
       ],
       [
         "producers.diff_standards_index",
@@ -13137,10 +12345,6 @@
       ],
       [
         "producers.generate_dependency_hygiene_report",
-        "json"
-      ],
-      [
-        "producers.generate_dependency_hygiene_report",
         "logging"
       ],
       [
@@ -13150,6 +12354,10 @@
       [
         "producers.generate_dependency_hygiene_report",
         "re"
+      ],
+      [
+        "producers.generate_dependency_hygiene_report",
+        "sys"
       ],
       [
         "producers.generate_dependency_hygiene_report",
@@ -13209,7 +12417,7 @@
       ],
       [
         "producers.generate_import_graph_report",
-        "shutil"
+        "sys"
       ],
       [
         "producers.generate_import_graph_report",
@@ -13222,10 +12430,6 @@
       [
         "producers.generate_lizard_report",
         "argparse"
-      ],
-      [
-        "producers.generate_lizard_report",
-        "collections.abc.Iterable"
       ],
       [
         "producers.generate_lizard_report",
@@ -13278,6 +12482,14 @@
       [
         "producers.generate_lizard_report",
         "typing.Any"
+      ],
+      [
+        "producers.generate_lizard_report",
+        "typing.Iterable"
+      ],
+      [
+        "producers.generate_lizard_report",
+        "typing.Sequence"
       ],
       [
         "producers.generate_standards_index",
@@ -13369,10 +12581,6 @@
       ],
       [
         "producers.generate_typecheck_report",
-        "json"
-      ],
-      [
-        "producers.generate_typecheck_report",
         "logging"
       ],
       [
@@ -13398,6 +12606,10 @@
       [
         "producers.generate_typecheck_report",
         "typing.Any"
+      ],
+      [
+        "producers.generate_typecheck_report",
+        "typing.NamedTuple"
       ],
       [
         "producers.render_inventory_views",
@@ -13441,6 +12653,10 @@
       ],
       [
         "producers.render_inventory_views",
+        "sys"
+      ],
+      [
+        "producers.render_inventory_views",
         "typing.Any"
       ],
       [
@@ -13454,6 +12670,10 @@
       [
         "producers.render_inventory_views",
         "typing.List"
+      ],
+      [
+        "producers.render_inventory_views",
+        "typing.NamedTuple"
       ],
       [
         "producers.render_inventory_views",
@@ -13510,6 +12730,10 @@
       [
         "producers.scan_code_placeholders",
         "typing.Iterable"
+      ],
+      [
+        "producers.scan_code_placeholders",
+        "typing.NamedTuple"
       ],
       [
         "producers.scan_monkey_patches",
@@ -13613,7 +12837,15 @@
       ],
       [
         "producers.seed_standards_prompts",
+        "sys"
+      ],
+      [
+        "producers.seed_standards_prompts",
         "typing.Any"
+      ],
+      [
+        "producers.seed_standards_prompts",
+        "typing.NamedTuple"
       ],
       [
         "producers.seed_standards_prompts",
@@ -13637,6 +12869,10 @@
       ],
       [
         "producers.validate_import_boundaries",
+        "dataclasses.replace"
+      ],
+      [
+        "producers.validate_import_boundaries",
         "datetime"
       ],
       [
@@ -13654,6 +12890,10 @@
       [
         "producers.validate_import_boundaries",
         "pathlib.Path"
+      ],
+      [
+        "producers.validate_import_boundaries",
+        "sys"
       ],
       [
         "producers.validate_import_boundaries",
@@ -13714,6 +12954,10 @@
       [
         "producers.validate_inventory",
         "typing.List"
+      ],
+      [
+        "producers.validate_inventory",
+        "typing.NamedTuple"
       ],
       [
         "producers.validate_inventory",
@@ -13809,6 +13053,10 @@
       ],
       [
         "producers.validate_metrics_anchor_stubs",
+        "sys"
+      ],
+      [
+        "producers.validate_metrics_anchor_stubs",
         "typing.Any"
       ],
       [
@@ -13834,6 +13082,10 @@
       [
         "producers.verify_docs_integrity",
         "dataclasses.field"
+      ],
+      [
+        "producers.verify_docs_integrity",
+        "dataclasses.replace"
       ],
       [
         "producers.verify_docs_integrity",
@@ -14115,7 +13367,7 @@
         }
       },
       "producers.analyze_test_hardening::build_options": {
-        "hash": "a290a9c22aed0fd2debe6555fef78c76bf4ea649",
+        "hash": "94292d30f8415504afff52fc9c0b7693585f9bca",
         "io_effects": {
           "env": false,
           "network": false,
@@ -14124,7 +13376,7 @@
         }
       },
       "producers.analyze_test_hardening::build_paths": {
-        "hash": "bce81799506234edcb59557d59c9a2d8a19d465d",
+        "hash": "de9bc606f837806565509215ebb2d0937cb102df",
         "io_effects": {
           "env": false,
           "network": false,
@@ -14222,6 +13474,24 @@
           "writes": false
         }
       },
+      "producers.check_inventory_health::build_options": {
+        "hash": "97b1df913d208d0f24c3b381c07814ae9569c3e6",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.check_inventory_health::build_paths": {
+        "hash": "de9bc606f837806565509215ebb2d0937cb102df",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
       "producers.check_inventory_health::build_report": {
         "hash": "fb5f16c67e692e9ad4f4a3bc721ec3a681b8dd19",
         "io_effects": {
@@ -14258,24 +13528,6 @@
           "writes": false
         }
       },
-      "producers.check_inventory_health::copy_latest": {
-        "hash": "f48b028ce737b040653135adccde63ea8a1af841",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.check_inventory_health::ensure_output_dir": {
-        "hash": "b9334f717c3a0030168bf5c5c94da3ed7c76513c",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
       "producers.check_inventory_health::evaluate": {
         "hash": "f9ce101ba6765dba4f31f500ba1082652b09fac7",
         "io_effects": {
@@ -14295,7 +13547,7 @@
         }
       },
       "producers.check_inventory_health::main": {
-        "hash": "d8dcba0a9932d466426f2a6239c8b57bf933b520",
+        "hash": "231d7cf5460ddee5529a322c0f678fe348e9f43a",
         "io_effects": {
           "env": false,
           "network": false,
@@ -14305,24 +13557,6 @@
       },
       "producers.check_inventory_health::parse_timestamp": {
         "hash": "47b3deaef0e093d0989b8de48c5f3dfa78e8bcbb",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.check_inventory_health::prune_old_runs": {
-        "hash": "4bf43894dd29fdddeebe2d7104f9b742b6745f51",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.check_inventory_health::write_artifacts": {
-        "hash": "4ed5f27551f6486d546e8bf1fbe01ecb82d59a31",
         "io_effects": {
           "env": false,
           "network": false,
@@ -14350,15 +13584,6 @@
       },
       "producers.diff_standards_index::_compose_report_payload": {
         "hash": "41cf25133801d5f61b9d23bdeabf3e8fe381e88c",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.diff_standards_index::_copy_latest": {
-        "hash": "f5218578a53498675b0f5dc5cd4625afab877fcb",
         "io_effects": {
           "env": false,
           "network": false,
@@ -14825,24 +14050,6 @@
           "writes": false
         }
       },
-      "producers.generate_dependency_hygiene_report::_copy_latest": {
-        "hash": "f5218578a53498675b0f5dc5cd4625afab877fcb",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_dependency_hygiene_report::_ensure_output_dir": {
-        "hash": "eba026c6311ac2899c84172d44cc526d6c1743d8",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
       "producers.generate_dependency_hygiene_report::_issue_counts": {
         "hash": "66221d3f5a3dd2f188720fb233c48a66092aeba7",
         "io_effects": {
@@ -14916,25 +14123,7 @@
         }
       },
       "producers.generate_dependency_hygiene_report::main": {
-        "hash": "32a9c3ec2ca4dd7d24cf617563779b2456e39d96",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_dependency_hygiene_report::prune_old_runs": {
-        "hash": "4bf43894dd29fdddeebe2d7104f9b742b6745f51",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_dependency_hygiene_report::write_artifacts": {
-        "hash": "2c0b2564b26d07bc3b063a35cee19488168c62e7",
+        "hash": "bc3e024e0b4c35aefe36ba27d9deb60f4baaf5fa",
         "io_effects": {
           "env": false,
           "network": false,
@@ -14962,24 +14151,6 @@
       },
       "producers.generate_import_graph_report::_alias_candidates": {
         "hash": "4543f98607e6553a2152dd4cf8e3ae5ce680e679",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_import_graph_report::_copy_latest": {
-        "hash": "f5218578a53498675b0f5dc5cd4625afab877fcb",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_import_graph_report::_ensure_output_dir": {
-        "hash": "eba026c6311ac2899c84172d44cc526d6c1743d8",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15069,7 +14240,7 @@
         }
       },
       "producers.generate_import_graph_report::main": {
-        "hash": "97f1e473231b4a604e29dc19d78ccf4c43ba5568",
+        "hash": "6fbb0f3111d5810da5da5ddb1503b49502f8ccbf",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15086,17 +14257,8 @@
           "writes": false
         }
       },
-      "producers.generate_import_graph_report::prune_old_runs": {
-        "hash": "0ef7311d0b3eca8a4c74f0d09cebb85528f5b547",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_import_graph_report::write_artifacts": {
-        "hash": "8e111ddde08b4563c6006a70114c5a476c478572",
+      "producers.generate_import_graph_report::write_import_graph_artifacts": {
+        "hash": "8d3bcd3d079e5dd2af9729d162c220e3cbcf5f82",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15122,6 +14284,24 @@
           "writes": false
         }
       },
+      "producers.generate_lizard_report::Offender.to_payload": {
+        "hash": "2db5e0a997ef312ebea9e6b758029ed226b1f8e6",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_lizard_report::_append_note": {
+        "hash": "4be570396c254217bae3abb12836d37953b70dfe",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
       "producers.generate_lizard_report::_apply_default_extra_args": {
         "hash": "99a3191e23ef765be7cd20b155e9f5af648c6804",
         "io_effects": {
@@ -15132,7 +14312,16 @@
         }
       },
       "producers.generate_lizard_report::_as_int": {
-        "hash": "eb8b65ffe3ec027a7caa023030402414a32c7d8d",
+        "hash": "94f7d3d5941bb60d424ebfbb1b76deea3d9aa034",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_lizard_report::_as_optional_int": {
+        "hash": "595ed3a539df21e4e0a16a04fd2b8b0f2d63558d",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15141,16 +14330,7 @@
         }
       },
       "producers.generate_lizard_report::_build_command": {
-        "hash": "3eb8313e993b973533e3c06e5df06e2c75a379ea",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_lizard_report::_build_offender": {
-        "hash": "70aa02890b63185e067b3e9495308583ceb5b5fb",
+        "hash": "4b5b1a999506e176b4537055b822b2e326d21dac",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15159,7 +14339,7 @@
         }
       },
       "producers.generate_lizard_report::_build_parser": {
-        "hash": "9a440e13c7033646e1a82d369d680cabedc27552",
+        "hash": "d4e255163f7399721f3cd80af893a179fd67bace",
         "io_effects": {
           "env": true,
           "network": false,
@@ -15167,8 +14347,8 @@
           "writes": false
         }
       },
-      "producers.generate_lizard_report::_compose_report_payload": {
-        "hash": "9ca4db2395ddbb0ca5c113acb384b663c173c67c",
+      "producers.generate_lizard_report::_collect_offenders": {
+        "hash": "e15f6fb8507a9732fa9f57452e6a7b725a7c2616",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15176,8 +14356,8 @@
           "writes": false
         }
       },
-      "producers.generate_lizard_report::_copy_latest": {
-        "hash": "f5218578a53498675b0f5dc5cd4625afab877fcb",
+      "producers.generate_lizard_report::_compose_report": {
+        "hash": "b8aab6f3d36d058c0ed780a10fead0fc5a9b909a",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15194,17 +14374,8 @@
           "writes": false
         }
       },
-      "producers.generate_lizard_report::_ensure_directory": {
-        "hash": "4c2a9efc78893e3d120104921b6774c2758bc3d4",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
       "producers.generate_lizard_report::_ensure_lizard_json_extension": {
-        "hash": "f518fc1363c4df91d3aae532729ced7e4ad20a7f",
+        "hash": "e4e68ed2a12ec232e587ae0133db7ef81b936828",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15213,7 +14384,7 @@
         }
       },
       "producers.generate_lizard_report::_extract_file_path": {
-        "hash": "358cef087cbc730f835337412ef857aca38c5451",
+        "hash": "2712f56b0d849b1b554b48f06c19c0a857683f95",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15221,8 +14392,8 @@
           "writes": false
         }
       },
-      "producers.generate_lizard_report::_format_run_slug": {
-        "hash": "adf3c6cbcc611d3927f154e451cc597760df9f0f",
+      "producers.generate_lizard_report::_format_location": {
+        "hash": "6cb225d22aaef3bd0a5fdbfec2d61c08cb16837b",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15230,8 +14401,8 @@
           "writes": false
         }
       },
-      "producers.generate_lizard_report::_generate_report": {
-        "hash": "59fde14dd065925f5d05b931020caaa04aa19084",
+      "producers.generate_lizard_report::_format_metric": {
+        "hash": "7555345bb9e071163fbe038ea2d702b94d68073d",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15239,8 +14410,8 @@
           "writes": false
         }
       },
-      "producers.generate_lizard_report::_handle_unsafe_arguments": {
-        "hash": "d2f3330fa9a47402a36471d329dd0b3208c72ac9",
+      "producers.generate_lizard_report::_format_raw_output": {
+        "hash": "41b2554070be5feebf98f1c83c290d77fe457d79",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15249,7 +14420,7 @@
         }
       },
       "producers.generate_lizard_report::_has_flag": {
-        "hash": "13f8f961546c17d9f3bb2de80000fc033c5d1283",
+        "hash": "e51194495d88ecb2df2b683d2c8f6b9ef1794bdb",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15257,8 +14428,8 @@
           "writes": false
         }
       },
-      "producers.generate_lizard_report::_parse_offenders": {
-        "hash": "f346951b2b5694ab5193102b6c99642f8d5f32f5",
+      "producers.generate_lizard_report::_parse_timestamp": {
+        "hash": "1bc9d522251ad79d91bca6f6b3d850289f79b37d",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15266,8 +14437,8 @@
           "writes": false
         }
       },
-      "producers.generate_lizard_report::_prepare_run_dir": {
-        "hash": "dc99fdb26055348f280a8c6922bacc78afa714ba",
+      "producers.generate_lizard_report::_rank_offenders": {
+        "hash": "12dc06b32b4b001cfc09029b8dce54fd172f655a",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15275,8 +14446,8 @@
           "writes": false
         }
       },
-      "producers.generate_lizard_report::_resolve_output_dir": {
-        "hash": "29d7e95c8e2a5d1bf9484ed3f0d72694221cca3f",
+      "producers.generate_lizard_report::_recommendation": {
+        "hash": "336fb42e7f40b11327d1e0f765efe1d2629a18b4",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15284,8 +14455,26 @@
           "writes": false
         }
       },
-      "producers.generate_lizard_report::_resolve_timestamp": {
-        "hash": "0425f9d7201650d38b69fab4513d754cc1050638",
+      "producers.generate_lizard_report::_render_log": {
+        "hash": "249abd371e91c9ecabd2ebd7203ce24559c9de92",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_lizard_report::_render_markdown": {
+        "hash": "6b7ce7e6cc24227f5545c980800547ac9100c0a7",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_lizard_report::_resolve_targets": {
+        "hash": "9ed672a44f6d526d95df7f64c87b188da588db6f",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15294,7 +14483,7 @@
         }
       },
       "producers.generate_lizard_report::_sanitize_command": {
-        "hash": "5ddab8edf200670dd68337e4bca8c695f16f9cd6",
+        "hash": "829818e3864106087f93831638e1631640822b36",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15302,53 +14491,8 @@
           "writes": false
         }
       },
-      "producers.generate_lizard_report::_sanitize_slug": {
-        "hash": "c872a6b563f1e04f72b0402b7f04cf61a0f34c56",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_lizard_report::_select_targets": {
-        "hash": "0a288dd9e2bfed180690ba0fbaacbf4146c9e568",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_lizard_report::_write_json": {
-        "hash": "28e6f9edce3fae803f4f52dc4456d5efcd8aabc4",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_lizard_report::_write_log": {
-        "hash": "cd9e3d644272e23e3f71297a7d9359b5435621b3",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_lizard_report::_write_md": {
-        "hash": "4548ddae2f44ed9b556a3299e16122d6d7215485",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_lizard_report::_write_raw": {
-        "hash": "cc68df7f1fb9f84e289ffdc97963eea46dd70982",
+      "producers.generate_lizard_report::_timestamp_slug": {
+        "hash": "618ff18e67a149d82231f63e0d83ab73c9ce3547",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15366,27 +14510,9 @@
         }
       },
       "producers.generate_lizard_report::main": {
-        "hash": "f6cdcab8663d4dabe1034d9ba2fecba29caab8f0",
+        "hash": "6fbb4c447f0599d90dbbc304710e3dbc4f2a89c0",
         "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_lizard_report::prune_old_runs": {
-        "hash": "4bf43894dd29fdddeebe2d7104f9b742b6745f51",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_lizard_report::write_artifacts": {
-        "hash": "3350856f11f9284cc2d7c124dc870620bbb35f9a",
-        "io_effects": {
-          "env": false,
+          "env": true,
           "network": false,
           "reads": false,
           "writes": false
@@ -15430,15 +14556,6 @@
       },
       "producers.generate_standards_index::_compute_rules_hash": {
         "hash": "5b25cd764d77d78802f0da90d65a091a8d9d196a",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_standards_index::_copy_latest": {
-        "hash": "f5218578a53498675b0f5dc5cd4625afab877fcb",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15743,15 +14860,6 @@
           "writes": false
         }
       },
-      "producers.generate_typecheck_report::_copy_latest": {
-        "hash": "f5218578a53498675b0f5dc5cd4625afab877fcb",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
       "producers.generate_typecheck_report::_current_utc": {
         "hash": "b63d2dfe470537b71a5b939ea7a409b2d237f1dc",
         "io_effects": {
@@ -15765,15 +14873,6 @@
         "hash": "184a5de4f39ceac322d8479d4a1ec52c3788e64d",
         "io_effects": {
           "env": true,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_typecheck_report::_ensure_dir": {
-        "hash": "8585a3094de354d8ecb9671901d08c1b95cc6626",
-        "io_effects": {
-          "env": false,
           "network": false,
           "reads": false,
           "writes": false
@@ -15842,15 +14941,6 @@
           "writes": false
         }
       },
-      "producers.generate_typecheck_report::_prepare_run_dir": {
-        "hash": "b1f7cdb603e242ca7998a91902e9c2a55d070601",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
       "producers.generate_typecheck_report::_read_pyproject_targets": {
         "hash": "521409d14e410fc718623587063d9d375a9a2075",
         "io_effects": {
@@ -15878,15 +14968,6 @@
           "writes": false
         }
       },
-      "producers.generate_typecheck_report::_resolve_path": {
-        "hash": "2d5eb4dafb9918e5b0a905b2478f6134c6e97eb3",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
       "producers.generate_typecheck_report::_run_mypy": {
         "hash": "614e62890a4b851e7acb70b5522942a10fd24257",
         "io_effects": {
@@ -15896,26 +14977,8 @@
           "writes": false
         }
       },
-      "producers.generate_typecheck_report::_sanitize_slug": {
-        "hash": "6097e8075a28d8e7d19883d20ad2787fd998d1dc",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_typecheck_report::_update_latest": {
-        "hash": "cda79454b7a941d85bc065b533ecd3efa73787cd",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.generate_typecheck_report::_write_artifacts": {
-        "hash": "4c210b840890d854b2807ec5535fd0f3919d7ba4",
+      "producers.generate_typecheck_report::build_options": {
+        "hash": "97b1df913d208d0f24c3b381c07814ae9569c3e6",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15924,7 +14987,16 @@
         }
       },
       "producers.generate_typecheck_report::build_parser": {
-        "hash": "4236fb40c23a0c55559e82f9436da1a0371a09e2",
+        "hash": "8d5feb0b8d143e649942d1549a7f92568ac9e4aa",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_typecheck_report::build_paths": {
+        "hash": "de9bc606f837806565509215ebb2d0937cb102df",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15942,7 +15014,7 @@
         }
       },
       "producers.generate_typecheck_report::main": {
-        "hash": "1d09a1cb549664fe3a7a23ce2f00882bbc92fb9c",
+        "hash": "5e472c89f054b4dc5e46fd1031f560b980c15687",
         "io_effects": {
           "env": true,
           "network": false,
@@ -15950,17 +15022,8 @@
           "writes": false
         }
       },
-      "producers.generate_typecheck_report::prune_old_runs": {
-        "hash": "3014903ab6447d031fae3807e3b3e089a44f9a54",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
       "producers.render_inventory_views::_build_parser": {
-        "hash": "ea072557bc6167922fcbd51557e63e32a453207f",
+        "hash": "40a9e70ccd3b09371ce0b2a2eb9801008d5544c9",
         "io_effects": {
           "env": false,
           "network": false,
@@ -15977,26 +15040,8 @@
           "writes": false
         }
       },
-      "producers.render_inventory_views::_copy_latest": {
-        "hash": "f5218578a53498675b0f5dc5cd4625afab877fcb",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
       "producers.render_inventory_views::_current_time": {
         "hash": "2ccbb7886271dc20dcc1b4337692a46cec7f021a",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.render_inventory_views::_ensure_dir": {
-        "hash": "8585a3094de354d8ecb9671901d08c1b95cc6626",
         "io_effects": {
           "env": false,
           "network": false,
@@ -16022,15 +15067,6 @@
           "writes": false
         }
       },
-      "producers.render_inventory_views::_prepare_run_dir": {
-        "hash": "128ec42c1876bd371f9b542b1d31d2db18582e84",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
       "producers.render_inventory_views::_resolve": {
         "hash": "704331b976e8211937c615e00b4d82727e98b9d9",
         "io_effects": {
@@ -16040,8 +15076,17 @@
           "writes": false
         }
       },
-      "producers.render_inventory_views::_sanitize_slug": {
-        "hash": "168560be2f14bf2b0a4f042c57e0f835fd00ad9d",
+      "producers.render_inventory_views::build_options": {
+        "hash": "97b1df913d208d0f24c3b381c07814ae9569c3e6",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.render_inventory_views::build_paths": {
+        "hash": "de9bc606f837806565509215ebb2d0937cb102df",
         "io_effects": {
           "env": false,
           "network": false,
@@ -16095,16 +15140,7 @@
         }
       },
       "producers.render_inventory_views::main": {
-        "hash": "a201bbe77da99e73b1f3dcddedc29c5d682cf517",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.render_inventory_views::prune_old_runs": {
-        "hash": "c33ce7c85d7f7b34a5bd892bbfeafa0f895e8206",
+        "hash": "87e6e9d98c20695bb412dc26a15071a1ddb756e0",
         "io_effects": {
           "env": false,
           "network": false,
@@ -16166,26 +15202,8 @@
           "writes": false
         }
       },
-      "producers.render_inventory_views::update_latest_artifacts": {
-        "hash": "4ea83a97a863e8375a9da0744593f0a920ee50b3",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
       "producers.render_inventory_views::write_json": {
         "hash": "7eb8ed1f449f227d364988541fcae326b488edc7",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.render_inventory_views::write_run_artifacts": {
-        "hash": "39200676bbd69a11e9286b6eb36a6fa5ad851de5",
         "io_effects": {
           "env": false,
           "network": false,
@@ -16239,7 +15257,7 @@
         }
       },
       "producers.scan_code_placeholders::build_paths": {
-        "hash": "3ff2aafadeb588bd8722f3e36ff0bb1e5c5ee1e8",
+        "hash": "de9bc606f837806565509215ebb2d0937cb102df",
         "io_effects": {
           "env": false,
           "network": false,
@@ -16356,7 +15374,7 @@
         }
       },
       "producers.scan_code_placeholders::run": {
-        "hash": "d82fd550ea20986f5a6b183f3238fa666d6e15ae",
+        "hash": "832b85daebfc4a95f13a6f071269fb5689552985",
         "io_effects": {
           "env": false,
           "network": false,
@@ -16653,7 +15671,7 @@
         }
       },
       "producers.scan_monkey_patches::build_paths": {
-        "hash": "f26e14fb8c57977c0b220385d91f6f250e05b13a",
+        "hash": "de9bc606f837806565509215ebb2d0937cb102df",
         "io_effects": {
           "env": false,
           "network": false,
@@ -16815,7 +15833,7 @@
         }
       },
       "producers.scan_monkey_patches::run": {
-        "hash": "e166efa70565d44361bb1b07c40ef58d236ffc63",
+        "hash": "b5664343f563dba5f246fe0cba2dd5add17d8d28",
         "io_effects": {
           "env": false,
           "network": false,
@@ -16887,7 +15905,7 @@
         }
       },
       "producers.seed_standards_prompts::build_options": {
-        "hash": "6ecd4a696c6fb999893aeedfa0997c5ac0d56d81",
+        "hash": "5103db0f676aad0a387034504b535e35f2bef486",
         "io_effects": {
           "env": false,
           "network": false,
@@ -16896,7 +15914,7 @@
         }
       },
       "producers.seed_standards_prompts::build_paths": {
-        "hash": "1258f72a4b940365cef88372c5f889298558dcd1",
+        "hash": "de9bc606f837806565509215ebb2d0937cb102df",
         "io_effects": {
           "env": false,
           "network": false,
@@ -17139,7 +16157,7 @@
         }
       },
       "producers.validate_import_boundaries::build_options": {
-        "hash": "1f0a0eddb88e91a9fb7f91be7506a775298b381e",
+        "hash": "47457e11b6df5352e85ea2138b99bcfc0dc9c9aa",
         "io_effects": {
           "env": true,
           "network": false,
@@ -17148,7 +16166,7 @@
         }
       },
       "producers.validate_import_boundaries::build_paths": {
-        "hash": "e9e6e86cfa82197a01025bf1e4a67f41c371d5db",
+        "hash": "ecddff00ba0bafd7ef4a0436b2d293abcd406d08",
         "io_effects": {
           "env": false,
           "network": false,
@@ -17319,7 +16337,7 @@
         }
       },
       "producers.validate_inventory::ValidatorConfig.load": {
-        "hash": "7bd8fffa241cf3dcdaa0160371c18246860c986e",
+        "hash": "0136d69c86af6b4c975bc723b5ca130a5154716a",
         "io_effects": {
           "env": false,
           "network": false,
@@ -17372,26 +16390,8 @@
           "writes": false
         }
       },
-      "producers.validate_inventory::_copy_latest": {
-        "hash": "f5218578a53498675b0f5dc5cd4625afab877fcb",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
       "producers.validate_inventory::_current_time": {
         "hash": "2ccbb7886271dc20dcc1b4337692a46cec7f021a",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "producers.validate_inventory::_ensure_dir": {
-        "hash": "8585a3094de354d8ecb9671901d08c1b95cc6626",
         "io_effects": {
           "env": false,
           "network": false,
@@ -17444,6 +16444,15 @@
           "writes": false
         }
       },
+      "producers.validate_inventory::_resolve_with_schema_dependency": {
+        "hash": "07bd63695459b6ee21fa9769f3c694c881a8a0ef",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
       "producers.validate_inventory::_sanitize_slug": {
         "hash": "168560be2f14bf2b0a4f042c57e0f835fd00ad9d",
         "io_effects": {
@@ -17453,8 +16462,26 @@
           "writes": false
         }
       },
+      "producers.validate_inventory::build_options": {
+        "hash": "ca8b695dfe6229dcc4a84324de43ba51347c60a9",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
       "producers.validate_inventory::build_parser": {
         "hash": "c260abd572707bbfbdaeb1e8391c6c68fda0faa6",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.validate_inventory::build_paths": {
+        "hash": "83b074db78e8825b529be07745e264525ae15821",
         "io_effects": {
           "env": false,
           "network": false,
@@ -17490,7 +16517,7 @@
         }
       },
       "producers.validate_inventory::main": {
-        "hash": "b7034d1b5ce41dc30d684e26b81db25cecf6fc3a",
+        "hash": "7d8b434805459234c26915e2327862607ff03006",
         "io_effects": {
           "env": false,
           "network": false,
@@ -17579,6 +16606,24 @@
           "writes": false
         }
       },
+      "producers.validate_markdown_anchors::build_options": {
+        "hash": "0c9cf4699d3596f72bce99ae0f1d3d159db7a678",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.validate_markdown_anchors::build_paths": {
+        "hash": "de9bc606f837806565509215ebb2d0937cb102df",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
       "producers.validate_markdown_anchors::build_report": {
         "hash": "2a79bcad81e6f37f3f8d75a649ce4531e0e46827",
         "io_effects": {
@@ -17616,7 +16661,7 @@
         }
       },
       "producers.validate_markdown_anchors::main": {
-        "hash": "d40fa2f4968233fd2a992f47106311f6fc0c744f",
+        "hash": "8df67ade7af6630fcdb73e24a4fff46876dd55ec",
         "io_effects": {
           "env": false,
           "network": false,
@@ -17670,7 +16715,7 @@
         }
       },
       "producers.validate_metrics_anchor_stubs::build_options": {
-        "hash": "30072ad9f75a6bd76726f53e0c67348d36fed5bd",
+        "hash": "0285adee27145e4d7484431dcc6542e36785c6cb",
         "io_effects": {
           "env": false,
           "network": false,
@@ -17679,7 +16724,7 @@
         }
       },
       "producers.validate_metrics_anchor_stubs::build_paths": {
-        "hash": "49777e4664decf095210fd31805622dc0ec5f0e5",
+        "hash": "de9bc606f837806565509215ebb2d0937cb102df",
         "io_effects": {
           "env": false,
           "network": false,
@@ -17895,7 +16940,7 @@
         }
       },
       "producers.verify_docs_integrity::build_options": {
-        "hash": "d0bc3a6ea73e93c5693befcf60927aeb7db96c65",
+        "hash": "8188f93d87c6b33cd49992e52b962c34213efef9",
         "io_effects": {
           "env": false,
           "network": false,
@@ -17904,7 +16949,7 @@
         }
       },
       "producers.verify_docs_integrity::build_paths": {
-        "hash": "e4520664449b0cc0de4abf6ba459f81a22817505",
+        "hash": "de9bc606f837806565509215ebb2d0937cb102df",
         "io_effects": {
           "env": false,
           "network": false,

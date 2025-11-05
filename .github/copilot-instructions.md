@@ -40,3 +40,10 @@
 - Prefer adapting shared utilities or extracting new ones under `scripts/utilities/` when cross-tier logic emerges.
 - Surface orchestration changes in `.repo_studios/Makefile` to keep local developer workflows consistent with automation.
 - When expanding duplicate reporting, ensure both the index directory and `command_center/reports` receive matching matrix/summary pairs even when no groups are found.
+
+## Terminal Coordination
+- Use `terminal-tools_sendCommand` with `captureOutput: true` whenever command output or logging is required; avoid bare fire-and-forget sends.
+- Prefer unbuffered invocations (`python -u`) or tee (`2>&1 | Tee-Object`) so Python logging reaches the transcript immediately.
+- For inline Python snippets stick to PowerShell here-strings (`@'... '@ | python -`); do not mix Bash-style `<<'PY'` heredocs.
+- When reusing a terminal, call `logging.basicConfig(..., force=True)` or open a fresh session so subsequent CLI runs emit logs.
+- If a command remains quiet, validate success by inspecting expected artifacts directly (for example `Get-ChildItem` on the target report folder).

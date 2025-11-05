@@ -10,23 +10,13 @@ import logging
 import re
 import sys
 from collections import Counter
+from collections.abc import Iterable
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
-SKIP_DIRS = {
-    "__pycache__",
-    ".git",
-    ".hg",
-    ".svn",
-    ".venv",
-    "venv",
-    "node_modules",
-    "build",
-    "dist",
-    ".tox",
-}
+SKIP_DIRS = {"__pycache__", ".git", ".hg", ".svn", ".venv", "venv", "node_modules", "build", "dist", ".tox"}
 TEST_DIR_HINTS = {"tests", "test", "__tests__"}
 TEST_DIR_PREFIXES = ("tests_",)
 TEST_DIR_SUFFIXES = ("_tests",)
@@ -35,7 +25,7 @@ TEST_FILE_SUFFIXES = ("_test.py", "_tests.py")
 PROJECT_NAMESPACE_HINTS = {"agents", "api", "mrp", "client_helpers", "scripts"}
 BRANCH_NODE_TYPES = (ast.If, ast.For, ast.While, ast.Try, ast.With, ast.Match)
 DEFAULT_SCHEMA_VERSION = 2
-DEFAULT_REPORTS_ROOT_RELATIVE = Path(".repo_studios/command_center/reports/index_scan")
+DEFAULT_REPORTS_ROOT_RELATIVE = Path(".copilot_instructions/index_reports")
 STD_DECORATOR_NAMES = {"staticmethod", "classmethod", "property"}
 STD_MODULE_PREFIXES = {"functools", "contextlib", "dataclasses", "abc", "typing", "inspect"}
 DYNAMIC_EXEC_NAMES = {"exec", "eval", "execfile"}
@@ -92,15 +82,7 @@ CALLBACK_CONTEXT_HINTS = (
     "router",
     "webhook",
 )
-CALLBACK_TARGET_KEYWORDS = {
-    "callback",
-    "handler",
-    "listener",
-    "func",
-    "function",
-    "target",
-    "receiver",
-}
+CALLBACK_TARGET_KEYWORDS = {"callback", "handler", "listener", "func", "function", "target", "receiver"}
 if hasattr(sys, "stdlib_module_names"):
     STDLIB_MODULE_NAMES = set(sys.stdlib_module_names)
 else:  # pragma: no cover - fallback for older Python versions
@@ -117,14 +99,25 @@ else:  # pragma: no cover - fallback for older Python versions
         "re",
     }
 
-LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
 
-try:
-    from libraries import slugify_relative
-except ModuleNotFoundError:  # pragma: no cover - fallback when run as script
-    if str(LIBRARIES_ROOT) not in sys.path:
-        sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import slugify_relative  # type: ignore  # noqa: E402
+def _timestamp_suffix(now: datetime | None = None) -> str:
+    current = now or datetime.now(UTC)
+    return current.strftime("%Y-%m-%d_%H-%M-%S")
+
+
+def _is_test_path(relative_parts: tuple[str, ...]) -> bool:
+    if not relative_parts:
+        return False
+    directories = [part.lower() for part in relative_parts[:-1]]
+    filename = relative_parts[-1].lower()
+    directory_hit = any(
+        part in TEST_DIR_HINTS
+        or part.startswith(TEST_DIR_PREFIXES)
+        or part.endswith(TEST_DIR_SUFFIXES)
+        for part in directories
+    )
+    file_hit = filename.startswith(TEST_FILE_PREFIXES) or filename.endswith(TEST_FILE_SUFFIXES)
+    return directory_hit or file_hit
 
 
 def _safe_unparse(node: ast.AST | None) -> str | None:
@@ -141,6 +134,8 @@ def _relative_module_id(relative_path: Path, root_name: str | None = None) -> st
     parts = list(without_suffix.parts)
     if parts and parts[-1] == "__init__":
         parts = parts[:-1]
+    if not parts:
+        parts = []
     if root_name:
         parts = [root_name] + parts
     if not parts:
@@ -228,7 +223,7 @@ def _normalize_callback_target(node: ast.AST) -> tuple[str | None, str | None]:
         return "lambda", "<lambda>"
     if isinstance(node, ast.Call):
         return "call", _safe_unparse(node)
-    if isinstance(node, ast.FunctionDef):  # pragma: no cover - uncommon inline definition
+    if isinstance(node, ast.FunctionDef):  # pragma: no cover - unlikely inline def
         return "function_def", getattr(node, "name", None)
     return None, None
 
@@ -367,13 +362,13 @@ def _attribute_chain(node: ast.AST) -> tuple[str | None, str | None]:
     if isinstance(current, ast.Name):
         parts.append(current.id)
         root = current.id
-    elif isinstance(current, ast.Call):  # pragma: no cover - uncommon decorator form
+    elif isinstance(current, ast.Call):  # pragma: no cover - uncommon decorator
         return _attribute_chain(current.func)
     else:
         root = None
     if not parts:
-        return root, root
-    return root, ".".join(reversed(parts))
+        return (root, root)
+    return (root, ".".join(reversed(parts)))
 
 
 def _simplify_base_expression(value: str | None) -> str | None:
@@ -469,28 +464,16 @@ def _detect_dynamic_code(tree: ast.AST) -> dict[str, Any]:
             for keyword in node.keywords or []:
                 if keyword.arg == "metaclass":
                     flags["metaclass"] = True
-                    events.append({
-                        "kind": "metaclass",
-                        "lineno": getattr(node, "lineno", None),
-                        "detail": _safe_unparse(keyword.value),
-                    })
+                    events.append({"kind": "metaclass", "lineno": getattr(node, "lineno", None), "detail": _safe_unparse(keyword.value)})
         elif isinstance(node, ast.Assign):
             for target in node.targets:
                 if _is_globals_mutation(target):
                     flags["globals_mutation"] = True
-                    events.append({
-                        "kind": "globals_assign",
-                        "lineno": getattr(target, "lineno", None),
-                        "detail": _safe_unparse(target),
-                    })
+                    events.append({"kind": "globals_assign", "lineno": getattr(target, "lineno", None), "detail": _safe_unparse(target)})
         elif isinstance(node, ast.AugAssign):
             if _is_globals_mutation(node.target):
                 flags["globals_mutation"] = True
-                events.append({
-                    "kind": "globals_augassign",
-                    "lineno": getattr(node.target, "lineno", None),
-                    "detail": _safe_unparse(node.target),
-                })
+                events.append({"kind": "globals_augassign", "lineno": getattr(node.target, "lineno", None), "detail": _safe_unparse(node.target)})
 
     return {"flags": flags, "events": events}
 
@@ -576,7 +559,7 @@ def _classify_module_path(module_path: str | None, package_root: str | None) -> 
         return "stdlib"
     if package_root and module_path.startswith(package_root):
         return "project"
-    return None
+    return "third_party"
 
 
 def _decorator_classification(
@@ -730,11 +713,138 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
-_slugify_relative = slugify_relative
+def _detect_repo_root(start: Path) -> Path:
+    current = start
+    for candidate in [current, *current.parents]:
+        if (candidate / ".git").exists():
+            return candidate
+    return start
+
+
+def _slugify_relative(relative_path: Path) -> str:
+    parts: list[str] = []
+    for part in relative_path.parts:
+        slug = "".join(ch.lower() if ch.isalnum() else "-" for ch in part)
+        slug = slug.strip("-") or "segment"
+        parts.append(slug)
+    return "__".join(parts) or "root"
+
+
+def _mermaid_identifier(base: str, existing: set[str]) -> str:
+    candidate = re.sub(r"[^0-9A-Za-z]+", "_", base)
+    if not candidate:
+        candidate = "n"
+    if candidate[0].isdigit():
+        candidate = f"n_{candidate}"
+    original = candidate
+    suffix = 1
+    while candidate in existing:
+        candidate = f"{original}_{suffix}"
+        suffix += 1
+    existing.add(candidate)
+    return candidate
+
+
+def _build_mermaid_diagram(files: list[dict[str, Any]], summary: dict[str, Any]) -> str:
+    modules: set[str] = set()
+    for entry in files:
+        module_key = entry.get("module_id") or entry.get("relative_path", "").replace("/", ".")
+        if module_key:
+            modules.add(module_key)
+
+    module_nodes: dict[str, str] = {}
+    existing_ids: set[str] = set()
+    module_lines: list[str] = []
+    for module in sorted(modules):
+        identifier = _mermaid_identifier(f"module_{module}", existing_ids)
+        module_nodes[module] = identifier
+        label = module.replace('"', "&quot;")
+        module_lines.append(f'{identifier}["{label}"]')
+
+    module_edges: set[tuple[str, str]] = set()
+    imports_graph = summary.get("graphs", {}).get("imports", []) if summary else []
+    for edge in imports_graph:
+        if len(edge) != 2:
+            continue
+        source, target = edge
+        if source in module_nodes and target in module_nodes:
+            module_edges.add((module_nodes[source], module_nodes[target]))
+
+    call_edges_input = summary.get("graphs", {}).get("calls", []) if summary else []
+    call_edges: set[tuple[str, str]] = set()
+    call_functions: set[str] = set()
+    for edge in call_edges_input:
+        if len(edge) != 2:
+            continue
+        source, target = edge
+        if "::" not in source or "::" not in target:
+            continue
+        source_module = source.split("::", 1)[0]
+        target_module = target.split("::", 1)[0]
+        if source_module not in module_nodes or target_module not in module_nodes:
+            continue
+        call_edges.add((source, target))
+        call_functions.add(source)
+        call_functions.add(target)
+
+    call_nodes: dict[str, str] = {}
+    call_node_lines: list[str] = []
+    module_function_links: set[tuple[str, str]] = set()
+    for function_name in sorted(call_functions):
+        identifier = _mermaid_identifier(f"call_{function_name}", existing_ids)
+        call_nodes[function_name] = identifier
+        label = function_name.replace('"', "&quot;")
+        call_node_lines.append(f'{identifier}["{label}"]')
+        module_name = function_name.split("::", 1)[0]
+        module_function_links.add((module_nodes[module_name], identifier))
+
+    call_edge_lines: list[str] = []
+    for source, target in sorted(call_edges):
+        call_edge_lines.append(f"{call_nodes[source]} -.-> {call_nodes[target]}")
+
+    lines: list[str] = [
+        "%% Auto-generated by generate_function_inventory.py",
+        "flowchart TD",
+    ]
+
+    if module_lines:
+        for line in module_lines:
+            lines.append(f"  {line}")
+    else:
+        lines.append("  %% No modules discovered during scan")
+
+    if module_edges:
+        lines.append("")
+        lines.append("  %% Module import edges")
+        for source, target in sorted(module_edges):
+            lines.append(f"  {source} --> {target}")
+
+    if call_node_lines:
+        lines.append("")
+        lines.append("  %% Function nodes from screening graph")
+        for line in call_node_lines:
+            lines.append(f"  {line}")
+
+    if module_function_links:
+        lines.append("")
+        lines.append("  %% Module to function associations")
+        for source, target in sorted(module_function_links):
+            lines.append(f"  {source} --> {target}")
+
+    if call_edge_lines:
+        lines.append("")
+        lines.append("  %% Function call edges")
+        for line in call_edge_lines:
+            lines.append(f"  {line}")
+
+    return "\n".join(lines) + "\n"
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[4]
+    if args.repo_root:
+        repo_root = Path(args.repo_root).resolve()
+    else:
+        repo_root = _detect_repo_root(Path(__file__).resolve().parent)
     target_candidate = Path(args.target)
     target = target_candidate if target_candidate.is_absolute() else (repo_root / target_candidate)
     target = target.resolve()
@@ -763,21 +873,6 @@ def build_options(args: argparse.Namespace) -> Options:
 
 def configure_logging(level: str) -> None:
     logging.basicConfig(level=getattr(logging, level.upper()), format="%(levelname)s %(message)s")
-
-
-def _is_test_path(relative_parts: tuple[str, ...]) -> bool:
-    if not relative_parts:
-        return False
-    directories = [part.lower() for part in relative_parts[:-1]]
-    filename = relative_parts[-1].lower()
-    directory_hit = any(
-        part in TEST_DIR_HINTS
-        or any(part.startswith(prefix) for prefix in TEST_DIR_PREFIXES)
-        or any(part.endswith(suffix) for suffix in TEST_DIR_SUFFIXES)
-        for part in directories
-    )
-    file_hit = filename.startswith(TEST_FILE_PREFIXES) or filename.endswith(TEST_FILE_SUFFIXES)
-    return directory_hit or file_hit
 
 
 def discover_python_files(target: Path) -> list[Path]:
@@ -1149,7 +1244,7 @@ def _extract_function(
         "returns_kind": _returns_kind(node),
         "locals_summary": locals_summary,
         "callback_registrations": callback_registrations,
-        "code_smells": code_smells,
+    "code_smells": code_smells,
         "used_globals": sorted(used_globals),
         "hash": function_hash,
         "todo_tags": todo_tags,
@@ -1330,7 +1425,6 @@ def _collect_function_import_usage(
     classes: list[dict[str, Any]],
 ) -> dict[str, dict[str, Any]]:
     usage: dict[str, dict[str, Any]] = {}
-
     def _iter_entries() -> Iterable[dict[str, Any]]:
         yield from functions
         for cls in classes:
@@ -1428,8 +1522,7 @@ def _collect_test_coverage_signals(imports_flat: set[str], module_id: str) -> di
             f"tests.{module_name}_tests",
         ])
     matching = sorted({
-        imp
-        for imp in imports_flat
+        imp for imp in imports_flat
         if any(imp.startswith(prefix) for prefix in prefixes)
         or any(candidate in imp for candidate in module_candidates)
     })
@@ -1654,15 +1747,15 @@ def analyze_python_file(path: Path, slice_root: Path, warnings: list[str]) -> di
         "classes": classes,
         "imports": sorted(imports_flat),
         "imports_detailed": imports_detailed,
-        "import_graph": import_graph,
-        "dependency_summary": dependency_summary,
-        "callback_registrations": module_callbacks,
-        "code_smell_summary": code_smell_summary,
-        "coverage_signals": coverage_signals,
+    "import_graph": import_graph,
+    "dependency_summary": dependency_summary,
+    "callback_registrations": module_callbacks,
+    "code_smell_summary": code_smell_summary,
+    "coverage_signals": coverage_signals,
         "globals": globals_block,
         "exports": exports_info,
-    "entrypoints": {"has_main_guard": has_main_guard, "cli_parser": cli_parser},
-    "dynamic_code": dynamic_code,
+        "entrypoints": {"has_main_guard": has_main_guard, "cli_parser": cli_parser},
+        "dynamic_code": dynamic_code,
         "module_first_line": first_statement,
     }
 
@@ -1703,7 +1796,7 @@ def compose_inventory(paths: Paths, options: Options, files: list[dict[str, Any]
 
     metadata = {
         "schema_version": options.schema_version,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": datetime.now(UTC).isoformat(),
         "folder_path": str(paths.target),
         "folder_name": paths.target.name,
         "total_files": len(files),
@@ -1773,6 +1866,7 @@ def _build_alias_resolution_map(
             else:
                 base_module = _resolve_relative_import(module_id, module, level)
                 target_module = base_module if base_module else module
+                # When module is empty and level resolves to root, target_module may be ''
                 if target_module:
                     resolved_target = f"{target_module}.{alias_name}"
                 else:
@@ -1918,9 +2012,7 @@ def build_screening_summary(files: list[dict[str, Any]]) -> dict[str, Any]:
                     "target": target,
                     "lineno": lineno,
                 }
-                for caller, target, lineno in sorted(
-                    data["call_sites"], key=lambda item: (item[0], item[1], item[2] or 0)
-                )
+                for caller, target, lineno in sorted(data["call_sites"], key=lambda item: (item[0], item[1], item[2] or 0))
             ],
         })
 
@@ -1935,7 +2027,12 @@ def build_screening_summary(files: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def _write_inventory_copy(directory: Path, source_name: str, payload: dict[str, Any]) -> Path:
+def _write_inventory_copy(
+    directory: Path,
+    source_name: str,
+    payload: dict[str, Any],
+    timestamp_suffix: str,
+) -> Path:
     directory.mkdir(parents=True, exist_ok=True)
     legacy_file = directory / f"{source_name}_index.json"
     if legacy_file.exists():
@@ -1943,27 +2040,58 @@ def _write_inventory_copy(directory: Path, source_name: str, payload: dict[str, 
     for existing in directory.glob(f"{source_name}_index-*.json"):
         if existing.is_file():
             existing.unlink()
-    date_suffix = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    output_file = directory / f"{source_name}_index-{date_suffix}.json"
+    output_file = directory / f"{source_name}_index-{timestamp_suffix}.json"
     temp_file = output_file.with_suffix(".json.tmp")
-    temp_file.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+    payload_text = json.dumps(payload, indent=2, sort_keys=True)
+    temp_file.write_text(payload_text, encoding="utf-8")
     temp_file.replace(output_file)
     latest_pointer = directory / "latest.json"
     if latest_pointer.exists():
         latest_pointer.unlink()
+    latest_pointer.write_text(payload_text, encoding="utf-8")
     return output_file
 
 
-def _write_screening_copy(directory: Path, source_name: str, summary: dict[str, Any]) -> Path:
+def _write_screening_copy(
+    directory: Path,
+    source_name: str,
+    summary: dict[str, Any],
+    timestamp_suffix: str,
+) -> Path:
     directory.mkdir(parents=True, exist_ok=True)
     for existing in directory.glob(f"{source_name}_screening-*.json"):
         if existing.is_file():
             existing.unlink()
-    date_suffix = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    output_file = directory / f"{source_name}_screening-{date_suffix}.json"
+    output_file = directory / f"{source_name}_screening-{timestamp_suffix}.json"
     temp_file = output_file.with_suffix(".screening.json.tmp")
-    temp_file.write_text(json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8")
+    summary_text = json.dumps(summary, indent=2, sort_keys=True)
+    temp_file.write_text(summary_text, encoding="utf-8")
     temp_file.replace(output_file)
+    latest_pointer = directory / "latest_screening.json"
+    if latest_pointer.exists():
+        latest_pointer.unlink()
+    latest_pointer.write_text(summary_text, encoding="utf-8")
+    return output_file
+
+
+def _write_mermaid_diagram(
+    directory: Path,
+    source_name: str,
+    diagram: str,
+    timestamp_suffix: str,
+) -> Path:
+    directory.mkdir(parents=True, exist_ok=True)
+    for existing in directory.glob(f"{source_name}_wiring-*.mmd"):
+        if existing.is_file():
+            existing.unlink()
+    output_file = directory / f"{source_name}_wiring-{timestamp_suffix}.mmd"
+    temp_file = output_file.with_suffix(".wiring.mmd.tmp")
+    temp_file.write_text(diagram, encoding="utf-8")
+    temp_file.replace(output_file)
+    latest_pointer = directory / "latest_wiring.mmd"
+    if latest_pointer.exists():
+        latest_pointer.unlink()
+    latest_pointer.write_text(diagram, encoding="utf-8")
     return output_file
 
 
@@ -1972,10 +2100,14 @@ def write_inventory(paths: Paths, payload: dict[str, Any], summary: dict[str, An
     primary_dir = paths.target / f"{source_name}_index"
     reports_slug = _slugify_relative(paths.target_relative)
     secondary_dir = paths.reports_root / f"{reports_slug}_index"
-    primary = _write_inventory_copy(primary_dir, source_name, payload)
-    _write_inventory_copy(secondary_dir, source_name, payload)
-    _write_screening_copy(primary_dir, source_name, summary)
-    _write_screening_copy(secondary_dir, source_name, summary)
+    timestamp_suffix = _timestamp_suffix()
+    primary = _write_inventory_copy(primary_dir, source_name, payload, timestamp_suffix)
+    _write_inventory_copy(secondary_dir, source_name, payload, timestamp_suffix)
+    _write_screening_copy(primary_dir, source_name, summary, timestamp_suffix)
+    _write_screening_copy(secondary_dir, source_name, summary, timestamp_suffix)
+    mermaid_diagram = _build_mermaid_diagram(payload.get("files", []), summary)
+    _write_mermaid_diagram(primary_dir, source_name, mermaid_diagram, timestamp_suffix)
+    _write_mermaid_diagram(secondary_dir, source_name, mermaid_diagram, timestamp_suffix)
     return primary
 
 
