@@ -69,3 +69,19 @@
 - **Context:** Keeps script naming aligned with the commandview artifact convention and avoids confusion between the schema slug and CLI entry points as documentation evolves.
 - **Owner:** GitHub Copilot implementation assistant.
 - **Evidence:** `.repo_studios/command_center/scripts/producers/generate_commandview_inventory.py` now hosts the producer logic, orchestrator and duplicate scanner loaders reference the new module, pytest suites load the updated path, documentation in `.github/copilot-instructions.md` and the mermaid integration checklist reflects the rename, and the legacy file was removed after verification runs.
+- **Decision:** Lock mirrored commandview inventory outputs to `.repo_studios/command_center/reports/**` for viewer discovery.
+- **Context:** Ensures the upcoming viewer selector only scans the canonical static reports tree while dynamic `<slug>_index/` folders remain available for agent experimentation.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** CLI validation in `.repo_studios/command_center/scripts/producers/generate_commandview_inventory.py` rejects `--reports-root` overrides outside the static directory, regression coverage in `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_reports_root_outside_static_scope_rejected`, and updated guidance in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Add regression coverage ensuring commandview inventories keep static mirrors and dynamic outputs synchronized.
+- **Context:** Protects against regressions where mirrored Command Center artifacts diverge from co-located `<slug>_index/` copies after the commandview rename.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New test `.repo_studios/tests/tests_command_center/producers/test_generate_function_inventory_command_center.py::test_commandview_inventory_keeps_static_and_dynamic_outputs_in_lockstep` plus checklist update documenting the synchronization guarantee.
+- **Decision:** Refresh orchestration and developer documentation with CommandView terminology and artifact naming.
+- **Context:** Ensures operators and agents see the `generate_commandview_inventory.py` rename and `<slug>_commandview_YYYYMMDD-HHMM.json` pattern in all go-to guides before viewer integration work continues.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Updated `.repo_studios/command_center/README.md`, `.repo_studios/README.md`, `.repo_studios/command_center/docs/manual_extraction_operator_brief.md`, `.github/copilot-instructions.md`, and `docs/automation/function_inventory_integration_plan.md`, with checklist notes capturing past/present/future state.
+- **Decision:** Provide a CommandView selector helper that only inspects the static reports mirror.
+- **Context:** Viewer discovery needs a deterministic payload sourced from `.repo_studios/command_center/reports/**` so dropdowns surface the freshest CommandView inventories without reading dynamic `<slug>_index/` directories.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New library module `.repo_studios/command_center/scripts/libraries/build_commandview_selector.py`, corresponding tests in `.repo_studios/tests/tests_library_integration/libraries/test_build_commandview_selector.py`, and checklist updates noting the bootstrapper completion.

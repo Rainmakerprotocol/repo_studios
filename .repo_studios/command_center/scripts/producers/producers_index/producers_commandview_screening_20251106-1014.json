@@ -1,0 +1,4438 @@
+{
+  "graphs": {
+    "calls": [
+      [
+        "producers.audit_helper_adoption::_build_report",
+        "_scan_targets"
+      ],
+      [
+        "producers.audit_helper_adoption::_build_report",
+        "helper_entries.append"
+      ],
+      [
+        "producers.audit_helper_adoption::_build_report",
+        "helper_entry['targets'].append"
+      ],
+      [
+        "producers.audit_helper_adoption::_build_report",
+        "producers.audit_helper_adoption::_scan_targets"
+      ],
+      [
+        "producers.audit_helper_adoption::_build_report",
+        "sorted"
+      ],
+      [
+        "producers.audit_helper_adoption::_build_report",
+        "str"
+      ],
+      [
+        "producers.audit_helper_adoption::_build_report",
+        "timestamp.isoformat"
+      ],
+      [
+        "producers.audit_helper_adoption::_collect_defined_helpers",
+        "ast.walk"
+      ],
+      [
+        "producers.audit_helper_adoption::_collect_defined_helpers",
+        "isinstance"
+      ],
+      [
+        "producers.audit_helper_adoption::_collect_defined_helpers",
+        "names.add"
+      ],
+      [
+        "producers.audit_helper_adoption::_collect_defined_helpers",
+        "set"
+      ],
+      [
+        "producers.audit_helper_adoption::_collect_imported_helpers",
+        "ast.walk"
+      ],
+      [
+        "producers.audit_helper_adoption::_collect_imported_helpers",
+        "isinstance"
+      ],
+      [
+        "producers.audit_helper_adoption::_collect_imported_helpers",
+        "names.add"
+      ],
+      [
+        "producers.audit_helper_adoption::_collect_imported_helpers",
+        "set"
+      ],
+      [
+        "producers.audit_helper_adoption::_collect_python_files",
+        "candidate.is_file"
+      ],
+      [
+        "producers.audit_helper_adoption::_collect_python_files",
+        "root.rglob"
+      ],
+      [
+        "producers.audit_helper_adoption::_configure_logging",
+        "getattr"
+      ],
+      [
+        "producers.audit_helper_adoption::_configure_logging",
+        "level.upper"
+      ],
+      [
+        "producers.audit_helper_adoption::_configure_logging",
+        "logging.basicConfig"
+      ],
+      [
+        "producers.audit_helper_adoption::_determine_status",
+        "LEGACY_NAMES.get"
+      ],
+      [
+        "producers.audit_helper_adoption::_determine_status",
+        "frozenset"
+      ],
+      [
+        "producers.audit_helper_adoption::_determine_status",
+        "legacy_names.intersection"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "(repo_root / candidate).resolve"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "(repo_root / config_path).resolve"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "FileNotFoundError"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "Path"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "TargetScope"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "ValueError"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "candidate.exists"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "candidate.is_absolute"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "candidate.is_dir"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "candidate.relative_to"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "candidate.resolve"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "config_path.exists"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "config_path.is_absolute"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "config_path.read_text"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "data.get"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "entry.get"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "isinstance"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "scopes.append"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "str"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "tuple"
+      ],
+      [
+        "producers.audit_helper_adoption::_load_allow_list",
+        "yaml.safe_load"
+      ],
+      [
+        "producers.audit_helper_adoption::_parse_timestamp",
+        "SystemExit"
+      ],
+      [
+        "producers.audit_helper_adoption::_parse_timestamp",
+        "datetime.fromisoformat"
+      ],
+      [
+        "producers.audit_helper_adoption::_parse_timestamp",
+        "datetime.now"
+      ],
+      [
+        "producers.audit_helper_adoption::_parse_timestamp",
+        "parsed.astimezone"
+      ],
+      [
+        "producers.audit_helper_adoption::_parse_timestamp",
+        "parsed.replace"
+      ],
+      [
+        "producers.audit_helper_adoption::_relative_path",
+        "path.resolve"
+      ],
+      [
+        "producers.audit_helper_adoption::_relative_path",
+        "path.resolve().as_posix"
+      ],
+      [
+        "producers.audit_helper_adoption::_relative_path",
+        "path.resolve().relative_to"
+      ],
+      [
+        "producers.audit_helper_adoption::_relative_path",
+        "path.resolve().relative_to(repo_root).as_posix"
+      ],
+      [
+        "producers.audit_helper_adoption::_render_markdown",
+        "'\\n'.join"
+      ],
+      [
+        "producers.audit_helper_adoption::_render_markdown",
+        "'\\n'.join(lines).rstrip"
+      ],
+      [
+        "producers.audit_helper_adoption::_render_markdown",
+        "lines.append"
+      ],
+      [
+        "producers.audit_helper_adoption::_render_markdown",
+        "report.get"
+      ],
+      [
+        "producers.audit_helper_adoption::_resolve_formats",
+        "SystemExit"
+      ],
+      [
+        "producers.audit_helper_adoption::_resolve_formats",
+        "entry.strip"
+      ],
+      [
+        "producers.audit_helper_adoption::_resolve_formats",
+        "entry.strip().lower"
+      ],
+      [
+        "producers.audit_helper_adoption::_resolve_formats",
+        "selected.append"
+      ],
+      [
+        "producers.audit_helper_adoption::_resolve_helpers",
+        "SystemExit"
+      ],
+      [
+        "producers.audit_helper_adoption::_resolve_helpers",
+        "entry.split"
+      ],
+      [
+        "producers.audit_helper_adoption::_resolve_helpers",
+        "list"
+      ],
+      [
+        "producers.audit_helper_adoption::_resolve_helpers",
+        "part.strip"
+      ],
+      [
+        "producers.audit_helper_adoption::_resolve_helpers",
+        "resolved.append"
+      ],
+      [
+        "producers.audit_helper_adoption::_scan_targets",
+        "_collect_defined_helpers"
+      ],
+      [
+        "producers.audit_helper_adoption::_scan_targets",
+        "_collect_imported_helpers"
+      ],
+      [
+        "producers.audit_helper_adoption::_scan_targets",
+        "_collect_python_files"
+      ],
+      [
+        "producers.audit_helper_adoption::_scan_targets",
+        "_determine_status"
+      ],
+      [
+        "producers.audit_helper_adoption::_scan_targets",
+        "_initialize_helper_map"
+      ],
+      [
+        "producers.audit_helper_adoption::_scan_targets",
+        "_relative_path"
+      ],
+      [
+        "producers.audit_helper_adoption::_scan_targets",
+        "ast.parse"
+      ],
+      [
+        "producers.audit_helper_adoption::_scan_targets",
+        "helper_payload['files'][status].append"
+      ],
+      [
+        "producers.audit_helper_adoption::_scan_targets",
+        "path.read_text"
+      ],
+      [
+        "producers.audit_helper_adoption::_scan_targets",
+        "producers.audit_helper_adoption::_collect_defined_helpers"
+      ],
+      [
+        "producers.audit_helper_adoption::_scan_targets",
+        "producers.audit_helper_adoption::_collect_imported_helpers"
+      ],
+      [
+        "producers.audit_helper_adoption::_scan_targets",
+        "producers.audit_helper_adoption::_collect_python_files"
+      ],
+      [
+        "producers.audit_helper_adoption::_scan_targets",
+        "producers.audit_helper_adoption::_determine_status"
+      ],
+      [
+        "producers.audit_helper_adoption::_scan_targets",
+        "producers.audit_helper_adoption::_initialize_helper_map"
+      ],
+      [
+        "producers.audit_helper_adoption::_scan_targets",
+        "producers.audit_helper_adoption::_relative_path"
+      ],
+      [
+        "producers.audit_helper_adoption::_scan_targets",
+        "target_payload['files'][status].append"
+      ],
+      [
+        "producers.audit_helper_adoption::build_parser",
+        "argparse.ArgumentParser"
+      ],
+      [
+        "producers.audit_helper_adoption::build_parser",
+        "parser.add_argument"
+      ],
+      [
+        "producers.audit_helper_adoption::main",
+        "producers.audit_helper_adoption::run"
+      ],
+      [
+        "producers.audit_helper_adoption::main",
+        "run"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "Path"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "ReportArtifact"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "_build_report"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "_configure_logging"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "_load_allow_list"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "_parse_timestamp"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "_render_markdown"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "_resolve_formats"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "_resolve_helpers"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "artifacts.append"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "build_parser"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "build_standard_options"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "build_standard_paths"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "logging.error"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "logging.info"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "parser.parse_args"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "producers.audit_helper_adoption::_build_report"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "producers.audit_helper_adoption::_configure_logging"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "producers.audit_helper_adoption::_load_allow_list"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "producers.audit_helper_adoption::_parse_timestamp"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "producers.audit_helper_adoption::_render_markdown"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "producers.audit_helper_adoption::_resolve_formats"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "producers.audit_helper_adoption::_resolve_helpers"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "producers.audit_helper_adoption::build_parser"
+      ],
+      [
+        "producers.audit_helper_adoption::run",
+        "write_report_artifacts"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.__bool__",
+        "bool"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.get",
+        "absolute_path.resolve"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.get",
+        "absolute_path.resolve().as_posix"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.get",
+        "relative_path.as_posix"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.get",
+        "self._by_relative.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.get",
+        "self._by_resolved.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.register",
+        "CoverageInfo"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.register",
+        "Path"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.register",
+        "bucket.update"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.register",
+        "contexts_raw.items"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.register",
+        "data.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.register",
+        "info.contexts.setdefault"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.register",
+        "info.executed.update"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.register",
+        "info.missing.update"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.register",
+        "int"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.register",
+        "raw_path.is_absolute"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.register",
+        "resolved.as_posix"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.register",
+        "resolved.relative_to"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.register",
+        "resolved.relative_to(repo_root).as_posix"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.register",
+        "resolved.resolve"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.register",
+        "self._by_resolved.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.register",
+        "set"
+      ],
+      [
+        "producers.generate_commandview_inventory::CoverageIndex.register",
+        "str"
+      ],
+      [
+        "producers.generate_commandview_inventory::_annotation_map",
+        "_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::_annotation_map",
+        "dict"
+      ],
+      [
+        "producers.generate_commandview_inventory::_annotation_map",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_annotation_map",
+        "list"
+      ],
+      [
+        "producers.generate_commandview_inventory::_annotation_map",
+        "producers.generate_commandview_inventory::_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::_annotation_quality",
+        "annotated_args.items"
+      ],
+      [
+        "producers.generate_commandview_inventory::_annotation_quality",
+        "annotated_args.values"
+      ],
+      [
+        "producers.generate_commandview_inventory::_annotation_quality",
+        "annotations.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_annotation_quality",
+        "bool"
+      ],
+      [
+        "producers.generate_commandview_inventory::_annotation_quality",
+        "int"
+      ],
+      [
+        "producers.generate_commandview_inventory::_annotation_quality",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_annotation_quality",
+        "len"
+      ],
+      [
+        "producers.generate_commandview_inventory::_annotation_quality",
+        "sorted"
+      ],
+      [
+        "producers.generate_commandview_inventory::_annotation_quality",
+        "sum"
+      ],
+      [
+        "producers.generate_commandview_inventory::_attribute_chain",
+        "'.'.join"
+      ],
+      [
+        "producers.generate_commandview_inventory::_attribute_chain",
+        "_attribute_chain"
+      ],
+      [
+        "producers.generate_commandview_inventory::_attribute_chain",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_attribute_chain",
+        "parts.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_attribute_chain",
+        "producers.generate_commandview_inventory::_attribute_chain"
+      ],
+      [
+        "producers.generate_commandview_inventory::_attribute_chain",
+        "reversed"
+      ],
+      [
+        "producers.generate_commandview_inventory::_attribute_root",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_augment_class_relationships",
+        "_build_method_index"
+      ],
+      [
+        "producers.generate_commandview_inventory::_augment_class_relationships",
+        "_collect_abstract_methods"
+      ],
+      [
+        "producers.generate_commandview_inventory::_augment_class_relationships",
+        "_collect_overrides"
+      ],
+      [
+        "producers.generate_commandview_inventory::_augment_class_relationships",
+        "_is_abstract_class"
+      ],
+      [
+        "producers.generate_commandview_inventory::_augment_class_relationships",
+        "_normalize_base_names"
+      ],
+      [
+        "producers.generate_commandview_inventory::_augment_class_relationships",
+        "class_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_augment_class_relationships",
+        "producers.generate_commandview_inventory::_build_method_index"
+      ],
+      [
+        "producers.generate_commandview_inventory::_augment_class_relationships",
+        "producers.generate_commandview_inventory::_collect_abstract_methods"
+      ],
+      [
+        "producers.generate_commandview_inventory::_augment_class_relationships",
+        "producers.generate_commandview_inventory::_collect_overrides"
+      ],
+      [
+        "producers.generate_commandview_inventory::_augment_class_relationships",
+        "producers.generate_commandview_inventory::_is_abstract_class"
+      ],
+      [
+        "producers.generate_commandview_inventory::_augment_class_relationships",
+        "producers.generate_commandview_inventory::_normalize_base_names"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_alias_resolution_map",
+        "_resolve_relative_import"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_alias_resolution_map",
+        "alias.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_alias_resolution_map",
+        "detail.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_alias_resolution_map",
+        "int"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_alias_resolution_map",
+        "producers.generate_commandview_inventory::_resolve_relative_import"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "Counter"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "_iter_entries"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "_record_local"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "_resolve_call_target"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "call.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "class_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "class_methods.setdefault"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "counter.items"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "counter.values"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "dict"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "display_name.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "edge.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "edges.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "edges.sort"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "filtered_resolution.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "item.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "len"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "local_nodes.add"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "method_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "module_id.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "per_function.items"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "per_function.setdefault"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "producers.generate_commandview_inventory::_resolve_call_target"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "resolution.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "resolution.items"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "resolution.pop"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "set"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "sorted"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "sum"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_call_graph",
+        "summary_counter.items"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_import_graph",
+        "_dependency_category"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_import_graph",
+        "_resolve_import_target"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_import_graph",
+        "alias_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_import_graph",
+        "detail.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_import_graph",
+        "edges.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_import_graph",
+        "graph.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_import_graph",
+        "module_id.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_import_graph",
+        "producers.generate_commandview_inventory::_dependency_category"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_import_graph",
+        "producers.generate_commandview_inventory::_resolve_import_target"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_import_graph",
+        "usage_map.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_method_index",
+        "_method_base_name"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_method_index",
+        "class_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_build_method_index",
+        "producers.generate_commandview_inventory::_method_base_name"
+      ],
+      [
+        "producers.generate_commandview_inventory::_callback_registration_info",
+        "' '.join"
+      ],
+      [
+        "producers.generate_commandview_inventory::_callback_registration_info",
+        "_attribute_chain"
+      ],
+      [
+        "producers.generate_commandview_inventory::_callback_registration_info",
+        "_is_callback_callee"
+      ],
+      [
+        "producers.generate_commandview_inventory::_callback_registration_info",
+        "_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::_callback_registration_info",
+        "_select_callback_target"
+      ],
+      [
+        "producers.generate_commandview_inventory::_callback_registration_info",
+        "getattr"
+      ],
+      [
+        "producers.generate_commandview_inventory::_callback_registration_info",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_callback_registration_info",
+        "method_name.lower"
+      ],
+      [
+        "producers.generate_commandview_inventory::_callback_registration_info",
+        "part.lower"
+      ],
+      [
+        "producers.generate_commandview_inventory::_callback_registration_info",
+        "producers.generate_commandview_inventory::_attribute_chain"
+      ],
+      [
+        "producers.generate_commandview_inventory::_callback_registration_info",
+        "producers.generate_commandview_inventory::_is_callback_callee"
+      ],
+      [
+        "producers.generate_commandview_inventory::_callback_registration_info",
+        "producers.generate_commandview_inventory::_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::_callback_registration_info",
+        "producers.generate_commandview_inventory::_select_callback_target"
+      ],
+      [
+        "producers.generate_commandview_inventory::_classify_decorator",
+        "_decorator_base_name"
+      ],
+      [
+        "producers.generate_commandview_inventory::_classify_decorator",
+        "_decorator_classification"
+      ],
+      [
+        "producers.generate_commandview_inventory::_classify_decorator",
+        "_decorator_flags"
+      ],
+      [
+        "producers.generate_commandview_inventory::_classify_decorator",
+        "producers.generate_commandview_inventory::_decorator_base_name"
+      ],
+      [
+        "producers.generate_commandview_inventory::_classify_decorator",
+        "producers.generate_commandview_inventory::_decorator_classification"
+      ],
+      [
+        "producers.generate_commandview_inventory::_classify_decorator",
+        "producers.generate_commandview_inventory::_decorator_flags"
+      ],
+      [
+        "producers.generate_commandview_inventory::_classify_global_value",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_classify_module_path",
+        "module_path.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_classify_module_path",
+        "module_path.startswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_abstract_methods",
+        "_is_abstract_method_entry"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_abstract_methods",
+        "_method_base_name"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_abstract_methods",
+        "abstract_entries.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_abstract_methods",
+        "class_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_abstract_methods",
+        "method.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_abstract_methods",
+        "producers.generate_commandview_inventory::_is_abstract_method_entry"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_abstract_methods",
+        "producers.generate_commandview_inventory::_method_base_name"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_callback_registrations",
+        "_append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_callback_registrations",
+        "class_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_callback_registrations",
+        "dict"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_callback_registrations",
+        "entries.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_callback_registrations",
+        "source_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_import_usage",
+        "_iter_entries"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_import_usage",
+        "cls.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_import_usage",
+        "entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_import_usage",
+        "func.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_import_usage",
+        "info['aliases'].add"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_import_usage",
+        "info['functions'].add"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_import_usage",
+        "set"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_import_usage",
+        "sorted"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_import_usage",
+        "usage.items"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_import_usage",
+        "usage.setdefault"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "_attribute_chain"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "_attribute_root"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "_callback_registration_info"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "_dedupe"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "any"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "ast.get_source_segment"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "ast.walk"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "attr.lower"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "callback_registrations.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "callee.endswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "callee.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "caller_context.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "calls.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "intra_file_refs.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "item.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "len"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "logging_calls.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "next"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "producers.generate_commandview_inventory::_attribute_chain"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "producers.generate_commandview_inventory::_attribute_root"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "producers.generate_commandview_inventory::_callback_registration_info"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "producers.generate_commandview_inventory::_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "re.compile"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "results.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "seen.add"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "set"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "todo_pattern.findall"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "tuple"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "used_globals.update"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_function_metrics",
+        "uses_import.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_git_churn",
+        "_run_git_command"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_git_churn",
+        "add_raw.isdigit"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_git_churn",
+        "datetime.fromtimestamp"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_git_churn",
+        "datetime.fromtimestamp(latest_timestamp, timezone.utc).isoformat"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_git_churn",
+        "del_raw.isdigit"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_git_churn",
+        "int"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_git_churn",
+        "len"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_git_churn",
+        "line.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_git_churn",
+        "producers.generate_commandview_inventory::_run_git_command"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_git_churn",
+        "repo_relative_path.as_posix"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_git_churn",
+        "result.stdout.splitlines"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_overrides",
+        "_method_base_name"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_overrides",
+        "class_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_overrides",
+        "method.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_overrides",
+        "method_index.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_overrides",
+        "overrides.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_overrides",
+        "producers.generate_commandview_inventory::_method_base_name"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_overrides",
+        "set"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_test_coverage_signals",
+        "any"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_test_coverage_signals",
+        "bool"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_test_coverage_signals",
+        "imp.startswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_test_coverage_signals",
+        "module_candidates.extend"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_test_coverage_signals",
+        "module_id.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_test_coverage_signals",
+        "prefixes.extend"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_test_coverage_signals",
+        "sorted"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_unused_imports",
+        "edge.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_unused_imports",
+        "item.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_unused_imports",
+        "seen.add"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_unused_imports",
+        "set"
+      ],
+      [
+        "producers.generate_commandview_inventory::_collect_unused_imports",
+        "unused.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_cyclomatic_complexity",
+        "ast.walk"
+      ],
+      [
+        "producers.generate_commandview_inventory::_cyclomatic_complexity",
+        "getattr"
+      ],
+      [
+        "producers.generate_commandview_inventory::_cyclomatic_complexity",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_cyclomatic_complexity",
+        "len"
+      ],
+      [
+        "producers.generate_commandview_inventory::_cyclomatic_complexity",
+        "max"
+      ],
+      [
+        "producers.generate_commandview_inventory::_decorator_base_name",
+        "resolved_path.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_decorator_classification",
+        "_classify_module_path"
+      ],
+      [
+        "producers.generate_commandview_inventory::_decorator_classification",
+        "_is_project_decorator"
+      ],
+      [
+        "producers.generate_commandview_inventory::_decorator_classification",
+        "module_id.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_decorator_classification",
+        "producers.generate_commandview_inventory::_classify_module_path"
+      ],
+      [
+        "producers.generate_commandview_inventory::_decorator_classification",
+        "producers.generate_commandview_inventory::_is_project_decorator"
+      ],
+      [
+        "producers.generate_commandview_inventory::_decorator_flags",
+        "_is_click_command"
+      ],
+      [
+        "producers.generate_commandview_inventory::_decorator_flags",
+        "_is_click_group"
+      ],
+      [
+        "producers.generate_commandview_inventory::_decorator_flags",
+        "_is_pytest_mark"
+      ],
+      [
+        "producers.generate_commandview_inventory::_decorator_flags",
+        "bool"
+      ],
+      [
+        "producers.generate_commandview_inventory::_decorator_flags",
+        "dict.fromkeys"
+      ],
+      [
+        "producers.generate_commandview_inventory::_decorator_flags",
+        "producers.generate_commandview_inventory::_is_click_command"
+      ],
+      [
+        "producers.generate_commandview_inventory::_decorator_flags",
+        "producers.generate_commandview_inventory::_is_click_group"
+      ],
+      [
+        "producers.generate_commandview_inventory::_decorator_flags",
+        "producers.generate_commandview_inventory::_is_pytest_mark"
+      ],
+      [
+        "producers.generate_commandview_inventory::_decorator_flags",
+        "sorted"
+      ],
+      [
+        "producers.generate_commandview_inventory::_dependency_category",
+        "target.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_dependency_category",
+        "target.startswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_describe_decorator",
+        "_attribute_chain"
+      ],
+      [
+        "producers.generate_commandview_inventory::_describe_decorator",
+        "_classify_decorator"
+      ],
+      [
+        "producers.generate_commandview_inventory::_describe_decorator",
+        "_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::_describe_decorator",
+        "import_alias_map.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_describe_decorator",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_describe_decorator",
+        "producers.generate_commandview_inventory::_attribute_chain"
+      ],
+      [
+        "producers.generate_commandview_inventory::_describe_decorator",
+        "producers.generate_commandview_inventory::_classify_decorator"
+      ],
+      [
+        "producers.generate_commandview_inventory::_describe_decorator",
+        "producers.generate_commandview_inventory::_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::_detect_dynamic_code",
+        "_attribute_root"
+      ],
+      [
+        "producers.generate_commandview_inventory::_detect_dynamic_code",
+        "_is_globals_mutation"
+      ],
+      [
+        "producers.generate_commandview_inventory::_detect_dynamic_code",
+        "_is_globals_setattr"
+      ],
+      [
+        "producers.generate_commandview_inventory::_detect_dynamic_code",
+        "_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::_detect_dynamic_code",
+        "ast.walk"
+      ],
+      [
+        "producers.generate_commandview_inventory::_detect_dynamic_code",
+        "callee.endswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_detect_dynamic_code",
+        "events.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_detect_dynamic_code",
+        "getattr"
+      ],
+      [
+        "producers.generate_commandview_inventory::_detect_dynamic_code",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_detect_dynamic_code",
+        "producers.generate_commandview_inventory::_attribute_root"
+      ],
+      [
+        "producers.generate_commandview_inventory::_detect_dynamic_code",
+        "producers.generate_commandview_inventory::_is_globals_mutation"
+      ],
+      [
+        "producers.generate_commandview_inventory::_detect_dynamic_code",
+        "producers.generate_commandview_inventory::_is_globals_setattr"
+      ],
+      [
+        "producers.generate_commandview_inventory::_detect_dynamic_code",
+        "producers.generate_commandview_inventory::_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_first_line",
+        "_docstring_summary"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_first_line",
+        "producers.generate_commandview_inventory::_docstring_summary"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_parameter_mentions",
+        "docstring.lower"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_parameter_mentions",
+        "name.lower"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_parameter_mentions",
+        "sorted"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_quality",
+        "_docstring_parameter_mentions"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_quality",
+        "_has_parameters_section"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_quality",
+        "_has_returns_section"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_quality",
+        "_parameter_names"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_quality",
+        "docstring.splitlines"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_quality",
+        "docstring.strip"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_quality",
+        "len"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_quality",
+        "line.strip"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_quality",
+        "producers.generate_commandview_inventory::_docstring_parameter_mentions"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_quality",
+        "producers.generate_commandview_inventory::_has_parameters_section"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_quality",
+        "producers.generate_commandview_inventory::_has_returns_section"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_quality",
+        "producers.generate_commandview_inventory::_parameter_names"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_quality",
+        "sorted"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_quality",
+        "sum"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_summary",
+        "line.strip"
+      ],
+      [
+        "producers.generate_commandview_inventory::_docstring_summary",
+        "value.splitlines"
+      ],
+      [
+        "producers.generate_commandview_inventory::_entry_module_key",
+        "entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_entry_module_key",
+        "relative.replace"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "_class_code_smells"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "_describe_decorator"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "_docstring_quality"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "_docstring_summary"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "_extract_function"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "ast.get_docstring"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "attributes.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "getattr"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "len"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "list"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "max"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "methods.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "producers.generate_commandview_inventory::_class_code_smells"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "producers.generate_commandview_inventory::_describe_decorator"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "producers.generate_commandview_inventory::_docstring_quality"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "producers.generate_commandview_inventory::_docstring_summary"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "producers.generate_commandview_inventory::_extract_function"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_class",
+        "producers.generate_commandview_inventory::_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_dunder_all",
+        "_extract_literal_str_seq"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_dunder_all",
+        "exports.setdefault"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_dunder_all",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_dunder_all",
+        "producers.generate_commandview_inventory::_extract_literal_str_seq"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_first_statement_line",
+        "ast.get_source_segment"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_first_statement_line",
+        "getattr"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_first_statement_line",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_first_statement_line",
+        "len"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_first_statement_line",
+        "lines[line_no - 1].strip"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_first_statement_line",
+        "segment.splitlines"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_first_statement_line",
+        "segment.splitlines()[0].strip"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_first_statement_line",
+        "source.splitlines"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "_annotation_map"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "_annotation_quality"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "_collect_function_metrics"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "_cyclomatic_complexity"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "_describe_decorator"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "_docstring_quality"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "_docstring_summary"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "_first_stmt_kind"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "_function_code_smells"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "_returns_kind"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "_signature_structure"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "annotation_quality.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "ast.get_docstring"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "ast.get_source_segment"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "ast.walk"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "getattr"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "hashlib.sha256"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "hashlib.sha256(source_segment.encode('utf-8')).hexdigest"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "list"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "max"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "name.startswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "producers.generate_commandview_inventory::_annotation_map"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "producers.generate_commandview_inventory::_annotation_quality"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "producers.generate_commandview_inventory::_collect_function_metrics"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "producers.generate_commandview_inventory::_cyclomatic_complexity"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "producers.generate_commandview_inventory::_describe_decorator"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "producers.generate_commandview_inventory::_docstring_quality"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "producers.generate_commandview_inventory::_docstring_summary"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "producers.generate_commandview_inventory::_first_stmt_kind"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "producers.generate_commandview_inventory::_function_code_smells"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "producers.generate_commandview_inventory::_returns_kind"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "producers.generate_commandview_inventory::_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "producers.generate_commandview_inventory::_signature_structure"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "raises.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "sorted"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "source_segment.encode"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "source_segment.splitlines"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_function",
+        "source_segment.splitlines()[0].strip"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_imports_detailed",
+        "details.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_imports_detailed",
+        "getattr"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_imports_detailed",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_imports_detailed",
+        "names.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_literal_str_seq",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_extract_literal_str_seq",
+        "symbols.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_first_stmt_kind",
+        "body[0].__class__.__name__.lower"
+      ],
+      [
+        "producers.generate_commandview_inventory::_first_stmt_kind",
+        "getattr"
+      ],
+      [
+        "producers.generate_commandview_inventory::_function_code_smells",
+        "summary.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_has_parameters_section",
+        "bool"
+      ],
+      [
+        "producers.generate_commandview_inventory::_has_parameters_section",
+        "re.search"
+      ],
+      [
+        "producers.generate_commandview_inventory::_has_returns_section",
+        "bool"
+      ],
+      [
+        "producers.generate_commandview_inventory::_has_returns_section",
+        "re.search"
+      ],
+      [
+        "producers.generate_commandview_inventory::_identify_unreachable_functions",
+        "call_graph.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_identify_unreachable_functions",
+        "class_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_identify_unreachable_functions",
+        "defined_entries.items"
+      ],
+      [
+        "producers.generate_commandview_inventory::_identify_unreachable_functions",
+        "edge.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_identify_unreachable_functions",
+        "entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_identify_unreachable_functions",
+        "inbound.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_identify_unreachable_functions",
+        "method.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_identify_unreachable_functions",
+        "unreachable.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_abstract_class",
+        "any"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_abstract_method_entry",
+        "(decorator.get('expression') or '').split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_abstract_method_entry",
+        "any"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_abstract_method_entry",
+        "decorator.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_abstract_method_entry",
+        "field.endswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_abstract_method_entry",
+        "method_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_callback_callee",
+        "any"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_callback_callee",
+        "method_name.lower"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_callback_callee",
+        "name.endswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_callback_callee",
+        "name.startswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_click_command",
+        "module_path.endswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_click_command",
+        "module_path.startswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_click_command",
+        "resolved_path.endswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_click_group",
+        "module_path.endswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_click_group",
+        "module_path.startswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_click_group",
+        "resolved_path.endswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_globals_mutation",
+        "_attribute_root"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_globals_mutation",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_globals_mutation",
+        "producers.generate_commandview_inventory::_attribute_root"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_globals_setattr",
+        "_attribute_root"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_globals_setattr",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_globals_setattr",
+        "producers.generate_commandview_inventory::_attribute_root"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_project_decorator",
+        "resolved_path.startswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_pytest_mark",
+        "bool"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_pytest_mark",
+        "resolved_path.startswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_test_path",
+        "any"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_test_path",
+        "filename.endswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_test_path",
+        "filename.startswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_test_path",
+        "part.endswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_test_path",
+        "part.lower"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_test_path",
+        "part.startswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_is_test_path",
+        "relative_parts[-1].lower"
+      ],
+      [
+        "producers.generate_commandview_inventory::_match_known_module",
+        "'.'.join"
+      ],
+      [
+        "producers.generate_commandview_inventory::_match_known_module",
+        "candidate.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_match_known_module",
+        "len"
+      ],
+      [
+        "producers.generate_commandview_inventory::_match_known_module",
+        "range"
+      ],
+      [
+        "producers.generate_commandview_inventory::_method_base_name",
+        "method_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_method_base_name",
+        "name.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_normalize_base_names",
+        "_simplify_base_expression"
+      ],
+      [
+        "producers.generate_commandview_inventory::_normalize_base_names",
+        "dict.fromkeys"
+      ],
+      [
+        "producers.generate_commandview_inventory::_normalize_base_names",
+        "list"
+      ],
+      [
+        "producers.generate_commandview_inventory::_normalize_base_names",
+        "producers.generate_commandview_inventory::_simplify_base_expression"
+      ],
+      [
+        "producers.generate_commandview_inventory::_normalize_callback_target",
+        "_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::_normalize_callback_target",
+        "getattr"
+      ],
+      [
+        "producers.generate_commandview_inventory::_normalize_callback_target",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_normalize_callback_target",
+        "producers.generate_commandview_inventory::_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::_parameter_names",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_parameter_names",
+        "names.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_parameter_names",
+        "names.extend"
+      ],
+      [
+        "producers.generate_commandview_inventory::_register_import",
+        "alias_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_register_import",
+        "detail.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_register_import",
+        "imports_flat.add"
+      ],
+      [
+        "producers.generate_commandview_inventory::_relative_module_id",
+        "'.'.join"
+      ],
+      [
+        "producers.generate_commandview_inventory::_relative_module_id",
+        "list"
+      ],
+      [
+        "producers.generate_commandview_inventory::_relative_module_id",
+        "relative_path.with_suffix"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "'.'.join"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "_dependency_category"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "_finalize"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "attribute.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "bool"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "call.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "caller_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "caller_name.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "class_methods.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "class_methods.get(caller_class, {}).get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "class_methods[candidate].get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "class_methods[root].get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "detail.setdefault"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "expression.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "len"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "producers.generate_commandview_inventory::_dependency_category"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "resolution.update"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_call_target",
+        "resolved_module.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_callee_path",
+        "callee.startswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_callee_path",
+        "info.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_callee_path",
+        "len"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_callee_path",
+        "remainder.startswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_relative_import",
+        "'.'.join"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_relative_import",
+        "(module_id or '').split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_relative_import",
+        "base_parts.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::_resolve_relative_import",
+        "len"
+      ],
+      [
+        "producers.generate_commandview_inventory::_returns_kind",
+        "any"
+      ],
+      [
+        "producers.generate_commandview_inventory::_returns_kind",
+        "ast.walk"
+      ],
+      [
+        "producers.generate_commandview_inventory::_returns_kind",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_run_git_command",
+        "' '.join"
+      ],
+      [
+        "producers.generate_commandview_inventory::_run_git_command",
+        "logging.warning"
+      ],
+      [
+        "producers.generate_commandview_inventory::_run_git_command",
+        "result.stderr.strip"
+      ],
+      [
+        "producers.generate_commandview_inventory::_run_git_command",
+        "str"
+      ],
+      [
+        "producers.generate_commandview_inventory::_run_git_command",
+        "subprocess.run"
+      ],
+      [
+        "producers.generate_commandview_inventory::_safe_unparse",
+        "ast.unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::_select_callback_target",
+        "_normalize_callback_target"
+      ],
+      [
+        "producers.generate_commandview_inventory::_select_callback_target",
+        "arg_name.lower"
+      ],
+      [
+        "producers.generate_commandview_inventory::_select_callback_target",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::_select_callback_target",
+        "producers.generate_commandview_inventory::_normalize_callback_target"
+      ],
+      [
+        "producers.generate_commandview_inventory::_signature_structure",
+        "_names"
+      ],
+      [
+        "producers.generate_commandview_inventory::_simplify_base_expression",
+        "trimmed.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_simplify_base_expression",
+        "value.split"
+      ],
+      [
+        "producers.generate_commandview_inventory::_summarize_code_smells",
+        "(entry.get('code_smells') or {}).items"
+      ],
+      [
+        "producers.generate_commandview_inventory::_summarize_code_smells",
+        "Counter"
+      ],
+      [
+        "producers.generate_commandview_inventory::_summarize_code_smells",
+        "_ingest"
+      ],
+      [
+        "producers.generate_commandview_inventory::_summarize_code_smells",
+        "class_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_summarize_code_smells",
+        "entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_summarize_code_smells",
+        "sorted"
+      ],
+      [
+        "producers.generate_commandview_inventory::_summarize_dependency_categories",
+        "edge.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_summarize_dependency_categories",
+        "item.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_summarize_dependency_categories",
+        "len"
+      ],
+      [
+        "producers.generate_commandview_inventory::_summarize_dependency_categories",
+        "modules_by_category.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::_summarize_dependency_categories",
+        "modules_by_category.items"
+      ],
+      [
+        "producers.generate_commandview_inventory::_summarize_dependency_categories",
+        "modules_by_category.setdefault"
+      ],
+      [
+        "producers.generate_commandview_inventory::_summarize_dependency_categories",
+        "modules_by_category.setdefault(category, set()).add"
+      ],
+      [
+        "producers.generate_commandview_inventory::_summarize_dependency_categories",
+        "set"
+      ],
+      [
+        "producers.generate_commandview_inventory::_summarize_dependency_categories",
+        "sorted"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_inventory_copy",
+        "datetime.now"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_inventory_copy",
+        "datetime.now(timezone.utc).strftime"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_inventory_copy",
+        "directory.glob"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_inventory_copy",
+        "directory.mkdir"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_inventory_copy",
+        "existing.is_file"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_inventory_copy",
+        "existing.unlink"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_inventory_copy",
+        "json.dumps"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_inventory_copy",
+        "latest_pointer.exists"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_inventory_copy",
+        "latest_pointer.unlink"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_inventory_copy",
+        "legacy_file.exists"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_inventory_copy",
+        "legacy_file.unlink"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_inventory_copy",
+        "output_file.with_suffix"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_inventory_copy",
+        "temp_file.replace"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_inventory_copy",
+        "temp_file.write_text"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_screening_copy",
+        "datetime.now"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_screening_copy",
+        "datetime.now(timezone.utc).strftime"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_screening_copy",
+        "directory.glob"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_screening_copy",
+        "directory.mkdir"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_screening_copy",
+        "existing.is_file"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_screening_copy",
+        "existing.unlink"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_screening_copy",
+        "json.dumps"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_screening_copy",
+        "output_file.with_suffix"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_screening_copy",
+        "temp_file.replace"
+      ],
+      [
+        "producers.generate_commandview_inventory::_write_screening_copy",
+        "temp_file.write_text"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_augment_class_relationships"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_build_call_graph"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_build_import_graph"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_classify_global_value"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_collect_callback_registrations"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_collect_function_import_usage"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_collect_test_coverage_signals"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_collect_unused_imports"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_detect_dynamic_code"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_docstring_summary"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_extract_class"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_extract_dunder_all"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_extract_first_statement_line"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_extract_function"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_extract_imports_detailed"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_identify_unreachable_functions"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_register_import"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_relative_module_id"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_summarize_code_smells"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "_summarize_dependency_categories"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "any"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "ast.get_docstring"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "ast.parse"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "ast.walk"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "class_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "classes.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "coverage.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "coverage_payload['contexts'].items"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "defined_export_candidates.add"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "defined_export_candidates.update"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "defined_symbols.add"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "functions.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "globals_block.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "info.contexts.items"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "len"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "logging.exception"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "logging.warning"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "method_entry['name'].split"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "path.read_text"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "path.relative_to"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_augment_class_relationships"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_build_call_graph"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_build_import_graph"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_classify_global_value"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_collect_callback_registrations"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_collect_function_import_usage"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_collect_test_coverage_signals"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_collect_unused_imports"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_detect_dynamic_code"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_docstring_summary"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_extract_class"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_extract_dunder_all"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_extract_first_statement_line"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_extract_function"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_extract_imports_detailed"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_identify_unreachable_functions"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_register_import"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_relative_module_id"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_safe_unparse"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_summarize_code_smells"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "producers.generate_commandview_inventory::_summarize_dependency_categories"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "relative.as_posix"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "relative.with_suffix"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "relative.with_suffix('').as_posix"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "round"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "set"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "sorted"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "str"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "text.splitlines"
+      ],
+      [
+        "producers.generate_commandview_inventory::analyze_python_file",
+        "warnings.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::attach_git_churn",
+        "(paths.target / Path(relative_path)).resolve"
+      ],
+      [
+        "producers.generate_commandview_inventory::attach_git_churn",
+        "Path"
+      ],
+      [
+        "producers.generate_commandview_inventory::attach_git_churn",
+        "_collect_git_churn"
+      ],
+      [
+        "producers.generate_commandview_inventory::attach_git_churn",
+        "absolute.relative_to"
+      ],
+      [
+        "producers.generate_commandview_inventory::attach_git_churn",
+        "churn.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::attach_git_churn",
+        "datetime.fromisoformat"
+      ],
+      [
+        "producers.generate_commandview_inventory::attach_git_churn",
+        "datetime.fromtimestamp"
+      ],
+      [
+        "producers.generate_commandview_inventory::attach_git_churn",
+        "datetime.fromtimestamp(latest_overall[0], timezone.utc).isoformat"
+      ],
+      [
+        "producers.generate_commandview_inventory::attach_git_churn",
+        "entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::attach_git_churn",
+        "int"
+      ],
+      [
+        "producers.generate_commandview_inventory::attach_git_churn",
+        "latest_payload.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::attach_git_churn",
+        "producers.generate_commandview_inventory::_collect_git_churn"
+      ],
+      [
+        "producers.generate_commandview_inventory::attach_git_churn",
+        "ts.timestamp"
+      ],
+      [
+        "producers.generate_commandview_inventory::attach_git_churn",
+        "warnings.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_options",
+        "Options"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_options",
+        "int"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_options",
+        "str"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_options",
+        "tuple"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_paths",
+        "Path"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_paths",
+        "Path(__file__).resolve"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_paths",
+        "Path(args.repo_root).resolve"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_paths",
+        "Paths"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_paths",
+        "ValueError"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_paths",
+        "reports_candidate.is_absolute"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_paths",
+        "reports_root.mkdir"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_paths",
+        "reports_root.relative_to"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_paths",
+        "reports_root.resolve"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_paths",
+        "target.relative_to"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_paths",
+        "target.resolve"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_paths",
+        "target_candidate.is_absolute"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "_build_alias_resolution_map"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "_capture_function"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "_entry_module_key"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "_match_known_module"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "_resolve_callee_path"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "call.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "call.get('caller', {}).get"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "call_edges.add"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "class_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "cross_module_edges.items"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "cross_module_edges.setdefault"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "cross_module_list.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "detail.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "edge['call_sites'].add"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "edge['callers'].add"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "edge['targets'].add"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "function_entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "import_edges.add"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "info.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "item.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "list"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "producers.generate_commandview_inventory::_build_alias_resolution_map"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "producers.generate_commandview_inventory::_entry_module_key"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "producers.generate_commandview_inventory::_match_known_module"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "producers.generate_commandview_inventory::_resolve_callee_path"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "ref.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "set"
+      ],
+      [
+        "producers.generate_commandview_inventory::build_screening_summary",
+        "sorted"
+      ],
+      [
+        "producers.generate_commandview_inventory::compose_inventory",
+        "Counter"
+      ],
+      [
+        "producers.generate_commandview_inventory::compose_inventory",
+        "cls.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::compose_inventory",
+        "coverage_block.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::compose_inventory",
+        "datetime.now"
+      ],
+      [
+        "producers.generate_commandview_inventory::compose_inventory",
+        "datetime.now(timezone.utc).isoformat"
+      ],
+      [
+        "producers.generate_commandview_inventory::compose_inventory",
+        "dict"
+      ],
+      [
+        "producers.generate_commandview_inventory::compose_inventory",
+        "entry.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::compose_inventory",
+        "func.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::compose_inventory",
+        "int"
+      ],
+      [
+        "producers.generate_commandview_inventory::compose_inventory",
+        "len"
+      ],
+      [
+        "producers.generate_commandview_inventory::compose_inventory",
+        "method.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::compose_inventory",
+        "round"
+      ],
+      [
+        "producers.generate_commandview_inventory::compose_inventory",
+        "str"
+      ],
+      [
+        "producers.generate_commandview_inventory::compose_inventory",
+        "sum"
+      ],
+      [
+        "producers.generate_commandview_inventory::configure_logging",
+        "getattr"
+      ],
+      [
+        "producers.generate_commandview_inventory::configure_logging",
+        "level.upper"
+      ],
+      [
+        "producers.generate_commandview_inventory::configure_logging",
+        "logging.basicConfig"
+      ],
+      [
+        "producers.generate_commandview_inventory::discover_python_files",
+        "_is_test_path"
+      ],
+      [
+        "producers.generate_commandview_inventory::discover_python_files",
+        "any"
+      ],
+      [
+        "producers.generate_commandview_inventory::discover_python_files",
+        "part.startswith"
+      ],
+      [
+        "producers.generate_commandview_inventory::discover_python_files",
+        "path.relative_to"
+      ],
+      [
+        "producers.generate_commandview_inventory::discover_python_files",
+        "producers.generate_commandview_inventory::_is_test_path"
+      ],
+      [
+        "producers.generate_commandview_inventory::discover_python_files",
+        "results.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::discover_python_files",
+        "results.sort"
+      ],
+      [
+        "producers.generate_commandview_inventory::discover_python_files",
+        "target.rglob"
+      ],
+      [
+        "producers.generate_commandview_inventory::discover_python_files",
+        "tuple"
+      ],
+      [
+        "producers.generate_commandview_inventory::load_coverage_reports",
+        "CoverageIndex"
+      ],
+      [
+        "producers.generate_commandview_inventory::load_coverage_reports",
+        "Path"
+      ],
+      [
+        "producers.generate_commandview_inventory::load_coverage_reports",
+        "candidate.as_posix"
+      ],
+      [
+        "producers.generate_commandview_inventory::load_coverage_reports",
+        "candidate.exists"
+      ],
+      [
+        "producers.generate_commandview_inventory::load_coverage_reports",
+        "candidate.is_absolute"
+      ],
+      [
+        "producers.generate_commandview_inventory::load_coverage_reports",
+        "candidate.read_text"
+      ],
+      [
+        "producers.generate_commandview_inventory::load_coverage_reports",
+        "candidate.relative_to"
+      ],
+      [
+        "producers.generate_commandview_inventory::load_coverage_reports",
+        "candidate.relative_to(paths.repo_root).as_posix"
+      ],
+      [
+        "producers.generate_commandview_inventory::load_coverage_reports",
+        "candidate.resolve"
+      ],
+      [
+        "producers.generate_commandview_inventory::load_coverage_reports",
+        "files_block.items"
+      ],
+      [
+        "producers.generate_commandview_inventory::load_coverage_reports",
+        "index.register"
+      ],
+      [
+        "producers.generate_commandview_inventory::load_coverage_reports",
+        "isinstance"
+      ],
+      [
+        "producers.generate_commandview_inventory::load_coverage_reports",
+        "json.loads"
+      ],
+      [
+        "producers.generate_commandview_inventory::load_coverage_reports",
+        "loaded_sources.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::load_coverage_reports",
+        "logging.warning"
+      ],
+      [
+        "producers.generate_commandview_inventory::load_coverage_reports",
+        "payload.get"
+      ],
+      [
+        "producers.generate_commandview_inventory::main",
+        "SystemExit"
+      ],
+      [
+        "producers.generate_commandview_inventory::main",
+        "producers.generate_commandview_inventory::run"
+      ],
+      [
+        "producers.generate_commandview_inventory::main",
+        "run"
+      ],
+      [
+        "producers.generate_commandview_inventory::parse_args",
+        "argparse.ArgumentParser"
+      ],
+      [
+        "producers.generate_commandview_inventory::parse_args",
+        "parser.add_argument"
+      ],
+      [
+        "producers.generate_commandview_inventory::parse_args",
+        "parser.parse_args"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "analyze_python_file"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "attach_git_churn"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "build_options"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "build_paths"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "build_screening_summary"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "collected.append"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "compose_inventory"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "configure_logging"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "discover_python_files"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "len"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "load_coverage_reports"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "logging.error"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "logging.info"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "parse_args"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "paths.target.exists"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "paths.target.is_dir"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "producers.generate_commandview_inventory::analyze_python_file"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "producers.generate_commandview_inventory::attach_git_churn"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "producers.generate_commandview_inventory::build_options"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "producers.generate_commandview_inventory::build_paths"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "producers.generate_commandview_inventory::build_screening_summary"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "producers.generate_commandview_inventory::compose_inventory"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "producers.generate_commandview_inventory::configure_logging"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "producers.generate_commandview_inventory::discover_python_files"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "producers.generate_commandview_inventory::load_coverage_reports"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "producers.generate_commandview_inventory::parse_args"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "producers.generate_commandview_inventory::write_inventory"
+      ],
+      [
+        "producers.generate_commandview_inventory::run",
+        "write_inventory"
+      ],
+      [
+        "producers.generate_commandview_inventory::write_inventory",
+        "_slugify_relative"
+      ],
+      [
+        "producers.generate_commandview_inventory::write_inventory",
+        "_write_inventory_copy"
+      ],
+      [
+        "producers.generate_commandview_inventory::write_inventory",
+        "_write_screening_copy"
+      ],
+      [
+        "producers.generate_commandview_inventory::write_inventory",
+        "producers.generate_commandview_inventory::_write_inventory_copy"
+      ],
+      [
+        "producers.generate_commandview_inventory::write_inventory",
+        "producers.generate_commandview_inventory::_write_screening_copy"
+      ]
+    ],
+    "cross_module_calls": [],
+    "imports": [
+      [
+        "producers.audit_helper_adoption",
+        "__future__.annotations"
+      ],
+      [
+        "producers.audit_helper_adoption",
+        "argparse"
+      ],
+      [
+        "producers.audit_helper_adoption",
+        "ast"
+      ],
+      [
+        "producers.audit_helper_adoption",
+        "dataclasses.dataclass"
+      ],
+      [
+        "producers.audit_helper_adoption",
+        "datetime.datetime"
+      ],
+      [
+        "producers.audit_helper_adoption",
+        "datetime.timezone"
+      ],
+      [
+        "producers.audit_helper_adoption",
+        "logging"
+      ],
+      [
+        "producers.audit_helper_adoption",
+        "pathlib.Path"
+      ],
+      [
+        "producers.audit_helper_adoption",
+        "sys"
+      ],
+      [
+        "producers.audit_helper_adoption",
+        "typing.Iterable"
+      ],
+      [
+        "producers.audit_helper_adoption",
+        "typing.Sequence"
+      ],
+      [
+        "producers.audit_helper_adoption",
+        "yaml"
+      ],
+      [
+        "producers.generate_commandview_inventory",
+        "__future__.annotations"
+      ],
+      [
+        "producers.generate_commandview_inventory",
+        "argparse"
+      ],
+      [
+        "producers.generate_commandview_inventory",
+        "ast"
+      ],
+      [
+        "producers.generate_commandview_inventory",
+        "builtins"
+      ],
+      [
+        "producers.generate_commandview_inventory",
+        "collections.Counter"
+      ],
+      [
+        "producers.generate_commandview_inventory",
+        "dataclasses.dataclass"
+      ],
+      [
+        "producers.generate_commandview_inventory",
+        "datetime.datetime"
+      ],
+      [
+        "producers.generate_commandview_inventory",
+        "datetime.timezone"
+      ],
+      [
+        "producers.generate_commandview_inventory",
+        "hashlib"
+      ],
+      [
+        "producers.generate_commandview_inventory",
+        "json"
+      ],
+      [
+        "producers.generate_commandview_inventory",
+        "logging"
+      ],
+      [
+        "producers.generate_commandview_inventory",
+        "pathlib.Path"
+      ],
+      [
+        "producers.generate_commandview_inventory",
+        "re"
+      ],
+      [
+        "producers.generate_commandview_inventory",
+        "subprocess"
+      ],
+      [
+        "producers.generate_commandview_inventory",
+        "sys"
+      ],
+      [
+        "producers.generate_commandview_inventory",
+        "typing.Any"
+      ],
+      [
+        "producers.generate_commandview_inventory",
+        "typing.Iterable"
+      ]
+    ]
+  },
+  "nodes": {
+    "meta": {
+      "producers.audit_helper_adoption::_build_report": {
+        "hash": "cdf5fa58c064ffa37c150efd70e3dc33885e24d488c4b2d1eec1a8c472b55ab2",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.audit_helper_adoption::_collect_defined_helpers": {
+        "hash": "a689cd2d267168607c6598599dce771f268ea428cc1696f50be2ac09bba88388",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.audit_helper_adoption::_collect_imported_helpers": {
+        "hash": "729450431198f1f957b97b055d3d4349703bea9e9801f08dc90011e7b7be9c2f",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.audit_helper_adoption::_collect_python_files": {
+        "hash": "e60789ad2690be1241883e48f3f886b636e30a24ec39f51cf4b1bd644eb7a279",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.audit_helper_adoption::_configure_logging": {
+        "hash": "38ff5698550459a500f03b36c8c6c114ff224d244166c6b8acbd0b387f3458bf",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.audit_helper_adoption::_determine_status": {
+        "hash": "dfdd487a8dd6deea67f543969137229b4df49a74404474e2999fc2abc1a6b802",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.audit_helper_adoption::_initialize_helper_map": {
+        "hash": "661d8bb4d3b48642d0ece0ccf3e325a8e70765e7f175e08004acaeac3bc7f1ab",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.audit_helper_adoption::_load_allow_list": {
+        "hash": "5164228749dba40086667ffc01f7cfd4f0d329e96b68964e38f91d462508aa52",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.audit_helper_adoption::_parse_timestamp": {
+        "hash": "c7b3dea22f4ef4ef120e5f2113fa49352163019808ba65cbc05e0ab674682252",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.audit_helper_adoption::_relative_path": {
+        "hash": "4d07d06a5831e5717ab611ba582a9c76808359a702faf4a72b75d05509f1838a",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.audit_helper_adoption::_render_markdown": {
+        "hash": "ef3154251c6a89533e6138ea62d451163675cfd664e0db1d31ee74b0634602d9",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.audit_helper_adoption::_resolve_formats": {
+        "hash": "0de939e508afd3d4b11624c4cfcce67fccdb08014e11096e8f78c354011ab14c",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.audit_helper_adoption::_resolve_helpers": {
+        "hash": "5ab304a36e4b19ea7712993a9bff922bced97c7d550f7fb7241a1e62e69c64e2",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.audit_helper_adoption::_scan_targets": {
+        "hash": "6317a5b720d139b7fe6a08d625bbc37aa7043699c45ec98316649ad964c13736",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.audit_helper_adoption::build_parser": {
+        "hash": "3fc8b9074e0c8f5c6caa7283548e70f31b6f940eb024089831f11495b14139d6",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.audit_helper_adoption::main": {
+        "hash": "98e3ff7cb322e2f932409547f70acb335d52d75282eb5c129c2a2bb07ad9ff14",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.audit_helper_adoption::run": {
+        "hash": "14f5faf509edf36c587e6c319603ff42078f3466b193e51dff8e857bcdb67ec2",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::CoverageIndex.__bool__": {
+        "hash": "6f931c79b988e68371b2e032388287562d948db72a8ecdf1b566dd762b0e6fc1",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::CoverageIndex.__init__": {
+        "hash": "df3d156865b52820c67eb71109432f20ad5aa3931b170329b73a63f9ebf59756",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::CoverageIndex.get": {
+        "hash": "8142a35ee8000def9185ca0d826d682979a44bd09df27b780b89e8875ab33e3b",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::CoverageIndex.register": {
+        "hash": "1cc4b46530fc648f3baad65370e7342afbee57cf57eb693b360fbf6e515ea44e",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_annotation_map": {
+        "hash": "2fee90e107b4a04d6262c912bee25e21a16c4505399092a3a1056a1280cbb2f6",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_annotation_quality": {
+        "hash": "354d95092de8e317e52b03808d673927f9429f2769cf73851f64043bbecaca7a",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_attribute_chain": {
+        "hash": "b81592f906fc7485867d6c54617ae53e3b7aadf83f78a20de69e55edc7e79e1f",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_attribute_root": {
+        "hash": "f1e6f2cc8048424803c2f8c77fd8c596f9cc898f50644583ad93d8458e6614f0",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_augment_class_relationships": {
+        "hash": "aed367fc35da51ba196f8b1d7a3b5ac1ba88de3bda695cb97d629477897dfac6",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_build_alias_resolution_map": {
+        "hash": "444364c42018ca755259ff9f0a15ba033959358d85e87700d261b147c8642cbf",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_build_call_graph": {
+        "hash": "0de28a5ccde6396469c488db19ebf207240c01cc625db104062cd65110f9e9ee",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_build_import_graph": {
+        "hash": "258c71c7766739b4ea8ff89e5c1e292a382da2e2f63ebf8c5a5745d83d0ee589",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_build_method_index": {
+        "hash": "337023cf013f01cf9dea6b6124c329d45d18e03098943929c834459d009cdf89",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_callback_registration_info": {
+        "hash": "fae1d07c9ff1ee2626f1b7c0a3cf64d0496af8c831ba06a447cc832c37fd305a",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_class_code_smells": {
+        "hash": "cb4f0110ab2965a74976874f4d9538b2a4d9d2d0d6fc4496012538c6e5dc1c3f",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_classify_decorator": {
+        "hash": "d55aaec2f5f6b638e2921275046293f9bb615d518b225d67bf9465025297ac13",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_classify_global_value": {
+        "hash": "8a50bbd474c9ab3b12f46adc84f92e1576bfb73e27b1f8f76827dd8daff3c157",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_classify_module_path": {
+        "hash": "e2b5c7c9171169cdbcf6ae20c43d08a85038c1b7b4f1c0bbfaf9d57b229c13b0",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_collect_abstract_methods": {
+        "hash": "cd80bc4ee4e82b0436e7d2c5fda9deb5c8a120963b5459ff768101f72477fa23",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_collect_callback_registrations": {
+        "hash": "6780ff02cb06259fb5cdf8dc7430b57d3c3766a5f124cf033d2fa06344f2c0e1",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_collect_function_import_usage": {
+        "hash": "129051a61a5c25f805cfdc74c606b660367cbeadb2977e443701acf28a361c74",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_collect_function_metrics": {
+        "hash": "897321442e3c3b08822fa1f883b2ce2f48e3f87f3565d29e02a45cab6410c26a",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_collect_git_churn": {
+        "hash": "46014cf70b99e86182748c3cc162144e00e80374ff4a3b80cd3a32e0f0d2e5f9",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_collect_overrides": {
+        "hash": "d5441f1ce4878e6c671f2e7f5d31811978413b5e2d9e84e527eb22f847f0ab20",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_collect_test_coverage_signals": {
+        "hash": "ab953a6ce6b87439a3392451a5d133afdb1309f1960444823c59d2d24fb73d6b",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_collect_unused_imports": {
+        "hash": "76a27f53120831282108e338b3c5eb4e2404c7abe67281e6a557e22e39b0a699",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_cyclomatic_complexity": {
+        "hash": "24f8bcd407dfdeb21f19f72c1ea3fbeaf29793bd24bb6c966a46fa5c55816ea0",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_decorator_base_name": {
+        "hash": "cf4777c68ce4abb0cbef6805d40de3194fc7b598ab3099db905e2b427104625c",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_decorator_classification": {
+        "hash": "1c34902b2b5ca6e4f63ac7e4a7ce7a281d14062f326b8d2bcd1ca2f39c96612a",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_decorator_flags": {
+        "hash": "f74a4acdf5fd47555905205d97523d97bb90e56ae394a3cf364a9faad4ad7ba3",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_dependency_category": {
+        "hash": "5b1fba77f1973b7fce3d9c8cab3a6a1178249fd526836485cb1fb6ec35312108",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_describe_decorator": {
+        "hash": "1cb7651d056e48294571daffbc79a350dfe02aabf833e4d6c9523b84b6367aa6",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_detect_dynamic_code": {
+        "hash": "a494f5a6f80a0f13eebbc7598e470edee142de2d5961ac47bd52e982abe7101c",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_docstring_first_line": {
+        "hash": "14afb63a37f5407dc57edd0711263c6ced075b03827a0a514f3fa4bf0cca9044",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_docstring_parameter_mentions": {
+        "hash": "54d8bd98f3be0dc842bed9df820e731ef8e7c34f67d3abcb3fbbbe0804eb4b22",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_docstring_quality": {
+        "hash": "7da18e25c0babcf9d05795ea6d7a407dd4595774440057a54a081d8610c08599",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_docstring_summary": {
+        "hash": "4042249cfb44070b2be7bc2bbc6d63e7c0d9c9dbef9f10f3f1b9934212d00fbc",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_entry_module_key": {
+        "hash": "6f2aa12dc260806fa1e434b2647e9c46284e8355f5a8a054f8d7ae105f7e62fc",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_extract_class": {
+        "hash": "c01a1a8810411c33bfd40740b4c29d671a1eb77286cdcaa8a0ee5d52cf624e9c",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_extract_dunder_all": {
+        "hash": "ac4729d85512bf3a4ebc9b55c3bffaeaff30682a2b67c5975b0be4c3730f292b",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_extract_first_statement_line": {
+        "hash": "1bcc0d148b543ed69e49d0a0b678fed1dff7d69dc2b99ed37678c67a0160574c",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_extract_function": {
+        "hash": "517103cfbb86a25efe602832be88ce1cfab4abf8e44588839d5511d00d22bb53",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_extract_imports_detailed": {
+        "hash": "3d009ad65e34971ad5a9f7de59ed8d9ab7eeb6cb6e43b5fee217f998fa7cf7a7",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_extract_literal_str_seq": {
+        "hash": "83494222fabac85e49720a62ab38ef0291840818312110574f539099061093ee",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_first_stmt_kind": {
+        "hash": "432891f73c709173e95a2098055925b0a364c831a542add64a946e94df1f6c6e",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_function_code_smells": {
+        "hash": "adad22b16caae1d5469fafebb00b9c7b6faeb594047e4866b6a90dcbd52ab594",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_has_parameters_section": {
+        "hash": "6610d3db62a8f5e6ae77daf8f3abec1ab7a65f34691f1b44daf72208bdf87e78",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_has_returns_section": {
+        "hash": "ba3ec0dbdf25008d4f7915fbff03f620b970ba33292598b0d53d0cfd647f200f",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_identify_unreachable_functions": {
+        "hash": "c57a5407aa033e4193e2c3abdf7043a84af00f6890b6307603af2e677dd4a258",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_is_abstract_class": {
+        "hash": "9d3e2b866102e1695d76386344eb660f9bce61805ed89faa134d08eafae8c83a",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_is_abstract_method_entry": {
+        "hash": "f10ee43a3f4a5702396796b2fef390e5e4c5edcd271af82121df065b22953c85",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_is_callback_callee": {
+        "hash": "5dae00cbfb2015bc3e6b3fadba340ffe3db9498014769da767bf21d0a2495a7f",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_is_click_command": {
+        "hash": "63f202269e3c8f8e72775e386fbce2021f1c7ba0264e4e3aba2dff0a5a3fbe3e",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_is_click_group": {
+        "hash": "5b13de1bc7c3f61c1466fe6fe69790c8b86a359ccad1ada419b68dd28c4dacf2",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_is_globals_mutation": {
+        "hash": "45c42d49e91d239285e84cc407887a7a1406c1505d63626b92fec18aba142329",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_is_globals_setattr": {
+        "hash": "2a6367ce38f19c2282b683cb1af296238106e4991688a3e82a52cffa51f65f54",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_is_project_decorator": {
+        "hash": "841fb9cede93c6b188eb1233e5ee2a369d24159e358739b013a0a53fd86db750",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_is_pytest_mark": {
+        "hash": "0dd9643b73efe1849a8bb47882781e111a45ff365f6a9d9617902c813c5a458e",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_is_test_path": {
+        "hash": "75abac8dbd24aeadf06a32ad335ca2fa1593476ec718092f0c875e142f714bb4",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_match_known_module": {
+        "hash": "a4615d057cc8c129c7e0276c4d5f3622de5ba5433f3707977838073b7997c8f6",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_method_base_name": {
+        "hash": "ff4ff030f159416148a2ec84dbb4b41eaafc620bf945fab82c772846e898f934",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_normalize_base_names": {
+        "hash": "253aed91d890858cccaa4046f5eb5daf6b15c446d4d64208c8325c1e10363965",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_normalize_callback_target": {
+        "hash": "011e5d94fc057b868edc90a03b1a55f03a529d3cafa078fbfbe60ab21fa297fe",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_parameter_names": {
+        "hash": "041e4d4bc9ac2e37acb02434dfb1eaa63f1ff49ba7d14bc939f024cdd6130033",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_register_import": {
+        "hash": "356001d800cdba6469fd7e31554a4808684eb22e54ac300d720315ac30ab0236",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_relative_module_id": {
+        "hash": "e681888a1ef4ee75cad0110263b70360b76fe765c813a89eb7e6611158fc624b",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_resolve_call_target": {
+        "hash": "d5b3393e108b1db7a44efa9ca167296f3db9b50970a1a8aa1e7df882e90b1c96",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_resolve_callee_path": {
+        "hash": "fd9bc63dad06d8b63074c3ba72a82e1c324dbbc24efbe0ce33258c628402a3bc",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_resolve_import_target": {
+        "hash": "5b0e92f944d3061486ece2ac1ecbdc056e126f5f860ef5e553bbb3033c3bfb2b",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_resolve_relative_import": {
+        "hash": "766dc591579f1e460dfd2d4ad0f98d8e4e8007b9ee41ac76007276746c1c35c5",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_returns_kind": {
+        "hash": "ac4d41fcb670db32e3749f9afb1138d88174840ba53f21d18c0706ff1b4137f4",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_run_git_command": {
+        "hash": "e9803511c9697c183fa9a692a2537bb9c0ac392c3e3d1bbf40c0bb27223752f6",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_safe_unparse": {
+        "hash": "8e17404fef51124a4b0480f1a82bd8d3a6b6076b0225da2f907e5e0fa73adc84",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_select_callback_target": {
+        "hash": "bf522b95305a0c12a7c7afc1163eb0be9b0de285d186adc501810622b9f8f6b3",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_signature_structure": {
+        "hash": "d46b2dd3e1c2fb161fb8af117a66ee4f1b20902cfdafb86cd66be78f3ea6e092",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_simplify_base_expression": {
+        "hash": "ab4cc17bf3eb9ac574ee5cf5235bfde88002e37d6391b151080bcf409b00e7db",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_summarize_code_smells": {
+        "hash": "8c4ff51c7275533405adfa857089ac2cbe3ea8bba30dce6ca6b2fef0bce6514f",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_summarize_dependency_categories": {
+        "hash": "30186e2e2878d7b5e2c6c89fd1fc83cb66b16c457ff3449d43c7928c8197e1f2",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_write_inventory_copy": {
+        "hash": "679cc0c8f4329a9309c5ada0dfa4b5284109340a712d2846eb095040c650b7d1",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::_write_screening_copy": {
+        "hash": "800a4a65f7d40ef5c3d766c1b16d38907ba4b8f579a6d36dde5a69148d944338",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::analyze_python_file": {
+        "hash": "6375beeed57ac4c0bca6dfb4050423765d210815059a3e63f46b69a3f37517be",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::attach_git_churn": {
+        "hash": "4aaf49cc9a6f47c3ff3393044efadfde4e495ae254988cc6a0ca9f62ecaa5a1c",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::build_options": {
+        "hash": "6f04864b6aa2aaeea08f91f0aab3f7faab33927dcaf4555400ce07e9d1cbdbdc",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::build_paths": {
+        "hash": "bdf5bb0daaf844c08c07d235b80701ee86acc7a9638d023f2114a23050bc693a",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::build_screening_summary": {
+        "hash": "88c633b677f4b7742a0f3ade9403437e00136320b3a996c02e18338914fede19",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::compose_inventory": {
+        "hash": "6135cd081cec2fe9ab10d6be433f36abd851a83e2750d0478458887a8c8ecf09",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::configure_logging": {
+        "hash": "d3d229f2b5a9a8293a6c59041538adbeaaa73158b3700dd6c2d2caa5f8a4be67",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::discover_python_files": {
+        "hash": "b4bc685a51c1a16da7c1cd933359dce23d96979c3b8156499629b8d3d992024c",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::load_coverage_reports": {
+        "hash": "1162d54016395c58392eebc8389bcdfd4a129c211b54b8560a400ef68a8a3dc7",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::main": {
+        "hash": "f4aab1c41261e2d44b56b1ff072c94c90e9dd6fb6862e49e8485820340767bb5",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::parse_args": {
+        "hash": "53e4406d4bf8e1e5b788339d9b42e9ede8d4b00793623657c54d981c7ff7454f",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::run": {
+        "hash": "3a37967a3ea155cb049275c159cd6e2f79341fab54ddd4005b917d8f908ee997",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "producers.generate_commandview_inventory::write_inventory": {
+        "hash": "c81ba53894b9e485973ab32c5ccbd8dcc12ccbe35b30173ab2b61de621c2d9a2",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      }
+    }
+  },
+  "violations": {
+    "cycles": false
+  }
+}

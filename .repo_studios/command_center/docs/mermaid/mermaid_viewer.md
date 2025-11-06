@@ -10,14 +10,18 @@
 
 - [ ] Keep generator outputs aligned with commandview naming (`<source_folder>_commandview_YYYYMMDD-HHMM.json`).
 - [ ] Format selector labels to surface timestamp freshness (derive display value from the slug’s `YYYYMMDD-HHMM` component).
-- [ ] Ensure `generate_commandview_inventory.py` writes mirrored artifacts only under `.repo_studios/command_center/reports/` for viewer discovery, leaving dynamic copies for agents.
+- [x] Ensure `generate_commandview_inventory.py` writes mirrored artifacts only under `.repo_studios/command_center/reports/` for viewer discovery, leaving dynamic copies for agents.
+  - Mirrored inventories now hard-block custom `--reports-root` values that escape `.repo_studios/command_center/reports`, keeping the viewer discovery scope static (enforced 2025-11-06).
+  - Local agent workflows continue to rely on the co-located `<slug>_index/` folders for dynamic experimentation without impacting the viewer scan.
 - [ ] Validate inventory payload includes `files[].call_graph` with resolved local/imported/builtin edges.
 - [ ] Document viewer expectations for coverage and churn overlays now that inventory emits `files[].coverage`, `files[].git_churn`, and `statistics.coverage`/`statistics.git_churn` aggregates.
 - [ ] Confirm dependency summaries, callbacks, IO effects, logging, globals, and docstring metadata remain intact for downstream packs.
 
 ## Phase 2 · Discovery & Refresh Pipeline
 
-- [ ] Build selector bootstrapper that scans the static reports tree only, filtering JSON that matches the `*_commandview_YYYYMMDD-HHMM.json` slug.
+- [x] Build selector bootstrapper that scans the static reports tree only, filtering JSON that matches the `*_commandview_YYYYMMDD-HHMM.json` slug.
+  - Added `build_commandview_selector.py` in the libraries staging area, producing structured payloads (`slug`, `timestamp`, `display_name`, paths) for viewer selection and ignoring screening artifacts.
+  - Selector payload exports underpin the upcoming refresh routine; entries are sorted by slug then timestamp so the UI lists the freshest CommandView inventories first.
 - [ ] Populate selector entries with source folder + timestamp so users can judge freshness at a glance.
 - [ ] Implement refresh button that re-runs discovery, updates selector options, and preserves active context when possible.
 - [ ] Ensure refresh routine deduplicates by slug to avoid double-listing static vs dynamic artifacts.

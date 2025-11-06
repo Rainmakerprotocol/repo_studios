@@ -7,6 +7,12 @@ from .artifacts import (
 	copy_latest_artifact,
 	write_report_artifacts,
 )
+from .build_commandview_selector import (
+	SelectorRecord,
+	build_commandview_selector,
+	build_commandview_selector_payload,
+	dump_commandview_selector,
+)
 from .cli import (
 	KeepSpec,
 	OptionsConfig,
@@ -48,6 +54,10 @@ __all__ = [
 	"ReportArtifact",
 	"WriteReportArtifactsResult",
 	"write_report_artifacts",
+	"SelectorRecord",
+	"build_commandview_selector",
+	"build_commandview_selector_payload",
+	"dump_commandview_selector",
 	"PathSpec",
 	"KeepSpec",
 	"build_paths",

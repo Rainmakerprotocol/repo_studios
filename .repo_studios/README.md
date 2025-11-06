@@ -22,8 +22,8 @@ This directory houses the automation runtime that keeps Repo Studios scripts, re
 ### Command Center pipeline orchestrator
 
 - **File:** `.repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py`
-- **Purpose:** Single make-style command that refreshes the function inventory, analysis, and duplicate scan for any repository slice.
-- **How it works:** Dynamically imports each script's `run(argv)` helper, executes them sequentially (inventory → analysis → duplicate scan), applies a shared log level, and aborts on first failure. Fresh inventory and analysis paths are captured and handed to the duplicate scan so the aggregator always consumes the newest dataset.
+- **Purpose:** Single make-style command that refreshes the CommandView inventory, analysis, and duplicate scan for any repository slice.
+- **How it works:** Dynamically imports each script's `run(argv)` helper, executes them sequentially (CommandView inventory → analysis → duplicate scan), applies a shared log level, and aborts on first failure. Fresh inventory and analysis paths are captured and handed to the duplicate scan so the aggregator always consumes the newest dataset.
 - **Outputs:** Emits no additional artifacts; the delegated scripts rewrite `<target>/<name>_index/`, `.repo_studios/command_center/reports/<slug>_analysis/`, and `.repo_studios/command_center/reports/<slug>_duplicate_scan/` with a single timestamped matrix/summary pair while pruning stale siblings.
 - **Benefits:** Keeps sequencing deterministic, gives humans a single command before library extraction, and guarantees slug-based retention stays tidy across reruns.
 
@@ -39,7 +39,7 @@ make -C .repo_studios command-center COMMAND_CENTER_TARGET=/.repo_studios/script
 
 ### Direct script families
 
-- **Producers:** Harvest inventories and screening summaries into `<target>/<name>_index/` plus slugged mirrors.
+- **Producers:** Harvest CommandView inventories and screening summaries into `<target>/<name>_index/` plus slugged mirrors.
 - **Summarizers:** Enrich producer data (e.g., analysis reports) and mirror to `.repo_studios/command_center/reports/<slug>_analysis/`.
 - **Aggregators:** Blend multi-source findings (duplicate scans) and mirror to `.repo_studios/command_center/reports/<slug>_duplicate_scan/`; pass `--skip-upstream` when orchestration already ran. The helper now deletes stale timestamped outputs before writing the new pair in both locations.
 

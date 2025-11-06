@@ -46,7 +46,7 @@ When adding new helpers, keep them importable without mutating `sys.path` (match
 Use this repeatable loop every time you address duplicate functions.
 
 1. **Detect & Stage**  
-   - Run the orchestrator (or individual scripts) to refresh the inventory, analysis, and duplicate scan for the current target.  
+   - Run the orchestrator (or individual scripts) to refresh the CommandView inventory, analysis, and duplicate scan for the current target.  
    - Inspect outputs under `<target>/<name>_index/` and `.repo_studios/command_center/reports/<slug>_duplicate_scan/`. Each run rewrites a single timestamped matrix/summary pair and removes stale siblings before mirroring the fresh files into both locations (helpers default to keeping the latest three runs and honor `.keep` guards), so capture history via commits rather than adding new folders.
 2. **Align & Plan**  
    - Update `checklists/command_center_checklist.md` (or paste a dated copy) with detected groups, priorities, and decisions.  
@@ -69,9 +69,9 @@ Use this repeatable loop every time you address duplicate functions.
 
 ### `orchestrators/run_command_center_pipeline.py`
 
-- **Purpose:** Offer a single make-style trigger that refreshes the function inventory, analysis, and duplicate scan for any repository subfolder.
-- **How it works:** Dynamically loads each script's `run(argv)` helper, executes them sequentially (inventory → analysis → duplicate scan), applies a shared log level, and aborts on the first non-zero exit code. The orchestrator captures the freshly written inventory and analysis paths and threads the analysis file into the duplicate scan so the aggregator always consumes the current dataset.
-- **Outputs:** Emits no new standalone artifacts; it rewrites the producer inventory and analysis within `<target>/<name>_index/`, then mirrors timestamped duplicate matrices/markdown into both `<target>/<name>_index/` and `.repo_studios/command_center/reports/<slug>_duplicate_scan/`, pruning older siblings in each location.
+- **Purpose:** Offer a single make-style trigger that refreshes the CommandView inventory, analysis, and duplicate scan for any repository subfolder.
+- **How it works:** Dynamically loads each script's `run(argv)` helper, executes them sequentially (CommandView inventory → analysis → duplicate scan), applies a shared log level, and aborts on the first non-zero exit code. The orchestrator captures the freshly written inventory and analysis paths and threads the analysis file into the duplicate scan so the aggregator always consumes the current dataset.
+- **Outputs:** Emits no new standalone artifacts; it rewrites the CommandView inventory and analysis within `<target>/<name>_index/`, then mirrors timestamped duplicate matrices/markdown into both `<target>/<name>_index/` and `.repo_studios/command_center/reports/<slug>_duplicate_scan/`, pruning older siblings in each location.
 - **Triggers:** `producers/generate_commandview_inventory.py`, `summarizers/generate_function_analysis.py`, and `aggregators/scan_duplicates.py` (called with `--skip-upstream` because upstream work already ran).
 - **Benefits:** Guarantees consistent sequencing, keeps slug retention tidy, and logs the mirrored artifact paths so humans and agents can locate outputs immediately before Phase 3 extraction begins.
 
@@ -101,7 +101,7 @@ make -C .repo_studios command-center COMMAND_CENTER_TARGET=/.repo_studios/script
 
 ### Direct script usage
 
-- `producers/generate_commandview_inventory.py <target>` refreshes `<target>/<name>_index/<name>_index-YYYY-MM-DD.json` and the screening summary in both the target and slugged mirror.
+- `producers/generate_commandview_inventory.py <target>` refreshes `<target>/<name>_index/<name>_commandview_YYYYMMDD-HHMM.json` (plus the screening summary) in both the target directory and slugged mirror.
 - `summarizers/generate_function_analysis.py <target>` consumes the latest inventory (or an explicit `--inventory-file`) and mirrors analysis payloads to `<target>/<name>_analysis-YYYY-MM-DD.json` and `.repo_studios/command_center/reports/<slug>_analysis/`.
 - `aggregators/scan_duplicates.py --target <target>` merges scanner output with the analysis and mirrors duplicate matrices/markdown to `.repo_studios/command_center/reports/<slug>_duplicate_scan/`. Add `--skip-upstream` when inventory and analysis were already run; the helper now removes stale timestamped outputs before writing the new pair in both locations.
 

@@ -123,6 +123,21 @@
     - Past: Relocated the producer to `generate_commandview_inventory.py`, refreshed the CLI `prog`, orchestrator loader, duplicate scanner hooks, Makefile target, and pytest modules to import the new path, and removed the legacy file after confirming coverage.
     - Present: Running targeted command center and producer suites to verify dynamic imports and CLI entry points pick up the `commandview` module; coordinating doc updates so operators see the new script name first.
     - Future: Retire remaining references to the legacy filename across governance docs and viewer guides as part of the broader documentation refresh.
-  - [ ] Limit viewer discovery scope to `.repo_studios/command_center/reports/**` while retaining dynamic artifacts for local agent workflows. *(Diff hint: document the scope in the viewer README and ensure automation respects the static directory boundary.)*
-  - [ ] Create regression tests ensuring both static and dynamic output locations remain synchronized post-renaming.
-  - [ ] Update orchestration and developer docs to reference the new commandview terminology and filename convention.
+  - [x] Limit viewer discovery scope to `.repo_studios/command_center/reports/**` while retaining dynamic artifacts for local agent workflows. *(Diff hint: document the scope in the viewer README and ensure automation respects the static directory boundary.)*
+    - Past: Enforced the CLI `--reports-root` validation so mirrored artifacts stay under `.repo_studios/command_center/reports`, refreshed `mermaid_viewer.md` with the policy, and added regression coverage via `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_reports_root_outside_static_scope_rejected` (2025-11-06).
+    - Present: Monitoring viewer documentation to keep the static discovery boundary front-and-center while dynamic `<slug>_index/` directories continue serving local agents.
+    - Future: Wire upcoming discovery bootstrapper tests to assert the viewer ignores any artifacts outside the static reports tree once the selector implementation lands.
+  - [x] Create regression tests ensuring both static and dynamic output locations remain synchronized post-renaming.
+    - Past: Added `.repo_studios/tests/tests_command_center/producers/test_generate_function_inventory_command_center.py::test_commandview_inventory_keeps_static_and_dynamic_outputs_in_lockstep` to assert mirrored and co-located artifacts share slugs and payloads, and exercised screening parity (2025-11-06).
+    - Present: Watching nightly command center jobs to ensure timestamp alignment persists as artifacts rotate and history pruning logic remains stable.
+    - Future: Extend coverage once orchestrator-level tests exist so end-to-end refreshes validate the same synchronization guarantees across chained producers.
+  - [x] Update orchestration and developer docs to reference the new commandview terminology and filename convention.
+    - Past: Refreshed `.repo_studios/command_center/README.md`, `.repo_studios/README.md`, `.repo_studios/command_center/docs/manual_extraction_operator_brief.md`, `.github/copilot-instructions.md`, and `docs/automation/function_inventory_integration_plan.md` to call out the CommandView inventory rename and slugged artifact pattern (2025-11-06).
+    - Present: Highlighting the updated documentation set across command center onboarding so humans and agents see the CommandView terminology first when launching the pipeline.
+    - Future: Sweep the remaining automation notebooks and Makefile comments once the viewer rollout introduces schema v3 references.
+
+  - **Viewer Discovery (Planned)**
+    - [x] Build selector bootstrapper that scans the static reports tree only, filtering JSON that matches the `*_commandview_YYYYMMDD-HHMM.json` slug.
+      - Past: Added `build_commandview_selector.py` under libraries to emit sorted selector payloads (slug, timestamp, display label, relative/absolute paths) scoped to `.repo_studios/command_center/reports/**`, explicitly excluding screening artifacts and dynamic `<slug>_index/` folders (2025-11-06).
+      - Present: Integrating the selector helper into viewer prototypes so dropdowns reflect static CommandView inventories and timestamps without touching local agent artifacts.
+      - Future: Extend the selector to optionally pair matching screening summaries and analysis files once the refresh workflow design lands.

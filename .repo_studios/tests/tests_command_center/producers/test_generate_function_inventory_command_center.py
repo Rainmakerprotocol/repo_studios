@@ -41,6 +41,10 @@ def _inventory_files(directory: Path, slug: str) -> list[Path]:
     return [path for path in directory.glob(f"{slug}_commandview_*.json") if "_screening_" not in path.name]
 
 
+def _screening_files(directory: Path, slug: str) -> list[Path]:
+    return list(directory.glob(f"{slug}_commandview_screening_*.json"))
+
+
 def test_generate_commandview_inventory_emits_extended_metrics(tmp_path: Path) -> None:
     module = _load_module()
 
@@ -127,3 +131,63 @@ def test_generate_commandview_inventory_emits_extended_metrics(tmp_path: Path) -
     central_files = _inventory_files(central_dir, "pkg")
     assert len(central_files) == 1
     assert json.loads(central_files[0].read_text(encoding="utf-8")) == payload
+
+
+def test_commandview_inventory_keeps_static_and_dynamic_outputs_in_lockstep(tmp_path: Path) -> None:
+    module = _load_module()
+
+    repo_root = tmp_path
+    target = repo_root / "pkg"
+    _write(target / "__init__.py", "")
+    _write(
+        target / "module.py",
+        (
+            "def hydrate(value: int) -> int:\n"
+            "    if value < 0:\n"
+            "        return value - 1\n"
+            "    return value + 1\n"
+        ),
+    )
+
+    exit_code = module.run([
+        "--repo-root",
+        str(repo_root),
+        str(target),
+    ])
+    assert exit_code == 0
+
+    local_dir = target / "pkg_index"
+    static_dir = (
+        repo_root
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "index_scan"
+        / "pkg_index"
+    )
+
+    assert local_dir.exists()
+    assert static_dir.exists()
+
+    local_inventory = sorted(_inventory_files(local_dir, "pkg"), key=lambda path: path.name)
+    static_inventory = sorted(_inventory_files(static_dir, "pkg"), key=lambda path: path.name)
+    assert local_inventory
+    assert static_inventory
+    assert [path.name for path in local_inventory] == [path.name for path in static_inventory]
+
+    for local_file, static_file in zip(local_inventory, static_inventory):
+        assert local_file.name == static_file.name
+        assert json.loads(local_file.read_text(encoding="utf-8")) == json.loads(static_file.read_text(encoding="utf-8"))
+
+    local_screening = sorted(_screening_files(local_dir, "pkg"), key=lambda path: path.name)
+    static_screening = sorted(_screening_files(static_dir, "pkg"), key=lambda path: path.name)
+    assert local_screening
+    assert static_screening
+    assert [path.name for path in local_screening] == [path.name for path in static_screening]
+
+    for local_file, static_file in zip(local_screening, static_screening):
+        assert local_file.name == static_file.name
+        assert json.loads(local_file.read_text(encoding="utf-8")) == json.loads(static_file.read_text(encoding="utf-8"))
+
+    assert not (local_dir / "latest.json").exists()
+    assert not (static_dir / "latest.json").exists()

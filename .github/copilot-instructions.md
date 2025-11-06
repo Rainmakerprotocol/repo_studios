@@ -6,8 +6,8 @@
 - Outputs are timestamped JSON/markdown assets co-located with the source folder (for example `scripts/aggregators/aggregators_index/aggregators_index-YYYY-MM-DD.json`) with history pruning rather than mutable pointers.
 
 ## Core Workflows
-- Prefer `.repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py <target> --repo-root .` or `make -C .repo_studios command-center COMMAND_CENTER_TARGET=<target> PYTHON=.venv/Scripts/python.exe` to refresh the inventory → analysis → duplicate scan pipeline; the orchestrator chains the three scripts with a shared log level, threads the freshly written analysis path into the duplicate scan, and aborts on the first failure. `scan_duplicates.py` still accepts `--skip-upstream` when you need to reuse existing producer artifacts directly.
-- Producers write inventories to `<target>/<name>_index/` and analyses alongside them; the duplicate scanner mirrors its matrix/summary into both the index directory and `.repo_studios/command_center/reports/<name>_duplicate_scan/`.
+- Prefer `.repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py <target> --repo-root .` or `make -C .repo_studios command-center COMMAND_CENTER_TARGET=<target> PYTHON=.venv/Scripts/python.exe` to refresh the CommandView inventory → analysis → duplicate scan pipeline; the orchestrator chains the three scripts with a shared log level, threads the freshly written analysis path into the duplicate scan, and aborts on the first failure. `scan_duplicates.py` still accepts `--skip-upstream` when you need to reuse existing producer artifacts directly.
+- Producers write CommandView inventories to `<target>/<name>_index/` and analyses alongside them; the duplicate scanner mirrors its matrix/summary into both the index directory and `.repo_studios/command_center/reports/<name>_duplicate_scan/`.
 - When scripting locally prefer dynamic imports plus `run(argv)` invocations over spawning subprocesses, matching how `scan_duplicates.py` calls the inventory and analysis producers.
 
 ## Command Center Orchestrator

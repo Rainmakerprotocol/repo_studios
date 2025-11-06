@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 from typing import Any
 import subprocess
+import pytest
 
 
 MODULE_PATH = (
@@ -670,3 +671,24 @@ def test_inventory_errors_when_no_python_files(tmp_path: Path) -> None:
 
     exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
     assert exit_code == 1
+
+
+def test_reports_root_outside_static_scope_rejected(
+    tmp_path: Path, caplog: pytest.LogCaptureFixture
+) -> None:
+    repo_root = tmp_path
+    target = repo_root / "pkg"
+    _write(target / "__init__.py", "")
+
+    caplog.set_level("ERROR")
+    exit_code = run_inventory(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--reports-root",
+            str(Path("custom_reports")),
+            str(target),
+        ]
+    )
+    assert exit_code == 1
+    assert any(".repo_studios/command_center/reports" in message for message in caplog.messages)

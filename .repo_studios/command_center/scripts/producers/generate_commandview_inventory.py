@@ -37,7 +37,8 @@ TEST_FILE_SUFFIXES = ("_test.py", "_tests.py")
 PROJECT_NAMESPACE_HINTS = {"agents", "api", "mrp", "client_helpers", "scripts"}
 BRANCH_NODE_TYPES = (ast.If, ast.For, ast.While, ast.Try, ast.With, ast.Match)
 DEFAULT_SCHEMA_VERSION = 2
-DEFAULT_REPORTS_ROOT_RELATIVE = Path(".repo_studios/command_center/reports/index_scan")
+STATIC_REPORTS_ROOT_RELATIVE = Path(".repo_studios/command_center/reports")
+DEFAULT_REPORTS_ROOT_RELATIVE = STATIC_REPORTS_ROOT_RELATIVE / "index_scan"
 STD_DECORATOR_NAMES = {"staticmethod", "classmethod", "property"}
 STD_MODULE_PREFIXES = {"functools", "contextlib", "dataclasses", "abc", "typing", "inspect"}
 DYNAMIC_EXEC_NAMES = {"exec", "eval", "execfile"}
@@ -823,8 +824,8 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--reports-root",
         help=(
-            "Optional directory for centralized inventory copies. "
-            "Defaults to .repo_studios/command_center/reports/index_scan within the repo root."
+            "Optional directory for centralized inventory copies inside "
+            ".repo_studios/command_center/reports/. Defaults to the index_scan folder within that tree."
         ),
     )
     parser.add_argument(
@@ -859,6 +860,14 @@ def build_paths(args: argparse.Namespace) -> Paths:
         reports_root.relative_to(repo_root)
     except ValueError as exc:
         raise ValueError(f"Reports root must reside within repo root: {reports_root}") from exc
+    static_reports_root = (repo_root / STATIC_REPORTS_ROOT_RELATIVE).resolve()
+    try:
+        reports_root.relative_to(static_reports_root)
+    except ValueError as exc:
+        raise ValueError(
+            "Reports root must reside under .repo_studios/command_center/reports for viewer discovery: "
+            f"{reports_root}"
+        ) from exc
     reports_root.mkdir(parents=True, exist_ok=True)
     return Paths(repo_root=repo_root, target=target, target_relative=target_relative, reports_root=reports_root)
 
