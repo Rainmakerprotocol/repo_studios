@@ -84,7 +84,7 @@ def test_pipeline_smoke_updates_artifacts() -> None:
     assert matrix_files[0].stat().st_mtime >= start_time
 
     inventory_dir = target / f"{target.name}_index"
-    inventory_files = list(inventory_dir.glob(f"{target.name}_index-*.json"))
+    inventory_files = list(inventory_dir.glob(f"{target.name}_commandview_[0-9]*.json"))
     assert inventory_files, "Expected inventory artifacts after pipeline run."
     assert any(path.stat().st_mtime >= start_time for path in inventory_files)
 

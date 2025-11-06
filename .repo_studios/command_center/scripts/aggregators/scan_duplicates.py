@@ -319,7 +319,7 @@ def _run_inventory(paths: Paths, options: Options) -> Path:
     if exit_code != 0:
         raise RuntimeError(f"Function inventory generation failed with exit code {exit_code}.")
     index_dir = paths.target / f"{paths.source_name}_index"
-    return _latest_artifact(index_dir, f"{paths.source_name}_index-*.json", "inventory")
+    return _latest_artifact(index_dir, f"{paths.source_name}_commandview_[0-9]*.json", "inventory")
 
 
 def _run_analysis(paths: Paths, options: Options, inventory_path: Path) -> Path:

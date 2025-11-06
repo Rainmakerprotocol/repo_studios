@@ -2639,8 +2639,11 @@ def _write_inventory_copy(directory: Path, source_name: str, payload: dict[str, 
     for existing in directory.glob(f"{source_name}_index-*.json"):
         if existing.is_file():
             existing.unlink()
-    date_suffix = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    output_file = directory / f"{source_name}_index-{date_suffix}.json"
+    for existing in directory.glob(f"{source_name}_commandview_*.json"):
+        if existing.is_file():
+            existing.unlink()
+    date_token = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M")
+    output_file = directory / f"{source_name}_commandview_{date_token}.json"
     temp_file = output_file.with_suffix(".json.tmp")
     temp_file.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
     temp_file.replace(output_file)
@@ -2655,8 +2658,11 @@ def _write_screening_copy(directory: Path, source_name: str, summary: dict[str, 
     for existing in directory.glob(f"{source_name}_screening-*.json"):
         if existing.is_file():
             existing.unlink()
-    date_suffix = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    output_file = directory / f"{source_name}_screening-{date_suffix}.json"
+    for existing in directory.glob(f"{source_name}_commandview_screening_*.json"):
+        if existing.is_file():
+            existing.unlink()
+    date_token = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M")
+    output_file = directory / f"{source_name}_commandview_screening_{date_token}.json"
     temp_file = output_file.with_suffix(".screening.json.tmp")
     temp_file.write_text(json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8")
     temp_file.replace(output_file)

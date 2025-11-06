@@ -78,6 +78,10 @@ def _load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _inventory_artifacts(directory: Path, slug: str) -> list[Path]:
+    return [path for path in directory.glob(f"{slug}_commandview_*.json") if "_screening_" not in path.name]
+
+
 def test_analysis_detects_duplicate_functions(tmp_path: Path) -> None:
     repo_root = tmp_path
     target = repo_root / "sample_pkg"
@@ -98,7 +102,7 @@ def test_analysis_detects_duplicate_functions(tmp_path: Path) -> None:
     assert run_inventory(["--repo-root", str(repo_root), str(target)]) == 0
 
     inventory_dir = target / "sample_pkg_index"
-    inventory_files = list(inventory_dir.glob("sample_pkg_index-*.json"))
+    inventory_files = _inventory_artifacts(inventory_dir, "sample_pkg")
     assert len(inventory_files) == 1
     inventory_file = inventory_files[0]
     inventory_payload = _load_json(inventory_file)

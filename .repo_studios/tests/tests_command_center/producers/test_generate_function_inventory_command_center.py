@@ -37,6 +37,10 @@ def _git(args: list[str], cwd: Path) -> None:
         raise AssertionError(f"git {' '.join(args)} failed: {completed.stderr}")
 
 
+def _inventory_files(directory: Path, slug: str) -> list[Path]:
+    return [path for path in directory.glob(f"{slug}_commandview_*.json") if "_screening_" not in path.name]
+
+
 def test_generate_function_inventory_emits_extended_metrics(tmp_path: Path) -> None:
     module = _load_module()
 
@@ -85,8 +89,9 @@ def test_generate_function_inventory_emits_extended_metrics(tmp_path: Path) -> N
     assert exit_code == 0
 
     output_dir = target / "pkg_index"
-    inventory_file = next(output_dir.glob("pkg_index-*.json"))
-    payload = json.loads(inventory_file.read_text(encoding="utf-8"))
+    inventory_files = _inventory_files(output_dir, "pkg")
+    assert len(inventory_files) == 1
+    payload = json.loads(inventory_files[0].read_text(encoding="utf-8"))
 
     assert payload["metadata"]["schema_version"] >= 2
     assert payload["metadata"]["coverage_sources"] == ["coverage.json"]
@@ -119,5 +124,6 @@ def test_generate_function_inventory_emits_extended_metrics(tmp_path: Path) -> N
         / "index_scan"
         / "pkg_index"
     )
-    central_file = next(central_dir.glob("pkg_index-*.json"))
-    assert json.loads(central_file.read_text(encoding="utf-8")) == payload
+    central_files = _inventory_files(central_dir, "pkg")
+    assert len(central_files) == 1
+    assert json.loads(central_files[0].read_text(encoding="utf-8")) == payload

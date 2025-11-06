@@ -131,7 +131,11 @@ def locate_inventory_file(paths: Paths, options: Options) -> Path:
     index_dir = paths.target / f"{paths.target.name}_index"
     if not index_dir.exists():
         raise FileNotFoundError(f"Inventory directory not found: {index_dir}")
-    candidates = sorted(index_dir.glob(f"{paths.target.name}_index-*.json"))
+    candidates = sorted(
+        path
+        for path in index_dir.glob(f"{paths.target.name}_commandview_*.json")
+        if "_screening_" not in path.name
+    )
     if not candidates:
         raise FileNotFoundError(f"No inventory JSON files found in {index_dir}")
     return candidates[-1]

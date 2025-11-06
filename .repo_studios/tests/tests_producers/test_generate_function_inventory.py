@@ -51,6 +51,14 @@ def _git(args: list[str], cwd: Path) -> None:
         raise AssertionError(f"git {' '.join(args)} failed: {completed.stderr}")
 
 
+def _inventory_files(directory: Path, slug: str) -> list[Path]:
+    return [path for path in directory.glob(f"{slug}_commandview_*.json") if "_screening_" not in path.name]
+
+
+def _screening_files(directory: Path, slug: str) -> list[Path]:
+    return list(directory.glob(f"{slug}_commandview_screening_*.json"))
+
+
 def test_inventory_generates_structured_output(tmp_path: Path) -> None:
     repo_root = tmp_path
     target = repo_root / "sample_pkg"
@@ -76,7 +84,7 @@ def helper(value):
     assert exit_code == 0
 
     output_dir = target / "sample_pkg_index"
-    files = list(output_dir.glob("sample_pkg_index-*.json"))
+    files = _inventory_files(output_dir, "sample_pkg")
     assert len(files) == 1
     output_file = files[0]
     assert output_file.exists()
@@ -92,7 +100,7 @@ def helper(value):
         / "index_scan"
         / "sample_pkg_index"
     )
-    central_files = list(reports_dir.glob("sample_pkg_index-*.json"))
+    central_files = _inventory_files(reports_dir, "sample_pkg")
     assert len(central_files) == 1
     central_file = central_files[0]
     assert json.loads(central_file.read_text(encoding="utf-8")) == payload
@@ -145,12 +153,12 @@ def helper(value):
     assert init_entry["module_doc"] == "Utility package."
     assert init_entry["module_first_line"] is None
 
-    summary_files = list(output_dir.glob("sample_pkg_screening-*.json"))
+    summary_files = _screening_files(output_dir, "sample_pkg")
     assert len(summary_files) == 1
     summary_payload = json.loads(summary_files[0].read_text(encoding="utf-8"))
     assert "graphs" in summary_payload
     assert summary_payload["violations"] == {"cycles": False}
-    central_summary = list(reports_dir.glob("sample_pkg_screening-*.json"))
+    central_summary = _screening_files(reports_dir, "sample_pkg")
     assert len(central_summary) == 1
     assert json.loads(central_summary[0].read_text(encoding="utf-8")) == summary_payload
 
@@ -193,8 +201,9 @@ def test_inventory_merges_coverage_reports(tmp_path: Path) -> None:
     assert exit_code == 0
 
     output_dir = target / "pkg_index"
-    output_file = next(output_dir.glob("pkg_index-*.json"))
-    payload = json.loads(output_file.read_text(encoding="utf-8"))
+    inventory_files = _inventory_files(output_dir, "pkg")
+    assert len(inventory_files) == 1
+    payload = json.loads(inventory_files[0].read_text(encoding="utf-8"))
 
     metadata = payload["metadata"]
     assert metadata.get("coverage_sources") == ["coverage.json"]
@@ -242,8 +251,9 @@ def test_inventory_includes_git_churn_summary(tmp_path: Path) -> None:
     assert exit_code == 0
 
     output_dir = target / "pkg_index"
-    output_file = next(output_dir.glob("pkg_index-*.json"))
-    payload = json.loads(output_file.read_text(encoding="utf-8"))
+    inventory_files = _inventory_files(output_dir, "pkg")
+    assert len(inventory_files) == 1
+    payload = json.loads(inventory_files[0].read_text(encoding="utf-8"))
 
     module_entry = next(entry for entry in payload["files"] if entry["relative_path"] == "module.py")
     churn = module_entry.get("git_churn")
@@ -274,7 +284,7 @@ def test_inventory_captures_warnings_for_problem_files(tmp_path: Path) -> None:
     assert exit_code == 0
 
     output_dir = target / "pkg_index"
-    files = list(output_dir.glob("pkg_index-*.json"))
+    files = _inventory_files(output_dir, "pkg")
     assert len(files) == 1
     output_file = files[0]
     payload = json.loads(output_file.read_text(encoding="utf-8"))
@@ -295,7 +305,7 @@ def test_inventory_skips_hidden_and_virtualenv_dirs(tmp_path: Path) -> None:
     assert exit_code == 0
 
     output_dir = target / "workspace_index"
-    files = list(output_dir.glob("workspace_index-*.json"))
+    files = _inventory_files(output_dir, "workspace")
     assert len(files) == 1
     output_file = files[0]
     assert not (output_dir / "workspace_index.json").exists()
@@ -332,26 +342,30 @@ def test_inventory_removes_preexisting_outputs(tmp_path: Path) -> None:
     exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
     assert exit_code == 0
 
-    files = list(output_dir.glob("pkg_index-*.json"))
+    files = _inventory_files(output_dir, "pkg")
     assert len(files) == 1
     output_file = files[0]
     assert output_file.exists()
-    assert output_file.name != "pkg_index-2000-01-01.json"
+    assert output_file.name.startswith("pkg_commandview_")
+    assert not (output_dir / "pkg_index-2000-01-01.json").exists()
     assert not (output_dir / "pkg_index.json").exists()
     latest_pointer = output_dir / "latest.json"
     assert not latest_pointer.exists()
-    central_files = list(reports_dir.glob("pkg_index-*.json"))
+    central_files = _inventory_files(reports_dir, "pkg")
     assert len(central_files) == 1
     central_file = central_files[0]
-    assert central_file.name != "pkg_index-1999-12-31.json"
+    assert central_file.name.startswith("pkg_commandview_")
+    assert not (reports_dir / "pkg_index-1999-12-31.json").exists()
     assert not (reports_dir / "pkg_index.json").exists()
     assert not (reports_dir / "latest.json").exists()
-    summary_files = list(output_dir.glob("pkg_screening-*.json"))
+    summary_files = _screening_files(output_dir, "pkg")
     assert len(summary_files) == 1
-    assert summary_files[0].name != "pkg_screening-2000-01-01.json"
-    central_summary = list(reports_dir.glob("pkg_screening-*.json"))
+    assert summary_files[0].name.startswith("pkg_commandview_screening_")
+    assert not (output_dir / "pkg_screening-2000-01-01.json").exists()
+    central_summary = _screening_files(reports_dir, "pkg")
     assert len(central_summary) == 1
-    assert central_summary[0].name != "pkg_screening-1999-12-31.json"
+    assert central_summary[0].name.startswith("pkg_commandview_screening_")
+    assert not (reports_dir / "pkg_screening-1999-12-31.json").exists()
 
 
 def test_call_graph_resolves_local_and_imported_calls(tmp_path: Path) -> None:
@@ -385,7 +399,9 @@ def test_call_graph_resolves_local_and_imported_calls(tmp_path: Path) -> None:
     assert exit_code == 0
 
     output_dir = target / "sample_index"
-    output_file = next(output_dir.glob("sample_index-*.json"))
+    inventory_files = _inventory_files(output_dir, "sample")
+    assert len(inventory_files) == 1
+    output_file = inventory_files[0]
     payload = json.loads(output_file.read_text(encoding="utf-8"))
     module_entry = next(entry for entry in payload["files"] if entry["relative_path"] == "module.py")
     call_graph = module_entry["call_graph"]
@@ -464,7 +480,9 @@ def test_inventory_records_class_bases(tmp_path: Path) -> None:
     assert exit_code == 0
 
     output_dir = target / "pkg_index"
-    payload = json.loads(next(output_dir.glob("pkg_index-*.json")).read_text(encoding="utf-8"))
+    inventory_files = _inventory_files(output_dir, "pkg")
+    assert len(inventory_files) == 1
+    payload = json.loads(inventory_files[0].read_text(encoding="utf-8"))
     module_entry = next(entry for entry in payload["files"] if entry["relative_path"] == "module.py")
     classes = {cls["name"]: cls for cls in module_entry["classes"]}
     assert classes["Base"]["bases"] == []
@@ -499,7 +517,9 @@ def test_cyclomatic_complexity_counts_branches(tmp_path: Path) -> None:
     assert exit_code == 0
 
     output_dir = target / "work_index"
-    payload = json.loads(next(output_dir.glob("work_index-*.json")).read_text(encoding="utf-8"))
+    inventory_files = _inventory_files(output_dir, "work")
+    assert len(inventory_files) == 1
+    payload = json.loads(inventory_files[0].read_text(encoding="utf-8"))
     module_entry = next(entry for entry in payload["files"] if entry["relative_path"] == "module.py")
     decision_entry = module_entry["functions"][0]
     assert decision_entry["cyclomatic_complexity"] == 8
@@ -524,7 +544,9 @@ def test_type_hint_coverage_reports_ratio(tmp_path: Path) -> None:
     assert exit_code == 0
 
     output_dir = target / "annot_index"
-    payload = json.loads(next(output_dir.glob("annot_index-*.json")).read_text(encoding="utf-8"))
+    inventory_files = _inventory_files(output_dir, "annot")
+    assert len(inventory_files) == 1
+    payload = json.loads(inventory_files[0].read_text(encoding="utf-8"))
     module_entry = next(entry for entry in payload["files"] if entry["relative_path"] == "module.py")
     by_name = {func["name"]: func for func in module_entry["functions"]}
     assert by_name["fully_typed"]["type_hint_coverage"] == 1
@@ -569,7 +591,9 @@ def test_function_metadata_persists_effects_and_decorators(tmp_path: Path) -> No
     assert exit_code == 0
 
     output_dir = target / "effects_index"
-    payload = json.loads(next(output_dir.glob("effects_index-*.json")).read_text(encoding="utf-8"))
+    inventory_files = _inventory_files(output_dir, "effects")
+    assert len(inventory_files) == 1
+    payload = json.loads(inventory_files[0].read_text(encoding="utf-8"))
     module_entry = next(entry for entry in payload["files"] if entry["relative_path"] == "module.py")
 
     functions = {func["name"]: func for func in module_entry["functions"]}
@@ -625,7 +649,9 @@ def test_unused_imports_and_unreachable_functions_reported(tmp_path: Path) -> No
     assert exit_code == 0
 
     output_dir = target / "deadcode_index"
-    payload = json.loads(next(output_dir.glob("deadcode_index-*.json")).read_text(encoding="utf-8"))
+    inventory_files = _inventory_files(output_dir, "deadcode")
+    assert len(inventory_files) == 1
+    payload = json.loads(inventory_files[0].read_text(encoding="utf-8"))
     module_entry = next(entry for entry in payload["files"] if entry["relative_path"] == "module.py")
 
     unused_imports = module_entry["unused_imports"]

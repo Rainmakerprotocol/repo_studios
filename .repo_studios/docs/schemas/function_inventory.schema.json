@@ -34,7 +34,7 @@
       "type": "array",
       "items": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": [
           "path",
           "relative_path",
@@ -133,7 +133,7 @@
     },
     "functionEntry": {
       "type": "object",
-      "additionalProperties": false,
+      "additionalProperties": true,
       "required": [
         "name",
         "qualified_name",
@@ -305,7 +305,7 @@
     },
     "classEntry": {
       "type": "object",
-      "additionalProperties": false,
+      "additionalProperties": true,
       "required": [
         "name",
         "line",

@@ -136,7 +136,7 @@ def _run_inventory(paths: Paths, options: Options) -> StepResult:
         return StepResult(exit_code=exit_code)
     index_dir = paths.target / f"{paths.target.name}_index"
     try:
-        artifact = _latest_artifact(index_dir, f"{paths.target.name}_index-*.json", "inventory")
+        artifact = _latest_artifact(index_dir, f"{paths.target.name}_commandview_[0-9]*.json", "inventory")
     except FileNotFoundError as exc:
         logging.error("Inventory step succeeded but produced no artifacts: %s", exc)
         return StepResult(exit_code=1)
