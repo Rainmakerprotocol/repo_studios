@@ -1,5 +1,5 @@
 We currently have:
-producer: `generate_function_inventory.py`
+producer: `generate_commandview_inventory.py`
     - collects the inventory reports in json
     - collects the inventory reports in json then deposits in target folder location
         purpose:
@@ -22,25 +22,25 @@ producer: `generate_function_inventory.py`
             - deposits data in folder location with same naming convetions
 
 summarizer:`generate_function_analysis.py
-    - collects the data from `generate_function_inventory.py` outputs
+    - collects the data from `generate_commandview_inventory.py` outputs
     - organizes data in a structured way
         purpose:
             - prepare the data for higher level reasoning
             - reduce the complexity of comprehension of data
-            - organize the data from`generate_function_inventory.py` 
+            - organize the data from`generate_commandview_inventory.py` 
             - keep data structure the same
         benefits: 
             - allows for ease of access to richer content
             - allows for human readability
             - allows for the understanding of where to look for less comprehensive inventory outputs
         Requirements:
-            - output to be placed along side the output from `generate_function_inventory.py`
+            - output to be placed along side the output from `generate_commandview_inventory.py`
             - does not generate the folder for the location
             - reports reagrdless of presence of data 
             - no data to report is good news, which we want that too
 
 aggregators: `scan_duplicates.py`
-    - collects the data from `generate_function_inventory.py` and`generate_function_inventory.py` outputs
+    - collects the data from `generate_commandview_inventory.py` and`generate_commandview_inventory.py` outputs
     - organizes data in a structured way
         - purpose:
             - prepare the data for higher level reasoning
@@ -53,7 +53,7 @@ aggregators: `scan_duplicates.py`
             - allows for human readability
             - allows for the understanding of where to look for less comprehensive and more direct
         requirements:
-            - output to be placed along side the output from `generate_function_inventory.py`
+            - output to be placed along side the output from `generate_commandview_inventory.py`
             - does not generate the folder for the location folder            
             - output to be duplicated in `.repo_studios/command_center/reports/duplicates_scan/` folder
             - does generate the folder for the `.repo_studios/command_center/reports/duplicates_scan/` location folder

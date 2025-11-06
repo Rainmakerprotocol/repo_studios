@@ -72,7 +72,7 @@ Use this repeatable loop every time you address duplicate functions.
 - **Purpose:** Offer a single make-style trigger that refreshes the function inventory, analysis, and duplicate scan for any repository subfolder.
 - **How it works:** Dynamically loads each script's `run(argv)` helper, executes them sequentially (inventory → analysis → duplicate scan), applies a shared log level, and aborts on the first non-zero exit code. The orchestrator captures the freshly written inventory and analysis paths and threads the analysis file into the duplicate scan so the aggregator always consumes the current dataset.
 - **Outputs:** Emits no new standalone artifacts; it rewrites the producer inventory and analysis within `<target>/<name>_index/`, then mirrors timestamped duplicate matrices/markdown into both `<target>/<name>_index/` and `.repo_studios/command_center/reports/<slug>_duplicate_scan/`, pruning older siblings in each location.
-- **Triggers:** `producers/generate_function_inventory.py`, `summarizers/generate_function_analysis.py`, and `aggregators/scan_duplicates.py` (called with `--skip-upstream` because upstream work already ran).
+- **Triggers:** `producers/generate_commandview_inventory.py`, `summarizers/generate_function_analysis.py`, and `aggregators/scan_duplicates.py` (called with `--skip-upstream` because upstream work already ran).
 - **Benefits:** Guarantees consistent sequencing, keeps slug retention tidy, and logs the mirrored artifact paths so humans and agents can locate outputs immediately before Phase 3 extraction begins.
 
 ```bash
@@ -101,7 +101,7 @@ make -C .repo_studios command-center COMMAND_CENTER_TARGET=/.repo_studios/script
 
 ### Direct script usage
 
-- `producers/generate_function_inventory.py <target>` refreshes `<target>/<name>_index/<name>_index-YYYY-MM-DD.json` and the screening summary in both the target and slugged mirror.
+- `producers/generate_commandview_inventory.py <target>` refreshes `<target>/<name>_index/<name>_index-YYYY-MM-DD.json` and the screening summary in both the target and slugged mirror.
 - `summarizers/generate_function_analysis.py <target>` consumes the latest inventory (or an explicit `--inventory-file`) and mirrors analysis payloads to `<target>/<name>_analysis-YYYY-MM-DD.json` and `.repo_studios/command_center/reports/<slug>_analysis/`.
 - `aggregators/scan_duplicates.py --target <target>` merges scanner output with the analysis and mirrors duplicate matrices/markdown to `.repo_studios/command_center/reports/<slug>_duplicate_scan/`. Add `--skip-upstream` when inventory and analysis were already run; the helper now removes stale timestamped outputs before writing the new pair in both locations.
 

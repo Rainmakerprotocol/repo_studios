@@ -1,4 +1,4 @@
-"""Tests for generate_function_inventory producer."""
+"""Tests for generate_commandview_inventory producer."""
 from __future__ import annotations
 
 import importlib.util
@@ -14,9 +14,9 @@ MODULE_PATH = (
     / "command_center"
     / "scripts"
     / "producers"
-    / "generate_function_inventory.py"
+    / "generate_commandview_inventory.py"
 )
-MODULE_NAME = "repo_studios_test.generate_function_inventory"
+MODULE_NAME = "repo_studios_test.generate_commandview_inventory"
 
 
 def _load_module():

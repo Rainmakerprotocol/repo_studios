@@ -4,7 +4,7 @@ rootdir: C:\Users\genet\repo_studios
 configfile: pytest.ini
 collected 5 items
 
-.repo_studios\tests\tests_producers\test_generate_function_inventory.py . [ 20%]
+.repo_studios\tests\tests_producers\test_generate_commandview_inventory.py . [ 20%]
 ....                                                                     [100%]
 
 ============================== 5 passed in 0.22s ==============================

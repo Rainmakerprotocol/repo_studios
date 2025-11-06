@@ -19020,8 +19020,8 @@
       "module_doc": "Generate a co-located function inventory for a repo folder.",
       "module_first_line": "def _safe_unparse(node: ast.AST | None) -> str | None:",
       "module_id": "producers.generate_function_inventory",
-      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\producers\\generate_function_inventory.py",
-      "relative_path": "generate_function_inventory.py"
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\producers\\generate_commandview_inventory.py",
+      "relative_path": "generate_commandview_inventory.py"
     }
   ],
   "metadata": {

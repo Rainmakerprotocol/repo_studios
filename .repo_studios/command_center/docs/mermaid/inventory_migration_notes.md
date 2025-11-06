@@ -1,11 +1,11 @@
 # Inventory Payload Migration Notes
 
-_Last updated: 2025-11-05_
+_Last updated: 2025-11-06_
 
 ## Purpose
 
 Outline the adjustments downstream tools must make to consume the enriched
-inventory payload emitted by `.repo_studios/command_center/scripts/producers/generate_function_inventory.py`.
+inventory payload emitted by `.repo_studios/command_center/scripts/producers/generate_commandview_inventory.py`.
 These notes ensure commandview packs, aggregators, and analytics pipelines stay
 aligned while coverage and git churn metadata settle in.
 

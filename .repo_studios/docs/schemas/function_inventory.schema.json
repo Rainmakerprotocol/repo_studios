@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Function Inventory Schema",
-  "description": "Schema for the JSON payload emitted by generate_function_inventory.py",
+  "description": "Schema for the JSON payload emitted by generate_commandview_inventory.py",
   "type": "object",
   "additionalProperties": false,
   "required": ["metadata", "files", "statistics"],

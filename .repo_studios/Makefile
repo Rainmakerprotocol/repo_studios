@@ -62,6 +62,6 @@ studio-verify-docs-integrity:
 .PHONY: studio-generate-function-index
 studio-generate-function-index:
 	@$(PYTHON) -c "import sys; sys.exit(0 if '$(path)' else 1)" || (echo "path variable required (make studio-generate-function-index path=...)" && exit 1)
-	$(PYTHON) scripts/producers/generate_function_inventory.py --repo-root .. "$(path)"
+	$(PYTHON) scripts/producers/generate_commandview_inventory.py --repo-root .. "$(path)"
 	$(PYTHON) scripts/producers/generate_function_analysis.py --repo-root .. "$(path)"
 

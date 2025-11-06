@@ -12,7 +12,7 @@ _Last updated: 2025-10-27_
 ## Component Map
 
 - **Producers** (`scripts/producers/`)
-  - `generate_function_inventory.py` indexes a target folder and emits `<source>_index/<source>_index-YYYY-MM-DD.json` plus the screening report used in later phases.
+  - `generate_commandview_inventory.py` indexes a target folder and emits `<source>_index/<source>_index-YYYY-MM-DD.json` plus the screening report used in later phases.
   - Each producer exposes `run(argv)` so tests and aggregators can import them without spawning subprocesses.
 - **Summarizers** (`scripts/summarizers/`)
   - `generate_function_analysis.py` consumes the inventory output, calculates duplicate group metrics, and stores `<source>_analysis-YYYY-MM-DD.json` beside the inventory history.
@@ -25,7 +25,7 @@ _Last updated: 2025-10-27_
 
 ## Data Flow
 
-1. `generate_function_inventory.py` builds the target inventory and screening report under `<target>/<target>_index/`.
+1. `generate_commandview_inventory.py` builds the target inventory and screening report under `<target>/<target>_index/`.
 2. `generate_function_analysis.py` derives duplicate and dependency metrics, persisting them alongside the inventory and the mirrored report tree.
 3. `scan_duplicates.py` optionally re-runs the upstream producers, scans for duplicate functions, and writes machine-readable (`*_duplicate_matrix-YYYY-MM-DD.json`) and human-readable (`*_duplicate_summary-YYYY-MM-DD.md`) payloads.
 4. Future orchestrators will wrap these steps in tiered Make targets so agents can trigger the full pipeline or individual stages without ad-hoc commands.

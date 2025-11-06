@@ -796,7 +796,7 @@ class CoverageIndex:
 
 def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        prog="generate_function_inventory",
+    prog="generate_commandview_inventory",
         description=__doc__ or "",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )

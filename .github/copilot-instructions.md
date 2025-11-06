@@ -14,18 +14,18 @@
 - **Purpose:** Provide a single make-style command for refreshing the staged artifacts that underpin manual duplicate remediation.
 - **How it works:** Loads each CLI’s `run(argv)` helper (inventory → analysis → duplicate scan), applies a shared `--log-level`, threads the freshly generated analysis file into the scan step, and stops on the first non-zero exit so partial runs do not slip through.
 - **Outputs:** Emits no new files; it updates `<target>/<name>_index/`, `.repo_studios/command_center/reports/<slug>_analysis/`, and `.repo_studios/command_center/reports/<slug>_duplicate_scan/` via the delegated scripts. Each run writes a single timestamped matrix/summary pair and prunes stale siblings in both locations.
-- **Triggers:** `producers/generate_function_inventory.py`, `summarizers/generate_function_analysis.py`, and `aggregators/scan_duplicates.py` with `--skip-upstream` to avoid redundant producer work.
+- **Triggers:** `producers/generate_commandview_inventory.py`, `summarizers/generate_function_analysis.py`, and `aggregators/scan_duplicates.py` with `--skip-upstream` to avoid redundant producer work.
 - **Benefits:** Keeps sequencing deterministic, aligns with the library-integration micro-cycle, and ensures today’s slug-based retention stays tidy even when the pipeline is run repeatedly in a single day.
 
 ## Conventions & Patterns
 - Logging goes through `logging` with level control, never `print`; honor the `--log-level` flag for every CLI.
 - Markdown summaries follow `docs/standards/global/std-global-markdown-authoring.md`: single H1, tidy bullet hierarchy, and wrapped lines.
-- Legacy `latest.json` pointers are being removed; ensure tests assert absence rather than recreating them (see `tests/tests_producers/test_generate_function_inventory.py`).
+- Legacy `latest.json` pointers are being removed; ensure tests assert absence rather than recreating them (see `tests/tests_producers/test_generate_commandview_inventory.py`).
 - Shared helpers live under `.repo_studios/command_center/scripts/libraries/` as a staging area; import `slugify_relative`, `copy_latest_artifact`, `write_report_artifacts`, and `cli` utilities from there rather than duplicating inline helpers. The CLI module now exposes config-driven builders (`PathsConfig`, `OptionsConfig`, `build_standard_paths`, `build_standard_options`) and every Command Center producer already consumes them—mirror that pattern whenever you touch CLI glue. These modules must stay compliant with the library naming rules captured in `que_for_integration/refactor_library/phase_1/naming_conventions.md` (training copy at `.repo_studios/command_center/docs/naming_conventions.md`), so name new functions `verb_noun`, keep depth ≤3 levels when the real `.repo_studios/library/` tree is created, and document staging locations when helpers have not yet moved.
 - Keep new helpers in ASCII and add explanatory comments only where the flow is non-obvious, per repository editing guidance.
 
 ## Testing & Validation
-- Pytest suites live under `.repo_studios/tests`; target a subpackage when iterating (e.g. `pytest tests/tests_producers/test_generate_function_inventory.py`).
+- Pytest suites live under `.repo_studios/tests`; target a subpackage when iterating (e.g. `pytest tests/tests_producers/test_generate_commandview_inventory.py`).
 - Duplicate scanner logic is covered via `tests/tests_command_center/duplicates/test_scan_duplicates.py`; extend fixtures instead of writing ad-hoc test harnesses.
 - Make targets typically depend on `PYTHON` env configuration—mirror existing invocations (`PYTHON=".venv/Scripts/python.exe"`) when documenting or scripting automation.
 

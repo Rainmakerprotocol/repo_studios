@@ -92,7 +92,7 @@ END → Update inventory + notify library owners of adjustments.
 - [ ] Pick purpose folder; ensure at least 3 peer modules justify its existence.
 - [ ] Name module `verb_noun.py`; implement `verb_noun()` as primary export.
 - [ ] Add module docstring with one-line capability summary.
-- [ ] Update function inventory (`.repo_studios/scripts/producers/generate_function_inventory.py`).
+- [ ] Update function inventory (`.repo_studios/scripts/producers/generate_commandview_inventory.py`).
 - [ ] Log addition in `.repo_studios/command_center/checklists/YYYY-MM-DD.md`.
 
 ### 5.2 Refactor Checklist

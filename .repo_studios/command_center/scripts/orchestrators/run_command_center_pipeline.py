@@ -17,7 +17,7 @@ class StepResult:
     artifacts: tuple[Path, ...] = ()
 
 INVENTORY_SCRIPT_RELATIVE = Path(
-    ".repo_studios/command_center/scripts/producers/generate_function_inventory.py"
+    ".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py"
 )
 ANALYSIS_SCRIPT_RELATIVE = Path(
     ".repo_studios/command_center/scripts/summarizers/generate_function_analysis.py"
@@ -123,7 +123,7 @@ def _latest_artifact(directory: Path, pattern: str, label: str) -> Path:
 
 def _run_inventory(paths: Paths, options: Options) -> StepResult:
     script_path = (paths.repo_root / INVENTORY_SCRIPT_RELATIVE).resolve()
-    run_fn = _load_run_function(script_path, "command_center.producers.generate_function_inventory")
+    run_fn = _load_run_function(script_path, "command_center.producers.generate_commandview_inventory")
     argv = [
         "--repo-root",
         str(paths.repo_root),

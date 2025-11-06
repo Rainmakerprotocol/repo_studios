@@ -42,7 +42,7 @@ This living checklist captures the sequential work required to integrate the Jar
 
 ### Phase B – Script Hardening
 
-* [x] Port or alias `phase1/generate_inventory.py` into `.repo_studios/scripts/producers/` with a repo-root aware CLI. _(`generate_function_inventory.py` now lives under `.repo_studios/scripts/producers/` with target resolution relative to `--repo-root`.)_
+* [x] Port or alias `phase1/generate_inventory.py` into `.repo_studios/scripts/producers/` with a repo-root aware CLI. _(`generate_commandview_inventory.py` (formerly `generate_commandview_inventory.py`) now lives under `.repo_studios/scripts/producers/` with target resolution relative to `--repo-root`.)_
 * [x] Replace ad-hoc printing with structured logging consistent with other producers (INFO summaries, DEBUG diagnostics). _(Logging wired via `logging.basicConfig`; warnings captured and surfaced.)_
 * [x] Add CLI flags for repo root resolution, optional verbose mode, and future-proofing (e.g., `--schema-version`). _(`--repo-root`, positional `target`, `--schema-version`, `--log-level`, and the new `--coverage-json` option for ingesting coverage reports implemented.)_
 * [x] Introduce explicit exit codes (0 success, non-zero on fatal errors) and ensure error messages surface in CI logs. _(Script returns 1 for validation failures and logs details before exiting.)_

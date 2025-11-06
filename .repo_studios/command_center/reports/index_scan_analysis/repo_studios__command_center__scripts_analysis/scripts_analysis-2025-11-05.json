@@ -1220,7 +1220,7 @@
             "aggregators/scan_duplicates.py:235",
             "orchestrators/run_automation_dry_run.py:123",
             "orchestrators/run_command_center_pipeline.py:68",
-            "producers/generate_function_inventory.py:871",
+            "producers/generate_commandview_inventory.py:871",
             "summarizers/generate_function_analysis.py:122"
           ],
           "type": "review_duplicate_function"
@@ -1618,7 +1618,7 @@
           "logging_calls": [],
           "module_id": "scripts.producers.generate_function_inventory",
           "name": "configure_logging",
-          "path": "producers/generate_function_inventory.py",
+          "path": "producers/generate_commandview_inventory.py",
           "qualified_name": "scripts.producers.generate_function_inventory::configure_logging",
           "returns_kind": "none",
           "signature": "def configure_logging(level: str) -> None:",
@@ -4801,7 +4801,7 @@
           "targets": [
             "aggregators/scan_duplicates.py:173",
             "orchestrators/run_command_center_pipeline.py:41",
-            "producers/generate_function_inventory.py:797",
+            "producers/generate_commandview_inventory.py:797",
             "summarizers/generate_function_analysis.py:50"
           ],
           "type": "review_duplicate_function"
@@ -5261,7 +5261,7 @@
           "logging_calls": [],
           "module_id": "scripts.producers.generate_function_inventory",
           "name": "parse_args",
-          "path": "producers/generate_function_inventory.py",
+          "path": "producers/generate_commandview_inventory.py",
           "qualified_name": "scripts.producers.generate_function_inventory::parse_args",
           "returns_kind": "value",
           "signature": "def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:",
@@ -5418,7 +5418,7 @@
             "aggregators/scan_duplicates.py:239",
             "orchestrators/run_automation_dry_run.py:110",
             "orchestrators/run_command_center_pipeline.py:82",
-            "producers/generate_function_inventory.py:842",
+            "producers/generate_commandview_inventory.py:842",
             "summarizers/generate_function_analysis.py:93"
           ],
           "type": "review_duplicate_function"
@@ -6186,7 +6186,7 @@
           "logging_calls": [],
           "module_id": "scripts.producers.generate_function_inventory",
           "name": "build_paths",
-          "path": "producers/generate_function_inventory.py",
+          "path": "producers/generate_commandview_inventory.py",
           "qualified_name": "scripts.producers.generate_function_inventory::build_paths",
           "returns_kind": "value",
           "signature": "def build_paths(args: argparse.Namespace) -> Paths:",
@@ -6467,7 +6467,7 @@
             "aggregators/scan_duplicates.py:264",
             "orchestrators/run_automation_dry_run.py:118",
             "orchestrators/run_command_center_pipeline.py:64",
-            "producers/generate_function_inventory.py:866",
+            "producers/generate_commandview_inventory.py:866",
             "summarizers/generate_function_analysis.py:117"
           ],
           "type": "review_duplicate_function"
@@ -6735,7 +6735,7 @@
           "logging_calls": [],
           "module_id": "scripts.producers.generate_function_inventory",
           "name": "build_options",
-          "path": "producers/generate_function_inventory.py",
+          "path": "producers/generate_commandview_inventory.py",
           "qualified_name": "scripts.producers.generate_function_inventory::build_options",
           "returns_kind": "value",
           "signature": "def build_options(args: argparse.Namespace) -> Options:",
@@ -7775,7 +7775,7 @@
           "targets": [
             "aggregators/scan_duplicates.py:956",
             "orchestrators/run_command_center_pipeline.py:203",
-            "producers/generate_function_inventory.py:2684",
+            "producers/generate_commandview_inventory.py:2684",
             "summarizers/generate_function_analysis.py:334"
           ],
           "type": "review_duplicate_function"
@@ -8844,7 +8844,7 @@
           ],
           "module_id": "scripts.producers.generate_function_inventory",
           "name": "run",
-          "path": "producers/generate_function_inventory.py",
+          "path": "producers/generate_commandview_inventory.py",
           "qualified_name": "scripts.producers.generate_function_inventory::run",
           "returns_kind": "value",
           "signature": "def run(argv: Iterable[str] | None = None) -> int:",
@@ -10149,7 +10149,7 @@
           "description": "Review duplicate implementations for consolidation or reuse.",
           "targets": [
             "orchestrators/run_command_center_pipeline.py:267",
-            "producers/generate_function_inventory.py:2742",
+            "producers/generate_commandview_inventory.py:2742",
             "summarizers/generate_function_analysis.py:374"
           ],
           "type": "review_duplicate_function"
@@ -10259,7 +10259,7 @@
           "logging_calls": [],
           "module_id": "scripts.producers.generate_function_inventory",
           "name": "main",
-          "path": "producers/generate_function_inventory.py",
+          "path": "producers/generate_commandview_inventory.py",
           "qualified_name": "scripts.producers.generate_function_inventory::main",
           "returns_kind": "none",
           "signature": "def main() -> None:",

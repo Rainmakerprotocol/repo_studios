@@ -17,7 +17,7 @@ INVENTORY_MODULE_PATH = (
     / "command_center"
     / "scripts"
     / "producers"
-    / "generate_function_inventory.py"
+    / "generate_commandview_inventory.py"
 )
 ANALYSIS_MODULE_PATH = (
     Path(__file__).resolve().parents[2]

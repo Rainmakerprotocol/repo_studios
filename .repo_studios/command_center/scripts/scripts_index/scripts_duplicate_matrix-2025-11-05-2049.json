@@ -39,7 +39,7 @@
           "line": 871,
           "line_count": 2,
           "name": "configure_logging",
-          "path": "producers/generate_function_inventory.py"
+          "path": "producers/generate_commandview_inventory.py"
         },
         {
           "line": 122,
@@ -192,7 +192,7 @@
           "line": 866,
           "line_count": 3,
           "name": "build_options",
-          "path": "producers/generate_function_inventory.py"
+          "path": "producers/generate_commandview_inventory.py"
         },
         {
           "line": 117,
@@ -231,7 +231,7 @@
           "line": 842,
           "line_count": 22,
           "name": "build_paths",
-          "path": "producers/generate_function_inventory.py"
+          "path": "producers/generate_commandview_inventory.py"
         },
         {
           "line": 93,
@@ -248,7 +248,7 @@
           "occurrences": [
             {
               "code_hash": "3da3d6ef4c01",
-              "file": ".repo_studios/command_center/scripts/producers/generate_function_inventory.py",
+              "file": ".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py",
               "function_name": "build_paths",
               "is_function": true,
               "line_end": 863,
@@ -377,7 +377,7 @@
           "line": 797,
           "line_count": 40,
           "name": "parse_args",
-          "path": "producers/generate_function_inventory.py"
+          "path": "producers/generate_commandview_inventory.py"
         },
         {
           "line": 50,
@@ -443,7 +443,7 @@
           "line": 2684,
           "line_count": 56,
           "name": "run",
-          "path": "producers/generate_function_inventory.py"
+          "path": "producers/generate_commandview_inventory.py"
         },
         {
           "line": 334,
@@ -591,7 +591,7 @@
           "line": 2742,
           "line_count": 2,
           "name": "main",
-          "path": "producers/generate_function_inventory.py"
+          "path": "producers/generate_commandview_inventory.py"
         },
         {
           "line": 374,
@@ -900,7 +900,7 @@
           "occurrences": [
             {
               "code_hash": "24142a4e9265",
-              "file": ".repo_studios/command_center/scripts/producers/generate_function_inventory.py",
+              "file": ".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py",
               "function_name": "_has_parameters_section",
               "is_function": true,
               "line_end": 202,
@@ -910,7 +910,7 @@
             },
             {
               "code_hash": "c7f53b665302",
-              "file": ".repo_studios/command_center/scripts/producers/generate_function_inventory.py",
+              "file": ".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py",
               "function_name": "_has_returns_section",
               "is_function": true,
               "line_end": 209,
@@ -938,7 +938,7 @@
           "occurrences": [
             {
               "code_hash": "f71d65adeee2",
-              "file": ".repo_studios/command_center/scripts/producers/generate_function_inventory.py",
+              "file": ".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py",
               "function_name": "_is_click_command",
               "is_function": true,
               "line_end": 447,
@@ -948,7 +948,7 @@
             },
             {
               "code_hash": "e0c102d830c8",
-              "file": ".repo_studios/command_center/scripts/producers/generate_function_inventory.py",
+              "file": ".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py",
               "function_name": "_is_click_group",
               "is_function": true,
               "line_end": 455,
@@ -976,7 +976,7 @@
           "occurrences": [
             {
               "code_hash": "55b6d1028870",
-              "file": ".repo_studios/command_center/scripts/producers/generate_function_inventory.py",
+              "file": ".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py",
               "function_name": "_iter_entries",
               "is_function": true,
               "line_end": 1632,
@@ -986,7 +986,7 @@
             },
             {
               "code_hash": "4bfcae9c3512",
-              "file": ".repo_studios/command_center/scripts/producers/generate_function_inventory.py",
+              "file": ".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py",
               "function_name": "_iter_entries",
               "is_function": true,
               "line_end": 1731,

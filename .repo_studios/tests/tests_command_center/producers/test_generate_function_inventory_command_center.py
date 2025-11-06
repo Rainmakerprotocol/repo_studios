@@ -12,12 +12,12 @@ _MODULE_PATH = (
     / "command_center"
     / "scripts"
     / "producers"
-    / "generate_function_inventory.py"
+    / "generate_commandview_inventory.py"
 )
 
 
 def _load_module():
-    spec = importlib.util.spec_from_file_location("generate_function_inventory", _MODULE_PATH)
+    spec = importlib.util.spec_from_file_location("generate_commandview_inventory", _MODULE_PATH)
     module = importlib.util.module_from_spec(spec)
     loader = spec.loader
     assert loader is not None
@@ -41,7 +41,7 @@ def _inventory_files(directory: Path, slug: str) -> list[Path]:
     return [path for path in directory.glob(f"{slug}_commandview_*.json") if "_screening_" not in path.name]
 
 
-def test_generate_function_inventory_emits_extended_metrics(tmp_path: Path) -> None:
+def test_generate_commandview_inventory_emits_extended_metrics(tmp_path: Path) -> None:
     module = _load_module()
 
     repo_root = tmp_path

@@ -50,7 +50,7 @@ Provide a consistent, scriptable way to inventory which Repo Studios scripts imp
         "not_applicable": 45
       },
       "files": {
-        "adopted": ["scripts/producers/generate_function_inventory.py"],
+        "adopted": ["scripts/producers/generate_commandview_inventory.py"],
         "legacy": ["scripts/summarizers/legacy_slugify.py"],
         "not_applicable": []
       }

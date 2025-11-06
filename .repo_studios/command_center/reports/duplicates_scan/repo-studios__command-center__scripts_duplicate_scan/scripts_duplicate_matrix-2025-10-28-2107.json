@@ -21,7 +21,7 @@
           "line": 206,
           "line_count": 2,
           "name": "build_options",
-          "path": "producers/generate_function_inventory.py"
+          "path": "producers/generate_commandview_inventory.py"
         },
         {
           "line": 117,
@@ -54,7 +54,7 @@
           "line": 182,
           "line_count": 22,
           "name": "build_paths",
-          "path": "producers/generate_function_inventory.py"
+          "path": "producers/generate_commandview_inventory.py"
         },
         {
           "line": 93,
@@ -71,7 +71,7 @@
           "occurrences": [
             {
               "code_hash": "3da3d6ef4c01",
-              "file": ".repo_studios/command_center/scripts/producers/generate_function_inventory.py",
+              "file": ".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py",
               "function_name": "build_paths",
               "is_function": true,
               "line_end": 203,
@@ -117,7 +117,7 @@
           "line": 210,
           "line_count": 2,
           "name": "configure_logging",
-          "path": "producers/generate_function_inventory.py"
+          "path": "producers/generate_commandview_inventory.py"
         },
         {
           "line": 122,
@@ -150,7 +150,7 @@
           "line": 143,
           "line_count": 34,
           "name": "parse_args",
-          "path": "producers/generate_function_inventory.py"
+          "path": "producers/generate_commandview_inventory.py"
         },
         {
           "line": 50,
@@ -183,7 +183,7 @@
           "line": 856,
           "line_count": 46,
           "name": "run",
-          "path": "producers/generate_function_inventory.py"
+          "path": "producers/generate_commandview_inventory.py"
         },
         {
           "line": 330,
@@ -210,7 +210,7 @@
           "line": 20,
           "line_count": 10,
           "name": "_load_slugify",
-          "path": "producers/generate_function_inventory.py"
+          "path": "producers/generate_commandview_inventory.py"
         },
         {
           "line": 17,
@@ -237,7 +237,7 @@
             },
             {
               "code_hash": "c9577d5bb09f",
-              "file": ".repo_studios/command_center/scripts/producers/generate_function_inventory.py",
+              "file": ".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py",
               "function_name": "_load_slugify",
               "is_function": true,
               "line_end": 29,
@@ -277,7 +277,7 @@
           "line": 904,
           "line_count": 2,
           "name": "main",
-          "path": "producers/generate_function_inventory.py"
+          "path": "producers/generate_commandview_inventory.py"
         },
         {
           "line": 370,

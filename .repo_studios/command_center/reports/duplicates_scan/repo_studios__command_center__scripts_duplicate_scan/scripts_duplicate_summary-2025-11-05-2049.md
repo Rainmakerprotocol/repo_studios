@@ -23,7 +23,7 @@
     - aggregators/scan_duplicates.py:235-236 (2 line(s)): `sample unavailable`
     - orchestrators/run_automation_dry_run.py:123-124 (2 line(s)): `sample unavailable`
     - orchestrators/run_command_center_pipeline.py:68-69 (2 line(s)): `sample unavailable`
-    - producers/generate_function_inventory.py:871-872 (2 line(s)): `sample unavailable`
+    - producers/generate_commandview_inventory.py:871-872 (2 line(s)): `sample unavailable`
     - summarizers/generate_function_analysis.py:122-123 (2 line(s)): `sample unavailable`
     - .repo_studios/command_center/scripts/aggregators/generate_automation_manifest.py:207-209 (3 line(s)): `def configure_logging(level: str) -> None:`
     - .repo_studios/command_center/scripts/aggregators/generate_metrics_summary.py:134-136 (3 line(s)): `def configure_logging(level: str) -> None:`
@@ -42,9 +42,9 @@
     - aggregators/scan_duplicates.py:239-261 (23 line(s)): `sample unavailable`
     - orchestrators/run_automation_dry_run.py:110-115 (6 line(s)): `sample unavailable`
     - orchestrators/run_command_center_pipeline.py:82-90 (9 line(s)): `sample unavailable`
-    - producers/generate_function_inventory.py:842-863 (22 line(s)): `sample unavailable`
+    - producers/generate_commandview_inventory.py:842-863 (22 line(s)): `sample unavailable`
     - summarizers/generate_function_analysis.py:93-114 (22 line(s)): `sample unavailable`
-    - .repo_studios/command_center/scripts/producers/generate_function_inventory.py:842-863 (22 line(s)): `def build_paths(args: argparse.Namespace) -> Paths:`
+    - .repo_studios/command_center/scripts/producers/generate_commandview_inventory.py:842-863 (22 line(s)): `def build_paths(args: argparse.Namespace) -> Paths:`
     - .repo_studios/command_center/scripts/summarizers/generate_function_analysis.py:93-114 (22 line(s)): `def build_paths(args: argparse.Namespace) -> Paths:`
 
 4. `PathSpec.__post_init__` — 6 duplicate(s)
@@ -74,7 +74,7 @@
     - aggregators/scan_duplicates.py:264-273 (10 line(s)): `sample unavailable`
     - orchestrators/run_automation_dry_run.py:118-120 (3 line(s)): `sample unavailable`
     - orchestrators/run_command_center_pipeline.py:64-65 (2 line(s)): `sample unavailable`
-    - producers/generate_function_inventory.py:866-868 (3 line(s)): `sample unavailable`
+    - producers/generate_commandview_inventory.py:866-868 (3 line(s)): `sample unavailable`
     - summarizers/generate_function_analysis.py:117-119 (3 line(s)): `sample unavailable`
 
 8. `_latest_artifact` — 4 duplicate(s)

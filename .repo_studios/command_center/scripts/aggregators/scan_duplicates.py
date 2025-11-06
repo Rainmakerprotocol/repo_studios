@@ -65,7 +65,7 @@ DEFAULT_IGNORE_DIRS = {
     ".tox",
 }
 INVENTORY_SCRIPT_RELATIVE = Path(
-    ".repo_studios/command_center/scripts/producers/generate_function_inventory.py"
+    ".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py"
 )
 ANALYSIS_SCRIPT_RELATIVE = Path(
     ".repo_studios/command_center/scripts/summarizers/generate_function_analysis.py"
@@ -303,11 +303,13 @@ def _latest_artifact(directory: Path, pattern: str, label: str) -> Path:
 
 def _run_inventory(paths: Paths, options: Options) -> Path:
     script_path = _resolve_script_path(paths.repo_root, INVENTORY_SCRIPT_RELATIVE)
-    module_name = "command_center.producers.generate_function_inventory"
+    module_name = "command_center.producers.generate_commandview_inventory"
     module = _load_cli_module(script_path, module_name)
     run_fn = getattr(module, "run", None)
     if run_fn is None:
-        raise RuntimeError(f"generate_function_inventory module at {script_path} does not expose a run() helper.")
+        raise RuntimeError(
+            f"generate_commandview_inventory module at {script_path} does not expose a run() helper."
+        )
     argv = [
         "--repo-root",
         str(paths.repo_root),

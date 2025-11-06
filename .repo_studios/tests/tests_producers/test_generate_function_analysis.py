@@ -14,7 +14,7 @@ INVENTORY_MODULE_PATH = (
     / "command_center"
     / "scripts"
     / "producers"
-    / "generate_function_inventory.py"
+    / "generate_commandview_inventory.py"
 )
 ANALYSIS_MODULE_PATH = (
     Path(__file__).resolve().parents[2]
@@ -23,7 +23,7 @@ ANALYSIS_MODULE_PATH = (
     / "summarizers"
     / "generate_function_analysis.py"
 )
-INVENTORY_MODULE_NAME = "repo_studios_test.generate_function_inventory"
+INVENTORY_MODULE_NAME = "repo_studios_test.generate_commandview_inventory"
 ANALYSIS_MODULE_NAME = "repo_studios_test.generate_function_analysis"
 
 SCRIPTS_ROOT = Path(__file__).resolve().parents[2] / "command_center" / "scripts"
