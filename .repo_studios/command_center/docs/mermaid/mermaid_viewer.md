@@ -22,28 +22,41 @@
 - [x] Build selector bootstrapper that scans the static reports tree only, filtering JSON that matches the `*_commandview_YYYYMMDD-HHMM.json` slug.
   - Added `build_commandview_selector.py` in the libraries staging area, producing structured payloads (`slug`, `timestamp`, `display_name`, paths) for viewer selection and ignoring screening artifacts.
   - Selector payload exports underpin the upcoming refresh routine; entries are sorted by slug then timestamp so the UI lists the freshest CommandView inventories first.
-- [ ] Populate selector entries with source folder + timestamp so users can judge freshness at a glance.
-- [ ] Implement refresh button that re-runs discovery, updates selector options, and preserves active context when possible.
-- [ ] Ensure refresh routine deduplicates by slug to avoid double-listing static vs dynamic artifacts.
-- [ ] Document refresh workflow in README and add make/CLI recipe to regenerate inventories before viewer launch.
+- [x] Populate selector entries with source folder + timestamp so users can judge freshness at a glance.
+  - Selector options now reuse the CommandView display label (`<slug> (YYYY-MM-DD HH:MM UTC)`) so freshness stays visible, covered by `.repo_studios/tests/tests_command_center/viewer/test_refresh.py::test_refresh_selector_state_groups_and_deduplicates` (completed 2025-11-06 by GitHub Copilot).
+- [x] Implement refresh button that re-runs discovery, updates selector options, and preserves active context when possible.
+  - Added viewer helper `refresh_selector_with_context` that rehydrates selector state, preserves previously active relative paths, falls back to slug, and defaults to the freshest entry when nothing matches; covered by `.repo_studios/tests/tests_command_center/viewer/test_refresh.py::test_refresh_selector_with_context_preserves_relative_path` and `::test_refresh_selector_with_context_falls_back_to_slug` (completed 2025-11-06 by GitHub Copilot).
+- [x] Ensure refresh routine deduplicates by slug to avoid double-listing static vs dynamic artifacts.
+  - Refresh grouping collapses duplicate relative paths before sorting, with regression coverage in `.repo_studios/tests/tests_command_center/viewer/test_refresh.py::test_refresh_selector_state_groups_and_deduplicates` (completed 2025-11-06 by GitHub Copilot).
+- [x] Document refresh workflow in README and add make/CLI recipe to regenerate inventories before viewer launch.
+  - Refresh operations now documented in the new "Refresh Workflow" section below, including `make -C .repo_studios command-center COMMAND_CENTER_TARGET=.repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py` guidance and manual CLI fallback; operators are pointed to `refresh_selector_with_context` for backend reuse (completed 2025-11-06 by GitHub Copilot).
 
 ## Phase 3 · Viewer Core (HTML/JS Shell)
 
-- [ ] Scaffold single-page HTML that loads Mermaid.js from CDN and initializes viewer state.
-- [ ] Implement JSON loader (local file or static host) that ingests both inventory and screening payloads.
-- [ ] Normalize data model on load: module registry, function registry, call graph index, metrics cache.
-- [ ] Guard against duplicate fetch and handle schema-version gating.
+- [x] Scaffold single-page HTML that loads Mermaid.js from CDN and initializes viewer state.
+  - Added `.repo_studios/command_center/viewer/ui/index.html`, `viewer.css`, and `viewer.js` providing a single-page shell wired to Mermaid.js with placeholder state initialisation (completed 2025-11-06 by GitHub Copilot).
+- [x] Implement JSON loader (local file or static host) that ingests both inventory and screening payloads.
+  - Viewer shell now fetches CommandView inventory JSON plus the paired `_commandview_screening_` summary from the static reports mirror (configurable via `window.viewerConfig.reportsBaseUrl`), persisting payloads in memory and hardening error handling when a screening artifact is absent; demo entry points at `scripts_commandview_20251105-2049.json` to exercise the loader (completed 2025-11-06 by GitHub Copilot).
+- [x] Normalize data model on load: module registry, function registry, call graph index, metrics cache.
+  - Viewer loader now derives module/function registries, call graph indices (runtime + screening edges), and metrics caches when fetching CommandView JSON; normalized data lives in `state.normalizedData` for upcoming LOD rendering (completed 2025-11-06 by GitHub Copilot).
+- [x] Guard against duplicate fetch and handle schema-version gating.
+  - Viewer caches CommandView payloads per slug/path/timestamp to avoid redundant network requests and validates `schema_version` (currently 2) before normalization, surfacing clear errors when mismatched (completed 2025-11-06 by GitHub Copilot).
 
 ## Phase 4 · Level-of-Detail Engine
 
-- [ ] Auto-detect hierarchy depth from module paths to define zoom levels (root, domain, module, function, neighborhood).
-- [ ] Configure five canonical levels:
-  - [ ] Level 0 Overview — root packages with aggregated import edges.
-  - [ ] Level 1 Domain — second-level groupings with cross-domain imports.
-  - [ ] Level 2 File — modules with file-to-file imports.
-  - [ ] Level 3 Functions — per-module call graph with metrics badges.
-  - [ ] Level 4 Detail — focal function plus immediate neighbors and annotations.
-- [ ] Maintain thresholds (≈50 nodes) that trigger suggestions to zoom deeper.
+- [x] Auto-detect hierarchy depth from module paths to define zoom levels (root, domain, module, function, neighborhood).
+  - Normalization now emits hierarchy metadata covering root packages, domains, modules, functions, and neighborhood adjacency, providing counts and adjacency lists for subsequent zoom workflows (completed 2025-11-06 by GitHub Copilot).
+- [x] Configure five canonical levels:
+  - [x] Level 0 Overview — root packages with aggregated import edges.
+  - [x] Level 1 Domain — second-level groupings with cross-domain imports.
+  - [x] Level 2 File — modules with file-to-file imports.
+  - [x] Level 3 Functions — per-module call graph with metrics badges.
+  - [x] Level 4 Detail — focal function plus immediate neighbors and annotations.
+  - Normalization now produces `state.normalizedData.levels` (Level 0–4) with node/edge aggregates, module call graphs, and function neighborhood snapshots derived from runtime + screening edges (completed 2025-11-06 by GitHub Copilot).
+- [x] Wire level selector UI to render the precomputed Level 0-4 slices.
+  - Zoom controls now expose Level buttons and context-specific sidebars that swap aggregated root/domain/module graphs, per-module call graphs, and function neighborhood views using cached normalization data (completed 2025-11-06 by GitHub Copilot).
+- [x] Maintain thresholds (≈50 nodes) that trigger suggestions to zoom deeper.
+  - Viewer now tallies node counts per level and surfaces zoom guidance whenever a diagram exceeds 50 nodes, nudging operators toward deeper levels to reduce clutter (completed 2025-11-06 by GitHub Copilot).
 
 ## Phase 5 · Interaction Model
 
@@ -90,4 +103,18 @@
 
 ---
 
-Status note (2025-11-05): Document reformatted into actionable checklist and ready for phased execution.
+Status note (2025-11-06): Selector payload now surfaces slug+timestamp labels, deduplicates static mirrors, backend refresh helpers preserve active context, the HTML shell with Mermaid wiring is live, JSON loader plus normalization populate registries/caches, duplicate fetch/schema gating keeps loads deterministic, hierarchy metadata and Level 0-4 data slices are ready for rendering, and level node thresholds now prompt deeper zoom when diagrams exceed 50 nodes (done). Zoom controls continue rendering Level 0-4 views in-browser while breadcrumb/back navigation remains in design (present). Pack overlays and advanced rendering remain upcoming (future).
+
+## Viewer Shell Assets
+
+- `index.html`: Hosts the viewer container, refresh trigger, and selector scaffold tied to Mermaid.js.
+- `viewer.css`: Provides baseline theming for the dark-mode layout used during prototyping.
+- `viewer.js`: Initialises Mermaid, seeds demo selector data, and renders placeholder diagrams until real loaders arrive.
+
+## Refresh Workflow
+
+1. **Regenerate CommandView artifacts** (present):
+  - Preferred: `make -C .repo_studios command-center COMMAND_CENTER_TARGET=.repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py PYTHON=.venv/Scripts/python.exe -- --repo-root . --log-level INFO`.
+  - Direct CLI: `C:/Users/genet/repo_studios/.venv/Scripts/python.exe .repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py .repo_studios/command_center/scripts --repo-root . --log-level INFO`.
+2. **Invoke viewer refresh backend** (present): call `refresh_selector_with_context(repo_root, active_relative_path=..., active_slug=...)` to rebuild selector state while preserving operator context.
+3. **Launch UI prototype** (future): upcoming HTML shell will call the helper to hydrate controls; document updates will follow once the UI wiring step completes.

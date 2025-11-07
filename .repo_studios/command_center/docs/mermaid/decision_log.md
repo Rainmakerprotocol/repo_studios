@@ -85,3 +85,47 @@
 - **Context:** Viewer discovery needs a deterministic payload sourced from `.repo_studios/command_center/reports/**` so dropdowns surface the freshest CommandView inventories without reading dynamic `<slug>_index/` directories.
 - **Owner:** GitHub Copilot implementation assistant.
 - **Evidence:** New library module `.repo_studios/command_center/scripts/libraries/build_commandview_selector.py`, corresponding tests in `.repo_studios/tests/tests_library_integration/libraries/test_build_commandview_selector.py`, and checklist updates noting the bootstrapper completion.
+- **Decision:** Viewer refresh state surfaces slug+timestamp options and deduplicates mirrored artifacts by relative path.
+- **Context:** Ensures operators see freshness cues while preventing duplicate entries when static mirrors and dynamic inventories coexist.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `.repo_studios/command_center/viewer/refresh.py` selector state helpers plus regression coverage in `.repo_studios/tests/tests_command_center/viewer/test_refresh.py` and updated notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Refresh helper preserves operator context when rerunning discovery.
+- **Context:** Needed so the future UI refresh action can retain the selected CommandView artifact while still surfacing the newest options.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `refresh_selector_with_context` in `.repo_studios/command_center/viewer/refresh.py`, regression coverage in `.repo_studios/tests/tests_command_center/viewer/test_refresh.py::test_refresh_selector_with_context_preserves_relative_path` and `::test_refresh_selector_with_context_falls_back_to_slug`, and checklist updates documenting the capability.
+- **Decision:** Documented refresh pipeline and operator commands ahead of viewer launch.
+- **Context:** Provides deterministic steps for regenerating CommandView inventories and invoking the backend helper before the UI shell is available.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** "Refresh Workflow" section in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` capturing make/CLI recipes and helper guidance.
+- **Decision:** Scaffolded the viewer HTML shell and placeholder state wiring.
+- **Context:** Establishes the single-page entry point, baseline styling, and demo data necessary for upcoming JSON loader and interaction work.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `.repo_studios/command_center/viewer/ui/index.html`, `viewer.css`, and `viewer.js` plus checklist updates in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Normalized viewer state now builds module/function registries, call graph indices, and metrics caches on load.
+- **Context:** Prepares the UI for level-of-detail navigation and future overlays by structuring CommandView payloads immediately after fetch.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `.repo_studios/command_center/viewer/ui/viewer.js` normalization helpers populating `state.normalizedData` and checklist update in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Viewer caches payloads and enforces CommandView schema_version gating prior to normalization.
+- **Context:** Prevents redundant fetches and blocks incompatible artifacts before they reach the rendering pipeline.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `.repo_studios/command_center/viewer/ui/viewer.js` cache + `validateInventorySchema` logic and Phase 3 checklist update in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Hierarchy metadata is derived during normalization to power upcoming level-of-detail views.
+- **Context:** Establishes root/domain/module/function buckets and neighborhood adjacency so zoom levels can reuse precomputed structure instead of re-walking payloads.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `.repo_studios/command_center/viewer/ui/viewer.js` hierarchy helpers (`buildHierarchyMetadata`, `deriveRootSegment`, `deriveDomainId`) and Phase 4 checklist update in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Level 0–4 view definitions are precomputed during normalization for downstream rendering.
+- **Context:** Provides aggregated root/domain/module edges, per-module function graphs, and neighborhood detail so the upcoming LOD engine can swap views without recomputing payload slices.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `.repo_studios/command_center/viewer/ui/viewer.js` level builders (`buildViewLevels`, `buildRootLevel`, `buildFunctionLevelGraphs`, `buildNeighborhoodDetail`) and checklist update in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Viewer now loads CommandView inventory and screening payloads directly from the static reports mirror.
+- **Context:** Enables downstream normalization logic and ensures the shell works with real artifacts ahead of the level-of-detail engine.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Updated `.repo_studios/command_center/viewer/ui/viewer.js` JSON loader with configurable base URL, checklist note in `mermaid_viewer.md`, and demo wiring targeting `scripts_commandview_20251105-2049.json`.
+- **Decision:** Level 0-4 zoom controls render precomputed diagrams directly in the viewer UI.
+- **Context:** Enables operators to swap between aggregated root/domain/module views, per-module call graphs, and function neighborhoods without recomputing payload slices.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Updated `.repo_studios/command_center/viewer/ui/index.html`, `viewer.css`, and `viewer.js` to wire level buttons, contextual sidebars, and Mermaid builders, plus checklist update in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` noting the control rollout.
+- **Decision:** Add level node thresholds that prompt operators to zoom deeper when diagrams exceed 50 nodes.
+- **Context:** Keeps high-density diagrams readable while signaling which zoom level should be selected next.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `.repo_studios/command_center/viewer/ui/viewer.js` now tracks node counts per level and appends zoom suggestions in the status panel when thresholds trigger, captured in the Phase 4 checklist update in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Progressive Detail Mermaid Viewer</title>
+    <link rel="stylesheet" href="./viewer.css" />
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" integrity="sha384-uHqPq+KGdaEXR7elLqEygxLHCeJoYiecFlxAp8OQaMQ6iIB41s7tree5WqxeP2hn" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div id="app" class="viewer-app">
+      <header class="viewer-header">
+        <h1>Progressive Detail Mermaid Viewer</h1>
+        <button id="refresh-button" type="button">Refresh</button>
+      </header>
+      <section class="viewer-body">
+        <aside class="viewer-sidebar" aria-label="Selector">
+          <h2 class="sidebar-title">CommandView Artifacts</h2>
+          <ul id="selector-list" class="selector-list" aria-live="polite"></ul>
+          <h2 class="sidebar-title">Zoom Levels</h2>
+          <div id="level-controls" class="level-controls" role="group" aria-label="Zoom levels">
+            <div id="level-buttons" class="level-buttons"></div>
+            <ul id="level-sidebar" class="selector-list level-list" aria-live="polite"></ul>
+          </div>
+        </aside>
+        <main class="viewer-main">
+          <div id="diagram-container" class="diagram-container" aria-live="polite">
+            <div id="diagram" class="diagram" role="img" aria-label="Mermaid diagram output"></div>
+          </div>
+          <section class="viewer-status" aria-live="polite" id="status-panel"></section>
+        </main>
+      </section>
+    </div>
+    <script type="module" src="./viewer.js"></script>
+  </body>
+</html>
