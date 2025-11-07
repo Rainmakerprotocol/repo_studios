@@ -20,6 +20,8 @@
 ## Conventions & Patterns
 - Logging goes through `logging` with level control, never `print`; honor the `--log-level` flag for every CLI.
 - Markdown summaries follow `docs/standards/global/std-global-markdown-authoring.md`: single H1, tidy bullet hierarchy, and wrapped lines.
+- JavaScript contributions follow `.repo_studios/docs/standards/global/std-global-javascript-engineering.md`; ensure linting, module boundaries, and async handling align before opening a PR.
+- CSS updates adhere to `.repo_studios/docs/standards/global/std-global-css-authoring.md`, including naming conventions, specificity thresholds, and accessibility safeguards.
 - Legacy `latest.json` pointers are being removed; ensure tests assert absence rather than recreating them (see `tests/tests_producers/test_generate_commandview_inventory.py`).
 - Shared helpers live under `.repo_studios/command_center/scripts/libraries/` as a staging area; import `slugify_relative`, `copy_latest_artifact`, `write_report_artifacts`, and `cli` utilities from there rather than duplicating inline helpers. The CLI module now exposes config-driven builders (`PathsConfig`, `OptionsConfig`, `build_standard_paths`, `build_standard_options`) and every Command Center producer already consumes them—mirror that pattern whenever you touch CLI glue. These modules must stay compliant with the library naming rules captured in `que_for_integration/refactor_library/phase_1/naming_conventions.md` (training copy at `.repo_studios/command_center/docs/naming_conventions.md`), so name new functions `verb_noun`, keep depth ≤3 levels when the real `.repo_studios/library/` tree is created, and document staging locations when helpers have not yet moved.
 - Keep new helpers in ASCII and add explanatory comments only where the flow is non-obvious, per repository editing guidance.
@@ -32,6 +34,7 @@
 ## Reference Material
 - `repo_prompts.md` enumerates canonical prompt flows for agents; cite the appropriate key when working on scripted operations.
 - Standards live in `docs/standards/global/`; consult them before touching Python, markdown, or cleanup processes.
+- Frontend work references `docs/standards/global/std-global-javascript-engineering.md` and `docs/standards/global/std-global-css-authoring.md` alongside the existing markdown and HTML standards.
 - Library naming and staging guidance lives in `que_for_integration/refactor_library/phase_1/naming_conventions.md` (canonical) and `.repo_studios/command_center/docs/naming_conventions.md` (training copy); review before adding or relocating shared helpers.
 - The scripts README (`.repo_studios/scripts/README.md`) documents tier responsibilities and migration notes—update it when adding or moving automation.
 

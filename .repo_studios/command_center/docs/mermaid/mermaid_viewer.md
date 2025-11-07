@@ -60,26 +60,36 @@
 
 ## Phase 5 · Interaction Model
 
-- [ ] Implement breadcrumb navigation (e.g., Overview > pkg > module > function).
-- [ ] Support node click to drill down and breadcrumb/back control to zoom out.
-- [ ] Persist zoom state during refresh when underlying data permits.
-- [ ] Apply color and edge styles (e.g., red for high complexity, dotted for call edges) sourced from inventory metrics.
+- [x] Implement breadcrumb navigation (e.g., Overview > pkg > module > function).
+  - Viewer now renders a breadcrumb rail above the diagram, showing the active root/domain/module/function selections with clickable segments to jump between levels (completed 2025-11-06 by GitHub Copilot).
+- [x] Support node click to drill down and breadcrumb/back control to zoom out.
+  - Diagram nodes now register click/keyboard handlers that promote the selected root/domain/module/function and advance to the next level, while breadcrumb segments remain clickable for zooming up the hierarchy (completed 2025-11-06 by GitHub Copilot).
+- [x] Persist zoom state during refresh when underlying data permits.
+  - Viewer caches the active level and hierarchy selections per CommandView artifact (keyed by slug and relative path) and reapplies them after refresh, falling back gracefully if nodes disappear (completed 2025-11-06 by GitHub Copilot).
+- [x] Apply color and edge styles (e.g., red for high complexity, dotted for call edges) sourced from inventory metrics.
+  - Level 0–2 aggregates now highlight large function clusters with escalating fills/strokes, while Level 3–4 function nodes adopt focus, complexity, and coverage-driven colors and stroke widths; aggregate import edges render with dotted connectors to reinforce their summary nature (completed 2025-11-06 by GitHub Copilot).
 
 ## Phase 6 · Rendering & Temp Artifact Strategy
 
-- [ ] Generate Mermaid definitions in memory; do not persist `.mmd` files to disk by default.
-- [ ] If temporary `.mmd` artifacts are needed for debugging, place them under a dedicated cache directory and overwrite on reuse.
-- [ ] Implement eviction/expiry policy to prevent stale temp views after refresh runs.
-- [ ] Add export button that writes the currently rendered Mermaid definition (`.mmd`) to disk on demand (image export remains optional).
+- [x] Generate Mermaid definitions in memory; do not persist `.mmd` files to disk by default.
+  - Viewer now caches the active Mermaid definition in `state.diagramDefinition` for in-memory reuse while clearing it whenever diagrams reset or loads fail, avoiding any filesystem writes (completed 2025-11-07 by GitHub Copilot).
+- [x] If temporary `.mmd` artifacts are needed for debugging, place them under a dedicated cache directory and overwrite on reuse.
+  - Added `.repo_studios/command_center/viewer/cache/` with an ignored `.mmd` policy plus `write_mermaid_cache.py` CLI that overwrites `debug_preview.mmd` (or a sanitized name) on each invocation, purges diagrams older than 24 hours, and caps cache size at five files (completed 2025-11-07 by GitHub Copilot).
+- [x] Implement eviction/expiry policy to prevent stale temp views after refresh runs.
+  - Cache helper now enforces a configurable TTL (default 24h) and trims to five most recent diagrams so old previews expire automatically (completed 2025-11-07 by GitHub Copilot).
+- [x] Add export button that writes the currently rendered Mermaid definition (`.mmd`) to disk on demand (image export remains optional).
+  - Header now exposes an `Export .mmd` control that bundles the active slug, level, and timestamp into a sanitized filename and triggers a client-side download using the cached Mermaid definition (completed 2025-11-07 by GitHub Copilot).
 
 ## Phase 7 · Selector Views & Packs
 
-- [ ] Expose sidebar list of the 28 candidate views curated in the integration checklist, grouped by pack (Health, Dependency, Code Flow, etc.).
+- [x] Expose sidebar list of the 28 candidate views curated in the integration checklist, grouped by pack (Health, Dependency, Code Flow, etc.).
 - [ ] For each view:
   - [ ] Define required data slice and transforms.
+    - [x] Code Flow · Function Call Graph consumes module-level call graph edges via the new view pack prototype.
   - [ ] Wire viewer controls to trigger view-specific Mermaid generation.
+    - [x] Code Flow · Function Call Graph buttons toggle a module-scoped call graph diagram without reloading JSON.
   - [ ] Ensure multiple views can coexist (tabbed or multi-panel) without reloading JSON.
-- [ ] Map Code Flow pack to newly emitted call graph edges.
+- [x] Map Code Flow pack to newly emitted call graph edges.
 
 ## Phase 8 · UX Enhancements
 
@@ -103,7 +113,7 @@
 
 ---
 
-Status note (2025-11-06): Selector payload now surfaces slug+timestamp labels, deduplicates static mirrors, backend refresh helpers preserve active context, the HTML shell with Mermaid wiring is live, JSON loader plus normalization populate registries/caches, duplicate fetch/schema gating keeps loads deterministic, hierarchy metadata and Level 0-4 data slices are ready for rendering, and level node thresholds now prompt deeper zoom when diagrams exceed 50 nodes (done). Zoom controls continue rendering Level 0-4 views in-browser while breadcrumb/back navigation remains in design (present). Pack overlays and advanced rendering remain upcoming (future).
+Status note (2025-11-07): Selector payload now surfaces slug+timestamp labels, deduplicates static mirrors, backend refresh helpers preserve active context, the HTML shell with Mermaid wiring is live, JSON loader plus normalization populate registries/caches, duplicate fetch/schema gating keeps loads deterministic, hierarchy metadata and Level 0-4 data slices are ready for rendering, level node thresholds now prompt deeper zoom when diagrams exceed 50 nodes, breadcrumb/navigation interactions keep zoom flows snappy, refresh cycles now restore the prior zoom level whenever the slug persists, the viewer applies metrics-driven node/edge styling across levels, Mermaid definitions stay in-memory via `state.diagramDefinition` with no default `.mmd` output, debugging exports route through `.repo_studios/command_center/viewer/cache/write_mermaid_cache.py` with 24-hour TTL and five-file retention, the UI now offers an `Export .mmd` button for on-demand downloads, the sidebar lists all 28 curated view packs, and the Code Flow · Function Call Graph view renders module-level call graph diagrams directly from normalized call graph edges (done). Pack overlays and advanced rendering remain upcoming (future).
 
 ## Viewer Shell Assets
 
@@ -114,7 +124,10 @@ Status note (2025-11-06): Selector payload now surfaces slug+timestamp labels, d
 ## Refresh Workflow
 
 1. **Regenerate CommandView artifacts** (present):
-  - Preferred: `make -C .repo_studios command-center COMMAND_CENTER_TARGET=.repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py PYTHON=.venv/Scripts/python.exe -- --repo-root . --log-level INFO`.
-  - Direct CLI: `C:/Users/genet/repo_studios/.venv/Scripts/python.exe .repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py .repo_studios/command_center/scripts --repo-root . --log-level INFO`.
-2. **Invoke viewer refresh backend** (present): call `refresh_selector_with_context(repo_root, active_relative_path=..., active_slug=...)` to rebuild selector state while preserving operator context.
+
+    - Preferred: `make -C .repo_studios command-center COMMAND_CENTER_TARGET=.repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py PYTHON=.venv/Scripts/python.exe -- --repo-root . --log-level INFO`.
+    - Direct CLI: `C:/Users/genet/repo_studios/.venv/Scripts/python.exe .repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py .repo_studios/command_center/scripts --repo-root . --log-level INFO`.
+
+2. **Invoke viewer refresh backend** (present):call `refresh_selector_with_context(repo_root, active_relative_path=..., active_slug=...)` to rebuild selector state while preserving operator context.
+
 3. **Launch UI prototype** (future): upcoming HTML shell will call the helper to hydrate controls; document updates will follow once the UI wiring step completes.

@@ -4,14 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Progressive Detail Mermaid Viewer</title>
-    <link rel="stylesheet" href="./viewer.css" />
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" integrity="sha384-uHqPq+KGdaEXR7elLqEygxLHCeJoYiecFlxAp8OQaMQ6iIB41s7tree5WqxeP2hn" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="viewer.css" />
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   </head>
   <body>
     <div id="app" class="viewer-app">
       <header class="viewer-header">
         <h1>Progressive Detail Mermaid Viewer</h1>
-        <button id="refresh-button" type="button">Refresh</button>
+        <div class="viewer-header-actions">
+          <button id="refresh-button" type="button">Refresh</button>
+          <button id="export-button" type="button" disabled>Export .mmd</button>
+        </div>
       </header>
       <section class="viewer-body">
         <aside class="viewer-sidebar" aria-label="Selector">
@@ -22,8 +25,11 @@
             <div id="level-buttons" class="level-buttons"></div>
             <ul id="level-sidebar" class="selector-list level-list" aria-live="polite"></ul>
           </div>
+          <h2 class="sidebar-title">View Packs</h2>
+          <div id="view-pack-container" class="view-pack-container" aria-live="polite"></div>
         </aside>
         <main class="viewer-main">
+          <nav id="breadcrumb" class="breadcrumb" aria-label="Zoom breadcrumb"></nav>
           <div id="diagram-container" class="diagram-container" aria-live="polite">
             <div id="diagram" class="diagram" role="img" aria-label="Mermaid diagram output"></div>
           </div>
@@ -31,6 +37,6 @@
         </main>
       </section>
     </div>
-    <script type="module" src="./viewer.js"></script>
+    <script src="viewer.js"></script>
   </body>
 </html>

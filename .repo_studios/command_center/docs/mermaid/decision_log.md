@@ -129,3 +129,42 @@
 - **Context:** Keeps high-density diagrams readable while signaling which zoom level should be selected next.
 - **Owner:** GitHub Copilot implementation assistant.
 - **Evidence:** `.repo_studios/command_center/viewer/ui/viewer.js` now tracks node counts per level and appends zoom suggestions in the status panel when thresholds trigger, captured in the Phase 4 checklist update in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Surface breadcrumb navigation so operators can jump between zoom levels without re-running discovery.
+- **Context:** Establishes lightweight navigation scaffolding ahead of deeper interaction work, allowing quick transitions from overview to focused diagrams.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `.repo_studios/command_center/viewer/ui/index.html`, `viewer.css`, and `viewer.js` now render a breadcrumb rail with clickable segments; Phase 5 tracker in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` marks the step complete.
+- **Decision:** Persist zoom selections across viewer refresh cycles whenever the artifact slug is unchanged.
+- **Context:** Operators can rerun discovery without losing their current root/domain/module/function focus, reducing friction during iterative duplicate investigations.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `.repo_studios/command_center/viewer/ui/viewer.js` now records level selections per slug/relative path and reapplies them after refresh, with checklist confirmation in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Enable diagram node interactions to drive drilldown and breadcrumb-based zoom out workflows.
+- **Context:** Allows operators to click or keyboard-activate diagram nodes to advance to deeper levels while breadcrumbs provide the complementary path back up the hierarchy.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `.repo_studios/command_center/viewer/ui/viewer.js` now registers interaction handlers during render, `.repo_studios/command_center/viewer/ui/viewer.css` styles clickable nodes, and the Phase 5 checklist in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` records completion on 2025-11-06.
+- **Decision:** Retain Mermaid definitions only in memory by default.
+- **Context:** Ensures viewer runs avoid writing `.mmd` artifacts unless explicitly exported later, aligning Phase 6 rendering strategy with in-memory caching.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `.repo_studios/command_center/viewer/ui/viewer.js` now tracks the active diagram in `state.diagramDefinition`, clears it on level resets or load failures, and documentation in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` Phase 6 reflects the in-memory policy (2025-11-07).
+- **Decision:** Standardize temporary Mermaid cache outputs under `.repo_studios/command_center/viewer/cache/`.
+- **Context:** Provides a single overwrite-friendly location for debugging `.mmd` files so temp artifacts never leak into other directories, with 24-hour TTL enforcement and a five-file retention cap.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `.repo_studios/command_center/viewer/cache/write_mermaid_cache.py` script plus cache README and checklist updates in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` Phase 6 (2025-11-07).
+- **Decision:** Add on-demand Mermaid export control to the viewer UI.
+- **Context:** Gives operators a deterministic way to download the current diagram without persisting `.mmd` files by default.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `.repo_studios/command_center/viewer/ui/index.html` and `viewer.js` now expose an `Export .mmd` button that downloads the cached diagram using sanitized filenames, documented in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` Phase 6 (2025-11-07).
+- **Decision:** Apply metrics-driven coloring and edge styles across viewer levels.
+- **Context:** Highlights high-volume aggregates and complex or low-coverage functions while differentiating aggregate import edges, giving operators immediate visual cues about risk hotspots.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `.repo_studios/command_center/viewer/ui/viewer.js` now injects severity-based Mermaid styles for aggregate and function nodes plus dotted aggregate edges, with documentation updated in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` Phase 5 notes.
+
+## 2025-11-07
+
+- **Decision:** List all curated Mermaid view packs in the viewer sidebar grouped by pack to anchor upcoming pack wiring.
+- **Context:** Provides operators with a complete catalog of the 28 candidate diagrams (Health, Dependency, Event Dynamics, Code Flow, State Effects, Quality Metrics, Coupling Insight, Risk & Assurance) while deeper pack interactions are staged.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Updated `.repo_studios/command_center/viewer/ui/viewer.css` and `viewer.js` to render the pack cards inside the existing sidebar container; Phase 7 checklist item in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` marked complete.
+- **Decision:** Prototype the Code Flow · Function Call Graph view so operators can render module-scoped call graphs straight from the viewer.
+- **Context:** Demonstrates the view pack interaction model while mapping the Code Flow pack to the newly emitted call graph edges without requiring a page reload.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `.repo_studios/command_center/viewer/ui/viewer.js` now enables the Code Flow button, computes module-level call graph diagrams, and routes selections through `renderActiveView`; documentation in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` records the partial Phase 7 completion.
