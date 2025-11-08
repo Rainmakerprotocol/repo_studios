@@ -1,6 +1,10 @@
-const DEFAULT_REPORTS_BASE_URL = "../../reports/";
+console.log('[viewer.js] Script loading started');
+
+const DEFAULT_REPORTS_BASE_URL = "/.repo_studios/command_center/reports/";
 const ABSOLUTE_URL_PATTERN = /^[a-zA-Z][a-zA-Z0-9+\-.]*:\/\//;
 const SUPPORTED_INVENTORY_SCHEMA_VERSIONS = new Set([2]);
+
+console.log('[viewer.js] Constants defined, DEFAULT_REPORTS_BASE_URL:', DEFAULT_REPORTS_BASE_URL);
 const LEVEL_DEFINITIONS = [
   { value: "level0", label: "Level 0 - Overview" },
   { value: "level1", label: "Level 1 - Domain" },
@@ -636,6 +640,12 @@ function resolveReportsBaseUrl() {
   const base = reportsBaseUrl && typeof reportsBaseUrl === "string" && reportsBaseUrl.trim().length > 0
     ? reportsBaseUrl.trim()
     : DEFAULT_REPORTS_BASE_URL;
+
+  if (/\.json$/i.test(base)) {
+    const lastSlash = base.lastIndexOf("/");
+    return lastSlash >= 0 ? ensureTrailingSlash(base.slice(0, lastSlash)) : "";
+  }
+
   return ensureTrailingSlash(base);
 }
 
@@ -710,9 +720,11 @@ async function fetchJson(url) {
 }
 
 async function loadCommandViewPayloads(option) {
+  console.log("[loadCommandViewPayloads] Loading option:", option);
   const cacheKey = buildCacheKey(option);
   const cached = payloadCache.get(cacheKey);
   if (cached) {
+    console.log("[loadCommandViewPayloads] Using cached data");
     state.inventoryPayload = cached.inventory;
     state.screeningPayload = cached.screening;
     state.inventoryUrl = cached.inventoryUrl;
@@ -732,13 +744,18 @@ async function loadCommandViewPayloads(option) {
   const screeningRelativePath = deriveScreeningRelativePath(option.relative_path);
   const screeningUrl = buildArtifactUrl(screeningRelativePath);
 
+  console.log("[loadCommandViewPayloads] Inventory URL:", inventoryUrl);
+  console.log("[loadCommandViewPayloads] Screening URL:", screeningUrl);
+
   const [inventory, screening] = await Promise.all([
     fetchJson(inventoryUrl),
     fetchJson(screeningUrl).catch((error) => {
-      console.warn("Screening payload load failed", error);
+      console.warn("[loadCommandViewPayloads] Screening payload load failed", error);
       return null;
     }),
   ]);
+
+  console.log("[loadCommandViewPayloads] Inventory loaded, files:", inventory?.files?.length);
 
   validateInventorySchema(inventory);
 
@@ -3249,13 +3266,17 @@ function removeActiveView(index, options = {}) {
 
 function renderSelector() {
   const list = document.getElementById("selector-list");
+  console.log("[renderSelector] List element:", list);
   if (!list) {
+    console.error("[renderSelector] selector-list element not found!");
     return;
   }
 
   list.innerHTML = "";
+  console.log("[renderSelector] Rendering", state.entries.length, "entries");
   state.entries.forEach((entry) => {
     entry.options.forEach((option) => {
+      console.log("[renderSelector] Adding option:", option.label);
       const item = document.createElement("li");
       const button = document.createElement("button");
       button.type = "button";
@@ -3272,9 +3293,11 @@ function renderSelector() {
       list.appendChild(item);
     });
   });
+  console.log("[renderSelector] Rendered", list.children.length, "items");
 }
 
 async function selectOption(option) {
+  console.log("[selectOption] Selecting option:", option);
   persistActiveSelectionMemory();
   clearActiveViewSelection({ silent: true, suppressStatus: true });
   state.activeOption = option;
@@ -3344,13 +3367,83 @@ function wireRefresh() {
 
   button.addEventListener("click", async () => {
     button.disabled = true;
-    updateStatus("Refresh triggered (UI wiring placeholder).");
+    updateStatus("Refreshing selector data...");
     try {
-      await bootstrapDemoPayload();
+      await refreshSelectorData();
+    } catch (error) {
+      console.error("Refresh failed", error);
+      updateStatus(`Refresh failed: ${error.message}`);
     } finally {
       button.disabled = false;
     }
   });
+}
+
+function buildSelectorUrl(endpoint) {
+  if (!endpoint || typeof endpoint !== "string") {
+    return null;
+  }
+
+  const trimmed = endpoint.trim();
+  if (trimmed.length === 0) {
+    return null;
+  }
+
+  if (/\.json$/i.test(trimmed)) {
+    return trimmed;
+  }
+
+  const base = ensureTrailingSlash(trimmed);
+  return `${base}selector.json`;
+}
+
+async function refreshSelectorData(options = {}) {
+  const { allowFallback = true } = options;
+  const config = getViewerConfig();
+  const selectorEndpoint = config.selectorApiEndpoint || config.reportsBaseUrl || DEFAULT_REPORTS_BASE_URL;
+  const selectorUrl = buildSelectorUrl(selectorEndpoint);
+
+  console.log("[refreshSelectorData] Config:", config);
+  console.log("[refreshSelectorData] Endpoint:", selectorEndpoint);
+  console.log("[refreshSelectorData] Selector URL:", selectorUrl);
+
+  if (!selectorUrl) {
+    updateStatus("No selector endpoint configured; using demo data.");
+    if (allowFallback) {
+      await bootstrapDemoPayload();
+    }
+    return;
+  }
+
+  try {
+    updateStatus(`Fetching selector data from ${selectorUrl}...`);
+    console.log("[refreshSelectorData] Fetching from:", selectorUrl);
+    const response = await fetch(selectorUrl, { cache: "no-cache" });
+
+    console.log("[refreshSelectorData] Response status:", response.status, response.statusText);
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    const payload = await response.json();
+    console.log("[refreshSelectorData] Payload received:", payload);
+
+    if (!payload.entries || !Array.isArray(payload.entries)) {
+      throw new Error("Invalid selector payload format");
+    }
+
+    console.log("[refreshSelectorData] Setting entries:", payload.entries.length, "groups");
+    setEntries(payload.entries);
+    updateStatus(`Refreshed selector data (${payload.entries.length} artifact groups loaded).`);
+  } catch (error) {
+    console.error("[refreshSelectorData] Error:", error);
+    if (!allowFallback) {
+      throw error;
+    }
+    updateStatus(`Could not fetch selector data (${error.message}); using demo data.`);
+    await bootstrapDemoPayload();
+  }
 }
 
 function wireExport() {
@@ -3389,12 +3482,15 @@ async function bootstrapDemoPayload() {
 }
 
 function setEntries(entries) {
+  console.log("[setEntries] Called with entries:", entries);
   persistActiveSelectionMemory();
   clearActiveViewSelection({ silent: true, suppressStatus: true });
   const previousOption = state.activeOption;
   state.entries = Array.isArray(entries) ? entries : [];
+  console.log("[setEntries] State entries set to:", state.entries);
   renderSelector();
   const nextOption = findMatchingOption(state.entries, previousOption) ?? state.entries[0]?.options?.[0];
+  console.log("[setEntries] Next option to select:", nextOption);
   if (nextOption) {
     void selectOption(nextOption);
   } else {
@@ -3415,24 +3511,59 @@ function setEntries(entries) {
   }
 }
 
-function bootstrap() {
+async function bootstrap() {
+  console.log('[bootstrap] Starting viewer bootstrap...');
   try {
+    console.log('[bootstrap] Step 1: initializeMermaid');
     initializeMermaid();
+    console.log('[bootstrap] Step 2: initializeLevelControls');
     initializeLevelControls();
+    console.log('[bootstrap] Step 3: initializeBreadcrumb');
     initializeBreadcrumb();
+    console.log('[bootstrap] Step 4: renderViewTabs');
     renderViewTabs();
+    console.log('[bootstrap] Step 5: renderViewPacks');
     renderViewPacks();
+    console.log('[bootstrap] Step 6: wireRefresh');
     wireRefresh();
+    console.log('[bootstrap] Step 7: wireExport');
     wireExport();
-    bootstrapDemoPayload();
+    console.log('[bootstrap] Step 8: updateStatus');
+    updateStatus("Loading selector data...");
+    console.log('[bootstrap] Step 9: refreshSelectorData');
+    await refreshSelectorData();
+    console.log('[bootstrap] Bootstrap completed successfully');
   } catch (error) {
-    console.error("Viewer bootstrap failed", error);
+    console.error("[bootstrap] Viewer bootstrap failed", error);
     updateStatus("Viewer bootstrap failed; check console logs.");
+    // Also show error in loading overlay if still visible
+    const loading = document.getElementById('loading-overlay');
+    if (loading && loading.style.display !== 'none') {
+      loading.innerHTML = `
+        <div style="text-align: center; max-width: 600px; padding: 20px;">
+          <div style="font-size: 24px; margin-bottom: 10px; color: #f48771;">⚠️</div>
+          <div style="color: #f48771; font-weight: bold; margin-bottom: 10px;">Bootstrap Failed</div>
+          <div style="font-size: 14px; margin-bottom: 10px;">${error.message}</div>
+          <div style="font-size: 12px; color: #858585; margin-top: 20px;">
+            Check browser console (F12) for details
+          </div>
+        </div>
+      `;
+    }
   }
 }
 
+console.log('[viewer.js] Setting up bootstrap trigger, readyState:', document.readyState);
+
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", bootstrap);
+  console.log('[viewer.js] Document still loading, adding DOMContentLoaded listener');
+  document.addEventListener("DOMContentLoaded", () => {
+    console.log('[viewer.js] DOMContentLoaded event fired, calling bootstrap');
+    void bootstrap();
+  });
 } else {
-  bootstrap();
+  console.log('[viewer.js] Document already loaded, calling bootstrap immediately');
+  void bootstrap();
 }
+
+console.log('[viewer.js] Script loading completed');

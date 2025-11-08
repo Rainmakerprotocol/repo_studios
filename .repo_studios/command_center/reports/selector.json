@@ -1,0 +1,33 @@
+{
+  "entries": [
+    {
+      "options": [
+        {
+          "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\index_scan\\repo_studios__command_center__scripts__producers_index\\producers_commandview_20251106-1014.json",
+          "category": "index_scan",
+          "label": "producers (2025-11-06 10:14 UTC)",
+          "relative_path": "index_scan/repo_studios__command_center__scripts__producers_index/producers_commandview_20251106-1014.json",
+          "slug": "producers",
+          "timestamp": "20251106-1014",
+          "timestamp_iso": "2025-11-06T10:14:00+00:00"
+        }
+      ],
+      "slug": "producers"
+    },
+    {
+      "options": [
+        {
+          "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\index_scan\\repo_studios__command_center__scripts_index\\scripts_commandview_20251105-2049.json",
+          "category": "index_scan",
+          "label": "scripts (2025-11-05 20:49 UTC)",
+          "relative_path": "index_scan/repo_studios__command_center__scripts_index/scripts_commandview_20251105-2049.json",
+          "slug": "scripts",
+          "timestamp": "20251105-2049",
+          "timestamp_iso": "2025-11-05T20:49:00+00:00"
+        }
+      ],
+      "slug": "scripts"
+    }
+  ],
+  "generated_at": "2025-11-07T17:32:17.115674+00:00"
+}

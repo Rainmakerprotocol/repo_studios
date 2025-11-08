@@ -339,7 +339,8 @@ body {
 }
 
 /* View Tabs */
-#view-tabs {
+#view-tabs,
+.view-tabs {
   display: flex;
   align-items: center;
   gap: 2px;
@@ -350,7 +351,8 @@ body {
   overflow-x: auto;
 }
 
-#view-tabs.view-tabs-empty {
+#view-tabs.view-tabs-empty,
+.view-tabs.view-tabs-empty {
   opacity: 0.9;
 }
 

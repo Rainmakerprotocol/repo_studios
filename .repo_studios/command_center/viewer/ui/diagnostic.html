@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viewer Diagnostic</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1e1e1e;
+            color: #cccccc;
+        }
+        h1 { color: #007acc; }
+        h2 { color: #4ec9b0; margin-top: 20px; }
+        .test { 
+            margin: 10px 0; 
+            padding: 10px;
+            background: #252526;
+            border-left: 3px solid #007acc;
+        }
+        .pass { border-left-color: #89d185; }
+        .fail { border-left-color: #f48771; }
+        pre {
+            background: #1e1e1e;
+            padding: 10px;
+            overflow-x: auto;
+            border: 1px solid #3e3e42;
+        }
+        button {
+            background: #0e639c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #1177bb; }
+    </style>
+</head>
+<body>
+    <h1>Command Center Viewer Diagnostic</h1>
+    
+    <h2>Configuration Tests</h2>
+    <div id="config-tests"></div>
+    
+    <h2>Network Tests</h2>
+    <div id="network-tests"></div>
+    
+    <h2>Actions</h2>
+    <button onclick="runAllTests()">Run All Tests</button>
+    <button onclick="testSelectorFetch()">Test Selector Fetch</button>
+    <button onclick="testArtifactFetch()">Test Artifact Fetch</button>
+    
+    <h2>Console Output</h2>
+    <pre id="console-output"></pre>
+
+    <script>
+        const output = document.getElementById('console-output');
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        function log(msg) {
+            output.textContent += msg + '\n';
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        console.log = (...args) => {
+            originalLog(...args);
+            log('[LOG] ' + args.join(' '));
+        };
+        
+        console.error = (...args) => {
+            originalError(...args);
+            log('[ERROR] ' + args.join(' '));
+        };
+        
+        console.warn = (...args) => {
+            originalWarn(...args);
+            log('[WARN] ' + args.join(' '));
+        };
+
+        function addTest(container, name, passed, details) {
+            const div = document.createElement('div');
+            div.className = 'test ' + (passed ? 'pass' : 'fail');
+            div.innerHTML = `
+                <strong>${passed ? '✓' : '✗'} ${name}</strong><br>
+                ${details}
+            `;
+            container.appendChild(div);
+        }
+
+        function testConfig() {
+            const container = document.getElementById('config-tests');
+            container.innerHTML = '';
+            
+            // Test window.viewerConfig
+            const hasConfig = typeof window.viewerConfig !== 'undefined';
+            addTest(container, 'window.viewerConfig exists', hasConfig, 
+                hasConfig ? `Config: ${JSON.stringify(window.viewerConfig, null, 2)}` : 'Not defined');
+            
+            // Test reportsBaseUrl
+            const reportsBaseUrl = window.viewerConfig?.reportsBaseUrl;
+            addTest(container, 'reportsBaseUrl configured', !!reportsBaseUrl,
+                `Value: ${reportsBaseUrl || 'Not set'}`);
+            
+            // Test current location
+            addTest(container, 'Current location', true,
+                `URL: ${window.location.href}<br>Path: ${window.location.pathname}`);
+        }
+
+        async function testSelectorFetch() {
+            const container = document.getElementById('network-tests');
+            container.innerHTML = '';
+            
+            const reportsBaseUrl = window.viewerConfig?.reportsBaseUrl || '/.repo_studios/command_center/reports/';
+            const selectorUrl = reportsBaseUrl.endsWith('/') 
+                ? `${reportsBaseUrl}selector.json`
+                : `${reportsBaseUrl}/selector.json`;
+            
+            console.log('Testing selector fetch from:', selectorUrl);
+            
+            try {
+                const response = await fetch(selectorUrl, { cache: 'no-cache' });
+                const passed = response.ok;
+                
+                addTest(container, 'Selector fetch', passed,
+                    `URL: ${selectorUrl}<br>Status: ${response.status} ${response.statusText}`);
+                
+                if (passed) {
+                    const data = await response.json();
+                    console.log('Selector data:', data);
+                    addTest(container, 'Selector data valid', 
+                        data.entries && Array.isArray(data.entries),
+                        `Entries: ${data.entries?.length || 0}<br>` +
+                        `Generated: ${data.generated_at}`);
+                }
+            } catch (error) {
+                console.error('Selector fetch failed:', error);
+                addTest(container, 'Selector fetch', false, error.message);
+            }
+        }
+
+        async function testArtifactFetch() {
+            const container = document.getElementById('network-tests');
+            
+            const reportsBaseUrl = window.viewerConfig?.reportsBaseUrl || '/.repo_studios/command_center/reports/';
+            const testPath = 'index_scan/repo_studios__command_center__scripts_index/scripts_commandview_20251105-2049.json';
+            const artifactUrl = reportsBaseUrl.endsWith('/')
+                ? `${reportsBaseUrl}${testPath}`
+                : `${reportsBaseUrl}/${testPath}`;
+            
+            console.log('Testing artifact fetch from:', artifactUrl);
+            
+            try {
+                const response = await fetch(artifactUrl, { cache: 'no-cache' });
+                const passed = response.ok;
+                
+                addTest(container, 'Artifact fetch', passed,
+                    `URL: ${artifactUrl}<br>Status: ${response.status} ${response.statusText}`);
+                
+                if (passed) {
+                    const data = await response.json();
+                    console.log('Artifact data loaded, files:', data.files?.length);
+                    addTest(container, 'Artifact data valid',
+                        data.files && Array.isArray(data.files),
+                        `Files: ${data.files?.length || 0}<br>` +
+                        `Schema version: ${data.schema_version}`);
+                }
+            } catch (error) {
+                console.error('Artifact fetch failed:', error);
+                addTest(container, 'Artifact fetch', false, error.message);
+            }
+        }
+
+        async function runAllTests() {
+            testConfig();
+            await testSelectorFetch();
+            await testArtifactFetch();
+        }
+
+        // Run tests on load
+        window.addEventListener('DOMContentLoaded', () => {
+            testConfig();
+        });
+    </script>
+</body>
+</html>

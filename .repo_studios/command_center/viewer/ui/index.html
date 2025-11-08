@@ -4,11 +4,51 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Progressive Detail Mermaid Viewer</title>
+    <style>
+      /* Inline critical styles to ensure page is visible during load */
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #1e1e1e;
+        color: #cccccc;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      #loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #1e1e1e;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        font-size: 18px;
+        color: #007acc;
+      }
+      .viewer-app {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+    </style>
     <link rel="stylesheet" href="viewer.css" />
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" onerror="console.error('Failed to load Mermaid from CDN')"></script>
   </head>
   <body>
-    <div id="app" class="viewer-app">
+    <div id="loading-overlay">
+      <div>
+        <div style="text-align: center;">
+          <div style="font-size: 24px; margin-bottom: 10px;">⚙️</div>
+          <div>Loading Command Center Viewer...</div>
+          <div style="font-size: 12px; margin-top: 10px; color: #858585;">
+            If this message persists, check browser console (F12)
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="app" class="viewer-app" style="display: none;">
       <header class="viewer-header">
         <h1>Progressive Detail Mermaid Viewer</h1>
         <div class="viewer-header-actions">
@@ -29,6 +69,7 @@
           <div id="view-pack-container" class="view-pack-container" aria-live="polite"></div>
         </aside>
         <main class="viewer-main">
+          <div id="view-tabs" class="view-tabs" role="tablist" aria-label="View tabs"></div>
           <nav id="breadcrumb" class="breadcrumb" aria-label="Zoom breadcrumb"></nav>
           <div id="diagram-container" class="diagram-container" aria-live="polite">
             <div id="diagram" class="diagram" role="img" aria-label="Mermaid diagram output"></div>
@@ -37,6 +78,51 @@
         </main>
       </section>
     </div>
-    <script src="viewer.js"></script>
+    <script>
+      // Global error handler
+      window.addEventListener('error', function(e) {
+        console.error('Global error:', e.error);
+        const loading = document.getElementById('loading-overlay');
+        if (loading) {
+          loading.innerHTML = `
+            <div style="text-align: center; max-width: 600px; padding: 20px;">
+              <div style="font-size: 24px; margin-bottom: 10px; color: #f48771;">⚠️</div>
+              <div style="color: #f48771; font-weight: bold; margin-bottom: 10px;">Error Loading Viewer</div>
+              <div style="font-size: 14px; margin-bottom: 10px;">${e.message}</div>
+              <div style="font-size: 12px; color: #858585; margin-top: 20px;">
+                Check browser console (F12) for details
+              </div>
+            </div>
+          `;
+        }
+      });
+      
+      // Remove loading overlay once DOM is ready
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('[HTML] DOMContentLoaded fired');
+        setTimeout(function() {
+          const loading = document.getElementById('loading-overlay');
+          const app = document.getElementById('app');
+          console.log('[HTML] Removing loading overlay, showing app');
+          if (loading) loading.style.display = 'none';
+          if (app) app.style.display = 'flex';
+        }, 100);
+      });
+      
+      // Configuration for the viewer - set before loading viewer.js
+      window.viewerConfig = {
+        // Base URL for reports - adjust based on your server setup
+        // When serving from repo root (default): use absolute path
+        reportsBaseUrl: '/.repo_studios/command_center/reports/',
+        
+        // When serving from ui directory only: use relative path
+        // reportsBaseUrl: '../../../reports/',
+        
+        // For production with API: use API endpoint
+        // reportsBaseUrl: '/api/reports/',
+        // selectorApiEndpoint: '/api/selector',
+      };
+    </script>
+    <script type="module" src="viewer.js"></script>
   </body>
 </html>
