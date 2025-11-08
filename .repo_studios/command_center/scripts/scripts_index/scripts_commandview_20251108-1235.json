@@ -60477,22 +60477,6 @@
             "attribute": "detail.get",
             "binding": "detail",
             "expression": "detail.get",
-            "lineno": 2467,
-            "resolution": {
-              "confidence": "low",
-              "detail": {
-                "attribute_tail": "get",
-                "binding": "detail"
-              },
-              "kind": "unknown"
-            },
-            "root": "detail",
-            "source": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map"
-          },
-          {
-            "attribute": "detail.get",
-            "binding": "detail",
-            "expression": "detail.get",
             "lineno": 2468,
             "resolution": {
               "confidence": "low",
@@ -60522,18 +60506,6 @@
             "source": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map"
           },
           {
-            "expression": "int",
-            "lineno": 2469,
-            "resolution": {
-              "confidence": "high",
-              "kind": "builtin",
-              "module": "builtins"
-            },
-            "root": "int",
-            "source": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map",
-            "target": "builtins.int"
-          },
-          {
             "attribute": "detail.get",
             "binding": "detail",
             "expression": "detail.get",
@@ -60550,10 +60522,38 @@
             "source": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map"
           },
           {
+            "expression": "int",
+            "lineno": 2470,
+            "resolution": {
+              "confidence": "high",
+              "kind": "builtin",
+              "module": "builtins"
+            },
+            "root": "int",
+            "source": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map",
+            "target": "builtins.int"
+          },
+          {
+            "attribute": "detail.get",
+            "binding": "detail",
+            "expression": "detail.get",
+            "lineno": 2471,
+            "resolution": {
+              "confidence": "low",
+              "detail": {
+                "attribute_tail": "get",
+                "binding": "detail"
+              },
+              "kind": "unknown"
+            },
+            "root": "detail",
+            "source": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map"
+          },
+          {
             "attribute": "alias.get",
             "binding": "alias",
             "expression": "alias.get",
-            "lineno": 2471,
+            "lineno": 2472,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -60569,7 +60569,7 @@
             "attribute": "alias.get",
             "binding": "alias",
             "expression": "alias.get",
-            "lineno": 2474,
+            "lineno": 2475,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -60583,7 +60583,7 @@
           },
           {
             "expression": "_resolve_relative_import",
-            "lineno": 2479,
+            "lineno": 2480,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -64712,7 +64712,7 @@
             "attribute": "entry.get",
             "binding": "entry",
             "expression": "entry.get",
-            "lineno": 2439,
+            "lineno": 2440,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -64728,7 +64728,7 @@
             "attribute": "entry.get",
             "binding": "entry",
             "expression": "entry.get",
-            "lineno": 2442,
+            "lineno": 2443,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -64744,7 +64744,7 @@
             "attribute": "relative.replace",
             "binding": "relative",
             "expression": "relative.replace",
-            "lineno": 2445,
+            "lineno": 2446,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -66955,7 +66955,7 @@
             "attribute": "candidate.split",
             "binding": "candidate",
             "expression": "candidate.split",
-            "lineno": 2520,
+            "lineno": 2521,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -66969,7 +66969,7 @@
           },
           {
             "expression": "len",
-            "lineno": 2521,
+            "lineno": 2522,
             "resolution": {
               "confidence": "high",
               "kind": "builtin",
@@ -66981,7 +66981,7 @@
           },
           {
             "expression": "range",
-            "lineno": 2521,
+            "lineno": 2522,
             "resolution": {
               "confidence": "high",
               "kind": "builtin",
@@ -66995,7 +66995,7 @@
             "attribute": "join",
             "binding_expression": "'.'",
             "expression": "'.'.join",
-            "lineno": 2522,
+            "lineno": 2523,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -68115,7 +68115,7 @@
             "attribute": "callee.startswith",
             "binding": "callee",
             "expression": "callee.startswith",
-            "lineno": 2501,
+            "lineno": 2502,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -68129,7 +68129,7 @@
           },
           {
             "expression": "len",
-            "lineno": 2502,
+            "lineno": 2503,
             "resolution": {
               "confidence": "high",
               "kind": "builtin",
@@ -68141,7 +68141,7 @@
           },
           {
             "expression": "len",
-            "lineno": 2502,
+            "lineno": 2503,
             "resolution": {
               "confidence": "high",
               "kind": "builtin",
@@ -68153,7 +68153,7 @@
           },
           {
             "expression": "len",
-            "lineno": 2507,
+            "lineno": 2508,
             "resolution": {
               "confidence": "high",
               "kind": "builtin",
@@ -68167,7 +68167,7 @@
             "attribute": "remainder.startswith",
             "binding": "remainder",
             "expression": "remainder.startswith",
-            "lineno": 2508,
+            "lineno": 2509,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -68183,7 +68183,7 @@
             "attribute": "info.get",
             "binding": "info",
             "expression": "info.get",
-            "lineno": 2511,
+            "lineno": 2512,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -68199,7 +68199,7 @@
             "attribute": "info.get",
             "binding": "info",
             "expression": "info.get",
-            "lineno": 2513,
+            "lineno": 2514,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -68215,7 +68215,7 @@
             "attribute": "split",
             "binding_expression": "module_id or ''",
             "expression": "(module_id or '').split",
-            "lineno": 2451,
+            "lineno": 2452,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -68228,7 +68228,7 @@
           },
           {
             "expression": "len",
-            "lineno": 2452,
+            "lineno": 2453,
             "resolution": {
               "confidence": "high",
               "kind": "builtin",
@@ -68242,7 +68242,7 @@
             "attribute": "base_parts.append",
             "binding": "base_parts",
             "expression": "base_parts.append",
-            "lineno": 2457,
+            "lineno": 2458,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -68258,7 +68258,7 @@
             "attribute": "join",
             "binding_expression": "'.'",
             "expression": "'.'.join",
-            "lineno": 2458,
+            "lineno": 2459,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -68927,7 +68927,7 @@
             "attribute": "directory.mkdir",
             "binding": "directory",
             "expression": "directory.mkdir",
-            "lineno": 2644,
+            "lineno": 2645,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -68943,7 +68943,7 @@
             "attribute": "legacy_file.exists",
             "binding": "legacy_file",
             "expression": "legacy_file.exists",
-            "lineno": 2646,
+            "lineno": 2647,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -68959,7 +68959,7 @@
             "attribute": "legacy_file.unlink",
             "binding": "legacy_file",
             "expression": "legacy_file.unlink",
-            "lineno": 2647,
+            "lineno": 2648,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -68975,7 +68975,7 @@
             "attribute": "directory.glob",
             "binding": "directory",
             "expression": "directory.glob",
-            "lineno": 2648,
+            "lineno": 2649,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -68991,7 +68991,7 @@
             "attribute": "existing.is_file",
             "binding": "existing",
             "expression": "existing.is_file",
-            "lineno": 2649,
+            "lineno": 2650,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69007,7 +69007,7 @@
             "attribute": "existing.unlink",
             "binding": "existing",
             "expression": "existing.unlink",
-            "lineno": 2650,
+            "lineno": 2651,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69023,7 +69023,7 @@
             "attribute": "directory.glob",
             "binding": "directory",
             "expression": "directory.glob",
-            "lineno": 2651,
+            "lineno": 2652,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69039,7 +69039,7 @@
             "attribute": "existing.is_file",
             "binding": "existing",
             "expression": "existing.is_file",
-            "lineno": 2652,
+            "lineno": 2653,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69055,7 +69055,7 @@
             "attribute": "existing.unlink",
             "binding": "existing",
             "expression": "existing.unlink",
-            "lineno": 2653,
+            "lineno": 2654,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69071,7 +69071,7 @@
             "attribute": "datetime.now",
             "binding": "datetime",
             "expression": "datetime.now",
-            "lineno": 2654,
+            "lineno": 2655,
             "resolution": {
               "category": "standard_library",
               "confidence": "high",
@@ -69091,7 +69091,7 @@
             "attribute": "datetime.now",
             "binding_expression": "datetime.now(timezone.utc)",
             "expression": "datetime.now(timezone.utc).strftime",
-            "lineno": 2654,
+            "lineno": 2655,
             "resolution": {
               "category": "standard_library",
               "confidence": "high",
@@ -69111,7 +69111,7 @@
             "attribute": "output_file.with_suffix",
             "binding": "output_file",
             "expression": "output_file.with_suffix",
-            "lineno": 2656,
+            "lineno": 2657,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69127,7 +69127,7 @@
             "attribute": "json.dumps",
             "binding": "json",
             "expression": "json.dumps",
-            "lineno": 2657,
+            "lineno": 2658,
             "resolution": {
               "category": "standard_library",
               "confidence": "high",
@@ -69147,7 +69147,7 @@
             "attribute": "temp_file.write_text",
             "binding": "temp_file",
             "expression": "temp_file.write_text",
-            "lineno": 2657,
+            "lineno": 2658,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69163,7 +69163,7 @@
             "attribute": "temp_file.replace",
             "binding": "temp_file",
             "expression": "temp_file.replace",
-            "lineno": 2658,
+            "lineno": 2659,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69179,7 +69179,7 @@
             "attribute": "latest_pointer.exists",
             "binding": "latest_pointer",
             "expression": "latest_pointer.exists",
-            "lineno": 2660,
+            "lineno": 2661,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69195,7 +69195,7 @@
             "attribute": "latest_pointer.unlink",
             "binding": "latest_pointer",
             "expression": "latest_pointer.unlink",
-            "lineno": 2661,
+            "lineno": 2662,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69211,7 +69211,7 @@
             "attribute": "directory.mkdir",
             "binding": "directory",
             "expression": "directory.mkdir",
-            "lineno": 2666,
+            "lineno": 2667,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69227,7 +69227,7 @@
             "attribute": "directory.glob",
             "binding": "directory",
             "expression": "directory.glob",
-            "lineno": 2667,
+            "lineno": 2668,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69243,7 +69243,7 @@
             "attribute": "existing.is_file",
             "binding": "existing",
             "expression": "existing.is_file",
-            "lineno": 2668,
+            "lineno": 2669,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69259,7 +69259,7 @@
             "attribute": "existing.unlink",
             "binding": "existing",
             "expression": "existing.unlink",
-            "lineno": 2669,
+            "lineno": 2670,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69275,7 +69275,7 @@
             "attribute": "directory.glob",
             "binding": "directory",
             "expression": "directory.glob",
-            "lineno": 2670,
+            "lineno": 2671,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69291,7 +69291,7 @@
             "attribute": "existing.is_file",
             "binding": "existing",
             "expression": "existing.is_file",
-            "lineno": 2671,
+            "lineno": 2672,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69307,7 +69307,7 @@
             "attribute": "existing.unlink",
             "binding": "existing",
             "expression": "existing.unlink",
-            "lineno": 2672,
+            "lineno": 2673,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69323,7 +69323,7 @@
             "attribute": "datetime.now",
             "binding": "datetime",
             "expression": "datetime.now",
-            "lineno": 2673,
+            "lineno": 2674,
             "resolution": {
               "category": "standard_library",
               "confidence": "high",
@@ -69343,7 +69343,7 @@
             "attribute": "datetime.now",
             "binding_expression": "datetime.now(timezone.utc)",
             "expression": "datetime.now(timezone.utc).strftime",
-            "lineno": 2673,
+            "lineno": 2674,
             "resolution": {
               "category": "standard_library",
               "confidence": "high",
@@ -69363,7 +69363,7 @@
             "attribute": "output_file.with_suffix",
             "binding": "output_file",
             "expression": "output_file.with_suffix",
-            "lineno": 2675,
+            "lineno": 2676,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69379,7 +69379,7 @@
             "attribute": "json.dumps",
             "binding": "json",
             "expression": "json.dumps",
-            "lineno": 2676,
+            "lineno": 2677,
             "resolution": {
               "category": "standard_library",
               "confidence": "high",
@@ -69399,7 +69399,7 @@
             "attribute": "temp_file.write_text",
             "binding": "temp_file",
             "expression": "temp_file.write_text",
-            "lineno": 2676,
+            "lineno": 2677,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -69415,7 +69415,7 @@
             "attribute": "temp_file.replace",
             "binding": "temp_file",
             "expression": "temp_file.replace",
-            "lineno": 2677,
+            "lineno": 2678,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71260,18 +71260,6 @@
           },
           {
             "expression": "set",
-            "lineno": 2529,
-            "resolution": {
-              "confidence": "high",
-              "kind": "builtin",
-              "module": "builtins"
-            },
-            "root": "set",
-            "source": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-            "target": "builtins.set"
-          },
-          {
-            "expression": "set",
             "lineno": 2530,
             "resolution": {
               "confidence": "high",
@@ -71283,8 +71271,20 @@
             "target": "builtins.set"
           },
           {
+            "expression": "set",
+            "lineno": 2531,
+            "resolution": {
+              "confidence": "high",
+              "kind": "builtin",
+              "module": "builtins"
+            },
+            "root": "set",
+            "source": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+            "target": "builtins.set"
+          },
+          {
             "expression": "_entry_module_key",
-            "lineno": 2533,
+            "lineno": 2534,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -71296,7 +71296,7 @@
           },
           {
             "expression": "_entry_module_key",
-            "lineno": 2533,
+            "lineno": 2534,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -71308,7 +71308,7 @@
           },
           {
             "expression": "_entry_module_key",
-            "lineno": 2536,
+            "lineno": 2537,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -71320,7 +71320,7 @@
           },
           {
             "expression": "_build_alias_resolution_map",
-            "lineno": 2537,
+            "lineno": 2538,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -71329,22 +71329,6 @@
             "root": "_build_alias_resolution_map",
             "source": "scripts.producers.generate_commandview_inventory::build_screening_summary",
             "target": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map"
-          },
-          {
-            "attribute": "entry.get",
-            "binding": "entry",
-            "expression": "entry.get",
-            "lineno": 2537,
-            "resolution": {
-              "confidence": "low",
-              "detail": {
-                "attribute_tail": "get",
-                "binding": "entry"
-              },
-              "kind": "unknown"
-            },
-            "root": "entry",
-            "source": "scripts.producers.generate_commandview_inventory::build_screening_summary"
           },
           {
             "attribute": "entry.get",
@@ -71363,19 +71347,19 @@
             "source": "scripts.producers.generate_commandview_inventory::build_screening_summary"
           },
           {
-            "attribute": "detail.get",
-            "binding": "detail",
-            "expression": "detail.get",
-            "lineno": 2540,
+            "attribute": "entry.get",
+            "binding": "entry",
+            "expression": "entry.get",
+            "lineno": 2539,
             "resolution": {
               "confidence": "low",
               "detail": {
                 "attribute_tail": "get",
-                "binding": "detail"
+                "binding": "entry"
               },
               "kind": "unknown"
             },
-            "root": "detail",
+            "root": "entry",
             "source": "scripts.producers.generate_commandview_inventory::build_screening_summary"
           },
           {
@@ -71395,10 +71379,26 @@
             "source": "scripts.producers.generate_commandview_inventory::build_screening_summary"
           },
           {
+            "attribute": "detail.get",
+            "binding": "detail",
+            "expression": "detail.get",
+            "lineno": 2542,
+            "resolution": {
+              "confidence": "low",
+              "detail": {
+                "attribute_tail": "get",
+                "binding": "detail"
+              },
+              "kind": "unknown"
+            },
+            "root": "detail",
+            "source": "scripts.producers.generate_commandview_inventory::build_screening_summary"
+          },
+          {
             "attribute": "item.get",
             "binding": "item",
             "expression": "item.get",
-            "lineno": 2542,
+            "lineno": 2543,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71414,7 +71414,7 @@
             "attribute": "import_edges.add",
             "binding": "import_edges",
             "expression": "import_edges.add",
-            "lineno": 2544,
+            "lineno": 2545,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71424,22 +71424,6 @@
               "kind": "unknown"
             },
             "root": "import_edges",
-            "source": "scripts.producers.generate_commandview_inventory::build_screening_summary"
-          },
-          {
-            "attribute": "detail.get",
-            "binding": "detail",
-            "expression": "detail.get",
-            "lineno": 2545,
-            "resolution": {
-              "confidence": "low",
-              "detail": {
-                "attribute_tail": "get",
-                "binding": "detail"
-              },
-              "kind": "unknown"
-            },
-            "root": "detail",
             "source": "scripts.producers.generate_commandview_inventory::build_screening_summary"
           },
           {
@@ -71475,10 +71459,26 @@
             "source": "scripts.producers.generate_commandview_inventory::build_screening_summary"
           },
           {
+            "attribute": "detail.get",
+            "binding": "detail",
+            "expression": "detail.get",
+            "lineno": 2548,
+            "resolution": {
+              "confidence": "low",
+              "detail": {
+                "attribute_tail": "get",
+                "binding": "detail"
+              },
+              "kind": "unknown"
+            },
+            "root": "detail",
+            "source": "scripts.producers.generate_commandview_inventory::build_screening_summary"
+          },
+          {
             "attribute": "item.get",
             "binding": "item",
             "expression": "item.get",
-            "lineno": 2548,
+            "lineno": 2549,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71494,7 +71494,7 @@
             "attribute": "import_edges.add",
             "binding": "import_edges",
             "expression": "import_edges.add",
-            "lineno": 2551,
+            "lineno": 2552,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71510,23 +71510,7 @@
             "attribute": "function_entry.get",
             "binding": "function_entry",
             "expression": "function_entry.get",
-            "lineno": 2561,
-            "resolution": {
-              "confidence": "low",
-              "detail": {
-                "attribute_tail": "get",
-                "binding": "function_entry"
-              },
-              "kind": "unknown"
-            },
-            "root": "function_entry",
-            "source": "scripts.producers.generate_commandview_inventory::build_screening_summary"
-          },
-          {
-            "attribute": "function_entry.get",
-            "binding": "function_entry",
-            "expression": "function_entry.get",
-            "lineno": 2565,
+            "lineno": 2562,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71558,7 +71542,23 @@
             "attribute": "function_entry.get",
             "binding": "function_entry",
             "expression": "function_entry.get",
-            "lineno": 2568,
+            "lineno": 2567,
+            "resolution": {
+              "confidence": "low",
+              "detail": {
+                "attribute_tail": "get",
+                "binding": "function_entry"
+              },
+              "kind": "unknown"
+            },
+            "root": "function_entry",
+            "source": "scripts.producers.generate_commandview_inventory::build_screening_summary"
+          },
+          {
+            "attribute": "function_entry.get",
+            "binding": "function_entry",
+            "expression": "function_entry.get",
+            "lineno": 2569,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71574,7 +71574,7 @@
             "attribute": "call.get",
             "binding": "call",
             "expression": "call.get",
-            "lineno": 2569,
+            "lineno": 2570,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71590,7 +71590,7 @@
             "attribute": "call_edges.add",
             "binding": "call_edges",
             "expression": "call_edges.add",
-            "lineno": 2571,
+            "lineno": 2572,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71604,7 +71604,7 @@
           },
           {
             "expression": "_resolve_callee_path",
-            "lineno": 2572,
+            "lineno": 2573,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -71616,7 +71616,7 @@
           },
           {
             "expression": "_match_known_module",
-            "lineno": 2573,
+            "lineno": 2574,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -71625,22 +71625,6 @@
             "root": "_match_known_module",
             "source": "scripts.producers.generate_commandview_inventory::build_screening_summary",
             "target": "scripts.producers.generate_commandview_inventory::_match_known_module"
-          },
-          {
-            "attribute": "info.get",
-            "binding": "info",
-            "expression": "info.get",
-            "lineno": 2574,
-            "resolution": {
-              "confidence": "low",
-              "detail": {
-                "attribute_tail": "get",
-                "binding": "info"
-              },
-              "kind": "unknown"
-            },
-            "root": "info",
-            "source": "scripts.producers.generate_commandview_inventory::build_screening_summary"
           },
           {
             "attribute": "info.get",
@@ -71659,10 +71643,26 @@
             "source": "scripts.producers.generate_commandview_inventory::build_screening_summary"
           },
           {
+            "attribute": "info.get",
+            "binding": "info",
+            "expression": "info.get",
+            "lineno": 2576,
+            "resolution": {
+              "confidence": "low",
+              "detail": {
+                "attribute_tail": "get",
+                "binding": "info"
+              },
+              "kind": "unknown"
+            },
+            "root": "info",
+            "source": "scripts.producers.generate_commandview_inventory::build_screening_summary"
+          },
+          {
             "attribute": "cross_module_edges.setdefault",
             "binding": "cross_module_edges",
             "expression": "cross_module_edges.setdefault",
-            "lineno": 2583,
+            "lineno": 2584,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71673,18 +71673,6 @@
             },
             "root": "cross_module_edges",
             "source": "scripts.producers.generate_commandview_inventory::build_screening_summary"
-          },
-          {
-            "expression": "set",
-            "lineno": 2586,
-            "resolution": {
-              "confidence": "high",
-              "kind": "builtin",
-              "module": "builtins"
-            },
-            "root": "set",
-            "source": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-            "target": "builtins.set"
           },
           {
             "expression": "set",
@@ -71711,10 +71699,22 @@
             "target": "builtins.set"
           },
           {
+            "expression": "set",
+            "lineno": 2589,
+            "resolution": {
+              "confidence": "high",
+              "kind": "builtin",
+              "module": "builtins"
+            },
+            "root": "set",
+            "source": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+            "target": "builtins.set"
+          },
+          {
             "attribute": "call.get",
             "binding": "call",
             "expression": "call.get",
-            "lineno": 2592,
+            "lineno": 2593,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71730,7 +71730,7 @@
             "attribute": "call.get",
             "binding_expression": "call.get('caller', {})",
             "expression": "call.get('caller', {}).get",
-            "lineno": 2592,
+            "lineno": 2593,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71746,7 +71746,7 @@
             "attribute": "add",
             "binding_expression": "edge['callers']",
             "expression": "edge['callers'].add",
-            "lineno": 2593,
+            "lineno": 2594,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71762,7 +71762,7 @@
             "attribute": "add",
             "binding_expression": "edge['targets']",
             "expression": "edge['targets'].add",
-            "lineno": 2594,
+            "lineno": 2595,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71778,7 +71778,7 @@
             "attribute": "call.get",
             "binding": "call",
             "expression": "call.get",
-            "lineno": 2595,
+            "lineno": 2596,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71794,7 +71794,7 @@
             "attribute": "add",
             "binding_expression": "edge['call_sites']",
             "expression": "edge['call_sites'].add",
-            "lineno": 2596,
+            "lineno": 2597,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71810,7 +71810,7 @@
             "attribute": "function_entry.get",
             "binding": "function_entry",
             "expression": "function_entry.get",
-            "lineno": 2598,
+            "lineno": 2599,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71826,7 +71826,7 @@
             "attribute": "ref.get",
             "binding": "ref",
             "expression": "ref.get",
-            "lineno": 2599,
+            "lineno": 2600,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71842,7 +71842,7 @@
             "attribute": "call_edges.add",
             "binding": "call_edges",
             "expression": "call_edges.add",
-            "lineno": 2602,
+            "lineno": 2603,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71858,7 +71858,7 @@
             "attribute": "entry.get",
             "binding": "entry",
             "expression": "entry.get",
-            "lineno": 2604,
+            "lineno": 2605,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71872,7 +71872,7 @@
           },
           {
             "expression": "_capture_function",
-            "lineno": 2605,
+            "lineno": 2606,
             "resolution": {
               "confidence": "low",
               "kind": "unknown"
@@ -71884,7 +71884,7 @@
             "attribute": "entry.get",
             "binding": "entry",
             "expression": "entry.get",
-            "lineno": 2606,
+            "lineno": 2607,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71900,7 +71900,7 @@
             "attribute": "class_entry.get",
             "binding": "class_entry",
             "expression": "class_entry.get",
-            "lineno": 2607,
+            "lineno": 2608,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71914,7 +71914,7 @@
           },
           {
             "expression": "_capture_function",
-            "lineno": 2608,
+            "lineno": 2609,
             "resolution": {
               "confidence": "low",
               "kind": "unknown"
@@ -71924,7 +71924,7 @@
           },
           {
             "expression": "list",
-            "lineno": 2610,
+            "lineno": 2611,
             "resolution": {
               "confidence": "high",
               "kind": "builtin",
@@ -71936,7 +71936,7 @@
           },
           {
             "expression": "sorted",
-            "lineno": 2610,
+            "lineno": 2611,
             "resolution": {
               "confidence": "high",
               "kind": "builtin",
@@ -71948,7 +71948,7 @@
           },
           {
             "expression": "list",
-            "lineno": 2611,
+            "lineno": 2612,
             "resolution": {
               "confidence": "high",
               "kind": "builtin",
@@ -71960,7 +71960,7 @@
           },
           {
             "expression": "sorted",
-            "lineno": 2611,
+            "lineno": 2612,
             "resolution": {
               "confidence": "high",
               "kind": "builtin",
@@ -71974,7 +71974,7 @@
             "attribute": "cross_module_edges.items",
             "binding": "cross_module_edges",
             "expression": "cross_module_edges.items",
-            "lineno": 2613,
+            "lineno": 2614,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -71988,7 +71988,7 @@
           },
           {
             "expression": "sorted",
-            "lineno": 2613,
+            "lineno": 2614,
             "resolution": {
               "confidence": "high",
               "kind": "builtin",
@@ -72002,7 +72002,7 @@
             "attribute": "cross_module_list.append",
             "binding": "cross_module_list",
             "expression": "cross_module_list.append",
-            "lineno": 2614,
+            "lineno": 2615,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -72013,18 +72013,6 @@
             },
             "root": "cross_module_list",
             "source": "scripts.producers.generate_commandview_inventory::build_screening_summary"
-          },
-          {
-            "expression": "sorted",
-            "lineno": 2618,
-            "resolution": {
-              "confidence": "high",
-              "kind": "builtin",
-              "module": "builtins"
-            },
-            "root": "sorted",
-            "source": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-            "target": "builtins.sorted"
           },
           {
             "expression": "sorted",
@@ -72040,7 +72028,19 @@
           },
           {
             "expression": "sorted",
-            "lineno": 2626,
+            "lineno": 2620,
+            "resolution": {
+              "confidence": "high",
+              "kind": "builtin",
+              "module": "builtins"
+            },
+            "root": "sorted",
+            "source": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+            "target": "builtins.sorted"
+          },
+          {
+            "expression": "sorted",
+            "lineno": 2627,
             "resolution": {
               "confidence": "high",
               "kind": "builtin",
@@ -72869,7 +72869,7 @@
           },
           {
             "expression": "SystemExit",
-            "lineno": 2752,
+            "lineno": 2753,
             "resolution": {
               "confidence": "high",
               "kind": "builtin",
@@ -72881,7 +72881,7 @@
           },
           {
             "expression": "run",
-            "lineno": 2752,
+            "lineno": 2753,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -73025,7 +73025,7 @@
           },
           {
             "expression": "parse_args",
-            "lineno": 2694,
+            "lineno": 2695,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -73037,7 +73037,7 @@
           },
           {
             "expression": "build_options",
-            "lineno": 2695,
+            "lineno": 2696,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -73049,7 +73049,7 @@
           },
           {
             "expression": "configure_logging",
-            "lineno": 2696,
+            "lineno": 2697,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -73061,7 +73061,7 @@
           },
           {
             "expression": "build_paths",
-            "lineno": 2699,
+            "lineno": 2700,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -73075,7 +73075,7 @@
             "attribute": "logging.error",
             "binding": "logging",
             "expression": "logging.error",
-            "lineno": 2701,
+            "lineno": 2702,
             "resolution": {
               "category": "standard_library",
               "confidence": "high",
@@ -73096,7 +73096,7 @@
             "binding": "paths",
             "binding_expression": "paths.target",
             "expression": "paths.target.exists",
-            "lineno": 2704,
+            "lineno": 2705,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -73113,7 +73113,7 @@
             "attribute": "logging.error",
             "binding": "logging",
             "expression": "logging.error",
-            "lineno": 2705,
+            "lineno": 2706,
             "resolution": {
               "category": "standard_library",
               "confidence": "high",
@@ -73134,7 +73134,7 @@
             "binding": "paths",
             "binding_expression": "paths.target",
             "expression": "paths.target.is_dir",
-            "lineno": 2707,
+            "lineno": 2708,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -73151,7 +73151,7 @@
             "attribute": "logging.error",
             "binding": "logging",
             "expression": "logging.error",
-            "lineno": 2708,
+            "lineno": 2709,
             "resolution": {
               "category": "standard_library",
               "confidence": "high",
@@ -73169,7 +73169,7 @@
           },
           {
             "expression": "discover_python_files",
-            "lineno": 2711,
+            "lineno": 2712,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -73183,7 +73183,7 @@
             "attribute": "logging.error",
             "binding": "logging",
             "expression": "logging.error",
-            "lineno": 2713,
+            "lineno": 2714,
             "resolution": {
               "category": "standard_library",
               "confidence": "high",
@@ -73201,7 +73201,7 @@
           },
           {
             "expression": "load_coverage_reports",
-            "lineno": 2716,
+            "lineno": 2717,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -73213,7 +73213,7 @@
           },
           {
             "expression": "analyze_python_file",
-            "lineno": 2721,
+            "lineno": 2722,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -73227,7 +73227,7 @@
             "attribute": "collected.append",
             "binding": "collected",
             "expression": "collected.append",
-            "lineno": 2729,
+            "lineno": 2730,
             "resolution": {
               "confidence": "low",
               "detail": {
@@ -73243,7 +73243,7 @@
             "attribute": "logging.error",
             "binding": "logging",
             "expression": "logging.error",
-            "lineno": 2732,
+            "lineno": 2733,
             "resolution": {
               "category": "standard_library",
               "confidence": "high",
@@ -73261,7 +73261,7 @@
           },
           {
             "expression": "attach_git_churn",
-            "lineno": 2735,
+            "lineno": 2736,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -73273,7 +73273,7 @@
           },
           {
             "expression": "compose_inventory",
-            "lineno": 2737,
+            "lineno": 2738,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -73285,7 +73285,7 @@
           },
           {
             "expression": "build_screening_summary",
-            "lineno": 2738,
+            "lineno": 2739,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -73297,7 +73297,7 @@
           },
           {
             "expression": "write_inventory",
-            "lineno": 2739,
+            "lineno": 2740,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -73311,7 +73311,7 @@
             "attribute": "logging.info",
             "binding": "logging",
             "expression": "logging.info",
-            "lineno": 2740,
+            "lineno": 2741,
             "resolution": {
               "category": "standard_library",
               "confidence": "high",
@@ -73329,7 +73329,7 @@
           },
           {
             "expression": "len",
-            "lineno": 2746,
+            "lineno": 2747,
             "resolution": {
               "confidence": "high",
               "kind": "builtin",
@@ -73341,25 +73341,13 @@
           },
           {
             "expression": "_slugify_relative",
-            "lineno": 2684,
+            "lineno": 2685,
             "resolution": {
               "confidence": "low",
               "kind": "unknown"
             },
             "root": "_slugify_relative",
             "source": "scripts.producers.generate_commandview_inventory::write_inventory"
-          },
-          {
-            "expression": "_write_inventory_copy",
-            "lineno": 2686,
-            "resolution": {
-              "confidence": "high",
-              "kind": "local_function",
-              "module": "scripts.producers.generate_commandview_inventory"
-            },
-            "root": "_write_inventory_copy",
-            "source": "scripts.producers.generate_commandview_inventory::write_inventory",
-            "target": "scripts.producers.generate_commandview_inventory::_write_inventory_copy"
           },
           {
             "expression": "_write_inventory_copy",
@@ -73374,8 +73362,20 @@
             "target": "scripts.producers.generate_commandview_inventory::_write_inventory_copy"
           },
           {
-            "expression": "_write_screening_copy",
+            "expression": "_write_inventory_copy",
             "lineno": 2688,
+            "resolution": {
+              "confidence": "high",
+              "kind": "local_function",
+              "module": "scripts.producers.generate_commandview_inventory"
+            },
+            "root": "_write_inventory_copy",
+            "source": "scripts.producers.generate_commandview_inventory::write_inventory",
+            "target": "scripts.producers.generate_commandview_inventory::_write_inventory_copy"
+          },
+          {
+            "expression": "_write_screening_copy",
+            "lineno": 2689,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -73387,7 +73387,7 @@
           },
           {
             "expression": "_write_screening_copy",
-            "lineno": 2689,
+            "lineno": 2690,
             "resolution": {
               "confidence": "high",
               "kind": "local_function",
@@ -92850,7 +92850,7 @@
             "nonempty_line_count": 0
           },
           "first_stmt_kind": "assign",
-          "hash": "6135cd081cec2fe9ab10d6be433f36abd851a83e2750d0478458887a8c8ecf09",
+          "hash": "7dd689d4affc1fe33767d130573e7ee8d5fcab587d143ee21b917720a0284a3b",
           "intra_file_refs": [],
           "io_effects": {
             "env": false,
@@ -92861,7 +92861,7 @@
           "is_async": false,
           "is_private": false,
           "line": 2340,
-          "line_count": 96,
+          "line_count": 97,
           "locals_summary": {
             "assign": 37,
             "branches": 15,
@@ -92944,13 +92944,13 @@
               "binding": "relative",
               "callee": "relative.replace",
               "caller": {
-                "lineno": 2445,
+                "lineno": 2446,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_entry_module_key",
                 "symbol": "_entry_module_key"
               },
               "is_attribute": true,
-              "lineno": 2445,
+              "lineno": 2446,
               "root": "relative"
             },
             {
@@ -92958,13 +92958,13 @@
               "binding": "entry",
               "callee": "entry.get",
               "caller": {
-                "lineno": 2439,
+                "lineno": 2440,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_entry_module_key",
                 "symbol": "_entry_module_key"
               },
               "is_attribute": true,
-              "lineno": 2439,
+              "lineno": 2440,
               "root": "entry"
             },
             {
@@ -92972,13 +92972,13 @@
               "binding": "entry",
               "callee": "entry.get",
               "caller": {
-                "lineno": 2442,
+                "lineno": 2443,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_entry_module_key",
                 "symbol": "_entry_module_key"
               },
               "is_attribute": true,
-              "lineno": 2442,
+              "lineno": 2443,
               "root": "entry"
             }
           ],
@@ -93010,7 +93010,7 @@
           },
           "is_async": false,
           "is_private": true,
-          "line": 2438,
+          "line": 2439,
           "line_count": 8,
           "locals_summary": {
             "assign": 2,
@@ -93029,7 +93029,7 @@
           "used_globals": [],
           "uses_import": [
             {
-              "lineno": 2438,
+              "lineno": 2439,
               "symbol": "typing.Any",
               "via": "Any"
             }
@@ -93068,25 +93068,25 @@
               "binding_expression": "'.'",
               "callee": "'.'.join",
               "caller": {
-                "lineno": 2458,
+                "lineno": 2459,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_resolve_relative_import",
                 "symbol": "_resolve_relative_import"
               },
               "is_attribute": true,
-              "lineno": 2458,
+              "lineno": 2459,
               "root": "'.'.join"
             },
             {
               "callee": "len",
               "caller": {
-                "lineno": 2452,
+                "lineno": 2453,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_resolve_relative_import",
                 "symbol": "_resolve_relative_import"
               },
               "is_attribute": false,
-              "lineno": 2452,
+              "lineno": 2453,
               "root": "len"
             },
             {
@@ -93094,13 +93094,13 @@
               "binding": "base_parts",
               "callee": "base_parts.append",
               "caller": {
-                "lineno": 2457,
+                "lineno": 2458,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_resolve_relative_import",
                 "symbol": "_resolve_relative_import"
               },
               "is_attribute": true,
-              "lineno": 2457,
+              "lineno": 2458,
               "root": "base_parts"
             },
             {
@@ -93108,13 +93108,13 @@
               "binding_expression": "module_id or ''",
               "callee": "(module_id or '').split",
               "caller": {
-                "lineno": 2451,
+                "lineno": 2452,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_resolve_relative_import",
                 "symbol": "_resolve_relative_import"
               },
               "is_attribute": true,
-              "lineno": 2451,
+              "lineno": 2452,
               "root": ""
             }
           ],
@@ -93148,7 +93148,7 @@
           },
           "is_async": false,
           "is_private": true,
-          "line": 2448,
+          "line": 2449,
           "line_count": 11,
           "locals_summary": {
             "assign": 3,
@@ -93198,32 +93198,6 @@
               "binding": "detail",
               "callee": "detail.get",
               "caller": {
-                "lineno": 2467,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map",
-                "symbol": "_build_alias_resolution_map"
-              },
-              "is_attribute": true,
-              "lineno": 2467,
-              "root": "detail"
-            },
-            {
-              "callee": "int",
-              "caller": {
-                "lineno": 2469,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map",
-                "symbol": "_build_alias_resolution_map"
-              },
-              "is_attribute": false,
-              "lineno": 2469,
-              "root": "int"
-            },
-            {
-              "attribute": "detail.get",
-              "binding": "detail",
-              "callee": "detail.get",
-              "caller": {
                 "lineno": 2468,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map",
@@ -93232,6 +93206,60 @@
               "is_attribute": true,
               "lineno": 2468,
               "root": "detail"
+            },
+            {
+              "callee": "int",
+              "caller": {
+                "lineno": 2470,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map",
+                "symbol": "_build_alias_resolution_map"
+              },
+              "is_attribute": false,
+              "lineno": 2470,
+              "root": "int"
+            },
+            {
+              "attribute": "detail.get",
+              "binding": "detail",
+              "callee": "detail.get",
+              "caller": {
+                "lineno": 2469,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map",
+                "symbol": "_build_alias_resolution_map"
+              },
+              "is_attribute": true,
+              "lineno": 2469,
+              "root": "detail"
+            },
+            {
+              "attribute": "detail.get",
+              "binding": "detail",
+              "callee": "detail.get",
+              "caller": {
+                "lineno": 2471,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map",
+                "symbol": "_build_alias_resolution_map"
+              },
+              "is_attribute": true,
+              "lineno": 2471,
+              "root": "detail"
+            },
+            {
+              "attribute": "alias.get",
+              "binding": "alias",
+              "callee": "alias.get",
+              "caller": {
+                "lineno": 2472,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map",
+                "symbol": "_build_alias_resolution_map"
+              },
+              "is_attribute": true,
+              "lineno": 2472,
+              "root": "alias"
             },
             {
               "attribute": "detail.get",
@@ -93252,53 +93280,25 @@
               "binding": "alias",
               "callee": "alias.get",
               "caller": {
-                "lineno": 2471,
+                "lineno": 2475,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map",
                 "symbol": "_build_alias_resolution_map"
               },
               "is_attribute": true,
-              "lineno": 2471,
-              "root": "alias"
-            },
-            {
-              "attribute": "detail.get",
-              "binding": "detail",
-              "callee": "detail.get",
-              "caller": {
-                "lineno": 2469,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map",
-                "symbol": "_build_alias_resolution_map"
-              },
-              "is_attribute": true,
-              "lineno": 2469,
-              "root": "detail"
-            },
-            {
-              "attribute": "alias.get",
-              "binding": "alias",
-              "callee": "alias.get",
-              "caller": {
-                "lineno": 2474,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map",
-                "symbol": "_build_alias_resolution_map"
-              },
-              "is_attribute": true,
-              "lineno": 2474,
+              "lineno": 2475,
               "root": "alias"
             },
             {
               "callee": "_resolve_relative_import",
               "caller": {
-                "lineno": 2479,
+                "lineno": 2480,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_build_alias_resolution_map",
                 "symbol": "_build_alias_resolution_map"
               },
               "is_attribute": false,
-              "lineno": 2479,
+              "lineno": 2480,
               "root": "_resolve_relative_import"
             }
           ],
@@ -93325,7 +93325,7 @@
           "intra_file_refs": [
             {
               "callee_func": "_resolve_relative_import",
-              "lineno": 2479
+              "lineno": 2480
             }
           ],
           "io_effects": {
@@ -93336,7 +93336,7 @@
           },
           "is_async": false,
           "is_private": true,
-          "line": 2461,
+          "line": 2462,
           "line_count": 30,
           "locals_summary": {
             "assign": 13,
@@ -93355,17 +93355,17 @@
           "used_globals": [],
           "uses_import": [
             {
-              "lineno": 2464,
-              "symbol": "typing.Any",
-              "via": "Any"
-            },
-            {
-              "lineno": 2462,
-              "symbol": "typing.Any",
-              "via": "Any"
-            },
-            {
               "lineno": 2465,
+              "symbol": "typing.Any",
+              "via": "Any"
+            },
+            {
+              "lineno": 2463,
+              "symbol": "typing.Any",
+              "via": "Any"
+            },
+            {
+              "lineno": 2466,
               "symbol": "typing.Any",
               "via": "Any"
             }
@@ -93402,13 +93402,13 @@
               "binding": "remainder",
               "callee": "remainder.startswith",
               "caller": {
-                "lineno": 2508,
+                "lineno": 2509,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_resolve_callee_path",
                 "symbol": "_resolve_callee_path"
               },
               "is_attribute": true,
-              "lineno": 2508,
+              "lineno": 2509,
               "root": "remainder"
             },
             {
@@ -93416,13 +93416,13 @@
               "binding": "info",
               "callee": "info.get",
               "caller": {
-                "lineno": 2513,
+                "lineno": 2514,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_resolve_callee_path",
                 "symbol": "_resolve_callee_path"
               },
               "is_attribute": true,
-              "lineno": 2513,
+              "lineno": 2514,
               "root": "info"
             },
             {
@@ -93430,25 +93430,25 @@
               "binding": "callee",
               "callee": "callee.startswith",
               "caller": {
-                "lineno": 2501,
+                "lineno": 2502,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_resolve_callee_path",
                 "symbol": "_resolve_callee_path"
               },
               "is_attribute": true,
-              "lineno": 2501,
+              "lineno": 2502,
               "root": "callee"
             },
             {
               "callee": "len",
               "caller": {
-                "lineno": 2507,
+                "lineno": 2508,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_resolve_callee_path",
                 "symbol": "_resolve_callee_path"
               },
               "is_attribute": false,
-              "lineno": 2507,
+              "lineno": 2508,
               "root": "len"
             },
             {
@@ -93456,37 +93456,37 @@
               "binding": "info",
               "callee": "info.get",
               "caller": {
-                "lineno": 2511,
+                "lineno": 2512,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_resolve_callee_path",
                 "symbol": "_resolve_callee_path"
               },
               "is_attribute": true,
-              "lineno": 2511,
+              "lineno": 2512,
               "root": "info"
             },
             {
               "callee": "len",
               "caller": {
-                "lineno": 2502,
+                "lineno": 2503,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_resolve_callee_path",
                 "symbol": "_resolve_callee_path"
               },
               "is_attribute": false,
-              "lineno": 2502,
+              "lineno": 2503,
               "root": "len"
             },
             {
               "callee": "len",
               "caller": {
-                "lineno": 2502,
+                "lineno": 2503,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_resolve_callee_path",
                 "symbol": "_resolve_callee_path"
               },
               "is_attribute": false,
-              "lineno": 2502,
+              "lineno": 2503,
               "root": "len"
             }
           ],
@@ -93521,7 +93521,7 @@
           },
           "is_async": false,
           "is_private": true,
-          "line": 2493,
+          "line": 2494,
           "line_count": 22,
           "locals_summary": {
             "assign": 7,
@@ -93540,12 +93540,12 @@
           "used_globals": [],
           "uses_import": [
             {
-              "lineno": 2496,
+              "lineno": 2497,
               "symbol": "typing.Any",
               "via": "Any"
             },
             {
-              "lineno": 2495,
+              "lineno": 2496,
               "symbol": "typing.Any",
               "via": "Any"
             }
@@ -93580,25 +93580,25 @@
             {
               "callee": "range",
               "caller": {
-                "lineno": 2521,
+                "lineno": 2522,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_match_known_module",
                 "symbol": "_match_known_module"
               },
               "is_attribute": false,
-              "lineno": 2521,
+              "lineno": 2522,
               "root": "range"
             },
             {
               "callee": "len",
               "caller": {
-                "lineno": 2521,
+                "lineno": 2522,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_match_known_module",
                 "symbol": "_match_known_module"
               },
               "is_attribute": false,
-              "lineno": 2521,
+              "lineno": 2522,
               "root": "len"
             },
             {
@@ -93606,13 +93606,13 @@
               "binding_expression": "'.'",
               "callee": "'.'.join",
               "caller": {
-                "lineno": 2522,
+                "lineno": 2523,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_match_known_module",
                 "symbol": "_match_known_module"
               },
               "is_attribute": true,
-              "lineno": 2522,
+              "lineno": 2523,
               "root": "'.'.join"
             },
             {
@@ -93620,13 +93620,13 @@
               "binding": "candidate",
               "callee": "candidate.split",
               "caller": {
-                "lineno": 2520,
+                "lineno": 2521,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_match_known_module",
                 "symbol": "_match_known_module"
               },
               "is_attribute": true,
-              "lineno": 2520,
+              "lineno": 2521,
               "root": "candidate"
             }
           ],
@@ -93659,7 +93659,7 @@
           },
           "is_async": false,
           "is_private": true,
-          "line": 2517,
+          "line": 2518,
           "line_count": 9,
           "locals_summary": {
             "assign": 2,
@@ -93705,18 +93705,6 @@
             {
               "callee": "set",
               "caller": {
-                "lineno": 2529,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": false,
-              "lineno": 2529,
-              "root": "set"
-            },
-            {
-              "callee": "set",
-              "caller": {
                 "lineno": 2530,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
@@ -93727,43 +93715,43 @@
               "root": "set"
             },
             {
-              "callee": "sorted",
+              "callee": "set",
               "caller": {
-                "lineno": 2613,
+                "lineno": 2531,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
                 "symbol": "build_screening_summary"
               },
               "is_attribute": false,
-              "lineno": 2613,
+              "lineno": 2531,
+              "root": "set"
+            },
+            {
+              "callee": "sorted",
+              "caller": {
+                "lineno": 2614,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": false,
+              "lineno": 2614,
               "root": "sorted"
             },
             {
               "callee": "_entry_module_key",
               "caller": {
-                "lineno": 2533,
+                "lineno": 2534,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
                 "symbol": "build_screening_summary"
               },
               "is_attribute": false,
-              "lineno": 2533,
+              "lineno": 2534,
               "root": "_entry_module_key"
             },
             {
               "callee": "_entry_module_key",
-              "caller": {
-                "lineno": 2536,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": false,
-              "lineno": 2536,
-              "root": "_entry_module_key"
-            },
-            {
-              "callee": "_build_alias_resolution_map",
               "caller": {
                 "lineno": 2537,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -93772,7 +93760,125 @@
               },
               "is_attribute": false,
               "lineno": 2537,
+              "root": "_entry_module_key"
+            },
+            {
+              "callee": "_build_alias_resolution_map",
+              "caller": {
+                "lineno": 2538,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": false,
+              "lineno": 2538,
               "root": "_build_alias_resolution_map"
+            },
+            {
+              "attribute": "entry.get",
+              "binding": "entry",
+              "callee": "entry.get",
+              "caller": {
+                "lineno": 2539,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2539,
+              "root": "entry"
+            },
+            {
+              "attribute": "entry.get",
+              "binding": "entry",
+              "callee": "entry.get",
+              "caller": {
+                "lineno": 2605,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2605,
+              "root": "entry"
+            },
+            {
+              "attribute": "entry.get",
+              "binding": "entry",
+              "callee": "entry.get",
+              "caller": {
+                "lineno": 2607,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2607,
+              "root": "entry"
+            },
+            {
+              "callee": "list",
+              "caller": {
+                "lineno": 2611,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": false,
+              "lineno": 2611,
+              "root": "list"
+            },
+            {
+              "callee": "list",
+              "caller": {
+                "lineno": 2612,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": false,
+              "lineno": 2612,
+              "root": "list"
+            },
+            {
+              "attribute": "cross_module_edges.items",
+              "binding": "cross_module_edges",
+              "callee": "cross_module_edges.items",
+              "caller": {
+                "lineno": 2614,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2614,
+              "root": "cross_module_edges"
+            },
+            {
+              "attribute": "cross_module_list.append",
+              "binding": "cross_module_list",
+              "callee": "cross_module_list.append",
+              "caller": {
+                "lineno": 2615,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2615,
+              "root": "cross_module_list"
+            },
+            {
+              "callee": "_entry_module_key",
+              "caller": {
+                "lineno": 2534,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": false,
+              "lineno": 2534,
+              "root": "_entry_module_key"
             },
             {
               "attribute": "entry.get",
@@ -93789,163 +93895,57 @@
               "root": "entry"
             },
             {
-              "attribute": "entry.get",
-              "binding": "entry",
-              "callee": "entry.get",
+              "attribute": "function_entry.get",
+              "binding": "function_entry",
+              "callee": "function_entry.get",
               "caller": {
-                "lineno": 2604,
+                "lineno": 2562,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
                 "symbol": "build_screening_summary"
               },
               "is_attribute": true,
-              "lineno": 2604,
-              "root": "entry"
+              "lineno": 2562,
+              "root": "function_entry"
             },
             {
-              "attribute": "entry.get",
-              "binding": "entry",
-              "callee": "entry.get",
+              "attribute": "function_entry.get",
+              "binding": "function_entry",
+              "callee": "function_entry.get",
+              "caller": {
+                "lineno": 2569,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2569,
+              "root": "function_entry"
+            },
+            {
+              "attribute": "function_entry.get",
+              "binding": "function_entry",
+              "callee": "function_entry.get",
+              "caller": {
+                "lineno": 2599,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2599,
+              "root": "function_entry"
+            },
+            {
+              "callee": "_capture_function",
               "caller": {
                 "lineno": 2606,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
                 "symbol": "build_screening_summary"
               },
-              "is_attribute": true,
+              "is_attribute": false,
               "lineno": 2606,
-              "root": "entry"
-            },
-            {
-              "callee": "list",
-              "caller": {
-                "lineno": 2610,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": false,
-              "lineno": 2610,
-              "root": "list"
-            },
-            {
-              "callee": "list",
-              "caller": {
-                "lineno": 2611,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": false,
-              "lineno": 2611,
-              "root": "list"
-            },
-            {
-              "attribute": "cross_module_edges.items",
-              "binding": "cross_module_edges",
-              "callee": "cross_module_edges.items",
-              "caller": {
-                "lineno": 2613,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2613,
-              "root": "cross_module_edges"
-            },
-            {
-              "attribute": "cross_module_list.append",
-              "binding": "cross_module_list",
-              "callee": "cross_module_list.append",
-              "caller": {
-                "lineno": 2614,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2614,
-              "root": "cross_module_list"
-            },
-            {
-              "callee": "_entry_module_key",
-              "caller": {
-                "lineno": 2533,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": false,
-              "lineno": 2533,
-              "root": "_entry_module_key"
-            },
-            {
-              "attribute": "entry.get",
-              "binding": "entry",
-              "callee": "entry.get",
-              "caller": {
-                "lineno": 2537,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2537,
-              "root": "entry"
-            },
-            {
-              "attribute": "function_entry.get",
-              "binding": "function_entry",
-              "callee": "function_entry.get",
-              "caller": {
-                "lineno": 2561,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2561,
-              "root": "function_entry"
-            },
-            {
-              "attribute": "function_entry.get",
-              "binding": "function_entry",
-              "callee": "function_entry.get",
-              "caller": {
-                "lineno": 2568,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2568,
-              "root": "function_entry"
-            },
-            {
-              "attribute": "function_entry.get",
-              "binding": "function_entry",
-              "callee": "function_entry.get",
-              "caller": {
-                "lineno": 2598,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2598,
-              "root": "function_entry"
-            },
-            {
-              "callee": "_capture_function",
-              "caller": {
-                "lineno": 2605,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": false,
-              "lineno": 2605,
               "root": "_capture_function"
             },
             {
@@ -93953,26 +93953,14 @@
               "binding": "class_entry",
               "callee": "class_entry.get",
               "caller": {
-                "lineno": 2607,
+                "lineno": 2608,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
                 "symbol": "build_screening_summary"
               },
               "is_attribute": true,
-              "lineno": 2607,
+              "lineno": 2608,
               "root": "class_entry"
-            },
-            {
-              "callee": "sorted",
-              "caller": {
-                "lineno": 2610,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": false,
-              "lineno": 2610,
-              "root": "sorted"
             },
             {
               "callee": "sorted",
@@ -93987,18 +93975,16 @@
               "root": "sorted"
             },
             {
-              "attribute": "detail.get",
-              "binding": "detail",
-              "callee": "detail.get",
+              "callee": "sorted",
               "caller": {
-                "lineno": 2540,
+                "lineno": 2612,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
                 "symbol": "build_screening_summary"
               },
-              "is_attribute": true,
-              "lineno": 2540,
-              "root": "detail"
+              "is_attribute": false,
+              "lineno": 2612,
+              "root": "sorted"
             },
             {
               "attribute": "detail.get",
@@ -94015,18 +94001,18 @@
               "root": "detail"
             },
             {
-              "attribute": "function_entry.get",
-              "binding": "function_entry",
-              "callee": "function_entry.get",
+              "attribute": "detail.get",
+              "binding": "detail",
+              "callee": "detail.get",
               "caller": {
-                "lineno": 2565,
+                "lineno": 2542,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
                 "symbol": "build_screening_summary"
               },
               "is_attribute": true,
-              "lineno": 2565,
-              "root": "function_entry"
+              "lineno": 2542,
+              "root": "detail"
             },
             {
               "attribute": "function_entry.get",
@@ -94043,17 +94029,31 @@
               "root": "function_entry"
             },
             {
-              "attribute": "call.get",
-              "binding": "call",
-              "callee": "call.get",
+              "attribute": "function_entry.get",
+              "binding": "function_entry",
+              "callee": "function_entry.get",
               "caller": {
-                "lineno": 2569,
+                "lineno": 2567,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
                 "symbol": "build_screening_summary"
               },
               "is_attribute": true,
-              "lineno": 2569,
+              "lineno": 2567,
+              "root": "function_entry"
+            },
+            {
+              "attribute": "call.get",
+              "binding": "call",
+              "callee": "call.get",
+              "caller": {
+                "lineno": 2570,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2570,
               "root": "call"
             },
             {
@@ -94061,38 +94061,26 @@
               "binding": "ref",
               "callee": "ref.get",
               "caller": {
-                "lineno": 2599,
+                "lineno": 2600,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
                 "symbol": "build_screening_summary"
               },
               "is_attribute": true,
-              "lineno": 2599,
+              "lineno": 2600,
               "root": "ref"
             },
             {
               "callee": "_capture_function",
               "caller": {
-                "lineno": 2608,
+                "lineno": 2609,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
                 "symbol": "build_screening_summary"
               },
               "is_attribute": false,
-              "lineno": 2608,
+              "lineno": 2609,
               "root": "_capture_function"
-            },
-            {
-              "callee": "sorted",
-              "caller": {
-                "lineno": 2618,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": false,
-              "lineno": 2618,
-              "root": "sorted"
             },
             {
               "callee": "sorted",
@@ -94107,112 +94095,30 @@
               "root": "sorted"
             },
             {
+              "callee": "sorted",
+              "caller": {
+                "lineno": 2620,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": false,
+              "lineno": 2620,
+              "root": "sorted"
+            },
+            {
               "attribute": "item.get",
               "binding": "item",
               "callee": "item.get",
               "caller": {
-                "lineno": 2542,
+                "lineno": 2543,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
                 "symbol": "build_screening_summary"
               },
               "is_attribute": true,
-              "lineno": 2542,
+              "lineno": 2543,
               "root": "item"
-            },
-            {
-              "attribute": "detail.get",
-              "binding": "detail",
-              "callee": "detail.get",
-              "caller": {
-                "lineno": 2545,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2545,
-              "root": "detail"
-            },
-            {
-              "attribute": "detail.get",
-              "binding": "detail",
-              "callee": "detail.get",
-              "caller": {
-                "lineno": 2547,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2547,
-              "root": "detail"
-            },
-            {
-              "attribute": "call_edges.add",
-              "binding": "call_edges",
-              "callee": "call_edges.add",
-              "caller": {
-                "lineno": 2571,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2571,
-              "root": "call_edges"
-            },
-            {
-              "callee": "_resolve_callee_path",
-              "caller": {
-                "lineno": 2572,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": false,
-              "lineno": 2572,
-              "root": "_resolve_callee_path"
-            },
-            {
-              "callee": "_match_known_module",
-              "caller": {
-                "lineno": 2573,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": false,
-              "lineno": 2573,
-              "root": "_match_known_module"
-            },
-            {
-              "attribute": "call_edges.add",
-              "binding": "call_edges",
-              "callee": "call_edges.add",
-              "caller": {
-                "lineno": 2602,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2602,
-              "root": "call_edges"
-            },
-            {
-              "attribute": "import_edges.add",
-              "binding": "import_edges",
-              "callee": "import_edges.add",
-              "caller": {
-                "lineno": 2544,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2544,
-              "root": "import_edges"
             },
             {
               "attribute": "detail.get",
@@ -94229,9 +94135,9 @@
               "root": "detail"
             },
             {
-              "attribute": "item.get",
-              "binding": "item",
-              "callee": "item.get",
+              "attribute": "detail.get",
+              "binding": "detail",
+              "callee": "detail.get",
               "caller": {
                 "lineno": 2548,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -94240,7 +94146,211 @@
               },
               "is_attribute": true,
               "lineno": 2548,
+              "root": "detail"
+            },
+            {
+              "attribute": "call_edges.add",
+              "binding": "call_edges",
+              "callee": "call_edges.add",
+              "caller": {
+                "lineno": 2572,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2572,
+              "root": "call_edges"
+            },
+            {
+              "callee": "_resolve_callee_path",
+              "caller": {
+                "lineno": 2573,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": false,
+              "lineno": 2573,
+              "root": "_resolve_callee_path"
+            },
+            {
+              "callee": "_match_known_module",
+              "caller": {
+                "lineno": 2574,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": false,
+              "lineno": 2574,
+              "root": "_match_known_module"
+            },
+            {
+              "attribute": "call_edges.add",
+              "binding": "call_edges",
+              "callee": "call_edges.add",
+              "caller": {
+                "lineno": 2603,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2603,
+              "root": "call_edges"
+            },
+            {
+              "attribute": "import_edges.add",
+              "binding": "import_edges",
+              "callee": "import_edges.add",
+              "caller": {
+                "lineno": 2545,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2545,
+              "root": "import_edges"
+            },
+            {
+              "attribute": "detail.get",
+              "binding": "detail",
+              "callee": "detail.get",
+              "caller": {
+                "lineno": 2547,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2547,
+              "root": "detail"
+            },
+            {
+              "attribute": "item.get",
+              "binding": "item",
+              "callee": "item.get",
+              "caller": {
+                "lineno": 2549,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2549,
               "root": "item"
+            },
+            {
+              "attribute": "info.get",
+              "binding": "info",
+              "callee": "info.get",
+              "caller": {
+                "lineno": 2576,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2576,
+              "root": "info"
+            },
+            {
+              "attribute": "cross_module_edges.setdefault",
+              "binding": "cross_module_edges",
+              "callee": "cross_module_edges.setdefault",
+              "caller": {
+                "lineno": 2584,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2584,
+              "root": "cross_module_edges"
+            },
+            {
+              "attribute": "add",
+              "binding_expression": "edge['callers']",
+              "callee": "edge['callers'].add",
+              "caller": {
+                "lineno": 2594,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2594,
+              "root": "edge['callers'].add"
+            },
+            {
+              "attribute": "add",
+              "binding_expression": "edge['targets']",
+              "callee": "edge['targets'].add",
+              "caller": {
+                "lineno": 2595,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2595,
+              "root": "edge['targets'].add"
+            },
+            {
+              "attribute": "call.get",
+              "binding": "call",
+              "callee": "call.get",
+              "caller": {
+                "lineno": 2596,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2596,
+              "root": "call"
+            },
+            {
+              "attribute": "add",
+              "binding_expression": "edge['call_sites']",
+              "callee": "edge['call_sites'].add",
+              "caller": {
+                "lineno": 2597,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2597,
+              "root": "edge['call_sites'].add"
+            },
+            {
+              "callee": "sorted",
+              "caller": {
+                "lineno": 2627,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": false,
+              "lineno": 2627,
+              "root": "sorted"
+            },
+            {
+              "attribute": "import_edges.add",
+              "binding": "import_edges",
+              "callee": "import_edges.add",
+              "caller": {
+                "lineno": 2552,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": true,
+              "lineno": 2552,
+              "root": "import_edges"
             },
             {
               "attribute": "info.get",
@@ -94257,23 +94367,9 @@
               "root": "info"
             },
             {
-              "attribute": "cross_module_edges.setdefault",
-              "binding": "cross_module_edges",
-              "callee": "cross_module_edges.setdefault",
-              "caller": {
-                "lineno": 2583,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2583,
-              "root": "cross_module_edges"
-            },
-            {
-              "attribute": "add",
-              "binding_expression": "edge['callers']",
-              "callee": "edge['callers'].add",
+              "attribute": "call.get",
+              "binding_expression": "call.get('caller', {})",
+              "callee": "call.get('caller', {}).get",
               "caller": {
                 "lineno": 2593,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -94282,115 +94378,7 @@
               },
               "is_attribute": true,
               "lineno": 2593,
-              "root": "edge['callers'].add"
-            },
-            {
-              "attribute": "add",
-              "binding_expression": "edge['targets']",
-              "callee": "edge['targets'].add",
-              "caller": {
-                "lineno": 2594,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2594,
-              "root": "edge['targets'].add"
-            },
-            {
-              "attribute": "call.get",
-              "binding": "call",
-              "callee": "call.get",
-              "caller": {
-                "lineno": 2595,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2595,
               "root": "call"
-            },
-            {
-              "attribute": "add",
-              "binding_expression": "edge['call_sites']",
-              "callee": "edge['call_sites'].add",
-              "caller": {
-                "lineno": 2596,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2596,
-              "root": "edge['call_sites'].add"
-            },
-            {
-              "callee": "sorted",
-              "caller": {
-                "lineno": 2626,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": false,
-              "lineno": 2626,
-              "root": "sorted"
-            },
-            {
-              "attribute": "import_edges.add",
-              "binding": "import_edges",
-              "callee": "import_edges.add",
-              "caller": {
-                "lineno": 2551,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2551,
-              "root": "import_edges"
-            },
-            {
-              "attribute": "info.get",
-              "binding": "info",
-              "callee": "info.get",
-              "caller": {
-                "lineno": 2574,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2574,
-              "root": "info"
-            },
-            {
-              "attribute": "call.get",
-              "binding_expression": "call.get('caller', {})",
-              "callee": "call.get('caller', {}).get",
-              "caller": {
-                "lineno": 2592,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": true,
-              "lineno": 2592,
-              "root": "call"
-            },
-            {
-              "callee": "set",
-              "caller": {
-                "lineno": 2586,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
-                "symbol": "build_screening_summary"
-              },
-              "is_attribute": false,
-              "lineno": 2586,
-              "root": "set"
             },
             {
               "callee": "set",
@@ -94417,17 +94405,29 @@
               "root": "set"
             },
             {
+              "callee": "set",
+              "caller": {
+                "lineno": 2589,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
+                "symbol": "build_screening_summary"
+              },
+              "is_attribute": false,
+              "lineno": 2589,
+              "root": "set"
+            },
+            {
               "attribute": "call.get",
               "binding": "call",
               "callee": "call.get",
               "caller": {
-                "lineno": 2592,
+                "lineno": 2593,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::build_screening_summary",
                 "symbol": "build_screening_summary"
               },
               "is_attribute": true,
-              "lineno": 2592,
+              "lineno": 2593,
               "root": "call"
             }
           ],
@@ -94457,23 +94457,23 @@
           "intra_file_refs": [
             {
               "callee_func": "_entry_module_key",
-              "lineno": 2533
+              "lineno": 2534
             },
             {
               "callee_func": "_entry_module_key",
-              "lineno": 2536
-            },
-            {
-              "callee_func": "_build_alias_resolution_map",
               "lineno": 2537
             },
             {
+              "callee_func": "_build_alias_resolution_map",
+              "lineno": 2538
+            },
+            {
               "callee_func": "_resolve_callee_path",
-              "lineno": 2572
+              "lineno": 2573
             },
             {
               "callee_func": "_match_known_module",
-              "lineno": 2573
+              "lineno": 2574
             }
           ],
           "io_effects": {
@@ -94484,7 +94484,7 @@
           },
           "is_async": false,
           "is_private": false,
-          "line": 2528,
+          "line": 2529,
           "line_count": 113,
           "locals_summary": {
             "assign": 30,
@@ -94503,17 +94503,12 @@
           "used_globals": [],
           "uses_import": [
             {
-              "lineno": 2528,
+              "lineno": 2529,
               "symbol": "typing.Any",
               "via": "Any"
             },
             {
-              "lineno": 2612,
-              "symbol": "typing.Any",
-              "via": "Any"
-            },
-            {
-              "lineno": 2531,
+              "lineno": 2613,
               "symbol": "typing.Any",
               "via": "Any"
             },
@@ -94523,12 +94518,17 @@
               "via": "Any"
             },
             {
-              "lineno": 2556,
+              "lineno": 2533,
               "symbol": "typing.Any",
               "via": "Any"
             },
             {
-              "lineno": 2558,
+              "lineno": 2557,
+              "symbol": "typing.Any",
+              "via": "Any"
+            },
+            {
+              "lineno": 2559,
               "symbol": "typing.Any",
               "via": "Any"
             }
@@ -94567,131 +94567,19 @@
               "binding": "directory",
               "callee": "directory.mkdir",
               "caller": {
-                "lineno": 2644,
+                "lineno": 2645,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_write_inventory_copy",
                 "symbol": "_write_inventory_copy"
               },
               "is_attribute": true,
-              "lineno": 2644,
+              "lineno": 2645,
               "root": "directory"
             },
             {
               "attribute": "legacy_file.exists",
               "binding": "legacy_file",
               "callee": "legacy_file.exists",
-              "caller": {
-                "lineno": 2646,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_inventory_copy",
-                "symbol": "_write_inventory_copy"
-              },
-              "is_attribute": true,
-              "lineno": 2646,
-              "root": "legacy_file"
-            },
-            {
-              "attribute": "directory.glob",
-              "binding": "directory",
-              "callee": "directory.glob",
-              "caller": {
-                "lineno": 2648,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_inventory_copy",
-                "symbol": "_write_inventory_copy"
-              },
-              "is_attribute": true,
-              "lineno": 2648,
-              "root": "directory"
-            },
-            {
-              "attribute": "directory.glob",
-              "binding": "directory",
-              "callee": "directory.glob",
-              "caller": {
-                "lineno": 2651,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_inventory_copy",
-                "symbol": "_write_inventory_copy"
-              },
-              "is_attribute": true,
-              "lineno": 2651,
-              "root": "directory"
-            },
-            {
-              "attribute": "datetime.now",
-              "binding_expression": "datetime.now(timezone.utc)",
-              "callee": "datetime.now(timezone.utc).strftime",
-              "caller": {
-                "lineno": 2654,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_inventory_copy",
-                "symbol": "_write_inventory_copy"
-              },
-              "is_attribute": true,
-              "lineno": 2654,
-              "root": "datetime"
-            },
-            {
-              "attribute": "output_file.with_suffix",
-              "binding": "output_file",
-              "callee": "output_file.with_suffix",
-              "caller": {
-                "lineno": 2656,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_inventory_copy",
-                "symbol": "_write_inventory_copy"
-              },
-              "is_attribute": true,
-              "lineno": 2656,
-              "root": "output_file"
-            },
-            {
-              "attribute": "temp_file.write_text",
-              "binding": "temp_file",
-              "callee": "temp_file.write_text",
-              "caller": {
-                "lineno": 2657,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_inventory_copy",
-                "symbol": "_write_inventory_copy"
-              },
-              "is_attribute": true,
-              "lineno": 2657,
-              "root": "temp_file"
-            },
-            {
-              "attribute": "temp_file.replace",
-              "binding": "temp_file",
-              "callee": "temp_file.replace",
-              "caller": {
-                "lineno": 2658,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_inventory_copy",
-                "symbol": "_write_inventory_copy"
-              },
-              "is_attribute": true,
-              "lineno": 2658,
-              "root": "temp_file"
-            },
-            {
-              "attribute": "latest_pointer.exists",
-              "binding": "latest_pointer",
-              "callee": "latest_pointer.exists",
-              "caller": {
-                "lineno": 2660,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_inventory_copy",
-                "symbol": "_write_inventory_copy"
-              },
-              "is_attribute": true,
-              "lineno": 2660,
-              "root": "latest_pointer"
-            },
-            {
-              "attribute": "legacy_file.unlink",
-              "binding": "legacy_file",
-              "callee": "legacy_file.unlink",
               "caller": {
                 "lineno": 2647,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -94703,9 +94591,9 @@
               "root": "legacy_file"
             },
             {
-              "attribute": "existing.is_file",
-              "binding": "existing",
-              "callee": "existing.is_file",
+              "attribute": "directory.glob",
+              "binding": "directory",
+              "callee": "directory.glob",
               "caller": {
                 "lineno": 2649,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -94714,12 +94602,12 @@
               },
               "is_attribute": true,
               "lineno": 2649,
-              "root": "existing"
+              "root": "directory"
             },
             {
-              "attribute": "existing.is_file",
-              "binding": "existing",
-              "callee": "existing.is_file",
+              "attribute": "directory.glob",
+              "binding": "directory",
+              "callee": "directory.glob",
               "caller": {
                 "lineno": 2652,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -94728,12 +94616,26 @@
               },
               "is_attribute": true,
               "lineno": 2652,
-              "root": "existing"
+              "root": "directory"
             },
             {
-              "attribute": "json.dumps",
-              "binding": "json",
-              "callee": "json.dumps",
+              "attribute": "datetime.now",
+              "binding_expression": "datetime.now(timezone.utc)",
+              "callee": "datetime.now(timezone.utc).strftime",
+              "caller": {
+                "lineno": 2655,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_inventory_copy",
+                "symbol": "_write_inventory_copy"
+              },
+              "is_attribute": true,
+              "lineno": 2655,
+              "root": "datetime"
+            },
+            {
+              "attribute": "output_file.with_suffix",
+              "binding": "output_file",
+              "callee": "output_file.with_suffix",
               "caller": {
                 "lineno": 2657,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -94742,12 +94644,40 @@
               },
               "is_attribute": true,
               "lineno": 2657,
-              "root": "json"
+              "root": "output_file"
             },
             {
-              "attribute": "latest_pointer.unlink",
+              "attribute": "temp_file.write_text",
+              "binding": "temp_file",
+              "callee": "temp_file.write_text",
+              "caller": {
+                "lineno": 2658,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_inventory_copy",
+                "symbol": "_write_inventory_copy"
+              },
+              "is_attribute": true,
+              "lineno": 2658,
+              "root": "temp_file"
+            },
+            {
+              "attribute": "temp_file.replace",
+              "binding": "temp_file",
+              "callee": "temp_file.replace",
+              "caller": {
+                "lineno": 2659,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_inventory_copy",
+                "symbol": "_write_inventory_copy"
+              },
+              "is_attribute": true,
+              "lineno": 2659,
+              "root": "temp_file"
+            },
+            {
+              "attribute": "latest_pointer.exists",
               "binding": "latest_pointer",
-              "callee": "latest_pointer.unlink",
+              "callee": "latest_pointer.exists",
               "caller": {
                 "lineno": 2661,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -94759,9 +94689,23 @@
               "root": "latest_pointer"
             },
             {
-              "attribute": "existing.unlink",
+              "attribute": "legacy_file.unlink",
+              "binding": "legacy_file",
+              "callee": "legacy_file.unlink",
+              "caller": {
+                "lineno": 2648,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_inventory_copy",
+                "symbol": "_write_inventory_copy"
+              },
+              "is_attribute": true,
+              "lineno": 2648,
+              "root": "legacy_file"
+            },
+            {
+              "attribute": "existing.is_file",
               "binding": "existing",
-              "callee": "existing.unlink",
+              "callee": "existing.is_file",
               "caller": {
                 "lineno": 2650,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -94773,9 +94717,9 @@
               "root": "existing"
             },
             {
-              "attribute": "existing.unlink",
+              "attribute": "existing.is_file",
               "binding": "existing",
-              "callee": "existing.unlink",
+              "callee": "existing.is_file",
               "caller": {
                 "lineno": 2653,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -94787,9 +94731,51 @@
               "root": "existing"
             },
             {
-              "attribute": "datetime.now",
-              "binding": "datetime",
-              "callee": "datetime.now",
+              "attribute": "json.dumps",
+              "binding": "json",
+              "callee": "json.dumps",
+              "caller": {
+                "lineno": 2658,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_inventory_copy",
+                "symbol": "_write_inventory_copy"
+              },
+              "is_attribute": true,
+              "lineno": 2658,
+              "root": "json"
+            },
+            {
+              "attribute": "latest_pointer.unlink",
+              "binding": "latest_pointer",
+              "callee": "latest_pointer.unlink",
+              "caller": {
+                "lineno": 2662,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_inventory_copy",
+                "symbol": "_write_inventory_copy"
+              },
+              "is_attribute": true,
+              "lineno": 2662,
+              "root": "latest_pointer"
+            },
+            {
+              "attribute": "existing.unlink",
+              "binding": "existing",
+              "callee": "existing.unlink",
+              "caller": {
+                "lineno": 2651,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_inventory_copy",
+                "symbol": "_write_inventory_copy"
+              },
+              "is_attribute": true,
+              "lineno": 2651,
+              "root": "existing"
+            },
+            {
+              "attribute": "existing.unlink",
+              "binding": "existing",
+              "callee": "existing.unlink",
               "caller": {
                 "lineno": 2654,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -94798,6 +94784,20 @@
               },
               "is_attribute": true,
               "lineno": 2654,
+              "root": "existing"
+            },
+            {
+              "attribute": "datetime.now",
+              "binding": "datetime",
+              "callee": "datetime.now",
+              "caller": {
+                "lineno": 2655,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_inventory_copy",
+                "symbol": "_write_inventory_copy"
+              },
+              "is_attribute": true,
+              "lineno": 2655,
               "root": "datetime"
             }
           ],
@@ -94834,7 +94834,7 @@
           },
           "is_async": false,
           "is_private": true,
-          "line": 2643,
+          "line": 2644,
           "line_count": 20,
           "locals_summary": {
             "assign": 5,
@@ -94853,27 +94853,27 @@
           "used_globals": [],
           "uses_import": [
             {
-              "lineno": 2643,
+              "lineno": 2644,
               "symbol": "pathlib.Path",
               "via": "Path"
             },
             {
-              "lineno": 2654,
+              "lineno": 2655,
               "symbol": "datetime.datetime",
               "via": "datetime"
             },
             {
-              "lineno": 2657,
+              "lineno": 2658,
               "symbol": "json",
               "via": "json"
             },
             {
-              "lineno": 2643,
+              "lineno": 2644,
               "symbol": "typing.Any",
               "via": "Any"
             },
             {
-              "lineno": 2654,
+              "lineno": 2655,
               "symbol": "datetime.timezone",
               "via": "timezone"
             }
@@ -94912,20 +94912,6 @@
               "binding": "directory",
               "callee": "directory.mkdir",
               "caller": {
-                "lineno": 2666,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_screening_copy",
-                "symbol": "_write_screening_copy"
-              },
-              "is_attribute": true,
-              "lineno": 2666,
-              "root": "directory"
-            },
-            {
-              "attribute": "directory.glob",
-              "binding": "directory",
-              "callee": "directory.glob",
-              "caller": {
                 "lineno": 2667,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_write_screening_copy",
@@ -94940,13 +94926,27 @@
               "binding": "directory",
               "callee": "directory.glob",
               "caller": {
-                "lineno": 2670,
+                "lineno": 2668,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_write_screening_copy",
                 "symbol": "_write_screening_copy"
               },
               "is_attribute": true,
-              "lineno": 2670,
+              "lineno": 2668,
+              "root": "directory"
+            },
+            {
+              "attribute": "directory.glob",
+              "binding": "directory",
+              "callee": "directory.glob",
+              "caller": {
+                "lineno": 2671,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_screening_copy",
+                "symbol": "_write_screening_copy"
+              },
+              "is_attribute": true,
+              "lineno": 2671,
               "root": "directory"
             },
             {
@@ -94954,33 +94954,19 @@
               "binding_expression": "datetime.now(timezone.utc)",
               "callee": "datetime.now(timezone.utc).strftime",
               "caller": {
-                "lineno": 2673,
+                "lineno": 2674,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_write_screening_copy",
                 "symbol": "_write_screening_copy"
               },
               "is_attribute": true,
-              "lineno": 2673,
+              "lineno": 2674,
               "root": "datetime"
             },
             {
               "attribute": "output_file.with_suffix",
               "binding": "output_file",
               "callee": "output_file.with_suffix",
-              "caller": {
-                "lineno": 2675,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_screening_copy",
-                "symbol": "_write_screening_copy"
-              },
-              "is_attribute": true,
-              "lineno": 2675,
-              "root": "output_file"
-            },
-            {
-              "attribute": "temp_file.write_text",
-              "binding": "temp_file",
-              "callee": "temp_file.write_text",
               "caller": {
                 "lineno": 2676,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -94989,12 +94975,12 @@
               },
               "is_attribute": true,
               "lineno": 2676,
-              "root": "temp_file"
+              "root": "output_file"
             },
             {
-              "attribute": "temp_file.replace",
+              "attribute": "temp_file.write_text",
               "binding": "temp_file",
-              "callee": "temp_file.replace",
+              "callee": "temp_file.write_text",
               "caller": {
                 "lineno": 2677,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -95006,51 +94992,23 @@
               "root": "temp_file"
             },
             {
-              "attribute": "existing.is_file",
-              "binding": "existing",
-              "callee": "existing.is_file",
+              "attribute": "temp_file.replace",
+              "binding": "temp_file",
+              "callee": "temp_file.replace",
               "caller": {
-                "lineno": 2668,
+                "lineno": 2678,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::_write_screening_copy",
                 "symbol": "_write_screening_copy"
               },
               "is_attribute": true,
-              "lineno": 2668,
-              "root": "existing"
+              "lineno": 2678,
+              "root": "temp_file"
             },
             {
               "attribute": "existing.is_file",
               "binding": "existing",
               "callee": "existing.is_file",
-              "caller": {
-                "lineno": 2671,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_screening_copy",
-                "symbol": "_write_screening_copy"
-              },
-              "is_attribute": true,
-              "lineno": 2671,
-              "root": "existing"
-            },
-            {
-              "attribute": "json.dumps",
-              "binding": "json",
-              "callee": "json.dumps",
-              "caller": {
-                "lineno": 2676,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_screening_copy",
-                "symbol": "_write_screening_copy"
-              },
-              "is_attribute": true,
-              "lineno": 2676,
-              "root": "json"
-            },
-            {
-              "attribute": "existing.unlink",
-              "binding": "existing",
-              "callee": "existing.unlink",
               "caller": {
                 "lineno": 2669,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -95062,9 +95020,9 @@
               "root": "existing"
             },
             {
-              "attribute": "existing.unlink",
+              "attribute": "existing.is_file",
               "binding": "existing",
-              "callee": "existing.unlink",
+              "callee": "existing.is_file",
               "caller": {
                 "lineno": 2672,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -95076,9 +95034,37 @@
               "root": "existing"
             },
             {
-              "attribute": "datetime.now",
-              "binding": "datetime",
-              "callee": "datetime.now",
+              "attribute": "json.dumps",
+              "binding": "json",
+              "callee": "json.dumps",
+              "caller": {
+                "lineno": 2677,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_screening_copy",
+                "symbol": "_write_screening_copy"
+              },
+              "is_attribute": true,
+              "lineno": 2677,
+              "root": "json"
+            },
+            {
+              "attribute": "existing.unlink",
+              "binding": "existing",
+              "callee": "existing.unlink",
+              "caller": {
+                "lineno": 2670,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_screening_copy",
+                "symbol": "_write_screening_copy"
+              },
+              "is_attribute": true,
+              "lineno": 2670,
+              "root": "existing"
+            },
+            {
+              "attribute": "existing.unlink",
+              "binding": "existing",
+              "callee": "existing.unlink",
               "caller": {
                 "lineno": 2673,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -95087,6 +95073,20 @@
               },
               "is_attribute": true,
               "lineno": 2673,
+              "root": "existing"
+            },
+            {
+              "attribute": "datetime.now",
+              "binding": "datetime",
+              "callee": "datetime.now",
+              "caller": {
+                "lineno": 2674,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::_write_screening_copy",
+                "symbol": "_write_screening_copy"
+              },
+              "is_attribute": true,
+              "lineno": 2674,
               "root": "datetime"
             }
           ],
@@ -95120,7 +95120,7 @@
           },
           "is_async": false,
           "is_private": true,
-          "line": 2665,
+          "line": 2666,
           "line_count": 14,
           "locals_summary": {
             "assign": 3,
@@ -95139,27 +95139,27 @@
           "used_globals": [],
           "uses_import": [
             {
-              "lineno": 2665,
+              "lineno": 2666,
               "symbol": "pathlib.Path",
               "via": "Path"
             },
             {
-              "lineno": 2673,
+              "lineno": 2674,
               "symbol": "datetime.datetime",
               "via": "datetime"
             },
             {
-              "lineno": 2676,
+              "lineno": 2677,
               "symbol": "json",
               "via": "json"
             },
             {
-              "lineno": 2665,
+              "lineno": 2666,
               "symbol": "typing.Any",
               "via": "Any"
             },
             {
-              "lineno": 2673,
+              "lineno": 2674,
               "symbol": "datetime.timezone",
               "via": "timezone"
             }
@@ -95196,26 +95196,14 @@
             {
               "callee": "_slugify_relative",
               "caller": {
-                "lineno": 2684,
+                "lineno": 2685,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::write_inventory",
                 "symbol": "write_inventory"
               },
               "is_attribute": false,
-              "lineno": 2684,
+              "lineno": 2685,
               "root": "_slugify_relative"
-            },
-            {
-              "callee": "_write_inventory_copy",
-              "caller": {
-                "lineno": 2686,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::write_inventory",
-                "symbol": "write_inventory"
-              },
-              "is_attribute": false,
-              "lineno": 2686,
-              "root": "_write_inventory_copy"
             },
             {
               "callee": "_write_inventory_copy",
@@ -95230,7 +95218,7 @@
               "root": "_write_inventory_copy"
             },
             {
-              "callee": "_write_screening_copy",
+              "callee": "_write_inventory_copy",
               "caller": {
                 "lineno": 2688,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -95239,7 +95227,7 @@
               },
               "is_attribute": false,
               "lineno": 2688,
-              "root": "_write_screening_copy"
+              "root": "_write_inventory_copy"
             },
             {
               "callee": "_write_screening_copy",
@@ -95251,6 +95239,18 @@
               },
               "is_attribute": false,
               "lineno": 2689,
+              "root": "_write_screening_copy"
+            },
+            {
+              "callee": "_write_screening_copy",
+              "caller": {
+                "lineno": 2690,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::write_inventory",
+                "symbol": "write_inventory"
+              },
+              "is_attribute": false,
+              "lineno": 2690,
               "root": "_write_screening_copy"
             }
           ],
@@ -95278,19 +95278,19 @@
           "intra_file_refs": [
             {
               "callee_func": "_write_inventory_copy",
-              "lineno": 2686
-            },
-            {
-              "callee_func": "_write_inventory_copy",
               "lineno": 2687
             },
             {
-              "callee_func": "_write_screening_copy",
+              "callee_func": "_write_inventory_copy",
               "lineno": 2688
             },
             {
               "callee_func": "_write_screening_copy",
               "lineno": 2689
+            },
+            {
+              "callee_func": "_write_screening_copy",
+              "lineno": 2690
             }
           ],
           "io_effects": {
@@ -95301,7 +95301,7 @@
           },
           "is_async": false,
           "is_private": false,
-          "line": 2681,
+          "line": 2682,
           "line_count": 10,
           "locals_summary": {
             "assign": 5,
@@ -95320,12 +95320,12 @@
           "used_globals": [],
           "uses_import": [
             {
-              "lineno": 2681,
+              "lineno": 2682,
               "symbol": "pathlib.Path",
               "via": "Path"
             },
             {
-              "lineno": 2681,
+              "lineno": 2682,
               "symbol": "typing.Any",
               "via": "Any"
             }
@@ -95358,18 +95358,6 @@
             {
               "callee": "parse_args",
               "caller": {
-                "lineno": 2694,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::run",
-                "symbol": "run"
-              },
-              "is_attribute": false,
-              "lineno": 2694,
-              "root": "parse_args"
-            },
-            {
-              "callee": "build_options",
-              "caller": {
                 "lineno": 2695,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::run",
@@ -95377,10 +95365,10 @@
               },
               "is_attribute": false,
               "lineno": 2695,
-              "root": "build_options"
+              "root": "parse_args"
             },
             {
-              "callee": "configure_logging",
+              "callee": "build_options",
               "caller": {
                 "lineno": 2696,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -95389,58 +95377,58 @@
               },
               "is_attribute": false,
               "lineno": 2696,
+              "root": "build_options"
+            },
+            {
+              "callee": "configure_logging",
+              "caller": {
+                "lineno": 2697,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::run",
+                "symbol": "run"
+              },
+              "is_attribute": false,
+              "lineno": 2697,
               "root": "configure_logging"
             },
             {
               "callee": "discover_python_files",
               "caller": {
-                "lineno": 2711,
+                "lineno": 2712,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::run",
                 "symbol": "run"
               },
               "is_attribute": false,
-              "lineno": 2711,
+              "lineno": 2712,
               "root": "discover_python_files"
             },
             {
               "callee": "load_coverage_reports",
               "caller": {
-                "lineno": 2716,
+                "lineno": 2717,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::run",
                 "symbol": "run"
               },
               "is_attribute": false,
-              "lineno": 2716,
+              "lineno": 2717,
               "root": "load_coverage_reports"
             },
             {
               "callee": "attach_git_churn",
               "caller": {
-                "lineno": 2735,
+                "lineno": 2736,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::run",
                 "symbol": "run"
               },
               "is_attribute": false,
-              "lineno": 2735,
+              "lineno": 2736,
               "root": "attach_git_churn"
             },
             {
               "callee": "compose_inventory",
-              "caller": {
-                "lineno": 2737,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::run",
-                "symbol": "run"
-              },
-              "is_attribute": false,
-              "lineno": 2737,
-              "root": "compose_inventory"
-            },
-            {
-              "callee": "build_screening_summary",
               "caller": {
                 "lineno": 2738,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -95449,10 +95437,10 @@
               },
               "is_attribute": false,
               "lineno": 2738,
-              "root": "build_screening_summary"
+              "root": "compose_inventory"
             },
             {
-              "callee": "write_inventory",
+              "callee": "build_screening_summary",
               "caller": {
                 "lineno": 2739,
                 "module": "scripts.producers.generate_commandview_inventory",
@@ -95461,6 +95449,18 @@
               },
               "is_attribute": false,
               "lineno": 2739,
+              "root": "build_screening_summary"
+            },
+            {
+              "callee": "write_inventory",
+              "caller": {
+                "lineno": 2740,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::run",
+                "symbol": "run"
+              },
+              "is_attribute": false,
+              "lineno": 2740,
               "root": "write_inventory"
             },
             {
@@ -95468,25 +95468,25 @@
               "binding": "logging",
               "callee": "logging.info",
               "caller": {
-                "lineno": 2740,
+                "lineno": 2741,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::run",
                 "symbol": "run"
               },
               "is_attribute": true,
-              "lineno": 2740,
+              "lineno": 2741,
               "root": "logging"
             },
             {
               "callee": "build_paths",
               "caller": {
-                "lineno": 2699,
+                "lineno": 2700,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::run",
                 "symbol": "run"
               },
               "is_attribute": false,
-              "lineno": 2699,
+              "lineno": 2700,
               "root": "build_paths"
             },
             {
@@ -95495,20 +95495,6 @@
               "binding_expression": "paths.target",
               "callee": "paths.target.exists",
               "caller": {
-                "lineno": 2704,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::run",
-                "symbol": "run"
-              },
-              "is_attribute": true,
-              "lineno": 2704,
-              "root": "paths"
-            },
-            {
-              "attribute": "logging.error",
-              "binding": "logging",
-              "callee": "logging.error",
-              "caller": {
                 "lineno": 2705,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::run",
@@ -95516,6 +95502,20 @@
               },
               "is_attribute": true,
               "lineno": 2705,
+              "root": "paths"
+            },
+            {
+              "attribute": "logging.error",
+              "binding": "logging",
+              "callee": "logging.error",
+              "caller": {
+                "lineno": 2706,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::run",
+                "symbol": "run"
+              },
+              "is_attribute": true,
+              "lineno": 2706,
               "root": "logging"
             },
             {
@@ -95524,20 +95524,6 @@
               "binding_expression": "paths.target",
               "callee": "paths.target.is_dir",
               "caller": {
-                "lineno": 2707,
-                "module": "scripts.producers.generate_commandview_inventory",
-                "qualified_name": "scripts.producers.generate_commandview_inventory::run",
-                "symbol": "run"
-              },
-              "is_attribute": true,
-              "lineno": 2707,
-              "root": "paths"
-            },
-            {
-              "attribute": "logging.error",
-              "binding": "logging",
-              "callee": "logging.error",
-              "caller": {
                 "lineno": 2708,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::run",
@@ -95545,6 +95531,20 @@
               },
               "is_attribute": true,
               "lineno": 2708,
+              "root": "paths"
+            },
+            {
+              "attribute": "logging.error",
+              "binding": "logging",
+              "callee": "logging.error",
+              "caller": {
+                "lineno": 2709,
+                "module": "scripts.producers.generate_commandview_inventory",
+                "qualified_name": "scripts.producers.generate_commandview_inventory::run",
+                "symbol": "run"
+              },
+              "is_attribute": true,
+              "lineno": 2709,
               "root": "logging"
             },
             {
@@ -95552,25 +95552,25 @@
               "binding": "logging",
               "callee": "logging.error",
               "caller": {
-                "lineno": 2713,
+                "lineno": 2714,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::run",
                 "symbol": "run"
               },
               "is_attribute": true,
-              "lineno": 2713,
+              "lineno": 2714,
               "root": "logging"
             },
             {
               "callee": "analyze_python_file",
               "caller": {
-                "lineno": 2721,
+                "lineno": 2722,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::run",
                 "symbol": "run"
               },
               "is_attribute": false,
-              "lineno": 2721,
+              "lineno": 2722,
               "root": "analyze_python_file"
             },
             {
@@ -95578,25 +95578,25 @@
               "binding": "logging",
               "callee": "logging.error",
               "caller": {
-                "lineno": 2732,
+                "lineno": 2733,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::run",
                 "symbol": "run"
               },
               "is_attribute": true,
-              "lineno": 2732,
+              "lineno": 2733,
               "root": "logging"
             },
             {
               "callee": "len",
               "caller": {
-                "lineno": 2746,
+                "lineno": 2747,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::run",
                 "symbol": "run"
               },
               "is_attribute": false,
-              "lineno": 2746,
+              "lineno": 2747,
               "root": "len"
             },
             {
@@ -95604,13 +95604,13 @@
               "binding": "logging",
               "callee": "logging.error",
               "caller": {
-                "lineno": 2701,
+                "lineno": 2702,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::run",
                 "symbol": "run"
               },
               "is_attribute": true,
-              "lineno": 2701,
+              "lineno": 2702,
               "root": "logging"
             },
             {
@@ -95618,13 +95618,13 @@
               "binding": "collected",
               "callee": "collected.append",
               "caller": {
-                "lineno": 2729,
+                "lineno": 2730,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::run",
                 "symbol": "run"
               },
               "is_attribute": true,
-              "lineno": 2729,
+              "lineno": 2730,
               "root": "collected"
             }
           ],
@@ -95653,47 +95653,47 @@
           "intra_file_refs": [
             {
               "callee_func": "parse_args",
-              "lineno": 2694
-            },
-            {
-              "callee_func": "build_options",
               "lineno": 2695
             },
             {
-              "callee_func": "configure_logging",
+              "callee_func": "build_options",
               "lineno": 2696
             },
             {
+              "callee_func": "configure_logging",
+              "lineno": 2697
+            },
+            {
               "callee_func": "discover_python_files",
-              "lineno": 2711
+              "lineno": 2712
             },
             {
               "callee_func": "load_coverage_reports",
-              "lineno": 2716
+              "lineno": 2717
             },
             {
               "callee_func": "attach_git_churn",
-              "lineno": 2735
+              "lineno": 2736
             },
             {
               "callee_func": "compose_inventory",
-              "lineno": 2737
-            },
-            {
-              "callee_func": "build_screening_summary",
               "lineno": 2738
             },
             {
-              "callee_func": "write_inventory",
+              "callee_func": "build_screening_summary",
               "lineno": 2739
             },
             {
+              "callee_func": "write_inventory",
+              "lineno": 2740
+            },
+            {
               "callee_func": "build_paths",
-              "lineno": 2699
+              "lineno": 2700
             },
             {
               "callee_func": "analyze_python_file",
-              "lineno": 2721
+              "lineno": 2722
             }
           ],
           "io_effects": {
@@ -95704,7 +95704,7 @@
           },
           "is_async": false,
           "is_private": false,
-          "line": 2693,
+          "line": 2694,
           "line_count": 56,
           "locals_summary": {
             "assign": 12,
@@ -95714,27 +95714,27 @@
           "logging_calls": [
             {
               "level": "info",
-              "lineno": 2740
+              "lineno": 2741
             },
             {
               "level": "error",
-              "lineno": 2705
+              "lineno": 2706
             },
             {
               "level": "error",
-              "lineno": 2708
+              "lineno": 2709
             },
             {
               "level": "error",
-              "lineno": 2713
+              "lineno": 2714
             },
             {
               "level": "error",
-              "lineno": 2732
+              "lineno": 2733
             },
             {
               "level": "error",
-              "lineno": 2701
+              "lineno": 2702
             }
           ],
           "name": "run",
@@ -95748,42 +95748,42 @@
           "used_globals": [],
           "uses_import": [
             {
-              "lineno": 2740,
+              "lineno": 2741,
               "symbol": "logging",
               "via": "logging"
             },
             {
-              "lineno": 2705,
+              "lineno": 2706,
               "symbol": "logging",
               "via": "logging"
             },
             {
-              "lineno": 2708,
+              "lineno": 2709,
               "symbol": "logging",
               "via": "logging"
             },
             {
-              "lineno": 2713,
+              "lineno": 2714,
               "symbol": "logging",
               "via": "logging"
             },
             {
-              "lineno": 2732,
+              "lineno": 2733,
               "symbol": "logging",
               "via": "logging"
             },
             {
-              "lineno": 2701,
+              "lineno": 2702,
               "symbol": "logging",
               "via": "logging"
             },
             {
-              "lineno": 2693,
+              "lineno": 2694,
               "symbol": "typing.Iterable",
               "via": "Iterable"
             },
             {
-              "lineno": 2719,
+              "lineno": 2720,
               "symbol": "typing.Any",
               "via": "Any"
             }
@@ -95812,25 +95812,25 @@
             {
               "callee": "SystemExit",
               "caller": {
-                "lineno": 2752,
+                "lineno": 2753,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::main",
                 "symbol": "main"
               },
               "is_attribute": false,
-              "lineno": 2752,
+              "lineno": 2753,
               "root": "SystemExit"
             },
             {
               "callee": "run",
               "caller": {
-                "lineno": 2752,
+                "lineno": 2753,
                 "module": "scripts.producers.generate_commandview_inventory",
                 "qualified_name": "scripts.producers.generate_commandview_inventory::main",
                 "symbol": "main"
               },
               "is_attribute": false,
-              "lineno": 2752,
+              "lineno": 2753,
               "root": "run"
             }
           ],
@@ -95854,7 +95854,7 @@
           "intra_file_refs": [
             {
               "callee_func": "run",
-              "lineno": 2752
+              "lineno": 2753
             }
           ],
           "io_effects": {
@@ -95865,7 +95865,7 @@
           },
           "is_async": false,
           "is_private": false,
-          "line": 2751,
+          "line": 2752,
           "line_count": 2,
           "locals_summary": {
             "assign": 0,
@@ -95878,7 +95878,7 @@
           "raises": [
             {
               "exception": "SystemExit(run())",
-              "lineno": 2752
+              "lineno": 2753
             }
           ],
           "returns_kind": "none",
@@ -96688,7 +96688,7 @@
           ]
         }
       ],
-      "line_count": 2756,
+      "line_count": 2757,
       "module_doc": "Generate a co-located function inventory for a repo folder.",
       "module_first_line": "def _safe_unparse(node: ast.AST | None) -> str | None:",
       "module_id": "scripts.producers.generate_commandview_inventory",
@@ -96704,7 +96704,7 @@
         },
         {
           "kind": "function",
-          "lineno": 2751,
+          "lineno": 2752,
           "name": "main",
           "parent_class": null,
           "qualified_name": "scripts.producers.generate_commandview_inventory::main"
@@ -104158,13 +104158,14 @@
   "metadata": {
     "folder_name": "scripts",
     "folder_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts",
-    "generated_at": "2025-11-07T18:55:44.317196+00:00",
+    "generated_at": "2025-11-08T12:35:43.186134+00:00",
     "scan_depth": "recursive",
     "schema_version": 2,
     "total_classes": 42,
     "total_files": 17,
     "total_functions": 263
   },
+  "schema_version": 2,
   "statistics": {
     "async_functions": 0,
     "files_by_type": {
@@ -104183,6 +104184,6 @@
     },
     "private_functions": 158,
     "public_functions": 105,
-    "total_lines_of_code": 6833
+    "total_lines_of_code": 6834
   }
 }

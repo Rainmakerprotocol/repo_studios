@@ -91,6 +91,129 @@
   - [ ] Ensure multiple views can coexist (tabbed or multi-panel) without reloading JSON.
 - [x] Map Code Flow pack to newly emitted call graph edges.
 
+### View Pack Readiness Tracker
+
+- **Health Pack**
+  - `function_inventory_overview.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `screening_signal_timeline.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+- **Dependency Pack**
+  - `module_dependency_graph.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `export_contract_matrix.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `circular_import_detection.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `layer_architecture_validation.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `external_vs_internal_dependency_map.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+- **Event Dynamics Pack**
+  - `callback_registration_map.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `dynamic_code_watchlist.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+- **Code Flow Pack**
+  - `function_call_graph.mmd`
+    - [x] Data slice ready
+    - [x] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `entrypoint_trace_diagram.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `class_inheritance_hierarchy.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `method_call_chain.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+- **State Effects Pack**
+  - `global_variable_usage_map.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `io_effects_diagram.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `exception_flow_map.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+- **Quality Metrics Pack**
+  - `complexity_heatmap.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `logging_flow.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `decorator_usage_map.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `public_vs_private_api.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `cyclomatic_complexity_map.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `type_coverage_map.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `documentation_coverage_map.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+- **Coupling Insight Pack**
+  - `cross_module_function_references.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `import_chain_depth.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+- **Risk & Assurance Pack**
+  - `test_coverage_mapping.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `git_churn_risk_map.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+  - `dead_code_detection.mmd`
+    - [ ] Data slice ready
+    - [ ] Controls wired
+    - [ ] Multi-view coexistence verified
+
 ## Phase 8 · UX Enhancements
 
 - [ ] Add metrics-driven overlays (line count, complexity, IO effects) at relevant zoom levels.

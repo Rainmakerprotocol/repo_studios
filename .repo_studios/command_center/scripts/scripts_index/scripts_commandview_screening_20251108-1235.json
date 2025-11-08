@@ -10179,7 +10179,7 @@
         }
       },
       "scripts.producers.generate_commandview_inventory::compose_inventory": {
-        "hash": "6135cd081cec2fe9ab10d6be433f36abd851a83e2750d0478458887a8c8ecf09",
+        "hash": "7dd689d4affc1fe33767d130573e7ee8d5fcab587d143ee21b917720a0284a3b",
         "io_effects": {
           "env": false,
           "network": false,

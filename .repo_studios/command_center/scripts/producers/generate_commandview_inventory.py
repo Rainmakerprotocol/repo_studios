@@ -2426,6 +2426,7 @@ def compose_inventory(
         statistics["git_churn"] = git_churn_summary
 
     payload = {
+        "schema_version": options.schema_version,
         "metadata": metadata,
         "files": files,
         "statistics": statistics,

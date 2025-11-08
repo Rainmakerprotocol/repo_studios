@@ -500,6 +500,20 @@ const state = {
   renderInteractions: new Map(),
   activeViews: [],
   activeViewIndex: -1,
+  zoom: {
+    scale: 1,
+    translateX: 0,
+    translateY: 0,
+    isPanning: false,
+    startX: 0,
+    startY: 0,
+  },
+  sidebar: {
+    width: 300,
+    isResizing: false,
+    startX: 0,
+    startWidth: 0,
+  },
 };
 
 const selectionMemory = new Map();
@@ -2931,12 +2945,180 @@ async function renderDiagram(definition) {
     const { svg } = await window.mermaid.render(renderKey, definition);
     container.innerHTML = svg;
     attachRenderInteractions(container);
+    initializeDiagramZoom(container);
     return true;
   } catch (error) {
     console.error("Mermaid render failed", error);
     updateStatus("Unable to render diagram preview (see console for details).");
     return false;
   }
+}
+
+function initializeDiagramZoom(container) {
+  if (!container) return;
+
+  const svgElement = container.querySelector('svg');
+  if (!svgElement) return;
+
+  // Reset zoom state when new diagram loads
+  state.zoom.scale = 1;
+  state.zoom.translateX = 0;
+  state.zoom.translateY = 0;
+
+  // Apply initial transform
+  applyZoomTransform(svgElement);
+
+  // Remove existing listeners to avoid duplicates
+  container.removeEventListener('wheel', handleDiagramWheel);
+  container.removeEventListener('mousedown', handleDiagramMouseDown);
+
+  // Add zoom and pan event listeners
+  container.addEventListener('wheel', handleDiagramWheel, { passive: false });
+  container.addEventListener('mousedown', handleDiagramMouseDown);
+
+  console.log('[initializeDiagramZoom] Zoom controls initialized');
+}
+
+function handleDiagramWheel(event) {
+  event.preventDefault();
+  
+  const container = event.currentTarget;
+  const svgElement = container.querySelector('svg');
+  if (!svgElement) return;
+
+  // Get mouse position relative to container
+  const rect = container.getBoundingClientRect();
+  const mouseX = event.clientX - rect.left;
+  const mouseY = event.clientY - rect.top;
+
+  // Calculate zoom delta (negative deltaY = zoom in)
+  const zoomDelta = event.deltaY > 0 ? 0.9 : 1.1;
+  const newScale = Math.max(0.1, Math.min(200, state.zoom.scale * zoomDelta));
+
+  // Adjust translation to zoom towards mouse position
+  const scaleChange = newScale / state.zoom.scale;
+  state.zoom.translateX = mouseX - (mouseX - state.zoom.translateX) * scaleChange;
+  state.zoom.translateY = mouseY - (mouseY - state.zoom.translateY) * scaleChange;
+  state.zoom.scale = newScale;
+
+  applyZoomTransform(svgElement);
+  updateZoomIndicator();
+}
+
+function handleDiagramMouseDown(event) {
+  // Only pan with left mouse button or when space key is held
+  if (event.button !== 0) return;
+
+  const container = event.currentTarget;
+  const svgElement = container.querySelector('svg');
+  if (!svgElement) return;
+
+  // Don't pan if clicking on an interactive element
+  if (event.target.classList.contains('diagram-node-action')) {
+    return;
+  }
+
+  state.zoom.isPanning = true;
+  state.zoom.startX = event.clientX - state.zoom.translateX;
+  state.zoom.startY = event.clientY - state.zoom.translateY;
+
+  container.style.cursor = 'grabbing';
+
+  const handleMouseMove = (e) => {
+    if (!state.zoom.isPanning) return;
+    
+    state.zoom.translateX = e.clientX - state.zoom.startX;
+    state.zoom.translateY = e.clientY - state.zoom.startY;
+    
+    applyZoomTransform(svgElement);
+  };
+
+  const handleMouseUp = () => {
+    state.zoom.isPanning = false;
+    container.style.cursor = 'grab';
+    
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+  };
+
+  document.addEventListener('mousemove', handleMouseMove);
+  document.addEventListener('mouseup', handleMouseUp);
+}
+
+function applyZoomTransform(svgElement) {
+  if (!svgElement) return;
+  
+  const transform = `translate(${state.zoom.translateX}px, ${state.zoom.translateY}px) scale(${state.zoom.scale})`;
+  svgElement.style.transform = transform;
+  svgElement.style.transformOrigin = '0 0';
+  svgElement.style.transition = 'transform 0.1s ease-out';
+}
+
+function updateZoomIndicator() {
+  const indicator = document.getElementById('zoom-indicator');
+  if (indicator) {
+    indicator.textContent = `${Math.round(state.zoom.scale * 100)}%`;
+  }
+}
+
+function resetDiagramZoom() {
+  const container = document.getElementById('diagram');
+  if (!container) return;
+
+  const svgElement = container.querySelector('svg');
+  if (!svgElement) return;
+
+  state.zoom.scale = 1;
+  state.zoom.translateX = 0;
+  state.zoom.translateY = 0;
+
+  applyZoomTransform(svgElement);
+  updateZoomIndicator();
+  updateStatus('Zoom reset to 100%');
+}
+
+function zoomIn() {
+  const container = document.getElementById('diagram');
+  if (!container) return;
+
+  const svgElement = container.querySelector('svg');
+  if (!svgElement) return;
+
+  const rect = container.getBoundingClientRect();
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+
+  const newScale = Math.min(200, state.zoom.scale * 1.2);
+  const scaleChange = newScale / state.zoom.scale;
+  
+  state.zoom.translateX = centerX - (centerX - state.zoom.translateX) * scaleChange;
+  state.zoom.translateY = centerY - (centerY - state.zoom.translateY) * scaleChange;
+  state.zoom.scale = newScale;
+
+  applyZoomTransform(svgElement);
+  updateZoomIndicator();
+}
+
+function zoomOut() {
+  const container = document.getElementById('diagram');
+  if (!container) return;
+
+  const svgElement = container.querySelector('svg');
+  if (!svgElement) return;
+
+  const rect = container.getBoundingClientRect();
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+
+  const newScale = Math.max(0.1, state.zoom.scale * 0.8);
+  const scaleChange = newScale / state.zoom.scale;
+  
+  state.zoom.translateX = centerX - (centerX - state.zoom.translateX) * scaleChange;
+  state.zoom.translateY = centerY - (centerY - state.zoom.translateY) * scaleChange;
+  state.zoom.scale = newScale;
+
+  applyZoomTransform(svgElement);
+  updateZoomIndicator();
 }
 
 function attachRenderInteractions(container) {
@@ -3459,6 +3641,135 @@ function wireExport() {
   updateExportButtonState();
 }
 
+function wireZoomControls() {
+  const zoomInBtn = document.getElementById("zoom-in-btn");
+  const zoomOutBtn = document.getElementById("zoom-out-btn");
+  const zoomResetBtn = document.getElementById("zoom-reset-btn");
+
+  if (zoomInBtn) {
+    zoomInBtn.addEventListener("click", () => {
+      zoomIn();
+    });
+  }
+
+  if (zoomOutBtn) {
+    zoomOutBtn.addEventListener("click", () => {
+      zoomOut();
+    });
+  }
+
+  if (zoomResetBtn) {
+    zoomResetBtn.addEventListener("click", () => {
+      resetDiagramZoom();
+    });
+  }
+
+  console.log('[wireZoomControls] Zoom control buttons wired');
+}
+
+function initializeSidebarResize() {
+  const resizeHandle = document.getElementById('sidebar-resize-handle');
+  const sidebar = document.querySelector('.viewer-sidebar');
+  
+  if (!resizeHandle || !sidebar) {
+    console.warn('[initializeSidebarResize] Resize handle or sidebar not found');
+    return;
+  }
+
+  // Load saved width from localStorage
+  const savedWidth = loadSidebarWidth();
+  if (savedWidth) {
+    applySidebarWidth(savedWidth);
+  }
+
+  resizeHandle.addEventListener('mousedown', handleSidebarMouseDown);
+  
+  console.log('[initializeSidebarResize] Sidebar resize initialized');
+}
+
+function handleSidebarMouseDown(event) {
+  event.preventDefault();
+  
+  const sidebar = document.querySelector('.viewer-sidebar');
+  if (!sidebar) return;
+
+  state.sidebar.isResizing = true;
+  state.sidebar.startX = event.clientX;
+  state.sidebar.startWidth = sidebar.offsetWidth;
+
+  const resizeHandle = document.getElementById('sidebar-resize-handle');
+  if (resizeHandle) {
+    resizeHandle.classList.add('resizing');
+  }
+
+  document.body.classList.add('sidebar-resizing');
+
+  document.addEventListener('mousemove', handleSidebarMouseMove);
+  document.addEventListener('mouseup', handleSidebarMouseUp);
+}
+
+function handleSidebarMouseMove(event) {
+  if (!state.sidebar.isResizing) return;
+
+  const delta = event.clientX - state.sidebar.startX;
+  const newWidth = state.sidebar.startWidth + delta;
+  
+  // Constrain width between min and max
+  const constrainedWidth = Math.max(200, Math.min(600, newWidth));
+  
+  applySidebarWidth(constrainedWidth);
+}
+
+function handleSidebarMouseUp() {
+  if (!state.sidebar.isResizing) return;
+
+  state.sidebar.isResizing = false;
+
+  const resizeHandle = document.getElementById('sidebar-resize-handle');
+  if (resizeHandle) {
+    resizeHandle.classList.remove('resizing');
+  }
+
+  document.body.classList.remove('sidebar-resizing');
+
+  document.removeEventListener('mousemove', handleSidebarMouseMove);
+  document.removeEventListener('mouseup', handleSidebarMouseUp);
+
+  // Save the new width
+  saveSidebarWidth(state.sidebar.width);
+}
+
+function applySidebarWidth(width) {
+  const sidebar = document.querySelector('.viewer-sidebar');
+  if (!sidebar) return;
+
+  sidebar.style.width = `${width}px`;
+  state.sidebar.width = width;
+}
+
+function saveSidebarWidth(width) {
+  try {
+    localStorage.setItem('viewer-sidebar-width', width.toString());
+  } catch (error) {
+    console.warn('[saveSidebarWidth] Failed to save sidebar width', error);
+  }
+}
+
+function loadSidebarWidth() {
+  try {
+    const saved = localStorage.getItem('viewer-sidebar-width');
+    if (saved) {
+      const width = parseInt(saved, 10);
+      if (!isNaN(width) && width >= 200 && width <= 600) {
+        return width;
+      }
+    }
+  } catch (error) {
+    console.warn('[loadSidebarWidth] Failed to load sidebar width', error);
+  }
+  return null;
+}
+
 async function bootstrapDemoPayload() {
   const demoPayload = {
     generated_at: new Date().toISOString(),
@@ -3528,9 +3839,13 @@ async function bootstrap() {
     wireRefresh();
     console.log('[bootstrap] Step 7: wireExport');
     wireExport();
-    console.log('[bootstrap] Step 8: updateStatus');
+    console.log('[bootstrap] Step 8: wireZoomControls');
+    wireZoomControls();
+    console.log('[bootstrap] Step 9: initializeSidebarResize');
+    initializeSidebarResize();
+    console.log('[bootstrap] Step 10: updateStatus');
     updateStatus("Loading selector data...");
-    console.log('[bootstrap] Step 9: refreshSelectorData');
+    console.log('[bootstrap] Step 11: refreshSelectorData');
     await refreshSelectorData();
     console.log('[bootstrap] Bootstrap completed successfully');
   } catch (error) {

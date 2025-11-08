@@ -67,11 +67,18 @@
           </div>
           <h2 class="sidebar-title">View Packs</h2>
           <div id="view-pack-container" class="view-pack-container" aria-live="polite"></div>
+          <div class="sidebar-resize-handle" id="sidebar-resize-handle"></div>
         </aside>
         <main class="viewer-main">
           <div id="view-tabs" class="view-tabs" role="tablist" aria-label="View tabs"></div>
           <nav id="breadcrumb" class="breadcrumb" aria-label="Zoom breadcrumb"></nav>
           <div id="diagram-container" class="diagram-container" aria-live="polite">
+            <div class="diagram-zoom-controls">
+              <button id="zoom-in-btn" type="button" class="zoom-control-btn" title="Zoom In (Scroll Up)">+</button>
+              <button id="zoom-out-btn" type="button" class="zoom-control-btn" title="Zoom Out (Scroll Down)">−</button>
+              <button id="zoom-reset-btn" type="button" class="zoom-control-btn" title="Reset Zoom">⊙</button>
+              <div id="zoom-indicator" class="zoom-indicator">100%</div>
+            </div>
             <div id="diagram" class="diagram" role="img" aria-label="Mermaid diagram output"></div>
           </div>
           <section class="viewer-status" aria-live="polite" id="status-panel"></section>
