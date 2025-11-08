@@ -158,6 +158,25 @@
 - **Owner:** GitHub Copilot implementation assistant.
 - **Evidence:** `.repo_studios/command_center/viewer/ui/viewer.js` now injects severity-based Mermaid styles for aggregate and function nodes plus dotted aggregate edges, with documentation updated in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` Phase 5 notes.
 
+## 2025-11-08
+
+- **Decision:** Defined the Function Inventory Overview data slice and aligned viewer logic with the CommandView schema.
+- **Context:** Establishes the Health pack baseline so operators can render high-level health summaries before additional views are wired, while avoiding drift between viewer expectations and producer fields.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New spec at `.repo_studios/command_center/docs/mermaid/view_specs/function_inventory_overview.md` plus docstring detection hardening in `.repo_studios/command_center/viewer/ui/viewer.js` (builder now respects `docstring_quality.exists`), referenced in the Phase 7 tracker within `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Documented the Screening Signal Timeline data contract and flagged the missing screening history feed as a blocker.
+- **Context:** Enables the Health pack roadmap to proceed methodically by capturing inputs and transformation logic while ensuring the Command Center pipeline exposes chronological score history before wiring the view.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** View spec at `.repo_studios/command_center/docs/mermaid/view_specs/screening_signal_timeline.md` and updated tracker notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` outlining the instrumentation TODO.
+- **Decision:** Instrumented CommandView screening summaries with score snapshots and rolling history.
+- **Context:** Unlocks the Health pack Screening Signal Timeline by persisting chronological screening scores (docstring coverage severity today) so viewers can plot threshold crossings across runs.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `.repo_studios/command_center/scripts/producers/generate_commandview_inventory.py` now emits `score_snapshot`/`score_history` packs with docstring coverage metrics and severity thresholds, with regression coverage in `.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_screening_score_history_accumulates_across_runs` and tracker updates in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Enable the Health pack Screening Signal Timeline controls and relax gating so status messaging appears even when no events are recorded yet.
+- **Context:** Ensures operators can open the timeline view as soon as screening snapshots exist, reducing confusion when history is still building while still guarding missing payloads.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Updated `.repo_studios/command_center/viewer/ui/viewer.js` screening history requirement handling, refreshed guidance in `.repo_studios/command_center/viewer/SCREENING_TIMELINE_VERIFICATION.md`, and Phase 7 tracker updates in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` noting the control wiring.
+
 ## 2025-11-07
 
 - **Decision:** List all curated Mermaid view packs in the viewer sidebar grouped by pack to anchor upcoming pack wiring.

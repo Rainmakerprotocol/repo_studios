@@ -3,13 +3,13 @@
     {
       "options": [
         {
-          "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\index_scan\\repo_studios_index\\.repo_studios_commandview_20251108-1835.json",
+          "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\index_scan\\repo_studios_index\\.repo_studios_commandview_20251108-2111.json",
           "category": "index_scan",
-          "label": ".repo_studios (2025-11-08 18:35 UTC)",
-          "relative_path": "index_scan/repo_studios_index/.repo_studios_commandview_20251108-1835.json",
+          "label": ".repo_studios (2025-11-08 21:11 UTC)",
+          "relative_path": "index_scan/repo_studios_index/.repo_studios_commandview_20251108-2111.json",
           "slug": ".repo_studios",
-          "timestamp": "20251108-1835",
-          "timestamp_iso": "2025-11-08T18:35:00+00:00"
+          "timestamp": "20251108-2111",
+          "timestamp_iso": "2025-11-08T21:11:00+00:00"
         }
       ],
       "slug": ".repo_studios"
@@ -43,5 +43,5 @@
       "slug": "scripts"
     }
   ],
-  "generated_at": "2025-11-08T18:36:07.004483+00:00"
+  "generated_at": "2025-11-08T21:43:16.558968+00:00"
 }

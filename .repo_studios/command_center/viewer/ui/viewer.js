@@ -1,3 +1,5 @@
+import { buildScreeningTimelineDiagram } from "./builders/screening_signal_timeline.js";
+
 console.log('[viewer.js] Script loading started');
 
 const DEFAULT_REPORTS_BASE_URL = "/.repo_studios/command_center/reports/";
@@ -34,7 +36,9 @@ const VIEW_PACKS = Object.freeze([
         filename: "screening_signal_timeline.mmd",
         description:
           "Timeline outlining when screening scores crossed thresholds to support release planning discussions.",
-        status: "planned",
+        status: "prototype",
+        builder: "screeningSignalTimelineView",
+        requirements: ["screeningHistory"],
       },
     ],
   },
@@ -310,6 +314,7 @@ const VIEW_BUILDERS = Object.freeze({
   functionCallGraphView: buildFunctionCallGraphViewDefinition,
   functionInventoryOverview: buildFunctionInventoryOverviewViewDefinition,
   typeCoverageMapView: buildTypeCoverageMapViewDefinition,
+  screeningSignalTimelineView: buildScreeningSignalTimelineViewDefinition,
 });
 
 function getViewPackById(packId) {
@@ -425,6 +430,16 @@ function findViewRequirementIssue(requirements) {
         const modulesWithChurn = state.normalizedData?.metrics?.modules;
         if (!(modulesWithChurn instanceof Map) || modulesWithChurn.size === 0) {
           return "Git churn metrics are not available in this CommandView artifact.";
+        }
+        break;
+      }
+      case "screeningHistory": {
+        const history = state.normalizedData?.screeningHistory ?? null;
+        if (!history) {
+          return "Screening history data is not available in this CommandView artifact.";
+        }
+        if (!Array.isArray(history.events)) {
+          return "Screening history events are missing from this CommandView artifact.";
         }
         break;
       }
@@ -811,6 +826,7 @@ function normalizeCommandViewData(inventory, screening) {
   const modules = new Map();
   const functions = new Map();
   const functionCallGraph = new Map();
+  const screeningHistory = buildScreeningHistory(screening);
 
   files.forEach((file) => {
     const moduleRecord = createModuleRecord(file);
@@ -849,6 +865,7 @@ function normalizeCommandViewData(inventory, screening) {
     metrics,
     hierarchy,
     levels,
+    screeningHistory,
   };
 }
 
@@ -941,6 +958,107 @@ function buildScreeningCallIndex(screening) {
     }
   });
   return index;
+}
+
+function buildScreeningHistory(screening) {
+  if (!screening || typeof screening !== "object") {
+    return {
+      events: [],
+      packs: new Map(),
+      latest: null,
+    };
+  }
+
+  const historyEntries = Array.isArray(screening.score_history) ? [...screening.score_history] : [];
+  if (historyEntries.length === 0 && screening.score_snapshot && typeof screening.score_snapshot === "object") {
+    historyEntries.push(screening.score_snapshot);
+  }
+  const events = [];
+  const packs = new Map();
+
+  historyEntries.forEach((entry) => {
+    if (!entry || typeof entry !== "object") {
+      return;
+    }
+
+    const timestamp = typeof entry.timestamp === "string" ? entry.timestamp : null;
+    const context = typeof entry.context === "object" && entry.context !== null ? entry.context : {};
+    const packEntries = Array.isArray(entry.packs) ? entry.packs : [];
+
+    packEntries.forEach((pack) => {
+      if (!pack || typeof pack !== "object") {
+        return;
+      }
+
+      const packId = typeof pack.id === "string" && pack.id.trim() ? pack.id : null;
+      const packLabel = typeof pack.label === "string" && pack.label.trim() ? pack.label : null;
+      let scoreValue = null;
+      if (pack.score !== null && pack.score !== undefined && pack.score !== "") {
+        const numericScore = Number(pack.score);
+        if (Number.isFinite(numericScore)) {
+          scoreValue = numericScore;
+        }
+      }
+      const severity = typeof pack.severity === "string" ? pack.severity : "unknown";
+      const thresholds = typeof pack.thresholds === "object" && pack.thresholds !== null ? pack.thresholds : {};
+      let warning = null;
+      if (thresholds.warning !== null && thresholds.warning !== undefined && thresholds.warning !== "") {
+        const warningThreshold = Number(thresholds.warning);
+        if (Number.isFinite(warningThreshold)) {
+          warning = warningThreshold;
+        }
+      }
+      let failure = null;
+      if (thresholds.failure !== null && thresholds.failure !== undefined && thresholds.failure !== "") {
+        const failureThreshold = Number(thresholds.failure);
+        if (Number.isFinite(failureThreshold)) {
+          failure = failureThreshold;
+        }
+      }
+
+      const event = {
+        timestamp,
+        packId,
+        packLabel,
+        severity,
+        score: scoreValue,
+        thresholds: {
+          warning,
+          failure,
+        },
+        context,
+        metrics: typeof pack.metrics === "object" && pack.metrics !== null ? pack.metrics : {},
+      };
+
+      events.push(event);
+
+      const key = packId ?? packLabel ?? "unknown";
+      const bucket = packs.get(key) ?? [];
+      bucket.push(event);
+      packs.set(key, bucket);
+    });
+  });
+
+  events.sort((left, right) => {
+    const leftTimestamp = left.timestamp ?? "";
+    const rightTimestamp = right.timestamp ?? "";
+    return leftTimestamp.localeCompare(rightTimestamp);
+  });
+
+  packs.forEach((bucket, key) => {
+    bucket.sort((left, right) => {
+      const leftTimestamp = left.timestamp ?? "";
+      const rightTimestamp = right.timestamp ?? "";
+      return leftTimestamp.localeCompare(rightTimestamp);
+    });
+    packs.set(key, bucket);
+  });
+
+  return {
+    events,
+    packs,
+    latest: events.length > 0 ? events[events.length - 1] : null,
+  };
 }
 
 function buildMetricsCache(inventory, modules, functions, screening) {
@@ -2272,7 +2390,7 @@ function buildFunctionInventoryOverviewViewDefinition() {
       const docQuality = fn?.docstringQuality ?? null;
       const hasDoc = Boolean(
         docQuality &&
-        (docQuality.has_docstring === true || docQuality.present === true || docQuality.status === "present")
+        (docQuality.exists === true || docQuality.has_docstring === true || docQuality.present === true || docQuality.status === "present")
       );
       if (hasDoc) {
         docstringWith += 1;
@@ -2353,6 +2471,30 @@ function buildFunctionInventoryOverviewViewDefinition() {
     definition: lines.join("\n"),
     label: "Health · Function Inventory Overview",
     statusMessage,
+  };
+}
+
+function buildScreeningSignalTimelineViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized || !normalized.screeningHistory) {
+    return { message: "Screening history has not been loaded for this CommandView artifact." };
+  }
+
+  const artifactLabel = state.activeOption?.label ?? state.activeOption?.slug ?? "CommandView Artifact";
+  const result = buildScreeningTimelineDiagram(normalized.screeningHistory, { artifactLabel });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Screening Signal Timeline diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
   };
 }
 

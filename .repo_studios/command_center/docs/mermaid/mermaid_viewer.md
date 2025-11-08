@@ -93,15 +93,28 @@
 
 ### View Pack Readiness Tracker
 
+Every pass against a view pack should explicitly update the three shared attributes:
+
+- **D · Data slice ready** — upstream artifacts emit the required fields and normalization paths are documented.
+- **C · Controls wired** — sidebar/tab wiring is live so operators can render the view without reloading data.
+- **M · Multi-view coexistence & regression** — manual verification + automated coverage ensure toggling between views preserves state and definitions.
+
 - **Health Pack**
   - `function_inventory_overview.mmd`
-    - [ ] Data slice ready
-    - [ ] Controls wired
-    - [ ] Multi-view coexistence verified
+    - [x] Data slice ready (D) — Documented input mapping and Mermaid transform in `view_specs/function_inventory_overview.md`; hardened builder docstring detection to respect `docstring_quality.exists` (2025-11-08, GitHub Copilot).
+    - [ ] Controls wired (C)
+    - [ ] Multi-view coexistence verified (M)
+    - Past: Captured the Function Inventory Overview data slice contract and aligned viewer builder logic with the CommandView schema (2025-11-08, GitHub Copilot).
+    - Present: Monitoring viewer availability gating to ensure docstring/type coverage metrics remain present across new inventories.
+    - Future: Wire sidebar controls once Health pack interaction design is finalized alongside multi-view coexistence testing.
   - `screening_signal_timeline.mmd`
-    - [ ] Data slice ready
-    - [ ] Controls wired
-    - [ ] Multi-view coexistence verified
+    - [x] Data slice ready (D) — Screening summary now emits `score_snapshot` + `score_history` blocks from the CommandView producer, unblocking timeline normalization (2025-11-08, GitHub Copilot).
+      - Past: Drafted the data contract and identified the missing `score_history` export in CommandView screening payloads.
+    - Present: Health pack controls now surface the timeline tab, render docstring coverage slices from normalized history, and coexist with the Code Flow call graph tab without resetting state (validated 2025-11-08 by GitHub Copilot).
+      - Future: Extend Health pack regression coverage to the upcoming Function Inventory Overview builder once its controls land, then expand coexistence checks across additional packs.
+    - [x] Instrument screening history emission for timeline view — Added docstring coverage scoring with severity thresholds to the screening artifact (`score_snapshot` ➔ `score_history`) so Health pack timelines can hydrate (2025-11-08, GitHub Copilot).
+    - [x] Controls wired (C) — Health pack controls now expose the timeline view tab and surface informative status messaging even when no screening events are present (2025-11-08, GitHub Copilot).
+    - [x] Multi-view coexistence verified (M) — Verified via manual viewer toggles and covered by `.repo_studios/tests/tests_command_center/viewer/test_screening_signal_timeline_view.py::test_screening_timeline_definition_is_stable_across_repeated_calls` to ensure repeated renders keep timeline state intact (2025-11-08, GitHub Copilot).
 - **Dependency Pack**
   - `module_dependency_graph.mmd`
     - [ ] Data slice ready
@@ -236,7 +249,7 @@
 
 ---
 
-Status note (2025-11-07): Selector payload now surfaces slug+timestamp labels, deduplicates static mirrors, backend refresh helpers preserve active context, the HTML shell with Mermaid wiring is live, JSON loader plus normalization populate registries/caches, duplicate fetch/schema gating keeps loads deterministic, hierarchy metadata and Level 0-4 data slices are ready for rendering, level node thresholds now prompt deeper zoom when diagrams exceed 50 nodes, breadcrumb/navigation interactions keep zoom flows snappy, refresh cycles now restore the prior zoom level whenever the slug persists, the viewer applies metrics-driven node/edge styling across levels, Mermaid definitions stay in-memory via `state.diagramDefinition` with no default `.mmd` output, debugging exports route through `.repo_studios/command_center/viewer/cache/write_mermaid_cache.py` with 24-hour TTL and five-file retention, the UI now offers an `Export .mmd` button for on-demand downloads, the sidebar lists all 28 curated view packs, and the Code Flow · Function Call Graph view renders module-level call graph diagrams directly from normalized call graph edges (done). Pack overlays and advanced rendering remain upcoming (future).
+Status note (2025-11-08): Selector payload now surfaces slug+timestamp labels, deduplicates static mirrors, backend refresh helpers preserve active context, the HTML shell with Mermaid wiring is live, JSON loader plus normalization populate registries/caches, duplicate fetch/schema gating keeps loads deterministic, hierarchy metadata and Level 0-4 data slices are ready for rendering, level node thresholds now prompt deeper zoom when diagrams exceed 50 nodes, breadcrumb/navigation interactions keep zoom flows snappy, refresh cycles now restore the prior zoom level whenever the slug persists, the viewer applies metrics-driven node/edge styling across levels, Mermaid definitions stay in-memory via `state.diagramDefinition` with no default `.mmd` output, debugging exports route through `.repo_studios/command_center/viewer/cache/write_mermaid_cache.py` with 24-hour TTL and five-file retention, the UI now offers an `Export .mmd` button for on-demand downloads, the sidebar lists all 28 curated view packs, the Health pack timeline view is selectable from the sidebar and renders docstring coverage history via the prototype builder, and the Code Flow · Function Call Graph view renders module-level call graph diagrams directly from normalized call graph edges (done). Pack overlays and advanced rendering remain upcoming (future).
 
 ## Viewer Shell Assets
 

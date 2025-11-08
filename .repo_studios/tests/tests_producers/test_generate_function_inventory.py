@@ -159,6 +159,16 @@ def helper(value):
     summary_payload = json.loads(summary_files[0].read_text(encoding="utf-8"))
     assert "graphs" in summary_payload
     assert summary_payload["violations"] == {"cycles": False}
+    assert "score_snapshot" in summary_payload
+    snapshot = summary_payload["score_snapshot"]
+    assert snapshot["packs"], "Expected at least one score pack"
+    doc_pack = next(pack for pack in snapshot["packs"] if pack["id"] == "docstring_coverage")
+    assert doc_pack["metrics"]["functions_total"] == 3
+    assert doc_pack["metrics"]["functions_documented"] == 0
+    assert doc_pack["score"] == 0.0
+    assert summary_payload["score_history"]
+    assert len(summary_payload["score_history"]) == 1
+    assert summary_payload["score_latest"] == summary_payload["score_history"][-1]
     central_summary = _screening_files(reports_dir, "sample_pkg")
     assert len(central_summary) == 1
     assert json.loads(central_summary[0].read_text(encoding="utf-8")) == summary_payload
@@ -367,6 +377,63 @@ def test_inventory_removes_preexisting_outputs(tmp_path: Path) -> None:
     assert len(central_summary) == 1
     assert central_summary[0].name.startswith("pkg_commandview_screening_")
     assert not (reports_dir / "pkg_screening-1999-12-31.json").exists()
+
+
+def test_screening_score_history_accumulates_across_runs(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    target = repo_root / "pkg"
+    _write(target / "__init__.py", "")
+    _write(
+        target / "module.py",
+        "def run(value: int) -> int:\n    return value\n",
+    )
+
+    exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+    assert exit_code == 0
+
+    output_dir = target / "pkg_index"
+    summary_files = _screening_files(output_dir, "pkg")
+    assert summary_files
+    summary_payload = json.loads(summary_files[-1].read_text(encoding="utf-8"))
+    history = summary_payload.get("score_history") or []
+    assert len(history) == 1
+    first_pack = history[0]["packs"][0]
+    assert first_pack["score"] == 0.0
+    assert first_pack["severity"] == "critical"
+
+    _write(
+        target / "module.py",
+        (
+            "def run(value: int) -> int:\n"
+            '    """Return supplied value."""\n'
+            "    return value\n"
+        ),
+    )
+
+    exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+    assert exit_code == 0
+
+    summary_files = _screening_files(output_dir, "pkg")
+    assert summary_files
+    updated_payload = json.loads(summary_files[-1].read_text(encoding="utf-8"))
+    updated_history = updated_payload.get("score_history") or []
+    assert len(updated_history) == 2
+    assert updated_history[0]["timestamp"] < updated_history[1]["timestamp"]
+    latest_pack = updated_history[-1]["packs"][0]
+    assert latest_pack["score"] == 100.0
+    assert latest_pack["severity"] == "ok"
+
+    mirror_dir = (
+        repo_root
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "index_scan"
+        / "pkg_index"
+    )
+    mirror_files = _screening_files(mirror_dir, "pkg")
+    assert mirror_files
+    assert json.loads(mirror_files[-1].read_text(encoding="utf-8")) == updated_payload
 
 
 def test_call_graph_resolves_local_and_imported_calls(tmp_path: Path) -> None:

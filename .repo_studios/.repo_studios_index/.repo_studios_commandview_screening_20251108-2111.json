@@ -4006,6 +4006,34 @@
         "sum"
       ],
       [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_apply_score_history",
+        "(entry.get('context') or {}).get"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_apply_score_history",
+        "entry.get"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_apply_score_history",
+        "len"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_apply_score_history",
+        "list"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_apply_score_history",
+        "merged.append"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_apply_score_history",
+        "merged.sort"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_apply_score_history",
+        "summary.get"
+      ],
+      [
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_attribute_chain",
         "'.'.join"
       ],
@@ -4222,6 +4250,42 @@
         "summary_counter.items"
       ],
       [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_docstring_score_pack",
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_iter_function_entries"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_docstring_score_pack",
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_score_severity"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_docstring_score_pack",
+        "_iter_function_entries"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_docstring_score_pack",
+        "_score_severity"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_docstring_score_pack",
+        "entry.get"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_docstring_score_pack",
+        "len"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_docstring_score_pack",
+        "max"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_docstring_score_pack",
+        "quality.get"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_docstring_score_pack",
+        "round"
+      ],
+      [
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_import_graph",
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_dependency_category"
       ],
@@ -4272,6 +4336,38 @@
       [
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_method_index",
         "class_entry.get"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_screening_score_snapshot",
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_docstring_score_pack"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_screening_score_snapshot",
+        "_build_docstring_score_pack"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_screening_score_snapshot",
+        "datetime.now"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_screening_score_snapshot",
+        "datetime.now(timezone.utc).isoformat"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_screening_score_snapshot",
+        "len"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_screening_score_snapshot",
+        "metadata.get"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_screening_score_snapshot",
+        "packs.append"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_screening_score_snapshot",
+        "payload.get"
       ],
       [
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_callback_registration_info",
@@ -4648,6 +4744,66 @@
       [
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_overrides",
         "set"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_screening_history",
+        "(entry.get('context') or {}).get"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_screening_history",
+        "directory.exists"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_screening_history",
+        "directory.glob"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_screening_history",
+        "entry.get"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_screening_history",
+        "history.append"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_screening_history",
+        "history.sort"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_screening_history",
+        "json.loads"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_screening_history",
+        "latest_file.read_text"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_screening_history",
+        "len"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_screening_history",
+        "logging.warning"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_screening_history",
+        "payload.get"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_screening_history",
+        "seen_timestamps.add"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_screening_history",
+        "set"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_screening_history",
+        "snapshot.get"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_screening_history",
+        "sorted"
       ],
       [
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_test_coverage_signals",
@@ -5460,6 +5616,14 @@
       [
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_is_test_path",
         "relative_parts[-1].lower"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_iter_function_entries",
+        "class_entry.get"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_iter_function_entries",
+        "entry.get"
       ],
       [
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_match_known_module",
@@ -6299,6 +6463,10 @@
       ],
       [
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::build_screening_summary",
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_screening_score_snapshot"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::build_screening_summary",
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_entry_module_key"
       ],
       [
@@ -6312,6 +6480,10 @@
       [
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::build_screening_summary",
         "_build_alias_resolution_map"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::build_screening_summary",
+        "_build_screening_score_snapshot"
       ],
       [
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::build_screening_summary",
@@ -6396,6 +6568,10 @@
       [
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::build_screening_summary",
         "list"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::build_screening_summary",
+        "payload.get"
       ],
       [
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::build_screening_summary",
@@ -6715,11 +6891,27 @@
       ],
       [
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::write_inventory",
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_apply_score_history"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::write_inventory",
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_screening_history"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::write_inventory",
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_write_inventory_copy"
       ],
       [
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::write_inventory",
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_write_screening_copy"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::write_inventory",
+        "_apply_score_history"
+      ],
+      [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::write_inventory",
+        "_collect_screening_history"
       ],
       [
         ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::write_inventory",
@@ -24985,6 +25177,10 @@
         "typing.Iterable"
       ],
       [
+        ".repo_studios.command_center.scripts.producers.generate_commandview_inventory",
+        "typing.Sequence"
+      ],
+      [
         ".repo_studios.command_center.scripts.summarizers.generate_function_analysis",
         "__future__.annotations"
       ],
@@ -28235,6 +28431,15 @@
           "writes": false
         }
       },
+      ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_apply_score_history": {
+        "hash": "5e241a8a07f5a033d6f317e56316503c8eec7f56d17e59c92779e813e2ccf6f1",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
       ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_attribute_chain": {
         "hash": "b81592f906fc7485867d6c54617ae53e3b7aadf83f78a20de69e55edc7e79e1f",
         "io_effects": {
@@ -28280,6 +28485,15 @@
           "writes": false
         }
       },
+      ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_docstring_score_pack": {
+        "hash": "4bbe2de258df0b7edccaeb58dc2bc6c2f28701ca77e9fddb786088d01750cb66",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
       ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_import_graph": {
         "hash": "258c71c7766739b4ea8ff89e5c1e292a382da2e2f63ebf8c5a5745d83d0ee589",
         "io_effects": {
@@ -28291,6 +28505,15 @@
       },
       ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_method_index": {
         "hash": "337023cf013f01cf9dea6b6124c329d45d18e03098943929c834459d009cdf89",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_build_screening_score_snapshot": {
+        "hash": "6dec482fc729e59d5606a806e87633521320ac87c1ad423d66b88a5408a6fc6b",
         "io_effects": {
           "env": false,
           "network": false,
@@ -28390,6 +28613,15 @@
       },
       ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_overrides": {
         "hash": "d5441f1ce4878e6c671f2e7f5d31811978413b5e2d9e84e527eb22f847f0ab20",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_collect_screening_history": {
+        "hash": "831842d8e1ac0e6ea72fafb2364f58e3911de43930f77d8220d91ff240116e09",
         "io_effects": {
           "env": false,
           "network": false,
@@ -28712,6 +28944,15 @@
           "writes": false
         }
       },
+      ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_iter_function_entries": {
+        "hash": "8cb60ffc327354be9754121ac62aa3feeae22615c6292a5f29d0936165ff1837",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
       ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_match_known_module": {
         "hash": "a4615d057cc8c129c7e0276c4d5f3622de5ba5433f3707977838073b7997c8f6",
         "io_effects": {
@@ -28838,6 +29079,15 @@
           "writes": false
         }
       },
+      ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_score_severity": {
+        "hash": "607e543591b0add0e733a7ecc553d200a25132dcb87689d924d8fda9b9053218",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
       ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_select_callback_target": {
         "hash": "bf522b95305a0c12a7c7afc1163eb0be9b0de285d186adc501810622b9f8f6b3",
         "io_effects": {
@@ -28884,7 +29134,7 @@
         }
       },
       ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::_write_inventory_copy": {
-        "hash": "679cc0c8f4329a9309c5ada0dfa4b5284109340a712d2846eb095040c650b7d1",
+        "hash": "70d3d41202bbc13c36d037f6e1f30950363f4ca1f782de01b9fbbac2456be5fb",
         "io_effects": {
           "env": false,
           "network": false,
@@ -28938,7 +29188,7 @@
         }
       },
       ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::build_screening_summary": {
-        "hash": "88c633b677f4b7742a0f3ade9403437e00136320b3a996c02e18338914fede19",
+        "hash": "08249cdb097e9bc15f50eb785d79daf46e4b96e3f53222be3ecf32db8bcf5f3e",
         "io_effects": {
           "env": false,
           "network": false,
@@ -29001,7 +29251,7 @@
         }
       },
       ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::run": {
-        "hash": "3a37967a3ea155cb049275c159cd6e2f79341fab54ddd4005b917d8f908ee997",
+        "hash": "7a35d5b7d7d433feefd19ef545999aa4f80e867a6e5e5dcd8784ed678e56e0d3",
         "io_effects": {
           "env": false,
           "network": false,
@@ -29010,7 +29260,7 @@
         }
       },
       ".repo_studios.command_center.scripts.producers.generate_commandview_inventory::write_inventory": {
-        "hash": "c81ba53894b9e485973ab32c5ccbd8dcc12ccbe35b30173ab2b61de621c2d9a2",
+        "hash": "175b4c6d737616f5c6bce24c29597e57c7265f4c73d59463fb87481bc930b587",
         "io_effects": {
           "env": false,
           "network": false,
@@ -34509,6 +34759,178 @@
         }
       }
     }
+  },
+  "score_history": [
+    {
+      "context": {
+        "folder_name": ".repo_studios",
+        "inventory_generated_at": "2025-11-08T18:35:29.950973+00:00",
+        "inventory_schema_version": 2
+      },
+      "packs": [
+        {
+          "coverage_ratio": 0.04672897196261682,
+          "description": "Percentage of functions and methods that include a docstring.",
+          "id": "docstring_coverage",
+          "label": "Docstring Coverage",
+          "metrics": {
+            "docstrings_with_parameters_section": 3,
+            "docstrings_with_returns_section": 0,
+            "functions_documented": 40,
+            "functions_missing": 816,
+            "functions_total": 856,
+            "missing_parameter_mentions": 1504
+          },
+          "score": 4.67,
+          "severity": "critical",
+          "thresholds": {
+            "failure": 60.0,
+            "warning": 80.0
+          },
+          "unit": "percent"
+        }
+      ],
+      "summary": {
+        "total_packs": 1
+      },
+      "timestamp": "2025-11-08T21:04:29.638669+00:00"
+    },
+    {
+      "context": {
+        "folder_name": ".repo_studios",
+        "inventory_generated_at": "2025-11-08T18:35:29.950973+00:00",
+        "inventory_schema_version": 2
+      },
+      "packs": [
+        {
+          "coverage_ratio": 0.04672897196261682,
+          "description": "Percentage of functions and methods that include a docstring.",
+          "id": "docstring_coverage",
+          "label": "Docstring Coverage",
+          "metrics": {
+            "docstrings_with_parameters_section": 3,
+            "docstrings_with_returns_section": 0,
+            "functions_documented": 40,
+            "functions_missing": 816,
+            "functions_total": 856,
+            "missing_parameter_mentions": 1504
+          },
+          "score": 4.67,
+          "severity": "critical",
+          "thresholds": {
+            "failure": 60.0,
+            "warning": 80.0
+          },
+          "unit": "percent"
+        }
+      ],
+      "summary": {
+        "total_packs": 1
+      },
+      "timestamp": "2025-11-08T21:04:39.350828+00:00"
+    },
+    {
+      "context": {
+        "folder_name": ".repo_studios",
+        "inventory_generated_at": "2025-11-08T21:11:49.920731+00:00",
+        "inventory_schema_version": 2
+      },
+      "packs": [
+        {
+          "coverage_ratio": 0.04640371229698376,
+          "description": "Percentage of functions and methods that include a docstring.",
+          "id": "docstring_coverage",
+          "label": "Docstring Coverage",
+          "metrics": {
+            "docstrings_with_parameters_section": 3,
+            "docstrings_with_returns_section": 0,
+            "functions_documented": 40,
+            "functions_missing": 822,
+            "functions_total": 862,
+            "missing_parameter_mentions": 1514
+          },
+          "score": 4.64,
+          "severity": "critical",
+          "thresholds": {
+            "failure": 60.0,
+            "warning": 80.0
+          },
+          "unit": "percent"
+        }
+      ],
+      "summary": {
+        "total_packs": 1
+      },
+      "timestamp": "2025-11-08T21:11:49.943427+00:00"
+    }
+  ],
+  "score_latest": {
+    "context": {
+      "folder_name": ".repo_studios",
+      "inventory_generated_at": "2025-11-08T21:11:49.920731+00:00",
+      "inventory_schema_version": 2
+    },
+    "packs": [
+      {
+        "coverage_ratio": 0.04640371229698376,
+        "description": "Percentage of functions and methods that include a docstring.",
+        "id": "docstring_coverage",
+        "label": "Docstring Coverage",
+        "metrics": {
+          "docstrings_with_parameters_section": 3,
+          "docstrings_with_returns_section": 0,
+          "functions_documented": 40,
+          "functions_missing": 822,
+          "functions_total": 862,
+          "missing_parameter_mentions": 1514
+        },
+        "score": 4.64,
+        "severity": "critical",
+        "thresholds": {
+          "failure": 60.0,
+          "warning": 80.0
+        },
+        "unit": "percent"
+      }
+    ],
+    "summary": {
+      "total_packs": 1
+    },
+    "timestamp": "2025-11-08T21:11:49.943427+00:00"
+  },
+  "score_snapshot": {
+    "context": {
+      "folder_name": ".repo_studios",
+      "inventory_generated_at": "2025-11-08T21:11:49.920731+00:00",
+      "inventory_schema_version": 2
+    },
+    "packs": [
+      {
+        "coverage_ratio": 0.04640371229698376,
+        "description": "Percentage of functions and methods that include a docstring.",
+        "id": "docstring_coverage",
+        "label": "Docstring Coverage",
+        "metrics": {
+          "docstrings_with_parameters_section": 3,
+          "docstrings_with_returns_section": 0,
+          "functions_documented": 40,
+          "functions_missing": 822,
+          "functions_total": 862,
+          "missing_parameter_mentions": 1514
+        },
+        "score": 4.64,
+        "severity": "critical",
+        "thresholds": {
+          "failure": 60.0,
+          "warning": 80.0
+        },
+        "unit": "percent"
+      }
+    ],
+    "summary": {
+      "total_packs": 1
+    },
+    "timestamp": "2025-11-08T21:11:49.943427+00:00"
   },
   "violations": {
     "cycles": false

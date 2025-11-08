@@ -15,7 +15,7 @@ from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Sequence
 
 SKIP_DIRS = {
     "__pycache__",
@@ -121,6 +121,10 @@ else:  # pragma: no cover - fallback for older Python versions
     }
 
 DEPENDENCY_SUMMARY_BUCKETS = ("internal", "standard_library", "third_party", "unknown")
+
+DOCSTRING_WARNING_THRESHOLD = 80.0
+DOCSTRING_FAILURE_THRESHOLD = 60.0
+MAX_SCREENING_HISTORY_ENTRIES = 30
 
 BUILTIN_FUNCTION_NAMES = {
     name
@@ -2526,7 +2530,170 @@ def _match_known_module(candidate: str | None, known_modules: set[str]) -> str |
     return None
 
 
-def build_screening_summary(files: list[dict[str, Any]]) -> dict[str, Any]:
+def _iter_function_entries(files: list[dict[str, Any]]) -> Iterable[dict[str, Any]]:
+    for entry in files:
+        for function_entry in entry.get("functions", []) or []:
+            yield function_entry
+        for class_entry in entry.get("classes", []) or []:
+            for method_entry in class_entry.get("methods", []) or []:
+                yield method_entry
+
+
+def _score_severity(score: float | None, warning_threshold: float, failure_threshold: float) -> str:
+    if score is None:
+        return "unknown"
+    if score >= warning_threshold:
+        return "ok"
+    if score >= failure_threshold:
+        return "warning"
+    return "critical"
+
+
+def _build_docstring_score_pack(files: list[dict[str, Any]]) -> dict[str, Any] | None:
+    total_functions = 0
+    documented_functions = 0
+    params_sections = 0
+    returns_sections = 0
+    missing_param_mentions = 0
+
+    for entry in _iter_function_entries(files):
+        total_functions += 1
+        quality = entry.get("docstring_quality") or {}
+        if quality.get("exists"):
+            documented_functions += 1
+            if quality.get("has_parameters_section"):
+                params_sections += 1
+            if quality.get("has_returns_section"):
+                returns_sections += 1
+        missing_param_mentions += len(quality.get("missing_params") or [])
+
+    if total_functions == 0:
+        score = None
+    else:
+        score = documented_functions / total_functions * 100.0
+
+    severity = _score_severity(score, DOCSTRING_WARNING_THRESHOLD, DOCSTRING_FAILURE_THRESHOLD)
+    metrics = {
+        "functions_total": total_functions,
+        "functions_documented": documented_functions,
+        "functions_missing": max(total_functions - documented_functions, 0),
+        "docstrings_with_parameters_section": params_sections,
+        "docstrings_with_returns_section": returns_sections,
+        "missing_parameter_mentions": missing_param_mentions,
+    }
+
+    pack: dict[str, Any] = {
+        "id": "docstring_coverage",
+        "label": "Docstring Coverage",
+        "description": "Percentage of functions and methods that include a docstring.",
+        "unit": "percent",
+        "severity": severity,
+        "thresholds": {
+            "warning": DOCSTRING_WARNING_THRESHOLD,
+            "failure": DOCSTRING_FAILURE_THRESHOLD,
+        },
+        "metrics": metrics,
+    }
+    if score is not None:
+        pack["score"] = round(score, 2)
+        pack["coverage_ratio"] = documented_functions / total_functions if total_functions else 0.0
+    else:
+        pack["score"] = None
+        pack["coverage_ratio"] = None
+    return pack
+
+
+def _build_screening_score_snapshot(payload: dict[str, Any]) -> dict[str, Any] | None:
+    files = payload.get("files", [])
+    packs: list[dict[str, Any]] = []
+    docstring_pack = _build_docstring_score_pack(files)
+    if docstring_pack:
+        packs.append(docstring_pack)
+
+    if not packs:
+        return None
+
+    timestamp = datetime.now(timezone.utc).isoformat()
+    metadata = payload.get("metadata", {})
+    context: dict[str, Any] = {}
+    folder_name = metadata.get("folder_name")
+    if folder_name:
+        context["folder_name"] = folder_name
+    generated_at = metadata.get("generated_at")
+    if generated_at:
+        context["inventory_generated_at"] = generated_at
+    schema_version = metadata.get("schema_version")
+    if schema_version is not None:
+        context["inventory_schema_version"] = schema_version
+
+    snapshot: dict[str, Any] = {
+        "timestamp": timestamp,
+        "packs": packs,
+    }
+    if context:
+        snapshot["context"] = context
+    snapshot["summary"] = {"total_packs": len(packs)}
+    return snapshot
+
+
+def _collect_screening_history(directories: Sequence[Path], source_name: str) -> list[dict[str, Any]]:
+    history: list[dict[str, Any]] = []
+    seen_timestamps: set[str] = set()
+    for directory in directories:
+        if not directory.exists():
+            continue
+        existing_files = sorted(directory.glob(f"{source_name}_commandview_screening_*.json"))
+        if not existing_files:
+            continue
+        latest_file = existing_files[-1]
+        try:
+            payload = json.loads(latest_file.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            logging.warning("Failed to load prior screening summary %s: %s", latest_file, exc)
+            continue
+        for entry in payload.get("score_history", []) or []:
+            timestamp = entry.get("timestamp")
+            if timestamp and timestamp not in seen_timestamps:
+                history.append(entry)
+                seen_timestamps.add(timestamp)
+        snapshot = payload.get("score_snapshot")
+        if snapshot:
+            timestamp = snapshot.get("timestamp")
+            if timestamp and timestamp not in seen_timestamps:
+                history.append(snapshot)
+                seen_timestamps.add(timestamp)
+    history.sort(
+        key=lambda entry: (
+            entry.get("timestamp") or "",
+            (entry.get("context") or {}).get("inventory_generated_at") or "",
+        )
+    )
+    if len(history) > MAX_SCREENING_HISTORY_ENTRIES:
+        history = history[-MAX_SCREENING_HISTORY_ENTRIES:]
+    return history
+
+
+def _apply_score_history(summary: dict[str, Any], history_seed: Sequence[dict[str, Any]]) -> dict[str, Any]:
+    snapshot = summary.get("score_snapshot")
+    merged = list(history_seed)
+    if snapshot:
+        merged.append(snapshot)
+    merged.sort(
+        key=lambda entry: (
+            entry.get("timestamp") or "",
+            (entry.get("context") or {}).get("inventory_generated_at") or "",
+        )
+    )
+    if len(merged) > MAX_SCREENING_HISTORY_ENTRIES:
+        merged = merged[-MAX_SCREENING_HISTORY_ENTRIES:]
+    summary["score_history"] = merged
+    if merged:
+        summary["score_latest"] = merged[-1]
+    return summary
+
+
+def build_screening_summary(payload: dict[str, Any]) -> dict[str, Any]:
+    files = payload.get("files", [])
     import_edges: set[tuple[str, str]] = set()
     call_edges: set[tuple[str, str]] = set()
     cross_module_edges: dict[tuple[str, str], dict[str, Any]] = {}
@@ -2630,7 +2797,7 @@ def build_screening_summary(files: list[dict[str, Any]]) -> dict[str, Any]:
             ],
         })
 
-    return {
+    summary: dict[str, Any] = {
         "graphs": {
             "imports": imports_list,
             "calls": calls_list,
@@ -2639,6 +2806,10 @@ def build_screening_summary(files: list[dict[str, Any]]) -> dict[str, Any]:
         "violations": {"cycles": False},
         "nodes": {"meta": nodes_meta},
     }
+    score_snapshot = _build_screening_score_snapshot(payload)
+    if score_snapshot:
+        summary["score_snapshot"] = score_snapshot
+    return summary
 
 
 def _write_inventory_copy(directory: Path, source_name: str, payload: dict[str, Any]) -> Path:
@@ -2650,7 +2821,7 @@ def _write_inventory_copy(directory: Path, source_name: str, payload: dict[str, 
         if existing.is_file():
             existing.unlink()
     for existing in directory.glob(f"{source_name}_commandview_*.json"):
-        if existing.is_file():
+        if existing.is_file() and "_screening_" not in existing.name:
             existing.unlink()
     date_token = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M")
     output_file = directory / f"{source_name}_commandview_{date_token}.json"
@@ -2686,6 +2857,8 @@ def write_inventory(paths: Paths, payload: dict[str, Any], summary: dict[str, An
     secondary_dir = paths.reports_root / f"{reports_slug}_index"
     primary = _write_inventory_copy(primary_dir, source_name, payload)
     _write_inventory_copy(secondary_dir, source_name, payload)
+    history_seed = _collect_screening_history((primary_dir, secondary_dir), source_name)
+    summary = _apply_score_history(summary, history_seed)
     _write_screening_copy(primary_dir, source_name, summary)
     _write_screening_copy(secondary_dir, source_name, summary)
     return primary
@@ -2736,7 +2909,7 @@ def run(argv: Iterable[str] | None = None) -> int:
     git_churn_summary = attach_git_churn(paths, collected, warnings)
 
     payload = compose_inventory(paths, options, collected, warnings, coverage_sources, git_churn_summary)
-    summary = build_screening_summary(payload["files"])
+    summary = build_screening_summary(payload)
     output_file = write_inventory(paths, payload, summary)
     logging.info(
         "Inventory generated: path=%s files=%d functions=%d classes=%d warnings=%d",
