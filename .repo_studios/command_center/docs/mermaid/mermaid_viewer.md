@@ -181,15 +181,18 @@ Every pass against a view pack should explicitly update the three shared attribu
 - **Quality Metrics Pack**
   - `complexity_heatmap.mmd`
     - [x] Data slice ready (D) — Complexity metrics (`cyclomatic_complexity`, `metrics.complexity`, `metrics.line_count`) documented in `view_specs/complexity_heatmap.md`, confirming normalized function records expose the required inputs (2025-11-09, GitHub Copilot).
-    - [ ] Controls wired
-    - [ ] Multi-view coexistence verified
+    - [x] Controls wired (C) — Viewer delegates to `buildComplexityHeatmapDiagram()` with `resolveComplexityHeatmapScope()` providing zoom-aware filtering (2025-11-09, GitHub Copilot).
+    - [x] Multi-view coexistence verified (M) — Regression `.repo_studios/tests/tests_command_center/viewer/test_quality_metrics_multi_view_coexistence.py` now exercises Complexity, Type, and Documentation toggles without definition drift (2025-11-09, GitHub Copilot).
     - Past: Captured the complexity heatmap data contract and linked upstream producer coverage that guards cyclomatic metrics (2025-11-09, GitHub Copilot).
-    - Present: Builder wiring remains pending while thresholds and bucket palette are finalized.
-    - Future: Implement the heatmap builder, wire Quality Metrics controls, and extend multi-view regression coverage alongside Type/Documentation maps.
+  - Present: Builder module `ui/builders/complexity_heatmap.js` now emits severity buckets with churn/coverage overlays, module hotspot stats, scoped helper coverage, and Node-backed regression (`test_complexity_heatmap_view.py`, `test_complexity_heatmap_scope.py`).
+  - Future: Thread hotspot summaries into the Command Center sidebar and add tooltip details for line counts, churn history, and coverage trends.
   - `logging_flow.mmd`
-    - [ ] Data slice ready
-    - [ ] Controls wired
-    - [ ] Multi-view coexistence verified
+    - [x] Data slice ready (D) — Documented logging call normalization in `view_specs/logging_flow.md`, confirming normalized function records expose sanitized `loggingCalls` entries for downstream builders (2025-11-09, GitHub Copilot).
+    - [x] Controls wired (C) — Viewer delegates the Logging Flow tab to `buildLoggingFlowViewDefinition()` which scopes via `resolveLoggingFlowScope()` and renders `buildLoggingFlowDiagram()` overlays for severity buckets, line numbers, and logger summaries (2025-11-09, GitHub Copilot).
+    - [x] Multi-view coexistence verified (M) — Node-backed regression `.repo_studios/tests/tests_command_center/viewer/test_quality_metrics_multi_view_coexistence.py` now exercises Logging Flow alongside Type, Documentation, and Complexity views; builder output covered by `.repo_studios/tests/tests_command_center/viewer/test_logging_flow_view.py` with scope filtering guarded in `.repo_studios/tests/tests_command_center/viewer/test_logging_flow_scope.py` (2025-11-09, GitHub Copilot).
+    - Past: Captured the logging flow data contract and tied it to normalized function records in the new view spec before wiring UI controls (2025-11-09, GitHub Copilot).
+    - Present: Logging Flow buckets aggregate emitters by highest severity, surface per-level event counts, and summarize top modules with call totals and emitter counts for observability auditing.
+    - Future: Layer screening insights (e.g., recent error bursts) onto the logging buckets and extend status messaging with alerts for roots or domains lacking emitters.
   - `decorator_usage_map.mmd`
     - [ ] Data slice ready
     - [ ] Controls wired
@@ -204,10 +207,10 @@ Every pass against a view pack should explicitly update the three shared attribu
     - [ ] Multi-view coexistence verified
   - `type_coverage_map.mmd`
     - [x] Data slice ready (D) — Coverage ratios (`type_hint_coverage`, `annotation_coverage`, `metrics.coverage`) documented in the new `view_specs/type_coverage_map.md` and confirmed available in normalized function records (2025-11-09, GitHub Copilot).
-    - [x] Controls wired (C) — Viewer delegates to `buildTypeCoverageMapDiagram()` with the shared builder module and exposes the Quality Metrics tab without reloading JSON (2025-11-09, GitHub Copilot).
+    - [x] Controls wired (C) — Viewer delegates to `buildTypeCoverageMapDiagram()` with the shared builder module, now filtered by `ui/builders/type_coverage_scope.js`, and exposes the Quality Metrics tab without reloading JSON (2025-11-09, GitHub Copilot).
     - [x] Multi-view coexistence verified (M) — Updated regression `.repo_studios/tests/tests_command_center/viewer/test_quality_metrics_multi_view_coexistence.py` confirms Type Coverage and Documentation Coverage views alternate without definition or status drift (2025-11-09, GitHub Copilot).
     - Past: Captured the Type Coverage Map contract and extracted builder logic to `ui/builders/type_coverage_map.js` (2025-11-09, GitHub Copilot).
-    - Present: Node-backed tests guard deterministic builder output in `.repo_studios/tests/tests_command_center/viewer/test_type_coverage_map_view.py` alongside the coexistence harness above.
+  - Present: Node-backed tests guard deterministic builder output in `.repo_studios/tests/tests_command_center/viewer/test_type_coverage_map_view.py`, zoom scoping in `.repo_studios/tests/tests_command_center/viewer/test_type_coverage_scope.py`, and coexistence alongside Complexity/Documentation in the shared Quality Metrics harness.
     - Future: Extend the map to surface coverage percentages per module and blend churn signals once additional metrics arrive in normalization.
   - `documentation_coverage_map.mmd`
     - [x] Data slice ready (D) — Documented docstring quality status mapping in `view_specs/documentation_coverage_map.md`, reusing normalized `docstringQuality` blocks emitted by the inventory (2025-11-09, GitHub Copilot).

@@ -17,6 +17,18 @@
 - **Context:** Establishes the complexity metrics contract before wiring controls so upcoming builder work can focus on bucketing logic and UI overlays.
 - **Owner:** GitHub Copilot implementation assistant.
 - **Evidence:** New spec `.repo_studios/command_center/docs/mermaid/view_specs/complexity_heatmap.md`, checklist update in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`, and existing producer regression `.repo_studios/tests/tests_producers/test_generate_commandview_inventory.py::test_cyclomatic_complexity_counts_branches` that guards complexity emission.
+- **Decision:** Centralized Quality Metrics zoom scoping through the shared function scope helper and prepared the complexity heatmap integration.
+- **Context:** Aligns Type Coverage with Documentation Coverage zoom behaviour while staging the complexity heatmap to reuse the same resolver once its builder lands.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Scope helpers `.repo_studios/command_center/viewer/ui/builders/type_coverage_scope.js` and `.repo_studios/command_center/viewer/ui/builders/complexity_heatmap_scope.js`, viewer wiring in `.repo_studios/command_center/viewer/ui/viewer.js`, regression tests `.repo_studios/tests/tests_command_center/viewer/test_type_coverage_scope.py` and `.repo_studios/tests/tests_command_center/viewer/test_complexity_heatmap_scope.py`, plus documentation updates in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` and `.repo_studios/command_center/docs/mermaid/view_specs/type_coverage_map.md`.
+- **Decision:** Wired the Complexity Heatmap builder and expanded Quality Metrics coexistence coverage.
+- **Context:** Delivers the third Quality Metrics view with severity-based bucketing while ensuring toggling across Complexity, Type, and Documentation diagrams stays stable.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Builder `.repo_studios/command_center/viewer/ui/builders/complexity_heatmap.js`, viewer integration `buildComplexityHeatmapViewDefinition()` plus requirement gating, regression tests `.repo_studios/tests/tests_command_center/viewer/test_complexity_heatmap_view.py` and updated coexistence suite `.repo_studios/tests/tests_command_center/viewer/test_quality_metrics_multi_view_coexistence.py`, and documentation updates in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` and `.repo_studios/command_center/docs/mermaid/view_specs/complexity_heatmap.md`.
+- **Decision:** Layered churn/coverage overlays and module hotspot aggregates into the Quality Metrics Complexity Heatmap.
+- **Context:** Adds volatility and coverage context directly to the diagram and status summaries so operators can pinpoint risky modules without leaving the view.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Enhanced builder `.repo_studios/command_center/viewer/ui/builders/complexity_heatmap.js`, viewer formatter `.repo_studios/command_center/viewer/ui/viewer.js`, expanded regression `.repo_studios/tests/tests_command_center/viewer/test_complexity_heatmap_view.py`, and refreshed documentation in `.repo_studios/command_center/docs/mermaid/view_specs/complexity_heatmap.md` plus `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
 
 ## 2025-11-05
 - **Decision:** Verified Health pack multi-view coexistence with dedicated regression coverage.

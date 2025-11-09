@@ -1,9 +1,14 @@
+import { buildComplexityHeatmapDiagram } from "./builders/complexity_heatmap.js";
+import { resolveComplexityHeatmapScope } from "./builders/complexity_heatmap_scope.js";
 import { buildDocumentationCoverageMapDiagram } from "./builders/documentation_coverage_map.js";
 import { resolveDocumentationCoverageScope } from "./builders/documentation_coverage_scope.js";
 import { buildFunctionCallGraphDiagram } from "./builders/function_call_graph.js";
 import { buildFunctionInventoryOverviewDiagram } from "./builders/function_inventory_overview.js";
 import { buildScreeningTimelineDiagram } from "./builders/screening_signal_timeline.js";
+import { buildLoggingFlowDiagram } from "./builders/logging_flow.js";
+import { resolveLoggingFlowScope } from "./builders/logging_flow_scope.js";
 import { buildTypeCoverageMapDiagram } from "./builders/type_coverage_map.js";
+import { resolveTypeCoverageScope } from "./builders/type_coverage_scope.js";
 
 console.log('[viewer.js] Script loading started');
 
@@ -201,7 +206,9 @@ const VIEW_PACKS = Object.freeze([
         filename: "complexity_heatmap.mmd",
         description:
           "Heatmap coloring functions by derived complexity scores to spotlight hard-to-maintain code.",
-        status: "planned",
+        status: "prototype",
+        builder: "complexityHeatmapView",
+        requirements: ["complexityMetrics"],
       },
       {
         id: "logging_flow",
@@ -209,7 +216,9 @@ const VIEW_PACKS = Object.freeze([
         filename: "logging_flow.mmd",
         description:
           "Diagram showing which functions emit logs at which levels to evaluate observability coverage.",
-        status: "planned",
+        status: "prototype",
+        builder: "loggingFlowView",
+        requirements: ["loggingCalls"],
       },
       {
         id: "decorator_usage_map",
@@ -318,7 +327,9 @@ const VIEW_PACKS = Object.freeze([
 ]);
 
 const VIEW_BUILDERS = Object.freeze({
+  complexityHeatmapView: buildComplexityHeatmapViewDefinition,
   documentationCoverageMapView: buildDocumentationCoverageMapViewDefinition,
+  loggingFlowView: buildLoggingFlowViewDefinition,
   functionCallGraphView: buildFunctionCallGraphViewDefinition,
   functionInventoryOverview: buildFunctionInventoryOverviewViewDefinition,
   typeCoverageMapView: buildTypeCoverageMapViewDefinition,
@@ -417,6 +428,24 @@ function findViewRequirementIssue(requirements) {
         });
         if (!hasTypeCoverage) {
           return "Type hint coverage metrics are not available in this CommandView artifact.";
+        }
+        break;
+      }
+      case "complexityMetrics": {
+        const functions = state.normalizedData?.functions;
+        if (!(functions instanceof Map) || functions.size === 0) {
+          return "Complexity metrics are unavailable because no functions were normalized.";
+        }
+        const hasComplexity = Array.from(functions.values()).some((fn) => {
+          if (!fn || typeof fn !== "object") {
+            return false;
+          }
+          const primary = fn.cyclomaticComplexity ?? fn.cyclomatic_complexity;
+          const fallback = fn.metrics?.complexity ?? fn.metrics?.cyclomatic_complexity;
+          return Number.isFinite(Number(primary)) || Number.isFinite(Number(fallback));
+        });
+        if (!hasComplexity) {
+          return "Complexity metrics are not available in this CommandView artifact.";
         }
         break;
       }
@@ -927,6 +956,7 @@ function createFunctionRecord(fn, moduleId) {
         .map((call) => call?.callee || call?.qualified_name || call?.attribute || null)
         .filter(Boolean)
     : [];
+  const loggingCalls = normalizeLoggingCalls(fn?.loggingCalls ?? fn?.logging_calls);
 
   return {
     id: functionId,
@@ -941,12 +971,41 @@ function createFunctionRecord(fn, moduleId) {
     docstringQuality: fn.docstring_quality ?? null,
     todoTags: fn.todo_tags ?? 0,
     localsSummary: fn.locals_summary ?? null,
+    loggingCalls,
     metrics: {
       coverage: fn.coverage ?? null,
       lineCount: fn.line_count ?? null,
     },
     calls,
   };
+}
+
+function normalizeLoggingCalls(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value
+    .map((call) => {
+      if (!call || typeof call !== "object") {
+        return null;
+      }
+      const levelRaw = call.level ?? call.log_level ?? call.levelname ?? null;
+      const level = typeof levelRaw === "string" && levelRaw.trim().length > 0 ? levelRaw.trim().toLowerCase() : null;
+      const linenoRaw = call.lineno ?? call.line ?? call.line_number ?? null;
+      const linenoNumeric = Number.isFinite(Number(linenoRaw)) ? Number(linenoRaw) : null;
+      const message = typeof call.message === "string" && call.message.trim().length > 0 ? call.message.trim() : null;
+      const loggerName = typeof call.logger === "string" && call.logger.trim().length > 0 ? call.logger.trim() : null;
+      if (!level && linenoNumeric === null && !message && !loggerName) {
+        return null;
+      }
+      return {
+        level,
+        lineno: linenoNumeric,
+        message,
+        logger: loggerName,
+      };
+    })
+    .filter(Boolean);
 }
 
 function buildScreeningCallIndex(screening) {
@@ -2328,6 +2387,214 @@ function buildScreeningSignalTimelineViewDefinition() {
   };
 }
 
+function buildComplexityHeatmapViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const scope = resolveComplexityHeatmapScope(
+    {
+      functions: normalized.functions,
+      modules: normalized.modules,
+      neighborhoods: state.levels?.level4 ?? null,
+    },
+    {
+      currentLevel: state.currentLevel,
+      selections: {
+        rootId: state.levelSelections.rootId,
+        domainId: state.levelSelections.domainId,
+        moduleId: state.levelSelections.moduleId,
+        functionId: state.levelSelections.functionId,
+      },
+    }
+  );
+
+  if (scope?.message) {
+    return { message: scope.message };
+  }
+
+  const functionsMap = scope?.functions instanceof Map ? scope.functions : null;
+  if (!functionsMap || functionsMap.size === 0) {
+    const emptyMessage = scope?.emptyMessage ?? "No complexity metrics recorded for this selection.";
+    return { message: emptyMessage };
+  }
+
+  const result = buildComplexityHeatmapDiagram(functionsMap, {
+    viewLabel: "Quality Metrics · Complexity Heatmap",
+    centerLabel: scope?.centerLabel,
+    moduleMetrics: normalized.metrics?.modules,
+    moduleAggregateLimit: 3,
+    coverageRiskThreshold: 0.6,
+    statusMessageFormatter: (stats) => formatComplexityHeatmapStatus(stats, scope?.statusContext),
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Complexity Heatmap diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+  };
+}
+
+function formatComplexityHeatmapStatus(stats, context) {
+  const extreme = typeof stats?.extreme === "number" ? stats.extreme : 0;
+  const high = typeof stats?.high === "number" ? stats.high : 0;
+  const moderate = typeof stats?.moderate === "number" ? stats.moderate : 0;
+  const low = typeof stats?.low === "number" ? stats.low : 0;
+  const unknown = typeof stats?.unknown === "number" ? stats.unknown : 0;
+  const maxComplexity = Number.isFinite(stats?.maxComplexity) ? stats.maxComplexity : null;
+  const prefix = context ? `Rendered Complexity Heatmap for ${context}` : "Rendered Complexity Heatmap";
+  const suffix = maxComplexity !== null ? `, max complexity ${Math.round(maxComplexity)}` : "";
+  const coverageStats = stats?.coverage ?? null;
+  let coverageSnippet = "";
+  if (coverageStats && typeof coverageStats === "object" && Number.isFinite(coverageStats.average)) {
+    const avgPercent = Math.round(coverageStats.average * 100);
+    const below = typeof coverageStats.belowThreshold === "number" ? coverageStats.belowThreshold : 0;
+    const thresholdPercent = Number.isFinite(coverageStats.threshold) ? Math.round(coverageStats.threshold * 100) : null;
+    const belowSnippet = below > 0 && thresholdPercent !== null ? `, ${below} below ${thresholdPercent}%` : "";
+    coverageSnippet = ` Avg coverage ${avgPercent}%${belowSnippet}`;
+  }
+
+  const aggregates = Array.isArray(stats?.moduleAggregates) ? stats.moduleAggregates : [];
+  let moduleSnippet = "";
+  if (aggregates.length > 0) {
+    const formatted = aggregates
+      .slice(0, 2)
+      .map((aggregate) => formatModuleAggregateSnippet(aggregate))
+      .filter(Boolean)
+      .join("; ");
+    if (formatted) {
+      moduleSnippet = ` Hot modules: ${formatted}`;
+    }
+  }
+
+  return `${prefix} (extreme ${extreme}, high ${high}, moderate ${moderate}, low ${low}, unknown ${unknown}${suffix}).${coverageSnippet}${moduleSnippet}`;
+}
+
+function formatModuleAggregateSnippet(aggregate) {
+  if (!aggregate || typeof aggregate !== "object") {
+    return "";
+  }
+  const moduleId = typeof aggregate.moduleId === "string" ? aggregate.moduleId : null;
+  if (!moduleId) {
+    return "";
+  }
+  const hot = typeof aggregate.hotFunctions === "number" ? aggregate.hotFunctions : aggregate.extreme + aggregate.high;
+  const extreme = typeof aggregate.extreme === "number" ? aggregate.extreme : 0;
+  const averageCoverage = Number.isFinite(aggregate.coverageAverage)
+    ? Math.round(aggregate.coverageAverage * 100)
+    : null;
+  const churnCommits = Number.isFinite(aggregate.churn?.commitCount) ? aggregate.churn.commitCount : null;
+  const churnNet = Number.isFinite(aggregate.churn?.netChanges) ? aggregate.churn.netChanges : null;
+
+  const parts = [];
+  if (hot > 0) {
+    parts.push(`hot ${hot}`);
+    if (extreme > 0) {
+      parts.push(`${extreme} extreme`);
+    }
+  }
+  if (averageCoverage !== null) {
+    parts.push(`cov ${averageCoverage}%`);
+  }
+  if (churnCommits !== null) {
+    let churnSnippet = `${churnCommits}c`;
+    if (churnNet !== null && churnNet !== 0) {
+      churnSnippet += churnNet > 0 ? `/+${churnNet}` : `/${churnNet}`;
+    }
+    parts.push(`churn ${churnSnippet}`);
+  }
+
+  if (parts.length === 0) {
+    return moduleId;
+  }
+  return `${moduleId} (${parts.join(", ")})`;
+}
+
+function buildLoggingFlowViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const scope = resolveLoggingFlowScope(
+    {
+      functions: normalized.functions,
+      modules: normalized.modules,
+      neighborhoods: state.levels?.level4 ?? null,
+    },
+    {
+      currentLevel: state.currentLevel,
+      selections: {
+        rootId: state.levelSelections.rootId,
+        domainId: state.levelSelections.domainId,
+        moduleId: state.levelSelections.moduleId,
+        functionId: state.levelSelections.functionId,
+      },
+    }
+  );
+
+  if (scope?.message) {
+    return { message: scope.message };
+  }
+
+  const functionsMap = scope?.functions instanceof Map ? scope.functions : null;
+  if (!functionsMap || functionsMap.size === 0) {
+    const emptyMessage = scope?.emptyMessage ?? "No logging events recorded for this selection.";
+    return { message: emptyMessage };
+  }
+
+  const result = buildLoggingFlowDiagram(functionsMap, {
+    viewLabel: "Quality Metrics · Logging Flow",
+    centerLabel: scope?.centerLabel,
+    statusMessageFormatter: (stats) => formatLoggingFlowStatus(stats, scope?.statusContext),
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Logging Flow diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+  };
+}
+
+function formatLoggingFlowStatus(stats, context) {
+  const emitters = typeof stats?.emitters === "number" ? stats.emitters : 0;
+  const silent = typeof stats?.silent === "number" ? stats.silent : 0;
+  const bucketCounts = stats?.bucketCounts ?? {};
+  const events = stats?.events ?? {};
+  const severityOrder = ["critical", "error", "warning", "info", "debug", "unknown"];
+  const bucketSummary = severityOrder
+    .filter((key) => bucketCounts[key] !== undefined)
+    .map((key) => `${key} ${bucketCounts[key] ?? 0}`)
+    .join(", ");
+  const eventSummary = severityOrder
+    .filter((key) => events[key] !== undefined)
+    .map((key) => `${key} ${events[key] ?? 0}`)
+    .join(", ");
+  const topModule = Array.isArray(stats?.topModules) && stats.topModules.length > 0 ? stats.topModules[0] : null;
+  const moduleSuffix = topModule
+    ? `; top module ${topModule.moduleId} (${topModule.callCount} calls, ${topModule.emitters} emitters)`
+    : "";
+  const prefix = context ? `Rendered Logging Flow for ${context}` : "Rendered Logging Flow";
+  return `${prefix} (emitters ${emitters}, silent ${silent}, buckets ${bucketSummary || "none"}, events ${eventSummary || "none"}${moduleSuffix}).`;
+}
+
 function buildDocumentationCoverageMapViewDefinition() {
   const normalized = state.normalizedData;
   if (!normalized) {
@@ -2396,9 +2663,37 @@ function buildTypeCoverageMapViewDefinition() {
     return { message: "Normalized CommandView data is unavailable." };
   }
 
-  const functionsMap = normalized.functions instanceof Map ? normalized.functions : null;
+  const scope = resolveTypeCoverageScope(
+    {
+      functions: normalized.functions,
+      modules: normalized.modules,
+      neighborhoods: state.levels?.level4 ?? null,
+    },
+    {
+      currentLevel: state.currentLevel,
+      selections: {
+        rootId: state.levelSelections.rootId,
+        domainId: state.levelSelections.domainId,
+        moduleId: state.levelSelections.moduleId,
+        functionId: state.levelSelections.functionId,
+      },
+    }
+  );
+
+  if (scope?.message) {
+    return { message: scope.message };
+  }
+
+  const functionsMap = scope?.functions instanceof Map ? scope.functions : null;
+  if (!functionsMap || functionsMap.size === 0) {
+    const emptyMessage = scope?.emptyMessage ?? "No type coverage metrics recorded for this selection.";
+    return { message: emptyMessage };
+  }
+
   const result = buildTypeCoverageMapDiagram(functionsMap, {
     viewLabel: "Quality Metrics · Type Coverage Map",
+    centerLabel: scope?.centerLabel,
+    statusMessageFormatter: (stats) => formatTypeCoverageStatus(stats, scope?.statusContext),
   });
 
   if (!result || typeof result !== "object") {
@@ -2414,6 +2709,15 @@ function buildTypeCoverageMapViewDefinition() {
     label: result.label,
     statusMessage: result.statusMessage,
   };
+}
+
+function formatTypeCoverageStatus(stats, context) {
+  const strong = typeof stats?.strong === "number" ? stats.strong : 0;
+  const moderate = typeof stats?.moderate === "number" ? stats.moderate : 0;
+  const weak = typeof stats?.weak === "number" ? stats.weak : 0;
+  const unknown = typeof stats?.unknown === "number" ? stats.unknown : 0;
+  const prefix = context ? `Rendered Type Coverage Map for ${context}` : "Rendered Type Coverage Map";
+  return `${prefix} (strong ${strong}, moderate ${moderate}, weak ${weak}, unknown ${unknown}).`;
 }
 
 function buildAggregateMermaid(levelData, labelFactory, onNode, styleFactory, edgeFormatter) {
