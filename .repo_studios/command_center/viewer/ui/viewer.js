@@ -1,4 +1,9 @@
+import { buildDocumentationCoverageMapDiagram } from "./builders/documentation_coverage_map.js";
+import { resolveDocumentationCoverageScope } from "./builders/documentation_coverage_scope.js";
+import { buildFunctionCallGraphDiagram } from "./builders/function_call_graph.js";
+import { buildFunctionInventoryOverviewDiagram } from "./builders/function_inventory_overview.js";
 import { buildScreeningTimelineDiagram } from "./builders/screening_signal_timeline.js";
+import { buildTypeCoverageMapDiagram } from "./builders/type_coverage_map.js";
 
 console.log('[viewer.js] Script loading started');
 
@@ -247,7 +252,9 @@ const VIEW_PACKS = Object.freeze([
         filename: "documentation_coverage_map.mmd",
         description:
           "Diagram portraying docstring presence and quality scores for knowledge sharing readiness.",
-        status: "planned",
+        status: "prototype",
+        builder: "documentationCoverageMapView",
+        requirements: ["docstringQuality"],
       },
     ],
   },
@@ -311,6 +318,7 @@ const VIEW_PACKS = Object.freeze([
 ]);
 
 const VIEW_BUILDERS = Object.freeze({
+  documentationCoverageMapView: buildDocumentationCoverageMapViewDefinition,
   functionCallGraphView: buildFunctionCallGraphViewDefinition,
   functionInventoryOverview: buildFunctionInventoryOverviewViewDefinition,
   typeCoverageMapView: buildTypeCoverageMapViewDefinition,
@@ -612,6 +620,8 @@ function persistActiveSelectionMemory() {
       moduleId: state.levelSelections.moduleId,
       functionId: state.levelSelections.functionId,
     },
+    activeViews: state.activeViews.length > 0 ? [...state.activeViews] : null,
+    activeViewIndex: state.activeViewIndex >= 0 ? state.activeViewIndex : null,
   };
 
   keys.forEach((key) => {
@@ -653,6 +663,13 @@ function restoreSelectionMemory(option) {
 
   if (memory.currentLevel) {
     state.currentLevel = memory.currentLevel;
+  }
+
+  // Restore active view pack selection
+  if (memory.activeViews && Array.isArray(memory.activeViews) && memory.activeViews.length > 0) {
+    state.activeViews = [...memory.activeViews];
+    state.activeViewIndex = memory.activeViewIndex ?? 0;
+    console.log("[restoreSelectionMemory] Restored active views:", state.activeViews, "index:", state.activeViewIndex);
   }
 }
 
@@ -2233,132 +2250,29 @@ function buildFunctionCallGraphViewDefinition() {
     return { message: "Normalized CommandView data is unavailable." };
   }
 
-  const modules = normalized.modules instanceof Map ? normalized.modules : null;
-  const functionsMap = normalized.functions instanceof Map ? normalized.functions : null;
-  const callGraph = normalized.callGraph?.functions instanceof Map ? normalized.callGraph.functions : null;
+  const modules = normalized.modules instanceof Map ? normalized.modules : normalized.modules ?? null;
+  const functionsMap = normalized.functions instanceof Map ? normalized.functions : normalized.functions ?? null;
+  const callGraph = normalized.callGraph?.functions instanceof Map
+    ? normalized.callGraph.functions
+    : normalized.callGraph?.functions ?? null;
 
-  if (!modules || modules.size === 0) {
-    return { message: "No modules recorded in this CommandView artifact." };
-  }
-
-  if (!functionsMap || functionsMap.size === 0) {
-    return { message: "No function records available to build a call graph." };
-  }
-
-  if (!callGraph || callGraph.size === 0) {
-    return { message: "Call graph edges are not present in this CommandView artifact." };
-  }
-
-  let moduleId = state.levelSelections.moduleId;
-  if (!moduleId || !modules.has(moduleId)) {
-    const iterator = modules.keys();
-    const firstKey = iterator.next();
-    moduleId = !firstKey.done ? firstKey.value : null;
-  }
-
-  if (!moduleId || !modules.has(moduleId)) {
-    return { message: "Select a module to render the function call graph view." };
-  }
-
-  const moduleRecord = modules.get(moduleId);
-  const localFunctionIds = Array.isArray(moduleRecord?.functions) ? moduleRecord.functions : [];
-  if (localFunctionIds.length === 0) {
-    return { message: `Module ${moduleId} has no functions recorded in the CommandView inventory.` };
-  }
-
-  const localSet = new Set(localFunctionIds);
-  const nodeIdMap = new Map();
-  const nodeLines = [];
-  const edgeSet = new Set();
-  const edgeLines = [];
-  const localNodeIds = new Set();
-  const focusNodeIds = new Set();
-  const focusFunctionId = state.levelSelections.functionId;
-
-  const ensureNode = (functionId) => {
-    if (nodeIdMap.has(functionId)) {
-      return nodeIdMap.get(functionId);
-    }
-    const record = functionsMap.get(functionId);
-    if (!record) {
-      return null;
-    }
-    const sanitizedId = sanitizeMermaidId(functionId);
-    nodeIdMap.set(functionId, sanitizedId);
-    const isFocus = focusFunctionId === functionId;
-    nodeLines.push({
-      id: sanitizedId,
-      label: formatFunctionNodeLabel(record, isFocus),
-      isFocus,
-    });
-    if (isFocus) {
-      focusNodeIds.add(sanitizedId);
-    } else {
-      localNodeIds.add(sanitizedId);
-    }
-    return sanitizedId;
-  };
-
-  localFunctionIds.forEach((functionId) => {
-    ensureNode(functionId);
+  const result = buildFunctionCallGraphDiagram(modules, functionsMap, callGraph, {
+    moduleId: state.levelSelections.moduleId,
+    focusFunctionId: state.levelSelections.functionId,
   });
 
-  localFunctionIds.forEach((sourceId) => {
-    const sanitizedSource = ensureNode(sourceId);
-    if (!sanitizedSource) {
-      return;
-    }
-    const targets = callGraph.get(sourceId) ?? [];
-    targets.forEach((targetId) => {
-      if (!localSet.has(targetId)) {
-        return;
-      }
-      const sanitizedTarget = ensureNode(targetId);
-      if (!sanitizedTarget) {
-        return;
-      }
-      const edgeKey = `${sanitizedSource}->${sanitizedTarget}`;
-      if (edgeSet.has(edgeKey)) {
-        return;
-      }
-      edgeSet.add(edgeKey);
-      edgeLines.push({ source: sanitizedSource, target: sanitizedTarget });
-    });
-  });
-
-  const palette = NODE_STYLE_PALETTE.function;
-  const lines = [
-    "graph TD",
-    `  classDef local fill:${palette.baseFill},stroke:${palette.baseStroke},color:#f8fafc;`,
-    `  classDef focus fill:${palette.focusFill},stroke:${palette.focusStroke},color:#f8fafc;`,
-  ];
-
-  nodeLines.forEach((node) => {
-    lines.push(`  ${node.id}["${escapeMermaidLabel(node.label)}"]`);
-  });
-
-  edgeLines.forEach((edge) => {
-    lines.push(`  ${edge.source} --> ${edge.target}`);
-  });
-
-  if (localNodeIds.size > 0) {
-    lines.push(`  class ${Array.from(localNodeIds).join(",")} local;`);
-  }
-  if (focusNodeIds.size > 0) {
-    lines.push(`  class ${Array.from(focusNodeIds).join(",")} focus;`);
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Function Call Graph diagram." };
   }
 
-  const nodeCount = nodeLines.length;
-  const edgeCount = edgeLines.length;
-  const label = `${moduleId} · Function Call Graph`;
-  const statusMessage = edgeCount > 0
-    ? `Rendered Function Call Graph for ${moduleId} (${nodeCount} functions, ${edgeCount} edges).`
-    : `Rendered Function Call Graph for ${moduleId}; no intra-module call edges recorded.`;
+  if (result.message) {
+    return { message: result.message };
+  }
 
   return {
-    definition: lines.join("\n"),
-    label,
-    statusMessage,
+    definition: result.definition,
+    label: result.label ?? `${result.moduleId ?? "Module"} · Function Call Graph`,
+    statusMessage: result.statusMessage,
   };
 }
 
@@ -2368,109 +2282,25 @@ function buildFunctionInventoryOverviewViewDefinition() {
     return { message: "Normalized CommandView data is unavailable." };
   }
 
-  const modules = normalized.modules instanceof Map ? normalized.modules : null;
-  const functionsMap = normalized.functions instanceof Map ? normalized.functions : null;
+  const modules = normalized.modules instanceof Map ? normalized.modules : normalized.modules ?? null;
+  const functionsMap = normalized.functions instanceof Map ? normalized.functions : normalized.functions ?? null;
 
-  if (!modules || modules.size === 0) {
-    return { message: "No modules recorded in this CommandView artifact." };
-  }
-
-  const moduleCount = modules.size;
-  const functionCount = functionsMap ? functionsMap.size : 0;
-
-  let docstringTotal = 0;
-  let docstringWith = 0;
-  let typeCoverageTotal = 0;
-  let typeCoverageSamples = 0;
-  let todoFunctionCount = 0;
-
-  if (functionsMap) {
-    functionsMap.forEach((fn) => {
-      docstringTotal += 1;
-      const docQuality = fn?.docstringQuality ?? null;
-      const hasDoc = Boolean(
-        docQuality &&
-        (docQuality.exists === true || docQuality.has_docstring === true || docQuality.present === true || docQuality.status === "present")
-      );
-      if (hasDoc) {
-        docstringWith += 1;
-      }
-
-      const typeCoverage = Number(fn?.typeHintCoverage ?? fn?.annotationCoverage);
-      if (Number.isFinite(typeCoverage)) {
-        typeCoverageTotal += typeCoverage;
-        typeCoverageSamples += 1;
-      }
-
-      const todoTags = Number(fn?.todoTags ?? 0);
-      if (Number.isFinite(todoTags) && todoTags > 0) {
-        todoFunctionCount += 1;
-      }
-    });
-  }
-
-  const docstringPercent = docstringTotal > 0 ? docstringWith / docstringTotal : null;
-  const averageTypeCoverage = typeCoverageSamples > 0 ? typeCoverageTotal / typeCoverageSamples : null;
-
-  const rootCounts = new Map();
-  modules.forEach((moduleRecord) => {
-    const moduleId = moduleRecord?.moduleId ?? moduleRecord?.id ?? "root";
-    const root = deriveRootSegment(moduleId);
-    rootCounts.set(root, (rootCounts.get(root) ?? 0) + 1);
-  });
-  const topRoots = Array.from(rootCounts.entries())
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5);
-
-  const lines = ["graph TD"];
-  const centralLabel = `Inventory Overview\nModules: ${moduleCount}\nFunctions: ${functionCount}`;
-  const centralId = sanitizeMermaidId("inventory_overview");
-  lines.push(`  ${centralId}["${escapeMermaidLabel(centralLabel)}"]`);
-
-  const docLabelLines = [`Docstrings`, `With: ${docstringWith}`];
-  if (docstringTotal > docstringWith) {
-    docLabelLines.push(`Missing: ${docstringTotal - docstringWith}`);
-  }
-  const docNodeId = sanitizeMermaidId("inventory_docstrings");
-  lines.push(`  ${docNodeId}["${escapeMermaidLabel(docLabelLines.join("\\n"))}"]`);
-  lines.push(`  ${centralId} --> ${docNodeId}`);
-
-  const typeLines = ["Type Hints", `Tracked: ${typeCoverageSamples}`];
-  if (Number.isFinite(averageTypeCoverage)) {
-    typeLines.push(`Average: ${formatCoveragePercent(averageTypeCoverage)}`);
-  }
-  const typeNodeId = sanitizeMermaidId("inventory_type_hints");
-  lines.push(`  ${typeNodeId}["${escapeMermaidLabel(typeLines.join("\\n"))}"]`);
-  lines.push(`  ${centralId} --> ${typeNodeId}`);
-
-  const todoNodeId = sanitizeMermaidId("inventory_todo_hotspots");
-  const todoLabel = `TODO Hotspots\nFunctions flagged: ${todoFunctionCount}`;
-  lines.push(`  ${todoNodeId}["${escapeMermaidLabel(todoLabel)}"]`);
-  lines.push(`  ${centralId} --> ${todoNodeId}`);
-
-  topRoots.forEach(([root, count]) => {
-    const rootId = sanitizeMermaidId(`inventory_root_${root}`);
-    const rootLabel = `${root}\nModules: ${count}`;
-    lines.push(`  ${rootId}["${escapeMermaidLabel(rootLabel)}"]`);
-    lines.push(`  ${centralId} --> ${rootId}`);
+  const result = buildFunctionInventoryOverviewDiagram(modules, functionsMap, {
+    viewLabel: "Health · Function Inventory Overview",
   });
 
-  const docClass = sanitizeMermaidId("class_doc");
-  const typeClass = sanitizeMermaidId("class_type");
-  const todoClass = sanitizeMermaidId("class_todo");
-  lines.push(`  classDef ${docClass} fill:#1d4ed8,stroke:#93c5fd,color:#eff6ff;`);
-  lines.push(`  classDef ${typeClass} fill:#0f766e,stroke:#5eead4,color:#ecfeff;`);
-  lines.push(`  classDef ${todoClass} fill:#7f1d1d,stroke:#fca5a5,color:#fee2e2;`);
-  lines.push(`  class ${docNodeId} ${docClass};`);
-  lines.push(`  class ${typeNodeId} ${typeClass};`);
-  lines.push(`  class ${todoNodeId} ${todoClass};`);
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Function Inventory Overview diagram." };
+  }
 
-  const statusMessage = `Rendered Function Inventory Overview (modules ${moduleCount}, functions ${functionCount}).`;
+  if (result.message) {
+    return { message: result.message };
+  }
 
   return {
-    definition: lines.join("\n"),
-    label: "Health · Function Inventory Overview",
-    statusMessage,
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
   };
 }
 
@@ -2498,6 +2328,68 @@ function buildScreeningSignalTimelineViewDefinition() {
   };
 }
 
+function buildDocumentationCoverageMapViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const scope = resolveDocumentationCoverageScope(
+    {
+      functions: normalized.functions,
+      modules: normalized.modules,
+      neighborhoods: state.levels?.level4 ?? null,
+    },
+    {
+      currentLevel: state.currentLevel,
+      selections: {
+        rootId: state.levelSelections.rootId,
+        domainId: state.levelSelections.domainId,
+        moduleId: state.levelSelections.moduleId,
+        functionId: state.levelSelections.functionId,
+      },
+    }
+  );
+
+  if (scope?.message) {
+    return { message: scope.message };
+  }
+
+  const functionsMap = scope?.functions instanceof Map ? scope.functions : null;
+  if (!functionsMap || functionsMap.size === 0) {
+    const emptyMessage = scope?.emptyMessage ?? "No documentation metrics recorded for this selection.";
+    return { message: emptyMessage };
+  }
+
+  const result = buildDocumentationCoverageMapDiagram(functionsMap, {
+    viewLabel: "Quality Metrics · Documentation Coverage Map",
+    centerLabel: scope?.centerLabel,
+    statusMessageFormatter: (stats) => formatDocumentationCoverageStatus(stats, scope?.statusContext),
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Documentation Coverage Map diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+  };
+}
+
+function formatDocumentationCoverageStatus(stats, context) {
+  const documented = typeof stats?.documented === "number" ? stats.documented : 0;
+  const missing = typeof stats?.missing === "number" ? stats.missing : 0;
+  const unknown = typeof stats?.unknown === "number" ? stats.unknown : 0;
+  const prefix = context ? `Rendered Documentation Coverage Map for ${context}` : "Rendered Documentation Coverage Map";
+  return `${prefix} (documented ${documented}, missing ${missing}, unknown ${unknown}).`;
+}
+
 function buildTypeCoverageMapViewDefinition() {
   const normalized = state.normalizedData;
   if (!normalized) {
@@ -2505,88 +2397,22 @@ function buildTypeCoverageMapViewDefinition() {
   }
 
   const functionsMap = normalized.functions instanceof Map ? normalized.functions : null;
-  if (!functionsMap || functionsMap.size === 0) {
-    return { message: "No functions recorded in this CommandView artifact." };
+  const result = buildTypeCoverageMapDiagram(functionsMap, {
+    viewLabel: "Quality Metrics · Type Coverage Map",
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Type Coverage Map diagram." };
   }
 
-  const buckets = {
-    strong: [],
-    moderate: [],
-    weak: [],
-    unknown: [],
-  };
-
-  const BUCKET_LIMIT = 8;
-
-  functionsMap.forEach((fn) => {
-    const coverage = Number(fn?.typeHintCoverage ?? fn?.annotationCoverage);
-    const entry = {
-      name: fn?.name ?? fn?.id ?? "anonymous",
-      moduleId: fn?.moduleId ?? null,
-      coverage,
-    };
-
-    if (!Number.isFinite(coverage)) {
-      buckets.unknown.push(entry);
-      return;
-    }
-    if (coverage >= 0.8) {
-      buckets.strong.push(entry);
-    } else if (coverage >= 0.5) {
-      buckets.moderate.push(entry);
-    } else {
-      buckets.weak.push(entry);
-    }
-  });
-
-  const lines = ["graph TD"];
-  const centerId = sanitizeMermaidId("type_coverage_center");
-  lines.push(`  ${centerId}["${escapeMermaidLabel("Type Coverage Map")}"]`);
-
-  const bucketConfigs = [
-    { key: "strong", title: "Strong ≥ 80%", className: "typeStrong", fill: "#166534", stroke: "#22c55e", color: "#ecfdf5" },
-    { key: "moderate", title: "Moderate 50-79%", className: "typeModerate", fill: "#1f2937", stroke: "#60a5fa", color: "#e0f2fe" },
-    { key: "weak", title: "Weak < 50%", className: "typeWeak", fill: "#7f1d1d", stroke: "#f87171", color: "#fee2e2" },
-    { key: "unknown", title: "Unknown", className: "typeUnknown", fill: "#4b5563", stroke: "#cbd5f5", color: "#f1f5f9" },
-  ];
-
-  bucketConfigs.forEach((config) => {
-    const entries = buckets[config.key] ?? [];
-    const nodeId = sanitizeMermaidId(`type_bucket_${config.key}`);
-    const count = entries.length;
-
-    const formattedEntries = entries
-      .slice(0, BUCKET_LIMIT)
-      .map((entry) => {
-        const coverageText = Number.isFinite(entry.coverage) ? formatCoveragePercent(entry.coverage) : "-";
-        const moduleSuffix = entry.moduleId ? ` · ${entry.moduleId}` : "";
-        return `${entry.name} (${coverageText})${moduleSuffix}`;
-      });
-
-    let labelLines = [`${config.title}`, `Functions: ${count}`];
-    if (formattedEntries.length > 0) {
-      labelLines = labelLines.concat(formattedEntries);
-      if (count > formattedEntries.length) {
-        labelLines.push(`+${count - formattedEntries.length} more`);
-      }
-    } else {
-      labelLines.push("None recorded");
-    }
-
-    lines.push(`  ${nodeId}["${escapeMermaidLabel(labelLines.join("\\n"))}"]`);
-    lines.push(`  ${centerId} --> ${nodeId}`);
-    lines.push(
-      `  classDef ${config.className} fill:${config.fill},stroke:${config.stroke},color:${config.color};`
-    );
-    lines.push(`  class ${nodeId} ${config.className};`);
-  });
-
-  const statusMessage = `Rendered Type Coverage Map (strong ${buckets.strong.length}, moderate ${buckets.moderate.length}, weak ${buckets.weak.length}, unknown ${buckets.unknown.length}).`;
+  if (result.message) {
+    return { message: result.message };
+  }
 
   return {
-    definition: lines.join("\n"),
-    label: "Quality Metrics · Type Coverage Map",
-    statusMessage,
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
   };
 }
 

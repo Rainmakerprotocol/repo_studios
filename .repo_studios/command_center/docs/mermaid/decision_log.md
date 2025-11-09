@@ -1,10 +1,28 @@
 # Mermaid Decision Log
 
-## 2025-11-05
-
-- **Decision:** Standardize inventory dependency categories as `internal`, `standard_library`, and `third_party`, keeping `unknown` as a fallback.
-- **Context:** Required for the commandview viewer packs (Dependency Pack, Coupling Insight Pack) to differentiate internal modules from external sources.
+## 2025-11-09
+- **Decision:** Modularized the Code Flow Function Call Graph builder and hardened multi-view coexistence.
+- **Context:** Ensures the Code Flow pack can toggle alongside Health pack diagrams without state resets while keeping call graph rendering reusable across future packs.
 - **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Builder delegation in `.repo_studios/command_center/viewer/ui/viewer.js`, dedicated helper module `.repo_studios/command_center/viewer/ui/builders/function_call_graph.js`, new regression coverage in `.repo_studios/tests/tests_command_center/viewer/test_function_call_graph_view.py` and `.repo_studios/tests/tests_command_center/viewer/test_code_flow_multi_view_coexistence.py`, plus documentation updates in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` and the new view spec `.repo_studios/command_center/docs/mermaid/view_specs/function_call_graph.md`.
+- **Decision:** Added the Quality Metrics Type Coverage Map builder with regression and coexistence coverage.
+- **Context:** Allows the Quality Metrics pack to surface coverage buckets and coexist with Health views while centralizing diagram logic for reuse.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Builder module `.repo_studios/command_center/viewer/ui/builders/type_coverage_map.js`, viewer delegation updates, regression tests `.repo_studios/tests/tests_command_center/viewer/test_type_coverage_map_view.py` and `.repo_studios/tests/tests_command_center/viewer/test_quality_metrics_multi_view_coexistence.py`, plus documentation updates in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` and the new spec `.repo_studios/command_center/docs/mermaid/view_specs/type_coverage_map.md`.
+- **Decision:** Added the Quality Metrics Documentation Coverage Map builder with zoom-aware scope filtering, regression, and coexistence coverage.
+- **Context:** Enables the Quality Metrics pack to visualize docstring health at repository, root, domain, module, and function neighborhood levels while keeping Type Coverage toggles stable and sharing reusable bucket logic.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Builder module `.repo_studios/command_center/viewer/ui/builders/documentation_coverage_map.js`, scope helper `.repo_studios/command_center/viewer/ui/builders/documentation_coverage_scope.js`, viewer wiring updates, regression tests `.repo_studios/tests/tests_command_center/viewer/test_documentation_coverage_map_view.py`, `.repo_studios/tests/tests_command_center/viewer/test_documentation_coverage_scope.py`, and `.repo_studios/tests/tests_command_center/viewer/test_quality_metrics_multi_view_coexistence.py`, plus documentation updates in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` and the view spec `.repo_studios/command_center/docs/mermaid/view_specs/documentation_coverage_map.md`.
+- **Decision:** Documented the Quality Metrics Complexity Heatmap data slice and confirmed inventory readiness.
+- **Context:** Establishes the complexity metrics contract before wiring controls so upcoming builder work can focus on bucketing logic and UI overlays.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New spec `.repo_studios/command_center/docs/mermaid/view_specs/complexity_heatmap.md`, checklist update in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`, and existing producer regression `.repo_studios/tests/tests_producers/test_generate_commandview_inventory.py::test_cyclomatic_complexity_counts_branches` that guards complexity emission.
+
+## 2025-11-05
+- **Decision:** Verified Health pack multi-view coexistence with dedicated regression coverage.
+- **Context:** Demonstrates that Function Inventory Overview and Screening Signal Timeline tabs can toggle without reloading JSON or mutating in-memory state, establishing the coexistence pattern for upcoming packs.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Node-backed regression at `.repo_studios/tests/tests_command_center/viewer/test_health_pack_multi_view_coexistence.py` plus updated tracker notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` and the Function Inventory Overview spec.
 - **Evidence:** Updated `.repo_studios/command_center/scripts/producers/generate_commandview_inventory.py` and checklist entry in `.repo_studios/command_center/docs/mermaid/mermaid_integration_checklist.md`.
 - **Decision:** Emit per-module call graph data with resolution metadata for local, imported, and builtin targets.
 - **Context:** Unlocks the Code Flow and Coupling Insight packs plus cross-module duplicate analysis by providing structured call edges directly in the inventory payload.
@@ -176,6 +194,10 @@
 - **Context:** Ensures operators can open the timeline view as soon as screening snapshots exist, reducing confusion when history is still building while still guarding missing payloads.
 - **Owner:** GitHub Copilot implementation assistant.
 - **Evidence:** Updated `.repo_studios/command_center/viewer/ui/viewer.js` screening history requirement handling, refreshed guidance in `.repo_studios/command_center/viewer/SCREENING_TIMELINE_VERIFICATION.md`, and Phase 7 tracker updates in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` noting the control wiring.
+- **Decision:** Wire the Health pack Function Inventory Overview controls with a reusable builder module.
+- **Context:** Moves the Health pack beyond data readiness so operators can render the overview alongside the timeline while keeping diagram generation testable via the shared Node harness.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `.repo_studios/command_center/viewer/ui/builders/function_inventory_overview.js` now supplies the diagram generator, `viewer.js` delegates to it for Health pack rendering, and `.repo_studios/tests/tests_command_center/viewer/test_function_inventory_overview_view.py` covers deterministic output; tracked in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` Phase 7.
 
 ## 2025-11-07
 

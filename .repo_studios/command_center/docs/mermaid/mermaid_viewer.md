@@ -102,16 +102,16 @@ Every pass against a view pack should explicitly update the three shared attribu
 - **Health Pack**
   - `function_inventory_overview.mmd`
     - [x] Data slice ready (D) — Documented input mapping and Mermaid transform in `view_specs/function_inventory_overview.md`; hardened builder docstring detection to respect `docstring_quality.exists` (2025-11-08, GitHub Copilot).
-    - [ ] Controls wired (C)
-    - [ ] Multi-view coexistence verified (M)
+    - [x] Controls wired (C) — Sidebar button now routes through `buildFunctionInventoryOverviewDiagram` with live wiring in `viewer.js`, and regression coverage asserts the builder output using the shared Node harness (2025-11-08, GitHub Copilot).
+    - [x] Multi-view coexistence verified (M) — Cross-view regression at `.repo_studios/tests/tests_command_center/viewer/test_health_pack_multi_view_coexistence.py::test_health_pack_builders_coexist_without_state_reset` confirms toggling between Health pack views preserves definitions and status messaging (2025-11-09, GitHub Copilot).
     - Past: Captured the Function Inventory Overview data slice contract and aligned viewer builder logic with the CommandView schema (2025-11-08, GitHub Copilot).
-    - Present: Monitoring viewer availability gating to ensure docstring/type coverage metrics remain present across new inventories.
-    - Future: Wire sidebar controls once Health pack interaction design is finalized alongside multi-view coexistence testing.
+    - Present: Controls expose the overview in the Health pack, with builder logic housed in `ui/builders/function_inventory_overview.js` and regression coverage (builder + coexistence) exercising the wiring.
+    - Future: Fold the Health pack coexistence harness into UI-level smoke tests once additional packs land, and extend the same coexistence coverage to Code Flow views.
   - `screening_signal_timeline.mmd`
     - [x] Data slice ready (D) — Screening summary now emits `score_snapshot` + `score_history` blocks from the CommandView producer, unblocking timeline normalization (2025-11-08, GitHub Copilot).
       - Past: Drafted the data contract and identified the missing `score_history` export in CommandView screening payloads.
     - Present: Health pack controls now surface the timeline tab, render docstring coverage slices from normalized history, and coexist with the Code Flow call graph tab without resetting state (validated 2025-11-08 by GitHub Copilot).
-      - Future: Extend Health pack regression coverage to the upcoming Function Inventory Overview builder once its controls land, then expand coexistence checks across additional packs.
+  - Future: Expand multi-view regression coverage beyond the Health pack so Dependency and Code Flow packs receive the same treatment as their builders arrive.
     - [x] Instrument screening history emission for timeline view — Added docstring coverage scoring with severity thresholds to the screening artifact (`score_snapshot` ➔ `score_history`) so Health pack timelines can hydrate (2025-11-08, GitHub Copilot).
     - [x] Controls wired (C) — Health pack controls now expose the timeline view tab and surface informative status messaging even when no screening events are present (2025-11-08, GitHub Copilot).
     - [x] Multi-view coexistence verified (M) — Verified via manual viewer toggles and covered by `.repo_studios/tests/tests_command_center/viewer/test_screening_signal_timeline_view.py::test_screening_timeline_definition_is_stable_across_repeated_calls` to ensure repeated renders keep timeline state intact (2025-11-08, GitHub Copilot).
@@ -149,7 +149,10 @@ Every pass against a view pack should explicitly update the three shared attribu
   - `function_call_graph.mmd`
     - [x] Data slice ready
     - [x] Controls wired
-    - [ ] Multi-view coexistence verified
+    - [x] Multi-view coexistence verified (M) — Node-backed regression at `.repo_studios/tests/tests_command_center/viewer/test_code_flow_multi_view_coexistence.py` confirms the call graph builder holds state when toggling with Health pack views (2025-11-09, GitHub Copilot).
+    - Past: Extracted the call graph diagrammer into `ui/builders/function_call_graph.js` and documented the data slice contract in `view_specs/function_call_graph.md` (2025-11-09, GitHub Copilot).
+    - Present: Viewer delegates the Code Flow tab to the shared builder, with deterministic output covered by `.repo_studios/tests/tests_command_center/viewer/test_function_call_graph_view.py` plus the multi-view harness above.
+    - Future: Expand the Code Flow regression harness once entrypoint trace and method call chain diagrams arrive so inter-pack coexistence remains guarded.
   - `entrypoint_trace_diagram.mmd`
     - [ ] Data slice ready
     - [ ] Controls wired
@@ -177,9 +180,12 @@ Every pass against a view pack should explicitly update the three shared attribu
     - [ ] Multi-view coexistence verified
 - **Quality Metrics Pack**
   - `complexity_heatmap.mmd`
-    - [ ] Data slice ready
+    - [x] Data slice ready (D) — Complexity metrics (`cyclomatic_complexity`, `metrics.complexity`, `metrics.line_count`) documented in `view_specs/complexity_heatmap.md`, confirming normalized function records expose the required inputs (2025-11-09, GitHub Copilot).
     - [ ] Controls wired
     - [ ] Multi-view coexistence verified
+    - Past: Captured the complexity heatmap data contract and linked upstream producer coverage that guards cyclomatic metrics (2025-11-09, GitHub Copilot).
+    - Present: Builder wiring remains pending while thresholds and bucket palette are finalized.
+    - Future: Implement the heatmap builder, wire Quality Metrics controls, and extend multi-view regression coverage alongside Type/Documentation maps.
   - `logging_flow.mmd`
     - [ ] Data slice ready
     - [ ] Controls wired
@@ -197,13 +203,19 @@ Every pass against a view pack should explicitly update the three shared attribu
     - [ ] Controls wired
     - [ ] Multi-view coexistence verified
   - `type_coverage_map.mmd`
-    - [ ] Data slice ready
-    - [ ] Controls wired
-    - [ ] Multi-view coexistence verified
+    - [x] Data slice ready (D) — Coverage ratios (`type_hint_coverage`, `annotation_coverage`, `metrics.coverage`) documented in the new `view_specs/type_coverage_map.md` and confirmed available in normalized function records (2025-11-09, GitHub Copilot).
+    - [x] Controls wired (C) — Viewer delegates to `buildTypeCoverageMapDiagram()` with the shared builder module and exposes the Quality Metrics tab without reloading JSON (2025-11-09, GitHub Copilot).
+    - [x] Multi-view coexistence verified (M) — Updated regression `.repo_studios/tests/tests_command_center/viewer/test_quality_metrics_multi_view_coexistence.py` confirms Type Coverage and Documentation Coverage views alternate without definition or status drift (2025-11-09, GitHub Copilot).
+    - Past: Captured the Type Coverage Map contract and extracted builder logic to `ui/builders/type_coverage_map.js` (2025-11-09, GitHub Copilot).
+    - Present: Node-backed tests guard deterministic builder output in `.repo_studios/tests/tests_command_center/viewer/test_type_coverage_map_view.py` alongside the coexistence harness above.
+    - Future: Extend the map to surface coverage percentages per module and blend churn signals once additional metrics arrive in normalization.
   - `documentation_coverage_map.mmd`
-    - [ ] Data slice ready
-    - [ ] Controls wired
-    - [ ] Multi-view coexistence verified
+    - [x] Data slice ready (D) — Documented docstring quality status mapping in `view_specs/documentation_coverage_map.md`, reusing normalized `docstringQuality` blocks emitted by the inventory (2025-11-09, GitHub Copilot).
+    - [x] Controls wired (C) — Viewer registers `buildDocumentationCoverageMapDiagram()` and wires the Quality Metrics sidebar to render the diagram without reloading payloads (2025-11-09, GitHub Copilot).
+    - [x] Multi-view coexistence verified (M) — Regression `.repo_studios/tests/tests_command_center/viewer/test_quality_metrics_multi_view_coexistence.py` exercises repeated toggles between Type Coverage and Documentation Coverage tabs while preserving state and stats (2025-11-09, GitHub Copilot).
+    - Past: Drafted the view spec, aligned builder inputs with normalized docstring quality metadata, and extracted reusable helpers in `ui/builders/documentation_coverage_map.js` (2025-11-09, GitHub Copilot).
+    - Present: Deterministic builder output covered by `.repo_studios/tests/tests_command_center/viewer/test_documentation_coverage_map_view.py`, zoom-aware scope filtering validated via `.repo_studios/tests/tests_command_center/viewer/test_documentation_coverage_scope.py`, and coexistence protection maintained in the shared Quality Metrics harness.
+    - Future: Enrich labels with docstring freshness timestamps and extend stats to surface stale documentation severity once normalization exposes the fields.
 - **Coupling Insight Pack**
   - `cross_module_function_references.mmd`
     - [ ] Data slice ready
@@ -249,7 +261,7 @@ Every pass against a view pack should explicitly update the three shared attribu
 
 ---
 
-Status note (2025-11-08): Selector payload now surfaces slug+timestamp labels, deduplicates static mirrors, backend refresh helpers preserve active context, the HTML shell with Mermaid wiring is live, JSON loader plus normalization populate registries/caches, duplicate fetch/schema gating keeps loads deterministic, hierarchy metadata and Level 0-4 data slices are ready for rendering, level node thresholds now prompt deeper zoom when diagrams exceed 50 nodes, breadcrumb/navigation interactions keep zoom flows snappy, refresh cycles now restore the prior zoom level whenever the slug persists, the viewer applies metrics-driven node/edge styling across levels, Mermaid definitions stay in-memory via `state.diagramDefinition` with no default `.mmd` output, debugging exports route through `.repo_studios/command_center/viewer/cache/write_mermaid_cache.py` with 24-hour TTL and five-file retention, the UI now offers an `Export .mmd` button for on-demand downloads, the sidebar lists all 28 curated view packs, the Health pack timeline view is selectable from the sidebar and renders docstring coverage history via the prototype builder, and the Code Flow · Function Call Graph view renders module-level call graph diagrams directly from normalized call graph edges (done). Pack overlays and advanced rendering remain upcoming (future).
+Status note (2025-11-09): Selector payload now surfaces slug+timestamp labels, deduplicates static mirrors, backend refresh helpers preserve active context, the HTML shell with Mermaid wiring is live, JSON loader plus normalization populate registries/caches, duplicate fetch/schema gating keeps loads deterministic, hierarchy metadata and Level 0-4 data slices are ready for rendering, level node thresholds now prompt deeper zoom when diagrams exceed 50 nodes, breadcrumb/navigation interactions keep zoom flows snappy, refresh cycles now restore the prior zoom level whenever the slug persists, the viewer applies metrics-driven node/edge styling across levels, Mermaid definitions stay in-memory via `state.diagramDefinition` with no default `.mmd` output, debugging exports route through `.repo_studios/command_center/viewer/cache/write_mermaid_cache.py` with 24-hour TTL and five-file retention, the UI now offers an `Export .mmd` button for on-demand downloads, the sidebar lists all 28 curated view packs, the Health pack Function Inventory Overview and Screening Signal Timeline views are selectable from the sidebar and render via their shared builder modules and regression harnesses, the Code Flow · Function Call Graph view now relies on the dedicated builder module with Node-backed regression plus multi-view coexistence coverage guarding Health ↔ Code Flow toggles, and the Quality Metrics pack includes Type Coverage and Documentation Coverage builders with deterministic tests, zoom-aware scope filtering, and coexistence coverage guarding intra-pack toggles (done). Pack overlays and advanced rendering remain upcoming (future).
 
 ## Viewer Shell Assets
 

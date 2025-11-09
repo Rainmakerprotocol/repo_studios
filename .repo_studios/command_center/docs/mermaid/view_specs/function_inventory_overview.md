@@ -1,6 +1,6 @@
 # Function Inventory Overview View Spec
 
-**Status:** Data slice defined (2025-11-08)
+**Status:** Multi-view coexistence verified with regression coverage (2025-11-09)
 
 ## Goal
 
@@ -39,7 +39,7 @@ All nodes emit under a `graph TD` diagram and include class styling hooks for co
 
 ## Implementation References
 
-- Builder: `buildFunctionInventoryOverviewViewDefinition()` in `.repo_studios/command_center/viewer/ui/viewer.js` (lines ~2247-2330).
+- Builder: `buildFunctionInventoryOverviewDiagram()` in `.repo_studios/command_center/viewer/ui/builders/function_inventory_overview.js`, consumed by `buildFunctionInventoryOverviewViewDefinition()` in `.repo_studios/command_center/viewer/ui/viewer.js`.
 - Availability gating: `requirements: ["inventoryBasics", "docstringQuality", "typeCoverage"]` in `VIEW_PACKS` definition ensures the view only activates when requisite metadata is present.
 - Normalization source: Function records created by `createFunctionRecord()` capture the `docstring_quality`, `type_hint_coverage`, `annotation_quality.coverage`, and `todo_tags` fields from CommandView payloads.
 
@@ -47,7 +47,7 @@ All nodes emit under a `graph TD` diagram and include class styling hooks for co
 
 - Spot checked `.repo_studios_commandview_20251108-1835.json` to confirm function entries include `docstring_quality.exists`, `type_hint_coverage`, and `todo_tags` fields.
 - `evaluateViewAvailability()` now blocks the view if function docstring quality objects are absent, preventing runtime null dereferences.
-- Mermaid builder updated to respect `docstringQuality.exists`, aligning with the producer schema and avoiding reliance on deprecated keys (`has_docstring`, `present`).
+- Dedicated builder module normalizes docstring, coverage, and TODO metrics before emitting Mermaid definitions, and regression coverage lives in `.repo_studios/tests/tests_command_center/viewer/test_function_inventory_overview_view.py` plus the Health pack coexistence harness at `.repo_studios/tests/tests_command_center/viewer/test_health_pack_multi_view_coexistence.py`.
 
 ## Future Enhancements
 

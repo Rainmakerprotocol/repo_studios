@@ -493,4 +493,12 @@ def _extract_first_statement_line(tree: ast.Module, source: str) -> str | None:
                 continue
         segment = ast.get_source_segment(source, node) if source else None
         line: str | None = None
- 
+  .../command_center/docs/mermaid/decision_log.md    |  15 [32m++[m
+ .../command_center/docs/mermaid/mermaid_viewer.md  |  11 [32m+[m[31m-[m
+ .../generate_commandview_inventory.cpython-313.pyc | Bin [31m128650[m -> [32m135800[m bytes
+ .../producers/generate_commandview_inventory.py    | 183 [32m++++++++++++++++++++[m[31m-[m
+ .repo_studios/command_center/viewer/ui/viewer.js   |   2 [32m+[m[31m-[m
+ ...ory_command_center.cpython-313-pytest-8.4.2.pyc | Bin [31m28745[m -> [32m28745[m bytes
+ ...function_inventory.cpython-313-pytest-8.4.2.pyc | Bin [31m107345[m -> [32m119164[m bytes
+ .../test_generate_function_inventory.py            |  67 [32m++++++++[m
+ 8 files changed, 270 insertions(+), 8 deletions(-)
