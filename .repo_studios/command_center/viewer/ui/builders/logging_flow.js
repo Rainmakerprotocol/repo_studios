@@ -44,6 +44,26 @@ const LEVEL_SEVERITY = Object.freeze({
   silent: -1,
 });
 
+const SCREENING_SEVERITY_ORDER = Object.freeze(["critical", "warning", "info", "success", "unknown"]);
+const SCREENING_SEVERITY_ALIASES = Object.freeze({
+  critical: "critical",
+  failure: "critical",
+  fatal: "critical",
+  error: "critical",
+  warning: "warning",
+  warn: "warning",
+  caution: "warning",
+  info: "info",
+  informational: "info",
+  notice: "info",
+  success: "success",
+  passing: "success",
+  pass: "success",
+  ok: "success",
+  healthy: "success",
+  good: "success",
+});
+
 export function buildLoggingFlowDiagram(functions, options = {}) {
   const functionsMap = toMap(functions);
   if (!functionsMap || functionsMap.size === 0) {
@@ -105,6 +125,7 @@ export function buildLoggingFlowDiagram(functions, options = {}) {
     levelEventCounts,
     moduleSummaries,
     moduleAggregateLimit,
+    screeningHistory: options.screeningHistory,
   });
 
   const statusMessage = options.statusMessageFormatter
@@ -193,6 +214,7 @@ function buildStatsSnapshot(payload) {
   }, {});
 
   const moduleAggregates = finalizeModuleAggregates(payload.moduleSummaries, payload.moduleAggregateLimit);
+  const screeningTelemetry = deriveScreeningTelemetry(payload.screeningHistory);
 
   return {
     emitters: payload.emitterCount,
@@ -200,6 +222,7 @@ function buildStatsSnapshot(payload) {
     bucketCounts,
     events: { ...payload.levelEventCounts },
     topModules: moduleAggregates,
+    ...(screeningTelemetry ? { screening: screeningTelemetry } : {}),
   };
 }
 
@@ -321,8 +344,16 @@ function formatDefaultStatus(stats) {
   const events = stats?.events ?? {};
   const levelParts = CANONICAL_LEVEL_ORDER.map((level) => `${level} ${Number.isFinite(events[level]) ? events[level] : 0}`);
   const topModule = Array.isArray(stats?.topModules) && stats.topModules.length > 0 ? stats.topModules[0] : null;
-  const moduleSuffix = topModule ? `; top module ${topModule.moduleId} (${topModule.callCount} calls)` : "";
-  return `Rendered Logging Flow (emitters ${emitters}, silent ${silent}, events ${levelParts.join(", ")}${moduleSuffix}).`;
+  const notes = [];
+  if (topModule) {
+    notes.push(`top module ${topModule.moduleId} (${topModule.callCount} calls, ${topModule.emitters} emitters)`);
+  }
+  const screeningNote = formatScreeningNote(stats?.screening);
+  if (screeningNote) {
+    notes.push(screeningNote);
+  }
+  const suffix = notes.length > 0 ? `; ${notes.join("; ")}` : "";
+  return `Rendered Logging Flow (emitters ${emitters}, silent ${silent}, events ${levelParts.join(", ")}${suffix}).`;
 }
 
 function finalizeModuleAggregates(moduleSummaries, limit) {
@@ -525,6 +556,154 @@ function mapToObject(map) {
   return result;
 }
 
+function deriveScreeningTelemetry(history) {
+  if (!history || typeof history !== "object") {
+    return null;
+  }
+  const rawEvents = Array.isArray(history.events) ? history.events : [];
+  const events = rawEvents
+    .map((event) => {
+      if (!event || typeof event !== "object") {
+        return null;
+      }
+      const timestamp = typeof event.timestamp === "string" ? event.timestamp : null;
+      const severity = normalizeScreeningSeverity(event.severity);
+      const packId = typeof event.packId === "string" && event.packId.trim().length > 0 ? event.packId : null;
+      const packLabel = typeof event.packLabel === "string" && event.packLabel.trim().length > 0 ? event.packLabel : null;
+      if (!timestamp && !severity) {
+        return null;
+      }
+      return {
+        timestamp,
+        severity,
+        packId,
+        packLabel,
+      };
+    })
+    .filter(Boolean);
+
+  if (events.length === 0) {
+    return null;
+  }
+
+  events.sort((left, right) => {
+    const leftTimestamp = left.timestamp ?? "";
+    const rightTimestamp = right.timestamp ?? "";
+    return leftTimestamp.localeCompare(rightTimestamp);
+  });
+
+  const latest = events[events.length - 1];
+  const windowSize = events.length >= 5 ? 5 : events.length;
+  const recentWindow = events.slice(events.length - windowSize);
+  const recentCounts = createScreeningSeverityCounter();
+  recentWindow.forEach((event) => {
+    if (recentCounts[event.severity] !== undefined) {
+      recentCounts[event.severity] += 1;
+    }
+  });
+
+  let streakLength = 0;
+  if (latest.severity === "critical" || latest.severity === "warning") {
+    for (let index = events.length - 1; index >= 0; index -= 1) {
+      const event = events[index];
+      if (event.severity === latest.severity) {
+        streakLength += 1;
+      } else if (event.severity === "unknown") {
+        continue;
+      } else {
+        break;
+      }
+    }
+  }
+
+  const alertSummary = buildScreeningAlertSummary({
+    latestSeverity: latest.severity,
+    streakLength,
+    recentCounts,
+    windowSize,
+  });
+
+  return {
+    latestSeverity: latest.severity,
+    latestTimestamp: latest.timestamp,
+    latestPackId: latest.packId,
+    latestPackLabel: latest.packLabel,
+    streakLength,
+    recentCounts,
+    windowSize,
+    alertSummary,
+  };
+}
+
+function createScreeningSeverityCounter() {
+  const counter = {};
+  SCREENING_SEVERITY_ORDER.forEach((severity) => {
+    counter[severity] = 0;
+  });
+  return counter;
+}
+
+function normalizeScreeningSeverity(value) {
+  if (typeof value !== "string") {
+    return "unknown";
+  }
+  const normalized = value.trim().toLowerCase();
+  if (!normalized) {
+    return "unknown";
+  }
+  if (SCREENING_SEVERITY_ALIASES[normalized]) {
+    return SCREENING_SEVERITY_ALIASES[normalized];
+  }
+  if (SCREENING_SEVERITY_ORDER.includes(normalized)) {
+    return normalized;
+  }
+  return "unknown";
+}
+
+function buildScreeningAlertSummary(payload) {
+  if (!payload || typeof payload !== "object") {
+    return null;
+  }
+  const severity = payload.latestSeverity;
+  if (severity !== "critical" && severity !== "warning") {
+    return null;
+  }
+  const count = payload.recentCounts?.[severity] ?? 0;
+  const windowSize = Number.isFinite(payload.windowSize) && payload.windowSize > 0 ? payload.windowSize : null;
+  const streakLength = Number.isFinite(payload.streakLength) && payload.streakLength > 1 ? payload.streakLength : null;
+  const details = [];
+  if (windowSize) {
+    details.push(`${count}/${windowSize} recent`);
+  }
+  if (streakLength) {
+    details.push(`${streakLength}-event streak`);
+  }
+  if (details.length === 0) {
+    return `${severity.toUpperCase()}`;
+  }
+  return `${severity.toUpperCase()} (${details.join(", ")})`;
+}
+
+function formatScreeningNote(screening) {
+  if (!screening || typeof screening !== "object") {
+    return null;
+  }
+  if (typeof screening.alertSummary === "string" && screening.alertSummary.trim().length > 0) {
+    return `screening ${screening.alertSummary.trim()}`;
+  }
+  const severity = typeof screening.latestSeverity === "string" ? screening.latestSeverity.trim() : "";
+  if (!severity) {
+    return null;
+  }
+  const upper = severity.toUpperCase();
+  const streakLength = Number.isFinite(screening.streakLength) && screening.streakLength > 1 ? `${screening.streakLength}-event streak` : "";
+  const parts = [upper];
+  if (streakLength) {
+    parts.push(streakLength);
+  }
+  return `screening ${parts.join(" ")}`;
+}
+
 export const __test__ = {
   buildFunctionLoggingEntry,
   buildStatsSnapshot,
@@ -533,6 +712,9 @@ export const __test__ = {
   formatFunctionEntry,
   formatLevelSummary,
   formatLineOverlay,
+  formatScreeningNote,
+  deriveScreeningTelemetry,
+  normalizeScreeningSeverity,
   normalizeLogLevel,
   normalizeLoggingCalls,
   resolveAggregateLimit,
@@ -541,4 +723,5 @@ export const __test__ = {
   escapeMermaidLabel,
   createLevelEventCounter,
   createBucketRegistry,
+  buildScreeningAlertSummary,
 };

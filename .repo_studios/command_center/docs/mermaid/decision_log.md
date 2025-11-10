@@ -1,6 +1,24 @@
 # Mermaid Decision Log
 
+## 2025-11-10
+- **Decision:** Reaffirmed the Progressive Detail Mermaid viewer charter and success criteria.
+- **Context:** Keeps Phase 0 governance intact by restating the viewer’s purpose, enumerating measurable outcomes, and confirming stakeholder ownership before continuing Phase 7 implementation work.
+- **Owner:** GitHub Copilot implementation assistant (supporting the Command Center maintainers).
+- **Evidence:** Updated checklist entries in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` capturing the charter recap, the four success criteria guardrails, and the completion note for Phase 0 governance tasks.
+- **Decision:** Wired the Dependency pack Module Dependency Graph view with normalization hardening and regression coverage.
+- **Context:** Unlocks dependency analysis within the viewer by aggregating module import edges, surfacing coupling statistics, and ensuring the view coexists with the Code Flow Function Call Graph without state drift.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Alias-preserving normalization in `.repo_studios/command_center/viewer/ui/viewer.js`, builder module `.repo_studios/command_center/viewer/ui/builders/module_dependency_graph.js`, view spec `.repo_studios/command_center/docs/mermaid/view_specs/module_dependency_graph.md`, and passing regressions `.repo_studios/tests/tests_command_center/viewer/test_dependency_data_normalization.py`, `test_module_dependency_graph_view.py`, and `test_dependency_pack_multi_view_coexistence.py`, alongside checklist updates in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Documented the Export Contract Matrix data slice and exposed normalized export summaries.
+- **Context:** Prepares the Dependency pack to render module export contracts by unifying `__all__` symbols, differentiating local definitions from re-exports, and flagging missing entries before builder wiring begins.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New spec `.repo_studios/command_center/docs/mermaid/view_specs/export_contract_matrix.md`, normalization helper `buildModuleExportSummary()` added to `.repo_studios/command_center/viewer/ui/viewer.js`, and regression coverage `.repo_studios/tests/tests_command_center/viewer/test_export_contract_data_normalization.py`, referenced in the updated checklist notes within `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+
 ## 2025-11-09
+- **Decision:** Documented and normalized the Decorator Usage Map data slice.
+- **Context:** Prepares the Quality Metrics pack to group functions by decorator patterns by ensuring sanitized decorator metadata is available in normalized viewer records before wiring the diagram builder.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Updated normalization helpers in `.repo_studios/command_center/viewer/ui/viewer.js` (adding `decorators`/`decoratorsDetailed` support), new regression coverage `.repo_studios/tests/tests_command_center/viewer/test_decorator_data_normalization.py`, and view spec `.repo_studios/command_center/docs/mermaid/view_specs/decorator_usage_map.md`; checklist progress captured in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
 - **Decision:** Modularized the Code Flow Function Call Graph builder and hardened multi-view coexistence.
 - **Context:** Ensures the Code Flow pack can toggle alongside Health pack diagrams without state resets while keeping call graph rendering reusable across future packs.
 - **Owner:** GitHub Copilot implementation assistant.

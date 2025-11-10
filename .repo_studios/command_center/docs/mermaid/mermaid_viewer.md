@@ -2,20 +2,28 @@
 
 ## Phase 0 · Charter & Success Measures
 
-- [ ] Reconfirm viewer purpose: deliver progressive wiring diagrams that solve clutter and exploration pain points.
-- [ ] Capture success criteria: fast comprehension for contractors, Copilot-ready JSON insights, reduced onboarding time, data-informed refactoring.
-- [ ] Log charter and owners in governance docs.
+- [x] Reconfirm viewer purpose: deliver progressive wiring diagrams that solve clutter and exploration pain points.
+  - Revalidated the charter on 2025-11-10, restating that the viewer exists to tame CommandView complexity by sequencing interconnected diagrams so operators can move from portfolio to function-level insights without losing context; documented the reaffirmation here to keep the implementation plan anchored to the original problem statement.
+- [x] Capture success criteria: fast comprehension for contractors, Copilot-ready JSON insights, reduced onboarding time, data-informed refactoring.
+  - Documented on 2025-11-10 with the following guardrails: (1) 30-minute onboarding target for contractors refreshing inventory context via the viewer, (2) Copilot agents must be able to harvest normalized JSON slices without re-running producers, (3) backlog refinement cadences use viewer overlays to spot refactoring candidates supported by churn/coverage metrics, and (4) charter success hinges on the viewer reducing manual screenshot digests in duplicate remediation reports; retaining these measures here keeps downstream validation tied to the stated outcomes.
+- [x] Log charter and owners in governance docs.
+  - Captured in the Mermaid decision log on 2025-11-10, linking the reaffirmed charter and four success guardrails to the Command Center maintainers with GitHub Copilot assisting; this closes the Phase 0 governance loop before resuming pack wiring work.
 
 ## Phase 1 · Data Supply & Naming
 
-- [ ] Keep generator outputs aligned with commandview naming (`<source_folder>_commandview_YYYYMMDD-HHMM.json`).
-- [ ] Format selector labels to surface timestamp freshness (derive display value from the slug’s `YYYYMMDD-HHMM` component).
+- [x] Keep generator outputs aligned with commandview naming (`<source_folder>_commandview_YYYYMMDD-HHMM.json`).
+  - Verified on 2025-11-10 using the Command Center pipeline outputs produced during the Phase 7 regression run; mirrored artifacts under `.repo_studios/command_center/reports/**` continue to follow the `<slug>_commandview_YYYYMMDD-HHMM.json` pattern as enforced by `generate_commandview_inventory.py` after the 2025-11-06 rename logged in the decision record.
+- [x] Format selector labels to surface timestamp freshness (derive display value from the slug’s `YYYYMMDD-HHMM` component).
+  - Confirmed on 2025-11-10 that the viewer sidebar renders selector entries as `<slug> (YYYY-MM-DD HH:MM UTC)`, reusing the helper exercised by `.repo_studios/tests/tests_command_center/viewer/test_refresh.py::test_refresh_selector_state_groups_and_deduplicates`; no additional wiring required for Phase 1.
 - [x] Ensure `generate_commandview_inventory.py` writes mirrored artifacts only under `.repo_studios/command_center/reports/` for viewer discovery, leaving dynamic copies for agents.
   - Mirrored inventories now hard-block custom `--reports-root` values that escape `.repo_studios/command_center/reports`, keeping the viewer discovery scope static (enforced 2025-11-06).
   - Local agent workflows continue to rely on the co-located `<slug>_index/` folders for dynamic experimentation without impacting the viewer scan.
-- [ ] Validate inventory payload includes `files[].call_graph` with resolved local/imported/builtin edges.
-- [ ] Document viewer expectations for coverage and churn overlays now that inventory emits `files[].coverage`, `files[].git_churn`, and `statistics.coverage`/`statistics.git_churn` aggregates.
-- [ ] Confirm dependency summaries, callbacks, IO effects, logging, globals, and docstring metadata remain intact for downstream packs.
+- [x] Validate inventory payload includes `files[].call_graph` with resolved local/imported/builtin edges.
+  - Regression `.repo_studios/tests/tests_producers/test_generate_commandview_inventory.py::test_call_graph_resolves_local_and_imported_calls` (last run 2025-11-09) still passes, confirming the CommandView inventory exports the normalized call graph entries required by downstream packs.
+- [x] Document viewer expectations for coverage and churn overlays now that inventory emits `files[].coverage`, `files[].git_churn`, and `statistics.coverage`/`statistics.git_churn` aggregates.
+  - Documented on 2025-11-10 that Level 0–2 aggregate nodes surface average coverage and churn deltas in status descriptors, while Quality Metrics heatmaps apply severity colors using `metrics.coverage.executed_ratio` and churn percentiles; viewers should expect sidebar summaries to call out modules breaching <60% coverage or falling into the top 20% churn bucket.
+- [x] Confirm dependency summaries, callbacks, IO effects, logging, globals, and docstring metadata remain intact for downstream packs.
+  - Spot-checked 2025-11-10 using the sample CommandView payload and verified existing regressions (`.repo_studios/tests/tests_producers/test_generate_commandview_inventory.py::test_function_metadata_persists_effects_and_decorators`, `::test_inventory_generates_structured_output`, and `::test_inventory_records_class_bases`) to ensure these fields stay populated for viewer normalization.
 
 ## Phase 2 · Discovery & Refresh Pipeline
 
@@ -117,13 +125,19 @@ Every pass against a view pack should explicitly update the three shared attribu
     - [x] Multi-view coexistence verified (M) — Verified via manual viewer toggles and covered by `.repo_studios/tests/tests_command_center/viewer/test_screening_signal_timeline_view.py::test_screening_timeline_definition_is_stable_across_repeated_calls` to ensure repeated renders keep timeline state intact (2025-11-08, GitHub Copilot).
 - **Dependency Pack**
   - `module_dependency_graph.mmd`
-    - [ ] Data slice ready
-    - [ ] Controls wired
-    - [ ] Multi-view coexistence verified
+    - [x] Data slice ready (D) — Normalized module import edges now flow through `createModuleRecord()` and the dedicated view spec (`view_specs/module_dependency_graph.md`) documents adjacency aggregation, severity thresholds, and status descriptors (2025-11-10, GitHub Copilot).
+    - [x] Controls wired (C) — Viewer wiring delegates to `buildModuleDependencyGraphViewDefinition()` which renders Mermaid diagrams via `ui/builders/module_dependency_graph.js`, gating availability on `moduleDependencies` and surfacing stats/status panels (2025-11-10, GitHub Copilot).
+    - [x] Multi-view coexistence verified (M) — Regression suite `.repo_studios/tests/tests_command_center/viewer/test_dependency_pack_multi_view_coexistence.py` keeps dependency and call graph views stable across toggles with deterministic builder output (2025-11-10, GitHub Copilot).
+    - Past: Hardened module import normalization to preserve alias metadata, aggregated dependency summaries in the builder, and captured transformation details in `view_specs/module_dependency_graph.md` (2025-11-10, GitHub Copilot).
+    - Present: Dependency controls render status-rich diagrams backed by `buildModuleDependencyGraphDiagram()`, with Node-backed regressions (`test_dependency_data_normalization.py`, `test_module_dependency_graph_view.py`) and coexistence coverage confirming stability after the latest alias hardening.
+    - Future: Respect scope filters for large repositories, expose module-level churn overlays, and add quick filters for unused imports before promoting the view beyond prototype.
   - `export_contract_matrix.mmd`
-    - [ ] Data slice ready
+    - [x] Data slice ready (D) — Captured the export contract data contract in `view_specs/export_contract_matrix.md` and normalized module records through `buildModuleExportSummary()` so `__all__` symbols classify as local definitions, re-exports, or missing entries with provenance (2025-11-10, GitHub Copilot).
     - [ ] Controls wired
     - [ ] Multi-view coexistence verified
+    - Past: Hardened module normalization to expose `exportSummary` (declared symbols, counts, provenance) and authored the view spec detailing inputs, transformations, and Mermaid structure, backed by Node-based regression `.repo_studios/tests/tests_command_center/viewer/test_export_contract_data_normalization.py` (2025-11-10, GitHub Copilot).
+    - Present: Dependency pack data slice now surfaces alias-preserving export summaries with counts for local vs re-exported symbols; wiring remains pending before operators can render the matrix from the sidebar.
+  - Future: Wire viewer controls to a dedicated export contract matrix builder, add coexistence coverage alongside the Module Dependency Graph, and layer churn/coverage overlays onto export status descriptors.
   - `circular_import_detection.mmd`
     - [ ] Data slice ready
     - [ ] Controls wired
@@ -194,9 +208,12 @@ Every pass against a view pack should explicitly update the three shared attribu
     - Present: Logging Flow buckets aggregate emitters by highest severity, surface per-level event counts, and summarize top modules with call totals and emitter counts for observability auditing.
     - Future: Layer screening insights (e.g., recent error bursts) onto the logging buckets and extend status messaging with alerts for roots or domains lacking emitters.
   - `decorator_usage_map.mmd`
-    - [ ] Data slice ready
-    - [ ] Controls wired
-    - [ ] Multi-view coexistence verified
+    - [x] Data slice ready (D) — Viewer normalization now exposes sanitized decorator names and detailed argument metadata via `createFunctionRecord()` so downstream builders can group functions without re-reading raw inventory structures (2025-11-09, GitHub Copilot).
+    - [x] Controls wired (C) — Quality Metrics controls now delegate to `buildDecoratorUsageMapViewDefinition()` backed by `buildDecoratorUsageMapDiagram()` plus `resolveDecoratorUsageScope()`, with regression coverage in `.repo_studios/tests/tests_command_center/viewer/test_decorator_usage_map_view.py` and `.repo_studios/tests/tests_command_center/viewer/test_decorator_usage_scope.py` (2025-11-10, GitHub Copilot).
+    - [x] Multi-view coexistence verified (M) — Extended `.repo_studios/tests/tests_command_center/viewer/test_quality_metrics_multi_view_coexistence.py` to include the Decorator Usage Map builder, confirming repeated toggles preserve definitions, status messaging, and stats alongside existing Quality Metrics views (2025-11-10, GitHub Copilot).
+    - Past: Documented the decorator usage data slice and confirmed inventory exports in `.repo_studios/command_center/docs/mermaid/view_specs/decorator_usage_map.md`, extending viewer normalization to hydrate `decorators`/`decoratorsDetailed` (2025-11-09, GitHub Copilot).
+  - Present: Decorator metadata now powers the wired Quality Metrics tab through `ui/builders/decorator_usage_map.js` and `ui/builders/decorator_usage_scope.js`, with deterministic Node-backed builders scoped by the new tests above, coexistence guaranteed via the refreshed Quality Metrics regression, and normalization guarded by `.repo_studios/tests/tests_command_center/viewer/test_decorator_data_normalization.py`.
+  - Future: Expand policy coverage by surfacing module-level gap summaries and integrating decorator policy metadata once other packs consume decorator signals.
   - `public_vs_private_api.mmd`
     - [ ] Data slice ready
     - [ ] Controls wired
@@ -264,7 +281,7 @@ Every pass against a view pack should explicitly update the three shared attribu
 
 ---
 
-Status note (2025-11-09): Selector payload now surfaces slug+timestamp labels, deduplicates static mirrors, backend refresh helpers preserve active context, the HTML shell with Mermaid wiring is live, JSON loader plus normalization populate registries/caches, duplicate fetch/schema gating keeps loads deterministic, hierarchy metadata and Level 0-4 data slices are ready for rendering, level node thresholds now prompt deeper zoom when diagrams exceed 50 nodes, breadcrumb/navigation interactions keep zoom flows snappy, refresh cycles now restore the prior zoom level whenever the slug persists, the viewer applies metrics-driven node/edge styling across levels, Mermaid definitions stay in-memory via `state.diagramDefinition` with no default `.mmd` output, debugging exports route through `.repo_studios/command_center/viewer/cache/write_mermaid_cache.py` with 24-hour TTL and five-file retention, the UI now offers an `Export .mmd` button for on-demand downloads, the sidebar lists all 28 curated view packs, the Health pack Function Inventory Overview and Screening Signal Timeline views are selectable from the sidebar and render via their shared builder modules and regression harnesses, the Code Flow · Function Call Graph view now relies on the dedicated builder module with Node-backed regression plus multi-view coexistence coverage guarding Health ↔ Code Flow toggles, and the Quality Metrics pack includes Type Coverage and Documentation Coverage builders with deterministic tests, zoom-aware scope filtering, and coexistence coverage guarding intra-pack toggles (done). Pack overlays and advanced rendering remain upcoming (future).
+Status note (2025-11-10): Selector payload now surfaces slug+timestamp labels, deduplicates static mirrors, backend refresh helpers preserve active context, the HTML shell with Mermaid wiring is live, JSON loader plus normalization populate registries/caches, duplicate fetch/schema gating keeps loads deterministic, hierarchy metadata and Level 0-4 data slices are ready for rendering, level node thresholds now prompt deeper zoom when diagrams exceed 50 nodes, breadcrumb/navigation interactions keep zoom flows snappy, refresh cycles now restore the prior zoom level whenever the slug persists, the viewer applies metrics-driven node/edge styling across levels, Mermaid definitions stay in-memory via `state.diagramDefinition` with no default `.mmd` output, debugging exports route through `.repo_studios/command_center/viewer/cache/write_mermaid_cache.py` with 24-hour TTL and five-file retention, the UI now offers an `Export .mmd` button for on-demand downloads, the sidebar lists all 28 curated view packs, the Health pack Function Inventory Overview and Screening Signal Timeline views are selectable from the sidebar and render via their shared builder modules and regression harnesses, the Code Flow · Function Call Graph view now relies on the dedicated builder module with Node-backed regression plus multi-view coexistence coverage guarding Health ↔ Code Flow toggles, the Dependency pack Module Dependency Graph now renders from normalized import edges with alias preservation and coexists alongside the Function Call Graph, the Export Contract Matrix data slice is documented with alias-aware `exportSummary` metadata awaiting UI wiring, the Quality Metrics pack includes Type Coverage and Documentation Coverage builders with deterministic tests, zoom-aware scope filtering, and coexistence coverage guarding intra-pack toggles, and the Decorator Usage Map now threads required-annotation alerts into status messaging alongside dedicated regressions and updated Quality Metrics coexistence coverage. Pack overlays and advanced rendering remain upcoming (future).
 
 ## Viewer Shell Assets
 

@@ -40,6 +40,14 @@ LOGGING_MODULE_PATH = (
     / "builders"
     / "logging_flow.js"
 )
+DECORATOR_MODULE_PATH = (
+    REPO_STUDIOS_ROOT
+    / "command_center"
+    / "viewer"
+    / "ui"
+    / "builders"
+    / "decorator_usage_map.js"
+)
 
 if not TYPE_COVERAGE_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected type coverage builder module at {TYPE_COVERAGE_MODULE_PATH}")
@@ -52,6 +60,9 @@ if not COMPLEXITY_MODULE_PATH.exists():  # pragma: no cover - guard against miss
 
 if not LOGGING_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected logging flow builder module at {LOGGING_MODULE_PATH}")
+
+if not DECORATOR_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
+    raise AssertionError(f"Expected decorator usage builder module at {DECORATOR_MODULE_PATH}")
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -81,6 +92,7 @@ def test_quality_metrics_views_coexist_without_state_reset() -> None:
     import {{ buildDocumentationCoverageMapDiagram }} from "{DOCUMENTATION_MODULE_PATH.as_uri()}";
     import {{ buildComplexityHeatmapDiagram }} from "{COMPLEXITY_MODULE_PATH.as_uri()}";
     import {{ buildLoggingFlowDiagram }} from "{LOGGING_MODULE_PATH.as_uri()}";
+    import {{ buildDecoratorUsageMapDiagram }} from "{DECORATOR_MODULE_PATH.as_uri()}";
 
 const functions = new Map([
     ["alpha::f1", {{
@@ -93,6 +105,11 @@ const functions = new Map([
                 {{ level: "ERROR", lineno: 10 }},
                 {{ level: "info", lineno: 12 }},
             ],
+        decorators: ["auth", "cache"],
+        decoratorsDetailed: [
+            {{ name: "auth", module: "alpha.decorators", args: [], kwargs: {{}} }},
+            {{ name: "cache", args: ["300"], kwargs: {{ key: "'user_id'" }} }},
+        ],
     }}],
     ["alpha::f2", {{
         name: "f2",
@@ -103,6 +120,7 @@ const functions = new Map([
             loggingCalls: [
                 {{ level: "warning", lineno: 8 }},
             ],
+        decorators: [],
     }}],
     ["beta::g1", {{
         name: "g1",
@@ -112,6 +130,10 @@ const functions = new Map([
             loggingCalls: [
                 {{ message: "no level recorded" }},
             ],
+        decorators: ["cache"],
+        decoratorsDetailed: [
+            {{ name: "cache", module: "shared.decorators", args: [], kwargs: {{}} }},
+        ],
     }}],
 ]);
 
@@ -122,6 +144,14 @@ const typeCoverageSecond = buildTypeCoverageMapDiagram(functions, {{ viewLabel: 
 const complexitySecond = buildComplexityHeatmapDiagram(functions, {{ viewLabel: "Quality Metrics · Complexity Heatmap" }});
     const loggingFirst = buildLoggingFlowDiagram(functions, {{ viewLabel: "Quality Metrics · Logging Flow" }});
     const loggingSecond = buildLoggingFlowDiagram(functions, {{ viewLabel: "Quality Metrics · Logging Flow" }});
+    const decoratorFirst = buildDecoratorUsageMapDiagram(functions, {{
+        viewLabel: "Quality Metrics · Decorator Usage Map",
+        requiredDecorators: ["auth", "audit"],
+    }});
+    const decoratorSecond = buildDecoratorUsageMapDiagram(functions, {{
+        viewLabel: "Quality Metrics · Decorator Usage Map",
+        requiredDecorators: ["auth", "audit"],
+    }});
 
 console.log(JSON.stringify({{
     typeCoverageFirstDefinition: typeCoverageFirst.definition,
@@ -145,6 +175,12 @@ console.log(JSON.stringify({{
         loggingSecondStatus: loggingSecond.statusMessage,
         loggingFirstStats: loggingFirst.stats,
         loggingSecondStats: loggingSecond.stats,
+    decoratorFirstDefinition: decoratorFirst.definition,
+    decoratorSecondDefinition: decoratorSecond.definition,
+    decoratorFirstStatus: decoratorFirst.statusMessage,
+    decoratorSecondStatus: decoratorSecond.statusMessage,
+    decoratorFirstStats: decoratorFirst.stats,
+    decoratorSecondStats: decoratorSecond.stats,
 }}));
 """
     payload = _run_node_module(script)
@@ -223,3 +259,31 @@ console.log(JSON.stringify({{
         ],
     }
     assert "Rendered Logging Flow" in payload["loggingFirstStatus"]
+    assert payload["decoratorFirstDefinition"] == payload["decoratorSecondDefinition"]
+    assert payload["decoratorFirstStatus"] == payload["decoratorSecondStatus"]
+    assert payload["decoratorFirstStats"] == payload["decoratorSecondStats"]
+    assert payload["decoratorFirstStats"] == {
+        "decorated": 2,
+        "undecorated": 1,
+        "uniqueDecorators": 2,
+        "topDecorators": [
+            {"name": "cache", "count": 2},
+            {"name": "auth", "count": 1},
+        ],
+        "requiredDecorators": ["auth", "audit"],
+        "missingRequiredDecorators": ["audit"],
+        "missingRequiredDetails": [
+            {
+                "decorator": "audit",
+                "scope": "global",
+                "target": None,
+                "samples": [
+                    {"id": "alpha::f1", "name": "f1", "moduleId": "alpha"},
+                    {"id": "alpha::f2", "name": "f2", "moduleId": "alpha"},
+                    {"id": "beta::g1", "name": "g1", "moduleId": "beta"},
+                ],
+            }
+        ],
+    }
+    assert "Rendered Decorator Usage Map" in payload["decoratorFirstStatus"]
+    assert "missing required audit" in payload["decoratorFirstStatus"]

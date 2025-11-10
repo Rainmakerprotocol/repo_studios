@@ -529,14 +529,183 @@ body.sidebar-resizing * {
 
 /* Status Bar - VS Code Status Bar */
 .viewer-status {
-  height: 22px;
-  padding: 0 12px;
+  min-height: 28px;
+  padding: 8px 12px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
   background-color: var(--vscode-button);
   color: #ffffff;
   font-size: 12px;
   border-top: 1px solid var(--vscode-border);
+}
+
+.viewer-status-message {
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.status-section {
+  width: 100%;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.status-section-note {
+  padding: 8px 10px;
+  border-radius: 4px;
+  background-color: rgba(0, 122, 204, 0.12);
+  border: 1px solid rgba(0, 122, 204, 0.35);
+  margin-top: 6px;
+}
+
+.status-note-message {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.status-section-listing {
+  margin-top: 6px;
+}
+
+.status-section-description {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.status-section:first-of-type {
+  margin-top: 0;
+}
+
+.status-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 4px;
+}
+
+.status-section-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.status-section-item {
+  background-color: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  padding: 6px 8px;
+}
+
+.status-section-item-header {
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.status-section-item-subtitle {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 4px;
+}
+
+.status-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.12);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  white-space: nowrap;
+}
+
+.status-section-sublist {
+  margin: 4px 0 0 14px;
+  padding: 0;
+  list-style: disc;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.status-section-subitem {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.status-section-metrics {
+  margin-top: 6px;
+}
+
+.status-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.status-metric {
+  background-color: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.status-metric-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.status-metric-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.status-metric-hint {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.status-section-pills {
+  margin-top: 6px;
+}
+
+.status-severity-info {
+  border-left: 3px solid #38bdf8;
+}
+
+.status-severity-success {
+  border-left: 3px solid #22c55e;
+}
+
+.status-severity-warning {
+  border-left: 3px solid #f59e0b;
+}
+
+.status-severity-error {
+  border-left: 3px solid #f87171;
 }
 
 /* Scrollbar Styling */

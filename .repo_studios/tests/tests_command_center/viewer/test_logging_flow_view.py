@@ -108,6 +108,13 @@ const result = buildLoggingFlowDiagram(functions, {{
   centerLabel: "Logging Flow · Overview",
   bucketLimit: 4,
   moduleAggregateLimit: 2,
+  screeningHistory: {{
+    events: [
+      {{ timestamp: "2025-11-08T12:00:00Z", severity: "warning", packId: "docstring_coverage", packLabel: "Docstring Coverage" }},
+      {{ timestamp: "2025-11-09T09:00:00Z", severity: "critical", packId: "docstring_coverage", packLabel: "Docstring Coverage" }},
+      {{ timestamp: "2025-11-09T18:00:00Z", severity: "CRITICAL", packId: "docstring_coverage", packLabel: "Docstring Coverage" }},
+    ],
+  }},
 }});
 console.log(JSON.stringify(result));
 """
@@ -123,6 +130,7 @@ console.log(JSON.stringify(result));
     status_message = payload.get("statusMessage")
     assert isinstance(status_message, str)
     assert "Rendered Logging Flow" in status_message
+    assert "screening CRITICAL" in status_message
 
     stats = payload.get("stats")
     assert stats["emitters"] == 5
@@ -150,6 +158,12 @@ console.log(JSON.stringify(result));
     assert top_modules[0]["moduleId"] == "alpha.service.logging"
     assert top_modules[0]["callCount"] == 3
     assert top_modules[0]["emitters"] == 2
+    screening = stats.get("screening")
+    assert screening is not None
+    assert screening["latestSeverity"] == "critical"
+    assert screening["streakLength"] == 2
+    assert screening["recentCounts"]["critical"] == 2
+    assert screening["windowSize"] == 3
 
 
 def test_logging_flow_definition_is_stable_across_repeated_calls() -> None:

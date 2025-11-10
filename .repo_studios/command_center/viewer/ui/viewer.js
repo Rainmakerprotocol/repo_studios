@@ -1,12 +1,16 @@
 import { buildComplexityHeatmapDiagram } from "./builders/complexity_heatmap.js";
 import { resolveComplexityHeatmapScope } from "./builders/complexity_heatmap_scope.js";
+import { buildDecoratorUsageMapDiagram } from "./builders/decorator_usage_map.js";
+import { resolveDecoratorUsageScope } from "./builders/decorator_usage_scope.js";
 import { buildDocumentationCoverageMapDiagram } from "./builders/documentation_coverage_map.js";
 import { resolveDocumentationCoverageScope } from "./builders/documentation_coverage_scope.js";
+import { buildExportContractMatrixDiagram } from "./builders/export_contract_matrix.js";
 import { buildFunctionCallGraphDiagram } from "./builders/function_call_graph.js";
 import { buildFunctionInventoryOverviewDiagram } from "./builders/function_inventory_overview.js";
 import { buildScreeningTimelineDiagram } from "./builders/screening_signal_timeline.js";
 import { buildLoggingFlowDiagram } from "./builders/logging_flow.js";
 import { resolveLoggingFlowScope } from "./builders/logging_flow_scope.js";
+import { buildModuleDependencyGraphDiagram } from "./builders/module_dependency_graph.js";
 import { buildTypeCoverageMapDiagram } from "./builders/type_coverage_map.js";
 import { resolveTypeCoverageScope } from "./builders/type_coverage_scope.js";
 
@@ -62,7 +66,9 @@ const VIEW_PACKS = Object.freeze([
         filename: "module_dependency_graph.mmd",
         description:
           "Import dependency graph to highlight hotspots, orphan modules, and cross-module coupling.",
-        status: "planned",
+        status: "prototype",
+        builder: "moduleDependencyGraphView",
+        requirements: ["moduleDependencies"],
       },
       {
         id: "export_contract_matrix",
@@ -70,7 +76,9 @@ const VIEW_PACKS = Object.freeze([
         filename: "export_contract_matrix.mmd",
         description:
           "Class diagram portraying public exports by type so API boundaries stay visible during reviews.",
-        status: "planned",
+        status: "prototype",
+        builder: "exportContractMatrixView",
+        requirements: ["moduleExports"],
       },
       {
         id: "circular_import_detection",
@@ -226,7 +234,9 @@ const VIEW_PACKS = Object.freeze([
         filename: "decorator_usage_map.mmd",
         description:
           "Graph clustering functions by decorator usage for quick annotation audits.",
-        status: "planned",
+        status: "prototype",
+        builder: "decoratorUsageMapView",
+        requirements: ["decoratorMetadata"],
       },
       {
         id: "public_vs_private_api",
@@ -328,8 +338,11 @@ const VIEW_PACKS = Object.freeze([
 
 const VIEW_BUILDERS = Object.freeze({
   complexityHeatmapView: buildComplexityHeatmapViewDefinition,
+  decoratorUsageMapView: buildDecoratorUsageMapViewDefinition,
   documentationCoverageMapView: buildDocumentationCoverageMapViewDefinition,
   loggingFlowView: buildLoggingFlowViewDefinition,
+  exportContractMatrixView: buildExportContractMatrixViewDefinition,
+  moduleDependencyGraphView: buildModuleDependencyGraphViewDefinition,
   functionCallGraphView: buildFunctionCallGraphViewDefinition,
   functionInventoryOverview: buildFunctionInventoryOverviewViewDefinition,
   typeCoverageMapView: buildTypeCoverageMapViewDefinition,
@@ -405,6 +418,25 @@ function findViewRequirementIssue(requirements) {
         }
         break;
       }
+      case "decoratorMetadata": {
+        const functions = state.normalizedData?.functions;
+        if (!(functions instanceof Map) || functions.size === 0) {
+          return "Load a CommandView artifact with normalized functions to inspect decorator usage.";
+        }
+
+        let hasDecoratorField = false;
+        for (const fn of functions.values()) {
+          if (Array.isArray(fn?.decorators) || Array.isArray(fn?.decoratorsDetailed)) {
+            hasDecoratorField = true;
+            break;
+          }
+        }
+
+        if (!hasDecoratorField) {
+          return "Decorator metadata is unavailable in the loaded artifact.";
+        }
+        break;
+      }
       case "docstringQuality": {
         const functions = state.normalizedData?.functions;
         if (!(functions instanceof Map) || functions.size === 0) {
@@ -477,6 +509,41 @@ function findViewRequirementIssue(requirements) {
         }
         if (!Array.isArray(history.events)) {
           return "Screening history events are missing from this CommandView artifact.";
+        }
+        break;
+      }
+      case "moduleDependencies": {
+        const modules = state.normalizedData?.modules;
+        const moduleMap = modules instanceof Map ? modules : modules ?? null;
+        if (!(moduleMap instanceof Map) || moduleMap.size === 0) {
+          return "Module dependency data is not available in this CommandView artifact.";
+        }
+        const hasDependencies = Array.from(moduleMap.values()).some((moduleRecord) =>
+          Array.isArray(moduleRecord?.importEdges) && moduleRecord.importEdges.length > 0
+        );
+        if (!hasDependencies) {
+          return "Module dependency metadata is not present in this CommandView artifact.";
+        }
+        break;
+      }
+      case "moduleExports": {
+        const modules = state.normalizedData?.modules;
+        const moduleMap = modules instanceof Map ? modules : modules ?? null;
+        if (!(moduleMap instanceof Map) || moduleMap.size === 0) {
+          return "Module export data is not available in this CommandView artifact.";
+        }
+        const hasExportContracts = Array.from(moduleMap.values()).some((moduleRecord) => {
+          const summary = moduleRecord?.exportSummary;
+          if (!summary || typeof summary !== "object") {
+            return false;
+          }
+          const declared = Array.isArray(summary.declared) ? summary.declared : [];
+          const resolved = Array.isArray(summary.resolved) ? summary.resolved : [];
+          const dynamic = summary.dynamic === true;
+          return declared.length > 0 || resolved.length > 0 || dynamic;
+        });
+        if (!hasExportContracts) {
+          return "Export contract metadata is not present in this CommandView artifact.";
         }
         break;
       }
@@ -566,6 +633,8 @@ const state = {
     startX: 0,
     startWidth: 0,
   },
+  statusMessage: "",
+  statusDetails: [],
 };
 
 const selectionMemory = new Map();
@@ -779,11 +848,517 @@ function initializeMermaid() {
   window.mermaid.initialize({ startOnLoad: false, theme: "dark" });
 }
 
-function updateStatus(message) {
-  const panel = document.getElementById("status-panel");
-  if (panel) {
-    panel.textContent = message;
+function updateStatus(message, options = {}) {
+  const shouldClearDetails = options.clearDetails !== false;
+  state.statusMessage = typeof message === "string" ? message : "";
+  if (shouldClearDetails) {
+    state.statusDetails = [];
   }
+  renderStatusPanel();
+}
+
+function setStatusDetails(descriptors) {
+  if (Array.isArray(descriptors) && descriptors.length > 0) {
+    state.statusDetails = descriptors;
+  } else {
+    state.statusDetails = [];
+  }
+  renderStatusPanel();
+}
+
+const STATUS_DESCRIPTOR_RENDERERS = Object.freeze({
+  note: renderStatusNoteDescriptor,
+  list: renderStatusListDescriptor,
+  "alert-list": renderStatusListDescriptor,
+  "stat-summary": renderStatusMetricDescriptor,
+  "metric-list": renderStatusMetricDescriptor,
+  "pill-list": renderStatusPillDescriptor,
+  "missing-decorator-policy": renderMissingDecoratorPolicyDescriptor,
+});
+
+function renderStatusPanel() {
+  const panel = document.getElementById("status-panel");
+  if (!panel) {
+    return;
+  }
+  panel.innerHTML = "";
+  const messageElement = document.createElement("div");
+  messageElement.className = "viewer-status-message";
+  messageElement.textContent = state.statusMessage || "";
+  panel.appendChild(messageElement);
+
+  const descriptors = Array.isArray(state.statusDetails) ? state.statusDetails : [];
+  descriptors.forEach((descriptor) => {
+    const descriptorElement = renderStatusDescriptor(descriptor);
+    if (descriptorElement) {
+      panel.appendChild(descriptorElement);
+    }
+  });
+}
+
+function renderStatusDescriptor(descriptor) {
+  if (!descriptor || typeof descriptor !== "object") {
+    return null;
+  }
+  const type = typeof descriptor.type === "string" ? descriptor.type : "note";
+  const renderer = STATUS_DESCRIPTOR_RENDERERS[type] ?? renderStatusNoteDescriptor;
+  try {
+    return renderer(descriptor);
+  } catch (error) {
+    console.warn("Failed to render status descriptor", descriptor, error);
+    return null;
+  }
+}
+
+function renderStatusNoteDescriptor(descriptor) {
+  const message = typeof descriptor.message === "string" ? descriptor.message.trim() : "";
+  const title = typeof descriptor.title === "string" ? descriptor.title.trim() : "";
+  if (!message && !title) {
+    return null;
+  }
+  const container = document.createElement("div");
+  container.className = buildStatusSectionClass(descriptor, "status-section-note");
+  if (title) {
+    appendStatusSectionTitle(container, title);
+  }
+  if (message) {
+    const body = document.createElement("div");
+    body.className = "status-note-message";
+    body.textContent = message;
+    container.appendChild(body);
+  }
+  return container;
+}
+
+function renderStatusListDescriptor(descriptor) {
+  const items = normalizeListDescriptorItems(descriptor.items);
+  if (items.length === 0) {
+    return null;
+  }
+  const container = document.createElement("div");
+  container.className = buildStatusSectionClass(descriptor, "status-section-listing");
+  const title = typeof descriptor.title === "string" && descriptor.title.trim().length > 0
+    ? descriptor.title.trim()
+    : null;
+  if (title) {
+    appendStatusSectionTitle(container, title);
+  }
+  appendStatusSectionDescription(container, descriptor);
+
+  const list = document.createElement("ul");
+  list.className = "status-section-list";
+
+  items.forEach((item) => {
+    const listItem = document.createElement("li");
+    listItem.className = "status-section-item";
+    if (item.header) {
+      const header = document.createElement("div");
+      header.className = "status-section-item-header";
+      header.textContent = item.header;
+      listItem.appendChild(header);
+    }
+    if (item.body) {
+      const subtitle = document.createElement("div");
+      subtitle.className = "status-section-item-subtitle";
+      subtitle.textContent = item.body;
+      listItem.appendChild(subtitle);
+    }
+    if (item.badges.length > 0) {
+      const pillList = document.createElement("div");
+      pillList.className = "status-pill-row";
+      item.badges.forEach((badgeLabel) => {
+        const pill = document.createElement("span");
+        pill.className = "status-pill";
+        pill.textContent = badgeLabel;
+        pillList.appendChild(pill);
+      });
+      listItem.appendChild(pillList);
+    }
+    if (item.subitems.length > 0) {
+      const sublist = document.createElement("ul");
+      sublist.className = "status-section-sublist";
+      item.subitems.forEach((entry) => {
+        const subItem = document.createElement("li");
+        subItem.className = "status-section-subitem";
+        subItem.textContent = entry;
+        sublist.appendChild(subItem);
+      });
+      listItem.appendChild(sublist);
+    }
+    list.appendChild(listItem);
+  });
+
+  container.appendChild(list);
+  return container;
+}
+
+function renderStatusMetricDescriptor(descriptor) {
+  const entries = normalizeMetricDescriptorItems(descriptor.items ?? descriptor.entries);
+  if (entries.length === 0) {
+    return null;
+  }
+  const container = document.createElement("div");
+  container.className = buildStatusSectionClass(descriptor, "status-section-metrics");
+
+  const title = typeof descriptor.title === "string" && descriptor.title.trim().length > 0
+    ? descriptor.title.trim()
+    : null;
+  if (title) {
+    appendStatusSectionTitle(container, title);
+  }
+  appendStatusSectionDescription(container, descriptor);
+
+  const metricContainer = document.createElement("div");
+  metricContainer.className = "status-metrics";
+  entries.forEach((entry) => {
+    const metric = document.createElement("div");
+    metric.className = "status-metric";
+
+    const label = document.createElement("div");
+    label.className = "status-metric-label";
+    label.textContent = entry.label;
+    metric.appendChild(label);
+
+    const value = document.createElement("div");
+    value.className = "status-metric-value";
+    value.textContent = entry.value;
+    metric.appendChild(value);
+
+    if (entry.hint) {
+      const hint = document.createElement("div");
+      hint.className = "status-metric-hint";
+      hint.textContent = entry.hint;
+      metric.appendChild(hint);
+    }
+
+    metricContainer.appendChild(metric);
+  });
+
+  container.appendChild(metricContainer);
+  return container;
+}
+
+function renderStatusPillDescriptor(descriptor) {
+  const items = normalizePillDescriptorItems(descriptor.items);
+  if (items.length === 0) {
+    return null;
+  }
+  const container = document.createElement("div");
+  container.className = buildStatusSectionClass(descriptor, "status-section-pills");
+
+  const title = typeof descriptor.title === "string" && descriptor.title.trim().length > 0
+    ? descriptor.title.trim()
+    : null;
+  if (title) {
+    appendStatusSectionTitle(container, title);
+  }
+  appendStatusSectionDescription(container, descriptor);
+
+  const pills = document.createElement("div");
+  pills.className = "status-pill-row";
+  items.forEach((item) => {
+    const pill = document.createElement("span");
+    pill.className = "status-pill";
+    pill.textContent = item;
+    pills.appendChild(pill);
+  });
+  container.appendChild(pills);
+  return container;
+}
+
+function renderMissingDecoratorPolicyDescriptor(descriptor) {
+  const items = Array.isArray(descriptor.items) ? descriptor.items : [];
+  if (items.length === 0) {
+    return null;
+  }
+
+  const container = document.createElement("div");
+  container.className = buildStatusSectionClass(descriptor, "status-section-policy");
+  appendStatusSectionTitle(container, descriptor.title ?? "Missing Decorator Policies");
+  appendStatusSectionDescription(container, descriptor);
+
+  const list = document.createElement("ul");
+  list.className = "status-section-list";
+
+  items.forEach((item) => {
+    if (!item || typeof item !== "object") {
+      return;
+    }
+    const listItem = document.createElement("li");
+    listItem.className = "status-section-item";
+
+    const header = document.createElement("div");
+    header.className = "status-section-item-header";
+    header.textContent = formatDecoratorPolicyDetailHeader(item);
+    listItem.appendChild(header);
+
+    const samples = Array.isArray(item.samples)
+      ? item.samples.filter((sample) => sample && typeof sample === "object")
+      : [];
+    if (samples.length > 0) {
+      const subtitle = document.createElement("div");
+      subtitle.className = "status-section-item-subtitle";
+      subtitle.textContent = samples.length === 1 ? "Sample function:" : "Sample functions:";
+      listItem.appendChild(subtitle);
+
+      const sublist = document.createElement("ul");
+      sublist.className = "status-section-sublist";
+      samples.forEach((sample) => {
+        const sampleItem = document.createElement("li");
+        sampleItem.className = "status-section-subitem";
+        sampleItem.textContent = formatDecoratorPolicySample(sample);
+        sublist.appendChild(sampleItem);
+      });
+      listItem.appendChild(sublist);
+    } else {
+      const subtitle = document.createElement("div");
+      subtitle.className = "status-section-item-subtitle";
+      subtitle.textContent = "No candidate functions recorded.";
+      listItem.appendChild(subtitle);
+    }
+
+    list.appendChild(listItem);
+  });
+
+  container.appendChild(list);
+  return container;
+}
+
+function buildStatusSectionClass(descriptor, extraClass) {
+  const classes = ["status-section"];
+  if (extraClass) {
+    classes.push(extraClass);
+  }
+  const severityClass = resolveStatusSeverityClass(descriptor.severity);
+  if (severityClass) {
+    classes.push(severityClass);
+  }
+  return classes.join(" ");
+}
+
+function resolveStatusSeverityClass(severity) {
+  if (typeof severity !== "string") {
+    return "";
+  }
+  const normalized = severity.trim().toLowerCase();
+  switch (normalized) {
+    case "info":
+      return "status-severity-info";
+    case "success":
+      return "status-severity-success";
+    case "warning":
+    case "warn":
+      return "status-severity-warning";
+    case "error":
+    case "alert":
+    case "critical":
+      return "status-severity-error";
+    default:
+      return "";
+  }
+}
+
+function appendStatusSectionTitle(container, title) {
+  if (!title) {
+    return;
+  }
+  const heading = document.createElement("div");
+  heading.className = "status-section-title";
+  heading.textContent = title;
+  container.appendChild(heading);
+}
+
+function appendStatusSectionDescription(container, descriptor) {
+  const description = typeof descriptor.description === "string" ? descriptor.description.trim() : "";
+  if (!description) {
+    return;
+  }
+  const paragraph = document.createElement("div");
+  paragraph.className = "status-section-description";
+  paragraph.textContent = description;
+  container.appendChild(paragraph);
+}
+
+function normalizeListDescriptorItems(items) {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+  return items
+    .map((item) => {
+      if (typeof item === "string") {
+        const value = item.trim();
+        return value.length > 0
+          ? { header: value, body: null, subitems: [], badges: [] }
+          : null;
+      }
+      if (!item || typeof item !== "object") {
+        return null;
+      }
+      const header =
+        typeof item.header === "string" && item.header.trim().length > 0
+          ? item.header.trim()
+          : typeof item.title === "string" && item.title.trim().length > 0
+            ? item.title.trim()
+            : typeof item.label === "string" && item.label.trim().length > 0
+              ? item.label.trim()
+              : null;
+      const body =
+        typeof item.body === "string" && item.body.trim().length > 0
+          ? item.body.trim()
+          : typeof item.description === "string" && item.description.trim().length > 0
+            ? item.description.trim()
+            : null;
+      const badges = Array.isArray(item.badges)
+        ? item.badges
+            .map((badge) => (typeof badge === "string" ? badge.trim() : ""))
+            .filter((badge) => badge.length > 0)
+        : [];
+      const subitems = Array.isArray(item.subitems)
+        ? item.subitems
+            .map((entry) => (typeof entry === "string" ? entry.trim() : ""))
+            .filter((entry) => entry.length > 0)
+        : [];
+      if (!header && !body && badges.length === 0 && subitems.length === 0) {
+        return null;
+      }
+      return { header, body, badges, subitems };
+    })
+    .filter(Boolean);
+}
+
+function normalizeMetricDescriptorItems(items) {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+  return items
+    .map((entry) => {
+      if (!entry || typeof entry !== "object") {
+        return null;
+      }
+      const label = typeof entry.label === "string" && entry.label.trim().length > 0
+        ? entry.label.trim()
+        : null;
+      const value = typeof entry.value === "string" && entry.value.trim().length > 0
+        ? entry.value.trim()
+        : Number.isFinite(entry.value)
+          ? String(entry.value)
+          : null;
+      const hint = typeof entry.hint === "string" && entry.hint.trim().length > 0 ? entry.hint.trim() : null;
+      if (!label || value === null) {
+        return null;
+      }
+      return { label, value, hint };
+    })
+    .filter(Boolean);
+}
+
+function normalizePillDescriptorItems(items) {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+  return items
+    .map((item) => (typeof item === "string" ? item.trim() : ""))
+    .filter((item) => item.length > 0);
+}
+
+function formatDecoratorPolicyDetailHeader(detail) {
+  const decoratorName = typeof detail?.decorator === "string" && detail.decorator.trim().length > 0
+    ? detail.decorator.trim()
+    : "Unnamed decorator";
+  const scope = typeof detail?.scope === "string" ? detail.scope.trim() : "global";
+  const scopeLabel = formatDecoratorPolicyScopeLabel(scope, detail?.target ?? null);
+  return `${decoratorName} missing (${scopeLabel})`;
+}
+
+function formatDecoratorPolicyScopeLabel(scope, target) {
+  const normalizedScope = scope && scope.length > 0 ? scope : "global";
+  const normalizedTarget = typeof target === "string" && target.trim().length > 0 ? target.trim() : null;
+  if (normalizedScope === "global" || !normalizedTarget) {
+    return normalizedScope;
+  }
+  return `${normalizedScope} ${normalizedTarget}`;
+}
+
+function formatDecoratorPolicySample(sample) {
+  const name = typeof sample?.name === "string" && sample.name.trim().length > 0
+    ? sample.name.trim()
+    : typeof sample?.id === "string"
+      ? sample.id
+      : "function";
+  const moduleId = typeof sample?.moduleId === "string" && sample.moduleId.trim().length > 0
+    ? sample.moduleId.trim()
+    : null;
+  return moduleId ? `${name} · ${moduleId}` : name;
+}
+
+function normalizeDecoratorPolicyDetails(details) {
+  if (!Array.isArray(details)) {
+    return [];
+  }
+  return details
+    .map((detail) => {
+      if (!detail || typeof detail !== "object") {
+        return null;
+      }
+      const decorator = typeof detail.decorator === "string" && detail.decorator.trim().length > 0
+        ? detail.decorator.trim()
+        : null;
+      if (!decorator) {
+        return null;
+      }
+      const scope = typeof detail.scope === "string" && detail.scope.trim().length > 0 ? detail.scope.trim() : "global";
+      const target = typeof detail.target === "string" && detail.target.trim().length > 0 ? detail.target.trim() : null;
+      const samples = Array.isArray(detail.samples)
+        ? detail.samples
+            .map((sample) => {
+              if (!sample || typeof sample !== "object") {
+                return null;
+              }
+              const name = typeof sample.name === "string" && sample.name.trim().length > 0 ? sample.name.trim() : null;
+              const id = typeof sample.id === "string" && sample.id.trim().length > 0 ? sample.id.trim() : null;
+              const fallback = name ?? id ?? "function";
+              const moduleId = typeof sample.moduleId === "string" && sample.moduleId.trim().length > 0
+                ? sample.moduleId.trim()
+                : null;
+              return { id: id ?? fallback, name: fallback, moduleId };
+            })
+            .filter(Boolean)
+        : [];
+
+      return {
+        decorator,
+        scope,
+        target,
+        samples,
+      };
+    })
+    .filter(Boolean);
+}
+
+function deriveBuilderStatusDetails(builderResult) {
+  if (!builderResult || typeof builderResult !== "object") {
+    return [];
+  }
+  if (Array.isArray(builderResult.statusDetails) && builderResult.statusDetails.length > 0) {
+    return builderResult.statusDetails;
+  }
+
+  const rawPolicyDetails = Array.isArray(builderResult.policyDetails)
+    ? builderResult.policyDetails
+    : Array.isArray(builderResult.stats?.missingRequiredDetails)
+      ? builderResult.stats.missingRequiredDetails
+      : [];
+  const normalized = normalizeDecoratorPolicyDetails(rawPolicyDetails);
+  if (normalized.length === 0) {
+    return [];
+  }
+  return [
+    {
+      type: "missing-decorator-policy",
+      title: "Missing Decorator Policies",
+      items: normalized,
+    },
+  ];
 }
 
 async function fetchJson(url) {
@@ -931,12 +1506,426 @@ function createModuleRecord(file) {
     relativePath: file.relative_path ?? null,
     absolutePath: file.path ?? null,
     packageName: typeof moduleId === "string" ? moduleId.split(".")[0] : null,
-    callGraphSummary: file.call_graph?.summary ?? null,
+  callGraphSummary: file.call_graph?.summary ?? null,
+  importEdges: buildModuleImportEdges(file.import_graph ?? null),
+  exportSummary: buildModuleExportSummary(file, moduleId),
     dependencySummary: file.dependency_summary ?? null,
     coverageSignals: file.coverage_signals ?? null,
     gitChurn: file.git_churn ?? null,
     lineCount: file.line_count ?? null,
     functions: [],
+  };
+}
+
+function buildModuleImportEdges(importGraph) {
+  if (!Array.isArray(importGraph)) {
+    return [];
+  }
+
+  const edges = [];
+
+  importGraph.forEach((entry) => {
+    if (!entry || typeof entry !== "object") {
+      return;
+    }
+    const kind = typeof entry.kind === "string" && entry.kind.trim().length > 0 ? entry.kind.trim() : null;
+    const moduleName = typeof entry.module === "string" && entry.module.trim().length > 0 ? entry.module.trim() : null;
+    const linenoRaw = entry.lineno ?? entry.line ?? entry.line_number ?? null;
+    const lineno = Number.isFinite(Number(linenoRaw)) ? Number(linenoRaw) : null;
+    const nestedEdges = Array.isArray(entry.edges) ? entry.edges : [];
+
+    nestedEdges.forEach((edge) => {
+      if (!edge || typeof edge !== "object") {
+        return;
+      }
+
+      const target = normalizeString(edge.target ?? edge.module ?? edge.symbol ?? edge.name ?? null);
+      if (!target) {
+        return;
+      }
+
+      const category = normalizeString(edge.category ?? edge.classification) ?? "unknown";
+      const functions = Array.isArray(edge.functions)
+        ? Array.from(
+            new Set(
+              edge.functions
+                .map((fn) => normalizeString(fn))
+                .filter((fn) => typeof fn === "string" && fn.length > 0)
+            )
+          )
+        : [];
+      const via = Array.isArray(edge.via)
+        ? Array.from(
+            new Set(
+              edge.via
+                .map((alias) => normalizeString(alias))
+                .filter((alias) => typeof alias === "string" && alias.length > 0)
+            )
+          )
+        : [];
+      let importedAs = normalizeString(edge.imported_as ?? edge.importedAs ?? edge.alias ?? null);
+      if (!importedAs && via.length > 0) {
+        importedAs = via[0];
+      }
+      const unused = edge.unused === true;
+
+      edges.push({
+        target,
+        category,
+        importedAs,
+        unused,
+        functions,
+        via,
+        kind,
+        module: moduleName,
+        lineno,
+      });
+    });
+  });
+
+  return edges;
+}
+
+function buildModuleExportSummary(file, moduleId) {
+  if (!file || typeof file !== "object") {
+    return {
+      declared: [],
+      missing: [],
+      dynamic: false,
+      lineno: null,
+      counts: { declared: 0, functions: 0, classes: 0, globals: 0, reexports: 0, missing: 0, local: 0 },
+      resolved: [],
+      hasDeclared: false,
+    };
+  }
+
+  const exportsInfo = typeof file.exports === "object" && file.exports !== null ? file.exports : null;
+  const importDetails = Array.isArray(file.imports_detailed) ? file.imports_detailed : [];
+  const functions = Array.isArray(file.functions) ? file.functions : [];
+  const classes = Array.isArray(file.classes) ? file.classes : [];
+  const globals = Array.isArray(file.globals) ? file.globals : [];
+
+  const declaredSymbols = uniqueNormalizedStringList(exportsInfo?.symbols ?? []);
+  const missingSymbols = uniqueNormalizedStringList(exportsInfo?.missing ?? []);
+  const declaredSet = new Set(declaredSymbols);
+  missingSymbols.forEach((symbol) => {
+    if (!declaredSet.has(symbol)) {
+      declaredSymbols.push(symbol);
+      declaredSet.add(symbol);
+    }
+  });
+
+  const missingSet = new Set(missingSymbols);
+  const exposureIndex = buildImportExposureIndex(importDetails);
+  const functionIndex = buildFunctionIndex(functions);
+  const classIndex = buildClassIndex(classes);
+  const globalIndex = buildGlobalIndex(globals);
+
+  const resolved = [];
+  const counts = {
+    declared: 0,
+    functions: 0,
+    classes: 0,
+    globals: 0,
+    reexports: 0,
+    missing: 0,
+    local: 0,
+  };
+
+  declaredSymbols.forEach((symbol) => {
+    const resolution = resolveExportSymbol(symbol, {
+      moduleId,
+      functionIndex,
+      classIndex,
+      globalIndex,
+      exposureIndex,
+      missingSet,
+    });
+    resolved.push(resolution);
+
+    switch (resolution.kind) {
+      case "function":
+        counts.functions += 1;
+        counts.local += 1;
+        break;
+      case "class":
+        counts.classes += 1;
+        counts.local += 1;
+        break;
+      case "global":
+        counts.globals += 1;
+        counts.local += 1;
+        break;
+      case "reexport":
+        counts.reexports += 1;
+        break;
+      case "missing":
+        counts.missing += 1;
+        break;
+      default:
+        counts.missing += 1;
+        break;
+    }
+  });
+
+  counts.declared = declaredSymbols.length;
+
+  return {
+    declared: declaredSymbols,
+    missing: missingSymbols,
+    dynamic: exportsInfo?.dynamic === true,
+    lineno: normalizeLineNumber(exportsInfo?.lineno),
+    counts,
+    resolved,
+    hasDeclared: declaredSymbols.length > 0,
+  };
+}
+
+function uniqueNormalizedStringList(values) {
+  if (!Array.isArray(values)) {
+    return [];
+  }
+  const seen = new Set();
+  const normalized = [];
+  values.forEach((value) => {
+    const normalizedValue = normalizeString(value);
+    if (!normalizedValue || seen.has(normalizedValue)) {
+      return;
+    }
+    seen.add(normalizedValue);
+    normalized.push(normalizedValue);
+  });
+  return normalized;
+}
+
+function normalizeLineNumber(value) {
+  if (value === null || value === undefined) {
+    return null;
+  }
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : null;
+}
+
+function buildFunctionIndex(functionEntries) {
+  const index = new Map();
+  functionEntries.forEach((entry) => {
+    if (!entry || typeof entry !== "object") {
+      return;
+    }
+    const name = normalizeString(entry.name);
+    if (!name || index.has(name)) {
+      return;
+    }
+    index.set(name, entry);
+  });
+  return index;
+}
+
+function buildClassIndex(classEntries) {
+  const index = new Map();
+  classEntries.forEach((entry) => {
+    if (!entry || typeof entry !== "object") {
+      return;
+    }
+    const name = normalizeString(entry.name);
+    if (!name || index.has(name)) {
+      return;
+    }
+    index.set(name, entry);
+  });
+  return index;
+}
+
+function buildGlobalIndex(globalEntries) {
+  const index = new Map();
+  globalEntries.forEach((entry) => {
+    if (!entry || typeof entry !== "object") {
+      return;
+    }
+    const name = normalizeString(entry.name);
+    if (!name || index.has(name)) {
+      return;
+    }
+    index.set(name, entry);
+  });
+  return index;
+}
+
+function buildImportExposureIndex(importsDetailed) {
+  const index = new Map();
+  importsDetailed.forEach((entry) => {
+    if (!entry || typeof entry !== "object") {
+      return;
+    }
+    const names = Array.isArray(entry.names) ? entry.names : [];
+    const importKind = entry.kind === "from" ? "from" : "import";
+    const moduleName = normalizeString(entry.module);
+    const lineno = normalizeLineNumber(entry.lineno);
+    const levelValue = normalizeLineNumber(entry.level);
+
+    names.forEach((detail) => {
+      if (!detail || typeof detail !== "object") {
+        return;
+      }
+      const original = normalizeString(detail.name);
+      const alias = normalizeString(detail.asname);
+      const exposed = alias ?? original;
+      if (!exposed) {
+        return;
+      }
+      let qualified = original;
+      if (importKind === "from") {
+        qualified = moduleName ? `${moduleName}.${original ?? ""}`.replace(/\.$/, "") : original;
+      }
+      index.set(exposed, {
+        original,
+        module: importKind === "from" ? moduleName : original,
+        importKind,
+        level: Number.isFinite(levelValue) ? levelValue : 0,
+        lineno,
+        qualified: normalizeString(qualified),
+      });
+    });
+  });
+  return index;
+}
+
+function buildFunctionIdentifier(functionEntry, moduleId) {
+  const qualified = normalizeString(functionEntry?.qualified_name ?? functionEntry?.qualifiedName);
+  if (qualified) {
+    return qualified;
+  }
+  const name = normalizeString(functionEntry?.name);
+  if (moduleId && name) {
+    return `${moduleId}::${name}`;
+  }
+  return name;
+}
+
+function buildClassQualifiedName(classEntry, moduleId) {
+  const name = normalizeString(classEntry?.name);
+  if (!name) {
+    return null;
+  }
+  return moduleId ? `${moduleId}.${name}` : name;
+}
+
+function resolveExportSymbol(symbol, context) {
+  const {
+    moduleId,
+    functionIndex,
+    classIndex,
+    globalIndex,
+    exposureIndex,
+    missingSet,
+  } = context;
+
+  const functionEntry = functionIndex.get(symbol);
+  if (functionEntry) {
+    return {
+      symbol,
+      kind: "function",
+      defined: true,
+      origin: "local",
+      moduleId,
+      functionId: buildFunctionIdentifier(functionEntry, moduleId),
+      classQualifiedName: null,
+      valueKind: null,
+      lineno: normalizeLineNumber(functionEntry.line ?? functionEntry.lineno),
+      signature: normalizeString(functionEntry.signature),
+      docstringQuality: functionEntry.docstring_quality ?? null,
+      sourceModule: null,
+      sourceName: null,
+      sourceQualifiedName: null,
+      sourceImportKind: null,
+      sourceLevel: null,
+    };
+  }
+
+  const classEntry = classIndex.get(symbol);
+  if (classEntry) {
+    return {
+      symbol,
+      kind: "class",
+      defined: true,
+      origin: "local",
+      moduleId,
+      functionId: null,
+      classQualifiedName: buildClassQualifiedName(classEntry, moduleId),
+      valueKind: null,
+      lineno: normalizeLineNumber(classEntry.line),
+      signature: null,
+      docstringQuality: classEntry.docstring_quality ?? null,
+      sourceModule: null,
+      sourceName: null,
+      sourceQualifiedName: null,
+      sourceImportKind: null,
+      sourceLevel: null,
+    };
+  }
+
+  const globalEntry = globalIndex.get(symbol);
+  if (globalEntry) {
+    return {
+      symbol,
+      kind: "global",
+      defined: true,
+      origin: "local",
+      moduleId,
+      functionId: null,
+      classQualifiedName: null,
+      valueKind: normalizeString(globalEntry.value_kind ?? globalEntry.valueKind),
+      lineno: normalizeLineNumber(globalEntry.lineno ?? globalEntry.line),
+      signature: null,
+      docstringQuality: null,
+      sourceModule: null,
+      sourceName: null,
+      sourceQualifiedName: null,
+      sourceImportKind: null,
+      sourceLevel: null,
+    };
+  }
+
+  const exposure = exposureIndex.get(symbol);
+  if (exposure) {
+    return {
+      symbol,
+      kind: "reexport",
+      defined: true,
+      origin: "reexport",
+      moduleId,
+      functionId: null,
+      classQualifiedName: null,
+      valueKind: null,
+      lineno: exposure.lineno,
+      signature: null,
+      docstringQuality: null,
+      sourceModule: exposure.module ?? null,
+      sourceName: exposure.original ?? null,
+      sourceQualifiedName: exposure.qualified ?? null,
+      sourceImportKind: exposure.importKind,
+      sourceLevel: exposure.level,
+    };
+  }
+
+  const isMissing = missingSet.has(symbol);
+  return {
+    symbol,
+    kind: isMissing ? "missing" : "unknown",
+    defined: false,
+    origin: isMissing ? "missing" : "unknown",
+    moduleId,
+    functionId: null,
+    classQualifiedName: null,
+    valueKind: null,
+    lineno: null,
+    signature: null,
+    docstringQuality: null,
+    sourceModule: null,
+    sourceName: null,
+    sourceQualifiedName: null,
+    sourceImportKind: null,
+    sourceLevel: null,
   };
 }
 
@@ -957,6 +1946,8 @@ function createFunctionRecord(fn, moduleId) {
         .filter(Boolean)
     : [];
   const loggingCalls = normalizeLoggingCalls(fn?.loggingCalls ?? fn?.logging_calls);
+  const decorators = normalizeDecorators(fn?.decorators);
+  const decoratorsDetailed = normalizeDecoratorDetails(fn?.decorators_detailed ?? fn?.decoratorsDetailed);
 
   return {
     id: functionId,
@@ -972,6 +1963,8 @@ function createFunctionRecord(fn, moduleId) {
     todoTags: fn.todo_tags ?? 0,
     localsSummary: fn.locals_summary ?? null,
     loggingCalls,
+    decorators,
+    decoratorsDetailed,
     metrics: {
       coverage: fn.coverage ?? null,
       lineCount: fn.line_count ?? null,
@@ -1006,6 +1999,96 @@ function normalizeLoggingCalls(value) {
       };
     })
     .filter(Boolean);
+}
+
+function normalizeDecorators(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value
+    .map((entry) => {
+      if (typeof entry === "string") {
+        const trimmed = entry.trim();
+        return trimmed.length > 0 ? trimmed : null;
+      }
+      if (entry && typeof entry === "object") {
+        const name = typeof entry.name === "string" ? entry.name.trim() : null;
+        return name && name.length > 0 ? name : null;
+      }
+      return null;
+    })
+    .filter(Boolean);
+}
+
+function normalizeDecoratorDetails(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .map((entry) => {
+      if (!entry || typeof entry !== "object") {
+        return null;
+      }
+
+      const name = normalizeString(entry.name ?? entry.decorator ?? entry.id ?? null);
+      const moduleName = normalizeString(entry.module ?? entry.module_name ?? entry.moduleId ?? entry.module_id ?? null);
+      const qualifiedName = normalizeString(entry.qualified_name ?? entry.qualifiedName ?? entry.qualname ?? null);
+      const expression = normalizeString(
+        entry.call ?? entry.expression ?? entry.representation ?? entry.expr ?? entry.source ?? null
+      );
+
+      const args = Array.isArray(entry.args)
+        ? entry.args
+            .map((arg) => normalizeString(arg))
+            .filter((arg) => typeof arg === "string" && arg.length > 0)
+        : [];
+
+      const kwargs = [];
+      if (entry.kwargs && typeof entry.kwargs === "object") {
+        Object.entries(entry.kwargs).forEach(([key, rawValue]) => {
+          if (typeof key !== "string" || key.trim().length === 0) {
+            return;
+          }
+          const valueString = normalizeString(rawValue);
+          if (!valueString) {
+            return;
+          }
+          kwargs.push({ name: key.trim(), value: valueString });
+        });
+      }
+
+      if (!name && args.length === 0 && kwargs.length === 0 && !expression) {
+        return null;
+      }
+
+      return {
+        name,
+        module: moduleName,
+        qualifiedName,
+        args,
+        kwargs,
+        expression,
+      };
+    })
+    .filter(Boolean);
+}
+
+function normalizeString(value) {
+  if (value === null || value === undefined) {
+    return null;
+  }
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    return trimmed.length > 0 ? trimmed : null;
+  }
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return String(value);
+  }
+  if (typeof value === "boolean") {
+    return value ? "true" : "false";
+  }
+  return null;
 }
 
 function buildScreeningCallIndex(screening) {
@@ -2303,6 +3386,90 @@ function buildMermaidDefinition(levelKey) {
   }
 }
 
+function buildExportContractMatrixViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const rootId = state.levelSelections.rootId ?? null;
+  const domainId = state.levelSelections.domainId ?? null;
+  const filteredModules = modules;
+
+  const result = buildExportContractMatrixDiagram(filteredModules, {
+    viewLabel: "Dependency · Export Contract Matrix",
+    rootId,
+    domainId,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Export Contract Matrix diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+  };
+}
+
+function buildModuleDependencyGraphViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const rootId = state.levelSelections.rootId ?? null;
+  const domainId = state.levelSelections.domainId ?? null;
+  const filteredModules = modules;
+
+  const dependencySummaries = new Map();
+  filteredModules.forEach((moduleRecord, moduleId) => {
+    if (moduleRecord?.dependencySummary && typeof moduleRecord.dependencySummary === "object") {
+      dependencySummaries.set(moduleId, moduleRecord.dependencySummary);
+    }
+  });
+
+  const result = buildModuleDependencyGraphDiagram(filteredModules, {
+    viewLabel: "Dependency · Module Dependency Graph",
+    rootId,
+    domainId,
+    dependencySummaries,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Module Dependency Graph diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+  };
+}
+
 function buildFunctionCallGraphViewDefinition() {
   const normalized = state.normalizedData;
   if (!normalized) {
@@ -2360,6 +3527,8 @@ function buildFunctionInventoryOverviewViewDefinition() {
     definition: result.definition,
     label: result.label,
     statusMessage: result.statusMessage,
+    stats: result.stats,
+    policyDetails: result.policyDetails,
   };
 }
 
@@ -2555,6 +3724,7 @@ function buildLoggingFlowViewDefinition() {
   const result = buildLoggingFlowDiagram(functionsMap, {
     viewLabel: "Quality Metrics · Logging Flow",
     centerLabel: scope?.centerLabel,
+    screeningHistory: normalized.screeningHistory,
     statusMessageFormatter: (stats) => formatLoggingFlowStatus(stats, scope?.statusContext),
   });
 
@@ -2588,11 +3758,47 @@ function formatLoggingFlowStatus(stats, context) {
     .map((key) => `${key} ${events[key] ?? 0}`)
     .join(", ");
   const topModule = Array.isArray(stats?.topModules) && stats.topModules.length > 0 ? stats.topModules[0] : null;
-  const moduleSuffix = topModule
-    ? `; top module ${topModule.moduleId} (${topModule.callCount} calls, ${topModule.emitters} emitters)`
-    : "";
+  const trailingNotes = [];
+  if (topModule) {
+    trailingNotes.push(`top module ${topModule.moduleId} (${topModule.callCount} calls, ${topModule.emitters} emitters)`);
+  }
+  const screeningNote = describeLoggingFlowScreening(stats?.screening);
+  if (screeningNote) {
+    trailingNotes.push(screeningNote);
+  }
+  const trailingSuffix = trailingNotes.length > 0 ? `; ${trailingNotes.join("; ")}` : "";
   const prefix = context ? `Rendered Logging Flow for ${context}` : "Rendered Logging Flow";
-  return `${prefix} (emitters ${emitters}, silent ${silent}, buckets ${bucketSummary || "none"}, events ${eventSummary || "none"}${moduleSuffix}).`;
+  return `${prefix} (emitters ${emitters}, silent ${silent}, buckets ${bucketSummary || "none"}, events ${eventSummary || "none"}${trailingSuffix}).`;
+}
+
+function describeLoggingFlowScreening(screening) {
+  if (!screening || typeof screening !== "object") {
+    return null;
+  }
+  if (typeof screening.alertSummary === "string" && screening.alertSummary.trim().length > 0) {
+    return `screening ${screening.alertSummary.trim()}`;
+  }
+  const severity = typeof screening.latestSeverity === "string" ? screening.latestSeverity.trim() : "";
+  if (!severity) {
+    return null;
+  }
+  if (severity !== "critical" && severity !== "warning") {
+    return null;
+  }
+  const upper = severity.toUpperCase();
+  const windowSize = Number.isFinite(screening.windowSize) && screening.windowSize > 0 ? screening.windowSize : null;
+  const recentCounts = typeof screening.recentCounts === "object" && screening.recentCounts !== null ? screening.recentCounts : {};
+  const recentCount = recentCounts[severity] ?? null;
+  const streakLength = Number.isFinite(screening.streakLength) && screening.streakLength > 1 ? screening.streakLength : null;
+  const details = [];
+  if (windowSize && recentCount !== null) {
+    details.push(`${recentCount}/${windowSize} recent`);
+  }
+  if (streakLength) {
+    details.push(`${streakLength}-event streak`);
+  }
+  const suffix = details.length > 0 ? ` (${details.join(", ")})` : "";
+  return `screening ${upper}${suffix}`;
 }
 
 function buildDocumentationCoverageMapViewDefinition() {
@@ -3081,6 +4287,210 @@ function formatCoveragePercent(value) {
   return `${Math.round(numeric)}%`;
 }
 
+function collectRequiredDecoratorPolicies() {
+  const names = new Set();
+  const config = getViewerConfig();
+  mergeRequiredDecoratorNames(names, config?.requiredDecorators);
+  mergeRequiredDecoratorNames(names, config?.decoratorPolicies?.required);
+  mergeRequiredDecoratorNames(names, config?.policies?.decorators?.required);
+
+  const inventory = state.inventoryPayload ?? {};
+  mergeRequiredDecoratorNames(names, inventory?.policies?.decorators?.required);
+  mergeRequiredDecoratorNames(names, inventory?.metadata?.policies?.decorators?.required);
+  mergeRequiredDecoratorNames(names, inventory?.metadata?.decorators?.required);
+  mergeRequiredDecoratorNames(names, inventory?.quality_metrics?.requiredDecorators);
+  mergeRequiredDecoratorNames(names, inventory?.quality_metrics?.decorators?.required);
+
+  return Array.from(names);
+}
+
+function mergeRequiredDecoratorNames(target, source) {
+  if (!(target instanceof Set) || !source) {
+    return;
+  }
+  const names = normalizeRequiredDecoratorSource(source);
+  names.forEach((name) => {
+    if (name.length > 0) {
+      target.add(name);
+    }
+  });
+}
+
+function normalizeRequiredDecoratorSource(source) {
+  if (!source) {
+    return [];
+  }
+  if (typeof source === "string") {
+    const trimmed = source.trim();
+    return trimmed.length > 0 ? [trimmed] : [];
+  }
+  if (Array.isArray(source)) {
+    const collected = [];
+    source.forEach((entry) => {
+      if (typeof entry === "string") {
+        const trimmed = entry.trim();
+        if (trimmed.length > 0) {
+          collected.push(trimmed);
+        }
+      } else if (entry && typeof entry === "object") {
+        const name = typeof entry.name === "string"
+          ? entry.name
+          : typeof entry.decorator === "string"
+            ? entry.decorator
+            : typeof entry.id === "string"
+              ? entry.id
+              : null;
+        if (name) {
+          const trimmed = name.trim();
+          if (trimmed.length > 0) {
+            collected.push(trimmed);
+          }
+        }
+      }
+    });
+    return collected;
+  }
+  if (typeof source === "object") {
+    if (Array.isArray(source.required)) {
+      return normalizeRequiredDecoratorSource(source.required);
+    }
+    if (typeof source.required === "string") {
+      return normalizeRequiredDecoratorSource([source.required]);
+    }
+  }
+  return [];
+}
+
+function collectDecoratorPolicyArtifacts() {
+  const sources = [];
+  const push = (value) => {
+    if (value === null || value === undefined) {
+      return;
+    }
+    if (typeof value === "string") {
+      const trimmed = value.trim();
+      if (trimmed.length > 0) {
+        sources.push(trimmed);
+      }
+      return;
+    }
+    if (Array.isArray(value)) {
+      if (value.length > 0) {
+        sources.push(value.map((entry) => entry));
+      }
+      return;
+    }
+    if (typeof value === "object") {
+      const keys = Object.keys(value);
+      if (keys.length > 0) {
+        sources.push(value);
+      }
+    }
+  };
+
+  const config = getViewerConfig() ?? {};
+  push(config.requiredDecorators);
+  push(config.decoratorPolicies);
+  push(config.policies?.decorators);
+
+  const inventory = state.inventoryPayload ?? {};
+  push(inventory.decoratorPolicies);
+  push(inventory.policies?.decorators);
+  push(inventory.metadata?.decorators);
+  push(inventory.metadata?.policies?.decorators);
+  push(inventory.quality_metrics?.decorators);
+  push(inventory.quality_metrics?.requiredDecorators);
+
+  const normalized = state.normalizedData ?? {};
+  push(normalized.decoratorPolicies);
+  push(normalized.policies?.decorators);
+
+  return sources.length === 0 ? null : sources;
+}
+  function buildDecoratorUsageMapViewDefinition() {
+    const normalized = state.normalizedData;
+    if (!normalized) {
+      return { message: "Normalized CommandView data is unavailable." };
+    }
+
+    const scope = resolveDecoratorUsageScope(
+      {
+        functions: normalized.functions,
+        modules: normalized.modules,
+        neighborhoods: state.levels?.level4 ?? null,
+      },
+      {
+        currentLevel: state.currentLevel,
+        selections: {
+          rootId: state.levelSelections.rootId,
+          domainId: state.levelSelections.domainId,
+          moduleId: state.levelSelections.moduleId,
+          functionId: state.levelSelections.functionId,
+        },
+      }
+    );
+
+    if (scope?.message) {
+      return { message: scope.message };
+    }
+
+    const functionsMap = scope?.functions instanceof Map ? scope.functions : null;
+    if (!functionsMap || functionsMap.size === 0) {
+      const emptyMessage = scope?.emptyMessage ?? "No decorator usage recorded for this selection.";
+      return { message: emptyMessage };
+    }
+
+    const result = buildDecoratorUsageMapDiagram(functionsMap, {
+      viewLabel: "Quality Metrics · Decorator Usage Map",
+      centerLabel: scope?.centerLabel,
+      policyConfig: collectDecoratorPolicyArtifacts(),
+      requiredDecorators: collectRequiredDecoratorPolicies(),
+      statusMessageFormatter: (stats, topDecorator) =>
+        formatDecoratorUsageStatus(stats, scope?.statusContext, topDecorator),
+    });
+
+    if (!result || typeof result !== "object") {
+      return { message: "Unable to build Decorator Usage Map diagram." };
+    }
+
+    if (result.message) {
+      return { message: result.message };
+    }
+
+    return {
+      definition: result.definition,
+      label: result.label,
+      statusMessage: result.statusMessage,
+    };
+  }
+
+  function formatDecoratorUsageStatus(stats, context, topDecorator) {
+    const decorated = typeof stats?.decorated === "number" ? stats.decorated : 0;
+    const undecorated = typeof stats?.undecorated === "number" ? stats.undecorated : 0;
+    const uniqueDecorators = typeof stats?.uniqueDecorators === "number" ? stats.uniqueDecorators : 0;
+    const prefix = context ? `Rendered Decorator Usage Map for ${context}` : "Rendered Decorator Usage Map";
+    const segments = [
+      `decorated ${decorated}`,
+      `undecorated ${undecorated}`,
+      `${uniqueDecorators} unique decorators`,
+    ];
+    const topName = topDecorator?.label ?? topDecorator?.name ?? null;
+    const topCount = typeof topDecorator?.count === "number" ? topDecorator.count : 0;
+    if (topName) {
+      segments.push(`top ${topName} x${topCount}`);
+    } else {
+      segments.push("no decorators recorded");
+    }
+    const missingRequired = Array.isArray(stats?.missingRequiredDecorators)
+      ? stats.missingRequiredDecorators.filter((name) => typeof name === "string" && name.length > 0)
+      : [];
+    if (missingRequired.length > 0) {
+      segments.push(`missing required ${missingRequired.join(", ")}`);
+    }
+    return `${prefix} (${segments.join(", ")}).`;
+  }
+
+
 function seedDefaultSelections() {
   if (!state.levels) {
     state.levelSelections.rootId = null;
@@ -3170,10 +4580,12 @@ async function renderActiveView() {
     state.diagramDefinition = null;
     updateExportButtonState();
     updateStatus(availability.reason ?? `View ${metadata.view.label} is not available for rendering yet.`);
+    setStatusDetails([]);
     return true;
   }
 
   resetRenderInteractions();
+  setStatusDetails([]);
   const builderResult = await Promise.resolve(
     availability.builder({
       state,
@@ -3182,6 +4594,7 @@ async function renderActiveView() {
       descriptor,
     })
   );
+  const builderStatusDetails = deriveBuilderStatusDetails(builderResult);
 
   if (!builderResult || typeof builderResult.definition !== "string" || builderResult.definition.trim().length === 0) {
     clearDiagram();
@@ -3189,6 +4602,9 @@ async function renderActiveView() {
     updateStatus(fallbackMessage);
     state.diagramDefinition = null;
     updateExportButtonState();
+    if (builderStatusDetails.length > 0) {
+      setStatusDetails(builderStatusDetails);
+    }
     return true;
   }
 
@@ -3201,6 +4617,10 @@ async function renderActiveView() {
   if (rendered) {
     const successMessage = builderResult.statusMessage ?? `Rendered ${label}.`;
     updateStatus(successMessage);
+  }
+
+  if (builderStatusDetails.length > 0) {
+    setStatusDetails(builderStatusDetails);
   }
 
   return true;
@@ -4154,3 +5574,12 @@ if (document.readyState === "loading") {
 }
 
 console.log('[viewer.js] Script loading completed');
+
+export const __test__ = {
+  createModuleRecord,
+  buildModuleImportEdges,
+  buildModuleExportSummary,
+  createFunctionRecord,
+  normalizeDecorators,
+  normalizeDecoratorDetails,
+};

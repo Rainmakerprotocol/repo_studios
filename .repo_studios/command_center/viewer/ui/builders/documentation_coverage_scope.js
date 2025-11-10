@@ -10,6 +10,7 @@ export function resolveDocumentationCoverageScope(data, context = {}) {
     messageOverrides: {
       ...context.messageOverrides,
       moduleEmpty: ({ moduleId }) => `Module ${moduleId} has no functions recorded for documentation coverage.`,
+  moduleMissing: ({ moduleId }) => `Module ${moduleId} is not present in normalized data for documentation coverage.`,
       domainEmpty: ({ domainId }) => `Domain ${domainId} has no functions recorded for documentation coverage.`,
       domainMissingModules: ({ domainId }) => `Domain ${domainId} has no modules recorded for documentation coverage.`,
       rootEmpty: ({ rootId }) => `Root ${rootId} has no functions recorded for documentation coverage.`,
