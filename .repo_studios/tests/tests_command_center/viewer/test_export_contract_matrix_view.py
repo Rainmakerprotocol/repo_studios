@@ -79,7 +79,12 @@ const modules = new Map([
   }}],
 ]);
 
+const originalLog = console.log;
+console.log = () => {{}};
+
 const result = buildExportContractMatrixDiagram(modules, {{ rootId: "alpha" }});
+
+console.log = originalLog;
 
 console.log(JSON.stringify({{
   definition: result.definition,
@@ -93,11 +98,11 @@ console.log(JSON.stringify({{
 
     definition = payload["definition"]
     assert isinstance(definition, str)
-    assert definition.startswith("graph TD")
-    assert "subgraph alpha_contracts_api_exports_group" in definition
+    assert definition.startswith("classDiagram")
+    assert "class alpha_contracts_api {" in definition
     assert "expose_api" in definition
-    assert "re-export" in definition
-    assert "Dynamic __all__" in definition
+    assert "public_helper from alpha.shared.helpers" in definition
+    assert "+__all__ : dynamic" in definition
 
     status = payload["statusMessage"]
     assert "Export Contract Matrix" in status
@@ -150,7 +155,12 @@ const modules = new Map([
   ["alpha.contracts.empty", {{ exportSummary: null }}],
 ]);
 
+const originalLog = console.log;
+console.log = () => {{}};
+
 const result = buildExportContractMatrixDiagram(modules);
+
+console.log = originalLog;
 
 console.log(JSON.stringify({{
   message: result.message,
@@ -180,8 +190,13 @@ const modules = new Map([
   }}],
 ]);
 
+const originalLog = console.log;
+console.log = () => {{}};
+
 const first = buildExportContractMatrixDiagram(modules);
 const second = buildExportContractMatrixDiagram(modules);
+
+console.log = originalLog;
 
 console.log(JSON.stringify({{
   definitionEqual: first.definition === second.definition,
@@ -194,3 +209,146 @@ console.log(JSON.stringify({{
     assert payload["definitionEqual"] is True
     assert payload["statusEqual"] is True
     assert payload["statsEqual"] is True
+
+
+def test_export_contract_matrix_includes_fallback_notice() -> None:
+    script = f"""
+import {{ buildExportContractMatrixDiagram }} from "{MODULE_PATH.as_uri()}";
+
+const modules = new Map([
+  ["alpha.contracts.api", {{
+    exportSummary: {{
+      declared: ["expose_api"],
+      missing: [],
+      dynamic: false,
+      counts: {{ declared: 1, functions: 1, classes: 0, globals: 0, reexports: 0, missing: 0, local: 1 }},
+      resolved: [
+        {{ symbol: "expose_api", kind: "function", origin: "local", defined: true, moduleId: "alpha.contracts.api", functionId: "alpha.contracts.api::expose_api", lineno: 18 }},
+      ],
+      hasDeclared: true,
+    }},
+  }}],
+]);
+
+const originalLog = console.log;
+console.log = () => {{}};
+
+const result = buildExportContractMatrixDiagram(modules, {{ fallbackNotice: "No contracts for selected scope; rendering repository instead." }});
+
+console.log = originalLog;
+
+console.log(JSON.stringify({{
+  statusMessage: result.statusMessage,
+  statusDetails: result.statusDetails,
+}}));
+"""
+    payload = _run_node_module(script)
+
+    assert "Fallback" in payload["statusMessage"] or "rendering repository" in payload["statusMessage"]
+    details = payload["statusDetails"]
+    assert details[0]["type"] == "info"
+    assert details[0]["title"].lower().startswith("scope fallback")
+    assert "rendering repository" in details[0]["description"].lower()
+
+
+def test_export_contract_matrix_view_falls_back_to_repository_scope() -> None:
+    viewer_path = (
+        REPO_STUDIOS_ROOT
+        / "command_center"
+        / "viewer"
+        / "ui"
+        / "viewer.js"
+    )
+
+    script = f"""
+if (!globalThis.window) {{
+  globalThis.window = {{}};
+}}
+if (!window.addEventListener) {{
+  window.addEventListener = () => {{}};
+}}
+if (!window.removeEventListener) {{
+  window.removeEventListener = () => {{}};
+}}
+if (!window.viewerConfig) {{
+  window.viewerConfig = {{}};
+}}
+if (!window.mermaid) {{
+  window.mermaid = {{ initialize: () => {{}}, render: async () => ({{ svg: '' }}) }};
+}}
+if (!globalThis.document) {{
+  globalThis.document = {{ readyState: 'loading', addEventListener: () => {{}} }};
+}}
+if (!globalThis.localStorage) {{
+  globalThis.localStorage = {{ getItem: () => null, setItem: () => {{}}, removeItem: () => {{}} }};
+}}
+
+const originalLog = console.log;
+const originalWarn = console.warn || (() => {{}});
+console.log = () => {{}};
+console.warn = () => {{}};
+
+const viewer = await import('{viewer_path.as_uri()}');
+const api = viewer.__test__;
+
+api.resetViewStateForTest();
+
+const contractModule = api.createModuleRecord({{
+  module_id: 'alpha.contracts.api',
+  path: 'alpha/contracts/api.py',
+  relative_path: 'alpha/contracts/api.py',
+  functions: [
+    {{ name: 'expose_api', qualified_name: 'alpha.contracts.api::expose_api', line: 18 }},
+  ],
+  exports: {{ symbols: ['expose_api'], missing: [], dynamic: false }},
+}});
+
+const emptyModule = api.createModuleRecord({{
+  module_id: 'beta.contracts.empty',
+  path: 'beta/contracts/empty.py',
+  relative_path: 'beta/contracts/empty.py',
+  exports: {{ symbols: [], missing: [], dynamic: false }},
+}});
+
+const modules = new Map();
+if (contractModule) {{
+  modules.set(contractModule.id, contractModule);
+}}
+if (emptyModule) {{
+  modules.set(emptyModule.id, emptyModule);
+}}
+
+const normalized = {{
+  modules,
+  functions: new Map(),
+  callGraph: {{ functions: new Map() }},
+  metrics: {{}},
+  hierarchy: {{}},
+  levels: null,
+  screeningHistory: null,
+}};
+
+api.setNormalizedDataForTest(normalized);
+api.setLevelSelectionsForTest({{ rootId: 'beta.contracts', domainId: null, moduleId: null }});
+
+const result = api.buildExportContractMatrixViewDefinitionForTest();
+
+api.resetViewStateForTest();
+
+console.log = originalLog;
+console.warn = originalWarn;
+
+console.log(JSON.stringify({{
+  hasDefinition: typeof result.definition === 'string',
+  statusDetails: result.statusDetails,
+  statusMessage: result.statusMessage,
+}}));
+"""
+    payload = _run_node_module(script)
+
+    assert payload["hasDefinition"] is True
+    fallback_detail = payload["statusDetails"][0]
+    assert fallback_detail["type"] == "info"
+    assert "fallback" in fallback_detail["title"].lower()
+    assert "beta.contracts" in fallback_detail["description"]
+    assert "repository" in fallback_detail["description"]

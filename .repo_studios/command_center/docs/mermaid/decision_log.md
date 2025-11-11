@@ -1,6 +1,22 @@
 # Mermaid Decision Log
 
+## 2025-11-11
+
+- **Decision:** Wired the Layer Architecture Validation controls and expanded Dependency pack coexistence coverage.
+- **Context:** Enables operators to render adjacency violations directly from the viewer, reuse repository fallbacks when scoped layers have no data, and guarantees the new view coexists with existing dependency diagrams without definition drift.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Viewer wiring in `.repo_studios/command_center/viewer/ui/viewer.js` (`buildLayerArchitectureValidationViewDefinition()`), builder enhancements in `.repo_studios/command_center/viewer/ui/builders/layer_architecture_validation.js`, updated spec `.repo_studios/command_center/docs/mermaid/view_specs/layer_architecture_validation.md`, refreshed checklist notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`, and passing regressions `.repo_studios/tests/tests_command_center/viewer/test_dependency_pack_multi_view_coexistence.py::test_layer_architecture_validation_coexists_with_dependency_view` plus `.repo_studios/tests/tests_command_center/viewer/test_layer_architecture_data_normalization.py`.
+- **Decision:** Documented the External vs Internal Dependency Map data slice and locked normalization coverage.
+- **Context:** Establishes the dependency mix contract so the upcoming builder can contrast internal CommandView references with third-party and standard-library usage without re-reading raw inventory payloads.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New spec `.repo_studios/command_center/docs/mermaid/view_specs/external_vs_internal_dependency_map.md`, normalization test `.repo_studios/tests/tests_command_center/viewer/test_external_dependency_data_normalization.py`, and updated checklist entries in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Wired the External vs Internal Dependency Map controls and guarded Dependency pack coexistence.
+- **Context:** Enables operators to render external-versus-internal dependency mix diagrams directly from the viewer, reusing scope-aware fallbacks while ensuring the new view toggles cleanly alongside existing dependency diagrams.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Viewer wiring in `.repo_studios/command_center/viewer/ui/viewer.js` (`buildExternalVsInternalDependencyMapViewDefinition()`), builder module `.repo_studios/command_center/viewer/ui/builders/external_vs_internal_dependency_map.js`, updated spec `.repo_studios/command_center/docs/mermaid/view_specs/external_vs_internal_dependency_map.md`, refreshed checklist notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`, and passing regressions `.repo_studios/tests/tests_command_center/viewer/test_external_vs_internal_dependency_map_view.py` plus `.repo_studios/tests/tests_command_center/viewer/test_dependency_pack_multi_view_coexistence.py::test_external_dependency_map_coexists_with_dependency_view`.
+
 ## 2025-11-10
+
 - **Decision:** Reaffirmed the Progressive Detail Mermaid viewer charter and success criteria.
 - **Context:** Keeps Phase 0 governance intact by restating the viewer’s purpose, enumerating measurable outcomes, and confirming stakeholder ownership before continuing Phase 7 implementation work.
 - **Owner:** GitHub Copilot implementation assistant (supporting the Command Center maintainers).
@@ -13,8 +29,25 @@
 - **Context:** Prepares the Dependency pack to render module export contracts by unifying `__all__` symbols, differentiating local definitions from re-exports, and flagging missing entries before builder wiring begins.
 - **Owner:** GitHub Copilot implementation assistant.
 - **Evidence:** New spec `.repo_studios/command_center/docs/mermaid/view_specs/export_contract_matrix.md`, normalization helper `buildModuleExportSummary()` added to `.repo_studios/command_center/viewer/ui/viewer.js`, and regression coverage `.repo_studios/tests/tests_command_center/viewer/test_export_contract_data_normalization.py`, referenced in the updated checklist notes within `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Wired the Export Contract Matrix controls and expanded Dependency pack coexistence coverage.
+- **Context:** Unlocks module export contract visualisation directly from the Dependency pack sidebar while ensuring toggling with the Module Dependency Graph remains stable and fallback messaging handles scoped datasets.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Viewer wiring in `.repo_studios/command_center/viewer/ui/viewer.js` (`buildExportContractMatrixViewDefinition()`), builder module `.repo_studios/command_center/viewer/ui/builders/export_contract_matrix.js`, updated view spec `.repo_studios/command_center/docs/mermaid/view_specs/export_contract_matrix.md`, refreshed checklist notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`, and passing regressions `.repo_studios/tests/tests_command_center/viewer/test_dependency_pack_multi_view_coexistence.py::test_export_contract_matrix_coexists_with_dependency_view` plus `test_export_contract_data_normalization.py`.
+- **Decision:** Documented the Circular Import Detection data slice and cycle derivation workflow.
+- **Context:** Establishes the Dependency pack blueprint for highlighting module import cycles by combining normalized import edges with producer summaries before builder wiring proceeds.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New spec `.repo_studios/command_center/docs/mermaid/view_specs/circular_import_detection.md` detailing inputs, SCC transformations, and fallback messaging, alongside checklist updates in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` marking the data slice ready.
+- **Decision:** Wired the Circular Import Detection controls with scoped fallbacks and coexistence coverage.
+- **Context:** Enables operators to render import cycles directly from the Dependency pack, applying level-aware filtering, repository fallbacks when scoped cycles are absent, and deterministic coexistence with the Module Dependency Graph.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Viewer wiring in `.repo_studios/command_center/viewer/ui/viewer.js` (`buildCircularImportDetectionViewDefinition()`), builder module `.repo_studios/command_center/viewer/ui/builders/circular_import_detection.js`, updated checklist notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`, and regression coverage `.repo_studios/tests/tests_command_center/viewer/test_circular_import_detection_view.py`.
+- **Decision:** Normalized script modules with static layer tiers to unblock the Layer Architecture Validation view.
+- **Context:** Establishes canonical Producers → Consumers → Aggregators → Orchestrators → Summarizers classifications so the dependency pack can audit cross-layer imports without recomputing heuristics.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Tier metadata added in `.repo_studios/command_center/viewer/ui/viewer.js`, new spec `.repo_studios/command_center/docs/mermaid/view_specs/layer_architecture_validation.md`, and regression `.repo_studios/tests/tests_command_center/viewer/test_layer_architecture_data_normalization.py` locking the classifier.
 
 ## 2025-11-09
+
 - **Decision:** Documented and normalized the Decorator Usage Map data slice.
 - **Context:** Prepares the Quality Metrics pack to group functions by decorator patterns by ensuring sanitized decorator metadata is available in normalized viewer records before wiring the diagram builder.
 - **Owner:** GitHub Copilot implementation assistant.
@@ -49,6 +82,7 @@
 - **Evidence:** Enhanced builder `.repo_studios/command_center/viewer/ui/builders/complexity_heatmap.js`, viewer formatter `.repo_studios/command_center/viewer/ui/viewer.js`, expanded regression `.repo_studios/tests/tests_command_center/viewer/test_complexity_heatmap_view.py`, and refreshed documentation in `.repo_studios/command_center/docs/mermaid/view_specs/complexity_heatmap.md` plus `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
 
 ## 2025-11-05
+
 - **Decision:** Verified Health pack multi-view coexistence with dedicated regression coverage.
 - **Context:** Demonstrates that Function Inventory Overview and Screening Signal Timeline tabs can toggle without reloading JSON or mutating in-memory state, establishing the coexistence pattern for upcoming packs.
 - **Owner:** GitHub Copilot implementation assistant.

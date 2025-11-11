@@ -5,12 +5,15 @@ import { resolveDecoratorUsageScope } from "./builders/decorator_usage_scope.js"
 import { buildDocumentationCoverageMapDiagram } from "./builders/documentation_coverage_map.js";
 import { resolveDocumentationCoverageScope } from "./builders/documentation_coverage_scope.js";
 import { buildExportContractMatrixDiagram } from "./builders/export_contract_matrix.js";
+import { buildExternalVsInternalDependencyMapDiagram } from "./builders/external_vs_internal_dependency_map.js";
+import { buildCircularImportDetectionDiagram } from "./builders/circular_import_detection.js";
 import { buildFunctionCallGraphDiagram } from "./builders/function_call_graph.js";
 import { buildFunctionInventoryOverviewDiagram } from "./builders/function_inventory_overview.js";
 import { buildScreeningTimelineDiagram } from "./builders/screening_signal_timeline.js";
 import { buildLoggingFlowDiagram } from "./builders/logging_flow.js";
 import { resolveLoggingFlowScope } from "./builders/logging_flow_scope.js";
 import { buildModuleDependencyGraphDiagram } from "./builders/module_dependency_graph.js";
+import { buildLayerArchitectureValidationDiagram } from "./builders/layer_architecture_validation.js";
 import { buildTypeCoverageMapDiagram } from "./builders/type_coverage_map.js";
 import { resolveTypeCoverageScope } from "./builders/type_coverage_scope.js";
 
@@ -28,6 +31,109 @@ const LEVEL_DEFINITIONS = [
   { value: "level3", label: "Level 3 - Functions" },
   { value: "level4", label: "Level 4 - Neighborhood" },
 ];
+
+const SCRIPT_LAYER_TIERS = Object.freeze([
+  {
+    id: "producers",
+    label: "Producers",
+    index: 0,
+    modulePrefixes: ["scripts.producers.", "command_center.scripts.producers."],
+    pathFragments: ["/scripts/producers/", "/command_center/scripts/producers/"],
+  },
+  {
+    id: "consumers",
+    label: "Consumers",
+    index: 1,
+    modulePrefixes: ["scripts.consumers.", "command_center.scripts.consumers."],
+    pathFragments: ["/scripts/consumers/", "/command_center/scripts/consumers/"],
+  },
+  {
+    id: "aggregators",
+    label: "Aggregators",
+    index: 2,
+    modulePrefixes: ["scripts.aggregators.", "command_center.scripts.aggregators."],
+    pathFragments: ["/scripts/aggregators/", "/command_center/scripts/aggregators/"],
+  },
+  {
+    id: "orchestrators",
+    label: "Orchestrators",
+    index: 3,
+    modulePrefixes: ["scripts.orchestrators.", "command_center.scripts.orchestrators."],
+    pathFragments: ["/scripts/orchestrators/", "/command_center/scripts/orchestrators/"],
+  },
+  {
+    id: "summarizers",
+    label: "Summarizers",
+    index: 4,
+    modulePrefixes: ["scripts.summarizers.", "command_center.scripts.summarizers."],
+    pathFragments: ["/scripts/summarizers/", "/command_center/scripts/summarizers/"],
+  },
+]);
+
+const SCRIPT_LAYER_UNKNOWN = Object.freeze({ id: "unclassified", label: "Unclassified", index: 99 });
+
+const SCRIPT_LAYER_ADJACENCY_DEFAULTS = Object.freeze({
+  producers: Object.freeze({
+    allowed: Object.freeze(["producers", "consumers"]),
+    peer: "Producers may collaborate on shared ingestion utilities.",
+    forward: "Producers feed Consumers with normalized inventories.",
+    rationale: "Producers hand off raw data to Consumers while keeping shared utilities within the tier.",
+    violations: Object.freeze({
+      backward: "Producers should not depend on downstream tiers.",
+      skip: "Producers must hand data to Consumers before Aggregators or Orchestrators.",
+    }),
+  }),
+  consumers: Object.freeze({
+    allowed: Object.freeze(["consumers", "aggregators"]),
+    peer: "Consumers may collaborate on shared enrichments.",
+    forward: "Consumers emit refined artifacts to Aggregators.",
+    rationale: "Consumers refine producer outputs and pass them to Aggregators.",
+    violations: Object.freeze({
+      backward: "Consumers should not import Summarizers or Orchestrators.",
+      skip: "Consumers must hand off to Aggregators before orchestration layers.",
+    }),
+  }),
+  aggregators: Object.freeze({
+    allowed: Object.freeze(["aggregators", "orchestrators"]),
+    peer: "Aggregators can compose peer modules for composite analyses.",
+    forward: "Aggregators feed Orchestrators with blended insights.",
+    rationale: "Aggregators blend consumer outputs before orchestration runs.",
+    violations: Object.freeze({
+      backward: "Aggregators should not depend on downstream execution tiers beyond Orchestrators.",
+      skip: "Aggregators must hand off to Orchestrators before Summarizers.",
+    }),
+  }),
+  orchestrators: Object.freeze({
+    allowed: Object.freeze(["orchestrators", "summarizers"]),
+    peer: "Orchestrators may reuse orchestration helpers within the tier.",
+    forward: "Orchestrators drive Summarizers after running pipelines.",
+    rationale: "Orchestrators coordinate pipelines and trigger summarization.",
+    violations: Object.freeze({
+      backward: "Orchestrators should not depend on downstream tiers outside Summarizers.",
+      skip: "Orchestrators must invoke Summarizers without skipping tiers.",
+    }),
+  }),
+  summarizers: Object.freeze({
+    allowed: Object.freeze(["summarizers"]),
+    peer: "Summarizers may share helper utilities.",
+    forward: "Summarizers are terminal endpoints in the pipeline.",
+    rationale: "Summarizers produce final narratives and should not feed higher tiers.",
+    violations: Object.freeze({
+      backward: "Summarizers should not call upstream orchestration or aggregation logic.",
+      skip: "Summarizers cannot forward data to additional tiers by design.",
+    }),
+  }),
+});
+
+const SCRIPT_LAYER_INDEX_BY_ID = Object.freeze(
+  SCRIPT_LAYER_TIERS.reduce(
+    (acc, tier) => {
+      acc[tier.id] = tier.index;
+      return acc;
+    },
+    { [SCRIPT_LAYER_UNKNOWN.id]: SCRIPT_LAYER_UNKNOWN.index }
+  )
+);
 
 const VIEW_PACKS = Object.freeze([
   {
@@ -86,7 +192,9 @@ const VIEW_PACKS = Object.freeze([
         filename: "circular_import_detection.mmd",
         description:
           "Graph emphasizing import cycles that could trigger module loading issues.",
-        status: "planned",
+        status: "prototype",
+        builder: "circularImportDetectionView",
+        requirements: ["moduleDependencies"],
       },
       {
         id: "layer_architecture_validation",
@@ -94,8 +202,10 @@ const VIEW_PACKS = Object.freeze([
         filename: "layer_architecture_validation.mmd",
         description:
           "Layered diagram validating Producers → Consumers → Aggregators → Orchestrators → Summarizers wiring.",
-        status: "planned",
-        note: "Requires a maintained tier map in the renderer to classify modules correctly.",
+        status: "prototype",
+        builder: "layerArchitectureValidationView",
+        requirements: ["moduleDependencies"],
+        note: "Highlights default layer adjacency violations using normalized tier metadata.",
       },
       {
         id: "external_vs_internal_dependency_map",
@@ -103,8 +213,10 @@ const VIEW_PACKS = Object.freeze([
         filename: "external_vs_internal_dependency_map.mmd",
         description:
           "Dependency map separating standard library, third-party, and internal modules to surface external attack surfaces.",
-        status: "planned",
-        note: "Depends on dependency classification buckets emitted by the inventory.",
+        status: "prototype",
+        builder: "externalVsInternalDependencyMapView",
+        requirements: ["moduleDependencies"],
+        note: "Highlights dependency classification buckets emitted by the inventory to track external exposure.",
       },
     ],
   },
@@ -342,7 +454,10 @@ const VIEW_BUILDERS = Object.freeze({
   documentationCoverageMapView: buildDocumentationCoverageMapViewDefinition,
   loggingFlowView: buildLoggingFlowViewDefinition,
   exportContractMatrixView: buildExportContractMatrixViewDefinition,
+  externalVsInternalDependencyMapView: buildExternalVsInternalDependencyMapViewDefinition,
   moduleDependencyGraphView: buildModuleDependencyGraphViewDefinition,
+  layerArchitectureValidationView: buildLayerArchitectureValidationViewDefinition,
+  circularImportDetectionView: buildCircularImportDetectionViewDefinition,
   functionCallGraphView: buildFunctionCallGraphViewDefinition,
   functionInventoryOverview: buildFunctionInventoryOverviewViewDefinition,
   typeCoverageMapView: buildTypeCoverageMapViewDefinition,
@@ -632,6 +747,12 @@ const state = {
     isResizing: false,
     startX: 0,
     startWidth: 0,
+  },
+  statusPanel: {
+    height: 200,
+    isResizing: false,
+    startY: 0,
+    startHeight: 0,
   },
   statusMessage: "",
   statusDetails: [],
@@ -1490,6 +1611,78 @@ function normalizeCommandViewData(inventory, screening) {
   };
 }
 
+function resolveScriptLayer(moduleId, relativePath, absolutePath) {
+  const normalizedModule = typeof moduleId === "string" ? moduleId.toLowerCase() : "";
+  const normalizedPaths = [relativePath, absolutePath]
+    .map((value) => (typeof value === "string" ? value.replace(/\\/g, "/").toLowerCase() : ""))
+    .filter((value) => value.length > 0);
+
+  for (const tier of SCRIPT_LAYER_TIERS) {
+    if (tier.modulePrefixes.some((prefix) => normalizedModule.startsWith(prefix))) {
+      return { id: tier.id, label: tier.label, index: tier.index };
+    }
+    if (normalizedPaths.some((path) => tier.pathFragments.some((fragment) => path.includes(fragment)))) {
+      return { id: tier.id, label: tier.label, index: tier.index };
+    }
+  }
+
+  return { id: SCRIPT_LAYER_UNKNOWN.id, label: SCRIPT_LAYER_UNKNOWN.label, index: SCRIPT_LAYER_UNKNOWN.index };
+}
+
+function evaluateLayerTransition(sourceLayerId, targetLayerId) {
+  const normalizedSource = typeof sourceLayerId === "string" ? sourceLayerId : SCRIPT_LAYER_UNKNOWN.id;
+  const normalizedTarget = typeof targetLayerId === "string" ? targetLayerId : SCRIPT_LAYER_UNKNOWN.id;
+
+  if (normalizedSource === SCRIPT_LAYER_UNKNOWN.id || normalizedTarget === SCRIPT_LAYER_UNKNOWN.id) {
+    return {
+      allowed: true,
+      classification: "unclassified",
+      reason: "One or both modules are unclassified; defer manual review but do not hard-fail the transition.",
+    };
+  }
+
+  const sourceIndex = SCRIPT_LAYER_INDEX_BY_ID[normalizedSource] ?? SCRIPT_LAYER_UNKNOWN.index;
+  const targetIndex = SCRIPT_LAYER_INDEX_BY_ID[normalizedTarget] ?? SCRIPT_LAYER_UNKNOWN.index;
+  const delta = targetIndex - sourceIndex;
+
+  let classification;
+  if (delta === 0) {
+    classification = "peer";
+  } else if (delta === 1) {
+    classification = "forward";
+  } else if (delta > 1) {
+    classification = "skip";
+  } else {
+    classification = "backward";
+  }
+
+  const adjacency = SCRIPT_LAYER_ADJACENCY_DEFAULTS[normalizedSource] ?? null;
+  const allowedTargets = Array.isArray(adjacency?.allowed) ? adjacency.allowed : [];
+  const allowed = allowedTargets.includes(normalizedTarget);
+
+  let reason;
+  if (allowed) {
+    if (classification === "peer" && adjacency?.peer) {
+      reason = adjacency.peer;
+    } else if (classification === "forward" && adjacency?.forward) {
+      reason = adjacency.forward;
+    } else if (adjacency?.rationale) {
+      reason = adjacency.rationale;
+    } else {
+      reason = "Transition allowed by default layer adjacency rules.";
+    }
+  } else {
+    const violationReasons = adjacency?.violations ?? null;
+    if (violationReasons && typeof violationReasons[classification] === "string") {
+      reason = violationReasons[classification];
+    } else {
+      reason = `Transition from ${normalizedSource} to ${normalizedTarget} violates default layer adjacency rules.`;
+    }
+  }
+
+  return { allowed, classification, reason };
+}
+
 function createModuleRecord(file) {
   if (!file || typeof file !== "object") {
     return null;
@@ -1500,15 +1693,20 @@ function createModuleRecord(file) {
     return null;
   }
 
+  const layer = resolveScriptLayer(moduleId, file.relative_path ?? null, file.path ?? null);
+
   return {
     id: moduleId,
     moduleId,
     relativePath: file.relative_path ?? null,
     absolutePath: file.path ?? null,
     packageName: typeof moduleId === "string" ? moduleId.split(".")[0] : null,
-  callGraphSummary: file.call_graph?.summary ?? null,
-  importEdges: buildModuleImportEdges(file.import_graph ?? null),
-  exportSummary: buildModuleExportSummary(file, moduleId),
+    layerTier: layer.id,
+    layerLabel: layer.label,
+    layerIndex: layer.index,
+    callGraphSummary: file.call_graph?.summary ?? null,
+    importEdges: buildModuleImportEdges(file.import_graph ?? null),
+    exportSummary: buildModuleExportSummary(file, moduleId),
     dependencySummary: file.dependency_summary ?? null,
     coverageSignals: file.coverage_signals ?? null,
     gitChurn: file.git_churn ?? null,
@@ -3400,16 +3598,69 @@ function buildExportContractMatrixViewDefinition() {
 
   const rootId = state.levelSelections.rootId ?? null;
   const domainId = state.levelSelections.domainId ?? null;
-  const filteredModules = modules;
+  const moduleId = state.levelSelections.moduleId ?? null;
+  const isScopedSelection = Boolean(moduleId || domainId || rootId);
 
-  const result = buildExportContractMatrixDiagram(filteredModules, {
+  // Filter modules based on current zoom level selection
+  let filteredModules = new Map();
+  let scopeDescription = "repository";
+
+  if (moduleId) {
+    // Level 2+: Show only the selected module
+    const moduleData = modules.get(moduleId);
+    if (moduleData) {
+      filteredModules.set(moduleId, moduleData);
+      scopeDescription = moduleId;
+    }
+  } else if (domainId) {
+    // Level 1: Show modules in the selected domain
+    for (const [modId, modData] of modules.entries()) {
+      if (modId.startsWith(domainId) || modId.includes(domainId)) {
+        filteredModules.set(modId, modData);
+      }
+    }
+    scopeDescription = domainId;
+  } else if (rootId) {
+    // Level 0: Show modules in the selected root
+    for (const [modId, modData] of modules.entries()) {
+      if (modId.startsWith(rootId) || modId.includes(rootId)) {
+        filteredModules.set(modId, modData);
+      }
+    }
+    scopeDescription = rootId;
+  }
+  
+  // Fallback: if filtering resulted in no modules, show all modules
+  if (filteredModules.size === 0) {
+    filteredModules = modules;
+    scopeDescription = "repository";
+  }
+
+  let result = buildExportContractMatrixDiagram(filteredModules, {
     viewLabel: "Dependency · Export Contract Matrix",
     rootId,
     domainId,
+    moduleId,
+    scopeDescription,
   });
 
   if (!result || typeof result !== "object") {
     return { message: "Unable to build Export Contract Matrix diagram." };
+  }
+
+  if (result.message && isScopedSelection && scopeDescription !== "repository") {
+    const fallbackNotice = `No export contracts recorded for "${scopeDescription}". Showing repository-wide matrix instead.`;
+    const fallbackResult = buildExportContractMatrixDiagram(modules, {
+      viewLabel: "Dependency · Export Contract Matrix",
+      rootId: null,
+      domainId: null,
+      moduleId: null,
+      scopeDescription: "repository",
+      fallbackNotice,
+    });
+    if (fallbackResult && !fallbackResult.message) {
+      result = fallbackResult;
+    }
   }
 
   if (result.message) {
@@ -3421,6 +3672,89 @@ function buildExportContractMatrixViewDefinition() {
     label: result.label,
     statusMessage: result.statusMessage,
     statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+  };
+}
+
+function buildCircularImportDetectionViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const rootId = state.levelSelections.rootId ?? null;
+  const domainId = state.levelSelections.domainId ?? null;
+  const moduleId = state.levelSelections.moduleId ?? null;
+  const isScopedSelection = Boolean(moduleId || domainId || rootId);
+  const selectionLabel = moduleId ?? domainId ?? rootId ?? null;
+
+  let filteredModules = new Map();
+  let scopeDescription = "repository";
+  let fallbackNotice = null;
+
+  if (moduleId) {
+    const moduleRecord = modules.get(moduleId);
+    if (moduleRecord) {
+      filteredModules.set(moduleId, moduleRecord);
+      scopeDescription = moduleId;
+    }
+  } else if (domainId) {
+    modules.forEach((record, identifier) => {
+      if (identifier.startsWith(domainId) || identifier.includes(domainId)) {
+        filteredModules.set(identifier, record);
+      }
+    });
+    scopeDescription = domainId;
+  } else if (rootId) {
+    modules.forEach((record, identifier) => {
+      if (identifier.startsWith(rootId) || identifier.includes(rootId)) {
+        filteredModules.set(identifier, record);
+      }
+    });
+    scopeDescription = rootId;
+  }
+
+  if (filteredModules.size === 0) {
+    filteredModules = modules;
+    scopeDescription = "repository";
+  }
+
+  let result = buildCircularImportDetectionDiagram(filteredModules, {
+    viewLabel: "Dependency · Circular Import Detection",
+    scopeDescription,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Circular Import Detection diagram." };
+  }
+
+  if (result.message && isScopedSelection && scopeDescription !== "repository") {
+    const fallbackNotice = `No circular imports detected for "${scopeDescription}". Showing repository cycles instead.`;
+    const fallbackResult = buildCircularImportDetectionDiagram(modules, {
+      viewLabel: "Dependency · Circular Import Detection",
+      scopeDescription: "repository",
+      fallbackNotice,
+    });
+    if (fallbackResult && !fallbackResult.message) {
+      result = fallbackResult;
+    }
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
   };
 }
 
@@ -3467,6 +3801,207 @@ function buildModuleDependencyGraphViewDefinition() {
     label: result.label,
     statusMessage: result.statusMessage,
     statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+  };
+}
+
+function buildLayerArchitectureValidationViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const rootId = state.levelSelections.rootId ?? null;
+  const domainId = state.levelSelections.domainId ?? null;
+  const moduleId = state.levelSelections.moduleId ?? null;
+  const isScopedSelection = Boolean(moduleId || domainId || rootId);
+  const selectionLabel = moduleId ?? domainId ?? rootId ?? null;
+
+  let filteredModules = new Map();
+  let scopeDescription = "repository";
+  let fallbackNotice = null;
+
+  if (moduleId) {
+    const moduleRecord = modules.get(moduleId);
+    if (moduleRecord) {
+      filteredModules.set(moduleId, moduleRecord);
+      scopeDescription = moduleId;
+    }
+  } else if (domainId) {
+    modules.forEach((record, identifier) => {
+      if (identifier.startsWith(domainId) || identifier.includes(domainId)) {
+        filteredModules.set(identifier, record);
+      }
+    });
+    scopeDescription = domainId;
+  } else if (rootId) {
+    modules.forEach((record, identifier) => {
+      if (identifier.startsWith(rootId) || identifier.includes(rootId)) {
+        filteredModules.set(identifier, record);
+      }
+    });
+    scopeDescription = rootId;
+  }
+
+  if (filteredModules.size === 0) {
+    filteredModules = modules;
+    scopeDescription = "repository";
+    if (isScopedSelection && selectionLabel) {
+      fallbackNotice = `No layer-classified modules recorded for "${selectionLabel}". Showing repository adjacency validation instead.`;
+    } else if (isScopedSelection) {
+      fallbackNotice = "No layer-classified modules recorded for the current selection. Showing repository adjacency validation instead.";
+    }
+  }
+
+  let result = buildLayerArchitectureValidationDiagram(filteredModules, {
+    viewLabel: "Dependency · Layer Architecture Validation",
+    rootId,
+    domainId,
+    moduleId,
+    scopeDescription,
+    evaluateLayerTransition,
+    fallbackNotice,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Layer Architecture Validation diagram." };
+  }
+
+  if (result.message && isScopedSelection && scopeDescription !== "repository") {
+    const fallbackMessage = fallbackNotice
+      ?? (selectionLabel
+        ? `No layer-classified modules recorded for "${selectionLabel}". Showing repository adjacency validation instead.`
+        : "No layer-classified modules recorded for the current selection. Showing repository adjacency validation instead.");
+    const fallbackResult = buildLayerArchitectureValidationDiagram(modules, {
+      viewLabel: "Dependency · Layer Architecture Validation",
+      rootId: null,
+      domainId: null,
+      moduleId: null,
+      scopeDescription: "repository",
+      evaluateLayerTransition,
+      fallbackNotice: fallbackMessage,
+    });
+    if (fallbackResult && !fallbackResult.message) {
+      result = fallbackResult;
+    }
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
+  };
+}
+
+function buildExternalVsInternalDependencyMapViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const rootId = state.levelSelections.rootId ?? null;
+  const domainId = state.levelSelections.domainId ?? null;
+  const moduleId = state.levelSelections.moduleId ?? null;
+  const isScopedSelection = Boolean(moduleId || domainId || rootId);
+  const selectionLabel = moduleId ?? domainId ?? rootId ?? null;
+
+  let filteredModules = new Map();
+  let scopeDescription = "repository";
+  let fallbackNotice = null;
+
+  if (moduleId) {
+    const moduleRecord = modules.get(moduleId);
+    if (moduleRecord) {
+      filteredModules.set(moduleId, moduleRecord);
+      scopeDescription = moduleId;
+    }
+  } else if (domainId) {
+    modules.forEach((record, identifier) => {
+      if (identifier.startsWith(domainId) || identifier.includes(domainId)) {
+        filteredModules.set(identifier, record);
+      }
+    });
+    scopeDescription = domainId;
+  } else if (rootId) {
+    modules.forEach((record, identifier) => {
+      if (identifier.startsWith(rootId) || identifier.includes(rootId)) {
+        filteredModules.set(identifier, record);
+      }
+    });
+    scopeDescription = rootId;
+  } else {
+    filteredModules = modules;
+  }
+
+  if (filteredModules.size === 0) {
+    filteredModules = modules;
+    scopeDescription = "repository";
+    if (isScopedSelection) {
+      fallbackNotice = selectionLabel
+        ? `No dependency mix metadata recorded for "${selectionLabel}". Showing repository map instead.`
+        : "No dependency mix metadata recorded for the current selection. Showing repository map instead.";
+    }
+  }
+
+  const usingRepositoryScope = filteredModules === modules;
+
+  let result = buildExternalVsInternalDependencyMapDiagram(filteredModules, {
+    viewLabel: "Dependency · External vs Internal Dependency Map",
+    rootId: usingRepositoryScope ? null : rootId,
+    domainId: usingRepositoryScope ? null : domainId,
+    moduleId: usingRepositoryScope ? null : moduleId,
+    scopeDescription,
+    fallbackNotice,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build External vs Internal Dependency Map diagram." };
+  }
+
+  if (result.message && isScopedSelection && !usingRepositoryScope) {
+    const repositoryFallbackNotice = selectionLabel
+      ? `No dependency mix metadata recorded for "${selectionLabel}". Showing repository map instead.`
+      : "No dependency mix metadata recorded for the current selection. Showing repository map instead.";
+    const fallbackResult = buildExternalVsInternalDependencyMapDiagram(modules, {
+      viewLabel: "Dependency · External vs Internal Dependency Map",
+      rootId: null,
+      domainId: null,
+      moduleId: null,
+      scopeDescription: "repository",
+      fallbackNotice: repositoryFallbackNotice,
+    });
+    if (fallbackResult && !fallbackResult.message) {
+      result = fallbackResult;
+    }
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
   };
 }
 
@@ -5379,6 +5914,111 @@ function initializeSidebarResize() {
   console.log('[initializeSidebarResize] Sidebar resize initialized');
 }
 
+function initializeStatusPanelResize() {
+  const resizeHandle = document.getElementById('status-panel-resize-handle');
+  const statusPanel = document.getElementById('status-panel');
+  
+  if (!resizeHandle || !statusPanel) {
+    console.warn('[initializeStatusPanelResize] Resize handle or status panel not found');
+    return;
+  }
+
+  // Load saved height from localStorage
+  const savedHeight = loadStatusPanelHeight();
+  if (savedHeight) {
+    applyStatusPanelHeight(savedHeight);
+  }
+
+  resizeHandle.addEventListener('mousedown', handleStatusPanelMouseDown);
+  
+  console.log('[initializeStatusPanelResize] Status panel resize initialized');
+}
+
+function handleStatusPanelMouseDown(event) {
+  event.preventDefault();
+  
+  const statusPanel = document.getElementById('status-panel');
+  if (!statusPanel) return;
+
+  state.statusPanel.isResizing = true;
+  state.statusPanel.startY = event.clientY;
+  state.statusPanel.startHeight = statusPanel.offsetHeight;
+
+  const resizeHandle = document.getElementById('status-panel-resize-handle');
+  if (resizeHandle) {
+    resizeHandle.classList.add('resizing');
+  }
+
+  document.body.classList.add('status-panel-resizing');
+
+  document.addEventListener('mousemove', handleStatusPanelMouseMove);
+  document.addEventListener('mouseup', handleStatusPanelMouseUp);
+}
+
+function handleStatusPanelMouseMove(event) {
+  if (!state.statusPanel.isResizing) return;
+
+  // Note: moving up (negative delta) should increase height
+  const delta = state.statusPanel.startY - event.clientY;
+  const newHeight = state.statusPanel.startHeight + delta;
+  
+  // Constrain height between min and max
+  const constrainedHeight = Math.max(100, Math.min(600, newHeight));
+  
+  applyStatusPanelHeight(constrainedHeight);
+}
+
+function handleStatusPanelMouseUp() {
+  if (!state.statusPanel.isResizing) return;
+
+  state.statusPanel.isResizing = false;
+
+  const resizeHandle = document.getElementById('status-panel-resize-handle');
+  if (resizeHandle) {
+    resizeHandle.classList.remove('resizing');
+  }
+
+  document.body.classList.remove('status-panel-resizing');
+
+  document.removeEventListener('mousemove', handleStatusPanelMouseMove);
+  document.removeEventListener('mouseup', handleStatusPanelMouseUp);
+
+  // Save the new height
+  saveStatusPanelHeight(state.statusPanel.height);
+}
+
+function applyStatusPanelHeight(height) {
+  const statusPanel = document.getElementById('status-panel');
+  if (!statusPanel) return;
+
+  statusPanel.style.height = `${height}px`;
+  statusPanel.style.maxHeight = `${height}px`;
+  state.statusPanel.height = height;
+}
+
+function saveStatusPanelHeight(height) {
+  try {
+    localStorage.setItem('viewer-status-panel-height', height.toString());
+  } catch (error) {
+    console.warn('[saveStatusPanelHeight] Failed to save status panel height', error);
+  }
+}
+
+function loadStatusPanelHeight() {
+  try {
+    const saved = localStorage.getItem('viewer-status-panel-height');
+    if (saved) {
+      const height = parseInt(saved, 10);
+      if (Number.isFinite(height) && height >= 100 && height <= 600) {
+        return height;
+      }
+    }
+  } catch (error) {
+    console.warn('[loadStatusPanelHeight] Failed to load status panel height', error);
+  }
+  return null;
+}
+
 function handleSidebarMouseDown(event) {
   event.preventDefault();
   
@@ -5535,6 +6175,8 @@ async function bootstrap() {
     wireZoomControls();
     console.log('[bootstrap] Step 9: initializeSidebarResize');
     initializeSidebarResize();
+    console.log('[bootstrap] Step 9.5: initializeStatusPanelResize');
+    initializeStatusPanelResize();
     console.log('[bootstrap] Step 10: updateStatus');
     updateStatus("Loading selector data...");
     console.log('[bootstrap] Step 11: refreshSelectorData');
@@ -5577,9 +6219,44 @@ console.log('[viewer.js] Script loading completed');
 
 export const __test__ = {
   createModuleRecord,
+  evaluateLayerTransition,
   buildModuleImportEdges,
   buildModuleExportSummary,
   createFunctionRecord,
   normalizeDecorators,
   normalizeDecoratorDetails,
+  setNormalizedDataForTest(normalized) {
+    state.normalizedData = normalized ?? null;
+    state.levels = normalized?.levels ?? null;
+  },
+  setLevelSelectionsForTest(selections) {
+    if (!selections || typeof selections !== "object") {
+      return;
+    }
+    state.levelSelections = {
+      ...state.levelSelections,
+      ...selections,
+    };
+  },
+  resetViewStateForTest() {
+    state.inventoryPayload = null;
+    state.inventoryUrl = null;
+    state.screeningPayload = null;
+    state.screeningUrl = null;
+    state.normalizedData = null;
+    state.levels = null;
+    state.levelSelections = {
+      rootId: null,
+      domainId: null,
+      moduleId: null,
+      functionId: null,
+    };
+    state.diagramDefinition = null;
+    buildExternalVsInternalDependencyMapViewDefinitionForTest: buildExternalVsInternalDependencyMapViewDefinition,
+    state.statusMessage = "";
+    state.statusDetails = [];
+  },
+  buildLayerArchitectureValidationViewDefinitionForTest: buildLayerArchitectureValidationViewDefinition,
+  buildExportContractMatrixViewDefinitionForTest: buildExportContractMatrixViewDefinition,
+  buildExternalVsInternalDependencyMapViewDefinitionForTest: buildExternalVsInternalDependencyMapViewDefinition,
 };

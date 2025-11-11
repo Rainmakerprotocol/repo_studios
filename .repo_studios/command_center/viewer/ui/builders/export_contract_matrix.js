@@ -32,58 +32,96 @@ export function buildExportContractMatrixDiagram(modules, options = {}) {
 
   mermaidIdCounter = 0;
 
+  console.log("[buildExportContractMatrixDiagram] Processing", moduleMap.size, "modules");
+
+  const fallbackNotice = normalizeString(options.fallbackNotice);
+  
   const moduleEntries = Array.from(moduleMap.entries())
     .map(([moduleId, record]) => createModuleExportEntry(moduleId, record))
     .filter(Boolean);
 
+  console.log("[buildExportContractMatrixDiagram] Created", moduleEntries.length, "module entries with export data");
+
   if (moduleEntries.length === 0) {
+    // Check if modules have exportSummary at all
+    const sampleModule = Array.from(moduleMap.entries())[0];
+    if (sampleModule) {
+      console.log("[buildExportContractMatrixDiagram] Sample module structure:", sampleModule[0], Object.keys(sampleModule[1]));
+    }
     return {
-      message: options.emptyContractsMessage ?? "Export contract metadata is not available in this CommandView artifact.",
+      message: options.emptyContractsMessage ?? "Export contract metadata is not available in this CommandView artifact. Modules may not have exportSummary data.",
     };
   }
 
   moduleEntries.sort((left, right) => left.moduleId.localeCompare(right.moduleId));
 
-  const lines = ["graph TD"];
-  lines.push(...buildClassDefinitions());
+  // Limit display to prevent overwhelming diagrams
+  const MAX_MODULES_TO_DISPLAY = 20;
+  const displayEntries = moduleEntries.slice(0, MAX_MODULES_TO_DISPLAY);
+  const hiddenCount = moduleEntries.length - displayEntries.length;
 
-  moduleEntries.forEach((entry) => {
-    const moduleNodeId = sanitizeMermaidId(`${entry.moduleId}_exports_group`);
-    const moduleLabel = escapeMermaidLabel(formatModuleLabel(entry));
-    lines.push(`  subgraph ${moduleNodeId}["${moduleLabel}"]`);
+  const lines = ["classDiagram"];
 
-    entry.symbols.forEach((symbol, index) => {
-      const nodeId = sanitizeMermaidId(`${entry.moduleId}_${symbol.symbolKey}_${index}`);
-      lines.push(`    ${nodeId}["${escapeMermaidLabel(symbol.label)}"]`);
-      lines.push(`    class ${nodeId} ${symbol.className};`);
+  displayEntries.forEach((entry) => {
+    const className = sanitizeMermaidId(entry.moduleId);
+
+    // Create class for module
+    lines.push(`  class ${className} {`);
+    lines.push("    <<module>>");
+
+    // Add symbols as class members
+    entry.symbols.forEach((symbol) => {
+      const symbolLine = formatSymbolForClassDiagram(symbol);
+      lines.push(`    ${symbolLine}`);
     });
 
     if (entry.dynamicPlaceholder) {
-      const placeholderId = sanitizeMermaidId(`${entry.moduleId}_dynamic_contract`);
-      lines.push(`    ${placeholderId}["${escapeMermaidLabel(entry.dynamicPlaceholder.label)}"]`);
-      lines.push(`    class ${placeholderId} ${SYMBOL_CLASS_NAMES.dynamic};`);
+      lines.push("    +__all__ : dynamic");
     }
 
-    lines.push("  end");
+    lines.push("  }");
+
+    // Add note with module details
+    const noteLines = [];
+    if (entry.summary.counts.declared > 0) {
+      noteLines.push(`${entry.summary.counts.declared} exports`);
+    }
+    if (entry.summary.counts.missing > 0) {
+      noteLines.push(`${entry.summary.counts.missing} missing`);
+    }
+    if (entry.summary.counts.reexports > 0) {
+      noteLines.push(`${entry.summary.counts.reexports} re-exports`);
+    }
+    if (noteLines.length > 0) {
+      lines.push(`  note for ${className} "${noteLines.join("\\n")}"`);
+    }
   });
 
+  // (Removed classDef block)
+
   const stats = buildStatsSnapshot(moduleEntries);
-  const scopeLabel = resolveScopeLabel(options.rootId, options.domainId);
-  const statusMessage = buildStatusMessage(stats, scopeLabel);
+  const scopeLabel = options.scopeDescription ?? resolveScopeLabel(options.rootId, options.domainId, options.moduleId);
+  let statusMessage = buildStatusMessage(stats, scopeLabel, hiddenCount);
+  if (fallbackNotice) {
+    statusMessage = `${statusMessage} ${fallbackNotice}`.trim();
+  }
+
+  const statusDetails = buildStatusDetails(stats, hiddenCount);
+  if (fallbackNotice) {
+    statusDetails.unshift({
+      type: "info",
+      title: "Scope fallback applied",
+      description: fallbackNotice,
+    });
+  }
 
   return {
     definition: lines.join("\n"),
     label: options.viewLabel ?? DEFAULT_VIEW_LABEL,
     statusMessage,
     stats,
-    statusDetails: buildStatusDetails(stats),
+    statusDetails,
   };
-}
-
-function buildClassDefinitions() {
-  return Object.entries(SYMBOL_STYLES).map(([kind, style]) =>
-    `  classDef ${SYMBOL_CLASS_NAMES[kind]} fill:${style.fill},stroke:${style.stroke},color:${style.color},stroke-width:1.5px;`
-  );
 }
 
 function createModuleExportEntry(moduleId, moduleRecord) {
@@ -197,16 +235,68 @@ function resolveSymbolKind(entry) {
 }
 
 function formatModuleLabel(entry) {
-  const parts = [entry.moduleId];
-  const declaredCount = entry.summary.counts.declared;
-  parts.push(`Exports ${declaredCount}`);
-  if (entry.summary.counts.missing > 0) {
-    parts.push(`${entry.summary.counts.missing} missing`);
+  return entry.moduleId;
+}
+
+function formatSymbolForClassDiagram(symbol) {
+  const sym = symbol.symbol;
+  let prefix = "+";
+  let suffix = "";
+
+  switch (sym.kind) {
+    case "function":
+      prefix = "+";
+      suffix = formatFunctionSignatureForMermaid(sym.signature);
+      break;
+    case "class":
+      prefix = "+";
+      suffix = " : class";
+      break;
+    case "global":
+      prefix = "+";
+      suffix = sym.valueKind ? ` : ${sym.valueKind}` : " : global";
+      break;
+    case "reexport":
+      prefix = "~";
+      suffix = sym.sourceModule ? ` from ${sym.sourceModule}` : " : re-export";
+      break;
+    case "missing":
+      prefix = "-";
+      suffix = " : MISSING";
+      break;
+    default:
+      prefix = "+";
+      suffix = "";
   }
-  if (entry.summary.dynamic) {
-    parts.push("Dynamic __all__");
+  
+  return `${prefix}${sym.symbol}${suffix}`;
+}
+
+function formatFunctionSignatureForMermaid(signature) {
+  if (!signature || typeof signature !== "string") {
+    return "()";
   }
-  return parts.join("\n");
+
+  let trimmed = signature.trim();
+  if (trimmed.startsWith("def ")) {
+    trimmed = trimmed.slice(4);
+  }
+
+  const openIndex = trimmed.indexOf("(");
+  const closeIndex = trimmed.lastIndexOf(")");
+  let params = "()";
+  if (openIndex !== -1 && closeIndex !== -1 && closeIndex > openIndex) {
+    params = trimmed.slice(openIndex, closeIndex + 1);
+  }
+
+  let trailing = "";
+  if (closeIndex !== -1 && closeIndex >= openIndex) {
+    trailing = trimmed.slice(closeIndex + 1).trim();
+  }
+  if (trailing.endsWith(":")) {
+    trailing = trailing.slice(0, -1).trimEnd();
+  }
+  return trailing ? `${params} ${trailing}` : params;
 }
 
 function formatSymbolNodeLabel(symbol) {
@@ -337,7 +427,7 @@ function buildStatsSnapshot(entries) {
   };
 }
 
-function buildStatusMessage(stats, scopeLabel) {
+function buildStatusMessage(stats, scopeLabel, hiddenCount = 0) {
   const suffixParts = [];
   if (stats.reexports > 0) {
     suffixParts.push(`${stats.reexports} re-export${stats.reexports === 1 ? "" : "s"}`);
@@ -348,24 +438,39 @@ function buildStatusMessage(stats, scopeLabel) {
   if (stats.dynamicModules > 0) {
     suffixParts.push(`${stats.dynamicModules} dynamic module${stats.dynamicModules === 1 ? "" : "s"}`);
   }
+  if (hiddenCount > 0) {
+    suffixParts.push(`${hiddenCount} module${hiddenCount === 1 ? "" : "s"} hidden for clarity`);
+  }
   const suffix = suffixParts.length > 0 ? `; ${suffixParts.join("; ")}` : "";
   return `Rendered Export Contract Matrix for ${scopeLabel} (${stats.modules} module${stats.modules === 1 ? "" : "s"}, ${stats.declaredSymbols} declared symbol${stats.declaredSymbols === 1 ? "" : "s"}${suffix}).`;
 }
 
-function buildStatusDetails(stats) {
+function buildStatusDetails(stats, hiddenCount = 0) {
   const descriptors = [];
+
+  const summaryItems = [
+    { label: "Modules Analyzed", value: String(stats.modules) },
+    { label: "Declared Symbols", value: String(stats.declaredSymbols) },
+    { label: "Local Symbols", value: String(stats.localSymbols) },
+    { label: "Re-exports", value: String(stats.reexports) },
+  ];
+  
+  if (stats.missingSymbols > 0) {
+    summaryItems.push({ label: "Missing Symbols", value: String(stats.missingSymbols) });
+  }
+  
+  if (stats.dynamicModules > 0) {
+    summaryItems.push({ label: "Dynamic Modules", value: String(stats.dynamicModules) });
+  }
+  
+  if (hiddenCount > 0) {
+    summaryItems.push({ label: "Hidden (for clarity)", value: String(hiddenCount) });
+  }
 
   descriptors.push({
     type: "stat-summary",
     title: "Export Snapshot",
-    items: [
-      { label: "Modules", value: String(stats.modules) },
-      { label: "Declared Symbols", value: String(stats.declaredSymbols) },
-      { label: "Local Symbols", value: String(stats.localSymbols) },
-      { label: "Re-exports", value: String(stats.reexports) },
-      { label: "Missing Symbols", value: String(stats.missingSymbols) },
-      { label: "Dynamic Modules", value: String(stats.dynamicModules) },
-    ],
+    items: summaryItems,
   });
 
   if (stats.modulesWithMissing.length > 0) {
@@ -531,7 +636,10 @@ function normalizeLineNumber(value) {
   return Number.isFinite(numeric) ? numeric : null;
 }
 
-function resolveScopeLabel(rootId, domainId) {
+function resolveScopeLabel(rootId, domainId, moduleId) {
+  if (moduleId) {
+    return `${moduleId}`;
+  }
   if (domainId) {
     return `${domainId}`;
   }
@@ -542,7 +650,6 @@ function resolveScopeLabel(rootId, domainId) {
 }
 
 export const __test__ = {
-  buildClassDefinitions,
   createModuleExportEntry,
   normalizeExportSummary,
   normalizeResolvedSymbol,

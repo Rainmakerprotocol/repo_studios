@@ -1,6 +1,6 @@
 # Export Contract Matrix View Spec
 
-**Status:** Data slice documented and normalization hardened (2025-11-10)
+**Status:** Controls wired with multi-view regression coverage (2025-11-10)
 
 ## Goal
 
@@ -52,9 +52,9 @@ Nodes reflect symbol types via class-based styling (local functions/classes/glob
 
 ## Verification & Hardening
 
-- New regression `.repo_studios/tests/tests_command_center/viewer/test_export_contract_data_normalization.py` asserts export summary normalization across local symbols, re-exports, missing entries, and dynamic contracts.
-- Existing dependency normalization tests remain green, confirming alias preservation changes do not alter import behavior.
-- Future builder tests will exercise diagram output once controls are wired.
+- Node regression `.repo_studios/tests/tests_command_center/viewer/test_export_contract_data_normalization.py` asserts export summary normalization across local symbols, re-exports, missing entries, and dynamic contracts.
+- Newly added coexistence harness `.repo_studios/tests/tests_command_center/viewer/test_dependency_pack_multi_view_coexistence.py::test_export_contract_matrix_coexists_with_dependency_view` verifies toggling between the export matrix and module dependency views keeps definitions and status messaging stable.
+- Inline builder logging was silenced for regressions by stubbing `console.log` inside the coexistence harness, confirming Mermaid output remains deterministic even with verbose diagnostics enabled.
 
 ## Future Enhancements
 

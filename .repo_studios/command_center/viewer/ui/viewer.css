@@ -529,8 +529,12 @@ body.sidebar-resizing * {
 
 /* Status Bar - VS Code Status Bar */
 .viewer-status {
+  position: relative;
   min-height: 28px;
+  height: 200px;
+  max-height: 200px;
   padding: 8px 12px;
+  padding-top: 16px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -539,6 +543,56 @@ body.sidebar-resizing * {
   color: #ffffff;
   font-size: 12px;
   border-top: 1px solid var(--vscode-border);
+  overflow-y: auto;
+}
+
+.status-panel-resize-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  cursor: ns-resize;
+  background-color: transparent;
+  z-index: 10;
+  transition: background-color 0.2s;
+}
+
+.status-panel-resize-handle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.status-panel-resize-handle::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 1px;
+}
+
+.status-panel-resize-handle:hover::before {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.status-panel-resize-handle.resizing {
+  background-color: rgba(0, 122, 204, 0.2);
+}
+
+.status-panel-resize-handle.resizing::before {
+  background-color: var(--vscode-accent);
+}
+
+body.status-panel-resizing {
+  cursor: ns-resize;
+  user-select: none;
+}
+
+body.status-panel-resizing * {
+  cursor: ns-resize !important;
 }
 
 .viewer-status-message {
