@@ -2,6 +2,14 @@
 
 ## 2025-11-11
 
+- **Decision:** Documented the Method Call Chain data slice and parsing strategy.
+- **Context:** Establishes how class-scoped method chains reuse normalized function IDs and call graph edges so builders can derive class descriptors, allowed-method scopes, and fallback selection logic without re-reading raw CommandView payloads.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New spec `.repo_studios/command_center/docs/mermaid/view_specs/method_call_chain.md`, helper exports (`collectRepositoryMethodIds`, `resolveMethodFocusedScope`) in `.repo_studios/command_center/viewer/ui/viewer.js`, and builder documentation inside `.repo_studios/command_center/viewer/ui/builders/method_call_chain.js`.
+- **Decision:** Wired the Method Call Chain controls and expanded Code Flow coexistence coverage.
+- **Context:** Enables operators to render class-focused sequence diagrams directly from the Code Flow pack, applies repository fallbacks when scoped selections lack methods, and guarantees the new view coexists with existing Code Flow and Health pack diagrams without definition drift.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Viewer wiring `buildMethodCallChainViewDefinition()` in `.repo_studios/command_center/viewer/ui/viewer.js`, builder module `.repo_studios/command_center/viewer/ui/builders/method_call_chain.js`, updated checklist notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`, and passing regressions `.repo_studios/tests/tests_command_center/viewer/test_method_call_chain_view.py`, `.repo_studios/tests/tests_command_center/viewer/test_method_call_chain_view_definition.py`, and `.repo_studios/tests/tests_command_center/viewer/test_code_flow_multi_view_coexistence.py`.
 - **Decision:** Wired the Layer Architecture Validation controls and expanded Dependency pack coexistence coverage.
 - **Context:** Enables operators to render adjacency violations directly from the viewer, reuse repository fallbacks when scoped layers have no data, and guarantees the new view coexists with existing dependency diagrams without definition drift.
 - **Owner:** GitHub Copilot implementation assistant.
@@ -38,6 +46,10 @@
 - **Context:** Confirms toggling between the Dynamic Code Watchlist and Callback Registration Map preserves definitions, status messaging, and stats so Event Dynamics maintains the same multi-view guarantees as other packs.
 - **Owner:** GitHub Copilot implementation assistant.
 - **Evidence:** Regression `.repo_studios/tests/tests_command_center/viewer/test_event_dynamics_multi_view_coexistence.py::test_dynamic_code_watchlist_coexists_with_callback_registration_map`, updated tracker notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`, and the new spec `.repo_studios/command_center/docs/mermaid/view_specs/dynamic_code_watchlist.md` citing coexistence expectations.
+- **Decision:** Documented and wired the State Effects Global Variable Usage Map view.
+- **Context:** Provides module-level visibility into global state references, enabling operators to spot implicit coupling while surfacing repository fallbacks until additional State Effects diagrams arrive.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New spec `.repo_studios/command_center/docs/mermaid/view_specs/global_variable_usage_map.md`, builder module `.repo_studios/command_center/viewer/ui/builders/global_variable_usage_map.js`, viewer wiring `buildGlobalVariableUsageViewDefinition()` in `.repo_studios/command_center/viewer/ui/viewer.js`, and passing regressions `.repo_studios/tests/tests_command_center/viewer/test_global_variable_usage_map_view.py` plus `test_global_variable_usage_view_definition.py` alongside tracker updates in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
 - **Decision:** Documented the Entrypoint Trace data slice and codified heuristics for CLI/main-guard discovery.
 - **Context:** Establishes the Code Flow contract for highlighting repository entrypoints so upcoming builders can expand traces without reimplementing naming or guard heuristics.
 - **Owner:** GitHub Copilot implementation assistant.

@@ -21,6 +21,8 @@ import { buildDynamicCodeWatchlistDiagram } from "./builders/dynamic_code_watchl
 import { buildEntrypointTraceDiagram } from "./builders/entrypoint_trace_diagram.js";
 import { buildClassInheritanceHierarchyDiagram } from "./builders/class_inheritance_hierarchy.js";
 import { buildMethodCallChainDiagram } from "./builders/method_call_chain.js";
+import { buildGlobalVariableUsageMapDiagram } from "./builders/global_variable_usage_map.js";
+import { buildIoEffectsDiagram } from "./builders/io_effects_diagram.js";
 
 console.log('[viewer.js] Script loading started');
 
@@ -339,7 +341,10 @@ const VIEW_PACKS = Object.freeze([
         filename: "global_variable_usage_map.mmd",
         description:
           "Diagram linking functions to global variables they read or write to highlight shared state.",
-        status: "planned",
+        status: "prototype",
+        builder: "globalVariableUsageMapView",
+        requirements: ["inventoryBasics"],
+        note: "Visualizes function-to-global relationships using normalized global declarations and usage metadata.",
       },
       {
         id: "io_effects_diagram",
@@ -347,7 +352,10 @@ const VIEW_PACKS = Object.freeze([
         filename: "io_effects_diagram.mmd",
         description:
           "Annotated graph mapping functions to file, network, or environment interactions.",
-        status: "planned",
+        status: "prototype",
+        builder: "ioEffectsDiagramView",
+        requirements: ["ioEffects"],
+        note: "Highlights per-module functions with IO side effects across filesystem, environment, and network categories.",
       },
       {
         id: "exception_flow_map",
@@ -507,6 +515,8 @@ const VIEW_BUILDERS = Object.freeze({
   entrypointTraceDiagramView: buildEntrypointTraceDiagramViewDefinition,
   classInheritanceHierarchyView: buildClassInheritanceHierarchyViewDefinition,
   methodCallChainView: buildMethodCallChainViewDefinition,
+  globalVariableUsageMapView: buildGlobalVariableUsageViewDefinition,
+  ioEffectsDiagramView: buildIoEffectsViewDefinition,
   functionInventoryOverview: buildFunctionInventoryOverviewViewDefinition,
   typeCoverageMapView: buildTypeCoverageMapViewDefinition,
   screeningSignalTimelineView: buildScreeningSignalTimelineViewDefinition,
@@ -737,6 +747,25 @@ function findViewRequirementIssue(requirements) {
         );
         if (!hasCallbacks) {
           return "Callback registration metadata is not available in this CommandView artifact.";
+        }
+        break;
+      }
+      case "ioEffects": {
+        const modules = state.normalizedData?.modules;
+        const moduleMap = modules instanceof Map ? modules : modules ?? null;
+        if (!(moduleMap instanceof Map) || moduleMap.size === 0) {
+          return "Module metadata has not been normalized for this CommandView artifact.";
+        }
+        const functions = state.normalizedData?.functions;
+        const functionMap = functions instanceof Map ? functions : functions ?? null;
+        if (!(functionMap instanceof Map) || functionMap.size === 0) {
+          return "Function metadata has not been normalized for this CommandView artifact.";
+        }
+        const hasIoEffects = Array.from(functionMap.values()).some(
+          (fn) => fn && typeof fn.ioEffects === "object"
+        );
+        if (!hasIoEffects) {
+          return "IO effects metadata is not available in this CommandView artifact.";
         }
         break;
       }
@@ -1817,6 +1846,7 @@ function createModuleRecord(file) {
     ),
     dynamicCode: normalizeDynamicCode(file.dynamic_code ?? file.dynamicCode ?? null),
     entrypoints: normalizeEntrypointSignals(file.entrypoints ?? file.entryPoints ?? null),
+    globals: normalizeModuleGlobals(file.globals ?? file.module_globals ?? null),
     functions: [],
     classes: [],
   };
@@ -2388,6 +2418,8 @@ function createFunctionRecord(fn, moduleId) {
     callbackRegistrations: normalizeCallbackRegistrations(
       fn.callback_registrations ?? fn.callbackRegistrations ?? null
     ),
+    ioEffects: normalizeIoEffects(fn.io_effects ?? fn.ioEffects ?? null),
+    usedGlobals: normalizeUsedGlobals(fn.used_globals ?? fn.usedGlobals ?? null),
     metrics: {
       coverage: fn.coverage ?? null,
       lineCount: fn.line_count ?? null,
@@ -2422,6 +2454,61 @@ function normalizeLoggingCalls(value) {
       };
     })
     .filter(Boolean);
+}
+
+function normalizeIoEffects(value) {
+  const source = value && typeof value === "object" ? value : {};
+  const reads = source.reads === true || source.read === true || source.file === true || source.filesystem === true;
+  const writes = source.writes === true || source.write === true || source.fileio === true;
+  const env = source.env === true || source.environment === true || source.environ === true;
+  const network = source.network === true || source.socket === true || source.http === true;
+
+  const activeFlags = [];
+  if (reads) {
+    activeFlags.push("reads");
+  }
+  if (writes) {
+    activeFlags.push("writes");
+  }
+  if (env) {
+    activeFlags.push("env");
+  }
+  if (network) {
+    activeFlags.push("network");
+  }
+
+  activeFlags.sort((left, right) => left.localeCompare(right));
+
+  return {
+    reads,
+    writes,
+    env,
+    network,
+    hasEffects: activeFlags.length > 0,
+    activeFlags,
+    flagCount: activeFlags.length,
+  };
+}
+
+function normalizeUsedGlobals(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  const seen = new Set();
+  const normalized = [];
+
+  value.forEach((entry) => {
+    const name = normalizeString(entry);
+    if (!name || seen.has(name)) {
+      return;
+    }
+    seen.add(name);
+    normalized.push(name);
+  });
+
+  normalized.sort((left, right) => left.localeCompare(right));
+  return normalized;
 }
 
 function normalizeDecorators(value) {
@@ -2786,6 +2873,47 @@ function normalizeDynamicCode(value) {
     events,
     eventCount: events.length,
   };
+}
+
+function normalizeModuleGlobals(entries) {
+  if (!Array.isArray(entries)) {
+    return [];
+  }
+
+  const results = [];
+  const seen = new Set();
+
+  entries.forEach((entry) => {
+    if (!entry || typeof entry !== "object") {
+      return;
+    }
+    const name = normalizeString(entry.name ?? entry.identifier ?? entry.id ?? null);
+    if (!name || seen.has(name)) {
+      return;
+    }
+    seen.add(name);
+
+    const valueKind = normalizeString(entry.value_kind ?? entry.valueKind ?? entry.kind ?? null) ?? "unknown";
+    const lineno = normalizeLineNumber(entry.lineno ?? entry.line ?? entry.line_number ?? null);
+
+    results.push({
+      name,
+      valueKind,
+      lineno,
+    });
+  });
+
+  results.sort((left, right) => {
+    const nameCompare = left.name.localeCompare(right.name);
+    if (nameCompare !== 0) {
+      return nameCompare;
+    }
+    const leftLine = Number.isFinite(left.lineno) ? left.lineno : Number.MAX_SAFE_INTEGER;
+    const rightLine = Number.isFinite(right.lineno) ? right.lineno : Number.MAX_SAFE_INTEGER;
+    return leftLine - rightLine;
+  });
+
+  return results;
 }
 
 function normalizeEntrypointSignals(value) {
@@ -5179,6 +5307,350 @@ function buildClassInheritanceHierarchyViewDefinition() {
     statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
     stats: result.stats,
   };
+}
+
+function buildIoEffectsViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const functionsValue = normalized.functions;
+  const functionsMap = functionsValue instanceof Map ? functionsValue : functionsValue ?? null;
+  if (!(functionsMap instanceof Map) || functionsMap.size === 0) {
+    return { message: "Function metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const repositoryFunctions = collectFunctionsWithIoEffects(functionsMap);
+  if (repositoryFunctions.length === 0) {
+    return { message: "No IO effects were detected in this CommandView artifact." };
+  }
+
+  const repositoryFunctionSet = new Set(repositoryFunctions);
+
+  const selections = state.levelSelections ?? {};
+  const focusFunctionId = typeof selections.functionId === "string" ? selections.functionId : null;
+  const moduleId = typeof selections.moduleId === "string" ? selections.moduleId : null;
+  const domainId = typeof selections.domainId === "string" ? selections.domainId : null;
+  const rootId = typeof selections.rootId === "string" ? selections.rootId : null;
+
+  const focusRecord = focusFunctionId ? functionsMap.get(focusFunctionId) : null;
+  const focusHasEffects = Boolean(focusRecord && functionHasIoEffects(focusRecord));
+
+  let scopedFunctionIds = new Set();
+  let scopeDescription = "repository";
+  let fallbackNotice = null;
+  const selectionLabel = moduleId ?? domainId ?? rootId ?? null;
+  const isScopedSelection = Boolean(selectionLabel);
+
+  if (focusHasEffects) {
+    scopedFunctionIds.add(focusFunctionId);
+    const focusModuleId = focusRecord?.moduleId ?? resolveModuleIdFromFunctionId(focusFunctionId);
+    if (focusModuleId) {
+      scopeDescription = focusModuleId;
+    }
+  }
+
+  if (!focusHasEffects && moduleId && modules.has(moduleId)) {
+    collectModuleIoFunctionIds(modules.get(moduleId), functionsMap).forEach((functionId) => {
+      scopedFunctionIds.add(functionId);
+    });
+    if (scopedFunctionIds.size > 0) {
+      scopeDescription = moduleId;
+    }
+  }
+
+  if (scopedFunctionIds.size === 0 && domainId) {
+    modules.forEach((moduleRecord, identifier) => {
+      if (!isModuleWithinScope(identifier, domainId)) {
+        return;
+      }
+      collectModuleIoFunctionIds(moduleRecord, functionsMap).forEach((functionId) => {
+        scopedFunctionIds.add(functionId);
+      });
+    });
+    if (scopedFunctionIds.size > 0) {
+      scopeDescription = domainId;
+    }
+  }
+
+  if (scopedFunctionIds.size === 0 && rootId) {
+    modules.forEach((moduleRecord, identifier) => {
+      if (!isModuleWithinScope(identifier, rootId)) {
+        return;
+      }
+      collectModuleIoFunctionIds(moduleRecord, functionsMap).forEach((functionId) => {
+        scopedFunctionIds.add(functionId);
+      });
+    });
+    if (scopedFunctionIds.size > 0) {
+      scopeDescription = rootId;
+    }
+  }
+
+  if (scopedFunctionIds.size === 0) {
+    scopedFunctionIds = new Set(repositoryFunctionSet);
+    scopeDescription = "repository";
+    if (isScopedSelection && selectionLabel) {
+      fallbackNotice = `No IO effects recorded for "${selectionLabel}". Showing repository map instead.`;
+    } else if (isScopedSelection) {
+      fallbackNotice = "No IO effects recorded for the current selection. Showing repository map instead.";
+    }
+  }
+
+  if (scopedFunctionIds.size === 0) {
+    return { message: "No IO effects were detected in this CommandView artifact." };
+  }
+
+  const allowedFunctionIds = new Set();
+  scopedFunctionIds.forEach((functionId) => {
+    if (repositoryFunctionSet.has(functionId)) {
+      allowedFunctionIds.add(functionId);
+    }
+  });
+
+  if (allowedFunctionIds.size === 0) {
+    return { message: "No IO effects were detected in this CommandView artifact." };
+  }
+
+  const result = buildIoEffectsDiagram(modules, functionsMap, {
+    viewLabel: "State Effects · IO Effects Diagram",
+    scopeDescription,
+    fallbackNotice,
+    allowedFunctionIds,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build IO Effects diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
+  };
+}
+
+function buildGlobalVariableUsageViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const functionsValue = normalized.functions;
+  const functionsMap = functionsValue instanceof Map ? functionsValue : functionsValue ?? null;
+  if (!(functionsMap instanceof Map) || functionsMap.size === 0) {
+    return { message: "Function metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const repositoryFunctions = collectFunctionsWithGlobalUsage(functionsMap);
+  if (repositoryFunctions.length === 0) {
+    return { message: "No global variable usage was detected in this CommandView artifact." };
+  }
+
+  const repositoryFunctionSet = new Set(repositoryFunctions);
+
+  const selections = state.levelSelections ?? {};
+  const focusFunctionId = typeof selections.functionId === "string" ? selections.functionId : null;
+  const moduleId = typeof selections.moduleId === "string" ? selections.moduleId : null;
+  const domainId = typeof selections.domainId === "string" ? selections.domainId : null;
+  const rootId = typeof selections.rootId === "string" ? selections.rootId : null;
+
+  const focusRecord = focusFunctionId ? functionsMap.get(focusFunctionId) : null;
+  const focusUsesGlobals = Boolean(focusRecord && functionUsesGlobals(focusRecord));
+
+  let scopedFunctionIds = new Set();
+  let scopeDescription = "repository";
+  let fallbackNotice = null;
+  const selectionLabel = moduleId ?? domainId ?? rootId ?? null;
+  const isScopedSelection = Boolean(selectionLabel);
+
+  if (focusUsesGlobals) {
+    scopedFunctionIds.add(focusFunctionId);
+    const focusModuleId = focusRecord?.moduleId ?? resolveModuleIdFromFunctionId(focusFunctionId);
+    if (focusModuleId) {
+      scopeDescription = focusModuleId;
+    }
+  }
+
+  if (!focusUsesGlobals && moduleId && modules.has(moduleId)) {
+    collectModuleGlobalUsageFunctionIds(modules.get(moduleId), functionsMap).forEach((functionId) => {
+      scopedFunctionIds.add(functionId);
+    });
+    if (scopedFunctionIds.size > 0) {
+      scopeDescription = moduleId;
+    }
+  }
+
+  if (scopedFunctionIds.size === 0 && domainId) {
+    modules.forEach((moduleRecord, identifier) => {
+      if (!isModuleWithinScope(identifier, domainId)) {
+        return;
+      }
+      collectModuleGlobalUsageFunctionIds(moduleRecord, functionsMap).forEach((functionId) => {
+        scopedFunctionIds.add(functionId);
+      });
+    });
+    if (scopedFunctionIds.size > 0) {
+      scopeDescription = domainId;
+    }
+  }
+
+  if (scopedFunctionIds.size === 0 && rootId) {
+    modules.forEach((moduleRecord, identifier) => {
+      if (!isModuleWithinScope(identifier, rootId)) {
+        return;
+      }
+      collectModuleGlobalUsageFunctionIds(moduleRecord, functionsMap).forEach((functionId) => {
+        scopedFunctionIds.add(functionId);
+      });
+    });
+    if (scopedFunctionIds.size > 0) {
+      scopeDescription = rootId;
+    }
+  }
+
+  if (scopedFunctionIds.size === 0) {
+    scopedFunctionIds = new Set(repositoryFunctionSet);
+    scopeDescription = "repository";
+    if (isScopedSelection && selectionLabel) {
+      fallbackNotice = `No global variable usage recorded for "${selectionLabel}". Showing repository map instead.`;
+    } else if (isScopedSelection) {
+      fallbackNotice = "No global variable usage recorded for the current selection. Showing repository map instead.";
+    }
+  }
+
+  if (scopedFunctionIds.size === 0) {
+    return { message: "No global variable usage was detected in this CommandView artifact." };
+  }
+
+  const allowedFunctionIds = new Set();
+  scopedFunctionIds.forEach((functionId) => {
+    if (repositoryFunctionSet.has(functionId)) {
+      allowedFunctionIds.add(functionId);
+    }
+  });
+
+  if (allowedFunctionIds.size === 0) {
+    return { message: "No global variable usage was detected in this CommandView artifact." };
+  }
+
+  const result = buildGlobalVariableUsageMapDiagram(modules, functionsMap, {
+    viewLabel: "State Effects · Global Variable Usage Map",
+    scopeDescription,
+    fallbackNotice,
+    allowedFunctionIds,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Global Variable Usage Map diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
+  };
+}
+
+function collectFunctionsWithIoEffects(functionsMap) {
+  if (!(functionsMap instanceof Map)) {
+    return [];
+  }
+  const results = [];
+  functionsMap.forEach((record, functionId) => {
+    if (functionHasIoEffects(record)) {
+      results.push(functionId);
+    }
+  });
+  results.sort((left, right) => left.localeCompare(right));
+  return results;
+}
+
+function collectModuleIoFunctionIds(moduleRecord, functionsMap) {
+  if (!moduleRecord || typeof moduleRecord !== "object") {
+    return [];
+  }
+  const functionIds = Array.isArray(moduleRecord.functions) ? moduleRecord.functions : [];
+  return functionIds.filter((functionId) => {
+    if (!functionsMap.has(functionId)) {
+      return false;
+    }
+    return functionHasIoEffects(functionsMap.get(functionId));
+  });
+}
+
+function functionHasIoEffects(record) {
+  if (!record || typeof record !== "object") {
+    return false;
+  }
+  const effects = record.ioEffects;
+  if (!effects || typeof effects !== "object") {
+    return false;
+  }
+  if (effects.hasEffects === true) {
+    return true;
+  }
+  return effects.reads === true || effects.writes === true || effects.env === true || effects.network === true;
+}
+
+function collectFunctionsWithGlobalUsage(functionsMap) {
+  if (!(functionsMap instanceof Map)) {
+    return [];
+  }
+  const results = [];
+  functionsMap.forEach((record, functionId) => {
+    if (functionUsesGlobals(record)) {
+      results.push(functionId);
+    }
+  });
+  results.sort((left, right) => left.localeCompare(right));
+  return results;
+}
+
+function collectModuleGlobalUsageFunctionIds(moduleRecord, functionsMap) {
+  if (!moduleRecord || typeof moduleRecord !== "object") {
+    return [];
+  }
+  const functionIds = Array.isArray(moduleRecord.functions) ? moduleRecord.functions : [];
+  return functionIds.filter((functionId) => {
+    if (!functionsMap.has(functionId)) {
+      return false;
+    }
+    return functionUsesGlobals(functionsMap.get(functionId));
+  });
+}
+
+function functionUsesGlobals(record) {
+  if (!record || typeof record !== "object") {
+    return false;
+  }
+  const usedGlobals = Array.isArray(record.usedGlobals) ? record.usedGlobals : [];
+  return usedGlobals.length > 0;
 }
 
 function buildMethodCallChainViewDefinition() {
@@ -7667,6 +8139,8 @@ export const __test__ = {
   buildEntrypointTraceDiagramViewDefinitionForTest: buildEntrypointTraceDiagramViewDefinition,
   buildClassInheritanceHierarchyViewDefinitionForTest: buildClassInheritanceHierarchyViewDefinition,
   buildMethodCallChainViewDefinitionForTest: buildMethodCallChainViewDefinition,
+  buildIoEffectsViewDefinitionForTest: buildIoEffectsViewDefinition,
+  buildGlobalVariableUsageViewDefinitionForTest: buildGlobalVariableUsageViewDefinition,
   hasDynamicCodeDataForTest: hasDynamicCodeData,
   normalizeEntrypointSignalsForTest: normalizeEntrypointSignals,
   populateEntrypointCandidatesForTest(modules, functions, callGraph) {
