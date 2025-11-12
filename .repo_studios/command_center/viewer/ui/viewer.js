@@ -16,6 +16,11 @@ import { buildModuleDependencyGraphDiagram } from "./builders/module_dependency_
 import { buildLayerArchitectureValidationDiagram } from "./builders/layer_architecture_validation.js";
 import { buildTypeCoverageMapDiagram } from "./builders/type_coverage_map.js";
 import { resolveTypeCoverageScope } from "./builders/type_coverage_scope.js";
+import { buildCallbackRegistrationMapDiagram } from "./builders/callback_registration_map.js";
+import { buildDynamicCodeWatchlistDiagram } from "./builders/dynamic_code_watchlist.js";
+import { buildEntrypointTraceDiagram } from "./builders/entrypoint_trace_diagram.js";
+import { buildClassInheritanceHierarchyDiagram } from "./builders/class_inheritance_hierarchy.js";
+import { buildMethodCallChainDiagram } from "./builders/method_call_chain.js";
 
 console.log('[viewer.js] Script loading started');
 
@@ -135,6 +140,32 @@ const SCRIPT_LAYER_INDEX_BY_ID = Object.freeze(
   )
 );
 
+const ENTRYPOINT_NAME_HINTS = Object.freeze([
+  "main",
+  "run",
+  "cli",
+  "entrypoint",
+  "execute",
+  "start",
+  "bootstrap",
+]);
+
+const ENTRYPOINT_SUFFIX_HINTS = Object.freeze([
+  "_main",
+  "_cli",
+  "_entrypoint",
+  "_runner",
+  "_command",
+  "_app",
+]);
+
+const ENTRYPOINT_REASON = Object.freeze({
+  MAIN_GUARD_NAME: "main-guard-name-match",
+  CLI_PARSER_NAME: "cli-parser-name-match",
+  MAIN_GUARD_ISOLATED: "main-guard-isolated-call",
+  CLI_PARSER_ISOLATED: "cli-parser-isolated-call",
+});
+
 const VIEW_PACKS = Object.freeze([
   {
     id: "health",
@@ -230,7 +261,10 @@ const VIEW_PACKS = Object.freeze([
         filename: "callback_registration_map.mmd",
         description:
           "Diagram tracing detected callback registrations to their emitters for reviewing event-driven surfaces.",
-        status: "planned",
+        status: "prototype",
+        builder: "callbackRegistrationMapView",
+        requirements: ["callbackRegistrations"],
+        note: "Highlights callback emitters and targets using normalized registration metadata.",
       },
       {
         id: "dynamic_code_watchlist",
@@ -238,7 +272,10 @@ const VIEW_PACKS = Object.freeze([
         filename: "dynamic_code_watchlist.mmd",
         description:
           "Block diagram flagging modules where dynamic execution occurs so auditors can follow up quickly.",
-        status: "planned",
+        status: "prototype",
+        builder: "dynamicCodeWatchlistView",
+        requirements: ["dynamicCode"],
+        note: "Highlights modules with exec/dynamic import/metaclass/globals mutation signals detected during inventory analysis.",
       },
     ],
   },
@@ -263,8 +300,10 @@ const VIEW_PACKS = Object.freeze([
         filename: "entrypoint_trace_diagram.mmd",
         description:
           "Flow diagram expanding from CLI entrypoints (e.g., run or main) to reachable functions.",
-        status: "planned",
-        note: "Requires curated entrypoint definitions plus call graph traversal.",
+        status: "prototype",
+        builder: "entrypointTraceDiagramView",
+        requirements: ["callGraph", "entrypoints"],
+        note: "Renders curated entrypoint candidates with call graph traversal and scope-aware fallbacks.",
       },
       {
         id: "class_inheritance_hierarchy",
@@ -272,7 +311,9 @@ const VIEW_PACKS = Object.freeze([
         filename: "class_inheritance_hierarchy.mmd",
         description:
           "Class diagram showing inheritance relationships to surface base/derived structures.",
-        status: "planned",
+        status: "prototype",
+        builder: "classInheritanceHierarchyView",
+        requirements: ["classInheritance"],
         note: "Builds on recorded base class metadata in the inventory.",
       },
       {
@@ -281,8 +322,10 @@ const VIEW_PACKS = Object.freeze([
         filename: "method_call_chain.mmd",
         description:
           "Sequence diagram highlighting chained object method calls for delegate tracing.",
-        status: "planned",
-        note: "Needs richer bound-method tracing from the call graph resolver.",
+        status: "prototype",
+        builder: "methodCallChainView",
+        requirements: ["callGraph"],
+        note: "Renders chained class method calls using normalized call graph edges with scope-aware fallbacks.",
       },
     ],
   },
@@ -449,6 +492,8 @@ const VIEW_PACKS = Object.freeze([
 ]);
 
 const VIEW_BUILDERS = Object.freeze({
+  callbackRegistrationMapView: buildCallbackRegistrationMapViewDefinition,
+  dynamicCodeWatchlistView: buildDynamicCodeWatchlistViewDefinition,
   complexityHeatmapView: buildComplexityHeatmapViewDefinition,
   decoratorUsageMapView: buildDecoratorUsageMapViewDefinition,
   documentationCoverageMapView: buildDocumentationCoverageMapViewDefinition,
@@ -459,6 +504,9 @@ const VIEW_BUILDERS = Object.freeze({
   layerArchitectureValidationView: buildLayerArchitectureValidationViewDefinition,
   circularImportDetectionView: buildCircularImportDetectionViewDefinition,
   functionCallGraphView: buildFunctionCallGraphViewDefinition,
+  entrypointTraceDiagramView: buildEntrypointTraceDiagramViewDefinition,
+  classInheritanceHierarchyView: buildClassInheritanceHierarchyViewDefinition,
+  methodCallChainView: buildMethodCallChainViewDefinition,
   functionInventoryOverview: buildFunctionInventoryOverviewViewDefinition,
   typeCoverageMapView: buildTypeCoverageMapViewDefinition,
   screeningSignalTimelineView: buildScreeningSignalTimelineViewDefinition,
@@ -603,6 +651,22 @@ function findViewRequirementIssue(requirements) {
         }
         break;
       }
+      case "classInheritance": {
+        const classes = state.normalizedData?.classes;
+        const classMap = classes instanceof Map ? classes : classes ?? null;
+        if (!(classMap instanceof Map) || classMap.size === 0) {
+          return "Class inheritance metadata is not available in this CommandView artifact.";
+        }
+        break;
+      }
+      case "entrypoints": {
+        const entrypoints = state.normalizedData?.entrypoints;
+        const entrypointMap = entrypoints instanceof Map ? entrypoints : entrypoints ?? null;
+        if (!(entrypointMap instanceof Map) || entrypointMap.size === 0) {
+          return "Entrypoint candidates are not available in this CommandView artifact.";
+        }
+        break;
+      }
       case "coverage": {
         const modulesWithCoverage = state.normalizedData?.metrics?.modules;
         if (!(modulesWithCoverage instanceof Map) || modulesWithCoverage.size === 0) {
@@ -659,6 +723,20 @@ function findViewRequirementIssue(requirements) {
         });
         if (!hasExportContracts) {
           return "Export contract metadata is not present in this CommandView artifact.";
+        }
+        break;
+      }
+      case "callbackRegistrations": {
+        const modules = state.normalizedData?.modules;
+        const moduleMap = modules instanceof Map ? modules : modules ?? null;
+        if (!(moduleMap instanceof Map) || moduleMap.size === 0) {
+          return "Callback registration metadata is not available in this CommandView artifact.";
+        }
+        const hasCallbacks = Array.from(moduleMap.values()).some((moduleRecord) =>
+          Array.isArray(moduleRecord?.callbackRegistrations) && moduleRecord.callbackRegistrations.length > 0
+        );
+        if (!hasCallbacks) {
+          return "Callback registration metadata is not available in this CommandView artifact.";
         }
         break;
       }
@@ -1566,6 +1644,7 @@ function normalizeCommandViewData(inventory, screening) {
 
   const files = Array.isArray(inventory.files) ? inventory.files : [];
   const modules = new Map();
+  const classes = new Map();
   const functions = new Map();
   const functionCallGraph = new Map();
   const screeningHistory = buildScreeningHistory(screening);
@@ -1576,6 +1655,17 @@ function normalizeCommandViewData(inventory, screening) {
       return;
     }
     modules.set(moduleRecord.id, moduleRecord);
+
+    const classIds = [];
+    const classEntries = Array.isArray(file.classes) ? file.classes : [];
+    classEntries.forEach((classEntry) => {
+      const classRecord = createClassRecord(classEntry, moduleRecord.id);
+      if (!classRecord) {
+        return;
+      }
+      classIds.push(classRecord.id);
+      classes.set(classRecord.id, classRecord);
+    });
 
     const functionIds = [];
     const functionEntries = Array.isArray(file.functions) ? file.functions : [];
@@ -1589,6 +1679,9 @@ function normalizeCommandViewData(inventory, screening) {
       functionCallGraph.set(functionRecord.id, functionRecord.calls);
     });
     moduleRecord.functions = functionIds;
+    moduleRecord.classes = classIds;
+    moduleRecord.functionCount = functionIds.length;
+    moduleRecord.classCount = classIds.length;
   });
 
   const callGraph = {
@@ -1596,14 +1689,21 @@ function normalizeCommandViewData(inventory, screening) {
     screening: buildScreeningCallIndex(screening),
   };
 
+  const entrypoints = populateEntrypointCandidates(modules, functions, callGraph);
+  resolveClassInheritanceRelationships(classes);
+  const classInheritance = buildClassInheritanceIndex(classes);
+
   const metrics = buildMetricsCache(inventory, modules, functions, screening);
   const hierarchy = buildHierarchyMetadata(modules, functions, callGraph);
   const levels = buildViewLevels(modules, functions, hierarchy, callGraph);
 
   return {
     modules,
+    classes,
     functions,
     callGraph,
+    entrypoints,
+    classInheritance,
     metrics,
     hierarchy,
     levels,
@@ -1711,7 +1811,14 @@ function createModuleRecord(file) {
     coverageSignals: file.coverage_signals ?? null,
     gitChurn: file.git_churn ?? null,
     lineCount: file.line_count ?? null,
+    callbackRegistrations: normalizeCallbackRegistrations(
+      file.callback_registrations ?? file.callbackRegistrations ?? null,
+      { includeFunction: true }
+    ),
+    dynamicCode: normalizeDynamicCode(file.dynamic_code ?? file.dynamicCode ?? null),
+    entrypoints: normalizeEntrypointSignals(file.entrypoints ?? file.entryPoints ?? null),
     functions: [],
+    classes: [],
   };
 }
 
@@ -2008,6 +2115,121 @@ function buildClassQualifiedName(classEntry, moduleId) {
   return moduleId ? `${moduleId}.${name}` : name;
 }
 
+function createClassRecord(classEntry, moduleId) {
+  if (!classEntry || typeof classEntry !== "object") {
+    return null;
+  }
+
+  const qualifiedName = buildClassQualifiedName(classEntry, moduleId);
+  if (!qualifiedName) {
+    return null;
+  }
+
+  const name = normalizeString(classEntry.name) ?? qualifiedName;
+  const lineno = normalizeLineNumber(classEntry.line ?? classEntry.lineno);
+  const lineCount = normalizeLineNumber(classEntry.line_count ?? classEntry.lineCount);
+  const docstring = normalizeString(classEntry.docstring ?? classEntry.docString);
+  const docstringQuality = classEntry.docstring_quality ?? classEntry.docstringQuality ?? null;
+  const bases = normalizeClassBases(classEntry.bases);
+  const decorators = normalizeDecorators(classEntry.decorators);
+  const decoratorsDetailed = normalizeDecoratorDetails(
+    classEntry.decorators_detailed ?? classEntry.decoratorsDetailed ?? null
+  );
+  const attributes = normalizeClassAttributes(classEntry.attributes);
+  const methods = normalizeClassMethods(classEntry.methods, moduleId, name);
+  const codeSmells = classEntry.code_smells ?? classEntry.codeSmells ?? null;
+
+  return {
+    id: qualifiedName,
+    name,
+    moduleId,
+    lineno,
+    lineCount,
+    docstring,
+    docstringQuality,
+    bases,
+    decorators,
+    decoratorsDetailed,
+    attributes,
+    methods,
+    methodCount: methods.length,
+    attributeCount: attributes.length,
+    codeSmells,
+    resolvedBases: [],
+    derivedClassIds: [],
+  };
+}
+
+function normalizeClassBases(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value
+    .map((entry) => normalizeString(entry))
+    .filter((entry) => typeof entry === "string" && entry.length > 0);
+}
+
+function normalizeClassAttributes(entries) {
+  if (!Array.isArray(entries)) {
+    return [];
+  }
+  return entries
+    .map((entry) => {
+      if (!entry || typeof entry !== "object") {
+        return null;
+      }
+      const name = normalizeString(entry.name ?? entry.attribute ?? null);
+      const lineno = normalizeLineNumber(entry.lineno ?? entry.line ?? null);
+      if (!name) {
+        return null;
+      }
+      return { name, lineno };
+    })
+    .filter(Boolean);
+}
+
+function normalizeClassMethods(entries, moduleId, className) {
+  if (!Array.isArray(entries)) {
+    return [];
+  }
+  return entries
+    .map((entry) => {
+      if (!entry || typeof entry !== "object") {
+        return null;
+      }
+      const name = normalizeString(entry.name);
+      const qualified = normalizeString(entry.qualified_name ?? entry.qualifiedName);
+      const methodId = qualified ?? (moduleId && name ? `${moduleId}::${className}.${name}` : null);
+      if (!methodId) {
+        return null;
+      }
+      const lineno = normalizeLineNumber(entry.line ?? entry.lineno);
+      const lineCount = normalizeLineNumber(entry.line_count ?? entry.lineCount);
+      const docstringQuality = entry.docstring_quality ?? entry.docstringQuality ?? null;
+      const decorators = normalizeDecorators(entry.decorators);
+      const decoratorsDetailed = normalizeDecoratorDetails(
+        entry.decorators_detailed ?? entry.decoratorsDetailed ?? null
+      );
+      const returnsKind = entry.returns_kind ?? entry.returnsKind ?? null;
+      const metrics = {
+        coverage: entry.coverage ?? null,
+        lineCount,
+      };
+      return {
+        id: methodId,
+        name: name ?? methodId,
+        lineno,
+        signature: entry.signature ?? null,
+        docstringQuality,
+        decorators,
+        decoratorsDetailed,
+        returnsKind,
+        metrics,
+      };
+    })
+    .filter(Boolean);
+}
+
 function resolveExportSymbol(symbol, context) {
   const {
     moduleId,
@@ -2163,6 +2385,9 @@ function createFunctionRecord(fn, moduleId) {
     loggingCalls,
     decorators,
     decoratorsDetailed,
+    callbackRegistrations: normalizeCallbackRegistrations(
+      fn.callback_registrations ?? fn.callbackRegistrations ?? null
+    ),
     metrics: {
       coverage: fn.coverage ?? null,
       lineCount: fn.line_count ?? null,
@@ -2268,6 +2493,470 @@ function normalizeDecoratorDetails(value) {
         kwargs,
         expression,
       };
+    })
+    .filter(Boolean);
+}
+
+function normalizeClassBaseReference(raw) {
+  if (typeof raw !== "string") {
+    return null;
+  }
+  let candidate = raw.trim();
+  if (!candidate) {
+    return null;
+  }
+  const genericIndex = candidate.indexOf("[");
+  if (genericIndex >= 0) {
+    candidate = candidate.slice(0, genericIndex);
+  }
+  const callIndex = candidate.indexOf("(");
+  if (callIndex >= 0) {
+    candidate = candidate.slice(0, callIndex);
+  }
+  candidate = candidate.replace(/\s+/g, "");
+  if (!candidate) {
+    return null;
+  }
+  return candidate;
+}
+
+function resolveClassInheritanceRelationships(classMap) {
+  if (!(classMap instanceof Map)) {
+    return { derivedByBase: new Map() };
+  }
+
+  const nameIndex = new Map();
+  classMap.forEach((record) => {
+    const key = (record?.name ?? "").toLowerCase();
+    if (!nameIndex.has(key)) {
+      nameIndex.set(key, []);
+    }
+    nameIndex.get(key).push(record);
+    if (!Array.isArray(record?.resolvedBases)) {
+      record.resolvedBases = [];
+    }
+    if (!Array.isArray(record?.derivedClassIds)) {
+      record.derivedClassIds = [];
+    }
+  });
+
+  const derivedMap = new Map();
+
+  classMap.forEach((record) => {
+    if (!record || typeof record !== "object") {
+      return;
+    }
+    const bases = Array.isArray(record.bases) ? record.bases : [];
+    const resolvedBases = [];
+    const seen = new Set();
+    bases.forEach((rawBase) => {
+      const resolution = resolveClassBaseReference(rawBase, record, classMap, nameIndex);
+      if (!resolution) {
+        return;
+      }
+      const dedupeKey = `${resolution.normalized}|${resolution.classId ?? "unknown"}`;
+      if (seen.has(dedupeKey)) {
+        return;
+      }
+      seen.add(dedupeKey);
+      resolvedBases.push(resolution);
+      if (resolution.classId) {
+        const existing = derivedMap.get(resolution.classId) ?? new Set();
+        existing.add(record.id);
+        derivedMap.set(resolution.classId, existing);
+      }
+    });
+    record.resolvedBases = resolvedBases;
+  });
+
+  derivedMap.forEach((derivedSet, classId) => {
+    const record = classMap.get(classId);
+    if (record) {
+      record.derivedClassIds = Array.from(derivedSet).sort((left, right) => left.localeCompare(right));
+    }
+  });
+
+  classMap.forEach((record) => {
+    if (!Array.isArray(record.derivedClassIds)) {
+      record.derivedClassIds = [];
+    }
+  });
+
+  return { derivedByBase: derivedMap };
+}
+
+function resolveClassBaseReference(rawBase, record, classMap, nameIndex) {
+  const normalized = normalizeClassBaseReference(rawBase);
+  if (!normalized) {
+    return null;
+  }
+
+  const lookup = findClassReference(normalized, record, classMap, nameIndex);
+
+  let matchType = "external";
+  let moduleId = lookup.moduleId ?? null;
+  if (lookup.classId) {
+    matchType = lookup.moduleId === record.moduleId ? "local" : "project";
+  } else if (normalized === "object" || normalized === "Exception") {
+    matchType = "builtin";
+    moduleId = null;
+  } else if (!moduleId && normalized === record.name) {
+    matchType = "self";
+  } else if (!moduleId && !normalized.includes(".")) {
+    matchType = "unknown";
+  }
+
+  return {
+    raw: rawBase,
+    normalized,
+    classId: lookup.classId ?? null,
+    moduleId,
+    matchType,
+  };
+}
+
+function findClassReference(normalized, record, classMap, nameIndex) {
+  const segments = normalized.split(".");
+  const candidateName = segments[segments.length - 1];
+  const candidateModule = segments.length > 1 ? segments.slice(0, -1).join(".") : null;
+
+  const directCandidates = [];
+  if (candidateModule) {
+    directCandidates.push(`${candidateModule}.${candidateName}`);
+  }
+  if (record?.moduleId) {
+    directCandidates.push(`${record.moduleId}.${candidateName}`);
+  }
+
+  for (const candidateId of directCandidates) {
+    if (classMap.has(candidateId)) {
+      const match = classMap.get(candidateId);
+      return { classId: match.id, moduleId: match.moduleId };
+    }
+  }
+
+  const nameMatches = nameIndex.get(candidateName.toLowerCase()) ?? [];
+  if (nameMatches.length === 1) {
+    const match = nameMatches[0];
+    return { classId: match.id, moduleId: match.moduleId };
+  }
+
+  return { classId: null, moduleId: candidateModule };
+}
+
+function buildClassInheritanceIndex(classMap) {
+  if (!(classMap instanceof Map)) {
+    return {
+      derivedByBase: new Map(),
+      modules: new Map(),
+      stats: {
+        classCount: 0,
+        modulesWithClasses: 0,
+        rootClasses: 0,
+        leafClasses: 0,
+        externalBaseReferences: 0,
+      },
+    };
+  }
+
+  const modulesWithClasses = new Map();
+  const derivedByBase = new Map();
+  let externalBaseReferences = 0;
+
+  classMap.forEach((record) => {
+    if (!record || typeof record !== "object") {
+      return;
+    }
+    if (!modulesWithClasses.has(record.moduleId)) {
+      modulesWithClasses.set(record.moduleId, []);
+    }
+    modulesWithClasses.get(record.moduleId).push(record.id);
+
+    const resolvedBases = Array.isArray(record.resolvedBases) ? record.resolvedBases : [];
+    resolvedBases.forEach((base) => {
+      if (base.classId) {
+        const derivedSet = derivedByBase.get(base.classId) ?? new Set();
+        derivedSet.add(record.id);
+        derivedByBase.set(base.classId, derivedSet);
+      } else if (base.matchType === "external" || base.matchType === "builtin") {
+        externalBaseReferences += 1;
+      }
+    });
+  });
+
+  modulesWithClasses.forEach((list, moduleId) => {
+    modulesWithClasses.set(moduleId, list.sort((left, right) => left.localeCompare(right)));
+  });
+
+  const derivedByBaseSorted = new Map();
+  derivedByBase.forEach((derivedSet, classId) => {
+    derivedByBaseSorted.set(classId, Array.from(derivedSet).sort((left, right) => left.localeCompare(right)));
+  });
+
+  const stats = {
+    classCount: classMap.size,
+    modulesWithClasses: modulesWithClasses.size,
+    rootClasses: 0,
+    leafClasses: 0,
+    externalBaseReferences,
+  };
+
+  classMap.forEach((record) => {
+    const resolvedBases = Array.isArray(record.resolvedBases) ? record.resolvedBases : [];
+    const derivedClassIds = Array.isArray(record.derivedClassIds) ? record.derivedClassIds : [];
+    if (resolvedBases.length === 0) {
+      stats.rootClasses += 1;
+    }
+    if (derivedClassIds.length === 0) {
+      stats.leafClasses += 1;
+    }
+  });
+
+  return {
+    derivedByBase: derivedByBaseSorted,
+    modules: modulesWithClasses,
+    stats,
+  };
+}
+
+function normalizeDynamicCode(value) {
+  if (!value || typeof value !== "object") {
+    return null;
+  }
+
+  const flagsSource = value.flags && typeof value.flags === "object" ? value.flags : {};
+  const flags = {
+    exec: flagsSource.exec === true,
+    dynamicImport: flagsSource.dynamic_import === true || flagsSource.dynamicImport === true,
+    metaclass: flagsSource.metaclass === true,
+    globalsMutation: flagsSource.globals_mutation === true || flagsSource.globalsMutation === true,
+  };
+
+  const activeFlags = Object.entries(flags)
+    .filter(([, enabled]) => enabled)
+    .map(([flagKey]) => flagKey);
+
+  const events = Array.isArray(value.events)
+    ? value.events
+        .map((entry) => {
+          if (!entry || typeof entry !== "object") {
+            return null;
+          }
+
+          const kind = normalizeString(entry.kind ?? entry.type ?? entry.category ?? null) ?? "unknown";
+          const detail = normalizeString(entry.detail ?? entry.description ?? entry.expr ?? entry.value ?? null);
+          const lineno = normalizeLineNumber(entry.lineno ?? entry.line ?? entry.line_number ?? null);
+
+          if (!kind && detail === null && lineno === null) {
+            return null;
+          }
+
+          return {
+            kind: kind ?? "unknown",
+            detail,
+            lineno,
+          };
+        })
+        .filter(Boolean)
+        .sort((left, right) => {
+          if (left.kind !== right.kind) {
+            return left.kind.localeCompare(right.kind);
+          }
+          const leftLine = Number.isFinite(left.lineno) ? left.lineno : Number.MAX_SAFE_INTEGER;
+          const rightLine = Number.isFinite(right.lineno) ? right.lineno : Number.MAX_SAFE_INTEGER;
+          if (leftLine !== rightLine) {
+            return leftLine - rightLine;
+          }
+          const leftDetail = left.detail ?? "";
+          const rightDetail = right.detail ?? "";
+          return leftDetail.localeCompare(rightDetail);
+        })
+    : [];
+
+  const hasDynamic = activeFlags.length > 0 || events.length > 0;
+  if (!hasDynamic) {
+    return null;
+  }
+
+  return {
+    hasDynamic: true,
+    flags,
+    activeFlags,
+    flagCount: activeFlags.length,
+    events,
+    eventCount: events.length,
+  };
+}
+
+function normalizeEntrypointSignals(value) {
+  const hasMainGuard = value?.has_main_guard === true || value?.hasMainGuard === true;
+  const cliParser = value?.cli_parser === true || value?.cliParser === true;
+  return {
+    hasMainGuard,
+    cliParser,
+    candidates: [],
+  };
+}
+
+function buildCallGraphInboundIndex(functionCallMap) {
+  const inbound = new Map();
+  if (!(functionCallMap instanceof Map)) {
+    return inbound;
+  }
+
+  functionCallMap.forEach((targets, sourceId) => {
+    if (!Array.isArray(targets)) {
+      return;
+    }
+    targets.forEach((targetId) => {
+      if (!targetId || typeof targetId !== "string") {
+        return;
+      }
+      let inboundSet = inbound.get(targetId);
+      if (!inboundSet) {
+        inboundSet = new Set();
+        inbound.set(targetId, inboundSet);
+      }
+      inboundSet.add(sourceId);
+    });
+  });
+
+  return inbound;
+}
+
+function determineEntrypointReason(fnRecord, metadata, inboundIndex) {
+  const name = typeof fnRecord?.name === "string" ? fnRecord.name.toLowerCase() : "";
+  const outboundCount = Array.isArray(fnRecord?.calls) ? fnRecord.calls.length : 0;
+  const inboundCount = inboundIndex.get(fnRecord?.id)?.size ?? 0;
+  const matchesExact = ENTRYPOINT_NAME_HINTS.includes(name);
+  const matchesSuffix = ENTRYPOINT_SUFFIX_HINTS.some((suffix) => name.endsWith(suffix));
+
+  if (metadata.hasMainGuard && (matchesExact || matchesSuffix)) {
+    return ENTRYPOINT_REASON.MAIN_GUARD_NAME;
+  }
+  if (metadata.cliParser && (matchesExact || matchesSuffix)) {
+    return ENTRYPOINT_REASON.CLI_PARSER_NAME;
+  }
+  if (metadata.hasMainGuard && outboundCount > 0 && inboundCount === 0) {
+    return ENTRYPOINT_REASON.MAIN_GUARD_ISOLATED;
+  }
+  if (metadata.cliParser && outboundCount > 0 && inboundCount === 0) {
+    return ENTRYPOINT_REASON.CLI_PARSER_ISOLATED;
+  }
+  return null;
+}
+
+function populateEntrypointCandidates(modules, functions, callGraph) {
+  const functionCallMap = callGraph?.functions instanceof Map ? callGraph.functions : new Map();
+  const inboundIndex = buildCallGraphInboundIndex(functionCallMap);
+  const index = new Map();
+
+  modules.forEach((moduleRecord, moduleId) => {
+    const entryMeta = normalizeEntrypointSignals(moduleRecord?.entrypoints);
+    const moduleFunctionIds = Array.isArray(moduleRecord?.functions) ? moduleRecord.functions : [];
+    const candidates = [];
+
+    moduleFunctionIds.forEach((functionId) => {
+      const fnRecord = functions.get(functionId);
+      if (!fnRecord) {
+        return;
+      }
+      const reason = determineEntrypointReason(fnRecord, entryMeta, inboundIndex);
+      if (!reason) {
+        return;
+      }
+      const outboundTargets = functionCallMap.get(functionId);
+      candidates.push({
+        id: fnRecord.id,
+        name: fnRecord.name ?? fnRecord.id,
+        moduleId: moduleRecord.moduleId,
+        reason,
+        inboundCount: inboundIndex.get(functionId)?.size ?? 0,
+        outboundCount: Array.isArray(outboundTargets) ? outboundTargets.length : 0,
+      });
+    });
+
+    candidates.sort((left, right) => {
+      if (right.outboundCount !== left.outboundCount) {
+        return right.outboundCount - left.outboundCount;
+      }
+      if (left.reason !== right.reason) {
+        return left.reason.localeCompare(right.reason);
+      }
+      return left.name.localeCompare(right.name);
+    });
+
+    moduleRecord.entrypoints = {
+      ...entryMeta,
+      candidates,
+    };
+
+    if (candidates.length > 0) {
+      index.set(moduleId, {
+        moduleId: moduleRecord.moduleId,
+        hasMainGuard: entryMeta.hasMainGuard,
+        cliParser: entryMeta.cliParser,
+        candidates,
+      });
+    }
+  });
+
+  return index;
+}
+
+function normalizeCallbackRegistrations(value, options = {}) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  const includeFunction = options.includeFunction === true;
+
+  return value
+    .map((entry) => {
+      if (!entry || typeof entry !== "object") {
+        return null;
+      }
+
+      const expression = normalizeString(
+        entry.expression ?? entry.call ?? entry.representation ?? entry.expr ?? entry.source ?? null
+      );
+      const method = normalizeString(entry.method ?? entry.method_name ?? entry.methodName ?? null);
+      const kind = normalizeString(entry.kind ?? entry.type ?? null);
+      const root = normalizeString(entry.root ?? entry.binding ?? null);
+      const moduleName = normalizeString(entry.module ?? entry.module_name ?? entry.moduleId ?? entry.module_id ?? null);
+      const resolved = normalizeString(entry.resolved ?? entry.resolved_target ?? entry.resolvedTarget ?? null);
+      const target = normalizeString(entry.target ?? entry.target_value ?? entry.targetValue ?? null);
+      const targetKind = normalizeString(entry.target_kind ?? entry.targetKind ?? null);
+      const targetVia = normalizeString(entry.target_via ?? entry.targetVia ?? null);
+      const lineno = normalizeLineNumber(entry.lineno ?? entry.line ?? entry.line_number ?? null);
+
+      if (!expression && !target && !method) {
+        return null;
+      }
+
+      const registration = {
+        expression,
+        method,
+        kind,
+        root,
+        module: moduleName,
+        resolved,
+        target,
+        targetKind,
+        targetVia,
+        lineno,
+      };
+
+      if (includeFunction) {
+        const functionName = normalizeString(
+          entry.function ?? entry.function_name ?? entry.functionName ?? entry.qualified_name ?? null
+        );
+        if (functionName) {
+          registration.function = functionName;
+        }
+      }
+
+      return registration;
     })
     .filter(Boolean);
 }
@@ -4005,6 +4694,222 @@ function buildExternalVsInternalDependencyMapViewDefinition() {
   };
 }
 
+function buildDynamicCodeWatchlistViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const repositoryHasDynamic = hasDynamicCodeData(modules);
+
+  const rootId = state.levelSelections.rootId ?? null;
+  const domainId = state.levelSelections.domainId ?? null;
+  const moduleId = state.levelSelections.moduleId ?? null;
+  const selectionLabel = moduleId ?? domainId ?? rootId ?? null;
+  const isScopedSelection = Boolean(selectionLabel);
+
+  let filteredModules = new Map();
+  let scopeDescription = "repository";
+  let fallbackNotice = null;
+
+  if (moduleId) {
+    const moduleRecord = modules.get(moduleId);
+    if (moduleRecord) {
+      filteredModules.set(moduleId, moduleRecord);
+      scopeDescription = moduleId;
+    }
+  } else if (domainId) {
+    modules.forEach((record, identifier) => {
+      if (typeof identifier === "string" && (identifier.startsWith(domainId) || identifier.includes(domainId))) {
+        filteredModules.set(identifier, record);
+      }
+    });
+    scopeDescription = domainId;
+  } else if (rootId) {
+    modules.forEach((record, identifier) => {
+      if (typeof identifier === "string" && (identifier.startsWith(rootId) || identifier.includes(rootId))) {
+        filteredModules.set(identifier, record);
+      }
+    });
+    scopeDescription = rootId;
+  } else {
+    filteredModules = modules;
+  }
+
+  const scopedHasDynamic = hasDynamicCodeData(filteredModules);
+  if (!scopedHasDynamic) {
+    filteredModules = modules;
+    scopeDescription = "repository";
+    if (isScopedSelection && repositoryHasDynamic) {
+      fallbackNotice = selectionLabel
+        ? `No dynamic code signals recorded for "${selectionLabel}". Showing repository watchlist instead.`
+        : "No dynamic code signals recorded for the current selection. Showing repository watchlist instead.";
+    }
+  }
+
+  let result = buildDynamicCodeWatchlistDiagram(filteredModules, {
+    viewLabel: "Event Dynamics · Dynamic Code Watchlist",
+    scopeDescription,
+    fallbackNotice,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Dynamic Code Watchlist diagram." };
+  }
+
+  if (result.message && isScopedSelection && repositoryHasDynamic) {
+    const fallbackResult = buildDynamicCodeWatchlistDiagram(modules, {
+      viewLabel: "Event Dynamics · Dynamic Code Watchlist",
+      scopeDescription: "repository",
+      fallbackNotice: selectionLabel
+        ? `No dynamic code signals recorded for "${selectionLabel}". Showing repository watchlist instead.`
+        : "No dynamic code signals recorded for the current selection. Showing repository watchlist instead.",
+    });
+    if (fallbackResult && !fallbackResult.message) {
+      result = fallbackResult;
+    }
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
+  };
+}
+
+function buildCallbackRegistrationMapViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const repositoryHasCallbacks = hasCallbackRegistrationData(modules);
+
+  const rootId = state.levelSelections.rootId ?? null;
+  const domainId = state.levelSelections.domainId ?? null;
+  const moduleId = state.levelSelections.moduleId ?? null;
+  const selectionLabel = moduleId ?? domainId ?? rootId ?? null;
+  const isScopedSelection = Boolean(selectionLabel);
+
+  let filteredModules = new Map();
+  let scopeDescription = "repository";
+  let fallbackNotice = null;
+
+  if (moduleId) {
+    const moduleRecord = modules.get(moduleId);
+    if (moduleRecord) {
+      filteredModules.set(moduleId, moduleRecord);
+      scopeDescription = moduleId;
+    }
+  } else if (domainId) {
+    modules.forEach((record, identifier) => {
+      if (typeof identifier === "string" && (identifier.startsWith(domainId) || identifier.includes(domainId))) {
+        filteredModules.set(identifier, record);
+      }
+    });
+    scopeDescription = domainId;
+  } else if (rootId) {
+    modules.forEach((record, identifier) => {
+      if (typeof identifier === "string" && (identifier.startsWith(rootId) || identifier.includes(rootId))) {
+        filteredModules.set(identifier, record);
+      }
+    });
+    scopeDescription = rootId;
+  } else {
+    filteredModules = modules;
+  }
+
+  const scopedHasCallbacks = hasCallbackRegistrationData(filteredModules);
+  if (!scopedHasCallbacks) {
+    filteredModules = modules;
+    scopeDescription = "repository";
+    if (isScopedSelection && repositoryHasCallbacks) {
+      fallbackNotice = selectionLabel
+        ? `No callback registrations recorded for "${selectionLabel}". Showing repository map instead.`
+        : "No callback registrations recorded for the current selection. Showing repository map instead.";
+    }
+  }
+
+  let result = buildCallbackRegistrationMapDiagram(filteredModules, {
+    viewLabel: "Event Dynamics · Callback Registration Map",
+    scopeDescription,
+    fallbackNotice,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Callback Registration Map diagram." };
+  }
+
+  if (result.message && isScopedSelection && repositoryHasCallbacks) {
+    const fallbackResult = buildCallbackRegistrationMapDiagram(modules, {
+      viewLabel: "Event Dynamics · Callback Registration Map",
+      scopeDescription: "repository",
+      fallbackNotice: selectionLabel
+        ? `No callback registrations recorded for "${selectionLabel}". Showing repository map instead.`
+        : "No callback registrations recorded for the current selection. Showing repository map instead.",
+    });
+    if (fallbackResult && !fallbackResult.message) {
+      result = fallbackResult;
+    }
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
+  };
+}
+
+function hasCallbackRegistrationData(candidate) {
+  const modules = candidate instanceof Map ? candidate : candidate ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return false;
+  }
+  for (const record of modules.values()) {
+    if (Array.isArray(record?.callbackRegistrations) && record.callbackRegistrations.length > 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function hasDynamicCodeData(candidate) {
+  const modules = candidate instanceof Map ? candidate : candidate ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return false;
+  }
+  for (const record of modules.values()) {
+    if (record?.dynamicCode?.hasDynamic === true) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function buildFunctionCallGraphViewDefinition() {
   const normalized = state.normalizedData;
   if (!normalized) {
@@ -4035,6 +4940,504 @@ function buildFunctionCallGraphViewDefinition() {
     label: result.label ?? `${result.moduleId ?? "Module"} · Function Call Graph`,
     statusMessage: result.statusMessage,
   };
+}
+
+function buildEntrypointTraceDiagramViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const functionsValue = normalized.functions;
+  const functionsMap = functionsValue instanceof Map ? functionsValue : functionsValue ?? null;
+  if (!(functionsMap instanceof Map) || functionsMap.size === 0) {
+    return { message: "Function metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const callGraphValue = normalized.callGraph?.functions;
+  const callGraph = callGraphValue instanceof Map ? callGraphValue : callGraphValue ?? null;
+  if (!(callGraph instanceof Map) || callGraph.size === 0) {
+    return { message: "Call graph data is not available in this CommandView artifact." };
+  }
+
+  const entrypointsValue = normalized.entrypoints;
+  const entrypointMap = entrypointsValue instanceof Map ? entrypointsValue : entrypointsValue ?? null;
+  if (!(entrypointMap instanceof Map) || entrypointMap.size === 0) {
+    return { message: "Entrypoint candidates were not detected in this CommandView artifact." };
+  }
+
+  const rootId = state.levelSelections.rootId ?? null;
+  const domainId = state.levelSelections.domainId ?? null;
+  const moduleId = state.levelSelections.moduleId ?? null;
+  const selectionLabel = moduleId ?? domainId ?? rootId ?? null;
+  const isScopedSelection = Boolean(selectionLabel);
+
+  const scopedModuleIds = new Set();
+  let scopeDescription = "repository";
+  let selectionMatched = false;
+
+  if (moduleId) {
+    if (modules.has(moduleId)) {
+      scopedModuleIds.add(moduleId);
+      scopeDescription = moduleId;
+      selectionMatched = true;
+    }
+  } else if (domainId) {
+    modules.forEach((record, identifier) => {
+      if (identifier.startsWith(domainId) || identifier.includes(`${domainId}.`)) {
+        scopedModuleIds.add(identifier);
+        selectionMatched = true;
+      }
+    });
+    if (selectionMatched) {
+      scopeDescription = domainId;
+    }
+  } else if (rootId) {
+    modules.forEach((record, identifier) => {
+      if (identifier.startsWith(rootId) || identifier.includes(`${rootId}.`)) {
+        scopedModuleIds.add(identifier);
+        selectionMatched = true;
+      }
+    });
+    if (selectionMatched) {
+      scopeDescription = rootId;
+    }
+  }
+
+  if (!selectionMatched) {
+    modules.forEach((_, identifier) => {
+      scopedModuleIds.add(identifier);
+    });
+    scopeDescription = "repository";
+  }
+
+  const scopedEntrypoints = new Map();
+  entrypointMap.forEach((value, identifier) => {
+    if (scopedModuleIds.has(identifier)) {
+      scopedEntrypoints.set(identifier, value);
+    }
+  });
+
+  let fallbackNotice = null;
+  let targetEntrypoints = scopedEntrypoints;
+  let targetScopeDescription = scopeDescription;
+
+  if (targetEntrypoints.size === 0) {
+    if (!isScopedSelection) {
+      return { message: "Entrypoint candidates were not detected in this CommandView artifact." };
+    }
+
+    if (entrypointMap.size === 0) {
+      return { message: "Entrypoint candidates were not detected in this CommandView artifact." };
+    }
+
+    targetEntrypoints = entrypointMap;
+    targetScopeDescription = "repository";
+    const fallbackLabel = selectionLabel ?? scopeDescription;
+    fallbackNotice = fallbackLabel
+      ? `No entrypoint candidates recorded for "${fallbackLabel}". Showing repository candidates instead.`
+      : "No entrypoint candidates recorded for the current selection. Showing repository candidates instead.";
+  }
+
+  const moduleIds = Array.from(targetEntrypoints.keys());
+
+  const result = buildEntrypointTraceDiagram(modules, functionsMap, callGraph, targetEntrypoints, {
+    viewLabel: "Code Flow · Entrypoint Trace",
+    scopeDescription: targetScopeDescription,
+    moduleIds,
+    fallbackNotice,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Entrypoint Trace diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
+  };
+}
+
+function buildClassInheritanceHierarchyViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const classesValue = normalized.classes;
+  const classes = classesValue instanceof Map ? classesValue : classesValue ?? null;
+  if (!(classes instanceof Map) || classes.size === 0) {
+    return { message: "Class inheritance metadata is not available in this CommandView artifact." };
+  }
+
+  const rootId = state.levelSelections.rootId ?? null;
+  const domainId = state.levelSelections.domainId ?? null;
+  const moduleId = state.levelSelections.moduleId ?? null;
+  const selectionLabel = moduleId ?? domainId ?? rootId ?? null;
+  const isScopedSelection = Boolean(selectionLabel);
+
+  const scopedClassIds = new Set();
+  let scopeDescription = "repository";
+
+  if (moduleId) {
+    classes.forEach((record, classId) => {
+      if (record?.moduleId === moduleId) {
+        scopedClassIds.add(classId);
+      }
+    });
+    scopeDescription = moduleId;
+  } else if (domainId) {
+    classes.forEach((record, classId) => {
+      if (isModuleWithinScope(record?.moduleId, domainId)) {
+        scopedClassIds.add(classId);
+      }
+    });
+    scopeDescription = domainId;
+  } else if (rootId) {
+    classes.forEach((record, classId) => {
+      if (isModuleWithinScope(record?.moduleId, rootId)) {
+        scopedClassIds.add(classId);
+      }
+    });
+    scopeDescription = rootId;
+  } else {
+    classes.forEach((_, classId) => scopedClassIds.add(classId));
+  }
+
+  let fallbackNotice = null;
+
+  if (scopedClassIds.size === 0) {
+    classes.forEach((_, classId) => scopedClassIds.add(classId));
+    scopeDescription = "repository";
+    if (isScopedSelection && selectionLabel) {
+      fallbackNotice = `No classes recorded for "${selectionLabel}". Showing repository hierarchy instead.`;
+    } else if (isScopedSelection) {
+      fallbackNotice = "No classes recorded for the current selection. Showing repository hierarchy instead.";
+    }
+  }
+
+  if (scopedClassIds.size === 0) {
+    return { message: "Class inheritance metadata is not available in this CommandView artifact." };
+  }
+
+  const targetClassIds = collectClassInheritanceScope(scopedClassIds, classes);
+  const targetClasses = new Map();
+  targetClassIds.forEach((classId) => {
+    const record = classes.get(classId);
+    if (record) {
+      targetClasses.set(classId, record);
+    }
+  });
+
+  if (targetClasses.size === 0) {
+    return { message: "Class inheritance metadata is not available in this CommandView artifact." };
+  }
+
+  const primaryClassIds = new Set();
+  targetClasses.forEach((_, classId) => {
+    if (!isScopedSelection || scopedClassIds.has(classId)) {
+      primaryClassIds.add(classId);
+    }
+  });
+
+  if (primaryClassIds.size === 0) {
+    targetClasses.forEach((_, classId) => primaryClassIds.add(classId));
+  }
+
+  const result = buildClassInheritanceHierarchyDiagram(targetClasses, {
+    viewLabel: "Code Flow · Class Inheritance Hierarchy",
+    scopeDescription,
+    fallbackNotice,
+    primaryClassIds,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Class Inheritance Hierarchy diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
+  };
+}
+
+function buildMethodCallChainViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const functionsValue = normalized.functions;
+  const functionsMap = functionsValue instanceof Map ? functionsValue : functionsValue ?? null;
+  if (!(functionsMap instanceof Map) || functionsMap.size === 0) {
+    return { message: "Function metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const callGraphValue = normalized.callGraph?.functions;
+  const callGraph = callGraphValue instanceof Map ? callGraphValue : callGraphValue ?? null;
+  if (!(callGraph instanceof Map) || callGraph.size === 0) {
+    return { message: "Call graph data is not available in this CommandView artifact." };
+  }
+
+  const repositoryMethodIds = collectRepositoryMethodIds(functionsMap);
+  if (repositoryMethodIds.length === 0) {
+    return { message: "Class method metadata is not available in this CommandView artifact." };
+  }
+
+  const repositoryMethodSet = new Set(repositoryMethodIds);
+
+  const selections = state.levelSelections ?? {};
+  const focusFunctionId = typeof selections.functionId === "string" ? selections.functionId : null;
+  const moduleId = typeof selections.moduleId === "string" ? selections.moduleId : null;
+  const domainId = typeof selections.domainId === "string" ? selections.domainId : null;
+  const rootId = typeof selections.rootId === "string" ? selections.rootId : null;
+
+  const focusIsMethod = Boolean(focusFunctionId && isClassMethodId(focusFunctionId) && functionsMap.has(focusFunctionId));
+
+  let scopedMethodIds = new Set();
+  let scopeDescription = "repository";
+  let fallbackNotice = null;
+  const selectionLabel = moduleId ?? domainId ?? rootId ?? null;
+  const isScopedSelection = Boolean(selectionLabel);
+
+  if (focusIsMethod) {
+    scopedMethodIds.add(focusFunctionId);
+    const focusModuleId = resolveModuleIdFromFunctionId(focusFunctionId);
+    if (focusModuleId) {
+      scopeDescription = focusModuleId;
+    }
+  }
+
+  if (!focusIsMethod && moduleId && modules.has(moduleId)) {
+    collectModuleMethodIds(modules.get(moduleId), functionsMap).forEach((methodId) => {
+      scopedMethodIds.add(methodId);
+    });
+    if (scopedMethodIds.size > 0) {
+      scopeDescription = moduleId;
+    }
+  }
+
+  if (scopedMethodIds.size === 0 && domainId) {
+    modules.forEach((moduleRecord, identifier) => {
+      if (!isModuleWithinScope(identifier, domainId)) {
+        return;
+      }
+      collectModuleMethodIds(moduleRecord, functionsMap).forEach((methodId) => {
+        scopedMethodIds.add(methodId);
+      });
+    });
+    if (scopedMethodIds.size > 0) {
+      scopeDescription = domainId;
+    }
+  }
+
+  if (scopedMethodIds.size === 0 && rootId) {
+    modules.forEach((moduleRecord, identifier) => {
+      if (!isModuleWithinScope(identifier, rootId)) {
+        return;
+      }
+      collectModuleMethodIds(moduleRecord, functionsMap).forEach((methodId) => {
+        scopedMethodIds.add(methodId);
+      });
+    });
+    if (scopedMethodIds.size > 0) {
+      scopeDescription = rootId;
+    }
+  }
+
+  if (scopedMethodIds.size > 0 && scopedMethodIds.size < repositoryMethodSet.size) {
+    expandMethodScope(scopedMethodIds, callGraph, functionsMap);
+  }
+
+  if (scopedMethodIds.size === 0) {
+    scopedMethodIds = new Set(repositoryMethodSet);
+    scopeDescription = "repository";
+    if (isScopedSelection && selectionLabel) {
+      fallbackNotice = `No class methods recorded for "${selectionLabel}". Showing repository chains instead.`;
+    } else if (isScopedSelection) {
+      fallbackNotice = "No class methods recorded for the current selection. Showing repository chains instead.";
+    }
+  }
+
+  if (scopedMethodIds.size === 0) {
+    return { message: "Class method metadata is not available in this CommandView artifact." };
+  }
+
+  const focusMethodId = focusIsMethod && scopedMethodIds.has(focusFunctionId) ? focusFunctionId : null;
+
+  const result = buildMethodCallChainDiagram(modules, functionsMap, callGraph, {
+    viewLabel: "Code Flow · Method Call Chain",
+    scopeDescription,
+    fallbackNotice,
+    focusFunctionId: focusMethodId,
+    moduleId,
+    allowedFunctionIds: scopedMethodIds,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Method Call Chain diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
+  };
+}
+
+function isModuleWithinScope(moduleId, scopePrefix) {
+  if (!moduleId || !scopePrefix) {
+    return false;
+  }
+  if (moduleId === scopePrefix) {
+    return true;
+  }
+  if (moduleId.startsWith(`${scopePrefix}.`)) {
+    return true;
+  }
+  return moduleId.includes(`${scopePrefix}.`);
+}
+
+function collectClassInheritanceScope(primaryIds, classes) {
+  const closure = new Set();
+  const queue = [];
+
+  primaryIds.forEach((identifier) => {
+    if (classes.has(identifier) && !closure.has(identifier)) {
+      closure.add(identifier);
+      queue.push(identifier);
+    }
+  });
+
+  while (queue.length > 0) {
+    const classId = queue.shift();
+    const record = classes.get(classId);
+    if (!record || typeof record !== "object") {
+      continue;
+    }
+
+    const resolvedBases = Array.isArray(record.resolvedBases) ? record.resolvedBases : [];
+    resolvedBases.forEach((base) => {
+      if (base?.classId && classes.has(base.classId) && !closure.has(base.classId)) {
+        closure.add(base.classId);
+        queue.push(base.classId);
+      }
+    });
+
+    const derivedClassIds = Array.isArray(record.derivedClassIds) ? record.derivedClassIds : [];
+    derivedClassIds.forEach((derivedId) => {
+      if (classes.has(derivedId) && !closure.has(derivedId)) {
+        closure.add(derivedId);
+        queue.push(derivedId);
+      }
+    });
+  }
+
+  return closure;
+}
+
+function collectRepositoryMethodIds(functionsMap) {
+  const results = [];
+  functionsMap.forEach((_, functionId) => {
+    if (isClassMethodId(functionId)) {
+      results.push(functionId);
+    }
+  });
+  results.sort((left, right) => left.localeCompare(right));
+  return results;
+}
+
+function collectModuleMethodIds(moduleRecord, functionsMap) {
+  if (!moduleRecord || typeof moduleRecord !== "object") {
+    return [];
+  }
+  const functionIds = Array.isArray(moduleRecord.functions) ? moduleRecord.functions : [];
+  return functionIds.filter((functionId) => isClassMethodId(functionId) && functionsMap.has(functionId));
+}
+
+function expandMethodScope(methodIds, callGraph, functionsMap) {
+  if (!(methodIds instanceof Set) || methodIds.size === 0) {
+    return;
+  }
+  if (!(callGraph instanceof Map) || callGraph.size === 0) {
+    return;
+  }
+  const queue = Array.from(methodIds.values());
+  const visited = new Set(queue);
+  while (queue.length > 0) {
+    const functionId = queue.shift();
+    const rawTargets = callGraph.get(functionId);
+    const targets = Array.isArray(rawTargets)
+      ? rawTargets
+      : rawTargets instanceof Set
+      ? Array.from(rawTargets)
+      : [];
+    targets.forEach((targetId) => {
+      if (!isClassMethodId(targetId) || !functionsMap.has(targetId)) {
+        return;
+      }
+      if (!visited.has(targetId)) {
+        visited.add(targetId);
+        methodIds.add(targetId);
+        queue.push(targetId);
+      }
+    });
+  }
+}
+
+function isClassMethodId(functionId) {
+  if (typeof functionId !== "string" || functionId.length === 0) {
+    return false;
+  }
+  const separatorIndex = functionId.indexOf("::");
+  if (separatorIndex < 0) {
+    return false;
+  }
+  const remainder = functionId.slice(separatorIndex + 2);
+  return remainder.includes(".");
+}
+
+function resolveModuleIdFromFunctionId(functionId) {
+  if (typeof functionId !== "string" || functionId.length === 0) {
+    return null;
+  }
+  const separatorIndex = functionId.indexOf("::");
+  if (separatorIndex < 0) {
+    return null;
+  }
+  return functionId.slice(0, separatorIndex);
 }
 
 function buildFunctionInventoryOverviewViewDefinition() {
@@ -6225,6 +7628,7 @@ export const __test__ = {
   createFunctionRecord,
   normalizeDecorators,
   normalizeDecoratorDetails,
+  normalizeDynamicCode,
   setNormalizedDataForTest(normalized) {
     state.normalizedData = normalized ?? null;
     state.levels = normalized?.levels ?? null;
@@ -6252,11 +7656,28 @@ export const __test__ = {
       functionId: null,
     };
     state.diagramDefinition = null;
-    buildExternalVsInternalDependencyMapViewDefinitionForTest: buildExternalVsInternalDependencyMapViewDefinition,
     state.statusMessage = "";
     state.statusDetails = [];
   },
   buildLayerArchitectureValidationViewDefinitionForTest: buildLayerArchitectureValidationViewDefinition,
   buildExportContractMatrixViewDefinitionForTest: buildExportContractMatrixViewDefinition,
   buildExternalVsInternalDependencyMapViewDefinitionForTest: buildExternalVsInternalDependencyMapViewDefinition,
+  buildCallbackRegistrationMapViewDefinitionForTest: buildCallbackRegistrationMapViewDefinition,
+  buildDynamicCodeWatchlistViewDefinitionForTest: buildDynamicCodeWatchlistViewDefinition,
+  buildEntrypointTraceDiagramViewDefinitionForTest: buildEntrypointTraceDiagramViewDefinition,
+  buildClassInheritanceHierarchyViewDefinitionForTest: buildClassInheritanceHierarchyViewDefinition,
+  buildMethodCallChainViewDefinitionForTest: buildMethodCallChainViewDefinition,
+  hasDynamicCodeDataForTest: hasDynamicCodeData,
+  normalizeEntrypointSignalsForTest: normalizeEntrypointSignals,
+  populateEntrypointCandidatesForTest(modules, functions, callGraph) {
+    return populateEntrypointCandidates(modules, functions, callGraph);
+  },
+  createClassRecord,
+  finalizeClassInheritanceForTest(classMap) {
+    if (!(classMap instanceof Map)) {
+      throw new Error("classMap must be a Map instance");
+    }
+    resolveClassInheritanceRelationships(classMap);
+    return buildClassInheritanceIndex(classMap);
+  },
 };

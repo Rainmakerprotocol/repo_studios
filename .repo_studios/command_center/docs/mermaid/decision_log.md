@@ -14,6 +14,46 @@
 - **Context:** Enables operators to render external-versus-internal dependency mix diagrams directly from the viewer, reusing scope-aware fallbacks while ensuring the new view toggles cleanly alongside existing dependency diagrams.
 - **Owner:** GitHub Copilot implementation assistant.
 - **Evidence:** Viewer wiring in `.repo_studios/command_center/viewer/ui/viewer.js` (`buildExternalVsInternalDependencyMapViewDefinition()`), builder module `.repo_studios/command_center/viewer/ui/builders/external_vs_internal_dependency_map.js`, updated spec `.repo_studios/command_center/docs/mermaid/view_specs/external_vs_internal_dependency_map.md`, refreshed checklist notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`, and passing regressions `.repo_studios/tests/tests_command_center/viewer/test_external_vs_internal_dependency_map_view.py` plus `.repo_studios/tests/tests_command_center/viewer/test_dependency_pack_multi_view_coexistence.py::test_external_dependency_map_coexists_with_dependency_view`.
+- **Decision:** Documented the Callback Registration Map data slice and exposed normalized viewer records for Event Dynamics staging.
+- **Context:** Ensures the upcoming callback view can consume sanitized emitter/target metadata without reprocessing raw CommandView payloads and keeps the Event Dynamics pack aligned with the inventory schema.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Normalization helper `normalizeCallbackRegistrations()` and module/function wiring in `.repo_studios/command_center/viewer/ui/viewer.js`, new spec `.repo_studios/command_center/docs/mermaid/view_specs/callback_registration_map.md`, regression `.repo_studios/tests/tests_command_center/viewer/test_callback_data_normalization.py`, and updated tracker notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Wired the Callback Registration Map controls and staged Event Dynamics fallback handling.
+- **Context:** Enables operators to render callback emitters and targets directly from the Event Dynamics pack, applying scope-aware repository fallbacks while locking deterministic builder output.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Viewer wiring `buildCallbackRegistrationMapViewDefinition()` in `.repo_studios/command_center/viewer/ui/viewer.js`, builder module `.repo_studios/command_center/viewer/ui/builders/callback_registration_map.js`, regression `.repo_studios/tests/tests_command_center/viewer/test_callback_registration_map_view.py`, updated spec `.repo_studios/command_center/docs/mermaid/view_specs/callback_registration_map.md`, and refreshed checklist entries in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Added Event Dynamics coexistence coverage for the Callback Registration Map and Function Call Graph views.
+- **Context:** Ensures toggling between the callback diagram and the existing Function Call Graph view preserves state, status messaging, and deterministic Mermaid definitions, aligning Event Dynamics with the multi-view guarantees already in place for other packs.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New regression `.repo_studios/tests/tests_command_center/viewer/test_event_dynamics_multi_view_coexistence.py::test_callback_registration_map_coexists_with_function_call_graph_view`, updated tracker notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`, and refreshed spec status in `.repo_studios/command_center/docs/mermaid/view_specs/callback_registration_map.md`.
+- **Decision:** Documented the Dynamic Code Watchlist data slice and normalized viewer records for Event Dynamics staging.
+- **Context:** Ensures the watchlist can consume sanitized flag and event metadata without reprocessing raw CommandView payloads while keeping module/function records aligned with the producer schema.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Normalization helper `normalizeDynamicCode()` in `.repo_studios/command_center/viewer/ui/viewer.js`, new spec `.repo_studios/command_center/docs/mermaid/view_specs/dynamic_code_watchlist.md`, regression `.repo_studios/tests/tests_command_center/viewer/test_dynamic_code_data_normalization.py`, and refreshed checklist notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Wired the Dynamic Code Watchlist controls with scope-aware fallback handling.
+- **Context:** Enables operators to render dynamic code risk snapshots directly from the Event Dynamics pack while substituting repository-level summaries whenever scoped selections lack signals.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Viewer wiring `buildDynamicCodeWatchlistViewDefinition()` in `.repo_studios/command_center/viewer/ui/viewer.js`, builder module `.repo_studios/command_center/viewer/ui/builders/dynamic_code_watchlist.js`, updated spec `.repo_studios/command_center/docs/mermaid/view_specs/dynamic_code_watchlist.md`, regression `.repo_studios/tests/tests_command_center/viewer/test_dynamic_code_watchlist_view.py`, and tracker updates in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Expanded Event Dynamics coexistence coverage to include the Dynamic Code Watchlist view.
+- **Context:** Confirms toggling between the Dynamic Code Watchlist and Callback Registration Map preserves definitions, status messaging, and stats so Event Dynamics maintains the same multi-view guarantees as other packs.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Regression `.repo_studios/tests/tests_command_center/viewer/test_event_dynamics_multi_view_coexistence.py::test_dynamic_code_watchlist_coexists_with_callback_registration_map`, updated tracker notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`, and the new spec `.repo_studios/command_center/docs/mermaid/view_specs/dynamic_code_watchlist.md` citing coexistence expectations.
+- **Decision:** Documented the Entrypoint Trace data slice and codified heuristics for CLI/main-guard discovery.
+- **Context:** Establishes the Code Flow contract for highlighting repository entrypoints so upcoming builders can expand traces without reimplementing naming or guard heuristics.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New spec `.repo_studios/command_center/docs/mermaid/view_specs/entrypoint_trace_diagram.md`, updated tracker notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`, and referenced heuristics inside `.repo_studios/command_center/viewer/ui/viewer.js`.
+- **Decision:** Normalized module entrypoint metadata and added regression coverage for candidate selection.
+- **Context:** Populates module-level entrypoint candidates with reason codes, outbound counts, and repository index entries so the trace builder can reuse curated seeds with deterministic ordering.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Viewer normalization helper `populateEntrypointCandidates()` in `.repo_studios/command_center/viewer/ui/viewer.js`, regression `.repo_studios/tests/tests_command_center/viewer/test_entrypoint_data_normalization.py`, and plan update in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` noting the data slice completion.
+- **Decision:** Wired the Entrypoint Trace controls and builder with scope-aware fallback messaging.
+- **Context:** Enables operators to render entrypoint traces directly from the Code Flow pack, reusing curated candidates, call graph expansion, and repository fallbacks when scoped selections lack entrypoints.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Viewer wiring `buildEntrypointTraceDiagramViewDefinition()` in `.repo_studios/command_center/viewer/ui/viewer.js`, builder module `.repo_studios/command_center/viewer/ui/builders/entrypoint_trace_diagram.js`, updated spec `.repo_studios/command_center/docs/mermaid/view_specs/entrypoint_trace_diagram.md`, and regression `.repo_studios/tests/tests_command_center/viewer/test_entrypoint_trace_view.py`.
+- **Decision:** Expanded Code Flow coexistence coverage to include the Entrypoint Trace view.
+- **Context:** Confirms toggling between Entrypoint Trace and Function Call Graph views preserves deterministic Mermaid definitions, status messaging, and stats so Code Flow matches the multi-view guarantees set by other packs.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Updated regression `.repo_studios/tests/tests_command_center/viewer/test_code_flow_multi_view_coexistence.py` exercising Function Call Graph ↔ Entrypoint Trace toggles, refreshed tracker notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`, and the wired builder documented in the Entrypoint Trace view spec.
 
 ## 2025-11-10
 
