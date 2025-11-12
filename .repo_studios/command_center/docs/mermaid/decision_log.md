@@ -1,5 +1,28 @@
 # Mermaid Decision Log
 
+## 2025-11-12
+
+- **Decision:** Wired the Public vs Private API view controls and expanded Quality Metrics coexistence coverage.
+- **Context:** Enables operators to render module exposure summaries directly from the Quality Metrics pack while guaranteeing toggles across existing metrics views remain deterministic.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Viewer wiring `buildPublicVsPrivateApiViewDefinition()` in `.repo_studios/command_center/viewer/ui/viewer.js`, builder module `.repo_studios/command_center/viewer/ui/builders/public_vs_private_api.js`, passing regressions `.repo_studios/tests/tests_command_center/viewer/test_public_private_api_view.py`, `test_public_private_api_view_definition.py`, `.repo_studios/tests/tests_command_center/viewer/test_quality_metrics_multi_view_coexistence.py` (executed 2025-11-12 via `.venv/Scripts/python.exe -m pytest ...`), and checklist updates in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` marking controls and coexistence complete.
+- **Decision:** Documented the Cyclomatic Complexity Map data slice.
+- **Context:** Establishes the Quality Metrics contract required to highlight function-level complexity hotspots before wiring the new view.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New spec `.repo_studios/command_center/docs/mermaid/view_specs/cyclomatic_complexity_map.md`, existing normalization helper `createFunctionRecord()` in `.repo_studios/command_center/viewer/ui/viewer.js`, and producer regression `.repo_studios/tests/tests_producers/test_generate_commandview_inventory.py::test_cyclomatic_complexity_counts_branches`, referenced in the updated checklist entry within `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+- **Decision:** Added State Effects multi-view coexistence harness.
+- **Context:** Ensures the Global Variable Usage Map, IO Effects Diagram, and Exception Flow Map maintain deterministic definitions, status messaging, and stats while operators switch between State Effects views, aligning the pack with existing coexistence guarantees.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New regression `.repo_studios/tests/tests_command_center/viewer/test_state_effects_multi_view_coexistence.py`, updated tracker notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`, and refreshed status note citing the pack-level harness.
+- **Decision:** Added State Effects multi-view coexistence harness.
+- **Context:** Ensures the Global Variable Usage Map, IO Effects Diagram, and Exception Flow Map maintain deterministic definitions, status messaging, and stats while operators switch between State Effects views, aligning the pack with existing coexistence guarantees.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New regression `.repo_studios/tests/tests_command_center/viewer/test_state_effects_multi_view_coexistence.py`, updated tracker notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`, and refreshed status note citing the pack-level harness.
+- **Decision:** Documented the Public vs Private API data slice and normalized API surface metadata.
+- **Context:** Establishes module-level exposure summaries so the upcoming Quality Metrics view can contrast exported contracts with internal helpers without reprocessing raw CommandView payloads.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Spec `.repo_studios/command_center/docs/mermaid/view_specs/public_vs_private_api.md`, normalization helper `buildModuleApiSurface()` in `.repo_studios/command_center/viewer/ui/viewer.js`, regression `.repo_studios/tests/tests_command_center/viewer/test_public_private_api_data_normalization.py`, and checklist updates in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
+
 ## 2025-11-11
 
 - **Decision:** Documented the Method Call Chain data slice and parsing strategy.

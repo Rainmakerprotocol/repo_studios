@@ -32,6 +32,14 @@ COMPLEXITY_MODULE_PATH = (
     / "builders"
     / "complexity_heatmap.js"
 )
+CYCLOMATIC_COMPLEXITY_MODULE_PATH = (
+    REPO_STUDIOS_ROOT
+    / "command_center"
+    / "viewer"
+    / "ui"
+    / "builders"
+    / "cyclomatic_complexity_map.js"
+)
 LOGGING_MODULE_PATH = (
     REPO_STUDIOS_ROOT
     / "command_center"
@@ -48,6 +56,14 @@ DECORATOR_MODULE_PATH = (
     / "builders"
     / "decorator_usage_map.js"
 )
+PUBLIC_PRIVATE_MODULE_PATH = (
+    REPO_STUDIOS_ROOT
+    / "command_center"
+    / "viewer"
+    / "ui"
+    / "builders"
+    / "public_vs_private_api.js"
+)
 
 if not TYPE_COVERAGE_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected type coverage builder module at {TYPE_COVERAGE_MODULE_PATH}")
@@ -58,11 +74,19 @@ if not DOCUMENTATION_MODULE_PATH.exists():  # pragma: no cover - guard against m
 if not COMPLEXITY_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected complexity heatmap builder module at {COMPLEXITY_MODULE_PATH}")
 
+if not CYCLOMATIC_COMPLEXITY_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
+    raise AssertionError(
+        f"Expected cyclomatic complexity map builder module at {CYCLOMATIC_COMPLEXITY_MODULE_PATH}"
+    )
+
 if not LOGGING_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected logging flow builder module at {LOGGING_MODULE_PATH}")
 
 if not DECORATOR_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected decorator usage builder module at {DECORATOR_MODULE_PATH}")
+
+if not PUBLIC_PRIVATE_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
+    raise AssertionError(f"Expected public vs private API builder module at {PUBLIC_PRIVATE_MODULE_PATH}")
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -91,8 +115,10 @@ def test_quality_metrics_views_coexist_without_state_reset() -> None:
     import {{ buildTypeCoverageMapDiagram }} from "{TYPE_COVERAGE_MODULE_PATH.as_uri()}";
     import {{ buildDocumentationCoverageMapDiagram }} from "{DOCUMENTATION_MODULE_PATH.as_uri()}";
     import {{ buildComplexityHeatmapDiagram }} from "{COMPLEXITY_MODULE_PATH.as_uri()}";
+    import {{ buildCyclomaticComplexityMapDiagram }} from "{CYCLOMATIC_COMPLEXITY_MODULE_PATH.as_uri()}";
     import {{ buildLoggingFlowDiagram }} from "{LOGGING_MODULE_PATH.as_uri()}";
     import {{ buildDecoratorUsageMapDiagram }} from "{DECORATOR_MODULE_PATH.as_uri()}";
+    import {{ buildPublicVsPrivateApiDiagram }} from "{PUBLIC_PRIVATE_MODULE_PATH.as_uri()}";
 
 const functions = new Map([
     ["alpha::f1", {{
@@ -137,11 +163,114 @@ const functions = new Map([
     }}],
 ]);
 
+const modules = new Map([
+    ["alpha.api", {{
+        moduleId: "alpha.api",
+        apiSurface: {{
+            hasDeclaredExports: true,
+            strategy: "explicit",
+            exportedSymbols: ["public_func", "CONFIG"],
+            reexports: [],
+            missingExports: [],
+            functions: {{
+                public: [
+                    {{
+                        id: "alpha.api::public_func",
+                        name: "public_func",
+                        category: "exported",
+                        coverage: 0.82,
+                        typeHintCoverage: 0.61,
+                        lineno: 10,
+                    }},
+                ],
+                internal: [
+                    {{
+                        id: "alpha.api::_helper",
+                        name: "_helper",
+                        category: "private",
+                        coverage: 0.4,
+                        typeHintCoverage: 0.1,
+                        lineno: 22,
+                    }},
+                ],
+            }},
+            classes: {{ public: [], internal: [] }},
+            globals: {{
+                public: [
+                    {{
+                        id: "alpha.api::CONFIG",
+                        name: "CONFIG",
+                        category: "exported",
+                        valueKind: "dict",
+                        lineno: 3,
+                    }},
+                ],
+                internal: [],
+            }},
+        }},
+    }}],
+    ["beta.utils", {{
+        moduleId: "beta.utils",
+        apiSurface: {{
+            hasDeclaredExports: false,
+            strategy: "implicit",
+            exportedSymbols: [],
+            reexports: [],
+            missingExports: [],
+            functions: {{
+                public: [
+                    {{
+                        id: "beta.utils::util_main",
+                        name: "util_main",
+                        category: "implicit",
+                        coverage: 0.55,
+                        lineno: 8,
+                    }},
+                ],
+                internal: [
+                    {{
+                        id: "beta.utils::_local",
+                        name: "_local",
+                        category: "private",
+                        coverage: 0.2,
+                        lineno: 12,
+                    }},
+                ],
+            }},
+            classes: {{ public: [], internal: [] }},
+            globals: {{
+                public: [],
+                internal: [
+                    {{
+                        id: "beta.utils::_CACHE",
+                        name: "_CACHE",
+                        category: "internal",
+                        valueKind: "dict",
+                        lineno: 2,
+                    }},
+                ],
+            }},
+        }},
+    }}],
+]);
+
 const typeCoverageFirst = buildTypeCoverageMapDiagram(functions, {{ viewLabel: "Quality Metrics · Type Coverage Map" }});
 const documentationResult = buildDocumentationCoverageMapDiagram(functions, {{ viewLabel: "Quality Metrics · Documentation Coverage Map" }});
 const complexityResult = buildComplexityHeatmapDiagram(functions, {{ viewLabel: "Quality Metrics · Complexity Heatmap" }});
 const typeCoverageSecond = buildTypeCoverageMapDiagram(functions, {{ viewLabel: "Quality Metrics · Type Coverage Map" }});
 const complexitySecond = buildComplexityHeatmapDiagram(functions, {{ viewLabel: "Quality Metrics · Complexity Heatmap" }});
+const cyclomaticFirst = buildCyclomaticComplexityMapDiagram(functions, {{
+        viewLabel: "Quality Metrics · Cyclomatic Complexity Map",
+        scopeDescription: "repository",
+        moduleLimit: 5,
+        functionLimit: 5,
+    }});
+const cyclomaticSecond = buildCyclomaticComplexityMapDiagram(functions, {{
+        viewLabel: "Quality Metrics · Cyclomatic Complexity Map",
+        scopeDescription: "repository",
+        moduleLimit: 5,
+        functionLimit: 5,
+    }});
     const loggingFirst = buildLoggingFlowDiagram(functions, {{ viewLabel: "Quality Metrics · Logging Flow" }});
     const loggingSecond = buildLoggingFlowDiagram(functions, {{ viewLabel: "Quality Metrics · Logging Flow" }});
     const decoratorFirst = buildDecoratorUsageMapDiagram(functions, {{
@@ -151,6 +280,14 @@ const complexitySecond = buildComplexityHeatmapDiagram(functions, {{ viewLabel: 
     const decoratorSecond = buildDecoratorUsageMapDiagram(functions, {{
         viewLabel: "Quality Metrics · Decorator Usage Map",
         requiredDecorators: ["auth", "audit"],
+    }});
+    const publicPrivateFirst = buildPublicVsPrivateApiDiagram(modules, {{
+        viewLabel: "Quality Metrics · Public vs Private API",
+        scopeDescription: "repository",
+    }});
+    const publicPrivateSecond = buildPublicVsPrivateApiDiagram(modules, {{
+        viewLabel: "Quality Metrics · Public vs Private API",
+        scopeDescription: "repository",
     }});
 
 console.log(JSON.stringify({{
@@ -169,6 +306,14 @@ console.log(JSON.stringify({{
     complexitySecondStatus: complexitySecond.statusMessage,
     complexityFirstStats: complexityResult.stats,
     complexitySecondStats: complexitySecond.stats,
+        cyclomaticFirstDefinition: cyclomaticFirst.definition,
+        cyclomaticSecondDefinition: cyclomaticSecond.definition,
+        cyclomaticFirstStatus: cyclomaticFirst.statusMessage,
+        cyclomaticSecondStatus: cyclomaticSecond.statusMessage,
+        cyclomaticFirstStats: cyclomaticFirst.stats,
+        cyclomaticSecondStats: cyclomaticSecond.stats,
+        cyclomaticFirstDetails: cyclomaticFirst.statusDetails,
+        cyclomaticSecondDetails: cyclomaticSecond.statusDetails,
         loggingFirstDefinition: loggingFirst.definition,
         loggingSecondDefinition: loggingSecond.definition,
         loggingFirstStatus: loggingFirst.statusMessage,
@@ -181,6 +326,12 @@ console.log(JSON.stringify({{
     decoratorSecondStatus: decoratorSecond.statusMessage,
     decoratorFirstStats: decoratorFirst.stats,
     decoratorSecondStats: decoratorSecond.stats,
+    publicPrivateFirstDefinition: publicPrivateFirst.definition,
+    publicPrivateSecondDefinition: publicPrivateSecond.definition,
+    publicPrivateFirstStatus: publicPrivateFirst.statusMessage,
+    publicPrivateSecondStatus: publicPrivateSecond.statusMessage,
+    publicPrivateFirstStats: publicPrivateFirst.stats,
+    publicPrivateSecondStats: publicPrivateSecond.stats,
 }}));
 """
     payload = _run_node_module(script)
@@ -204,6 +355,35 @@ console.log(JSON.stringify({{
     assert payload["complexityFirstStats"]["unknown"] == 0
     assert payload["complexityFirstStats"]["maxComplexity"] == 18
     assert "Rendered Complexity Heatmap" in payload["complexityFirstStatus"]
+    assert payload["cyclomaticFirstDefinition"].startswith("graph TD")
+    assert payload["cyclomaticFirstDefinition"] == payload["cyclomaticSecondDefinition"]
+    assert payload["cyclomaticFirstStatus"] == payload["cyclomaticSecondStatus"]
+    assert "Rendered Cyclomatic Complexity Map" in payload["cyclomaticFirstStatus"]
+    cyclomatic_stats = payload["cyclomaticFirstStats"]
+    assert cyclomatic_stats == payload["cyclomaticSecondStats"]
+    assert cyclomatic_stats["totalModules"] == 2
+    assert cyclomatic_stats["displayedModules"] == 2
+    assert cyclomatic_stats["hiddenModules"] == 0
+    assert cyclomatic_stats["extreme"] == 1
+    assert cyclomatic_stats["high"] == 0
+    assert cyclomatic_stats["moderate"] == 1
+    assert cyclomatic_stats["low"] == 1
+    assert cyclomatic_stats["unknown"] == 0
+    assert cyclomatic_stats["maxComplexity"] == 18
+    assert cyclomatic_stats["averageComplexity"] == pytest.approx(8.75, rel=1e-9)
+    assert cyclomatic_stats["coverageAverage"] == pytest.approx(0.15, rel=1e-9)
+    assert cyclomatic_stats["coverageBelowThreshold"] == 3
+    assert cyclomatic_stats["coverageThreshold"] == 0.6
+    assert isinstance(cyclomatic_stats["topModules"], list)
+    assert len(cyclomatic_stats["topModules"]) == 2
+    assert cyclomatic_stats["topModules"][0]["moduleId"] == "alpha"
+    assert cyclomatic_stats["topModules"][0]["extreme"] == 1
+    assert cyclomatic_stats["topModules"][1]["moduleId"] == "beta"
+
+    cyclomatic_details = payload["cyclomaticFirstDetails"]
+    assert cyclomatic_details == payload["cyclomaticSecondDetails"]
+    assert cyclomatic_details
+    assert cyclomatic_details[0]["title"] == "alpha"
     assert payload["loggingFirstDefinition"] == payload["loggingSecondDefinition"]
     assert payload["loggingFirstStatus"] == payload["loggingSecondStatus"]
     assert payload["loggingFirstStats"] == payload["loggingSecondStats"]
@@ -287,3 +467,28 @@ console.log(JSON.stringify({{
     }
     assert "Rendered Decorator Usage Map" in payload["decoratorFirstStatus"]
     assert "missing required audit" in payload["decoratorFirstStatus"]
+    assert payload["publicPrivateFirstDefinition"].startswith("graph LR")
+    assert payload["publicPrivateFirstDefinition"] == payload["publicPrivateSecondDefinition"]
+    assert payload["publicPrivateFirstStatus"] == payload["publicPrivateSecondStatus"]
+    assert payload["publicPrivateFirstStats"] == payload["publicPrivateSecondStats"]
+    assert payload["publicPrivateFirstStats"] == {
+        "totalModules": 2,
+        "visibleModules": 2,
+        "hiddenModules": 0,
+        "exported": 2,
+        "implicit": 1,
+    "internal": 1,
+        "private": 2,
+        "reexports": 0,
+        "missing": 0,
+        "modulesWithImplicit": [
+            {
+                "moduleId": "beta.utils",
+                "count": 1,
+                "samples": ["util_main"],
+            },
+        ],
+        "modulesWithoutDeclaredExports": ["beta.utils"],
+        "modulesWithMissingExports": [],
+    }
+    assert "Rendered Public vs Private API Map" in payload["publicPrivateFirstStatus"]

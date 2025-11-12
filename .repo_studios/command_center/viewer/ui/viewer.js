@@ -1,4 +1,5 @@
 import { buildComplexityHeatmapDiagram } from "./builders/complexity_heatmap.js";
+import { buildCyclomaticComplexityMapDiagram } from "./builders/cyclomatic_complexity_map.js";
 import { resolveComplexityHeatmapScope } from "./builders/complexity_heatmap_scope.js";
 import { buildDecoratorUsageMapDiagram } from "./builders/decorator_usage_map.js";
 import { resolveDecoratorUsageScope } from "./builders/decorator_usage_scope.js";
@@ -23,6 +24,8 @@ import { buildClassInheritanceHierarchyDiagram } from "./builders/class_inherita
 import { buildMethodCallChainDiagram } from "./builders/method_call_chain.js";
 import { buildGlobalVariableUsageMapDiagram } from "./builders/global_variable_usage_map.js";
 import { buildIoEffectsDiagram } from "./builders/io_effects_diagram.js";
+import { buildExceptionFlowMapDiagram } from "./builders/exception_flow_map.js";
+import { buildPublicVsPrivateApiDiagram } from "./builders/public_vs_private_api.js";
 
 console.log('[viewer.js] Script loading started');
 
@@ -363,7 +366,10 @@ const VIEW_PACKS = Object.freeze([
         filename: "exception_flow_map.mmd",
         description:
           "Visualization of which functions raise which exceptions to follow error propagation paths.",
-        status: "planned",
+        status: "prototype",
+        builder: "exceptionFlowMapView",
+        requirements: ["exceptionFlow"],
+        note: "Highlights per-module exception raises so auditors can trace propagation paths across modules.",
       },
     ],
   },
@@ -403,11 +409,14 @@ const VIEW_PACKS = Object.freeze([
       },
       {
         id: "public_vs_private_api",
-        label: "Public vs Private API",
+        label: "Public vs Private API Map",
         filename: "public_vs_private_api.mmd",
         description:
-          "Interface map contrasting externally exposed functions and classes with internal helpers.",
-        status: "planned",
+          "Graph contrasting declared exports with implicit public helpers and private internals to expose API drift.",
+        status: "prototype",
+        builder: "publicVsPrivateApiView",
+        requirements: ["moduleExports"],
+        note: "Summarizes normalized API surface metadata including __all__ declarations, implicit exports, and private helpers.",
       },
       {
         id: "cyclomatic_complexity_map",
@@ -415,8 +424,10 @@ const VIEW_PACKS = Object.freeze([
         filename: "cyclomatic_complexity_map.mmd",
         description:
           "Visualization using McCabe complexity scores attached to functions in the inventory.",
-        status: "planned",
-        note: "Depends on cyclomatic complexity values emitted during inventory generation.",
+        status: "prototype",
+        builder: "cyclomaticComplexityMapView",
+        requirements: ["complexityMetrics"],
+        note: "Highlights per-module complexity tiers and surfaces low-coverage hotspots for refactoring triage.",
       },
       {
         id: "type_coverage_map",
@@ -503,7 +514,9 @@ const VIEW_BUILDERS = Object.freeze({
   callbackRegistrationMapView: buildCallbackRegistrationMapViewDefinition,
   dynamicCodeWatchlistView: buildDynamicCodeWatchlistViewDefinition,
   complexityHeatmapView: buildComplexityHeatmapViewDefinition,
+  cyclomaticComplexityMapView: buildCyclomaticComplexityMapViewDefinition,
   decoratorUsageMapView: buildDecoratorUsageMapViewDefinition,
+  publicVsPrivateApiView: buildPublicVsPrivateApiViewDefinition,
   documentationCoverageMapView: buildDocumentationCoverageMapViewDefinition,
   loggingFlowView: buildLoggingFlowViewDefinition,
   exportContractMatrixView: buildExportContractMatrixViewDefinition,
@@ -517,6 +530,7 @@ const VIEW_BUILDERS = Object.freeze({
   methodCallChainView: buildMethodCallChainViewDefinition,
   globalVariableUsageMapView: buildGlobalVariableUsageViewDefinition,
   ioEffectsDiagramView: buildIoEffectsViewDefinition,
+  exceptionFlowMapView: buildExceptionFlowViewDefinition,
   functionInventoryOverview: buildFunctionInventoryOverviewViewDefinition,
   typeCoverageMapView: buildTypeCoverageMapViewDefinition,
   screeningSignalTimelineView: buildScreeningSignalTimelineViewDefinition,
@@ -766,6 +780,29 @@ function findViewRequirementIssue(requirements) {
         );
         if (!hasIoEffects) {
           return "IO effects metadata is not available in this CommandView artifact.";
+        }
+        break;
+      }
+      case "exceptionFlow": {
+        const modules = state.normalizedData?.modules;
+        const moduleMap = modules instanceof Map ? modules : modules ?? null;
+        if (!(moduleMap instanceof Map) || moduleMap.size === 0) {
+          return "Module metadata has not been normalized for this CommandView artifact.";
+        }
+        const functions = state.normalizedData?.functions;
+        const functionMap = functions instanceof Map ? functions : functions ?? null;
+        if (!(functionMap instanceof Map) || functionMap.size === 0) {
+          return "Function metadata has not been normalized for this CommandView artifact.";
+        }
+        const hasExceptionData = Array.from(functionMap.values()).some((fn) => {
+          if (!fn || typeof fn !== "object") {
+            return false;
+          }
+          const raised = Array.isArray(fn.raisedExceptions) ? fn.raisedExceptions : [];
+          return raised.length > 0;
+        });
+        if (!hasExceptionData) {
+          return "Exception flow metadata is not available in this CommandView artifact.";
         }
         break;
       }
@@ -1711,6 +1748,7 @@ function normalizeCommandViewData(inventory, screening) {
     moduleRecord.classes = classIds;
     moduleRecord.functionCount = functionIds.length;
     moduleRecord.classCount = classIds.length;
+    moduleRecord.apiSurface = buildModuleApiSurface(moduleRecord, functions, classes);
   });
 
   const callGraph = {
@@ -2013,6 +2051,299 @@ function buildModuleExportSummary(file, moduleId) {
     counts,
     resolved,
     hasDeclared: declaredSymbols.length > 0,
+  };
+}
+
+function buildModuleApiSurface(moduleRecord, functionsMap, classesMap) {
+  if (!moduleRecord || typeof moduleRecord !== "object") {
+    return {
+      hasDeclaredExports: false,
+      strategy: "implicit",
+      exportedSymbols: [],
+      functions: { public: [], internal: [] },
+      classes: { public: [], internal: [] },
+      globals: { public: [], internal: [] },
+      reexports: [],
+      missingExports: [],
+      counts: {
+        functions: { public: 0, internal: 0 },
+        classes: { public: 0, internal: 0 },
+        globals: { public: 0, internal: 0 },
+        exported: 0,
+        reexports: 0,
+        missing: 0,
+      },
+    };
+  }
+
+  const exportSummary = moduleRecord.exportSummary ?? {};
+  const resolvedExports = Array.isArray(exportSummary.resolved) ? exportSummary.resolved : [];
+  const exportedSymbols = new Set();
+  const reexports = [];
+  const missingExports = [];
+
+  resolvedExports.forEach((entry) => {
+    if (!entry || typeof entry !== "object") {
+      return;
+    }
+    const kind = normalizeString(entry.kind);
+    const symbol = normalizeString(entry.symbol);
+    if (kind === "function" || kind === "class" || kind === "global") {
+      if (symbol) {
+        exportedSymbols.add(symbol);
+      }
+      return;
+    }
+    if (kind === "reexport") {
+      if (symbol) {
+        exportedSymbols.add(symbol);
+      }
+      reexports.push({
+        symbol,
+        sourceModule: normalizeString(entry.sourceModule ?? entry.source_module ?? null),
+        sourceName: normalizeString(entry.sourceName ?? entry.source_name ?? null),
+        sourceQualifiedName: normalizeString(entry.sourceQualifiedName ?? entry.source_qualified_name ?? null),
+        lineno: normalizeLineNumber(entry.lineno),
+      });
+      return;
+    }
+    if (symbol) {
+      missingExports.push({
+        symbol,
+        kind: kind ?? (entry.defined === false ? "missing" : "unknown"),
+      });
+    }
+  });
+
+  reexports.sort((left, right) => {
+    const leftSymbol = left.symbol ?? "";
+    const rightSymbol = right.symbol ?? "";
+    if (leftSymbol !== rightSymbol) {
+      return leftSymbol.localeCompare(rightSymbol);
+    }
+    const leftModule = left.sourceModule ?? "";
+    const rightModule = right.sourceModule ?? "";
+    if (leftModule !== rightModule) {
+      return leftModule.localeCompare(rightModule);
+    }
+    return 0;
+  });
+
+  missingExports.sort((left, right) => {
+    const leftSymbol = left.symbol ?? "";
+    const rightSymbol = right.symbol ?? "";
+    if (leftSymbol !== rightSymbol) {
+      return leftSymbol.localeCompare(rightSymbol);
+    }
+    return 0;
+  });
+
+  const useExplicitExports = exportSummary.hasDeclared === true;
+  const functionIds = Array.isArray(moduleRecord.functions) ? moduleRecord.functions : [];
+  const classIds = Array.isArray(moduleRecord.classes) ? moduleRecord.classes : [];
+  const globals = Array.isArray(moduleRecord.globals) ? moduleRecord.globals : [];
+
+  const functionPublic = [];
+  const functionInternal = [];
+  functionIds.forEach((functionId) => {
+    const fn = functionsMap.get(functionId);
+    if (!fn || typeof fn !== "object") {
+      return;
+    }
+    const entry = buildApiSurfaceItem({
+      id: fn.id,
+      name: fn.name,
+      lineno: fn.lineno,
+      docstringQuality: fn.docstringQuality ?? null,
+      coverage: fn.metrics?.coverage ?? null,
+      typeHintCoverage: fn.typeHintCoverage ?? null,
+      exportedSymbols,
+      useExplicitExports,
+    });
+    if (entry.category === "exported" || entry.category === "implicit") {
+      functionPublic.push(entry);
+    } else {
+      functionInternal.push(entry);
+    }
+  });
+
+  const classPublic = [];
+  const classInternal = [];
+  classIds.forEach((classId) => {
+    const cls = classesMap.get(classId);
+    if (!cls || typeof cls !== "object") {
+      return;
+    }
+    const entry = buildApiSurfaceItem({
+      id: cls.id,
+      name: cls.name,
+      lineno: cls.lineno,
+      docstringQuality: cls.docstringQuality ?? null,
+      methodCount: cls.methodCount ?? 0,
+      exportedSymbols,
+      useExplicitExports,
+    });
+    if (entry.category === "exported" || entry.category === "implicit") {
+      classPublic.push(entry);
+    } else {
+      classInternal.push(entry);
+    }
+  });
+
+  const globalPublic = [];
+  const globalInternal = [];
+  globals.forEach((globalEntry) => {
+    if (!globalEntry || typeof globalEntry !== "object") {
+      return;
+    }
+    const entry = buildApiSurfaceItem({
+      id: moduleRecord.moduleId ? `${moduleRecord.moduleId}::${globalEntry.name}` : globalEntry.name,
+      name: globalEntry.name,
+      lineno: globalEntry.lineno,
+      valueKind: globalEntry.valueKind ?? null,
+      exportedSymbols,
+      useExplicitExports,
+    });
+    if (entry.category === "exported" || entry.category === "implicit") {
+      globalPublic.push(entry);
+    } else {
+      globalInternal.push(entry);
+    }
+  });
+
+  functionPublic.sort((left, right) => left.name.localeCompare(right.name));
+  functionInternal.sort((left, right) => left.name.localeCompare(right.name));
+  classPublic.sort((left, right) => left.name.localeCompare(right.name));
+  classInternal.sort((left, right) => left.name.localeCompare(right.name));
+  globalPublic.sort((left, right) => left.name.localeCompare(right.name));
+  globalInternal.sort((left, right) => left.name.localeCompare(right.name));
+
+  const counts = {
+    functions: {
+      public: functionPublic.length,
+      internal: functionInternal.length,
+    },
+    classes: {
+      public: classPublic.length,
+      internal: classInternal.length,
+    },
+    globals: {
+      public: globalPublic.length,
+      internal: globalInternal.length,
+    },
+    exported: exportedSymbols.size,
+    reexports: reexports.length,
+    missing: missingExports.length,
+  };
+
+  return {
+    hasDeclaredExports: useExplicitExports,
+    strategy: useExplicitExports ? "explicit" : "implicit",
+  exportedSymbols: Array.from(exportedSymbols).sort(compareExportedSymbols),
+    functions: {
+      public: functionPublic,
+      internal: functionInternal,
+    },
+    classes: {
+      public: classPublic,
+      internal: classInternal,
+    },
+    globals: {
+      public: globalPublic,
+      internal: globalInternal,
+    },
+    reexports,
+    missingExports,
+    counts,
+  };
+}
+
+function compareExportedSymbols(left, right) {
+  if (!left && !right) {
+    return 0;
+  }
+  if (!left) {
+    return 1;
+  }
+  if (!right) {
+    return -1;
+  }
+
+  const leftWeight = getExportSymbolOrderingWeight(left);
+  const rightWeight = getExportSymbolOrderingWeight(right);
+  if (leftWeight !== rightWeight) {
+    return leftWeight - rightWeight;
+  }
+
+  const leftLower = left.toLowerCase();
+  const rightLower = right.toLowerCase();
+  if (leftLower !== rightLower) {
+    return leftLower.localeCompare(rightLower);
+  }
+
+  return left.localeCompare(right);
+}
+
+function getExportSymbolOrderingWeight(symbol) {
+  if (!symbol) {
+    return 3;
+  }
+  if (/^[A-Z0-9_]+$/.test(symbol)) {
+    return 0;
+  }
+  if (/^[A-Z][A-Za-z0-9]*$/.test(symbol)) {
+    return 1;
+  }
+  return 2;
+}
+
+function buildApiSurfaceItem(options) {
+  const {
+    id,
+    name,
+    lineno,
+    docstringQuality,
+    coverage,
+    typeHintCoverage,
+    methodCount,
+    valueKind,
+    exportedSymbols,
+    useExplicitExports,
+  } = options;
+
+  const normalizedName = normalizeString(name ?? id) ?? null;
+  const exported = normalizedName ? exportedSymbols.has(normalizedName) : false;
+  const isPrivateName = normalizedName ? normalizedName.startsWith("_") : false;
+
+  let category;
+  let reason;
+  if (exported) {
+    category = "exported";
+    reason = "Declared in __all__";
+  } else if (isPrivateName) {
+    category = "private";
+    reason = "Name is prefixed with an underscore.";
+  } else if (useExplicitExports) {
+    category = "internal";
+    reason = "Module defines __all__ and symbol is not exported.";
+  } else {
+    category = "implicit";
+    reason = "Implicitly public because module does not define __all__.";
+  }
+
+  return {
+    id,
+    name: normalizedName ?? (typeof name === "string" ? name : id),
+    qualifiedId: id,
+    lineno: normalizeLineNumber(lineno),
+    docstringQuality: docstringQuality ?? null,
+    coverage: coverage ?? null,
+    typeHintCoverage: typeHintCoverage ?? null,
+    methodCount: typeof methodCount === "number" ? methodCount : null,
+    valueKind: valueKind ?? null,
+    exported,
+    category,
+    reason,
   };
 }
 
@@ -2420,6 +2751,9 @@ function createFunctionRecord(fn, moduleId) {
     ),
     ioEffects: normalizeIoEffects(fn.io_effects ?? fn.ioEffects ?? null),
     usedGlobals: normalizeUsedGlobals(fn.used_globals ?? fn.usedGlobals ?? null),
+    raisedExceptions: normalizeRaisedExceptions(
+      fn.raises ?? fn.raised_exceptions ?? fn.raisedExceptions ?? null
+    ),
     metrics: {
       coverage: fn.coverage ?? null,
       lineCount: fn.line_count ?? null,
@@ -2487,6 +2821,132 @@ function normalizeIoEffects(value) {
     hasEffects: activeFlags.length > 0,
     activeFlags,
     flagCount: activeFlags.length,
+  };
+}
+
+function normalizeRaisedExceptions(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  const seen = new Set();
+  const normalized = [];
+
+  value.forEach((entry) => {
+    let raw = null;
+    let moduleName = null;
+    let qualifiedName = null;
+    let type = null;
+    let message = null;
+    let lineno = null;
+
+    if (typeof entry === "string") {
+      raw = entry.trim();
+    } else if (entry && typeof entry === "object") {
+      raw = normalizeString(
+        entry.exception ?? entry.expression ?? entry.representation ?? entry.raw ?? entry.name ?? null
+      );
+      moduleName = normalizeString(entry.module ?? entry.module_name ?? entry.moduleId ?? entry.module_id ?? null);
+      qualifiedName = normalizeString(
+        entry.qualified_name ?? entry.qualifiedName ?? entry.qualname ?? entry.exception_qualified_name ?? null
+      );
+      type = normalizeString(entry.type ?? entry.exception_type ?? entry.class ?? entry.kind ?? null);
+      message = normalizeString(entry.message ?? entry.detail ?? entry.reason ?? null);
+      lineno = normalizeLineNumber(entry.lineno ?? entry.line ?? entry.line_number ?? null);
+    } else if (entry !== null && entry !== undefined) {
+      raw = String(entry).trim();
+    }
+
+    if (!type || type.length === 0 || !message) {
+      const inference = inferExceptionTypeAndMessage(raw ?? qualifiedName ?? type ?? null);
+      if (!type && inference.type) {
+        type = inference.type;
+      }
+      if (!message && inference.message) {
+        message = inference.message;
+      }
+    }
+
+    if (!qualifiedName && type) {
+      qualifiedName = type;
+    }
+
+    if (!raw && qualifiedName) {
+      raw = qualifiedName;
+    }
+
+    if (!type && !raw) {
+      return;
+    }
+
+    const dedupeKey = `${type ?? ""}|${message ?? ""}|${qualifiedName ?? ""}`;
+    if (seen.has(dedupeKey)) {
+      return;
+    }
+    seen.add(dedupeKey);
+
+    normalized.push({
+      type: type ?? null,
+      message: message ?? null,
+      raw: raw ?? null,
+      qualifiedName,
+      module: moduleName,
+      lineno,
+    });
+  });
+
+  normalized.sort((left, right) => {
+    const leftType = left.type ?? "";
+    const rightType = right.type ?? "";
+    if (leftType !== rightType) {
+      return leftType.localeCompare(rightType);
+    }
+    const leftMessage = left.message ?? "";
+    const rightMessage = right.message ?? "";
+    if (leftMessage !== rightMessage) {
+      return leftMessage.localeCompare(rightMessage);
+    }
+    const leftLineno = Number.isFinite(left.lineno) ? left.lineno : Number.MAX_SAFE_INTEGER;
+    const rightLineno = Number.isFinite(right.lineno) ? right.lineno : Number.MAX_SAFE_INTEGER;
+    if (leftLineno !== rightLineno) {
+      return leftLineno - rightLineno;
+    }
+    const leftQualified = left.qualifiedName ?? "";
+    const rightQualified = right.qualifiedName ?? "";
+    if (leftQualified !== rightQualified) {
+      return leftQualified.localeCompare(rightQualified);
+    }
+    return 0;
+  });
+
+  return normalized;
+}
+
+function inferExceptionTypeAndMessage(raw) {
+  if (typeof raw !== "string") {
+    return { type: null, message: null };
+  }
+  const trimmed = raw.trim();
+  if (!trimmed) {
+    return { type: null, message: null };
+  }
+  const openIndex = trimmed.indexOf("(");
+  if (openIndex < 0) {
+    return { type: trimmed, message: null };
+  }
+  const type = trimmed.slice(0, openIndex).trim();
+  const closeIndex = trimmed.lastIndexOf(")");
+  const messageSlice = closeIndex > openIndex ? trimmed.slice(openIndex + 1, closeIndex) : trimmed.slice(openIndex + 1);
+  let message = messageSlice.trim();
+  if (
+    (message.startsWith("'") && message.endsWith("'")) ||
+    (message.startsWith('"') && message.endsWith('"'))
+  ) {
+    message = message.slice(1, -1);
+  }
+  return {
+    type: type || trimmed,
+    message: message || null,
   };
 }
 
@@ -5309,6 +5769,140 @@ function buildClassInheritanceHierarchyViewDefinition() {
   };
 }
 
+function buildExceptionFlowViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const functionsValue = normalized.functions;
+  const functionsMap = functionsValue instanceof Map ? functionsValue : functionsValue ?? null;
+  if (!(functionsMap instanceof Map) || functionsMap.size === 0) {
+    return { message: "Function metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const repositoryFunctions = collectFunctionsWithExceptions(functionsMap);
+  if (repositoryFunctions.length === 0) {
+    return { message: "No exceptions were recorded in this CommandView artifact." };
+  }
+
+  const repositoryFunctionSet = new Set(repositoryFunctions);
+
+  const selections = state.levelSelections ?? {};
+  const focusFunctionId = typeof selections.functionId === "string" ? selections.functionId : null;
+  const moduleId = typeof selections.moduleId === "string" ? selections.moduleId : null;
+  const domainId = typeof selections.domainId === "string" ? selections.domainId : null;
+  const rootId = typeof selections.rootId === "string" ? selections.rootId : null;
+
+  const focusRecord = focusFunctionId ? functionsMap.get(focusFunctionId) : null;
+  const focusRaisesExceptions = Boolean(focusRecord && functionRaisesExceptions(focusRecord));
+
+  let scopedFunctionIds = new Set();
+  let scopeDescription = "repository";
+  let fallbackNotice = null;
+  const selectionLabel = moduleId ?? domainId ?? rootId ?? null;
+  const isScopedSelection = Boolean(selectionLabel);
+
+  if (focusRaisesExceptions) {
+    scopedFunctionIds.add(focusFunctionId);
+    const focusModuleId = focusRecord?.moduleId ?? resolveModuleIdFromFunctionId(focusFunctionId);
+    if (focusModuleId) {
+      scopeDescription = focusModuleId;
+    }
+  }
+
+  if (!focusRaisesExceptions && moduleId && modules.has(moduleId)) {
+    collectModuleExceptionFunctionIds(modules.get(moduleId), functionsMap).forEach((functionId) => {
+      scopedFunctionIds.add(functionId);
+    });
+    if (scopedFunctionIds.size > 0) {
+      scopeDescription = moduleId;
+    }
+  }
+
+  if (scopedFunctionIds.size === 0 && domainId) {
+    modules.forEach((moduleRecord, identifier) => {
+      if (!isModuleWithinScope(identifier, domainId)) {
+        return;
+      }
+      collectModuleExceptionFunctionIds(moduleRecord, functionsMap).forEach((functionId) => {
+        scopedFunctionIds.add(functionId);
+      });
+    });
+    if (scopedFunctionIds.size > 0) {
+      scopeDescription = domainId;
+    }
+  }
+
+  if (scopedFunctionIds.size === 0 && rootId) {
+    modules.forEach((moduleRecord, identifier) => {
+      if (!isModuleWithinScope(identifier, rootId)) {
+        return;
+      }
+      collectModuleExceptionFunctionIds(moduleRecord, functionsMap).forEach((functionId) => {
+        scopedFunctionIds.add(functionId);
+      });
+    });
+    if (scopedFunctionIds.size > 0) {
+      scopeDescription = rootId;
+    }
+  }
+
+  if (scopedFunctionIds.size === 0) {
+    scopedFunctionIds = new Set(repositoryFunctionSet);
+    scopeDescription = "repository";
+    if (isScopedSelection && selectionLabel) {
+      fallbackNotice = `No exceptions recorded for "${selectionLabel}". Showing repository map instead.`;
+    } else if (isScopedSelection) {
+      fallbackNotice = "No exceptions recorded for the current selection. Showing repository map instead.";
+    }
+  }
+
+  if (scopedFunctionIds.size === 0) {
+    return { message: "No exceptions were recorded in this CommandView artifact." };
+  }
+
+  const allowedFunctionIds = new Set();
+  scopedFunctionIds.forEach((functionId) => {
+    if (repositoryFunctionSet.has(functionId)) {
+      allowedFunctionIds.add(functionId);
+    }
+  });
+
+  if (allowedFunctionIds.size === 0) {
+    return { message: "No exceptions were recorded in this CommandView artifact." };
+  }
+
+  const result = buildExceptionFlowMapDiagram(modules, functionsMap, {
+    viewLabel: "State Effects · Exception Flow Map",
+    scopeDescription,
+    fallbackNotice,
+    allowedFunctionIds,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Exception Flow Map diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
+  };
+}
+
 function buildIoEffectsViewDefinition() {
   const normalized = state.normalizedData;
   if (!normalized) {
@@ -5575,6 +6169,41 @@ function buildGlobalVariableUsageViewDefinition() {
     statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
     stats: result.stats,
   };
+}
+
+function collectFunctionsWithExceptions(functionsMap) {
+  if (!(functionsMap instanceof Map)) {
+    return [];
+  }
+  const results = [];
+  functionsMap.forEach((record, functionId) => {
+    if (functionRaisesExceptions(record)) {
+      results.push(functionId);
+    }
+  });
+  results.sort((left, right) => left.localeCompare(right));
+  return results;
+}
+
+function collectModuleExceptionFunctionIds(moduleRecord, functionsMap) {
+  if (!moduleRecord || typeof moduleRecord !== "object") {
+    return [];
+  }
+  const functionIds = Array.isArray(moduleRecord.functions) ? moduleRecord.functions : [];
+  return functionIds.filter((functionId) => {
+    if (!functionsMap.has(functionId)) {
+      return false;
+    }
+    return functionRaisesExceptions(functionsMap.get(functionId));
+  });
+}
+
+function functionRaisesExceptions(record) {
+  if (!record || typeof record !== "object") {
+    return false;
+  }
+  const raised = Array.isArray(record.raisedExceptions) ? record.raisedExceptions : [];
+  return raised.length > 0;
 }
 
 function collectFunctionsWithIoEffects(functionsMap) {
@@ -6023,6 +6652,65 @@ function buildComplexityHeatmapViewDefinition() {
   };
 }
 
+function buildCyclomaticComplexityMapViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const scope = resolveComplexityHeatmapScope(
+    {
+      functions: normalized.functions,
+      modules: normalized.modules,
+      neighborhoods: state.levels?.level4 ?? null,
+    },
+    {
+      currentLevel: state.currentLevel,
+      selections: {
+        rootId: state.levelSelections.rootId,
+        domainId: state.levelSelections.domainId,
+        moduleId: state.levelSelections.moduleId,
+        functionId: state.levelSelections.functionId,
+      },
+    }
+  );
+
+  if (scope?.message) {
+    return { message: scope.message };
+  }
+
+  const functionsMap = scope?.functions instanceof Map ? scope.functions : null;
+  if (!functionsMap || functionsMap.size === 0) {
+    const emptyMessage = scope?.emptyMessage ?? "No complexity metrics recorded for this selection.";
+    return { message: emptyMessage };
+  }
+
+  const result = buildCyclomaticComplexityMapDiagram(functionsMap, {
+    viewLabel: "Quality Metrics · Cyclomatic Complexity Map",
+    scopeDescription: scope?.statusContext ?? "repository",
+    modules: normalized.modules,
+    moduleLimit: 12,
+    functionLimit: 6,
+    coverageRiskThreshold: 0.6,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Cyclomatic Complexity Map diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
+  };
+}
+
 function formatComplexityHeatmapStatus(stats, context) {
   const extreme = typeof stats?.extreme === "number" ? stats.extreme : 0;
   const high = typeof stats?.high === "number" ? stats.high : 0;
@@ -6209,6 +6897,174 @@ function describeLoggingFlowScreening(screening) {
   }
   const suffix = details.length > 0 ? ` (${details.join(", ")})` : "";
   return `screening ${upper}${suffix}`;
+}
+
+function buildPublicVsPrivateApiViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const scope = resolvePublicVsPrivateApiScope(modules, {
+    rootId: state.levelSelections.rootId,
+    domainId: state.levelSelections.domainId,
+    moduleId: state.levelSelections.moduleId,
+  });
+
+  if (scope?.message) {
+    return { message: scope.message };
+  }
+
+  const result = buildPublicVsPrivateApiDiagram(scope.modules, {
+    viewLabel: "Quality Metrics · Public vs Private API",
+    scopeDescription: scope.scopeDescription,
+    fallbackNotice: scope.fallbackNotice ?? undefined,
+    moduleLimit: scope.moduleLimit ?? undefined,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Public vs Private API diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
+  };
+}
+
+function resolvePublicVsPrivateApiScope(modules, selections) {
+  const moduleId = typeof selections?.moduleId === "string" ? selections.moduleId : null;
+  const domainId = typeof selections?.domainId === "string" ? selections.domainId : null;
+  const rootId = typeof selections?.rootId === "string" ? selections.rootId : null;
+
+  const isScopedSelection = Boolean(moduleId || domainId || rootId);
+  const selectionLabel = moduleId ?? domainId ?? rootId ?? null;
+
+  let scopedModules = new Map();
+  let scopeDescription = "repository";
+
+  if (moduleId && modules.has(moduleId)) {
+    scopedModules.set(moduleId, modules.get(moduleId));
+    scopeDescription = moduleId;
+  } else if (domainId) {
+    modules.forEach((moduleRecord, identifier) => {
+      if (isModuleWithinScope(identifier, domainId)) {
+        scopedModules.set(identifier, moduleRecord);
+      }
+    });
+    if (scopedModules.size > 0) {
+      scopeDescription = domainId;
+    }
+  } else if (rootId) {
+    modules.forEach((moduleRecord, identifier) => {
+      if (isModuleWithinScope(identifier, rootId)) {
+        scopedModules.set(identifier, moduleRecord);
+      }
+    });
+    if (scopedModules.size > 0) {
+      scopeDescription = rootId;
+    }
+  }
+
+  if (scopedModules.size === 0) {
+    scopedModules = modules;
+    scopeDescription = "repository";
+  }
+
+  let eligibleModules = filterModulesWithApiSurface(scopedModules);
+
+  if (eligibleModules.size === 0) {
+    const repositoryEligible = filterModulesWithApiSurface(modules);
+    if (repositoryEligible.size === 0) {
+      return { message: "Public vs Private API surface metadata is unavailable for this CommandView artifact." };
+    }
+
+    const fallbackNotice = isScopedSelection
+      ? selectionLabel
+        ? `API surface metadata missing for "${selectionLabel}". Showing repository coverage instead.`
+        : "API surface metadata missing for the current selection. Showing repository coverage instead."
+      : null;
+
+    eligibleModules = repositoryEligible;
+    scopeDescription = "repository";
+
+    return {
+      modules: eligibleModules,
+      scopeDescription,
+      fallbackNotice,
+      moduleLimit: undefined,
+    };
+  }
+
+  return {
+    modules: eligibleModules,
+    scopeDescription,
+    fallbackNotice: null,
+    moduleLimit: undefined,
+  };
+}
+
+function filterModulesWithApiSurface(modules) {
+  const map = new Map();
+  if (!(modules instanceof Map)) {
+    return map;
+  }
+  modules.forEach((record, identifier) => {
+    if (hasModuleApiSurface(record)) {
+      map.set(identifier, record);
+    }
+  });
+  return map;
+}
+
+function hasModuleApiSurface(moduleRecord) {
+  if (!moduleRecord || typeof moduleRecord !== "object") {
+    return false;
+  }
+  const apiSurface = moduleRecord.apiSurface;
+  if (!apiSurface || typeof apiSurface !== "object") {
+    return false;
+  }
+
+  const exportedSymbols = Array.isArray(apiSurface.exportedSymbols) ? apiSurface.exportedSymbols : [];
+  const reexports = Array.isArray(apiSurface.reexports) ? apiSurface.reexports : [];
+  const missing = Array.isArray(apiSurface.missingExports) ? apiSurface.missingExports : [];
+
+  const functionsPublic = Array.isArray(apiSurface.functions?.public) ? apiSurface.functions.public : [];
+  const functionsInternal = Array.isArray(apiSurface.functions?.internal) ? apiSurface.functions.internal : [];
+  const classesPublic = Array.isArray(apiSurface.classes?.public) ? apiSurface.classes.public : [];
+  const classesInternal = Array.isArray(apiSurface.classes?.internal) ? apiSurface.classes.internal : [];
+  const globalsPublic = Array.isArray(apiSurface.globals?.public) ? apiSurface.globals.public : [];
+  const globalsInternal = Array.isArray(apiSurface.globals?.internal) ? apiSurface.globals.internal : [];
+
+  if (
+    exportedSymbols.length === 0 &&
+    reexports.length === 0 &&
+    missing.length === 0 &&
+    functionsPublic.length === 0 &&
+    functionsInternal.length === 0 &&
+    classesPublic.length === 0 &&
+    classesInternal.length === 0 &&
+    globalsPublic.length === 0 &&
+    globalsInternal.length === 0
+  ) {
+    return false;
+  }
+
+  return true;
 }
 
 function buildDocumentationCoverageMapViewDefinition() {
@@ -8132,6 +8988,7 @@ export const __test__ = {
     state.statusDetails = [];
   },
   buildLayerArchitectureValidationViewDefinitionForTest: buildLayerArchitectureValidationViewDefinition,
+  buildModuleApiSurfaceForTest: buildModuleApiSurface,
   buildExportContractMatrixViewDefinitionForTest: buildExportContractMatrixViewDefinition,
   buildExternalVsInternalDependencyMapViewDefinitionForTest: buildExternalVsInternalDependencyMapViewDefinition,
   buildCallbackRegistrationMapViewDefinitionForTest: buildCallbackRegistrationMapViewDefinition,
@@ -8139,7 +8996,10 @@ export const __test__ = {
   buildEntrypointTraceDiagramViewDefinitionForTest: buildEntrypointTraceDiagramViewDefinition,
   buildClassInheritanceHierarchyViewDefinitionForTest: buildClassInheritanceHierarchyViewDefinition,
   buildMethodCallChainViewDefinitionForTest: buildMethodCallChainViewDefinition,
+  buildPublicVsPrivateApiViewDefinitionForTest: buildPublicVsPrivateApiViewDefinition,
+  buildCyclomaticComplexityMapViewDefinitionForTest: buildCyclomaticComplexityMapViewDefinition,
   buildIoEffectsViewDefinitionForTest: buildIoEffectsViewDefinition,
+  buildExceptionFlowViewDefinitionForTest: buildExceptionFlowViewDefinition,
   buildGlobalVariableUsageViewDefinitionForTest: buildGlobalVariableUsageViewDefinition,
   hasDynamicCodeDataForTest: hasDynamicCodeData,
   normalizeEntrypointSignalsForTest: normalizeEntrypointSignals,

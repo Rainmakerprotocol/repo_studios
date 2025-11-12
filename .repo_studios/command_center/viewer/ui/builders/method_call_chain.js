@@ -93,7 +93,7 @@ export function buildMethodCallChainDiagram(modules, functions, callGraph, optio
       return;
     }
     const arrow = sourceParticipant.id === targetParticipant.id ? "-->>" : "->>";
-    const label = `${sourceDescriptor.methodName}() → ${targetDescriptor.methodName}()`;
+  const label = `${sourceDescriptor.methodName}() -> ${targetDescriptor.methodName}()`;
     lines.push(
       `  ${sourceParticipant.id} ${arrow} ${targetParticipant.id}: ${escapeMermaidLabel(label)}`
     );
@@ -445,7 +445,7 @@ function buildStatusDetails({ stats, chain, methodIndex, scopeDescription, fallb
     const targetDescriptor = methodIndex.get(edge.targetId)?.descriptor;
     return {
       label: `Step ${index + 1}`,
-      value: `${sourceDescriptor?.displayName ?? edge.sourceId} → ${targetDescriptor?.displayName ?? edge.targetId}`,
+  value: `${sourceDescriptor?.displayName ?? edge.sourceId} -> ${targetDescriptor?.displayName ?? edge.targetId}`,
     };
   });
 
