@@ -35,8 +35,8 @@
   24. `cross_module_function_references.mmd` — edge map showing when functions in one file call functions in another, highlighting inter-module coupling; *requires the planned function call graph data plus module association for each node.*
   25. `import_chain_depth.mmd` — layered view illustrating import hop counts from the standard library through third-party packages into project modules; *once dependency classification enhancement (standard_library vs third_party vs internal) lands, derive depth metrics during rendering.*
 - **Risk & Assurance Pack**
-  26. `test_coverage_mapping.mmd` — bipartite graph connecting tests in `tests/` to exercised functions; *requires new cross-artifact mapping (e.g., ingest coverage.json) because the inventory alone does not record test relationships.*
-  27. `git_churn_risk_map.mmd` — risk heatmap combining git change frequency with complexity signals; *needs integration with git history metrics (e.g., `git log --stat`) before visualization is possible.*
+ 26. `test_coverage_mapping.mmd` — bipartite graph connecting tests in `tests/` to exercised functions; coverage ingestion via `generate_commandview_inventory.py --coverage-json` now populates `coverage_signals` and per-function metrics, enabling the viewer builder documented in `view_specs/test_coverage_mapping.md`.
+   27. `git_churn_risk_map.mmd` — risk heatmap combining git change frequency with complexity signals; git churn metrics now flow through CommandView (`git_churn` blocks and `statistics.git_churn`), enabling view wiring once builder logic lands (see `view_specs/git_churn_risk_map.md`).
   28. `dead_code_detection.mmd` — diagram isolating functions never invoked and unused imports; *depends on the future call graph emission plus additional usage analysis to mark unreachable code paths.*
 
 ## Draft Checklist Spine

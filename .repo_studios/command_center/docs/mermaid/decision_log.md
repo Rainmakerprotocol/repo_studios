@@ -1,5 +1,12 @@
 # Mermaid Decision Log
 
+## 2025-11-13
+
+- **Decision:** Wired the Risk & Assurance Git Churn Risk Map view and documented scope fallbacks.
+- **Context:** Adds the second Risk & Assurance diagram so operators can correlate repository churn baselines with module-level volatility while preserving deterministic wiring prior to the coexistence harness.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Viewer wiring `buildGitChurnRiskMapViewDefinition()` in `.repo_studios/command_center/viewer/ui/viewer.js`, builder module `.repo_studios/command_center/viewer/ui/builders/git_churn_risk_map.js`, updated spec `.repo_studios/command_center/docs/mermaid/view_specs/git_churn_risk_map.md`, and passing regressions `.repo_studios/tests/tests_command_center/viewer/test_git_churn_risk_map_view.py` plus `test_git_churn_risk_map_view_definition.py` (executed 2025-11-13 via Node-backed harness).
+
 ## 2025-11-12
 
 - **Decision:** Wired the Public vs Private API view controls and expanded Quality Metrics coexistence coverage.
@@ -348,3 +355,15 @@
 - **Context:** Demonstrates the view pack interaction model while mapping the Code Flow pack to the newly emitted call graph edges without requiring a page reload.
 - **Owner:** GitHub Copilot implementation assistant.
 - **Evidence:** `.repo_studios/command_center/viewer/ui/viewer.js` now enables the Code Flow button, computes module-level call graph diagrams, and routes selections through `renderActiveView`; documentation in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` records the partial Phase 7 completion.
+
+## 2025-11-13
+
+- **Decision:** Wired the Risk & Assurance Test Coverage Mapping view and documented the coverage-driven data contract.
+- **Context:** Unblocks auditors by surfacing module/test coverage signals inside the viewer while the rest of the Risk & Assurance pack is under construction.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New spec at `.repo_studios/command_center/docs/mermaid/view_specs/test_coverage_mapping.md`, viewer wiring in `.repo_studios/command_center/viewer/ui/viewer.js` (`buildTestCoverageMappingViewDefinition` + `resolveTestCoverageScope`), builder implementation in `ui/builders/test_coverage_mapping.js`, and regression coverage (`test_test_coverage_mapping_view.py`, `test_test_coverage_mapping_view_definition.py`) referenced in the Phase 7 tracker within `mermaid_viewer.md`.
+
+- **Decision:** Documented Git Churn Risk Map data slice readiness and confirmed CommandView churn metrics availability.
+- **Context:** Establishes the data foundation for the remaining Risk & Assurance views while controls are in flight.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Spec at `.repo_studios/command_center/docs/mermaid/view_specs/git_churn_risk_map.md`, `createModuleRecord()` retention of `gitChurn` blocks in `viewer.js`, producer regression `.repo_studios/tests/tests_producers/test_generate_commandview_inventory.py::test_inventory_includes_git_churn_summary`, and Phase 7 tracker update in `mermaid_viewer.md`.

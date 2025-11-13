@@ -121,7 +121,7 @@ console.log(JSON.stringify({{
     assert definition.startswith("sequenceDiagram")
     assert "alpha_workflow_Workflow" in definition
     assert "beta_notifications_Notifier" in definition
-    assert "Workflow.start() -> Workflow.validate()" in definition
+    assert "start() -> validate()" in definition
 
     status = payload["statusMessage"]
     assert "Method Call Chain" in status

@@ -26,6 +26,11 @@ import { buildGlobalVariableUsageMapDiagram } from "./builders/global_variable_u
 import { buildIoEffectsDiagram } from "./builders/io_effects_diagram.js";
 import { buildExceptionFlowMapDiagram } from "./builders/exception_flow_map.js";
 import { buildPublicVsPrivateApiDiagram } from "./builders/public_vs_private_api.js";
+import { buildCrossModuleFunctionReferencesDiagram } from "./builders/cross_module_function_references.js";
+import { buildImportChainDepthDiagram } from "./builders/import_chain_depth.js";
+import { buildTestCoverageMappingDiagram } from "./builders/test_coverage_mapping.js";
+import { buildGitChurnRiskMapDiagram } from "./builders/git_churn_risk_map.js";
+import { buildDeadCodeDetectionDiagram } from "./builders/dead_code_detection.js";
 
 console.log('[viewer.js] Script loading started');
 
@@ -461,8 +466,10 @@ const VIEW_PACKS = Object.freeze([
         filename: "cross_module_function_references.mmd",
         description:
           "Edge map showing when functions in one file call functions in another to expose coupling.",
-        status: "planned",
-        note: "Requires function-to-module association from the call graph data.",
+        status: "prototype",
+        builder: "crossModuleFunctionReferencesView",
+        requirements: ["inventoryBasics", "callGraph"],
+        note: "Aggregates normalized call graph edges into module-level coupling stats with scope-aware fallbacks.",
       },
       {
         id: "import_chain_depth",
@@ -470,8 +477,10 @@ const VIEW_PACKS = Object.freeze([
         filename: "import_chain_depth.mmd",
         description:
           "Layered view illustrating import hop counts from standard library to local modules.",
-        status: "planned",
-        note: "Builds on dependency classification buckets and depth calculations during rendering.",
+        status: "prototype",
+        builder: "importChainDepthView",
+        requirements: ["inventoryBasics"],
+        note: "Derives minimal hop depths from normalized import edges and highlights modules lacking a path back to the standard library.",
       },
     ],
   },
@@ -485,7 +494,9 @@ const VIEW_PACKS = Object.freeze([
         filename: "test_coverage_mapping.mmd",
         description:
           "Graph connecting tests to exercised functions for coverage validation.",
-        status: "planned",
+        status: "prototype",
+        builder: "testCoverageMappingView",
+        requirements: ["inventoryBasics", "coverage"],
         note: "Requires coverage artifacts (e.g., coverage.json) mapped to inventory modules.",
       },
       {
@@ -494,8 +505,10 @@ const VIEW_PACKS = Object.freeze([
         filename: "git_churn_risk_map.mmd",
         description:
           "Risk heatmap combining git change frequency with complexity signals.",
-        status: "planned",
-        note: "Needs git churn metrics plus scoring guidance to drive risk colors.",
+        status: "prototype",
+        builder: "gitChurnRiskMapView",
+        requirements: ["gitChurn"],
+        note: "Renders churn severity based on repository baselines when git churn metrics are available.",
       },
       {
         id: "dead_code_detection",
@@ -503,8 +516,10 @@ const VIEW_PACKS = Object.freeze([
         filename: "dead_code_detection.mmd",
         description:
           "Diagram isolating functions never invoked alongside unused imports for remediation planning.",
-        status: "planned",
-        note: "Depends on call graph coverage and unused symbol analysis in the inventory.",
+        status: "prototype",
+        builder: "deadCodeDetectionView",
+        requirements: ["deadCodeSignals"],
+        note: "Surfaces unreachable functions and unused imports captured by the CommandView inventory with scope-aware fallbacks.",
       },
     ],
   },
@@ -525,6 +540,8 @@ const VIEW_BUILDERS = Object.freeze({
   layerArchitectureValidationView: buildLayerArchitectureValidationViewDefinition,
   circularImportDetectionView: buildCircularImportDetectionViewDefinition,
   functionCallGraphView: buildFunctionCallGraphViewDefinition,
+  crossModuleFunctionReferencesView: buildCrossModuleFunctionReferencesViewDefinition,
+  importChainDepthView: buildImportChainDepthViewDefinition,
   entrypointTraceDiagramView: buildEntrypointTraceDiagramViewDefinition,
   classInheritanceHierarchyView: buildClassInheritanceHierarchyViewDefinition,
   methodCallChainView: buildMethodCallChainViewDefinition,
@@ -534,6 +551,9 @@ const VIEW_BUILDERS = Object.freeze({
   functionInventoryOverview: buildFunctionInventoryOverviewViewDefinition,
   typeCoverageMapView: buildTypeCoverageMapViewDefinition,
   screeningSignalTimelineView: buildScreeningSignalTimelineViewDefinition,
+  testCoverageMappingView: buildTestCoverageMappingViewDefinition,
+  gitChurnRiskMapView: buildGitChurnRiskMapViewDefinition,
+  deadCodeDetectionView: buildDeadCodeDetectionViewDefinition,
 });
 
 function getViewPackById(packId) {
@@ -1885,6 +1905,11 @@ function createModuleRecord(file) {
     dynamicCode: normalizeDynamicCode(file.dynamic_code ?? file.dynamicCode ?? null),
     entrypoints: normalizeEntrypointSignals(file.entrypoints ?? file.entryPoints ?? null),
     globals: normalizeModuleGlobals(file.globals ?? file.module_globals ?? null),
+    unusedImports: normalizeUnusedImports(file.unused_imports ?? file.unusedImports ?? null),
+    unreachableFunctions: normalizeUnreachableFunctions(
+      file.unreachable_functions ?? file.unreachableFunctions ?? null,
+      moduleId
+    ),
     functions: [],
     classes: [],
   };
@@ -3371,6 +3396,113 @@ function normalizeModuleGlobals(entries) {
     const leftLine = Number.isFinite(left.lineno) ? left.lineno : Number.MAX_SAFE_INTEGER;
     const rightLine = Number.isFinite(right.lineno) ? right.lineno : Number.MAX_SAFE_INTEGER;
     return leftLine - rightLine;
+  });
+
+  return results;
+}
+
+function normalizeUnusedImports(entries) {
+  if (!Array.isArray(entries)) {
+    return [];
+  }
+
+  const results = [];
+  const seen = new Set();
+
+  entries.forEach((entry) => {
+    if (!entry || typeof entry !== "object") {
+      return;
+    }
+
+    const target = normalizeString(entry.target ?? entry.symbol ?? entry.name ?? null);
+    const moduleName = normalizeString(entry.module ?? null);
+    const importedAs = normalizeString(entry.imported_as ?? entry.importedAs ?? entry.alias ?? null);
+    const key = `${moduleName ?? ""}|${target ?? ""}|${importedAs ?? ""}`;
+    if (seen.has(key)) {
+      return;
+    }
+    seen.add(key);
+
+    const kind = normalizeString(entry.kind ?? entry.import_kind ?? null) ?? "import";
+    const lineno = normalizeLineNumber(entry.lineno ?? entry.line ?? entry.line_number ?? null);
+
+    results.push({
+      target,
+      module: moduleName,
+      importedAs,
+      kind,
+      lineno,
+    });
+  });
+
+  results.sort((left, right) => {
+    const leftLine = Number.isFinite(left.lineno) ? left.lineno : Number.MAX_SAFE_INTEGER;
+    const rightLine = Number.isFinite(right.lineno) ? right.lineno : Number.MAX_SAFE_INTEGER;
+    if (leftLine !== rightLine) {
+      return leftLine - rightLine;
+    }
+    const leftTarget = left.target ?? "";
+    const rightTarget = right.target ?? "";
+    if (leftTarget !== rightTarget) {
+      return leftTarget.localeCompare(rightTarget);
+    }
+    const leftAlias = left.importedAs ?? "";
+    const rightAlias = right.importedAs ?? "";
+    return leftAlias.localeCompare(rightAlias);
+  });
+
+  return results;
+}
+
+function normalizeUnreachableFunctions(entries, moduleId) {
+  if (!Array.isArray(entries)) {
+    return [];
+  }
+
+  const results = [];
+  const seen = new Set();
+
+  entries.forEach((entry) => {
+    if (!entry || typeof entry !== "object") {
+      return;
+    }
+
+    const qualifiedName = normalizeString(entry.qualified_name ?? entry.qualifiedName ?? entry.name ?? null);
+    if (!qualifiedName) {
+      return;
+    }
+    if (seen.has(qualifiedName)) {
+      return;
+    }
+    seen.add(qualifiedName);
+
+    const name = normalizeString(entry.name ?? entry.function ?? null) ?? qualifiedName;
+    const parentClass = normalizeString(entry.parent_class ?? entry.parentClass ?? null);
+    const kind = normalizeString(entry.kind ?? entry.type ?? null) ?? "function";
+    const lineno = normalizeLineNumber(entry.lineno ?? entry.line ?? entry.line_number ?? null);
+
+    results.push({
+      name,
+      qualifiedName,
+      parentClass,
+      kind,
+      lineno,
+      moduleId: moduleId ?? null,
+    });
+  });
+
+  results.sort((left, right) => {
+    const leftKind = left.kind ?? "";
+    const rightKind = right.kind ?? "";
+    if (leftKind !== rightKind) {
+      return leftKind.localeCompare(rightKind);
+    }
+    const leftLine = Number.isFinite(left.lineno) ? left.lineno : Number.MAX_SAFE_INTEGER;
+    const rightLine = Number.isFinite(right.lineno) ? right.lineno : Number.MAX_SAFE_INTEGER;
+    if (leftLine !== rightLine) {
+      return leftLine - rightLine;
+    }
+    return left.qualifiedName.localeCompare(right.qualifiedName);
   });
 
   return results;
@@ -5530,6 +5662,206 @@ function buildFunctionCallGraphViewDefinition() {
   };
 }
 
+function buildCrossModuleFunctionReferencesViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const functionsValue = normalized.functions;
+  const functionsMap = functionsValue instanceof Map ? functionsValue : functionsValue ?? null;
+  if (!(functionsMap instanceof Map) || functionsMap.size === 0) {
+    return { message: "Function metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const callGraphValue = normalized.callGraph?.functions;
+  const callGraph = callGraphValue instanceof Map ? callGraphValue : callGraphValue ?? null;
+  if (!(callGraph instanceof Map) || callGraph.size === 0) {
+    return { message: "Call graph data is not available in this CommandView artifact." };
+  }
+
+  const rootId = state.levelSelections.rootId ?? null;
+  const domainId = state.levelSelections.domainId ?? null;
+  const moduleId = state.levelSelections.moduleId ?? null;
+  const selectionLabel = moduleId ?? domainId ?? rootId ?? null;
+  const hasScopedSelection = Boolean(selectionLabel);
+
+  const focusModules = new Set();
+  let selectionMatched = false;
+  let scopeDescription = "repository";
+
+  if (moduleId && modules.has(moduleId)) {
+    focusModules.add(moduleId);
+    selectionMatched = true;
+    scopeDescription = moduleId;
+  } else if (domainId) {
+    modules.forEach((_record, identifier) => {
+      if (identifier.startsWith(domainId) || identifier.includes(`${domainId}.`)) {
+        focusModules.add(identifier);
+        selectionMatched = true;
+      }
+    });
+    if (selectionMatched) {
+      scopeDescription = domainId;
+    }
+  } else if (rootId) {
+    modules.forEach((_record, identifier) => {
+      if (identifier.startsWith(rootId) || identifier.includes(`${rootId}.`)) {
+        focusModules.add(identifier);
+        selectionMatched = true;
+      }
+    });
+    if (selectionMatched) {
+      scopeDescription = rootId;
+    }
+  }
+
+  const initialOptions = {
+    viewLabel: "Coupling Insight · Cross-Module Function References",
+    scopeDescription: selectionMatched ? scopeDescription : "repository",
+  };
+
+  if (selectionMatched) {
+    initialOptions.focusModules = Array.from(focusModules);
+  } else if (hasScopedSelection) {
+    initialOptions.fallbackNotice = selectionLabel
+      ? `No modules matched selection "${selectionLabel}". Showing repository coupling instead.`
+      : "No modules matched the current selection. Showing repository coupling instead.";
+  }
+
+  let result = buildCrossModuleFunctionReferencesDiagram(modules, functionsMap, callGraph, initialOptions);
+
+  if (result && result.message && selectionMatched) {
+    const fallbackNotice = selectionLabel
+      ? `No cross-module references recorded for "${selectionLabel}". Showing repository coupling instead.`
+      : "No cross-module references recorded for the current selection. Showing repository coupling instead.";
+    const fallbackResult = buildCrossModuleFunctionReferencesDiagram(modules, functionsMap, callGraph, {
+      viewLabel: "Coupling Insight · Cross-Module Function References",
+      scopeDescription: "repository",
+      fallbackNotice,
+    });
+    if (fallbackResult && !fallbackResult.message) {
+      result = fallbackResult;
+    }
+  }
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Cross-Module Function References diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
+  };
+}
+
+function buildImportChainDepthViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const rootId = state.levelSelections.rootId ?? null;
+  const domainId = state.levelSelections.domainId ?? null;
+  const moduleId = state.levelSelections.moduleId ?? null;
+  const selectionLabel = moduleId ?? domainId ?? rootId ?? null;
+  const hasScopedSelection = Boolean(selectionLabel);
+
+  const focusModules = new Set();
+  let selectionMatched = false;
+  let scopeDescription = "repository";
+
+  if (moduleId && modules.has(moduleId)) {
+    focusModules.add(moduleId);
+    selectionMatched = true;
+    scopeDescription = moduleId;
+  } else if (domainId) {
+    modules.forEach((_record, identifier) => {
+      if (identifier.startsWith(domainId) || identifier.includes(`${domainId}.`)) {
+        focusModules.add(identifier);
+        selectionMatched = true;
+      }
+    });
+    if (selectionMatched) {
+      scopeDescription = domainId;
+    }
+  } else if (rootId) {
+    modules.forEach((_record, identifier) => {
+      if (identifier.startsWith(rootId) || identifier.includes(`${rootId}.`)) {
+        focusModules.add(identifier);
+        selectionMatched = true;
+      }
+    });
+    if (selectionMatched) {
+      scopeDescription = rootId;
+    }
+  }
+
+  const initialOptions = {
+    viewLabel: "Coupling Insight · Import Chain Depth",
+    scopeDescription: selectionMatched ? scopeDescription : "repository",
+  };
+
+  if (selectionMatched) {
+    initialOptions.focusModules = Array.from(focusModules);
+  } else if (hasScopedSelection) {
+    initialOptions.fallbackNotice = selectionLabel
+      ? `No modules matched selection "${selectionLabel}". Showing repository import chains instead.`
+      : "No modules matched the current selection. Showing repository import chains instead.";
+  }
+
+  let result = buildImportChainDepthDiagram(modules, initialOptions);
+
+  if (result && result.message && selectionMatched) {
+    const fallbackNotice = selectionLabel
+      ? `No import chains recorded for "${selectionLabel}". Showing repository import chains instead.`
+      : "No import chains recorded for the current selection. Showing repository import chains instead.";
+    const fallbackResult = buildImportChainDepthDiagram(modules, {
+      viewLabel: "Coupling Insight · Import Chain Depth",
+      scopeDescription: "repository",
+      fallbackNotice,
+    });
+    if (fallbackResult && !fallbackResult.message) {
+      result = fallbackResult;
+    }
+  }
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Import Chain Depth diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
+  };
+}
+
 function buildEntrypointTraceDiagramViewDefinition() {
   const normalized = state.normalizedData;
   if (!normalized) {
@@ -7190,6 +7522,473 @@ function formatTypeCoverageStatus(stats, context) {
   const unknown = typeof stats?.unknown === "number" ? stats.unknown : 0;
   const prefix = context ? `Rendered Type Coverage Map for ${context}` : "Rendered Type Coverage Map";
   return `${prefix} (strong ${strong}, moderate ${moderate}, weak ${weak}, unknown ${unknown}).`;
+}
+
+function buildTestCoverageMappingViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const functionsValue = normalized.functions;
+  const functionsMap = functionsValue instanceof Map ? functionsValue : functionsValue ?? null;
+  if (!(functionsMap instanceof Map) || functionsMap.size === 0) {
+    return { message: "Function metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const scope = resolveTestCoverageScope(modules, functionsMap, {
+    rootId: state.levelSelections.rootId,
+    domainId: state.levelSelections.domainId,
+    moduleId: state.levelSelections.moduleId,
+  });
+
+  if (scope?.message) {
+    return { message: scope.message };
+  }
+
+  const result = buildTestCoverageMappingDiagram(scope.modules, functionsMap, {
+    viewLabel: "Risk & Assurance · Test Coverage Mapping",
+    centerLabel: scope.centerLabel ?? "Test Coverage Mapping",
+    scopeDescription: scope.scopeDescription,
+    fallbackNotice: scope.fallbackNotice ?? undefined,
+    moduleLimit: scope.moduleLimit ?? undefined,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Test Coverage Mapping diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
+  };
+}
+
+function buildGitChurnRiskMapViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const scope = resolveGitChurnScope(modules, {
+    rootId: state.levelSelections.rootId,
+    domainId: state.levelSelections.domainId,
+    moduleId: state.levelSelections.moduleId,
+  });
+
+  if (scope?.message) {
+    return { message: scope.message };
+  }
+
+  const functionsValue = normalized.functions;
+  const functionsMap = functionsValue instanceof Map ? functionsValue : functionsValue ?? null;
+
+  const baselines =
+    normalized.metrics?.repository?.git_churn ??
+    state.inventoryPayload?.statistics?.git_churn ??
+    null;
+
+  const result = buildGitChurnRiskMapDiagram(scope.modules, {
+    functions: functionsMap,
+    baselines,
+    viewLabel: "Risk & Assurance · Git Churn Risk Map",
+    centerLabel: scope.centerLabel ?? "Git Churn Risk Map",
+    scopeDescription: scope.scopeDescription,
+    fallbackNotice: scope.fallbackNotice ?? undefined,
+    moduleLimit: scope.moduleLimit ?? undefined,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Git Churn Risk Map diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
+  };
+}
+
+function buildDeadCodeDetectionViewDefinition() {
+  const normalized = state.normalizedData;
+  if (!normalized) {
+    return { message: "Normalized CommandView data is unavailable." };
+  }
+
+  const modulesValue = normalized.modules;
+  const modules = modulesValue instanceof Map ? modulesValue : modulesValue ?? null;
+  if (!(modules instanceof Map) || modules.size === 0) {
+    return { message: "Module metadata has not been normalized for this CommandView artifact." };
+  }
+
+  const scope = resolveDeadCodeScope(modules, {
+    rootId: state.levelSelections.rootId,
+    domainId: state.levelSelections.domainId,
+    moduleId: state.levelSelections.moduleId,
+  });
+
+  if (scope?.message) {
+    return { message: scope.message };
+  }
+
+  const result = buildDeadCodeDetectionDiagram(scope.modules, {
+    viewLabel: "Risk & Assurance · Dead Code Detection",
+    centerLabel: scope.centerLabel ?? "Dead Code Detection",
+    scopeDescription: scope.scopeDescription,
+    fallbackNotice: scope.fallbackNotice ?? undefined,
+    moduleLimit: scope.moduleLimit ?? undefined,
+    functionLimit: scope.functionLimit ?? undefined,
+    importLimit: scope.importLimit ?? undefined,
+  });
+
+  if (!result || typeof result !== "object") {
+    return { message: "Unable to build Dead Code Detection diagram." };
+  }
+
+  if (result.message) {
+    return { message: result.message };
+  }
+
+  return {
+    definition: result.definition,
+    label: result.label,
+    statusMessage: result.statusMessage,
+    statusDetails: Array.isArray(result.statusDetails) ? result.statusDetails : [],
+    stats: result.stats,
+  };
+}
+
+function resolveTestCoverageScope(modules, functionsMap, selections) {
+  const moduleId = typeof selections?.moduleId === "string" ? selections.moduleId : null;
+  const domainId = typeof selections?.domainId === "string" ? selections.domainId : null;
+  const rootId = typeof selections?.rootId === "string" ? selections.rootId : null;
+
+  const isScopedSelection = Boolean(moduleId || domainId || rootId);
+  const selectionLabel = moduleId ?? domainId ?? rootId ?? null;
+
+  let scopedModules = new Map();
+  let scopeDescription = "repository";
+
+  if (moduleId && modules.has(moduleId)) {
+    scopedModules.set(moduleId, modules.get(moduleId));
+    scopeDescription = moduleId;
+  } else if (domainId) {
+    modules.forEach((moduleRecord, identifier) => {
+      if (isModuleWithinScope(identifier, domainId)) {
+        scopedModules.set(identifier, moduleRecord);
+      }
+    });
+    if (scopedModules.size > 0) {
+      scopeDescription = domainId;
+    }
+  } else if (rootId) {
+    modules.forEach((moduleRecord, identifier) => {
+      if (isModuleWithinScope(identifier, rootId)) {
+        scopedModules.set(identifier, moduleRecord);
+      }
+    });
+    if (scopedModules.size > 0) {
+      scopeDescription = rootId;
+    }
+  }
+
+  if (scopedModules.size === 0) {
+    scopedModules = modules;
+    scopeDescription = "repository";
+  }
+
+  let eligibleModules = filterModulesWithCoverageTelemetry(scopedModules, functionsMap);
+
+  if (eligibleModules.size === 0) {
+    const repositoryEligible = filterModulesWithCoverageTelemetry(modules, functionsMap);
+    if (repositoryEligible.size === 0) {
+      return { message: "Test coverage metadata is not available in this CommandView artifact." };
+    }
+    const fallbackNotice = isScopedSelection
+      ? selectionLabel
+        ? `No coverage signals recorded for "${selectionLabel}". Showing repository coverage instead.`
+        : "No coverage signals recorded for the current selection. Showing repository coverage instead."
+      : null;
+    return {
+      modules: repositoryEligible,
+      scopeDescription: "repository",
+      fallbackNotice,
+      centerLabel: "Test Coverage · repository",
+      moduleLimit: undefined,
+    };
+  }
+
+  const resolvedDescription = scopeDescription ?? "repository";
+  return {
+    modules: eligibleModules,
+    scopeDescription: resolvedDescription,
+    fallbackNotice: null,
+    centerLabel: `Test Coverage · ${resolvedDescription}`,
+    moduleLimit: undefined,
+  };
+}
+
+function resolveGitChurnScope(modules, selections) {
+  const moduleId = typeof selections?.moduleId === "string" ? selections.moduleId : null;
+  const domainId = typeof selections?.domainId === "string" ? selections.domainId : null;
+  const rootId = typeof selections?.rootId === "string" ? selections.rootId : null;
+
+  const isScopedSelection = Boolean(moduleId || domainId || rootId);
+  const selectionLabel = moduleId ?? domainId ?? rootId ?? null;
+
+  let scopedModules = new Map();
+  let scopeDescription = "repository";
+
+  if (moduleId && modules.has(moduleId)) {
+    scopedModules.set(moduleId, modules.get(moduleId));
+    scopeDescription = moduleId;
+  } else if (domainId) {
+    modules.forEach((moduleRecord, identifier) => {
+      if (isModuleWithinScope(identifier, domainId)) {
+        scopedModules.set(identifier, moduleRecord);
+      }
+    });
+    if (scopedModules.size > 0) {
+      scopeDescription = domainId;
+    }
+  } else if (rootId) {
+    modules.forEach((moduleRecord, identifier) => {
+      if (isModuleWithinScope(identifier, rootId)) {
+        scopedModules.set(identifier, moduleRecord);
+      }
+    });
+    if (scopedModules.size > 0) {
+      scopeDescription = rootId;
+    }
+  }
+
+  if (scopedModules.size === 0) {
+    scopedModules = modules;
+    scopeDescription = "repository";
+  }
+
+  const eligibleModules = filterModulesWithGitChurn(scopedModules);
+
+  if (eligibleModules.size === 0) {
+    const repositoryEligible = filterModulesWithGitChurn(modules);
+    if (repositoryEligible.size === 0) {
+      return { message: "Git churn metrics are not available in this CommandView artifact." };
+    }
+    const fallbackNotice = isScopedSelection
+      ? selectionLabel
+        ? `No git churn metrics recorded for "${selectionLabel}". Showing repository churn instead.`
+        : "No git churn metrics recorded for the current selection. Showing repository churn instead."
+      : null;
+    return {
+      modules: repositoryEligible,
+      scopeDescription: "repository",
+      fallbackNotice,
+      centerLabel: "Git Churn · repository",
+      moduleLimit: undefined,
+    };
+  }
+
+  const resolvedDescription = scopeDescription ?? "repository";
+  return {
+    modules: eligibleModules,
+    scopeDescription: resolvedDescription,
+    fallbackNotice: null,
+    centerLabel: `Git Churn · ${resolvedDescription}`,
+    moduleLimit: undefined,
+  };
+}
+
+function resolveDeadCodeScope(modules, selections) {
+  const moduleId = typeof selections?.moduleId === "string" ? selections.moduleId : null;
+  const domainId = typeof selections?.domainId === "string" ? selections.domainId : null;
+  const rootId = typeof selections?.rootId === "string" ? selections.rootId : null;
+
+  const isScopedSelection = Boolean(moduleId || domainId || rootId);
+  const selectionLabel = moduleId ?? domainId ?? rootId ?? null;
+
+  let scopedModules = new Map();
+  let scopeDescription = "repository";
+
+  if (moduleId && modules.has(moduleId)) {
+    scopedModules.set(moduleId, modules.get(moduleId));
+    scopeDescription = moduleId;
+  } else if (domainId) {
+    modules.forEach((moduleRecord, identifier) => {
+      if (isModuleWithinScope(identifier, domainId)) {
+        scopedModules.set(identifier, moduleRecord);
+      }
+    });
+    if (scopedModules.size > 0) {
+      scopeDescription = domainId;
+    }
+  } else if (rootId) {
+    modules.forEach((moduleRecord, identifier) => {
+      if (isModuleWithinScope(identifier, rootId)) {
+        scopedModules.set(identifier, moduleRecord);
+      }
+    });
+    if (scopedModules.size > 0) {
+      scopeDescription = rootId;
+    }
+  }
+
+  if (scopedModules.size === 0) {
+    scopedModules = modules;
+    scopeDescription = "repository";
+  }
+
+  const eligibleModules = filterModulesWithDeadCodeSignals(scopedModules);
+
+  if (eligibleModules.size === 0) {
+    const repositoryEligible = filterModulesWithDeadCodeSignals(modules);
+    if (repositoryEligible.size === 0) {
+      return { message: "Dead code signals are not available in this CommandView artifact." };
+    }
+    const fallbackNotice = isScopedSelection
+      ? selectionLabel
+        ? `No dead code signals recorded for "${selectionLabel}". Showing repository dead code signals instead.`
+        : "No dead code signals recorded for the current selection. Showing repository dead code signals instead."
+      : null;
+    return {
+      modules: repositoryEligible,
+      scopeDescription: "repository",
+      fallbackNotice,
+      centerLabel: "Dead Code · repository",
+      moduleLimit: undefined,
+      functionLimit: undefined,
+      importLimit: undefined,
+    };
+  }
+
+  const resolvedDescription = scopeDescription ?? "repository";
+  return {
+    modules: eligibleModules,
+    scopeDescription: resolvedDescription,
+    fallbackNotice: null,
+    centerLabel: `Dead Code · ${resolvedDescription}`,
+    moduleLimit: undefined,
+    functionLimit: undefined,
+    importLimit: undefined,
+  };
+}
+
+function filterModulesWithGitChurn(modules) {
+  const map = new Map();
+  if (!(modules instanceof Map)) {
+    return map;
+  }
+  modules.forEach((moduleRecord, identifier) => {
+    if (moduleHasGitChurnTelemetry(moduleRecord)) {
+      map.set(identifier, moduleRecord);
+    }
+  });
+  return map;
+}
+
+function filterModulesWithCoverageTelemetry(modules, functionsMap) {
+  const map = new Map();
+  if (!(modules instanceof Map)) {
+    return map;
+  }
+  modules.forEach((moduleRecord, identifier) => {
+    if (moduleHasCoverageTelemetry(moduleRecord, functionsMap)) {
+      map.set(identifier, moduleRecord);
+    }
+  });
+  return map;
+}
+
+function filterModulesWithDeadCodeSignals(modules) {
+  const map = new Map();
+  if (!(modules instanceof Map)) {
+    return map;
+  }
+  modules.forEach((moduleRecord, identifier) => {
+    if (moduleHasDeadCodeTelemetry(moduleRecord)) {
+      map.set(identifier, moduleRecord);
+    }
+  });
+  return map;
+}
+
+function moduleHasCoverageTelemetry(moduleRecord, functionsMap) {
+  if (!moduleRecord || typeof moduleRecord !== "object") {
+    return false;
+  }
+  const coverageSignals = moduleRecord.coverageSignals ?? null;
+  const hasTestImports = Array.isArray(coverageSignals?.imports) && coverageSignals.imports.length > 0;
+  const hasMatchesFlag = coverageSignals?.has_matches === true;
+
+  const functionIds = Array.isArray(moduleRecord.functions) ? moduleRecord.functions : [];
+  const hasCoverageMetrics = functionIds.some((functionId) => {
+    const fn = functionsMap instanceof Map ? functionsMap.get(functionId) : null;
+    return Number.isFinite(resolveCoverageValue(fn));
+  });
+
+  return hasCoverageMetrics || hasTestImports || hasMatchesFlag;
+}
+
+function moduleHasDeadCodeTelemetry(moduleRecord) {
+  if (!moduleRecord || typeof moduleRecord !== "object") {
+    return false;
+  }
+  if (Array.isArray(moduleRecord.unreachableFunctions) && moduleRecord.unreachableFunctions.some((entry) => entry && typeof entry === "object")) {
+    return true;
+  }
+  if (Array.isArray(moduleRecord.unusedImports) && moduleRecord.unusedImports.some((entry) => entry && typeof entry === "object")) {
+    return true;
+  }
+  return false;
+}
+
+function moduleHasGitChurnTelemetry(moduleRecord) {
+  if (!moduleRecord || typeof moduleRecord !== "object") {
+    return false;
+  }
+  const churn = moduleRecord.gitChurn ?? moduleRecord.git_churn ?? null;
+  if (!churn || typeof churn !== "object") {
+    return false;
+  }
+  const commitsRaw = churn.commit_count ?? churn.commits;
+  const additionsRaw = churn.additions;
+  const deletionsRaw = churn.deletions;
+  const netRaw = churn.net_changes ?? churn.netChanges;
+
+  const commits = Number(commitsRaw);
+  const additions = Number(additionsRaw);
+  const deletions = Number(deletionsRaw);
+  const net = Number(netRaw);
+
+  const hasCommitData = Number.isFinite(commits) && commits > 0;
+  const hasLineData = (Number.isFinite(additions) && additions > 0) || (Number.isFinite(deletions) && deletions > 0);
+  const hasNetData = Number.isFinite(net) && net !== 0;
+
+  return hasCommitData || hasLineData || hasNetData;
 }
 
 function buildAggregateMermaid(levelData, labelFactory, onNode, styleFactory, edgeFormatter) {
@@ -8997,10 +9796,25 @@ export const __test__ = {
   buildClassInheritanceHierarchyViewDefinitionForTest: buildClassInheritanceHierarchyViewDefinition,
   buildMethodCallChainViewDefinitionForTest: buildMethodCallChainViewDefinition,
   buildPublicVsPrivateApiViewDefinitionForTest: buildPublicVsPrivateApiViewDefinition,
+  buildTestCoverageMappingViewDefinitionForTest: buildTestCoverageMappingViewDefinition,
+  buildGitChurnRiskMapViewDefinitionForTest: buildGitChurnRiskMapViewDefinition,
+  buildDeadCodeDetectionViewDefinitionForTest: buildDeadCodeDetectionViewDefinition,
   buildCyclomaticComplexityMapViewDefinitionForTest: buildCyclomaticComplexityMapViewDefinition,
   buildIoEffectsViewDefinitionForTest: buildIoEffectsViewDefinition,
   buildExceptionFlowViewDefinitionForTest: buildExceptionFlowViewDefinition,
   buildGlobalVariableUsageViewDefinitionForTest: buildGlobalVariableUsageViewDefinition,
+  resolveTestCoverageScopeForTest(modules, functions, selections) {
+    return resolveTestCoverageScope(modules, functions, selections);
+  },
+  resolveGitChurnScopeForTest(modules, selections) {
+    return resolveGitChurnScope(modules, selections);
+  },
+  resolveDeadCodeScopeForTest(modules, selections) {
+    return resolveDeadCodeScope(modules, selections);
+  },
+  moduleHasCoverageTelemetryForTest: moduleHasCoverageTelemetry,
+  moduleHasGitChurnTelemetryForTest: moduleHasGitChurnTelemetry,
+  moduleHasDeadCodeTelemetryForTest: moduleHasDeadCodeTelemetry,
   hasDynamicCodeDataForTest: hasDynamicCodeData,
   normalizeEntrypointSignalsForTest: normalizeEntrypointSignals,
   populateEntrypointCandidatesForTest(modules, functions, callGraph) {

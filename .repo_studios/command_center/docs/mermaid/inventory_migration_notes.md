@@ -1,6 +1,6 @@
 # Inventory Payload Migration Notes
 
-_Last updated: 2025-11-06_
+_Last updated: 2025-11-13_
 
 ## Purpose
 
@@ -29,7 +29,9 @@ aligned while coverage and git churn metadata settle in.
    - Accept optional `coverage`/`git_churn` metadata; default to zeroed overlays
      when absent.
    - Wire pack templates (Risk & Assurance, Quality Metrics) to read the new
-     aggregate statistics.
+     aggregate statistics. Risk & Assurance documentation now includes
+     `view_specs/test_coverage_mapping.md`, outlining how coverage signals feed
+     the Test Coverage Mapping builder.
 2. **Aggregators and Summaries**
    - Update JSON parsing helpers to tolerate new keys without throwing when data
      is missing (e.g., repositories with no git history).
