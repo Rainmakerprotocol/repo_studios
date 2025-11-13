@@ -52,10 +52,11 @@ def _ensure_node_runtime() -> None:
 def _run_node_module(script: str) -> dict[str, object]:
     result = subprocess.run(
         ["node", "--input-type=module", "-e", script],
-        check=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
+    check=True,
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+    text=True,
+    encoding="utf-8",
     )
     if result.stderr.strip():
         pytest.fail(f"Node.js script wrote to stderr: {result.stderr}")

@@ -31,10 +31,11 @@ def _ensure_node_runtime() -> None:
 def _run_node_module(script: str) -> dict[str, object]:
     result = subprocess.run(
         ["node", "--input-type=module", "-e", script],
-        check=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
+    check=True,
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+    text=True,
+    encoding="utf-8",
     )
     if result.stderr.strip():
         pytest.fail(f"Node.js script wrote to stderr: {result.stderr}")
@@ -180,6 +181,11 @@ def test_module_has_dead_code_telemetry_detects_signals() -> None:
     script = (
         _scaffold_viewer_environment()
         + f"""
+const originalLog = console.log;
+const originalWarn = console.warn || (() => {{}});
+console.log = () => {{}};
+console.warn = () => {{}};
+
 const viewer = await import('{VIEWER_PATH.as_uri()}');
 const api = viewer.__test__;
 
@@ -194,6 +200,9 @@ const moduleWithoutSignals = api.createModuleRecord({{
 
 const withSignals = api.moduleHasDeadCodeTelemetryForTest(moduleWithSignals);
 const withoutSignals = api.moduleHasDeadCodeTelemetryForTest(moduleWithoutSignals);
+
+console.log = originalLog;
+console.warn = originalWarn;
 
 console.log(JSON.stringify({{
   withSignals,
