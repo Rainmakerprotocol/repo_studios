@@ -12,6 +12,7 @@
 | --- | --- | --- | --- | --- |
 | `preflight-locks` | Runs `verify-command-center-locks` to ensure no active remediation lock before automation jobs start. | Run-lock presence, timestamp freshness | Lock audit logs | Warning → Blocking after two clean sprints |
 | `duplicate-scan` | Executes `studio-detect-duplicates` make target (or PowerShell fallback) and uploads duplicate matrix. | `max_files_per_run`, orchestration success, duplicate matrix retention | Duplicate matrix JSON + summary | Warning until automation manifest adoption hits 80% |
+| `placeholder-scan` | Runs `make studio-scan-code-placeholders` with exclusion defaults, uploads artifacts, and enforces allowlist thresholds. | `total_matches - allowlist_size == 0`, allowlist review dates, artifact presence | Placeholder `report.json`, `matches.json`, `report.md` | Warning (Weeks 1–2) → Blocking (Week 5+) |
 | `automation-manifest` | Invokes `generate_automation_manifest.py` with metrics summary capture. | Manifest schema validation, guardrail compliance (`max_files_per_run`, evidence bundle completeness) | `manifest.json`, `metrics_summary.json`, README | Blocking for automation branches; warning for manual pull requests |
 | `post-run-tests` | Runs library integration + targeted producer pytest suites. | Test suite pass requirement (`--maxfail=1`), duration tracking | Pytest logs, coverage report (optional) | Blocking for main branch merges |
 | `reporting-brief` | Generates weighted progress briefing summary for artifacts touched. | Template completeness, decision log linkage | Markdown briefing, decision log pointer | Warning; manual review required |
@@ -48,5 +49,6 @@
 ## Next Actions
 
 - Create `CI_ROLLOUT_LOG.md` template to track warning → blocking transitions.
-- Align with developer reviewer on gating criteria and communication plan.
+- Align with developer reviewer on gating criteria and communication plan (placeholder + duplicate scans).
 - Update automation README/FAQ once final blocking schedule is approved.
+- Draft `placeholder-scan.yml` GitHub Actions stub in warning mode and link it from the rollout log.

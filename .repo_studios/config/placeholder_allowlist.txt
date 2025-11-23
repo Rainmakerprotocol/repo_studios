@@ -1,0 +1,4 @@
+# Placeholder allowlist maintained by Standards Guild.
+# Review cadence: monthly (next review due 2025-12-23).
+# Entries follow the format <relative/path>:<line> with supporting context logged in the decision log.
+# No active allowlist entries as of 2025-11-23.

@@ -105,3 +105,86 @@ def test_pruning_and_allowlist(tmp_path: Path) -> None:
     payload = json.loads((run_dirs[0] / "report.json").read_text(encoding="utf-8"))
     assert payload["total_matches"] == 0
     assert payload["allowlist_size"] == 1
+
+
+def test_default_exclusions_skip_virtualenv(tmp_path: Path) -> None:
+    mod = _load_module()
+    repo_root = tmp_path / "workspace"
+    repo_root.mkdir(parents=True, exist_ok=True)
+
+    (repo_root / "real.py").write_text("# TODO: implement feature\n", encoding="utf-8")
+    env_file = repo_root / ".venv" / "lib" / "package.py"
+    env_file.parent.mkdir(parents=True, exist_ok=True)
+    env_file.write_text("# FIXME: should be ignored\n", encoding="utf-8")
+
+    payload = mod.run([
+        "--repo-root",
+        str(repo_root),
+        "--root",
+        ".",
+        "--include-ext",
+        ".py",
+    ])
+
+    assert payload["total_matches"] == 1
+    assert payload["default_exclusions_applied"] is True
+    assert set(payload["exclude_prefixes"]) == {".venv/", "node_modules/"}
+    assert payload["exclude_segments"] == ["site-packages"]
+
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "code_placeholder_scans"
+    run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith("placeholder_scan-")]
+    assert len(run_dirs) == 1
+    matches_path = run_dirs[0] / "matches.json"
+    matches = json.loads(matches_path.read_text(encoding="utf-8"))
+    assert {entry["path"] for entry in matches} == {"real.py"}
+
+
+def test_exclude_prefix_flag_disables_defaults(tmp_path: Path) -> None:
+    mod = _load_module()
+    repo_root = tmp_path / "workspace"
+    repo_root.mkdir(parents=True, exist_ok=True)
+
+    env_file = repo_root / ".venv" / "lib" / "module.py"
+    env_file.parent.mkdir(parents=True, exist_ok=True)
+    env_file.write_text("# NOTE: now included\n", encoding="utf-8")
+
+    payload = mod.run([
+        "--repo-root",
+        str(repo_root),
+        "--root",
+        ".",
+        "--include-ext",
+        ".py",
+        "--exclude-prefix",
+    ])
+
+    assert payload["default_exclusions_applied"] is False
+    assert payload["exclude_prefixes"] == []
+    assert payload["exclude_segments"] == []
+    assert payload["total_matches"] == 1
+
+
+def test_ignores_title_case_tokens(tmp_path: Path) -> None:
+    mod = _load_module()
+    repo_root = tmp_path / "workspace"
+    repo_root.mkdir(parents=True, exist_ok=True)
+
+    (repo_root / "doc.md").write_text("# Review heading\n", encoding="utf-8")
+    (repo_root / "code.py").write_text("# TODO: follow up\n", encoding="utf-8")
+
+    payload = mod.run([
+        "--repo-root",
+        str(repo_root),
+        "--root",
+        ".",
+        "--include-ext",
+        ".md",
+        ".py",
+    ])
+
+    assert payload["total_matches"] == 1
+    matches_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "code_placeholder_scans"
+    run_dirs = [p for p in matches_dir.iterdir() if p.is_dir() and p.name.startswith("placeholder_scan-")]
+    assert len(run_dirs) == 1
+    matches = json.loads((run_dirs[0] / "matches.json").read_text(encoding="utf-8"))
+    assert {entry["path"] for entry in matches} == {"code.py"}

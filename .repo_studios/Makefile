@@ -59,6 +59,14 @@ studio-analyze-test-hardening:
 studio-verify-docs-integrity:
 	$(PYTHON) .repo_studios/scripts/producers/verify_docs_integrity.py --repo-root . --output-dir .repo_studios/reports/producer_reports/docs_integrity_reports
 
+.PHONY: studio-diff-standards-index
+studio-diff-standards-index:
+	$(PYTHON) .repo_studios/scripts/producers/diff_standards_index.py "$(old)" "$(new)" --repo-root . --output-dir .repo_studios/reports/producer_reports/standards_index_diff_reports --artifacts-to-keep 10 --fail-on any --log-level INFO
+
+.PHONY: studio-generate-dependency-hygiene
+studio-generate-dependency-hygiene:
+	$(PYTHON) .repo_studios/scripts/producers/generate_dependency_hygiene_report.py --repo-root . --output-dir .repo_studios/reports/producer_reports/dependency_hygiene_reports --log-level INFO
+
 .PHONY: studio-generate-function-index
 studio-generate-function-index:
 	@$(PYTHON) -c "import sys; sys.exit(0 if '$(path)' else 1)" || (echo "path variable required (make studio-generate-function-index path=...)" && exit 1)

@@ -35,6 +35,7 @@ DEFAULT_EXTENSIONS = (
 )
 DEFAULT_PATTERNS = ("TODO", "FIXME", "NOTE", "XXX", "OPTIMIZE", "REVIEW")
 COMMENT_ANCHORS = ("#", "//", "<!--", "/*", "*")
+DEFAULT_EXCLUDE_PREFIXES = (".venv/", "node_modules/", "*/site-packages/")
 
 LIBRARIES_ROOT = (
     Path(__file__).resolve().parents[3]
@@ -78,6 +79,9 @@ class ScanOptions:
     patterns: tuple[str, ...]
     allowlist: set[tuple[str, int]]
     artifacts_to_keep: int
+    exclude_prefixes: tuple[str, ...]
+    exclude_segments: tuple[str, ...]
+    default_exclusions_applied: bool
 
 
 class Options(NamedTuple):
@@ -164,6 +168,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Number of historical scans to retain",
     )
     parser.add_argument(
+        "--exclude-prefix",
+        nargs="*",
+        default=None,
+        metavar="PREFIX",
+        help="Relative directory prefixes to exclude (defaults applied when scanning the repo root)",
+    )
+    parser.add_argument(
         "--log-level",
         default="INFO",
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
@@ -217,6 +228,32 @@ def normalize_extensions(raw: Iterable[str] | None) -> tuple[str, ...]:
     return tuple(sorted(normalized))
 
 
+def normalize_exclude_prefixes(raw: Iterable[str] | None) -> tuple[tuple[str, ...], tuple[str, ...]]:
+    prefixes: set[str] = set()
+    segments: set[str] = set()
+    for entry in raw or ():
+        value = str(entry).strip()
+        if not value:
+            continue
+        pointer = value.replace("\\", "/")
+        if pointer.startswith("*/"):
+            segment = pointer[2:]
+            if segment.endswith("/"):
+                segment = segment[:-1]
+            if segment:
+                segments.add(segment.lower())
+            continue
+        if pointer.startswith("./"):
+            pointer = pointer[2:]
+        if pointer.startswith("/"):
+            pointer = pointer[1:]
+        if pointer and not pointer.endswith("/"):
+            pointer = f"{pointer}/"
+        if pointer:
+            prefixes.add(pointer)
+    return tuple(sorted(prefixes)), tuple(sorted(segments))
+
+
 def compile_pattern_regex(patterns: tuple[str, ...]) -> dict[str, re.Pattern[str]]:
     compiled: dict[str, re.Pattern[str]] = {}
     for token in patterns:
@@ -235,6 +272,8 @@ def scan_placeholders(
             continue
         rel_path = file_path.resolve().relative_to(paths.repo_root)
         rel_display = rel_path.as_posix()
+        if _should_exclude(rel_display, options):
+            continue
         try:
             text = file_path.read_text(encoding="utf-8", errors="ignore").splitlines()
         except Exception as exc:  # pragma: no cover - defensive guard
@@ -244,7 +283,8 @@ def scan_placeholders(
             if not _looks_like_comment(line):
                 continue
             for token, regex in compiled_patterns.items():
-                if not regex.search(line):
+                match = regex.search(line)
+                if not match or not _is_uppercase_match(match.group(0)):
                     continue
                 if (rel_display, idx) in options.allowlist:
                     break
@@ -268,6 +308,24 @@ def _looks_like_comment(line: str) -> bool:
     return any(lowered.startswith(anchor) for anchor in COMMENT_ANCHORS)
 
 
+def _is_uppercase_match(token: str) -> bool:
+    stripped = token.strip()
+    return bool(stripped) and stripped.isupper()
+
+
+def _should_exclude(rel_display: str, options: ScanOptions) -> bool:
+    normalized = rel_display.replace("\\", "/")
+    for prefix in options.exclude_prefixes:
+        if normalized.startswith(prefix):
+            return True
+    decorated = f"/{normalized}/"
+    for segment in options.exclude_segments:
+        needle = f"/{segment}/"
+        if needle in decorated:
+            return True
+    return False
+
+
 def compose_payload(
     *,
     paths: Paths,
@@ -288,6 +346,9 @@ def compose_payload(
         "include_extensions": list(options.extensions),
         "patterns": list(options.patterns),
         "allowlist_size": len(options.allowlist),
+        "exclude_prefixes": list(options.exclude_prefixes),
+        "exclude_segments": list(options.exclude_segments),
+        "default_exclusions_applied": options.default_exclusions_applied,
         "total_matches": len(records),
         "summary": {
             "by_pattern": dict(sorted(by_pattern.items())),
@@ -414,11 +475,25 @@ def run(argv: list[str] | None = None) -> dict[str, object]:
     extensions = normalize_extensions(args.include_ext)
     allowlist = load_allowlist(args.allowlist_file, paths.repo_root)
     base_options = build_standard_options(args, OPTIONS_CONFIG)
+    raw_exclusions: Iterable[str] | None
+    default_exclusions_applied = False
+    if args.exclude_prefix is None:
+        if paths.scan_root.resolve() == paths.repo_root.resolve():
+            raw_exclusions = DEFAULT_EXCLUDE_PREFIXES
+            default_exclusions_applied = True
+        else:
+            raw_exclusions = ()
+    else:
+        raw_exclusions = args.exclude_prefix
+    exclude_prefixes, exclude_segments = normalize_exclude_prefixes(raw_exclusions)
     options = ScanOptions(
         extensions=extensions,
         patterns=patterns,
         allowlist=allowlist,
         artifacts_to_keep=base_options.artifacts_to_keep,
+        exclude_prefixes=exclude_prefixes,
+        exclude_segments=exclude_segments,
+        default_exclusions_applied=default_exclusions_applied,
     )
     compiled_patterns = compile_pattern_regex(patterns)
     timestamp = datetime.now(timezone.utc)

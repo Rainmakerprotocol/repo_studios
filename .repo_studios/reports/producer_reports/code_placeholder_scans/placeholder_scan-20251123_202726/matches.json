@@ -1,0 +1,149 @@
+[
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\agent_notes\\meta\\phase1_foundation_review_2025-10-18_0138.md",
+    "line": 1,
+    "path": ".repo_studios/agent_notes/meta/phase1_foundation_review_2025-10-18_0138.md",
+    "pattern": "REVIEW",
+    "text": "# Phase 1 Foundation Review"
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\docs\\guardrails\\library_extraction_guardrails.md",
+    "line": 89,
+    "path": ".repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md",
+    "pattern": "REVIEW",
+    "text": "## Review & Sign-off Process"
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\docs\\guardrails\\library_extraction_guardrails.md",
+    "line": 106,
+    "path": ".repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md",
+    "pattern": "NOTE",
+    "text": "**Working response (2025-10-31):** Yes\u2014link the lockfile state to a GitHub environment check so concurrent automation runs fail fast. Follow-up: reusable workflow documented in Implementation Note 7; next step is landing the CI file and wiring branch protection."
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\docs\\guardrails\\library_extraction_guardrails.md",
+    "line": 110,
+    "path": ".repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md",
+    "pattern": "NOTE",
+    "text": "**Working response (2025-10-31):** Cap automated refactors to 15 files per run while the allow-list remains the source of truth. Action item: `automation_config.yaml` now reserves `constraints.max_files_per_run`; implementation must wire the validator and manifest reporting per Implementation Note 8."
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\docs\\phase_4\\PR_CHECKLIST_TEMPLATE.md",
+    "line": 5,
+    "path": ".repo_studios/command_center/docs/phase_4/PR_CHECKLIST_TEMPLATE.md",
+    "pattern": "REVIEW",
+    "text": "**Usage:** Copy the section below into any PR raised from a Phase 4 automation run, replacing the placeholder values before requesting review."
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\docs\\phase_4\\PR_CHECKLIST_TEMPLATE.md",
+    "line": 46,
+    "path": ".repo_studios/command_center/docs/phase_4/PR_CHECKLIST_TEMPLATE.md",
+    "pattern": "REVIEW",
+    "text": "## Review Notes"
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\docs\\phase_6\\validation_runs\\2025-11-04-bundle_review.md",
+    "line": 1,
+    "path": ".repo_studios/command_center/docs/phase_6/validation_runs/2025-11-04-bundle_review.md",
+    "pattern": "REVIEW",
+    "text": "# Validation Transcript \u2013 Bundle Review (2025-11-04)"
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\viewer\\README.md",
+    "line": 47,
+    "path": ".repo_studios/command_center/viewer/README.md",
+    "pattern": "NOTE",
+    "text": "**Note**: The server serves from repo root to enable access to `/.repo_studios/command_center/reports/`"
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\viewer\\ui\\builders\\export_contract_matrix.js",
+    "line": 84,
+    "path": ".repo_studios/command_center/viewer/ui/builders/export_contract_matrix.js",
+    "pattern": "NOTE",
+    "text": "// Add note with module details"
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\viewer\\ui\\viewer.js",
+    "line": 9813,
+    "path": ".repo_studios/command_center/viewer/ui/viewer.js",
+    "pattern": "NOTE",
+    "text": "// Note: moving up (negative delta) should increase height"
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\automation\\function_inventory_integration_plan.md",
+    "line": 34,
+    "path": ".repo_studios/docs/automation/function_inventory_integration_plan.md",
+    "pattern": "REVIEW",
+    "text": "* [x] Capture JSON schema expectations (fields, types, `schema_version`) and circulate for review. _(2025-10-24: v1 schema refreshed to document signatures, line counts, and module-first-line metadata.)_"
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\automation\\function_inventory_integration_plan.md",
+    "line": 63,
+    "path": ".repo_studios/docs/automation/function_inventory_integration_plan.md",
+    "pattern": "REVIEW",
+    "text": "* [x] Specify companion artifact schema (`schema_version`, provenance metadata, `findings[]`, severities, recommended actions, machine-readable action items) and circulate for review. _(Schema captured 2025-10-24 with `findings[].instances[]` including signatures, line counts, docstrings.)_"
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\automation\\function_inventory_integration_plan.md",
+    "line": 73,
+    "path": ".repo_studios/docs/automation/function_inventory_integration_plan.md",
+    "pattern": "NOTE",
+    "text": "* [ ] Add integration tests that generate indices for curated fixtures (empty dirs, nested trees, syntax-error files, large modules). _(Initial round-trip test added in `.repo_studios/tests/tests_producers/test_function_inventory_integration.py`; dependency note: `jsonschema` already pinned so payload validation can run once fixture matrix expands.)_"
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\automation\\function_inventory_integration_plan.md",
+    "line": 108,
+    "path": ".repo_studios/docs/automation/function_inventory_integration_plan.md",
+    "pattern": "REVIEW",
+    "text": "* [ ] Run pilot generation on `.repo_studios/scripts/producers/` and review output for accuracy and performance."
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\automation\\function_inventory_integration_plan.md",
+    "line": 111,
+    "path": ".repo_studios/docs/automation/function_inventory_integration_plan.md",
+    "pattern": "REVIEW",
+    "text": "* [ ] Schedule post-integration review to assess adoption, gather feedback, and plan future enhancements (additional analyses, cross-folder rollups, API hooks)."
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\automation\\function_inventory_integration_plan.md",
+    "line": 125,
+    "path": ".repo_studios/docs/automation/function_inventory_integration_plan.md",
+    "pattern": "REVIEW",
+    "text": "* Ownership sits with the Repo Studios team, with plans to surface timestamps in JSON so review cycles can track freshness."
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\templates\\agent_note_template.md",
+    "line": 1,
+    "path": ".repo_studios/docs/templates/agent_note_template.md",
+    "pattern": "NOTE",
+    "text": "# Agent Note Template"
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\templates\\integration_alignment_template.md",
+    "line": 67,
+    "path": ".repo_studios/docs/templates/integration_alignment_template.md",
+    "pattern": "REVIEW",
+    "text": "* [ ] **Review orchestrator impacts** if integrating with existing remediation suites *(Owner \u2192 analysis).*"
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\orchestrators\\run_pytest_log_capture.py",
+    "line": 172,
+    "path": ".repo_studios/scripts/orchestrators/run_pytest_log_capture.py",
+    "pattern": "NOTE",
+    "text": "# Note idle but avoid sending signals that may terminate pytest"
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\producers\\extract_standards_rules.py",
+    "line": 178,
+    "path": ".repo_studios/scripts/producers/extract_standards_rules.py",
+    "pattern": "NOTE",
+    "text": "# Ignore silently (could add error note in future)"
+  },
+  {
+    "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\script_inventory_architecture.md",
+    "line": 128,
+    "path": ".repo_studios/scripts/script_inventory_architecture.md",
+    "pattern": "REVIEW",
+    "text": "**Status Update (2025-11-23):** Completed the producer testing reference audit, documentation refresh (validate_markdown_anchors), extraction consumer audit, placeholder remediation plan drafting (see `.repo_studios/command_center/docs/phase_7/PLACEHOLDER_DEBT_PLAN.md`), top offender cataloging, owner outreach + allowlist guidance publication, and the shipped scanner exclusions with matching docs/tests; next up is seeding the allowlist, logging the first post-exclusion baseline, and restarting weekly burn-down tracking ahead of the CI gating review."
+  }
+]

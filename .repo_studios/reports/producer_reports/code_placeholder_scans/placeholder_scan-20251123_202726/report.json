@@ -27,14 +27,21 @@
     "XXX"
   ],
   "repo_root": "C:\\Users\\genet\\repo_studios",
-  "run_id": "placeholder_scan-20251123_203707",
+  "run_id": "placeholder_scan-20251123_202726",
   "scan_root": ".",
   "schema_version": 1,
   "status": "ok",
   "summary": {
-    "by_extension": {},
-    "by_pattern": {}
+    "by_extension": {
+      ".js": 2,
+      ".md": 17,
+      ".py": 2
+    },
+    "by_pattern": {
+      "NOTE": 9,
+      "REVIEW": 12
+    }
   },
-  "timestamp": "2025-11-23T20:37:07.332443+00:00",
-  "total_matches": 0
+  "timestamp": "2025-11-23T20:27:26.904696+00:00",
+  "total_matches": 21
 }
