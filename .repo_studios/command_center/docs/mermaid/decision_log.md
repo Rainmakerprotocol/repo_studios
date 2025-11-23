@@ -1,11 +1,42 @@
 # Mermaid Decision Log
 
+## 2025-11-22
+
+- **Decision:** Introduced Update header button styling for the viewer refresh workflow.
+- **Context:** Establishes the visible control required for the forthcoming Update spinner and backend trigger work while maintaining consistent placement with existing Refresh/Export actions.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** UI update in `.repo_studios/command_center/viewer/ui/index.html` adding the `Update` button, styling overrides in `.repo_studios/command_center/viewer/ui/viewer.css`, and updated checklist entry in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` (Phase 7.5).
+- **Decision:** Implemented Update button spinner state and placeholder workflow.
+- **Context:** Provides the visual feedback and disabled state required while the backend trigger is being wired, satisfying Phase 7.5 spinner requirements without launching subprocesses yet.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `setUpdateButtonBusy()` and handler wiring in `.repo_studios/command_center/viewer/ui/viewer.js`, spinner styling in `.repo_studios/command_center/viewer/ui/viewer.css`, and checklist update in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` marking the spinner task complete.
+- **Decision:** Standardized viewer updates on the `run_inventory_update.py` launcher.
+- **Context:** Keeps Update button executions inside `.repo_studios/`, reusing the new launcher to invoke `generate_commandview_inventory.py` with repo-relative targets before cancellation and refresh handling land.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** `_default_command_factory` now calls `.repo_studios/command_center/scripts/orchestrators/run_inventory_update.py`, new regression `.repo_studios/tests/tests_command_center/viewer/test_update_service.py` locks the command shape, and the Phase 7.5 checklist in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` records the launcher rollout (2025-11-22).
+- **Decision:** Expanded the CommandView selector payload with repo-relative target metadata.
+- **Context:** Ensures the upcoming Update workflow can resolve the correct Command Center target directory without ad-hoc path reconstruction while preserving backward-compatible selector behaviour.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Enriched `build_commandview_selector.py` to emit `target_path`/`target_repo_relative`, refreshed viewer selector wiring in `.repo_studios/command_center/viewer/refresh.py`, regression updates in `.repo_studios/tests/tests_library_integration/libraries/test_build_commandview_selector.py` and `.repo_studios/tests/tests_command_center/viewer/test_refresh.py`, plus checklist completion in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` (Phase 7.5).
+
 ## 2025-11-13
 
+- **Decision:** Added Risk & Assurance multi-view coexistence harness.
+- **Context:** Aligns the Risk & Assurance pack with other viewer packs by ensuring Test Coverage Mapping, Git Churn Risk Map, and Dead Code Detection diagrams remain stable when operators toggle between them.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New regression `.repo_studios/tests/tests_command_center/viewer/test_risk_assurance_multi_view_coexistence.py`, checklist updates in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`, and refreshed status note referencing the pack-level harness.
 - **Decision:** Wired the Risk & Assurance Git Churn Risk Map view and documented scope fallbacks.
 - **Context:** Adds the second Risk & Assurance diagram so operators can correlate repository churn baselines with module-level volatility while preserving deterministic wiring prior to the coexistence harness.
 - **Owner:** GitHub Copilot implementation assistant.
 - **Evidence:** Viewer wiring `buildGitChurnRiskMapViewDefinition()` in `.repo_studios/command_center/viewer/ui/viewer.js`, builder module `.repo_studios/command_center/viewer/ui/builders/git_churn_risk_map.js`, updated spec `.repo_studios/command_center/docs/mermaid/view_specs/git_churn_risk_map.md`, and passing regressions `.repo_studios/tests/tests_command_center/viewer/test_git_churn_risk_map_view.py` plus `test_git_churn_risk_map_view_definition.py` (executed 2025-11-13 via Node-backed harness).
+- **Decision:** Wired the Risk & Assurance Test Coverage Mapping view and documented the coverage-driven data contract.
+- **Context:** Unblocks auditors by surfacing module/test coverage signals inside the viewer while the rest of the Risk & Assurance pack is under construction.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** New spec at `.repo_studios/command_center/docs/mermaid/view_specs/test_coverage_mapping.md`, viewer wiring in `.repo_studios/command_center/viewer/ui/viewer.js` (`buildTestCoverageMappingViewDefinition` + `resolveTestCoverageScope`), builder implementation in `ui/builders/test_coverage_mapping.js`, and regression coverage (`test_test_coverage_mapping_view.py`, `test_test_coverage_mapping_view_definition.py`) referenced in the Phase 7 tracker within `mermaid_viewer.md`.
+- **Decision:** Documented Git Churn Risk Map data slice readiness and confirmed CommandView churn metrics availability.
+- **Context:** Establishes the data foundation for the remaining Risk & Assurance views while controls are in flight.
+- **Owner:** GitHub Copilot implementation assistant.
+- **Evidence:** Spec at `.repo_studios/command_center/docs/mermaid/view_specs/git_churn_risk_map.md`, `createModuleRecord()` retention of `gitChurn` blocks in `viewer.js`, producer regression `.repo_studios/tests/tests_producers/test_generate_commandview_inventory.py::test_inventory_includes_git_churn_summary`, and Phase 7 tracker update in `mermaid_viewer.md`.
 
 ## 2025-11-12
 
@@ -17,10 +48,6 @@
 - **Context:** Establishes the Quality Metrics contract required to highlight function-level complexity hotspots before wiring the new view.
 - **Owner:** GitHub Copilot implementation assistant.
 - **Evidence:** New spec `.repo_studios/command_center/docs/mermaid/view_specs/cyclomatic_complexity_map.md`, existing normalization helper `createFunctionRecord()` in `.repo_studios/command_center/viewer/ui/viewer.js`, and producer regression `.repo_studios/tests/tests_producers/test_generate_commandview_inventory.py::test_cyclomatic_complexity_counts_branches`, referenced in the updated checklist entry within `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`.
-- **Decision:** Added State Effects multi-view coexistence harness.
-- **Context:** Ensures the Global Variable Usage Map, IO Effects Diagram, and Exception Flow Map maintain deterministic definitions, status messaging, and stats while operators switch between State Effects views, aligning the pack with existing coexistence guarantees.
-- **Owner:** GitHub Copilot implementation assistant.
-- **Evidence:** New regression `.repo_studios/tests/tests_command_center/viewer/test_state_effects_multi_view_coexistence.py`, updated tracker notes in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md`, and refreshed status note citing the pack-level harness.
 - **Decision:** Added State Effects multi-view coexistence harness.
 - **Context:** Ensures the Global Variable Usage Map, IO Effects Diagram, and Exception Flow Map maintain deterministic definitions, status messaging, and stats while operators switch between State Effects views, aligning the pack with existing coexistence guarantees.
 - **Owner:** GitHub Copilot implementation assistant.
@@ -356,14 +383,3 @@
 - **Owner:** GitHub Copilot implementation assistant.
 - **Evidence:** `.repo_studios/command_center/viewer/ui/viewer.js` now enables the Code Flow button, computes module-level call graph diagrams, and routes selections through `renderActiveView`; documentation in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` records the partial Phase 7 completion.
 
-## 2025-11-13
-
-- **Decision:** Wired the Risk & Assurance Test Coverage Mapping view and documented the coverage-driven data contract.
-- **Context:** Unblocks auditors by surfacing module/test coverage signals inside the viewer while the rest of the Risk & Assurance pack is under construction.
-- **Owner:** GitHub Copilot implementation assistant.
-- **Evidence:** New spec at `.repo_studios/command_center/docs/mermaid/view_specs/test_coverage_mapping.md`, viewer wiring in `.repo_studios/command_center/viewer/ui/viewer.js` (`buildTestCoverageMappingViewDefinition` + `resolveTestCoverageScope`), builder implementation in `ui/builders/test_coverage_mapping.js`, and regression coverage (`test_test_coverage_mapping_view.py`, `test_test_coverage_mapping_view_definition.py`) referenced in the Phase 7 tracker within `mermaid_viewer.md`.
-
-- **Decision:** Documented Git Churn Risk Map data slice readiness and confirmed CommandView churn metrics availability.
-- **Context:** Establishes the data foundation for the remaining Risk & Assurance views while controls are in flight.
-- **Owner:** GitHub Copilot implementation assistant.
-- **Evidence:** Spec at `.repo_studios/command_center/docs/mermaid/view_specs/git_churn_risk_map.md`, `createModuleRecord()` retention of `gitChurn` blocks in `viewer.js`, producer regression `.repo_studios/tests/tests_producers/test_generate_commandview_inventory.py::test_inventory_includes_git_churn_summary`, and Phase 7 tracker update in `mermaid_viewer.md`.

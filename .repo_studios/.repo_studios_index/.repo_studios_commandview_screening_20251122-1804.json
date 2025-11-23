@@ -7758,6 +7758,118 @@
         "refresh_selector_state"
       ],
       [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._handle_update_cancel",
+        "UPDATE_MANAGER.cancel"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._handle_update_cancel",
+        "self._send_json"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._handle_update_request",
+        "UPDATE_MANAGER.start"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._handle_update_request",
+        "create_update_request"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._handle_update_request",
+        "payload.get"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._handle_update_request",
+        "print"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._handle_update_request",
+        "result.to_payload"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._handle_update_request",
+        "self._read_json_body"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._handle_update_request",
+        "self._send_json"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._handle_update_request",
+        "str"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._read_json_body",
+        "ValueError"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._read_json_body",
+        "int"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._read_json_body",
+        "isinstance"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._read_json_body",
+        "json.loads"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._read_json_body",
+        "raw.decode"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._read_json_body",
+        "self.headers.get"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._read_json_body",
+        "self.rfile.read"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._send_json",
+        "json.dumps"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._send_json",
+        "json.dumps(payload).encode"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._send_json",
+        "len"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._send_json",
+        "self.end_headers"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._send_json",
+        "self.send_header"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._send_json",
+        "self.send_response"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._send_json",
+        "self.wfile.write"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._send_json",
+        "str"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler.do_POST",
+        "self._handle_update_cancel"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler.do_POST",
+        "self._handle_update_request"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler.do_POST",
+        "self.send_error"
+      ],
+      [
         ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler.end_headers",
         "self.send_header"
       ],
@@ -7775,6 +7887,10 @@
       ],
       [
         ".repo_studios.command_center.viewer.serve_viewer::serve_viewer",
+        "ViewerHTTPServer"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer::serve_viewer",
         "httpd.serve_forever"
       ],
       [
@@ -7787,11 +7903,179 @@
       ],
       [
         ".repo_studios.command_center.viewer.serve_viewer::serve_viewer",
-        "socketserver.TCPServer"
+        "str"
       ],
       [
-        ".repo_studios.command_center.viewer.serve_viewer::serve_viewer",
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.__init__",
+        "repo_root.resolve"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.__init__",
+        "threading.Lock"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.cancel",
+        "process.kill"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.cancel",
+        "process.poll"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.cancel",
+        "process.terminate"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.cancel",
+        "process.wait"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.is_running",
+        "bool"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.is_running",
+        "self._process.poll"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.start",
+        ".repo_studios.command_center.viewer.update_service::_regenerate_selector_json"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.start",
+        ".repo_studios.command_center.viewer.update_service::_tail_lines"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.start",
+        "UpdateAlreadyRunningError"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.start",
+        "UpdateResult"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.start",
+        "UpdateValidationError"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.start",
+        "_regenerate_selector_json"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.start",
+        "_tail_lines"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.start",
+        "list"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.start",
+        "process.communicate"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.start",
+        "self._command_factory"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.start",
+        "self._process.poll"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.start",
         "str"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.start",
+        "subprocess.Popen"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.start",
+        "time.monotonic"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::_default_command_factory",
+        "UpdateValidationError"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::_default_command_factory",
+        "script_path.exists"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::_default_command_factory",
+        "str"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::_regenerate_selector_json",
+        "json.dumps"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::_regenerate_selector_json",
+        "output_path.parent.mkdir"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::_regenerate_selector_json",
+        "output_path.write_text"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::_regenerate_selector_json",
+        "refresh_selector_payload"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::_tail_lines",
+        "content.splitlines"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::_tail_lines",
+        "len"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::create_update_request",
+        "(repo_root / target_path).resolve"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::create_update_request",
+        "Path"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::create_update_request",
+        "UpdateRequest"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::create_update_request",
+        "UpdateValidationError"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::create_update_request",
+        "isinstance"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::create_update_request",
+        "repo_root.resolve"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::create_update_request",
+        "str"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::create_update_request",
+        "target_path.exists"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::create_update_request",
+        "target_path.is_absolute"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::create_update_request",
+        "target_path.is_dir"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::create_update_request",
+        "target_path.relative_to"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service::create_update_request",
+        "target_path.resolve"
       ],
       [
         ".repo_studios.scripts.aggregators.analyze_monkey_patch_trends::_agg_counts",
@@ -25378,7 +25662,31 @@
       ],
       [
         ".repo_studios.command_center.viewer.serve_viewer",
+        "command_center.viewer.update_service.UpdateAlreadyRunningError"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer",
+        "command_center.viewer.update_service.UpdateProcessManager"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer",
+        "command_center.viewer.update_service.UpdateValidationError"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer",
+        "command_center.viewer.update_service.create_update_request"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer",
+        "http.HTTPStatus"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer",
         "http.server"
+      ],
+      [
+        ".repo_studios.command_center.viewer.serve_viewer",
+        "json"
       ],
       [
         ".repo_studios.command_center.viewer.serve_viewer",
@@ -25387,6 +25695,46 @@
       [
         ".repo_studios.command_center.viewer.serve_viewer",
         "socketserver"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service",
+        "__future__.annotations"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service",
+        "dataclasses.dataclass"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service",
+        "json"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service",
+        "pathlib.Path"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service",
+        "subprocess"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service",
+        "sys"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service",
+        "threading"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service",
+        "time"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service",
+        "typing.Callable"
+      ],
+      [
+        ".repo_studios.command_center.viewer.update_service",
+        "typing.Sequence"
       ],
       [
         ".repo_studios.scripts.aggregators.analyze_monkey_patch_trends",
@@ -29556,6 +29904,51 @@
           "writes": false
         }
       },
+      ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._handle_update_cancel": {
+        "hash": "9ecda692c49f2d147e8489b6e8d9b824548c076b9c919054427848ccc097574e",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._handle_update_request": {
+        "hash": "ed0a7d407c521da98bd3b5c8a167060100b9b2388dcadd6a3386bacfbe4cf124",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._read_json_body": {
+        "hash": "bafe0b33ef9baae9ad30082c150a18484b2ad787e1b8ab9c9dcb89eeb18cf2fc",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler._send_json": {
+        "hash": "861041315998ea514f9f8bcc03ded4f9b538f0188db6d138d26b338a2f54587e",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler.do_POST": {
+        "hash": "9a1f485a973a162e557066a46480140584c7987d34ae3c02735a668485aae16a",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
       ".repo_studios.command_center.viewer.serve_viewer::ViewerHTTPRequestHandler.end_headers": {
         "hash": "4656192ea0905a5a619cdc9882fbc4ee72722b06d23ddc268580c8b4ee5fb751",
         "io_effects": {
@@ -29566,7 +29959,88 @@
         }
       },
       ".repo_studios.command_center.viewer.serve_viewer::serve_viewer": {
-        "hash": "2db5071262adc81bf5d32013bb8e3411941654a69cd4a3723971904b54bf8487",
+        "hash": "3d0623f69917dbb40528e46b260e582a267173770e55d9fe513c3bb2abc2dc4f",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.__init__": {
+        "hash": "a705b970234b53a1b37a2b9b3b0aeb91a52047ee623d5298dceb04cfdfcd8989",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.cancel": {
+        "hash": "0a93256f90c25ac5961d12498e678c2b8571571465d5932734d185fe35758117",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.is_running": {
+        "hash": "235c794adbcf5c4aba988d02016732aa22ed3d804bd4e324ef996224956fa3d5",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      ".repo_studios.command_center.viewer.update_service::UpdateProcessManager.start": {
+        "hash": "c154e76e1d7bbc624e2884e28eecbd2f684ad268ee6023d380f64aea13470cc2",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      ".repo_studios.command_center.viewer.update_service::UpdateResult.to_payload": {
+        "hash": "f9fa706e60575c65c50001ba46fa577ddd81f99bf3547651191b6172a503633f",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      ".repo_studios.command_center.viewer.update_service::_default_command_factory": {
+        "hash": "669a697898679ec572e2224b201598235ff450a9934d3197ea0144b68eb6744a",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      ".repo_studios.command_center.viewer.update_service::_regenerate_selector_json": {
+        "hash": "d8fdc227cb8aa183fd730231f1abbaaf9cb8e14a3d27130845e37d1f321ab9f4",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      ".repo_studios.command_center.viewer.update_service::_tail_lines": {
+        "hash": "e0d30025c29ba048d73e412cb2a30740cad0546ac3fd3108480eee92b9e697de",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      ".repo_studios.command_center.viewer.update_service::create_update_request": {
+        "hash": "73dffdb4a84463623e6502e018754809abeab2c4bddc3463d6c79075d04ceafe",
         "io_effects": {
           "env": false,
           "network": false,
@@ -34862,29 +35336,165 @@
         "total_packs": 1
       },
       "timestamp": "2025-11-08T21:11:49.943427+00:00"
+    },
+    {
+      "context": {
+        "folder_name": ".repo_studios",
+        "inventory_generated_at": "2025-11-22T17:35:13.393298+00:00",
+        "inventory_schema_version": 2
+      },
+      "packs": [
+        {
+          "coverage_ratio": 0.05028571428571429,
+          "description": "Percentage of functions and methods that include a docstring.",
+          "id": "docstring_coverage",
+          "label": "Docstring Coverage",
+          "metrics": {
+            "docstrings_with_parameters_section": 3,
+            "docstrings_with_returns_section": 0,
+            "functions_documented": 44,
+            "functions_missing": 831,
+            "functions_total": 875,
+            "missing_parameter_mentions": 1528
+          },
+          "score": 5.03,
+          "severity": "critical",
+          "thresholds": {
+            "failure": 60.0,
+            "warning": 80.0
+          },
+          "unit": "percent"
+        }
+      ],
+      "summary": {
+        "total_packs": 1
+      },
+      "timestamp": "2025-11-22T17:35:13.416169+00:00"
+    },
+    {
+      "context": {
+        "folder_name": ".repo_studios",
+        "inventory_generated_at": "2025-11-22T17:59:22.589550+00:00",
+        "inventory_schema_version": 2
+      },
+      "packs": [
+        {
+          "coverage_ratio": 0.0502283105022831,
+          "description": "Percentage of functions and methods that include a docstring.",
+          "id": "docstring_coverage",
+          "label": "Docstring Coverage",
+          "metrics": {
+            "docstrings_with_parameters_section": 3,
+            "docstrings_with_returns_section": 0,
+            "functions_documented": 44,
+            "functions_missing": 832,
+            "functions_total": 876,
+            "missing_parameter_mentions": 1529
+          },
+          "score": 5.02,
+          "severity": "critical",
+          "thresholds": {
+            "failure": 60.0,
+            "warning": 80.0
+          },
+          "unit": "percent"
+        }
+      ],
+      "summary": {
+        "total_packs": 1
+      },
+      "timestamp": "2025-11-22T17:59:22.612959+00:00"
+    },
+    {
+      "context": {
+        "folder_name": ".repo_studios",
+        "inventory_generated_at": "2025-11-22T17:59:47.143732+00:00",
+        "inventory_schema_version": 2
+      },
+      "packs": [
+        {
+          "coverage_ratio": 0.0502283105022831,
+          "description": "Percentage of functions and methods that include a docstring.",
+          "id": "docstring_coverage",
+          "label": "Docstring Coverage",
+          "metrics": {
+            "docstrings_with_parameters_section": 3,
+            "docstrings_with_returns_section": 0,
+            "functions_documented": 44,
+            "functions_missing": 832,
+            "functions_total": 876,
+            "missing_parameter_mentions": 1529
+          },
+          "score": 5.02,
+          "severity": "critical",
+          "thresholds": {
+            "failure": 60.0,
+            "warning": 80.0
+          },
+          "unit": "percent"
+        }
+      ],
+      "summary": {
+        "total_packs": 1
+      },
+      "timestamp": "2025-11-22T17:59:47.166561+00:00"
+    },
+    {
+      "context": {
+        "folder_name": ".repo_studios",
+        "inventory_generated_at": "2025-11-22T18:04:50.193348+00:00",
+        "inventory_schema_version": 2
+      },
+      "packs": [
+        {
+          "coverage_ratio": 0.0502283105022831,
+          "description": "Percentage of functions and methods that include a docstring.",
+          "id": "docstring_coverage",
+          "label": "Docstring Coverage",
+          "metrics": {
+            "docstrings_with_parameters_section": 3,
+            "docstrings_with_returns_section": 0,
+            "functions_documented": 44,
+            "functions_missing": 832,
+            "functions_total": 876,
+            "missing_parameter_mentions": 1529
+          },
+          "score": 5.02,
+          "severity": "critical",
+          "thresholds": {
+            "failure": 60.0,
+            "warning": 80.0
+          },
+          "unit": "percent"
+        }
+      ],
+      "summary": {
+        "total_packs": 1
+      },
+      "timestamp": "2025-11-22T18:04:50.216795+00:00"
     }
   ],
   "score_latest": {
     "context": {
       "folder_name": ".repo_studios",
-      "inventory_generated_at": "2025-11-08T21:11:49.920731+00:00",
+      "inventory_generated_at": "2025-11-22T18:04:50.193348+00:00",
       "inventory_schema_version": 2
     },
     "packs": [
       {
-        "coverage_ratio": 0.04640371229698376,
+        "coverage_ratio": 0.0502283105022831,
         "description": "Percentage of functions and methods that include a docstring.",
         "id": "docstring_coverage",
         "label": "Docstring Coverage",
         "metrics": {
           "docstrings_with_parameters_section": 3,
           "docstrings_with_returns_section": 0,
-          "functions_documented": 40,
-          "functions_missing": 822,
-          "functions_total": 862,
-          "missing_parameter_mentions": 1514
+          "functions_documented": 44,
+          "functions_missing": 832,
+          "functions_total": 876,
+          "missing_parameter_mentions": 1529
         },
-        "score": 4.64,
+        "score": 5.02,
         "severity": "critical",
         "thresholds": {
           "failure": 60.0,
@@ -34896,29 +35506,29 @@
     "summary": {
       "total_packs": 1
     },
-    "timestamp": "2025-11-08T21:11:49.943427+00:00"
+    "timestamp": "2025-11-22T18:04:50.216795+00:00"
   },
   "score_snapshot": {
     "context": {
       "folder_name": ".repo_studios",
-      "inventory_generated_at": "2025-11-08T21:11:49.920731+00:00",
+      "inventory_generated_at": "2025-11-22T18:04:50.193348+00:00",
       "inventory_schema_version": 2
     },
     "packs": [
       {
-        "coverage_ratio": 0.04640371229698376,
+        "coverage_ratio": 0.0502283105022831,
         "description": "Percentage of functions and methods that include a docstring.",
         "id": "docstring_coverage",
         "label": "Docstring Coverage",
         "metrics": {
           "docstrings_with_parameters_section": 3,
           "docstrings_with_returns_section": 0,
-          "functions_documented": 40,
-          "functions_missing": 822,
-          "functions_total": 862,
-          "missing_parameter_mentions": 1514
+          "functions_documented": 44,
+          "functions_missing": 832,
+          "functions_total": 876,
+          "missing_parameter_mentions": 1529
         },
-        "score": 4.64,
+        "score": 5.02,
         "severity": "critical",
         "thresholds": {
           "failure": 60.0,
@@ -34930,7 +35540,7 @@
     "summary": {
       "total_packs": 1
     },
-    "timestamp": "2025-11-08T21:11:49.943427+00:00"
+    "timestamp": "2025-11-22T18:04:50.216795+00:00"
   },
   "violations": {
     "cycles": false

@@ -16,8 +16,11 @@ def _make_record(
     relative_path: str,
     category: str,
     absolute_root: Path,
+    target_relative: str | None = None,
 ) -> SelectorRecord:
     stamp_dt = real_datetime.strptime(stamp, "%Y%m%d-%H%M").replace(tzinfo=real_timezone.utc)
+    target_relative = target_relative or relative_path.split("/", 1)[0]
+    target_absolute = str((absolute_root / target_relative).resolve()) if target_relative else None
     return SelectorRecord(
         slug=slug,
         timestamp=stamp,
@@ -26,6 +29,8 @@ def _make_record(
         category=category,
         relative_path=relative_path,
         absolute_path=str((absolute_root / relative_path).resolve()),
+        target_path=target_absolute,
+        target_repo_relative=target_relative,
         _sort_key=stamp_dt,
     )
 
@@ -52,6 +57,7 @@ def test_refresh_selector_state_groups_and_deduplicates(monkeypatch: pytest.Monk
             relative_path="alpha/alpha_commandview_20240102-1310.json",
             category="alpha",
             absolute_root=tmp_path,
+            target_relative="alpha_index",
         ),
         _make_record(
             slug="alpha",
@@ -59,6 +65,7 @@ def test_refresh_selector_state_groups_and_deduplicates(monkeypatch: pytest.Monk
             relative_path="alpha/alpha_commandview_20240101-1310.json",
             category="alpha",
             absolute_root=tmp_path,
+            target_relative="alpha_index",
         ),
         _make_record(
             slug="alpha",
@@ -66,6 +73,7 @@ def test_refresh_selector_state_groups_and_deduplicates(monkeypatch: pytest.Monk
             relative_path="alpha/alpha_commandview_20240101-1310.json",
             category="alpha",
             absolute_root=tmp_path,
+            target_relative="alpha_index",
         ),
         _make_record(
             slug="beta",
@@ -73,6 +81,7 @@ def test_refresh_selector_state_groups_and_deduplicates(monkeypatch: pytest.Monk
             relative_path="beta/beta_commandview_20231231-2359.json",
             category="beta",
             absolute_root=tmp_path,
+            target_relative="beta_index",
         ),
     ]
     monkeypatch.setattr(viewer_refresh, "build_commandview_selector", lambda _: records)
@@ -88,10 +97,14 @@ def test_refresh_selector_state_groups_and_deduplicates(monkeypatch: pytest.Monk
         "20240102-1310",
         "20240101-1310",
     ]
+    assert all(option.target_repo_relative == "alpha_index" for option in alpha_entry.options)
+    assert all(option.target_path and option.target_path.endswith("alpha_index") for option in alpha_entry.options)
 
     beta_entry = state.entries[1]
     assert len(beta_entry.options) == 1
     assert beta_entry.options[0].relative_path == "beta/beta_commandview_20231231-2359.json"
+    assert beta_entry.options[0].target_repo_relative == "beta_index"
+    assert beta_entry.options[0].target_path and beta_entry.options[0].target_path.endswith("beta_index")
 
 
 def test_refresh_selector_state_json_reuses_state_timestamp(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
@@ -111,6 +124,7 @@ def test_refresh_selector_with_context_preserves_relative_path(monkeypatch: pyte
             relative_path="alpha/alpha_commandview_20240102-1310.json",
             category="alpha",
             absolute_root=tmp_path,
+            target_relative="alpha_index",
         ),
         _make_record(
             slug="beta",
@@ -118,6 +132,7 @@ def test_refresh_selector_with_context_preserves_relative_path(monkeypatch: pyte
             relative_path="beta/beta_commandview_20231231-2359.json",
             category="beta",
             absolute_root=tmp_path,
+            target_relative="beta_index",
         ),
     ]
     monkeypatch.setattr(viewer_refresh, "build_commandview_selector", lambda _: records)
@@ -140,6 +155,7 @@ def test_refresh_selector_with_context_falls_back_to_slug(monkeypatch: pytest.Mo
             relative_path="alpha/alpha_commandview_20240102-1310.json",
             category="alpha",
             absolute_root=tmp_path,
+            target_relative="alpha_index",
         ),
         _make_record(
             slug="beta",
@@ -147,6 +163,7 @@ def test_refresh_selector_with_context_falls_back_to_slug(monkeypatch: pytest.Mo
             relative_path="beta/beta_commandview_20231231-2359.json",
             category="beta",
             absolute_root=tmp_path,
+            target_relative="beta_index",
         ),
     ]
     monkeypatch.setattr(viewer_refresh, "build_commandview_selector", lambda _: records)

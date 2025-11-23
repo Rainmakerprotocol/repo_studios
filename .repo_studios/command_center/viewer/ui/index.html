@@ -54,6 +54,7 @@
         <div class="viewer-header-actions">
           <button id="refresh-button" type="button">Refresh</button>
           <button id="export-button" type="button" disabled>Export .mmd</button>
+          <button id="update-button" type="button">Update</button>
         </div>
       </header>
       <section class="viewer-body">
@@ -123,6 +124,9 @@
         // Base URL for reports - adjust based on your server setup
         // When serving from repo root (default): use absolute path
         reportsBaseUrl: '/.repo_studios/command_center/reports/',
+
+        // API endpoint for triggering CommandView updates (served by serve_viewer.py)
+        updateApiEndpoint: '/.repo_studios/command_center/viewer/update',
         
         // When serving from ui directory only: use relative path
         // reportsBaseUrl: '../../../reports/',

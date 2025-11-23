@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from command_center.scripts.libraries.build_commandview_selector import (
@@ -21,7 +22,7 @@ def test_build_commandview_selector_filters_static_commandview_files(tmp_path: P
     dynamic_root = repo_root / "alpha_index"
     dynamic_file = dynamic_root / "alpha_commandview_20251105-0930.json"
 
-    _write(commandview_file, "{}")
+    _write(commandview_file, json.dumps({"metadata": {"folder_path": str(repo_root / "alpha_index")}}))
     _write(screening_file, "{}")
     _write(dynamic_file, "{}")
 
@@ -33,6 +34,8 @@ def test_build_commandview_selector_filters_static_commandview_files(tmp_path: P
     assert record.category == "index_scan"
     assert record.relative_path == "index_scan/alpha_index/alpha_commandview_20251106-1014.json"
     assert record.absolute_path.endswith("alpha_commandview_20251106-1014.json")
+    assert record.target_path.endswith("alpha_index")
+    assert record.target_repo_relative == "alpha_index"
     assert record.timestamp_iso.endswith("+00:00")
     assert "alpha" in record.display_name
     assert "2025-11-06" in record.display_name

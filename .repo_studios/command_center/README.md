@@ -16,6 +16,15 @@
 └── README.md             # This protocol overview
 ```
 
+### Viewer Documentation Jumpstart
+
+- **What**: Progressive-detail CommandView explorer documented under `viewer/` and `docs/mermaid/`.
+- **Where**: Entry point at `.repo_studios/command_center/viewer/README.md` with links to launch instructions and troubleshooting.
+- **Why**: Use the viewer to inspect CommandView inventories, duplicate scans, and view packs before library integration work begins.
+- **Who**: Command Center operators, Repo Studios contributors, and AI coding agents preparing remediation plans.
+- **When**: After refreshing inventories via the pipeline or update launcher so selector data and diagrams reflect the latest artifacts.
+- **How**: Follow the 5-step quick start in the viewer README, then dive into `docs/mermaid/README.md` for roadmap/history context.
+
 > **Note:** Keep raw producer reports elsewhere (e.g., `.repo_studios/reports/producer_reports/`). Only place library-integration-specific artifacts and slugged mirrors here so this workspace stays focused.
 
 ---

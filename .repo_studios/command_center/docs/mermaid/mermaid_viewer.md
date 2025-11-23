@@ -114,7 +114,7 @@ Every pass against a view pack should explicitly update the three shared attribu
     - [x] Multi-view coexistence verified (M) — Cross-view regression at `.repo_studios/tests/tests_command_center/viewer/test_health_pack_multi_view_coexistence.py::test_health_pack_builders_coexist_without_state_reset` confirms toggling between Health pack views preserves definitions and status messaging (2025-11-09, GitHub Copilot).
     - Past: Captured the Function Inventory Overview data slice contract and aligned viewer builder logic with the CommandView schema (2025-11-08, GitHub Copilot).
     - Present: Controls expose the overview in the Health pack, with builder logic housed in `ui/builders/function_inventory_overview.js` and regression coverage (builder + coexistence) exercising the wiring.
-    - Future: Fold the Health pack coexistence harness into UI-level smoke tests once additional packs land, extend the same coexistence coverage to Code Flow views, and add a Risk & Assurance pack harness once Git Churn and Dead Code diagrams wire up alongside Test Coverage Mapping.
+    - Future: Fold the Health pack coexistence harness into UI-level smoke tests once additional packs land, extend the same coexistence coverage to Code Flow views, and expand Risk & Assurance pack harness coverage as new diagrams arrive.
   - `screening_signal_timeline.mmd`
     - [x] Data slice ready (D) — Screening summary now emits `score_snapshot` + `score_history` blocks from the CommandView producer, unblocking timeline normalization (2025-11-08, GitHub Copilot).
       - Past: Drafted the data contract and identified the missing `score_history` export in CommandView screening payloads.
@@ -294,15 +294,48 @@ Every pass against a view pack should explicitly update the three shared attribu
   - `test_coverage_mapping.mmd`
     - [x] Data slice ready (D) — Coverage signals (`coverage_signals.imports`, `coverage_signals.has_matches`) and per-function coverage metrics now flow through `createModuleRecord()` / `createFunctionRecord()`, captured in the new spec `view_specs/test_coverage_mapping.md` (2025-11-13, GitHub Copilot).
     - [x] Controls wired (C) — Viewer delegates the Risk & Assurance toggle to `buildTestCoverageMappingViewDefinition()` which scopes via `resolveTestCoverageScope()`, threads repository fallbacks, and renders diagrams through `ui/builders/test_coverage_mapping.js`; regression coverage lives in `.repo_studios/tests/tests_command_center/viewer/test_test_coverage_mapping_view.py` and `test_test_coverage_mapping_view_definition.py` (2025-11-13, GitHub Copilot).
-  - [ ] Multi-view coexistence verified (M) — Pending dedicated Risk & Assurance coexistence harness; will add regression once Git Churn and Dead Code diagrams are wired.
+  - [x] Multi-view coexistence verified (M) — Added Risk & Assurance harness `.repo_studios/tests/tests_command_center/viewer/test_risk_assurance_multi_view_coexistence.py` covering Test Coverage Mapping, Git Churn Risk Map, and Dead Code Detection toggles (2025-11-13, GitHub Copilot).
   - `git_churn_risk_map.mmd`
     - [x] Data slice ready (D) — Documented churn metrics contract in `view_specs/git_churn_risk_map.md`, confirming normalized modules expose `gitChurn` blocks and `statistics.git_churn` aggregates (2025-11-13, GitHub Copilot).
     - [x] Controls wired (C) — Viewer delegates to `buildGitChurnRiskMapViewDefinition()` which scopes selections via the new git churn resolver, threads repository baselines, and renders diagrams through `ui/builders/git_churn_risk_map.js` with deterministic status payloads (2025-11-13, GitHub Copilot).
-    - [ ] Multi-view coexistence verified
+    - [x] Multi-view coexistence verified (M) — Guarded by the shared Risk & Assurance coexistence harness referenced above.
   - `dead_code_detection.mmd`
     - [x] Data slice ready (D) — Normalization now surfaces `unusedImports` and `unreachableFunctions` via `normalizeUnusedImports()` / `normalizeUnreachableFunctions()` with regression coverage in `.repo_studios/tests/tests_command_center/viewer/test_dead_code_data_normalization.py` (2025-11-13, GitHub Copilot).
     - [x] Controls wired (C) — Viewer delegates to `buildDeadCodeDetectionViewDefinition()` which applies scope-aware fallbacks and renders diagrams through `ui/builders/dead_code_detection.js`; behavior locked by `.repo_studios/tests/tests_command_center/viewer/test_dead_code_detection_view_definition.py` (2025-11-13, GitHub Copilot).
     - [x] Multi-view coexistence verified (M) — Added Risk & Assurance harness `.repo_studios/tests/tests_command_center/viewer/test_risk_assurance_multi_view_coexistence.py` covering Test Coverage Mapping, Git Churn Risk Map, and Dead Code Detection toggles (2025-11-13, GitHub Copilot).
+
+  -## Phase 7.5 · Update Workflow Integration
+
+  - [x] Style a new Update header button (red background, white text) positioned to the right of Refresh and Export.
+    - Past: Added the `Update` control alongside `Refresh` and `Export` in `viewer/ui/index.html` with red styling overrides in `viewer/ui/viewer.css` (2025-11-22, GitHub Copilot).
+    - Present: Button renders with static styling; spinner and wiring work below remains.
+    - Future: Extend the button to manage spinner states and backend triggers.
+  - [x] Replace the Update label with a spinner and disable the control while work runs; restore the label and state on success or error.
+    - Past: Added `setUpdateButtonBusy()` and placeholder handler wiring in `viewer/ui/viewer.js`, with spinner styling in `viewer/ui/viewer.css` (2025-11-22, GitHub Copilot).
+    - Present: Spinner toggles during the placeholder workflow; backend invocation and cancellation plumbing follow.
+    - Future: Swap the placeholder handler for the real subprocess trigger and propagate completion status to Refresh.
+  - [x] Confirm selector entries expose enough identifiers (slug, relative path, derived repo path) to resolve the Command Center target and expand the payload if necessary.
+    - Past: Extended `build_commandview_selector.py` to parse `metadata.folder_path`, emitting absolute `target_path` plus repo-relative `target_repo_relative` fields alongside slug/timestamp metadata (2025-11-22, GitHub Copilot).
+    - Present: Viewer refresh helpers now propagate the enriched selector metadata and regression coverage locks the new fields in `test_build_commandview_selector.py` and `tests_command_center/viewer/test_refresh.py`.
+    - Future: Use the repo-relative target metadata to resolve the Update launcher path before wiring subprocess execution and cancellation.
+  - [x] Trigger `generate_commandview_inventory.py` through an in-repo launcher (make target or helper under `.repo_studios/`) using the resolved target, keeping execution confined to `.repo_studios/`.
+    - Past: Added `.repo_studios/command_center/scripts/orchestrators/run_inventory_update.py` to wrap `generate_commandview_inventory.run()` with repo-root validation and wired `UpdateProcessManager` to spawn the launcher via `_default_command_factory` (2025-11-22, GitHub Copilot).
+    - Present: Update requests now execute through the new launcher with repo-relative targets, and regression coverage in `.repo_studios/tests/tests_command_center/viewer/test_update_service.py` guards the command wiring.
+    - Future: Shift the viewer payload to rely on selector-provided `target_repo_relative` metadata before tackling cancellation and post-run refresh steps.
+  - [x] Tie the launcher lifecycle to the viewer session so a page refresh cancels the subprocess cleanly.
+    - Past: Verified `sendUpdateCancellation()` coverage by exercising the backend with the new `test_update_service.py::test_cancel_terminates_running_update`, ensuring `UpdateProcessManager.cancel()` flags results correctly after client-triggered aborts (2025-11-22, GitHub Copilot).
+    - Present: Viewer unload hooks send cancellation beacons, the HTTP handler stops active runs, and backend tests guard the termination flow so Update results surface `was_cancelled=True` without refreshing selectors post-abort.
+    - Future: Thread cancellation telemetry into viewer status messaging once audit logging is added for Update runs.
+  - [x] Call the existing refresh flow after the subprocess completes so the selector reflects the regenerated artifact.
+    - Past: Verified `viewer/ui/viewer.js::handleUpdateButtonClick` threads the happy-path completion through `refreshSelectorData({ allowFallback: false })`, ensuring the selector rehydrates with the freshly generated artifact once the launcher succeeds (2025-11-22, GitHub Copilot).
+    - Present: Manual validation confirms selector entries update without manual refresh, and backend `UpdateResult.selector_refreshed` mirrors the regeneration when the subprocess exits cleanly.
+    - Future: Extend refresh error surfacing to the sidebar once audit logging lands so operators see selector regeneration failures inline.
+  - [x] Document spinner/cancellation behavior and backfill tests covering the Update pathway.
+    - Past: Documented the spinner lifecycle, cancellation beacon, and selector refresh outcomes here to keep Phase 7.5 governance synchronized with the `setUpdateButtonBusy`/`sendUpdateCancellation` wiring (2025-11-22, GitHub Copilot).
+    - Present: Added regression `.repo_studios/tests/tests_command_center/viewer/test_update_service.py::test_successful_update_refreshes_selector` to assert the happy-path update marks `selector_refreshed` and invokes the regeneration hook, complementing the existing cancellation coverage.
+    - Future: Capture UI smoke coverage once the viewer shell is ready for automated browser tests so spinner states and status messaging stay guarded.
+
+Version 1 milestone (2025-11-23): Phase 7.5 closes out the initial viewer launch with inventory updates, cancellation safeguards, and selector auto-refresh in place. Future contributors can treat the remaining phases as a backlog of v2 explorations—feel free to revisit the scope, propose alternative interaction models (search overlays, shareable URLs, richer pack wiring), or fold these ideas into a fresh roadmap. The current Phase 8–10 checklists are intentionally left as placeholders that will need a planning pass before implementation resumes.
 
 ## Phase 8 · UX Enhancements
 
@@ -341,6 +374,7 @@ Additionally, the Risk & Assurance Test Coverage Mapping view now renders throug
 
     - Preferred: `make -C .repo_studios command-center COMMAND_CENTER_TARGET=.repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py PYTHON=.venv/Scripts/python.exe -- --repo-root . --log-level INFO`.
     - Direct CLI: `C:/Users/genet/repo_studios/.venv/Scripts/python.exe .repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py .repo_studios/command_center/scripts --repo-root . --log-level INFO`.
+    - Viewer Update launcher: `C:/Users/genet/repo_studios/.venv/Scripts/python.exe .repo_studios/command_center/scripts/orchestrators/run_inventory_update.py .repo_studios/command_center/scripts --repo-root . --log-level INFO` (used by the Update button backend).
 
 2. **Invoke viewer refresh backend** (present):call `refresh_selector_with_context(repo_root, active_relative_path=..., active_slug=...)` to rebuild selector state while preserving operator context.
 

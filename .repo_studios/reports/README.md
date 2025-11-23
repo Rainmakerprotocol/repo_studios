@@ -28,6 +28,7 @@ This directory now mirrors the producer → consumer → aggregator → orchestr
 - `import_graph_reports/` – module graph JSON/markdown outputs from topology scans.
 - `lizard_metrics_reports/` – complexity reports emitted by `generate_lizard_report.py`; each run now includes a ranked top-10 offender table (path, line, delta over thresholds, recommended remediation) alongside JSON/log artifacts for planning manual extractions.
 - `typecheck_reports/` – mypy error snapshots and summaries.
+- `test_coverage_reports/` – function coverage inventories sourced from Coverage.py XML, including uncovered function lists for each module.
 - `monkey_patch_scan_reports/` – raw inventory of monkey patches prior to risk classification.
 - `placeholder_scan_reports/` – TODO/FIXME placeholder scans for hygiene dashboards.
 - `inventory_health_reports/` – aggregated inventory health summaries.

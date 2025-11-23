@@ -918,6 +918,12 @@ const state = {
     startY: 0,
     startHeight: 0,
   },
+  update: {
+    isRunning: false,
+    abortController: null,
+    cancelEndpoint: null,
+    unloadHandler: null,
+  },
   statusMessage: "",
   statusDetails: [],
 };
@@ -927,6 +933,7 @@ const selectionMemory = new Map();
 const headerUi = {
   refreshButton: null,
   exportButton: null,
+  updateButton: null,
 };
 
 const levelUi = {
@@ -967,6 +974,172 @@ function updateExportButtonState() {
   }
   const hasDefinition = typeof state.diagramDefinition === "string" && state.diagramDefinition.trim().length > 0;
   button.disabled = !hasDefinition;
+}
+
+function getUpdateButton() {
+  if (!headerUi.updateButton) {
+    headerUi.updateButton = document.getElementById("update-button");
+  }
+  return headerUi.updateButton;
+}
+
+function setUpdateButtonBusy(isBusy) {
+  const button = getUpdateButton();
+  if (!button) {
+    return;
+  }
+
+  if (isBusy) {
+    if (state.update.isRunning) {
+      return;
+    }
+    state.update.isRunning = true;
+    button.disabled = true;
+    if (!button.dataset.originalLabel) {
+      button.dataset.originalLabel = button.textContent ?? "Update";
+    }
+    button.textContent = "";
+    const spinner = document.createElement("span");
+    spinner.className = "viewer-header-spinner";
+    spinner.setAttribute("aria-hidden", "true");
+    button.appendChild(spinner);
+    button.setAttribute("aria-label", "Update in progress");
+  } else {
+    state.update.isRunning = false;
+    button.disabled = false;
+    const label = button.dataset.originalLabel ?? "Update";
+    button.textContent = label;
+    button.removeAttribute("aria-label");
+  }
+}
+
+async function handleUpdateButtonClick() {
+  if (state.update.isRunning) {
+    updateStatus("An update is already in progress.", { clearDetails: false });
+    return;
+  }
+
+  const { start, cancel } = resolveUpdateEndpoints();
+  if (!start) {
+    updateStatus("Update endpoint is not configured for this viewer instance.");
+    return;
+  }
+
+  if (!state.activeOption) {
+    updateStatus("Select a CommandView artifact before triggering an update.");
+    return;
+  }
+
+  const inventory = state.inventoryPayload;
+  if (!inventory || typeof inventory !== "object") {
+    updateStatus("Load the CommandView artifact before triggering an update.");
+    return;
+  }
+  const metadata = inventory.metadata ?? {};
+  const folderPath = metadata.folder_path ?? metadata.folderPath ?? null;
+  if (!folderPath) {
+    updateStatus("Active CommandView metadata does not expose folder_path; refresh the artifact and try again.");
+    return;
+  }
+  const folderLabel = metadata.folder_name ?? metadata.folderName ?? state.activeOption.label ?? folderPath;
+
+  const controller = new AbortController();
+  state.update.abortController = controller;
+  state.update.cancelEndpoint = cancel;
+
+  setUpdateButtonBusy(true);
+  attachUpdateUnloadHandler(controller);
+
+  try {
+    updateStatus(`Regenerating CommandView inventory for ${folderLabel}…`);
+
+    const payload = {
+      target: folderPath,
+      slug: state.activeOption.slug ?? null,
+      relative_path: state.activeOption.relative_path ?? null,
+      timestamp_iso: state.activeOption.timestamp_iso ?? state.activeOption.timestamp ?? null,
+    };
+
+    const response = await fetch(start, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+
+    const rawBody = await response.text();
+    let resultPayload = null;
+    if (rawBody) {
+      try {
+        resultPayload = JSON.parse(rawBody);
+      } catch (parseError) {
+        console.error("[handleUpdateButtonClick] Failed to parse update response", parseError, rawBody);
+        throw new Error("Update endpoint returned malformed JSON");
+      }
+    }
+
+    if (!response.ok) {
+      const message = resultPayload?.message ?? `HTTP ${response.status} ${response.statusText}`;
+      throw new Error(message);
+    }
+
+    const updateResult = resultPayload ?? {};
+    if (updateResult.status !== "ok") {
+      const message = updateResult.message ?? "Update endpoint returned an unexpected response.";
+      throw new Error(message);
+    }
+
+    let refreshError = null;
+    if (!updateResult.was_cancelled) {
+      try {
+        await refreshSelectorData({ allowFallback: false });
+      } catch (error) {
+        refreshError = error;
+        console.warn("[handleUpdateButtonClick] Selector refresh failed", error);
+      }
+    }
+
+    let message;
+    const exitCode = typeof updateResult.exit_code === "number" ? updateResult.exit_code : null;
+    const duration = typeof updateResult.duration_seconds === "number" ? updateResult.duration_seconds : null;
+    const formattedDuration = duration !== null ? formatDuration(duration) : null;
+
+    if (updateResult.was_cancelled) {
+      message = formattedDuration
+        ? `Update cancelled after ${formattedDuration}.`
+        : "Update cancelled.";
+    } else if (exitCode === 0) {
+      message = formattedDuration
+        ? `CommandView inventory regenerated for ${folderLabel} in ${formattedDuration}.`
+        : `CommandView inventory regenerated for ${folderLabel}.`;
+    } else {
+      message = exitCode !== null
+        ? `Update completed with errors (exit code ${exitCode}).`
+        : "Update completed with errors.";
+    }
+
+    if (refreshError) {
+      const detail = refreshError instanceof Error ? refreshError.message : String(refreshError);
+      message = `${message} Refresh failed: ${detail}`;
+    }
+
+    setStatusDetails(buildUpdateStatusDetails(updateResult));
+    updateStatus(message, { clearDetails: false });
+  } catch (error) {
+    if (error && error.name === "AbortError") {
+      sendUpdateCancellation("client-abort");
+      updateStatus("Update cancelled.");
+    } else {
+      console.error("Update button handler failed", error);
+      updateStatus(`Update failed: ${error?.message ?? error}`);
+    }
+    setStatusDetails([]);
+  } finally {
+    detachUpdateUnloadHandler();
+    state.update.abortController = null;
+    state.update.cancelEndpoint = null;
+    setUpdateButtonBusy(false);
+  }
 }
 
 function buildMemoryKeys(option) {
@@ -1076,6 +1249,136 @@ function resolveReportsBaseUrl() {
   }
 
   return ensureTrailingSlash(base);
+}
+
+function resolveUpdateEndpoints() {
+  const config = getViewerConfig() ?? {};
+  const start = typeof config.updateApiEndpoint === "string" && config.updateApiEndpoint.trim().length > 0
+    ? config.updateApiEndpoint.trim()
+    : null;
+  const cancel = typeof config.updateCancelEndpoint === "string" && config.updateCancelEndpoint.trim().length > 0
+    ? config.updateCancelEndpoint.trim()
+    : start
+      ? `${start.replace(/\/+$/, "")}/cancel`
+      : null;
+  return { start, cancel };
+}
+
+function formatDuration(seconds) {
+  if (!Number.isFinite(seconds) || seconds < 0) {
+    return "unknown duration";
+  }
+  if (seconds < 1) {
+    const millis = Math.round(seconds * 1000);
+    return `${millis} ms`;
+  }
+  if (seconds < 10) {
+    return `${seconds.toFixed(2)} s`;
+  }
+  return `${seconds.toFixed(1)} s`;
+}
+
+function attachUpdateUnloadHandler(controller) {
+  detachUpdateUnloadHandler();
+  if (!controller) {
+    return;
+  }
+  const handler = () => {
+    if (!state.update.isRunning) {
+      return;
+    }
+    sendUpdateCancellation("page-unload");
+    if (!controller.signal.aborted) {
+      controller.abort();
+    }
+  };
+  state.update.unloadHandler = handler;
+  window.addEventListener("beforeunload", handler);
+}
+
+function detachUpdateUnloadHandler() {
+  if (!state.update.unloadHandler) {
+    return;
+  }
+  window.removeEventListener("beforeunload", state.update.unloadHandler);
+  state.update.unloadHandler = null;
+}
+
+function sendUpdateCancellation(reason = "client-abort") {
+  const stored = typeof state.update.cancelEndpoint === "string" && state.update.cancelEndpoint.trim().length > 0
+    ? state.update.cancelEndpoint.trim()
+    : null;
+  const { cancel } = resolveUpdateEndpoints();
+  const endpoint = stored ?? cancel;
+  if (!endpoint) {
+    return;
+  }
+  const payload = JSON.stringify({ reason });
+  try {
+    if (navigator.sendBeacon) {
+      const blob = new Blob([payload], { type: "application/json" });
+      navigator.sendBeacon(endpoint, blob);
+    } else {
+      void fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+        keepalive: true,
+      }).catch((error) => {
+        console.warn("Update cancellation request failed", error);
+      });
+    }
+  } catch (error) {
+    console.warn("Unable to send update cancellation", error);
+  }
+}
+
+function buildUpdateStatusDetails(result) {
+  const descriptors = [];
+  const targetRelative = result?.target_relative ?? null;
+  if (targetRelative) {
+    descriptors.push({
+      type: "note",
+      title: "Target directory",
+      message: targetRelative,
+    });
+  }
+
+  const selectorError = typeof result?.selector_error === "string" && result.selector_error.trim().length > 0
+    ? result.selector_error.trim()
+    : null;
+  if (selectorError) {
+    descriptors.push({
+      type: "note",
+      title: "Selector refresh",
+      message: selectorError,
+    });
+  } else if (result?.selector_refreshed) {
+    descriptors.push({
+      type: "note",
+      title: "Selector refresh",
+      message: "selector.json regenerated.",
+    });
+  }
+
+  const logs = result?.logs ?? {};
+  if (Array.isArray(logs.stdout) && logs.stdout.length > 0) {
+    descriptors.push({
+      type: "list",
+      title: logs.stdout_truncated ? "stdout (tail)" : "stdout",
+      description: logs.stdout_truncated ? "Output truncated to the most recent lines." : undefined,
+      items: logs.stdout,
+    });
+  }
+  if (Array.isArray(logs.stderr) && logs.stderr.length > 0) {
+    descriptors.push({
+      type: "list",
+      title: logs.stderr_truncated ? "stderr (tail)" : "stderr",
+      description: logs.stderr_truncated ? "Errors truncated to the most recent lines." : undefined,
+      items: logs.stderr,
+    });
+  }
+  return descriptors;
 }
 
 function buildArtifactUrl(relativePath) {
@@ -9398,6 +9701,25 @@ function wireExport() {
   updateExportButtonState();
 }
 
+function wireUpdate() {
+  const button = getUpdateButton();
+  if (!button) {
+    console.warn("[wireUpdate] update-button element not found");
+    return;
+  }
+
+  const { start } = resolveUpdateEndpoints();
+  if (!start) {
+    button.disabled = true;
+    button.title = "Configure viewerConfig.updateApiEndpoint to enable updates.";
+    return;
+  }
+
+  button.addEventListener("click", () => {
+    void handleUpdateButtonClick();
+  });
+}
+
 function wireZoomControls() {
   const zoomInBtn = document.getElementById("zoom-in-btn");
   const zoomOutBtn = document.getElementById("zoom-out-btn");
@@ -9701,6 +10023,8 @@ async function bootstrap() {
     wireRefresh();
     console.log('[bootstrap] Step 7: wireExport');
     wireExport();
+    console.log('[bootstrap] Step 7.5: wireUpdate');
+    wireUpdate();
     console.log('[bootstrap] Step 8: wireZoomControls');
     wireZoomControls();
     console.log('[bootstrap] Step 9: initializeSidebarResize');

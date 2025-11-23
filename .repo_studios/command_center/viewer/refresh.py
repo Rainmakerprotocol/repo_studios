@@ -23,6 +23,8 @@ class SelectorOption:
     absolute_path: str
     category: str
     timestamp_iso: str
+    target_repo_relative: Optional[str]
+    target_path: Optional[str]
 
 
 @dataclass(frozen=True)
@@ -59,6 +61,8 @@ def _build_option(record: SelectorRecord) -> SelectorOption:
         absolute_path=record.absolute_path,
         category=record.category,
         timestamp_iso=record.timestamp_iso,
+        target_repo_relative=record.target_repo_relative,
+        target_path=record.target_path,
     )
 
 
@@ -108,6 +112,8 @@ def refresh_selector_payload(repo_root: Path) -> dict:
                         "absolute_path": option.absolute_path,
                         "category": option.category,
                         "timestamp_iso": option.timestamp_iso,
+                        "target_repo_relative": option.target_repo_relative,
+                        "target_path": option.target_path,
                     }
                     for option in entry.options
                 ],

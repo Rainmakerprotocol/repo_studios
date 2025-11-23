@@ -2,6 +2,15 @@
 
 A modern VS Code-styled progressive detail viewer for CommandView artifacts.
 
+## 5W1H Snapshot
+
+- **Who**: Command Center operators, Repo Studios maintainers, and AI coding agents investigating CommandView inventories.
+- **What**: A browser-based progressive-detail viewer that renders inventories, analyses, and duplicate scans across eight view packs and five zoom levels.
+- **When**: Run after the Command Center pipeline or update launcher refreshes artifacts so selector entries and diagrams represent the latest repository state.
+- **Where**: Hosted from `.repo_studios/command_center/viewer/ui/` and typically served via `serve_viewer.py` from the repository root.
+- **Why**: Provides fast situational awareness for duplicate remediation, risk surfacing, and onboarding—condensing large CommandView payloads into interactive diagrams.
+- **How**: Generate `selector.json`, start the development server, open the UI, and use the refresh/update controls outlined below; governance history lives in `docs/mermaid/`.
+
 ## Features
 
 - **5 Zoom Levels**: Overview → Domain → Module → Functions → Neighborhood
@@ -33,7 +42,7 @@ python serve_viewer.py
 python serve_viewer.py --port 8080
 ```
 
-Then open your browser to: **http://localhost:8000/.repo_studios/command_center/viewer/ui/**
+Then open your browser to: [http://localhost:8000/.repo_studios/command_center/viewer/ui/](http://localhost:8000/.repo_studios/command_center/viewer/ui/)
 
 **Note**: The server serves from repo root to enable access to `/.repo_studios/command_center/reports/`
 
@@ -45,7 +54,7 @@ If you only want to test the UI without reports:
 python serve_viewer.py --ui-only
 ```
 
-Then open: **http://localhost:8000/**
+Then open: [http://localhost:8000/](http://localhost:8000/)
 
 ### Option 3: Using Python's Built-in Server
 
@@ -55,18 +64,19 @@ cd /path/to/repo_studios
 python -m http.server 8000
 ```
 
-Then open: **http://localhost:8000/.repo_studios/command_center/viewer/ui/**
+Then open: [http://localhost:8000/.repo_studios/command_center/viewer/ui/](http://localhost:8000/.repo_studios/command_center/viewer/ui/)
 
 ### Option 3: Using Any Web Server
 
 Serve the `ui/` directory with any web server that supports:
+
 - Proper MIME types for `.js` files (`application/javascript`)
 - Proper MIME types for `.css` files (`text/css`)
 - CORS headers (for local development)
 
 ## File Structure
 
-```
+```text
 viewer/
 ├── ui/
 │   ├── index.html          # Main HTML structure
@@ -76,6 +86,8 @@ viewer/
 ├── serve_viewer.py         # Development server with proper MIME types
 └── README.md               # This file
 ```
+
+See `../docs/mermaid/README.md` for a curated index of viewer roadmaps, decision logs, and view specifications.
 
 ## Configuration
 
@@ -92,6 +104,7 @@ window.viewerConfig = {
 ```
 
 **Path Options**:
+
 - **Serving from repo root** (default): `'/.repo_studios/command_center/reports/'`
 - **Serving from ui directory**: `'../../../reports/'`
 - **Production API**: `'/api/reports/'`
@@ -103,6 +116,7 @@ window.viewerConfig = {
 **Cause**: JavaScript not loading or MIME type issues
 
 **Solution**:
+
 1. Use the provided `serve_viewer.py` script
 2. Check browser console (F12) for errors
 3. Verify `viewer.js` loads with `Content-Type: application/javascript`
@@ -112,6 +126,7 @@ window.viewerConfig = {
 **Cause**: Missing `#view-tabs` container or JavaScript not initializing
 
 **Solution**:
+
 1. Verify `<div id="view-tabs">` exists in HTML
 2. Check console for `renderViewTabs()` errors
 3. Ensure `bootstrap()` function completes successfully
@@ -121,6 +136,7 @@ window.viewerConfig = {
 **Cause**: Reports path incorrect or data not available
 
 **Solution**:
+
 1. **Check server mode**: Use `serve_viewer.py` (serves from repo root)
 2. **Verify reports exist**: Check `/.repo_studios/command_center/reports/` has data
 3. **Check Network tab**: Look for 404s on JSON files
@@ -131,6 +147,7 @@ window.viewerConfig = {
 **Cause**: No selector.json endpoint or reports not accessible
 
 **Solution**:
+
 1. Ensure reports directory is accessible via configured path
 2. Create `selector.json` in reports directory (or use API endpoint)
 3. Check console for fetch errors
@@ -141,6 +158,7 @@ window.viewerConfig = {
 **Cause**: CSS not loading
 
 **Solution**:
+
 1. Check `viewer.css` loads with `Content-Type: text/css`
 2. Hard refresh browser (Ctrl+F5 or Cmd+Shift+R)
 3. Clear browser cache
@@ -150,6 +168,7 @@ window.viewerConfig = {
 **Cause**: Server not setting correct MIME type for JavaScript modules
 
 **Solution**:
+
 - Use `serve_viewer.py` which sets proper MIME types
 - Or configure your server to serve `.js` files as `application/javascript`
 
@@ -158,21 +177,24 @@ window.viewerConfig = {
 Open DevTools (F12) and check:
 
 **Console Tab**: Look for JavaScript errors
-```
+
+```text
 ✓ No errors = JavaScript loaded correctly
 ✗ "Failed to load resource" = Path or MIME type issue
 ✗ "Mermaid is not defined" = CDN blocked
 ```
 
 **Network Tab**: Verify file loading
-```
+
+```text
 ✓ viewer.css: 200 OK, text/css
 ✓ viewer.js: 200 OK, application/javascript
 ✓ mermaid.min.js: 200 OK from CDN
 ```
 
 **Elements Tab**: Inspect DOM
-```
+
+```text
 ✓ Buttons have event listeners attached
 ✓ Diagram container has content
 ✓ CSS classes applied correctly
@@ -220,6 +242,7 @@ Then implement the builder function in `VIEW_BUILDERS` (line 305).
 ## VS Code Theme
 
 The viewer uses an authentic VS Code dark theme with:
+
 - Background: `#1e1e1e`
 - Sidebar: `#252526`
 - Accent: `#007acc`
@@ -227,3 +250,13 @@ The viewer uses an authentic VS Code dark theme with:
 - Text: `#cccccc`
 
 All colors are defined as CSS variables in `:root` for easy customization.
+
+## Documentation Map
+
+- **Roadmap & History**: `../docs/mermaid/mermaid_viewer.md` tracks phased delivery, decisions, and backlog ideas.
+- **Decision Log**: `../docs/mermaid/decision_log.md` records major architectural and governance choices.
+- **View Specifications**: `../docs/mermaid/view_specs/` documents data contracts and builder expectations per view pack module.
+- **Troubleshooting**: `TROUBLESHOOTING.md` captures common runtime issues and resolutions.
+- **Operational Scripts**: `refresh.py` (backend payloads) and `serve_viewer.py` (dev server) each include inline docstrings following `docs/standards/global/std-global-python-engineering.md` conventions.
+
+> This README follows the Repo Studios markdown standard (`docs/standards/global/std-global-markdown-authoring.md`). Keep future edits aligned with those guidelines so contributors and agents can scan context quickly.
