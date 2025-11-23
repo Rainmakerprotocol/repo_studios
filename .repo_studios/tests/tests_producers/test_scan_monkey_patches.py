@@ -97,6 +97,26 @@ os.environ[\"EXAMPLE_FLAG\"] = \"1\"
     assert (run_dir / "log.txt").exists()
     assert (run_dir / "report.md").exists()
 
+    legacy_root = repo_root / ".repo_studios" / "monkey_patch"
+    assert legacy_root.exists()
+    legacy_runs = [p for p in legacy_root.iterdir() if p.is_dir() and p.name not in {"latest"}]
+    assert len(legacy_runs) == 1
+    legacy_run = legacy_runs[0]
+    assert legacy_run.name[:1].isdigit()
+
+    legacy_report = json.loads((legacy_run / "report.json").read_text(encoding="utf-8"))
+    assert isinstance(legacy_report, list)
+    legacy_categories = {entry["category"] for entry in legacy_report}
+    assert "global_env_mutation" in legacy_categories
+    assert "attribute_reassignment_on_import" in legacy_categories
+
+    legacy_summary = json.loads((legacy_run / "summary.json").read_text(encoding="utf-8"))
+    assert legacy_summary["run_id"] == payload["run_id"]
+
+    legacy_latest = legacy_root / "latest"
+    assert (legacy_latest / "report.json").exists()
+    assert (legacy_latest / "summary.json").exists()
+
 
 def test_prune_history(tmp_path: Path) -> None:
     mod = _load_module()
@@ -150,3 +170,9 @@ def test_prune_history(tmp_path: Path) -> None:
 
     latest_dir = output_dir / "latest"
     assert (latest_dir / "latest_report.json").exists()
+
+    legacy_root = repo_root / ".repo_studios" / "monkey_patch"
+    legacy_runs = [
+        p for p in legacy_root.iterdir() if p.is_dir() and p.name not in {"latest"}
+    ]
+    assert len(legacy_runs) == 1

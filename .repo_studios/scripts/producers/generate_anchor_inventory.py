@@ -67,6 +67,7 @@ class SlugStat:
     count: int
     file_count: int
     files: list[str]
+    locations: list[str]
 
 
 GENERIC_ALLOWED = {"overview", "introduction", "faq", "notes"}
@@ -89,7 +90,13 @@ def collect(root: Path) -> dict[str, SlugStat]:
     stats: dict[str, SlugStat] = {}
     for slug, locs in slug_locations.items():
         files = sorted({loc.split(":")[0] for loc in locs})
-        stats[slug] = SlugStat(slug=slug, count=len(locs), file_count=len(files), files=files)
+        stats[slug] = SlugStat(
+            slug=slug,
+            count=len(locs),
+            file_count=len(files),
+            files=files,
+            locations=sorted(locs),
+        )
     return stats
 
 
@@ -247,10 +254,13 @@ def write_artifacts(
     md_path = run_dir / "report.md"
     md_path.write_text(write_markdown(report, ordered_slugs), encoding="utf-8")
 
-    tsv_lines = ["slug\tcount\tfile_count\tfiles"]
+    tsv_lines = ["slug\tcount\tfile_count\tfiles\tlocations"]
     for stat in ordered_slugs:
         tsv_lines.append(
-            f"{stat.slug}\t{stat.count}\t{stat.file_count}\t" + ",".join(stat.files)
+            f"{stat.slug}\t{stat.count}\t{stat.file_count}\t"
+            + ",".join(stat.files)
+            + "\t"
+            + ";".join(stat.locations)
         )
     tsv_path = run_dir / "slugs.tsv"
     tsv_path.write_text("\n".join(tsv_lines) + "\n", encoding="utf-8")

@@ -24,20 +24,30 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import logging
 import os
-import re
-from collections.abc import Iterable
-from dataclasses import dataclass
+import sys
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any, Sequence
 
-# Anchor runs base to the repository root (parent of .repo_studios)
 ROOT = Path(__file__).resolve().parents[1]
 RUNS_BASE = ROOT / ".repo_studios/faulthandler"
-DEFAULT_TOP_N = 10
+PRODUCER_BASE = ROOT / ".repo_studios/reports/producer_reports/faulthandler_reports"
+PRODUCER_LATEST = PRODUCER_BASE / "latest_report.json"
+
+UTILITIES_ROOT = Path(__file__).resolve().parents[2]
+if str(UTILITIES_ROOT) not in sys.path:
+    sys.path.insert(0, str(UTILITIES_ROOT))
+
+from utilities.fault_run_analysis import (  # noqa: E402
+    DEFAULT_TOP_N,
+    FaultSignature,
+    build_fault_report,
+    ensure_manifest,
+    read_stacks_text,
+)
 
 
 def _find_latest_outdir() -> Path | None:
@@ -60,112 +70,52 @@ def _discover_outdir(explicit: str | None) -> Path | None:
     return _find_latest_outdir()
 
 
-def _read_text(p: Path) -> str:
-    try:
-        return p.read_text(encoding="utf-8", errors="replace")
-    except Exception:
-        return ""
-
-
-def _ensure_manifest(outdir: Path) -> None:
-    mf = outdir / "MANIFEST.json"
-    if mf.exists():
-        return
-    manifest = {
-        "ts": datetime.now(UTC).isoformat(timespec="seconds"),
-        "pid": None,
-        "python": None,
-        "platform": None,
-        "flags": {},
-        "writer": None,
-    }
-    try:
-        mf.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
-    except Exception:
-        pass
-
-
-@dataclass
-class TopFrame:
-    module: str | None
-    func: str | None
-    file: str | None
-    line: int | None
-
-
-THREAD_HEADER_RE = re.compile(r"^(Current thread|Thread) ")
-FRAME_RE = re.compile(r"^\s*File \"(?P<file>.+?)\", line (?P<line>\d+), in (?P<func>[^\n]+)")
-
-
-def _iter_thread_blocks(lines: Iterable[str]) -> Iterable[list[str]]:
-    """Yield lines per thread block, separated by thread headers.
-
-    This groups contiguous lines starting at a line matching THREAD_HEADER_RE
-    until just before the next header or EOF.
-    """
-    buf: list[str] = []
-    for ln in lines:
-        if THREAD_HEADER_RE.match(ln):
-            if buf:
-                yield buf
-                buf = []
-        buf.append(ln)
-    if buf:
-        yield buf
-
-
-def _extract_top_frames(block: list[str], n: int) -> list[TopFrame]:
-    frames: list[TopFrame] = []
-    for ln in block:
-        m = FRAME_RE.match(ln)
-        if not m:
+def _iter_producer_reports(base_dir: Path) -> list[Path]:
+    if not base_dir.exists():
+        return []
+    candidates: list[Path] = []
+    for child in base_dir.iterdir():
+        if not child.is_dir():
             continue
-        file_path = m.group("file")
-        try:
-            module = Path(file_path).stem
-        except Exception:
-            module = None
-        func = m.group("func").strip()
-        top_file = file_path
-        try:
-            top_line = int(m.group("line"))
-        except Exception:
-            top_line = None
-        frames.append(TopFrame(module=module, func=func, file=top_file, line=top_line))
-        if len(frames) >= n:
-            break
-    if not frames:
-        frames.append(TopFrame(module=None, func=None, file=None, line=None))
-    return frames
+        if not child.name.startswith("faulthandler_report-"):
+            continue
+        candidate = child / "report.json"
+        if candidate.exists():
+            candidates.append(candidate)
+    candidates.sort(key=lambda p: p.parent.name, reverse=True)
+    return candidates
 
 
-def _load_process_salt(outdir: Path) -> str:
-    """Build a salt using process python version + platform from MANIFEST if present.
-
-    Falls back to current interpreter/platform when fields are missing.
-    """
-    py = None
-    plat = None
+def _load_json(path: Path) -> dict[str, Any] | None:
     try:
-        mf = outdir / "MANIFEST.json"
-        if mf.exists():
-            data = json.loads(mf.read_text(encoding="utf-8"))
-            py = (data.get("python") or None) if isinstance(data, dict) else None
-            plat = (data.get("platform") or None) if isinstance(data, dict) else None
+        return json.loads(path.read_text(encoding="utf-8"))
     except Exception:
-        py = None
-        plat = None
-    if not py or not plat:
-        try:
-            import platform as _platform
-            import sys as _sys
+        return None
 
-            py = py or _sys.version.split(" ")[0]
-            plat = plat or _platform.platform()
-        except Exception:
-            py = py or "unknown"
-            plat = plat or "unknown"
-    return f"py={py}|plat={plat}"
+
+def _load_producer_report(explicit: Path | None, *, run_dir: Path | None) -> tuple[dict[str, Any] | None, Path | None]:
+    if explicit is not None:
+        payload = _load_json(explicit)
+        if payload is not None:
+            return payload, explicit.resolve()
+        return None, None
+    target_run = run_dir.resolve() if run_dir else None
+    if PRODUCER_LATEST.exists():
+        payload = _load_json(PRODUCER_LATEST)
+        if payload is not None:
+            run_path = payload.get("run_dir")
+            if target_run is None:
+                return payload, PRODUCER_LATEST.resolve()
+            if run_path and Path(run_path).resolve() == target_run:
+                return payload, PRODUCER_LATEST.resolve()
+    for candidate in _iter_producer_reports(PRODUCER_BASE):
+        payload = _load_json(candidate)
+        if payload is None:
+            continue
+        run_path = payload.get("run_dir")
+        if target_run is None or (run_path and Path(run_path).resolve() == target_run):
+            return payload, candidate.resolve()
+    return None, None
 
 
 def _top_n_from_env() -> int:
@@ -176,84 +126,47 @@ def _top_n_from_env() -> int:
         return DEFAULT_TOP_N
 
 
-def _signature_id(frames: list[TopFrame], salt: str) -> str:
-    # Normalize per-frame data to reduce path churn: use basename for file
-    parts: list[str] = []
-    for f in frames:
-        file_base = None
+def _decode_signatures(payload: dict[str, Any], *, default_top_line: int = 0) -> list[FaultSignature]:
+    signatures: list[FaultSignature] = []
+    for entry in payload.get("signatures", []):
         try:
-            file_base = Path(f.file or "?").name
-        except Exception:
-            file_base = f.file or "?"
-        parts.append(
-            "::".join(
-                [
-                    f.module or "?",
-                    f.func or "?",
-                    file_base or "?",
-                    str(f.line if f.line is not None else "?"),
-                ]
+            raw_line = entry.get("top_line", default_top_line)
+            try:
+                top_line = int(raw_line)
+            except Exception:
+                top_line = default_top_line
+            threads_raw = entry.get("threads", [])
+            if isinstance(threads_raw, (list, tuple)):
+                threads = [str(t) for t in threads_raw]
+            elif isinstance(threads_raw, str):
+                threads = [t for t in threads_raw.split(",") if t]
+            else:
+                threads = []
+            signatures.append(
+                FaultSignature(
+                    signature_id=str(entry.get("signature_id", "")),
+                    count=int(entry.get("count", 0)),
+                    top_module=str(entry.get("top_module", "?")),
+                    top_func=str(entry.get("top_func", "?")),
+                    top_file=str(entry.get("top_file", "?")),
+                    top_line=top_line,
+                    threads=threads,
+                    first_seen_ts=str(entry.get("first_seen_ts", "")),
+                    last_seen_ts=str(entry.get("last_seen_ts", "")),
+                )
             )
-        )
-    raw = f"{salt}|N={len(frames)}|" + "|".join(parts)
-    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
-
-
-def _write_stacks_csv(outdir: Path, stacks_text: str) -> list[dict[str, object]]:
-    # Aggregate by signature
-    now_iso = datetime.now(UTC).isoformat(timespec="seconds")
-    lines = stacks_text.splitlines()
-    rows_map: dict[str, dict[str, object]] = {}
-    salt = _load_process_salt(outdir)
-    top_n = _top_n_from_env()
-    for block in _iter_thread_blocks(lines):
-        # Header is the first line; use as thread id text
-        thread_id = block[0].strip() if block else "(unknown)"
-        frames = _extract_top_frames(block, top_n)
-        sig = _signature_id(frames, salt)
-        # Top-of-stack frame for readability in CSV columns
-        tf0 = frames[0]
-        top_module = tf0.module or "?"
-        top_func = tf0.func or "?"
-        top_file = tf0.file or "?"
-        top_line = tf0.line or 0
-        if sig not in rows_map:
-            rows_map[sig] = {
-                "signature_id": sig,
-                "count": 0,
-                "top_module": top_module,
-                "top_func": top_func,
-                "top_file": top_file,
-                "top_line": top_line,
-                "threads": set(),
-                "first_seen_ts": now_iso,
-                "last_seen_ts": now_iso,
-            }
-        row = rows_map[sig]
-        row["count"] = int(row["count"]) + 1
-        row["last_seen_ts"] = now_iso
-        # Merge thread id
-        th_set = row["threads"]  # type: ignore[assignment]
-        assert isinstance(th_set, set)
-        th_set.add(thread_id)
-
-    # Materialize threads as counts and stable list
-    rows: list[dict[str, object]] = []
-    for v in rows_map.values():
-        th_set = v.pop("threads")  # type: ignore[assignment]
-        try:
-            threads_list = sorted(th_set)  # type: ignore[arg-type]
         except Exception:
-            threads_list = []
-        v["threads"] = ",".join(threads_list)
-        rows.append(v)
+            continue
+    signatures.sort(key=lambda sig: (-sig.count, sig.signature_id))
+    return signatures
 
-    # Write CSV
+
+def _write_stacks_csv(outdir: Path, signatures: Sequence[FaultSignature]) -> None:
     csv_path = outdir / "stacks.csv"
     try:
-        with csv_path.open("w", newline="", encoding="utf-8") as f:
+        with csv_path.open("w", newline="", encoding="utf-8") as fh:
             writer = csv.DictWriter(
-                f,
+                fh,
                 fieldnames=[
                     "signature_id",
                     "count",
@@ -267,43 +180,62 @@ def _write_stacks_csv(outdir: Path, stacks_text: str) -> list[dict[str, object]]
                 ],
             )
             writer.writeheader()
-            for r in sorted(rows, key=lambda x: (-int(x["count"]), str(x["signature_id"]))):
-                writer.writerow(r)
+            for sig in signatures:
+                writer.writerow(
+                    {
+                        "signature_id": sig.signature_id,
+                        "count": sig.count,
+                        "top_module": sig.top_module,
+                        "top_func": sig.top_func,
+                        "top_file": sig.top_file,
+                        "top_line": sig.top_line,
+                        "threads": ",".join(sig.threads),
+                        "first_seen_ts": sig.first_seen_ts,
+                        "last_seen_ts": sig.last_seen_ts,
+                    }
+                )
     except Exception:
         pass
-    return rows
 
 
-def _write_summary(outdir: Path, rows: list[dict[str, object]], dumps_dir: Path) -> None:
+def _write_summary(outdir: Path, report: dict[str, Any], signatures: Sequence[FaultSignature], dumps_dir: Path) -> None:
     lines: list[str] = []
     lines.append("# Fault Diagnostics Summary")
     lines.append("")
-    lines.append(f"Time: {datetime.now(UTC).isoformat(timespec='seconds')}")
+    lines.append(f"Generated (UTC): {datetime.now(UTC).isoformat(timespec='seconds')}")
     lines.append("")
-    # Dumps info
-    try:
-        dump_files = sorted([p.name for p in dumps_dir.glob("*.txt")])
-    except Exception:
-        dump_files = []
+    summary = report.get("summary") or {}
+    lines.append("## Summary")
+    lines.append("")
+    lines.append(f"- signature_count: {summary.get('signature_count', len(signatures))}")
+    lines.append(f"- thread_block_count: {summary.get('thread_block_count')}")
+    lines.append(f"- top_frame_limit: {summary.get('top_frame_limit', DEFAULT_TOP_N)}")
+    lines.append(f"- stack_log_exists: {summary.get('stack_log_exists')}")
+    lines.append(f"- stack_text_bytes: {summary.get('stack_text_bytes')}")
+    lines.append("")
     lines.append("## Dumps")
     lines.append("")
+    try:
+        dump_files = sorted(p.name for p in dumps_dir.glob("*.txt"))
+    except Exception:
+        dump_files = []
     if dump_files:
         for name in dump_files:
             lines.append(f"* {name}")
     else:
         lines.append("(none)")
     lines.append("")
-    # Top signatures table (first 20)
     lines.append("## Top Signatures")
     lines.append("")
-    lines.append("| count | signature_id | top | file:line | threads |")
-    lines.append("|------:|--------------|-----|----------:|---------|")
-    for r in rows[:20]:
-        top = f"{r.get('top_module', '?')}.{r.get('top_func', '?')}"
-        fileline = f"{r.get('top_file', '?')}:{r.get('top_line', 0)}"
-        lines.append(
-            f"| {r.get('count', 0)} | {r.get('signature_id', '?')} | {top} | {fileline} | {r.get('threads', '')} |"
-        )
+    if signatures:
+        lines.append("| count | signature_id | top | file:line | threads |")
+        lines.append("|------:|--------------|-----|----------:|---------|")
+        for sig in signatures[:20]:
+            top = f"{sig.top_module}.{sig.top_func}"
+            fileline = f"{sig.top_file}:{sig.top_line}"
+            lines.append(f"| {sig.count} | {sig.signature_id} | {top} | {fileline} | {','.join(sig.threads)} |")
+    else:
+        lines.append("(none)")
     lines.append("")
     try:
         (outdir / "SUMMARY.md").write_text("\n".join(lines), encoding="utf-8")
@@ -311,40 +243,83 @@ def _write_summary(outdir: Path, rows: list[dict[str, object]], dumps_dir: Path)
         pass
 
 
-def main(argv: list[str] | None = None) -> int:
+def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Generate fault artifacts for a run directory")
+    parser.add_argument("--outdir", default=None, help="Run directory containing stacks.log (defaults to latest)")
+    parser.add_argument(
+        "--report",
+        type=Path,
+        default=None,
+        help="Explicit faulthandler producer report JSON to reuse",
+    )
+    return parser.parse_args(argv)
+
+
+def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     if not logging.getLogger().handlers:
         logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
     log = logging.getLogger("fault_artifacts")
 
-    ap = argparse.ArgumentParser(description="Generate fault artifacts for a run directory")
-    ap.add_argument("--outdir", help="Run directory containing stacks.log", default=None)
-    args = ap.parse_args(argv)
-
+    args = _parse_args(argv)
     outdir = _discover_outdir(args.outdir)
     if outdir is None or not outdir.exists() or not outdir.is_dir():
         log.info("No valid FAULT_OUTDIR or runs found; nothing to generate")
-        return 0
+        return {"outdir": None, "source_report": None, "signatures": 0}
 
-    outdir.mkdir(parents=True, exist_ok=True)
-    _ensure_manifest(outdir)
+    outdir = outdir.resolve()
+    ensure_manifest(outdir)
 
-    stacks_path = outdir / "stacks.log"
+    payload, payload_path = _load_producer_report(args.report, run_dir=outdir)
+
+    if payload:
+        summary = payload.get("summary") or {}
+        top_frame_limit = summary.get("top_frame_limit")
+        default_line = int(top_frame_limit) if isinstance(top_frame_limit, int) else 0
+        signatures = _decode_signatures(payload, default_top_line=default_line)
+        report = payload
+        combined_text = read_stacks_text(outdir / "stacks.log")
+        source_path = payload_path.resolve() if payload_path else None
+        source_label = str(source_path) if source_path else "producer"
+    else:
+        top_n = _top_n_from_env()
+        analysis = build_fault_report(outdir, top_n=top_n)
+        report = analysis.report
+        signatures = analysis.signatures
+        combined_text = analysis.combined_text
+        source_path = None
+        source_label = "scan"
+
     dumps_dir = outdir / "dumps"
-    dumps_dir.mkdir(exist_ok=True)
+    dumps_dir.mkdir(parents=True, exist_ok=True)
 
-    stacks_text = _read_text(stacks_path)
-    # Always emit a combined dump file for convenience
+    if not combined_text:
+        combined_text = read_stacks_text(outdir / "stacks.log")
     try:
-        (dumps_dir / "combined.txt").write_text(stacks_text, encoding="utf-8")
+        (dumps_dir / "combined.txt").write_text(combined_text, encoding="utf-8")
     except Exception:
         pass
 
-    # Write CSV aggregation and summary
-    rows = _write_stacks_csv(outdir, stacks_text)
-    _write_summary(outdir, rows, dumps_dir)
-    log.info("Artifacts generated under: %s", outdir)
+    _write_stacks_csv(outdir, signatures)
+    _write_summary(outdir, report, signatures, dumps_dir)
+
+    log.info(
+        "Fault artifacts refreshed (run=%s, source=%s, signatures=%d)",
+        outdir,
+        source_label,
+        len(signatures),
+    )
+
+    return {
+        "outdir": str(outdir),
+        "source_report": str(source_path) if source_path else None,
+        "signatures": len(signatures),
+    }
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    run(argv)
     return 0
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     raise SystemExit(main())

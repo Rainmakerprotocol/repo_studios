@@ -122,6 +122,7 @@ The `studio-scan-code-placeholders` producer currently reports 1,175 unresolved 
 - Updated the producer to only record matches when the placeholder token appears in uppercase (e.g., `TODO`, `FIXME`, `NOTE`), eliminating noise from documentation headings and prose.
 - Added regression coverage for the uppercase heuristic and refreshed the automation runbook so downstream operators understand the behavior.
 - Latest scan (placeholder_scan-20251123_203707) reported zero matches with defaults applied; metrics ledger updated accordingly.
+- Observation cadence kickoff (placeholder_scan-20251123_211100) confirmed the weekly schedule; details logged in metrics and CI rollout records.
 
 ## CI Gating Proposal Draft (2025-11-23)
 
@@ -143,15 +144,17 @@ The `studio-scan-code-placeholders` producer currently reports 1,175 unresolved 
   - Draft `placeholder-scan.yml` workflow stub that mirrors Command Center make invocation.
   - Update `CI_INTEGRATION_STRATEGY.md` pipeline table with the new stage before flipping to blocking.
   - Socialize thresholds with Dev Productivity and Standards Guild sign-off.
+  - Maintain `CI_ROLLOUT_LOG.md` entries each week to document warning → blocking readiness.
 
 ## Reporting & Governance
 
 - Update `.repo_studios/command_center/docs/phase_7/METRIC_BASELINE_LOG.csv` after each scan.
+- Track phased enforcement outcomes in `.repo_studios/command_center/docs/phase_7/CI_ROLLOUT_LOG.md`.
 - Record major remediations and gating decisions in `.repo_studios/command_center/docs/decision_log.md`.
 - Reference this plan from `script_inventory_architecture.md` and the automation doc for `scan_code_placeholders`.
 
 ## Next Actions
 
-1. Maintain the placeholder allowlist via monthly reviews (next check 2025-12-23) and capture any new sanctioned entries in the decision log.
-2. Start the weekly scan cadence and log outcomes in the metrics ledger + CI rollout log beginning week of 2025-11-24.
-3. Prototype the `placeholder-scan` GitHub Actions workflow in warning mode and align stakeholders on the enforcement rollout timeline.
+- [ ] Maintain the placeholder allowlist via monthly reviews (next check 2025-12-23) and capture any new sanctioned entries in the decision log.
+- [x] Start the weekly scan cadence and log outcomes in the metrics ledger + CI rollout log beginning week of 2025-11-24.
+- [ ] Monitor the `placeholder-scan` workflow (warning mode), circulate weekly run summaries, and prepare sign-off for the transition to blocking enforcement.

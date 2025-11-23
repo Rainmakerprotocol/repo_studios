@@ -1015,6 +1015,84 @@ def _write_latest_artifacts(run_dir: Path, output_dir: Path) -> None:
             target.write_bytes(source.read_bytes())
 
 
+def _legacy_alias_root(output_dir: Path) -> Path:
+    try:
+        return output_dir.parents[2] / "monkey_patch"
+    except IndexError:
+        return output_dir / "monkey_patch"
+
+
+def _legacy_alias_run_name(run_dir: Path) -> str:
+    parts = run_dir.name.split("-", 1)
+    candidate = parts[1] if len(parts) == 2 and parts[1] else run_dir.name
+    return candidate if candidate[:1].isdigit() else run_dir.name
+
+
+def _sync_legacy_latest(alias_root: Path, alias_run_dir: Path) -> None:
+    latest_dir = alias_root / "latest"
+    latest_dir.mkdir(parents=True, exist_ok=True)
+    files = [
+        "report.json",
+        "matches.json",
+        "summary.json",
+        "report.md",
+        "log.txt",
+        "matches.tsv",
+    ]
+    for name in files:
+        src = alias_run_dir / name
+        dest = latest_dir / name
+        if src.exists():
+            dest.write_bytes(src.read_bytes())
+        elif dest.exists():
+            dest.unlink()
+
+
+def _prune_legacy_alias(alias_root: Path, keep: int) -> None:
+    if not alias_root.exists():
+        return
+    keep = max(keep, 1)
+    candidates = sorted(
+        [p for p in alias_root.iterdir() if p.is_dir() and p.name != "latest"],
+        key=lambda item: item.name,
+    )
+    excess = len(candidates) - keep
+    for old_dir in candidates[: max(excess, 0)]:
+        shutil.rmtree(old_dir, ignore_errors=True)
+
+
+def _sync_legacy_alias(run_dir: Path, output_dir: Path, keep: int) -> None:
+    alias_root = _legacy_alias_root(output_dir)
+    alias_root.mkdir(parents=True, exist_ok=True)
+
+    legacy_name = _legacy_alias_run_name(run_dir)
+    alias_run_dir = alias_root / legacy_name
+    alias_run_dir.mkdir(parents=True, exist_ok=True)
+
+    matches_path = run_dir / "matches.json"
+    if matches_path.exists():
+        data = matches_path.read_bytes()
+        (alias_run_dir / "report.json").write_bytes(data)
+        (alias_run_dir / "matches.json").write_bytes(data)
+    else:
+        (alias_run_dir / "report.json").write_text("[]\n", encoding="utf-8")
+
+    summary_path = run_dir / "report.json"
+    if summary_path.exists():
+        (alias_run_dir / "summary.json").write_bytes(summary_path.read_bytes())
+
+    for name in ("report.md", "log.txt", "matches.tsv"):
+        src = run_dir / name
+        dest = alias_run_dir / name
+        if src.exists():
+            dest.write_bytes(src.read_bytes())
+        elif dest.exists():
+            dest.unlink()
+
+    _sync_legacy_latest(alias_root, alias_run_dir)
+    _prune_legacy_alias(alias_root, keep)
+
+
 def write_artifacts(
     *,
     run_dir: Path,
@@ -1309,6 +1387,7 @@ def run(argv: list[str] | None = None) -> dict[str, object]:
     run_id = str(payload["run_id"])
     run_dir = ensure_run_directory(paths.output_dir, run_id)
     write_artifacts(run_dir=run_dir, payload=payload, findings=findings, output_dir=paths.output_dir)
+    _sync_legacy_alias(run_dir, paths.output_dir, options.artifacts_to_keep)
     prune_history(paths.output_dir, options.artifacts_to_keep)
 
     logging.info("Done. Findings: %d", len(findings))

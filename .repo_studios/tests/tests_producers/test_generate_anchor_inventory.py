@@ -78,12 +78,20 @@ def test_reports_written_with_duplicates(tmp_path):
     assert summary["total_slugs"] == 3
     assert summary["cross_file_duplicates"] == 1
     assert report["allowlist_size"] == 2
-    assert any(entry["slug"] == "shared" for entry in report["duplicates"])
+    duplicate = next(entry for entry in report["duplicates"] if entry["slug"] == "shared")
+    assert duplicate["locations"] == ["one.md:1", "two.md:1"]
+    assert duplicate["files"] == ["one.md", "two.md"]
     assert (run_dir / "report.md").is_file()
     assert (run_dir / "slugs.tsv").is_file()
     assert (output_dir / "latest_report.json").is_file()
     assert (output_dir / "latest_report.md").is_file()
     assert (output_dir / "latest_slugs.tsv").is_file()
+
+    tsv_lines = (run_dir / "slugs.tsv").read_text(encoding="utf-8").splitlines()
+    assert tsv_lines[0] == "slug\tcount\tfile_count\tfiles\tlocations"
+    shared_row = next(line for line in tsv_lines if line.startswith("shared\t"))
+    assert "one.md,two.md" in shared_row
+    assert "one.md:1;two.md:1" in shared_row
 
     baseline = json.loads(json_out.read_text(encoding="utf-8"))
     assert baseline["summary"] == summary

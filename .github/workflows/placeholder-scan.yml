@@ -1,0 +1,48 @@
+name: Placeholder Scan Guardrail (Warning Mode)
+
+on:
+  schedule:
+    - cron: '0 12 * * 1'
+  workflow_dispatch:
+
+jobs:
+  placeholder-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          pip install -r requirements.txt || true
+
+      - name: Run placeholder scan (warning mode)
+        run: |
+          . .venv/bin/activate
+          make -C .repo_studios studio-scan-code-placeholders PYTHON=.venv/bin/python
+
+      - name: Evaluate placeholder thresholds
+        id: evaluate
+        continue-on-error: true
+        run: |
+          . .venv/bin/activate
+          python -c "import json, os, sys; from pathlib import Path; latest_report = Path('.repo_studios/reports/producer_reports/code_placeholder_scans/latest/latest_report.json'); if not latest_report.exists(): sys.exit('latest placeholder scan report not found'); payload = json.loads(latest_report.read_text(encoding='utf-8')); run_id = payload['run_id']; placeholder_delta = int(payload['total_matches']) - int(payload['allowlist_size']); allowlist_size = int(payload['allowlist_size']); print(f'::notice::placeholder scan run {run_id} placeholder_delta={placeholder_delta} allowlist_size={allowlist_size}'); Path(os.environ['GITHUB_OUTPUT']).write_text(f'run_id={run_id}\\nplaceholder_delta={placeholder_delta}\\nallowlist_size={allowlist_size}\\n', encoding='utf-8'); if placeholder_delta > 0: sys.exit('placeholder delta exceeds threshold (warning mode)'); if allowlist_size > 20: sys.exit('allowlist entries exceed governance threshold (warning mode)')"
+
+      - name: Upload placeholder scan artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: placeholder-scan-${{ steps.evaluate.outputs.run_id }}
+          path: |
+            .repo_studios/reports/producer_reports/code_placeholder_scans/${{ steps.evaluate.outputs.run_id }}/report.json
+            .repo_studios/reports/producer_reports/code_placeholder_scans/${{ steps.evaluate.outputs.run_id }}/matches.json
+            .repo_studios/reports/producer_reports/code_placeholder_scans/${{ steps.evaluate.outputs.run_id }}/report.md
+            .repo_studios/reports/producer_reports/code_placeholder_scans/${{ steps.evaluate.outputs.run_id }}/log.txt
+            .repo_studios/reports/producer_reports/code_placeholder_scans/${{ steps.evaluate.outputs.run_id }}/matches.tsv
+          if-no-files-found: warn

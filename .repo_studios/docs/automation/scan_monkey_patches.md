@@ -54,6 +54,16 @@ The producer also refreshes `.repo_studios/reports/producer_reports/monkey_patch
 - `latest_matches.json`
 - `latest_matches.tsv` (when applicable)
 
+### Legacy Compatibility Alias
+
+To keep legacy consumers operational during the transition, each run now mirrors a compatibility view under `.repo_studios/monkey_patch/`. The mirrored directory name matches the timestamp portion of the run ID (for example `20251023_130108/`) and contains:
+
+- `report.json`: copy of the finding list (`matches.json`) for parsers that expect the legacy schema.
+- `summary.json`: structured summary payload from the producer.
+- `report.md`, `log.txt`, `matches.json`, and `matches.tsv` when present.
+
+The alias also publishes a `latest/` directory with the same files, and history pruning keeps the mirror aligned with the configured retention window.
+
 Historical runs are pruned to the configured retention window after each execution.
 
 ## Diagnostics
