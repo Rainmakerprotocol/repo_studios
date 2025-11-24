@@ -9,29 +9,10 @@ import pytest
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
 CALLBACK_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "callback_registration_map.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "callback_registration_map.js"
 )
-CALL_GRAPH_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "function_call_graph.js"
-)
-DYNAMIC_MODULE_PATH = (
-  REPO_STUDIOS_ROOT
-  / "command_center"
-  / "viewer"
-  / "ui"
-  / "builders"
-  / "dynamic_code_watchlist.js"
-)
+CALL_GRAPH_MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "function_call_graph.js"
+DYNAMIC_MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "dynamic_code_watchlist.js"
 
 if not CALLBACK_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected callback registration map builder at {CALLBACK_MODULE_PATH}")
@@ -40,7 +21,7 @@ if not CALL_GRAPH_MODULE_PATH.exists():  # pragma: no cover - guard against miss
     raise AssertionError(f"Expected function call graph builder module at {CALL_GRAPH_MODULE_PATH}")
 
 if not DYNAMIC_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
-  raise AssertionError(f"Expected dynamic code watchlist builder at {DYNAMIC_MODULE_PATH}")
+    raise AssertionError(f"Expected dynamic code watchlist builder at {DYNAMIC_MODULE_PATH}")
 
 
 @pytest.fixture(scope="module", autouse=True)

@@ -8,14 +8,7 @@ import pytest
 
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
-BUILDER_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "class_inheritance_hierarchy.js"
-)
+BUILDER_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "class_inheritance_hierarchy.js"
 
 if not BUILDER_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected class inheritance hierarchy builder at {BUILDER_PATH}")

@@ -9,20 +9,10 @@ import pytest
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
 INVENTORY_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "function_inventory_overview.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "function_inventory_overview.js"
 )
 TIMELINE_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "screening_signal_timeline.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "screening_signal_timeline.js"
 )
 
 if not INVENTORY_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets

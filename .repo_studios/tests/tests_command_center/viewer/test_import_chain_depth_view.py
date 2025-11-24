@@ -8,14 +8,7 @@ import pytest
 
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
-MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "import_chain_depth.js"
-)
+MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "import_chain_depth.js"
 
 if not MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected import chain depth builder at {MODULE_PATH}")
@@ -39,9 +32,9 @@ def _run_node_module(script: str) -> dict[str, object]:
         check=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-    text=True,
-    encoding="utf-8",
-    errors="replace",
+        text=True,
+        encoding="utf-8",
+        errors="replace",
     )
     if result.stderr.strip():
         pytest.fail(f"Node.js script wrote to stderr: {result.stderr}")

@@ -6,12 +6,7 @@ from typing import Callable
 
 import pytest
 
-MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "generate_typecheck_report.py"
-)
+MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "generate_typecheck_report.py"
 
 
 def _load_module():
@@ -32,7 +27,7 @@ def _clean_env(monkeypatch):
 
 def _write_pyproject(tmp_path: Path, targets: list[str]) -> None:
     content = "[tool.mypy]\nfiles = [\n"
-    content += "".join(f"    \"{target}\",\n" for target in targets)
+    content += "".join(f'    "{target}",\n' for target in targets)
     content += "]\n"
     (tmp_path / "pyproject.toml").write_text(content, encoding="utf-8")
 

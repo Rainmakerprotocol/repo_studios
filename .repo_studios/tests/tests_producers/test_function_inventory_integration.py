@@ -1,4 +1,5 @@
 """Integration tests for inventory and analysis producers."""
+
 from __future__ import annotations
 
 import importlib
@@ -20,21 +21,12 @@ INVENTORY_MODULE_PATH = (
     / "generate_commandview_inventory.py"
 )
 ANALYSIS_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "command_center"
-    / "scripts"
-    / "summarizers"
-    / "generate_function_analysis.py"
+    Path(__file__).resolve().parents[2] / "command_center" / "scripts" / "summarizers" / "generate_function_analysis.py"
 )
 INVENTORY_MODULE_NAME = "repo_studios_test.integration_inventory"
 ANALYSIS_MODULE_NAME = "repo_studios_test.integration_analysis"
 SCHEMA_DIR = Path(__file__).resolve().parents[2] / "docs" / "schemas"
-FIXTURE_ROOT = (
-    Path(__file__).resolve().parents[1]
-    / "fixtures"
-    / "function_inventory"
-    / "sample_pkg"
-)
+FIXTURE_ROOT = Path(__file__).resolve().parents[1] / "fixtures" / "function_inventory" / "sample_pkg"
 
 SCRIPTS_ROOT = Path(__file__).resolve().parents[2] / "command_center" / "scripts"
 
@@ -86,9 +78,7 @@ def _load_json(path: Path) -> dict:
 
 
 def _inventory_artifacts(directory: Path, slug: str) -> list[Path]:
-    return sorted(
-        path for path in directory.glob(f"{slug}_commandview_*.json") if "_screening_" not in path.name
-    )
+    return sorted(path for path in directory.glob(f"{slug}_commandview_*.json") if "_screening_" not in path.name)
 
 
 def _screening_artifacts(directory: Path, slug: str) -> list[Path]:
@@ -101,11 +91,7 @@ def _validate_with_schema(payload: dict, schema_name: str) -> None:
     validator_cls = jsonschema.validators.validator_for(schema)
     validator_cls.check_schema(schema)
     validator = validator_cls(schema)
-    errors = [
-        error
-        for error in validator.iter_errors(payload)
-        if error.validator != "additionalProperties"
-    ]
+    errors = [error for error in validator.iter_errors(payload) if error.validator != "additionalProperties"]
     if errors:
         raise errors[0]
 
@@ -132,9 +118,7 @@ def test_inventory_and_analysis_round_trip(tmp_path: Path) -> None:
     metadata = inventory_payload["metadata"]
     assert metadata["total_files"] == 4
     assert metadata["total_functions"] >= 4
-    module_entry = next(
-        item for item in inventory_payload["files"] if item["relative_path"] == "alpha.py"
-    )
+    module_entry = next(item for item in inventory_payload["files"] if item["relative_path"] == "alpha.py")
     assert module_entry["module_first_line"].startswith("def duplicate_helper")
     screening_files = _screening_artifacts(index_dir, "sample_pkg")
     assert screening_files, "Expected screening summary artifact"

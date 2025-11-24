@@ -46,11 +46,7 @@ def summarize(label: str, index_path: Path, pending_path: Path) -> int:
         extraction.get("pending_file"),
     )
 
-    md_ids = [
-        r.get("id")
-        for r in rules
-        if isinstance(r, dict) and str(r.get("id", "")).startswith("markdown-")
-    ]
+    md_ids = [r.get("id") for r in rules if isinstance(r, dict) and str(r.get("id", "")).startswith("markdown-")]
     if md_ids:
         md_ids_sorted = sorted(set(md_ids))
         logging.info(
@@ -71,9 +67,7 @@ def summarize(label: str, index_path: Path, pending_path: Path) -> int:
 
 def main() -> int:  # pragma: no cover - tiny wrapper
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--label", default="summary", help="label for log prefix (grow|sync|summary)"
-    )
+    parser.add_argument("--label", default="summary", help="label for log prefix (grow|sync|summary)")
     args = parser.parse_args()
     index_path = Path(os.environ.get("INDEX_PATH", "repo_standards_index.yaml"))
     pending_path = Path(os.environ.get("PENDING_PATH", "repo_standards_pending.yaml"))

@@ -5,18 +5,11 @@ import importlib.util
 import sys
 from pathlib import Path
 
-_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "validate_import_boundaries.py"
-)
+_MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "validate_import_boundaries.py"
 
 
 def _load_module():
-    spec = importlib.util.spec_from_file_location(
-        "validate_import_boundaries", _MODULE_PATH
-    )
+    spec = importlib.util.spec_from_file_location("validate_import_boundaries", _MODULE_PATH)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     sys.modules[spec.name] = module
@@ -55,14 +48,16 @@ def test_emits_structured_artifacts_without_violations(tmp_path, monkeypatch):
         mod.dt.datetime(2025, 1, 1, 12, 0, 0, tzinfo=mod.dt.timezone.utc),
     )
 
-    payload = mod.run([
-        "--repo-root",
-        str(repo_root),
-        "--artifacts-to-keep",
-        "2",
-        "--log-level",
-        "DEBUG",
-    ])
+    payload = mod.run(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--artifacts-to-keep",
+            "2",
+            "--log-level",
+            "DEBUG",
+        ]
+    )
 
     assert payload["status"] == "ok"
     assert payload["summary"]["violation_count"] == 0
@@ -109,14 +104,16 @@ def test_detects_violations_and_honors_allowlist(tmp_path, monkeypatch):
         mod.dt.datetime(2025, 1, 1, 12, 0, 0, tzinfo=mod.dt.timezone.utc),
     )
 
-    payload_first = mod.run([
-        "--repo-root",
-        str(repo_root),
-        "--artifacts-to-keep",
-        "1",
-        "--log-level",
-        "DEBUG",
-    ])
+    payload_first = mod.run(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--artifacts-to-keep",
+            "1",
+            "--log-level",
+            "DEBUG",
+        ]
+    )
 
     assert payload_first["status"] == "violations"
     assert payload_first["summary"]["violation_count"] >= 1
@@ -143,21 +140,21 @@ def test_detects_violations_and_honors_allowlist(tmp_path, monkeypatch):
         mod,
         mod.dt.datetime(2025, 1, 1, 12, 0, 1, tzinfo=mod.dt.timezone.utc),
     )
-    payload_second = mod.run([
-        "--repo-root",
-        str(repo_root),
-        "--artifacts-to-keep",
-        "1",
-        "--log-level",
-        "DEBUG",
-    ])
+    payload_second = mod.run(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--artifacts-to-keep",
+            "1",
+            "--log-level",
+            "DEBUG",
+        ]
+    )
 
     assert payload_second["status"] == "ok"
     assert payload_second["summary"]["violation_count"] == 0
 
     output_dir = Path(payload_second["output_dir"])
-    run_dirs = [
-        p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith(mod.RUN_PREFIX)
-    ]
+    run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith(mod.RUN_PREFIX)]
     assert len(run_dirs) == 1
     assert run_dirs[0].name == payload_second["run_id"]

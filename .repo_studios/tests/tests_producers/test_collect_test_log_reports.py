@@ -4,12 +4,7 @@ import importlib.util
 import json
 from pathlib import Path
 
-_PRODUCER_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "collect_test_log_reports.py"
-)
+_PRODUCER_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "collect_test_log_reports.py"
 
 
 def _load_module(name: str, path: Path):
@@ -129,31 +124,35 @@ def test_collect_test_log_reports_prunes_history(tmp_path):
 
     output_dir = repo / ".repo_studios" / "reports" / "producer_reports" / "test_log_reports"
 
-    producer_mod.run([
-        "--logs-dir",
-        str(logs_base),
-        "--logs-run",
-        str(first_run),
-        "--output-dir",
-        str(output_dir),
-        "--artifacts-to-keep",
-        "2",
-        "--log-level",
-        "ERROR",
-    ])
+    producer_mod.run(
+        [
+            "--logs-dir",
+            str(logs_base),
+            "--logs-run",
+            str(first_run),
+            "--output-dir",
+            str(output_dir),
+            "--artifacts-to-keep",
+            "2",
+            "--log-level",
+            "ERROR",
+        ]
+    )
 
-    result = producer_mod.run([
-        "--logs-dir",
-        str(logs_base),
-        "--logs-run",
-        str(second_run),
-        "--output-dir",
-        str(output_dir),
-        "--artifacts-to-keep",
-        "1",
-        "--log-level",
-        "ERROR",
-    ])
+    result = producer_mod.run(
+        [
+            "--logs-dir",
+            str(logs_base),
+            "--logs-run",
+            str(second_run),
+            "--output-dir",
+            str(output_dir),
+            "--artifacts-to-keep",
+            "1",
+            "--log-level",
+            "ERROR",
+        ]
+    )
 
     artifacts_dir = Path(result["output_dir"])
     runs = [child.name for child in output_dir.iterdir() if child.is_dir()]
@@ -168,14 +167,16 @@ def test_collect_test_log_reports_handles_missing_runs(tmp_path):
     logs_dir = repo / ".repo_studios" / "pytest_logs"
     logs_dir.mkdir(parents=True)
 
-    result = producer_mod.run([
-        "--logs-dir",
-        str(logs_dir),
-        "--output-dir",
-        str(repo / "out"),
-        "--log-level",
-        "ERROR",
-    ])
+    result = producer_mod.run(
+        [
+            "--logs-dir",
+            str(logs_dir),
+            "--output-dir",
+            str(repo / "out"),
+            "--log-level",
+            "ERROR",
+        ]
+    )
 
     assert result["run_dir"] is None
     assert result["output_dir"] is None

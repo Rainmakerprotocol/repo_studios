@@ -218,7 +218,9 @@ def _write_artifacts(result: TestLogAnalysisResult, output_dir: Path, *, keep: i
 
 def run(argv: Sequence[str] | None = None) -> dict[str, object]:
     args = _parse_args(argv)
-    logging.basicConfig(level=getattr(logging, args.log_level.upper(), logging.INFO), format="%(levelname)s %(message)s")
+    logging.basicConfig(
+        level=getattr(logging, args.log_level.upper(), logging.INFO), format="%(levelname)s %(message)s"
+    )
     log = logging.getLogger("test_log_reports")
 
     logs_dir = args.logs_dir.resolve()

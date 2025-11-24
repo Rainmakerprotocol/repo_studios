@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Validate Repo Studios inventory entries and emit structured artifacts."""
+
 from __future__ import annotations
 
 import argparse
@@ -463,16 +464,19 @@ def render_markdown(report_payload: Dict[str, Any]) -> str:
 def render_log(report_payload: Dict[str, Any]) -> str:
     summary = report_payload.get("summary", {})
     issue_counts = summary.get("issue_counts", {})
-    return "\n".join(
-        [
-            f"status={report_payload['status']}",
-            f"timestamp={report_payload['timestamp']}",
-            f"files_checked={summary.get('files_checked', 0)}",
-            f"records_checked={summary.get('records_checked', 0)}",
-            f"errors={issue_counts.get('errors', 0)}",
-            f"warnings={issue_counts.get('warnings', 0)}",
-        ]
-    ) + "\n"
+    return (
+        "\n".join(
+            [
+                f"status={report_payload['status']}",
+                f"timestamp={report_payload['timestamp']}",
+                f"files_checked={summary.get('files_checked', 0)}",
+                f"records_checked={summary.get('records_checked', 0)}",
+                f"errors={issue_counts.get('errors', 0)}",
+                f"warnings={issue_counts.get('warnings', 0)}",
+            ]
+        )
+        + "\n"
+    )
 
 
 def write_run_artifacts(run_dir: Path, report_payload: Dict[str, Any], raw_payload: Dict[str, Any]) -> None:
@@ -542,11 +546,17 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--repo-root", default=str(DEFAULT_REPO_ROOT), help="Repository root used to resolve paths")
     parser.add_argument("--schema-root", default=str(DEFAULT_SCHEMA_ROOT), help="Path to inventory schema directory")
     parser.add_argument("--enums-path", default=str(DEFAULT_ENUMS_PATH), help="Path to enums YAML file")
-    parser.add_argument("--template-path", default=str(DEFAULT_TEMPLATE_PATH), help="Path to inventory entry template (ignored)" )
-    parser.add_argument("--config-path", default=str(DEFAULT_CONFIG_PATH), help="Optional validator configuration file (YAML)")
+    parser.add_argument(
+        "--template-path", default=str(DEFAULT_TEMPLATE_PATH), help="Path to inventory entry template (ignored)"
+    )
+    parser.add_argument(
+        "--config-path", default=str(DEFAULT_CONFIG_PATH), help="Optional validator configuration file (YAML)"
+    )
     parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR), help="Directory for structured artifacts")
     parser.add_argument("--timestamp", help="Override run timestamp (ISO8601)")
-    parser.add_argument("--artifacts-to-keep", type=int, default=DEFAULT_ARTIFACTS_TO_KEEP, help="Number of historical runs to retain")
+    parser.add_argument(
+        "--artifacts-to-keep", type=int, default=DEFAULT_ARTIFACTS_TO_KEEP, help="Number of historical runs to retain"
+    )
     parser.add_argument("--json", action="store_true", help="Emit validation issues to stdout in JSON (legacy mode)")
     parser.add_argument("--log-level", default="INFO", help="Logging verbosity")
     return parser
@@ -684,7 +694,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     paths = build_paths(args)
     options = build_options(args)
 
-    logging.basicConfig(level=getattr(logging, options.log_level.upper(), logging.INFO), format="%(levelname)s: %(message)s")
+    logging.basicConfig(
+        level=getattr(logging, options.log_level.upper(), logging.INFO), format="%(levelname)s: %(message)s"
+    )
 
     generated_at = _current_time() if options.timestamp is None else datetime.fromisoformat(options.timestamp)
     slug = _format_slug(generated_at)

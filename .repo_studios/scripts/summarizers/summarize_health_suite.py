@@ -166,13 +166,7 @@ def _load_dep_summary(root: Path, ts: str) -> tuple[str, Path | None]:
 
 
 def _load_import_graph(root: Path, ts: str) -> tuple[list[str], list[str], list[str], Path | None]:
-    ig_base = (
-        root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "import_graph_reports"
-    )
+    ig_base = root / ".repo_studios" / "reports" / "producer_reports" / "import_graph_reports"
     ig_dir = _prefer_ts(ig_base, ts)
     ig_report = _read_text(ig_dir / "report.md") if ig_dir else ""
     fan_in = _extract_markdown_list(
@@ -198,9 +192,7 @@ def _load_test_health_summary(root: Path, ts: str) -> tuple[list[str], Path | No
     th_dir = _prefer_ts(th_base, ts)
     th_report = _read_text(th_dir / "report.md") if th_dir else ""
     summary_lines = [
-        line.lstrip("- ").strip()
-        for line in _extract_section_lines(th_report, "## Summary")
-        if line.strip()
+        line.lstrip("- ").strip() for line in _extract_section_lines(th_report, "## Summary") if line.strip()
     ]
     return summary_lines or ["(no summary)"], th_dir
 

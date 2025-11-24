@@ -2,27 +2,24 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import sys
+from datetime import datetime
 from pathlib import Path
 
-_CONSUMER_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "consumers"
-    / "generate_test_log_health_report.py"
-)
+_CONSUMER_PATH = Path(__file__).resolve().parents[2] / "scripts" / "consumers" / "generate_test_log_health_report.py"
 
 
 def _load_module(name: str, path: Path):
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
+    sys.modules[name] = module
     spec.loader.exec_module(module)
     return module
 
 
 def _write_junit(run_dir: Path) -> Path:
-    content = (
-        """
+    content = """
 <testsuite name="pytest" tests="3" failures="1" errors="0" skipped="1">
   <testcase classname="pkg.test_mod" name="test_ok" />
   <testcase classname="pkg.test_mod" name="test_warn">
@@ -32,17 +29,14 @@ def _write_junit(run_dir: Path) -> Path:
     <skipped message="xfail" />
   </testcase>
 </testsuite>
-"""
-        .strip()
-    )
+""".strip()
     junit_path = run_dir / "junit_run.xml"
     junit_path.write_text(content, encoding="utf-8")
     return junit_path
 
 
 def _write_pytest_log(run_dir: Path) -> Path:
-    content = (
-        """
+    content = """
 =============================== warnings summary ===============================
 repo/tests/test_mod.py:10: UserWarning: sample
   warnings.warn("sample")
@@ -54,9 +48,7 @@ Traceback (most recent call last):
   File "repo/tests/test_mod.py", line 10, in test_warn
     raise AssertionError("boom")
 AssertionError: boom
-"""
-        .lstrip()
-    )
+""".lstrip()
     log_path = run_dir / "pytest_20250101.txt"
     log_path.write_text(content, encoding="utf-8")
     return log_path
@@ -105,13 +97,7 @@ def test_generate_test_log_health_report_prefers_producer_bundle(tmp_path, monke
     report_path = producer_dir / "latest_report.json"
     report_path.write_text(json.dumps(payload), encoding="utf-8")
 
-    output_base = (
-        repo
-        / ".repo_studios"
-        / "reports"
-        / "consumer_reports"
-        / "test_log_health_reports"
-    )
+    output_base = repo / ".repo_studios" / "reports" / "consumer_reports" / "test_log_health_reports"
 
     result = consumer_mod.run(
         [
@@ -137,6 +123,11 @@ def test_generate_test_log_health_report_prefers_producer_bundle(tmp_path, monke
     markdown = (artifacts_dir / "report.md").read_text(encoding="utf-8")
     assert "warnings_total: 2" in markdown
     assert "slowest tests" in markdown.lower()
+    assert "Source References" in markdown
+    bundle_summary = json.loads((artifacts_dir / "bundle_summary.json").read_text(encoding="utf-8"))
+    assert bundle_summary["source"] == "producer"
+    assert bundle_summary["producer_report"] == str(report_path.resolve())
+    assert bundle_summary["summary"] == payload["summary"]
 
 
 def test_generate_test_log_health_report_falls_back_to_logs(tmp_path, monkeypatch):
@@ -152,13 +143,7 @@ def test_generate_test_log_health_report_falls_back_to_logs(tmp_path, monkeypatc
     _write_junit(run_dir)
     _write_pytest_log(run_dir)
 
-    output_base = (
-        repo
-        / ".repo_studios"
-        / "reports"
-        / "consumer_reports"
-        / "test_log_health_reports"
-    )
+    output_base = repo / ".repo_studios" / "reports" / "consumer_reports" / "test_log_health_reports"
 
     result = consumer_mod.run(
         [
@@ -187,3 +172,59 @@ def test_generate_test_log_health_report_falls_back_to_logs(tmp_path, monkeypatc
     markdown = (artifacts_dir / "report.md").read_text(encoding="utf-8")
     assert "UserWarning" in markdown
     assert "repo/tests/test_mod.py::test_warn" in markdown
+    assert "Source References" in markdown
+    bundle_summary = json.loads((artifacts_dir / "bundle_summary.json").read_text(encoding="utf-8"))
+    assert bundle_summary["source"] == "logs"
+    assert bundle_summary["producer_report"] is None
+    assert bundle_summary["summary"]["total"] == 3
+
+
+def test_generate_test_log_health_report_prunes_history(tmp_path, monkeypatch):
+    consumer_mod = _load_module("generate_test_log_health_report", _CONSUMER_PATH)
+
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    monkeypatch.chdir(repo)
+
+    logs_base = repo / ".repo_studios" / "pytest_logs"
+    run_dir = logs_base / "suite" / "2025-01-01"
+    run_dir.mkdir(parents=True)
+    _write_junit(run_dir)
+    _write_pytest_log(run_dir)
+
+    output_base = repo / ".repo_studios" / "reports" / "consumer_reports" / "test_log_health_reports"
+
+    timestamps = [datetime(2025, 1, 1, 0, minute, tzinfo=consumer_mod.UTC) for minute in range(12)]
+
+    class _FakeDatetime(datetime):
+        queue = timestamps.copy()
+
+        @classmethod
+        def now(cls, tz=None):
+            value = cls.queue.pop(0)
+            if tz is not None:
+                return value.astimezone(tz)
+            return value.replace(tzinfo=None)
+
+        @classmethod
+        def utcnow(cls):
+            return cls.now(consumer_mod.UTC)
+
+    monkeypatch.setattr(consumer_mod, "datetime", _FakeDatetime)
+
+    for _ in range(6):
+        consumer_mod.run(
+            [
+                "--logs-dir",
+                str(logs_base),
+                "--output-base",
+                str(output_base),
+                "--producer-report",
+                str(repo / "missing.json"),
+                "--artifacts-to-keep",
+                "3",
+            ]
+        )
+
+    runs = sorted(p for p in output_base.iterdir() if p.is_dir())
+    assert len(runs) == 3

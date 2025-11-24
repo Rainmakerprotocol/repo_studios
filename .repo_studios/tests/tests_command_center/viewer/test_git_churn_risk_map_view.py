@@ -8,14 +8,7 @@ import pytest
 
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
-MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "git_churn_risk_map.js"
-)
+MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "git_churn_risk_map.js"
 
 if not MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected git churn risk map builder at {MODULE_PATH}")

@@ -152,9 +152,7 @@ if _FAULT_ENABLE == "1":  # only derive paths and create dirs when enabled
 
         # Activation banner (compact)
         try:
-            _sys.stderr.write(
-                f"[faulthandler] enable=1 outdir={outdir or '-'} dump_later={_FAULT_DUMP_LATER}\n"
-            )
+            _sys.stderr.write(f"[faulthandler] enable=1 outdir={outdir or '-'} dump_later={_FAULT_DUMP_LATER}\n")
             _sys.stderr.flush()
         except Exception:
             pass

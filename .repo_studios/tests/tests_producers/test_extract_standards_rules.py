@@ -5,18 +5,11 @@ import sys
 from pathlib import Path
 from textwrap import dedent
 
-_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "extract_standards_rules.py"
-)
+_MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "extract_standards_rules.py"
 
 
 def _load_module():
-    spec = importlib.util.spec_from_file_location(
-        "extract_standards_rules", _MODULE_PATH
-    )
+    spec = importlib.util.spec_from_file_location("extract_standards_rules", _MODULE_PATH)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     sys.modules[spec.name] = module

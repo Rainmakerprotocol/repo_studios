@@ -43,6 +43,7 @@ last_updated.
 This module is intentionally dependency‑light (only stdlib) for portability in
 restricted CI sandboxes.
 """
+
 from __future__ import annotations
 
 import re
@@ -100,6 +101,7 @@ class ParsedRule:
 # Public extraction function
 # ---------------------------------------------------------------------------
 
+
 def extract_rules(
     path: Path,
     categories: list[str],
@@ -144,6 +146,7 @@ def extract_rules(
 # ---------------------------------------------------------------------------
 # Marker block extraction
 # ---------------------------------------------------------------------------
+
 
 def _extract_marker_blocks(
     text: str,
@@ -212,6 +215,7 @@ def _extract_marker_blocks(
 # ---------------------------------------------------------------------------
 # Heading rule extraction
 # ---------------------------------------------------------------------------
+
 
 def _extract_heading_rules(
     text: str,
@@ -287,6 +291,7 @@ def _extract_heading_rules(
 # ---------------------------------------------------------------------------
 # Helper parsing functions
 # ---------------------------------------------------------------------------
+
 
 def _split_multi(raw: str) -> list[str]:
     if "," in raw:

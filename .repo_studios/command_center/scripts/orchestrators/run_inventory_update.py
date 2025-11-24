@@ -67,9 +67,7 @@ def _ensure_target_allowed(repo_root: Path, target: Path) -> None:
     try:
         target.relative_to(allowed_root)
     except ValueError as exc:
-        raise SystemExit(
-            f"Target must reside within {allowed_root} (got {target})"
-        ) from exc
+        raise SystemExit(f"Target must reside within {allowed_root} (got {target})") from exc
 
 
 def run(argv: Sequence[str] | None = None) -> int:

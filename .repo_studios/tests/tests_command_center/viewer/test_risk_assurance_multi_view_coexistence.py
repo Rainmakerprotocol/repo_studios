@@ -9,29 +9,10 @@ import pytest
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
 TEST_COVERAGE_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "test_coverage_mapping.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "test_coverage_mapping.js"
 )
-GIT_CHURN_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "git_churn_risk_map.js"
-)
-DEAD_CODE_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "dead_code_detection.js"
-)
+GIT_CHURN_MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "git_churn_risk_map.js"
+DEAD_CODE_MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "dead_code_detection.js"
 
 if not TEST_COVERAGE_MODULE_PATH.exists():  # pragma: no cover
     raise AssertionError(f"Expected test coverage builder at {TEST_COVERAGE_MODULE_PATH}")
@@ -52,11 +33,11 @@ def _ensure_node_runtime() -> None:
 def _run_node_module(script: str) -> dict[str, object]:
     result = subprocess.run(
         ["node", "--input-type=module", "-e", script],
-    check=True,
-    stdout=subprocess.PIPE,
-    stderr=subprocess.PIPE,
-    text=True,
-    encoding="utf-8",
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8",
     )
     if result.stderr.strip():
         pytest.fail(f"Node.js script wrote to stderr: {result.stderr}")

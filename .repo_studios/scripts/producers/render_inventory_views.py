@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Render structured inventory views and maintain legacy compatibility."""
+
 from __future__ import annotations
 
 import argparse
@@ -271,6 +272,7 @@ def write_stub(path: Path, destination: Path, *, generated_at: datetime, repo_ro
         ]
         write_yaml(path, payload)
 
+
 def compose_report_payload(
     *,
     repo_root: Path,
@@ -311,7 +313,9 @@ def compose_report_payload(
             "by_status": summary.get("by_status", {}),
         },
         "top_tags": summary.get("top_tags", [])[:10],
-        "top_consumers": sorted(bundle.summary.get("consumers", {}).items(), key=lambda item: item[1], reverse=True)[:10],
+        "top_consumers": sorted(bundle.summary.get("consumers", {}).items(), key=lambda item: item[1], reverse=True)[
+            :10
+        ],
         "notes": [],
     }
     raw_payload = {
@@ -359,16 +363,19 @@ def render_markdown(report_payload: Dict[str, Any]) -> str:
 
 def render_log(report_payload: Dict[str, Any]) -> str:
     counts = report_payload.get("counts", {}).get("totals", {})
-    return "\n".join(
-        [
-            f"status={report_payload['status']}",
-            f"timestamp={report_payload['timestamp']}",
-            f"total_entries={counts.get('total', 0)}",
-            f"docs={counts.get('docs', 0)}",
-            f"scripts={counts.get('scripts', 0)}",
-            f"tests={counts.get('tests', 0)}",
-        ]
-    ) + "\n"
+    return (
+        "\n".join(
+            [
+                f"status={report_payload['status']}",
+                f"timestamp={report_payload['timestamp']}",
+                f"total_entries={counts.get('total', 0)}",
+                f"docs={counts.get('docs', 0)}",
+                f"scripts={counts.get('scripts', 0)}",
+                f"tests={counts.get('tests', 0)}",
+            ]
+        )
+        + "\n"
+    )
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -380,9 +387,13 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--schema-root", default=str(DEFAULT_SCHEMA_ROOT), help="Path to inventory schema directory")
     parser.add_argument("--views-dir", default=str(DEFAULT_VIEWS_DIR), help="Legacy compatibility directory for views")
     parser.add_argument("--reports-root", default=str(DEFAULT_REPORTS_ROOT), help="Destination root for topic reports")
-    parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR), help="Destination for structured producer artifacts")
+    parser.add_argument(
+        "--output-dir", default=str(DEFAULT_OUTPUT_DIR), help="Destination for structured producer artifacts"
+    )
     parser.add_argument("--timestamp", help="ISO timestamp override for the run")
-    parser.add_argument("--artifacts-to-keep", type=int, default=DEFAULT_ARTIFACTS_TO_KEEP, help="Number of historical runs to retain")
+    parser.add_argument(
+        "--artifacts-to-keep", type=int, default=DEFAULT_ARTIFACTS_TO_KEEP, help="Number of historical runs to retain"
+    )
     parser.add_argument("--log-level", default="INFO", help="Logging verbosity")
     return parser
 
@@ -446,7 +457,9 @@ def main(argv: List[str] | None = None) -> int:
     paths = build_paths(args)
     options = build_options(args)
 
-    logging.basicConfig(level=getattr(logging, options.log_level.upper(), logging.INFO), format="%(levelname)s: %(message)s")
+    logging.basicConfig(
+        level=getattr(logging, options.log_level.upper(), logging.INFO), format="%(levelname)s: %(message)s"
+    )
 
     repo_root = paths.repo_root
     schema_root = _resolve(repo_root, paths.schema_root)

@@ -8,14 +8,7 @@ import pytest
 
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
-MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "documentation_coverage_scope.js"
-)
+MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "documentation_coverage_scope.js"
 
 if not MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected documentation coverage scope module at {MODULE_PATH}")
@@ -189,7 +182,9 @@ console.log(JSON.stringify({{
     payload = _run_node_module(script)
 
     assert payload["size"] == 0
-    assert payload["emptyMessage"] == "Module alpha.service.module1 has no functions recorded for documentation coverage."
+    assert (
+        payload["emptyMessage"] == "Module alpha.service.module1 has no functions recorded for documentation coverage."
+    )
 
 
 def test_scope_reports_missing_module_message() -> None:
@@ -213,4 +208,7 @@ console.log(JSON.stringify({{
     payload = _run_node_module(script)
 
     assert payload["size"] == 0
-    assert payload["emptyMessage"] == "Module alpha.service.module1 is not present in normalized data for documentation coverage."
+    assert (
+        payload["emptyMessage"]
+        == "Module alpha.service.module1 is not present in normalized data for documentation coverage."
+    )

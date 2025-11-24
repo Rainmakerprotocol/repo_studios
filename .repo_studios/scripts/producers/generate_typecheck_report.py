@@ -200,9 +200,7 @@ def _parse_summary(stdout: str) -> tuple[int, int, bool]:
 
 
 def _parse_samples(stdout: str, limit: int = 50) -> list[ErrorSample]:
-    pattern = re.compile(
-        r"^(?P<path>[^:\n]+):(?P<line>\d+):(?:\d+:)?\s+error: (?P<msg>.*?)(?: \[(?P<code>[^\]]+)\])?$"
-    )
+    pattern = re.compile(r"^(?P<path>[^:\n]+):(?P<line>\d+):(?:\d+:)?\s+error: (?P<msg>.*?)(?: \[(?P<code>[^\]]+)\])?$")
     samples: list[ErrorSample] = []
     for line in stdout.splitlines():
         match = pattern.match(line.strip())
@@ -293,9 +291,7 @@ def _render_markdown(payload: dict[str, Any]) -> str:
         for sample in samples[:20]:
             code = sample.get("code")
             fragment = f"[{code}] " if code else ""
-            lines.append(
-                f"- {sample.get('path')}:{sample.get('line')} — {fragment}{sample.get('message')}\n"
-            )
+            lines.append(f"- {sample.get('path')}:{sample.get('line')} — {fragment}{sample.get('message')}\n")
     lines.append("\n## Invocation\n\n")
     command = payload.get("invocation", [])
     if command:
@@ -308,16 +304,19 @@ def _render_markdown(payload: dict[str, Any]) -> str:
 
 def _render_log(payload: dict[str, Any]) -> str:
     summary = payload.get("summary", {})
-    return "\n".join(
-        [
-            f"status={payload['status']}",
-            f"timestamp={payload['timestamp']}",
-            f"error_count={summary.get('error_count', 0)}",
-            f"files_with_issues={summary.get('files_with_issues', 0)}",
-            f"paths_checked={len(summary.get('paths_checked', []))}",
-            f"mypy_version={payload.get('mypy_version', 'unknown')}",
-        ]
-    ) + "\n"
+    return (
+        "\n".join(
+            [
+                f"status={payload['status']}",
+                f"timestamp={payload['timestamp']}",
+                f"error_count={summary.get('error_count', 0)}",
+                f"files_with_issues={summary.get('files_with_issues', 0)}",
+                f"paths_checked={len(summary.get('paths_checked', []))}",
+                f"mypy_version={payload.get('mypy_version', 'unknown')}",
+            ]
+        )
+        + "\n"
+    )
 
 
 def configure_logging(level: str) -> None:
@@ -336,7 +335,9 @@ def build_parser() -> argparse.ArgumentParser:
         help="Directory where structured artifacts will be written",
     )
     parser.add_argument("--timestamp", help="ISO8601 timestamp to seed the run directory")
-    parser.add_argument("--artifacts-to-keep", type=int, default=DEFAULT_ARTIFACTS_TO_KEEP, help="Number of historical runs to retain")
+    parser.add_argument(
+        "--artifacts-to-keep", type=int, default=DEFAULT_ARTIFACTS_TO_KEEP, help="Number of historical runs to retain"
+    )
     parser.add_argument("--log-level", default="INFO", help="Logging verbosity")
     return parser
 

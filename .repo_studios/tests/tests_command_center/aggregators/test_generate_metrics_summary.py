@@ -6,11 +6,7 @@ import sys
 from pathlib import Path
 
 _MODULE_PATH = (
-    Path(__file__).resolve().parents[3]
-    / "command_center"
-    / "scripts"
-    / "aggregators"
-    / "generate_metrics_summary.py"
+    Path(__file__).resolve().parents[3] / "command_center" / "scripts" / "aggregators" / "generate_metrics_summary.py"
 )
 
 

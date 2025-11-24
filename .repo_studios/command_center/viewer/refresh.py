@@ -86,10 +86,7 @@ def refresh_selector_state(repo_root: Path) -> ViewerSelectorState:
 
     records = build_commandview_selector(repo_root)
     buckets = _group_records(records)
-    entries = tuple(
-        ViewerSelectorEntry(slug=slug, options=tuple(options))
-        for slug, options in sorted(buckets.items())
-    )
+    entries = tuple(ViewerSelectorEntry(slug=slug, options=tuple(options)) for slug, options in sorted(buckets.items()))
     generated_at = datetime.now(timezone.utc).isoformat()
     return ViewerSelectorState(generated_at=generated_at, entries=entries)
 

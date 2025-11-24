@@ -249,11 +249,7 @@ def make_steps(ts: str) -> list[Step]:
                 str(script),
                 "--base-dir",
                 str(repo_DIR / "reports/producer_reports/monkey_patch_scans"),
-                *(
-                    ["--verbose"]
-                    if os.environ.get("COMMAND_CENTER_LOG_LEVEL", "INFO").upper() == "DEBUG"
-                    else []
-                ),
+                *(["--verbose"] if os.environ.get("COMMAND_CENTER_LOG_LEVEL", "INFO").upper() == "DEBUG" else []),
             ]
             if script
             else [py, "-c", "import sys; sys.exit(1)"],
@@ -424,9 +420,7 @@ def make_steps(ts: str) -> list[Step]:
     steps.append(
         Step(
             name="fault_aggregate",
-            argv=[py, str(agg_script)]
-            if agg_script.exists()
-            else [py, "-c", "import sys; sys.exit(1)"],
+            argv=[py, str(agg_script)] if agg_script.exists() else [py, "-c", "import sys; sys.exit(1)"],
             optional=not agg_script.exists(),
             env=fault_env,
         )
@@ -437,9 +431,7 @@ def make_steps(ts: str) -> list[Step]:
     steps.append(
         Step(
             name="fault_gate",
-            argv=[py, str(gate_script)]
-            if gate_script.exists()
-            else [py, "-c", "import sys; sys.exit(1)"],
+            argv=[py, str(gate_script)] if gate_script.exists() else [py, "-c", "import sys; sys.exit(1)"],
             optional=not gate_script.exists(),
             env=fault_env,
         )
@@ -534,12 +526,8 @@ def run_step(
                 )
                 assert proc.stdout is not None
                 # Heartbeat and timeout supervisor
-                timeout_sec = (
-                    step.timeout_sec if step.timeout_sec is not None else default_timeout_sec
-                )
-                heartbeat_sec = (
-                    step.heartbeat_sec if step.heartbeat_sec is not None else default_heartbeat_sec
-                )
+                timeout_sec = step.timeout_sec if step.timeout_sec is not None else default_timeout_sec
+                heartbeat_sec = step.heartbeat_sec if step.heartbeat_sec is not None else default_heartbeat_sec
                 stop_evt = threading.Event()
 
                 def _heartbeat():
@@ -556,9 +544,7 @@ def run_step(
                         except Exception:
                             pass
                         if timeout_sec and elapsed > timeout_sec and proc.poll() is None:
-                            to_msg = (
-                                f"[TIMEOUT] {step.name} exceeded {int(timeout_sec)}s — terminating"
-                            )
+                            to_msg = f"[TIMEOUT] {step.name} exceeded {int(timeout_sec)}s — terminating"
                             logging.warning("%s", to_msg)
                             try:
                                 err_f.write(to_msg + "\n")
@@ -580,9 +566,7 @@ def run_step(
 
                 hb_thread = None
                 if heartbeat_sec and heartbeat_sec > 0:
-                    hb_thread = threading.Thread(
-                        target=_heartbeat, name=f"hb-{step.name}", daemon=True
-                    )
+                    hb_thread = threading.Thread(target=_heartbeat, name=f"hb-{step.name}", daemon=True)
                     hb_thread.start()
 
                 for line in proc.stdout:
@@ -697,9 +681,7 @@ def write_status(log_dir: Path, run_status: dict) -> None:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(
-        description="Run health suite steps sequentially, never aborting on errors."
-    )
+    ap = argparse.ArgumentParser(description="Run health suite steps sequentially, never aborting on errors.")
     ap.add_argument(
         "--timestamp",
         dest="timestamp",
@@ -766,16 +748,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             step,
             log_dir=log_dir,
             live=args.live,
-            default_timeout_sec=(args.step_timeout_sec or None)
-            if args.step_timeout_sec > 0
-            else None,
+            default_timeout_sec=(args.step_timeout_sec or None) if args.step_timeout_sec > 0 else None,
             default_heartbeat_sec=(args.heartbeat_sec or None) if args.heartbeat_sec > 0 else None,
         )
         # Capture triage for fault gate failures
         if step.name == "fault_gate" and status.get("exit_code") not in (None, 0):
-            fault_outdir = (
-                Path(run["fault_outdir"]) if isinstance(run.get("fault_outdir"), str) else None
-            )
+            fault_outdir = Path(run["fault_outdir"]) if isinstance(run.get("fault_outdir"), str) else None
             if fault_outdir and fault_outdir.exists():
                 listing = _capture_fault_gate_triage(fault_outdir, log_dir)
                 if listing:

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Generate a co-located function inventory for a repo folder."""
+
 from __future__ import annotations
 
 import argparse
@@ -126,11 +127,7 @@ DOCSTRING_WARNING_THRESHOLD = 80.0
 DOCSTRING_FAILURE_THRESHOLD = 60.0
 MAX_SCREENING_HISTORY_ENTRIES = 30
 
-BUILTIN_FUNCTION_NAMES = {
-    name
-    for name, value in vars(builtins).items()
-    if callable(value)
-}
+BUILTIN_FUNCTION_NAMES = {name for name, value in vars(builtins).items() if callable(value)}
 
 _MATCH_NODE = (getattr(ast, "Match"),) if hasattr(ast, "Match") else tuple()
 
@@ -517,28 +514,34 @@ def _detect_dynamic_code(tree: ast.AST) -> dict[str, Any]:
             for keyword in node.keywords or []:
                 if keyword.arg == "metaclass":
                     flags["metaclass"] = True
-                    events.append({
-                        "kind": "metaclass",
-                        "lineno": getattr(node, "lineno", None),
-                        "detail": _safe_unparse(keyword.value),
-                    })
+                    events.append(
+                        {
+                            "kind": "metaclass",
+                            "lineno": getattr(node, "lineno", None),
+                            "detail": _safe_unparse(keyword.value),
+                        }
+                    )
         elif isinstance(node, ast.Assign):
             for target in node.targets:
                 if _is_globals_mutation(target):
                     flags["globals_mutation"] = True
-                    events.append({
-                        "kind": "globals_assign",
-                        "lineno": getattr(target, "lineno", None),
-                        "detail": _safe_unparse(target),
-                    })
+                    events.append(
+                        {
+                            "kind": "globals_assign",
+                            "lineno": getattr(target, "lineno", None),
+                            "detail": _safe_unparse(target),
+                        }
+                    )
         elif isinstance(node, ast.AugAssign):
             if _is_globals_mutation(node.target):
                 flags["globals_mutation"] = True
-                events.append({
-                    "kind": "globals_augassign",
-                    "lineno": getattr(node.target, "lineno", None),
-                    "detail": _safe_unparse(node.target),
-                })
+                events.append(
+                    {
+                        "kind": "globals_augassign",
+                        "lineno": getattr(node.target, "lineno", None),
+                        "detail": _safe_unparse(node.target),
+                    }
+                )
 
     return {"flags": flags, "events": events}
 
@@ -703,13 +706,15 @@ def _extract_imports_detailed(tree: ast.AST) -> tuple[list[dict[str, Any]], dict
                 exposed = alias.asname or alias.name
                 alias_map[exposed] = alias.name
                 names.append({"name": alias.name, "asname": alias.asname})
-            details.append({
-                "kind": "import",
-                "module": None,
-                "names": names,
-                "lineno": node.lineno,
-                "level": 0,
-            })
+            details.append(
+                {
+                    "kind": "import",
+                    "module": None,
+                    "names": names,
+                    "lineno": node.lineno,
+                    "level": 0,
+                }
+            )
         elif isinstance(node, ast.ImportFrom):
             names = []
             module = node.module or ""
@@ -718,13 +723,15 @@ def _extract_imports_detailed(tree: ast.AST) -> tuple[list[dict[str, Any]], dict
                 exposed = alias.asname or alias.name
                 alias_map[exposed] = full_name
                 names.append({"name": alias.name, "asname": alias.asname})
-            details.append({
-                "kind": "from",
-                "module": module,
-                "names": names,
-                "lineno": node.lineno,
-                "level": getattr(node, "level", 0) or 0,
-            })
+            details.append(
+                {
+                    "kind": "from",
+                    "module": module,
+                    "names": names,
+                    "lineno": node.lineno,
+                    "level": getattr(node, "level", 0) or 0,
+                }
+            )
     return details, alias_map
 
 
@@ -801,7 +808,7 @@ class CoverageIndex:
 
 def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-    prog="generate_commandview_inventory",
+        prog="generate_commandview_inventory",
         description=__doc__ or "",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
@@ -1264,11 +1271,13 @@ def _collect_function_metrics(
                 call_entry["is_method_like"] = True
             calls.append(call_entry)
             if root_name in import_alias_map:
-                uses_import.append({
-                    "symbol": import_alias_map[root_name],
-                    "via": root_name,
-                    "lineno": inner.lineno,
-                })
+                uses_import.append(
+                    {
+                        "symbol": import_alias_map[root_name],
+                        "via": root_name,
+                        "lineno": inner.lineno,
+                    }
+                )
             if callee in defined_local_symbols:
                 intra_file_refs.append({"callee_func": callee, "lineno": inner.lineno})
 
@@ -1311,11 +1320,13 @@ def _collect_function_metrics(
             used_globals.update(inner.names)
         if isinstance(inner, ast.Name) and isinstance(inner.ctx, ast.Load):
             if inner.id in import_alias_map:
-                uses_import.append({
-                    "symbol": import_alias_map[inner.id],
-                    "via": inner.id,
-                    "lineno": inner.lineno,
-                })
+                uses_import.append(
+                    {
+                        "symbol": import_alias_map[inner.id],
+                        "via": inner.id,
+                        "lineno": inner.lineno,
+                    }
+                )
         if isinstance(inner, ast.Attribute):
             root = _attribute_root(inner)
             if root == "os" and inner.attr == "environ":
@@ -1415,14 +1426,15 @@ def _extract_function(
 
     function_hash = hashlib.sha256(source_segment.encode("utf-8")).hexdigest() if source_segment else None
 
-    args_structure = _signature_structure(node.args) if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) else {}
+    args_structure = (
+        _signature_structure(node.args) if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) else {}
+    )
     annotations = _annotation_map(node)
     annotation_quality = _annotation_quality(node, annotations)
     decorator_nodes = list(getattr(node, "decorator_list", []))
     decorators = [value for value in (_safe_unparse(deco) for deco in decorator_nodes) if value]
     decorators_detailed = [
-        _describe_decorator(deco, import_alias_map, module_id, defined_local_symbols)
-        for deco in decorator_nodes
+        _describe_decorator(deco, import_alias_map, module_id, defined_local_symbols) for deco in decorator_nodes
     ]
     cyclomatic_complexity = _cyclomatic_complexity(node)
 
@@ -1482,8 +1494,7 @@ def _extract_class(
     decorator_nodes = list(node.decorator_list)
     decorators = [value for value in (_safe_unparse(deco) for deco in decorator_nodes) if value]
     decorators_detailed = [
-        _describe_decorator(deco, import_alias_map, module_id, defined_local_symbols)
-        for deco in decorator_nodes
+        _describe_decorator(deco, import_alias_map, module_id, defined_local_symbols) for deco in decorator_nodes
     ]
     attributes: list[dict[str, Any]] = []
     methods: list[dict[str, Any]] = []
@@ -1534,10 +1545,7 @@ def _is_abstract_method_entry(method_entry: dict[str, Any]) -> bool:
             decorator.get("module"),
             expression,
         )
-        if any(
-            field and any(field.endswith(suffix) for suffix in ABSTRACT_DECORATOR_SUFFIXES)
-            for field in fields
-        ):
+        if any(field and any(field.endswith(suffix) for suffix in ABSTRACT_DECORATOR_SUFFIXES) for field in fields):
             return True
     return False
 
@@ -1553,9 +1561,7 @@ def _build_method_index(classes: list[dict[str, Any]]) -> dict[str, set[str]]:
     index: dict[str, set[str]] = {}
     for class_entry in classes:
         method_names = {
-            _method_base_name(method)
-            for method in class_entry.get("methods", [])
-            if _method_base_name(method)
+            _method_base_name(method) for method in class_entry.get("methods", []) if _method_base_name(method)
         }
         index[class_entry.get("name", "")] = method_names
     return index
@@ -1571,16 +1577,16 @@ def _collect_overrides(
         method_name = _method_base_name(method)
         if not method_name:
             continue
-        overriding = [
-            base for base in local_bases if method_name in method_index.get(base, set())
-        ]
+        overriding = [base for base in local_bases if method_name in method_index.get(base, set())]
         if overriding:
-            overrides.append({
-                "name": method_name,
-                "qualified_name": method.get("qualified_name"),
-                "lineno": method.get("line"),
-                "overrides": overriding,
-            })
+            overrides.append(
+                {
+                    "name": method_name,
+                    "qualified_name": method.get("qualified_name"),
+                    "lineno": method.get("line"),
+                    "overrides": overriding,
+                }
+            )
     return overrides
 
 
@@ -1590,18 +1596,18 @@ def _collect_abstract_methods(class_entry: dict[str, Any]) -> list[dict[str, Any
         if not _is_abstract_method_entry(method):
             continue
         method_name = _method_base_name(method)
-        abstract_entries.append({
-            "name": method_name,
-            "qualified_name": method.get("qualified_name"),
-            "lineno": method.get("line"),
-        })
+        abstract_entries.append(
+            {
+                "name": method_name,
+                "qualified_name": method.get("qualified_name"),
+                "lineno": method.get("line"),
+            }
+        )
     return abstract_entries
 
 
 def _normalize_base_names(base_exprs: list[str]) -> list[str]:
-    names = [
-        base for base in (_simplify_base_expression(expr) for expr in base_exprs) if base
-    ]
+    names = [base for base in (_simplify_base_expression(expr) for expr in base_exprs) if base]
     return list(dict.fromkeys(names))
 
 
@@ -1685,13 +1691,15 @@ def _collect_unused_imports(import_graph: list[dict[str, Any]]) -> list[dict[str
             if key in seen:
                 continue
             seen.add(key)
-            unused.append({
-                "target": edge.get("target"),
-                "imported_as": edge.get("imported_as"),
-                "kind": kind,
-                "module": module,
-                "lineno": lineno,
-            })
+            unused.append(
+                {
+                    "target": edge.get("target"),
+                    "imported_as": edge.get("imported_as"),
+                    "kind": kind,
+                    "module": module,
+                    "lineno": lineno,
+                }
+            )
     return unused
 
 
@@ -1795,13 +1803,13 @@ def _build_call_graph(
             "by_kind": dict(sorted(counter.items())),
         }
 
-    external_modules = sorted({
-        resolution.get("module")
-        for resolution in (
-            edge.get("resolution") for edge in edges
-        )
-        if resolution and resolution.get("kind") == "imported" and resolution.get("module")
-    })
+    external_modules = sorted(
+        {
+            resolution.get("module")
+            for resolution in (edge.get("resolution") for edge in edges)
+            if resolution and resolution.get("kind") == "imported" and resolution.get("module")
+        }
+    )
 
     call_graph: dict[str, Any] = {
         "edges": edges,
@@ -1846,13 +1854,15 @@ def _identify_unreachable_functions(
         if inbound.get(qualified, 0) > 0:
             continue
         kind = "method" if entry.get("parent_class") else (entry.get("type") or "function")
-        unreachable.append({
-            "qualified_name": qualified,
-            "name": entry.get("name"),
-            "parent_class": entry.get("parent_class"),
-            "kind": kind,
-            "lineno": entry.get("line"),
-        })
+        unreachable.append(
+            {
+                "qualified_name": qualified,
+                "name": entry.get("name"),
+                "parent_class": entry.get("parent_class"),
+                "kind": kind,
+                "lineno": entry.get("line"),
+            }
+        )
     return unreachable
 
 
@@ -1892,13 +1902,22 @@ def _resolve_call_target(
     if not caller_class and caller_name and "." in caller_name:
         caller_class = caller_name.split(".", 1)[0]
 
-    def _finalize(target: str | None, kind: str, module: str | None, confidence: str = "high", detail: dict[str, Any] | None = None, extra: dict[str, Any] | None = None) -> dict[str, Any]:
-        resolution.update({
-            "target": target,
-            "kind": kind,
-            "module": module,
-            "confidence": confidence,
-        })
+    def _finalize(
+        target: str | None,
+        kind: str,
+        module: str | None,
+        confidence: str = "high",
+        detail: dict[str, Any] | None = None,
+        extra: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        resolution.update(
+            {
+                "target": target,
+                "kind": kind,
+                "module": module,
+                "confidence": confidence,
+            }
+        )
         if detail:
             resolution["detail"] = detail
         if extra:
@@ -1936,7 +1955,14 @@ def _resolve_call_target(
             detail = None
             if len(attr_tail_parts) > 1:
                 detail = {"attribute_tail": ".".join(attr_tail_parts[1:])}
-            return _finalize(local_symbols[candidate], "local_function", module_id, "medium" if detail else "high", detail, {"via_module": module_basename})
+            return _finalize(
+                local_symbols[candidate],
+                "local_function",
+                module_id,
+                "medium" if detail else "high",
+                detail,
+                {"via_module": module_basename},
+            )
         if candidate in class_methods and len(attr_tail_parts) > 1:
             method_candidate = attr_tail_parts[1]
             target = class_methods[candidate].get(method_candidate)
@@ -1944,7 +1970,14 @@ def _resolve_call_target(
                 detail = None
                 if len(attr_tail_parts) > 2:
                     detail = {"attribute_tail": ".".join(attr_tail_parts[2:])}
-                return _finalize(target, "local_method", module_id, "medium" if detail else "high", detail, {"via_module": module_basename})
+                return _finalize(
+                    target,
+                    "local_method",
+                    module_id,
+                    "medium" if detail else "high",
+                    detail,
+                    {"via_module": module_basename},
+                )
 
     if root and root in import_alias_map:
         resolved_module = import_alias_map[root]
@@ -1981,7 +2014,9 @@ def _resolve_call_target(
     return resolution
 
 
-def _collect_callback_registrations(functions: list[dict[str, Any]], classes: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def _collect_callback_registrations(
+    functions: list[dict[str, Any]], classes: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
     entries: list[dict[str, Any]] = []
 
     def _append(source_entry: dict[str, Any]) -> None:
@@ -2041,22 +2076,28 @@ def _collect_test_coverage_signals(imports_flat: set[str], module_id: str) -> di
     prefixes = ["tests", "test", "pytest"]
     module_candidates = []
     if module_name:
-        module_candidates.extend([
-            module_name,
-            f"test_{module_name}",
-            f"{module_name}_tests",
-        ])
-        prefixes.extend([
-            f"tests.{module_name}",
-            f"tests.test_{module_name}",
-            f"tests.{module_name}_tests",
-        ])
-    matching = sorted({
-        imp
-        for imp in imports_flat
-        if any(imp.startswith(prefix) for prefix in prefixes)
-        or any(candidate in imp for candidate in module_candidates)
-    })
+        module_candidates.extend(
+            [
+                module_name,
+                f"test_{module_name}",
+                f"{module_name}_tests",
+            ]
+        )
+        prefixes.extend(
+            [
+                f"tests.{module_name}",
+                f"tests.test_{module_name}",
+                f"tests.{module_name}_tests",
+            ]
+        )
+    matching = sorted(
+        {
+            imp
+            for imp in imports_flat
+            if any(imp.startswith(prefix) for prefix in prefixes)
+            or any(candidate in imp for candidate in module_candidates)
+        }
+    )
     return {
         "imports": matching,
         "has_matches": bool(matching),
@@ -2078,20 +2119,24 @@ def _build_import_graph(
             functions = usage["functions"] if usage else []
             aliases = usage["aliases"] if usage else []
             category = _dependency_category(target, package_root)
-            edges.append({
-                "target": target,
-                "imported_as": alias_entry.get("asname") or alias_entry["name"],
-                "functions": functions,
-                "via": aliases,
-                "unused": not functions,
-                "category": category,
-            })
-        graph.append({
-            "kind": detail["kind"],
-            "module": detail.get("module"),
-            "lineno": detail.get("lineno"),
-            "edges": edges,
-        })
+            edges.append(
+                {
+                    "target": target,
+                    "imported_as": alias_entry.get("asname") or alias_entry["name"],
+                    "functions": functions,
+                    "via": aliases,
+                    "unused": not functions,
+                    "category": category,
+                }
+            )
+        graph.append(
+            {
+                "kind": detail["kind"],
+                "module": detail.get("module"),
+                "lineno": detail.get("lineno"),
+                "edges": edges,
+            }
+        )
     return graph
 
 
@@ -2218,10 +2263,7 @@ def analyze_python_file(
                 and isinstance(test.ops[0], ast.Eq)
                 and isinstance(test.left, ast.Name)
                 and test.left.id == "__name__"
-                and any(
-                    isinstance(comp, ast.Constant) and comp.value == "__main__"
-                    for comp in test.comparators
-                )
+                and any(isinstance(comp, ast.Constant) and comp.value == "__main__" for comp in test.comparators)
             ):
                 has_main_guard = True
 
@@ -2335,7 +2377,9 @@ def analyze_python_file(
                 coverage_payload["line_rate"] = round(executed_count / tracked_count, 4)
             if info.contexts:
                 coverage_payload["contexts"] = {name: sorted(lines) for name, lines in sorted(info.contexts.items())}
-                coverage_payload["contexts_count"] = {name: len(lines) for name, lines in coverage_payload["contexts"].items()}
+                coverage_payload["contexts_count"] = {
+                    name: len(lines) for name, lines in coverage_payload["contexts"].items()
+                }
             result["coverage"] = coverage_payload
 
     return result
@@ -2509,7 +2553,7 @@ def _resolve_callee_path(
     if best_alias is None:
         return None, None
     info = resolution_map[best_alias]
-    remainder = callee[len(best_alias):]
+    remainder = callee[len(best_alias) :]
     if remainder.startswith("."):
         remainder = remainder[1:]
     if remainder:
@@ -2741,12 +2785,7 @@ def build_screening_summary(payload: dict[str, Any]) -> dict[str, Any]:
                     target_module = _match_known_module(resolved, known_modules)
                     if not target_module and info and info.get("module") in known_modules:
                         target_module = info.get("module")
-                    if (
-                        resolved
-                        and target_module
-                        and module_alias
-                        and target_module != module_alias
-                    ):
+                    if resolved and target_module and module_alias and target_module != module_alias:
                         key = (module_alias, target_module)
                         edge = cross_module_edges.setdefault(
                             key,
@@ -2779,23 +2818,25 @@ def build_screening_summary(payload: dict[str, Any]) -> dict[str, Any]:
     calls_list = [list(edge) for edge in sorted(call_edges)]
     cross_module_list: list[dict[str, Any]] = []
     for (source_module, target_module), data in sorted(cross_module_edges.items()):
-        cross_module_list.append({
-            "source": source_module,
-            "target": target_module,
-            "call_count": data["count"],
-            "callers": sorted(data["callers"]),
-            "targets": sorted(data["targets"]),
-            "call_sites": [
-                {
-                    "caller": caller,
-                    "target": target,
-                    "lineno": lineno,
-                }
-                for caller, target, lineno in sorted(
-                    data["call_sites"], key=lambda item: (item[0], item[1], item[2] or 0)
-                )
-            ],
-        })
+        cross_module_list.append(
+            {
+                "source": source_module,
+                "target": target_module,
+                "call_count": data["count"],
+                "callers": sorted(data["callers"]),
+                "targets": sorted(data["targets"]),
+                "call_sites": [
+                    {
+                        "caller": caller,
+                        "target": target,
+                        "lineno": lineno,
+                    }
+                    for caller, target, lineno in sorted(
+                        data["call_sites"], key=lambda item: (item[0], item[1], item[2] or 0)
+                    )
+                ],
+            }
+        )
 
     summary: dict[str, Any] = {
         "graphs": {

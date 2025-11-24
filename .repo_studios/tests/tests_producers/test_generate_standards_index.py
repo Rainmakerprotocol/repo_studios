@@ -5,18 +5,11 @@ import json
 import sys
 from pathlib import Path
 
-_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "generate_standards_index.py"
-)
+_MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "generate_standards_index.py"
 
 
 def _load_module():
-    spec = importlib.util.spec_from_file_location(
-        "generate_standards_index", _MODULE_PATH
-    )
+    spec = importlib.util.spec_from_file_location("generate_standards_index", _MODULE_PATH)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     sys.modules[spec.name] = module
@@ -83,13 +76,7 @@ def test_structured_artifacts_success(tmp_path: Path) -> None:
     docs_dir.mkdir()
     (docs_dir / "rule_source.md").write_text("# Rules\n", encoding="utf-8")
 
-    output_dir = (
-        repo_root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "standards_index_reports"
-    )
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "standards_index_reports"
 
     exit_code = mod.main(
         [
@@ -147,13 +134,7 @@ def test_failure_path_writes_artifacts_and_prunes(tmp_path: Path) -> None:
     repo_root = tmp_path / "workspace"
     repo_root.mkdir()
 
-    output_dir = (
-        repo_root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "standards_index_reports"
-    )
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "standards_index_reports"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     stale_dirs = [
@@ -197,8 +178,6 @@ def test_failure_path_writes_artifacts_and_prunes(tmp_path: Path) -> None:
     assert not (output_dir / "latest_index.yaml").exists()
 
     remaining_dirs = sorted(
-        path.name
-        for path in output_dir.iterdir()
-        if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)
+        path.name for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)
     )
     assert remaining_dirs == [f"{mod.RUN_PREFIX}-20240102_000000"]

@@ -5,18 +5,11 @@ import sys
 import importlib.util
 from pathlib import Path
 
-_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "generate_dependency_hygiene_report.py"
-)
+_MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "generate_dependency_hygiene_report.py"
 
 
 def _load_module():
-    spec = importlib.util.spec_from_file_location(
-        "generate_dependency_hygiene_report", _MODULE_PATH
-    )
+    spec = importlib.util.spec_from_file_location("generate_dependency_hygiene_report", _MODULE_PATH)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     sys.modules[spec.name] = module
@@ -50,18 +43,11 @@ dependencies = [
     "rich==13.7.1",
     "typer==0.12.3"
 ]
-        """
-        .strip()
+        """.strip()
         + "\n",
     )
 
-    output_dir = (
-        root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "dependency_hygiene_reports"
-    )
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "dependency_hygiene_reports"
 
     exit_code = mod.main(
         [
@@ -109,13 +95,7 @@ def test_threshold_breach_and_pruning(tmp_path):
     root = tmp_path / "project"
     root.mkdir()
 
-    output_dir = (
-        root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "dependency_hygiene_reports"
-    )
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "dependency_hygiene_reports"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     stale_names = [
@@ -142,8 +122,7 @@ def test_threshold_breach_and_pruning(tmp_path):
 [tool.poetry.dependencies]
 python = "^3.11"
 fastapi = "0.110"
-        """
-        .strip()
+        """.strip()
         + "\n",
     )
 
@@ -173,11 +152,7 @@ fastapi = "0.110"
     assert "duplicate" in kinds
     assert "unpinned" in kinds
 
-    run_dirs = {
-        path.name
-        for path in output_dir.iterdir()
-        if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)
-    }
+    run_dirs = {path.name for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)}
     assert run_dirs == {
         f"{mod.RUN_PREFIX}-20240115_000000",
         f"{mod.RUN_PREFIX}-20240203_000000",

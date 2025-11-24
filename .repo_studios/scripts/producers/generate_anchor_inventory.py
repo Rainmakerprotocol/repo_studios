@@ -39,9 +39,7 @@ from pathlib import Path
 
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 
-DEFAULT_OUTPUT_DIR = Path(
-    ".repo_studios/reports/producer_reports/anchor_inventory_reports"
-)
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/anchor_inventory_reports")
 RUN_PREFIX = "anchor_inventory"
 
 
@@ -159,9 +157,7 @@ def build_summary(
 
 
 def build_cross_file_duplicates(stats: dict[str, SlugStat], allow_set: set[str]) -> list[SlugStat]:
-    duplicates = [
-        st for st in stats.values() if st.file_count > 1 and st.slug not in allow_set
-    ]
+    duplicates = [st for st in stats.values() if st.file_count > 1 and st.slug not in allow_set]
     duplicates.sort(key=lambda s: (-s.file_count, -s.count, s.slug))
     return duplicates
 
@@ -175,9 +171,7 @@ def build_report(
     allowlist_size: int | None,
     generated_ts: datetime,
 ) -> tuple[dict, list[SlugStat]]:
-    ordered_slugs = sorted(
-        stats.values(), key=lambda s: (-s.file_count, -s.count, s.slug)
-    )
+    ordered_slugs = sorted(stats.values(), key=lambda s: (-s.file_count, -s.count, s.slug))
     summary = build_summary(stats, duplicates, allow_set, allowlist_size)
     report = {
         "schema_version": 1,
@@ -213,18 +207,14 @@ def write_markdown(report: dict, ordered_slugs: list[SlugStat]) -> str:
     duplicates = report.get("duplicates", [])
     if duplicates:
         for dup in duplicates[:25]:
-            lines.append(
-                f"- `{dup['slug']}` — {dup['file_count']} files ({dup['count']} headings)"
-            )
+            lines.append(f"- `{dup['slug']}` — {dup['file_count']} files ({dup['count']} headings)")
     else:
         lines.append("- (none)")
     lines.append("")
     lines.append("## Top Slugs by File Coverage (up to 25)")
     lines.append("")
     for stat in ordered_slugs[:25]:
-        lines.append(
-            f"- `{stat.slug}` — {stat.file_count} files ({stat.count} headings)"
-        )
+        lines.append(f"- `{stat.slug}` — {stat.file_count} files ({stat.count} headings)")
     lines.append("")
     lines.append("## Generic Allowlist")
     lines.append("")
@@ -257,10 +247,7 @@ def write_artifacts(
     tsv_lines = ["slug\tcount\tfile_count\tfiles\tlocations"]
     for stat in ordered_slugs:
         tsv_lines.append(
-            f"{stat.slug}\t{stat.count}\t{stat.file_count}\t"
-            + ",".join(stat.files)
-            + "\t"
-            + ";".join(stat.locations)
+            f"{stat.slug}\t{stat.count}\t{stat.file_count}\t" + ",".join(stat.files) + "\t" + ";".join(stat.locations)
         )
     tsv_path = run_dir / "slugs.tsv"
     tsv_path.write_text("\n".join(tsv_lines) + "\n", encoding="utf-8")
@@ -285,11 +272,7 @@ def prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> list[Pa
     keep = max(keep, 1)
     if not output_dir.exists():
         return []
-    candidates = [
-        path
-        for path in output_dir.iterdir()
-        if path.is_dir() and path.name.startswith(f"{RUN_PREFIX}-")
-    ]
+    candidates = [path for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(f"{RUN_PREFIX}-")]
     candidates.sort(key=lambda p: p.name, reverse=True)
     removed: list[Path] = []
     for idx, path in enumerate(candidates):
@@ -316,9 +299,7 @@ def emit_summary_log(
     if duplicates:
         logger.info("Top duplicates (up to 10):")
         for dup in duplicates[:10]:
-            logger.info(
-                "  %s -> %d files (%d headings)", dup.slug, dup.file_count, dup.count
-            )
+            logger.info("  %s -> %d files (%d headings)", dup.slug, dup.file_count, dup.count)
     else:
         logger.info("No cross-file duplicates outside generic allowlist.")
 

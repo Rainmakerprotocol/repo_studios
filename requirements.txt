@@ -2,7 +2,7 @@ defusedxml==0.7.1
 lizard==1.18.0
 mypy==1.11.1
 PyYAML==6.0.2
-pytest==8.4.2
+pytest==9.0.1
 requests==2.32.3
 ruff==0.6.3
 tomli==2.0.1

@@ -8,45 +8,16 @@ import pytest
 
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
-CALL_GRAPH_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "function_call_graph.js"
-)
+CALL_GRAPH_MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "function_call_graph.js"
 ENTRYPOINT_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "entrypoint_trace_diagram.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "entrypoint_trace_diagram.js"
 )
 CLASS_INHERITANCE_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "class_inheritance_hierarchy.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "class_inheritance_hierarchy.js"
 )
-METHOD_CHAIN_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "method_call_chain.js"
-)
+METHOD_CHAIN_MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "method_call_chain.js"
 INVENTORY_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "function_inventory_overview.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "function_inventory_overview.js"
 )
 
 if not CALL_GRAPH_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets

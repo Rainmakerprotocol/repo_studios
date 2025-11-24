@@ -8,18 +8,11 @@ from types import SimpleNamespace
 
 import pytest
 
-_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "generate_lizard_report.py"
-)
+_MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "generate_lizard_report.py"
 
 
 def _load_module():
-    spec = importlib.util.spec_from_file_location(
-        "generate_lizard_report", _MODULE_PATH
-    )
+    spec = importlib.util.spec_from_file_location("generate_lizard_report", _MODULE_PATH)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     sys.modules[spec.name] = module
@@ -59,13 +52,7 @@ def test_structured_artifacts_success(monkeypatch: pytest.MonkeyPatch, tmp_path:
 
     monkeypatch.setattr(mod.subprocess, "run", fake_run)
 
-    output_dir = (
-        repo_root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "lizard_reports"
-    )
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "lizard_reports"
 
     exit_code = mod.main(
         [
@@ -134,13 +121,7 @@ def test_no_targets_and_pruning(tmp_path: Path):
     repo_root = tmp_path / "workspace"
     repo_root.mkdir()
 
-    output_dir = (
-        repo_root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "lizard_reports"
-    )
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "lizard_reports"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     stale_dirs = [
@@ -184,9 +165,7 @@ def test_no_targets_and_pruning(tmp_path: Path):
     assert not (output_dir / "latest_raw.json").exists()
 
     remaining = sorted(
-        path.name
-        for path in output_dir.iterdir()
-        if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)
+        path.name for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)
     )
     assert remaining == [
         f"{mod.RUN_PREFIX}-20240115_000000",

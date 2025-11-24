@@ -1,4 +1,5 @@
 """Tests for analyze_test_hardening producer."""
+
 from __future__ import annotations
 
 import importlib.util
@@ -8,12 +9,7 @@ from pathlib import Path
 
 import pytest
 
-MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "analyze_test_hardening.py"
-)
+MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "analyze_test_hardening.py"
 MODULE_NAME = "repo_studios_test.analyze_test_hardening"
 
 
@@ -64,9 +60,7 @@ def run_analyzer(module, repo_root: Path, output_dir: Path) -> dict:
     return payload
 
 
-def test_detects_missing_assertions_and_long_test(
-    analyzer_module, repo_root: Path
-) -> None:
+def test_detects_missing_assertions_and_long_test(analyzer_module, repo_root: Path) -> None:
     lines = [
         "import requests",
         "",

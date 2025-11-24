@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "generated_at": "2025-11-24T22:53:34+00:00",
+  "status": "failed",
+  "options": {
+    "targets": [
+      "C:\\Users\\genet\\repo_studios"
+    ],
+    "mode": "all",
+    "dry_run": false,
+    "backup": false,
+    "refresh_only": false,
+    "skip_pytest": false,
+    "artifacts_to_keep": 5
+  },
+  "steps": [
+    {
+      "label": "Ruff format",
+      "command": [
+        "ruff",
+        "format",
+        "C:\\Users\\genet\\repo_studios",
+        "--config",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\ruff_clean.toml"
+      ],
+      "status": "success",
+      "returncode": 0,
+      "stdout": "186 files left unchanged\n",
+      "stderr": "",
+      "duration_seconds": 0.05453190000844188,
+      "skipped_reason": null
+    },
+    {
+      "label": "Ruff check --fix",
+      "command": [
+        "ruff",
+        "check",
+        "C:\\Users\\genet\\repo_studios",
+        "--fix",
+        "--config",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\ruff_clean.toml"
+      ],
+      "status": "success",
+      "returncode": 0,
+      "stdout": "All checks passed!\n",
+      "stderr": "",
+      "duration_seconds": 0.04832299999543466,
+      "skipped_reason": null
+    },
+    {
+      "label": "markdownlint",
+      "command": [],
+      "status": "skipped",
+      "returncode": null,
+      "stdout": "",
+      "stderr": "",
+      "duration_seconds": 0.0,
+      "skipped_reason": "config missing"
+    },
+    {
+      "label": "Mypy",
+      "command": [
+        "mypy",
+        "agents/core/monitoring",
+        "agents/interface/chainlit"
+      ],
+      "status": "failed",
+      "returncode": 2,
+      "stdout": "",
+      "stderr": "mypy.ini: Source contains parsing errors: 'mypy.ini'\n\t[line 16]: ')\\n'\nmypy: can't read file 'agents\\core\\monitoring': No such file or directory\n",
+      "duration_seconds": 9.237590000004275,
+      "skipped_reason": null
+    }
+  ],
+  "tree_refresh": {
+    "markdown_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\project_tree_overview.md",
+    "root": "C:\\Users\\genet\\repo_studios",
+    "updated": true,
+    "found_markers": true,
+    "timestamp": "11/24/2025_22:53:25"
+  },
+  "backups": [],
+  "notes": [
+    "Requested cleanup targets missing; defaulted to project root",
+    "markdownlint skipped (config missing)"
+  ],
+  "exception": null
+}

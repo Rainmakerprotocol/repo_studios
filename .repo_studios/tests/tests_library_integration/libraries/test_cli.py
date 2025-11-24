@@ -8,12 +8,7 @@ from dataclasses import dataclass
 
 import pytest
 
-SCRIPTS_ROOT = (
-    Path(__file__).resolve().parents[4]
-    / ".repo_studios"
-    / "command_center"
-    / "scripts"
-)
+SCRIPTS_ROOT = Path(__file__).resolve().parents[4] / ".repo_studios" / "command_center" / "scripts"
 
 
 def _load_libraries():
@@ -78,9 +73,7 @@ def test_build_paths_uses_specs(tmp_path: Path) -> None:
     repo_root = tmp_path
     config = {
         "reports_root": PathSpec(field="reports_root", default=Path("reports"), ensure_dir=True),
-        "output_dir": PathSpec(
-            field="output_dir", default=Path("fallback"), ensure_dir=True, within_repo=False
-        ),
+        "output_dir": PathSpec(field="output_dir", default=Path("fallback"), ensure_dir=True, within_repo=False),
     }
     custom_output = tmp_path / "custom-output"
     args = SimpleNamespace(reports_root=None, output_dir=str(custom_output))
@@ -148,7 +141,9 @@ def test_build_standard_options_wraps_keep_counts(monkeypatch: pytest.MonkeyPatc
     config = OptionsConfig(
         dataclass_type=SampleOptions,
         keep_specs={
-            "artifacts": KeepSpec(field="artifacts", minimum=1, env_override="FORCE_KEEP", env_truthy=frozenset({"true"})),
+            "artifacts": KeepSpec(
+                field="artifacts", minimum=1, env_override="FORCE_KEEP", env_truthy=frozenset({"true"})
+            ),
         },
     )
     args = SimpleNamespace(artifacts="3")

@@ -14,14 +14,16 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import shutil
 import sys
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Sequence
 
 LOGS_DIR_DEFAULT = ".repo_studios/pytest_logs"
 PRODUCER_REPORT_DEFAULT = ".repo_studios/reports/producer_reports/test_log_reports/latest_report.json"
 OUTPUT_BASE_DEFAULT = ".repo_studios/reports/consumer_reports/test_log_health_reports"
+DEFAULT_ARTIFACTS_TO_KEEP = 10
 
 SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
 UTILITIES_ROOT = Path(__file__).resolve().parents[2]
@@ -43,11 +45,17 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
         default="INFO",
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
     )
+    parser.add_argument(
+        "--artifacts-to-keep",
+        type=int,
+        default=DEFAULT_ARTIFACTS_TO_KEEP,
+        help="Number of timestamped run directories to retain (including the newest run)",
+    )
     return parser.parse_args(argv)
 
 
 def _ensure_out(base: Path) -> Path:
-    ts = datetime.now().strftime("%Y-%m-%d_%H%M")
+    ts = datetime.now(UTC).strftime("%Y-%m-%d_%H%M")
     out_dir = base / ts
     out_dir.mkdir(parents=True, exist_ok=True)
     return out_dir
@@ -110,7 +118,7 @@ def _select_logs_dir(logs_dir: Path) -> Path | None:
 
 
 def _empty_report(logs_dir: Path) -> dict[str, Any]:
-    generated = datetime.now().isoformat()
+    generated = datetime.now(UTC).isoformat()
     return {
         "schema_version": 1,
         "meta": {
@@ -141,12 +149,83 @@ def _write_artifacts(out_dir: Path, payload: dict[str, Any], markdown: str) -> N
     out_dir.mkdir(parents=True, exist_ok=True)
     out_json = out_dir / "report.json"
     out_json.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    if not markdown.endswith("\n"):
+        markdown = markdown + "\n"
     (out_dir / "report.md").write_text(markdown, encoding="utf-8")
+
+
+def _write_metadata(
+    out_dir: Path,
+    *,
+    source: str,
+    producer_report: Path | None,
+    logs_dir: Path,
+    logs_source: Path | None,
+    summary: dict[str, Any] | None,
+) -> Path:
+    generated = datetime.now(UTC)
+    metadata = {
+        "schema_version": 1,
+        "generated_at": generated.isoformat(timespec="seconds"),
+        "source": source,
+        "producer_report": str(producer_report.resolve()) if producer_report else None,
+        "logs_dir": str(logs_dir.resolve()),
+        "logs_source": str(logs_source.resolve()) if logs_source else None,
+        "artifacts": {
+            "report_json": str((out_dir / "report.json").resolve()),
+            "report_md": str((out_dir / "report.md").resolve()),
+        },
+        "summary": summary,
+    }
+    meta_path = out_dir / "bundle_summary.json"
+    meta_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
+
+    md_path = out_dir / "report.md"
+    if md_path.exists():
+        lines = md_path.read_text(encoding="utf-8").rstrip("\n").splitlines()
+        lines.append("")
+        lines.append("## Source References")
+        lines.append(f"- Source: {source}")
+        if producer_report:
+            lines.append(f"- Producer Report: `{producer_report.resolve()}`")
+        if logs_source:
+            lines.append(f"- Logs Source: `{logs_source.resolve()}`")
+        lines.append(f"- Logs Directory: `{logs_dir.resolve()}`")
+        md_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return meta_path
+
+
+def _prune_history(base: Path, keep: int | None, current: Path) -> list[Path]:
+    if keep is None:
+        return []
+    try:
+        keep_count = max(int(keep), 0)
+    except Exception:
+        keep_count = DEFAULT_ARTIFACTS_TO_KEEP
+    if not base.exists():
+        return []
+    candidates = sorted(
+        [path for path in base.iterdir() if path.is_dir() and path != current],
+        key=lambda p: p.name,
+        reverse=True,
+    )
+    limit = max(keep_count - 1, 0)
+    stale = candidates[limit:]
+    for path in stale:
+        try:
+            shutil.rmtree(path, ignore_errors=True)
+        except Exception:
+            continue
+    return stale
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     args = _parse_args(argv)
-    logging.basicConfig(level=getattr(logging, args.log_level.upper(), logging.INFO), format="%(levelname)s %(message)s")
+    logging.basicConfig(
+        level=getattr(logging, args.log_level.upper(), logging.INFO),
+        format="%(levelname)s %(message)s",
+        force=True,
+    )
     repo_root = Path(".").resolve()
 
     logs_dir = Path(args.logs_dir)
@@ -187,13 +266,31 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
     out_dir = _ensure_out(out_base)
     _write_artifacts(out_dir, payload, markdown)
-    logging.info("Test log health report written to %s (source=%s)", out_dir, source)
+    summary = payload.get("summary") if isinstance(payload, dict) else None
+    metadata_path = _write_metadata(
+        out_dir,
+        source=source,
+        producer_report=used_report,
+        logs_dir=logs_dir,
+        logs_source=logs_source,
+        summary=summary,
+    )
+    pruned = _prune_history(out_base, args.artifacts_to_keep, out_dir)
+    logging.info(
+        "Test log health report written to %s (source=%s, pruned=%d)",
+        out_dir,
+        source,
+        len(pruned),
+    )
     return {
-        "output_dir": str(out_dir),
+        "output_dir": str(out_dir.resolve()),
         "source": source,
         "producer_report": str(used_report) if used_report else None,
-        "logs_dir": str(logs_dir),
-        "logs_source": str(logs_source) if logs_source else None,
+        "logs_dir": str(logs_dir.resolve()),
+        "logs_source": str(logs_source.resolve()) if logs_source else None,
+        "bundle_summary": str(metadata_path.resolve()),
+        "artifacts_root": str(out_base.resolve()),
+        "pruned": [str(p.resolve()) for p in pruned],
     }
 
 

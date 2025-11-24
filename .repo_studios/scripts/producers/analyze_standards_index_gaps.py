@@ -33,9 +33,7 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_INDEX_PATH = ROOT / "repo_standards_index.yaml"
 DEFAULT_CATEGORIES_PATH = ROOT / ".repo_studios" / "standards_categories.yaml"
-DEFAULT_OUTPUT_DIR = Path(
-    ".repo_studios/reports/producer_reports/standards_gap_reports"
-)
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_gap_reports")
 RUN_PREFIX = "standards_index_gap"
 
 IMP_VERBS = re.compile(
@@ -151,10 +149,7 @@ def build_report(
 ) -> dict[str, Any]:
     total_candidates = sum(len(items) for items in gaps.values())
     top_source_count = max((len(items) for items in gaps.values()), default=0)
-    sorted_sources = {
-        path: [cand.to_dict() for cand in items]
-        for path, items in sorted(gaps.items())
-    }
+    sorted_sources = {path: [cand.to_dict() for cand in items] for path, items in sorted(gaps.items())}
     summary = {
         "sources_with_candidates": len(gaps),
         "top_source_candidates": top_source_count,
@@ -162,9 +157,7 @@ def build_report(
     }
     top_sources = [
         {"path": path, "candidate_count": len(items)}
-        for path, items in sorted(
-            gaps.items(), key=lambda item: (-len(item[1]), item[0])
-        )
+        for path, items in sorted(gaps.items(), key=lambda item: (-len(item[1]), item[0]))
     ][:10]
     return {
         "schema_version": 1,
@@ -202,13 +195,7 @@ def write_markdown(report: dict[str, Any]) -> str:
         for path, items in sources.items():
             lines.append(f"- **{path}** — {len(items)} candidate(s)")
             for candidate in items[:5]:
-                snippet = (
-                    candidate["text"]
-                    .strip()
-                    .replace("`", "'")
-                    .replace("<", "&lt;")
-                    .replace(">", "&gt;")
-                )
+                snippet = candidate["text"].strip().replace("`", "'").replace("<", "&lt;").replace(">", "&gt;")
                 lines.append(f"  - L{candidate['line']}: {snippet}")
             if len(items) > 5:
                 lines.append(f"  - ... (+{len(items) - 5} more)")
@@ -259,11 +246,7 @@ def prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> list[Pa
     keep = max(keep, 1)
     if not output_dir.exists():
         return []
-    candidates = [
-        path
-        for path in output_dir.iterdir()
-        if path.is_dir() and path.name.startswith(f"{RUN_PREFIX}-")
-    ]
+    candidates = [path for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(f"{RUN_PREFIX}-")]
     candidates.sort(key=lambda p: p.name, reverse=True)
     removed: list[Path] = []
     for idx, path in enumerate(candidates):
@@ -353,7 +336,9 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
-    logging.basicConfig(level=getattr(logging, args.log_level.upper(), logging.INFO), format="%(levelname)s %(message)s")
+    logging.basicConfig(
+        level=getattr(logging, args.log_level.upper(), logging.INFO), format="%(levelname)s %(message)s"
+    )
     log = logging.getLogger("standards_index_gap")
 
     generated_ts = _parse_timestamp(args.timestamp)

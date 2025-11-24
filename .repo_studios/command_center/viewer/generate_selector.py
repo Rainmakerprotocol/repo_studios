@@ -38,21 +38,21 @@ def generate_selector_json(
         output_path = repo_root / ".repo_studios" / "command_center" / "reports" / "selector.json"
 
     print(f"Generating selector data from: {repo_root}")
-    
+
     # Use the refresh module to build selector payload
     payload = refresh_selector_payload(repo_root)
-    
+
     # Ensure output directory exists
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    
+
     # Write selector.json
     with output_path.open("w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, sort_keys=True)
-    
+
     entry_count = len(payload.get("entries", []))
     print(f"✓ Generated selector.json with {entry_count} artifact groups")
     print(f"✓ Written to: {output_path}")
-    
+
     # Also print summary
     for entry in payload.get("entries", []):
         slug = entry.get("slug", "unknown")
@@ -63,9 +63,7 @@ def generate_selector_json(
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Generate selector.json for Command Center viewer"
-    )
+    parser = argparse.ArgumentParser(description="Generate selector.json for Command Center viewer")
     parser.add_argument(
         "--repo-root",
         type=Path,

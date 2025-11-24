@@ -8,14 +8,7 @@ import pytest
 
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
-MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "export_contract_matrix.js"
-)
+MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "export_contract_matrix.js"
 
 if not MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected export contract matrix builder at {MODULE_PATH}")
@@ -252,13 +245,7 @@ console.log(JSON.stringify({{
 
 
 def test_export_contract_matrix_view_falls_back_to_repository_scope() -> None:
-    viewer_path = (
-        REPO_STUDIOS_ROOT
-        / "command_center"
-        / "viewer"
-        / "ui"
-        / "viewer.js"
-    )
+    viewer_path = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "viewer.js"
 
     script = f"""
 if (!globalThis.window) {{

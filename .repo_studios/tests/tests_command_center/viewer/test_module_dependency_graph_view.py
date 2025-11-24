@@ -8,14 +8,7 @@ import pytest
 
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
-MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "module_dependency_graph.js"
-)
+MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "module_dependency_graph.js"
 
 if not MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected module dependency graph builder at {MODULE_PATH}")

@@ -8,11 +8,7 @@ import uuid
 from pathlib import Path
 
 _MODULE_PATH = (
-    Path(__file__).resolve().parents[3]
-    / "command_center"
-    / "scripts"
-    / "orchestrators"
-    / "run_automation_dry_run.py"
+    Path(__file__).resolve().parents[3] / "command_center" / "scripts" / "orchestrators" / "run_automation_dry_run.py"
 )
 
 

@@ -8,61 +8,18 @@ import pytest
 
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
-TYPE_COVERAGE_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "type_coverage_map.js"
-)
+TYPE_COVERAGE_MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "type_coverage_map.js"
 DOCUMENTATION_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "documentation_coverage_map.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "documentation_coverage_map.js"
 )
-COMPLEXITY_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "complexity_heatmap.js"
-)
+COMPLEXITY_MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "complexity_heatmap.js"
 CYCLOMATIC_COMPLEXITY_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "cyclomatic_complexity_map.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "cyclomatic_complexity_map.js"
 )
-LOGGING_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "logging_flow.js"
-)
-DECORATOR_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "decorator_usage_map.js"
-)
+LOGGING_MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "logging_flow.js"
+DECORATOR_MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "decorator_usage_map.js"
 PUBLIC_PRIVATE_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "public_vs_private_api.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "public_vs_private_api.js"
 )
 
 if not TYPE_COVERAGE_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
@@ -75,9 +32,7 @@ if not COMPLEXITY_MODULE_PATH.exists():  # pragma: no cover - guard against miss
     raise AssertionError(f"Expected complexity heatmap builder module at {COMPLEXITY_MODULE_PATH}")
 
 if not CYCLOMATIC_COMPLEXITY_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
-    raise AssertionError(
-        f"Expected cyclomatic complexity map builder module at {CYCLOMATIC_COMPLEXITY_MODULE_PATH}"
-    )
+    raise AssertionError(f"Expected cyclomatic complexity map builder module at {CYCLOMATIC_COMPLEXITY_MODULE_PATH}")
 
 if not LOGGING_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected logging flow builder module at {LOGGING_MODULE_PATH}")
@@ -477,7 +432,7 @@ console.log(JSON.stringify({{
         "hiddenModules": 0,
         "exported": 2,
         "implicit": 1,
-    "internal": 1,
+        "internal": 1,
         "private": 2,
         "reexports": 0,
         "missing": 0,

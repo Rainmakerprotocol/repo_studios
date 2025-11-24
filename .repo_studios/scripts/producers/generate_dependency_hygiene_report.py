@@ -42,9 +42,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
         sys.path.insert(0, str(LIBRARIES_ROOT))
     from libraries import ReportArtifact, write_report_artifacts
 
-DEFAULT_OUTPUT_DIR = Path(
-    ".repo_studios/reports/producer_reports/dependency_hygiene_reports"
-)
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/dependency_hygiene_reports")
 RUN_PREFIX = "dependency_hygiene"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 DEFAULT_REQ_PATTERNS: tuple[str, ...] = (
@@ -79,9 +77,7 @@ def _iter_req_files(root: Path, patterns: Sequence[str]) -> list[Path]:
 def _parse_requirements_file(path: Path, *, repo_root: Path) -> list[Issue]:
     issues: list[Issue] = []
     seen: dict[str, list[str]] = {}
-    for i, raw in enumerate(
-        path.read_text(encoding="utf-8", errors="replace").splitlines(), start=1
-    ):
+    for i, raw in enumerate(path.read_text(encoding="utf-8", errors="replace").splitlines(), start=1):
         line = raw.strip()
         if not line or line.startswith("#"):
             continue
@@ -119,9 +115,9 @@ def _parse_pyproject(path: Path, *, repo_root: Path) -> list[Issue]:
     except Exception:  # pragma: no cover - malformed TOML handled upstream
         return issues
     # PEP 621 / Poetry dependencies
-    deps = data.get("project", {}).get("dependencies", []) or data.get("tool", {}).get(
-        "poetry", {}
-    ).get("dependencies", {})
+    deps = data.get("project", {}).get("dependencies", []) or data.get("tool", {}).get("poetry", {}).get(
+        "dependencies", {}
+    )
     if isinstance(deps, dict):
         items = [(k, str(v)) for k, v in deps.items() if k != "python"]
     else:
@@ -160,10 +156,7 @@ def _issue_counts(issues: Iterable[Issue]) -> list[dict[str, Any]]:
     counts: dict[str, int] = {}
     for issue in issues:
         counts[issue.kind] = counts.get(issue.kind, 0) + 1
-    return [
-        {"kind": kind, "count": counts[kind]}
-        for kind in sorted(counts, key=lambda k: (-counts[k], k))
-    ]
+    return [{"kind": kind, "count": counts[kind]} for kind in sorted(counts, key=lambda k: (-counts[k], k))]
 
 
 def build_report(
@@ -183,8 +176,7 @@ def build_report(
         "pyproject_scanned": bool(pyproject),
     }
     issue_entries = [
-        {"kind": issue.kind, "file": issue.file, "line": issue.line, "spec": issue.spec}
-        for issue in issues
+        {"kind": issue.kind, "file": issue.file, "line": issue.line, "spec": issue.spec} for issue in issues
     ]
     return {
         "schema_version": 1,
@@ -229,9 +221,7 @@ def write_markdown(report: dict[str, Any]) -> str:
         lines.append("- (none)")
     else:
         for entry in issues:
-            location = (
-                f"{entry['file']}:{entry['line']}" if entry.get("line") else entry["file"]
-            )
+            location = f"{entry['file']}:{entry['line']}" if entry.get("line") else entry["file"]
             lines.append(f"- [{entry['kind']}] {location} — {entry['spec']}")
 
     return "\n".join(lines) + "\n"
@@ -251,7 +241,7 @@ def write_log(report: dict[str, Any]) -> str:
     for issue in report.get("issues", []):
         location = f"{issue['file']}:{issue['line']}" if issue.get("line") else issue["file"]
         lines.append(f"  {issue['kind']} -> {location} :: {issue['spec']}")
-    if report['summary']['status'] == "failed":
+    if report["summary"]["status"] == "failed":
         lines.append("failure_reason=dependency hygiene issues detected")
     return "\n".join(lines) + "\n"
 
@@ -271,9 +261,7 @@ def configure_logging(level: str) -> None:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(
-        description="Generate dependency hygiene report (offline)"
-    )
+    parser = argparse.ArgumentParser(description="Generate dependency hygiene report (offline)")
     parser.add_argument(
         "--repo-root",
         default=".",
@@ -320,11 +308,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     if not output_dir.is_absolute():
         output_dir = (repo_root / output_dir).resolve()
 
-    patterns = (
-        args.requirements_patterns
-        if args.requirements_patterns
-        else list(DEFAULT_REQ_PATTERNS)
-    )
+    patterns = args.requirements_patterns if args.requirements_patterns else list(DEFAULT_REQ_PATTERNS)
 
     issues, requirements, pyproject = _collect_issues(
         repo_root,

@@ -27,6 +27,7 @@ import csv
 import json
 import logging
 import os
+import shutil
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -36,6 +37,9 @@ ROOT = Path(__file__).resolve().parents[1]
 RUNS_BASE = ROOT / ".repo_studios/faulthandler"
 PRODUCER_BASE = ROOT / ".repo_studios/reports/producer_reports/faulthandler_reports"
 PRODUCER_LATEST = PRODUCER_BASE / "latest_report.json"
+CONSUMER_BASE = ROOT / ".repo_studios/reports/consumer_reports/fault_artifacts"
+CONSUMER_DIR_PREFIX = "fault_artifacts-"
+DEFAULT_ARTIFACTS_TO_KEEP = 10
 
 UTILITIES_ROOT = Path(__file__).resolve().parents[2]
 if str(UTILITIES_ROOT) not in sys.path:
@@ -198,7 +202,7 @@ def _write_stacks_csv(outdir: Path, signatures: Sequence[FaultSignature]) -> Non
         pass
 
 
-def _write_summary(outdir: Path, report: dict[str, Any], signatures: Sequence[FaultSignature], dumps_dir: Path) -> None:
+def _write_summary(outdir: Path, report: dict[str, Any], signatures: Sequence[FaultSignature], dumps_dir: Path) -> str:
     lines: list[str] = []
     lines.append("# Fault Diagnostics Summary")
     lines.append("")
@@ -237,10 +241,115 @@ def _write_summary(outdir: Path, report: dict[str, Any], signatures: Sequence[Fa
     else:
         lines.append("(none)")
     lines.append("")
+    content = "\n".join(lines) + "\n"
     try:
-        (outdir / "SUMMARY.md").write_text("\n".join(lines), encoding="utf-8")
+        (outdir / "SUMMARY.md").write_text(content, encoding="utf-8")
     except Exception:
         pass
+    return content
+
+
+def _serialize_signatures(signatures: Sequence[FaultSignature]) -> list[dict[str, Any]]:
+    return [
+        {
+            "signature_id": sig.signature_id,
+            "count": sig.count,
+            "top_module": sig.top_module,
+            "top_func": sig.top_func,
+            "top_file": sig.top_file,
+            "top_line": sig.top_line,
+            "threads": list(sig.threads),
+            "first_seen_ts": sig.first_seen_ts,
+            "last_seen_ts": sig.last_seen_ts,
+        }
+        for sig in signatures
+    ]
+
+
+def _write_consumer_bundle(
+    *,
+    target_root: Path,
+    run_dir: Path,
+    report: dict[str, Any],
+    signatures: Sequence[FaultSignature],
+    summary_text: str,
+    source: str,
+    source_report: Path | None,
+) -> Path:
+    generated_at = datetime.now(UTC)
+    target_root.mkdir(parents=True, exist_ok=True)
+    slug = run_dir.name
+    bundle_name = f"{CONSUMER_DIR_PREFIX}{generated_at.strftime('%Y-%m-%d_%H%M%S')}-{slug}"
+    bundle_dir = target_root / bundle_name
+    bundle_dir.mkdir(parents=True, exist_ok=True)
+
+    run_summary_path = (run_dir / "SUMMARY.md").resolve()
+    stacks_csv_path = (run_dir / "stacks.csv").resolve()
+    combined_txt_path = (run_dir / "dumps" / "combined.txt").resolve()
+
+    source_report_path = source_report.resolve() if source_report else None
+
+    summary_payload = {
+        "schema_version": 1,
+        "generated_at": generated_at.isoformat(timespec="seconds"),
+        "source": source,
+        "source_report": str(source_report_path) if source_report_path else None,
+        "run_dir": str(run_dir.resolve()),
+        "summary": report.get("summary") if isinstance(report, dict) else None,
+        "signatures": _serialize_signatures(signatures),
+        "artifacts": {
+            "run_summary_md": str(run_summary_path) if run_summary_path.exists() else None,
+            "stacks_csv": str(stacks_csv_path) if stacks_csv_path.exists() else None,
+            "combined_txt": str(combined_txt_path) if combined_txt_path.exists() else None,
+        },
+    }
+
+    (bundle_dir / "summary.json").write_text(json.dumps(summary_payload, indent=2) + "\n", encoding="utf-8")
+
+    base_lines = summary_text.rstrip("\n").splitlines()
+    base_lines.append("")
+    base_lines.append("## Source References")
+    base_lines.append(f"- Run Directory: `{run_dir.resolve()}`")
+    base_lines.append(f"- Source Type: {source}")
+    if source_report_path:
+        base_lines.append(f"- Producer Report: `{source_report_path}`")
+    if run_summary_path.exists():
+        base_lines.append(f"- Run Summary: `{run_summary_path}`")
+    if stacks_csv_path.exists():
+        base_lines.append(f"- Stacks CSV: `{stacks_csv_path}`")
+    if combined_txt_path.exists():
+        base_lines.append(f"- Combined Stack Text: `{combined_txt_path}`")
+    consumer_summary = "\n".join(base_lines) + "\n"
+    (bundle_dir / "SUMMARY.md").write_text(consumer_summary, encoding="utf-8")
+    return bundle_dir
+
+
+def _prune_history(root: Path, keep: int | None, current: Path) -> list[Path]:
+    if keep is None:
+        return []
+    try:
+        keep_count = max(int(keep), 0)
+    except Exception:
+        keep_count = DEFAULT_ARTIFACTS_TO_KEEP
+    if not root.exists():
+        return []
+    candidates = sorted(
+        [
+            path
+            for path in root.iterdir()
+            if path.is_dir() and path.name.startswith(CONSUMER_DIR_PREFIX) and path != current
+        ],
+        key=lambda p: p.name,
+        reverse=True,
+    )
+    limit = max(keep_count - 1, 0)
+    stale = candidates[limit:]
+    for path in stale:
+        try:
+            shutil.rmtree(path, ignore_errors=True)
+        except Exception:
+            continue
+    return stale
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
@@ -252,15 +361,32 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
         default=None,
         help="Explicit faulthandler producer report JSON to reuse",
     )
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=None,
+        help="Directory to store consumer summaries (defaults to .repo_studios/reports/consumer_reports/fault_artifacts)",
+    )
+    parser.add_argument(
+        "--artifacts-to-keep",
+        type=int,
+        default=DEFAULT_ARTIFACTS_TO_KEEP,
+        help="Number of consumer summary directories to retain (including the newest run)",
+    )
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        help="Logging verbosity (e.g. INFO, DEBUG)",
+    )
     return parser.parse_args(argv)
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
-    if not logging.getLogger().handlers:
-        logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
+    args = _parse_args(argv)
+    log_level = getattr(logging, str(args.log_level).upper(), logging.INFO)
+    logging.basicConfig(level=log_level, format="[%(levelname)s] %(message)s", force=True)
     log = logging.getLogger("fault_artifacts")
 
-    args = _parse_args(argv)
     outdir = _discover_outdir(args.outdir)
     if outdir is None or not outdir.exists() or not outdir.is_dir():
         log.info("No valid FAULT_OUTDIR or runs found; nothing to generate")
@@ -279,7 +405,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         report = payload
         combined_text = read_stacks_text(outdir / "stacks.log")
         source_path = payload_path.resolve() if payload_path else None
-        source_label = str(source_path) if source_path else "producer"
+        source_label = "producer"
     else:
         top_n = _top_n_from_env()
         analysis = build_fault_report(outdir, top_n=top_n)
@@ -300,18 +426,38 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         pass
 
     _write_stacks_csv(outdir, signatures)
-    _write_summary(outdir, report, signatures, dumps_dir)
+    summary_text = _write_summary(outdir, report, signatures, dumps_dir)
 
+    target_root = args.output_dir if args.output_dir is not None else CONSUMER_BASE
+    target_root = Path(target_root)
+    consumer_dir = _write_consumer_bundle(
+        target_root=target_root,
+        run_dir=outdir,
+        report=report,
+        signatures=signatures,
+        summary_text=summary_text,
+        source=source_label,
+        source_report=source_path,
+    )
+    pruned = _prune_history(target_root, args.artifacts_to_keep, consumer_dir)
+
+    source_report_log = str(source_path) if source_path else "scan"
     log.info(
-        "Fault artifacts refreshed (run=%s, source=%s, signatures=%d)",
+        "Fault artifacts refreshed (run=%s, source=%s, report=%s, signatures=%d, consumer=%s, pruned=%d)",
         outdir,
         source_label,
+        source_report_log,
         len(signatures),
+        consumer_dir,
+        len(pruned),
     )
 
     return {
-        "outdir": str(outdir),
+        "outdir": str(outdir.resolve()),
+        "source": source_label,
         "source_report": str(source_path) if source_path else None,
+        "consumer_report": str(consumer_dir.resolve()),
+        "artifacts_root": str(target_root.resolve()),
         "signatures": len(signatures),
     }
 

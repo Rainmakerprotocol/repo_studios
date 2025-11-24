@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Structured test hardening analyzer producer."""
+
 from __future__ import annotations
 
 import argparse
@@ -21,12 +22,7 @@ SCHEMA_VERSION = 1
 TEST_PATTERNS = ("test_*.py", "*_test.py", "test*.py")
 IGNORED_PARTS = {".git", ".repo_studios", ".venv", "__pycache__"}
 
-LIBRARIES_ROOT = (
-    Path(__file__).resolve().parents[3]
-    / ".repo_studios"
-    / "command_center"
-    / "scripts"
-)
+LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
 try:
     from libraries import (
@@ -527,15 +523,11 @@ def render_markdown_report(payload: dict) -> str:
                 lines.append("* Key findings:")
                 for issue in item["issues"][:5]:
                     line_info = f" (line {issue['line_number']})" if issue.get("line_number") else ""
-                    lines.append(
-                        f"  * [{issue['severity'].upper()}] {issue['message']}{line_info}"
-                    )
+                    lines.append(f"  * [{issue['severity'].upper()}] {issue['message']}{line_info}")
             if item.get("long_tests"):
                 lines.append("* Long tests:")
                 for test in item["long_tests"][:3]:
-                    lines.append(
-                        f"  * `{test['name']}` — {test['lines']} lines (starts at {test['start_line']})"
-                    )
+                    lines.append(f"  * `{test['name']}` — {test['lines']} lines (starts at {test['start_line']})")
             lines.append("")
 
     clean_files = payload.get("clean_files", [])

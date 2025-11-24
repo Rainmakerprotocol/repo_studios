@@ -20,6 +20,8 @@ DEFAULT_MAX_FILES = 5
 class CachePolicy:
     ttl: timedelta
     max_files: int
+
+
 DEFAULT_TTL_HOURS = 24
 DEFAULT_MAX_FILES = 5
 
@@ -85,8 +87,15 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--name", default=DEFAULT_CACHE_NAME, help="Cache file stem to use (default: debug_preview).")
     parser.add_argument("--source", type=Path, default=None, help="Optional path to a file containing the definition.")
     parser.add_argument("--log-level", default="INFO", help="Logging level (default: INFO).")
-    parser.add_argument("--ttl-hours", type=float, default=DEFAULT_TTL_HOURS, help="Evict cache files older than this many hours (default: 24).")
-    parser.add_argument("--max-files", type=int, default=DEFAULT_MAX_FILES, help="Maximum Mermaid cache files to retain (default: 5).")
+    parser.add_argument(
+        "--ttl-hours",
+        type=float,
+        default=DEFAULT_TTL_HOURS,
+        help="Evict cache files older than this many hours (default: 24).",
+    )
+    parser.add_argument(
+        "--max-files", type=int, default=DEFAULT_MAX_FILES, help="Maximum Mermaid cache files to retain (default: 5)."
+    )
     return parser
 
 

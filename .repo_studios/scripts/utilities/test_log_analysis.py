@@ -59,6 +59,8 @@ def read_text(path: Path | None) -> str:
         return path.read_text(encoding="utf-8", errors="replace")
     except Exception:
         return ""
+
+
 def _load_element_tree():
     try:
         spec = importlib.util.find_spec("defusedxml.ElementTree")
@@ -119,8 +121,8 @@ def select_junit_artifact(logs_dir: Path) -> Path | None:
         internal_only = False
         if total == 1:
             for tc in root.iterfind(".//testcase"):
-                name = (tc.get("name") or "")
-                classname = (tc.get("classname") or "")
+                name = tc.get("name") or ""
+                classname = tc.get("classname") or ""
                 if name == "internal" and classname == "pytest":
                     internal_only = True
                     break
@@ -132,14 +134,18 @@ def select_junit_artifact(logs_dir: Path) -> Path | None:
         total, internal_only = _totals_and_internal_only(candidate)
         if internal_only:
             continue
-        if total > best_total or (total == best_total and (best is None or candidate.stat().st_mtime > best.stat().st_mtime)):
+        if total > best_total or (
+            total == best_total and (best is None or candidate.stat().st_mtime > best.stat().st_mtime)
+        ):
             best = candidate
             best_total = total
     if best is not None:
         return best
     for candidate in candidates:
         total, _ = _totals_and_internal_only(candidate)
-        if total > best_total or (total == best_total and (best is None or candidate.stat().st_mtime > best.stat().st_mtime)):
+        if total > best_total or (
+            total == best_total and (best is None or candidate.stat().st_mtime > best.stat().st_mtime)
+        ):
             best = candidate
             best_total = total
     return best or _latest_by_prefix(logs_dir, "junit")

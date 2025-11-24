@@ -19,13 +19,15 @@ Outputs (by default under `.repo_studios/anchor_health/`):
 Exit code is 0 even if duplicates exist (pipeline decides policy). Use the JSON
 field `strict_duplicate_count` to gate if desired.
 """
+
 from __future__ import annotations
 
 import argparse
 import json
 import logging
 import re
-from datetime import datetime
+import shutil
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Iterable, Sequence
 
@@ -36,6 +38,7 @@ BASELINE_PATH = Path("tests/docs/anchor_slug_baseline.json")
 OUTPUT_DIR = Path(".repo_studios/anchor_health")
 INVENTORY_DIR = Path(".repo_studios/reports/producer_reports/anchor_inventory_reports")
 INVENTORY_LATEST = INVENTORY_DIR / "latest_report.json"
+DEFAULT_ARTIFACTS_TO_KEEP = 10
 
 # Subfolder naming pattern: anchor_health-YYYY-MM-DD_hhmm
 RUN_PREFIX = "anchor_health-"
@@ -113,11 +116,7 @@ def _iter_inventory_reports(base_dir: Path) -> Iterable[Path]:
     if not base_dir.exists():
         return []
     run_dirs = sorted(
-        (
-            child
-            for child in base_dir.iterdir()
-            if child.is_dir() and child.name.startswith("anchor_inventory-")
-        ),
+        (child for child in base_dir.iterdir() if child.is_dir() and child.name.startswith("anchor_inventory-")),
         key=lambda p: p.name,
         reverse=True,
     )
@@ -218,16 +217,38 @@ def _run_dir(ts: datetime, base: Path = OUTPUT_DIR) -> Path:
     return base / f"{RUN_PREFIX}{stamp}"
 
 
+def _prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> list[Path]:
+    if keep is None:
+        return []
+    keep = max(int(keep), 0)
+    if not output_dir.exists():
+        return []
+    run_dirs = sorted(
+        [
+            path
+            for path in output_dir.iterdir()
+            if path.is_dir() and path.name.startswith(RUN_PREFIX) and path != current_run
+        ],
+        key=lambda p: p.name,
+        reverse=True,
+    )
+    limit = max(keep - 1, 0)
+    stale = run_dirs[limit:]
+    for path in stale:
+        shutil.rmtree(path, ignore_errors=True)
+    if stale:
+        logging.debug("Pruned %s old anchor health runs", len(stale))
+    return stale
+
+
 def write_artifacts(report: dict, ts: datetime | None = None, *, output_dir: Path = OUTPUT_DIR) -> Path:
-    ts = ts or datetime.utcnow()
+    ts = ts or datetime.now(UTC)
     output_dir.mkdir(parents=True, exist_ok=True)
     run_dir = _run_dir(ts, output_dir)
     run_dir.mkdir(parents=True, exist_ok=True)
 
     # Base JSON artifact (timestamped)
-    (run_dir / "anchor_report.json").write_text(
-        json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    (run_dir / "anchor_report.json").write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     # Compact markdown summary
     lines = [
@@ -273,9 +294,7 @@ def write_artifacts(report: dict, ts: datetime | None = None, *, output_dir: Pat
             dest.write_bytes(src.read_bytes())
 
     # Append to run log
-    log_line = (
-        f"{ts.isoformat()} duplicates={report['strict_duplicate_count']} baseline={report['baseline_cross_file_duplicates']}"  # noqa: E501
-    )
+    log_line = f"{ts.isoformat()} duplicates={report['strict_duplicate_count']} baseline={report['baseline_cross_file_duplicates']}"  # noqa: E501
     with (output_dir / "runs.log").open("a", encoding="utf-8") as fh:
         fh.write(log_line + "\n")
 
@@ -284,12 +303,25 @@ def write_artifacts(report: dict, ts: datetime | None = None, *, output_dir: Pat
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate anchor health report from inventory artifacts")
-    parser.add_argument("--inventory-report", type=Path, default=None, help="Explicit anchor inventory report to consume")
+    parser.add_argument(
+        "--inventory-report", type=Path, default=None, help="Explicit anchor inventory report to consume"
+    )
     parser.add_argument(
         "--output-dir",
         type=Path,
         default=None,
         help="Override anchor health output directory (defaults to .repo_studios/anchor_health)",
+    )
+    parser.add_argument(
+        "--artifacts-to-keep",
+        type=int,
+        default=DEFAULT_ARTIFACTS_TO_KEEP,
+        help="Number of timestamped runs to retain (including the newest run)",
+    )
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        help="Logging level (e.g. INFO, DEBUG)",
     )
     return parser.parse_args(argv)
 
@@ -298,13 +330,27 @@ def run(
     *,
     inventory_report: Path | None = None,
     output_dir: Path | None = None,
+    artifacts_to_keep: int | None = None,
     argv: Sequence[str] | None = None,
 ) -> dict:
-    args = parse_args(argv) if argv is not None else argparse.Namespace(inventory_report=inventory_report, output_dir=output_dir)
+    if argv is not None:
+        args = parse_args(argv)
+    else:
+        args = argparse.Namespace(
+            inventory_report=inventory_report,
+            output_dir=output_dir,
+            artifacts_to_keep=artifacts_to_keep if artifacts_to_keep is not None else DEFAULT_ARTIFACTS_TO_KEEP,
+            log_level="INFO",
+        )
+
+    log_level = getattr(logging, str(args.log_level).upper(), logging.INFO)
+    logging.basicConfig(level=log_level, format="%(levelname)s %(message)s", force=True)
+
     inventory_payload, inventory_path = load_inventory_report(args.inventory_report)
     report = build_report(inventory=inventory_payload, inventory_path=inventory_path)
     target_output = args.output_dir if args.output_dir is not None else OUTPUT_DIR
     run_dir = write_artifacts(report, output_dir=target_output)
+    _prune_old_runs(target_output, keep=args.artifacts_to_keep, current_run=run_dir)
     return {"report": report, "run_dir": str(run_dir)}
 
 
@@ -312,7 +358,6 @@ def main(argv: Sequence[str] | None = None) -> None:  # pragma: no cover - CLI s
     result = run(argv=argv)
     report = result["report"]
     run_dir = result["run_dir"]
-    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     logging.info(
         "Anchor health artifacts written to %s (duplicates=%s baseline=%s)",
         run_dir,

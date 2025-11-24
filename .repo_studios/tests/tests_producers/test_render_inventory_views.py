@@ -6,12 +6,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "render_inventory_views.py"
-)
+MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "render_inventory_views.py"
 
 
 def _load_module():

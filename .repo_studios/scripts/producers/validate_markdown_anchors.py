@@ -40,12 +40,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import NamedTuple
 
-LIBRARIES_ROOT = (
-    Path(__file__).resolve().parents[3]
-    / ".repo_studios"
-    / "command_center"
-    / "scripts"
-)
+LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
 try:
     from libraries import (  # type: ignore
@@ -71,9 +66,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback during standalone exe
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")  # capture link target
 
-DEFAULT_OUTPUT_DIR = Path(
-        ".repo_studios/reports/producer_reports/markdown_anchor_validation_reports"
-)
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/markdown_anchor_validation_reports")
 RUN_PREFIX = "markdown_anchor_validation"
 DEFAULT_PATTERNS = [
     "README.md",
@@ -216,11 +209,7 @@ def prune_old_runs(output_dir: Path, *, keep: int) -> list[Path]:
     keep = max(keep, 1)
     if not output_dir.exists():
         return []
-    candidates = [
-        path
-        for path in output_dir.iterdir()
-        if path.is_dir() and path.name.startswith(f"{RUN_PREFIX}-")
-    ]
+    candidates = [path for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(f"{RUN_PREFIX}-")]
     candidates.sort(key=lambda path: path.name, reverse=True)
     removed: list[Path] = []
     for stale in candidates[keep:]:

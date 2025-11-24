@@ -24,12 +24,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, NamedTuple
 
-LIBRARIES_ROOT = (
-    Path(__file__).resolve().parents[3]
-    / ".repo_studios"
-    / "command_center"
-    / "scripts"
-)
+LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
 try:
     from libraries import (  # type: ignore
@@ -60,9 +55,7 @@ ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SUMMARY_PATH = Path("reports/summary/latest/summary.json")
 DEFAULT_BASELINE_PATH = Path("reports/summary/main_baseline.json")
 DEFAULT_THRESHOLDS_PATH = Path("config/ci_inventory_thresholds.json")
-DEFAULT_OUTPUT_PATH = Path(
-    ".repo_studios/reports/producer_reports/inventory_health_reports"
-)
+DEFAULT_OUTPUT_PATH = Path(".repo_studios/reports/producer_reports/inventory_health_reports")
 
 SUMMARY_LATEST = ROOT / DEFAULT_SUMMARY_PATH
 BASELINE_PATH = ROOT / DEFAULT_BASELINE_PATH
@@ -146,32 +139,24 @@ def check_thresholds(current: JsonDict, thresholds: JsonDict) -> Dict[str, str]:
     for status, limit in status_limits.items():
         value = current.get("by_status", {}).get(status, 0)
         if value > limit:
-            issues[f"status:{status}"] = (
-                f"Status '{status}' count {value} exceeds limit {limit}"
-            )
+            issues[f"status:{status}"] = f"Status '{status}' count {value} exceeds limit {limit}"
 
     minimum_assets = thresholds.get("minimum_assets", {}) or {}
     for asset_kind, minimum in minimum_assets.items():
         value = current.get("by_asset_kind", {}).get(asset_kind, 0)
         if value < minimum:
-            issues[f"asset:{asset_kind}"] = (
-                f"Asset kind '{asset_kind}' count {value} below minimum {minimum}"
-            )
+            issues[f"asset:{asset_kind}"] = f"Asset kind '{asset_kind}' count {value} below minimum {minimum}"
 
     consumer_required = thresholds.get("consumer_required", []) or []
     consumers = current.get("consumers", {}) or {}
     for consumer in consumer_required:
         if consumers.get(consumer, 0) == 0:
-            issues[f"consumer:{consumer}"] = (
-                f"Consumer '{consumer}' missing from summary"
-            )
+            issues[f"consumer:{consumer}"] = f"Consumer '{consumer}' missing from summary"
 
     return issues
 
 
-def evaluate(
-    current: JsonDict, baseline: JsonDict, thresholds: JsonDict
-) -> tuple[str, Dict[str, str], JsonDict]:
+def evaluate(current: JsonDict, baseline: JsonDict, thresholds: JsonDict) -> tuple[str, Dict[str, str], JsonDict]:
     issues = check_thresholds(current, thresholds)
     deltas = compute_deltas(current, baseline)
     status = "failed" if issues else "passed"
@@ -200,14 +185,8 @@ def build_report(
     baseline_path: Path,
     thresholds_path: Path,
 ) -> JsonDict:
-    issue_list = [
-        {"id": key, "description": message}
-        for key, message in sorted(issues.items())
-    ]
-    delta_list = [
-        {"metric": key, "delta": value}
-        for key, value in sorted(deltas.items())
-    ]
+    issue_list = [{"id": key, "description": message} for key, message in sorted(issues.items())]
+    delta_list = [{"metric": key, "delta": value} for key, value in sorted(deltas.items())]
     summary = {
         "status": status,
         "issues": len(issue_list),
@@ -300,9 +279,7 @@ def build_options(args: argparse.Namespace) -> Options:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(
-        description="Validate Repo Studios inventory health thresholds."
-    )
+    parser = argparse.ArgumentParser(description="Validate Repo Studios inventory health thresholds.")
     parser.add_argument(
         "--repo-root",
         help="Repository root (defaults to project root)",

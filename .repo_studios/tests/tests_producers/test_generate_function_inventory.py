@@ -1,4 +1,5 @@
 """Tests for generate_commandview_inventory producer."""
+
 from __future__ import annotations
 
 import importlib.util
@@ -93,14 +94,7 @@ def helper(value):
     payload = json.loads(output_file.read_text(encoding="utf-8"))
     latest_pointer = output_dir / "latest.json"
     assert not latest_pointer.exists()
-    reports_dir = (
-        repo_root
-        / ".repo_studios"
-        / "command_center"
-        / "reports"
-        / "index_scan"
-        / "sample_pkg_index"
-    )
+    reports_dir = repo_root / ".repo_studios" / "command_center" / "reports" / "index_scan" / "sample_pkg_index"
     central_files = _inventory_files(reports_dir, "sample_pkg")
     assert len(central_files) == 1
     central_file = central_files[0]
@@ -180,12 +174,7 @@ def test_inventory_merges_coverage_reports(tmp_path: Path) -> None:
     _write(target / "__init__.py", "")
     _write(
         target / "module.py",
-        (
-            "def act(value: int) -> int:\n"
-            "    if value > 0:\n"
-            "        return value + 1\n"
-            "    return value - 1\n"
-        ),
+        ("def act(value: int) -> int:\n" "    if value > 0:\n" "        return value + 1\n" "    return value - 1\n"),
     )
 
     coverage_payload = {
@@ -336,14 +325,7 @@ def test_inventory_removes_preexisting_outputs(tmp_path: Path) -> None:
     _write(output_dir / "pkg_index-2000-01-01.json", "{}")
     _write(output_dir / "latest.json", "{}")
     _write(output_dir / "pkg_screening-2000-01-01.json", "{}")
-    reports_dir = (
-        repo_root
-        / ".repo_studios"
-        / "command_center"
-        / "reports"
-        / "index_scan"
-        / "pkg_index"
-    )
+    reports_dir = repo_root / ".repo_studios" / "command_center" / "reports" / "index_scan" / "pkg_index"
     reports_dir.mkdir(parents=True, exist_ok=True)
     _write(reports_dir / "pkg_index.json", "{}")
     _write(reports_dir / "pkg_index-1999-12-31.json", "{}")
@@ -403,11 +385,7 @@ def test_screening_score_history_accumulates_across_runs(tmp_path: Path) -> None
 
     _write(
         target / "module.py",
-        (
-            "def run(value: int) -> int:\n"
-            '    """Return supplied value."""\n'
-            "    return value\n"
-        ),
+        ("def run(value: int) -> int:\n" '    """Return supplied value."""\n' "    return value\n"),
     )
 
     exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
@@ -423,14 +401,7 @@ def test_screening_score_history_accumulates_across_runs(tmp_path: Path) -> None
     assert latest_pack["score"] == 100.0
     assert latest_pack["severity"] == "ok"
 
-    mirror_dir = (
-        repo_root
-        / ".repo_studios"
-        / "command_center"
-        / "reports"
-        / "index_scan"
-        / "pkg_index"
-    )
+    mirror_dir = repo_root / ".repo_studios" / "command_center" / "reports" / "index_scan" / "pkg_index"
     mirror_files = _screening_files(mirror_dir, "pkg")
     assert mirror_files
     assert json.loads(mirror_files[-1].read_text(encoding="utf-8")) == updated_payload
@@ -570,7 +541,6 @@ def test_cyclomatic_complexity_counts_branches(tmp_path: Path) -> None:
             "    for item in value:\n"
             "        if item and item > 0:\n"
             "            total += item\n"
-        
             "        elif item == 0:\n"
             "            total += 1\n"
             "        else:\n"
@@ -740,9 +710,7 @@ def test_inventory_errors_when_no_python_files(tmp_path: Path) -> None:
     assert exit_code == 1
 
 
-def test_reports_root_outside_static_scope_rejected(
-    tmp_path: Path, caplog: pytest.LogCaptureFixture
-) -> None:
+def test_reports_root_outside_static_scope_rejected(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     repo_root = tmp_path
     target = repo_root / "pkg"
     _write(target / "__init__.py", "")

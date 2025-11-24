@@ -5,18 +5,11 @@ import json
 import sys
 from pathlib import Path
 
-_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "generate_import_graph_report.py"
-)
+_MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "generate_import_graph_report.py"
 
 
 def _load_module():
-    spec = importlib.util.spec_from_file_location(
-        "generate_import_graph_report", _MODULE_PATH
-    )
+    spec = importlib.util.spec_from_file_location("generate_import_graph_report", _MODULE_PATH)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     sys.modules[spec.name] = module
@@ -34,13 +27,7 @@ def test_report_with_no_targets(tmp_path: Path) -> None:
     root = tmp_path / "workspace"
     root.mkdir()
 
-    output_dir = (
-        root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "import_graph_reports"
-    )
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "import_graph_reports"
     argv = [
         "--repo-root",
         str(root),
@@ -86,13 +73,7 @@ def test_cycle_detection_and_pruning(tmp_path: Path) -> None:
     _write(root / "api" / "__init__.py", "")
     _write(root / "api" / "bar.py", "import agents\n")
 
-    output_dir = (
-        root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "import_graph_reports"
-    )
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "import_graph_reports"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     stale_one = output_dir / "import_graph-20240101_000000"
@@ -134,15 +115,11 @@ def test_cycle_detection_and_pruning(tmp_path: Path) -> None:
     graph_payload = json.loads((run_dir / "graph.json").read_text(encoding="utf-8"))
     assert graph_payload == {"agents": ["api"], "api": ["agents"]}
 
-    latest_graph = json.loads(
-        (output_dir / "latest_graph.json").read_text(encoding="utf-8")
-    )
+    latest_graph = json.loads((output_dir / "latest_graph.json").read_text(encoding="utf-8"))
     assert latest_graph == graph_payload
 
     remaining_dirs = {
-        path.name
-        for path in output_dir.iterdir()
-        if path.is_dir() and path.name.startswith("import_graph-")
+        path.name for path in output_dir.iterdir() if path.is_dir() and path.name.startswith("import_graph-")
     }
     assert remaining_dirs == {
         "import_graph-20240102_000000",

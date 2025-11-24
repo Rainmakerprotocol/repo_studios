@@ -24,13 +24,7 @@ def test_reports_written_with_issues(tmp_path):
         "# Title\n\nMissing anchor [bad](#missing)\n",
         encoding="utf-8",
     )
-    output_dir = (
-        root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "markdown_anchor_validation_reports"
-    )
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "markdown_anchor_validation_reports"
 
     exit_code = mod.main(
         [
@@ -68,13 +62,7 @@ def test_pruning_keeps_newest_run(tmp_path):
     docs = root / "docs"
     docs.mkdir(parents=True)
     (docs / "good.md").write_text("# Title\n\n[Self](#title)\n", encoding="utf-8")
-    output_dir = (
-        root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "markdown_anchor_validation_reports"
-    )
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "markdown_anchor_validation_reports"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     stale_names = [
@@ -104,11 +92,7 @@ def test_pruning_keeps_newest_run(tmp_path):
 
     assert exit_code == 0
     expected_latest = {f"{mod.RUN_PREFIX}-20230301_000000", f"{mod.RUN_PREFIX}-20240203_000000"}
-    run_dirs = {
-        path.name
-        for path in output_dir.iterdir()
-        if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)
-    }
+    run_dirs = {path.name for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)}
     assert run_dirs == expected_latest
     assert (output_dir / "latest_report.json").is_file()
     assert (output_dir / "latest_report.md").is_file()

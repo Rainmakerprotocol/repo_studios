@@ -8,13 +8,7 @@ import pytest
 
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
-VIEWER_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "viewer.js"
-)
+VIEWER_MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "viewer.js"
 
 if not VIEWER_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected viewer module at {VIEWER_MODULE_PATH}")
@@ -325,12 +319,33 @@ console.log(JSON.stringify({{
     violations_section = next((entry for entry in details if entry["title"] == "Adjacency Violations"), None)
     assert violations_section is not None
     violation_items = {item["header"]: item for item in violations_section["items"]}
-    producer_header = next((header for header in violation_items if header.startswith("scripts.aggregators.aggregate_signal") and "scripts.producers.generate_inventory" in header), None)
-    summarizer_header = next((header for header in violation_items if header.startswith("scripts.aggregators.aggregate_signal") and "scripts.summarizers.publish_summary" in header), None)
+    producer_header = next(
+        (
+            header
+            for header in violation_items
+            if header.startswith("scripts.aggregators.aggregate_signal")
+            and "scripts.producers.generate_inventory" in header
+        ),
+        None,
+    )
+    summarizer_header = next(
+        (
+            header
+            for header in violation_items
+            if header.startswith("scripts.aggregators.aggregate_signal")
+            and "scripts.summarizers.publish_summary" in header
+        ),
+        None,
+    )
     assert producer_header is not None
     assert summarizer_header is not None
-    assert violation_items[producer_header]["body"] == "Aggregators should not depend on downstream execution tiers beyond Orchestrators."
-    assert violation_items[summarizer_header]["body"] == "Aggregators must hand off to Orchestrators before Summarizers."
+    assert (
+        violation_items[producer_header]["body"]
+        == "Aggregators should not depend on downstream execution tiers beyond Orchestrators."
+    )
+    assert (
+        violation_items[summarizer_header]["body"] == "Aggregators must hand off to Orchestrators before Summarizers."
+    )
 
     warnings_section = next((entry for entry in details if entry["title"] == "Inventory Warnings"), None)
     assert warnings_section is not None

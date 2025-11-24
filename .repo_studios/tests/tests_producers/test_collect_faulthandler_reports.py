@@ -4,12 +4,7 @@ import importlib.util
 import json
 from pathlib import Path
 
-_PRODUCER_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "collect_faulthandler_reports.py"
-)
+_PRODUCER_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "collect_faulthandler_reports.py"
 
 
 def _load_module(name: str, path: Path):
@@ -23,11 +18,11 @@ def _load_module(name: str, path: Path):
 def _sample_stacks() -> str:
     return (
         "Current thread 0x0001 (most recent call first):\n"
-        "  File \"/app/main.py\", line 12, in run\n"
-        "  File \"/app/service.py\", line 5, in handle\n"
+        '  File "/app/main.py", line 12, in run\n'
+        '  File "/app/service.py", line 5, in handle\n'
         "\n"
         "Thread 0x0002:\n"
-        "  File \"/lib/utils.py\", line 7, in helper\n"
+        '  File "/lib/utils.py", line 7, in helper\n'
     )
 
 

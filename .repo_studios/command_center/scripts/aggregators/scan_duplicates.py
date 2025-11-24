@@ -64,12 +64,8 @@ DEFAULT_IGNORE_DIRS = {
     "dist",
     ".tox",
 }
-INVENTORY_SCRIPT_RELATIVE = Path(
-    ".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py"
-)
-ANALYSIS_SCRIPT_RELATIVE = Path(
-    ".repo_studios/command_center/scripts/summarizers/generate_function_analysis.py"
-)
+INVENTORY_SCRIPT_RELATIVE = Path(".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py")
+ANALYSIS_SCRIPT_RELATIVE = Path(".repo_studios/command_center/scripts/summarizers/generate_function_analysis.py")
 
 
 @dataclass(frozen=True)
@@ -237,11 +233,7 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = (
-        Path(args.repo_root).resolve()
-        if args.repo_root
-        else Path(__file__).resolve().parents[4]
-    )
+    repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[4]
     target = _resolve_within_repo(repo_root, Path(args.target))
     run_root = _resolve_within_repo(repo_root, Path(args.run_root))
     if not target.exists() or not target.is_dir():
@@ -295,9 +287,7 @@ def _load_cli_module(script_path: Path, module_name: str):
 def _latest_artifact(directory: Path, pattern: str, label: str) -> Path:
     candidates = sorted(directory.glob(pattern))
     if not candidates:
-        raise FileNotFoundError(
-            f"No {label} artifacts matching '{pattern}' found in {directory}."
-        )
+        raise FileNotFoundError(f"No {label} artifacts matching '{pattern}' found in {directory}.")
     return candidates[-1]
 
 
@@ -307,9 +297,7 @@ def _run_inventory(paths: Paths, options: Options) -> Path:
     module = _load_cli_module(script_path, module_name)
     run_fn = getattr(module, "run", None)
     if run_fn is None:
-        raise RuntimeError(
-            f"generate_commandview_inventory module at {script_path} does not expose a run() helper."
-        )
+        raise RuntimeError(f"generate_commandview_inventory module at {script_path} does not expose a run() helper.")
     argv = [
         "--repo-root",
         str(paths.repo_root),
@@ -716,9 +704,7 @@ def _extract_top_offenders(
                 }
             else:
                 existing = occurrences[key]
-                if line_count is not None and (
-                    existing["line_count"] is None or line_count > existing["line_count"]
-                ):
+                if line_count is not None and (existing["line_count"] is None or line_count > existing["line_count"]):
                     existing["line_count"] = line_count
                 if not existing["sample_line"] and sample_line:
                     existing["sample_line"] = sample_line
@@ -804,10 +790,7 @@ def generate_summary(
         lines.append("- No notable duplicate offenders detected.")
     else:
         for index, offender in enumerate(offenders, start=1):
-            lines.append(
-                f"{index}. `{offender['function_name']}` — "
-                f"{offender['occurrence_count']} duplicate(s)"
-            )
+            lines.append(f"{index}. `{offender['function_name']}` — " f"{offender['occurrence_count']} duplicate(s)")
             for detail in offender["occurrences"]:
                 path = detail["path"]
                 line_start = detail.get("line_start")

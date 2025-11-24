@@ -9,28 +9,11 @@ import pytest
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
 GLOBAL_USAGE_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "global_variable_usage_map.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "global_variable_usage_map.js"
 )
-IO_EFFECTS_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "io_effects_diagram.js"
-)
+IO_EFFECTS_MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "io_effects_diagram.js"
 EXCEPTION_FLOW_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "exception_flow_map.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "exception_flow_map.js"
 )
 
 if not GLOBAL_USAGE_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets

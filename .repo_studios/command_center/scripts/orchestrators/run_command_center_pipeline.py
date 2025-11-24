@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Orchestrate the command center pipeline (inventory → analysis → duplicate scan)."""
+
 from __future__ import annotations
 
 import argparse
@@ -16,15 +17,10 @@ class StepResult:
     exit_code: int
     artifacts: tuple[Path, ...] = ()
 
-INVENTORY_SCRIPT_RELATIVE = Path(
-    ".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py"
-)
-ANALYSIS_SCRIPT_RELATIVE = Path(
-    ".repo_studios/command_center/scripts/summarizers/generate_function_analysis.py"
-)
-SCAN_SCRIPT_RELATIVE = Path(
-    ".repo_studios/command_center/scripts/aggregators/scan_duplicates.py"
-)
+
+INVENTORY_SCRIPT_RELATIVE = Path(".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py")
+ANALYSIS_SCRIPT_RELATIVE = Path(".repo_studios/command_center/scripts/summarizers/generate_function_analysis.py")
+SCAN_SCRIPT_RELATIVE = Path(".repo_studios/command_center/scripts/aggregators/scan_duplicates.py")
 
 
 @dataclass(frozen=True)
@@ -115,9 +111,7 @@ def _load_run_function(script_path: Path, module_name: str) -> Callable[[Iterabl
 def _latest_artifact(directory: Path, pattern: str, label: str) -> Path:
     candidates = sorted(directory.glob(pattern))
     if not candidates:
-        raise FileNotFoundError(
-            f"No {label} artifacts matching '{pattern}' found in {directory}."
-        )
+        raise FileNotFoundError(f"No {label} artifacts matching '{pattern}' found in {directory}.")
     return candidates[-1]
 
 

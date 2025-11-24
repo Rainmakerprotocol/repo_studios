@@ -7,18 +7,11 @@ from pathlib import Path
 
 import pytest
 
-_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "generate_test_coverage_inventory.py"
-)
+_MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "generate_test_coverage_inventory.py"
 
 
 def _load_module():
-    spec = importlib.util.spec_from_file_location(
-        "generate_test_coverage_inventory", _MODULE_PATH
-    )
+    spec = importlib.util.spec_from_file_location("generate_test_coverage_inventory", _MODULE_PATH)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     sys.modules[spec.name] = module
@@ -27,13 +20,7 @@ def _load_module():
 
 
 def _write_coverage_fixture(repo_root: Path, *, hits_for_uncovered: int = 0) -> Path:
-    coverage_dir = (
-        repo_root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "test_run_coverage"
-    )
+    coverage_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "test_run_coverage"
     coverage_dir.mkdir(parents=True, exist_ok=True)
     coverage_xml = coverage_dir / "coverage.xml"
     coverage_xml.write_text(
@@ -76,13 +63,7 @@ def test_generates_structured_artifacts(tmp_path: Path):
 
     coverage_xml = _write_coverage_fixture(repo_root)
 
-    output_dir = (
-        repo_root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "test_coverage_reports"
-    )
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "test_coverage_reports"
 
     exit_code = mod.main(
         [
@@ -152,13 +133,7 @@ def test_threshold_enforcement_and_pruning(tmp_path: Path):
 
     coverage_xml = _write_coverage_fixture(repo_root)
 
-    output_dir = (
-        repo_root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "test_coverage_reports"
-    )
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "test_coverage_reports"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     stale_slugs = [
@@ -205,9 +180,7 @@ def test_threshold_enforcement_and_pruning(tmp_path: Path):
     assert "files_below_threshold=1" in log_text
 
     remaining = sorted(
-        path.name
-        for path in output_dir.iterdir()
-        if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)
+        path.name for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)
     )
     assert remaining == [
         f"{mod.RUN_PREFIX}-20240103_000000",

@@ -9,20 +9,10 @@ import pytest
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
 CIRCULAR_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "circular_import_detection.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "circular_import_detection.js"
 )
 DEPENDENCY_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "module_dependency_graph.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "module_dependency_graph.js"
 )
 
 if not CIRCULAR_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
@@ -39,6 +29,7 @@ def _ensure_node_runtime() -> None:
     except FileNotFoundError as exc:  # pragma: no cover - environment guard
         pytest.skip(f"Node.js runtime is required for viewer builder tests: {exc}")
 
+
 def _run_node_module(script: str) -> dict[str, object]:
     result = subprocess.run(
         ["node", "--input-type=module", "-e", script],
@@ -50,6 +41,7 @@ def _run_node_module(script: str) -> dict[str, object]:
     if result.stderr.strip():
         pytest.fail(f"Node.js script wrote to stderr: {result.stderr}")
     return json.loads(result.stdout.strip())
+
 
 def test_circular_import_detection_is_deterministic() -> None:
     script = f"""
@@ -120,6 +112,7 @@ console.log(JSON.stringify({{
     assert "Detected" in payload["statusMessage"]
     assert payload["stats"]["cycleCount"] == 3
     assert payload["statusDetailsCount"] >= 2
+
 
 def test_circular_import_detection_coexists_with_dependency_view() -> None:
     script = f"""

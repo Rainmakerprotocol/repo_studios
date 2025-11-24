@@ -9,29 +9,10 @@ import pytest
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
 COUPLING_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "cross_module_function_references.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "cross_module_function_references.js"
 )
-CALL_GRAPH_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "function_call_graph.js"
-)
-IMPORT_CHAIN_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "import_chain_depth.js"
-)
+CALL_GRAPH_MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "function_call_graph.js"
+IMPORT_CHAIN_MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "import_chain_depth.js"
 
 if not COUPLING_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected cross module function references builder at {COUPLING_MODULE_PATH}")

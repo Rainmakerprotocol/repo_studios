@@ -1,4 +1,5 @@
 """Tests for generate_function_analysis producer."""
+
 from __future__ import annotations
 
 import importlib
@@ -17,11 +18,7 @@ INVENTORY_MODULE_PATH = (
     / "generate_commandview_inventory.py"
 )
 ANALYSIS_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "command_center"
-    / "scripts"
-    / "summarizers"
-    / "generate_function_analysis.py"
+    Path(__file__).resolve().parents[2] / "command_center" / "scripts" / "summarizers" / "generate_function_analysis.py"
 )
 INVENTORY_MODULE_NAME = "repo_studios_test.generate_commandview_inventory"
 ANALYSIS_MODULE_NAME = "repo_studios_test.generate_function_analysis"
@@ -88,15 +85,11 @@ def test_analysis_detects_duplicate_functions(tmp_path: Path) -> None:
     _write(target / "__init__.py", "")
     _write(
         target / "alpha.py",
-        "def helper(value):\n"
-        "    \"\"\"Alpha helpers.\"\"\"\n"
-        "    return value * 2\n",
+        "def helper(value):\n" '    """Alpha helpers."""\n' "    return value * 2\n",
     )
     _write(
         target / "beta.py",
-        "def helper(value):\n"
-        "    \"\"\"Alpha helpers.\"\"\"\n"
-        "    return value + 2\n",
+        "def helper(value):\n" '    """Alpha helpers."""\n' "    return value + 2\n",
     )
 
     assert run_inventory(["--repo-root", str(repo_root), str(target)]) == 0
@@ -114,14 +107,7 @@ def test_analysis_detects_duplicate_functions(tmp_path: Path) -> None:
     analysis_file = analysis_files[0]
     analysis_payload = _load_json(analysis_file)
     slug = slugify_relative(target.relative_to(repo_root))
-    mirror_dir = (
-        repo_root
-        / ".repo_studios"
-        / "command_center"
-        / "reports"
-        / "index_scan_analysis"
-        / f"{slug}_analysis"
-    )
+    mirror_dir = repo_root / ".repo_studios" / "command_center" / "reports" / "index_scan_analysis" / f"{slug}_analysis"
     mirror_files = list(mirror_dir.glob("sample_pkg_analysis-*.json"))
     assert len(mirror_files) == 1
     mirror_payload = _load_json(mirror_files[0])
@@ -177,14 +163,7 @@ def test_analysis_replaces_existing_outputs(tmp_path: Path) -> None:
 
     index_dir = target / "pkg_index"
     slug = slugify_relative(target.relative_to(repo_root))
-    mirror_dir = (
-        repo_root
-        / ".repo_studios"
-        / "command_center"
-        / "reports"
-        / "index_scan_analysis"
-        / f"{slug}_analysis"
-    )
+    mirror_dir = repo_root / ".repo_studios" / "command_center" / "reports" / "index_scan_analysis" / f"{slug}_analysis"
     old_file = index_dir / "pkg_analysis-2000-01-01.json"
     _write(old_file, "{}")
     legacy_file = index_dir / "pkg_analysis.json"

@@ -14,12 +14,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable, Sequence
 
-AUTOMATION_SCRIPT_RELATIVE = Path(
-    ".repo_studios/command_center/scripts/aggregators/generate_automation_manifest.py"
-)
-DEFAULT_POST_RUN_MATRIX = Path(
-    "que_for_integration/refactor_library/phase_4/POST_RUN_TEST_MATRIX.md"
-)
+AUTOMATION_SCRIPT_RELATIVE = Path(".repo_studios/command_center/scripts/aggregators/generate_automation_manifest.py")
+DEFAULT_POST_RUN_MATRIX = Path("que_for_integration/refactor_library/phase_4/POST_RUN_TEST_MATRIX.md")
 
 
 @dataclass(frozen=True)
@@ -88,10 +84,18 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--timestamp", help="ISO8601 timestamp for run directory naming (UTC if absent)")
     parser.add_argument("--run-id", required=True, help="Unique identifier for the automation run")
     parser.add_argument("--baseline-sha", required=True, help="Git commit SHA used as the automation baseline")
-    parser.add_argument("--target", dest="targets", action="append", required=True, help="Slugged target processed during the run (repeatable)")
+    parser.add_argument(
+        "--target",
+        dest="targets",
+        action="append",
+        required=True,
+        help="Slugged target processed during the run (repeatable)",
+    )
     parser.add_argument("--lines-touched", type=int, required=True, help="Total lines changed during the run")
     parser.add_argument("--files-changed", type=int, required=True, help="Count of files modified")
-    parser.add_argument("--duplicate-groups-resolved", type=int, required=True, help="Number of duplicate groups addressed")
+    parser.add_argument(
+        "--duplicate-groups-resolved", type=int, required=True, help="Number of duplicate groups addressed"
+    )
     parser.add_argument("--runtime-seconds", type=float, required=True, help="Wall-clock execution time for the run")
     parser.add_argument("--files-file", required=True, help="Path to JSON describing updated/skipped/conflicted files")
     parser.add_argument("--tests-file", required=True, help="Path to JSON describing executed test suites")
@@ -99,17 +103,26 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--operator", help="Operator responsible for the run")
     parser.add_argument("--dry-run", action="store_true", help="Flag indicating the run emitted artifacts only")
     parser.add_argument("--guardrail-config", help="Path to guardrail configuration YAML to snapshot in the manifest")
-    parser.add_argument("--guardrail-override", action="store_true", help="Indicate whether guardrail override was used")
+    parser.add_argument(
+        "--guardrail-override", action="store_true", help="Indicate whether guardrail override was used"
+    )
     parser.add_argument("--manifest-schema-version", default="1.0", help="Schema version to embed in manifest")
     parser.add_argument("--metrics-schema-version", default="1.0", help="Schema version to embed in metrics summary")
-    parser.add_argument("--log-level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], help="Logging verbosity")
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        help="Logging verbosity",
+    )
     parser.add_argument("--post-run-matrix", help="Path to post-run test matrix markdown file")
     return parser.parse_args(argv)
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
     repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[4]
-    output_dir = _resolve_within_repo(repo_root, args.output_dir or ".repo_studios/command_center/reports/automation_runs")
+    output_dir = _resolve_within_repo(
+        repo_root, args.output_dir or ".repo_studios/command_center/reports/automation_runs"
+    )
     matrix_candidate = args.post_run_matrix or str(DEFAULT_POST_RUN_MATRIX)
     post_run_matrix = _resolve_within_repo(repo_root, matrix_candidate)
     return Paths(repo_root=repo_root, output_dir=output_dir, post_run_matrix=post_run_matrix)
@@ -254,15 +267,9 @@ def _build_post_run_snapshot(
     if matrix_reference is not None:
         snapshot["matrix_reference"] = matrix_reference.as_posix()
     if required:
-        snapshot["required"] = [
-            {"label": label, "command": command}
-            for label, command in required
-        ]
+        snapshot["required"] = [{"label": label, "command": command} for label, command in required]
     if conditional:
-        snapshot["conditional"] = [
-            {"condition": label, "command": command}
-            for label, command in conditional
-        ]
+        snapshot["conditional"] = [{"condition": label, "command": command} for label, command in conditional]
     return snapshot
 
 

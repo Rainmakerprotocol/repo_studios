@@ -62,12 +62,7 @@ from pathlib import Path
 import shutil
 from typing import Any
 
-LIBRARIES_ROOT = (
-    Path(__file__).resolve().parents[3]
-    / ".repo_studios"
-    / "command_center"
-    / "scripts"
-)
+LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
 try:
     from libraries import (
@@ -354,9 +349,7 @@ def dotted_name_from_attribute(attr: ast.AST) -> str | None:
     return None
 
 
-def is_alias_external(
-    alias: str, resolver: ImportResolver, project_pkgs: set[str]
-) -> tuple[bool, str | None]:
+def is_alias_external(alias: str, resolver: ImportResolver, project_pkgs: set[str]) -> tuple[bool, str | None]:
     # Determine the import base for an alias and whether it's external
     mod = resolver.alias_to_module.get(alias)
     if not mod:
@@ -383,9 +376,7 @@ def classify_intent(category: str, import_base: str | None, is_test: bool) -> st
     return INTENT_UNSPECIFIED
 
 
-def add_git_blame(
-    repo_root: Path, file_path: Path, lineno: int
-) -> tuple[str | None, str | None, str | None]:
+def add_git_blame(repo_root: Path, file_path: Path, lineno: int) -> tuple[str | None, str | None, str | None]:
     try:
         rel = file_path.relative_to(repo_root)
     except Exception:
@@ -475,9 +466,7 @@ class MonkeyPatchScanner(ast.NodeVisitor):
             elif isinstance(target, ast.Attribute) and isinstance(target.value, ast.Name):
                 base_alias = target.value.id
             external, base = (
-                is_alias_external(base_alias or "", self.resolver, self.project_pkgs)
-                if base_alias
-                else (False, None)
+                is_alias_external(base_alias or "", self.resolver, self.project_pkgs) if base_alias else (False, None)
             )
             category = CATEGORY_SETATTR
             if external:
@@ -583,25 +572,15 @@ class MonkeyPatchScanner(ast.NodeVisitor):
         for t in targets:
             # sys.modules[...]
             if isinstance(t, ast.Subscript) and _is_sys_modules(t):
-                self._add_finding(
-                    lineno, CATEGORY_SYS_MODULES, "sys", is_module_scope, fn_name, cl_name
-                )
+                self._add_finding(lineno, CATEGORY_SYS_MODULES, "sys", is_module_scope, fn_name, cl_name)
                 continue
             # builtins.X = ...
-            if (
-                isinstance(t, ast.Attribute)
-                and isinstance(t.value, ast.Name)
-                and t.value.id == "builtins"
-            ):
-                self._add_finding(
-                    lineno, CATEGORY_BUILTINS, "builtins", is_module_scope, fn_name, cl_name
-                )
+            if isinstance(t, ast.Attribute) and isinstance(t.value, ast.Name) and t.value.id == "builtins":
+                self._add_finding(lineno, CATEGORY_BUILTINS, "builtins", is_module_scope, fn_name, cl_name)
                 continue
             # os.environ[...]
             if isinstance(t, ast.Subscript) and _is_os_environ(t):
-                self._add_finding(
-                    lineno, CATEGORY_GLOBAL_ENV, "os", is_module_scope, fn_name, cl_name
-                )
+                self._add_finding(lineno, CATEGORY_GLOBAL_ENV, "os", is_module_scope, fn_name, cl_name)
                 continue
             # logging.getLogger = ... or warnings.filterwarnings = ...
             if isinstance(t, ast.Attribute):
@@ -786,9 +765,7 @@ def scan_file(
     resolver.visit(tree)
 
     # Main scan
-    scanner = MonkeyPatchScanner(
-        repo_root, file_path, text_lines, resolver, project_pkgs, context_lines
-    )
+    scanner = MonkeyPatchScanner(repo_root, file_path, text_lines, resolver, project_pkgs, context_lines)
     scanner.visit(tree)
     findings = scanner.findings
 
@@ -852,9 +829,7 @@ def iter_python_files(
         yield path
 
 
-def augment_findings_with_git(
-    findings: list[Finding], repo_root: Path, with_git: bool
-) -> None:
+def augment_findings_with_git(findings: list[Finding], repo_root: Path, with_git: bool) -> None:
     if not with_git:
         return
     for finding in findings:
@@ -874,9 +849,7 @@ def summarize_findings(
     findings: list[Finding], top_n: int = 10
 ) -> tuple[Counter[str], Counter[str], list[tuple[str, int]]]:
     by_category: Counter[str] = Counter(f.category for f in findings)
-    by_import_base: Counter[str] = Counter(
-        f.import_base for f in findings if f.import_base is not None
-    )
+    by_import_base: Counter[str] = Counter(f.import_base for f in findings if f.import_base is not None)
     by_file_counter: Counter[str] = Counter(f.file for f in findings)
     top_files = sorted(by_file_counter.items(), key=lambda item: (-item[1], item[0]))[:top_n]
     return by_category, by_import_base, top_files
@@ -922,9 +895,7 @@ def compose_payload(
         "summary": {
             "by_category": dict(sorted(by_category.items())),
             "by_import_base": dict(sorted(by_import_base.items())),
-            "top_files": [
-                {"path": path, "count": count} for path, count in top_files
-            ],
+            "top_files": [{"path": path, "count": count} for path, count in top_files],
         },
     }
     return payload
@@ -1116,9 +1087,7 @@ def write_artifacts(
         encoding="utf-8",
     )
     if findings:
-        tsv_lines = [
-            "file\tline\tcategory\timport_base\tintent\tis_test\tis_module_scope\tcode"
-        ]
+        tsv_lines = ["file\tline\tcategory\timport_base\tintent\tis_test\tis_module_scope\tcode"]
         for finding in findings:
             tsv_lines.append(
                 "\t".join(
@@ -1155,9 +1124,7 @@ def scan_repository(paths: Paths, options: ScanOptions) -> tuple[list[Finding], 
     findings: list[Finding] = []
     parse_errors = 0
     files_scanned = 0
-    for file in iter_python_files(
-        paths.scan_root, paths.repo_root, options.exclude_dirs, options.exclude_globs
-    ):
+    for file in iter_python_files(paths.scan_root, paths.repo_root, options.exclude_dirs, options.exclude_globs):
         try:
             if file.resolve() == Path(__file__).resolve():
                 continue
@@ -1248,9 +1215,7 @@ mx.feature_flag = True
                 logging.debug("[SELF-TEST] Missing categories: %s", sorted(missing))
             return 2
         if verbose:
-            logging.debug(
-                "[SELF-TEST] OK — %d findings across %d files", len(findings), len(sample_files)
-            )
+            logging.debug("[SELF-TEST] OK — %d findings across %d files", len(findings), len(sample_files))
         return 0
 
 
@@ -1297,12 +1262,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=DEFAULT_CONTEXT_LINES,
         help="Lines of context to capture around each finding",
     )
-    parser.add_argument(
-        "--with-git", action="store_true", help="Include git blame metadata where available"
-    )
-    parser.add_argument(
-        "--strict", action="store_true", help="Treat parse errors as fatal (after scanning)"
-    )
+    parser.add_argument("--with-git", action="store_true", help="Include git blame metadata where available")
+    parser.add_argument("--strict", action="store_true", help="Treat parse errors as fatal (after scanning)")
     parser.add_argument(
         "--artifacts-to-keep",
         type=int,
@@ -1315,9 +1276,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
         help="Logging verbosity",
     )
-    parser.add_argument(
-        "--self-test", action="store_true", help="Run the built-in scanner self-test and exit"
-    )
+    parser.add_argument("--self-test", action="store_true", help="Run the built-in scanner self-test and exit")
     return parser.parse_args(argv)
 
 
@@ -1346,14 +1305,10 @@ def run(argv: list[str] | None = None) -> dict[str, object]:
     paths.output_dir.mkdir(parents=True, exist_ok=True)
 
     project_packages = (
-        set(args.project_packages)
-        if args.project_packages
-        else top_level_packages_default(paths.repo_root)
+        set(args.project_packages) if args.project_packages else top_level_packages_default(paths.repo_root)
     )
     exclude_dirs = set(args.exclude_dirs) if args.exclude_dirs is not None else set(DEFAULT_EXCLUDES)
-    exclude_globs = (
-        set(args.exclude_globs) if args.exclude_globs is not None else set(DEFAULT_EXCLUDE_GLOBS)
-    )
+    exclude_globs = set(args.exclude_globs) if args.exclude_globs is not None else set(DEFAULT_EXCLUDE_GLOBS)
     resolved_options = build_standard_options(args, OPTIONS_CONFIG)
 
     options = ScanOptions(

@@ -7,12 +7,7 @@ from pathlib import Path
 
 import yaml
 
-_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "diff_standards_index.py"
-)
+_MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "diff_standards_index.py"
 
 
 def _load_module():
@@ -33,13 +28,7 @@ def test_diff_detects_changes_and_writes_artifacts(tmp_path: Path) -> None:
 
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
-    output_dir = (
-        repo_root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "standards_index_diff_reports"
-    )
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "standards_index_diff_reports"
 
     old_index = {
         "integrity_hash": "abc123",
@@ -150,13 +139,7 @@ def test_no_changes_returns_zero_and_prunes(tmp_path: Path) -> None:
 
     repo_root = tmp_path / "workspace"
     repo_root.mkdir()
-    output_dir = (
-        repo_root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "standards_index_diff_reports"
-    )
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "standards_index_diff_reports"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     stale_dir = output_dir / f"{mod.RUN_PREFIX}-20231231_235959"

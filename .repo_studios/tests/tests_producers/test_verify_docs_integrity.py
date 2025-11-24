@@ -5,12 +5,7 @@ import json
 import sys
 from pathlib import Path
 
-MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "verify_docs_integrity.py"
-)
+MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "verify_docs_integrity.py"
 
 
 def _load_module():
@@ -112,16 +107,18 @@ def test_clean_run_generates_artifacts(tmp_path, monkeypatch):
         mod.dt.datetime(2025, 1, 1, 12, 0, 0, tzinfo=mod.dt.timezone.utc),
     )
 
-    payload = mod.run([
-        "--repo-root",
-        str(repo_root),
-        "--output-dir",
-        str(repo_root / "artifacts"),
-        "--artifacts-to-keep",
-        "2",
-        "--log-level",
-        "DEBUG",
-    ])
+    payload = mod.run(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--output-dir",
+            str(repo_root / "artifacts"),
+            "--artifacts-to-keep",
+            "2",
+            "--log-level",
+            "DEBUG",
+        ]
+    )
 
     assert payload["status"] == "ok"
     assert payload["exit_code"] == 0
@@ -207,14 +204,16 @@ def test_detects_mismatches_and_updates(tmp_path, monkeypatch):
         mod.dt.datetime(2025, 1, 1, 12, 0, 0, tzinfo=mod.dt.timezone.utc),
     )
 
-    first_payload = mod.run([
-        "--repo-root",
-        str(repo_root),
-        "--output-dir",
-        str(repo_root / "artifacts"),
-        "--log-level",
-        "INFO",
-    ])
+    first_payload = mod.run(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--output-dir",
+            str(repo_root / "artifacts"),
+            "--log-level",
+            "INFO",
+        ]
+    )
 
     assert first_payload["status"] == "mismatches"
     assert first_payload["exit_code"] == 1
@@ -226,27 +225,31 @@ def test_detects_mismatches_and_updates(tmp_path, monkeypatch):
         mod.dt.datetime(2025, 1, 1, 12, 0, 1, tzinfo=mod.dt.timezone.utc),
     )
 
-    second_payload = mod.run([
-        "--repo-root",
-        str(repo_root),
-        "--output-dir",
-        str(repo_root / "artifacts"),
-        "--log-level",
-        "INFO",
-        "--update",
-    ])
+    second_payload = mod.run(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--output-dir",
+            str(repo_root / "artifacts"),
+            "--log-level",
+            "INFO",
+            "--update",
+        ]
+    )
 
     assert second_payload["status"] == "updated"
     assert second_payload["exit_code"] == 0
 
-    final_payload = mod.run([
-        "--repo-root",
-        str(repo_root),
-        "--output-dir",
-        str(repo_root / "artifacts"),
-        "--log-level",
-        "INFO",
-    ])
+    final_payload = mod.run(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--output-dir",
+            str(repo_root / "artifacts"),
+            "--log-level",
+            "INFO",
+        ]
+    )
 
     assert final_payload["status"] == "ok"
     assert final_payload["summary"]["mismatched_blocks"] == 0

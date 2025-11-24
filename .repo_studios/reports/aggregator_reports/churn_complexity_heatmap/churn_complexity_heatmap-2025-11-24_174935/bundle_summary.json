@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "generated_at": "2025-11-24T17:49:35+00:00",
+  "mode": "logs_fallback",
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "window": 500,
+  "git_sha": "d66c2a1b87b450a105270d467e6f8cb427b9a6e2",
+  "inputs": {
+    "metrics_source": null,
+    "test_log_summary": null,
+    "logs_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\pytest_logs",
+    "junit": null
+  },
+  "artifacts": {
+    "heatmap_json": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\aggregator_reports\\churn_complexity_heatmap\\churn_complexity_heatmap-2025-11-24_174935\\heatmap.json",
+    "heatmap_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\aggregator_reports\\churn_complexity_heatmap\\churn_complexity_heatmap-2025-11-24_174935\\heatmap.md"
+  },
+  "notes": [
+    "Consumer bundle summary not found near C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\consumer_reports\\test_log_health_reports\\latest\\bundle_summary.json",
+    "JUnit artifact not found; failure density defaults to zero"
+  ],
+  "summary_source": null
+}

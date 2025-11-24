@@ -71,9 +71,7 @@ def _canonical_severity(sev: str | None) -> str | None:
         return None
     s = _norm(sev)
     if s in ALIAS_SEVERITY_MAP:
-        logging.warning(
-            "severity alias '%s' mapped to '%s' (prefer canonical names)", s, ALIAS_SEVERITY_MAP[s]
-        )
+        logging.warning("severity alias '%s' mapped to '%s' (prefer canonical names)", s, ALIAS_SEVERITY_MAP[s])
         s = ALIAS_SEVERITY_MAP[s]
     return s
 
@@ -173,9 +171,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     sp_search = sub.add_parser("search", help="Search rule summaries with optional filters")
     add_common(sp_search)
-    sp_search.add_argument(
-        "--text", required=True, help="Case-insensitive substring over id+summary+rationale"
-    )
+    sp_search.add_argument("--text", required=True, help="Case-insensitive substring over id+summary+rationale")
 
     sp_show = sub.add_parser("show", help="Show a single rule in detail")
     sp_show.add_argument("--id", required=True)

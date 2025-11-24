@@ -30,9 +30,7 @@ from pathlib import Path
 from typing import Any, Iterable, Sequence
 
 DEFAULT_TARGETS = ("agents", "api", "scripts")
-DEFAULT_OUTPUT_DIR = Path(
-    ".repo_studios/reports/producer_reports/lizard_reports"
-)
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/lizard_reports")
 RUN_PREFIX = "lizard"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 DEFAULT_LIZARD_EXTRA_ARGS = ("-Ejson", "-i", "-1")
@@ -257,7 +255,7 @@ def _collect_offenders(modules: Sequence[dict[str, Any]], max_ccn: int, max_leng
         file_path = _extract_file_path(entry)
         if not file_path:
             continue
-        for func in (entry.get("function_list") or []):
+        for func in entry.get("function_list") or []:
             ccn = _as_int(func.get("cyclomatic_complexity"))
             length = _as_int(func.get("length", func.get("nloc")))
             if ccn <= max_ccn and length <= max_length:
@@ -288,12 +286,14 @@ def _render_markdown(payload: dict[str, Any], offenders: Sequence[Offender], *, 
     ]
 
     if offenders:
-        lines.extend([
-            "## Top Offenders",
-            "",
-            "| Function | File | CCN | Length |",
-            "|---|---|---:|---:|",
-        ])
+        lines.extend(
+            [
+                "## Top Offenders",
+                "",
+                "| Function | File | CCN | Length |",
+                "|---|---|---:|---:|",
+            ]
+        )
         for offender in offenders[:max_rows]:
             lines.append(
                 f"| `{offender.name}` | `{offender.path}` | {offender.cyclomatic_complexity} | {offender.length} |"
@@ -303,14 +303,16 @@ def _render_markdown(payload: dict[str, Any], offenders: Sequence[Offender], *, 
         lines.append("No functions exceeded the configured thresholds.")
         lines.append("")
 
-    lines.extend([
-        "## How to Reproduce",
-        "",
-        "```bash",
-        payload.get("command_str") or "(unavailable)",
-        "```",
-        "",
-    ])
+    lines.extend(
+        [
+            "## How to Reproduce",
+            "",
+            "```bash",
+            payload.get("command_str") or "(unavailable)",
+            "```",
+            "",
+        ]
+    )
 
     return "\n".join(lines) + "\n"
 
@@ -367,9 +369,7 @@ def _compose_report(
     command_display: str | None = None,
 ) -> dict[str, Any]:
     command_list = list(command)
-    display = command_display if command_display is not None else (
-        shlex.join(command_list) if command_list else ""
-    )
+    display = command_display if command_display is not None else (shlex.join(command_list) if command_list else "")
     return {
         "schema_version": 1,
         "timestamp": slug,

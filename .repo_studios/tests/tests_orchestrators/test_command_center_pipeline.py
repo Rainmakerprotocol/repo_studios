@@ -1,4 +1,5 @@
 """Integration coverage for the command center pipeline orchestrator."""
+
 from __future__ import annotations
 
 import importlib

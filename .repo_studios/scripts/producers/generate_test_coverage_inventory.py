@@ -55,12 +55,8 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when executed directl
         write_report_artifacts,
     )
 
-DEFAULT_OUTPUT_DIR = Path(
-    ".repo_studios/reports/producer_reports/test_coverage_reports"
-)
-DEFAULT_COVERAGE_XML = Path(
-    ".repo_studios/reports/producer_reports/test_run_coverage/coverage.xml"
-)
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/test_coverage_reports")
+DEFAULT_COVERAGE_XML = Path(".repo_studios/reports/producer_reports/test_run_coverage/coverage.xml")
 RUN_PREFIX = "test_coverage"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 SCHEMA_VERSION = 1
@@ -131,9 +127,7 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Summarise function-level test coverage from Coverage.py XML outputs."
-    )
+    parser = argparse.ArgumentParser(description="Summarise function-level test coverage from Coverage.py XML outputs.")
     parser.add_argument("--repo-root", help="Override repository root resolution")
     parser.add_argument(
         "--coverage-xml",
@@ -204,7 +198,9 @@ def _load_coverage_lines(
 ) -> dict[Path, dict[int, int]]:
     tree = ET.parse(coverage_xml)
     root = tree.getroot()
-    sources = [Path(node.text or "").expanduser() for node in root.findall("./sources/source") if (node.text or "").strip()]
+    sources = [
+        Path(node.text or "").expanduser() for node in root.findall("./sources/source") if (node.text or "").strip()
+    ]
 
     coverage: dict[Path, dict[int, int]] = {}
     for class_node in root.findall(".//class"):

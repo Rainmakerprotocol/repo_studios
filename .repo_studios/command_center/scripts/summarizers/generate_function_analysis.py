@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Generate companion analysis insights from an existing function inventory."""
+
 from __future__ import annotations
 
 import argparse
@@ -24,6 +25,7 @@ def _load_slugify() -> Callable[[Path], str]:
             sys.path.insert(0, str(scripts_root))
         module = importlib.import_module("libraries")
     return module.slugify_relative
+
 
 slugify_relative = _load_slugify()
 
@@ -132,9 +134,7 @@ def locate_inventory_file(paths: Paths, options: Options) -> Path:
     if not index_dir.exists():
         raise FileNotFoundError(f"Inventory directory not found: {index_dir}")
     candidates = sorted(
-        path
-        for path in index_dir.glob(f"{paths.target.name}_commandview_*.json")
-        if "_screening_" not in path.name
+        path for path in index_dir.glob(f"{paths.target.name}_commandview_*.json") if "_screening_" not in path.name
     )
     if not candidates:
         raise FileNotFoundError(f"No inventory JSON files found in {index_dir}")

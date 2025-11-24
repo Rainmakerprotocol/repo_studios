@@ -8,27 +8,14 @@ import pytest
 
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
-MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "dynamic_code_watchlist.js"
-)
-VIEWER_PATH = (
-  REPO_STUDIOS_ROOT
-  / "command_center"
-  / "viewer"
-  / "ui"
-  / "viewer.js"
-)
+MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "dynamic_code_watchlist.js"
+VIEWER_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "viewer.js"
 
 if not MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected dynamic code watchlist builder at {MODULE_PATH}")
 
 if not VIEWER_PATH.exists():  # pragma: no cover - guard against missing assets
-  raise AssertionError(f"Expected viewer module at {VIEWER_PATH}")
+    raise AssertionError(f"Expected viewer module at {VIEWER_PATH}")
 
 
 @pytest.fixture(scope="module", autouse=True)

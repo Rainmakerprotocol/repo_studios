@@ -26,18 +26,21 @@ import argparse
 import json
 import logging
 import os
+import shutil
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-DEFAULT_STRUCTURED_ROOT = Path(
-    ".repo_studios/reports/producer_reports/monkey_patch_scans"
-)
+DEFAULT_STRUCTURED_ROOT = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
 LEGACY_ROOT = Path(".repo_studios/monkey_patch")
 LEGACY_REPORT_NAME = "report.json"
 STRUCTURED_MATCHES_NAME = "matches.json"
+DEFAULT_OUTPUT_BASE = Path(".repo_studios/reports/consumer_reports/monkey_patch_risk")
+DEFAULT_ARTIFACTS_TO_KEEP = 10
+BUNDLE_PREFIX = "monkey_patch_risk-"
 
 
 class NoScansFoundError(FileNotFoundError):
@@ -77,9 +80,7 @@ def _resolve_latest_scan(
 ) -> Path:
     if explicit_scan is not None:
         if not _is_scan_dir(explicit_scan):
-            raise FileNotFoundError(
-                f"Scan directory {explicit_scan} is missing expected artifacts"
-            )
+            raise FileNotFoundError(f"Scan directory {explicit_scan} is missing expected artifacts")
         return explicit_scan
 
     candidate_roots: list[Path] = []
@@ -183,12 +184,15 @@ def aggregate(findings: Iterable[Finding], metadata: dict[str, Any] | None = Non
     }
 
 
-def write_outputs(scan_dir: Path, agg: dict[str, Any]) -> None:
-    # JSON
-    with (scan_dir / "RISK_SUMMARY.json").open("w", encoding="utf-8") as f:
-        json.dump(agg, f, indent=2)
-    # Markdown
-    md = ["# Monkey-Patch Risk Summary", ""]
+def _utcnow() -> datetime:
+    return datetime.now(UTC)
+
+
+def _render_markdown(agg: dict[str, Any], *, generated: datetime | None = None) -> str:
+    md: list[str] = ["# Monkey-Patch Risk Summary", ""]
+    if generated is not None:
+        md.append(f"Generated (UTC): {generated.isoformat(timespec='seconds')}")
+        md.append("")
     total = agg.get("total_findings")
     if total is not None:
         md.append(f"- Total Findings: {int(total)}")
@@ -205,7 +209,98 @@ def write_outputs(scan_dir: Path, agg: dict[str, Any]) -> None:
     md.append("## Top Categories")
     for cat, count in agg["top_categories"]:
         md.append(f"- {cat}: {count}")
-    (scan_dir / "RISK_SUMMARY.md").write_text("\n".join(md) + "\n", encoding="utf-8")
+    return "\n".join(md) + "\n"
+
+
+def _write_legacy_outputs(scan_dir: Path, agg: dict[str, Any]) -> None:
+    scan_dir.mkdir(parents=True, exist_ok=True)
+    (scan_dir / "RISK_SUMMARY.json").write_text(json.dumps(agg, indent=2) + "\n", encoding="utf-8")
+    (scan_dir / "RISK_SUMMARY.md").write_text(_render_markdown(agg), encoding="utf-8")
+
+
+def _write_consumer_bundle(
+    *,
+    scan_dir: Path,
+    agg: dict[str, Any],
+    output_base: Path,
+    source: str,
+    producer_report: Path | None,
+    keep: int,
+) -> tuple[Path, Path, list[Path]]:
+    output_base.mkdir(parents=True, exist_ok=True)
+    ts = _utcnow()
+    bundle_dir = output_base / f"{BUNDLE_PREFIX}{ts.strftime('%Y-%m-%d_%H%M%S')}"
+    bundle_dir.mkdir(parents=True, exist_ok=True)
+
+    summary_path = bundle_dir / "summary.json"
+    summary_path.write_text(json.dumps(agg, indent=2) + "\n", encoding="utf-8")
+
+    md_path = bundle_dir / "SUMMARY.md"
+    markdown = _render_markdown(agg, generated=ts)
+    md_lines = markdown.rstrip("\n").splitlines()
+    md_lines.append("")
+    md_lines.append("## Source References")
+    md_lines.append(f"- Source Type: {source}")
+    md_lines.append(f"- Scan Directory: `{scan_dir.resolve()}`")
+    if producer_report:
+        md_lines.append(f"- Producer Report: `{producer_report.resolve()}`")
+    md_lines.append(f"- Consumer Bundle: `{bundle_dir.resolve()}`")
+    md_path.write_text("\n".join(md_lines) + "\n", encoding="utf-8")
+
+    bundle_summary = {
+        "schema_version": 1,
+        "generated_at": ts.isoformat(timespec="seconds"),
+        "source": source,
+        "scan_dir": str(scan_dir.resolve()),
+        "producer_report": str(producer_report.resolve()) if producer_report else None,
+        "artifacts": {
+            "summary_json": str(summary_path.resolve()),
+            "summary_md": str(md_path.resolve()),
+        },
+        "counts_by_risk": agg.get("counts_by_risk"),
+        "top_files": agg.get("top_files"),
+        "top_categories": agg.get("top_categories"),
+        "run_metadata": agg.get("run_metadata", {}),
+    }
+    bundle_summary_path = bundle_dir / "bundle_summary.json"
+    bundle_summary_path.write_text(json.dumps(bundle_summary, indent=2) + "\n", encoding="utf-8")
+
+    _update_latest(output_base, bundle_dir, ["summary.json", "SUMMARY.md", "bundle_summary.json"])
+    pruned = _prune_history(output_base, keep=keep, current=bundle_dir)
+    return bundle_dir, bundle_summary_path, pruned
+
+
+def _update_latest(base: Path, bundle_dir: Path, filenames: list[str]) -> None:
+    for name in filenames:
+        src = bundle_dir / name
+        dest = base / f"latest_{name}"
+        try:
+            if dest.exists() or dest.is_symlink():
+                dest.unlink()
+            dest.hardlink_to(src)
+        except Exception:
+            dest.write_bytes(src.read_bytes())
+
+
+def _prune_history(base: Path, *, keep: int | None, current: Path) -> list[Path]:
+    if keep is None:
+        return []
+    try:
+        keep_count = max(int(keep), 0)
+    except Exception:
+        keep_count = DEFAULT_ARTIFACTS_TO_KEEP
+    if not base.exists():
+        return []
+    bundles = sorted(
+        [path for path in base.iterdir() if path.is_dir() and path.name.startswith(BUNDLE_PREFIX) and path != current],
+        key=lambda p: p.name,
+        reverse=True,
+    )
+    limit = max(keep_count - 1, 0)
+    stale = bundles[limit:]
+    for path in stale:
+        shutil.rmtree(path, ignore_errors=True)
+    return stale
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
@@ -221,24 +316,35 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
         help="Directory that holds timestamped monkey patch scan runs",
     )
     parser.add_argument(
-        "--output-dir",
+        "--output-base",
         type=Path,
-        help="Directory for risk summary outputs (defaults to scan directory)",
+        default=None,
+        help="Directory for structured consumer bundles (defaults to .repo_studios/reports/consumer_reports/monkey_patch_risk)",
+    )
+    parser.add_argument(
+        "--artifacts-to-keep",
+        type=int,
+        default=DEFAULT_ARTIFACTS_TO_KEEP,
+        help="Number of consumer bundles to retain (including the newest run)",
+    )
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        help="Logging verbosity (e.g. INFO, DEBUG)",
     )
     parser.add_argument(
         "--verbose",
         action="store_true",
-        help="Increase logging verbosity",
+        help="Increase logging verbosity (alias for --log-level DEBUG)",
     )
     return parser.parse_args(argv)
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     args = _parse_args(argv)
-    logging.basicConfig(
-        level=logging.DEBUG if args.verbose else logging.INFO,
-        format="[%(levelname)s] %(message)s",
-    )
+    log_level = logging.DEBUG if args.verbose else getattr(logging, str(args.log_level).upper(), logging.INFO)
+    logging.basicConfig(level=log_level, format="[%(levelname)s] %(message)s", force=True)
+    logger = logging.getLogger("classify_monkey_patches")
 
     scan_dir = _resolve_latest_scan(
         explicit_scan=args.scan_dir,
@@ -247,23 +353,47 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     )
 
     findings, metadata = _load_structured_findings(scan_dir)
+    source = "structured" if findings else "legacy"
     if not findings:
         legacy_report = scan_dir / LEGACY_REPORT_NAME
         if legacy_report.exists():
             findings = _load_legacy_findings(legacy_report)
             metadata = None
+            source = "legacy"
         else:
-            raise FileNotFoundError(
-                f"No {STRUCTURED_MATCHES_NAME} or legacy {LEGACY_REPORT_NAME} found in {scan_dir}"
-            )
+            raise FileNotFoundError(f"No {STRUCTURED_MATCHES_NAME} or legacy {LEGACY_REPORT_NAME} found in {scan_dir}")
 
     result = aggregate(findings, metadata)
-    output_dir = args.output_dir or scan_dir
-    output_dir.mkdir(parents=True, exist_ok=True)
-    write_outputs(output_dir, result)
-    logging.info("Wrote risk summary to %s", output_dir)
-    result.update({"scan_dir": str(scan_dir), "output_dir": str(output_dir)})
-    return result
+    _write_legacy_outputs(scan_dir, result)
+
+    output_base = args.output_base or DEFAULT_OUTPUT_BASE
+    if not output_base.is_absolute():
+        output_base = Path.cwd() / output_base
+    producer_report_path = scan_dir / LEGACY_REPORT_NAME
+    if not producer_report_path.exists():
+        producer_report_path = None
+    bundle_dir, bundle_summary, pruned = _write_consumer_bundle(
+        scan_dir=scan_dir,
+        agg=result,
+        output_base=output_base,
+        source=source,
+        producer_report=producer_report_path,
+        keep=args.artifacts_to_keep,
+    )
+    logger.info(
+        "Wrote monkey patch risk bundle to %s (source=%s, pruned=%d)",
+        bundle_dir,
+        source,
+        len(pruned),
+    )
+    return {
+        "scan_dir": str(scan_dir.resolve()),
+        "bundle_dir": str(bundle_dir.resolve()),
+        "bundle_summary": str(bundle_summary.resolve()),
+        "output_base": str(output_base.resolve()),
+        "source": source,
+        "pruned": [str(p.resolve()) for p in pruned],
+    }
 
 
 def main(argv: Sequence[str] | None = None) -> int:

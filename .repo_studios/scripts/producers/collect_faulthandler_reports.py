@@ -83,7 +83,6 @@ def _render_markdown(report: dict[str, object], signatures: Sequence[FaultSignat
     return "\n".join(lines) + "\n"
 
 
-
 def _write_csv(run_dir: Path, signatures: Sequence[FaultSignature]) -> None:
     csv_path = run_dir / "stacks.csv"
     try:
@@ -160,11 +159,7 @@ def _prune_old_runs(output_dir: Path, keep: int, current_run: Path) -> list[Path
     removed: list[Path] = []
     if not output_dir.exists():
         return removed
-    candidates = [
-        child
-        for child in output_dir.iterdir()
-        if child.is_dir() and child.name.startswith(RUN_PREFIX)
-    ]
+    candidates = [child for child in output_dir.iterdir() if child.is_dir() and child.name.startswith(RUN_PREFIX)]
     candidates.sort(key=lambda p: p.name, reverse=True)
     for idx, path in enumerate(candidates):
         if idx < keep or path == current_run:
@@ -220,7 +215,9 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
 
 def run(argv: Sequence[str] | None = None) -> dict[str, object]:
     args = _parse_args(argv)
-    logging.basicConfig(level=getattr(logging, args.log_level.upper(), logging.INFO), format="%(levelname)s %(message)s")
+    logging.basicConfig(
+        level=getattr(logging, args.log_level.upper(), logging.INFO), format="%(levelname)s %(message)s"
+    )
     log = logging.getLogger("faulthandler_report")
 
     runs_base = args.runs_dir.resolve()
@@ -230,7 +227,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, object]:
         return {"run_dir": None, "artifacts": None}
 
     top_frames = args.top_frames if args.top_frames is not None else None
-    result = build_fault_report(run_dir.resolve(), top_n=top_frames) if top_frames else build_fault_report(run_dir.resolve())
+    result = (
+        build_fault_report(run_dir.resolve(), top_n=top_frames) if top_frames else build_fault_report(run_dir.resolve())
+    )
     output_dir = args.output_dir.resolve()
     run_artifacts = _write_artifacts(result, output_dir, keep=args.artifacts_to_keep)
 

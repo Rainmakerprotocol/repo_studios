@@ -4,18 +4,11 @@ import importlib.util
 import json
 from pathlib import Path
 
-_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "generate_anchor_inventory.py"
-)
+_MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "generate_anchor_inventory.py"
 
 
 def _load_module():
-    spec = importlib.util.spec_from_file_location(
-        "generate_anchor_inventory", _MODULE_PATH
-    )
+    spec = importlib.util.spec_from_file_location("generate_anchor_inventory", _MODULE_PATH)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(module)
@@ -34,17 +27,11 @@ def test_reports_written_with_duplicates(tmp_path):
     allow_file.write_text("overview\n", encoding="utf-8")
     test_file = root / "test_global_anchors.py"
     test_file.write_text(
-        "ALLOWED = {\n    \"foo\",\n    \"bar\",\n}\n",
+        'ALLOWED = {\n    "foo",\n    "bar",\n}\n',
         encoding="utf-8",
     )
 
-    output_dir = (
-        root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "anchor_inventory_reports"
-    )
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "anchor_inventory_reports"
 
     json_out = root / "baseline.json"
 
@@ -103,13 +90,7 @@ def test_pruning_keeps_newest_run(tmp_path):
     docs = root / "docs"
     docs.mkdir(parents=True)
     (docs / "alpha.md").write_text("# Alpha\n", encoding="utf-8")
-    output_dir = (
-        root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "anchor_inventory_reports"
-    )
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "anchor_inventory_reports"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     stale_names = [
@@ -142,11 +123,7 @@ def test_pruning_keeps_newest_run(tmp_path):
         f"{mod.RUN_PREFIX}-20230301_000000",
         f"{mod.RUN_PREFIX}-20240203_000000",
     }
-    run_dirs = {
-        path.name
-        for path in output_dir.iterdir()
-        if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)
-    }
+    run_dirs = {path.name for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)}
     assert run_dirs == expected
     assert (output_dir / "latest_report.json").is_file()
     assert (output_dir / "latest_report.md").is_file()

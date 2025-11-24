@@ -8,21 +8,8 @@ import pytest
 
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
-BUILDER_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "entrypoint_trace_diagram.js"
-)
-VIEWER_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "viewer.js"
-)
+BUILDER_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "entrypoint_trace_diagram.js"
+VIEWER_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "viewer.js"
 
 if not BUILDER_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected entrypoint trace builder at {BUILDER_PATH}")

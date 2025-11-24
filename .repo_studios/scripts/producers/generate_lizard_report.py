@@ -30,9 +30,7 @@ from pathlib import Path
 from typing import Any, Iterable, Sequence
 
 DEFAULT_TARGETS = ("agents", "api", "scripts")
-DEFAULT_OUTPUT_DIR = Path(
-    ".repo_studios/reports/producer_reports/lizard_reports"
-)
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/lizard_reports")
 RUN_PREFIX = "lizard"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 DEFAULT_LIZARD_EXTRA_ARGS = ("-Ejson", "-i", "-1")
@@ -277,7 +275,7 @@ def _collect_offenders(modules: Sequence[dict[str, Any]], max_ccn: int, max_leng
         file_path = _extract_file_path(entry)
         if not file_path:
             continue
-        for func in (entry.get("function_list") or []):
+        for func in entry.get("function_list") or []:
             ccn = _as_int(func.get("cyclomatic_complexity"))
             length = _as_int(func.get("length", func.get("nloc")))
             if ccn <= max_ccn and length <= max_length:
@@ -362,12 +360,14 @@ def _render_markdown(
     ]
 
     if offenders:
-        lines.extend([
-            "## Top Offenders",
-            "",
-            "| Rank | Function | Location | CCN (Δ) | Length (Δ) | Recommendation |",
-            "|---:|---|---|---:|---:|---|",
-        ])
+        lines.extend(
+            [
+                "## Top Offenders",
+                "",
+                "| Rank | Function | Location | CCN (Δ) | Length (Δ) | Recommendation |",
+                "|---:|---|---|---:|---:|---|",
+            ]
+        )
         for index, offender in enumerate(offenders[:top_limit], start=1):
             ccn_display = _format_metric(offender.cyclomatic_complexity, max_ccn)
             length_display = _format_metric(offender.length, max_length)
@@ -384,22 +384,26 @@ def _render_markdown(
         lines.append("")
         remaining = payload.get("issue_count", 0) - min(len(offenders), top_limit)
         if remaining > 0:
-            lines.extend([
-                f"Additional offenders not shown: {remaining} (see `report.json` for full list).",
-                "",
-            ])
+            lines.extend(
+                [
+                    f"Additional offenders not shown: {remaining} (see `report.json` for full list).",
+                    "",
+                ]
+            )
     else:
         lines.append("No functions exceeded the configured thresholds.")
         lines.append("")
 
-    lines.extend([
-        "## How to Reproduce",
-        "",
-        "```bash",
-        payload.get("command_str") or "(unavailable)",
-        "```",
-        "",
-    ])
+    lines.extend(
+        [
+            "## How to Reproduce",
+            "",
+            "```bash",
+            payload.get("command_str") or "(unavailable)",
+            "```",
+            "",
+        ]
+    )
 
     return "\n".join(lines) + "\n"
 
@@ -477,9 +481,7 @@ def _compose_report(
     command_display: str | None = None,
 ) -> dict[str, Any]:
     command_list = list(command)
-    display = command_display if command_display is not None else (
-        shlex.join(command_list) if command_list else ""
-    )
+    display = command_display if command_display is not None else (shlex.join(command_list) if command_list else "")
     return {
         "schema_version": 1,
         "timestamp": slug,

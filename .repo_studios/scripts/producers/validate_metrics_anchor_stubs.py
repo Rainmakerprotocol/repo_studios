@@ -17,23 +17,14 @@ from typing import Any, Iterable
 RE_MD_LINK = re.compile(r"metrics_orchestrator\.md#([a-zA-Z0-9\-._]+)")
 RE_HEADING = re.compile(r"^(#{2,6})\s+(.*)$")
 
-DEFAULT_OUTPUT_DIR = Path(
-    ".repo_studios/reports/producer_reports/metrics_anchor_stub_reports"
-)
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/metrics_anchor_stub_reports")
 DEFAULT_LEGACY_FILE = Path("docs/api/metrics_orchestrator.md")
-DEFAULT_ALLOWLIST_PATH = Path(
-    ".repo_studios/scripts/producers/metrics_anchor_allowlist.json"
-)
+DEFAULT_ALLOWLIST_PATH = Path(".repo_studios/scripts/producers/metrics_anchor_allowlist.json")
 RUN_PREFIX = "metrics_anchor_stub_check"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 SCHEMA_VERSION = 1
 
-LIBRARIES_ROOT = (
-    Path(__file__).resolve().parents[3]
-    / ".repo_studios"
-    / "command_center"
-    / "scripts"
-)
+LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
 try:
     from libraries import (
@@ -108,7 +99,7 @@ def parse_args(argv: list[str] | None) -> argparse.Namespace:
     )
     parser.add_argument(
         "--allowlist-path",
-        help="JSON file with anchors to allow (format: {\"anchors\": [\"foo\"]})",
+        help='JSON file with anchors to allow (format: {"anchors": ["foo"]})',
     )
     parser.add_argument(
         "--artifacts-to-keep",
@@ -153,9 +144,7 @@ def iter_markdown_files(repo_root: Path) -> Iterable[Path]:
         yield path
 
 
-def collect_referenced_anchors(
-    files: Iterable[Path], repo_root: Path
-) -> dict[str, list[str]]:
+def collect_referenced_anchors(files: Iterable[Path], repo_root: Path) -> dict[str, list[str]]:
     anchors: dict[str, set[str]] = defaultdict(set)
     for md_file in files:
         try:
@@ -308,12 +297,8 @@ def render_log(payload: dict[str, Any]) -> str:
 
 def write_artifacts(run_dir: Path, output_dir: Path, payload: dict[str, Any]) -> None:
     run_dir.mkdir(parents=True, exist_ok=True)
-    (run_dir / "report.json").write_text(
-        json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
-    (run_dir / "report.md").write_text(
-        render_markdown_report(payload), encoding="utf-8"
-    )
+    (run_dir / "report.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    (run_dir / "report.md").write_text(render_markdown_report(payload), encoding="utf-8")
     (run_dir / "log.txt").write_text(render_log(payload), encoding="utf-8")
     (run_dir / "missing.json").write_text(
         json.dumps(payload.get("missing", []), indent=2, sort_keys=True) + "\n",

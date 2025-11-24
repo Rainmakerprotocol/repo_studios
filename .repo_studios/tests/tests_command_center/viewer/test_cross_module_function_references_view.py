@@ -9,12 +9,7 @@ import pytest
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
 MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "cross_module_function_references.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "cross_module_function_references.js"
 )
 
 if not MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
@@ -39,9 +34,9 @@ def _run_node_module(script: str) -> dict[str, object]:
         check=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-    text=True,
-    encoding="utf-8",
-    errors="replace",
+        text=True,
+        encoding="utf-8",
+        errors="replace",
     )
     if result.stderr.strip():
         pytest.fail(f"Node.js script wrote to stderr: {result.stderr}")

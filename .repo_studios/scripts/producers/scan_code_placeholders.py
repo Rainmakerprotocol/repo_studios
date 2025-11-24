@@ -37,12 +37,7 @@ DEFAULT_PATTERNS = ("TODO", "FIXME", "NOTE", "XXX", "OPTIMIZE", "REVIEW")
 COMMENT_ANCHORS = ("#", "//", "<!--", "/*", "*")
 DEFAULT_EXCLUDE_PREFIXES = (".venv/", "node_modules/", "*/site-packages/")
 
-LIBRARIES_ROOT = (
-    Path(__file__).resolve().parents[3]
-    / ".repo_studios"
-    / "command_center"
-    / "scripts"
-)
+LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
 try:
     from libraries import (
@@ -136,7 +131,9 @@ class PlaceholderRecord:
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Scan for placeholder comments and emit structured artifacts")
-    parser.add_argument("--repo-root", default=None, help="Repository root (defaults to three levels up from this script)")
+    parser.add_argument(
+        "--repo-root", default=None, help="Repository root (defaults to three levels up from this script)"
+    )
     parser.add_argument("--root", default=".", help="Directory to scan (relative to repo root by default)")
     parser.add_argument(
         "--output-dir",
@@ -382,9 +379,7 @@ def render_markdown_report(payload: dict[str, object], records: list[Placeholder
         lines.append("| Path | Line | Pattern | Snippet |\n| --- | ---: | --- | --- |\n")
         for record in records[:20]:
             snippet = record.line_text.replace("|", "\\|")
-            lines.append(
-                f"| {record.relative_path} | {record.line_number} | `{record.pattern}` | {snippet} |\n"
-            )
+            lines.append(f"| {record.relative_path} | {record.line_number} | `{record.pattern}` | {snippet} |\n")
         lines.append("\n")
     return "".join(lines)
 
@@ -427,9 +422,7 @@ def write_artifacts(
         tsv_lines = ["path\tline\tpattern\tsnippet"]
         for record in records:
             snippet = record.line_text.replace("\t", " ")
-            tsv_lines.append(
-                f"{record.relative_path}\t{record.line_number}\t{record.pattern}\t{snippet}"
-            )
+            tsv_lines.append(f"{record.relative_path}\t{record.line_number}\t{record.pattern}\t{snippet}")
         (run_dir / "matches.tsv").write_text("\n".join(tsv_lines) + "\n", encoding="utf-8")
     _write_latest_artifacts(run_dir, output_dir)
 
@@ -458,7 +451,7 @@ def prune_history(base_dir: Path, keep: int) -> None:
         key=lambda item: item.name,
     )
     excess = len(run_dirs) - keep
-    for old_dir in run_dirs[:max(excess, 0)]:
+    for old_dir in run_dirs[: max(excess, 0)]:
         shutil.rmtree(old_dir, ignore_errors=True)
 
 

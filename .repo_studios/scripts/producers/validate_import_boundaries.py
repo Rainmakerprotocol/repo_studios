@@ -14,25 +14,14 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any
 
-DEFAULT_RELATIVE_GRAPH_DIR = Path(
-    ".repo_studios/reports/producer_reports/import_graph_reports"
-)
-DEFAULT_OUTPUT_DIR = Path(
-    ".repo_studios/reports/producer_reports/import_boundary_reports"
-)
-DEFAULT_ALLOWLIST = Path(
-    ".repo_studios/scripts/producers/import_rules_allowlist.json"
-)
+DEFAULT_RELATIVE_GRAPH_DIR = Path(".repo_studios/reports/producer_reports/import_graph_reports")
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/import_boundary_reports")
+DEFAULT_ALLOWLIST = Path(".repo_studios/scripts/producers/import_rules_allowlist.json")
 RUN_PREFIX = "import_boundary_check"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 SCHEMA_VERSION = 1
 
-LIBRARIES_ROOT = (
-    Path(__file__).resolve().parents[3]
-    / ".repo_studios"
-    / "command_center"
-    / "scripts"
-)
+LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
 try:
     from libraries import (
@@ -238,9 +227,7 @@ def _scan_static_imports(repo_root: Path) -> list[Violation]:
                 continue
             if rel_path.startswith("agents/"):
                 if "\nfrom api " in text or "\nimport api" in text:
-                    violations.append(
-                        Violation(kind="static-import", detail="agents -> api", file=rel_path)
-                    )
+                    violations.append(Violation(kind="static-import", detail="agents -> api", file=rel_path))
             if rel_path.startswith("agents/core/"):
                 if "\nfrom agents.interface" in text or "\nimport agents.interface" in text:
                     violations.append(
@@ -262,9 +249,7 @@ def _scan_static_imports(repo_root: Path) -> list[Violation]:
     return violations
 
 
-def _detect_cycles(
-    graph: dict[str, list[str]], *, agents_to_api_forbidden_found: bool
-) -> list[Violation]:
+def _detect_cycles(graph: dict[str, list[str]], *, agents_to_api_forbidden_found: bool) -> list[Violation]:
     violations: list[Violation] = []
     if "api" in graph and "agents" in graph:
         api_edges = set(graph.get("api", []))
@@ -274,9 +259,7 @@ def _detect_cycles(
     return violations
 
 
-def _edge_violations(
-    graph: dict[str, list[str]], *, agents_to_api_forbidden_found: bool
-) -> list[Violation]:
+def _edge_violations(graph: dict[str, list[str]], *, agents_to_api_forbidden_found: bool) -> list[Violation]:
     violations: list[Violation] = []
     if agents_to_api_forbidden_found and "agents" in graph:
         if "api" in set(graph.get("agents", [])):
@@ -285,9 +268,7 @@ def _edge_violations(
 
 
 def _apply_allowlist(violations: list[Violation], allowlist: dict[str, Any]) -> list[Violation]:
-    allowed_edges = {
-        (edge.get("from"), edge.get("to")) for edge in allowlist.get("edges", [])
-    }
+    allowed_edges = {(edge.get("from"), edge.get("to")) for edge in allowlist.get("edges", [])}
     allowed_files = set(allowlist.get("files", []))
     remaining: list[Violation] = []
     for violation in violations:
@@ -296,10 +277,7 @@ def _apply_allowlist(violations: list[Violation], allowlist: dict[str, Any]) -> 
             if len(parts) == 2 and (parts[0], parts[1]) in allowed_edges:
                 continue
         if violation.kind == "cycle":
-            if (
-                ("api", "agents") in allowed_edges
-                and ("agents", "api") in allowed_edges
-            ):
+            if ("api", "agents") in allowed_edges and ("agents", "api") in allowed_edges:
                 continue
         if violation.kind == "static-import" and violation.file in allowed_files:
             continue
@@ -340,9 +318,7 @@ def render_markdown_report(payload: dict[str, Any]) -> str:
         lines.append("| Kind | Detail | File |\n| --- | --- | --- |\n")
         for violation in violations:
             file_display = violation.get("file") or "—"
-            lines.append(
-                f"| {violation.get('kind')} | {violation.get('detail')} | {file_display} |\n"
-            )
+            lines.append(f"| {violation.get('kind')} | {violation.get('detail')} | {file_display} |\n")
 
     lines.append(
         "\n## Next Steps\n\n"
@@ -391,9 +367,7 @@ def write_artifacts(
     payload: dict[str, Any],
 ) -> None:
     run_dir.mkdir(parents=True, exist_ok=True)
-    (run_dir / "report.json").write_text(
-        json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    (run_dir / "report.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     (run_dir / "report.md").write_text(render_markdown_report(payload), encoding="utf-8")
     (run_dir / "log.txt").write_text(render_log(payload), encoding="utf-8")
     (run_dir / "violations.json").write_text(
@@ -447,9 +421,7 @@ def compose_payload(
             "artifacts_to_keep": options.artifacts_to_keep,
         },
         "summary": summary,
-        "violations": [
-            {"kind": v.kind, "detail": v.detail, "file": v.file} for v in violations
-        ],
+        "violations": [{"kind": v.kind, "detail": v.detail, "file": v.file} for v in violations],
     }
     return payload
 
@@ -477,12 +449,8 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
         v.kind == "static-import" and v.detail == "agents -> api" for v in static_violations
     )
     violations = []
-    violations.extend(
-        _detect_cycles(graph, agents_to_api_forbidden_found=agents_to_api_forbidden_found)
-    )
-    violations.extend(
-        _edge_violations(graph, agents_to_api_forbidden_found=agents_to_api_forbidden_found)
-    )
+    violations.extend(_detect_cycles(graph, agents_to_api_forbidden_found=agents_to_api_forbidden_found))
+    violations.extend(_edge_violations(graph, agents_to_api_forbidden_found=agents_to_api_forbidden_found))
     violations.extend(static_violations)
     remaining = _apply_allowlist(violations, allowlist)
 

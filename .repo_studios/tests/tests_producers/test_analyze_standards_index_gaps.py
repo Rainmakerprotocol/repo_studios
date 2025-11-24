@@ -6,12 +6,7 @@ import sys
 import textwrap
 from pathlib import Path
 
-_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "analyze_standards_index_gaps.py"
-)
+_MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "analyze_standards_index_gaps.py"
 
 
 def _load_module():
@@ -69,13 +64,7 @@ def test_structured_artifacts_created(tmp_path):
     categories_path = workspace / "standards_categories.yaml"
     _write_categories(categories_path, [doc])
 
-    output_dir = (
-        workspace
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "standards_gap_reports"
-    )
+    output_dir = workspace / ".repo_studios" / "reports" / "producer_reports" / "standards_gap_reports"
     legacy_json = workspace / "legacy_gap.json"
 
     exit_code = mod.main(
@@ -136,13 +125,7 @@ def test_pruning_keeps_recent_runs(tmp_path):
     categories_path = workspace / "standards_categories.yaml"
     _write_categories(categories_path, [doc])
 
-    output_dir = (
-        workspace
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "standards_gap_reports"
-    )
+    output_dir = workspace / ".repo_studios" / "reports" / "producer_reports" / "standards_gap_reports"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     stale_dirs = [
@@ -176,11 +159,7 @@ def test_pruning_keeps_recent_runs(tmp_path):
         f"{mod.RUN_PREFIX}-20230301_000000",
         f"{mod.RUN_PREFIX}-20240203_000000",
     }
-    remaining = {
-        path.name
-        for path in output_dir.iterdir()
-        if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)
-    }
+    remaining = {path.name for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)}
     assert remaining == expected
     assert (output_dir / "latest_report.json").is_file()
     assert (output_dir / "latest_report.md").is_file()

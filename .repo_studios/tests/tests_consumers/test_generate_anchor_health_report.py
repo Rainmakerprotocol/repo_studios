@@ -3,20 +3,14 @@ from __future__ import annotations
 import importlib.util
 import json
 import os
+import sys
+from datetime import datetime
 from pathlib import Path
 
-_INVENTORY_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "generate_anchor_inventory.py"
-)
+_INVENTORY_MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "generate_anchor_inventory.py"
 
 _CONSUMER_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "consumers"
-    / "generate_anchor_health_report.py"
+    Path(__file__).resolve().parents[2] / "scripts" / "consumers" / "generate_anchor_health_report.py"
 )
 
 
@@ -24,6 +18,7 @@ def _load_module(name: str, path: Path):
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
+    sys.modules[name] = module
     spec.loader.exec_module(module)
     return module
 
@@ -45,13 +40,7 @@ def test_anchor_health_uses_inventory_artifacts(tmp_path):
         encoding="utf-8",
     )
 
-    inventory_output = (
-        repo
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "anchor_inventory_reports"
-    )
+    inventory_output = repo / ".repo_studios" / "reports" / "producer_reports" / "anchor_inventory_reports"
     inventory_output.mkdir(parents=True, exist_ok=True)
 
     exit_code = inventory_mod.main(
@@ -81,7 +70,11 @@ def test_anchor_health_uses_inventory_artifacts(tmp_path):
     cwd = os.getcwd()
     os.chdir(repo)
     try:
-        result = consumer_mod.run(inventory_report=latest_report, output_dir=repo / ".repo_studios" / "anchor_health")
+        result = consumer_mod.run(
+            inventory_report=latest_report,
+            output_dir=repo / ".repo_studios" / "anchor_health",
+            artifacts_to_keep=5,
+        )
     finally:
         os.chdir(cwd)
 
@@ -100,3 +93,81 @@ def test_anchor_health_uses_inventory_artifacts(tmp_path):
 
     latest_json = run_dir.parent / "anchor_report_latest.json"
     assert latest_json.exists()
+
+
+def test_anchor_health_falls_back_to_docs_scan(tmp_path):
+    consumer_mod = _load_module("generate_anchor_health_report", _CONSUMER_MODULE_PATH)
+
+    repo = tmp_path / "repo"
+    docs = repo / "docs"
+    docs.mkdir(parents=True)
+    (docs / "alpha.md").write_text("# Intro\n\n## Shared\n", encoding="utf-8")
+    (docs / "beta.md").write_text("# Shared\n", encoding="utf-8")
+
+    baseline_path = repo / "tests" / "docs"
+    baseline_path.mkdir(parents=True)
+    (baseline_path / "anchor_slug_baseline.json").write_text(
+        json.dumps({"summary": {"cross_file_duplicates": 0}}, indent=2),
+        encoding="utf-8",
+    )
+
+    cwd = os.getcwd()
+    os.chdir(repo)
+    try:
+        result = consumer_mod.run(output_dir=repo / ".repo_studios" / "anchor_health", artifacts_to_keep=5)
+    finally:
+        os.chdir(cwd)
+
+    report = result["report"]
+    assert report["source"] == "scan"
+    assert report["strict_duplicate_count"] == 1
+    cluster = next(item for item in report["clusters"] if item["slug"] == "shared")
+    assert sorted(cluster["files"]) == ["alpha.md", "beta.md"]
+
+
+def test_anchor_health_prunes_history(tmp_path, monkeypatch):
+    consumer_mod = _load_module("generate_anchor_health_report", _CONSUMER_MODULE_PATH)
+
+    repo = tmp_path / "repo"
+    docs = repo / "docs"
+    docs.mkdir(parents=True)
+    (docs / "one.md").write_text("# Shared\n", encoding="utf-8")
+    (docs / "two.md").write_text("# Shared\n", encoding="utf-8")
+
+    baseline_path = repo / "tests" / "docs"
+    baseline_path.mkdir(parents=True)
+    (baseline_path / "anchor_slug_baseline.json").write_text(
+        json.dumps({"summary": {"cross_file_duplicates": 0}}, indent=2),
+        encoding="utf-8",
+    )
+
+    times = [datetime(2025, 1, 1, 0, minute, tzinfo=consumer_mod.UTC) for minute in range(6)]
+
+    class _FakeDatetime(datetime):
+        queue = times.copy()
+
+        @classmethod
+        def now(cls, tz=None):
+            value = cls.queue.pop(0)
+            if tz is None:
+                return value.replace(tzinfo=None)
+            return value
+
+        @classmethod
+        def utcnow(cls):
+            return cls.now(consumer_mod.UTC)
+
+    monkeypatch.setattr(consumer_mod, "datetime", _FakeDatetime)
+
+    cwd = os.getcwd()
+    os.chdir(repo)
+    try:
+        for _ in range(6):
+            consumer_mod.run(output_dir=repo / ".repo_studios" / "anchor_health", artifacts_to_keep=3)
+    finally:
+        os.chdir(cwd)
+
+    output_dir = repo / ".repo_studios" / "anchor_health"
+    run_dirs = sorted(p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith("anchor_health-"))
+    assert len(run_dirs) == 3
+    assert all(run_dirs)

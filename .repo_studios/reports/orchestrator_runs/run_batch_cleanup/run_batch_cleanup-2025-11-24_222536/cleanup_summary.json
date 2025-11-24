@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "generated_at": "2025-11-24T22:25:36+00:00",
+  "status": "failed",
+  "options": {
+    "targets": [
+      "C:\\Users\\genet\\repo_studios\\metrics_storage\\storage"
+    ],
+    "mode": "all",
+    "dry_run": false,
+    "backup": false,
+    "refresh_only": false,
+    "skip_pytest": false,
+    "artifacts_to_keep": 5
+  },
+  "steps": [
+    {
+      "label": "Ruff format",
+      "command": [
+        "ruff",
+        "format",
+        "C:\\Users\\genet\\repo_studios\\metrics_storage\\storage",
+        "--config",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\ruff_clean.toml"
+      ],
+      "status": "failed",
+      "returncode": 2,
+      "stdout": "",
+      "stderr": "error: Failed to format metrics_storage\\storage: The system cannot find the path specified. (os error 3)\n",
+      "duration_seconds": 0.027485900005558506,
+      "skipped_reason": null
+    }
+  ],
+  "tree_refresh": {
+    "markdown_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\project_tree_overview.md",
+    "root": "C:\\Users\\genet\\repo_studios",
+    "updated": true,
+    "found_markers": true,
+    "timestamp": "11/24/2025_22:25:36"
+  },
+  "backups": [],
+  "notes": [],
+  "exception": null
+}

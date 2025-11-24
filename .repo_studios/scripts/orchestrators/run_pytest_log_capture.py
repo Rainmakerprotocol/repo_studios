@@ -45,9 +45,11 @@ from collections import Counter, defaultdict
 from collections.abc import Iterable
 from datetime import datetime
 from pathlib import Path
+
 # Use defusedxml for secure XML parsing; fallback keeps runner usable when missing
 try:  # pragma: no cover - import wiring
     from defusedxml import ElementTree  # type: ignore
+
     _USING_DEFUSEDXML = True
 except ModuleNotFoundError:  # pragma: no cover - exercised in environments without dependency
     from xml.etree import ElementTree  # type: ignore
@@ -184,9 +186,7 @@ def run_pytest_and_capture(cmd: list[str], cwd: Path) -> tuple[str, int, bool]:
                     # Escalate: terminate then kill
                     try:
                         proc.terminate()
-                        lines.append(
-                            "[pytest_log_runner] Escalating: sent SIGTERM to pytest process.\n"
-                        )
+                        lines.append("[pytest_log_runner] Escalating: sent SIGTERM to pytest process.\n")
                         sys.stdout.write(lines[-1])
                     except Exception:
                         pass
@@ -195,9 +195,7 @@ def run_pytest_and_capture(cmd: list[str], cwd: Path) -> tuple[str, int, bool]:
                     except Exception:
                         try:
                             proc.kill()
-                            lines.append(
-                                "[pytest_log_runner] Escalating: sent SIGKILL to pytest process.\n"
-                            )
+                            lines.append("[pytest_log_runner] Escalating: sent SIGKILL to pytest process.\n")
                             sys.stdout.write(lines[-1])
                         except Exception:
                             pass
@@ -304,9 +302,7 @@ def parse_junit_failed_and_skipped(
             file_attr = tc.get("file")
             classname = tc.get("classname")
             name = tc.get("name") or "<unknown>"
-            node_left = file_attr or (
-                classname.replace(".", "/") + ".py" if classname else "<unknown>"
-            )
+            node_left = file_attr or (classname.replace(".", "/") + ".py" if classname else "<unknown>")
             nodeid = f"{node_left}::{name}"
             # Failure or error
             f_el = tc.find("failure")
@@ -385,16 +381,13 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "--cwd",
-        default=os.environ.get("PYTEST_RUNNER_CWD")
-        or os.environ.get("GITHUB_WORKSPACE")
-        or str(Path.cwd()),
+        default=os.environ.get("PYTEST_RUNNER_CWD") or os.environ.get("GITHUB_WORKSPACE") or str(Path.cwd()),
         help="Working directory to run pytest from",
     )
     parser.add_argument(
         "--logs-dir",
         default=os.environ.get("PYTEST_LOGS_DIR")
-        or str(Path(os.environ.get("GITHUB_WORKSPACE") or Path.cwd())
-                / ".repo_studios/pytest_logs"),
+        or str(Path(os.environ.get("GITHUB_WORKSPACE") or Path.cwd()) / ".repo_studios/pytest_logs"),
         help="Directory to store logs",
     )
     parser.add_argument(
@@ -457,10 +450,7 @@ def main(argv: list[str] | None = None) -> int:
     if supports.get("--report-log", False):
         base_cmd += ["--report-log", str(reportlog_path)]
     # Allow disabling xdist via env if it causes instability/hangs
-    if (
-        supports.get("-n", False)
-        and _env_flag("PYTEST_RUNNER_DISABLE_XDIST", default=False) is False
-    ):
+    if supports.get("-n", False) and _env_flag("PYTEST_RUNNER_DISABLE_XDIST", default=False) is False:
         base_cmd += ["-n", "auto"]
         xdist_used = True
     if supports.get("--cov", False):
@@ -546,11 +536,7 @@ def main(argv: list[str] | None = None) -> int:
     # If we detected a hang and terminated OR pytest exited due to a signal while using xdist,
     # optionally retry serially (common mitigation for xdist end-of-suite stalls).
     exited_by_signal = isinstance(rc, int) and rc < 0
-    if (
-        (terminated or exited_by_signal)
-        and xdist_used
-        and _env_flag("PYTEST_RUNNER_FALLBACK_SERIAL", default=True)
-    ):
+    if (terminated or exited_by_signal) and xdist_used and _env_flag("PYTEST_RUNNER_FALLBACK_SERIAL", default=True):
         try:
             logging.warning(
                 "Detected hang/termination%s with xdist; retrying in serial mode without -n",
@@ -645,7 +631,5 @@ if __name__ == "__main__":
         format="%(asctime)s %(levelname)s %(message)s",
     )
     if not _USING_DEFUSEDXML:
-        logging.warning(
-            "defusedxml not available; falling back to xml.etree.ElementTree"
-        )
+        logging.warning("defusedxml not available; falling back to xml.etree.ElementTree")
     raise SystemExit(main())

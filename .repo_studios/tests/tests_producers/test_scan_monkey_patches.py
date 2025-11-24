@@ -5,18 +5,11 @@ import json
 import sys
 from pathlib import Path
 
-_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "scan_monkey_patches.py"
-)
+_MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "scan_monkey_patches.py"
 
 
 def _load_module():
-    spec = importlib.util.spec_from_file_location(
-        "scan_monkey_patches", _MODULE_PATH
-    )
+    spec = importlib.util.spec_from_file_location("scan_monkey_patches", _MODULE_PATH)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     sys.modules[spec.name] = module
@@ -58,18 +51,8 @@ os.environ[\"EXAMPLE_FLAG\"] = \"1\"
     assert payload["status"] == "ok"
     assert payload["scan_root"] == "src"
 
-    output_dir = (
-        repo_root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "monkey_patch_scans"
-    )
-    run_dirs = [
-        p
-        for p in output_dir.iterdir()
-        if p.is_dir() and p.name.startswith("monkey_patch_scan-")
-    ]
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "monkey_patch_scans"
+    run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith("monkey_patch_scan-")]
     assert len(run_dirs) == 1
     run_dir = run_dirs[0]
 
@@ -130,13 +113,7 @@ def test_prune_history(tmp_path: Path) -> None:
         encoding="utf-8",
     )
 
-    output_dir = (
-        repo_root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "monkey_patch_scans"
-    )
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "monkey_patch_scans"
 
     mod.run(
         [
@@ -161,18 +138,12 @@ def test_prune_history(tmp_path: Path) -> None:
         ]
     )
 
-    run_dirs = [
-        p
-        for p in output_dir.iterdir()
-        if p.is_dir() and p.name.startswith("monkey_patch_scan-")
-    ]
+    run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith("monkey_patch_scan-")]
     assert len(run_dirs) == 1
 
     latest_dir = output_dir / "latest"
     assert (latest_dir / "latest_report.json").exists()
 
     legacy_root = repo_root / ".repo_studios" / "monkey_patch"
-    legacy_runs = [
-        p for p in legacy_root.iterdir() if p.is_dir() and p.name not in {"latest"}
-    ]
+    legacy_runs = [p for p in legacy_root.iterdir() if p.is_dir() and p.name not in {"latest"}]
     assert len(legacy_runs) == 1

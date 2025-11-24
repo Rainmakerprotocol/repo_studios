@@ -1,4 +1,5 @@
 """Build repo_standards_index.yaml and emit structured artifacts for auditing."""
+
 from __future__ import annotations
 
 import argparse
@@ -172,6 +173,7 @@ def _load_seed_rules(paths: Paths) -> tuple[list[dict[str, Any]], set[str]]:
 def _dynamic_import_extract(paths: Paths) -> ExtractFn:  # pragma: no cover - best effort
     spec_path = paths.extraction_module
     if not spec_path.exists():
+
         def _absent(_: Path, __: list[str], ___: set[str], today: str | None = None):  # type: ignore[unused-ignore]
             return [], {"notes": ["extraction module not present"]}
 
@@ -278,7 +280,9 @@ def _write_pending_file(
 def _compute_rules_hash(rules: list[dict[str, Any]]) -> str:
     if not rules:
         return _build_empty_rules_hash()
-    fragments = [f"{rule['id']}|{rule['last_updated']}|{rule['severity']}" for rule in sorted(rules, key=lambda item: item['id'])]
+    fragments = [
+        f"{rule['id']}|{rule['last_updated']}|{rule['severity']}" for rule in sorted(rules, key=lambda item: item["id"])
+    ]
     return _compute_integrity_hash(fragments)
 
 
@@ -289,11 +293,7 @@ def _build_metadata(
     extracted_all: list[dict[str, Any]],
     pending_written: bool,
 ) -> dict[str, Any]:
-    pending_file = (
-        str(paths.pending_file.relative_to(paths.repo_root))
-        if pending_written
-        else None
-    )
+    pending_file = str(paths.pending_file.relative_to(paths.repo_root)) if pending_written else None
     return {
         "build_script": _rel_to_repo(Path(__file__), paths.repo_root),
         "overrides_file": ".repo_studios/standards_index_overrides.yaml",
@@ -314,7 +314,9 @@ def build_index(paths: Paths) -> tuple[dict[str, Any], BuildStats]:
     rules, seed_ids = _load_seed_rules(paths)
     enable_extraction = _env_flag("ENABLE_STANDARDS_EXTRACTION")
     auto_accept = _env_flag("AUTO_ACCEPT_EXTRACTED")
-    accepted, extracted_all, extraction_diags = _maybe_extract_rules(paths, sources, seed_ids, enable_extraction, auto_accept)
+    accepted, extracted_all, extraction_diags = _maybe_extract_rules(
+        paths, sources, seed_ids, enable_extraction, auto_accept
+    )
     pending_written = False
     if accepted:
         rules.extend(accepted)
@@ -481,9 +483,7 @@ def _compose_report_payload(
         "accepted_count": stats.accepted_count if stats else 0,
         "pending_written": stats.pending_written if stats else False,
         "pending_file": (
-            _rel_to_repo(paths.pending_file, paths.repo_root)
-            if stats and stats.pending_written
-            else None
+            _rel_to_repo(paths.pending_file, paths.repo_root) if stats and stats.pending_written else None
         ),
         "diagnostics": stats.extraction_diags if stats else [],
     }
@@ -635,13 +635,19 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--repo-root", default=str(DEFAULT_REPO_ROOT), help="Repository root")
     parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR), help="Directory for run artifacts")
-    parser.add_argument("--categories-path", default=str(DEFAULT_RELATIVE_CATEGORIES), help="Path to standards_categories.yaml")
+    parser.add_argument(
+        "--categories-path", default=str(DEFAULT_RELATIVE_CATEGORIES), help="Path to standards_categories.yaml"
+    )
     parser.add_argument("--seed-path", default=str(DEFAULT_RELATIVE_SEED), help="Path to standards_seed.yaml")
-    parser.add_argument("--extraction-module", default=str(DEFAULT_RELATIVE_EXTRACTION), help="Path to standards_extraction.py")
+    parser.add_argument(
+        "--extraction-module", default=str(DEFAULT_RELATIVE_EXTRACTION), help="Path to standards_extraction.py"
+    )
     parser.add_argument("--index-path", default=str(DEFAULT_RELATIVE_INDEX), help="Canonical index output path")
     parser.add_argument("--pending-path", default=str(DEFAULT_RELATIVE_PENDING), help="Pending extraction output path")
     parser.add_argument("--timestamp", help="ISO8601 timestamp for the run directory")
-    parser.add_argument("--artifacts-to-keep", type=int, default=DEFAULT_ARTIFACTS_TO_KEEP, help="How many historical runs to retain")
+    parser.add_argument(
+        "--artifacts-to-keep", type=int, default=DEFAULT_ARTIFACTS_TO_KEEP, help="How many historical runs to retain"
+    )
     parser.add_argument("--log-level", default="INFO", help="Logging verbosity")
     return parser
 

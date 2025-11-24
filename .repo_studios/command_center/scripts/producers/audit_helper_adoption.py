@@ -375,12 +375,19 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--schema-version", default=DEFAULT_SCHEMA_VERSION, help="Schema version for the JSON report")
     parser.add_argument("--helper", dest="helpers", action="append", help="Helper name to audit (repeatable)")
     parser.add_argument("--helpers", dest="helpers", action="append", help="Helper name to audit (repeatable)")
-    parser.add_argument("--format", dest="formats", action="append", help="Report format: json, markdown, or all (repeatable)")
+    parser.add_argument(
+        "--format", dest="formats", action="append", help="Report format: json, markdown, or all (repeatable)"
+    )
     parser.add_argument(
         "--allow-list",
         help="Path to allowed targets YAML (defaults to .repo_studios/command_center/docs/guardrails/allowed_targets.yaml)",
     )
-    parser.add_argument("--log-level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], help="Logging verbosity")
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        help="Logging verbosity",
+    )
     return parser
 
 

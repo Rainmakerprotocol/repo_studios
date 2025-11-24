@@ -9,12 +9,7 @@ import pytest
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
 MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "external_vs_internal_dependency_map.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "external_vs_internal_dependency_map.js"
 )
 
 if not MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
@@ -150,7 +145,9 @@ console.log(JSON.stringify({{
     details = payload["statusDetails"]
     assert isinstance(details, list) and details
     assert details[0]["type"] == "stat-summary"
-    dominated_section = next((entry for entry in details if entry["title"] == "Modules Dominated by External Imports"), None)
+    dominated_section = next(
+        (entry for entry in details if entry["title"] == "Modules Dominated by External Imports"), None
+    )
     assert dominated_section is not None
     top_packages_section = next((entry for entry in details if entry["title"] == "Top External Packages"), None)
     assert top_packages_section is not None
@@ -210,13 +207,7 @@ console.log(JSON.stringify({{
 
 
 def test_external_dependency_map_view_falls_back_to_repository_scope() -> None:
-    viewer_path = (
-        REPO_STUDIOS_ROOT
-        / "command_center"
-        / "viewer"
-        / "ui"
-        / "viewer.js"
-    )
+    viewer_path = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "viewer.js"
 
     script = f"""
 if (!globalThis.window) {{

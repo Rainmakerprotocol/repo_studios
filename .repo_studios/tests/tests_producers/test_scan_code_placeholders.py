@@ -5,18 +5,11 @@ import json
 import sys
 from pathlib import Path
 
-_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "scan_code_placeholders.py"
-)
+_MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "scan_code_placeholders.py"
 
 
 def _load_module():
-    spec = importlib.util.spec_from_file_location(
-        "scan_code_placeholders", _MODULE_PATH
-    )
+    spec = importlib.util.spec_from_file_location("scan_code_placeholders", _MODULE_PATH)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     sys.modules[spec.name] = module
@@ -117,14 +110,16 @@ def test_default_exclusions_skip_virtualenv(tmp_path: Path) -> None:
     env_file.parent.mkdir(parents=True, exist_ok=True)
     env_file.write_text("# FIXME: should be ignored\n", encoding="utf-8")
 
-    payload = mod.run([
-        "--repo-root",
-        str(repo_root),
-        "--root",
-        ".",
-        "--include-ext",
-        ".py",
-    ])
+    payload = mod.run(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--root",
+            ".",
+            "--include-ext",
+            ".py",
+        ]
+    )
 
     assert payload["total_matches"] == 1
     assert payload["default_exclusions_applied"] is True
@@ -148,15 +143,17 @@ def test_exclude_prefix_flag_disables_defaults(tmp_path: Path) -> None:
     env_file.parent.mkdir(parents=True, exist_ok=True)
     env_file.write_text("# NOTE: now included\n", encoding="utf-8")
 
-    payload = mod.run([
-        "--repo-root",
-        str(repo_root),
-        "--root",
-        ".",
-        "--include-ext",
-        ".py",
-        "--exclude-prefix",
-    ])
+    payload = mod.run(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--root",
+            ".",
+            "--include-ext",
+            ".py",
+            "--exclude-prefix",
+        ]
+    )
 
     assert payload["default_exclusions_applied"] is False
     assert payload["exclude_prefixes"] == []
@@ -172,15 +169,17 @@ def test_ignores_title_case_tokens(tmp_path: Path) -> None:
     (repo_root / "doc.md").write_text("# Review heading\n", encoding="utf-8")
     (repo_root / "code.py").write_text("# TODO: follow up\n", encoding="utf-8")
 
-    payload = mod.run([
-        "--repo-root",
-        str(repo_root),
-        "--root",
-        ".",
-        "--include-ext",
-        ".md",
-        ".py",
-    ])
+    payload = mod.run(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--root",
+            ".",
+            "--include-ext",
+            ".md",
+            ".py",
+        ]
+    )
 
     assert payload["total_matches"] == 1
     matches_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "code_placeholder_scans"

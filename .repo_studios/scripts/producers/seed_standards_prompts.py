@@ -23,12 +23,7 @@ DEFAULT_ARTIFACTS_TO_KEEP = 10
 FORMAT_CHOICES = ("text", "yaml", "json")
 SCHEMA_VERSION = 1
 
-LIBRARIES_ROOT = (
-    Path(__file__).resolve().parents[3]
-    / ".repo_studios"
-    / "command_center"
-    / "scripts"
-)
+LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
 try:
     from libraries import (
@@ -290,9 +285,7 @@ def render_markdown_report(payload: dict[str, Any]) -> str:
         lines.append("## Categories Included\n\n")
         lines.append("| Category ID | Title | Rule Count |\n| --- | --- | ---: |\n")
         for entry in categories:
-            lines.append(
-                f"| {entry.get('id')} | {entry.get('title')} | {entry.get('rule_count', 0)} |\n"
-            )
+            lines.append(f"| {entry.get('id')} | {entry.get('title')} | {entry.get('rule_count', 0)} |\n")
         lines.append("\n")
     lines.append("## Next Steps\n\n")
     lines.append("- [ ] Review seed for high-severity coverage gaps.\n")
@@ -415,9 +408,7 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
     logging.info("Index path: %s", paths.index_path)
     logging.info("Output directory: %s", paths.output_dir)
     logging.info("Include warn: %s", options.include_warn)
-    logging.info(
-        "Artifact formats: %s", ", ".join(options.artifact_formats)
-    )
+    logging.info("Artifact formats: %s", ", ".join(options.artifact_formats))
 
     try:
         index = load_index(paths.index_path)
@@ -436,7 +427,9 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
     payload = compose_payload(paths=paths, options=options, seed=seed, summary=summary, timestamp=timestamp)
 
     run_dir = ensure_run_directory(paths.output_dir, payload["run_id"])
-    write_artifacts(run_dir=run_dir, payload=payload, seed=seed, formats=options.artifact_formats, output_dir=paths.output_dir)
+    write_artifacts(
+        run_dir=run_dir, payload=payload, seed=seed, formats=options.artifact_formats, output_dir=paths.output_dir
+    )
     prune_history(paths.output_dir, options.artifacts_to_keep)
     emit_legacy_output(seed, options.legacy_format, options.legacy_output)
 

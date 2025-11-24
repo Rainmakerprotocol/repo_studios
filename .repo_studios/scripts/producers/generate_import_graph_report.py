@@ -14,9 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-DEFAULT_OUTPUT_DIR = Path(
-    ".repo_studios/reports/producer_reports/import_graph_reports"
-)
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/import_graph_reports")
 RUN_PREFIX = "import_graph"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 OWNED_DEFAULT = {
@@ -109,7 +107,7 @@ def build_graph(root: Path, owned: set[str]) -> dict[str, set[str]]:
     graph: dict[str, set[str]] = {module_id: set() for module_id in modules}
     for module_id, imports in raw_dependencies.items():
         for dep in imports:
-            for target in alias_map.get(dep, () ):
+            for target in alias_map.get(dep, ()):
                 if target != module_id:
                     graph[module_id].add(target)
     return graph
@@ -203,9 +201,7 @@ def build_report(
         {"module": name, "count": count}
         for name, count in sorted(fan_out.items(), key=lambda item: (-item[1], item[0]))[:10]
     ]
-    isolated_modules = sorted(
-        name for name in all_nodes if fan_in.get(name, 0) == 0 and fan_out.get(name, 0) == 0
-    )
+    isolated_modules = sorted(name for name in all_nodes if fan_in.get(name, 0) == 0 and fan_out.get(name, 0) == 0)
     return {
         "schema_version": 1,
         "generated_utc": generated_ts.isoformat(),
@@ -416,4 +412,3 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 if __name__ == "__main__":  # pragma: no cover
     raise SystemExit(main())
-

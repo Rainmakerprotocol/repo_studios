@@ -26,9 +26,7 @@ CHANGE_KINDS = {
 }
 
 TOLERATE_DIFF_KEYS = {"last_updated"}
-DEFAULT_OUTPUT_DIR = Path(
-    ".repo_studios/reports/producer_reports/standards_index_diff_reports"
-)
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_index_diff_reports")
 RUN_PREFIX = "standards_index_diff"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 
@@ -95,11 +93,7 @@ def prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> None:
     keep = max(keep, 1)
     if not output_dir.exists():
         return
-    dirs = [
-        path
-        for path in output_dir.iterdir()
-        if path.is_dir() and path.name.startswith(f"{RUN_PREFIX}-")
-    ]
+    dirs = [path for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(f"{RUN_PREFIX}-")]
     dirs.sort(key=lambda item: item.name, reverse=True)
     for index, path in enumerate(dirs):
         if index < keep or path == current_run:
@@ -148,9 +142,7 @@ def index_rules(index: dict[str, Any]) -> dict[str, dict[str, Any]]:
     return {r.get("id"): r for r in index.get("rules", []) if r.get("id")}
 
 
-def classify(
-    id_: str, old: dict[str, Any] | None, new: dict[str, Any] | None
-) -> list[dict[str, Any]]:
+def classify(id_: str, old: dict[str, Any] | None, new: dict[str, Any] | None) -> list[dict[str, Any]]:
     changes: list[dict[str, Any]] = []
     if old is None and new is not None:
         changes.append({"id": id_, "kind": "added"})
@@ -213,8 +205,7 @@ def generate_diff(old_index: dict[str, Any], new_index: dict[str, Any]) -> dict[
     return {
         "integrity_hash_old": old_index.get("integrity_hash"),
         "integrity_hash_new": new_index.get("integrity_hash"),
-        "integrity_hash_changed": old_index.get("integrity_hash")
-        != new_index.get("integrity_hash"),
+        "integrity_hash_changed": old_index.get("integrity_hash") != new_index.get("integrity_hash"),
         "changes": all_changes,
         "summary": summary,
     }
@@ -337,9 +328,7 @@ def _write_report_md(payload: dict[str, Any]) -> str:
     lines.append(f"- change_count: {payload['change_count']}\n")
     lines.append(f"- should_fail: {str(payload['should_fail']).lower()}\n")
     if payload.get("integrity_hash_changed") is not None:
-        lines.append(
-            f"- integrity_hash_changed: {str(payload['integrity_hash_changed']).lower()}\n"
-        )
+        lines.append(f"- integrity_hash_changed: {str(payload['integrity_hash_changed']).lower()}\n")
     if payload.get("notes"):
         lines.append(f"- notes: {payload['notes']}\n")
     lines.append("\n")
@@ -361,9 +350,7 @@ def _write_report_md(payload: dict[str, Any]) -> str:
         lines.append("| Rule ID | Kind | Details |\n")
         lines.append("|---|---|---|\n")
         for change in changes:
-            lines.append(
-                f"| {change['id']} | {change['kind']} | {_format_change_row(change)} |\n"
-            )
+            lines.append(f"| {change['id']} | {change['kind']} | {_format_change_row(change)} |\n")
         lines.append("\n")
 
     lines.append("## How to Reproduce\n\n")
@@ -436,9 +423,7 @@ def write_artifacts(
     report_log_path = run_dir / "log.txt"
     report_log_path.write_text(_write_report_log(payload), encoding="utf-8")
 
-    raw_json_path, raw_txt_path = _write_raw_artifacts(
-        run_dir=run_dir, diff=diff, notes=payload.get("notes", "")
-    )
+    raw_json_path, raw_txt_path = _write_raw_artifacts(run_dir=run_dir, diff=diff, notes=payload.get("notes", ""))
 
     latest_pairs = [
         (report_json_path, output_dir / "latest_report.json"),

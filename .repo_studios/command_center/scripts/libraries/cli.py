@@ -84,7 +84,9 @@ def resolve_path(
     return candidate
 
 
-def normalize_keep_count(raw: int | None, *, minimum: int = 1, env_override: str | None = None, env_truthy: frozenset[str] | None = None) -> int:
+def normalize_keep_count(
+    raw: int | None, *, minimum: int = 1, env_override: str | None = None, env_truthy: frozenset[str] | None = None
+) -> int:
     env_truthy = env_truthy or frozenset({"1", "true", "TRUE"})
     value = raw if raw is not None else minimum
     if env_override and os.getenv(env_override) in env_truthy:
@@ -113,12 +115,16 @@ def build_keep_counts(config: Mapping[str, KeepSpec], *, args: Any) -> dict[str,
     resolved: dict[str, int] = {}
     for alias, spec in config.items():
         raw_value = _source_value(args, spec.field)
-        resolved[alias] = normalize_keep_count(raw_value, minimum=spec.minimum, env_override=spec.env_override, env_truthy=spec.env_truthy)
+        resolved[alias] = normalize_keep_count(
+            raw_value, minimum=spec.minimum, env_override=spec.env_override, env_truthy=spec.env_truthy
+        )
     return resolved
 
 
 def build_standard_paths(args: Any, config: PathsConfig, *, origin: Path) -> Any:
-    repo_root = resolve_repo_root(getattr(args, "repo_root", None), fallback_depth=config.repo_root_depth, origin=origin)
+    repo_root = resolve_repo_root(
+        getattr(args, "repo_root", None), fallback_depth=config.repo_root_depth, origin=origin
+    )
     resolved = build_paths(config.path_specs, args=args, repo_root=repo_root)
     payload: dict[str, Any] = {}
     if config.include_repo_root:

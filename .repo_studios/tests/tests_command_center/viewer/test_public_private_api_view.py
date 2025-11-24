@@ -8,14 +8,7 @@ import pytest
 
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
-MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "public_vs_private_api.js"
-)
+MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "public_vs_private_api.js"
 
 if not MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected public vs private API builder module at {MODULE_PATH}")
@@ -251,4 +244,6 @@ console.log(JSON.stringify(result));
     assert status_details
     assert status_details[0]["type"] == "stat-summary"
     assert any(detail.get("type") == "pill-list" for detail in status_details)
-    assert any(detail.get("type") == "list" and "Declared But Missing" in detail.get("title", "") for detail in status_details)
+    assert any(
+        detail.get("type") == "list" and "Declared But Missing" in detail.get("title", "") for detail in status_details
+    )

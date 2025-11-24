@@ -12,12 +12,7 @@ from typing import Callable
 
 import pytest
 
-SCRIPTS_ROOT = (
-    Path(__file__).resolve().parents[4]
-    / ".repo_studios"
-    / "command_center"
-    / "scripts"
-)
+SCRIPTS_ROOT = Path(__file__).resolve().parents[4] / ".repo_studios" / "command_center" / "scripts"
 
 
 def _load_slugify() -> Callable[[Path], str]:

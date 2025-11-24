@@ -95,7 +95,9 @@ class ViewerHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             return
         except Exception as exc:  # pragma: no cover - defensive safeguard
             print(f"[viewer update] unexpected error: {exc}")
-            self._send_json({"status": "error", "message": f"Update failed: {exc}"}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
+            self._send_json(
+                {"status": "error", "message": f"Update failed: {exc}"}, status=HTTPStatus.INTERNAL_SERVER_ERROR
+            )
             return
 
         payload = result.to_payload()
@@ -147,7 +149,7 @@ def serve_viewer(port: int = 8000, directory: str | None = None, serve_from_repo
             # Serve from repo root so reports are accessible
             # viewer/serve_viewer.py -> viewer -> command_center -> .repo_studios -> repo_root
             directory = str(REPO_ROOT)
-            print(f"Serving from repo root to enable reports access")
+            print("Serving from repo root to enable reports access")
             print(f"Viewer URL: http://localhost:{port}/.repo_studios/command_center/viewer/ui/")
         else:
             # Serve from the ui directory only
@@ -155,11 +157,12 @@ def serve_viewer(port: int = 8000, directory: str | None = None, serve_from_repo
             directory = str(ui_dir)
             print(f"Viewer URL: http://localhost:{port}/")
 
-    print(f"Starting Command Center Viewer server...")
+    print("Starting Command Center Viewer server...")
     print(f"Serving from: {directory}")
-    print(f"Press Ctrl+C to stop the server")
+    print("Press Ctrl+C to stop the server")
 
     import os
+
     os.chdir(directory)
 
     with ViewerHTTPServer(("", port), ViewerHTTPRequestHandler) as httpd:
@@ -192,8 +195,4 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    serve_viewer(
-        port=args.port, 
-        directory=args.directory,
-        serve_from_repo_root=not args.ui_only
-    )
+    serve_viewer(port=args.port, directory=args.directory, serve_from_repo_root=not args.ui_only)

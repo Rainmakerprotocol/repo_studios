@@ -120,14 +120,7 @@ def test_generate_commandview_inventory_emits_extended_metrics(tmp_path: Path) -
     assert latest_commit["hash"]
     assert latest_commit["timestamp"].endswith("+00:00")
 
-    central_dir = (
-        repo_root
-        / ".repo_studios"
-        / "command_center"
-        / "reports"
-        / "index_scan"
-        / "pkg_index"
-    )
+    central_dir = repo_root / ".repo_studios" / "command_center" / "reports" / "index_scan" / "pkg_index"
     central_files = _inventory_files(central_dir, "pkg")
     assert len(central_files) == 1
     assert json.loads(central_files[0].read_text(encoding="utf-8")) == payload
@@ -149,22 +142,17 @@ def test_commandview_inventory_keeps_static_and_dynamic_outputs_in_lockstep(tmp_
         ),
     )
 
-    exit_code = module.run([
-        "--repo-root",
-        str(repo_root),
-        str(target),
-    ])
+    exit_code = module.run(
+        [
+            "--repo-root",
+            str(repo_root),
+            str(target),
+        ]
+    )
     assert exit_code == 0
 
     local_dir = target / "pkg_index"
-    static_dir = (
-        repo_root
-        / ".repo_studios"
-        / "command_center"
-        / "reports"
-        / "index_scan"
-        / "pkg_index"
-    )
+    static_dir = repo_root / ".repo_studios" / "command_center" / "reports" / "index_scan" / "pkg_index"
 
     assert local_dir.exists()
     assert static_dir.exists()

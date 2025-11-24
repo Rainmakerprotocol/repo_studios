@@ -8,13 +8,7 @@ import pytest
 
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
-VIEWER_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "viewer.js"
-)
+VIEWER_MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "viewer.js"
 
 if not VIEWER_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected viewer module at {VIEWER_MODULE_PATH}")
@@ -152,7 +146,9 @@ console.log(JSON.stringify({{
 
     payload = _run_node_module(script)
 
-    derived_bases = {(entry["normalized"], entry.get("matchType"), entry.get("classId")) for entry in payload["derivedResolved"]}
+    derived_bases = {
+        (entry["normalized"], entry.get("matchType"), entry.get("classId")) for entry in payload["derivedResolved"]
+    }
 
     assert ("ControllerBase", "local", "gamma.controller.ControllerBase") in derived_bases
     assert ("alpha.base.Base", "project", "alpha.base.Base") in derived_bases

@@ -98,11 +98,7 @@ def _prune_old_runs(output_dir: Path, *, stem: str, keep: int, current_run: Path
     keep = max(keep, 1)
     if not output_dir.exists():
         return
-    candidates = [
-        node
-        for node in output_dir.iterdir()
-        if node.is_dir() and node.name.startswith(f"{stem}-")
-    ]
+    candidates = [node for node in output_dir.iterdir() if node.is_dir() and node.name.startswith(f"{stem}-")]
     candidates.sort(key=lambda node: node.name, reverse=True)
     for index, node in enumerate(candidates):
         if index < keep or node == current_run:

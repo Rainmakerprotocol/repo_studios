@@ -9,12 +9,7 @@ from typing import Any
 
 import pytest
 
-SCRIPTS_ROOT = (
-    Path(__file__).resolve().parents[4]
-    / ".repo_studios"
-    / "command_center"
-    / "scripts"
-)
+SCRIPTS_ROOT = Path(__file__).resolve().parents[4] / ".repo_studios" / "command_center" / "scripts"
 
 
 def _load_libraries():
@@ -35,7 +30,7 @@ write_report_artifacts = libraries.write_report_artifacts
 def test_copy_latest_artifact_creates_link(tmp_path: Path) -> None:
     src = tmp_path / "source.json"
     dest = tmp_path / "dest.json"
-    content = "{\"value\": 1}"
+    content = '{"value": 1}'
     src.write_text(content, encoding="utf-8")
 
     copy_latest_artifact(src, dest)
@@ -115,11 +110,7 @@ def test_write_report_artifacts_basic_flow(tmp_path: Path) -> None:
         artifacts=artifacts,
         keep=2,
     )
-    remaining_dirs = {
-        node.name
-        for node in tmp_path.iterdir()
-        if node.is_dir() and node.name.startswith("demo-")
-    }
+    remaining_dirs = {node.name for node in tmp_path.iterdir() if node.is_dir() and node.name.startswith("demo-")}
     assert remaining_dirs == {"demo-20240101_000000", "demo-20240102_000000"}
 
 

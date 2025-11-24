@@ -9,44 +9,17 @@ import pytest
 
 REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[3]
 DEPENDENCY_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "module_dependency_graph.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "module_dependency_graph.js"
 )
-CALL_GRAPH_MODULE_PATH = (
-    REPO_STUDIOS_ROOT
-    / "command_center"
-    / "viewer"
-    / "ui"
-    / "builders"
-    / "function_call_graph.js"
-)
+CALL_GRAPH_MODULE_PATH = REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "function_call_graph.js"
 EXPORT_MATRIX_MODULE_PATH = (
-  REPO_STUDIOS_ROOT
-  / "command_center"
-  / "viewer"
-  / "ui"
-  / "builders"
-  / "export_contract_matrix.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "export_contract_matrix.js"
 )
 EXTERNAL_DEPENDENCY_MODULE_PATH = (
-  REPO_STUDIOS_ROOT
-  / "command_center"
-  / "viewer"
-  / "ui"
-  / "builders"
-  / "external_vs_internal_dependency_map.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "external_vs_internal_dependency_map.js"
 )
 LAYER_ARCHITECTURE_MODULE_PATH = (
-  REPO_STUDIOS_ROOT
-  / "command_center"
-  / "viewer"
-  / "ui"
-  / "builders"
-  / "layer_architecture_validation.js"
+    REPO_STUDIOS_ROOT / "command_center" / "viewer" / "ui" / "builders" / "layer_architecture_validation.js"
 )
 
 if not DEPENDENCY_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
@@ -56,7 +29,7 @@ if not CALL_GRAPH_MODULE_PATH.exists():  # pragma: no cover - guard against miss
     raise AssertionError(f"Expected function call graph builder at {CALL_GRAPH_MODULE_PATH}")
 
 if not EXPORT_MATRIX_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
-  raise AssertionError(f"Expected export contract matrix builder at {EXPORT_MATRIX_MODULE_PATH}")
+    raise AssertionError(f"Expected export contract matrix builder at {EXPORT_MATRIX_MODULE_PATH}")
 
 if not LAYER_ARCHITECTURE_MODULE_PATH.exists():  # pragma: no cover - guard against missing assets
     raise AssertionError(f"Expected layer architecture validation builder at {LAYER_ARCHITECTURE_MODULE_PATH}")

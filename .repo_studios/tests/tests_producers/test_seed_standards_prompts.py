@@ -7,18 +7,11 @@ import sys
 import textwrap
 from pathlib import Path
 
-_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "seed_standards_prompts.py"
-)
+_MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "seed_standards_prompts.py"
 
 
 def _load_module():
-    spec = importlib.util.spec_from_file_location(
-        "seed_standards_prompts", _MODULE_PATH
-    )
+    spec = importlib.util.spec_from_file_location("seed_standards_prompts", _MODULE_PATH)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     sys.modules[spec.name] = module
@@ -53,9 +46,7 @@ def _write_index(repo_root: Path) -> None:
             category_ids: [cat.doc]
         """
     ).strip()
-    (index_dir / "repo_standards_index.yaml").write_text(
-        index_content + "\n", encoding="utf-8"
-    )
+    (index_dir / "repo_standards_index.yaml").write_text(index_content + "\n", encoding="utf-8")
 
 
 def test_structured_artifacts(tmp_path: Path) -> None:
@@ -87,18 +78,8 @@ def test_structured_artifacts(tmp_path: Path) -> None:
         "warn": 1,
     }
 
-    output_dir = (
-        repo_root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "standards_prompt_seeds"
-    )
-    run_dirs = [
-        p
-        for p in output_dir.iterdir()
-        if p.is_dir() and p.name.startswith("standards_prompt_seed-")
-    ]
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "standards_prompt_seeds"
+    run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith("standards_prompt_seed-")]
     assert len(run_dirs) == 1
     run_dir = run_dirs[0]
 
@@ -137,13 +118,7 @@ def test_prune_history(tmp_path: Path, monkeypatch) -> None:
     repo_root = tmp_path / "workspace"
     _write_index(repo_root)
 
-    output_dir = (
-        repo_root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "standards_prompt_seeds"
-    )
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "standards_prompt_seeds"
 
     class _FakeDateTime(_dt.datetime):
         _counter = 0
@@ -172,14 +147,9 @@ def test_prune_history(tmp_path: Path, monkeypatch) -> None:
             ]
         )
 
-    run_dirs = [
-        p
-        for p in output_dir.iterdir()
-        if p.is_dir() and p.name.startswith("standards_prompt_seed-")
-    ]
+    run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith("standards_prompt_seed-")]
     assert len(run_dirs) == 1
 
     latest_dir = output_dir / "latest"
     assert (latest_dir / "latest_report.json").exists()
     assert (latest_dir / "latest_seed.json").exists()
-

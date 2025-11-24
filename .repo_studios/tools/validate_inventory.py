@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Compatibility shim for legacy inventory validator entrypoint."""
+
 from __future__ import annotations
 
 import importlib.util

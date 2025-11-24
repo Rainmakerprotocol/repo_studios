@@ -4,18 +4,11 @@ import importlib.util
 import json
 from pathlib import Path
 
-_MODULE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "scripts"
-    / "producers"
-    / "check_inventory_health.py"
-)
+_MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "check_inventory_health.py"
 
 
 def _load_module():
-    spec = importlib.util.spec_from_file_location(
-        "check_inventory_health", _MODULE_PATH
-    )
+    spec = importlib.util.spec_from_file_location("check_inventory_health", _MODULE_PATH)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(module)
@@ -65,13 +58,7 @@ def test_reports_written_without_issues(tmp_path):
         },
     )
 
-    output_dir = (
-        root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "inventory_health_reports"
-    )
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "inventory_health_reports"
 
     exit_code = mod.main(
         [
@@ -114,13 +101,7 @@ def test_reports_written_without_issues(tmp_path):
 def test_threshold_breach_and_pruning(tmp_path):
     mod = _load_module()
     root = tmp_path / "project"
-    output_dir = (
-        root
-        / ".repo_studios"
-        / "reports"
-        / "producer_reports"
-        / "inventory_health_reports"
-    )
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "inventory_health_reports"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     stale_names = [
@@ -186,11 +167,7 @@ def test_threshold_breach_and_pruning(tmp_path):
     assert "status:deprecated" in issue_ids
     assert "asset:doc" in issue_ids
 
-    run_dirs = {
-        path.name
-        for path in output_dir.iterdir()
-        if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)
-    }
+    run_dirs = {path.name for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)}
     assert run_dirs == {
         f"{mod.RUN_PREFIX}-20240115_000000",
         f"{mod.RUN_PREFIX}-20240203_000000",
