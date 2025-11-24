@@ -149,7 +149,7 @@ def _extract_markdown_list(report: str, heading: str, limit: int | None = None) 
 
 
 def _load_trend_head(root: Path) -> list[str]:
-    trend_latest = root / ".repo_studios/monkey_patch/trend_latest.md"
+    trend_latest = root / ".repo_studios/reports/producer_reports/monkey_patch_scans/trend_latest.md"
     trend_txt = _read_text(trend_latest, "").strip()
     if not trend_txt:
         return []
@@ -194,7 +194,7 @@ def _load_import_graph(root: Path, ts: str) -> tuple[list[str], list[str], list[
 
 
 def _load_test_health_summary(root: Path, ts: str) -> tuple[list[str], Path | None]:
-    th_base = root / ".repo_studios/test_health"
+    th_base = root / ".repo_studios/reports/consumer_reports/test_log_health_reports"
     th_dir = _prefer_ts(th_base, ts)
     th_report = _read_text(th_dir / "report.md") if th_dir else ""
     summary_lines = [
@@ -206,7 +206,7 @@ def _load_test_health_summary(root: Path, ts: str) -> tuple[list[str], Path | No
 
 
 def _load_churn_table(root: Path, ts: str) -> tuple[list[str], Path | None]:
-    cc_base = root / ".repo_studios/churn_complexity"
+    cc_base = root / ".repo_studios/reports/aggregator_reports/churn_complexity_heatmap"
     cc_dir = _prefer_ts(cc_base, ts)
     cc_report = _read_text(cc_dir / "heatmap.md") if cc_dir else ""
     lines = cc_report.splitlines()
@@ -447,7 +447,10 @@ def _compose_repo_insight_section(lines: list[str], trend_excerpt: list[str]) ->
         _append_blockquote(lines, trend_excerpt)
     else:
         _append_paragraph(lines, "(no data)")
-    _append_paragraph(lines, "[Full trend](/.repo_studios/monkey_patch/trend_latest.md)")
+    _append_paragraph(
+        lines,
+        "[Full trend](/.repo_studios/reports/producer_reports/monkey_patch_scans/trend_latest.md)",
+    )
 
 
 def _compose_dependency_section(lines: list[str], summary_text: str, dep_dir: Path | None) -> None:
@@ -487,7 +490,7 @@ def _compose_test_health_section(lines: list[str], summary_items: list[str], th_
     if th_dir:
         _append_paragraph(
             lines,
-            f"[Full report](/.repo_studios/test_health/{th_dir.name}/report.md)",
+            f"[Full report](/.repo_studios/reports/consumer_reports/test_log_health_reports/{th_dir.name}/report.md)",
         )
 
 
@@ -557,7 +560,7 @@ def _compose_churn_section(lines: list[str], table_rows: list[str], cc_dir: Path
     if cc_dir:
         _append_paragraph(
             lines,
-            f"[Full heatmap](/.repo_studios/churn_complexity/{cc_dir.name}/heatmap.md)",
+            f"[Full heatmap](/.repo_studios/reports/aggregator_reports/churn_complexity_heatmap/{cc_dir.name}/heatmap.md)",
         )
 
 

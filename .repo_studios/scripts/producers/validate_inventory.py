@@ -424,12 +424,17 @@ def validate_file(
             report.add("error", path, "Record missing 'id'", record_id="<unknown>")
         else:
             if record_id in seen_ids:
+                first_occurrence_path = seen_ids[record_id]
+                try:
+                    first_occurrence = first_occurrence_path.relative_to(repo_root).as_posix()
+                except ValueError:
+                    first_occurrence = str(first_occurrence_path)
                 report.add(
                     "error",
                     path,
                     "Duplicate id detected",
                     record_id=record_id,
-                    first_occurrence=str(seen_ids[record_id].relative_to(repo_root)).replace("\\", "/"),
+                    first_occurrence=first_occurrence,
                 )
             else:
                 seen_ids[record_id] = path

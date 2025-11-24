@@ -9,12 +9,12 @@ logged to per-step error logs and included in a final status summary.
 Requested order (with tolerant filename matching for historical typos):
   1) batch_clean.py
   2) pytest_log_runner.py
-  3) scan_monkey_patches.py
-  4) dep_hygiene_report.py
-  5) compare_monkey_patch_trends.py
-  6) check_import_boundaries.py
+    3) scan_monkey_patches.py
+    4) generate_dependency_hygiene_report.py (alias dep_hygiene_report.py)
+    5) analyze_monkey_patch_trends.py (alias compare_monkey_patch_trends.py)
+    6) validate_import_boundaries.py (alias check_import_boundaries.py)
   7) test_log_health_report.py
-  8) import_graph_report.py
+    8) generate_import_graph_report.py (alias import_graph_report.py)
   9) churn_complexity_heatmap.py
  10) dump_faulthandler_once.py (best-effort)
  11) generate_fault_artifacts.py (best-effort)
@@ -44,9 +44,29 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-repo_DIR = ROOT / ".repo_studios"
+REPO_ROOT = Path(__file__).resolve().parents[3]
+ROOT = REPO_ROOT / ".repo_studios"
+repo_DIR = ROOT
 LOG_BASE = repo_DIR / "health_suite" / "logs"
+
+SCRIPT_ALIASES: dict[str, str] = {
+    "batch_clean.py": "scripts/orchestrators/run_batch_cleanup.py",
+    "pytest_log_runner.py": "scripts/orchestrators/run_pytest_log_capture.py",
+    "scan_monkey_patches.py": "scripts/producers/scan_monkey_patches.py",
+    "dep_hygiene_report.py": "scripts/producers/generate_dependency_hygiene_report.py",
+    "compare_monkey_patch_trends.py": "scripts/aggregators/analyze_monkey_patch_trends.py",
+    "check_import_boundaries.py": "scripts/producers/validate_import_boundaries.py",
+    "check_import_boundries.py": "scripts/producers/validate_import_boundaries.py",
+    "import_graph_report.py": "scripts/producers/generate_import_graph_report.py",
+    "churn_complexity_heatmap.py": "scripts/aggregators/generate_churn_complexity_heatmap.py",
+    "typecheck_report.py": "scripts/producers/generate_typecheck_report.py",
+    "lizard_report.py": "scripts/producers/generate_lizard_report.py",
+    "dump_faulthandler_once.py": "scripts/utilities/dump_faulthandler_snapshot.py",
+    "generate_fault_artifacts.py": "scripts/consumers/generate_fault_artifacts.py",
+    "health_suite_summary.py": "scripts/summarizers/summarize_health_suite.py",
+    "heath_suite_summary.py": "scripts/summarizers/summarize_health_suite.py",
+    "anchor_health_report.py": "scripts/consumers/generate_anchor_health_report.py",
+}
 
 
 def _ts_default() -> str:
@@ -57,11 +77,37 @@ def exe() -> str:
     return sys.executable or "python"
 
 
+def _candidate_paths(name: str) -> list[Path]:
+    parts = [name]
+    alias = SCRIPT_ALIASES.get(name)
+    if alias:
+        parts.append(alias)
+    seen: set[Path] = set()
+    resolved: list[Path] = []
+    for part in parts:
+        option = Path(part)
+        candidates: list[Path]
+        if option.is_absolute():
+            candidates = [option]
+        else:
+            candidates = [repo_DIR / option, REPO_ROOT / option]
+        for candidate in candidates:
+            try:
+                real = candidate.resolve()
+            except FileNotFoundError:
+                real = candidate
+            if real in seen:
+                continue
+            seen.add(real)
+            resolved.append(real)
+    return resolved
+
+
 def find_script(*candidates: str) -> Path | None:
     for name in candidates:
-        p = repo_DIR / name
-        if p.exists():
-            return p
+        for candidate in _candidate_paths(name):
+            if candidate.exists():
+                return candidate
     return None
 
 
@@ -110,8 +156,8 @@ def make_steps(ts: str) -> list[Step]:
             )
         )
 
-    # 2) pytest_log_runner.py
-    script = find_script("pytest_log_runner.py")
+    # 2) pytest log capture orchestrator
+    script = find_script("scripts/orchestrators/run_pytest_log_capture.py", "pytest_log_runner.py")
     steps.append(
         Step(
             name="pytest_logs",
@@ -120,19 +166,59 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 3) scan_monkey_patches.py
+    # 3) collect_test_log_reports.py
+    producer_script = ROOT / "scripts/producers/collect_test_log_reports.py"
+    steps.append(
+        Step(
+            name="collect_test_log_reports",
+            argv=[
+                py,
+                str(producer_script) if producer_script.exists() else "-c",
+                *(
+                    [
+                        "--logs-dir",
+                        str(repo_DIR / "pytest_logs"),
+                        "--output-dir",
+                        str(repo_DIR / "reports/producer_reports/test_log_reports"),
+                        "--artifacts-to-keep",
+                        "10",
+                        "--log-level",
+                        os.environ.get("COMMAND_CENTER_LOG_LEVEL", "INFO"),
+                    ]
+                    if producer_script.exists()
+                    else [
+                        "import sys; print('missing collect_test_log_reports.py', file=sys.stderr); sys.exit(1)",
+                    ]
+                ),
+            ],
+            optional=not producer_script.exists(),
+        )
+    )
+
+    # 4) scan_monkey_patches.py
     script = find_script("scan_monkey_patches.py")
     steps.append(
         Step(
             name="scan_monkey_patches",
-            argv=[py, str(script), "--repo-root", ".", "--with-git", "--verbose", "--strict"]
+            argv=[
+                py,
+                str(script),
+                "--repo-root",
+                ".",
+                "--output-dir",
+                str(repo_DIR / "reports/producer_reports/monkey_patch_scans"),
+                "--log-level",
+                os.environ.get("COMMAND_CENTER_LOG_LEVEL", "INFO"),
+                "--with-git",
+                "--strict",
+            ]
             if script
             else [py, "-c", "import sys; sys.exit(1)"],
             optional=script is None,
         )
     )
 
-    # 4) dep_hygiene_report.py
+    # 5) generate_dependency_hygiene_report.py
     script = find_script("dep_hygiene_report.py")
     steps.append(
         Step(
@@ -142,8 +228,10 @@ def make_steps(ts: str) -> list[Step]:
                 str(script),
                 "--repo-root",
                 ".",
-                "--output-base",
-                str(repo_DIR / "dep_health"),
+                "--output-dir",
+                str(repo_DIR / "reports/producer_reports/dependency_hygiene_reports"),
+                "--log-level",
+                os.environ.get("COMMAND_CENTER_LOG_LEVEL", "INFO"),
             ]
             if script
             else [py, "-c", "import sys; sys.exit(1)"],
@@ -151,46 +239,75 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 5) compare_monkey_patch_trends.py
+    # 6) analyze_monkey_patch_trends.py
     script = find_script("compare_monkey_patch_trends.py")
     steps.append(
         Step(
             name="compare_monkey_patch_trends",
-            argv=[py, str(script)] if script else [py, "-c", "import sys; sys.exit(1)"],
+            argv=[
+                py,
+                str(script),
+                "--base-dir",
+                str(repo_DIR / "reports/producer_reports/monkey_patch_scans"),
+                *(
+                    ["--verbose"]
+                    if os.environ.get("COMMAND_CENTER_LOG_LEVEL", "INFO").upper() == "DEBUG"
+                    else []
+                ),
+            ]
+            if script
+            else [py, "-c", "import sys; sys.exit(1)"],
             optional=script is None,
         )
     )
 
-    # 6) check_import_boundaries.py (typo-tolerant)
+    # 7) validate_import_boundaries.py (typo-tolerant)
     script = find_script("check_import_boundaries.py", "check_import_boundries.py")
     steps.append(
         Step(
             name="check_import_boundaries",
-            argv=[py, str(script)] if script else [py, "-c", "import sys; sys.exit(1)"],
+            argv=[
+                py,
+                str(script),
+                "--repo-root",
+                ".",
+                "--log-level",
+                os.environ.get("COMMAND_CENTER_LOG_LEVEL", "INFO"),
+            ]
+            if script
+            else [py, "-c", "import sys; sys.exit(1)"],
             optional=script is None,
         )
     )
 
-    # 7) test_log_health_report.py
-    script = find_script("test_log_health_report.py")
+    # 8) generate_test_log_health_report.py (consumer)
+    consumer_script = ROOT / "scripts/consumers/generate_test_log_health_report.py"
     steps.append(
         Step(
             name="test_log_health_report",
             argv=[
                 py,
-                str(script),
+                str(consumer_script) if consumer_script.exists() else "-c",
                 "--logs-dir",
                 str(repo_DIR / "pytest_logs"),
                 "--output-base",
-                str(repo_DIR / "test_health"),
+                str(repo_DIR / "reports/consumer_reports/test_log_health_reports"),
+                "--producer-report",
+                str(repo_DIR / "reports/producer_reports/test_log_reports/latest_report.json"),
+                "--log-level",
+                os.environ.get("COMMAND_CENTER_LOG_LEVEL", "INFO"),
             ]
-            if script
-            else [py, "-c", "import sys; sys.exit(1)"],
-            optional=script is None,
+            if consumer_script.exists()
+            else [
+                py,
+                "-c",
+                "import sys; print('missing generate_test_log_health_report.py', file=sys.stderr); sys.exit(1)",
+            ],
+            optional=not consumer_script.exists(),
         )
     )
 
-    # New) typecheck_report.py — run mypy and produce artifacts (optional)
+    # New) generate_typecheck_report.py — run mypy and produce artifacts (optional)
     script = find_script("typecheck_report.py")
     steps.append(
         Step(
@@ -202,10 +319,12 @@ def make_steps(ts: str) -> list[Step]:
                     [
                         "--repo-root",
                         ".",
-                        "--output-base",
-                        str(repo_DIR / "typecheck"),
+                        "--output-dir",
+                        str(repo_DIR / "reports/producer_reports/typecheck_reports"),
                         "--timestamp",
                         ts,
+                        "--log-level",
+                        os.environ.get("COMMAND_CENTER_LOG_LEVEL", "INFO"),
                     ]
                     if script
                     else [
@@ -217,7 +336,7 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 8) import_graph_report.py
+    # 9) generate_import_graph_report.py
     script = find_script("import_graph_report.py")
     steps.append(
         Step(
@@ -227,8 +346,10 @@ def make_steps(ts: str) -> list[Step]:
                 str(script),
                 "--repo-root",
                 ".",
-                "--output-base",
-                str(repo_DIR / "import_graph"),
+                "--output-dir",
+                str(repo_DIR / "reports/producer_reports/import_graph_reports"),
+                "--log-level",
+                os.environ.get("COMMAND_CENTER_LOG_LEVEL", "INFO"),
             ]
             if script
             else [py, "-c", "import sys; sys.exit(1)"],
@@ -236,7 +357,7 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 9) churn_complexity_heatmap.py
+    # 10) churn_complexity_heatmap.py
     script = find_script("churn_complexity_heatmap.py")
     steps.append(
         Step(
@@ -247,7 +368,7 @@ def make_steps(ts: str) -> list[Step]:
                 "--repo-root",
                 ".",
                 "--output-base",
-                str(repo_DIR / "churn_complexity"),
+                str(repo_DIR / "reports/aggregator_reports/churn_complexity_heatmap"),
                 "--logs-dir",
                 str(repo_DIR / "pytest_logs"),
             ]
@@ -257,7 +378,7 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 9.5) lizard complexity report (optional but expected in CI)
+    # 10.5) lizard complexity report (optional but expected in CI)
     lizard_script = repo_DIR / "lizard_report.py"
     steps.append(
         Step(
@@ -276,7 +397,7 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 10) one-time faulthandler dump (best-effort)
+    # 11) one-time faulthandler dump (best-effort)
     script = find_script("dump_faulthandler_once.py")
     steps.append(
         Step(
@@ -287,7 +408,7 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 11) faulthandler artifacts generator (best-effort)
+    # 12) faulthandler artifacts generator (best-effort)
     script = find_script("generate_fault_artifacts.py")
     steps.append(
         Step(
@@ -298,7 +419,7 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 12) faulthandler aggregator under scripts/health (best-effort)
+    # 13) faulthandler aggregator under scripts/health (best-effort)
     agg_script = Path("scripts/health/faulthandler_aggregate.py")
     steps.append(
         Step(
@@ -311,7 +432,7 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 13) ci gate (best-effort, non-blocking in the suite)
+    # 14) ci gate (best-effort, non-blocking in the suite)
     gate_script = Path("scripts/ci_faulthandler_gate.py")
     steps.append(
         Step(
@@ -324,7 +445,7 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 13.5) anchor health (generate timestamped anchor report artifacts)
+    # 14.5) anchor health (generate timestamped anchor report artifacts)
     anchor_script = repo_DIR / "anchor_health_report.py"
     steps.append(
         Step(
@@ -334,7 +455,7 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 14) health_suite_summary.py (typo-tolerant) — now includes anchor health section
+    # 15) health_suite_summary.py (typo-tolerant) — now includes anchor health section
     script = find_script("health_suite_summary.py", "heath_suite_summary.py")
     out_dir = repo_DIR / "health_suite"
     steps.append(
@@ -404,7 +525,7 @@ def run_step(
             ):
                 proc = subprocess.Popen(
                     step.argv,
-                    cwd=str(ROOT),
+                    cwd=str(REPO_ROOT),
                     env={**os.environ, **(env or {})},
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
@@ -482,7 +603,7 @@ def run_step(
             try:
                 proc = subprocess.run(
                     step.argv,
-                    cwd=str(ROOT),
+                    cwd=str(REPO_ROOT),
                     env={**os.environ, **(env or {})},
                     capture_output=True,
                     text=True,

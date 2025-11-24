@@ -59,6 +59,14 @@ studio-analyze-test-hardening:
 studio-verify-docs-integrity:
 	$(PYTHON) .repo_studios/scripts/producers/verify_docs_integrity.py --repo-root . --output-dir .repo_studios/reports/producer_reports/docs_integrity_reports
 
+.PHONY: studio-collect-faulthandler-reports
+studio-collect-faulthandler-reports:
+	$(PYTHON) .repo_studios/scripts/producers/collect_faulthandler_reports.py --runs-dir .repo_studios/faulthandler --output-dir .repo_studios/reports/producer_reports/faulthandler_reports --artifacts-to-keep 10 --log-level INFO
+
+.PHONY: studio-collect-test-log-reports
+studio-collect-test-log-reports:
+	$(PYTHON) .repo_studios/scripts/producers/collect_test_log_reports.py --logs-dir .repo_studios/pytest_logs --output-dir .repo_studios/reports/producer_reports/test_log_reports --artifacts-to-keep 10 --log-level INFO
+
 .PHONY: studio-diff-standards-index
 studio-diff-standards-index:
 	$(PYTHON) .repo_studios/scripts/producers/diff_standards_index.py "$(old)" "$(new)" --repo-root . --output-dir .repo_studios/reports/producer_reports/standards_index_diff_reports --artifacts-to-keep 10 --fail-on any --log-level INFO

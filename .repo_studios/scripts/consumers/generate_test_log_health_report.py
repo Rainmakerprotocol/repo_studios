@@ -1,17 +1,12 @@
 #!/usr/bin/env python3
-"""
-Test Log Health Report — Warning/Exception Census + Slowest Tests
+"""Test Log Health Report — Warning/Exception Census + Slowest Tests.
 
-Scans the latest pytest artifacts under .repo_studios/pytest_logs and
-produces a timestamped report with:
-- Warnings by type and by file
-- Exception/traceback count
-- Slowest tests (from pytest durations block)
-- Basic pass/skip/xfail summary (from JUnit)
+Prefers structured bundles emitted by ``collect_test_log_reports.py`` and
+falls back to direct log analysis when no producer artifact is available.
 
-Outputs (under --output-base/<ts>/):
-- report.json
-- report.md
+Outputs (under ``--output-base/<ts>/``)
+- ``report.json``
+- ``report.md``
 """
 
 from __future__ import annotations
@@ -19,24 +14,36 @@ from __future__ import annotations
 import argparse
 import json
 import logging
-import re
-from collections import Counter
-from dataclasses import dataclass
+import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Sequence
 
 LOGS_DIR_DEFAULT = ".repo_studios/pytest_logs"
+PRODUCER_REPORT_DEFAULT = ".repo_studios/reports/producer_reports/test_log_reports/latest_report.json"
+OUTPUT_BASE_DEFAULT = ".repo_studios/reports/consumer_reports/test_log_health_reports"
+
+SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
+UTILITIES_ROOT = Path(__file__).resolve().parents[2]
+for candidate in (SCRIPTS_ROOT, UTILITIES_ROOT):
+    candidate_str = str(candidate)
+    if candidate_str not in sys.path:
+        sys.path.insert(0, candidate_str)
+
+from utilities.test_log_analysis import build_test_log_report, render_markdown  # noqa: E402
 
 
-def _latest(path: Path, prefix: str, suffix: str) -> Path | None:
-    candidates = sorted(p for p in path.glob(f"{prefix}_*.{suffix}") if p.is_file())
-    return candidates[-1] if candidates else None
-
-
-def _latest_by_prefix(path: Path, prefix: str) -> Path | None:
-    candidates = sorted(p for p in path.glob(f"{prefix}_*.*") if p.is_file())
-    return candidates[-1] if candidates else None
+def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Generate test log health report")
+    parser.add_argument("--logs-dir", default=LOGS_DIR_DEFAULT)
+    parser.add_argument("--output-base", default=OUTPUT_BASE_DEFAULT)
+    parser.add_argument("--producer-report", default=PRODUCER_REPORT_DEFAULT)
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+    )
+    return parser.parse_args(argv)
 
 
 def _ensure_out(base: Path) -> Path:
@@ -46,263 +53,154 @@ def _ensure_out(base: Path) -> Path:
     return out_dir
 
 
-def _read(p: Path) -> str:
+def _load_producer_report(path: Path) -> dict[str, Any] | None:
     try:
-        return p.read_text(encoding="utf-8", errors="replace")
+        payload = json.loads(path.read_text(encoding="utf-8"))
     except Exception:
-        return ""
+        return None
+    return payload if isinstance(payload, dict) else None
 
 
-WARNINGS_HDR = re.compile(r"^=+\s+warnings summary\s+=+$", re.IGNORECASE)
-SLOWEST_HDR = re.compile(r"^=+\s+slowest\s+\d+\s+durations\s+=+$", re.IGNORECASE)
-SUMMARY_HDR = re.compile(r"^=+\s+short test summary info\s+=+$", re.IGNORECASE)
+def _has_log_artifacts(directory: Path) -> bool:
+    try:
+        for entry in directory.iterdir():
+            if not entry.is_file():
+                continue
+            name = entry.name
+            if name.startswith("pytest") or name.startswith("junit"):
+                return True
+    except FileNotFoundError:
+        return False
+    except PermissionError:
+        return False
+    return False
 
 
-def _extract_block(lines: list[str], start_re: re.Pattern[str]) -> list[str]:
-    start = None
-    for i, line in enumerate(lines):
-        if start_re.match(line.strip()):
-            start = i + 1
-            break
-    if start is None:
+def _discover_log_runs(base: Path) -> list[Path]:
+    if not base.exists():
         return []
-    # collect until next header (====) or EOF
-    out: list[str] = []
-    for line in lines[start:]:
-        if line.strip().startswith("=") and (
-            "summary" in line or "coverage" in line or "slowest" in line or "short test" in line
-        ):
-            break
-        out.append(line.rstrip("\n"))
-    return out
-
-
-_WARN_LINE_RE = re.compile(r"^(?P<path>[^:]+):\d+:\s*(?P<type>[A-Za-z]+Warning):\s*(?P<msg>.*)$")
-
-
-@dataclass
-class TestHealth:
-    total: int = 0
-    passed: int = 0
-    skipped: int = 0
-    xfailed: int = 0
-    failed: int = 0
-    errors: int = 0
-
-
-def _parse_junit(path: Path) -> TestHealth:
-    # Use defusedxml for secure XML parsing (avoid XXE and entity expansion attacks)
-    from defusedxml import ElementTree
-
-    th = TestHealth()
-    try:
-        root = ElementTree.parse(path).getroot()
-    except Exception:
-        return th
-    # aggregate across suites
-    for suite in root.findall("testsuite"):
-        th.total += int(suite.get("tests") or 0)
-        th.failed += int(suite.get("failures") or 0)
-        th.errors += int(suite.get("errors") or 0)
-        th.skipped += int(suite.get("skipped") or 0)
-    # xfailed isn’t directly in JUnit; approximate from testcase/skipped message
-    for tc in root.iterfind(".//testcase"):
-        sk = tc.find("skipped")
-        if sk is not None:
-            msg = (sk.get("message") or "").lower()
-            if "xfailed" in msg or "xfail" in msg:
-                th.xfailed += 1
-    th.passed = max(th.total - (th.failed + th.errors + th.skipped), 0)
-    return th
-
-
-def _pick_best_junit(logs_dir: Path) -> Path | None:
-    """Select the most representative JUnit XML artifact.
-
-    Heuristic:
-    - Prefer files matching junit_*.xml
-    - Parse each and compute total test count across suites
-    - Skip incidental internal-only artifacts (pytest internal error shim):
-        tests == 1 and a single testcase with classname="pytest" and name="internal"
-    - Choose the file with the highest total tests; tie-breaker: latest mtime
-    - Fallback: if all were skipped/unparseable, choose the max-tests among all candidates;
-      if still none, use the latest by name as last resort.
-    """
-    # Use defusedxml for secure XML parsing when inspecting JUnit artifacts
-    from defusedxml import ElementTree
-
-    candidates = sorted(p for p in logs_dir.glob("junit_*.xml") if p.is_file())
-    if not candidates:
-        # broaden slightly as a fallback
-        candidates = sorted(p for p in logs_dir.glob("junit*.*") if p.is_file())
-
-    def _totals_and_internal_only(path: Path) -> tuple[int, bool]:
+    seen: set[Path] = set()
+    candidates: list[Path] = []
+    stack: list[Path] = [base]
+    while stack:
+        current = stack.pop()
+        if current in seen or not current.exists():
+            continue
+        seen.add(current)
+        if not current.is_dir():
+            continue
+        if _has_log_artifacts(current):
+            candidates.append(current)
+            continue
         try:
-            root = ElementTree.parse(path).getroot()
-        except Exception:
-            return 0, False
-        total = 0
-        for suite in root.findall("testsuite"):
-            total += int(suite.get("tests") or 0)
-        internal_only = False
-        if total == 1:
-            for tc in root.iterfind(".//testcase"):
-                name = (tc.get("name") or "")
-                classname = (tc.get("classname") or "")
-                if name == "internal" and classname == "pytest":
-                    internal_only = True
-                    break
-        return total, internal_only
-
-    best: Path | None = None
-    best_total = -1
-
-    # First pass: skip internal-only artifacts
-    for p in candidates:
-        total, internal_only = _totals_and_internal_only(p)
-        if internal_only:
+            for entry in current.iterdir():
+                if entry.is_dir():
+                    stack.append(entry)
+        except (FileNotFoundError, PermissionError):
             continue
-        if total > best_total or (total == best_total and (best is None or p.stat().st_mtime > best.stat().st_mtime)):
-            best = p
-            best_total = total
-
-    if best is not None:
-        return best
-
-    # Second pass: include all, pick max tests
-    for p in candidates:
-        total, _ = _totals_and_internal_only(p)
-        if total > best_total or (total == best_total and (best is None or p.stat().st_mtime > best.stat().st_mtime)):
-            best = p
-            best_total = total
-
-    # Final fallback: latest by prefix
-    return best or _latest_by_prefix(logs_dir, "junit")
+    candidates.sort(key=lambda path: path.stat().st_mtime, reverse=True)
+    return candidates
 
 
-def _parse_warnings(block: list[str]) -> tuple[Counter[str], Counter[str]]:
-    by_type: Counter[str] = Counter()
-    by_file: Counter[str] = Counter()
-    for line in block:
-        m = _WARN_LINE_RE.match(line.strip())
-        if not m:
-            continue
-        wtype = m.group("type")
-        path = m.group("path")
-        by_type[wtype] += 1
-        by_file[path] += 1
-    return by_type, by_file
+def _select_logs_dir(logs_dir: Path) -> Path | None:
+    if _has_log_artifacts(logs_dir):
+        return logs_dir
+    runs = _discover_log_runs(logs_dir)
+    return runs[0] if runs else None
 
 
-_SLOW_LINE_RE = re.compile(r"^(?P<secs>\d+\.\d+)s\s+call\s+(?P<node>\S+)\s*$")
-
-
-def _parse_slowest(block: list[str]) -> list[dict[str, Any]]:
-    out: list[dict[str, Any]] = []
-    for line in block:
-        m = _SLOW_LINE_RE.match(line.strip())
-        if m:
-            out.append({"seconds": float(m.group("secs")), "nodeid": m.group("node")})
-    return out
-
-
-def _count_tracebacks(text: str) -> int:
-    return text.count("Traceback (most recent call last):")
-
-
-def main() -> int:
-    ap = argparse.ArgumentParser(description="Generate test log health report")
-    ap.add_argument("--logs-dir", default=LOGS_DIR_DEFAULT)
-    ap.add_argument("--output-base", default=".repo_studios/test_health")
-    args = ap.parse_args()
-
-    repo_root = Path(".").resolve()
-    logs_dir = (Path(args.logs_dir) if Path(args.logs_dir).is_absolute() else (repo_root / args.logs_dir)).resolve()
-    out_base = (Path(args.output_base) if Path(args.output_base).is_absolute() else (repo_root / args.output_base)).resolve()
-    out_dir = _ensure_out(out_base)
-
-    # Choose the most representative JUnit file to avoid incidental internal artifacts
-    junit = _pick_best_junit(logs_dir) or _latest(logs_dir, "junit", "xml") or _latest_by_prefix(logs_dir, "junit")
-    full_log = _latest(logs_dir, "pytest", "txt") or _latest_by_prefix(logs_dir, "pytest")
-
-    junit_health = _parse_junit(junit) if junit else TestHealth()
-    log_text = _read(full_log) if full_log else ""
-    lines = log_text.splitlines()
-    warn_block = _extract_block(lines, WARNINGS_HDR)
-    slow_block = _extract_block(lines, SLOWEST_HDR)
-
-    warn_by_type, warn_by_file = _parse_warnings(warn_block)
-    slow_tests = _parse_slowest(slow_block)
-    traceback_count = _count_tracebacks(log_text)
-
-    data = {
+def _empty_report(logs_dir: Path) -> dict[str, Any]:
+    generated = datetime.now().isoformat()
+    return {
+        "schema_version": 1,
         "meta": {
-            "generated_at": datetime.now().isoformat(),
+            "generated_at": generated,
             "logs_dir": str(logs_dir),
-            "junit": str(junit) if junit else None,
-            "full_log": str(full_log) if full_log else None,
+            "junit": None,
+            "full_log": None,
         },
         "summary": {
-            "total": junit_health.total,
-            "passed": junit_health.passed,
-            "skipped": junit_health.skipped,
-            "xfailed": junit_health.xfailed,
-            "failed": junit_health.failed,
-            "errors": junit_health.errors,
-            "warnings_total": int(sum(warn_by_type.values())),
-            "tracebacks": traceback_count,
+            "total": 0,
+            "passed": 0,
+            "skipped": 0,
+            "xfailed": 0,
+            "failed": 0,
+            "errors": 0,
+            "warnings_total": 0,
+            "tracebacks": 0,
         },
         "warnings": {
-            "by_type": warn_by_type,
-            "by_file": warn_by_file,
+            "by_type": {},
+            "by_file": {},
         },
-        "slow_tests": slow_tests,
+        "slow_tests": [],
     }
 
-    # JSON (convert Counters)
-    json_ready = json.loads(json.dumps(data, default=lambda o: dict(o)))
-    (out_dir / "report.json").write_text(json.dumps(json_ready, indent=2), encoding="utf-8")
 
-    # Markdown
-    md: list[str] = []
-    md.append("# Test Log Health Report\n")
-    md.append(f"Generated: {data['meta']['generated_at']}\n")
-    md.append("\n## Summary\n")
-    s = data["summary"]
-    md.append(
-        f"- total: {s['total']}, passed: {s['passed']}, skipped: {s['skipped']}, xfailed: {s['xfailed']}, failed: {s['failed']}, errors: {s['errors']}\n"
-    )
-    md.append(f"- warnings_total: {s['warnings_total']}, tracebacks: {s['tracebacks']}\n")
+def _write_artifacts(out_dir: Path, payload: dict[str, Any], markdown: str) -> None:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_json = out_dir / "report.json"
+    out_json.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    (out_dir / "report.md").write_text(markdown, encoding="utf-8")
 
-    md.append("\n## Warnings by Type\n")
-    if warn_by_type:
-        md.append("| Type | Count |\n|---|---:|\n")
-        for wtype, cnt in warn_by_type.most_common():
-            md.append(f"| {wtype} | {cnt} |\n")
+
+def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    args = _parse_args(argv)
+    logging.basicConfig(level=getattr(logging, args.log_level.upper(), logging.INFO), format="%(levelname)s %(message)s")
+    repo_root = Path(".").resolve()
+
+    logs_dir = Path(args.logs_dir)
+    if not logs_dir.is_absolute():
+        logs_dir = (repo_root / logs_dir).resolve()
+
+    out_base = Path(args.output_base)
+    if not out_base.is_absolute():
+        out_base = (repo_root / out_base).resolve()
+
+    producer_report_path = Path(args.producer_report)
+    if not producer_report_path.is_absolute():
+        producer_report_path = (repo_root / producer_report_path).resolve()
+
+    payload = None
+    source = "producer"
+    used_report: Path | None = None
+    logs_source: Path | None = None
+    if producer_report_path.exists():
+        payload = _load_producer_report(producer_report_path)
+        if payload is not None:
+            used_report = producer_report_path
+            logging.info("Loaded pytest log bundle from %s", producer_report_path)
+    if payload is None:
+        source = "logs"
+        logging.info("Structured pytest log report not found; analyzing logs under %s", logs_dir)
+        logs_source = _select_logs_dir(logs_dir)
+        if logs_source is None:
+            logging.info("No pytest artifacts discovered under %s; emitting empty report", logs_dir)
+            payload = _empty_report(logs_dir)
+            markdown = render_markdown(payload)
+        else:
+            result = build_test_log_report(logs_source)
+            payload = result.report
+            markdown = result.markdown
     else:
-        md.append("(none)\n")
+        markdown = render_markdown(payload)
 
-    md.append("\n## Top Warning Files\n")
-    if warn_by_file:
-        md.append("| File | Count |\n|---|---:|\n")
-        for path, cnt in warn_by_file.most_common(15):
-            md.append(f"| {path} | {cnt} |\n")
-    else:
-        md.append("(none)\n")
+    out_dir = _ensure_out(out_base)
+    _write_artifacts(out_dir, payload, markdown)
+    logging.info("Test log health report written to %s (source=%s)", out_dir, source)
+    return {
+        "output_dir": str(out_dir),
+        "source": source,
+        "producer_report": str(used_report) if used_report else None,
+        "logs_dir": str(logs_dir),
+        "logs_source": str(logs_source) if logs_source else None,
+    }
 
-    md.append("\n## Slowest Tests\n")
-    if slow_tests:
-        md.append("| Seconds | Test |\n|---:|---|\n")
-        for item in slow_tests:
-            md.append(f"| {item['seconds']:.2f} | {item['nodeid']} |\n")
-    else:
-        md.append("(none)\n")
 
-    (out_dir / "report.md").write_text("\n".join(md), encoding="utf-8")
-
-    logging.info("Test log health report written to %s", out_dir)
+def main(argv: Sequence[str] | None = None) -> int:
+    run(argv)
     return 0
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     raise SystemExit(main())

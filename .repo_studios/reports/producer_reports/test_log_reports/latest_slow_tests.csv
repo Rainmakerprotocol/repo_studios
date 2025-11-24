@@ -1,0 +1,5 @@
+seconds,nodeid
+5.160,.repo_studios/tests/tests_orchestrators/test_command_center_pipeline.py::test_pipeline_smoke_updates_artifacts
+5.060,.repo_studios/tests/tests_orchestrators/test_command_center_pipeline.py::test_pipeline_allows_repo_root_prefixed_target
+0.660,.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_inventory_includes_git_churn_summary
+0.630,.repo_studios/tests/tests_command_center/producers/test_generate_function_inventory_command_center.py::test_generate_commandview_inventory_emits_extended_metrics

@@ -45,8 +45,14 @@ from collections import Counter, defaultdict
 from collections.abc import Iterable
 from datetime import datetime
 from pathlib import Path
-# Use defusedxml for secure XML parsing
-from defusedxml import ElementTree
+# Use defusedxml for secure XML parsing; fallback keeps runner usable when missing
+try:  # pragma: no cover - import wiring
+    from defusedxml import ElementTree  # type: ignore
+    _USING_DEFUSEDXML = True
+except ModuleNotFoundError:  # pragma: no cover - exercised in environments without dependency
+    from xml.etree import ElementTree  # type: ignore
+
+    _USING_DEFUSEDXML = False
 
 # Patterns to suppress from console/log output (non-actionable noise)
 _SUPPRESS_LINE_SUBSTR = [
@@ -129,7 +135,7 @@ def run_pytest_and_capture(cmd: list[str], cwd: Path) -> tuple[str, int, bool]:
     try:
         import select as _select
 
-        use_select = True
+        use_select = os.name != "nt"
     except Exception:
         use_select = False
     try:
@@ -638,4 +644,8 @@ if __name__ == "__main__":
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(message)s",
     )
+    if not _USING_DEFUSEDXML:
+        logging.warning(
+            "defusedxml not available; falling back to xml.etree.ElementTree"
+        )
     raise SystemExit(main())

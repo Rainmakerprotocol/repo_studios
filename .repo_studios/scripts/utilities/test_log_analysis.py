@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import importlib
+import importlib.util
 import re
 from collections import Counter
 from dataclasses import dataclass
@@ -59,7 +60,10 @@ def read_text(path: Path | None) -> str:
     except Exception:
         return ""
 def _load_element_tree():
-    spec = importlib.util.find_spec("defusedxml.ElementTree")
+    try:
+        spec = importlib.util.find_spec("defusedxml.ElementTree")
+    except ModuleNotFoundError:
+        spec = None
     if spec is not None:
         return importlib.import_module("defusedxml.ElementTree")
 
@@ -79,7 +83,10 @@ def parse_junit(path: Path | None) -> TestHealth:
         root = ElementTree.parse(path).getroot()
     except Exception:
         return th
-    for suite in root.findall("testsuite"):
+    suites = list(root.findall("testsuite"))
+    if root.tag == "testsuite":
+        suites.insert(0, root)
+    for suite in suites:
         th.total += int(suite.get("tests") or 0)
         th.failed += int(suite.get("failures") or 0)
         th.errors += int(suite.get("errors") or 0)

@@ -1,0 +1,41 @@
+{
+  "meta": {
+    "full_log": "C:\\Users\\genet\\repo_studios\\.repo_studios\\pytest_logs\\pytest_2025-11-23_2124.txt",
+    "generated_at": "2025-11-24T02:25:28.680787+00:00",
+    "junit": "C:\\Users\\genet\\repo_studios\\.repo_studios\\pytest_logs\\junit_2025-11-23_2124.xml",
+    "logs_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\pytest_logs"
+  },
+  "schema_version": 1,
+  "slow_tests": [
+    {
+      "nodeid": ".repo_studios/tests/tests_orchestrators/test_command_center_pipeline.py::test_pipeline_allows_repo_root_prefixed_target",
+      "seconds": 5.08
+    },
+    {
+      "nodeid": ".repo_studios/tests/tests_orchestrators/test_command_center_pipeline.py::test_pipeline_smoke_updates_artifacts",
+      "seconds": 5.07
+    },
+    {
+      "nodeid": ".repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_inventory_includes_git_churn_summary",
+      "seconds": 0.64
+    },
+    {
+      "nodeid": ".repo_studios/tests/tests_command_center/producers/test_generate_function_inventory_command_center.py::test_generate_commandview_inventory_emits_extended_metrics",
+      "seconds": 0.64
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "failed": 1,
+    "passed": 284,
+    "skipped": 0,
+    "total": 285,
+    "tracebacks": 0,
+    "warnings_total": 0,
+    "xfailed": 0
+  },
+  "warnings": {
+    "by_file": {},
+    "by_type": {}
+  }
+}

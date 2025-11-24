@@ -50,7 +50,7 @@ Monkey patches are last-resort tools. Use this standard to minimize risk, track 
 - Primary scanner: `.repo_studios/scan_monkey_patches.py` (AST-first with optional regex fallback).
 - Run via `make scan-monkey-patches` or the broader `make repo-insight` suite.
 - Use `--strict` to disable regex fallback and fail on parse errors for high signal.
-- Review `.repo_studios/monkey_patch/trend_latest.md` for category deltas relative to prior runs.
+- Review `.repo_studios/reports/producer_reports/monkey_patch_scans/trend_latest.md` for category deltas relative to prior runs.
 - Track baseline counts in the docs inventory; ratchet by risky category before reducing overall totals.
 
 ---

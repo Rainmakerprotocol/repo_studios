@@ -2,14 +2,16 @@
 """
 compare_monkey_patch_trends.py — Summarize deltas across monkey‑patch scans.
 
-Reads timestamped scan outputs under .repo_studios/monkey_patch/<TS>/report.json
+Reads timestamped scan outputs under
+``.repo_studios/reports/producer_reports/monkey_patch_scans/<TS>/report.json``
 and generates a compact trend summary comparing the latest two scans, plus an optional
 multi-scan overview. Outputs a Markdown summary and a JSON with computed stats.
 
 Usage examples:
   python .repo_studios/compare_monkey_patch_trends.py
-  python .repo_studios/compare_monkey_patch_trends.py \
-    --base-dir .repo_studios/monkey_patch --max-scans 5 --recent-n 5 --verbose
+    python .repo_studios/compare_monkey_patch_trends.py \
+        --base-dir .repo_studios/reports/producer_reports/monkey_patch_scans \
+        --max-scans 5 --recent-n 5 --verbose
 
 Outputs:
   - <base-dir>/trend_latest.md       (overview + latest vs previous delta)
@@ -30,7 +32,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-BASE_DIR_DEFAULT = Path(".repo_studios/monkey_patch")
+BASE_DIR_DEFAULT = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
 REPORT_NAME = "report.json"
 
 

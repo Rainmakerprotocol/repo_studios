@@ -113,7 +113,10 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Generate churn × complexity heatmap")
     ap.add_argument("--repo-root", default=".")
     ap.add_argument("--window", type=int, default=500, help="git log window (number of commits)")
-    ap.add_argument("--output-base", default=".repo_studios/churn_complexity")
+    ap.add_argument(
+        "--output-base",
+        default=".repo_studios/reports/aggregator_reports/churn_complexity_heatmap",
+    )
     ap.add_argument("--logs-dir", default=".repo_studios/pytest_logs")
     args = ap.parse_args()
 
