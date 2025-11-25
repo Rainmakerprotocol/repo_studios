@@ -1,6 +1,6 @@
 # Anchor Inventory Report
 
-Generated (UTC): 2025-11-25T14:01:15.106984+00:00
+Generated (UTC): 2025-11-25T12:54:37.151300+00:00
 Docs Root: C:\Users\genet\repo_studios\docs
 
 ## Summary
@@ -21,6 +21,7 @@ Top directories by document count (up to 10):
 
 - `.repo_studios` — 66 documents
 - `standards` — 11 documents
+
 
 ## Top Cross-File Duplicates (up to 25)
 
@@ -124,4 +125,4 @@ Top directories by document count (up to 10):
 
 - Docs Root: `C:\Users\genet\repo_studios\docs`
 - Additional Root: `C:\Users\genet\repo_studios\.repo_studios\docs`
-- Generated UTC: `2025-11-25T14:01:15.106984+00:00`
+- Generated UTC: `2025-11-25T12:54:37.151300+00:00`

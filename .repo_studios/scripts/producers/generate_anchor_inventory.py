@@ -7,13 +7,15 @@ pointers managed by the shared Command Center helpers.
 """
 
 import argparse
+import csv
 import json
 import logging
 import re
-from collections import defaultdict
+from collections import Counter, defaultdict
 from collections.abc import Iterable, Sequence
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
+from io import StringIO
 from pathlib import Path, PurePosixPath
 from typing import Any
 
@@ -21,7 +23,7 @@ HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/anchor_inventory_reports")
 RUN_PREFIX = "anchor_inventory"
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = 5
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
@@ -114,19 +116,60 @@ class SlugStat:
 GENERIC_ALLOWED = {"overview", "introduction", "faq", "notes"}
 
 
-def _compose_location(prefix: Path | None, relative_path: Path, line_number: int) -> str:
+@dataclass
+class DocumentSummary:
+    path: str
+    slug_counts: dict[str, int]
+    h1_count: int
+    h2_count: int
+
+    def heading_count(self) -> int:
+        return self.h1_count + self.h2_count
+
+    def unique_slugs(self) -> int:
+        return len(self.slug_counts)
+
+    def duplicate_slugs(self) -> list[str]:
+        return sorted(slug for slug, count in self.slug_counts.items() if count > 1)
+
+    def missing_h1(self) -> bool:
+        return self.h1_count == 0
+
+    def missing_h2(self) -> bool:
+        return self.h1_count > 0 and self.h2_count == 0
+
+
+def _compose_display_path(prefix: Path | None, relative_path: Path) -> PurePosixPath:
     parts: list[str] = []
     if prefix is not None:
         parts.extend(part for part in prefix.parts if part not in (".",))
     parts.extend(relative_path.parts)
-    display_path = PurePosixPath(*parts) if parts else PurePosixPath(relative_path.as_posix())
+    return PurePosixPath(*parts) if parts else PurePosixPath(relative_path.as_posix())
+
+
+def _document_root_key(path: str) -> str:
+    parts = path.split("/")
+    if not parts or not parts[0]:
+        return "."
+    if len(parts) == 1:
+        return "."
+    return parts[0]
+
+
+def _compose_location(prefix: Path | None, relative_path: Path, line_number: int) -> str:
+    display_path = _compose_display_path(prefix, relative_path)
     return f"{display_path}:{line_number}"
 
 
-def _collect_from_root(root: Path, prefix: Path | None) -> dict[str, list[str]]:
+def _collect_from_root(root: Path, prefix: Path | None) -> tuple[dict[str, list[str]], list[DocumentSummary]]:
     slug_locations: dict[str, list[str]] = defaultdict(list)
+    document_summaries: list[DocumentSummary] = []
     for md in iter_markdown_files(root):
         text = md.read_text(encoding="utf-8", errors="replace")
+        slug_counts: dict[str, int] = defaultdict(int)
+        h1_count = 0
+        h2_count = 0
+        rel = md.relative_to(root)
         for lineno, line in enumerate(text.splitlines(), start=1):
             match = HEADING_RE.match(line)
             if not match:
@@ -135,9 +178,21 @@ def _collect_from_root(root: Path, prefix: Path | None) -> dict[str, list[str]]:
             if level > 2:
                 continue
             slug = slugify(match.group(2))
-            rel = md.relative_to(root)
+            slug_counts[slug] += 1
+            if level == 1:
+                h1_count += 1
+            elif level == 2:
+                h2_count += 1
             slug_locations[slug].append(_compose_location(prefix, rel, lineno))
-    return slug_locations
+        document_summaries.append(
+            DocumentSummary(
+                path=str(_compose_display_path(prefix, rel)),
+                slug_counts=dict(slug_counts),
+                h1_count=h1_count,
+                h2_count=h2_count,
+            )
+        )
+    return slug_locations, document_summaries
 
 
 def _compute_display_prefix(repo_root: Path, doc_root: Path) -> Path | None:
@@ -150,11 +205,22 @@ def _compute_display_prefix(repo_root: Path, doc_root: Path) -> Path | None:
     return relative
 
 
-def collect(doc_roots: Iterable[tuple[Path, Path | None]]) -> dict[str, SlugStat]:
+def collect(doc_roots: Iterable[tuple[Path, Path | None]]) -> tuple[dict[str, SlugStat], list[DocumentSummary]]:
     slug_locations: dict[str, list[str]] = defaultdict(list)
+    documents: dict[str, DocumentSummary] = {}
     for root, prefix in doc_roots:
-        for slug, locations in _collect_from_root(root, prefix).items():
+        root_locations, root_documents = _collect_from_root(root, prefix)
+        for slug, locations in root_locations.items():
             slug_locations[slug].extend(locations)
+        for doc in root_documents:
+            existing = documents.get(doc.path)
+            if existing is None:
+                documents[doc.path] = doc
+                continue
+            for slug, count in doc.slug_counts.items():
+                existing.slug_counts[slug] = existing.slug_counts.get(slug, 0) + count
+            existing.h1_count += doc.h1_count
+            existing.h2_count += doc.h2_count
     stats: dict[str, SlugStat] = {}
     for slug, locations in slug_locations.items():
         files = sorted({loc.split(":")[0] for loc in locations})
@@ -165,7 +231,8 @@ def collect(doc_roots: Iterable[tuple[Path, Path | None]]) -> dict[str, SlugStat
             files=files,
             locations=sorted(locations),
         )
-    return stats
+    ordered_documents = sorted(documents.values(), key=lambda item: item.path)
+    return stats, ordered_documents
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
@@ -231,12 +298,29 @@ def build_summary(
     duplicates: list[SlugStat],
     allow_set: set[str],
     allowlist_size: int | None,
-) -> dict[str, int | None]:
+    documents: Sequence[DocumentSummary],
+    cross_file_membership: dict[str, list[str]],
+) -> dict[str, Any]:
+    cross_file_members = set(cross_file_membership.keys())
+    missing_h1 = sum(1 for doc in documents if doc.missing_h1())
+    missing_h2 = sum(1 for doc in documents if doc.missing_h2())
+    repeated = sum(1 for doc in documents if doc.duplicate_slugs())
+    root_counter = Counter(_document_root_key(doc.path) for doc in documents)
+    top_roots = [
+        {"root": root, "count": count}
+        for root, count in root_counter.most_common(10)
+    ]
     return {
         "total_slugs": len(stats),
         "cross_file_duplicates": len(duplicates),
         "generic_allow_size": len(allow_set),
         "allowlist_size": allowlist_size,
+        "total_documents": len(documents),
+        "documents_missing_h1": missing_h1,
+        "documents_missing_h2": missing_h2,
+        "documents_with_repeated_anchors": repeated,
+        "documents_with_cross_file_duplicates": len(cross_file_members),
+        "top_document_roots": top_roots,
     }
 
 
@@ -246,18 +330,56 @@ def build_cross_file_duplicates(stats: dict[str, SlugStat], allow_set: set[str])
     return duplicates
 
 
+def build_cross_file_membership(duplicates: Sequence[SlugStat]) -> dict[str, list[str]]:
+    membership: dict[str, list[str]] = defaultdict(list)
+    for entry in duplicates:
+        for path in entry.files:
+            membership[path].append(entry.slug)
+    for slugs in membership.values():
+        slugs.sort()
+    return {path: slugs for path, slugs in sorted(membership.items())}
+
+
+def build_document_payload(
+    documents: Sequence[DocumentSummary],
+    allow_set: set[str],
+    cross_file_membership: dict[str, list[str]],
+) -> list[dict[str, Any]]:
+    payload: list[dict[str, Any]] = []
+    for doc in documents:
+        slug_counts = {slug: doc.slug_counts[slug] for slug in sorted(doc.slug_counts)}
+        allowlisted = sorted(slug for slug in slug_counts if slug in allow_set)
+        payload.append(
+            {
+                "path": doc.path,
+                "h1_count": doc.h1_count,
+                "h2_count": doc.h2_count,
+                "heading_count": doc.heading_count(),
+                "unique_slugs": doc.unique_slugs(),
+                "duplicate_slugs": doc.duplicate_slugs(),
+                "cross_file_duplicate_slugs": cross_file_membership.get(doc.path, []),
+                "allowlisted_slugs": allowlisted,
+                "slug_counts": slug_counts,
+            }
+        )
+    return payload
+
+
 def build_report(
     *,
     docs_root: Path,
     stats: dict[str, SlugStat],
+    documents: Sequence[DocumentSummary],
     duplicates: list[SlugStat],
     allow_set: set[str],
     allowlist_size: int | None,
     scanned_roots: Sequence[Path],
     generated_ts: datetime,
-) -> tuple[dict[str, Any], list[SlugStat]]:
+) -> tuple[dict[str, Any], list[SlugStat], list[dict[str, Any]]]:
     ordered_slugs = sorted(stats.values(), key=lambda item: (-item.file_count, -item.count, item.slug))
-    summary = build_summary(stats, duplicates, allow_set, allowlist_size)
+    cross_file_membership = build_cross_file_membership(duplicates)
+    documents_payload = build_document_payload(documents, allow_set, cross_file_membership)
+    summary = build_summary(stats, duplicates, allow_set, allowlist_size, documents, cross_file_membership)
     report = {
         "schema_version": 1,
         "generated_utc": generated_ts.isoformat(),
@@ -268,8 +390,9 @@ def build_report(
         "slugs": [asdict(item) for item in ordered_slugs],
         "allow_generic": sorted(allow_set),
         "allowlist_size": allowlist_size,
+        "documents": documents_payload,
     }
-    return report, ordered_slugs
+    return report, ordered_slugs, documents_payload
 
 
 def render_markdown(report: dict[str, Any], ordered_slugs: list[SlugStat]) -> str:
@@ -286,10 +409,26 @@ def render_markdown(report: dict[str, Any], ordered_slugs: list[SlugStat]) -> st
         f"- cross-file duplicates: {summary['cross_file_duplicates']}",
         f"- generic allow size: {summary['generic_allow_size']}",
         f"- allowlist size: {summary['allowlist_size']}",
+        f"- total documents: {summary.get('total_documents')}",
+        f"- documents missing H1: {summary.get('documents_missing_h1')}",
+        f"- documents missing H2 (with H1 present): {summary.get('documents_missing_h2')}",
+        f"- documents with repeated anchors (same file): {summary.get('documents_with_repeated_anchors')}",
+        f"- documents with cross-file duplicates: {summary.get('documents_with_cross_file_duplicates')}",
         "",
-        "## Top Cross-File Duplicates (up to 25)",
+        "## Document Root Coverage",
+        "",
+        "Top directories by document count (up to 10):",
         "",
     ]
+    for entry in summary.get("top_document_roots", [])[:10]:
+        lines.append(f"- `{entry['root']}` — {entry['count']} documents")
+    if not summary.get("top_document_roots"):
+        lines.append("- (none)")
+    lines.append("")
+    lines.extend([
+        "## Top Cross-File Duplicates (up to 25)",
+        "",
+    ])
     duplicates = report.get("duplicates", [])
     if duplicates:
         for dup in duplicates[:25]:
@@ -301,6 +440,40 @@ def render_markdown(report: dict[str, Any], ordered_slugs: list[SlugStat]) -> st
     lines.append("")
     for stat in ordered_slugs[:25]:
         lines.append(f"- `{stat.slug}` — {stat.file_count} files ({stat.count} headings)")
+    lines.append("")
+    documents = report.get("documents", [])
+    cross_file_docs = [doc for doc in documents if doc.get("cross_file_duplicate_slugs")]
+    lines.append("## Documents With Cross-File Duplicates (up to 15)")
+    lines.append("")
+    lines.append("<!-- markdownlint-disable MD013 -->")
+    lines.append("")
+    if cross_file_docs:
+        for doc in cross_file_docs[:15]:
+            slugs = ", ".join(f"`{slug}`" for slug in doc.get("cross_file_duplicate_slugs", []))
+            lines.append(f"- `{doc['path']}` — {slugs}")
+    else:
+        lines.append("- (none)")
+    lines.append("")
+    lines.append("<!-- markdownlint-enable MD013 -->")
+    lines.append("")
+    missing_h2_docs = [doc for doc in documents if doc.get("h1_count", 0) > 0 and doc.get("h2_count", 0) == 0]
+    lines.append("## Documents Missing H2 Headings (up to 15)")
+    lines.append("")
+    if missing_h2_docs:
+        for doc in missing_h2_docs[:15]:
+            lines.append(f"- `{doc['path']}` — H1 count {doc['h1_count']}")
+    else:
+        lines.append("- (none)")
+    lines.append("")
+    repeated_anchor_docs = [doc for doc in documents if doc.get("duplicate_slugs")]
+    lines.append("## Documents With Repeated Anchors (up to 15)")
+    lines.append("")
+    if repeated_anchor_docs:
+        for doc in repeated_anchor_docs[:15]:
+            slugs = ", ".join(f"`{slug}`" for slug in doc.get("duplicate_slugs", []))
+            lines.append(f"- `{doc['path']}` — {slugs}")
+    else:
+        lines.append("- (none)")
     lines.append("")
     lines.append("## Generic Allowlist")
     lines.append("")
@@ -332,7 +505,52 @@ def render_tsv(ordered_slugs: list[SlugStat]) -> str:
     return "\n".join(lines)
 
 
-def emit_summary_log(logger: logging.Logger, ordered_slugs: list[SlugStat], duplicates: list[SlugStat]) -> None:
+def render_documents_csv(documents: Sequence[dict[str, Any]]) -> str:
+    buffer = StringIO(newline="")
+    writer = csv.writer(buffer, lineterminator="\n")
+    writer.writerow(
+        [
+            "path",
+            "h1_count",
+            "h2_count",
+            "heading_count",
+            "unique_slugs",
+            "duplicate_slugs",
+            "cross_file_duplicate_slugs",
+            "allowlisted_slugs",
+        ]
+    )
+    for doc in documents:
+        writer.writerow(
+            [
+                doc["path"],
+                doc["h1_count"],
+                doc["h2_count"],
+                doc["heading_count"],
+                doc["unique_slugs"],
+                ";".join(doc.get("duplicate_slugs", [])),
+                ";".join(doc.get("cross_file_duplicate_slugs", [])),
+                ";".join(doc.get("allowlisted_slugs", [])),
+            ]
+        )
+    return buffer.getvalue().rstrip("\n")
+
+
+def emit_summary_log(
+    logger: logging.Logger,
+    ordered_slugs: list[SlugStat],
+    duplicates: list[SlugStat],
+    summary: dict[str, Any],
+    documents: Sequence[dict[str, Any]],
+) -> None:
+    logger.info(
+        "Documents scanned=%s missing_h1=%s missing_h2=%s repeated=%s cross_file_members=%s",
+        summary.get("total_documents"),
+        summary.get("documents_missing_h1"),
+        summary.get("documents_missing_h2"),
+        summary.get("documents_with_repeated_anchors"),
+        summary.get("documents_with_cross_file_duplicates"),
+    )
     header = f"{'SLUG':40} {'CNT':>4} {'FILES':>5}"
     logger.info(header)
     logger.info("-" * len(header))
@@ -344,6 +562,22 @@ def emit_summary_log(logger: logging.Logger, ordered_slugs: list[SlugStat], dupl
             logger.info("  %s -> %d files (%d headings)", dup.slug, dup.file_count, dup.count)
     else:
         logger.info("No cross-file duplicates outside generic allowlist.")
+    if documents:
+        cross_file_docs = [doc for doc in documents if doc.get("cross_file_duplicate_slugs")]
+        if cross_file_docs:
+            logger.info("Cross-file duplicate members (up to 5):")
+            for doc in cross_file_docs[:5]:
+                logger.info(
+                    "  %s -> %s",
+                    doc["path"],
+                    ", ".join(doc.get("cross_file_duplicate_slugs", [])),
+                )
+        missing_h2_docs = [doc for doc in documents if doc.get("h1_count", 0) > 0 and doc.get("h2_count", 0) == 0]
+        if missing_h2_docs:
+            logger.info(
+                "Docs missing H2 (up to 5): %s",
+                ", ".join(doc["path"] for doc in missing_h2_docs[:5]),
+            )
 
 
 def load_allow_set(defaults: set[str], allow_file: Path | None) -> set[str]:
@@ -418,14 +652,15 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         extras = ", ".join(str(path) for path, _ in doc_roots[1:])
         logger.info("Including additional documentation roots: %s", extras)
 
-    stats = collect(doc_roots)
+    stats, documents = collect(doc_roots)
     allow_set = load_allow_set(set(GENERIC_ALLOWED), args.allow_file)
     duplicates = build_cross_file_duplicates(stats, allow_set)
     allowlist_size = extract_test_allowlist_size(args.test_file) if args.test_file else None
     generated_ts = _parse_timestamp(args.timestamp)
-    report, ordered_slugs = build_report(
+    report, ordered_slugs, documents_payload = build_report(
         docs_root=docs_root,
         stats=stats,
+        documents=documents,
         duplicates=duplicates,
         allow_set=allow_set,
         allowlist_size=allowlist_size,
@@ -452,6 +687,12 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
             kind="text",
             content=render_tsv(ordered_slugs) + "\n",
         ),
+        ReportArtifact(
+            filename="documents.csv",
+            pointer="latest_documents.csv",
+            kind="text",
+            content=render_documents_csv(documents_payload) + "\n",
+        ),
     ]
     result = write_report_artifacts(
         stem=RUN_PREFIX,
@@ -462,7 +703,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     )
 
     maybe_write_legacy_json(args.json_out, report, logger)
-    emit_summary_log(logger, ordered_slugs, duplicates)
+    emit_summary_log(logger, ordered_slugs, duplicates, report["summary"], report.get("documents", []))
 
     return {
         "run_dir": str(result.run_dir),

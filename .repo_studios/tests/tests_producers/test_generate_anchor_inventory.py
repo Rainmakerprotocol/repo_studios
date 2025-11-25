@@ -64,21 +64,48 @@ def test_reports_written_with_duplicates(tmp_path):
     summary = report["summary"]
     assert summary["total_slugs"] == 3
     assert summary["cross_file_duplicates"] == 1
+    assert summary["total_documents"] == 2
+    assert summary["documents_missing_h1"] == 0
+    assert summary["documents_missing_h2"] == 1
+    assert summary["documents_with_repeated_anchors"] == 0
+    assert summary["documents_with_cross_file_duplicates"] == 2
+    assert summary["top_document_roots"][0] == {"root": ".", "count": 2}
     assert report["allowlist_size"] == 2
     duplicate = next(entry for entry in report["duplicates"] if entry["slug"] == "shared")
     assert duplicate["locations"] == ["one.md:1", "two.md:1"]
     assert duplicate["files"] == ["one.md", "two.md"]
+    documents = {doc["path"]: doc for doc in report["documents"]}
+    assert set(documents) == {"one.md", "two.md"}
+    assert documents["one.md"]["h1_count"] == 1
+    assert documents["one.md"]["h2_count"] == 0
+    assert documents["one.md"]["cross_file_duplicate_slugs"] == ["shared"]
+    assert documents["one.md"]["duplicate_slugs"] == []
+    assert documents["two.md"]["h1_count"] == 2
+    assert documents["two.md"]["h2_count"] == 1
+    assert documents["two.md"]["cross_file_duplicate_slugs"] == ["shared"]
     assert (run_dir / "report.md").is_file()
     assert (run_dir / "slugs.tsv").is_file()
+    assert (run_dir / "documents.csv").is_file()
     assert (output_dir / "latest_report.json").is_file()
     assert (output_dir / "latest_report.md").is_file()
     assert (output_dir / "latest_slugs.tsv").is_file()
+    assert (output_dir / "latest_documents.csv").is_file()
 
     tsv_lines = (run_dir / "slugs.tsv").read_text(encoding="utf-8").splitlines()
     assert tsv_lines[0] == "slug\tcount\tfile_count\tfiles\tlocations"
     shared_row = next(line for line in tsv_lines if line.startswith("shared\t"))
     assert "one.md,two.md" in shared_row
     assert "one.md:1;two.md:1" in shared_row
+
+    csv_lines = (run_dir / "documents.csv").read_text(encoding="utf-8").splitlines()
+    assert csv_lines[0] == (
+        "path,h1_count,h2_count,heading_count,unique_slugs,duplicate_slugs,cross_file_duplicate_slugs,allowlisted_slugs"
+    )
+    one_fields = csv_lines[1].split(",")
+    assert one_fields[0] == "one.md"
+    assert one_fields[1:5] == ["1", "0", "1", "1"]
+    assert one_fields[5] == ""
+    assert one_fields[6] == "shared"
 
     baseline = json.loads(json_out.read_text(encoding="utf-8"))
     assert baseline["summary"] == summary
@@ -128,3 +155,4 @@ def test_pruning_keeps_newest_run(tmp_path):
     assert (output_dir / "latest_report.json").is_file()
     assert (output_dir / "latest_report.md").is_file()
     assert (output_dir / "latest_slugs.tsv").is_file()
+    assert (output_dir / "latest_documents.csv").is_file()

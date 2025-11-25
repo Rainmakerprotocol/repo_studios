@@ -1,6 +1,6 @@
 # Anchor Inventory Report
 
-Generated (UTC): 2025-11-25T14:01:15.106984+00:00
+Generated (UTC): 2025-11-25T12:37:18.863555+00:00
 Docs Root: C:\Users\genet\repo_studios\docs
 
 ## Summary
@@ -18,7 +18,6 @@ Docs Root: C:\Users\genet\repo_studios\docs
 ## Document Root Coverage
 
 Top directories by document count (up to 10):
-
 - `.repo_studios` — 66 documents
 - `standards` — 11 documents
 
@@ -80,8 +79,6 @@ Top directories by document count (up to 10):
 
 ## Documents With Cross-File Duplicates (up to 15)
 
-<!-- markdownlint-disable MD013 -->
-
 - `.repo_studios/docs/automation/analyze_test_hardening.md` — `invocation`, `operational-notes`, `outputs`, `purpose`, `testing`
 - `.repo_studios/docs/automation/ci_metrics_checks.md` — `goals`, `next-actions`
 - `.repo_studios/docs/automation/collect_faulthandler_reports.md` — `diagnostics`, `invocation`, `operational-notes`, `outputs`, `purpose`, `testing`
@@ -97,8 +94,6 @@ Top directories by document count (up to 10):
 - `.repo_studios/docs/automation/generate_standards_index.md` — `invocation`, `operational-notes`, `outputs`, `purpose`, `status-semantics`, `testing`
 - `.repo_studios/docs/automation/generate_test_coverage_inventory.md` — `invocation`, `operational-notes`, `outputs`, `purpose`, `status-semantics`, `testing`
 - `.repo_studios/docs/automation/generate_typecheck_report.md` — `invocation`, `outputs`, `testing`
-
-<!-- markdownlint-enable MD013 -->
 
 ## Documents Missing H2 Headings (up to 15)
 
@@ -124,4 +119,4 @@ Top directories by document count (up to 10):
 
 - Docs Root: `C:\Users\genet\repo_studios\docs`
 - Additional Root: `C:\Users\genet\repo_studios\.repo_studios\docs`
-- Generated UTC: `2025-11-25T14:01:15.106984+00:00`
+- Generated UTC: `2025-11-25T12:37:18.863555+00:00`
