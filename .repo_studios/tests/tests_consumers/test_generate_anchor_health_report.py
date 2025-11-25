@@ -72,7 +72,11 @@ def test_anchor_health_uses_inventory_artifacts(tmp_path):
     try:
         result = consumer_mod.run(
             inventory_report=latest_report,
-            output_dir=repo / ".repo_studios" / "anchor_health",
+            output_dir=repo
+            / ".repo_studios"
+            / "reports"
+            / "consumer_reports"
+            / "anchor_health_reports",
             artifacts_to_keep=5,
         )
     finally:
@@ -82,6 +86,9 @@ def test_anchor_health_uses_inventory_artifacts(tmp_path):
     assert report["source"] == "inventory"
     assert report["strict_duplicate_count"] == 1
     assert report["inventory_cross_file_duplicates"] == 1
+    database_placeholder = report["outputs"]["database"]
+    assert database_placeholder["status"] == "not_implemented"
+    assert database_placeholder["target"] == "anchor_health_snapshot"
     cluster = next(item for item in report["clusters"] if item["slug"] == "shared")
     assert cluster["files"] == ["one.md", "two.md"]
     assert cluster["locations"] == ["one.md:1", "two.md:1"]
@@ -114,13 +121,23 @@ def test_anchor_health_falls_back_to_docs_scan(tmp_path):
     cwd = os.getcwd()
     os.chdir(repo)
     try:
-        result = consumer_mod.run(output_dir=repo / ".repo_studios" / "anchor_health", artifacts_to_keep=5)
+        result = consumer_mod.run(
+            output_dir=repo
+            / ".repo_studios"
+            / "reports"
+            / "consumer_reports"
+            / "anchor_health_reports",
+            artifacts_to_keep=5,
+        )
     finally:
         os.chdir(cwd)
 
     report = result["report"]
     assert report["source"] == "scan"
     assert report["strict_duplicate_count"] == 1
+    database_placeholder = report["outputs"]["database"]
+    assert database_placeholder["status"] == "not_implemented"
+    assert database_placeholder["target"] == "anchor_health_snapshot"
     cluster = next(item for item in report["clusters"] if item["slug"] == "shared")
     assert sorted(cluster["files"]) == ["alpha.md", "beta.md"]
 
@@ -163,11 +180,24 @@ def test_anchor_health_prunes_history(tmp_path, monkeypatch):
     os.chdir(repo)
     try:
         for _ in range(6):
-            consumer_mod.run(output_dir=repo / ".repo_studios" / "anchor_health", artifacts_to_keep=3)
+            consumer_mod.run(
+                output_dir=repo
+                / ".repo_studios"
+                / "reports"
+                / "consumer_reports"
+                / "anchor_health_reports",
+                artifacts_to_keep=3,
+            )
     finally:
         os.chdir(cwd)
 
-    output_dir = repo / ".repo_studios" / "anchor_health"
+    output_dir = (
+        repo
+        / ".repo_studios"
+        / "reports"
+        / "consumer_reports"
+        / "anchor_health_reports"
+    )
     run_dirs = sorted(p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith("anchor_health-"))
     assert len(run_dirs) == 3
     assert all(run_dirs)

@@ -35,13 +35,14 @@ HEADING_RE = re.compile(r"^(#{1,2})\s+(.*)$")
 GENERIC_ALLOWED = {"overview", "introduction", "faq", "notes"}
 BASELINE_PATH = Path("tests/docs/anchor_slug_baseline.json")
 # Permanent root for anchor health artifacts (contains latest + historical runs)
-OUTPUT_DIR = Path(".repo_studios/anchor_health")
+OUTPUT_DIR = Path(".repo_studios/reports/consumer_reports/anchor_health_reports")
 INVENTORY_DIR = Path(".repo_studios/reports/producer_reports/anchor_inventory_reports")
 INVENTORY_LATEST = INVENTORY_DIR / "latest_report.json"
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = 5
 
 # Subfolder naming pattern: anchor_health-YYYY-MM-DD_hhmm
 RUN_PREFIX = "anchor_health-"
+DATABASE_PLACEHOLDER_TARGET = "anchor_health_snapshot"
 
 
 def _slugify(raw: str) -> str:
@@ -64,6 +65,16 @@ class Cluster:
     @property
     def file_count(self) -> int:  # pragma: no cover - trivial
         return len(self.files)
+
+
+def build_database_placeholder(target: str) -> dict[str, str]:
+    """Return a clearly marked stub for future database sinks."""
+
+    return {
+        "target": target,
+        "status": "not_implemented",
+        "note": "Database sink placeholder; no data persisted during this run.",
+    }
 
 
 def collect_h1_h2_slugs(skip: set[str] | None = None, *, docs_root: Path | None = None) -> dict[str, list[str]]:
@@ -192,7 +203,7 @@ def build_report(*, inventory: dict | None, inventory_path: Path | None) -> dict
 
     baseline = load_baseline()
     baseline_dupes = baseline.get("summary", {}).get("cross_file_duplicates") if baseline else None
-    return {
+    report = {
         "schema_version": 2,
         "source": source,
         "inventory_report": str(inventory_path) if inventory_path else None,
@@ -210,6 +221,8 @@ def build_report(*, inventory: dict | None, inventory_path: Path | None) -> dict
             for c in clusters
         ],
     }
+    report["outputs"] = {"database": build_database_placeholder(DATABASE_PLACEHOLDER_TARGET)}
+    return report
 
 
 def _run_dir(ts: datetime, base: Path = OUTPUT_DIR) -> Path:
@@ -260,11 +273,13 @@ def write_artifacts(report: dict, ts: datetime | None = None, *, output_dir: Pat
         f"Delta vs Baseline: {report['delta_vs_baseline']}",
         "",
         "## Top Clusters (up to 25)",
+        "",
     ]
     for c in report["clusters"][:25]:
         lines.append(f"- `{c['slug']}` — {c['file_count']} files")
     lines.append("")
     lines.append("## Next Actions Guidance")
+    lines.append("")
     lines.append("Prioritize largest clusters first; rename all but canonical file.")
     (run_dir / "anchor_report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 

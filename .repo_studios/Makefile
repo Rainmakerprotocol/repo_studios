@@ -75,6 +75,10 @@ studio-diff-standards-index:
 studio-generate-dependency-hygiene:
 	$(PYTHON) .repo_studios/scripts/producers/generate_dependency_hygiene_report.py --repo-root . --output-dir .repo_studios/reports/producer_reports/dependency_hygiene_reports --log-level INFO
 
+.PHONY: studio-generate-code-doc-churn-report
+studio-generate-code-doc-churn-report:
+	$(PYTHON) .repo_studios/scripts/producers/generate_code_doc_churn_report.py --repo-root . --output-dir .repo_studios/reports/producer_reports/code_doc_churn_reports --git-window "30 days" --artifacts-to-keep 5 --log-level INFO
+
 .PHONY: studio-generate-function-index
 studio-generate-function-index:
 	@$(PYTHON) -c "import sys; sys.exit(0 if '$(path)' else 1)" || (echo "path variable required (make studio-generate-function-index path=...)" && exit 1)
