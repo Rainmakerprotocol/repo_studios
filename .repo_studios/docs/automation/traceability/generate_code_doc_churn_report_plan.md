@@ -19,8 +19,8 @@
   summarizing inputs, outputs, lint exceptions, and usage.
 - ✅ Script catalog updated (`script_inventory_architecture.md`) to reflect remediation completion.
 - 🔄 Follow-ups: consider CI wiring for the new Make target, wire aggregator
-  (`aggregate_docs_health_signals.py`) once complementary producers ship, and monitor doc-index
-  schema changes that may require enrichment tweaks.
+  (`aggregate_docs_health_signals.py`) now that the undocumented-logic producer is live, and
+  monitor doc-index schema changes that may require enrichment tweaks.
 
 ## Primary Inputs
 

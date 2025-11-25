@@ -1,6 +1,10 @@
 PYTHON ?= python3
 REPO_ROOT := $(abspath $(CURDIR)/..)
 
+ifneq ($(filter ./% ../% .venv/%,$(PYTHON)),)
+	override PYTHON := $(abspath $(REPO_ROOT)/$(PYTHON))
+endif
+
 .PHONY: command-center
 command-center:
 ifeq ($(strip $(COMMAND_CENTER_TARGET)),)
@@ -78,6 +82,14 @@ studio-generate-dependency-hygiene:
 .PHONY: studio-generate-code-doc-churn-report
 studio-generate-code-doc-churn-report:
 	$(PYTHON) .repo_studios/scripts/producers/generate_code_doc_churn_report.py --repo-root . --output-dir .repo_studios/reports/producer_reports/code_doc_churn_reports --git-window "30 days" --artifacts-to-keep 5 --log-level INFO
+
+.PHONY: studio-generate-undocumented-logic-report
+studio-generate-undocumented-logic-report:
+	$(PYTHON) "$(REPO_ROOT)/.repo_studios/scripts/producers/generate_undocumented_logic_report.py" --repo-root "$(REPO_ROOT)" --output-dir "$(REPO_ROOT)/.repo_studios/reports/producer_reports/undocumented_logic_reports" --include-command-center --log-level INFO
+
+.PHONY: studio-aggregate-docs-health
+studio-aggregate-docs-health:
+	$(PYTHON) "$(REPO_ROOT)/.repo_studios/scripts/aggregators/aggregate_docs_health_signals.py" --repo-root "$(REPO_ROOT)" --output-dir "$(REPO_ROOT)/.repo_studios/reports/aggregator_reports/docs_health_signals" --log-level INFO
 
 .PHONY: studio-generate-function-index
 studio-generate-function-index:

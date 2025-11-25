@@ -1,0 +1,976 @@
+# Undocumented Logic Report
+
+## Summary
+- Modules scanned: 61
+- Modules with findings: 54
+- Entities scanned: 633
+- Entities missing docs: 588
+- Docstring coverage: 7.11%
+
+## Modules With Undocumented Logic
+- `.repo_studios/scripts/producers/scan_monkey_patches.py` — missing 50 of 53 entities (coverage 5.66%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/scan_monkey_patches.md` (slug: scanmonkeypatchespy, anchors: 7, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.scan_monkey_patches.Paths` line 143 — missing docstring
+  - class `.repo_studios.scripts.producers.scan_monkey_patches.Options` line 150 — missing docstring
+  - class `.repo_studios.scripts.producers.scan_monkey_patches.ScanOptions` line 155 — missing docstring
+  - class `.repo_studios.scripts.producers.scan_monkey_patches.Finding` line 166 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.Finding.to_dict` line 183 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.ImportResolver.__init__` line 216 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.ImportResolver.visit_Import` line 221 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.ImportResolver.visit_ImportFrom` line 229 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.ScopeTracker.__init__` line 243 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.ScopeTracker.current` line 246 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.ScopeTracker.visit_FunctionDef` line 256 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.ScopeTracker.visit_AsyncFunctionDef` line 261 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.ScopeTracker.visit_ClassDef` line 266 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.read_lines` line 272 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.get_context` line 279 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.get_nearby_comment` line 286 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.is_path_in_tests` line 305 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.top_level_packages_default` line 314 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.base_module_name` line 333 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.dotted_name_from_attribute` line 339 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.is_alias_external` line 352 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.classify_intent` line 361 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.add_git_blame` line 379 — missing docstring
+  - class `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner` line 417 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.__init__` line 418 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.generic_visit` line 437 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_Assign` line 445 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_AnnAssign` line 449 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_AugAssign` line 453 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_Call` line 457 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_Delete` line 519 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_FunctionDef` line 534 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_ClassDef` line 550 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.scan_file` line 747 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.iter_python_files` line 806 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.augment_findings_with_git` line 832 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.summarize_findings` line 848 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.compose_payload` line 858 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.render_markdown_report` line 904 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.render_log` line 950 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.ensure_run_directory` line 967 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.write_artifacts` line 1067 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.prune_history` line 1110 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.scan_repository` line 1123 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.run_self_test` line 1151 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.parse_args` line 1222 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.configure_logging` line 1283 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.build_paths` line 1287 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.run` line 1291 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_monkey_patches.main` line 1356 — missing docstring
+- `.repo_studios/scripts/producers/validate_inventory.py` — missing 33 of 34 entities (coverage 2.94%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/validate_inventory.md` (slug: validate-inventory-producer, anchors: 4, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.validate_inventory.ValidationIssue` line 81 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.ValidationIssue.to_dict` line 87 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_inventory.ValidationReport` line 101 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.ValidationReport.add` line 104 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.ValidationReport.errors` line 108 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.ValidationReport.warnings` line 112 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.ValidationReport.to_json` line 115 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_inventory.ValidationStats` line 120 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.ValidationStats.to_dict` line 124 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_inventory.EnumRegistry` line 132 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.EnumRegistry.load` line 136 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.EnumRegistry.ensure` line 144 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_inventory.ValidatorConfig` line 165 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.ValidatorConfig.load` line 172 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.ValidatorConfig.is_suppressed` line 191 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.prune_old_runs` line 224 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.update_latest_artifacts` line 242 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.iterate_inventory_files` line 277 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.validate_record` line 389 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.validate_file` line 405 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.render_markdown` line 445 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.render_log` line 464 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.write_run_artifacts` line 482 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.compose_payload` line 489 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.compose_raw_payload` line 527 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.build_parser` line 541 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_inventory.Paths` line 566 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_inventory.BasePaths` line 575 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_inventory.Options` line 582 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_inventory.KeepOptions` line 617 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.build_paths` line 642 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.build_options` line 680 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.main` line 690 — missing docstring
+- `.repo_studios/scripts/producers/generate_anchor_inventory.py` — missing 27 of 27 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.generate_anchor_inventory.Paths` line 57 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_anchor_inventory.Options` line 64 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.slugify` line 91 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.iter_markdown_files` line 100 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_anchor_inventory.SlugStat` line 108 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_anchor_inventory.DocumentSummary` line 120 — missing docstring
+  - method `.repo_studios.scripts.producers.generate_anchor_inventory.DocumentSummary.heading_count` line 126 — missing docstring
+  - method `.repo_studios.scripts.producers.generate_anchor_inventory.DocumentSummary.unique_slugs` line 129 — missing docstring
+  - method `.repo_studios.scripts.producers.generate_anchor_inventory.DocumentSummary.duplicate_slugs` line 132 — missing docstring
+  - method `.repo_studios.scripts.producers.generate_anchor_inventory.DocumentSummary.missing_h1` line 135 — missing docstring
+  - method `.repo_studios.scripts.producers.generate_anchor_inventory.DocumentSummary.missing_h2` line 138 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.collect` line 208 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.parse_args` line 238 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.extract_test_allowlist_size` line 276 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.build_summary` line 296 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.build_cross_file_duplicates` line 327 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.build_cross_file_membership` line 333 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.build_document_payload` line 343 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.build_report` line 368 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.render_markdown` line 398 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.render_tsv` line 499 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.render_documents_csv` line 508 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.emit_summary_log` line 539 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.load_allow_set` line 583 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.maybe_write_legacy_json` line 602 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.run` line 610 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_anchor_inventory.main` line 718 — missing docstring
+- `.repo_studios/command_center/scripts/aggregators/scan_duplicates.py` — missing 25 of 34 entities (coverage 26.47%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.parse_args` line 169 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.configure_logging` line 231 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.build_paths` line 235 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.build_options` line 256 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.orchestrate_upstream` line 338 — missing docstring
+  - method `.repo_studios.command_center.scripts.aggregators.scan_duplicates.FunctionExtractor.__init__` line 369 — missing docstring
+  - method `.repo_studios.command_center.scripts.aggregators.scan_duplicates.FunctionExtractor.visit_FunctionDef` line 376 — missing docstring
+  - method `.repo_studios.command_center.scripts.aggregators.scan_duplicates.FunctionExtractor.visit_AsyncFunctionDef` line 380 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.scan_python_files` line 431 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.extract_functions_from_file` line 445 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.compute_ast_similarity` line 457 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.group_duplicates` line 494 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.build_duplicate_groups` line 527 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.locate_analysis` line 578 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.load_source_duplicates` line 593 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.merge_duplicates` line 621 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.generate_summary` line 758 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.scan_target` line 827 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.compose_payload` line 844 — missing docstring
+  - class `.repo_studios.command_center.scripts.aggregators.scan_duplicates.RunPaths` line 867 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.initialise_run_paths` line 872 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.write_outputs` line 887 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.apply_retention` line 919 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.run` line 941 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.scan_duplicates.main` line 987 — missing docstring
+- `.repo_studios/scripts/producers/scan_code_placeholders.py` — missing 22 of 22 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/scan_code_placeholders.md` (slug: scancodeplaceholderspy, anchors: 8, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.scan_code_placeholders.Paths` line 65 — missing docstring
+  - class `.repo_studios.scripts.producers.scan_code_placeholders.ScanOptions` line 72 — missing docstring
+  - class `.repo_studios.scripts.producers.scan_code_placeholders.Options` line 82 — missing docstring
+  - class `.repo_studios.scripts.producers.scan_code_placeholders.PlaceholderRecord` line 115 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_code_placeholders.PlaceholderRecord.to_dict` line 122 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_code_placeholders.parse_args` line 132 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_code_placeholders.build_paths` line 183 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_code_placeholders.load_allowlist` line 187 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_code_placeholders.normalize_patterns` line 211 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_code_placeholders.normalize_extensions` line 218 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_code_placeholders.normalize_exclude_prefixes` line 228 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_code_placeholders.compile_pattern_regex` line 254 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_code_placeholders.scan_placeholders` line 261 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_code_placeholders.compose_payload` line 326 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_code_placeholders.render_markdown_report` line 358 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_code_placeholders.render_log` line 388 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_code_placeholders.ensure_run_directory` line 404 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_code_placeholders.write_artifacts` line 410 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_code_placeholders.prune_history` line 447 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_code_placeholders.configure_logging` line 459 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_code_placeholders.run` line 463 — missing docstring
+  - function `.repo_studios.scripts.producers.scan_code_placeholders.main` line 503 — missing docstring
+- `.repo_studios/scripts/producers/seed_standards_prompts.py` — missing 21 of 21 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/seed_standards_prompts.md` (slug: seedstandardspromptspy, anchors: 7, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.seed_standards_prompts.Paths` line 51 — missing docstring
+  - class `.repo_studios.scripts.producers.seed_standards_prompts.Options` line 58 — missing docstring
+  - class `.repo_studios.scripts.producers.seed_standards_prompts.KeepOptions` line 89 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.parse_args` line 99 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.configure_logging` line 144 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.build_paths` line 148 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.build_options` line 152 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.load_index` line 166 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.build_seed` line 174 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.summarize_seed` line 199 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.render_seed` line 227 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.ensure_run_directory` line 244 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.write_seed_files` line 250 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.render_markdown_report` line 265 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.render_log` line 297 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.write_artifacts` line 330 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.prune_history` line 349 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.emit_legacy_output` line 362 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.compose_payload` line 375 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.run` line 400 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.main` line 439 — missing docstring
+- `.repo_studios/command_center/scripts/producers/generate_commandview_inventory.py` — missing 20 of 20 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.Paths` line 739 — missing docstring
+  - class `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.Options` line 747 — missing docstring
+  - class `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.CoverageInfo` line 754 — missing docstring
+  - class `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.CoverageIndex` line 761 — missing docstring
+  - method `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.CoverageIndex.__init__` line 762 — missing docstring
+  - method `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.CoverageIndex.register` line 769 — missing docstring
+  - method `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.CoverageIndex.get` line 796 — missing docstring
+  - function `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.parse_args` line 809 — missing docstring
+  - function `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.build_paths` line 854 — missing docstring
+  - function `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.build_options` line 886 — missing docstring
+  - function `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.configure_logging` line 891 — missing docstring
+  - function `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.load_coverage_reports` line 895 — missing docstring
+  - function `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.attach_git_churn` line 1007 — missing docstring
+  - function `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.discover_python_files` line 1068 — missing docstring
+  - function `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.analyze_python_file` line 2187 — missing docstring
+  - function `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.compose_inventory` line 2388 — missing docstring
+  - function `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.build_screening_summary` line 2739 — missing docstring
+  - function `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.write_inventory` line 2894 — missing docstring
+  - function `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.run` line 2908 — missing docstring
+  - function `.repo_studios.command_center.scripts.producers.generate_commandview_inventory.main` line 2966 — missing docstring
+- `.repo_studios/scripts/producers/analyze_test_hardening.py` — missing 20 of 20 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/analyze_test_hardening.md` (slug: analyzetesthardeningpy, anchors: 7, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.analyze_test_hardening.Paths` line 50 — missing docstring
+  - class `.repo_studios.scripts.producers.analyze_test_hardening.Options` line 56 — missing docstring
+  - class `.repo_studios.scripts.producers.analyze_test_hardening.TestIssue` line 84 — missing docstring
+  - class `.repo_studios.scripts.producers.analyze_test_hardening.TestFileAnalysis` line 92 — missing docstring
+  - method `.repo_studios.scripts.producers.analyze_test_hardening.TestFileAnalysis.severity_counts` line 101 — missing docstring
+  - method `.repo_studios.scripts.producers.analyze_test_hardening.TestFileAnalysis.priority_score` line 109 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_test_hardening.parse_args` line 114 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_test_hardening.build_paths` line 140 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_test_hardening.build_options` line 144 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_test_hardening.configure_logging` line 149 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_test_hardening.discover_test_files` line 153 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_test_hardening.analyze_file` line 166 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_test_hardening.analyze_all` line 388 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_test_hardening.compose_payload` line 400 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_test_hardening.render_markdown_report` line 485 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_test_hardening.render_log` line 557 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_test_hardening.write_artifacts` line 573 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_test_hardening.prune_history` line 597 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_test_hardening.run` line 618 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_test_hardening.main` line 632 — missing docstring
+- `.repo_studios/scripts/producers/render_inventory_views.py` — missing 20 of 20 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/render_inventory_views.md` (slug: render-inventory-views-producer, anchors: 4, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.render_inventory_views.ViewBundle` line 57 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.load_inventory` line 89 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.docs_view` line 108 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.scripts_view` line 128 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.tests_view` line 149 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.summary_view` line 167 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.summary_dashboard` line 201 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.build_views` line 219 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.write_yaml` line 229 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.write_json` line 234 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.ensure_report_topics` line 238 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.write_stub` line 259 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.compose_report_payload` line 276 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.render_markdown` line 334 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.render_log` line 364 — missing docstring
+  - class `.repo_studios.scripts.producers.render_inventory_views.Paths` line 401 — missing docstring
+  - class `.repo_studios.scripts.producers.render_inventory_views.Options` line 409 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.build_paths` line 441 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.build_options` line 445 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.main` line 453 — missing docstring
+- `.repo_studios/scripts/producers/verify_docs_integrity.py` — missing 20 of 20 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/verify_docs_integrity.md` (slug: verifydocsintegrity, anchors: 9, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.verify_docs_integrity.JsonBlockResult` line 54 — missing docstring
+  - class `.repo_studios.scripts.producers.verify_docs_integrity.Paths` line 62 — missing docstring
+  - class `.repo_studios.scripts.producers.verify_docs_integrity.Options` line 69 — missing docstring
+  - class `.repo_studios.scripts.producers.verify_docs_integrity.DocumentProcessingResult` line 104 — missing docstring
+  - class `.repo_studios.scripts.producers.verify_docs_integrity.VerificationOutcome` line 114 — missing docstring
+  - function `.repo_studios.scripts.producers.verify_docs_integrity.parse_args` line 126 — missing docstring
+  - function `.repo_studios.scripts.producers.verify_docs_integrity.configure_logging` line 170 — missing docstring
+  - function `.repo_studios.scripts.producers.verify_docs_integrity.build_paths` line 174 — missing docstring
+  - function `.repo_studios.scripts.producers.verify_docs_integrity.build_options` line 178 — missing docstring
+  - function `.repo_studios.scripts.producers.verify_docs_integrity.compute_exit_codes_hash` line 203 — missing docstring
+  - function `.repo_studios.scripts.producers.verify_docs_integrity.process_file` line 232 — missing docstring
+  - function `.repo_studios.scripts.producers.verify_docs_integrity.regenerate_index_table` line 259 — missing docstring
+  - function `.repo_studios.scripts.producers.verify_docs_integrity.verify_all` line 343 — missing docstring
+  - function `.repo_studios.scripts.producers.verify_docs_integrity.compose_payload` line 394 — missing docstring
+  - function `.repo_studios.scripts.producers.verify_docs_integrity.render_markdown_report` line 469 — missing docstring
+  - function `.repo_studios.scripts.producers.verify_docs_integrity.render_log` line 500 — missing docstring
+  - function `.repo_studios.scripts.producers.verify_docs_integrity.write_artifacts` line 518 — missing docstring
+  - function `.repo_studios.scripts.producers.verify_docs_integrity.prune_history` line 542 — missing docstring
+  - function `.repo_studios.scripts.producers.verify_docs_integrity.run` line 561 — missing docstring
+  - function `.repo_studios.scripts.producers.verify_docs_integrity.main` line 608 — missing docstring
+- `.repo_studios/scripts/producers/generate_doc_index.py` — missing 18 of 18 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/generate_doc_index.md` (slug: generatedocindexpy, anchors: 7, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.generate_doc_index.Paths` line 83 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_doc_index.Options` line 89 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_doc_index.Heading` line 94 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_doc_index.SubHeading` line 101 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_doc_index.DocumentRecord` line 110 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_doc_index.slugify` line 149 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_doc_index.iter_markdown_files` line 170 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_doc_index.parse_markdown_document` line 297 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_doc_index.collect_documents` line 373 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_doc_index.build_metrics` line 381 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_doc_index.build_database_placeholder` line 432 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_doc_index.build_payload` line 441 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_doc_index.build_csv` line 485 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_doc_index.render_bundle` line 570 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_doc_index.handle_database_placeholder` line 692 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_doc_index.parse_args` line 699 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_doc_index.run` line 724 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_doc_index.main` line 809 — missing docstring
+- `.repo_studios/scripts/producers/validate_metrics_anchor_stubs.py` — missing 18 of 18 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/validate_metrics_anchor_stubs.md` (slug: validatemetricsanchorstubspy, anchors: 7, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.Paths` line 52 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.Options` line 60 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.parse_args` line 82 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.configure_logging` line 119 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.build_paths` line 123 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.build_options` line 127 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.iter_markdown_files` line 137 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.collect_referenced_anchors` line 147 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.collect_legacy_stub_anchors` line 160 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.load_allowlist` line 185 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.summarize_missing` line 196 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.compose_payload` line 213 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.render_markdown_report` line 252 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.render_log` line 283 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.write_artifacts` line 298 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.prune_history` line 322 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.run` line 341 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_metrics_anchor_stubs.main` line 388 — missing docstring
+- `.repo_studios/command_center/scripts/summarizers/generate_function_analysis.py` — missing 17 of 17 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.command_center.scripts.summarizers.generate_function_analysis.Paths` line 38 — missing docstring
+  - class `.repo_studios.command_center.scripts.summarizers.generate_function_analysis.Options` line 46 — missing docstring
+  - function `.repo_studios.command_center.scripts.summarizers.generate_function_analysis.parse_args` line 52 — missing docstring
+  - function `.repo_studios.command_center.scripts.summarizers.generate_function_analysis.build_paths` line 95 — missing docstring
+  - function `.repo_studios.command_center.scripts.summarizers.generate_function_analysis.build_options` line 119 — missing docstring
+  - function `.repo_studios.command_center.scripts.summarizers.generate_function_analysis.configure_logging` line 124 — missing docstring
+  - function `.repo_studios.command_center.scripts.summarizers.generate_function_analysis.locate_inventory_file` line 128 — missing docstring
+  - function `.repo_studios.command_center.scripts.summarizers.generate_function_analysis.read_inventory` line 144 — missing docstring
+  - function `.repo_studios.command_center.scripts.summarizers.generate_function_analysis.collect_functions` line 151 — missing docstring
+  - function `.repo_studios.command_center.scripts.summarizers.generate_function_analysis.identify_duplicate_groups` line 192 — missing docstring
+  - function `.repo_studios.command_center.scripts.summarizers.generate_function_analysis.slugify` line 205 — missing docstring
+  - function `.repo_studios.command_center.scripts.summarizers.generate_function_analysis.build_findings` line 209 — missing docstring
+  - function `.repo_studios.command_center.scripts.summarizers.generate_function_analysis.compose_payload` line 248 — missing docstring
+  - function `.repo_studios.command_center.scripts.summarizers.generate_function_analysis.analysis_date` line 300 — missing docstring
+  - function `.repo_studios.command_center.scripts.summarizers.generate_function_analysis.write_analysis` line 318 — missing docstring
+  - function `.repo_studios.command_center.scripts.summarizers.generate_function_analysis.run` line 334 — missing docstring
+  - function `.repo_studios.command_center.scripts.summarizers.generate_function_analysis.main` line 374 — missing docstring
+- `.repo_studios/scripts/producers/analyze_standards_index_gaps.py` — missing 15 of 15 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.analyze_standards_index_gaps.GapCandidate` line 47 — missing docstring
+  - method `.repo_studios.scripts.producers.analyze_standards_index_gaps.GapCandidate.to_dict` line 51 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_standards_index_gaps.load_index` line 55 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_standards_index_gaps.load_sources` line 70 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_standards_index_gaps.build_existing_tokens` line 94 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_standards_index_gaps.scan_file` line 106 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_standards_index_gaps.run_gap_detection` line 127 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_standards_index_gaps.build_report` line 143 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_standards_index_gaps.write_markdown` line 174 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_standards_index_gaps.write_candidates_tsv` line 206 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_standards_index_gaps.write_artifacts` line 215 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_standards_index_gaps.prune_old_runs` line 245 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_standards_index_gaps.emit_runtime_log` line 263 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_standards_index_gaps.build_parser` line 286 — missing docstring
+  - function `.repo_studios.scripts.producers.analyze_standards_index_gaps.main` line 336 — missing docstring
+- `.repo_studios/scripts/producers/check_inventory_health.py` — missing 14 of 14 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.check_inventory_health.Paths` line 69 — missing docstring
+  - class `.repo_studios.scripts.producers.check_inventory_health.Options` line 77 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.load_json` line 113 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.compute_deltas` line 124 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.check_thresholds` line 135 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.evaluate` line 159 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.parse_timestamp` line 166 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.build_report` line 175 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.write_markdown` line 211 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.write_log` line 247 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.configure_logging` line 264 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.build_paths` line 269 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.build_options` line 273 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.main` line 281 — missing docstring
+- `.repo_studios/scripts/producers/validate_import_boundaries.py` — missing 14 of 14 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/validate_import_boundaries.md` (slug: validateimportboundariespy, anchors: 7, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.validate_import_boundaries.Paths` line 49 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_import_boundaries.Options` line 57 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_import_boundaries.Violation` line 91 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.parse_args` line 97 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.configure_logging` line 136 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.build_paths` line 140 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.build_options` line 154 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.render_markdown_report` line 296 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.render_log` line 332 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.write_artifacts` line 363 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.prune_history` line 380 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.compose_payload` line 399 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.run` line 429 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.main` line 481 — missing docstring
+- `.repo_studios/scripts/producers/validate_markdown_anchors.py` — missing 14 of 14 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/validate_markdown_anchors.md` (slug: validatemarkdownanchorspy, anchors: 7, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.validate_markdown_anchors.Issue` line 78 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_markdown_anchors.Paths` line 86 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_markdown_anchors.Options` line 92 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_markdown_anchors.build_report` line 132 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_markdown_anchors.write_artifacts` line 162 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_markdown_anchors.prune_old_runs` line 208 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_markdown_anchors.slugify` line 221 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_markdown_anchors.collect_anchors` line 232 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_markdown_anchors.iter_files` line 242 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_markdown_anchors.parse_links` line 251 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_markdown_anchors.check_file` line 257 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_markdown_anchors.build_paths` line 317 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_markdown_anchors.build_options` line 321 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_markdown_anchors.main` line 332 — missing docstring
+- `.repo_studios/scripts/producers/generate_code_doc_churn_report.py` — missing 12 of 12 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.generate_code_doc_churn_report.Paths` line 74 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_code_doc_churn_report.Options` line 83 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_code_doc_churn_report.ModuleActivity` line 128 — missing docstring
+  - method `.repo_studios.scripts.producers.generate_code_doc_churn_report.ModuleActivity.to_payload` line 136 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_code_doc_churn_report.GitMetadata` line 149 — missing docstring
+  - method `.repo_studios.scripts.producers.generate_code_doc_churn_report.GitMetadata.to_payload` line 155 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_code_doc_churn_report.parse_args` line 165 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_code_doc_churn_report.build_report` line 369 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_code_doc_churn_report.render_markdown` line 411 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_code_doc_churn_report.render_tsv` line 475 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_code_doc_churn_report.run` line 512 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_code_doc_churn_report.main` line 598 — missing docstring
+- `.repo_studios/scripts/producers/generate_standards_index.py` — missing 12 of 12 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/generate_standards_index.md` (slug: generatestandardsindexpy, anchors: 7, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.generate_standards_index.Category` line 49 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_standards_index.Source` line 57 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_standards_index.Paths` line 63 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_standards_index.BuildStats` line 74 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_standards_index.ExtractDiagnostics` line 86 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_standards_index.build_index` line 310 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_standards_index.write_index` line 371 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_standards_index.prune_old_runs` line 419 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_standards_index.write_artifacts` line 571 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_standards_index.configure_logging` line 626 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_standards_index.build_parser` line 631 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_standards_index.main` line 669 — missing docstring
+- `.repo_studios/command_center/scripts/libraries/cli.py` — missing 11 of 11 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/command_center/docs/phase_4/HELPER_ADOPTION_CLI_SPEC.md` (slug: helper-adoption-audit-cli-specification, anchors: 0, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.command_center.scripts.libraries.cli.PathSpec` line 12 — missing docstring
+  - class `.repo_studios.command_center.scripts.libraries.cli.KeepSpec` line 23 — missing docstring
+  - class `.repo_studios.command_center.scripts.libraries.cli.PathsConfig` line 34 — missing docstring
+  - class `.repo_studios.command_center.scripts.libraries.cli.OptionsConfig` line 43 — missing docstring
+  - function `.repo_studios.command_center.scripts.libraries.cli.resolve_repo_root` line 54 — missing docstring
+  - function `.repo_studios.command_center.scripts.libraries.cli.resolve_path` line 64 — missing docstring
+  - function `.repo_studios.command_center.scripts.libraries.cli.normalize_keep_count` line 87 — missing docstring
+  - function `.repo_studios.command_center.scripts.libraries.cli.build_paths` line 100 — missing docstring
+  - function `.repo_studios.command_center.scripts.libraries.cli.build_keep_counts` line 114 — missing docstring
+  - function `.repo_studios.command_center.scripts.libraries.cli.build_standard_paths` line 124 — missing docstring
+  - function `.repo_studios.command_center.scripts.libraries.cli.build_standard_options` line 137 — missing docstring
+- `.repo_studios/scripts/producers/generate_import_graph_report.py` — missing 11 of 11 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - function `.repo_studios.scripts.producers.generate_import_graph_report.iter_py_files` line 39 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_import_graph_report.parse_imports` line 46 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_import_graph_report.build_graph` line 87 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_import_graph_report.fan_metrics` line 116 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_import_graph_report.find_cycles` line 125 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_import_graph_report.build_report` line 171 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_import_graph_report.write_markdown` line 221 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_import_graph_report.write_log` line 268 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_import_graph_report.write_import_graph_artifacts` line 290 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_import_graph_report.configure_logging` line 342 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_import_graph_report.main` line 347 — missing docstring
+- `.repo_studios/scripts/consumers/generate_anchor_health_report.py` — missing 10 of 13 entities (coverage 23.08%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - method `.repo_studios.scripts.consumers.generate_anchor_health_report.Cluster.__init__` line 60 — missing docstring
+  - method `.repo_studios.scripts.consumers.generate_anchor_health_report.Cluster.file_count` line 66 — missing docstring
+  - function `.repo_studios.scripts.consumers.generate_anchor_health_report.collect_h1_h2_slugs` line 80 — missing docstring
+  - function `.repo_studios.scripts.consumers.generate_anchor_health_report.multi_file_duplicates` line 101 — missing docstring
+  - function `.repo_studios.scripts.consumers.generate_anchor_health_report.load_baseline` line 110 — missing docstring
+  - function `.repo_studios.scripts.consumers.generate_anchor_health_report.build_report` line 191 — missing docstring
+  - function `.repo_studios.scripts.consumers.generate_anchor_health_report.write_artifacts` line 257 — missing docstring
+  - function `.repo_studios.scripts.consumers.generate_anchor_health_report.parse_args` line 319 — missing docstring
+  - function `.repo_studios.scripts.consumers.generate_anchor_health_report.run` line 344 — missing docstring
+  - function `.repo_studios.scripts.consumers.generate_anchor_health_report.main` line 372 — missing docstring
+- `.repo_studios/scripts/producers/diff_standards_index.py` — missing 10 of 11 entities (coverage 9.09%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/diff_standards_index.md` (slug: diffstandardsindexpy, anchors: 7, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - function `.repo_studios.scripts.producers.diff_standards_index.prune_old_runs` line 92 — missing docstring
+  - function `.repo_studios.scripts.producers.diff_standards_index.load` line 132 — missing docstring
+  - function `.repo_studios.scripts.producers.diff_standards_index.index_rules` line 141 — missing docstring
+  - function `.repo_studios.scripts.producers.diff_standards_index.classify` line 145 — missing docstring
+  - function `.repo_studios.scripts.producers.diff_standards_index.generate_diff` line 193 — missing docstring
+  - function `.repo_studios.scripts.producers.diff_standards_index.build_parser` line 214 — missing docstring
+  - function `.repo_studios.scripts.producers.diff_standards_index.should_fail` line 259 — missing docstring
+  - function `.repo_studios.scripts.producers.diff_standards_index.write_artifacts` line 412 — missing docstring
+  - function `.repo_studios.scripts.producers.diff_standards_index.configure_logging` line 443 — missing docstring
+  - function `.repo_studios.scripts.producers.diff_standards_index.main` line 448 — missing docstring
+- `.repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py` — missing 9 of 9 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.command_center.scripts.orchestrators.run_command_center_pipeline.StepResult` line 16 — missing docstring
+  - class `.repo_studios.command_center.scripts.orchestrators.run_command_center_pipeline.Paths` line 27 — missing docstring
+  - class `.repo_studios.command_center.scripts.orchestrators.run_command_center_pipeline.Options` line 33 — missing docstring
+  - function `.repo_studios.command_center.scripts.orchestrators.run_command_center_pipeline.parse_args` line 37 — missing docstring
+  - function `.repo_studios.command_center.scripts.orchestrators.run_command_center_pipeline.build_options` line 60 — missing docstring
+  - function `.repo_studios.command_center.scripts.orchestrators.run_command_center_pipeline.configure_logging` line 64 — missing docstring
+  - function `.repo_studios.command_center.scripts.orchestrators.run_command_center_pipeline.build_paths` line 78 — missing docstring
+  - function `.repo_studios.command_center.scripts.orchestrators.run_command_center_pipeline.run` line 197 — missing docstring
+  - function `.repo_studios.command_center.scripts.orchestrators.run_command_center_pipeline.main` line 261 — missing docstring
+- `.repo_studios/scripts/orchestrators/run_standards_index_cli.py` — missing 9 of 9 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - function `.repo_studios.scripts.orchestrators.run_standards_index_cli.load_index` line 53 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.run_standards_index_cli.filter_rules` line 79 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.run_standards_index_cli.cmd_list` line 110 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.run_standards_index_cli.cmd_search` line 118 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.run_standards_index_cli.cmd_show` line 125 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.run_standards_index_cli.cmd_stats` line 136 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.run_standards_index_cli.build_parser` line 149 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.run_standards_index_cli.validate_args` line 184 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.run_standards_index_cli.main` line 193 — missing docstring
+- `.repo_studios/scripts/producers/generate_typecheck_report.py` — missing 9 of 9 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/generate_typecheck_report.md` (slug: typecheck-report-producer, anchors: 4, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.generate_typecheck_report.ErrorSample` line 57 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_typecheck_report.BuildStats` line 65 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_typecheck_report.configure_logging` line 322 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_typecheck_report.build_parser` line 326 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_typecheck_report.Paths` line 345 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_typecheck_report.Options` line 350 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_typecheck_report.build_paths` line 379 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_typecheck_report.build_options` line 383 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_typecheck_report.main` line 391 — missing docstring
+- `.repo_studios/command_center/scripts/libraries/manifest.py` — missing 8 of 8 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/command_center/docs/guardrails/automation_manifest_schema.md` (slug: automation-manifest-schema, anchors: 0, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.command_center.scripts.libraries.manifest.ManifestFile` line 22 — missing docstring
+  - method `.repo_studios.command_center.scripts.libraries.manifest.ManifestFile.to_dict` line 30 — missing docstring
+  - class `.repo_studios.command_center.scripts.libraries.manifest.GuardrailState` line 38 — missing docstring
+  - method `.repo_studios.command_center.scripts.libraries.manifest.GuardrailState.to_dict` line 46 — missing docstring
+  - class `.repo_studios.command_center.scripts.libraries.manifest.AutomationManifest` line 62 — missing docstring
+  - method `.repo_studios.command_center.scripts.libraries.manifest.AutomationManifest.to_dict` line 93 — missing docstring
+  - function `.repo_studios.command_center.scripts.libraries.manifest.build_automation_manifest` line 110 — missing docstring
+  - function `.repo_studios.command_center.scripts.libraries.manifest.write_automation_manifest` line 141 — missing docstring
+- `.repo_studios/command_center/scripts/orchestrators/run_automation_dry_run.py` — missing 8 of 8 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.command_center.scripts.orchestrators.run_automation_dry_run.Paths` line 22 — missing docstring
+  - class `.repo_studios.command_center.scripts.orchestrators.run_automation_dry_run.Options` line 29 — missing docstring
+  - function `.repo_studios.command_center.scripts.orchestrators.run_automation_dry_run.parse_args` line 79 — missing docstring
+  - function `.repo_studios.command_center.scripts.orchestrators.run_automation_dry_run.build_paths` line 121 — missing docstring
+  - function `.repo_studios.command_center.scripts.orchestrators.run_automation_dry_run.build_options` line 131 — missing docstring
+  - function `.repo_studios.command_center.scripts.orchestrators.run_automation_dry_run.configure_logging` line 136 — missing docstring
+  - function `.repo_studios.command_center.scripts.orchestrators.run_automation_dry_run.run` line 318 — missing docstring
+  - function `.repo_studios.command_center.scripts.orchestrators.run_automation_dry_run.main` line 459 — missing docstring
+- `.repo_studios/scripts/producers/generate_undocumented_logic_report.py` — missing 8 of 8 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.generate_undocumented_logic_report.Paths` line 52 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_undocumented_logic_report.Options` line 61 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_undocumented_logic_report.EntityFinding` line 109 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_undocumented_logic_report.ModuleScan` line 118 — missing docstring
+  - method `.repo_studios.scripts.producers.generate_undocumented_logic_report.ModuleScan.coverage` line 124 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_undocumented_logic_report.parse_args` line 134 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_undocumented_logic_report.run` line 537 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_undocumented_logic_report.main` line 643 — missing docstring
+- `.repo_studios/scripts/orchestrators/orchestrate_health_suite.py` — missing 7 of 7 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - function `.repo_studios.scripts.orchestrators.orchestrate_health_suite.exe` line 76 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.orchestrate_health_suite.find_script` line 106 — missing docstring
+  - class `.repo_studios.scripts.orchestrators.orchestrate_health_suite.Step` line 115 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.orchestrate_health_suite.make_steps` line 124 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.orchestrate_health_suite.run_step` line 481 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.orchestrate_health_suite.write_status` line 656 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.orchestrate_health_suite.main` line 683 — missing docstring
+- `.repo_studios/scripts/orchestrators/run_batch_cleanup.py` — missing 7 of 7 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/traceability/run_batch_cleanup_modernization_plan.md` (slug: run-batch-cleanup-modernization-plan-draft-2025-11-24, anchors: 9, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - function `.repo_studios.scripts.orchestrators.run_batch_cleanup.ruff_format_cmd` line 31 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.run_batch_cleanup.ruff_fix_cmd` line 35 — missing docstring
+  - class `.repo_studios.scripts.orchestrators.run_batch_cleanup.CleanupOptions` line 40 — missing docstring
+  - class `.repo_studios.scripts.orchestrators.run_batch_cleanup.CommandResult` line 53 — missing docstring
+  - method `.repo_studios.scripts.orchestrators.run_batch_cleanup.CommandResult.to_dict` line 63 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.run_batch_cleanup.run` line 595 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.run_batch_cleanup.main` line 706 — missing docstring
+- `.repo_studios/scripts/producers/generate_test_coverage_inventory.py` — missing 7 of 7 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/generate_test_coverage_inventory.md` (slug: generatetestcoverageinventorypy, anchors: 7, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.generate_test_coverage_inventory.Paths` line 66 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_test_coverage_inventory.Options` line 73 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_test_coverage_inventory.FunctionStat` line 105 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_test_coverage_inventory.FileCoverage` line 112 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_test_coverage_inventory.parse_args` line 129 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_test_coverage_inventory.run` line 456 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_test_coverage_inventory.main` line 569 — missing docstring
+- `.repo_studios/scripts/utilities/test_log_analysis.py` — missing 7 of 8 entities (coverage 12.50%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.utilities.test_log_analysis.TestHealth` line 30 — missing docstring
+  - class `.repo_studios.scripts.utilities.test_log_analysis.TestLogAnalysisResult` line 40 — missing docstring
+  - function `.repo_studios.scripts.utilities.test_log_analysis.read_text` line 55 — missing docstring
+  - function `.repo_studios.scripts.utilities.test_log_analysis.select_junit_artifact` line 107 — missing docstring
+  - function `.repo_studios.scripts.utilities.test_log_analysis.select_full_log` line 154 — missing docstring
+  - function `.repo_studios.scripts.utilities.test_log_analysis.build_test_log_report` line 201 — missing docstring
+  - function `.repo_studios.scripts.utilities.test_log_analysis.render_markdown` line 250 — missing docstring
+- `.repo_studios/command_center/scripts/aggregators/generate_automation_manifest.py` — missing 6 of 6 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.command_center.scripts.aggregators.generate_automation_manifest.Paths` line 74 — missing docstring
+  - class `.repo_studios.command_center.scripts.aggregators.generate_automation_manifest.Options` line 80 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.generate_automation_manifest.configure_logging` line 207 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.generate_automation_manifest.build_parser` line 212 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.generate_automation_manifest.run` line 259 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.generate_automation_manifest.main` line 383 — missing docstring
+- `.repo_studios/command_center/scripts/aggregators/generate_metrics_summary.py` — missing 6 of 6 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.command_center.scripts.aggregators.generate_metrics_summary.Paths` line 56 — missing docstring
+  - class `.repo_studios.command_center.scripts.aggregators.generate_metrics_summary.Options` line 62 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.generate_metrics_summary.configure_logging` line 134 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.generate_metrics_summary.build_parser` line 139 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.generate_metrics_summary.run` line 198 — missing docstring
+  - function `.repo_studios.command_center.scripts.aggregators.generate_metrics_summary.main` line 255 — missing docstring
+- `.repo_studios/command_center/scripts/libraries/metrics.py` — missing 6 of 6 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/command_center/docs/metrics/library_integration_metrics.md` (slug: library-integration-metrics-specification, anchors: 0, owners: (unassigned))
+    - `.repo_studios/command_center/docs/metrics/metrics_summary_schema.md` (slug: automation-metrics-summary-schema, anchors: 0, owners: (unassigned))
+    - `.repo_studios/docs/automation/ci_metrics_checks.md` (slug: ci-metrics-checks-for-inventory-reports, anchors: 5, owners: (unassigned))
+    - `.repo_studios/docs/automation/validate_metrics_anchor_stubs.md` (slug: validatemetricsanchorstubspy, anchors: 7, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.command_center.scripts.libraries.metrics.TestRunResult` line 19 — missing docstring
+  - method `.repo_studios.command_center.scripts.libraries.metrics.TestRunResult.to_dict` line 30 — missing docstring
+  - class `.repo_studios.command_center.scripts.libraries.metrics.MetricsSummary` line 39 — missing docstring
+  - method `.repo_studios.command_center.scripts.libraries.metrics.MetricsSummary.to_dict` line 65 — missing docstring
+  - function `.repo_studios.command_center.scripts.libraries.metrics.build_metrics_summary` line 79 — missing docstring
+  - function `.repo_studios.command_center.scripts.libraries.metrics.write_metrics_summary` line 104 — missing docstring
+- `.repo_studios/command_center/scripts/producers/audit_helper_adoption.py` — missing 6 of 6 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.command_center.scripts.producers.audit_helper_adoption.Paths` line 70 — missing docstring
+  - class `.repo_studios.command_center.scripts.producers.audit_helper_adoption.Options` line 76 — missing docstring
+  - class `.repo_studios.command_center.scripts.producers.audit_helper_adoption.TargetScope` line 81 — missing docstring
+  - function `.repo_studios.command_center.scripts.producers.audit_helper_adoption.build_parser` line 369 — missing docstring
+  - function `.repo_studios.command_center.scripts.producers.audit_helper_adoption.run` line 394 — missing docstring
+  - function `.repo_studios.command_center.scripts.producers.audit_helper_adoption.main` line 456 — missing docstring
+- `.repo_studios/scripts/consumers/classify_monkey_patches.py` — missing 6 of 7 entities (coverage 14.29%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.consumers.classify_monkey_patches.Finding` line 106 — missing docstring
+  - method `.repo_studios.scripts.consumers.classify_monkey_patches.Finding.from_obj` line 115 — missing docstring
+  - function `.repo_studios.scripts.consumers.classify_monkey_patches.classify` line 152 — missing docstring
+  - function `.repo_studios.scripts.consumers.classify_monkey_patches.aggregate` line 164 — missing docstring
+  - function `.repo_studios.scripts.consumers.classify_monkey_patches.run` line 343 — missing docstring
+  - function `.repo_studios.scripts.consumers.classify_monkey_patches.main` line 399 — missing docstring
+- `.repo_studios/scripts/orchestrators/run_pytest_log_capture.py` — missing 6 of 9 entities (coverage 33.33%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - function `.repo_studios.scripts.orchestrators.run_pytest_log_capture.timestamp` line 70 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.run_pytest_log_capture.ensure_dirs` line 84 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.run_pytest_log_capture.run_pytest_and_capture` line 102 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.run_pytest_log_capture.group_by_file` line 322 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.run_pytest_log_capture.write_summary` line 330 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.run_pytest_log_capture.main` line 378 — missing docstring
+- `.repo_studios/scripts/producers/generate_dependency_hygiene_report.py` — missing 6 of 6 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/generate_dependency_hygiene_report.md` (slug: generatedependencyhygienereportpy, anchors: 7, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.generate_dependency_hygiene_report.Issue` line 56 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_dependency_hygiene_report.build_report` line 162 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_dependency_hygiene_report.write_markdown` line 194 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_dependency_hygiene_report.write_log` line 230 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_dependency_hygiene_report.configure_logging` line 258 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_dependency_hygiene_report.main` line 263 — missing docstring
+- `.repo_studios/command_center/scripts/orchestrators/run_inventory_update.py` — missing 5 of 5 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.command_center.scripts.orchestrators.run_inventory_update.Paths` line 27 — missing docstring
+  - function `.repo_studios.command_center.scripts.orchestrators.run_inventory_update.build_parser` line 41 — missing docstring
+  - function `.repo_studios.command_center.scripts.orchestrators.run_inventory_update.configure_logging` line 60 — missing docstring
+  - function `.repo_studios.command_center.scripts.orchestrators.run_inventory_update.run` line 73 — missing docstring
+  - function `.repo_studios.command_center.scripts.orchestrators.run_inventory_update.main` line 102 — missing docstring
+- `.repo_studios/scripts/producers/generate_lizard_report.py` — missing 4 of 4 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/generate_lizard_report.md` (slug: generatelizardreportpy, anchors: 7, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.generate_lizard_report.Offender` line 108 — missing docstring
+  - method `.repo_studios.scripts.producers.generate_lizard_report.Offender.to_payload` line 116 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_lizard_report.configure_logging` line 564 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_lizard_report.main` line 569 — missing docstring
+- `.repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py` — missing 3 of 3 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/traceability/analyze_monkey_patch_trends_modernization_plan.md` (slug: analyze-monkey-patch-trends-modernization-plan-draft-2025-11-24, anchors: 8, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.aggregators.analyze_monkey_patch_trends.TrendRun` line 37 — missing docstring
+  - function `.repo_studios.scripts.aggregators.analyze_monkey_patch_trends.run` line 403 — missing docstring
+  - function `.repo_studios.scripts.aggregators.analyze_monkey_patch_trends.main` line 511 — missing docstring
+- `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` — missing 3 of 3 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md` (slug: generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24, anchors: 8, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.aggregators.generate_churn_complexity_heatmap.MetricRecord` line 37 — missing docstring
+  - function `.repo_studios.scripts.aggregators.generate_churn_complexity_heatmap.run` line 455 — missing docstring
+  - function `.repo_studios.scripts.aggregators.generate_churn_complexity_heatmap.main` line 581 — missing docstring
+- `.repo_studios/scripts/producers/extract_standards_rules.py` — missing 3 of 3 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/extract_standards_rules.md` (slug: extractstandardsrulespy, anchors: 7, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.scripts.producers.extract_standards_rules.ParsedRule` line 76 — missing docstring
+  - method `.repo_studios.scripts.producers.extract_standards_rules.ParsedRule.to_dict` line 87 — missing docstring
+  - function `.repo_studios.scripts.producers.extract_standards_rules.extract_rules` line 105 — missing docstring
+- `.repo_studios/command_center/scripts/libraries/guardrails.py` — missing 2 of 6 entities (coverage 66.67%).
+  - Doc candidates:
+    - `.repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md` (slug: library-extraction-guardrails, anchors: 0, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - class `.repo_studios.command_center.scripts.libraries.guardrails.GuardrailConstraints` line 21 — missing docstring
+  - class `.repo_studios.command_center.scripts.libraries.guardrails.GuardrailConfig` line 29 — missing docstring
+- `.repo_studios/scripts/consumers/generate_fault_artifacts.py` — missing 2 of 2 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - function `.repo_studios.scripts.consumers.generate_fault_artifacts.run` line 384 — missing docstring
+  - function `.repo_studios.scripts.consumers.generate_fault_artifacts.main` line 465 — missing docstring
+- `.repo_studios/scripts/consumers/generate_test_log_health_report.py` — missing 2 of 2 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - function `.repo_studios.scripts.consumers.generate_test_log_health_report.run` line 222 — missing docstring
+  - function `.repo_studios.scripts.consumers.generate_test_log_health_report.main` line 297 — missing docstring
+- `.repo_studios/scripts/producers/collect_faulthandler_reports.py` — missing 2 of 2 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/collect_faulthandler_reports.md` (slug: collectfaulthandlerreportspy, anchors: 7, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - function `.repo_studios.scripts.producers.collect_faulthandler_reports.run` line 216 — missing docstring
+  - function `.repo_studios.scripts.producers.collect_faulthandler_reports.main` line 249 — missing docstring
+- `.repo_studios/scripts/producers/collect_test_log_reports.py` — missing 2 of 2 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.repo_studios/docs/automation/collect_test_log_reports.md` (slug: collecttestlogreportspy, anchors: 7, owners: (unassigned))
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+  - function `.repo_studios.scripts.producers.collect_test_log_reports.run` line 219 — missing docstring
+  - function `.repo_studios.scripts.producers.collect_test_log_reports.main` line 257 — missing docstring
+- `.repo_studios/scripts/utilities/refresh_mypy_baselines.py` — missing 2 of 2 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - function `.repo_studios.scripts.utilities.refresh_mypy_baselines.run` line 35 — missing docstring
+  - function `.repo_studios.scripts.utilities.refresh_mypy_baselines.refresh` line 43 — missing docstring
+- `.repo_studios/scripts/summarizers/summarize_health_suite.py` — missing 1 of 1 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - function `.repo_studios.scripts.summarizers.summarize_health_suite.main` line 567 — missing docstring
+- `.repo_studios/scripts/summarizers/summarize_standards.py` — missing 1 of 2 entities (coverage 50.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - function `.repo_studios.scripts.summarizers.summarize_standards.main` line 68 — missing docstring
+- `.repo_studios/scripts/utilities/dump_faulthandler_snapshot.py` — missing 1 of 1 entities (coverage 0.00%).
+  - Doc candidates:
+    - `.copilot_todo.md` (slug: task-tracker-phase-3-execution, anchors: 0, owners: (unassigned))
+    - `.github/architect.chatmode.md` (slug: system-architect, anchors: 0, owners: (unassigned))
+    - `.github/ask.chatmode.md` (slug: project-assistant, anchors: 0, owners: (unassigned))
+    - `.github/code.chatmode.md` (slug: code-expert, anchors: 0, owners: (unassigned))
+    - `.github/copilot-instructions.md` (slug: repo-studios-copilot-playbook, anchors: 0, owners: (unassigned))
+  - function `.repo_studios.scripts.utilities.dump_faulthandler_snapshot.main` line 14 — missing docstring
