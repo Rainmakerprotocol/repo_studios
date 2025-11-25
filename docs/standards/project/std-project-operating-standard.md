@@ -5,6 +5,8 @@ version: 2025-10-23
 last_updated: 2025-10-23
 ---
 
+<!-- markdownlint-disable MD013 -->
+
 This standard outlines the baseline project hygiene practices that every contributor should apply until the long-form documentation is synced.
 
 ## Dependency Management
@@ -18,3 +20,5 @@ This standard outlines the baseline project hygiene practices that every contrib
 - Document every new automation target or script addition in the repository Makefile and supporting docs to keep contributors informed.
 - Provide a short description, example usage, and cross-links to logs or generated artifacts so that downstream agents can troubleshoot quickly.
 - Update existing automation references when renaming or deprecating tasks to avoid drift between tooling and documentation.
+
+<!-- markdownlint-enable MD013 -->

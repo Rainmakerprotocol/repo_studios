@@ -23,7 +23,8 @@ RUFF_CONFIG = PROJECT_ROOT / ".repo_studios" / "ruff_clean.toml"
 PROJECT_TREE_DOC_REL = Path(".repo_studios/docs/project_tree_overview.md")
 MARKDOWNLINT_CONFIG = ".markdownlint.json"
 MARKDOWN_GLOB = "**/*.md"
-MYPY_TARGETS = ["mypy", "agents/core/monitoring", "agents/interface/chainlit"]
+MYPY_CMD = "mypy"
+MYPY_TARGET_CANDIDATES = [Path("agents/core/monitoring"), Path("agents/interface/chainlit")]
 PYTEST_CMD = ["pytest", "-q"]
 
 
@@ -174,6 +175,17 @@ def _record_skip(label: str, reason: str, command: list[str] | None = None) -> C
         duration_seconds=0.0,
         skipped_reason=reason,
     )
+
+
+def _build_mypy_command(root: Path) -> tuple[list[str] | None, str | None]:
+    available: list[str] = []
+    for candidate in MYPY_TARGET_CANDIDATES:
+        if (root / candidate).exists():
+            available.append(str(candidate))
+    if available:
+        return [MYPY_CMD, *available], None
+    note = "mypy skipped (configured targets missing)"
+    return None, note
 
 
 def _execute_command(
@@ -454,16 +466,22 @@ def _execute_cleanup(
     if steps[-1].status == "failed":
         return steps, notes, True
 
-    mypy_result = _execute_command(
-        MYPY_TARGETS,
-        "Mypy",
-        options=options,
-        log_handle=log_handle,
-        executor=executor,
-    )
-    steps.append(mypy_result)
-    if mypy_result.status == "failed":
-        return steps, notes, True
+    mypy_cmd, mypy_note = _build_mypy_command(PROJECT_ROOT)
+    if mypy_note:
+        notes.append(mypy_note)
+    if mypy_cmd is None:
+        steps.append(_record_skip("Mypy", "configured targets missing", [MYPY_CMD]))
+    else:
+        mypy_result = _execute_command(
+            mypy_cmd,
+            "Mypy",
+            options=options,
+            log_handle=log_handle,
+            executor=executor,
+        )
+        steps.append(mypy_result)
+        if mypy_result.status == "failed":
+            return steps, notes, True
 
     if options.skip_pytest:
         skip_note = "pytest skipped (--no-pytest or BATCH_CLEAN_NO_PYTEST=1)"

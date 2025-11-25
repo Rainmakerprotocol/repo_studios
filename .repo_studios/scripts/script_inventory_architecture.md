@@ -7,14 +7,23 @@
 	consistent so automated tooling can parse it later.
 
 	Alignment Notes:
-	- Advance remediation strictly in tier order: producers → consumers → aggregators → orchestrators (then summarizers when applicable) so downstream tables always reference hardened upstream assets.
-	- Touch one script at a time per tier. Snapshot current gaps, refactor, test, document, and only then proceed to the next script to prevent partial migrations.
-	- While refactoring, prioritize artifact pruning, schema cleanliness, and markdown lint health to keep generated outputs readable and debt-free.
-	- When adding new needs, capture them here first, then thread them into the refactor loop so the source remains the authoritative backlog.
-	- Preserve compatibility shims until the successor artifacts have passed validation and handoff reviews.
-	- Only after a script’s remediation checklist is satisfied do we run it end-to-end, inspect the generated artifacts against expectations, and capture deltas for follow-up.
-	- After each validation run, request human review of the outputs and gather feedback—many reports target human stakeholders, so operator sign-off remains essential.
+	- Advance remediation strictly in tier order: producers → consumers → aggregators → orchestrators
+	(then summarizers when applicable) so downstream tables always reference hardened upstream assets.
+	- Touch one script at a time per tier. Snapshot current gaps, refactor, test, document, and only
+	then proceed to the next script to prevent partial migrations.
+	- While refactoring, prioritize artifact pruning, schema cleanliness, and markdown lint health
+	to keep generated outputs readable and debt-free.
+	- When adding new needs, capture them here first, then thread them into the refactor loop so
+	the source remains the authoritative backlog.
+	- Preserve compatibility shims until the successor artifacts have passed validation and handoff
+	reviews.
+	- Only after a script’s remediation checklist is satisfied do we run it end-to-end, inspect the
+	generated artifacts against expectations, and capture deltas for follow-up.
+	- After each validation run, request human review of the outputs and gather feedback—many reports
+	target human stakeholders, so operator sign-off remains essential.
 -->
+
+<!-- markdownlint-disable MD010 MD013 MD029 -->
 
 ## Document Metadata
 
@@ -22,7 +31,10 @@
 - **Owner:** _repo_studios_ai_
 - **Last Updated:** _2025-11-24_
 - **Scope:** `.repo_studios/scripts/`
-- **Command Center Reference:** Before updating this blueprint, review `.repo_studios/command_center/README.md` for the current library-integration protocol, guardrails, and duplicate remediation workflow. Link that README in handoffs so agents always land in the command center first.
+- **Command Center Reference:** Before updating this blueprint, review
+  `.repo_studios/command_center/README.md` for the current library-integration protocol,
+  guardrails, and duplicate remediation workflow. Link that README in handoffs so agents always
+  land in the command center first.
 
 > Once sections stabilize, convert each completed table to YAML blocks using the
 > provided field names. Until then, maintain this Markdown as the human-editable
@@ -33,19 +45,24 @@
 Use this repeatable micro-cycle for every script remediation pass:
 
 1. **Select & Snapshot** – choose one script, update its entry in this file with current gaps.
-2. **Refactor & Harden** – add pruning (cap artifacts at 10 by default), tighten error handling, confirm output paths, and wire or refresh a dedicated Make target in `.repo_studios/Makefile`.
-3. **Execute & Validate** – run the script, inspect generated artifacts for formatting, metadata, and agent readability.
-4. **Test** – add or extend a matching monolithic test in `.repo_studios/tests/tests_<tier>/` and run it locally.
-5. **Document & Log** – refresh this inventory, update supporting docs, and capture notable decisions in `.repo_studios/command_center/docs/decision_log.md`.
+2. **Refactor & Harden** – add pruning (cap artifacts at 10 by default), tighten error handling,
+  confirm output paths, and wire or refresh a dedicated Make target in `.repo_studios/Makefile`.
+3. **Execute & Validate** – run the script, inspect generated artifacts for formatting, metadata,
+  and agent readability.
+4. **Test** – add or extend a matching monolithic test in `.repo_studios/tests/tests_<tier>/` and
+  run it locally.
+5. **Document & Log** – refresh this inventory, update supporting docs, and capture notable
+  decisions in `.repo_studios/command_center/docs/decision_log.md`.
 6. **Repeat** – move on only when the script satisfies pruning, testing, and documentation expectations.
 
 ## How to Use This Template
 
-1. Identify the script category (producers, consumers, aggregators, orchestrators, summarizers, utilities).
+1. Identify the script category (producers, consumers, aggregators, orchestrators, summarizers,
+utilities).
 2. Copy the per-script table skeleton into the category section and populate the
-   fields. Leave `TODO` markers for unknown data.
+fields. Leave `TODO` markers for unknown data.
 3. Record follow-up actions in the category’s “Next Actions” list to keep
-   migration work visible.
+migration work visible.
 4. When ready to export to YAML, reuse the field names exactly as shown.
 
 ### Per-Script Table Fields
@@ -137,11 +154,14 @@ Use this repeatable micro-cycle for every script remediation pass:
 - [x] Update remediation plan + automation docs after exclusion support lands, then resume weekly burn-down tracking (2025-11-23).
 - [x] Re-run producer + metrics ledger after exclusion rollout to capture zero-match baseline (2025-11-23).
 - [x] Prototype `placeholder-scan` CI workflow in warning mode and document rollout checkpoints (2025-11-23).
-- [ ] Monitor `placeholder-scan` workflow results and prepare blocking-mode transition brief.
+- todo (done 2025-11-24): Monitored `placeholder-scan` workflow results and captured the 2025-11-24 scan artifacts.
+  Published the blocking-mode transition brief (`.repo_studios/command_center/docs/phase_7/placeholder_scan_blocking_transition_brief.md`) to guide the enforcement review.
 
 **Status Update (2025-11-24):** Completed the monkey-patch, anchor health, faulthandler, and test-log consumer hardening passes—each now prefers structured producer bundles, enforces retention pruning, exposes CLI logging controls, and ships with pytest coverage plus refreshed inventory notes. Placeholder remediation remains steady with weekly scans staged, CI still in warning mode, and outreach artifacts live. Immediate focus is documenting the latest consumer decision, re-running the placeholder metrics ledger after the next scan window, and kicking off the producer→consumer traceability audit ahead of aggregator planning.
 
 **Status Update (2025-11-24 follow-up):** Past — Landed the pytest log producer/consumer chain, carried the faulthandler refactor through docs and Make wiring, and wrapped the monkey-patch, anchor, faulthandler, and test-log consumer uplifts with regression tests and retention pruning. Present — Recording governance updates, launching the producer→consumer traceability audit, and prepping notes for the aggregator modernization plan. Future — Finish the consumer backlog audit, align aggregator input expectations with the new summaries, and expand governance reporting once the aggregator handoff ships.
+
+**Status Update (2025-11-24 readiness):** Past — Logged observation week 2 for the placeholder scan guardrail and generated the blocking-mode transition brief. Present — Maintaining weekly monitoring evidence and capturing metrics/CI rollout updates in tandem. Future — Collect two additional clean observation runs, secure stakeholder approval, and then promote the workflow to blocking enforcement.
 
 ---
 
@@ -295,3 +315,5 @@ classification—capture them here before routing to a category above.
 >   duplicates: []
 >   notes: Pending log pruning helper.
 > ```
+
+<!-- markdownlint-enable MD010 MD013 MD029 -->

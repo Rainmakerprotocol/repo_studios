@@ -1,0 +1,40 @@
+{
+  "allowlist_size": 0,
+  "default_exclusions_applied": true,
+  "exclude_prefixes": [
+    ".venv/",
+    "node_modules/"
+  ],
+  "exclude_segments": [
+    "site-packages"
+  ],
+  "include_extensions": [
+    ".js",
+    ".json",
+    ".md",
+    ".py",
+    ".ts",
+    ".txt",
+    ".yaml",
+    ".yml"
+  ],
+  "patterns": [
+    "FIXME",
+    "NOTE",
+    "OPTIMIZE",
+    "REVIEW",
+    "TODO",
+    "XXX"
+  ],
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "run_id": "placeholder_scan-20251124_235519",
+  "scan_root": ".",
+  "schema_version": 1,
+  "status": "ok",
+  "summary": {
+    "by_extension": {},
+    "by_pattern": {}
+  },
+  "timestamp": "2025-11-24T23:55:19.584786+00:00",
+  "total_matches": 0
+}

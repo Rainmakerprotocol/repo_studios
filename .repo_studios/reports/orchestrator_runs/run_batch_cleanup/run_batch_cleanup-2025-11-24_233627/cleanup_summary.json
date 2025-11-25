@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "generated_at": "2025-11-24T23:37:02+00:00",
+  "status": "failed",
+  "options": {
+    "targets": [
+      "C:\\Users\\genet\\repo_studios"
+    ],
+    "mode": "all",
+    "dry_run": false,
+    "backup": false,
+    "refresh_only": false,
+    "skip_pytest": false,
+    "artifacts_to_keep": 5
+  },
+  "steps": [
+    {
+      "label": "Ruff format",
+      "command": [
+        "ruff",
+        "format",
+        "C:\\Users\\genet\\repo_studios",
+        "--config",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\ruff_clean.toml"
+      ],
+      "status": "success",
+      "returncode": 0,
+      "stdout": "186 files left unchanged\n",
+      "stderr": "",
+      "duration_seconds": 0.07745089998934418,
+      "skipped_reason": null
+    },
+    {
+      "label": "Ruff check --fix",
+      "command": [
+        "ruff",
+        "check",
+        "C:\\Users\\genet\\repo_studios",
+        "--fix",
+        "--config",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\ruff_clean.toml"
+      ],
+      "status": "success",
+      "returncode": 0,
+      "stdout": "All checks passed!\n",
+      "stderr": "",
+      "duration_seconds": 0.06257259999983944,
+      "skipped_reason": null
+    },
+    {
+      "label": "markdownlint --fix (npx)",
+      "command": [
+        "C:\\Program Files\\nodejs\\npx.cmd",
+        "--yes",
+        "markdownlint-cli@0.39.0",
+        "**/*.md",
+        "--fix",
+        "--config",
+        "C:\\Users\\genet\\repo_studios\\.markdownlint.json"
+      ],
+      "status": "success",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "duration_seconds": 1.5159864000161178,
+      "skipped_reason": null
+    },
+    {
+      "label": "markdownlint check (npx)",
+      "command": [
+        "C:\\Program Files\\nodejs\\npx.cmd",
+        "--yes",
+        "markdownlint-cli@0.39.0",
+        "**/*.md",
+        "--config",
+        "C:\\Users\\genet\\repo_studios\\.markdownlint.json"
+      ],
+      "status": "success",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "duration_seconds": 1.426438499998767,
+      "skipped_reason": null
+    },
+    {
+      "label": "Mypy",
+      "command": [
+        "mypy"
+      ],
+      "status": "skipped",
+      "returncode": null,
+      "stdout": "",
+      "stderr": "",
+      "duration_seconds": 0.0,
+      "skipped_reason": "configured targets missing"
+    },
+    {
+      "label": "Pytest",
+      "command": [
+        "pytest",
+        "-q"
+      ],
+      "status": "failed",
+      "returncode": 1,
+      "stdout": "........................................................................ [ 23%]\n........................................................................ [ 47%]\n........................................................................ [ 71%]\n.............F.......................................................... [ 95%]\n...............                                                          [100%]\n================================== FAILURES ===================================\n_________________ test_run_creates_structured_bundle_success __________________\n\ntmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-289/test_run_creates_structured_bu0')\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001D9D9CE6E10>\n\n    def test_run_creates_structured_bundle_success(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:\n        repo_root = _prepare_repo(tmp_path)\n        module = _load_module()\n        _patch_common(module, repo_root, monkeypatch)\n    \n        executor, calls = _stub_executor()\n        monkeypatch.setattr(module, \"_run_subprocess\", executor)\n        monkeypatch.setattr(module.shutil, \"which\", lambda name: \"npx\" if name == \"npx\" else None)\n    \n        output_base = repo_root / \"out\"\n        result = module.run([\"--output-base\", str(output_base), \"--log-level\", \"INFO\"])\n    \n        assert result[\"status\"] == \"success\"\n        summary_path = Path(result[\"summary_path\"])\n        log_path = Path(result[\"log_path\"])\n        assert summary_path.exists()\n        assert log_path.exists()\n        summary = json.loads(summary_path.read_text(encoding=\"utf-8\"))\n        assert summary[\"status\"] == \"success\"\n        labels = [step[\"label\"] for step in summary[\"steps\"]]\n>       assert labels == [\n            \"Ruff format\",\n            \"Ruff check --fix\",\n            \"markdownlint --fix (npx)\",\n            \"markdownlint check (npx)\",\n            \"Mypy\",\n            \"Pytest\",\n        ]\nE       AssertionError: assert ['Ruff format...py', 'Pytest'] == ['Ruff format...py', 'Pytest']\nE         \nE         At index 2 diff: 'markdownlint' != 'markdownlint --fix (npx)'\nE         Right contains one more item: 'Pytest'\nE         Use -v to get more diff\n\n.repo_studios\\tests\\tests_orchestrators\\test_run_batch_cleanup.py:104: AssertionError\n============================== warnings summary ===============================\n.repo_studios\\command_center\\scripts\\libraries\\metrics.py:18\n  C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\metrics.py:18: PytestCollectionWarning: cannot collect test class 'TestRunResult' because it has a __init__ constructor (from: .repo_studios/tests/command_center/libraries/test_manifest.py)\n    @dataclass(frozen=True)\n\n.repo_studios\\command_center\\scripts\\libraries\\metrics.py:18\n  C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\metrics.py:18: PytestCollectionWarning: cannot collect test class 'TestRunResult' because it has a __init__ constructor (from: .repo_studios/tests/command_center/libraries/test_metrics.py)\n    @dataclass(frozen=True)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nFAILED .repo_studios/tests/tests_orchestrators/test_run_batch_cleanup.py::test_run_creates_structured_bundle_success\n1 failed, 302 passed, 2 warnings in 31.55s\n",
+      "stderr": "",
+      "duration_seconds": 32.060140200017486,
+      "skipped_reason": null
+    }
+  ],
+  "tree_refresh": {
+    "markdown_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\project_tree_overview.md",
+    "root": "C:\\Users\\genet\\repo_studios",
+    "updated": true,
+    "found_markers": true,
+    "timestamp": "11/24/2025_23:36:27"
+  },
+  "backups": [],
+  "notes": [
+    "Requested cleanup targets missing; defaulted to project root",
+    "mypy skipped (configured targets missing)"
+  ],
+  "exception": null
+}

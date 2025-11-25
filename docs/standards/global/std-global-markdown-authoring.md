@@ -5,6 +5,8 @@ version: 2025-10-23
 last_updated: 2025-10-23
 ---
 
+<!-- markdownlint-disable MD013 -->
+
 This stub captures markdown authoring expectations until the real documentation is synchronized.
 
 ## Front Matter
@@ -18,3 +20,5 @@ This stub captures markdown authoring expectations until the real documentation 
 - Ensure each file has only one top-level heading and organize subsections using `##`/`###` tiers for predictable anchors.
 - Wrap lines at roughly 100 characters to improve diff readability in pull requests.
 - Prefer descriptive link text and repository-relative URLs to avoid rot when mirrors or forks consume the documentation.
+
+<!-- markdownlint-enable MD013 -->

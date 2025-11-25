@@ -21,7 +21,7 @@ from typing import Iterable, NamedTuple
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/code_placeholder_scans")
 RUN_PREFIX = "placeholder_scan"
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = 5
 SCHEMA_VERSION = 1
 DEFAULT_EXTENSIONS = (
     ".py",
@@ -381,7 +381,8 @@ def render_markdown_report(payload: dict[str, object], records: list[Placeholder
             snippet = record.line_text.replace("|", "\\|")
             lines.append(f"| {record.relative_path} | {record.line_number} | `{record.pattern}` | {snippet} |\n")
         lines.append("\n")
-    return "".join(lines)
+    content = "".join(lines).rstrip() + "\n"
+    return content
 
 
 def render_log(payload: dict[str, object]) -> str:

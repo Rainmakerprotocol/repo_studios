@@ -1,0 +1,55 @@
+# 🧼 repo cleanup log
+Timestamp: 2025-11-24T23:21:18.052316+00:00
+Targets: C:\Users\genet\repo_studios
+Mode: all
+
+--- Target verification ---
+Missing target: C:\Users\genet\repo_studios\metrics_storage\storage
+No requested targets existed; defaulted to project root.
+
+--- Refresh project tree ---
+Updated tree block at 11/24/2025_23:21:18.
+
+--- Ruff format ---
+$ ruff format C:\Users\genet\repo_studios --config C:\Users\genet\repo_studios\.repo_studios\ruff_clean.toml
+186 files left unchanged
+
+--- Ruff check --fix ---
+$ ruff check C:\Users\genet\repo_studios --fix --config C:\Users\genet\repo_studios\.repo_studios\ruff_clean.toml
+All checks passed!
+
+--- Markdownlint ---
+
+--- markdownlint --fix (npx) ---
+$ C:\Program Files\nodejs\npx.cmd --yes markdownlint-cli@0.39.0 **/*.md --fix --config C:\Users\genet\repo_studios\.markdownlint.json
+docs\standards\global\std-global-chainlit-ui.md:3:101 MD013/line-length Line length [Expected: 100; Actual: 121]
+docs\standards\global\std-global-code-cleanup.md:13:101 MD013/line-length Line length [Expected: 100; Actual: 114]
+docs\standards\global\std-global-code-cleanup.md:14:101 MD013/line-length Line length [Expected: 100; Actual: 110]
+docs\standards\global\std-global-html-coding.md:3:101 MD013/line-length Line length [Expected: 100; Actual: 119]
+docs\standards\global\std-global-markdown-authoring.md:12:101 MD013/line-length Line length [Expected: 100; Actual: 152]
+docs\standards\global\std-global-markdown-authoring.md:18:101 MD013/line-length Line length [Expected: 100; Actual: 122]
+docs\standards\global\std-global-markdown-authoring.md:20:101 MD013/line-length Line length [Expected: 100; Actual: 121]
+docs\standards\global\std-global-mission-parameters.md:8:101 MD013/line-length Line length [Expected: 100; Actual: 112]
+docs\standards\global\std-global-mission-parameters.md:12:101 MD013/line-length Line length [Expected: 100; Actual: 124]
+docs\standards\global\std-global-monkey-patching.md:8:101 MD013/line-length Line length [Expected: 100; Actual: 132]
+docs\standards\global\std-global-monkey-patching.md:12:101 MD013/line-length Line length [Expected: 100; Actual: 115]
+docs\standards\global\std-global-monkey-patching.md:14:101 MD013/line-length Line length [Expected: 100; Actual: 126]
+docs\standards\global\std-global-prompt-engineering.md:8:101 MD013/line-length Line length [Expected: 100; Actual: 116]
+docs\standards\global\std-global-prompt-engineering.md:12:101 MD013/line-length Line length [Expected: 100; Actual: 125]
+docs\standards\global\std-global-prompt-engineering.md:13:101 MD013/line-length Line length [Expected: 100; Actual: 127]
+docs\standards\global\std-global-prompt-engineering.md:14:101 MD013/line-length Line length [Expected: 100; Actual: 115]
+docs\standards\global\std-global-python-engineering.md:8:101 MD013/line-length Line length [Expected: 100; Actual: 116]
+docs\standards\global\std-global-python-engineering.md:12:101 MD013/line-length Line length [Expected: 100; Actual: 130]
+docs\standards\global\std-global-python-engineering.md:14:101 MD013/line-length Line length [Expected: 100; Actual: 116]
+docs\standards\global\std-global-python-engineering.md:18:101 MD013/line-length Line length [Expected: 100; Actual: 139]
+docs\standards\global\std-global-python-engineering.md:19:101 MD013/line-length Line length [Expected: 100; Actual: 124]
+docs\standards\global\std-global-python-engineering.md:20:101 MD013/line-length Line length [Expected: 100; Actual: 118]
+docs\standards\project\std-project-operating-standard.md:8:101 MD013/line-length Line length [Expected: 100; Actual: 142]
+docs\standards\project\std-project-operating-standard.md:12:101 MD013/line-length Line length [Expected: 100; Actual: 166]
+docs\standards\project\std-project-operating-standard.md:18:101 MD013/line-length Line length [Expected: 100; Actual: 135]
+docs\standards\project\std-project-operating-standard.md:19:101 MD013/line-length Line length [Expected: 100; Actual: 144]
+docs\standards\project\std-project-operating-standard.md:20:101 MD013/line-length Line length [Expected: 100; Actual: 124]
+docs\standards\project\std-project-python-instructions.md:3:101 MD013/line-length Line length [Expected: 100; Actual: 124]
+[!] markdownlint --fix (npx) exited with 1
+
+Status: failed

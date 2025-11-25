@@ -1,6 +1,8 @@
 # Placeholder Debt Remediation Plan
 
-**Last updated:** 2025-11-23
+**Last updated:** 2025-11-24
+
+<!-- markdownlint-disable MD013 MD029 -->
 
 ## Purpose
 
@@ -123,6 +125,7 @@ The `studio-scan-code-placeholders` producer currently reports 1,175 unresolved 
 - Added regression coverage for the uppercase heuristic and refreshed the automation runbook so downstream operators understand the behavior.
 - Latest scan (placeholder_scan-20251123_203707) reported zero matches with defaults applied; metrics ledger updated accordingly.
 - Observation cadence kickoff (placeholder_scan-20251123_211100) confirmed the weekly schedule; details logged in metrics and CI rollout records.
+- Observation week 2 (placeholder_scan-20251124_235519) sustained zero delta; metrics ledger and CI rollout log both updated, and a blocking-mode transition brief now outlines readiness checkpoints.
 
 ## CI Gating Proposal Draft (2025-11-23)
 
@@ -157,4 +160,6 @@ The `studio-scan-code-placeholders` producer currently reports 1,175 unresolved 
 
 - [ ] Maintain the placeholder allowlist via monthly reviews (next check 2025-12-23) and capture any new sanctioned entries in the decision log.
 - [x] Start the weekly scan cadence and log outcomes in the metrics ledger + CI rollout log beginning week of 2025-11-24.
-- [ ] Monitor the `placeholder-scan` workflow (warning mode), circulate weekly run summaries, and prepare sign-off for the transition to blocking enforcement.
+- [ ] Monitor the `placeholder-scan` workflow (warning mode), circulate weekly run summaries, and prepare sign-off for the transition to blocking enforcement. *(Week 2 summary logged 2025-11-24; next action: collect two additional clean observation runs before requesting blocking review.)*
+
+<!-- markdownlint-enable MD013 MD029 -->

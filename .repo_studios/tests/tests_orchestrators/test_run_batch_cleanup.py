@@ -32,6 +32,12 @@ def _prepare_repo(tmp_path: Path) -> Path:
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
     (repo_root / "metrics_storage" / "storage").mkdir(parents=True)
+    for candidate in (
+        repo_root / "agents" / "core" / "monitoring",
+        repo_root / "agents" / "interface" / "chainlit",
+    ):
+        candidate.mkdir(parents=True)
+    (repo_root / ".markdownlint.json").write_text("{}\n", encoding="utf-8")
     standards_doc = repo_root / ".repo_studios" / "docs" / "project_tree_overview.md"
     standards_doc.parent.mkdir(parents=True)
     standards_doc.write_text(

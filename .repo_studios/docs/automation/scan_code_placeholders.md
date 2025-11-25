@@ -15,7 +15,7 @@ python .repo_studios/scripts/producers/scan_code_placeholders.py \
   --include-ext .py .md .yaml \
   --patterns TODO FIXME NOTE \
   --allowlist-file .repo_studios/config/placeholder_allowlist.txt \
-  --artifacts-to-keep 10
+  --artifacts-to-keep 5
 ```
 
 From `.repo_studios/`, run `make studio-scan-code-placeholders` to execute the producer with repository defaults.
@@ -29,7 +29,7 @@ From `.repo_studios/`, run `make studio-scan-code-placeholders` to execute the p
 - `--patterns`: tokens to detect. Defaults to `TODO`, `FIXME`, `NOTE`, `XXX`, `OPTIMIZE`, `REVIEW`.
 - `--allowlist-file`: optional file containing `<path>:<line>` entries (paths relative to repo root) that should be ignored.
 - `--exclude-prefix`: directory prefixes to skip. Accepts multiple values; use `*/segment/` to skip any path containing `segment` as a directory. Defaults to `.venv/`, `node_modules/`, and any `site-packages/` path when scanning the repo root. Pass `--exclude-prefix` with no values to disable defaults.
-- `--artifacts-to-keep`: number of historical runs to retain (default `10`).
+- `--artifacts-to-keep`: number of historical runs to retain (default `5`).
 - `--log-level`: standard Python logging level (default `INFO`).
 
 The script auto-creates output directories and normalizes extensions/patterns for case-insensitive matching.

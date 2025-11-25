@@ -1,0 +1,7 @@
+# Markdownlint Ignore List
+
+alignment_notes_temp.md
+command_center_script_verification_temp.md
+repo_prompts.md
+docs/standards/global/**
+docs/standards/project/**

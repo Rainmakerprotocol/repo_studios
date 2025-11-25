@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "generated_at": "2025-11-24T23:35:50+00:00",
+  "status": "failed",
+  "bundle_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_runs\\run_batch_cleanup\\run_batch_cleanup-2025-11-24_233440",
+  "artifacts": {
+    "cleanup_summary": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_runs\\run_batch_cleanup\\run_batch_cleanup-2025-11-24_233440\\cleanup_summary.json",
+    "cleanup_log": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_runs\\run_batch_cleanup\\run_batch_cleanup-2025-11-24_233440\\cleanup_log.txt"
+  }
+}

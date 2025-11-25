@@ -1,0 +1,34 @@
+# 🧼 repo cleanup log
+Timestamp: 2025-11-24T23:33:32.661227+00:00
+Targets: C:\Users\genet\repo_studios
+Mode: all
+
+--- Target verification ---
+Missing target: C:\Users\genet\repo_studios\metrics_storage\storage
+No requested targets existed; defaulted to project root.
+
+--- Refresh project tree ---
+Updated tree block at 11/24/2025_23:33:32.
+
+--- Ruff format ---
+$ ruff format C:\Users\genet\repo_studios --config C:\Users\genet\repo_studios\.repo_studios\ruff_clean.toml
+186 files left unchanged
+
+--- Ruff check --fix ---
+$ ruff check C:\Users\genet\repo_studios --fix --config C:\Users\genet\repo_studios\.repo_studios\ruff_clean.toml
+All checks passed!
+
+--- Markdownlint ---
+
+--- markdownlint --fix (npx) ---
+$ C:\Program Files\nodejs\npx.cmd --yes markdownlint-cli@0.39.0 **/*.md --fix --config C:\Users\genet\repo_studios\.markdownlint.json
+
+--- markdownlint check (npx) ---
+$ C:\Program Files\nodejs\npx.cmd --yes markdownlint-cli@0.39.0 **/*.md --config C:\Users\genet\repo_studios\.markdownlint.json
+
+--- Mypy ---
+$ mypy agents/core/monitoring agents/interface/chainlit
+mypy: can't read file 'agents\core\monitoring': No such file or directory
+[!] Mypy exited with 2
+
+Status: failed
