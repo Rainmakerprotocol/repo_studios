@@ -1,0 +1,14 @@
+slug	count	file_count	files	locations
+automation-visibility	1	1	standards\project\std-project-operating-standard.md	standards\project\std-project-operating-standard.md:18
+builtin-constraints	1	1	standards\global\std-global-monkey-patching.md	standards\global\std-global-monkey-patching.md:12
+decisions	1	1	standards\global\std-global-mission-parameters.md	standards\global\std-global-mission-parameters.md:12
+dependency-management	1	1	standards\project\std-project-operating-standard.md	standards\project\std-project-operating-standard.md:12
+docs-integrity-handbook	1	1	standards\global\std-docs-integrity-handbook.md	standards\global\std-docs-integrity-handbook.md:1
+error-handling	1	1	standards\global\std-global-python-engineering.md	standards\global\std-global-python-engineering.md:12
+evaluation-cases	1	1	standards\global\std-global-prompt-engineering.md	standards\global\std-global-prompt-engineering.md:12
+front-matter	1	1	standards\global\std-global-markdown-authoring.md	standards\global\std-global-markdown-authoring.md:12
+global-chainlit-ui-standard	1	1	standards\global\std-global-chainlit-ui.md	standards\global\std-global-chainlit-ui.md:3
+global-html-coding-standard	1	1	standards\global\std-global-html-coding.md	standards\global\std-global-html-coding.md:3
+logging	1	1	standards\global\std-global-python-engineering.md	standards\global\std-global-python-engineering.md:18
+project-python-instructions	1	1	standards\project\std-project-python-instructions.md	standards\project\std-project-python-instructions.md:3
+style-essentials	1	1	standards\global\std-global-markdown-authoring.md	standards\global\std-global-markdown-authoring.md:18

@@ -1,5 +1,8 @@
 # Producer → Consumer Traceability Audit (Draft 2025-11-24)
 
+**Last updated:** 2025-11-24
+<!-- markdownlint-disable MD013 -->
+
 ## Overview
 
 - Confirm which producer bundles feed hardened consumers and document the traceability metadata each stage preserves.
@@ -30,10 +33,14 @@
 | `.repo_studios/scripts/producers/generate_lizard_report.py` | Captures complexity deltas and offender lists. | Complexity data never gets condensed for operators; only raw producer bundles exist. | `generate_complexity_health_report.py` — identify highest-complexity modules, trend against previous runs, and attach refactoring guidance. |
 | `.repo_studios/scripts/producers/generate_test_coverage_inventory.py` | Emits per-file function coverage metrics. | Coverage gaps remain buried in CSV/JSON, limiting fast regression detection. | `summarize_test_coverage_gaps.py` — flag modules below thresholds, list uncovered functions, and attach delegate actions. |
 | `.repo_studios/scripts/producers/analyze_test_hardening.py` | Scores tests for asserts, mocks, and latency issues. | Consumers/aggregators do not expose the findings, so hardening regressions lack visibility. | `generate_test_hardening_report.py` — grade modules by hardening score, bubble up top offenders, and log suggested remediations. |
+| `.repo_studios/scripts/producers/scan_code_placeholders.py` | Captures placeholder totals, allowlist counts, and zero-match baselines in JSON/MD/log bundles. | Weekly governance entries track results, but no consumer summarizes deltas or allowlist churn for operators. | `summarize_placeholder_debt.py` — diff successive runs, flag new placeholders, highlight expiring allowlist entries, and embed enforcement readiness cues. |
+| `.repo_studios/scripts/producers/generate_doc_index.py` | Planned repo-wide documentation index capturing headings, links, and descriptions per markdown file. | Implementation pending; no consumer yet, but output will underpin AI documentation navigation. | Future consumer TBD — likely `summarize_doc_index_usage.py` to surface top navigation queries and stale descriptions once the producer ships. |
 
 ## Recommendations
 
 1. Treat the four hardened consumer bundles as the canonical inputs for upcoming aggregator rewires; aggregators should ingest the consumer summary JSON (`summary.json`, `anchor_report.json`, `bundle_summary.json`, `RISK_SUMMARY.json`) instead of raw producer data.
-2. Schedule design spikes for the five proposed consumers so each high-signal producer has an operator-facing summary before aggregator modernization begins.
-3. Consider adding explicit history pruning to `classify_monkey_patches.py` (or relocating consumer outputs into the consumer_reports tree) to mirror the retention guarantees implemented in the other consumers.
-4. Once the new consumers are scoped, update `.repo_studios/scripts/script_inventory_architecture.md` and the decision log with ownership, testing expectations, and wiring plans to keep traceability current.
+1. Schedule design spikes for the six proposed consumers so each high-signal producer has an operator-facing summary before aggregator modernization begins; fold the placeholder debt summary into the same review so governance metrics stay synchronized.
+1. Consider adding explicit history pruning to `classify_monkey_patches.py` (or relocating consumer outputs into the consumer_reports tree) to mirror the retention guarantees implemented in the other consumers.
+1. Once the new consumers are scoped, update `.repo_studios/scripts/script_inventory_architecture.md` and the decision log with ownership, testing expectations, and wiring plans to keep traceability current, threading placeholder scan governance milestones into the same ledger.
+
+<!-- markdownlint-enable MD013 -->

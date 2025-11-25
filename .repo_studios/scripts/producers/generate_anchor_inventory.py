@@ -1,30 +1,9 @@
 #!/usr/bin/env python3
-"""Anchor Inventory Tool
+"""Anchor Inventory Tool.
 
-Generates an inventory of top-level (H1/H2) markdown heading slugs under the
-docs tree and emits machine + human readable reports.
-
-Artifacts (default):
-    - `.repo_studios/reports/producer_reports/anchor_inventory_reports/`
-        - `anchor_inventory-<timestamp>/report.json`
-        - `anchor_inventory-<timestamp>/report.md`
-        - `anchor_inventory-<timestamp>/slugs.tsv`
-        - `latest_report.(json|md|tsv)` hard links or file copies for quick access
-
-The JSON payload includes summary counts, allowlisted generics, and a full
-listing of slugs/duplicates. The markdown summary highlights the top duplicate
-slugs for fast triage.
-
-Usage:
-    python scripts/producers/generate_anchor_inventory.py \
-            [--docs-root docs] \
-            [--output-dir .repo_studios/reports/producer_reports/anchor_inventory_reports] \
-            [--allow-file tests/docs/anchor_allow_generic.txt] \
-            [--test-file tests/docs/test_global_anchors.py] \
-            [--timestamp 2024-01-01T00:00:00] \
-            [--artifacts-to-keep 10]
-
-Exit code 0 on success.
+Generates an inventory of top-level (H1/H2) markdown headings under the docs
+tree and emits structured artifacts (JSON/Markdown/TSV) with pruning and latest
+pointers managed by the shared Command Center helpers.
 """
 
 import argparse
@@ -35,12 +14,76 @@ from collections import defaultdict
 from collections.abc import Iterable, Sequence
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
-from pathlib import Path
+from pathlib import Path, PurePosixPath
+from typing import Any
 
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/anchor_inventory_reports")
 RUN_PREFIX = "anchor_inventory"
+DEFAULT_ARTIFACTS_TO_KEEP = 10
+
+LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
+
+try:  # pragma: no cover - import guard for standalone execution
+    from libraries import (  # type: ignore import
+        KeepSpec,
+        OptionsConfig,
+        PathSpec,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
+    )
+    from libraries.artifacts import ReportArtifact, write_report_artifacts  # type: ignore import
+except ModuleNotFoundError:  # pragma: no cover - fallback when script is run directly
+    import sys
+
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import (  # type: ignore import
+        KeepSpec,
+        OptionsConfig,
+        PathSpec,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
+    )
+    from libraries.artifacts import ReportArtifact, write_report_artifacts  # type: ignore import
+
+
+@dataclass(frozen=True)
+class Paths:
+    repo_root: Path
+    docs_root: Path
+    output_dir: Path
+
+
+@dataclass(frozen=True)
+class Options:
+    artifacts_to_keep: int
+
+
+PATH_SPECS: dict[str, PathSpec] = {
+    "docs_root": PathSpec(field="docs_root", default=Path("docs"), ensure_dir=False, within_repo=False),
+    "output_dir": PathSpec(
+        field="output_dir",
+        default=DEFAULT_OUTPUT_DIR,
+        ensure_dir=False,
+        within_repo=False,
+    ),
+}
+
+PATH_CONFIG = PathsConfig(
+    dataclass_type=Paths,
+    path_specs=PATH_SPECS,
+    repo_root_depth=4,
+)
+
+KEEP_SPECS: dict[str, KeepSpec] = {
+    "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
+}
+
+OPTIONS_CONFIG = OptionsConfig(dataclass_type=Options, keep_specs=KEEP_SPECS)
 
 
 def slugify(raw: str) -> str:
@@ -54,7 +97,7 @@ def slugify(raw: str) -> str:
 
 def iter_markdown_files(root: Path) -> Iterable[Path]:
     for md in root.rglob("*.md"):
-        if any(p in md.parts for p in ("coverage_history",)):
+        if any(part in md.parts for part in ("coverage_history",)):
             continue
         yield md
 
@@ -71,40 +114,73 @@ class SlugStat:
 GENERIC_ALLOWED = {"overview", "introduction", "faq", "notes"}
 
 
-def collect(root: Path) -> dict[str, SlugStat]:
+def _compose_location(prefix: Path | None, relative_path: Path, line_number: int) -> str:
+    parts: list[str] = []
+    if prefix is not None:
+        parts.extend(part for part in prefix.parts if part not in (".",))
+    parts.extend(relative_path.parts)
+    display_path = PurePosixPath(*parts) if parts else PurePosixPath(relative_path.as_posix())
+    return f"{display_path}:{line_number}"
+
+
+def _collect_from_root(root: Path, prefix: Path | None) -> dict[str, list[str]]:
     slug_locations: dict[str, list[str]] = defaultdict(list)
     for md in iter_markdown_files(root):
         text = md.read_text(encoding="utf-8", errors="replace")
         for lineno, line in enumerate(text.splitlines(), start=1):
-            m = HEADING_RE.match(line)
-            if not m:
+            match = HEADING_RE.match(line)
+            if not match:
                 continue
-            level = len(m.group(1))
+            level = len(match.group(1))
             if level > 2:
                 continue
-            slug = slugify(m.group(2))
+            slug = slugify(match.group(2))
             rel = md.relative_to(root)
-            slug_locations[slug].append(f"{rel}:{lineno}")
+            slug_locations[slug].append(_compose_location(prefix, rel, lineno))
+    return slug_locations
+
+
+def _compute_display_prefix(repo_root: Path, doc_root: Path) -> Path | None:
+    try:
+        relative = doc_root.resolve().relative_to(repo_root.resolve())
+    except ValueError:
+        return None
+    if str(relative) in ("", "."):
+        return None
+    return relative
+
+
+def collect(doc_roots: Iterable[tuple[Path, Path | None]]) -> dict[str, SlugStat]:
+    slug_locations: dict[str, list[str]] = defaultdict(list)
+    for root, prefix in doc_roots:
+        for slug, locations in _collect_from_root(root, prefix).items():
+            slug_locations[slug].extend(locations)
     stats: dict[str, SlugStat] = {}
-    for slug, locs in slug_locations.items():
-        files = sorted({loc.split(":")[0] for loc in locs})
+    for slug, locations in slug_locations.items():
+        files = sorted({loc.split(":")[0] for loc in locations})
         stats[slug] = SlugStat(
             slug=slug,
-            count=len(locs),
+            count=len(locations),
             file_count=len(files),
             files=files,
-            locations=sorted(locs),
+            locations=sorted(locations),
         )
     return stats
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--docs-root", type=Path, default=Path("docs"))
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
-    parser.add_argument("--artifacts-to-keep", type=int, default=10)
+    parser = argparse.ArgumentParser(description="Generate anchor inventory artifacts")
+    parser.add_argument("--repo-root", help="Repository root override (defaults to script-relative resolution)")
+    parser.add_argument("--docs-root", type=Path, default=Path("docs"), help="Docs directory to scan")
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=DEFAULT_OUTPUT_DIR,
+        help="Directory for inventory artifacts",
+    )
+    parser.add_argument("--artifacts-to-keep", type=int, default=DEFAULT_ARTIFACTS_TO_KEEP)
     parser.add_argument("--timestamp", help="Override run timestamp (ISO 8601)")
-    parser.add_argument("--json-out", type=Path)
+    parser.add_argument("--json-out", type=Path, help="Optional legacy JSON mirror path")
     parser.add_argument(
         "--allow-file",
         type=Path,
@@ -113,7 +189,14 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--test-file",
         type=Path,
-        help="Path to test_global_anchors.py to extract current ALLOWED size for baseline",
+        help="Path to test_global_anchors.py for ALLOWED baseline extraction",
+    )
+    parser.add_argument(
+        "--additional-docs-root",
+        action="append",
+        default=[],
+        type=Path,
+        help="Additional documentation directories to scan (repeatable)",
     )
     parser.add_argument(
         "--log-level",
@@ -130,15 +213,16 @@ def extract_test_allowlist_size(test_file: Path) -> int | None:
     allowed_block: list[str] = []
     capture = False
     for line in text.splitlines():
-        if line.strip().startswith("ALLOWED = {"):
+        stripped = line.strip()
+        if stripped.startswith("ALLOWED = {"):
             capture = True
             continue
         if capture:
-            if line.strip().startswith("}"):
+            if stripped.startswith("}"):
                 break
-            m = re.search(r"\"([^\"]*)\"", line)
-            if m:
-                allowed_block.append(m.group(1))
+            match = re.search(r"\"([^\"]*)\"", stripped)
+            if match:
+                allowed_block.append(match.group(1))
     return len(allowed_block) if allowed_block else None
 
 
@@ -158,7 +242,7 @@ def build_summary(
 
 def build_cross_file_duplicates(stats: dict[str, SlugStat], allow_set: set[str]) -> list[SlugStat]:
     duplicates = [st for st in stats.values() if st.file_count > 1 and st.slug not in allow_set]
-    duplicates.sort(key=lambda s: (-s.file_count, -s.count, s.slug))
+    duplicates.sort(key=lambda item: (-item.file_count, -item.count, item.slug))
     return duplicates
 
 
@@ -169,24 +253,26 @@ def build_report(
     duplicates: list[SlugStat],
     allow_set: set[str],
     allowlist_size: int | None,
+    scanned_roots: Sequence[Path],
     generated_ts: datetime,
-) -> tuple[dict, list[SlugStat]]:
-    ordered_slugs = sorted(stats.values(), key=lambda s: (-s.file_count, -s.count, s.slug))
+) -> tuple[dict[str, Any], list[SlugStat]]:
+    ordered_slugs = sorted(stats.values(), key=lambda item: (-item.file_count, -item.count, item.slug))
     summary = build_summary(stats, duplicates, allow_set, allowlist_size)
     report = {
         "schema_version": 1,
         "generated_utc": generated_ts.isoformat(),
         "docs_root": str(docs_root),
+        "scanned_roots": [str(root) for root in scanned_roots],
         "summary": summary,
-        "duplicates": [asdict(s) for s in duplicates],
-        "slugs": [asdict(s) for s in ordered_slugs],
+        "duplicates": [asdict(item) for item in duplicates],
+        "slugs": [asdict(item) for item in ordered_slugs],
         "allow_generic": sorted(allow_set),
         "allowlist_size": allowlist_size,
     }
     return report, ordered_slugs
 
 
-def write_markdown(report: dict, ordered_slugs: list[SlugStat]) -> str:
+def render_markdown(report: dict[str, Any], ordered_slugs: list[SlugStat]) -> str:
     summary = report["summary"]
     lines: list[str] = [
         "# Anchor Inventory Report",
@@ -196,10 +282,10 @@ def write_markdown(report: dict, ordered_slugs: list[SlugStat]) -> str:
         "",
         "## Summary",
         "",
-        f"* total slugs: {summary['total_slugs']}",
-        f"* cross-file duplicates: {summary['cross_file_duplicates']}",
-        f"* generic allow size: {summary['generic_allow_size']}",
-        f"* allowlist size: {summary['allowlist_size']}",
+        f"- total slugs: {summary['total_slugs']}",
+        f"- cross-file duplicates: {summary['cross_file_duplicates']}",
+        f"- generic allow size: {summary['generic_allow_size']}",
+        f"- allowlist size: {summary['allowlist_size']}",
         "",
         "## Top Cross-File Duplicates (up to 25)",
         "",
@@ -225,77 +311,33 @@ def write_markdown(report: dict, ordered_slugs: list[SlugStat]) -> str:
     else:
         lines.append("- (none)")
     lines.append("")
-    return "\n".join(lines) + "\n"
+    lines.append("## Source References")
+    lines.append("")
+    lines.append(f"- Docs Root: `{report['docs_root']}`")
+    scanned_roots = report.get("scanned_roots", [])
+    extra_roots = [root for root in scanned_roots if root != report["docs_root"]]
+    for root in extra_roots:
+        lines.append(f"- Additional Root: `{root}`")
+    lines.append(f"- Generated UTC: `{report['generated_utc']}`")
+    lines.append("")
+    return "\n".join(lines).rstrip() + "\n"
 
 
-def write_artifacts(
-    report: dict,
-    ordered_slugs: list[SlugStat],
-    output_dir: Path,
-) -> Path:
-    output_dir.mkdir(parents=True, exist_ok=True)
-    generated_ts = datetime.fromisoformat(report["generated_utc"])
-    run_dir = output_dir / f"{RUN_PREFIX}-{generated_ts.strftime('%Y%m%d_%H%M%S')}"
-    run_dir.mkdir(parents=True, exist_ok=True)
-
-    json_path = run_dir / "report.json"
-    json_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-
-    md_path = run_dir / "report.md"
-    md_path.write_text(write_markdown(report, ordered_slugs), encoding="utf-8")
-
-    tsv_lines = ["slug\tcount\tfile_count\tfiles\tlocations"]
+def render_tsv(ordered_slugs: list[SlugStat]) -> str:
+    lines = ["slug\tcount\tfile_count\tfiles\tlocations"]
     for stat in ordered_slugs:
-        tsv_lines.append(
-            f"{stat.slug}\t{stat.count}\t{stat.file_count}\t" + ",".join(stat.files) + "\t" + ";".join(stat.locations)
-        )
-    tsv_path = run_dir / "slugs.tsv"
-    tsv_path.write_text("\n".join(tsv_lines) + "\n", encoding="utf-8")
-
-    latest_pairs = [
-        (json_path, output_dir / "latest_report.json"),
-        (md_path, output_dir / "latest_report.md"),
-        (tsv_path, output_dir / "latest_slugs.tsv"),
-    ]
-    for src, dest in latest_pairs:
-        try:
-            if dest.exists():
-                dest.unlink()
-            dest.hardlink_to(src)
-        except OSError:
-            dest.write_bytes(src.read_bytes())
-
-    return run_dir
+        files = ",".join(stat.files)
+        locations = ";".join(stat.locations)
+        lines.append(f"{stat.slug}\t{stat.count}\t{stat.file_count}\t{files}\t{locations}")
+    return "\n".join(lines)
 
 
-def prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> list[Path]:
-    keep = max(keep, 1)
-    if not output_dir.exists():
-        return []
-    candidates = [path for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(f"{RUN_PREFIX}-")]
-    candidates.sort(key=lambda p: p.name, reverse=True)
-    removed: list[Path] = []
-    for idx, path in enumerate(candidates):
-        if idx < keep or path == current_run:
-            continue
-        removed.append(path)
-        for child in path.iterdir():
-            if child.is_file():
-                child.unlink(missing_ok=True)  # type: ignore[attr-defined]
-        path.rmdir()
-    return removed
-
-
-def emit_summary_log(
-    logger: logging.Logger,
-    ordered_slugs: list[SlugStat],
-    duplicates: list[SlugStat],
-) -> None:
+def emit_summary_log(logger: logging.Logger, ordered_slugs: list[SlugStat], duplicates: list[SlugStat]) -> None:
     header = f"{'SLUG':40} {'CNT':>4} {'FILES':>5}"
     logger.info(header)
     logger.info("-" * len(header))
-    for st in ordered_slugs[:25]:
-        logger.info(f"{st.slug[:40]:40} {st.count:4d} {st.file_count:5d}")
+    for entry in ordered_slugs[:25]:
+        logger.info("%s %4d %5d", f"{entry.slug[:40]:40}", entry.count, entry.file_count)
     if duplicates:
         logger.info("Top duplicates (up to 10):")
         for dup in duplicates[:10]:
@@ -323,7 +365,7 @@ def _parse_timestamp(raw: str | None) -> datetime:
         raise SystemExit(f"Invalid --timestamp value: {exc}")
 
 
-def maybe_write_legacy_json(path: Path | None, payload: dict, logger: logging.Logger) -> None:
+def maybe_write_legacy_json(path: Path | None, payload: dict[str, Any], logger: logging.Logger) -> None:
     if not path:
         return
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -331,18 +373,52 @@ def maybe_write_legacy_json(path: Path | None, payload: dict, logger: logging.Lo
     logger.info("Wrote baseline JSON: %s", path)
 
 
-def main(argv: Sequence[str] | None = None) -> int:
+def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     args = parse_args(argv)
     logging.basicConfig(
         level=getattr(logging, args.log_level.upper(), logging.INFO),
         format="%(levelname)s %(message)s",
+        force=True,
     )
-    log = logging.getLogger("anchor_inventory")
-    docs_root = args.docs_root.resolve()
+    logger = logging.getLogger("anchor_inventory")
+
+    paths = build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    options = build_standard_options(args, OPTIONS_CONFIG)
+
+    docs_root = paths.docs_root
     if not docs_root.exists():
         raise SystemExit(f"docs directory not found: {docs_root}")
 
-    stats = collect(docs_root)
+    primary_root = docs_root.resolve()
+    doc_roots: list[tuple[Path, Path | None]] = [(primary_root, None)]
+    seen_roots: set[Path] = {primary_root}
+
+    additional_candidates: list[Path] = []
+    for raw_extra in args.additional_docs_root:
+        candidate = raw_extra
+        if not candidate.is_absolute():
+            candidate = paths.repo_root / candidate
+        additional_candidates.append(candidate.resolve())
+
+    if args.docs_root == Path("docs"):
+        repo_docs = (paths.repo_root / ".repo_studios" / "docs").resolve()
+        additional_candidates.append(repo_docs)
+
+    for candidate in additional_candidates:
+        if candidate in seen_roots:
+            continue
+        if not candidate.exists():
+            logger.warning("Additional docs root not found, skipping: %s", candidate)
+            continue
+        prefix = _compute_display_prefix(paths.repo_root, candidate)
+        doc_roots.append((candidate, prefix))
+        seen_roots.add(candidate)
+
+    if len(doc_roots) > 1:
+        extras = ", ".join(str(path) for path, _ in doc_roots[1:])
+        logger.info("Including additional documentation roots: %s", extras)
+
+    stats = collect(doc_roots)
     allow_set = load_allow_set(set(GENERIC_ALLOWED), args.allow_file)
     duplicates = build_cross_file_duplicates(stats, allow_set)
     allowlist_size = extract_test_allowlist_size(args.test_file) if args.test_file else None
@@ -353,17 +429,53 @@ def main(argv: Sequence[str] | None = None) -> int:
         duplicates=duplicates,
         allow_set=allow_set,
         allowlist_size=allowlist_size,
+        scanned_roots=[root for root, _ in doc_roots],
         generated_ts=generated_ts,
     )
 
-    output_dir = args.output_dir.resolve()
-    run_dir = write_artifacts(report, ordered_slugs, output_dir)
-    pruned = prune_old_runs(output_dir, keep=args.artifacts_to_keep, current_run=run_dir)
-    if pruned:
-        log.info("Pruned %d old run(s)", len(pruned))
+    artifacts = [
+        ReportArtifact(
+            filename="report.json",
+            pointer="latest_report.json",
+            kind="json",
+            content=report,
+        ),
+        ReportArtifact(
+            filename="report.md",
+            pointer="latest_report.md",
+            kind="text",
+            content=render_markdown(report, ordered_slugs),
+        ),
+        ReportArtifact(
+            filename="slugs.tsv",
+            pointer="latest_slugs.tsv",
+            kind="text",
+            content=render_tsv(ordered_slugs) + "\n",
+        ),
+    ]
+    result = write_report_artifacts(
+        stem=RUN_PREFIX,
+        timestamp=generated_ts,
+        output_dir=paths.output_dir,
+        artifacts=artifacts,
+        keep=options.artifacts_to_keep,
+    )
 
-    maybe_write_legacy_json(args.json_out, report, log)
-    emit_summary_log(log, ordered_slugs, duplicates)
+    maybe_write_legacy_json(args.json_out, report, logger)
+    emit_summary_log(logger, ordered_slugs, duplicates)
+
+    return {
+        "run_dir": str(result.run_dir),
+        "slug": result.slug,
+        "artifacts": {name: str(path) for name, path in result.artifacts.items()},
+        "docs_root": str(docs_root),
+        "total_slugs": report["summary"]["total_slugs"],
+        "duplicates": len(duplicates),
+    }
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    run(argv)
     return 0
 
 

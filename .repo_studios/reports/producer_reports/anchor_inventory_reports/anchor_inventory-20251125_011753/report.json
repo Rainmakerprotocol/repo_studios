@@ -1,0 +1,164 @@
+{
+  "allow_generic": [
+    "faq",
+    "introduction",
+    "notes",
+    "overview"
+  ],
+  "allowlist_size": null,
+  "docs_root": "C:\\Users\\genet\\repo_studios\\docs",
+  "duplicates": [],
+  "generated_utc": "2025-11-25T01:17:53.694166+00:00",
+  "schema_version": 1,
+  "slugs": [
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\project\\std-project-operating-standard.md"
+      ],
+      "locations": [
+        "standards\\project\\std-project-operating-standard.md:18"
+      ],
+      "slug": "automation-visibility"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-monkey-patching.md"
+      ],
+      "locations": [
+        "standards\\global\\std-global-monkey-patching.md:12"
+      ],
+      "slug": "builtin-constraints"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-mission-parameters.md"
+      ],
+      "locations": [
+        "standards\\global\\std-global-mission-parameters.md:12"
+      ],
+      "slug": "decisions"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\project\\std-project-operating-standard.md"
+      ],
+      "locations": [
+        "standards\\project\\std-project-operating-standard.md:12"
+      ],
+      "slug": "dependency-management"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-docs-integrity-handbook.md"
+      ],
+      "locations": [
+        "standards\\global\\std-docs-integrity-handbook.md:1"
+      ],
+      "slug": "docs-integrity-handbook"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-python-engineering.md"
+      ],
+      "locations": [
+        "standards\\global\\std-global-python-engineering.md:12"
+      ],
+      "slug": "error-handling"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-prompt-engineering.md"
+      ],
+      "locations": [
+        "standards\\global\\std-global-prompt-engineering.md:12"
+      ],
+      "slug": "evaluation-cases"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-markdown-authoring.md"
+      ],
+      "locations": [
+        "standards\\global\\std-global-markdown-authoring.md:12"
+      ],
+      "slug": "front-matter"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-chainlit-ui.md"
+      ],
+      "locations": [
+        "standards\\global\\std-global-chainlit-ui.md:3"
+      ],
+      "slug": "global-chainlit-ui-standard"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-html-coding.md"
+      ],
+      "locations": [
+        "standards\\global\\std-global-html-coding.md:3"
+      ],
+      "slug": "global-html-coding-standard"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-python-engineering.md"
+      ],
+      "locations": [
+        "standards\\global\\std-global-python-engineering.md:18"
+      ],
+      "slug": "logging"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\project\\std-project-python-instructions.md"
+      ],
+      "locations": [
+        "standards\\project\\std-project-python-instructions.md:3"
+      ],
+      "slug": "project-python-instructions"
+    },
+    {
+      "count": 1,
+      "file_count": 1,
+      "files": [
+        "standards\\global\\std-global-markdown-authoring.md"
+      ],
+      "locations": [
+        "standards\\global\\std-global-markdown-authoring.md:18"
+      ],
+      "slug": "style-essentials"
+    }
+  ],
+  "summary": {
+    "allowlist_size": null,
+    "cross_file_duplicates": 0,
+    "generic_allow_size": 4,
+    "total_slugs": 13
+  }
+}
