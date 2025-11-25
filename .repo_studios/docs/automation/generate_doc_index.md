@@ -17,7 +17,10 @@ includes JSON/YAML/CSV renderings.
 - Each run contains:
       - `doc_index.json` – canonical JSON payload.
       - `doc_index_bundle.md` – Markdown bundle with metadata frontmatter plus
-            fenced JSON, YAML, and CSV sections.
+            fenced JSON, YAML, and CSV sections. The file begins with
+            `<!-- markdownlint-disable MD013 -->` and closes with
+            `<!-- markdownlint-enable MD013 -->` so long descriptions and CSV rows
+            can exceed standard line-length without failing lint.
 - Latest pointers (`latest_doc_index.json`, `latest_doc_index_bundle.md`) live
       alongside the run directories.
 - Retention defaults to one run; older directories are pruned automatically
@@ -39,6 +42,11 @@ Each document entry includes:
       the file (image links excluded by design).
 - `description`: first qualifying paragraph after the lead H1 (trimmed to ~240
       characters, optional when no prose is available).
+
+CSV output columns are `folder`, `filename`, `level`, `heading`, `slug`,
+`parent_slug`, `description`, and `links`; each row repeats the document’s link
+targets (semicolon-separated) so spreadsheet tooling can pivot on cross-document
+references without reprocessing the JSON payload.
 
 Payload metadata exposes summary counts, scanner exclusions, and an `outputs`
 block describing file artifacts; the optional `outputs.database` node records

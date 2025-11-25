@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_utc": "2025-11-25T02:46:48.631404+00:00",
+  "generated_utc": "2025-11-25T03:38:45.960103+00:00",
   "repo_root": "C:\\Users\\genet\\repo_studios",
   "summary": {
     "total_documents": 192,
@@ -8,6 +8,257 @@
     "total_h2": 1038,
     "total_headings": 1214,
     "total_links": 2
+  },
+  "metrics": {
+    "documents_per_directory": [
+      {
+        "directory": ".repo_studios/command_center/docs/mermaid/view_specs",
+        "count": 28
+      },
+      {
+        "directory": ".repo_studios/docs/automation",
+        "count": 27
+      },
+      {
+        "directory": ".repo_studios/command_center/docs",
+        "count": 11
+      },
+      {
+        "directory": ".repo_studios/docs/standards/global",
+        "count": 11
+      },
+      {
+        "directory": ".repo_studios/command_center/docs/phase_7",
+        "count": 10
+      },
+      {
+        "directory": "docs/standards/global",
+        "count": 9
+      },
+      {
+        "directory": ".repo_studios/docs",
+        "count": 8
+      },
+      {
+        "directory": ".repo_studios/command_center/docs/phase_6",
+        "count": 7
+      },
+      {
+        "directory": ".repo_studios/command_center/viewer",
+        "count": 6
+      },
+      {
+        "directory": ".",
+        "count": 5
+      },
+      {
+        "directory": ".github",
+        "count": 5
+      },
+      {
+        "directory": ".repo_studios/command_center/docs/mermaid",
+        "count": 5
+      },
+      {
+        "directory": ".repo_studios/docs/automation/traceability",
+        "count": 5
+      },
+      {
+        "directory": ".repo_studios/docs/templates",
+        "count": 5
+      },
+      {
+        "directory": ".repo_studios/command_center/docs/phase_4",
+        "count": 4
+      },
+      {
+        "directory": ".repo_studios/command_center/docs/phase_6/validation_runs",
+        "count": 4
+      },
+      {
+        "directory": ".repo_studios/docs/playbooks",
+        "count": 4
+      },
+      {
+        "directory": ".repo_studios/command_center/docs/metrics",
+        "count": 3
+      },
+      {
+        "directory": ".repo_studios/docs/standards/project",
+        "count": 3
+      },
+      {
+        "directory": ".repo_studios/scripts",
+        "count": 3
+      }
+    ],
+    "documents_missing_description_count": 34,
+    "documents_without_h1_count": 20,
+    "documents_without_h2_count": 21,
+    "placeholder_documents_count": 37,
+    "duplicate_slug_count": 6,
+    "documents_outside_docs_tree_count": 116,
+    "link_density": 0.010416666666666666
+  },
+  "advisories": {
+    "documents_missing_description": [
+      ".copilot_todo.md",
+      ".github/copilot-instructions.md",
+      ".repo_studios/agent_notes/meta/phase1_foundation_review_2025-10-18_0138.md",
+      ".repo_studios/command_center/docs/decision_log.md",
+      ".repo_studios/command_center/docs/mermaid/decision_log.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/callback_registration_map.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/cyclomatic_complexity_map.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/dynamic_code_watchlist.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/entrypoint_trace_diagram.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/external_vs_internal_dependency_map.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/function_call_graph.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/import_chain_depth.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/public_vs_private_api.md",
+      ".repo_studios/command_center/docs/phase_4/PR_CHECKLIST_TEMPLATE.md",
+      ".repo_studios/command_center/docs/phase_6/PROMPT_DELTA_DRAFTS.md",
+      ".repo_studios/command_center/docs/phase_6/PROMPT_VALIDATION_RESULTS.md",
+      ".repo_studios/command_center/scripts/script_inventory.md",
+      ".repo_studios/docs/standards/global/std-global-chainlit-ui.md",
+      ".repo_studios/docs/standards/global/std-global-css-authoring.md",
+      ".repo_studios/docs/standards/global/std-global-javascript-engineering.md",
+      ".repo_studios/docs/standards/global/std-global-markdown-authoring.md",
+      ".repo_studios/docs/standards/global/std-global-mission-parameters.md",
+      ".repo_studios/docs/templates/script_inventory.md",
+      ".repo_studios/monkey_patch/20251124_175233/report.md",
+      ".repo_studios/monkey_patch/latest/report.md"
+    ],
+    "documents_without_h1": [
+      ".repo_studios/command_center/docs/mermaid/view_specs/callback_registration_map.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/cyclomatic_complexity_map.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/dynamic_code_watchlist.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/entrypoint_trace_diagram.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/external_vs_internal_dependency_map.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/function_call_graph.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/import_chain_depth.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/public_vs_private_api.md",
+      ".repo_studios/docs/standards/global/std-global-chainlit-ui.md",
+      ".repo_studios/docs/standards/global/std-global-css-authoring.md",
+      ".repo_studios/docs/standards/global/std-global-javascript-engineering.md",
+      ".repo_studios/docs/standards/global/std-global-markdown-authoring.md",
+      ".repo_studios/docs/standards/global/std-global-mission-parameters.md",
+      "docs/standards/global/std-global-code-cleanup.md",
+      "docs/standards/global/std-global-markdown-authoring.md",
+      "docs/standards/global/std-global-mission-parameters.md",
+      "docs/standards/global/std-global-monkey-patching.md",
+      "docs/standards/global/std-global-prompt-engineering.md",
+      "docs/standards/global/std-global-python-engineering.md",
+      "docs/standards/project/std-project-operating-standard.md"
+    ],
+    "documents_without_h2": [
+      ".copilot_todo.md",
+      ".repo_studios/command_center/docs/decision_log.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/cross_module_function_references.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/module_dependency_graph.md",
+      ".repo_studios/command_center/docs/phase_4/dry_run_samples/README.md",
+      ".repo_studios/command_center/docs/phase_7/CI_ROLLOUT_LOG.md",
+      ".repo_studios/command_center/docs/phase_7/PRODUCER_CONSUMER_TRACEABILITY_AUDIT.md",
+      ".repo_studios/command_center/scripts/script_inventory.md",
+      ".repo_studios/command_center/viewer/cache/README.md",
+      ".repo_studios/docs/project_tree_overview.md",
+      ".repo_studios/docs/standards/docs_index.md",
+      ".repo_studios/docs/templates/agent_note_template.md",
+      ".repo_studios/docs/templates/script_inventory.md",
+      ".repo_studios/docs/templates/structural_checklist_template.md",
+      ".repo_studios/inventory_schema/views/README.md",
+      "README.md",
+      "command_center_script_verification_temp.md",
+      "docs/standards/global/std-docs-integrity-handbook.md",
+      "docs/standards/global/std-global-chainlit-ui.md",
+      "docs/standards/global/std-global-html-coding.md",
+      "docs/standards/project/std-project-python-instructions.md"
+    ],
+    "placeholder_documents": [
+      ".repo_studios/command_center/checklists/2025-10-24.md",
+      ".repo_studios/command_center/command_center_architecture.md",
+      ".repo_studios/command_center/docs/code_library/code_library_status.md",
+      ".repo_studios/command_center/docs/decision_log.md",
+      ".repo_studios/command_center/docs/duplicate_target_mappings.md",
+      ".repo_studios/command_center/docs/library_integration_checklist.md",
+      ".repo_studios/command_center/docs/library_readme_adjustments.md",
+      ".repo_studios/command_center/docs/mermaid/README.md",
+      ".repo_studios/command_center/docs/mermaid/decision_log.md",
+      ".repo_studios/command_center/docs/mermaid/mermaid_viewer.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/class_inheritance_hierarchy.md",
+      ".repo_studios/command_center/docs/mermaid/view_specs/git_churn_risk_map.md",
+      ".repo_studios/command_center/docs/phase_4/POST_RUN_TEST_MATRIX.md",
+      ".repo_studios/command_center/docs/phase_4/PR_CHECKLIST_TEMPLATE.md",
+      ".repo_studios/command_center/docs/phase_7/CI_INTEGRATION_STRATEGY.md",
+      ".repo_studios/command_center/docs/phase_7/CI_ROLLOUT_LOG.md",
+      ".repo_studios/command_center/docs/phase_7/PLACEHOLDER_DEBT_PLAN.md",
+      ".repo_studios/command_center/docs/phase_7/REPORTING_INTERFACE_PLAN.md",
+      ".repo_studios/command_center/docs/phase_7/placeholder_scan_blocking_transition_brief.md",
+      ".repo_studios/command_center/docs/run_log_template.md",
+      ".repo_studios/docs/automation/generate_doc_index.md",
+      ".repo_studios/docs/automation/orchestrator_automation_hooks.md",
+      ".repo_studios/docs/automation/scan_code_placeholders.md",
+      ".repo_studios/docs/automation/traceability/producer_consumer_traceability_audit.md",
+      ".repo_studios/docs/inventory/inventory-notes.md"
+    ],
+    "documents_outside_docs_tree": [
+      ".copilot_todo.md",
+      ".github/architect.chatmode.md",
+      ".github/ask.chatmode.md",
+      ".github/code.chatmode.md",
+      ".github/copilot-instructions.md",
+      ".github/debug.chatmode.md",
+      ".repo_studios/README.md",
+      ".repo_studios/agent_notes/README.md",
+      ".repo_studios/agent_notes/meta/phase1_foundation_review_2025-10-18_0138.md",
+      ".repo_studios/alignment_protocol.md",
+      ".repo_studios/command_center/README.md",
+      ".repo_studios/command_center/checklists/2025-10-24.md",
+      ".repo_studios/command_center/command_center_architecture.md",
+      ".repo_studios/command_center/docs/build_paths_extraction_brief.md",
+      ".repo_studios/command_center/docs/code_library/code_library_status.md",
+      ".repo_studios/command_center/docs/decision_log.md",
+      ".repo_studios/command_center/docs/duplicate_detection_schema_alignment.md",
+      ".repo_studios/command_center/docs/duplicate_target_mappings.md",
+      ".repo_studios/command_center/docs/guardrails/automation_manifest_schema.md",
+      ".repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md",
+      ".repo_studios/command_center/docs/library_integration_checklist.md",
+      ".repo_studios/command_center/docs/library_readme_adjustments.md",
+      ".repo_studios/command_center/docs/manual_extraction_checklist.md",
+      ".repo_studios/command_center/docs/manual_extraction_operator_brief.md",
+      ".repo_studios/command_center/docs/mermaid/README.md"
+    ],
+    "duplicate_slugs": {
+      "library-integration-alignment-plan": [
+        ".repo_studios/command_center/checklists/2025-10-24.md",
+        ".repo_studios/command_center/docs/library_integration_checklist.md"
+      ],
+      "duplicate-scan-summary": [
+        ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-24-2338.md",
+        ".repo_studios/scripts/aggregators/aggregators_index/aggregators_duplicate_summary-2025-10-28-0942.md",
+        ".repo_studios/scripts/consumers/consumers_index/consumers_duplicate_summary-2025-10-28-0934.md",
+        ".repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md",
+        ".repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md",
+        ".repo_studios/scripts/scripts_index/scripts_duplicate_summary-2025-10-27.md",
+        ".repo_studios/scripts/summarizers/summarizers_index/summarizers_duplicate_summary-2025-11-04-2010.md",
+        ".repo_studios/scripts/utilities/utilities_index/utilities_duplicate_summary-2025-10-28-1344.md"
+      ],
+      "std-global-markdown-authoring": [
+        ".repo_studios/docs/standards/global/std-global-markdown-authoring.md",
+        "docs/standards/global/std-global-markdown-authoring.md"
+      ],
+      "std-global-mission-parameters": [
+        ".repo_studios/docs/standards/global/std-global-mission-parameters.md",
+        "docs/standards/global/std-global-mission-parameters.md"
+      ],
+      "script-inventory-template": [
+        ".repo_studios/docs/templates/script_inventory.md",
+        ".repo_studios/docs/templates/script_inventory_template.md"
+      ],
+      "monkey-patch-scan-report": [
+        ".repo_studios/monkey_patch/20251124_175233/report.md",
+        ".repo_studios/monkey_patch/latest/report.md"
+      ]
+    }
   },
   "documents": [
     {
@@ -23,7 +274,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 295,
+      "modified_utc": "2025-11-08T23:02:14.488500+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".github",
@@ -88,7 +346,45 @@
         }
       ],
       "links": [],
-      "description": "You are an expert system architect in this workspace. Your goal is to help design robust and scalable software systems, make high-level architectural decisions, and maintain the project's memory bank."
+      "description": "You are an expert system architect in this workspace. Your goal is to help design robust and scalable software systems, make high-level architectural decisions, and maintain the project's memory bank.",
+      "size_bytes": 9635,
+      "modified_utc": "2025-11-04T14:45:21.942680+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": {
+        "description": "Design robust and scalable software systems, make high-level architectural decisions, and maintain the project's memory bank.",
+        "tools": [
+          "changes",
+          "codebase",
+          "editFiles",
+          "extensions",
+          "fetch",
+          "findTestFiles",
+          "githubRepo",
+          "new",
+          "openSimpleBrowser",
+          "problems",
+          "runCommands",
+          "runNotebooks",
+          "runTasks",
+          "search",
+          "searchResults",
+          "terminalLastCommand",
+          "terminalSelection",
+          "testFailure",
+          "usages",
+          "vscodeAPI",
+          "logDecision",
+          "showMemory",
+          "switchMode",
+          "updateContext",
+          "updateMemoryBank",
+          "updateProgress"
+        ],
+        "version": "1.0.0"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".github",
@@ -139,7 +435,45 @@
         }
       ],
       "links": [],
-      "description": "You are a knowledgeable assistant in this workspace. Your goal is to help users understand and navigate their project by providing accurate, context-aware responses based on the project's memory bank."
+      "description": "You are a knowledgeable assistant in this workspace. Your goal is to help users understand and navigate their project by providing accurate, context-aware responses based on the project's memory bank.",
+      "size_bytes": 5874,
+      "modified_utc": "2025-11-04T14:45:21.943680+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": {
+        "description": "Answer questions about the project by leveraging the memory bank's persistent knowledge.",
+        "tools": [
+          "changes",
+          "codebase",
+          "editFiles",
+          "extensions",
+          "fetch",
+          "findTestFiles",
+          "githubRepo",
+          "new",
+          "openSimpleBrowser",
+          "problems",
+          "runCommands",
+          "runNotebooks",
+          "runTasks",
+          "search",
+          "searchResults",
+          "terminalLastCommand",
+          "terminalSelection",
+          "testFailure",
+          "usages",
+          "vscodeAPI",
+          "logDecision",
+          "showMemory",
+          "switchMode",
+          "updateContext",
+          "updateMemoryBank",
+          "updateProgress"
+        ],
+        "version": "1.0.0"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".github",
@@ -204,7 +538,45 @@
         }
       ],
       "links": [],
-      "description": "You are an expert programmer in this workspace. Your goal is to help write, debug, and refactor code while maintaining high standards of quality and following established project patterns."
+      "description": "You are an expert programmer in this workspace. Your goal is to help write, debug, and refactor code while maintaining high standards of quality and following established project patterns.",
+      "size_bytes": 7684,
+      "modified_utc": "2025-11-04T14:45:21.943680+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": {
+        "description": "Implement features and write high-quality code aligned with the project's established patterns.",
+        "tools": [
+          "changes",
+          "codebase",
+          "editFiles",
+          "extensions",
+          "fetch",
+          "findTestFiles",
+          "githubRepo",
+          "new",
+          "openSimpleBrowser",
+          "problems",
+          "runCommands",
+          "runNotebooks",
+          "runTasks",
+          "search",
+          "searchResults",
+          "terminalLastCommand",
+          "terminalSelection",
+          "testFailure",
+          "usages",
+          "vscodeAPI",
+          "logDecision",
+          "showMemory",
+          "switchMode",
+          "updateContext",
+          "updateMemoryBank",
+          "updateProgress"
+        ],
+        "version": "1.0.0"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".github",
@@ -276,7 +648,14 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 7422,
+      "modified_utc": "2025-11-07T03:43:35.020145+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".github",
@@ -341,7 +720,45 @@
         }
       ],
       "links": [],
-      "description": "You are a debugging expert in this workspace. Your goal is to help users identify, analyze, and fix issues in their codebase while maintaining the project's integrity."
+      "description": "You are a debugging expert in this workspace. Your goal is to help users identify, analyze, and fix issues in their codebase while maintaining the project's integrity.",
+      "size_bytes": 7534,
+      "modified_utc": "2025-11-04T14:45:21.944681+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": {
+        "description": "Identify, analyze, and fix issues by leveraging project history and context.",
+        "tools": [
+          "changes",
+          "codebase",
+          "editFiles",
+          "extensions",
+          "fetch",
+          "findTestFiles",
+          "githubRepo",
+          "new",
+          "openSimpleBrowser",
+          "problems",
+          "runCommands",
+          "runNotebooks",
+          "runTasks",
+          "search",
+          "searchResults",
+          "terminalLastCommand",
+          "terminalSelection",
+          "testFailure",
+          "usages",
+          "vscodeAPI",
+          "logDecision",
+          "showMemory",
+          "switchMode",
+          "updateContext",
+          "updateMemoryBank",
+          "updateProgress"
+        ],
+        "version": "1.0.0"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios",
@@ -378,7 +795,14 @@
         }
       ],
       "links": [],
-      "description": "This directory houses the automation runtime that keeps Repo Studios scripts, reports, and tests aligned. Every CLI under `.repo_studios/scripts/` follows the same `run(argv)` pattern so they can be imported safely in orchestrators, tests,\u2026"
+      "description": "This directory houses the automation runtime that keeps Repo Studios scripts, reports, and tests aligned. Every CLI under `.repo_studios/scripts/` follows the same `run(argv)` pattern so they can be imported safely in orchestrators, tests,\u2026",
+      "size_bytes": 4932,
+      "modified_utc": "2025-11-08T23:02:48.606878+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/agent_notes",
@@ -415,7 +839,14 @@
         }
       ],
       "links": [],
-      "description": "This workspace hosts timestamped YAML entries that capture substantive actions, discoveries, and decisions made by the coding agent. Treat it as a lightweight knowledge base that agents and developers can reference over time."
+      "description": "This workspace hosts timestamped YAML entries that capture substantive actions, discoveries, and decisions made by the coding agent. Treat it as a lightweight knowledge base that agents and developers can reference over time.",
+      "size_bytes": 2205,
+      "modified_utc": "2025-10-21T12:02:58.646317+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/agent_notes/meta",
@@ -459,7 +890,14 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 1837,
+      "modified_utc": "2025-10-21T12:02:58.653326+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios",
@@ -524,7 +962,14 @@
         }
       ],
       "links": [],
-      "description": "This document captures the working blueprint for collaborative cycles between the coding agent (GitHub Copilot) and the human developer. It is meant to stay lightweight, evolve over time, and provide repeatable guardrails for future\u2026"
+      "description": "This document captures the working blueprint for collaborative cycles between the coding agent (GitHub Copilot) and the human developer. It is meant to stay lightweight, evolve over time, and provide repeatable guardrails for future\u2026",
+      "size_bytes": 4269,
+      "modified_utc": "2025-10-21T14:59:31.821261+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center",
@@ -596,7 +1041,14 @@
         }
       ],
       "links": [],
-      "description": "Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical\u2026"
+      "description": "Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical\u2026",
+      "size_bytes": 14418,
+      "modified_utc": "2025-11-23T11:14:18.336713+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/checklists",
@@ -696,7 +1148,14 @@
         }
       ],
       "links": [],
-      "description": "Legend: In discovery = gathering facts, Not started = pending alignment, Deferred = intentionally out of scope for now."
+      "description": "Legend: In discovery = gathering facts, Not started = pending alignment, Deferred = intentionally out of scope for now.",
+      "size_bytes": 14558,
+      "modified_utc": "2025-10-27T17:59:50.299412+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center",
@@ -754,7 +1213,14 @@
         }
       ],
       "links": [],
-      "description": "_Last updated: 2025-10-27_"
+      "description": "_Last updated: 2025-10-27_",
+      "size_bytes": 4427,
+      "modified_utc": "2025-11-06T09:44:23.975246+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs",
@@ -819,7 +1285,14 @@
         }
       ],
       "links": [],
-      "description": "This brief captures the concrete plan for centralising the duplicated `build_paths` and `build_options` helpers into the shared `libraries` staging package."
+      "description": "This brief captures the concrete plan for centralising the duplicated `build_paths` and `build_options` helpers into the shared `libraries` staging package.",
+      "size_bytes": 4461,
+      "modified_utc": "2025-10-30T11:23:59.998614+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/code_library",
@@ -891,7 +1364,14 @@
         }
       ],
       "links": [],
-      "description": "Summarize the current state of Repo Studios\u2019 duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This\u2026"
+      "description": "Summarize the current state of Repo Studios\u2019 duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This\u2026",
+      "size_bytes": 13812,
+      "modified_utc": "2025-11-23T11:23:20.546419+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs",
@@ -906,7 +1386,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 20019,
+      "modified_utc": "2025-11-24T23:59:30.978451+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs",
@@ -964,7 +1451,14 @@
         }
       ],
       "links": [],
-      "description": "Translate `scan_code_duplicates.py` output into the data products Repo Studios already consumes (health-suite summaries, companion analysis exports, and future automation inputs)."
+      "description": "Translate `scan_code_duplicates.py` output into the data products Repo Studios already consumes (health-suite summaries, companion analysis exports, and future automation inputs).",
+      "size_bytes": 4145,
+      "modified_utc": "2025-10-25T14:24:46.937636+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs",
@@ -987,7 +1481,14 @@
         }
       ],
       "links": [],
-      "description": "This document maps the first four duplicate hotspots to their future home inside `.repo_studios/library/`, following the training guide naming rules."
+      "description": "This document maps the first four duplicate hotspots to their future home inside `.repo_studios/library/`, following the training guide naming rules.",
+      "size_bytes": 1648,
+      "modified_utc": "2025-10-24T20:30:48.568785+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs/guardrails",
@@ -1024,7 +1525,14 @@
         }
       ],
       "links": [],
-      "description": "Define the JSON structure for `manifest.json` produced during Phase 4 automation rehearsals. The manifest pairs with the rollback bundle and metrics summary so operators can audit run context, guardrail compliance, and planned file changes."
+      "description": "Define the JSON structure for `manifest.json` produced during Phase 4 automation rehearsals. The manifest pairs with the rollback bundle and metrics summary so operators can audit run context, guardrail compliance, and planned file changes.",
+      "size_bytes": 3702,
+      "modified_utc": "2025-11-04T14:15:55.969230+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/guardrails",
@@ -1089,7 +1597,14 @@
         }
       ],
       "links": [],
-      "description": "Provide the mandatory safeguards required before any automated extraction or mass-remediation tooling operates on Repo Studios scripts. These guardrails ensure duplicate remediation remains auditable, reversible, and consistent with the\u2026"
+      "description": "Provide the mandatory safeguards required before any automated extraction or mass-remediation tooling operates on Repo Studios scripts. These guardrails ensure duplicate remediation remains auditable, reversible, and consistent with the\u2026",
+      "size_bytes": 11676,
+      "modified_utc": "2025-11-04T14:15:56.158240+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs",
@@ -1189,7 +1704,14 @@
         }
       ],
       "links": [],
-      "description": "Legend: In discovery = gathering facts, Not started = pending alignment, Deferred = intentionally out of scope for now."
+      "description": "Legend: In discovery = gathering facts, Not started = pending alignment, Deferred = intentionally out of scope for now.",
+      "size_bytes": 68277,
+      "modified_utc": "2025-11-08T23:02:08.263694+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs",
@@ -1212,7 +1734,14 @@
         }
       ],
       "links": [],
-      "description": "Reference doc: `que_for_integration/refactor_library/phase_1/library_README.md`"
+      "description": "Reference doc: `que_for_integration/refactor_library/phase_1/library_README.md`",
+      "size_bytes": 1868,
+      "modified_utc": "2025-10-25T14:24:46.937636+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs",
@@ -1284,7 +1813,14 @@
         }
       ],
       "links": [],
-      "description": "Use this checklist whenever you migrate a duplicated helper into `.repo_studios/library/`. It adapts the Phase 3 guide for Repo Studios workflows, Windows shell conventions, and the refreshed orchestrator pipeline (2025-10-28)."
+      "description": "Use this checklist whenever you migrate a duplicated helper into `.repo_studios/library/`. It adapts the Phase 3 guide for Repo Studios workflows, Windows shell conventions, and the refreshed orchestrator pipeline (2025-10-28).",
+      "size_bytes": 4154,
+      "modified_utc": "2025-10-30T11:20:16.293146+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs",
@@ -1328,7 +1864,14 @@
         }
       ],
       "links": [],
-      "description": "This note packages the key resources operators need when executing Phase 3 manual extractions. Share this document with anyone running the checklist so they align with the latest tooling and report outputs."
+      "description": "This note packages the key resources operators need when executing Phase 3 manual extractions. Share this document with anyone running the checklist so they align with the latest tooling and report outputs.",
+      "size_bytes": 3069,
+      "modified_utc": "2025-11-08T23:02:50.721156+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid",
@@ -1379,7 +1922,14 @@
         }
       ],
       "links": [],
-      "description": "Provide a single discovery point for the Command Center Mermaid viewer so contributors, operators, and AI agents can locate the right artifact before diving into implementation details."
+      "description": "Provide a single discovery point for the Command Center Mermaid viewer so contributors, operators, and AI agents can locate the right artifact before diving into implementation details.",
+      "size_bytes": 2524,
+      "modified_utc": "2025-11-23T11:14:18.336713+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid",
@@ -1465,7 +2015,14 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 63171,
+      "modified_utc": "2025-11-22T18:48:10.128200+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid",
@@ -1516,7 +2073,14 @@
         }
       ],
       "links": [],
-      "description": "_Last updated: 2025-11-13_"
+      "description": "_Last updated: 2025-11-13_",
+      "size_bytes": 2948,
+      "modified_utc": "2025-11-13T12:19:47.720289+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid",
@@ -1560,7 +2124,14 @@
         }
       ],
       "links": [],
-      "description": "1. `function_inventory_overview.mmd` \u2014 flowchart summarizing per-module function counts, docstring coverage, and annotation ratios for a quick health read. 2. `screening_signal_timeline.mmd` \u2014 timeline chart outlining when screening scores\u2026"
+      "description": "1. `function_inventory_overview.mmd` \u2014 flowchart summarizing per-module function counts, docstring coverage, and annotation ratios for a quick health read. 2. `screening_signal_timeline.mmd` \u2014 timeline chart outlining when screening scores\u2026",
+      "size_bytes": 22819,
+      "modified_utc": "2025-11-13T12:19:47.472267+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid",
@@ -1667,7 +2238,14 @@
         }
       ],
       "links": [],
-      "description": "Every pass against a view pack should explicitly update the three shared attributes:"
+      "description": "Every pass against a view pack should explicitly update the three shared attributes:",
+      "size_bytes": 67975,
+      "modified_utc": "2025-11-23T11:00:30.710454+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -1676,7 +2254,14 @@
       "h1_headings": [],
       "h2_headings": [],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 5021,
+      "modified_utc": "2025-11-11T18:09:33.893527+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -1741,7 +2326,14 @@
         }
       ],
       "links": [],
-      "description": "Surface import cycles between project modules so operators can quickly spot chains that risk initialization failures, implicit side effects, or brittle refactor points. The diagram should group strongly connected modules, highlight cycle\u2026"
+      "description": "Surface import cycles between project modules so operators can quickly spot chains that risk initialization failures, implicit side effects, or brittle refactor points. The diagram should group strongly connected modules, highlight cycle\u2026",
+      "size_bytes": 4944,
+      "modified_utc": "2025-11-10T23:44:51.556360+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -1806,7 +2398,14 @@
         }
       ],
       "links": [],
-      "description": "Visualize relationships between classes defined in CommandView inventories so reviewers can trace inheritance chains, identify architecture bottlenecks, and spot classes that still rely on external or builtin parents."
+      "description": "Visualize relationships between classes defined in CommandView inventories so reviewers can trace inheritance chains, identify architecture bottlenecks, and spot classes that still rely on external or builtin parents.",
+      "size_bytes": 5247,
+      "modified_utc": "2025-11-12T00:31:56.863013+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -1864,7 +2463,14 @@
         }
       ],
       "links": [],
-      "description": "Surface functions with high cyclomatic complexity so maintainers can prioritize refactoring efforts. The heatmap will cluster functions by severity buckets and highlight modules concentrating complex logic."
+      "description": "Surface functions with high cyclomatic complexity so maintainers can prioritize refactoring efforts. The heatmap will cluster functions by severity buckets and highlight modules concentrating complex logic.",
+      "size_bytes": 4827,
+      "modified_utc": "2025-11-09T18:47:12.657650+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -1879,7 +2485,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": "graph LR classDef moduleBase fill:#0f172a,stroke:#38bdf8,color:#f8fafc classDef moduleCaution fill:#78350f,stroke:#f59e0b,color:#fef3c7 classDef moduleAlert fill:#7f1d1d,stroke:#f87171,color:#fee2e2 classDef moduleFocus\u2026"
+      "description": "graph LR classDef moduleBase fill:#0f172a,stroke:#38bdf8,color:#f8fafc classDef moduleCaution fill:#78350f,stroke:#f59e0b,color:#fef3c7 classDef moduleAlert fill:#7f1d1d,stroke:#f87171,color:#fee2e2 classDef moduleFocus\u2026",
+      "size_bytes": 5173,
+      "modified_utc": "2025-11-13T00:44:40.567019+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -1888,7 +2501,14 @@
       "h1_headings": [],
       "h2_headings": [],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 5467,
+      "modified_utc": "2025-11-12T21:30:49.588627+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -1953,7 +2573,14 @@
         }
       ],
       "links": [],
-      "description": "Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities."
+      "description": "Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.",
+      "size_bytes": 4341,
+      "modified_utc": "2025-11-13T13:29:06.677630+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2011,7 +2638,14 @@
         }
       ],
       "links": [],
-      "description": "Cluster functions by decorator usage so maintainers can audit annotation patterns, confirm policy-enforced decorators are present, and spot modules that overuse or lack critical decorators during reviews."
+      "description": "Cluster functions by decorator usage so maintainers can audit annotation patterns, confirm policy-enforced decorators are present, and spot modules that overuse or lack critical decorators during reviews.",
+      "size_bytes": 4036,
+      "modified_utc": "2025-11-10T02:50:17.687901+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2076,7 +2710,14 @@
         }
       ],
       "links": [],
-      "description": "Highlight documentation quality across functions in a CommandView artifact by grouping items into documented, missing, or unknown buckets. The view helps reviewers spot modules that lack docstrings or contain stale notes before onboarding\u2026"
+      "description": "Highlight documentation quality across functions in a CommandView artifact by grouping items into documented, missing, or unknown buckets. The view helps reviewers spot modules that lack docstrings or contain stale notes before onboarding\u2026",
+      "size_bytes": 4705,
+      "modified_utc": "2025-11-09T13:52:08.599860+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2085,7 +2726,14 @@
       "h1_headings": [],
       "h2_headings": [],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 4737,
+      "modified_utc": "2025-11-11T19:18:20.042571+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2094,7 +2742,14 @@
       "h1_headings": [],
       "h2_headings": [],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 4987,
+      "modified_utc": "2025-11-11T20:50:52.234611+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2159,7 +2814,14 @@
         }
       ],
       "links": [],
-      "description": "Highlight where functions raise exceptions so operators can quickly spot unstable modules, understand shared failure modes, and prioritize remediation as part of the State Effects pack."
+      "description": "Highlight where functions raise exceptions so operators can quickly spot unstable modules, understand shared failure modes, and prioritize remediation as part of the State Effects pack.",
+      "size_bytes": 4746,
+      "modified_utc": "2025-11-12T17:19:01.353505+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2224,7 +2886,14 @@
         }
       ],
       "links": [],
-      "description": "Represent each module's public export contract so operators can verify that `__all__` declarations align with locally defined symbols, highlight re-exported helpers, and flag gaps where contracts omit or reference missing entries. The\u2026"
+      "description": "Represent each module's public export contract so operators can verify that `__all__` declarations align with locally defined symbols, highlight re-exported helpers, and flag gaps where contracts omit or reference missing entries. The\u2026",
+      "size_bytes": 5061,
+      "modified_utc": "2025-11-10T22:16:35.884664+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2283,7 +2952,14 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 4606,
+      "modified_utc": "2025-11-11T14:21:33.164689+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2292,7 +2968,14 @@
       "h1_headings": [],
       "h2_headings": [],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 4243,
+      "modified_utc": "2025-11-09T12:22:54.577880+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2357,7 +3040,14 @@
         }
       ],
       "links": [],
-      "description": "Provide a high-level health snapshot for a selected CommandView artifact, summarizing module counts, function totals, documentation coverage, type-hint adoption, TODO hotspots, and top-level package density. The view helps reviewers\u2026"
+      "description": "Provide a high-level health snapshot for a selected CommandView artifact, summarizing module counts, function totals, documentation coverage, type-hint adoption, TODO hotspots, and top-level package density. The view helps reviewers\u2026",
+      "size_bytes": 4000,
+      "modified_utc": "2025-11-09T12:03:21.554136+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2422,7 +3112,14 @@
         }
       ],
       "links": [],
-      "description": "Highlight modules and functions with elevated change frequency so auditors can prioritize risky areas that combine churn with code complexity or coverage gaps. The view will aggregate churn signals captured by the CommandView inventory and\u2026"
+      "description": "Highlight modules and functions with elevated change frequency so auditors can prioritize risky areas that combine churn with code complexity or coverage gaps. The view will aggregate churn signals captured by the CommandView inventory and\u2026",
+      "size_bytes": 4143,
+      "modified_utc": "2025-11-13T13:02:43.504541+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2487,7 +3184,14 @@
         }
       ],
       "links": [],
-      "description": "Surface module-level global variables and the functions that reference them so operators can quickly spot hidden couplings, implicit state, and potential refactoring targets before expanding to broader side-effect views."
+      "description": "Surface module-level global variables and the functions that reference them so operators can quickly spot hidden couplings, implicit state, and potential refactoring targets before expanding to broader side-effect views.",
+      "size_bytes": 4306,
+      "modified_utc": "2025-11-12T02:31:03.545393+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2546,7 +3250,14 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 4855,
+      "modified_utc": "2025-11-13T01:18:18.407063+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2611,7 +3322,14 @@
         }
       ],
       "links": [],
-      "description": "Surface module-level functions that interact with the filesystem, environment, or network so operators can trace stateful side effects alongside the emerging State Effects pack."
+      "description": "Surface module-level functions that interact with the filesystem, environment, or network so operators can trace stateful side effects alongside the emerging State Effects pack.",
+      "size_bytes": 4077,
+      "modified_utc": "2025-11-12T02:58:12.165922+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2669,7 +3387,14 @@
         }
       ],
       "links": [],
-      "description": "Confirm Repo Studios automation adheres to the mandated execution pipeline \u2014 Producers \u2192 Consumers \u2192 Aggregators \u2192 Orchestrators \u2192 Summarizers \u2014 by rendering each tier as a discrete swimlane and highlighting dependencies that flow in the\u2026"
+      "description": "Confirm Repo Studios automation adheres to the mandated execution pipeline \u2014 Producers \u2192 Consumers \u2192 Aggregators \u2192 Orchestrators \u2192 Summarizers \u2014 by rendering each tier as a discrete swimlane and highlighting dependencies that flow in the\u2026",
+      "size_bytes": 4534,
+      "modified_utc": "2025-11-11T12:06:51.981977+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2727,7 +3452,14 @@
         }
       ],
       "links": [],
-      "description": "Surface how logging statements propagate through the codebase so maintainers can gauge observability coverage, highlight logging hot spots, and verify that critical code paths emit the expected log levels."
+      "description": "Surface how logging statements propagate through the codebase so maintainers can gauge observability coverage, highlight logging hot spots, and verify that critical code paths emit the expected log levels.",
+      "size_bytes": 4543,
+      "modified_utc": "2025-11-09T22:40:49.131670+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2792,7 +3524,14 @@
         }
       ],
       "links": [],
-      "description": "Render class-focused method call chains as a Mermaid sequence diagram so operators can inspect orchestrated method hops, confirm delegation boundaries, and spot cross-class fan-out without manually walking the full call graph."
+      "description": "Render class-focused method call chains as a Mermaid sequence diagram so operators can inspect orchestrated method hops, confirm delegation boundaries, and spot cross-class fan-out without manually walking the full call graph.",
+      "size_bytes": 5108,
+      "modified_utc": "2025-11-12T01:21:25.043349+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2807,7 +3546,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": "graph LR classDef module ... classDef moduleCaution ... classDef moduleAlert ... classDef moduleOrphan ... alpha_core[\"alpha.core\\nFunctions 5\\nOut 3 (4) \u00b7 In 1 (2)\\nUnused imports 1\"] class alpha_core moduleCaution; alpha_core -->|2\u2026"
+      "description": "graph LR classDef module ... classDef moduleCaution ... classDef moduleAlert ... classDef moduleOrphan ... alpha_core[\"alpha.core\\nFunctions 5\\nOut 3 (4) \u00b7 In 1 (2)\\nUnused imports 1\"] class alpha_core moduleCaution; alpha_core -->|2\u2026",
+      "size_bytes": 4493,
+      "modified_utc": "2025-11-10T17:21:33.634574+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2816,7 +3562,14 @@
       "h1_headings": [],
       "h2_headings": [],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 5197,
+      "modified_utc": "2025-11-12T17:58:50.934758+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2874,7 +3627,14 @@
         }
       ],
       "links": [],
-      "description": "Render a chronological view of Command Center screening scores so reviewers can see when inventories crossed warning or failure thresholds. The timeline should highlight meaningful score deltas, threshold crossings, and streaks to guide\u2026"
+      "description": "Render a chronological view of Command Center screening scores so reviewers can see when inventories crossed warning or failure thresholds. The timeline should highlight meaningful score deltas, threshold crossings, and streaks to guide\u2026",
+      "size_bytes": 3331,
+      "modified_utc": "2025-11-08T22:44:05.280184+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -2939,7 +3699,14 @@
         }
       ],
       "links": [],
-      "description": "Surface where automated tests touch the codebase by connecting modules, representative low-coverage functions, and the tests exercising them. The view helps auditors spot modules lacking tests, highlight partially covered functions, and\u2026"
+      "description": "Surface where automated tests touch the codebase by connecting modules, representative low-coverage functions, and the tests exercising them. The view helps auditors spot modules lacking tests, highlight partially covered functions, and\u2026",
+      "size_bytes": 5088,
+      "modified_utc": "2025-11-13T11:50:20.803023+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/mermaid/view_specs",
@@ -3004,7 +3771,14 @@
         }
       ],
       "links": [],
-      "description": "Highlight type hint adoption across functions in a CommandView artifact by clustering functions into coverage strength buckets. The view gives maintainers a quick read on where type annotations are strong, moderate, weak, or missing\u2026"
+      "description": "Highlight type hint adoption across functions in a CommandView artifact by clustering functions into coverage strength buckets. The view gives maintainers a quick read on where type annotations are strong, moderate, weak, or missing\u2026",
+      "size_bytes": 4405,
+      "modified_utc": "2025-11-09T14:42:20.042563+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/metrics",
@@ -3055,7 +3829,14 @@
         }
       ],
       "links": [],
-      "description": "1. **Refresh artifacts:** After each remediation batch, rerun the command-center pipeline for the affected target so the duplicate matrix reflects the new baseline. 2. **Update run log:** Append a run entry using the template in\u2026"
+      "description": "1. **Refresh artifacts:** After each remediation batch, rerun the command-center pipeline for the affected target so the duplicate matrix reflects the new baseline. 2. **Update run log:** Append a run entry using the template in\u2026",
+      "size_bytes": 4796,
+      "modified_utc": "2025-11-04T14:15:56.326050+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/metrics",
@@ -3092,7 +3873,14 @@
         }
       ],
       "links": [],
-      "description": "Define the JSON payload emitted alongside Phase 4 automation manifests so operators and reporting jobs can reason about impact, runtime, and test coverage in a consistent format."
+      "description": "Define the JSON payload emitted alongside Phase 4 automation manifests so operators and reporting jobs can reason about impact, runtime, and test coverage in a consistent format.",
+      "size_bytes": 2261,
+      "modified_utc": "2025-11-04T14:15:56.479204+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/metrics",
@@ -3164,7 +3952,14 @@
         }
       ],
       "links": [],
-      "description": "Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance."
+      "description": "Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.",
+      "size_bytes": 5193,
+      "modified_utc": "2025-11-04T14:45:22.715420+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs",
@@ -3299,7 +4094,14 @@
         }
       ],
       "links": [],
-      "description": "This guide trains agents on how to interpret, enforce, and validate naming conventions inside `.repo_studios/library`. Use it as an operational playbook, not just a reference."
+      "description": "This guide trains agents on how to interpret, enforce, and validate naming conventions inside `.repo_studios/library`. Use it as an operational playbook, not just a reference.",
+      "size_bytes": 12668,
+      "modified_utc": "2025-11-06T09:44:23.975246+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_4",
@@ -3371,7 +4173,14 @@
         }
       ],
       "links": [],
-      "description": "Deliver a vetted blueprint for automated duplicate extraction that adheres to Phase 3 guardrails, maintains auditability, and minimizes regression risk. Implementation remains manual until this brief is approved."
+      "description": "Deliver a vetted blueprint for automated duplicate extraction that adheres to Phase 3 guardrails, maintains auditability, and minimizes regression risk. Implementation remains manual until this brief is approved.",
+      "size_bytes": 20578,
+      "modified_utc": "2025-11-04T14:29:02.460996+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_4",
@@ -3450,7 +4259,14 @@
         }
       ],
       "links": [],
-      "description": "Provide a consistent, scriptable way to inventory which Repo Studios scripts import shared command center helpers so we can monitor adoption progress during Phase 4 and prepare for automated enforcement. The CLI replaces the ad-hoc\u2026"
+      "description": "Provide a consistent, scriptable way to inventory which Repo Studios scripts import shared command center helpers so we can monitor adoption progress during Phase 4 and prepare for automated enforcement. The CLI replaces the ad-hoc\u2026",
+      "size_bytes": 5459,
+      "modified_utc": "2025-11-08T23:02:05.500300+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_4",
@@ -3487,7 +4303,14 @@
         }
       ],
       "links": [],
-      "description": "Applies to every Phase 4 automation dry-run or write-run. Operators should execute the suites below immediately after the automation step completes and record the results in the PR checklist."
+      "description": "Applies to every Phase 4 automation dry-run or write-run. Operators should execute the suites below immediately after the automation step completes and record the results in the PR checklist.",
+      "size_bytes": 2616,
+      "modified_utc": "2025-11-04T14:15:52.461168+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_4",
@@ -3545,7 +4368,14 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 3579,
+      "modified_utc": "2025-11-04T14:29:02.463000+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_4/dry_run_samples",
@@ -3560,7 +4390,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": "These fixtures seed the Phase 4 automation dry-run rehearsals."
+      "description": "These fixtures seed the Phase 4 automation dry-run rehearsals.",
+      "size_bytes": 620,
+      "modified_utc": "2025-11-04T14:15:52.700940+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_5",
@@ -3653,7 +4490,14 @@
         }
       ],
       "links": [],
-      "description": "Outline the proposed `make` targets that will eventually wrap the command center orchestration and automation rehearsals without implementing any code changes yet. This design preserves auditability, mirrors the reference plan naming\u2026"
+      "description": "Outline the proposed `make` targets that will eventually wrap the command center orchestration and automation rehearsals without implementing any code changes yet. This design preserves auditability, mirrors the reference plan naming\u2026",
+      "size_bytes": 11994,
+      "modified_utc": "2025-11-04T14:29:02.463000+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_6",
@@ -3704,7 +4548,14 @@
         }
       ],
       "links": [],
-      "description": "1. **Guardrail alignment:** Existing prompts reference local-only execution, minimal diffs, and validator reporting; they do not mention command center guardrails (duplicate retention, lock checks, `max_files_per_run`). 2. **Command center\u2026"
+      "description": "1. **Guardrail alignment:** Existing prompts reference local-only execution, minimal diffs, and validator reporting; they do not mention command center guardrails (duplicate retention, lock checks, `max_files_per_run`). 2. **Command center\u2026",
+      "size_bytes": 2145,
+      "modified_utc": "2025-11-04T14:15:53.173199+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_6",
@@ -3741,7 +4592,14 @@
         }
       ],
       "links": [],
-      "description": "1. **Draft Preparation**"
+      "description": "1. **Draft Preparation**",
+      "size_bytes": 1907,
+      "modified_utc": "2025-11-04T14:45:22.717422+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_6",
@@ -3806,7 +4664,14 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 2239,
+      "modified_utc": "2025-11-04T14:45:22.717422+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_6",
@@ -3836,7 +4701,14 @@
         }
       ],
       "links": [],
-      "description": "1. Inject command center entry point and guardrail reminders into `session_primer`, `guardrails`, and bundle prompts. 2. Add documentation and evidence logging guidance to `update_docs` and `bundle_review` to align with Phase 4/5\u2026"
+      "description": "1. Inject command center entry point and guardrail reminders into `session_primer`, `guardrails`, and bundle prompts. 2. Add documentation and evidence logging guidance to `update_docs` and `bundle_review` to align with Phase 4/5\u2026",
+      "size_bytes": 2942,
+      "modified_utc": "2025-11-04T14:15:53.527503+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_6",
@@ -3880,7 +4752,14 @@
         }
       ],
       "links": [],
-      "description": "1. Identify the last known good version (e.g., v1.2.0) via Git history and documented metadata. 2. Revert `repo_prompts.md` to the prior version using Git (`git checkout <commit> -- repo_prompts.md`) and increment version metadata with a\u2026"
+      "description": "1. Identify the last known good version (e.g., v1.2.0) via Git history and documented metadata. 2. Revert `repo_prompts.md` to the prior version using Git (`git checkout <commit> -- repo_prompts.md`) and increment version metadata with a\u2026",
+      "size_bytes": 1705,
+      "modified_utc": "2025-11-04T14:45:22.718420+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_6",
@@ -3910,7 +4789,14 @@
         }
       ],
       "links": [],
-      "description": "1. **Duplicate Remediation Kickoff**"
+      "description": "1. **Duplicate Remediation Kickoff**",
+      "size_bytes": 2491,
+      "modified_utc": "2025-11-04T14:15:53.865969+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_6",
@@ -3933,7 +4819,14 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 1207,
+      "modified_utc": "2025-11-04T14:15:54.005985+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_6/validation_runs",
@@ -3970,7 +4863,14 @@
         }
       ],
       "links": [],
-      "description": "1. Summarized edits: `scripts/aggregators/scan_duplicates.py` guardrail tweak and `docs/command_center/remediation_brief.md` note added; both reduce duplicate drift and clarify evidence capture. 2. Quality gates: Lint/Typecheck N/A; Unit\u2026"
+      "description": "1. Summarized edits: `scripts/aggregators/scan_duplicates.py` guardrail tweak and `docs/command_center/remediation_brief.md` note added; both reduce duplicate drift and clarify evidence capture. 2. Quality gates: Lint/Typecheck N/A; Unit\u2026",
+      "size_bytes": 2109,
+      "modified_utc": "2025-11-04T14:45:22.721421+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_6/validation_runs",
@@ -4007,7 +4907,14 @@
         }
       ],
       "links": [],
-      "description": "1. Summary: Updated `scan_duplicates.py` guardrail prompts, refreshed `automation_manifest-20251104_181500/`, and added guardrail bullet to documentation; impact reduces duplicate drift and clarifies evidence capture. 2. Verification:\u2026"
+      "description": "1. Summary: Updated `scan_duplicates.py` guardrail prompts, refreshed `automation_manifest-20251104_181500/`, and added guardrail bullet to documentation; impact reduces duplicate drift and clarifies evidence capture. 2. Verification:\u2026",
+      "size_bytes": 2036,
+      "modified_utc": "2025-11-04T14:15:54.514396+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_6/validation_runs",
@@ -4044,7 +4951,14 @@
         }
       ],
       "links": [],
-      "description": "1. Reviewed `.repo_studios/command_center/README.md#guardrails` to refresh duplicate remediation constraints and automation evidence requirements. 2. Ran `make command-center-check-locks` \u2192 `RUN_LOCK_STATUS: clear` to confirm no active\u2026"
+      "description": "1. Reviewed `.repo_studios/command_center/README.md#guardrails` to refresh duplicate remediation constraints and automation evidence requirements. 2. Ran `make command-center-check-locks` \u2192 `RUN_LOCK_STATUS: clear` to confirm no active\u2026",
+      "size_bytes": 1846,
+      "modified_utc": "2025-11-04T14:45:22.722420+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_6/validation_runs",
@@ -4081,7 +4995,14 @@
         }
       ],
       "links": [],
-      "description": "1. Reviewed `.repo_studios/command_center/README.md#documentation-updates` to confirm required cross-links and formatting constraints before editing. 2. Proposed change: add a bullet under \"Automation Evidence\" noting manifest + metrics\u2026"
+      "description": "1. Reviewed `.repo_studios/command_center/README.md#documentation-updates` to confirm required cross-links and formatting constraints before editing. 2. Proposed change: add a bullet under \"Automation Evidence\" noting manifest + metrics\u2026",
+      "size_bytes": 1474,
+      "modified_utc": "2025-11-04T14:29:02.467513+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_7",
@@ -4139,7 +5060,14 @@
         }
       ],
       "links": [],
-      "description": "1. **Observation (Weeks 1\u20132)**"
+      "description": "1. **Observation (Weeks 1\u20132)**",
+      "size_bytes": 4207,
+      "modified_utc": "2025-11-23T20:48:09.158067+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_7",
@@ -4154,7 +5082,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": "Document transitions from warning to blocking enforcement for new guardrail workflows. Record every run used to validate thresholds so reviewers can audit readiness decisions."
+      "description": "Document transitions from warning to blocking enforcement for new guardrail workflows. Record every run used to validate thresholds so reviewers can audit readiness decisions.",
+      "size_bytes": 1042,
+      "modified_utc": "2025-11-24T23:59:30.979170+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_7",
@@ -4240,7 +5175,14 @@
         }
       ],
       "links": [],
-      "description": "Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in `utilities.test_log_analysis` and emit\u2026"
+      "description": "Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in `utilities.test_log_analysis` and emit\u2026",
+      "size_bytes": 6040,
+      "modified_utc": "2025-11-23T23:22:54.838677+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_7",
@@ -4298,7 +5240,14 @@
         }
       ],
       "links": [],
-      "description": "1. **Detection**"
+      "description": "1. **Detection**",
+      "size_bytes": 2694,
+      "modified_utc": "2025-11-04T14:45:22.719421+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_7",
@@ -4363,7 +5312,14 @@
         }
       ],
       "links": [],
-      "description": "1. **Pre-run snapshot**: Export duplicate matrix and metrics summary pointers before starting remediation. 2. **Remediation run**: Execute manual or automated extraction while capturing manifest and metrics summary artifacts. 3. **Post-run\u2026"
+      "description": "1. **Pre-run snapshot**: Export duplicate matrix and metrics summary pointers before starting remediation. 2. **Remediation run**: Execute manual or automated extraction while capturing manifest and metrics summary artifacts. 3. **Post-run\u2026",
+      "size_bytes": 6519,
+      "modified_utc": "2025-11-04T14:45:22.720423+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_7",
@@ -4470,7 +5426,14 @@
         }
       ],
       "links": [],
-      "description": "The `studio-scan-code-placeholders` producer currently reports 1,175 unresolved placeholder markers (0 allowlisted). CI gating remains disabled to avoid noisy build failures. This plan defines the remediation path required to reduce\u2026"
+      "description": "The `studio-scan-code-placeholders` producer currently reports 1,175 unresolved placeholder markers (0 allowlisted). CI gating remains disabled to avoid noisy build failures. This plan defines the remediation path required to reduce\u2026",
+      "size_bytes": 10691,
+      "modified_utc": "2025-11-24T23:59:30.979170+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_7",
@@ -4485,7 +5448,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": "This document now lives with the baseline automation guides at:"
+      "description": "This document now lives with the baseline automation guides at:",
+      "size_bytes": 270,
+      "modified_utc": "2025-11-24T14:58:19.684270+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_7",
@@ -4543,7 +5513,14 @@
         }
       ],
       "links": [],
-      "description": "1. **Weighted Progress Briefing**"
+      "description": "1. **Weighted Progress Briefing**",
+      "size_bytes": 2974,
+      "modified_utc": "2025-11-04T14:15:55.276656+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_7",
@@ -4594,7 +5571,14 @@
         }
       ],
       "links": [],
-      "description": "1. Document retention rules in `.repo_studios/command_center/README.md` and guardrail doc. 2. Update automation manifest CLI to hook pruning step after artifact write. 3. Add housekeeping Make target (`command-center-prune-artifacts`)\u2026"
+      "description": "1. Document retention rules in `.repo_studios/command_center/README.md` and guardrail doc. 2. Update automation manifest CLI to hook pruning step after artifact write. 3. Add housekeeping Make target (`command-center-prune-artifacts`)\u2026",
+      "size_bytes": 2632,
+      "modified_utc": "2025-11-04T14:15:55.420232+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs/phase_7",
@@ -4645,7 +5629,14 @@
         }
       ],
       "links": [],
-      "description": "1. Continue weekly monitoring in warning mode through at least 2025-12-08. 1. Begin assembling the blocking review packet after the third clean run. 1. Schedule the Standards Guild + Dev Productivity readiness review for week 4."
+      "description": "1. Continue weekly monitoring in warning mode through at least 2025-12-08. 1. Begin assembling the blocking review packet after the third clean run. 1. Schedule the Standards Guild + Dev Productivity readiness review for week 4.",
+      "size_bytes": 1990,
+      "modified_utc": "2025-11-24T23:59:30.988190+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/docs",
@@ -4703,7 +5694,14 @@
         }
       ],
       "links": [],
-      "description": "Add or remove rows as needed to reflect the actual functions addressed."
+      "description": "Add or remove rows as needed to reflect the actual functions addressed.",
+      "size_bytes": 2406,
+      "modified_utc": "2025-10-28T21:57:52.001815+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs",
@@ -4733,7 +5731,14 @@
         }
       ],
       "links": [],
-      "description": "make -C .repo_studios command-center COMMAND_CENTER_TARGET=[target] PYTHON=.venv/Scripts/python.exe [additional commands]"
+      "description": "make -C .repo_studios command-center COMMAND_CENTER_TARGET=[target] PYTHON=.venv/Scripts/python.exe [additional commands]",
+      "size_bytes": 2161,
+      "modified_utc": "2025-10-30T20:01:02.588368+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/command_center/scripts",
@@ -4748,7 +5753,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 1523,
+      "modified_utc": "2025-10-25T14:43:05.753999+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/scripts/scripts_index",
@@ -4792,7 +5804,14 @@
         }
       ],
       "links": [],
-      "description": "1. `configure_logging` \u2014 12 duplicate(s)"
+      "description": "1. `configure_logging` \u2014 12 duplicate(s)",
+      "size_bytes": 7126,
+      "modified_utc": "2025-11-24T23:38:11.764488+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/viewer",
@@ -4888,7 +5907,14 @@
         "http://localhost:8000/.repo_studios/command_center/viewer/ui/",
         "http://localhost:8000/"
       ],
-      "description": "A modern VS Code-styled progressive detail viewer for CommandView artifacts."
+      "description": "A modern VS Code-styled progressive detail viewer for CommandView artifacts.",
+      "size_bytes": 8558,
+      "modified_utc": "2025-11-23T11:14:18.336713+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/viewer",
@@ -4974,7 +6000,14 @@
         }
       ],
       "links": [],
-      "description": "The Screening Signal Timeline feature has been implemented and regression tests are passing. This guide will help you verify the end-to-end functionality in the browser."
+      "description": "The Screening Signal Timeline feature has been implemented and regression tests are passing. This guide will help you verify the end-to-end functionality in the browser.",
+      "size_bytes": 8701,
+      "modified_utc": "2025-11-08T23:00:23.526480+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/viewer",
@@ -5039,7 +6072,14 @@
         }
       ],
       "links": [],
-      "description": "1. **Open the diagnostic page**: http://127.0.0.1:8000/.repo_studios/command_center/viewer/ui/diagnostic.html 2. **Click \"Run All Tests\"** to verify configuration and network connectivity 3. **Check browser console** (F12) for detailed\u2026"
+      "description": "1. **Open the diagnostic page**: http://127.0.0.1:8000/.repo_studios/command_center/viewer/ui/diagnostic.html 2. **Click \"Run All Tests\"** to verify configuration and network connectivity 3. **Check browser console** (F12) for detailed\u2026",
+      "size_bytes": 6412,
+      "modified_utc": "2025-11-07T17:36:20.424796+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/viewer",
@@ -5111,7 +6151,14 @@
         }
       ],
       "links": [],
-      "description": "When switching between CommandView artifacts or changing zoom levels, the active View Pack selection was being reset to the default \"Function Inventory Overview\" instead of maintaining the user's last selected view."
+      "description": "When switching between CommandView artifacts or changing zoom levels, the active View Pack selection was being reset to the default \"Function Inventory Overview\" instead of maintaining the user's last selected view.",
+      "size_bytes": 4144,
+      "modified_utc": "2025-11-09T14:10:49.671386+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/viewer",
@@ -5218,7 +6265,14 @@
         }
       ],
       "links": [],
-      "description": "The viewer's wiring and plumbing have been traced end-to-end. All critical paths are properly connected with comprehensive logging in place. The system follows a clean data flow from initialization through user interaction."
+      "description": "The viewer's wiring and plumbing have been traced end-to-end. All critical paths are properly connected with comprehensive logging in place. The system follows a clean data flow from initialization through user interaction.",
+      "size_bytes": 14866,
+      "modified_utc": "2025-11-08T23:00:21.109311+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/viewer/cache",
@@ -5233,7 +6287,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": "Temporary `.mmd` artifacts generated for manual debugging belong in this directory. Use `write_mermaid_cache.py` to create or refresh cached diagrams:"
+      "description": "Temporary `.mmd` artifacts generated for manual debugging belong in this directory. Use `write_mermaid_cache.py` to create or refresh cached diagrams:",
+      "size_bytes": 492,
+      "modified_utc": "2025-11-08T23:01:49.217319+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/viewer",
@@ -5347,7 +6408,14 @@
         }
       ],
       "links": [],
-      "description": "The viewer load path from HTML bootstrap through data normalization and rendering has been revalidated against the current `viewer/ui` sources. Configuration defaults, selector discovery, artifact loading, and rendering all operate as\u2026"
+      "description": "The viewer load path from HTML bootstrap through data normalization and rendering has been revalidated against the current `viewer/ui` sources. Configuration defaults, selector discovery, artifact loading, and rendering all operate as\u2026",
+      "size_bytes": 10429,
+      "modified_utc": "2025-11-08T23:01:54.913598+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs",
@@ -5454,7 +6522,14 @@
         }
       ],
       "links": [],
-      "description": "Repo Studios is a **preventative infrastructure template** designed to eliminate entire classes of technical debt before they can form. It encodes hard-won lessons from the Jarvis Project into reusable, AI-optimized tooling that transforms\u2026"
+      "description": "Repo Studios is a **preventative infrastructure template** designed to eliminate entire classes of technical debt before they can form. It encodes hard-won lessons from the Jarvis Project into reusable, AI-optimized tooling that transforms\u2026",
+      "size_bytes": 17528,
+      "modified_utc": "2025-10-24T16:47:03.308768+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -5512,7 +6587,14 @@
         }
       ],
       "links": [],
-      "description": "`analyze_test_hardening.py` inspects repository test modules for maintainability risks such as missing assertions, vague test names, excessive length, global state usage, and reliance on `time.sleep()`. The producer emits structured\u2026"
+      "description": "`analyze_test_hardening.py` inspects repository test modules for maintainability risks such as missing assertions, vague test names, excessive length, global state usage, and reliance on `time.sleep()`. The producer emits structured\u2026",
+      "size_bytes": 3455,
+      "modified_utc": "2025-10-24T10:37:09.893282+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -5556,7 +6638,14 @@
         }
       ],
       "links": [],
-      "description": "Last updated: 2025-10-18"
+      "description": "Last updated: 2025-10-18",
+      "size_bytes": 2331,
+      "modified_utc": "2025-10-21T12:02:58.657326+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -5614,7 +6703,14 @@
         }
       ],
       "links": [],
-      "description": "`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,\u2026"
+      "description": "`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,\u2026",
+      "size_bytes": 4095,
+      "modified_utc": "2025-11-24T00:04:56.269286+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -5672,7 +6768,14 @@
         }
       ],
       "links": [],
-      "description": "`collect_test_log_reports.py` converts raw pytest log runs into structured artifacts that downstream consumers and dashboards can reuse without reparsing warning blocks or slow-test sections. The producer leverages\u2026"
+      "description": "`collect_test_log_reports.py` converts raw pytest log runs into structured artifacts that downstream consumers and dashboards can reuse without reparsing warning blocks or slow-test sections. The producer leverages\u2026",
+      "size_bytes": 4176,
+      "modified_utc": "2025-11-24T00:04:56.272246+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -5730,7 +6833,14 @@
         }
       ],
       "links": [],
-      "description": "`diff_standards_index.py` compares two standards index YAML snapshots (typically the baseline catalog and a regenerated proposal) and produces structured artifacts that highlight rule-level changes. Summaries classify per-rule deltas\u2026"
+      "description": "`diff_standards_index.py` compares two standards index YAML snapshots (typically the baseline catalog and a regenerated proposal) and produces structured artifacts that highlight rule-level changes. Summaries classify per-rule deltas\u2026",
+      "size_bytes": 4388,
+      "modified_utc": "2025-10-23T00:14:57.649053+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -5788,7 +6898,14 @@
         }
       ],
       "links": [],
-      "description": "`extract_standards_rules.py` parses curated markdown sources for guardrail rules that enrich the standards index build. It gathers candidate rules from dedicated HTML marker blocks and heading conventions, normalizes their metadata\u2026"
+      "description": "`extract_standards_rules.py` parses curated markdown sources for guardrail rules that enrich the standards index build. It gathers candidate rules from dedicated HTML marker blocks and heading conventions, normalizes their metadata\u2026",
+      "size_bytes": 4451,
+      "modified_utc": "2025-10-23T11:45:54.459576+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -5846,7 +6963,14 @@
         }
       ],
       "links": [],
-      "description": "This guide explains how to interpret the JSON companion analysis produced by `.repo_studios/scripts/producers/generate_function_analysis.py`. The analysis consumes the structural inventory generated by `generate_commandview_inventory.py`\u2026"
+      "description": "This guide explains how to interpret the JSON companion analysis produced by `.repo_studios/scripts/producers/generate_function_analysis.py`. The analysis consumes the structural inventory generated by `generate_commandview_inventory.py`\u2026",
+      "size_bytes": 4467,
+      "modified_utc": "2025-11-06T09:42:53.626079+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -5918,7 +7042,14 @@
         }
       ],
       "links": [],
-      "description": "This living checklist captures the sequential work required to integrate the Jarvis Function Inventory System into Repo Studios. We will refine and approve these steps before implementation."
+      "description": "This living checklist captures the sequential work required to integrate the Jarvis Function Inventory System into Repo Studios. We will refine and approve these steps before implementation.",
+      "size_bytes": 19430,
+      "modified_utc": "2025-11-08T23:02:25.037373+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -5976,7 +7107,14 @@
         }
       ],
       "links": [],
-      "description": "`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally\u2026"
+      "description": "`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally\u2026",
+      "size_bytes": 3898,
+      "modified_utc": "2025-10-22T23:47:19.955116+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -6007,34 +7145,41 @@
         {
           "title": "Data Shape",
           "slug": "data-shape",
-          "line": 28,
+          "line": 31,
           "parent_title": "generate_doc_index.py",
           "parent_slug": "generatedocindexpy"
         },
         {
           "title": "CLI Reference",
           "slug": "cli-reference",
-          "line": 47,
+          "line": 55,
           "parent_title": "generate_doc_index.py",
           "parent_slug": "generatedocindexpy"
         },
         {
           "title": "Implementation Summary",
           "slug": "implementation-summary",
-          "line": 60,
+          "line": 68,
           "parent_title": "generate_doc_index.py",
           "parent_slug": "generatedocindexpy"
         },
         {
           "title": "Notes for AI Consumers",
           "slug": "notes-for-ai-consumers",
-          "line": 76,
+          "line": 84,
           "parent_title": "generate_doc_index.py",
           "parent_slug": "generatedocindexpy"
         }
       ],
       "links": [],
-      "description": "`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem. The producer normalises H1/H2\u2026"
+      "description": "`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem. The producer normalises H1/H2\u2026",
+      "size_bytes": 4844,
+      "modified_utc": "2025-11-25T03:00:52.637362+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -6092,7 +7237,14 @@
         }
       ],
       "links": [],
-      "description": "`generate_lizard_report.py` runs `python -m lizard` across the owned source tree, captures the JSON output, and emits structured artifacts so downstream agents can track cyclomatic complexity hotspots and long functions. It is designed to\u2026"
+      "description": "`generate_lizard_report.py` runs `python -m lizard` across the owned source tree, captures the JSON output, and emits structured artifacts so downstream agents can track cyclomatic complexity hotspots and long functions. It is designed to\u2026",
+      "size_bytes": 4795,
+      "modified_utc": "2025-10-22T21:38:16.995302+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -6150,7 +7302,14 @@
         }
       ],
       "links": [],
-      "description": "`generate_standards_index.py` assembles the canonical `repo_standards_index.yaml` by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a structured artifact bundle\u2026"
+      "description": "`generate_standards_index.py` assembles the canonical `repo_standards_index.yaml` by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a structured artifact bundle\u2026",
+      "size_bytes": 5095,
+      "modified_utc": "2025-10-23T01:16:24.453566+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -6208,7 +7367,14 @@
         }
       ],
       "links": [],
-      "description": "`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered. The producer emits JSON, Markdown, CSV,\u2026"
+      "description": "`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered. The producer emits JSON, Markdown, CSV,\u2026",
+      "size_bytes": 4223,
+      "modified_utc": "2025-11-23T12:12:27.820382+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -6245,7 +7411,14 @@
         }
       ],
       "links": [],
-      "description": "The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and captures a structured set of artifacts for observability."
+      "description": "The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and captures a structured set of artifacts for observability.",
+      "size_bytes": 1895,
+      "modified_utc": "2025-10-23T02:03:40.458715+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -6268,7 +7441,14 @@
         }
       ],
       "links": [],
-      "description": "This reference captures the current run surfaces, automation wiring, and success criteria for the Repo Studios orchestrator tier. Record changes here before altering orchestrator code so downstream automation stays aligned with expected\u2026"
+      "description": "This reference captures the current run surfaces, automation wiring, and success criteria for the Repo Studios orchestrator tier. Record changes here before altering orchestrator code so downstream automation stays aligned with expected\u2026",
+      "size_bytes": 2487,
+      "modified_utc": "2025-11-24T18:55:36.604719+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -6326,7 +7506,14 @@
         }
       ],
       "links": [],
-      "description": "Legend: \u2713 complete, \ud83d\udd04 in-progress research, \ud83d\udea7 blocked by dependencies, \u26a0\ufe0f risk, \ud83d\udccc planned decision, \u2753 unanswered question, \ud83d\udca4 deferred."
+      "description": "Legend: \u2713 complete, \ud83d\udd04 in-progress research, \ud83d\udea7 blocked by dependencies, \u26a0\ufe0f risk, \ud83d\udccc planned decision, \u2753 unanswered question, \ud83d\udca4 deferred.",
+      "size_bytes": 8675,
+      "modified_utc": "2025-10-24T17:35:53.640323+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -6363,7 +7550,14 @@
         }
       ],
       "links": [],
-      "description": "The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation."
+      "description": "The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation.",
+      "size_bytes": 2019,
+      "modified_utc": "2025-10-23T09:50:23.539274+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -6428,7 +7622,14 @@
         }
       ],
       "links": [],
-      "description": "`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved\u2026"
+      "description": "`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved\u2026",
+      "size_bytes": 6420,
+      "modified_utc": "2025-11-25T00:22:28.965573+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -6486,7 +7687,14 @@
         }
       ],
       "links": [],
-      "description": "`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and\u2026"
+      "description": "`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and\u2026",
+      "size_bytes": 5224,
+      "modified_utc": "2025-11-23T22:11:45.717043+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -6544,7 +7752,14 @@
         }
       ],
       "links": [],
-      "description": "`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can\u2026"
+      "description": "`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can\u2026",
+      "size_bytes": 3752,
+      "modified_utc": "2025-10-23T18:08:31.195120+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -6679,7 +7894,39 @@
         }
       ],
       "links": [],
-      "description": "Defines deterministic heuristic pipeline converting Markdown standards sources into normalized `rule` objects prior to overrides."
+      "description": "Defines deterministic heuristic pipeline converting Markdown standards sources into normalized `rule` objects prior to overrides.",
+      "size_bytes": 6217,
+      "modified_utc": "2025-10-21T12:02:58.658325+00:00",
+      "tags": [
+        "standards",
+        "automation",
+        "extraction"
+      ],
+      "owners": [
+        "repo_studios_ai"
+      ],
+      "status": "draft",
+      "frontmatter": {
+        "title": "Standards Rule Extraction Specification",
+        "audience": [
+          "coding_agent",
+          "automation_engineer"
+        ],
+        "owners": [
+          "repo_studios_ai"
+        ],
+        "status": "draft",
+        "version": "0.2.0",
+        "updated": "2025-10-18",
+        "summary": "Deterministic pipeline for extracting actionable rule objects from Markdown standards sources prior to overrides.",
+        "tags": [
+          "standards",
+          "automation",
+          "extraction"
+        ],
+        "legacy_source": ".repo_studios_legacy/repo_docs/standards_extraction_spec.md"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -6786,7 +8033,39 @@
         }
       ],
       "links": [],
-      "description": "This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows."
+      "description": "This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.",
+      "size_bytes": 5239,
+      "modified_utc": "2025-10-21T12:02:58.658325+00:00",
+      "tags": [
+        "standards",
+        "schema",
+        "automation"
+      ],
+      "owners": [
+        "repo_studios_ai"
+      ],
+      "status": "draft",
+      "frontmatter": {
+        "title": "Standards Index Schema Specification",
+        "audience": [
+          "coding_agent",
+          "automation_engineer"
+        ],
+        "owners": [
+          "repo_studios_ai"
+        ],
+        "status": "draft",
+        "version": "0.2.0",
+        "updated": "2025-10-18",
+        "summary": "Schema contract for `repo_standards_index.yaml`, detailing the deterministic structure consumed by Repo Studios automation and agents.",
+        "tags": [
+          "standards",
+          "schema",
+          "automation"
+        ],
+        "legacy_source": ".repo_studios_legacy/repo_docs/standards_index_schema.md"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation/traceability",
@@ -6830,7 +8109,14 @@
         }
       ],
       "links": [],
-      "description": "1. **Monkey Patch Trends** _(modernization complete \u2014 reference plan: `.repo_studios/docs/automation/traceability/analyze_monkey_patch_trends_modernization_plan.md`)_"
+      "description": "1. **Monkey Patch Trends** _(modernization complete \u2014 reference plan: `.repo_studios/docs/automation/traceability/analyze_monkey_patch_trends_modernization_plan.md`)_",
+      "size_bytes": 3390,
+      "modified_utc": "2025-11-24T17:47:49.125843+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation/traceability",
@@ -6895,7 +8181,14 @@
         }
       ],
       "links": [],
-      "description": "Retool `.repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py` so it ingests the hardened consumer risk summaries, retains provenance, and publishes history-managed artifacts under the aggregator reports hierarchy."
+      "description": "Retool `.repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py` so it ingests the hardened consumer risk summaries, retains provenance, and publishes history-managed artifacts under the aggregator reports hierarchy.",
+      "size_bytes": 4888,
+      "modified_utc": "2025-11-24T18:09:28.195246+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation/traceability",
@@ -6960,7 +8253,14 @@
         }
       ],
       "links": [],
-      "description": "Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing."
+      "description": "Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",
+      "size_bytes": 5560,
+      "modified_utc": "2025-11-24T17:47:49.125843+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation/traceability",
@@ -7011,7 +8311,14 @@
         }
       ],
       "links": [],
-      "description": "1. Treat the four hardened consumer bundles as the canonical inputs for upcoming aggregator rewires; aggregators should ingest the consumer summary JSON (`summary.json`, `anchor_report.json`, `bundle_summary.json`, `RISK_SUMMARY.json`)\u2026"
+      "description": "1. Treat the four hardened consumer bundles as the canonical inputs for upcoming aggregator rewires; aggregators should ingest the consumer summary JSON (`summary.json`, `anchor_report.json`, `bundle_summary.json`, `RISK_SUMMARY.json`)\u2026",
+      "size_bytes": 7719,
+      "modified_utc": "2025-11-25T00:58:05.672960+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/docs/automation/traceability",
@@ -7083,7 +8390,14 @@
         }
       ],
       "links": [],
-      "description": "Existing tables below retain the pre-modernization snapshot for historical context."
+      "description": "Existing tables below retain the pre-modernization snapshot for historical context.",
+      "size_bytes": 5364,
+      "modified_utc": "2025-11-24T18:55:36.604719+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -7141,7 +8455,14 @@
         }
       ],
       "links": [],
-      "description": "`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level\u2026"
+      "description": "`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level\u2026",
+      "size_bytes": 3680,
+      "modified_utc": "2025-10-23T20:46:06.804068+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -7178,7 +8499,14 @@
         }
       ],
       "links": [],
-      "description": "The `validate_inventory.py` producer walks the inventory catalog, enforces schema conventions, and writes structured validation bundles for downstream tooling."
+      "description": "The `validate_inventory.py` producer walks the inventory catalog, enforces schema conventions, and writes structured validation bundles for downstream tooling.",
+      "size_bytes": 1882,
+      "modified_utc": "2025-10-23T11:18:26.650942+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -7236,7 +8564,14 @@
         }
       ],
       "links": [],
-      "description": "`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and\u2026"
+      "description": "`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and\u2026",
+      "size_bytes": 3046,
+      "modified_utc": "2025-11-23T19:36:19.831021+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -7294,7 +8629,14 @@
         }
       ],
       "links": [],
-      "description": "`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry. The refactor emits structured artifacts\u2026"
+      "description": "`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry. The refactor emits structured artifacts\u2026",
+      "size_bytes": 3140,
+      "modified_utc": "2025-10-23T23:24:42.780107+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/automation",
@@ -7345,7 +8687,14 @@
         }
       ],
       "links": [],
-      "description": "`verify_docs_integrity.py` audits governed documentation JSON blocks to ensure each fenced payload exposes a stable `content_hash`. The script also refreshes the navigation table contained in `docs/standards/docs_index.md` unless `--no-\u2026"
+      "description": "`verify_docs_integrity.py` audits governed documentation JSON blocks to ensure each fenced payload exposes a stable `content_hash`. The script also refreshes the navigation table contained in `docs/standards/docs_index.md` unless `--no-\u2026",
+      "size_bytes": 2945,
+      "modified_utc": "2025-11-04T14:45:22.664536+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs",
@@ -7389,7 +8738,14 @@
         }
       ],
       "links": [],
-      "description": "Last updated: 2025-10-17"
+      "description": "Last updated: 2025-10-17",
+      "size_bytes": 2677,
+      "modified_utc": "2025-10-21T12:02:58.658325+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/inventory",
@@ -7447,7 +8803,37 @@
         }
       ],
       "links": [],
-      "description": "Date: 2025-10-01 | Status: Draft | Phase: Discovery"
+      "description": "Date: 2025-10-01 | Status: Draft | Phase: Discovery",
+      "size_bytes": 11741,
+      "modified_utc": "2025-10-21T12:02:58.660326+00:00",
+      "tags": [
+        "inventory",
+        "notes"
+      ],
+      "owners": [
+        "repo_studios_ai"
+      ],
+      "status": "draft",
+      "frontmatter": {
+        "title": "Documentation Inventory Notes",
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_ai"
+        ],
+        "status": "draft",
+        "version": "0.2.0",
+        "updated": "2025-10-18",
+        "summary": "Field notes capturing findings, action items, concerns, and gaps from the latest Repo Studios documentation inventory sweep.",
+        "tags": [
+          "inventory",
+          "notes"
+        ],
+        "legacy_source": ".repo_studios_legacy/repo_docs/docs_inventory_notes.md"
+      },
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/docs",
@@ -7484,7 +8870,14 @@
         }
       ],
       "links": [],
-      "description": "Last updated: 2025-10-18"
+      "description": "Last updated: 2025-10-18",
+      "size_bytes": 2574,
+      "modified_utc": "2025-10-21T12:02:58.661326+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs",
@@ -7549,7 +8942,14 @@
         }
       ],
       "links": [],
-      "description": "Last updated: 2025-10-17"
+      "description": "Last updated: 2025-10-17",
+      "size_bytes": 5455,
+      "modified_utc": "2025-10-21T12:02:58.661326+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs",
@@ -7593,7 +8993,14 @@
         }
       ],
       "links": [],
-      "description": "Last updated: 2025-10-18"
+      "description": "Last updated: 2025-10-18",
+      "size_bytes": 2350,
+      "modified_utc": "2025-10-21T12:02:58.662325+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs",
@@ -7637,7 +9044,14 @@
         }
       ],
       "links": [],
-      "description": "Last updated: 2025-10-18"
+      "description": "Last updated: 2025-10-18",
+      "size_bytes": 1625,
+      "modified_utc": "2025-10-21T12:02:58.662325+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/playbooks",
@@ -7702,7 +9116,41 @@
         }
       ],
       "links": [],
-      "description": "Audience: Repo Studios automation | Human developers | Partner agents"
+      "description": "Audience: Repo Studios automation | Human developers | Partner agents",
+      "size_bytes": 4806,
+      "modified_utc": "2025-11-24T12:14:55.737022+00:00",
+      "tags": [
+        "playbook",
+        "operations",
+        "repo-studios"
+      ],
+      "owners": [
+        "repo_studios_ai",
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "status": "draft",
+      "frontmatter": {
+        "title": "Repo Studios Agent Operations Playbook",
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_ai",
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "draft",
+        "version": "0.1.0",
+        "updated": "2025-10-18",
+        "summary": "Orientation and day-to-day runbook for Repo Studios automation and humans collaborating inside the workspace.",
+        "tags": [
+          "playbook",
+          "operations",
+          "repo-studios"
+        ],
+        "legacy_source": ".repo_studios_legacy/repo_docs/AGENTS_GUIDE.md"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/playbooks",
@@ -7781,7 +9229,41 @@
         }
       ],
       "links": [],
-      "description": "Audience: Repo Studios automation | Memory maintainers"
+      "description": "Audience: Repo Studios automation | Memory maintainers",
+      "size_bytes": 4891,
+      "modified_utc": "2025-10-21T12:02:58.663326+00:00",
+      "tags": [
+        "memory",
+        "playbook",
+        "rag"
+      ],
+      "owners": [
+        "repo_studios_ai",
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "status": "approved",
+      "frontmatter": {
+        "title": "Repo Studios Memory Refresh Playbook",
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_ai",
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "approved",
+        "version": "0.3.0",
+        "updated": "2025-10-18",
+        "summary": "Operational workflow for refreshing and verifying the Repo Studios memory store used for RAG workloads.",
+        "tags": [
+          "memory",
+          "playbook",
+          "rag"
+        ],
+        "legacy_source": ".repo_studios_legacy/repo_docs/agent_memory_workflow.md"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/playbooks",
@@ -7832,7 +9314,40 @@
         }
       ],
       "links": [],
-      "description": "Audience: Repo Studios automation | Human collaborators"
+      "description": "Audience: Repo Studios automation | Human collaborators",
+      "size_bytes": 4277,
+      "modified_utc": "2025-11-04T14:45:22.667537+00:00",
+      "tags": [
+        "migration",
+        "playbook",
+        "repo-studios"
+      ],
+      "owners": [
+        "repo_studios_ai",
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "status": "draft",
+      "frontmatter": {
+        "title": "Repo Studios Migration Playbook",
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_ai",
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "draft",
+        "version": "0.9.0",
+        "updated": "2025-10-18",
+        "summary": "Structured procedure for moving documentation and tooling from the legacy Repo Studios layout into the `.repo_studios/` workspace.",
+        "tags": [
+          "migration",
+          "playbook",
+          "repo-studios"
+        ]
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/playbooks",
@@ -7890,7 +9405,41 @@
         }
       ],
       "links": [],
-      "description": "Audience: Repo Studios automation | Human collaborators"
+      "description": "Audience: Repo Studios automation | Human collaborators",
+      "size_bytes": 3166,
+      "modified_utc": "2025-11-04T14:45:22.667537+00:00",
+      "tags": [
+        "prompts",
+        "playbook",
+        "ai-ingestion"
+      ],
+      "owners": [
+        "repo_studios_ai",
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "status": "approved",
+      "frontmatter": {
+        "title": "Repo Studios Prompt Library Playbook",
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_ai",
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "approved",
+        "version": "1.1.0",
+        "updated": "2025-10-18",
+        "summary": "Guidance for selecting, updating, and governing prompts from the Repo Studios shared library.",
+        "tags": [
+          "prompts",
+          "playbook",
+          "ai-ingestion"
+        ],
+        "legacy_source": ".repo_studios_legacy/repo_docs/PROMPT_LIBRARY_USAGE.md"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs",
@@ -7905,7 +9454,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": "This document is refreshed automatically by `run_batch_cleanup.py`. Edits outside the tree block are preserved, but avoid modifying the block between the markers."
+      "description": "This document is refreshed automatically by `run_batch_cleanup.py`. Edits outside the tree block are preserved, but avoid modifying the block between the markers.",
+      "size_bytes": 7804,
+      "modified_utc": "2025-11-24T23:37:41.293374+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/docs",
@@ -7984,7 +9540,14 @@
         }
       ],
       "links": [],
-      "description": "_Last updated: 2025-10-17_"
+      "description": "_Last updated: 2025-10-17_",
+      "size_bytes": 7647,
+      "modified_utc": "2025-10-21T12:02:58.665326+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/standards",
@@ -7999,7 +9562,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": "This index enumerates governed documentation surfaces that participate in Repo Studios integrity checks."
+      "description": "This index enumerates governed documentation surfaces that participate in Repo Studios integrity checks.",
+      "size_bytes": 1161,
+      "modified_utc": "2025-10-24T00:50:09.673913+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/standards/global",
@@ -8029,7 +9599,14 @@
         }
       ],
       "links": [],
-      "description": "Last updated: 2025-10-18"
+      "description": "Last updated: 2025-10-18",
+      "size_bytes": 1094,
+      "modified_utc": "2025-10-21T12:02:58.666326+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/standards/global",
@@ -8130,7 +9707,39 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 6483,
+      "modified_utc": "2025-10-21T12:02:58.667326+00:00",
+      "tags": [
+        "chainlit",
+        "ui",
+        "async"
+      ],
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "status": "approved",
+      "frontmatter": {
+        "title": "Chainlit UI and LLM Integration Standards",
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "approved",
+        "version": "1.0.1",
+        "updated": "2025-09-28",
+        "summary": "Standards for building Chainlit-based UI for Repo Studios orchestration agents with reliable async flows and predictable UX.",
+        "tags": [
+          "chainlit",
+          "ui",
+          "async"
+        ],
+        "legacy_source": ".repo_studios_legacy/repo_docs/copilot_standards_chainlit.md"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/standards/global",
@@ -8205,7 +9814,39 @@
         }
       ],
       "links": [],
-      "description": "Target Folder: `metrics_storage/storage` (override with `-t <path>` when using the tool below)"
+      "description": "Target Folder: `metrics_storage/storage` (override with `-t <path>` when using the tool below)",
+      "size_bytes": 5411,
+      "modified_utc": "2025-10-21T12:02:58.667326+00:00",
+      "tags": [
+        "cleanup",
+        "refactor",
+        "standards"
+      ],
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "status": "active",
+      "frontmatter": {
+        "title": "Code Cleanup Instructions",
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "version": "1.1.0",
+        "updated": "2025-09-28",
+        "summary": "Canonical guidance for Repo Studios agents performing focused Python cleanup and refactoring tasks.",
+        "tags": [
+          "cleanup",
+          "refactor",
+          "standards"
+        ],
+        "legacy_source": ".repo_studios_legacy/repo_docs/copilot_instructions_clean.md"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/standards/global",
@@ -8250,7 +9891,19 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 2495,
+      "modified_utc": "2025-11-07T03:43:35.611632+00:00",
+      "tags": [],
+      "owners": [],
+      "status": "draft",
+      "frontmatter": {
+        "title": "Global CSS Authoring Standard",
+        "status": "draft",
+        "version": "2025-11-06",
+        "last_updated": "2025-11-06"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/standards/global",
@@ -8357,7 +10010,39 @@
         }
       ],
       "links": [],
-      "description": "Audience: Repo Studios | Agents | Developers | All"
+      "description": "Audience: Repo Studios | Agents | Developers | All",
+      "size_bytes": 6156,
+      "modified_utc": "2025-10-21T12:02:58.668326+00:00",
+      "tags": [
+        "html",
+        "standards",
+        "accessibility"
+      ],
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "status": "approved",
+      "frontmatter": {
+        "title": "HTML Coding Practices",
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "approved",
+        "version": "1.0.0",
+        "updated": "2025-08-22",
+        "summary": "Enforceable HTML standards that ensure semantic structure, accessibility, and AI readiness across Repo Studios interfaces.",
+        "tags": [
+          "html",
+          "standards",
+          "accessibility"
+        ],
+        "legacy_source": ".repo_studios_legacy/repo_docs/copilot_standards_html.md"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/standards/global",
@@ -8402,7 +10087,19 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 2961,
+      "modified_utc": "2025-11-07T03:43:35.511958+00:00",
+      "tags": [],
+      "owners": [],
+      "status": "draft",
+      "frontmatter": {
+        "title": "Global JavaScript Engineering Standard",
+        "status": "draft",
+        "version": "2025-11-06",
+        "last_updated": "2025-11-06"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/standards/global",
@@ -8503,7 +10200,39 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 15671,
+      "modified_utc": "2025-10-24T10:30:37.534765+00:00",
+      "tags": [
+        "markdown",
+        "standards",
+        "ai-ingestion"
+      ],
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "status": "approved",
+      "frontmatter": {
+        "title": "Markdown Authoring for AI, Agent, and Human Integration",
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "approved",
+        "version": "1.1.0",
+        "updated": "2025-08-22",
+        "summary": "Standardized Markdown authoring conventions to support Repo Studios automation, human comprehension, and agent ingestion.",
+        "tags": [
+          "markdown",
+          "standards",
+          "ai-ingestion"
+        ],
+        "legacy_source": ".repo_studios_legacy/repo_docs/copilot_standards_markdown.md"
+      },
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/docs/standards/global",
@@ -8583,7 +10312,37 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 4925,
+      "modified_utc": "2025-10-21T12:02:58.669326+00:00",
+      "tags": [
+        "mission",
+        "alignment"
+      ],
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "status": "active",
+      "frontmatter": {
+        "title": "Repo Studios Mission Parameters",
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "version": "1.0.0",
+        "updated": "2025-09-28",
+        "summary": "Mission scope, intent, and operational parameters for Repo Studios agents collaborating with humans and orchestration tooling.",
+        "tags": [
+          "mission",
+          "alignment"
+        ],
+        "legacy_source": ".repo_studios_legacy/repo_docs/copilot_mission_parameters.md"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/standards/global",
@@ -8697,7 +10456,39 @@
         }
       ],
       "links": [],
-      "description": "Audience: Repo Studios automation | Human developers | CI pipelines"
+      "description": "Audience: Repo Studios automation | Human developers | CI pipelines",
+      "size_bytes": 7226,
+      "modified_utc": "2025-11-24T12:14:55.737022+00:00",
+      "tags": [
+        "monkey_patch",
+        "standards"
+      ],
+      "owners": [
+        "repo_studios_ai",
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "status": "approved",
+      "frontmatter": {
+        "title": "Repo Studios Monkey Patch Governance",
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_ai",
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "approved",
+        "version": "1.1.0",
+        "updated": "2025-10-18",
+        "summary": "Guardrails for introducing, auditing, and retiring monkey patches within Repo Studios projects.",
+        "tags": [
+          "monkey_patch",
+          "standards"
+        ],
+        "legacy_source": ".repo_studios_legacy/repo_docs/copilot_standards_monkey_patch.md"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/standards/global",
@@ -8797,7 +10588,41 @@
         }
       ],
       "links": [],
-      "description": "These standards provide reusable guardrails for prompts, agent instructions, and automation hand-offs. Apply them whenever you write or refresh Repo Studios guidance."
+      "description": "These standards provide reusable guardrails for prompts, agent instructions, and automation hand-offs. Apply them whenever you write or refresh Repo Studios guidance.",
+      "size_bytes": 5474,
+      "modified_utc": "2025-10-22T12:06:54.496721+00:00",
+      "tags": [
+        "prompts",
+        "standards",
+        "ai-ingestion"
+      ],
+      "owners": [
+        "repo_studios_ai",
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "status": "needs_review",
+      "frontmatter": {
+        "title": "Repo Studios Prompt Engineering Standards",
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_ai",
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "needs_review",
+        "version": "0.3.0",
+        "updated": "2025-10-18",
+        "summary": "Operational guidance for designing prompts and agent instructions used across Repo Studios projects.",
+        "tags": [
+          "prompts",
+          "standards",
+          "ai-ingestion"
+        ],
+        "legacy_source": ".repo_studios_legacy/repo_docs/copilot_prompt_engineering_standards.md"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/standards/global",
@@ -8939,7 +10764,41 @@
         }
       ],
       "links": [],
-      "description": "Audience: Repo Studios automation | Human developers | Partner agents"
+      "description": "Audience: Repo Studios automation | Human developers | Partner agents",
+      "size_bytes": 11157,
+      "modified_utc": "2025-10-21T12:02:58.670326+00:00",
+      "tags": [
+        "python",
+        "standards",
+        "ai-ingestion"
+      ],
+      "owners": [
+        "repo_studios_ai",
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "status": "approved",
+      "frontmatter": {
+        "title": "Python Engineering Standards",
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_ai",
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "approved",
+        "version": "1.1.0",
+        "updated": "2025-10-18",
+        "summary": "Baseline Python engineering guardrails for Repo Studios automation and human contributors building AI-ready services.",
+        "tags": [
+          "python",
+          "standards",
+          "ai-ingestion"
+        ],
+        "legacy_source": ".repo_studios_legacy/repo_docs/copilot_standards_python.md"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/standards/project",
@@ -8976,7 +10835,14 @@
         }
       ],
       "links": [],
-      "description": "Last updated: 2025-10-18"
+      "description": "Last updated: 2025-10-18",
+      "size_bytes": 1099,
+      "modified_utc": "2025-10-21T12:02:58.670326+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/standards/project",
@@ -9062,7 +10928,41 @@
         }
       ],
       "links": [],
-      "description": "Audience: Repo Studios automation | Human developers | Partner agents"
+      "description": "Audience: Repo Studios automation | Human developers | Partner agents",
+      "size_bytes": 6702,
+      "modified_utc": "2025-10-21T12:02:58.671326+00:00",
+      "tags": [
+        "project",
+        "standards",
+        "ai-ingestion"
+      ],
+      "owners": [
+        "repo_studios_ai",
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "status": "approved",
+      "frontmatter": {
+        "title": "Repo Studios Project Operating Standard",
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_ai",
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "approved",
+        "version": "1.1.0",
+        "updated": "2025-10-18",
+        "summary": "Project-level guardrails covering technology stack, behavioral expectations, and documentation hygiene for Repo Studios contributors and agents.",
+        "tags": [
+          "project",
+          "standards",
+          "ai-ingestion"
+        ],
+        "legacy_source": ".repo_studios_legacy/repo_docs/copilot_standards_project.md"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/standards/project",
@@ -9109,7 +11009,39 @@
         }
       ],
       "links": [],
-      "description": "This structured reference equips Repo Studios automation and collaborators with vetted Python patterns, anti-patterns, and fixes derived from the Jarvis2 remediation log. Any references to the legacy agent name (`repo`) map to Repo Studios\u2026"
+      "description": "This structured reference equips Repo Studios automation and collaborators with vetted Python patterns, anti-patterns, and fixes derived from the Jarvis2 remediation log. Any references to the legacy agent name (`repo`) map to Repo Studios\u2026",
+      "size_bytes": 12098,
+      "modified_utc": "2025-10-21T12:02:58.671326+00:00",
+      "tags": [
+        "python",
+        "remediation",
+        "standards"
+      ],
+      "owners": [
+        "repo_studios_ai"
+      ],
+      "status": "draft",
+      "frontmatter": {
+        "title": "Repo Studios Python Remediation Instructions",
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_ai"
+        ],
+        "status": "draft",
+        "version": "0.1.0",
+        "updated": "2025-10-18",
+        "summary": "Repository-specific Python cleanup patterns, quick fixes, and approved practices preserved from the Jarvis2 remediation guide.",
+        "tags": [
+          "python",
+          "remediation",
+          "standards"
+        ],
+        "legacy_source": ".repo_studios_legacy/repo_docs/copilot_instructions_python.md"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/templates",
@@ -9124,7 +11056,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": "Last updated: 2025-10-18"
+      "description": "Last updated: 2025-10-18",
+      "size_bytes": 726,
+      "modified_utc": "2025-10-21T12:02:58.672327+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/templates",
@@ -9224,7 +11163,14 @@
         }
       ],
       "links": [],
-      "description": "Legend: _Define status labels (e.g., In discovery, Not started, In progress, Deferred)._"
+      "description": "Legend: _Define status labels (e.g., In discovery, Not started, In progress, Deferred)._",
+      "size_bytes": 5804,
+      "modified_utc": "2025-10-24T18:10:58.469251+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/templates",
@@ -9239,7 +11185,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 1511,
+      "modified_utc": "2025-10-25T14:41:26.969605+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/templates",
@@ -9290,7 +11243,14 @@
         }
       ],
       "links": [],
-      "description": "Last updated: 2025-10-21"
+      "description": "Last updated: 2025-10-21",
+      "size_bytes": 2293,
+      "modified_utc": "2025-10-21T14:59:28.496722+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/docs/templates",
@@ -9305,7 +11265,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": "Last updated: 2025-10-18"
+      "description": "Last updated: 2025-10-18",
+      "size_bytes": 1189,
+      "modified_utc": "2025-10-21T12:02:58.672327+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/inventory_schema/views",
@@ -9320,7 +11287,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": "Derived views in this folder are generated by `.repo_studios/scripts/render_inventory_views.py`. They provide read-only summaries of the authoritative catalogs so agents can quickly scan asset coverage without duplicating source data."
+      "description": "Derived views in this folder are generated by `.repo_studios/scripts/render_inventory_views.py`. They provide read-only summaries of the authoritative catalogs so agents can quickly scan asset coverage without duplicating source data.",
+      "size_bytes": 860,
+      "modified_utc": "2025-10-21T12:02:58.677327+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/monkey_patch/20251124_175233",
@@ -9364,7 +11338,14 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 1696,
+      "modified_utc": "2025-11-24T17:52:33.912420+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/monkey_patch/latest",
@@ -9408,7 +11389,14 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 1696,
+      "modified_utc": "2025-11-24T17:52:33.916251+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/scripts",
@@ -9445,7 +11433,14 @@
         }
       ],
       "links": [],
-      "description": "This directory houses the active automation suite for Repo Studios. Scripts are grouped by the role they play in the data and automation pipeline so coding agents can locate the right tool quickly."
+      "description": "This directory houses the active automation suite for Repo Studios. Scripts are grouped by the role they play in the data and automation pipeline so coding agents can locate the right tool quickly.",
+      "size_bytes": 2391,
+      "modified_utc": "2025-11-04T09:50:54.154871+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/scripts/aggregators/aggregators_index",
@@ -9489,7 +11484,14 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 733,
+      "modified_utc": "2025-10-28T09:42:56.137074+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/scripts/consumers/consumers_index",
@@ -9533,7 +11535,14 @@
         }
       ],
       "links": [],
-      "description": "1. `main` \u2014 2 duplicate(s)"
+      "description": "1. `main` \u2014 2 duplicate(s)",
+      "size_bytes": 1093,
+      "modified_utc": "2025-10-28T09:34:22.504107+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/scripts",
@@ -9563,7 +11572,14 @@
         }
       ],
       "links": [],
-      "description": "This document maps the active automation suite under `.repo_studios/scripts/` using the producer \u2192 consumer \u2192 aggregator \u2192 orchestrator \u2192 summarizer tier model. Use it as a quick reference when deciding where a script lives or which\u2026"
+      "description": "This document maps the active automation suite under `.repo_studios/scripts/` using the producer \u2192 consumer \u2192 aggregator \u2192 orchestrator \u2192 summarizer tier model. Use it as a quick reference when deciding where a script lives or which\u2026",
+      "size_bytes": 4879,
+      "modified_utc": "2025-10-21T16:07:43.334091+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/scripts/orchestrators/orchestrators_index",
@@ -9607,7 +11623,14 @@
         }
       ],
       "links": [],
-      "description": "1. `cmd_list` \u2014 2 duplicate(s)"
+      "description": "1. `cmd_list` \u2014 2 duplicate(s)",
+      "size_bytes": 1191,
+      "modified_utc": "2025-10-28T09:55:41.218181+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/scripts/producers/producers_index",
@@ -9651,7 +11674,14 @@
         }
       ],
       "links": [],
-      "description": "1. `configure_logging` \u2014 19 duplicate(s)"
+      "description": "1. `configure_logging` \u2014 19 duplicate(s)",
+      "size_bytes": 11966,
+      "modified_utc": "2025-11-05T11:25:43.763687+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/scripts",
@@ -9751,7 +11781,14 @@
         }
       ],
       "links": [],
-      "description": "Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent\u2026"
+      "description": "Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent\u2026",
+      "size_bytes": 46381,
+      "modified_utc": "2025-11-25T02:53:56.349953+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/scripts/scripts_index",
@@ -9795,7 +11832,14 @@
         }
       ],
       "links": [],
-      "description": "1. `prune_old_runs` \u2014 20 duplicate(s)"
+      "description": "1. `prune_old_runs` \u2014 20 duplicate(s)",
+      "size_bytes": 14434,
+      "modified_utc": "2025-10-27T12:08:34.090771+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".repo_studios/scripts/summarizers/summarizers_index",
@@ -9839,7 +11883,14 @@
         }
       ],
       "links": [],
-      "description": "1. `append_table` \u2014 2 duplicate(s)"
+      "description": "1. `append_table` \u2014 2 duplicate(s)",
+      "size_bytes": 982,
+      "modified_utc": "2025-11-04T20:10:52.055388+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/scripts/utilities/utilities_index",
@@ -9883,7 +11934,14 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 724,
+      "modified_utc": "2025-10-28T13:44:35.047795+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".",
@@ -9898,7 +11956,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": "To reduce confusion with the root-level `README.md`, the detailed guide for AI agents and contributors has been moved to `AGENTS_GUIDE.md` in this same folder."
+      "description": "To reduce confusion with the root-level `README.md`, the detailed guide for AI agents and contributors has been moved to `AGENTS_GUIDE.md` in this same folder.",
+      "size_bytes": 633,
+      "modified_utc": "2025-11-24T23:21:19.649681+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".",
@@ -9970,7 +12035,14 @@
         }
       ],
       "links": [],
-      "description": "This document is a scratch pad for understanding the transplanted tooling. We will delete it once alignment is complete."
+      "description": "This document is a scratch pad for understanding the transplanted tooling. We will delete it once alignment is complete.",
+      "size_bytes": 29288,
+      "modified_utc": "2025-11-08T23:03:00.112443+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".",
@@ -9985,7 +12057,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": "This file tracks command center script executions requested on 2025-11-04."
+      "description": "This file tracks command center script executions requested on 2025-11-04.",
+      "size_bytes": 4905,
+      "modified_utc": "2025-11-08T23:03:02.374057+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": "docs/standards/global",
@@ -10000,7 +12079,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": "This handbook defines the governed documentation surfaces used by Repo Studios tooling."
+      "description": "This handbook defines the governed documentation surfaces used by Repo Studios tooling.",
+      "size_bytes": 284,
+      "modified_utc": "2025-10-24T00:50:07.867124+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": "docs/standards/global",
@@ -10015,7 +12101,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": "Placeholder overview of Chainlit UI conventions. Update with the real standard when synced from the documentation source."
+      "description": "Placeholder overview of Chainlit UI conventions. Update with the real standard when synced from the documentation source.",
+      "size_bytes": 233,
+      "modified_utc": "2025-11-24T23:31:22.862853+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": "docs/standards/global",
@@ -10024,7 +12117,19 @@
       "h1_headings": [],
       "h2_headings": [],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 747,
+      "modified_utc": "2025-11-24T23:31:22.862853+00:00",
+      "tags": [],
+      "owners": [],
+      "status": "draft",
+      "frontmatter": {
+        "title": "Global Code Cleanup Standard",
+        "status": "draft",
+        "version": "2025-10-23",
+        "last_updated": "2025-10-23"
+      },
+      "contains_placeholder": true
     },
     {
       "folder": "docs/standards/global",
@@ -10039,7 +12144,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": "Temporary HTML coding guidance. Replace this stub with the official standard when syncing the documentation repository."
+      "description": "Temporary HTML coding guidance. Replace this stub with the official standard when syncing the documentation repository.",
+      "size_bytes": 231,
+      "modified_utc": "2025-11-24T23:31:22.862853+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": "docs/standards/global",
@@ -10063,7 +12175,19 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 1034,
+      "modified_utc": "2025-11-24T23:31:22.862853+00:00",
+      "tags": [],
+      "owners": [],
+      "status": "draft",
+      "frontmatter": {
+        "title": "Global Markdown Authoring Standard",
+        "status": "draft",
+        "version": "2025-10-23",
+        "last_updated": "2025-10-23"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": "docs/standards/global",
@@ -10080,7 +12204,19 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 644,
+      "modified_utc": "2025-11-24T23:31:22.862853+00:00",
+      "tags": [],
+      "owners": [],
+      "status": "draft",
+      "frontmatter": {
+        "title": "Global Mission Parameters",
+        "status": "draft",
+        "version": "2025-10-23",
+        "last_updated": "2025-10-23"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": "docs/standards/global",
@@ -10097,7 +12233,19 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 702,
+      "modified_utc": "2025-11-24T23:31:22.862853+00:00",
+      "tags": [],
+      "owners": [],
+      "status": "draft",
+      "frontmatter": {
+        "title": "Global Monkey Patching Standard",
+        "status": "draft",
+        "version": "2025-10-23",
+        "last_updated": "2025-10-23"
+      },
+      "contains_placeholder": true
     },
     {
       "folder": "docs/standards/global",
@@ -10114,7 +12262,19 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 710,
+      "modified_utc": "2025-11-24T23:31:22.863855+00:00",
+      "tags": [],
+      "owners": [],
+      "status": "draft",
+      "frontmatter": {
+        "title": "Global Prompt Engineering Standard",
+        "status": "draft",
+        "version": "2025-10-23",
+        "last_updated": "2025-10-23"
+      },
+      "contains_placeholder": true
     },
     {
       "folder": "docs/standards/global",
@@ -10138,7 +12298,19 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 1087,
+      "modified_utc": "2025-11-24T23:31:22.871630+00:00",
+      "tags": [],
+      "owners": [],
+      "status": "draft",
+      "frontmatter": {
+        "title": "Global Python Engineering Standard",
+        "status": "draft",
+        "version": "2025-10-23",
+        "last_updated": "2025-10-23"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": "docs/standards/project",
@@ -10162,7 +12334,19 @@
         }
       ],
       "links": [],
-      "description": null
+      "description": null,
+      "size_bytes": 1180,
+      "modified_utc": "2025-11-24T23:31:22.871630+00:00",
+      "tags": [],
+      "owners": [],
+      "status": "draft",
+      "frontmatter": {
+        "title": "Project Operating Standard",
+        "status": "draft",
+        "version": "2025-10-23",
+        "last_updated": "2025-10-23"
+      },
+      "contains_placeholder": false
     },
     {
       "folder": "docs/standards/project",
@@ -10177,7 +12361,14 @@
       ],
       "h2_headings": [],
       "links": [],
-      "description": "Placeholder instructions for Python setup and workflows. Replace with authoritative content when documentation is available."
+      "description": "Placeholder instructions for Python setup and workflows. Replace with authoritative content when documentation is available.",
+      "size_bytes": 236,
+      "modified_utc": "2025-11-24T23:31:22.871630+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
     },
     {
       "folder": ".",
@@ -10221,13 +12412,46 @@
         }
       ],
       "links": [],
-      "description": "Audience: Repo Studios automation | Human collaborators"
+      "description": "Audience: Repo Studios automation | Human collaborators",
+      "size_bytes": 11283,
+      "modified_utc": "2025-11-04T14:45:21.938679+00:00",
+      "tags": [
+        "prompts",
+        "library",
+        "repo-studios"
+      ],
+      "owners": [
+        "repo_studios_ai"
+      ],
+      "status": "active",
+      "frontmatter": {
+        "title": "Repo Studios Prompt Library",
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_ai"
+        ],
+        "status": "active",
+        "version": "1.3.0",
+        "updated": "2025-11-04",
+        "summary": "Canonical catalog of reusable Repo Studios prompts grouped by atomic and bundle flows for local operations.",
+        "tags": [
+          "prompts",
+          "library",
+          "repo-studios"
+        ],
+        "legacy_source": "legacy/repo_docs/copilot_prompts.md"
+      },
+      "contains_placeholder": false
     }
   ],
   "outputs": {
     "files": {
       "bundle": "doc_index_bundle.md",
-      "json": "doc_index.json"
+      "json": "doc_index.json",
+      "csv": "doc_index.csv"
     }
   },
   "scanner": {

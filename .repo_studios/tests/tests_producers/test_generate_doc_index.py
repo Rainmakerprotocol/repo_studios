@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import csv
 import importlib.util
+import io
 import json
 from pathlib import Path
 
@@ -98,18 +100,60 @@ Refer to [Guide](../../docs/guide.md).
     assert internal["description"].startswith("Second paragraph lives here")
     assert internal["links"] == ["../../docs/guide.md"]
 
-    database = payload["outputs"]["database"]
+    outputs = payload["outputs"]
+    files_output = outputs["files"]
+    assert files_output["bundle"] == "doc_index_bundle.md"
+    assert files_output["json"] == "doc_index.json"
+    assert files_output["csv"] == "doc_index.csv"
+
+    database = outputs["database"]
     assert database["target"] == "placeholder://inventory"
     assert database["implemented"] is False
+
+    metrics = payload["metrics"]
+    assert metrics["documents_missing_description_count"] == 0
+    assert metrics["duplicate_slug_count"] == 0
+    assert metrics["link_density"] == 1.0
+
+    advisories = payload["advisories"]
+    assert advisories["documents_missing_description"] == []
+    assert advisories["duplicate_slugs"] == {}
 
     bundle_text = (run_dir / "doc_index_bundle.md").read_text(encoding="utf-8")
     assert "# Documentation Index Bundle" in bundle_text
     assert "```json" in bundle_text
     assert "```yaml" in bundle_text
     assert "```csv" in bundle_text
+    assert "<!-- markdownlint-disable MD013 -->" in bundle_text
+    assert "<!-- markdownlint-enable MD013 -->" in bundle_text
+
+    csv_block = bundle_text.split("```csv", 1)[1].split("```", 1)[0].strip()
+    csv_rows = list(csv.reader(io.StringIO(csv_block)))
+    assert csv_rows[0] == [
+        "folder",
+        "filename",
+        "level",
+        "heading",
+        "slug",
+        "parent_slug",
+        "description",
+        "size_bytes",
+        "modified_utc",
+        "tags",
+        "owners",
+        "status",
+        "contains_placeholder",
+        "links",
+    ]
+    guide_row = next(row for row in csv_rows if row[1] == "docs/guide.md" and row[2] == "h1")
+    link_index = csv_rows[0].index("links")
+    placeholder_index = csv_rows[0].index("contains_placeholder")
+    assert guide_row[link_index] == "../.repo_studios/docs/internal.md"
+    assert guide_row[placeholder_index] == "no"
 
     assert (output_dir / "latest_doc_index.json").is_file()
     assert (output_dir / "latest_doc_index_bundle.md").is_file()
+    assert (output_dir / "latest_doc_index.csv").is_file()
 
 
 def test_doc_index_retention_keeps_single_run(tmp_path):

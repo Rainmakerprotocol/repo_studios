@@ -13,9 +13,9 @@ import json
 import logging
 import re
 import textwrap
-from collections import OrderedDict
+from collections import Counter, OrderedDict
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from io import StringIO
 from pathlib import Path
 from typing import Any, Iterable, Sequence
@@ -115,6 +115,13 @@ class DocumentRecord:
   h2_headings: list[SubHeading]
   links: list[str]
   description: str | None
+  size_bytes: int
+  modified_utc: str
+  tags: list[str]
+  owners: list[str]
+  status: str | None
+  frontmatter: dict[str, Any] | None
+  contains_placeholder: bool
 
 
 PATH_SPECS: dict[str, PathSpec] = {
@@ -219,9 +226,80 @@ def _fallback_slug(relative_str: str) -> str:
   return f"doc-{abs(hash(relative_str)) & 0xFFFFFFFF:08x}"
 
 
+def _extract_frontmatter(lines: list[str]) -> tuple[dict[str, Any] | None, int]:
+  if not lines or lines[0].strip() != "---":
+    return None, 0
+  buffer: list[str] = []
+  end_index = 0
+  for idx, line in enumerate(lines[1:], start=1):
+    if line.strip() == "---":
+      end_index = idx
+      break
+    buffer.append(line)
+  if end_index == 0:
+    return None, 0
+  try:
+    parsed = yaml.safe_load("\n".join(buffer))
+  except yaml.YAMLError:
+    return None, end_index
+  return parsed if isinstance(parsed, dict) else None, end_index
+
+
+def _sanitize_frontmatter(value: Any) -> Any:
+  if isinstance(value, dict):
+    return {str(key): _sanitize_frontmatter(val) for key, val in value.items()}
+  if isinstance(value, list):
+    return [_sanitize_frontmatter(item) for item in value]
+  if isinstance(value, tuple):
+    return [_sanitize_frontmatter(item) for item in value]
+  if isinstance(value, (datetime, date)):
+    return value.isoformat()
+  if isinstance(value, (str, int, float, bool)) or value is None:
+    return value
+  return str(value)
+
+
+def _normalize_tags(raw: Any) -> list[str]:
+  if raw is None:
+    return []
+  if isinstance(raw, str):
+    value = raw.strip()
+    return [value] if value else []
+  if isinstance(raw, (list, tuple, set)):
+    return [str(item).strip() for item in raw if str(item).strip()]
+  return []
+
+
+def _normalize_owners(frontmatter: dict[str, Any] | None) -> list[str]:
+  if not frontmatter:
+    return []
+  for key in ("owners", "owner", "maintainers", "maintainer"):
+    if key in frontmatter:
+      value = frontmatter[key]
+      if isinstance(value, str):
+        stripped = value.strip()
+        return [stripped] if stripped else []
+      if isinstance(value, (list, tuple, set)):
+        return [str(item).strip() for item in value if str(item).strip()]
+  return []
+
+
+def _normalize_status(frontmatter: dict[str, Any] | None) -> str | None:
+  if not frontmatter:
+    return None
+  value = frontmatter.get("status")
+  if value is None:
+    return None
+  stripped = str(value).strip()
+  return stripped or None
+
+
 def parse_markdown_document(path: Path, repo_root: Path) -> DocumentRecord:
   text = path.read_text(encoding="utf-8", errors="replace")
   lines = text.splitlines()
+  frontmatter, frontmatter_end = _extract_frontmatter(lines)
+  frontmatter_dict = frontmatter if isinstance(frontmatter, dict) else None
+  sanitized_frontmatter = _sanitize_frontmatter(frontmatter_dict) if frontmatter_dict else None
   h1_headings: list[Heading] = []
   h2_headings: list[SubHeading] = []
   in_code_block = False
@@ -234,6 +312,8 @@ def parse_markdown_document(path: Path, repo_root: Path) -> DocumentRecord:
       in_code_block = not in_code_block
       continue
     if in_code_block:
+      continue
+    if frontmatter_end and index <= frontmatter_end:
       continue
     match = HEADING_RE.match(stripped)
     if not match:
@@ -265,6 +345,12 @@ def parse_markdown_document(path: Path, repo_root: Path) -> DocumentRecord:
   folder = relative_path.parent.as_posix() if relative_path.parent.as_posix() else "."
   doc_slug = h1_headings[0].slug if h1_headings else _fallback_slug(relative_str)
   links = _collect_links(text)
+  stat = path.stat()
+  modified = datetime.fromtimestamp(stat.st_mtime, timezone.utc).isoformat()
+  tags = _normalize_tags(frontmatter_dict.get("tags") if frontmatter_dict else None)
+  owners = _normalize_owners(frontmatter_dict)
+  status = _normalize_status(frontmatter_dict)
+  contains_placeholder = "placeholder" in text.lower()
 
   return DocumentRecord(
     folder=folder,
@@ -274,6 +360,13 @@ def parse_markdown_document(path: Path, repo_root: Path) -> DocumentRecord:
     h2_headings=h2_headings,
     links=links,
     description=description,
+    size_bytes=stat.st_size,
+    modified_utc=modified,
+    tags=tags,
+    owners=owners,
+    status=status,
+    frontmatter=sanitized_frontmatter,
+    contains_placeholder=contains_placeholder,
   )
 
 
@@ -283,6 +376,57 @@ def collect_documents(repo_root: Path) -> list[DocumentRecord]:
     records.append(parse_markdown_document(path, repo_root))
   records.sort(key=lambda record: record.filename)
   return records
+
+
+def build_metrics(documents: Sequence[DocumentRecord]) -> tuple[dict[str, Any], dict[str, Any]]:
+  total_documents = len(documents)
+  counts_by_dir = Counter(doc.folder for doc in documents)
+  top_directories = [
+    {"directory": directory, "count": count}
+    for directory, count in counts_by_dir.most_common(20)
+  ]
+
+  missing_description = sorted(doc.filename for doc in documents if not doc.description)
+  missing_h1 = sorted(doc.filename for doc in documents if not doc.h1_headings)
+  missing_h2 = sorted(
+    doc.filename for doc in documents if doc.h1_headings and not doc.h2_headings
+  )
+  placeholder_docs = sorted(doc.filename for doc in documents if doc.contains_placeholder)
+  outside_docs_tree = sorted(
+    doc.filename
+    for doc in documents
+    if not (doc.filename.startswith("docs/") or doc.filename.startswith(".repo_studios/docs/"))
+  )
+
+  slug_map: dict[str, list[str]] = {}
+  for doc in documents:
+    slug_map.setdefault(doc.slug, []).append(doc.filename)
+  duplicate_slugs = {slug: sorted(files) for slug, files in slug_map.items() if len(files) > 1}
+
+  total_links = sum(len(doc.links) for doc in documents)
+  link_density = total_links / total_documents if total_documents else 0.0
+
+  metrics = {
+    "documents_per_directory": top_directories,
+    "documents_missing_description_count": len(missing_description),
+    "documents_without_h1_count": len(missing_h1),
+    "documents_without_h2_count": len(missing_h2),
+    "placeholder_documents_count": len(placeholder_docs),
+    "duplicate_slug_count": len(duplicate_slugs),
+    "documents_outside_docs_tree_count": len(outside_docs_tree),
+    "link_density": link_density,
+  }
+
+  advisories = {
+    "documents_missing_description": missing_description[:25],
+    "documents_without_h1": missing_h1[:25],
+    "documents_without_h2": missing_h2[:25],
+    "placeholder_documents": placeholder_docs[:25],
+    "documents_outside_docs_tree": outside_docs_tree[:25],
+    "duplicate_slugs": {slug: files[:10] for slug, files in list(duplicate_slugs.items())[:10]},
+  }
+
+  return metrics, advisories
 
 
 def build_database_placeholder(target: str) -> dict[str, Any]:
@@ -305,6 +449,7 @@ def build_payload(
   total_h1 = sum(len(doc.h1_headings) for doc in documents)
   total_h2 = sum(len(doc.h2_headings) for doc in documents)
   total_links = sum(len(doc.links) for doc in documents)
+  metrics, advisories = build_metrics(documents)
   summary = {
     "total_documents": len(documents),
     "total_h1": total_h1,
@@ -317,11 +462,14 @@ def build_payload(
     "generated_utc": generated_ts.isoformat(),
     "repo_root": str(repo_root),
     "summary": summary,
+    "metrics": metrics,
+    "advisories": advisories,
     "documents": doc_dicts,
     "outputs": {
       "files": {
         "bundle": "doc_index_bundle.md",
         "json": "doc_index.json",
+        "csv": "doc_index.csv",
       }
     },
     "scanner": {
@@ -336,10 +484,30 @@ def build_payload(
 
 def build_csv(documents: Sequence[DocumentRecord]) -> str:
   buffer = StringIO()
-  writer = csv.writer(buffer)
-  writer.writerow(["folder", "filename", "level", "heading", "slug", "parent_slug", "description"])
+  writer = csv.writer(buffer, lineterminator="\n")
+  writer.writerow([
+    "folder",
+    "filename",
+    "level",
+    "heading",
+    "slug",
+    "parent_slug",
+    "description",
+    "size_bytes",
+    "modified_utc",
+    "tags",
+    "owners",
+    "status",
+    "contains_placeholder",
+    "links",
+  ])
   for doc in documents:
     description = doc.description or ""
+    links_value = ";".join(doc.links)
+    tags_value = ";".join(doc.tags)
+    owners_value = ";".join(doc.owners)
+    status_value = doc.status or ""
+    placeholder_value = "yes" if doc.contains_placeholder else "no"
     if doc.h1_headings or doc.h2_headings:
       for heading in doc.h1_headings:
         writer.writerow(
@@ -351,6 +519,13 @@ def build_csv(documents: Sequence[DocumentRecord]) -> str:
             heading.slug,
             "",
             description,
+            doc.size_bytes,
+            doc.modified_utc,
+            tags_value,
+            owners_value,
+            status_value,
+            placeholder_value,
+            links_value,
           ]
         )
       for heading in doc.h2_headings:
@@ -363,6 +538,13 @@ def build_csv(documents: Sequence[DocumentRecord]) -> str:
             heading.slug,
             heading.parent_slug,
             description,
+            doc.size_bytes,
+            doc.modified_utc,
+            tags_value,
+            owners_value,
+            status_value,
+            placeholder_value,
+            links_value,
           ]
         )
     else:
@@ -374,6 +556,13 @@ def build_csv(documents: Sequence[DocumentRecord]) -> str:
         doc.slug,
         "",
         description,
+        doc.size_bytes,
+        doc.modified_utc,
+        tags_value,
+        owners_value,
+        status_value,
+        placeholder_value,
+        links_value,
       ])
   return buffer.getvalue().strip()
 
@@ -386,6 +575,18 @@ def render_bundle(
   csv_text: str,
 ) -> str:
   summary = payload.get("summary", {})
+  metrics = payload.get("metrics", {})
+  advisories = payload.get("advisories", {})
+
+  def preview_list(values: Sequence[str]) -> str:
+    if not values:
+      return "none"
+    limited = list(values[:5])
+    text = ", ".join(limited)
+    if len(values) > 5:
+      text += ", …"
+    return text
+
   bundle_lines: list[str] = [
     "---",
     f"schema_version: {payload['schema_version']}",
@@ -395,6 +596,7 @@ def render_bundle(
     f"total_links: {summary.get('total_links', 0)}",
     "---",
     "",
+    "<!-- markdownlint-disable MD013 -->",
     "# Documentation Index Bundle",
     "",
     "## Guidance",
@@ -416,6 +618,44 @@ def render_bundle(
       f"- h2 headings: {summary.get('total_h2', 0)}",
       f"- links: {summary.get('total_links', 0)}",
       "",
+      "## Metrics",
+      "",
+      f"- link density: {metrics.get('link_density', 0):.3f}",
+      f"- duplicate slug groups: {metrics.get('duplicate_slug_count', 0)}",
+      f"- placeholder documents: {metrics.get('placeholder_documents_count', 0)}",
+      f"- documents outside docs tree: {metrics.get('documents_outside_docs_tree_count', 0)}",
+    ]
+  )
+  top_directories = metrics.get("documents_per_directory", [])
+  if top_directories:
+    preview = ", ".join(f"{entry['directory']} ({entry['count']})" for entry in top_directories[:5])
+    bundle_lines.append(f"- top directories: {preview}")
+  bundle_lines.extend(
+    [
+      "- see JSON section for full metric payload.",
+      "",
+      "## Advisories",
+      "",
+      f"- documents missing description: {preview_list(advisories.get('documents_missing_description', []))}",
+      f"- documents without h1: {preview_list(advisories.get('documents_without_h1', []))}",
+      f"- documents without h2: {preview_list(advisories.get('documents_without_h2', []))}",
+      f"- placeholder documents: {preview_list(advisories.get('placeholder_documents', []))}",
+      f"- documents outside docs tree: {preview_list(advisories.get('documents_outside_docs_tree', []))}",
+    ]
+  )
+  duplicate_preview = advisories.get("duplicate_slugs", {})
+  if isinstance(duplicate_preview, dict):
+    duplicate_count = len(duplicate_preview)
+    samples = list(duplicate_preview.items())[:3]
+    if samples:
+      rendered = "; ".join(f"{slug} ({len(files)} files)" for slug, files in samples)
+      bundle_lines.append(f"- duplicate slugs: {duplicate_count} groups; examples: {rendered}")
+    else:
+      bundle_lines.append("- duplicate slugs: none detected")
+  bundle_lines.extend(
+    [
+      "- see JSON section for full advisory payload.",
+      "",
       "## JSON",
       "",
       "```json",
@@ -436,6 +676,7 @@ def render_bundle(
       "",
     ]
   )
+  bundle_lines.append("<!-- markdownlint-enable MD013 -->")
   return "\n".join(bundle_lines).rstrip() + "\n"
 
 
@@ -526,6 +767,12 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
       pointer="latest_doc_index_bundle.md",
       kind="text",
       content=bundle_text,
+    ),
+    ReportArtifact(
+      filename="doc_index.csv",
+      pointer="latest_doc_index.csv",
+      kind="text",
+      content=csv_text,
     ),
   ]
 
