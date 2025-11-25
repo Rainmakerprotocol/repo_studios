@@ -30,7 +30,12 @@
   },
   "MD018": true,
   "MD022": true,
-  "MD025": true,
+  "MD024": {
+    "siblings_only": true
+  },
+  "MD025": {
+    "front_matter_title": ""
+  },
   "MD029": {
     "style": "one"
   },
@@ -40,5 +45,6 @@
   "MD041": true,
   "MD046": {
     "style": "fenced"
-  }
+  },
+  "MD051": true
 }

@@ -29,7 +29,7 @@
 
 - **Status:** _Draft_
 - **Owner:** _repo_studios_ai_
-- **Last Updated:** _2025-11-24_
+- **Last Updated:** _2025-11-25_
 - **Scope:** `.repo_studios/scripts/`
 - **Command Center Reference:** Before updating this blueprint, review
   `.repo_studios/command_center/README.md` for the current library-integration protocol,
@@ -96,7 +96,7 @@ migration work visible.
 | diff_standards_index.py | DONE | DONE | DONE | Status, pruning, tests, and automation doc aligned; fail policy behavior documented. |
 | extract_standards_rules.py | N/A | DONE | DONE | Severity normalization + pytest coverage complete; automation doc published 2025-10-23. |
 | generate_anchor_inventory.py | DONE | DONE | DONE | Structured report emitter with pruning, Make wiring, and tests now live. |
-| generate_doc_index.py | DONE | DONE | DONE | Repo-wide documentation index emits JSON/Markdown bundle with CSV/YAML sections, retention=1, and database sink placeholder logging. |
+| generate_doc_index.py | DONE | DONE | DONE | Repo-wide documentation index now emits metrics/advisories, JSON + Markdown bundle with YAML/CSV sections, standalone CSV pointer, retention=1, and database sink placeholder logging. |
 | generate_dependency_hygiene_report.py | DONE | DONE | DONE | Structured artifacts emit JSON/MD/log bundles with pruning, pytest coverage, automation doc, and Make wiring completed. |
 | collect_faulthandler_reports.py | DONE | DONE | DONE | Structured faulthandler bundle emits JSON/MD/CSV alongside combined logs with pruning, latest pointers, automation doc (`docs/automation/collect_faulthandler_reports.md`), and Make target `studio-collect-faulthandler-reports`. |
 | collect_test_log_reports.py | DONE | DONE | DONE | Structured pytest log producer emits JSON/MD/CSV/log bundles with pruning, latest pointers, pytest coverage (`tests/tests_producers/test_collect_test_log_reports.py`), automation doc (`docs/automation/collect_test_log_reports.md`), and Make target `studio-collect-test-log-reports`. |
@@ -140,7 +140,7 @@ migration work visible.
 | .repo_studios/scripts/producers/check_inventory_health.py | Validates inventory summary metrics against CI thresholds and baseline deltas. | yes | manual CLI (--summary); make studio-check-inventory-health | inventory summary JSON; `.repo_studios/config/ci_inventory_thresholds.json` | tests/tests_producers/test_check_inventory_health.py | manual; make studio-check-inventory-health | scripts/producers/check_inventory_health.py | std-global-markdown-authoring.md | none | Emits structured JSON/MD/log artifacts with pruning and latest pointers. |
 | .repo_studios/scripts/producers/render_inventory_views.py | Renders canonical inventory YAML/Markdown views for quick review. | yes | manual CLI (--schema-root/--output-dir) | PyYAML; inventory schema | tests/tests_producers/test_render_inventory_views.py | manual | scripts/producers/render_inventory_views.py | std-global-markdown-authoring.md | none | Writes run bundles under `.repo_studios/reports/producer_reports/render_inventory_views/` (JSON/MD/log/raw) and refreshes legacy view stubs for downstream compatibility. |
 | .repo_studios/scripts/producers/validate_inventory.py | Lightweight schema checks applied to Repo Studios inventory files. | yes | manual CLI (--json) | PyYAML; inventory schema; validator_config.yaml; enums.yaml | tests/tests_producers/test_validate_inventory.py | manual | scripts/producers/validate_inventory.py | std-global-python-engineering.md | none | Emits validation runs in `.repo_studios/reports/producer_reports/validate_inventory/` (JSON/MD/log/issues) with pruning & latest pointers; legacy `--json` continues to surface consolidated findings. |
-| .repo_studios/scripts/producers/generate_doc_index.py | Builds repo-wide documentation index bundle with JSON/YAML/CSV views plus optional database sink placeholder metadata. | yes | manual CLI (--repo-root/--output-dir/--db-target/--log-level) | stdlib; PyYAML | tests/tests_producers/test_generate_doc_index.py | manual | scripts/producers/generate_doc_index.py | std-global-markdown-authoring.md | none | Outputs JSON + Markdown bundle under `.repo_studios/reports/producer_reports/doc_index/` with retention=1, database placeholder logging, and automation doc `docs/automation/generate_doc_index.md`. |
+| .repo_studios/scripts/producers/generate_doc_index.py | Builds repo-wide documentation index bundle with metrics/advisories plus JSON/YAML/CSV views and optional database sink placeholder metadata. | yes | manual CLI (--repo-root/--output-dir/--db-target/--log-level) | stdlib; PyYAML | tests/tests_producers/test_generate_doc_index.py | manual | scripts/producers/generate_doc_index.py | std-global-markdown-authoring.md | none | Outputs JSON, Markdown bundle, and standalone CSV under `.repo_studios/reports/producer_reports/doc_index/` with sanitized front matter, retention=1, metrics/advisories sections, database placeholder logging, and automation doc `docs/automation/generate_doc_index.md`. |
 
 - **Next Actions:**
 - [x] Backfilled testing references for legacy producers that listed `TODO` coverage (diff_standards_index.py, validate_markdown_anchors.py) on 2025-11-23.

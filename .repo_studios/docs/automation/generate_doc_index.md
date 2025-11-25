@@ -7,9 +7,9 @@
 `generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI
 agents and operators can locate content, follow cross-links, and understand
 section structure without rescanning the filesystem. The producer normalises
-H1/H2 headings, gathers inline links, and captures a short descriptive snippet
-for each document, packaging the results in JSON and a Markdown bundle that
-includes JSON/YAML/CSV renderings.
+H1/H2 headings, parses YAML front matter, gathers inline links, and captures a
+short descriptive snippet for each document, packaging the results in JSON, a
+Markdown bundle, and a standalone CSV export with mirrored data.
 
 ## Output Contract
 
@@ -21,7 +21,10 @@ includes JSON/YAML/CSV renderings.
             `<!-- markdownlint-disable MD013 -->` and closes with
             `<!-- markdownlint-enable MD013 -->` so long descriptions and CSV rows
             can exceed standard line-length without failing lint.
-- Latest pointers (`latest_doc_index.json`, `latest_doc_index_bundle.md`) live
+      - `doc_index.csv` – flattened export containing the expanded metadata
+            columns described below.
+- Latest pointers (`latest_doc_index.json`, `latest_doc_index_bundle.md`,
+      `latest_doc_index.csv`) live
       alongside the run directories.
 - Retention defaults to one run; older directories are pruned automatically
       (`--artifacts-to-keep` honours higher values when explicitly provided).
@@ -42,15 +45,28 @@ Each document entry includes:
       the file (image links excluded by design).
 - `description`: first qualifying paragraph after the lead H1 (trimmed to ~240
       characters, optional when no prose is available).
+- `size_bytes`: file size at crawl time (integer).
+- `modified_utc`: ISO 8601 timestamp for the last modification.
+- `tags`: normalised list extracted from front matter (`tags` scalar or list).
+- `owners`: normalised list extracted from common owner front matter keys.
+- `status`: optional status string from front matter.
+- `frontmatter`: sanitised dict preserving serialisable values (dates rendered
+      as ISO strings, other unsupported types coerced to string).
+- `contains_placeholder`: `true` when the document text includes the word
+      “placeholder”.
 
 CSV output columns are `folder`, `filename`, `level`, `heading`, `slug`,
-`parent_slug`, `description`, and `links`; each row repeats the document’s link
-targets (semicolon-separated) so spreadsheet tooling can pivot on cross-document
-references without reprocessing the JSON payload.
+`parent_slug`, `description`, `size_bytes`, `modified_utc`, `tags`, `owners`,
+`status`, `contains_placeholder`, and `links`; each row repeats the document’s
+link targets (semicolon-separated) so spreadsheet tooling can pivot on
+cross-document references without reprocessing the JSON payload.
 
-Payload metadata exposes summary counts, scanner exclusions, and an `outputs`
-block describing file artifacts; the optional `outputs.database` node records
-placeholder sink details when requested.
+Payload metadata exposes summary counts, derived metrics (link density, missing
+description totals, duplicate slug counts, directory distributions), advisory
+previews (recent files missing descriptions/headings, placeholder hits, files
+outside the docs tree), scanner exclusions, and an `outputs` block describing
+file artifacts; the optional `outputs.database` node records placeholder sink
+details when requested.
 
 ## CLI Reference
 
@@ -72,7 +88,8 @@ placeholder sink details when requested.
 - Traverses the repository while excluding generated/vendor directories such as
       `.venv/`, `node_modules/`, `dist/`, and `.repo_studios/reports/`.
 - Normalises slugs via the shared `slugify` helper, captures heading line
-      numbers, and deduplicates inline links.
+      numbers, deduplicates inline links, and converts front matter into
+      serialisable metadata (tags, owners, status, preserved dict snapshot).
 - Generates JSON, YAML, and CSV renderings, embedding them in the Markdown
       bundle with frontmatter and guidance for agent consumers.
 - Delegates artifact management to `write_report_artifacts`, maintaining latest
