@@ -14,13 +14,12 @@
 - Fallback Markdown scan of `docs/` when inventory artifacts are unavailable.
 - Baseline file `tests/docs/anchor_slug_baseline.json` for regression deltas.
 
-## Outputs
-
 - Timestamped run directory under
-  `.repo_studios/reports/consumer_reports/anchor_health_reports/` containing `anchor_report.json`,
-  `anchor_report.md`, and `clusters.tsv`.
-- Hard-linked pointers in the same directory: `anchor_report_latest.json`, `anchor_report_latest.md`,
-  `clusters_latest.tsv`.
+  `.repo_studios/reports/consumer_reports/anchor_health_reports/` containing `summary.json`,
+  `SUMMARY.md`, `bundle_summary.json`, `anchor_report.json`, `anchor_report.md`, and `clusters.tsv`.
+- Latest pointers in the same directory: `latest_summary.json`, `latest_SUMMARY.md`,
+  `latest_bundle_summary.json`, plus compatibility links `anchor_report_latest.json`,
+  `anchor_report_latest.md`, and `clusters_latest.tsv`.
 - `runs.log` entry with timestamped duplicate counts.
 - Database integration placeholder in the JSON payload (`outputs.database`) for future sink wiring.
 

@@ -7,6 +7,7 @@ import argparse
 import json
 import logging
 import shutil
+import sys
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -31,6 +32,18 @@ CONSUMER_TREND_COPY_NAME = "TREND_SNAPSHOT.md"
 PRODUCER_REPORT_NAME = "report.json"
 
 RISK_LEVELS: tuple[str, ...] = ("HIGH", "MODERATE", "SAFE")
+
+SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
+UTILITIES_ROOT = Path(__file__).resolve().parents[2]
+for candidate in (SCRIPTS_ROOT, UTILITIES_ROOT):
+    candidate_str = str(candidate)
+    if candidate_str not in sys.path:
+        sys.path.insert(0, candidate_str)
+
+from utilities.monkey_patch_risk import (  # noqa: E402
+    FindingSignals,
+    classify_monkey_patch,
+)
 
 
 @dataclass(frozen=True)
@@ -137,19 +150,14 @@ def _dir_timestamp(name: str) -> datetime | None:
 def _classify(findings: Iterable[dict[str, Any]]) -> dict[str, int]:
     counts = {level: 0 for level in RISK_LEVELS}
     for finding in findings:
-        category = str(finding.get("category", ""))
-        is_test = bool(finding.get("is_test", False))
-        is_module_scope = bool(finding.get("is_module_scope", False))
-        if category in {"sys_modules_assignment", "import_time_side_effect"} and not is_test:
-            counts["HIGH"] += 1
-        elif category == "global_env_mutation" and (not is_test) and is_module_scope:
-            counts["HIGH"] += 1
-        elif category == "attribute_reassignment_on_import":
-            counts["MODERATE"] += 1
-        elif category == "global_env_mutation" and is_test:
-            counts["MODERATE"] += 1
-        else:
-            counts["SAFE"] += 1
+        risk = classify_monkey_patch(
+            FindingSignals(
+                category=str(finding.get("category", "")),
+                is_test=bool(finding.get("is_test", False)),
+                is_module_scope=bool(finding.get("is_module_scope", False)),
+            )
+        )
+        counts[risk] += 1
     return counts
 
 

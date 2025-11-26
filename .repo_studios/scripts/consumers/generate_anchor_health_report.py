@@ -29,7 +29,7 @@ import re
 import shutil
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Iterable, Sequence
+from typing import Any, Iterable, Sequence
 
 HEADING_RE = re.compile(r"^(#{1,2})\s+(.*)$")
 GENERIC_ALLOWED = {"overview", "introduction", "faq", "notes"}
@@ -43,6 +43,21 @@ DEFAULT_ARTIFACTS_TO_KEEP = 5
 # Subfolder naming pattern: anchor_health-YYYY-MM-DD_hhmm
 RUN_PREFIX = "anchor_health-"
 DATABASE_PLACEHOLDER_TARGET = "anchor_health_snapshot"
+
+SUMMARY_JSON_NAME = "summary.json"
+SUMMARY_MD_NAME = "SUMMARY.md"
+BUNDLE_SUMMARY_NAME = "bundle_summary.json"
+LEGACY_JSON_NAME = "anchor_report.json"
+LEGACY_MD_NAME = "anchor_report.md"
+CLUSTERS_TSV_NAME = "clusters.tsv"
+LATEST_POINTERS = {
+    SUMMARY_JSON_NAME: "latest_summary.json",
+    SUMMARY_MD_NAME: "latest_SUMMARY.md",
+    BUNDLE_SUMMARY_NAME: "latest_bundle_summary.json",
+    LEGACY_JSON_NAME: "anchor_report_latest.json",
+    LEGACY_MD_NAME: "anchor_report_latest.md",
+    CLUSTERS_TSV_NAME: "clusters_latest.tsv",
+}
 
 
 def _slugify(raw: str) -> str:
@@ -254,17 +269,146 @@ def _prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> list[P
     return stale
 
 
-def write_artifacts(report: dict, ts: datetime | None = None, *, output_dir: Path = OUTPUT_DIR) -> Path:
+def _build_summary(report: dict[str, Any]) -> dict[str, Any]:
+    clusters: list[dict[str, Any]] = list(report.get("clusters", []))
+    top_clusters: list[dict[str, Any]] = []
+    for cluster in clusters[:10]:
+        top_clusters.append(
+            {
+                "slug": cluster.get("slug"),
+                "file_count": int(cluster.get("file_count", 0)),
+                "files": list(cluster.get("files", [])),
+                "locations": list(cluster.get("locations", [])),
+            }
+        )
+    return {
+        "schema_version": 1,
+        "source": report.get("source"),
+        "strict_duplicate_count": int(report.get("strict_duplicate_count", 0)),
+        "baseline_cross_file_duplicates": report.get("baseline_cross_file_duplicates"),
+        "delta_vs_baseline": report.get("delta_vs_baseline"),
+        "inventory_cross_file_duplicates": report.get("inventory_cross_file_duplicates"),
+        "inventory_report": report.get("inventory_report"),
+        "total_clusters": len(clusters),
+        "top_clusters": top_clusters,
+        "database_placeholder": report.get("outputs", {}).get("database"),
+    }
+
+
+def _render_summary_markdown(
+    summary: dict[str, Any], *, generated_at: datetime, bundle_dir: Path
+) -> str:
+    lines: list[str] = ["# Anchor Health Summary", ""]
+    lines.append(f"Generated (UTC): {generated_at.isoformat(timespec='seconds')}")
+    lines.append("")
+    lines.append(f"- Strict Duplicate Count: {summary['strict_duplicate_count']}")
+    baseline = summary.get("baseline_cross_file_duplicates")
+    lines.append(f"- Baseline Cross-File Duplicates: {baseline if baseline is not None else 'unknown'}")
+    delta = summary.get("delta_vs_baseline")
+    lines.append(f"- Delta vs Baseline: {delta if delta is not None else 'N/A'}")
+    cross_file = summary.get("inventory_cross_file_duplicates")
+    if cross_file is not None:
+        lines.append(f"- Inventory Cross-File Duplicates: {cross_file}")
+    lines.append(f"- Source: {summary.get('source', 'unknown')}")
+    lines.append("")
+    lines.append("## Top Clusters")
+    lines.append("")
+    raw_top_clusters = summary.get("top_clusters", [])
+    top_clusters: list[dict[str, Any]] = list(raw_top_clusters) if isinstance(raw_top_clusters, list) else []
+    if top_clusters:
+        for cluster in top_clusters:
+            slug = cluster.get("slug", "unknown")
+            file_count = cluster.get("file_count", 0)
+            files_list = list(cluster.get("files", []))
+            files = ", ".join(files_list[:3])
+            if files:
+                lines.append(f"- `{slug}` — {file_count} files ({files})")
+            else:
+                lines.append(f"- `{slug}` — {file_count} files")
+    else:
+        lines.append("- None")
+    lines.append("")
+    lines.append("## Next Actions")
+    lines.append("")
+    lines.append("- Prioritize the largest duplicate clusters and align headings across files.")
+    lines.append("- Confirm updates against the committed baseline before closing remediation items.")
+    lines.append("")
+    lines.append("## Source References")
+    lines.append("")
+    lines.append(f"- Source Type: {summary.get('source', 'unknown')}")
+    inventory_report = summary.get("inventory_report")
+    if inventory_report:
+        try:
+            lines.append(f"- Inventory Report: `{Path(str(inventory_report)).resolve()}`")
+        except Exception:
+            lines.append(f"- Inventory Report: `{inventory_report}`")
+    try:
+        baseline_path = BASELINE_PATH.resolve()
+        lines.append(f"- Baseline File: `{baseline_path}`")
+    except Exception:
+        lines.append(f"- Baseline File: `{BASELINE_PATH}`")
+    lines.append(f"- Consumer Bundle: `{bundle_dir.resolve()}`")
+    return "\n".join(lines) + "\n"
+
+
+def _update_latest_artifacts(base: Path, bundle_dir: Path) -> None:
+    base.mkdir(parents=True, exist_ok=True)
+    for src_name, dest_name in LATEST_POINTERS.items():
+        src = bundle_dir / src_name
+        if not src.exists():
+            continue
+        dest = base / dest_name
+        try:
+            if dest.exists() or dest.is_symlink():
+                dest.unlink()
+            dest.hardlink_to(src)
+        except Exception:
+            dest.write_bytes(src.read_bytes())
+
+
+def write_artifacts(report: dict, ts: datetime | None = None, *, output_dir: Path = OUTPUT_DIR) -> dict[str, Any]:
     ts = ts or datetime.now(UTC)
     output_dir.mkdir(parents=True, exist_ok=True)
     run_dir = _run_dir(ts, output_dir)
     run_dir.mkdir(parents=True, exist_ok=True)
 
-    # Base JSON artifact (timestamped)
-    (run_dir / "anchor_report.json").write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    summary = _build_summary(report)
 
-    # Compact markdown summary
-    lines = [
+    summary_path = run_dir / SUMMARY_JSON_NAME
+    summary_path.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+
+    summary_md_path = run_dir / SUMMARY_MD_NAME
+    summary_md_path.write_text(_render_summary_markdown(summary, generated_at=ts, bundle_dir=run_dir), encoding="utf-8")
+
+    bundle_summary = {
+        "schema_version": 1,
+        "generated_at": ts.isoformat(timespec="seconds"),
+        "source": report.get("source"),
+        "inventory_report": report.get("inventory_report"),
+        "artifacts": {
+            "summary_json": str(summary_path.resolve()),
+            "summary_md": str(summary_md_path.resolve()),
+            "legacy_report_json": str((run_dir / LEGACY_JSON_NAME).resolve()),
+            "legacy_report_md": str((run_dir / LEGACY_MD_NAME).resolve()),
+            "clusters_tsv": str((run_dir / CLUSTERS_TSV_NAME).resolve()),
+        },
+        "metrics": {
+            "strict_duplicate_count": summary["strict_duplicate_count"],
+            "baseline_cross_file_duplicates": summary.get("baseline_cross_file_duplicates"),
+            "delta_vs_baseline": summary.get("delta_vs_baseline"),
+            "inventory_cross_file_duplicates": summary.get("inventory_cross_file_duplicates"),
+            "total_clusters": summary.get("total_clusters"),
+        },
+        "database_placeholder": summary.get("database_placeholder"),
+    }
+
+    bundle_summary_path = run_dir / BUNDLE_SUMMARY_NAME
+    bundle_summary_path.write_text(json.dumps(bundle_summary, indent=2) + "\n", encoding="utf-8")
+
+    legacy_json_path = run_dir / LEGACY_JSON_NAME
+    legacy_json_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    legacy_md_lines = [
         "# Anchor Health Report",
         "",
         f"Generated (UTC): {ts.isoformat()}",
@@ -275,45 +419,34 @@ def write_artifacts(report: dict, ts: datetime | None = None, *, output_dir: Pat
         "## Top Clusters (up to 25)",
         "",
     ]
-    for c in report["clusters"][:25]:
-        lines.append(f"- `{c['slug']}` — {c['file_count']} files")
-    lines.append("")
-    lines.append("## Next Actions Guidance")
-    lines.append("")
-    lines.append("Prioritize largest clusters first; rename all but canonical file.")
-    (run_dir / "anchor_report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    for cluster in report["clusters"][:25]:
+        legacy_md_lines.append(f"- `{cluster['slug']}` — {cluster['file_count']} files")
+    legacy_md_lines.append("")
+    legacy_md_lines.append("## Next Actions Guidance")
+    legacy_md_lines.append("")
+    legacy_md_lines.append("Prioritize largest clusters first; rename all but canonical file.")
+    (run_dir / LEGACY_MD_NAME).write_text("\n".join(legacy_md_lines) + "\n", encoding="utf-8")
 
-    # Full cluster listing for tooling consumption (tsv for quick grep)
     tsv_lines = ["slug\tfile_count\tfiles\tlocations"]
-    for c in report["clusters"]:
-        files_joined = ",".join(c["files"])  # type: ignore[index]
-        locations_joined = ";".join(c.get("locations", []))
-        tsv_lines.append(f"{c['slug']}\t{c['file_count']}\t{files_joined}\t{locations_joined}")
-    (run_dir / "clusters.tsv").write_text("\n".join(tsv_lines) + "\n", encoding="utf-8")
+    for cluster in report["clusters"]:
+        files_joined = ",".join(cluster["files"])  # type: ignore[index]
+        locations_joined = ";".join(cluster.get("locations", []))
+        tsv_lines.append(f"{cluster['slug']}\t{cluster['file_count']}\t{files_joined}\t{locations_joined}")
+    (run_dir / CLUSTERS_TSV_NAME).write_text("\n".join(tsv_lines) + "\n", encoding="utf-8")
 
-    # Update latest symlink / copies
-    latest_json = output_dir / "anchor_report_latest.json"
-    latest_md = output_dir / "anchor_report_latest.md"
-    latest_tsv = output_dir / "clusters_latest.tsv"
-    for src, dest in [
-        (run_dir / "anchor_report.json", latest_json),
-        (run_dir / "anchor_report.md", latest_md),
-        (run_dir / "clusters.tsv", latest_tsv),
-    ]:
-        try:
-            if dest.exists():
-                dest.unlink()
-            dest.hardlink_to(src)  # fast copy when same FS
-        except Exception:
-            # Fallback copy
-            dest.write_bytes(src.read_bytes())
+    _update_latest_artifacts(output_dir, run_dir)
 
-    # Append to run log
-    log_line = f"{ts.isoformat()} duplicates={report['strict_duplicate_count']} baseline={report['baseline_cross_file_duplicates']}"  # noqa: E501
+    log_line = f"{ts.isoformat()} duplicates={report['strict_duplicate_count']} baseline={report['baseline_cross_file_duplicates']}"
     with (output_dir / "runs.log").open("a", encoding="utf-8") as fh:
         fh.write(log_line + "\n")
 
-    return run_dir
+    return {
+        "bundle_dir": run_dir,
+        "summary": summary,
+        "summary_path": summary_path,
+        "summary_markdown_path": summary_md_path,
+        "bundle_summary_path": bundle_summary_path,
+    }
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
@@ -364,18 +497,28 @@ def run(
     inventory_payload, inventory_path = load_inventory_report(args.inventory_report)
     report = build_report(inventory=inventory_payload, inventory_path=inventory_path)
     target_output = args.output_dir if args.output_dir is not None else OUTPUT_DIR
-    run_dir = write_artifacts(report, output_dir=target_output)
-    _prune_old_runs(target_output, keep=args.artifacts_to_keep, current_run=run_dir)
-    return {"report": report, "run_dir": str(run_dir)}
+    artifact_info = write_artifacts(report, output_dir=target_output)
+    pruned = _prune_old_runs(target_output, keep=args.artifacts_to_keep, current_run=artifact_info["bundle_dir"])
+    return {
+        "report": report,
+        "summary": artifact_info["summary"],
+        "bundle_dir": str(artifact_info["bundle_dir"].resolve()),
+        "bundle_summary": str(artifact_info["bundle_summary_path"].resolve()),
+        "summary_path": str(artifact_info["summary_path"].resolve()),
+        "summary_markdown": str(artifact_info["summary_markdown_path"].resolve()),
+        "output_dir": str(target_output.resolve()),
+        "source": report.get("source"),
+        "pruned": [str(p.resolve()) for p in pruned],
+    }
 
 
 def main(argv: Sequence[str] | None = None) -> None:  # pragma: no cover - CLI side effect
     result = run(argv=argv)
     report = result["report"]
-    run_dir = result["run_dir"]
+    bundle_dir = result["bundle_dir"]
     logging.info(
         "Anchor health artifacts written to %s (duplicates=%s baseline=%s)",
-        run_dir,
+        bundle_dir,
         report["strict_duplicate_count"],
         report["baseline_cross_file_duplicates"],
     )

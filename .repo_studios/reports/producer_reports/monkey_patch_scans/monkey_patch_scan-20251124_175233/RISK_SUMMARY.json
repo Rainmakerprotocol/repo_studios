@@ -2,8 +2,8 @@
   "total_findings": 56,
   "counts_by_risk": {
     "HIGH": 4,
-    "SAFE": 48,
-    "MODERATE": 4
+    "MODERATE": 37,
+    "SAFE": 15
   },
   "top_files": [
     [
@@ -63,6 +63,12 @@
     [
       "global_env_mutation",
       1
+    ]
+  ],
+  "high_risk_categories": [
+    [
+      "sys_modules_assignment",
+      4
     ]
   ],
   "run_metadata": {

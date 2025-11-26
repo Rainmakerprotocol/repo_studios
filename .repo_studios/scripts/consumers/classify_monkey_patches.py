@@ -27,12 +27,25 @@ import json
 import logging
 import os
 import shutil
+import sys
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
+
+SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
+UTILITIES_ROOT = Path(__file__).resolve().parents[2]
+for candidate in (SCRIPTS_ROOT, UTILITIES_ROOT):
+    candidate_str = str(candidate)
+    if candidate_str not in sys.path:
+        sys.path.insert(0, candidate_str)
+
+from utilities.monkey_patch_risk import (  # noqa: E402
+    FindingSignals,
+    classify_monkey_patch as classify_monkey_patch_from_signals,
+)
 
 DEFAULT_STRUCTURED_ROOT = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
 LEGACY_ROOT = Path(".repo_studios/monkey_patch")
@@ -150,15 +163,13 @@ def _load_legacy_findings(report_path: Path) -> list[Finding]:
 
 
 def classify(f: Finding) -> str:
-    if f.category in {"sys_modules_assignment", "import_time_side_effect"} and not f.is_test:
-        return "HIGH"
-    if f.category == "global_env_mutation" and (not f.is_test) and f.is_module_scope:
-        return "HIGH"
-    if f.category == "attribute_reassignment_on_import" and (not f.is_test):
-        return "MODERATE"
-    if f.category == "global_env_mutation" and f.is_test:
-        return "MODERATE"
-    return "SAFE"
+    return classify_monkey_patch_from_signals(
+        FindingSignals(
+            category=f.category,
+            is_test=f.is_test,
+            is_module_scope=f.is_module_scope,
+        )
+    )
 
 
 def aggregate(findings: Iterable[Finding], metadata: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -167,6 +178,7 @@ def aggregate(findings: Iterable[Finding], metadata: dict[str, Any] | None = Non
     for f in findings_list:
         buckets[classify(f)].append(f)
     counts = {k: len(v) for k, v in buckets.items()}
+    high_category_counts = Counter(f.category for f in buckets.get("HIGH", []))
 
     # Top files by count
     file_counts = Counter(f.file for f in findings_list)
@@ -180,6 +192,7 @@ def aggregate(findings: Iterable[Finding], metadata: dict[str, Any] | None = Non
         "counts_by_risk": counts,
         "top_files": top_files,
         "top_categories": cat_counts,
+        "high_risk_categories": high_category_counts.most_common(),
         "run_metadata": metadata or {},
     }
 
@@ -198,17 +211,27 @@ def _render_markdown(agg: dict[str, Any], *, generated: datetime | None = None) 
         md.append(f"- Total Findings: {int(total)}")
         md.append("")
     md.append("## Counts by Risk")
+    md.append("")
     counts = agg["counts_by_risk"]
     for level in ("HIGH", "MODERATE", "SAFE"):
         md.append(f"- {level}: {int(counts.get(level, 0))}")
     md.append("")
     md.append("## Top Files")
+    md.append("")
     for file, count in agg["top_files"]:
         md.append(f"- {file}: {count}")
     md.append("")
     md.append("## Top Categories")
+    md.append("")
     for cat, count in agg["top_categories"]:
         md.append(f"- {cat}: {count}")
+    high_risk = agg.get("high_risk_categories")
+    if high_risk:
+        md.append("")
+        md.append("## High-Risk Focus")
+        md.append("")
+        for cat, count in high_risk:
+            md.append(f"- {cat}: {count}")
     return "\n".join(md) + "\n"
 
 
@@ -238,8 +261,10 @@ def _write_consumer_bundle(
     md_path = bundle_dir / "SUMMARY.md"
     markdown = _render_markdown(agg, generated=ts)
     md_lines = markdown.rstrip("\n").splitlines()
-    md_lines.append("")
+    if md_lines and md_lines[-1] != "":
+        md_lines.append("")
     md_lines.append("## Source References")
+    md_lines.append("")
     md_lines.append(f"- Source Type: {source}")
     md_lines.append(f"- Scan Directory: `{scan_dir.resolve()}`")
     if producer_report:

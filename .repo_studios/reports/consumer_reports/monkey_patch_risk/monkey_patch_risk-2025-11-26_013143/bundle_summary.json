@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "generated_at": "2025-11-26T01:40:25+00:00",
+  "generated_at": "2025-11-26T01:31:43+00:00",
   "source": "structured",
   "scan_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\monkey_patch_scans\\monkey_patch_scan-20251124_175233",
   "producer_report": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\monkey_patch_scans\\monkey_patch_scan-20251124_175233\\report.json",
   "artifacts": {
-    "summary_json": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\consumer_reports\\monkey_patch_risk\\monkey_patch_risk-2025-11-26_014025\\summary.json",
-    "summary_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\consumer_reports\\monkey_patch_risk\\monkey_patch_risk-2025-11-26_014025\\SUMMARY.md"
+    "summary_json": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\consumer_reports\\monkey_patch_risk\\monkey_patch_risk-2025-11-26_013143\\summary.json",
+    "summary_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\consumer_reports\\monkey_patch_risk\\monkey_patch_risk-2025-11-26_013143\\SUMMARY.md"
   },
   "counts_by_risk": {
     "HIGH": 4,

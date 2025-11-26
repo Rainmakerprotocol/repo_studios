@@ -83,6 +83,7 @@ def test_anchor_health_uses_inventory_artifacts(tmp_path):
         os.chdir(cwd)
 
     report = result["report"]
+    summary = result["summary"]
     assert report["source"] == "inventory"
     assert report["strict_duplicate_count"] == 1
     assert report["inventory_cross_file_duplicates"] == 1
@@ -92,14 +93,25 @@ def test_anchor_health_uses_inventory_artifacts(tmp_path):
     cluster = next(item for item in report["clusters"] if item["slug"] == "shared")
     assert cluster["files"] == ["one.md", "two.md"]
     assert cluster["locations"] == ["one.md:1", "two.md:1"]
-    run_dir = Path(result["run_dir"])
-    assert run_dir.exists()
-    assert (run_dir / "anchor_report.json").exists()
-    assert (run_dir / "anchor_report.md").exists()
-    assert (run_dir / "clusters.tsv").exists()
+    assert summary["strict_duplicate_count"] == 1
+    top_cluster = next(item for item in summary["top_clusters"] if item["slug"] == "shared")
+    assert top_cluster["file_count"] == 2
+    bundle_dir = Path(result["bundle_dir"])
+    assert bundle_dir.exists()
+    assert (bundle_dir / "summary.json").exists()
+    assert (bundle_dir / "SUMMARY.md").exists()
+    assert (bundle_dir / "bundle_summary.json").exists()
+    assert (bundle_dir / "anchor_report.json").exists()
+    assert (bundle_dir / "anchor_report.md").exists()
+    assert (bundle_dir / "clusters.tsv").exists()
 
-    latest_json = run_dir.parent / "anchor_report_latest.json"
-    assert latest_json.exists()
+    output_dir = bundle_dir.parent
+    assert (output_dir / "latest_summary.json").exists()
+    assert (output_dir / "latest_SUMMARY.md").exists()
+    assert (output_dir / "latest_bundle_summary.json").exists()
+    assert (output_dir / "anchor_report_latest.json").exists()
+    assert (output_dir / "anchor_report_latest.md").exists()
+    assert (output_dir / "clusters_latest.tsv").exists()
 
 
 def test_anchor_health_falls_back_to_docs_scan(tmp_path):
@@ -133,6 +145,7 @@ def test_anchor_health_falls_back_to_docs_scan(tmp_path):
         os.chdir(cwd)
 
     report = result["report"]
+    summary = result["summary"]
     assert report["source"] == "scan"
     assert report["strict_duplicate_count"] == 1
     database_placeholder = report["outputs"]["database"]
@@ -140,6 +153,8 @@ def test_anchor_health_falls_back_to_docs_scan(tmp_path):
     assert database_placeholder["target"] == "anchor_health_snapshot"
     cluster = next(item for item in report["clusters"] if item["slug"] == "shared")
     assert sorted(cluster["files"]) == ["alpha.md", "beta.md"]
+    assert summary["source"] == "scan"
+    assert summary["strict_duplicate_count"] == 1
 
 
 def test_anchor_health_prunes_history(tmp_path, monkeypatch):

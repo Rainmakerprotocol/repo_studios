@@ -6,6 +6,8 @@ import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
+import pytest
+
 _CONSUMER_PATH = Path(__file__).resolve().parents[2] / "scripts" / "consumers" / "classify_monkey_patches.py"
 
 
@@ -38,6 +40,36 @@ def _write_legacy_run(root: Path, name: str, findings: list[dict[str, object]]) 
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "report.json").write_text(json.dumps(findings), encoding="utf-8")
     return run_dir
+
+
+@pytest.mark.parametrize(
+    "category,is_test,is_module_scope,expected",
+    [
+        ("sys_modules_assignment", False, True, "HIGH"),
+        ("sys_modules_assignment", True, True, "MODERATE"),
+        ("import_time_side_effect", False, False, "HIGH"),
+        ("builtins_mutation", True, False, "MODERATE"),
+        ("singleton_rebind", False, False, "HIGH"),
+        ("global_env_mutation", False, True, "HIGH"),
+        ("global_env_mutation", True, False, "MODERATE"),
+        ("attribute_reassignment_on_import", False, False, "MODERATE"),
+        ("attribute_reassignment_on_import", True, False, "SAFE"),
+        ("setattr_on_import_or_class", False, False, "MODERATE"),
+        ("test_patch_misuse", True, True, "MODERATE"),
+        ("other", False, False, "SAFE"),
+    ],
+)
+def test_classify_matrix(category, is_test, is_module_scope, expected):
+    consumer = _load_module("classify_monkey_patches", _CONSUMER_PATH)
+    finding = consumer.Finding(
+        file="src/example.py",
+        line=1,
+        category=category,
+        is_test=is_test,
+        is_module_scope=is_module_scope,
+        import_base=None,
+    )
+    assert consumer.classify(finding) == expected
 
 
 def test_run_prefers_structured_matches(tmp_path):

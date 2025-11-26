@@ -157,7 +157,8 @@ def test_fallback_to_producer_reports(tmp_path):
     assert trend_json["notes"]
     runs = trend_json["runs"]
     assert runs[-1]["counts_by_risk"]["HIGH"] == 1
-    assert runs[-1]["counts_by_risk"]["MODERATE"] == 2
+    assert runs[-1]["counts_by_risk"]["MODERATE"] == 1
+    assert runs[-1]["counts_by_risk"]["SAFE"] == 1
     assert result["consumer_snapshot"] is None
 
 
