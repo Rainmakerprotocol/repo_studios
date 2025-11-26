@@ -1,0 +1,30 @@
+categories:
+  global:
+    title: Global Standards
+    description: Repository-wide engineering guidance
+    tags:
+      - global
+  project:
+    title: Project Practices
+    description: Project-specific operating instructions
+    tags:
+      - project
+sources:
+  - path: docs/standards/global/std-global-code-cleanup.md
+    categories:
+      - global
+  - path: docs/standards/global/std-global-markdown-authoring.md
+    categories:
+      - global
+  - path: docs/standards/global/std-global-monkey-patching.md
+    categories:
+      - global
+  - path: docs/standards/global/std-global-python-engineering.md
+    categories:
+      - global
+  - path: docs/standards/project/std-project-operating-standard.md
+    categories:
+      - project
+  - path: docs/standards/project/std-project-python-instructions.md
+    categories:
+      - project

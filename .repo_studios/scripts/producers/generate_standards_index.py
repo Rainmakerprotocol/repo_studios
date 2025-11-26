@@ -26,7 +26,7 @@ except Exception as exc:  # pragma: no cover - dependency issue surfaced early
 DEFAULT_REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_index_reports")
 RUN_PREFIX = "standards_index"
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = 5
 SCHEMA_VERSION = 1
 
 DEFAULT_RELATIVE_CATEGORIES = Path(".repo_studios/scripts/.repo_studios/standards_categories.yaml")

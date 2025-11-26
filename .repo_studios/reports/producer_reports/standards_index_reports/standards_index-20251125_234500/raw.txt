@@ -1,0 +1,68 @@
+schema_version: 1
+version: 2025.11.0
+generated_at: '2025-11-25T23:34:17.993602+00:00'
+offline: true
+integrity_hash: ac5fbce0d2185c4a1bbe2cd48da6cb42420fe38102d548a74749daecb8ac041a
+sources:
+- path: docs\standards\global\std-global-code-cleanup.md
+  categories:
+  - global
+- path: docs\standards\global\std-global-markdown-authoring.md
+  categories:
+  - global
+- path: docs\standards\global\std-global-monkey-patching.md
+  categories:
+  - global
+- path: docs\standards\global\std-global-python-engineering.md
+  categories:
+  - global
+- path: docs\standards\project\std-project-operating-standard.md
+  categories:
+  - project
+- path: docs\standards\project\std-project-python-instructions.md
+  categories:
+  - project
+categories:
+  global:
+    title: Global Standards
+    description: Repository-wide engineering guidance
+    tags:
+    - global
+  project:
+    title: Project Practices
+    description: Project-specific operating instructions
+    tags:
+    - project
+rules:
+- id: STD-0001
+  category_ids:
+  - global
+  summary: Follow repository-wide code cleanup practices
+  rationale: Aligns contributors on consistent cleanup rituals
+  severity: medium
+  applies_to:
+  - repositories
+  source: docs/standards/global/std-global-code-cleanup.md
+  last_updated: 2025-01-01
+- id: STD-0002
+  category_ids:
+  - project
+  summary: Maintain project operating documentation up to date
+  rationale: Keeps project workflows transparent for the team
+  severity: medium
+  applies_to:
+  - project_docs
+  source: docs/standards/project/std-project-operating-standard.md
+  last_updated: 2025-01-01
+coverage:
+  source_stats: {}
+  missing_sections: []
+metadata:
+  build_script: .repo_studios\scripts\producers\generate_standards_index.py
+  overrides_file: .repo_studios/standards_index_overrides.yaml
+  extraction:
+    enabled: false
+    auto_accept: false
+    extracted_count: 0
+    pending_file: null
+  notes: Seed + optional heuristic extraction phase.

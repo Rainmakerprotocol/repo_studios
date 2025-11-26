@@ -41,6 +41,17 @@ def _write_categories(path: Path, sources: list[Path]) -> None:
     path.write_text("\n".join(body), encoding="utf-8")
 
 
+def test_basic_shim_delegates_to_command_center():
+    mod = _load_module()
+    impl = mod.COMMAND_CENTER_MODULE
+
+    assert mod.run is impl.run
+    assert mod.main is impl.main
+    assert mod.RUN_PREFIX == impl.RUN_PREFIX
+    assert mod.PATHS_CONFIG is impl.PATHS_CONFIG
+    assert mod.COMMAND_CENTER_SCRIPT_PATH.is_file()
+
+
 def test_structured_artifacts_created(tmp_path):
     mod = _load_module()
     workspace = tmp_path / "workspace"
@@ -67,8 +78,10 @@ def test_structured_artifacts_created(tmp_path):
     output_dir = workspace / ".repo_studios" / "reports" / "producer_reports" / "standards_gap_reports"
     legacy_json = workspace / "legacy_gap.json"
 
-    exit_code = mod.main(
+    result = mod.run(
         [
+            "--repo-root",
+            str(workspace),
             "--index-path",
             str(index_path),
             "--categories-path",
@@ -86,26 +99,39 @@ def test_structured_artifacts_created(tmp_path):
         ]
     )
 
-    assert exit_code == 0
-    run_dir = output_dir / f"{mod.RUN_PREFIX}-20240101_000000"
+    run_dir = Path(result["run_dir"])
+    assert run_dir == output_dir / f"{mod.RUN_PREFIX}-20240101_000000"
     assert run_dir.is_dir()
 
-    report = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
+    report = json.loads(Path(result["report_json"]).read_text(encoding="utf-8"))
     summary = report["summary"]
-    key = str(doc)
+    possible_keys = {
+        str(doc),
+        str(doc.relative_to(workspace)),
+        str(doc.relative_to(workspace)).replace("\\", "/"),
+    }
+    key = next((candidate for candidate in possible_keys if candidate in report["sources"]), None)
+    assert key is not None
+    assert summary == result["summary"]
     assert summary["total_candidates"] == 2
     assert summary["sources_with_candidates"] == 1
     assert summary["top_source_candidates"] == 2
+    assert summary["scanned_sources"] == 1
     assert report["total_candidates"] == 2
-    assert key in report["sources"]
     assert len(report["sources"][key]) == 2
     assert (run_dir / "report.md").is_file()
     assert (run_dir / "candidates.tsv").is_file()
     assert (output_dir / "latest_report.json").is_file()
     assert (output_dir / "latest_report.md").is_file()
     assert (output_dir / "latest_candidates.tsv").is_file()
+    assert (output_dir / "latest_bundle_summary.json").is_file()
 
-    legacy = json.loads(legacy_json.read_text(encoding="utf-8"))
+    bundle_summary = json.loads(Path(result["bundle_summary"]).read_text(encoding="utf-8"))
+    assert bundle_summary["total_candidates"] == 2
+    assert bundle_summary["sources_with_candidates"] == 1
+    assert bundle_summary["top_sources"][0]["path"].endswith(doc.name)
+
+    legacy = json.loads(Path(result["legacy_json"]).read_text(encoding="utf-8"))
     assert legacy["summary"] == summary
 
 
@@ -137,8 +163,10 @@ def test_pruning_keeps_recent_runs(tmp_path):
         path.mkdir()
         (path / "report.json").write_text("{}", encoding="utf-8")
 
-    exit_code = mod.main(
+    mod.run(
         [
+            "--repo-root",
+            str(workspace),
             "--index-path",
             str(index_path),
             "--categories-path",
@@ -154,7 +182,6 @@ def test_pruning_keeps_recent_runs(tmp_path):
         ]
     )
 
-    assert exit_code == 0
     expected = {
         f"{mod.RUN_PREFIX}-20230301_000000",
         f"{mod.RUN_PREFIX}-20240203_000000",
@@ -164,3 +191,4 @@ def test_pruning_keeps_recent_runs(tmp_path):
     assert (output_dir / "latest_report.json").is_file()
     assert (output_dir / "latest_report.md").is_file()
     assert (output_dir / "latest_candidates.tsv").is_file()
+    assert (output_dir / "latest_bundle_summary.json").is_file()
