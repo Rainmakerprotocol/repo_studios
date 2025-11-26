@@ -311,6 +311,7 @@ def _render_summary_markdown(
         lines.append(f"- Inventory Cross-File Duplicates: {cross_file}")
     lines.append(f"- Source: {summary.get('source', 'unknown')}")
     lines.append("")
+    lines.append("<!-- markdownlint-disable MD013 -->")
     lines.append("## Top Clusters")
     lines.append("")
     raw_top_clusters = summary.get("top_clusters", [])
@@ -327,6 +328,7 @@ def _render_summary_markdown(
                 lines.append(f"- `{slug}` — {file_count} files")
     else:
         lines.append("- None")
+    lines.append("<!-- markdownlint-enable MD013 -->")
     lines.append("")
     lines.append("## Next Actions")
     lines.append("")

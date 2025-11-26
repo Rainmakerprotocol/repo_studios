@@ -102,6 +102,31 @@ def _extract_top_frames(block: Sequence[str], n: int) -> list[_TopFrame]:
     return frames
 
 
+def _bucket_signatures(signatures: Sequence[FaultSignature]) -> dict[str, int]:
+    buckets = {
+        "repeat_offender": 0,
+        "multi_hit": 0,
+        "single_hit": 0,
+    }
+    for sig in signatures:
+        if sig.count >= 5:
+            buckets["repeat_offender"] += 1
+        elif sig.count >= 2:
+            buckets["multi_hit"] += 1
+        else:
+            buckets["single_hit"] += 1
+    return buckets
+
+
+def _parse_iso(value: str) -> datetime | None:
+    if not value:
+        return None
+    try:
+        return datetime.fromisoformat(value)
+    except Exception:
+        return None
+
+
 def ensure_manifest(outdir: Path) -> dict[str, object]:
     """Ensure MANIFEST.json exists and return its parsed contents."""
 
@@ -263,12 +288,22 @@ def build_fault_report(
         top_n=top_n,
         now_iso=now.isoformat(timespec="seconds"),
     )
+    severity_buckets = _bucket_signatures(signatures)
+    first_seen = None
+    last_seen = None
+    if signatures:
+        first_seen = min(filter(None, (_parse_iso(sig.first_seen_ts) for sig in signatures)), default=None)
+        last_seen = max(filter(None, (_parse_iso(sig.last_seen_ts) for sig in signatures)), default=None)
     summary = {
         "signature_count": len(signatures),
         "thread_block_count": thread_block_count,
         "top_frame_limit": top_n,
         "stack_log_exists": stacks_path.exists(),
         "stack_text_bytes": len(stacks_text.encode("utf-8")),
+        "severity_buckets": severity_buckets,
+        "active_signature_count": sum(1 for sig in signatures if sig.count > 0),
+        "first_seen_utc": first_seen.isoformat(timespec="seconds") if first_seen else None,
+        "last_seen_utc": last_seen.isoformat(timespec="seconds") if last_seen else None,
     }
     report = {
         "schema_version": 1,

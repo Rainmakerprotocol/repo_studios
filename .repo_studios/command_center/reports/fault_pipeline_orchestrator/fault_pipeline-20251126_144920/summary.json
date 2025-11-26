@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "generated_at": "2025-11-26T14:49:20+00:00",
+  "status": "success",
+  "run_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\faulthandler\\20251126_144316",
+  "report_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\faulthandler_reports\\faulthandler_report-20251126_144920\\report.json",
+  "producer": {
+    "status": "success",
+    "notes": [],
+    "run_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\faulthandler\\20251126_144316",
+    "output_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\faulthandler_reports\\faulthandler_report-20251126_144920",
+    "report_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\faulthandler_reports\\faulthandler_report-20251126_144920\\report.json",
+    "signatures": 2,
+    "repeat_offender_signatures": 0,
+    "duration_seconds": 0.315
+  },
+  "consumer": {
+    "status": "success",
+    "notes": [],
+    "consumer_report": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\consumer_reports\\fault_artifacts\\fault_artifacts-2025-11-26_144920-20251126_144316",
+    "bundle_summary": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\consumer_reports\\fault_artifacts\\fault_artifacts-2025-11-26_144920-20251126_144316\\bundle_summary.json",
+    "signatures": 2,
+    "repeat_offender_signatures": 0,
+    "duration_seconds": 0.0314
+  },
+  "steps": [
+    {
+      "name": "collect_faulthandler_reports",
+      "status": "success",
+      "duration_seconds": 0.315,
+      "notes": []
+    },
+    {
+      "name": "generate_fault_artifacts",
+      "status": "success",
+      "duration_seconds": 0.0314,
+      "notes": []
+    }
+  ],
+  "severity_buckets": {
+    "repeat_offender": 0,
+    "multi_hit": 0,
+    "single_hit": 2
+  },
+  "artifacts": {
+    "summary_json": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_runs\\fault_pipeline\\fault_pipeline-20251126_144920\\summary.json",
+    "summary_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_runs\\fault_pipeline\\fault_pipeline-20251126_144920\\SUMMARY.md",
+    "bundle_summary": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_runs\\fault_pipeline\\fault_pipeline-20251126_144920\\bundle_summary.json",
+    "pipeline_log": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_runs\\fault_pipeline\\fault_pipeline-20251126_144920\\pipeline.log"
+  }
+}

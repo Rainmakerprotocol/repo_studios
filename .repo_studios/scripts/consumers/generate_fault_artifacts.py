@@ -33,13 +33,25 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Sequence
 
-ROOT = Path(__file__).resolve().parents[1]
-RUNS_BASE = ROOT / ".repo_studios/faulthandler"
-PRODUCER_BASE = ROOT / ".repo_studios/reports/producer_reports/faulthandler_reports"
+from command_center.scripts.libraries.artifacts import copy_latest_artifact  # noqa: E402
+
+REPO_ROOT = Path(__file__).resolve().parents[4]
+RUNS_BASE = REPO_ROOT / ".repo_studios/faulthandler"
+PRODUCER_BASE = REPO_ROOT / ".repo_studios/reports/producer_reports/faulthandler_reports"
 PRODUCER_LATEST = PRODUCER_BASE / "latest_report.json"
-CONSUMER_BASE = ROOT / ".repo_studios/reports/consumer_reports/fault_artifacts"
+CONSUMER_BASE = REPO_ROOT / ".repo_studios/reports/consumer_reports/fault_artifacts"
+COMMAND_CENTER_BASE = REPO_ROOT / ".repo_studios/command_center/reports/fault_artifacts_consumer"
 CONSUMER_DIR_PREFIX = "fault_artifacts-"
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = 5
+
+SUMMARY_JSON_NAME = "summary.json"
+SUMMARY_MD_NAME = "SUMMARY.md"
+BUNDLE_SUMMARY_NAME = "bundle_summary.json"
+LATEST_POINTERS = {
+    SUMMARY_JSON_NAME: "latest_summary.json",
+    SUMMARY_MD_NAME: "latest_SUMMARY.md",
+    BUNDLE_SUMMARY_NAME: "latest_bundle_summary.json",
+}
 
 UTILITIES_ROOT = Path(__file__).resolve().parents[2]
 if str(UTILITIES_ROOT) not in sys.path:
@@ -54,24 +66,24 @@ from utilities.fault_run_analysis import (  # noqa: E402
 )
 
 
-def _find_latest_outdir() -> Path | None:
+def _find_latest_outdir(runs_base: Path) -> Path | None:
     try:
-        if not RUNS_BASE.exists():
+        if not runs_base.exists():
             return None
-        candidates = [p for p in RUNS_BASE.iterdir() if p.is_dir()]
+        candidates = [p for p in runs_base.iterdir() if p.is_dir()]
         candidates.sort(key=lambda p: p.stat().st_mtime, reverse=True)
         return candidates[0] if candidates else None
     except Exception:
         return None
 
 
-def _discover_outdir(explicit: str | None) -> Path | None:
+def _discover_outdir(explicit: str | None, runs_base: Path) -> Path | None:
     if explicit:
         return Path(explicit)
     env = os.getenv("FAULT_OUTDIR")
     if env:
         return Path(env)
-    return _find_latest_outdir()
+    return _find_latest_outdir(runs_base)
 
 
 def _iter_producer_reports(base_dir: Path) -> list[Path]:
@@ -212,11 +224,22 @@ def _write_summary(outdir: Path, report: dict[str, Any], signatures: Sequence[Fa
     lines.append("## Summary")
     lines.append("")
     lines.append(f"- signature_count: {summary.get('signature_count', len(signatures))}")
+    lines.append(f"- active_signature_count: {summary.get('active_signature_count')}")
     lines.append(f"- thread_block_count: {summary.get('thread_block_count')}")
     lines.append(f"- top_frame_limit: {summary.get('top_frame_limit', DEFAULT_TOP_N)}")
     lines.append(f"- stack_log_exists: {summary.get('stack_log_exists')}")
     lines.append(f"- stack_text_bytes: {summary.get('stack_text_bytes')}")
+    lines.append(f"- first_seen_utc: {summary.get('first_seen_utc')}")
+    lines.append(f"- last_seen_utc: {summary.get('last_seen_utc')}")
     lines.append("")
+    severity = summary.get("severity_buckets") if isinstance(summary, dict) else None
+    if isinstance(severity, dict):
+        lines.append("## Severity Buckets")
+        lines.append("")
+        lines.append(f"- repeat_offender: {severity.get('repeat_offender')}")
+        lines.append(f"- multi_hit: {severity.get('multi_hit')}")
+        lines.append(f"- single_hit: {severity.get('single_hit')}")
+        lines.append("")
     lines.append("## Dumps")
     lines.append("")
     try:
@@ -225,7 +248,7 @@ def _write_summary(outdir: Path, report: dict[str, Any], signatures: Sequence[Fa
         dump_files = []
     if dump_files:
         for name in dump_files:
-            lines.append(f"* {name}")
+            lines.append(f"- {name}")
     else:
         lines.append("(none)")
     lines.append("")
@@ -275,7 +298,7 @@ def _write_consumer_bundle(
     summary_text: str,
     source: str,
     source_report: Path | None,
-) -> Path:
+) -> dict[str, Path]:
     generated_at = datetime.now(UTC)
     target_root.mkdir(parents=True, exist_ok=True)
     slug = run_dir.name
@@ -304,11 +327,14 @@ def _write_consumer_bundle(
         },
     }
 
-    (bundle_dir / "summary.json").write_text(json.dumps(summary_payload, indent=2) + "\n", encoding="utf-8")
+    summary_json_path = bundle_dir / SUMMARY_JSON_NAME
+    summary_json_path.write_text(json.dumps(summary_payload, indent=2) + "\n", encoding="utf-8")
 
     base_lines = summary_text.rstrip("\n").splitlines()
     base_lines.append("")
+    base_lines.append("<!-- markdownlint-disable-next-line MD013 -->")
     base_lines.append("## Source References")
+    base_lines.append("")
     base_lines.append(f"- Run Directory: `{run_dir.resolve()}`")
     base_lines.append(f"- Source Type: {source}")
     if source_report_path:
@@ -320,8 +346,74 @@ def _write_consumer_bundle(
     if combined_txt_path.exists():
         base_lines.append(f"- Combined Stack Text: `{combined_txt_path}`")
     consumer_summary = "\n".join(base_lines) + "\n"
-    (bundle_dir / "SUMMARY.md").write_text(consumer_summary, encoding="utf-8")
-    return bundle_dir
+    summary_md_path = bundle_dir / SUMMARY_MD_NAME
+    summary_md_path.write_text(consumer_summary, encoding="utf-8")
+
+    summary_data = summary_payload.get("summary") if isinstance(summary_payload, dict) else None
+    severity = summary_data.get("severity_buckets") if isinstance(summary_data, dict) else {}
+    bundle_summary_payload = {
+        "schema_version": 1,
+        "bundle": bundle_dir.name,
+        "generated_at": summary_payload["generated_at"],
+        "source": source,
+        "metrics": {
+            "signature_count": summary_data.get("signature_count") if isinstance(summary_data, dict) else None,
+            "active_signature_count": summary_data.get("active_signature_count") if isinstance(summary_data, dict) else None,
+            "repeat_offender": severity.get("repeat_offender") if isinstance(severity, dict) else None,
+            "multi_hit": severity.get("multi_hit") if isinstance(severity, dict) else None,
+            "single_hit": severity.get("single_hit") if isinstance(severity, dict) else None,
+            "thread_block_count": summary_data.get("thread_block_count") if isinstance(summary_data, dict) else None,
+        },
+        "artifacts": {
+            "summary_json": str(summary_json_path.resolve()),
+            "summary_md": str(summary_md_path.resolve()),
+            "run_summary_md": str(run_summary_path) if run_summary_path.exists() else None,
+            "stacks_csv": str(stacks_csv_path) if stacks_csv_path.exists() else None,
+            "combined_txt": str(combined_txt_path) if combined_txt_path.exists() else None,
+        },
+        "source_report": summary_payload.get("source_report"),
+    }
+    bundle_summary_path = bundle_dir / BUNDLE_SUMMARY_NAME
+    bundle_summary_path.write_text(json.dumps(bundle_summary_payload, indent=2) + "\n", encoding="utf-8")
+
+    return {
+        "bundle_dir": bundle_dir,
+        "summary_json_path": summary_json_path,
+        "summary_md_path": summary_md_path,
+        "bundle_summary_path": bundle_summary_path,
+    }
+
+
+def _update_latest_pointers(bundle_dir: Path, target_root: Path) -> None:
+    target_root.mkdir(parents=True, exist_ok=True)
+    for filename, pointer in LATEST_POINTERS.items():
+        src = bundle_dir / filename
+        if not src.exists():
+            continue
+        copy_latest_artifact(src, target_root / pointer)
+
+
+def _mirror_to_command_center(
+    *,
+    bundle_dir: Path,
+    command_center_dir: Path,
+    keep: int,
+) -> None:
+    command_center_dir.mkdir(parents=True, exist_ok=True)
+    mirror_dir = command_center_dir / bundle_dir.name
+    if mirror_dir.exists():
+        shutil.rmtree(mirror_dir, ignore_errors=True)
+    mirror_dir.mkdir(parents=True, exist_ok=True)
+
+    for name in (SUMMARY_JSON_NAME, SUMMARY_MD_NAME, BUNDLE_SUMMARY_NAME):
+        src = bundle_dir / name
+        if not src.exists():
+            continue
+        dest = mirror_dir / name
+        dest.write_bytes(src.read_bytes())
+        copy_latest_artifact(src, command_center_dir / f"latest_{name}")
+
+    _prune_history(command_center_dir, keep, mirror_dir)
 
 
 def _prune_history(root: Path, keep: int | None, current: Path) -> list[Path]:
@@ -368,6 +460,12 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
         help="Directory to store consumer summaries (defaults to .repo_studios/reports/consumer_reports/fault_artifacts)",
     )
     parser.add_argument(
+        "--command-center-dir",
+        type=Path,
+        default=None,
+        help="Directory to mirror summaries for Command Center discovery",
+    )
+    parser.add_argument(
         "--artifacts-to-keep",
         type=int,
         default=DEFAULT_ARTIFACTS_TO_KEEP,
@@ -387,7 +485,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     logging.basicConfig(level=log_level, format="[%(levelname)s] %(message)s", force=True)
     log = logging.getLogger("fault_artifacts")
 
-    outdir = _discover_outdir(args.outdir)
+    outdir = _discover_outdir(args.outdir, RUNS_BASE)
     if outdir is None or not outdir.exists() or not outdir.is_dir():
         log.info("No valid FAULT_OUTDIR or runs found; nothing to generate")
         return {"outdir": None, "source_report": None, "signatures": 0}
@@ -428,9 +526,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     _write_stacks_csv(outdir, signatures)
     summary_text = _write_summary(outdir, report, signatures, dumps_dir)
 
-    target_root = args.output_dir if args.output_dir is not None else CONSUMER_BASE
-    target_root = Path(target_root)
-    consumer_dir = _write_consumer_bundle(
+    target_root = Path(args.output_dir) if args.output_dir is not None else CONSUMER_BASE
+    command_center_dir = Path(args.command_center_dir) if args.command_center_dir is not None else COMMAND_CENTER_BASE
+    artifact_paths = _write_consumer_bundle(
         target_root=target_root,
         run_dir=outdir,
         report=report,
@@ -439,16 +537,22 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         source=source_label,
         source_report=source_path,
     )
-    pruned = _prune_history(target_root, args.artifacts_to_keep, consumer_dir)
+    bundle_dir = artifact_paths["bundle_dir"]
+    _update_latest_pointers(bundle_dir, target_root)
+    _mirror_to_command_center(bundle_dir=bundle_dir, command_center_dir=command_center_dir, keep=args.artifacts_to_keep)
+    pruned = _prune_history(target_root, args.artifacts_to_keep, bundle_dir)
 
     source_report_log = str(source_path) if source_path else "scan"
+    severity = report.get("summary", {}).get("severity_buckets", {}) if isinstance(report, dict) else {}
+    repeat_offender = int(severity.get("repeat_offender", 0)) if isinstance(severity, dict) else 0
     log.info(
-        "Fault artifacts refreshed (run=%s, source=%s, report=%s, signatures=%d, consumer=%s, pruned=%d)",
+        "Fault artifacts refreshed (run=%s, source=%s, report=%s, signatures=%d, repeat_offender=%d, consumer=%s, pruned=%d)",
         outdir,
         source_label,
         source_report_log,
         len(signatures),
-        consumer_dir,
+        repeat_offender,
+        bundle_dir,
         len(pruned),
     )
 
@@ -456,9 +560,11 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         "outdir": str(outdir.resolve()),
         "source": source_label,
         "source_report": str(source_path) if source_path else None,
-        "consumer_report": str(consumer_dir.resolve()),
+        "consumer_report": str(bundle_dir.resolve()),
         "artifacts_root": str(target_root.resolve()),
         "signatures": len(signatures),
+        "bundle_summary": str(artifact_paths["bundle_summary_path"].resolve()),
+        "repeat_offender_signatures": repeat_offender,
     }
 
 
