@@ -12,6 +12,7 @@ Outputs (under ``--output-base/<ts>/``)
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import logging
 import shutil
@@ -23,7 +24,7 @@ from typing import Any, Sequence
 LOGS_DIR_DEFAULT = ".repo_studios/pytest_logs"
 PRODUCER_REPORT_DEFAULT = ".repo_studios/reports/producer_reports/test_log_reports/latest_report.json"
 OUTPUT_BASE_DEFAULT = ".repo_studios/reports/consumer_reports/test_log_health_reports"
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = 5
 
 SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
 UTILITIES_ROOT = Path(__file__).resolve().parents[2]
@@ -59,6 +60,79 @@ def _ensure_out(base: Path) -> Path:
     out_dir = base / ts
     out_dir.mkdir(parents=True, exist_ok=True)
     return out_dir
+
+
+def _iter_previous_runs(base: Path) -> list[Path]:
+    if not base.exists():
+        return []
+    runs = [child for child in base.iterdir() if child.is_dir()]
+    runs.sort(key=lambda path: path.name, reverse=True)
+    return runs
+
+
+def _load_previous_summary(base: Path) -> tuple[dict[str, Any] | None, Path | None]:
+    for run_dir in _iter_previous_runs(base):
+        summary_path = run_dir / "bundle_summary.json"
+        if summary_path.exists():
+            try:
+                data = json.loads(summary_path.read_text(encoding="utf-8"))
+            except Exception:
+                data = None
+            if isinstance(data, dict):
+                summary = data.get("summary")
+                if isinstance(summary, dict):
+                    return summary, run_dir
+        report_path = run_dir / "report.json"
+        if report_path.exists():
+            try:
+                payload = json.loads(report_path.read_text(encoding="utf-8"))
+            except Exception:
+                payload = None
+            if isinstance(payload, dict):
+                summary = payload.get("summary")
+                if isinstance(summary, dict):
+                    return summary, run_dir
+    return None, None
+
+
+def _pass_rate(summary: dict[str, Any] | None) -> float | None:
+    if not summary:
+        return None
+    total = summary.get("total")
+    passed = summary.get("passed")
+    if not isinstance(total, int) or total <= 0:
+        return None
+    if not isinstance(passed, int):
+        return None
+    return (passed / total) * 100.0
+
+
+def _build_comparisons(
+    current_summary: dict[str, Any] | None,
+    previous_summary: dict[str, Any] | None,
+    previous_dir: Path | None,
+) -> dict[str, Any]:
+    current_rate = _pass_rate(current_summary)
+    previous_rate = _pass_rate(previous_summary)
+    if current_rate is not None:
+        current_rate = round(current_rate, 2)
+    if previous_rate is not None:
+        previous_rate = round(previous_rate, 2)
+    if current_rate is not None and previous_rate is not None:
+        delta = round(current_rate - previous_rate, 2)
+    else:
+        delta = None
+    previous_path = str(previous_dir.resolve()) if previous_dir is not None else None
+    return {
+        "previous_run": {
+            "summary_dir": previous_path,
+            "pass_rate": {
+                "current": current_rate,
+                "previous": previous_rate,
+                "delta": delta,
+            },
+        }
+    }
 
 
 def _load_producer_report(path: Path) -> dict[str, Any] | None:
@@ -145,13 +219,87 @@ def _empty_report(logs_dir: Path) -> dict[str, Any]:
     }
 
 
-def _write_artifacts(out_dir: Path, payload: dict[str, Any], markdown: str) -> None:
+def _append_delta_markdown(markdown: str, comparisons: dict[str, Any]) -> str:
+    lines = markdown.rstrip("\n").splitlines()
+    lines.append("")
+    lines.append("## Pass Rate Delta")
+    lines.append("")
+    pass_rate = comparisons.get("previous_run", {}).get("pass_rate", {})
+    current = pass_rate.get("current")
+    previous = pass_rate.get("previous")
+    delta = pass_rate.get("delta")
+    if previous is None:
+        lines.append("- Previous pass rate: N/A")
+    else:
+        lines.append(f"- Previous pass rate: {previous:.2f}%")
+    if current is None:
+        lines.append("- Current pass rate: N/A")
+    else:
+        lines.append(f"- Current pass rate: {current:.2f}%")
+    if delta is None:
+        lines.append("- Delta: N/A")
+    else:
+        lines.append(f"- Delta: {delta:+.2f} percentage points")
+    return "\n".join(lines) + "\n"
+
+
+def _inject_markdownlint_exception(markdown: str) -> str:
+    prefix = "<!-- markdownlint-disable MD013 -->"
+    stripped = markdown.lstrip()
+    if markdown.startswith(prefix):
+        return markdown if markdown.endswith("\n") else markdown + "\n"
+    if stripped.startswith(prefix):
+        return markdown if markdown.endswith("\n") else markdown + "\n"
+    if markdown.startswith("#"):
+        return prefix + "\n" + markdown if markdown.endswith("\n") else prefix + "\n" + markdown + "\n"
+    return prefix + "\n" + markdown if markdown.endswith("\n") else prefix + "\n" + markdown + "\n"
+
+
+def _write_csv(out_dir: Path, payload: dict[str, Any], comparisons: dict[str, Any]) -> Path:
+    summary = payload.get("summary") or {}
+    pass_rate = comparisons.get("previous_run", {}).get("pass_rate", {})
+    slow_tests = payload.get("slow_tests") or []
+    csv_path = out_dir / "report.csv"
+    with csv_path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(["metric", "value"])
+        for field in (
+            "total",
+            "passed",
+            "skipped",
+            "xfailed",
+            "failed",
+            "errors",
+            "warnings_total",
+            "tracebacks",
+        ):
+            writer.writerow([field, summary.get(field, 0)])
+        writer.writerow(["pass_rate_current_pct", "{0:.2f}".format(pass_rate.get("current")) if pass_rate.get("current") is not None else "N/A"])
+        writer.writerow(["pass_rate_previous_pct", "{0:.2f}".format(pass_rate.get("previous")) if pass_rate.get("previous") is not None else "N/A"])
+        writer.writerow(["pass_rate_delta_pct", "{0:+.2f}".format(pass_rate.get("delta")) if pass_rate.get("delta") is not None else "N/A"])
+        writer.writerow(["slow_tests_count", len(slow_tests)])
+        for idx, entry in enumerate(slow_tests, start=1):
+            nodeid = entry.get("nodeid") or ""
+            seconds = entry.get("seconds")
+            writer.writerow([f"slow_test_{idx}", f"{seconds}s {nodeid}" if seconds is not None else nodeid])
+    return csv_path
+
+
+def _write_artifacts(
+    out_dir: Path,
+    payload: dict[str, Any],
+    markdown: str,
+    *,
+    comparisons: dict[str, Any],
+) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     out_json = out_dir / "report.json"
     out_json.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    if not markdown.endswith("\n"):
-        markdown = markdown + "\n"
-    (out_dir / "report.md").write_text(markdown, encoding="utf-8")
+    updated_markdown = _append_delta_markdown(markdown, comparisons)
+    updated_markdown = _inject_markdownlint_exception(updated_markdown)
+    (out_dir / "report.md").write_text(updated_markdown, encoding="utf-8")
+    csv_path = _write_csv(out_dir, payload, comparisons)
+    return csv_path
 
 
 def _write_metadata(
@@ -162,6 +310,7 @@ def _write_metadata(
     logs_dir: Path,
     logs_source: Path | None,
     summary: dict[str, Any] | None,
+    comparisons: dict[str, Any],
 ) -> Path:
     generated = datetime.now(UTC)
     metadata = {
@@ -174,8 +323,10 @@ def _write_metadata(
         "artifacts": {
             "report_json": str((out_dir / "report.json").resolve()),
             "report_md": str((out_dir / "report.md").resolve()),
+            "report_csv": str((out_dir / "report.csv").resolve()),
         },
         "summary": summary,
+        "comparisons": comparisons,
     }
     meta_path = out_dir / "bundle_summary.json"
     meta_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
@@ -185,12 +336,16 @@ def _write_metadata(
         lines = md_path.read_text(encoding="utf-8").rstrip("\n").splitlines()
         lines.append("")
         lines.append("## Source References")
+        lines.append("")
         lines.append(f"- Source: {source}")
         if producer_report:
             lines.append(f"- Producer Report: `{producer_report.resolve()}`")
         if logs_source:
             lines.append(f"- Logs Source: `{logs_source.resolve()}`")
         lines.append(f"- Logs Directory: `{logs_dir.resolve()}`")
+        csv_path = out_dir / "report.csv"
+        if csv_path.exists():
+            lines.append(f"- CSV Export: `{csv_path.resolve()}`")
         md_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     return meta_path
 
@@ -264,8 +419,13 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     else:
         markdown = render_markdown(payload)
 
+    previous_summary, previous_dir = _load_previous_summary(out_base)
     out_dir = _ensure_out(out_base)
-    _write_artifacts(out_dir, payload, markdown)
+    summary = payload.get("summary") if isinstance(payload, dict) else None
+    comparisons = _build_comparisons(summary, previous_summary, previous_dir)
+    payload = dict(payload)
+    payload["comparisons"] = comparisons
+    csv_path = _write_artifacts(out_dir, payload, markdown, comparisons=comparisons)
     summary = payload.get("summary") if isinstance(payload, dict) else None
     metadata_path = _write_metadata(
         out_dir,
@@ -274,6 +434,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         logs_dir=logs_dir,
         logs_source=logs_source,
         summary=summary,
+        comparisons=comparisons,
     )
     pruned = _prune_history(out_base, args.artifacts_to_keep, out_dir)
     logging.info(
@@ -290,6 +451,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         "logs_source": str(logs_source.resolve()) if logs_source else None,
         "bundle_summary": str(metadata_path.resolve()),
         "artifacts_root": str(out_base.resolve()),
+        "report_csv": str(csv_path.resolve()),
         "pruned": [str(p.resolve()) for p in pruned],
     }
 

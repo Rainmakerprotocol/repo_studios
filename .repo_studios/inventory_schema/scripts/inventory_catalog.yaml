@@ -1,0 +1,100 @@
+- id: scripts.inventory.check_inventory_health
+  name: "Check Inventory Health"
+  path: .repo_studios/scripts/producers/check_inventory_health.py
+  asset_kind: script
+  roles:
+    - validator
+    - report_generator
+  maturity: incubating
+  description: "Validates inventory summary metrics against CI thresholds and historical baselines."
+  dependencies:
+    internal_paths:
+      - .repo_studios/config/ci_inventory_thresholds.json
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: active
+  governance_flags: []
+  artifact_type: py
+  related_assets:
+    - scripts.inventory.render_inventory_views
+    - scripts.inventory.validate_inventory
+  tags:
+    - inventory
+    - health
+  phase_origin: phase2
+  source_repo: repo_studios
+  notes:
+    context: "Consumes rendered inventory summaries and emits JSON/Markdown/log bundles with pruning to support governance checks."
+    decisions:
+      - "Provides CI guardrails so inventory drift is surfaced quickly."
+    blockers: []
+- id: scripts.inventory.render_inventory_views
+  name: "Render Inventory Views"
+  path: .repo_studios/scripts/producers/render_inventory_views.py
+  asset_kind: script
+  roles:
+    - report_generator
+  maturity: incubating
+  description: "Renders canonical inventory YAML/Markdown views for review and downstream automation."
+  dependencies:
+    internal_paths:
+      - .repo_studios/inventory_schema
+    external_tools: []
+    inputs:
+      - path: .repo_studios/inventory_schema
+  consumers:
+    - coding_agent
+    - human_developer
+  status: active
+  governance_flags: []
+  artifact_type: py
+  related_assets:
+    - scripts.inventory.check_inventory_health
+    - scripts.inventory.validate_inventory
+  tags:
+    - inventory
+    - reporting
+  phase_origin: phase2
+  source_repo: repo_studios
+  notes:
+    context: "Writes timestamped JSON/Markdown/log bundles with pruning and latest pointers for inventory oversight."
+    decisions:
+      - "Acts as canonical renderer feeding command center dashboards."
+    blockers: []
+- id: scripts.inventory.validate_inventory
+  name: "Validate Inventory"
+  path: .repo_studios/scripts/producers/validate_inventory.py
+  asset_kind: script
+  roles:
+    - validator
+  maturity: incubating
+  description: "Applies schema and enum checks across Repo Studios inventory files."
+  dependencies:
+    internal_paths:
+      - .repo_studios/inventory_schema/validator_config.yaml
+      - .repo_studios/inventory_schema/enums.yaml
+    external_tools: []
+    inputs:
+      - path: .repo_studios/inventory_schema
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: active
+  governance_flags: []
+  artifact_type: py
+  related_assets:
+    - scripts.inventory.render_inventory_views
+    - scripts.inventory.check_inventory_health
+  tags:
+    - inventory
+    - validation
+  phase_origin: phase2
+  source_repo: repo_studios
+  notes:
+    context: "Emits JSON/Markdown/log/issue bundles with pruning and latest pointers while preserving legacy --json compatibility."
+    decisions:
+      - "Serves as schema gate before inventory artifacts publish."
+    blockers: []

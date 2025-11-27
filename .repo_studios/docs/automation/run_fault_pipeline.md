@@ -24,6 +24,12 @@ python .repo_studios/scripts/orchestrators/run_fault_pipeline.py \
   [--log-level INFO|DEBUG|WARNING]
 ```
 
+From the repository root, run the Make target for the opinionated defaults:
+
+```bash
+make -C .repo_studios studio-run-fault-pipeline
+```
+
 - `--repo-root`: Required outside the repo; defaults via library heuristics when omitted.
 - `--run-dir`: Targets a specific faulthandler run. Without it, the producer selects the newest capture.
 - `--skip-producer`: Reuses existing producer artifacts. Combine with `--reuse-report` to pin a report.
@@ -58,6 +64,6 @@ full flow, producer reuse with skip flags, and bundle pruning behaviour. Run the
 
 ## Follow-Ups
 
-- Wire a dedicated Make target (placeholder: `studio-run-fault-pipeline`) so health suites can refresh
-  the stack artefacts without manual CLI invocation.
+- Monitor adoption of `make -C .repo_studios studio-run-fault-pipeline` and capture feedback for additional
+  CLI ergonomics (e.g., canned skip/reuse modes).
 - Draft an aggregator blueprint for cross-run faulthandler trending once the orchestrator stabilises.

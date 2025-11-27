@@ -49,14 +49,16 @@ within `.repo_studios/reports/aggregator_reports/docs_health_signals/` containin
   - `summary` headline KPIs (overall health score, docstring coverage, churn hotspots)
   - `signals` map keyed by category (`freshness`, `coverage`, `structure`, `integrity`, `hygiene`)
     capturing status (`healthy`, `warning`, `critical`), supporting metrics, and top findings
-  - `provenance` entries mapping each signal to the upstream artifact path + timestamp
+  - `provenance` entries mapping each signal to the upstream artifact path,
+    recorded schema versions, and aggregate status
 - `report.md` – human-readable brief summarizing each category with tables of top offenders
   (long doc paths live inside an `<!-- markdownlint-disable MD013 -->` guard)
 - `signals.tsv` – flat table of category, severity, subject, metric, and call-to-action
+- `signals.csv` – spreadsheet-friendly mirror of the TSV payload for downstream tooling
 - `bundle_summary.json` – quick metrics designed for orchestrator dashboards
 
 Latest-pointer files (`latest_report.json`, `latest_report.md`, `latest_signals.tsv`,
-`latest_bundle_summary.json`) sit alongside timestamped runs. Retention is controlled
+`latest_signals.csv`, `latest_bundle_summary.json`) sit alongside timestamped runs. Retention is controlled
 through `--artifacts-to-keep` (default 5) leveraging the shared
 `write_report_artifacts` helper.
 
@@ -128,5 +130,5 @@ sensitivity.
   emitting sparkline-ready data in `report.json`.
 - Thread doc ownership information (from doc index `owners` values) directly
   into the signals payload for rapid assignment.
-- Emit optional CSV exports once operators request spreadsheet ingestion.
+- CSV export landed; gather operator feedback before expanding metric coverage.
 - Wire the aggregator into the command center orchestrator once stability is confirmed.

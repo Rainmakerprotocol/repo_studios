@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import csv
+import pytest
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -99,7 +101,7 @@ def test_generate_test_log_health_report_prefers_producer_bundle(tmp_path, monke
 
     output_base = repo / ".repo_studios" / "reports" / "consumer_reports" / "test_log_health_reports"
 
-    result = consumer_mod.run(
+    first_result = consumer_mod.run(
         [
             "--logs-dir",
             str(logs_dir),
@@ -112,13 +114,13 @@ def test_generate_test_log_health_report_prefers_producer_bundle(tmp_path, monke
         ]
     )
 
-    artifacts_dir = Path(result["output_dir"])
+    artifacts_dir = Path(first_result["output_dir"])
     assert artifacts_dir.exists()
-    assert result["source"] == "producer"
-    assert Path(result["producer_report"]).resolve() == report_path.resolve()
+    assert first_result["source"] == "producer"
+    assert Path(first_result["producer_report"]).resolve() == report_path.resolve()
 
     report = json.loads((artifacts_dir / "report.json").read_text(encoding="utf-8"))
-    assert report == payload
+    assert report["summary"] == payload["summary"]
 
     markdown = (artifacts_dir / "report.md").read_text(encoding="utf-8")
     assert "warnings_total: 2" in markdown
@@ -128,6 +130,40 @@ def test_generate_test_log_health_report_prefers_producer_bundle(tmp_path, monke
     assert bundle_summary["source"] == "producer"
     assert bundle_summary["producer_report"] == str(report_path.resolve())
     assert bundle_summary["summary"] == payload["summary"]
+    assert bundle_summary["comparisons"]["previous_run"]["pass_rate"]["previous"] is None
+    csv_path = Path(first_result["report_csv"])
+    assert csv_path.exists()
+    with csv_path.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.reader(handle))
+    assert rows[0] == ["metric", "value"]
+    assert ["total", "3"] in rows
+
+    # second run to verify pass-rate delta and CSV update
+    payload["summary"]["passed"] = 2
+    payload["summary"]["failed"] = 0
+    report_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    second_result = consumer_mod.run(
+        [
+            "--logs-dir",
+            str(logs_dir),
+            "--output-base",
+            str(output_base),
+            "--producer-report",
+            str(report_path),
+            "--log-level",
+            "ERROR",
+        ]
+    )
+
+    second_dir = Path(second_result["output_dir"])
+    second_report = json.loads((second_dir / "report.json").read_text(encoding="utf-8"))
+    pass_rate_delta = second_report["comparisons"]["previous_run"]["pass_rate"]["delta"]
+    assert pass_rate_delta == pytest.approx(33.34, abs=0.01)
+    csv_path = Path(second_result["report_csv"])
+    with csv_path.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.reader(handle))
+    assert ["pass_rate_delta_pct", "+33.34"] in rows
 
 
 def test_generate_test_log_health_report_falls_back_to_logs(tmp_path, monkeypatch):
@@ -145,7 +181,7 @@ def test_generate_test_log_health_report_falls_back_to_logs(tmp_path, monkeypatc
 
     output_base = repo / ".repo_studios" / "reports" / "consumer_reports" / "test_log_health_reports"
 
-    result = consumer_mod.run(
+    first_result = consumer_mod.run(
         [
             "--logs-dir",
             str(logs_base),
@@ -158,10 +194,10 @@ def test_generate_test_log_health_report_falls_back_to_logs(tmp_path, monkeypatc
         ]
     )
 
-    artifacts_dir = Path(result["output_dir"])
+    artifacts_dir = Path(first_result["output_dir"])
     assert artifacts_dir.exists()
-    assert result["source"] == "logs"
-    assert Path(result["logs_source"]).resolve() == run_dir.resolve()
+    assert first_result["source"] == "logs"
+    assert Path(first_result["logs_source"]).resolve() == run_dir.resolve()
 
     report = json.loads((artifacts_dir / "report.json").read_text(encoding="utf-8"))
     summary = report["summary"]
@@ -177,6 +213,25 @@ def test_generate_test_log_health_report_falls_back_to_logs(tmp_path, monkeypatc
     assert bundle_summary["source"] == "logs"
     assert bundle_summary["producer_report"] is None
     assert bundle_summary["summary"]["total"] == 3
+    assert bundle_summary["comparisons"]["previous_run"]["pass_rate"]["previous"] is None
+
+    # Second run should compute zero delta because data unchanged
+    second_result = consumer_mod.run(
+        [
+            "--logs-dir",
+            str(logs_base),
+            "--output-base",
+            str(output_base),
+            "--producer-report",
+            str(repo / "missing.json"),
+        ]
+    )
+    second_dir = Path(second_result["output_dir"])
+    second_report = json.loads((second_dir / "report.json").read_text(encoding="utf-8"))
+    delta = second_report["comparisons"]["previous_run"]["pass_rate"]["delta"]
+    assert delta == 0.0
+    csv_path = Path(second_result["report_csv"])
+    assert csv_path.exists()
 
 
 def test_generate_test_log_health_report_prunes_history(tmp_path, monkeypatch):

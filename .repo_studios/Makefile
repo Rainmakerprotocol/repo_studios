@@ -67,9 +67,21 @@ studio-verify-docs-integrity:
 studio-collect-faulthandler-reports:
 	$(PYTHON) .repo_studios/scripts/producers/collect_faulthandler_reports.py --runs-dir .repo_studios/faulthandler --output-dir .repo_studios/reports/producer_reports/faulthandler_reports --artifacts-to-keep 10 --log-level INFO
 
+.PHONY: studio-generate-fault-artifacts
+studio-generate-fault-artifacts:
+	$(PYTHON) .repo_studios/scripts/consumers/generate_fault_artifacts.py --output-dir .repo_studios/reports/consumer_reports/fault_artifacts --command-center-dir .repo_studios/command_center/reports/fault_artifacts_consumer --artifacts-to-keep 10 --log-level INFO
+
+.PHONY: studio-run-fault-pipeline
+studio-run-fault-pipeline:
+	$(PYTHON) .repo_studios/scripts/orchestrators/run_fault_pipeline.py --repo-root . --artifacts-to-keep 10 --producer-artifacts-to-keep 10 --consumer-artifacts-to-keep 10 --log-level INFO
+
 .PHONY: studio-collect-test-log-reports
 studio-collect-test-log-reports:
 	$(PYTHON) .repo_studios/scripts/producers/collect_test_log_reports.py --logs-dir .repo_studios/pytest_logs --output-dir .repo_studios/reports/producer_reports/test_log_reports --artifacts-to-keep 10 --log-level INFO
+
+.PHONY: studio-generate-test-log-health-report
+studio-generate-test-log-health-report:
+	$(PYTHON) .repo_studios/scripts/consumers/generate_test_log_health_report.py --logs-dir .repo_studios/pytest_logs --output-base .repo_studios/reports/consumer_reports/test_log_health_reports --producer-report .repo_studios/reports/producer_reports/test_log_reports/latest_report.json --artifacts-to-keep 5 --log-level INFO
 
 .PHONY: studio-diff-standards-index
 studio-diff-standards-index:

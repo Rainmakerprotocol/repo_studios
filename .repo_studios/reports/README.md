@@ -1,5 +1,7 @@
 # Repo Studios Report Layout
 
+<!-- markdownlint-disable MD013 -->
+
 This directory now mirrors the producer → consumer → aggregator → orchestrator → summarizer → utility flow used by the active scripts under `.repo_studios/scripts/`. Each subfolder is pre-created so refactored automation can land artifacts in predictable locations without having to recreate directory scaffolding at runtime.
 
 ## Top-Level Folders
@@ -43,7 +45,8 @@ This directory now mirrors the producer → consumer → aggregator → orchestr
 - `monkey_patch_risk_reports/` – risk classifications produced after scanning monkey patches.
 - `anchor_health_reports/` – duplicate anchor health scorecards.
 - `fault_artifact_reports/` – faulthandler artifact bundles (CSV, JSON, Markdown).
-- `test_log_health_reports/` – pytest log health summaries, warnings, and slow-test tables.
+- `test_log_health_reports/` – pytest log health bundles (JSON/Markdown/CSV) with warnings,
+  slow-test tables, and pass-rate delta metadata.
 
 ### aggregator_reports/
 

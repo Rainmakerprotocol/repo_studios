@@ -129,7 +129,7 @@ categories:
         current_module: .repo_studios/scripts/consumers/generate_test_log_health_report.py
         artifact_target: .repo_studios/reports/consumer_reports/test_log_health_reports
         status: migrated
-        comments: "Digest of pytest warnings, slow tests, and JUnit stats."
+        comments: "Digest of pytest warnings, slow tests, JUnit stats, and pass-rate deltas (JSON/MD/CSV)."
   aggregators:
     description: Multi-source rollups blending several producer/consumer artifacts.
     target_dir: .repo_studios/scripts/aggregators

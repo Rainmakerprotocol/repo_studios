@@ -194,12 +194,16 @@ def test_generates_docs_health_bundle(tmp_path):
     assert report["signals"]["coverage"]["status"] == "warning"
     assert report["signals"]["structure"]["metrics"]["documents_missing_h1"] == 1
     assert "placeholder_total_matches" in report["signals"]["hygiene"]["metrics"]
+    assert report["provenance"]["freshness"]["schema_versions"] == {str(inputs["churn"]): None}
 
     markdown_path = Path(result["report_md"])
     assert markdown_path.read_text(encoding="utf-8").startswith("# Docs Health Signals")
     tsv_rows = Path(result["signals_tsv"]).read_text(encoding="utf-8").splitlines()
     assert tsv_rows[0].split("\t") == ["category", "metric", "status", "score", "value"]
     assert any(row.startswith("hygiene\tplaceholder_total_matches") for row in tsv_rows[1:])
+    csv_rows = Path(result["signals_csv"]).read_text(encoding="utf-8").splitlines()
+    assert csv_rows[0].split(",") == ["category", "metric", "status", "score", "value"]
+    assert any(row.startswith("hygiene,placeholder_total_matches") for row in csv_rows[1:])
 
 
 def test_skip_hygiene_omits_category(tmp_path):

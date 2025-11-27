@@ -1,64 +1,70 @@
-- id: tests.faults.aggregate_and_gate
-  name: "Fault Aggregate And Gate Test"
-  path: legacy/repo_tests/test_fault_aggregate_and_gate.py
+- id: tests.faults.fault_pipeline_orchestrator
+  name: "Fault Pipeline Orchestrator Tests"
+  path: .repo_studios/tests/tests_orchestrators/test_run_fault_pipeline.py
   asset_kind: test
   roles:
     - test_case
-  maturity: legacy
-  description: "Placeholder for validating fault aggregation gating once diagnostics pipeline is restored."
-  dependencies:
-    internal_paths: []
-    external_tools: []
-    inputs: []
-  consumers:
-    - coding_agent
-  status: needs_review
-  governance_flags:
-    - pending_migration
-  artifact_type: py
-  related_assets:
-    - scripts.health.generate_fault_artifacts
-  tags:
-    - faults
-    - diagnostics
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
-  notes:
-    context: "Legacy test body removed pending new aggregate-and-gate implementation."
-    decisions:
-      - "Keep file tracked to preserve historical coverage expectations."
-    blockers:
-      - "Awaiting revived aggregation script in new repo layout."
-- id: tests.faults.generate_fault_artifacts
-  name: "Generate Fault Artifacts Test"
-  path: legacy/repo_tests/test_generate_fault_artifacts.py
-  asset_kind: test
-  roles:
-    - test_case
-  maturity: legacy
-  description: "Placeholder to exercise artifact bundling logic once migration completes."
+    - validator
+  maturity: incubating
+  description: "Covers the orchestration between the faulthandler producer and consumer, including reuse and pruning flows."
   dependencies:
     internal_paths:
+      - .repo_studios/scripts/orchestrators/run_fault_pipeline.py
+      - .repo_studios/scripts/producers/collect_faulthandler_reports.py
       - .repo_studios/scripts/consumers/generate_fault_artifacts.py
     external_tools: []
     inputs: []
   consumers:
     - coding_agent
-  status: needs_review
-  governance_flags:
-    - pending_migration
+    - ci_pipeline
+  status: active
+  governance_flags: []
+  artifact_type: py
+  related_assets:
+    - scripts.health.fault_pipeline_orchestrator
+    - scripts.health.collect_faulthandler_reports
+    - scripts.health.generate_fault_artifacts
+  tags:
+    - faults
+    - orchestration
+  phase_origin: phase2
+  source_repo: repo_studios
+  notes:
+    context: "Validates producer/consumer sequencing, reuse semantics, and retention pruning emitted by the orchestrator."
+    decisions:
+      - "Keeps orchestration behavior in lockstep with the command center health suite."
+    blockers: []
+- id: tests.faults.generate_fault_artifacts
+  name: "Generate Fault Artifacts Tests"
+  path: .repo_studios/tests/tests_consumers/test_generate_fault_artifacts.py
+  asset_kind: test
+  roles:
+    - test_case
+    - validator
+  maturity: incubating
+  description: "Ensures consumer bundles prefer producer outputs, handle retention, and write command center mirrors."
+  dependencies:
+    internal_paths:
+      - .repo_studios/scripts/consumers/generate_fault_artifacts.py
+      - .repo_studios/scripts/producers/collect_faulthandler_reports.py
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - human_developer
+  status: active
+  governance_flags: []
   artifact_type: py
   related_assets:
     - scripts.health.generate_fault_artifacts
-    - scripts.health.dump_faulthandler_once
+    - scripts.health.collect_faulthandler_reports
   tags:
     - faults
     - diagnostics
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
+  phase_origin: phase2
+  source_repo: repo_studios
   notes:
-    context: "Test currently empty; retains slot to capture regression coverage for artifact bundling."
+    context: "Validates producer preference, fallback behavior, and provenance metadata for fault artifact bundles."
     decisions:
-      - "Mark dependency on helper modules for migration planning."
-    blockers:
-      - "Requires new assertions after porting scripts to `.repo_studios/`."
+      - "Covers retention pruning to keep reports tidy."
+    blockers: []

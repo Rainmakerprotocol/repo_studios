@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import csv
+import io
 import json
 import logging
 from dataclasses import dataclass, field
@@ -120,6 +122,7 @@ class SignalResult:
     top_findings: list[dict[str, Any]] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
     sources: list[str] = field(default_factory=list)
+    source_versions: dict[str, Any] = field(default_factory=dict)
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
@@ -167,6 +170,26 @@ def _load_json(path: Path, label: str, logger: logging.Logger) -> dict[str, Any]
         logger.warning("%s must be a JSON object: %s", label, path)
         return None
     return data
+
+
+def _validate_payload(
+    payload: dict[str, Any] | None,
+    *,
+    label: str,
+    required_summary_keys: Iterable[str],
+    logger: logging.Logger,
+) -> None:
+    if payload is None:
+        return
+    summary = payload.get("summary")
+    if required_summary_keys and not isinstance(summary, dict):
+        logger.warning("%s missing summary block", label)
+        return
+    if not isinstance(summary, dict):
+        return
+    missing = sorted(key for key in required_summary_keys if key not in summary)
+    if missing:
+        logger.warning("%s summary missing keys: %s", label, ", ".join(missing))
 
 
 def _ratio_score(numerator: float, denominator: float) -> float:
@@ -482,6 +505,17 @@ def _render_tsv(signals: list[SignalResult]) -> str:
     return "\n".join("\t".join(row) for row in rows) + "\n"
 
 
+def _render_csv(signals: list[SignalResult]) -> str:
+    buffer = io.StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow(["category", "metric", "status", "score", "value"])
+    for signal in signals:
+        score_str = _format_score(signal.score)
+        for category, key, value in _flatten_metrics(signal.metrics, signal.category):
+            writer.writerow([category, key, signal.status, score_str, value])
+    return buffer.getvalue()
+
+
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     args = parse_args(argv)
     _configure_logging(args.log_level)
@@ -503,24 +537,89 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         placeholder_report = _load_json(paths.placeholder_report, "placeholder scan", logger)
         monkey_report = _load_json(paths.monkey_patch_report, "monkey patch scan", logger)
 
+    _validate_payload(
+        churn_report,
+        label="churn report",
+        required_summary_keys=[
+            "modules_with_code_churn",
+            "modules_with_doc_updates",
+            "modules_without_doc_updates",
+        ],
+        logger=logger,
+    )
+    _validate_payload(
+        undocumented_report,
+        label="undocumented logic report",
+        required_summary_keys=[
+            "modules_scanned",
+            "entities_scanned",
+            "docstring_coverage_percent",
+        ],
+        logger=logger,
+    )
+    _validate_payload(
+        anchor_inventory,
+        label="anchor inventory",
+        required_summary_keys=[
+            "total_documents",
+            "documents_missing_h1",
+            "documents_missing_h2",
+        ],
+        logger=logger,
+    )
+    _validate_payload(
+        docs_integrity,
+        label="docs integrity",
+        required_summary_keys=["mismatched_blocks", "json_blocks_checked"],
+        logger=logger,
+    )
+    if options.include_hygiene:
+        if placeholder_report is not None and "total_matches" not in placeholder_report:
+            logger.warning("placeholder scan missing total_matches field")
+        if monkey_report is not None and "total_findings" not in monkey_report:
+            logger.warning("monkey patch scan missing total_findings field")
+
     freshness = _compute_freshness(churn_report)
     coverage = _compute_coverage(undocumented_report)
     structure = _compute_structure(anchor_inventory, anchor_validation)
     integrity = _compute_integrity(docs_integrity, metrics_stub)
-    signals_data: list[tuple[str, str, tuple[float | None, dict[str, Any], list[dict[str, Any]], list[str]], list[str]]] = [
-        ("freshness", "Freshness", freshness, [str(paths.churn_report)]),
-        ("coverage", "Coverage", coverage, [str(paths.undocumented_report)]),
+    signals_data: list[
+        tuple[
+            str,
+            str,
+            tuple[float | None, dict[str, Any], list[dict[str, Any]], list[str]],
+            list[tuple[str, dict[str, Any] | None]],
+        ]
+    ] = [
+        (
+            "freshness",
+            "Freshness",
+            freshness,
+            [(str(paths.churn_report), churn_report)],
+        ),
+        (
+            "coverage",
+            "Coverage",
+            coverage,
+            [(str(paths.undocumented_report), undocumented_report)],
+        ),
         (
             "structure",
             "Structure",
             structure,
-            [str(paths.anchor_inventory), str(paths.anchor_validation)],
+            [
+                (str(paths.anchor_inventory), anchor_inventory),
+                (str(paths.anchor_validation), anchor_validation),
+            ],
         ),
         (
             "integrity",
             "Integrity",
             integrity,
-            [str(paths.docs_integrity), str(paths.metrics_stub)],
+            [
+                (str(paths.docs_integrity), docs_integrity),
+                (str(paths.metrics_stub), metrics_stub),
+            ],
         ),
     ]
     if options.include_hygiene:
@@ -530,13 +629,26 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
                 "hygiene",
                 "Hygiene",
                 hygiene,
-                [str(paths.placeholder_report), str(paths.monkey_patch_report)],
+                [
+                    (str(paths.placeholder_report), placeholder_report),
+                    (str(paths.monkey_patch_report), monkey_report),
+                ],
             )
         )
 
     signals: list[SignalResult] = []
     for category, title, payload, sources in signals_data:
         score, metrics, findings, notes = payload
+        source_versions: dict[str, Any] = {}
+        source_paths: list[str] = []
+        for source_path, source_payload in sources:
+            if source_path:
+                source_paths.append(source_path)
+            version: Any = None
+            if isinstance(source_payload, dict):
+                version = source_payload.get("schema_version")
+            if source_path:
+                source_versions[source_path] = version
         result = SignalResult(
             category=category,
             title=title,
@@ -545,7 +657,8 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
             metrics=metrics,
             top_findings=findings,
             notes=notes,
-            sources=[source for source in sources if source],
+            sources=source_paths,
+            source_versions=source_versions,
         )
         signals.append(result)
 
@@ -565,14 +678,14 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         "weights": weights,
     }
 
-    provenance = {
-        signal.category: {
-            "paths": signal.sources,
+    provenance = {}
+    for signal in signals:
+        provenance[signal.category] = {
+            "inputs": signal.sources,
+            "schema_versions": signal.source_versions,
             "status": signal.status,
             "score": signal.score,
         }
-        for signal in signals
-    }
 
     report_payload = {
         "schema_version": SCHEMA_VERSION,
@@ -594,6 +707,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
     markdown_payload = _render_markdown(generated_at=generated_at, summary=summary_payload, signals=signals)
     tsv_payload = _render_tsv(signals)
+    csv_payload = _render_csv(signals)
     bundle_summary = {
         "overall_score": summary_payload["overall_score"],
         "statuses": summary_payload["statuses"],
@@ -604,6 +718,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         ReportArtifact(filename="report.json", pointer="latest_report.json", kind="json", content=report_payload),
         ReportArtifact(filename="report.md", pointer="latest_report.md", kind="text", content=markdown_payload),
         ReportArtifact(filename="signals.tsv", pointer="latest_signals.tsv", kind="text", content=tsv_payload),
+        ReportArtifact(filename="signals.csv", pointer="latest_signals.csv", kind="text", content=csv_payload),
         ReportArtifact(
             filename="bundle_summary.json",
             pointer="latest_bundle_summary.json",
@@ -627,6 +742,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         "report_json": str(write_result.artifacts["report.json"]),
         "report_md": str(write_result.artifacts["report.md"]),
         "signals_tsv": str(write_result.artifacts["signals.tsv"]),
+        "signals_csv": str(write_result.artifacts["signals.csv"]),
         "bundle_summary": str(write_result.artifacts["bundle_summary.json"]),
         "summary": summary_payload,
     }

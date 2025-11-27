@@ -1,0 +1,397 @@
+{
+  "schema_version": 1,
+  "status": "error",
+  "timestamp": "20251126_191616",
+  "generated_utc": "2025-11-26T19:16:16.347236+00:00",
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "output_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\validate_inventory\\validate_inventory-20251126_191616",
+  "inputs": {
+    "schema_root": "C:\\Users\\genet\\repo_studios\\.repo_studios\\inventory_schema",
+    "config_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\inventory_schema\\validator_config.yaml",
+    "enums_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\inventory_schema\\enums.yaml"
+  },
+  "summary": {
+    "files_checked": 7,
+    "records_checked": 72,
+    "issue_counts": {
+      "total": 23,
+      "errors": 23,
+      "warnings": 0
+    }
+  },
+  "issues": {
+    "all": [
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/docs_catalog.yaml",
+        "message": "Referenced path does not exist: .repo_studios/docs/governance/alignment-ledger.md",
+        "context": {
+          "record_id": "docs.alignment_ledger"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Missing required fields: ['name']",
+        "context": {
+          "record_id": "scripts.health.churn_complexity_heatmap"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.health.collect_faulthandler_reports"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.health.test_coverage_inventory"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.health.analyze_test_hardening"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.docs.generate_doc_index"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.docs.code_doc_churn_report"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.docs.undocumented_logic_report"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.docs.undocumented_logic_report"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.docs.aggregate_docs_health_signals"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.docs.aggregate_docs_health_signals"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/inventory_catalog.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.inventory.render_inventory_views"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/inventory_catalog.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.inventory.validate_inventory"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/faults.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_fault_aggregate_and_gate.py",
+        "context": {
+          "record_id": "tests.faults.aggregate_and_gate"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/faults.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_generate_fault_artifacts.py",
+        "context": {
+          "record_id": "tests.faults.generate_fault_artifacts"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/health_suite.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_health_suite_orchestrator.py",
+        "context": {
+          "record_id": "tests.health_suite.orchestrator_cli"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/health_suite.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_health_suite_summary.py",
+        "context": {
+          "record_id": "tests.health_suite.summary_render"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/health_suite.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_lizard_report.py",
+        "context": {
+          "record_id": "tests.health_suite.lizard_report"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/health_suite.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_typecheck_report.py",
+        "context": {
+          "record_id": "tests.health_suite.typecheck_report"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/health_suite.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_typecheck_report_fast_mode.py",
+        "context": {
+          "record_id": "tests.health_suite.typecheck_fast_mode"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/health_suite.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_pytest_log_runner.py",
+        "context": {
+          "record_id": "tests.health_suite.pytest_log_runner"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/health_suite.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_pytest_log_runner_paths.py",
+        "context": {
+          "record_id": "tests.health_suite.pytest_log_runner_paths"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/health_suite.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_test_log_health_report_pick_best.py",
+        "context": {
+          "record_id": "tests.health_suite.test_log_health_report_pick_best"
+        }
+      }
+    ],
+    "errors": [
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/docs_catalog.yaml",
+        "message": "Referenced path does not exist: .repo_studios/docs/governance/alignment-ledger.md",
+        "context": {
+          "record_id": "docs.alignment_ledger"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Missing required fields: ['name']",
+        "context": {
+          "record_id": "scripts.health.churn_complexity_heatmap"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.health.collect_faulthandler_reports"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.health.test_coverage_inventory"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.health.analyze_test_hardening"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.docs.generate_doc_index"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.docs.code_doc_churn_report"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.docs.undocumented_logic_report"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.docs.undocumented_logic_report"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.docs.aggregate_docs_health_signals"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/health_reports.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.docs.aggregate_docs_health_signals"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/inventory_catalog.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.inventory.render_inventory_views"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/scripts/inventory_catalog.yaml",
+        "message": "Each 'dependencies.inputs' entry must be a mapping with a 'path' key",
+        "context": {
+          "record_id": "scripts.inventory.validate_inventory"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/faults.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_fault_aggregate_and_gate.py",
+        "context": {
+          "record_id": "tests.faults.aggregate_and_gate"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/faults.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_generate_fault_artifacts.py",
+        "context": {
+          "record_id": "tests.faults.generate_fault_artifacts"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/health_suite.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_health_suite_orchestrator.py",
+        "context": {
+          "record_id": "tests.health_suite.orchestrator_cli"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/health_suite.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_health_suite_summary.py",
+        "context": {
+          "record_id": "tests.health_suite.summary_render"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/health_suite.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_lizard_report.py",
+        "context": {
+          "record_id": "tests.health_suite.lizard_report"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/health_suite.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_typecheck_report.py",
+        "context": {
+          "record_id": "tests.health_suite.typecheck_report"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/health_suite.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_typecheck_report_fast_mode.py",
+        "context": {
+          "record_id": "tests.health_suite.typecheck_fast_mode"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/health_suite.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_pytest_log_runner.py",
+        "context": {
+          "record_id": "tests.health_suite.pytest_log_runner"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/health_suite.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_pytest_log_runner_paths.py",
+        "context": {
+          "record_id": "tests.health_suite.pytest_log_runner_paths"
+        }
+      },
+      {
+        "level": "error",
+        "file": ".repo_studios/inventory_schema/tests/health_suite.yaml",
+        "message": "Referenced path does not exist: legacy/repo_tests/test_test_log_health_report_pick_best.py",
+        "context": {
+          "record_id": "tests.health_suite.test_log_health_report_pick_best"
+        }
+      }
+    ],
+    "warnings": []
+  }
+}

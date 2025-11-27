@@ -8,8 +8,6 @@ reuse without re-parsing stacks. The script also mirrors key files into the
 Command Center reports tree so agents have a single discovery point.
 """
 
-from __future__ import annotations
-
 import argparse
 import csv
 import json

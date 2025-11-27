@@ -452,15 +452,14 @@
     - tests.health_suite.test_log_health_report_pick_best
   tags:
     - health
-    - testing
+    - typing
   phase_origin: legacy
   source_repo: repo_studios_legacy
   notes:
-    context: "Currently reads legacy log layout; update to new observability storage during migration."
+    context: "Outputs plain text; capture structured results for inventory pipeline."
     decisions:
-      - "Emit YAML alongside JSON/Markdown once inventory-driven reports are in place."
-    blockers:
-      - "Requires relocation to `.repo_studios/` scripts directory."
+      - "Bundle with new type coverage tracking targets."
+    blockers: []
 - id: scripts.health.pytest_log_runner
   name: "Pytest Log Runner"
   path: .repo_studios/scripts/orchestrators/run_pytest_log_capture.py
@@ -588,4 +587,271 @@
     context: "Centralizes helper code; verify packaging approach post-migration."
     decisions:
       - "Consider relocating to shared module under `.repo_studios`."
+    blockers: []
+- id: scripts.health.collect_faulthandler_reports
+  name: "Collect Faulthandler Reports"
+  path: .repo_studios/scripts/producers/collect_faulthandler_reports.py
+  asset_kind: script
+  roles:
+    - report_generator
+  maturity: incubating
+  description: "Aggregates faulthandler runs into structured bundles with pruning, provenance, and latest pointers."
+  dependencies:
+    internal_paths:
+      - .repo_studios/scripts/utilities/fault_run_analysis.py
+    external_tools: []
+    inputs:
+      - path: .repo_studios/faulthandler
+  consumers:
+    - coding_agent
+    - human_developer
+  status: active
+  governance_flags: []
+  artifact_type: py
+  related_assets:
+    - scripts.health.generate_fault_artifacts
+    - scripts.health.fault_pipeline_orchestrator
+  tags:
+    - health
+    - faults
+  phase_origin: phase2
+  source_repo: repo_studios
+  notes:
+    context: "Produces JSON/Markdown/CSV/log bundles with retention pruning and provenance metadata for each run."
+    decisions:
+      - "Standardize faulthandler ingestion so orchestrators and consumers reference a single canonical report."
+    blockers: []
+- id: scripts.health.test_coverage_inventory
+  name: "Test Coverage Inventory"
+  path: .repo_studios/scripts/producers/generate_test_coverage_inventory.py
+  asset_kind: script
+  roles:
+    - report_generator
+  maturity: incubating
+  description: "Transforms coverage.py XML exports into function-level coverage inventories."
+  dependencies:
+    internal_paths: []
+    external_tools: []
+    inputs:
+      - path: coverage.xml
+  consumers:
+    - coding_agent
+    - human_developer
+  status: active
+  governance_flags: []
+  artifact_type: py
+  related_assets:
+    - scripts.docs.aggregate_docs_health_signals
+  tags:
+    - health
+    - testing
+  phase_origin: phase2
+  source_repo: repo_studios
+  notes:
+    context: "Emits JSON/Markdown/CSV/log bundles with pruning and latest pointers to support coverage audits."
+    decisions:
+      - "Acts as canonical coverage feed for docs and test hardening analytics."
+    blockers: []
+- id: scripts.health.analyze_test_hardening
+  name: "Analyze Test Hardening"
+  path: .repo_studios/scripts/producers/analyze_test_hardening.py
+  asset_kind: script
+  roles:
+    - validator
+    - report_generator
+  maturity: incubating
+  description: "Evaluates test modules for missing assertions, flaky markers, and other hardening gaps."
+  dependencies:
+    internal_paths:
+      - .repo_studios/docs/automation/analyze_test_hardening.md
+    external_tools: []
+    inputs:
+      - path: tests
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: active
+  governance_flags: []
+  artifact_type: py
+  related_assets:
+    - scripts.docs.aggregate_docs_health_signals
+  tags:
+    - health
+    - testing
+  phase_origin: phase2
+  source_repo: repo_studios
+  notes:
+    context: "Outputs JSON/Markdown/log bundles with pruning and provenance for each repository scan."
+    decisions:
+      - "Feeds orchestration pipelines and reporting ledgers focused on test quality."
+    blockers: []
+- id: scripts.docs.generate_doc_index
+  name: "Generate Doc Index"
+  path: .repo_studios/scripts/producers/generate_doc_index.py
+  asset_kind: script
+  roles:
+    - report_generator
+  maturity: incubating
+  description: "Builds the documentation index bundle with metrics, advisories, and export variants."
+  dependencies:
+    internal_paths:
+      - .repo_studios/docs/automation/generate_doc_index.md
+    external_tools: []
+    inputs:
+      - path: .repo_studios/docs
+  consumers:
+    - coding_agent
+    - human_developer
+  status: active
+  governance_flags: []
+  artifact_type: py
+  related_assets:
+    - scripts.docs.code_doc_churn_report
+    - scripts.docs.aggregate_docs_health_signals
+  tags:
+    - docs
+    - health
+  phase_origin: phase2
+  source_repo: repo_studios
+  notes:
+    context: "Emits JSON/Markdown/CSV bundles with retention=1 and database placeholder metadata for downstream reporting."
+    decisions:
+      - "Serves as canonical documentation inventory for aggregator pipelines."
+    blockers: []
+- id: scripts.docs.code_doc_churn_report
+  name: "Code Doc Churn Report"
+  path: .repo_studios/scripts/producers/generate_code_doc_churn_report.py
+  asset_kind: script
+  roles:
+    - report_generator
+  maturity: incubating
+  description: "Compares recent code changes against documentation updates to flag drift."
+  dependencies:
+    internal_paths:
+      - .repo_studios/docs/automation/generate_code_doc_churn_report.md
+    external_tools:
+      - git
+    inputs:
+      - path: .repo_studios/reports/producer_reports/doc_index
+  consumers:
+    - coding_agent
+    - human_developer
+  status: active
+  governance_flags: []
+  artifact_type: py
+  related_assets:
+    - scripts.docs.generate_doc_index
+    - scripts.docs.aggregate_docs_health_signals
+  tags:
+    - docs
+    - health
+  phase_origin: phase2
+  source_repo: repo_studios
+  notes:
+    context: "Outputs JSON/Markdown/TSV bundles with retention and latest pointers for doc drift governance."
+    decisions:
+      - "Feeds docs health aggregators with churn-aware risk scoring."
+    blockers: []
+- id: scripts.docs.undocumented_logic_report
+  name: "Undocumented Logic Report"
+  path: .repo_studios/scripts/producers/generate_undocumented_logic_report.py
+  asset_kind: script
+  roles:
+    - report_generator
+  maturity: incubating
+  description: "Highlights modules lacking documentation anchors given the doc index and anchor inventory."
+  dependencies:
+    internal_paths:
+      - .repo_studios/docs/automation/generate_undocumented_logic_report.md
+    external_tools: []
+    inputs:
+      - path: .repo_studios/reports/producer_reports/doc_index
+      - path: .repo_studios/reports/producer_reports/anchor_inventory_reports
+  consumers:
+    - coding_agent
+    - human_developer
+  status: active
+  governance_flags: []
+  artifact_type: py
+  related_assets:
+    - scripts.docs.generate_doc_index
+    - scripts.docs.aggregate_docs_health_signals
+  tags:
+    - docs
+    - health
+  phase_origin: phase2
+  source_repo: repo_studios
+  notes:
+    context: "Provides JSON/Markdown/TSV bundles with pruning, allowlists, and provenance metadata to focus doc remediation."
+    decisions:
+      - "Used by docs health aggregator to score documentation coverage."
+    blockers: []
+- id: scripts.docs.aggregate_docs_health_signals
+  name: "Aggregate Docs Health Signals"
+  path: .repo_studios/scripts/aggregators/aggregate_docs_health_signals.py
+  asset_kind: script
+  roles:
+    - summarizer
+    - report_generator
+  maturity: incubating
+  description: "Blends documentation hygiene, coverage, churn, and integrity signals into a single health bundle."
+  dependencies:
+    internal_paths:
+      - .repo_studios/docs/automation/aggregate_docs_health_signals.md
+    external_tools: []
+    inputs:
+      - path: .repo_studios/reports/producer_reports
+      - path: .repo_studios/reports/consumer_reports
+  consumers:
+    - coding_agent
+    - human_developer
+  status: active
+  governance_flags: []
+  artifact_type: py
+  related_assets:
+    - scripts.docs.generate_doc_index
+    - scripts.docs.code_doc_churn_report
+    - scripts.docs.undocumented_logic_report
+  tags:
+    - docs
+    - health
+  phase_origin: phase2
+  source_repo: repo_studios
+  notes:
+    context: "Produces JSON/Markdown/TSV bundles with weighted scoring, provenance maps, and latest pointers for documentation governance."
+    decisions:
+      - "Acts as entry point for orchestrators synthesizing docs risk metrics."
+    blockers: []
+- id: scripts.health.fault_pipeline_orchestrator
+  name: "Fault Pipeline Orchestrator"
+  path: .repo_studios/scripts/orchestrators/run_fault_pipeline.py
+  asset_kind: script
+  roles:
+    - orchestrator
+  maturity: incubating
+  description: "Coordinates the faulthandler producer and consumer chain and mirrors summaries into the command center."
+  dependencies:
+    internal_paths:
+      - .repo_studios/scripts/producers/collect_faulthandler_reports.py
+      - .repo_studios/scripts/consumers/generate_fault_artifacts.py
+    external_tools: []
+    inputs: []
+  consumers:
+    - coding_agent
+    - ci_pipeline
+  status: active
+  governance_flags: []
+  artifact_type: py
+  related_assets:
+    - scripts.health.collect_faulthandler_reports
+    - scripts.health.generate_fault_artifacts
+  tags:
+    - health
+    - faults
+  phase_origin: phase2
+  source_repo: repo_studios
+  notes:
+    context: "Emits orchestrator bundles with manifests, logs, and mirrored command center summaries while respecting retention flags."
+    decisions:
+      - "Provides reuse hooks so downstream automation can skip producer work when reports already exist."
     blockers: []

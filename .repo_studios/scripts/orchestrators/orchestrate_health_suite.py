@@ -292,6 +292,8 @@ def make_steps(ts: str) -> list[Step]:
                 str(repo_DIR / "reports/producer_reports/test_log_reports/latest_report.json"),
                 "--log-level",
                 os.environ.get("COMMAND_CENTER_LOG_LEVEL", "INFO"),
+                "--artifacts-to-keep",
+                "5",
             ]
             if consumer_script.exists()
             else [
