@@ -1,7 +1,9 @@
+<!-- markdownlint-disable MD013 -->
+
 # Standards Index Gap Report
 
-Generated (UTC): 2025-11-25T23:31:23.459512+00:00
-Index Path: C:\Users\genet\repo_studios\.repo_studios\scripts\repo_standards_index.yaml
+Generated (UTC): 2025-11-27T17:15:23.760852+00:00
+Index Path: C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\standards_index_reports\latest_index.yaml
 Categories Path: C:\Users\genet\repo_studios\.repo_studios\scripts\.repo_studios\standards_categories.yaml
 
 ## Summary
@@ -9,7 +11,7 @@ Categories Path: C:\Users\genet\repo_studios\.repo_studios\scripts\.repo_studios
 - Total candidates: 14
 - Sources with candidates: 6
 - Top source candidate count: 5
-- Sources scanned: 10
+- Sources scanned: 6
 
 ## Sources With Candidates
 
@@ -33,3 +35,5 @@ Categories Path: C:\Users\genet\repo_studios\.repo_studios\scripts\.repo_studios
   - L21: - Use the repository-managed virtual environment ('.venv/') for local development and testing. Regenerate it after any dependency change.
   - L22: - Pin new dependencies in 'requirements.txt' or supporting lockfiles and document the reasoning in pull requests.
   - L28: - Ensure each doc adheres to the global markdown authoring standard: include front matter with 'owner', 'tags', and 'status', provide a single H1 with a descriptive summary paragraph, and add meaningful H2 sections for navigability.
+
+<!-- markdownlint-enable MD013 -->

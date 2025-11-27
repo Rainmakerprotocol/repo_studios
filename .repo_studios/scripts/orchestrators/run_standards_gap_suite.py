@@ -7,7 +7,7 @@ import argparse
 import importlib.util
 import logging
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, Callable, Sequence
 
@@ -40,7 +40,10 @@ GAP_SCRIPT_RELATIVE = Path(".repo_studios/scripts/producers/analyze_standards_in
 
 DEFAULT_INDEX_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_index_reports")
 DEFAULT_GAP_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_gap_reports")
-DEFAULT_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
+DEFAULT_INDEX_PATH = Path(
+    ".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml"
+)
+LEGACY_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
 DEFAULT_CATEGORIES_PATH = Path(".repo_studios/scripts/.repo_studios/standards_categories.yaml")
 
 DEFAULT_ARTIFACTS_TO_KEEP = 5
@@ -125,12 +128,32 @@ OPTIONS_CONFIG = OptionsConfig(
 )
 
 
+def _ensure_index_path(paths: Paths, logger: logging.Logger) -> Paths:
+    if paths.index_path.exists():
+        return paths
+    legacy_candidate = (paths.repo_root / LEGACY_INDEX_PATH).resolve()
+    if legacy_candidate.exists():
+        logger.warning(
+            "standards index missing at %s; falling back to legacy snapshot %s",
+            paths.index_path,
+            legacy_candidate,
+        )
+        return replace(paths, index_path=legacy_candidate)
+    return paths
+
+
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__ or "")
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument("--index-output-dir", help="Override index run output directory")
     parser.add_argument("--gap-output-dir", help="Override gap analysis output directory")
-    parser.add_argument("--index-path", help="Path to repo_standards_index.yaml")
+    parser.add_argument(
+        "--index-path",
+        help=(
+            "Path to repo_standards_index.yaml (defaults to "
+            ".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml)"
+        ),
+    )
     parser.add_argument("--categories-path", help="Path to standards_categories.yaml")
     parser.add_argument("--legacy-json", help="Optional legacy JSON output path passed to the analyzer")
     parser.add_argument("--timestamp", help="ISO8601 timestamp forwarded to both steps")
@@ -281,7 +304,9 @@ def _run_gap_analysis(paths: Paths, options: Options) -> StepOutcome:
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     args = parse_args(argv)
+    logger = _configure_logging(args.log_level)
     paths = build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__).resolve())
+    paths = _ensure_index_path(paths, logger)
     keep_values = build_standard_options(args, OPTIONS_CONFIG)
     options = Options(
         log_level=args.log_level,

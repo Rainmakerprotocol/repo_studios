@@ -1,6 +1,6 @@
 schema_version: 1
 version: 2025.11.0
-generated_at: '2025-11-26T00:35:57.762437+00:00'
+generated_at: '2025-11-27T17:13:11.972642+00:00'
 offline: true
 integrity_hash: ac5fbce0d2185c4a1bbe2cd48da6cb42420fe38102d548a74749daecb8ac041a
 sources:

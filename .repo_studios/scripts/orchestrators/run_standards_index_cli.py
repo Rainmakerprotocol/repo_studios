@@ -14,7 +14,10 @@ from typing import Any, Iterable, Sequence
 import yaml
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/orchestrator_runs/standards_index_cli")
-DEFAULT_INDEX_PATH = Path(".repo_studios/repo_standards_index.yaml")
+DEFAULT_INDEX_PATH = Path(
+    ".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml"
+)
+LEGACY_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
 DEFAULT_ARTIFACTS_TO_KEEP = 5
 RUN_STEM = "standards_index_cli"
 SCHEMA_VERSION = 1
@@ -79,6 +82,20 @@ OPTIONS_CONFIG = OptionsConfig(
     dataclass_type=Options,
     keep_specs={"artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1)},
 )
+
+
+def _ensure_index_path(paths: Paths) -> Paths:
+    if paths.index_path.exists():
+        return paths
+    legacy_candidate = (paths.repo_root / LEGACY_INDEX_PATH).resolve()
+    if legacy_candidate.exists():
+        logger.warning(
+            "standards index missing at %s; falling back to legacy snapshot %s",
+            paths.index_path,
+            legacy_candidate,
+        )
+        return replace(paths, index_path=legacy_candidate)
+    return paths
 
 
 class StandardsCliError(Exception):
@@ -408,6 +425,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         }
 
     paths = build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    paths = _ensure_index_path(paths)
     options = build_standard_options(args, OPTIONS_CONFIG)
     options = replace(options, log_level=args.log_level)
     _configure_logging(options.log_level)

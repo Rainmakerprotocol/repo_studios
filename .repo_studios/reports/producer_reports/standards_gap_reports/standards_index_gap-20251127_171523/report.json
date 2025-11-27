@@ -1,7 +1,7 @@
 {
   "categories_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\.repo_studios\\standards_categories.yaml",
-  "generated_utc": "2025-11-25T23:31:23.459512+00:00",
-  "index_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\repo_standards_index.yaml",
+  "generated_utc": "2025-11-27T17:15:23.760852+00:00",
+  "index_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\standards_index_reports\\latest_index.yaml",
   "schema_version": 1,
   "sources": {
     "docs\\standards\\global\\std-global-code-cleanup.md": [
@@ -74,7 +74,7 @@
     ]
   },
   "summary": {
-    "scanned_sources": 10,
+    "scanned_sources": 6,
     "sources_with_candidates": 6,
     "top_source_candidates": 5,
     "total_candidates": 14

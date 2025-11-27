@@ -10,13 +10,16 @@ import logging
 import shutil
 import sys
 from collections import Counter
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, NamedTuple
 
 import yaml
 
-DEFAULT_RELATIVE_INDEX = Path(".repo_studios/scripts/repo_standards_index.yaml")
+DEFAULT_RELATIVE_INDEX = Path(
+    ".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml"
+)
+LEGACY_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_prompt_seeds")
 RUN_PREFIX = "standards_prompt_seed"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
@@ -105,7 +108,10 @@ def parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser.add_argument("--repo-root", help="Repository root (defaults to project root)")
     parser.add_argument(
         "--index-path",
-        help="Path to repo_standards_index.yaml (defaults to .repo_studios/scripts/repo_standards_index.yaml)",
+        help=(
+            "Path to repo_standards_index.yaml (defaults to "
+            ".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml)"
+        ),
     )
     parser.add_argument(
         "--output-dir",
@@ -146,7 +152,18 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    paths = build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    if paths.index_path.exists():
+        return paths
+    legacy_candidate = (paths.repo_root / LEGACY_INDEX_PATH).resolve()
+    if legacy_candidate.exists():
+        logging.warning(
+            "standards index missing at %s; falling back to legacy snapshot %s",
+            paths.index_path,
+            legacy_candidate,
+        )
+        return replace(paths, index_path=legacy_candidate)
+    return paths
 
 
 def build_options(args: argparse.Namespace) -> Options:

@@ -7,9 +7,9 @@ owners:
   - repo_studios_ai
 status: draft
 version: 0.2.0
-updated: 2025-10-18
+updated: 2025-11-27
 summary: >-
-  Schema contract for `repo_standards_index.yaml`, detailing the deterministic structure consumed by Repo Studios automation and agents.
+  Schema contract for the standards index bundle referenced by `latest_index.yaml`, detailing the deterministic structure consumed by Repo Studios automation and agents.
 tags:
   - standards
   - schema
@@ -20,7 +20,7 @@ legacy_source: .repo_studios_legacy/repo_docs/standards_index_schema.md
 <!-- markdownlint-disable MD025 -->
 # Standards Index Schema Specification
 
-This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.
+This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.
 
 ---
 

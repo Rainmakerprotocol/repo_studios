@@ -32,7 +32,9 @@ SCHEMA_VERSION = 1
 DEFAULT_RELATIVE_CATEGORIES = Path(".repo_studios/scripts/.repo_studios/standards_categories.yaml")
 DEFAULT_RELATIVE_SEED = Path(".repo_studios/scripts/.repo_studios/standards_seed.yaml")
 DEFAULT_RELATIVE_EXTRACTION = Path(".repo_studios/scripts/.repo_studios/standards_extraction.py")
-DEFAULT_RELATIVE_INDEX = Path(".repo_studios/scripts/repo_standards_index.yaml")
+DEFAULT_RELATIVE_INDEX = Path(
+    ".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml"
+)
 DEFAULT_RELATIVE_PENDING = Path(".repo_studios/scripts/repo_standards_pending.yaml")
 
 LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
@@ -642,7 +644,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--extraction-module", default=str(DEFAULT_RELATIVE_EXTRACTION), help="Path to standards_extraction.py"
     )
-    parser.add_argument("--index-path", default=str(DEFAULT_RELATIVE_INDEX), help="Canonical index output path")
+    parser.add_argument(
+        "--index-path",
+        default=str(DEFAULT_RELATIVE_INDEX),
+        help="Canonical index output path (defaults to latest_index.yaml bundle pointer)",
+    )
     parser.add_argument("--pending-path", default=str(DEFAULT_RELATIVE_PENDING), help="Pending extraction output path")
     parser.add_argument("--timestamp", help="ISO8601 timestamp for the run directory")
     parser.add_argument(

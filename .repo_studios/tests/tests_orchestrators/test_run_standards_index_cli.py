@@ -27,9 +27,15 @@ def _load_module() -> ModuleType:
 
 
 def _write_index(repo_root: Path) -> Path:
-    standards_dir = repo_root / ".repo_studios"
-    standards_dir.mkdir(parents=True, exist_ok=True)
-    index_path = standards_dir / "repo_standards_index.yaml"
+    reports_dir = (
+        repo_root
+        / ".repo_studios"
+        / "reports"
+        / "producer_reports"
+        / "standards_index_reports"
+    )
+    reports_dir.mkdir(parents=True, exist_ok=True)
+    index_path = reports_dir / "latest_index.yaml"
     index_payload = {
         "integrity_hash": "abc123",
         "rules": [
@@ -62,6 +68,7 @@ def test_list_command_writes_structured_bundle(tmp_path: Path) -> None:
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
     index_path = _write_index(repo_root)
+    assert index_path.exists()
     output_dir = repo_root / "out"
 
     result = module.run(
@@ -70,8 +77,6 @@ def test_list_command_writes_structured_bundle(tmp_path: Path) -> None:
             str(repo_root),
             "--output-dir",
             str(output_dir),
-            "--index-path",
-            str(index_path),
             "--log-level",
             "INFO",
             "list",
@@ -102,6 +107,7 @@ def test_show_missing_rule_returns_exit_three(tmp_path: Path) -> None:
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
     index_path = _write_index(repo_root)
+    assert index_path.exists()
     output_dir = repo_root / "out"
 
     result = module.run(
@@ -110,8 +116,6 @@ def test_show_missing_rule_returns_exit_three(tmp_path: Path) -> None:
             str(repo_root),
             "--output-dir",
             str(output_dir),
-            "--index-path",
-            str(index_path),
             "show",
             "--id",
             "UNKNOWN",
@@ -133,6 +137,7 @@ def test_stats_command_reports_severity_counts(tmp_path: Path) -> None:
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
     index_path = _write_index(repo_root)
+    assert index_path.exists()
     output_dir = repo_root / "out"
 
     result = module.run(
@@ -141,8 +146,6 @@ def test_stats_command_reports_severity_counts(tmp_path: Path) -> None:
             str(repo_root),
             "--output-dir",
             str(output_dir),
-            "--index-path",
-            str(index_path),
             "stats",
         ]
     )

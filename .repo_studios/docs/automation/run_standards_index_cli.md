@@ -27,7 +27,7 @@ Subset filtering example (only `error` severity rules with matching text):
 python .repo_studios/scripts/orchestrators/run_standards_index_cli.py \
   --repo-root . \
   --output-dir .repo_studios/reports/orchestrator_runs/standards_index_cli \
-  --index-path .repo_studios/repo_standards_index.yaml \
+  --index-path .repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml \
   list \
   --severity error \
   --category security
@@ -37,7 +37,7 @@ Key flags:
 
 - `--repo-root`: Optional override when running outside of the repo checkout.
 - `--output-dir`: Destination for structured run bundles (defaults to `.repo_studios/reports/orchestrator_runs/standards_index_cli`).
-- `--index-path`: Alternate standards index path (defaults to `.repo_studios/repo_standards_index.yaml`).
+- `--index-path`: Alternate standards index path (defaults to `.repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml`).
 - `--artifacts-to-keep`: Retention window for orchestrator bundles and latest pointers (minimum 1, default 5).
 - `--log-level`: Logging verbosity across helpers (`INFO` default).
 - Subcommands:
@@ -91,4 +91,5 @@ Run with:
 - The CLI remains stdout-first for interactive use; structured bundles are emitted in parallel for retention.
 - Severity aliases (`low`, `medium`, `high`) are mapped with warnings; prefer canonical severities in scripts.
 - `--index-path` simplifies testing and allows experimentation with alternate catalogs prior to committing updates.
+- The canonical index pointer lives at `.repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml`; if that pointer is missing, regenerate the bundle via `python .repo_studios/scripts/producers/generate_standards_index.py` or supply an alternate archive path with `--index-path`.
 - When wiring the command into broader orchestration, prefer calling the import-safe `run(argv=None)` helper instead of spawning a subprocess.

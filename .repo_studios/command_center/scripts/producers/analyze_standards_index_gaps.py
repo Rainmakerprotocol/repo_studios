@@ -7,7 +7,7 @@ import argparse
 import json
 import logging
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Sequence
@@ -15,7 +15,10 @@ from typing import Any, Iterable, Sequence
 import yaml
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_gap_reports")
-DEFAULT_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
+DEFAULT_INDEX_PATH = Path(
+    ".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml"
+)
+LEGACY_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
 DEFAULT_CATEGORIES_PATH = Path(".repo_studios/scripts/.repo_studios/standards_categories.yaml")
 DEFAULT_ARTIFACTS_TO_KEEP = 5
 RUN_STEM = "standards_index_gap"
@@ -97,6 +100,20 @@ OPTIONS_CONFIG = OptionsConfig(
     dataclass_type=Options,
     keep_specs={"artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1)},
 )
+
+
+def _ensure_index_path(paths: Paths, logger: logging.Logger) -> Paths:
+    if paths.index_path.exists():
+        return paths
+    legacy_candidate = (paths.repo_root / LEGACY_INDEX_PATH).resolve()
+    if legacy_candidate.exists():
+        logger.warning(
+            "standards index missing at %s; falling back to legacy snapshot %s",
+            paths.index_path,
+            legacy_candidate,
+        )
+        return replace(paths, index_path=legacy_candidate)
+    return paths
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
@@ -360,6 +377,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     logger = _configure_logging(args.log_level)
 
     paths = build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+    paths = _ensure_index_path(paths, logger)
     base_options = build_standard_options(args, OPTIONS_CONFIG)
     options = Options(
         artifacts_to_keep=base_options.artifacts_to_keep,

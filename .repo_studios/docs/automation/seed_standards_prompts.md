@@ -1,6 +1,6 @@
 # seed_standards_prompts.py
 
-**Last updated:** 2025-10-23
+**Last updated:** 2025-11-27
 
 ## Purpose
 
@@ -21,7 +21,7 @@ From `.repo_studios/`, run `make studio-seed-standards-prompts` to execute the p
 ### Key arguments
 
 - `--repo-root`: repository root used to resolve relative paths (defaults to four levels up from the script location).
-- `--index-path`: override path to `repo_standards_index.yaml` (defaults to `.repo_studios/scripts/repo_standards_index.yaml`).
+- `--index-path`: override path to the canonical standards index (defaults to `.repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml`).
 - `--output-dir`: destination for structured artifacts (defaults to `.repo_studios/reports/producer_reports/standards_prompt_seeds`).
 - `--include-warn`: include warn-severity rules in the seed (default is critical + error only).
 - `--artifact-formats`: formats persisted in the run bundle (`text`, `yaml`, `json`; default emits all three).

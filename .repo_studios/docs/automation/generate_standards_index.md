@@ -1,10 +1,10 @@
 # generate_standards_index.py
 
-**Last updated:** 2025-10-22
+**Last updated:** 2025-11-27
 
 ## Purpose
 
-`generate_standards_index.py` assembles the canonical `repo_standards_index.yaml` by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a structured artifact bundle (JSON/Markdown/log/raw copies) so agents can audit build metadata, extraction diagnostics, and integrity hashes without scraping the YAML directly.
+`generate_standards_index.py` assembles the canonical standards index and refreshes the `latest_index.yaml` pointer by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a structured artifact bundle (JSON/Markdown/log/raw copies) so agents can audit build metadata, extraction diagnostics, and integrity hashes without scraping the YAML directly.
 
 ## Invocation
 
@@ -24,7 +24,7 @@ python .repo_studios/scripts/producers/generate_standards_index.py \
 - `--categories-path`: YAML mapping of standards categories and markdown sources.
 - `--seed-path`: seed rules merged into the index before extraction.
 - `--extraction-module` (optional): path to `standards_extraction.py` providing `extract_rules(...)`. When missing, the producer records a diagnostic and continues.
-- `--index-path` (default `.repo_studios/scripts/repo_standards_index.yaml`): canonical YAML output.
+- `--index-path` (default `.repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml`): canonical YAML pointer updated after each run.
 - `--pending-path` (default `.repo_studios/scripts/repo_standards_pending.yaml`): draft queue populated when extraction runs but auto-accept is disabled.
 - `--timestamp`: ISO8601 value used for the run slug. When omitted the script captures current UTC.
 - `--artifacts-to-keep` (default `10`): retention window applied after each run (minimum of one directory).
@@ -59,7 +59,7 @@ The output directory also maintains convenience links:
 - `latest_report.json`, `latest_report.md`, `latest_report.log`.
 - `latest_index.yaml`, `latest_raw.yaml`, `latest_raw.txt`.
 
-When extraction is disabled or accepts no rules, the script writes `repo_standards_index.yaml` only. If extraction discovers rules but auto-accept is disabled, the producer also saves `repo_standards_pending.yaml` with metadata and diagnostics.
+When extraction is disabled or accepts no rules, the script writes `latest_index.yaml` (and related `latest_*` pointers) only. If extraction discovers rules but auto-accept is disabled, the producer also saves `repo_standards_pending.yaml` with metadata and diagnostics.
 
 Historical run directories are pruned down to the configured retention window after each execution.
 
