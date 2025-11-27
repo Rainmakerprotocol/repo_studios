@@ -1,0 +1,10 @@
+{
+  "duration_seconds": 42.232972,
+  "errors": 0,
+  "exit_code": 0,
+  "failures": 0,
+  "overall_status": "passed",
+  "passed": 336,
+  "skips": 0,
+  "tests_run": 336
+}

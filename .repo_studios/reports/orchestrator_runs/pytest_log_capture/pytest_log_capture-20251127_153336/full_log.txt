@@ -1,0 +1,15 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.3, pytest-9.0.1, pluggy-1.6.0 -- C:\Users\genet\repo_studios\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\genet\repo_studios
+configfile: pytest.ini
+collecting ... collected 2 items
+
+.repo_studios/tests/tests_orchestrators/test_run_pytest_log_capture.py::test_summary_mode_produces_structured_bundle PASSED [ 50%]
+.repo_studios/tests/tests_orchestrators/test_run_pytest_log_capture.py::test_execute_mode_captures_and_writes_artifacts PASSED [100%]
+
+- generated xml file: C:\Users\genet\repo_studios\.repo_studios\pytest_logs\junit_2025-11-27_1033.xml -
+============================ slowest 25 durations =============================
+
+(6 durations < 0.5s hidden.)
+============================== 2 passed in 0.26s ==============================

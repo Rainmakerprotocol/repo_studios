@@ -34,6 +34,8 @@ Examples:
 from __future__ import annotations
 
 import argparse
+import csv
+import io
 import logging
 import os
 import re
@@ -42,9 +44,43 @@ import subprocess
 import sys
 import time
 from collections import Counter, defaultdict
-from collections.abc import Iterable
-from datetime import datetime
+from dataclasses import dataclass, replace
+from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any, Iterable, Sequence
+
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/orchestrator_runs/pytest_log_capture")
+DEFAULT_LEGACY_LOGS_DIR = Path(".repo_studios/pytest_logs")
+DEFAULT_ARTIFACTS_TO_KEEP = 5
+RUN_STEM = "pytest_log_capture"
+SCHEMA_VERSION = 1
+
+LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
+
+try:  # pragma: no cover - prefer import when packaged
+    from libraries import (  # type: ignore
+        KeepSpec,
+        OptionsConfig,
+        PathSpec,
+        PathsConfig,
+        ReportArtifact,
+        build_standard_options,
+        build_standard_paths,
+        write_report_artifacts,
+    )
+except ModuleNotFoundError:  # pragma: no cover - exercised in environments without dependency
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import (  # type: ignore
+        KeepSpec,
+        OptionsConfig,
+        PathSpec,
+        PathsConfig,
+        ReportArtifact,
+        build_standard_options,
+        build_standard_paths,
+        write_report_artifacts,
+    )
 
 # Use defusedxml for secure XML parsing; fallback keeps runner usable when missing
 try:  # pragma: no cover - import wiring
@@ -65,6 +101,39 @@ _SUPPRESS_LINE_SUBSTR = [
     'self.code = compile(text, filename, "exec", dont_inherit=True)',
     "return compile(source, filename, mode, flags",
 ]
+
+
+@dataclass(frozen=True)
+class Paths:
+    repo_root: Path
+    output_dir: Path
+    logs_dir: Path
+
+
+@dataclass
+class Options:
+    artifacts_to_keep: int
+    log_level: str = "INFO"
+
+
+PATH_CONFIG = PathsConfig(
+    dataclass_type=Paths,
+    path_specs={
+        "output_dir": PathSpec(field="output_dir", default=DEFAULT_OUTPUT_DIR, ensure_dir=True, within_repo=True),
+        "logs_dir": PathSpec(field="logs_dir", default=DEFAULT_LEGACY_LOGS_DIR, ensure_dir=True, within_repo=True),
+    },
+    repo_root_depth=4,
+)
+
+
+OPTIONS_CONFIG = OptionsConfig(
+    dataclass_type=Options,
+    keep_specs={"artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1)},
+)
+
+
+def _configure_logging(level: str) -> None:
+    logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
 
 
 def timestamp() -> str:
@@ -327,28 +396,139 @@ def group_by_file(entries: list[tuple[str, str | None]]) -> dict[str, list[tuple
     return groups
 
 
-def write_summary(path: Path, title: str, entries: list[tuple[str, str | None]]) -> None:
+def render_summary_text(title: str, entries: list[tuple[str, str | None]]) -> str:
     # Group by file and sort by descending count, then filename asc
     groups = group_by_file(entries)
     counts = Counter({k: len(v) for k, v in groups.items()})
     sorted_groups = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))
 
-    with path.open("w", encoding="utf-8") as f:
-        f.write(f"{title}\n")
-        f.write(f"Generated: {datetime.now().isoformat(timespec='seconds')}\n")
-        f.write(f"Total: {len(entries)}\n\n")
+    lines: list[str] = []
+    lines.append(f"{title}")
+    lines.append(f"Generated: {datetime.now(timezone.utc).isoformat(timespec='seconds')}")
+    lines.append(f"Total: {len(entries)}")
+    lines.append("")
+    if not entries:
+        lines.append("<none>")
+        return "\n".join(lines) + "\n"
+    lines.append("Grouped by file (count desc):")
+    for file_name, cnt in sorted_groups:
+        lines.append(f"  {cnt:4d}  {file_name}")
+    lines.append("")
+    lines.append("Items:")
+    for nodeid, msg in entries:
+        if msg:
+            lines.append(f"- {nodeid}  # {msg}")
+        else:
+            lines.append(f"- {nodeid}")
+    return "\n".join(lines) + "\n"
+
+
+def write_summary(path: Path, title: str, entries: list[tuple[str, str | None]]) -> None:
+    path.write_text(render_summary_text(title, entries), encoding="utf-8")
+
+
+def _build_output_paths(base: Path, ts: str) -> dict[str, Path]:
+    return {
+        "full_log": base / f"pytest_{ts}.txt",
+        "failed_log": base / "pytest_failed_logs" / f"pytest_failed_{ts}.txt",
+        "skip_log": base / "pytest_skip_logs" / f"pytest_skip_{ts}.txt",
+        "junit": base / f"junit_{ts}.xml",
+        "reportlog": base / f"reportlog_{ts}.jsonl",
+        "html": base / f"report_{ts}.html",
+        "cov_xml": base / f"coverage_{ts}.xml",
+        "cov_html_dir": base / f"coverage_html_{ts}",
+        "manifest": base / f"manifest_{ts}.json",
+    }
+
+
+def _render_table(entries: list[tuple[str, str | None]], delimiter: str) -> str:
+    headers = ["file", "nodeid", "message"]
+    rows: list[list[str]] = [headers]
+    for nodeid, msg in entries:
+        file_part = nodeid.split("::", 1)[0]
+        rows.append([file_part, nodeid, msg or ""])
+    if delimiter == "\t":
+        return "\n".join(delimiter.join(row) for row in rows) + "\n"
+    buffer = io.StringIO()
+    writer = csv.writer(buffer)
+    writer.writerows(rows)
+    return buffer.getvalue()
+
+
+def _collect_junit_metrics(junit_path: Path) -> dict[str, Any]:
+    metrics: dict[str, Any] = {}
+    if not junit_path.exists():
+        return metrics
+    try:
+        root = ElementTree.parse(junit_path).getroot()
+    except Exception:
+        return metrics
+    suite = root.find("testsuite")
+    if suite is None:
+        return metrics
+    metrics.update(
+        {
+            "tests": int(suite.get("tests", "0")),
+            "failures": int(suite.get("failures", "0")),
+            "errors": int(suite.get("errors", "0")),
+            "skipped": int(suite.get("skipped", "0")),
+            "time": float(suite.get("time", "0")),
+        }
+    )
+    return metrics
+
+
+def _overall_status(exit_code: int, failures: int) -> str:
+    if exit_code == 0 and failures == 0:
+        return "passed"
+    if exit_code == 0 and failures > 0:
+        return "unstable"
+    return "failed"
+
+
+def _render_markdown_report(
+    *,
+    generated_at: datetime,
+    run_info: dict[str, Any],
+    failures: list[tuple[str, str | None]],
+    skips: list[tuple[str, str | None]],
+    summary: dict[str, Any],
+) -> str:
+    lines: list[str] = ["# Pytest Log Capture", ""]
+    lines.append(f"Generated (UTC): {generated_at.isoformat(timespec='seconds')}")
+    lines.append("")
+    lines.append("## Run Summary")
+    lines.append("")
+    lines.append(f"- Overall status: {summary['overall_status']}")
+    lines.append(f"- Exit code: {run_info['exit_code']}")
+    lines.append(f"- Duration (s): {summary['duration_seconds']:.2f}")
+    lines.append(f"- Tests run: {summary['tests_run']}")
+    lines.append(f"- Passed: {summary['passed']}")
+    lines.append(f"- Errors: {summary['errors']}")
+    lines.append(f"- Failures: {summary['failures']}")
+    lines.append(f"- Skips: {summary['skips']}")
+    lines.append(f"- Command: {' '.join(run_info['command']) if run_info['command'] else '<none>'}")
+    lines.append("")
+
+    def _section(title: str, entries: list[tuple[str, str | None]]) -> None:
+        lines.append(f"## {title}")
+        lines.append("")
         if not entries:
-            f.write("<none>\n")
+            lines.append("(none)")
+            lines.append("")
             return
-        f.write("Grouped by file (count desc):\n")
-        for file_name, cnt in sorted_groups:
-            f.write(f"  {cnt:4d}  {file_name}\n")
-        f.write("\nItems:\n")
-        for nodeid, msg in entries:
-            if msg:
-                f.write(f"- {nodeid}  # {msg}\n")
+        lines.append("<!-- markdownlint-disable MD013 -->")
+        for nodeid, message in entries:
+            if message:
+                lines.append(f"- {nodeid} — {message}")
             else:
-                f.write(f"- {nodeid}\n")
+                lines.append(f"- {nodeid}")
+        lines.append("<!-- markdownlint-enable MD013 -->")
+        lines.append("")
+
+    _section("Failures", failures)
+    _section("Skips", skips)
+    return "\n".join(lines).rstrip() + "\n"
 
 
 def _pytest_help_supports(options: list[str], cwd: Path) -> dict[str, bool]:
@@ -375,86 +555,179 @@ def _pytest_help_supports(options: list[str], cwd: Path) -> dict[str, bool]:
     return support
 
 
-def main(argv: list[str] | None = None) -> int:
+def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run pytest, capture logs, and write failed/skip summaries.",
+        description="Run pytest, capture logs, and emit structured artifacts.",
+    )
+    parser.add_argument("--repo-root", help="Repository root override (defaults to auto-detect)")
+    parser.add_argument("--output-dir", help="Directory for structured bundle outputs")
+    parser.add_argument("--logs-dir", help="Directory for legacy raw logs and JUnit artifacts")
+    parser.add_argument("--cwd", help="Working directory to invoke pytest from")
+    parser.add_argument(
+        "--artifacts-to-keep",
+        type=int,
+        default=DEFAULT_ARTIFACTS_TO_KEEP,
+        help="Retention count for structured run directories",
     )
     parser.add_argument(
-        "--cwd",
-        default=os.environ.get("PYTEST_RUNNER_CWD") or os.environ.get("GITHUB_WORKSPACE") or str(Path.cwd()),
-        help="Working directory to run pytest from",
-    )
-    parser.add_argument(
-        "--logs-dir",
-        default=os.environ.get("PYTEST_LOGS_DIR")
-        or str(Path(os.environ.get("GITHUB_WORKSPACE") or Path.cwd()) / ".repo_studios/pytest_logs"),
-        help="Directory to store logs",
-    )
-    parser.add_argument(
-        "pytest_args",
-        nargs=argparse.REMAINDER,
-        help="Additional pytest args after --",
+        "--log-level",
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        help="Logging verbosity",
     )
     parser.add_argument(
         "--from-log",
         dest="from_log",
         default=None,
-        help="Summarize from an existing full pytest log (no test run)",
+        help="Summarize existing pytest log without executing tests",
     )
     parser.add_argument(
         "--from-junit",
         dest="from_junit",
         default=None,
-        help="Summarize from an existing JUnit XML (no test run)",
+        help="Summarize existing pytest JUnit XML without executing tests",
     )
-    args = parser.parse_args(argv)
+    parser.add_argument(
+        "pytest_args",
+        nargs=argparse.REMAINDER,
+        help="Additional pytest args following --",
+    )
+    return parser.parse_args(argv)
 
-    # Extract pass-through args after "--"
-    passthrough = []
-    if args.pytest_args:
-        # argparse includes the leading --; strip it if present
-        passthrough = [a for a in args.pytest_args if a != "--"]
 
-    cwd = Path(args.cwd)
-    logs_dir, failed_dir, skip_dir = ensure_dirs(Path(args.logs_dir))
+def _strip_after_flag(lst: list[str], flag: str) -> list[str]:
+    out: list[str] = []
+    skip_next = False
+    for item in lst:
+        if skip_next:
+            skip_next = False
+            continue
+        if item == flag:
+            skip_next = True
+            continue
+        out.append(item)
+    return out
+
+
+def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    args = parse_args(argv)
+    _configure_logging(args.log_level)
+    logger = logging.getLogger("run_pytest_log_capture")
+
+    paths = build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    options = build_standard_options(args, OPTIONS_CONFIG)
+    options = replace(options, log_level=args.log_level)
+
+    if not _USING_DEFUSEDXML:
+        logger.warning("defusedxml not available; falling back to xml.etree.ElementTree")
+
+    passthrough = [a for a in (args.pytest_args or []) if a != "--"]
+    default_cwd = (
+        args.cwd
+        or os.environ.get("PYTEST_RUNNER_CWD")
+        or os.environ.get("GITHUB_WORKSPACE")
+        or str(paths.repo_root)
+    )
+    cwd = Path(default_cwd)
+
+    _logs_dir, _failed_dir, _skip_dir = ensure_dirs(paths.logs_dir)
     ts = timestamp()
+    legacy_paths = _build_output_paths(paths.logs_dir, ts)
+    junit_path = Path(args.from_junit) if args.from_junit else legacy_paths["junit"]
+    reportlog_path = legacy_paths["reportlog"]
+    html_report_path = legacy_paths["html"]
+    cov_xml_path = legacy_paths["cov_xml"]
+    cov_html_dir = legacy_paths["cov_html_dir"]
 
-    full_log_path = logs_dir / f"pytest_{ts}.txt"
-    failed_log_path = failed_dir / f"pytest_failed_{ts}.txt"
-    skip_log_path = skip_dir / f"pytest_skip_{ts}.txt"
+    summary_mode = bool(args.from_log or args.from_junit)
+    idle_timeout = float(os.environ.get("PYTEST_RUNNER_IDLE_TIMEOUT_SEC", "300") or 300)
+    escalation_grace = float(os.environ.get("PYTEST_RUNNER_ESCALATION_GRACE_SEC", "30") or 30)
+    enable_sigusr1 = _env_flag("PYTEST_RUNNER_ENABLE_SIGUSR1", default=False)
 
-    junit_path = logs_dir / f"junit_{ts}.xml"
-    reportlog_path = logs_dir / f"reportlog_{ts}.jsonl"
-    html_report_path = logs_dir / f"report_{ts}.html"
-    cov_xml_path = logs_dir / f"coverage_{ts}.xml"
-    cov_html_dir = logs_dir / f"coverage_html_{ts}"
-    base_cmd = [
-        sys.executable,
-        "-m",
-        "pytest",
-        "-vv",
-        "-ra",
-        "-rs",
-        "--color=no",
-        "--show-capture=all",
-        "--durations=25",
-        "--durations-min=0.50",
-        f"--junitxml={junit_path}",
-    ]
-    # Optional plugin outputs (detected via pytest --help in the same interpreter)
-    optional_opts = ["--report-log", "-n", "--cov", "--reruns", "--html", "--timeout"]
-    supports = _pytest_help_supports(optional_opts, cwd)
+    start_time = datetime.now(timezone.utc)
+    end_time = start_time
+    output = ""
+    rc = 0
+    terminated = False
+    retried_serial = False
     xdist_used = False
     cov_enabled = False
     reruns_enabled = False
-    if supports.get("--report-log", False):
-        base_cmd += ["--report-log", str(reportlog_path)]
-    # Allow disabling xdist via env if it causes instability/hangs
-    if supports.get("-n", False) and _env_flag("PYTEST_RUNNER_DISABLE_XDIST", default=False) is False:
-        base_cmd += ["-n", "auto"]
-        xdist_used = True
-    if supports.get("--cov", False):
-        if _env_flag("PYTEST_RUNNER_DISABLE_COV", default=False) is False:
+    supports: dict[str, bool] = {}
+    junit_metrics: dict[str, Any] = {}
+    failures: list[tuple[str, str | None]] = []
+    skips: list[tuple[str, str | None]] = []
+    full_command: list[str] = passthrough[:]
+
+    junit_path = legacy_paths["junit"]
+    reportlog_path = legacy_paths["reportlog"]
+    html_report_path = legacy_paths["html"]
+    cov_xml_path = legacy_paths["cov_xml"]
+    cov_html_dir = legacy_paths["cov_html_dir"]
+
+    if summary_mode:
+        if args.from_log:
+            match = re.search(r"pytest_(\d{4}-\d{2}-\d{2}_\d{4})\.txt$", args.from_log)
+            if match:
+                ts = match.group(1)
+                legacy_paths = _build_output_paths(paths.logs_dir, ts)
+                junit_path = Path(args.from_junit) if args.from_junit else legacy_paths["junit"]
+                reportlog_path = legacy_paths["reportlog"]
+                html_report_path = legacy_paths["html"]
+                cov_xml_path = legacy_paths["cov_xml"]
+                cov_html_dir = legacy_paths["cov_html_dir"]
+        if args.from_junit:
+            match = re.search(r"junit_(\d{4}-\d{2}-\d{2}_\d{4})\.xml$", args.from_junit)
+            if match:
+                ts = match.group(1)
+                legacy_paths = _build_output_paths(paths.logs_dir, ts)
+                reportlog_path = legacy_paths["reportlog"]
+                html_report_path = legacy_paths["html"]
+                cov_xml_path = legacy_paths["cov_xml"]
+                cov_html_dir = legacy_paths["cov_html_dir"]
+                junit_path = Path(args.from_junit)
+        if args.from_log:
+            src = Path(args.from_log)
+            output = src.read_text(encoding="utf-8", errors="ignore") if src.exists() else ""
+            legacy_paths["full_log"] = src
+        if output:
+            f1, s1 = parse_failed_and_skipped(output)
+            failures.extend(f1)
+            skips.extend(s1)
+        if junit_path.exists():
+            f2, s2 = parse_junit_failed_and_skipped(junit_path)
+            existing_failures = set(failures)
+            for item in f2:
+                if item not in existing_failures:
+                    failures.append(item)
+            existing_skips = set(skips)
+            for item in s2:
+                if item not in existing_skips:
+                    skips.append(item)
+            junit_metrics = _collect_junit_metrics(junit_path)
+        rc = 1 if failures else 0
+    else:
+        base_cmd = [
+            sys.executable,
+            "-m",
+            "pytest",
+            "-vv",
+            "-ra",
+            "-rs",
+            "--color=no",
+            "--show-capture=all",
+            "--durations=25",
+            "--durations-min=0.50",
+            f"--junitxml={junit_path}",
+        ]
+        optional_opts = ["--report-log", "-n", "--cov", "--reruns", "--html", "--timeout"]
+        supports = _pytest_help_supports(optional_opts, cwd)
+        if supports.get("--report-log", False):
+            base_cmd += ["--report-log", str(reportlog_path)]
+        if supports.get("-n", False) and _env_flag("PYTEST_RUNNER_DISABLE_XDIST", default=False) is False:
+            base_cmd += ["-n", "auto"]
+            xdist_used = True
+        if supports.get("--cov", False) and _env_flag("PYTEST_RUNNER_DISABLE_COV", default=False) is False:
             base_cmd += [
                 "--cov=.",
                 "--cov-report",
@@ -463,173 +736,186 @@ def main(argv: list[str] | None = None) -> int:
                 f"html:{cov_html_dir}",
             ]
             cov_enabled = True
-    if supports.get("--reruns", False):
-        if _env_flag("PYTEST_RUNNER_DISABLE_RERUNS", default=False) is False:
+        if supports.get("--reruns", False) and _env_flag("PYTEST_RUNNER_DISABLE_RERUNS", default=False) is False:
             base_cmd += ["--reruns", "1", "--reruns-delay", "2"]
             reruns_enabled = True
-    if supports.get("--html", False):
-        base_cmd += ["--html", str(html_report_path), "--self-contained-html"]
-    # pytest-timeout plugin support (if available via --help)
-    if supports.get("--timeout", False) and _env_flag("PYTEST_RUNNER_ENABLE_TIMEOUT", default=True):
-        per_test_sec = os.environ.get("PYTEST_RUNNER_TIMEOUT_PER_TEST", "120")
-        method = os.environ.get("PYTEST_RUNNER_TIMEOUT_METHOD", "thread")
-        base_cmd += ["--timeout", str(per_test_sec), "--timeout-method", method]
+        if supports.get("--html", False):
+            base_cmd += ["--html", str(html_report_path), "--self-contained-html"]
+        if supports.get("--timeout", False) and _env_flag("PYTEST_RUNNER_ENABLE_TIMEOUT", default=True):
+            per_test_sec = os.environ.get("PYTEST_RUNNER_TIMEOUT_PER_TEST", "120")
+            method = os.environ.get("PYTEST_RUNNER_TIMEOUT_METHOD", "thread")
+            base_cmd += ["--timeout", str(per_test_sec), "--timeout-method", method]
 
-    # If no selectors provided, let pytest.ini testpaths control discovery
-    # Summarize-only mode: from existing log/junit without running pytest
-    if args.from_log or args.from_junit:
-        # Determine timestamp from provided filenames when possible
-        if args.from_log:
-            m_ts = re.search(r"pytest_(\d{4}-\d{2}-\d{2}_\d{4})\.txt$", args.from_log)
-            if m_ts:
-                ts = m_ts.group(1)
-        if args.from_junit:
-            m_ts2 = re.search(r"junit_(\d{4}-\d{2}-\d{2}_\d{4})\.xml$", args.from_junit)
-            if m_ts2:
-                ts = m_ts2.group(1)
-        full_log_path = Path(args.from_log) if args.from_log else full_log_path
-        junit_path = Path(args.from_junit) if args.from_junit else junit_path
-        # Read sources
-        output = ""
-        if args.from_log:
-            output = Path(args.from_log).read_text(encoding="utf-8", errors="ignore")
-        failed, skipped = ([], [])
-        if output:
-            f1, s1 = parse_failed_and_skipped(output)
-            failed.extend(f1)
-            skipped.extend(s1)
-        if args.from_junit and Path(junit_path).exists():
-            f2, s2 = parse_junit_failed_and_skipped(Path(junit_path))
-            # Merge, avoid duplicates
-            seen = set(failed)
-            for item in f2:
-                if item not in seen:
-                    failed.append(item)
-            seen = set(skipped)
-            for item in s2:
-                if item not in seen:
-                    skipped.append(item)
-        # Write summaries
-        write_summary(failed_dir / f"pytest_failed_{ts}.txt", "FAILED tests", failed)
-        write_summary(skip_dir / f"pytest_skip_{ts}.txt", "SKIPPED tests", skipped)
-        logging.info("Summaries written for timestamp %s (from existing artifacts)", ts)
-        return 1 if failed else 0
+        cmd = base_cmd + passthrough
+        full_command = cmd
+        logger.info("Running: %s (cwd=%s)", " ".join(cmd), cwd)
+        output, rc, terminated = run_pytest_and_capture(cmd, cwd)
+        end_time = datetime.now(timezone.utc)
 
-    cmd = base_cmd + (passthrough or [])
+        legacy_paths["full_log"].write_text(output, encoding="utf-8")
+        logger.info("Saved full log: %s", legacy_paths["full_log"])
 
-    logging.info("Running: %s (cwd=%s)", " ".join(cmd), cwd)
-    output, rc, terminated = run_pytest_and_capture(cmd, cwd)
+        failures, skips = parse_failed_and_skipped(output)
+        logger.info("Expected JUnit XML: %s", junit_path)
 
-    # Save full output
-    with full_log_path.open("w", encoding="utf-8") as f:
-        f.write(output)
-    logging.info("Saved full log: %s", full_log_path)
+        exited_by_signal = isinstance(rc, int) and rc < 0
+        if (terminated or exited_by_signal) and xdist_used and _env_flag("PYTEST_RUNNER_FALLBACK_SERIAL", default=True):
+            try:
+                logger.warning(
+                    "Detected hang/termination%s with xdist; retrying in serial mode without -n",
+                    " (signal)" if exited_by_signal else "",
+                )
+                cmd_serial = _strip_after_flag(cmd, "-n")
+                out2, rc2, _ = run_pytest_and_capture(cmd_serial, cwd)
+                with legacy_paths["full_log"].open("a", encoding="utf-8") as fh:
+                    fh.write("\n[pytest_log_runner] Retried serial run output begins below:\n\n")
+                    fh.write(out2)
+                output += "\n[pytest_log_runner] Retried serial run appended above.\n"
+                rc = rc2
+                retried_serial = True
+                end_time = datetime.now(timezone.utc)
+                failures, skips = parse_failed_and_skipped(output)
+            except Exception as exc:  # pragma: no cover - defensive
+                logger.exception("Serial fallback failed: %s", exc)
 
-    # Parse and write summaries
-    failed, skipped = parse_failed_and_skipped(output)
-    write_summary(failed_log_path, "FAILED tests", failed)
-    write_summary(skip_log_path, "SKIPPED tests", skipped)
-    logging.info("Saved failed summary: %s", failed_log_path)
-    logging.info("Saved skipped summary: %s", skip_log_path)
-    logging.info("Saved JUnit XML: %s", junit_path)
+        junit_metrics = _collect_junit_metrics(junit_path)
+    # End execute flow
 
-    # If we detected a hang and terminated OR pytest exited due to a signal while using xdist,
-    # optionally retry serially (common mitigation for xdist end-of-suite stalls).
-    exited_by_signal = isinstance(rc, int) and rc < 0
-    if (terminated or exited_by_signal) and xdist_used and _env_flag("PYTEST_RUNNER_FALLBACK_SERIAL", default=True):
-        try:
-            logging.warning(
-                "Detected hang/termination%s with xdist; retrying in serial mode without -n",
-                " (signal)" if exited_by_signal else "",
-            )
-            cmd_serial = [c for c in cmd if c != "-n"]
+    generated_at = datetime.now(timezone.utc)
+    duration_seconds = max((end_time - start_time).total_seconds(), 0.0)
+    junit_tests = int(junit_metrics.get("tests", 0)) if junit_metrics else 0
+    junit_errors = int(junit_metrics.get("errors", 0)) if junit_metrics else 0
+    inferred_total = max(junit_tests, len(failures) + len(skips))
+    total_tests = junit_tests or inferred_total
+    passed_tests = max(total_tests - len(failures) - junit_errors - len(skips), 0)
 
-            # Remove the automatic value following -n if present
-            def _strip_after_flag(lst: list[str], flag: str) -> list[str]:
-                out: list[str] = []
-                skip_next = False
-                for item in lst:
-                    if skip_next:
-                        skip_next = False
-                        continue
-                    if item == flag:
-                        skip_next = True
-                        continue
-                    out.append(item)
-                return out
+    summary_payload = {
+        "overall_status": _overall_status(rc, len(failures)),
+        "failures": len(failures),
+        "skips": len(skips),
+        "errors": junit_errors,
+        "passed": passed_tests,
+        "tests_run": total_tests,
+        "duration_seconds": duration_seconds,
+        "junit": junit_metrics,
+    }
 
-            cmd_serial = _strip_after_flag(cmd_serial, "-n")
-            out2, rc2, _ = run_pytest_and_capture(cmd_serial, cwd)
-            # Append retry output to the same log for continuity
-            with full_log_path.open("a", encoding="utf-8") as f:
-                f.write("\n[pytest_log_runner] Retried serial run output begins below:\n\n")
-                f.write(out2)
-            output += "\n[pytest_log_runner] Retried serial run appended above.\n"
-            rc = rc2
-        except Exception as e:
-            logging.exception("Serial fallback failed: %s", e)
+    run_info = {
+        "mode": "summarize" if summary_mode else "execute",
+        "timestamp_utc": generated_at.isoformat(timespec="seconds"),
+        "command": full_command,
+        "exit_code": rc,
+        "terminated": terminated,
+        "retried_serial": retried_serial,
+        "xdist_used": xdist_used,
+        "cov_enabled": cov_enabled,
+        "reruns_enabled": reruns_enabled,
+        "cwd": str(cwd),
+        "idle_timeout_seconds": idle_timeout,
+        "escalation_grace_seconds": escalation_grace,
+        "enable_sigusr1": enable_sigusr1,
+    }
 
-    # Write a manifest for longitudinal comparisons
-    try:
-        import json as _json
-        import platform as _platform
+    failure_summary_text = render_summary_text("FAILED tests", failures)
+    skip_summary_text = render_summary_text("SKIPPED tests", skips)
+    failures_tsv = _render_table(failures, "\t")
+    skips_tsv = _render_table(skips, "\t")
+    failures_csv = _render_table(failures, ",")
+    skips_csv = _render_table(skips, ",")
+    markdown_payload = _render_markdown_report(
+        generated_at=generated_at,
+        run_info=run_info,
+        failures=failures,
+        skips=skips,
+        summary=summary_payload,
+    )
 
-        manifest = {
-            "timestamp": datetime.now().isoformat(timespec="seconds"),
-            "cwd": str(cwd),
+    bundle_summary = {
+        "overall_status": summary_payload["overall_status"],
+        "failures": summary_payload["failures"],
+        "skips": summary_payload["skips"],
+        "errors": summary_payload["errors"],
+        "passed": summary_payload["passed"],
+        "tests_run": summary_payload["tests_run"],
+        "duration_seconds": summary_payload["duration_seconds"],
+        "exit_code": rc,
+    }
+
+    report_payload = {
+        "schema_version": SCHEMA_VERSION,
+        "generated_utc": generated_at.isoformat(timespec="seconds"),
+        "run": run_info,
+        "summary": summary_payload,
+        "failures": [{"nodeid": nodeid, "message": msg} for nodeid, msg in failures],
+        "skips": [{"nodeid": nodeid, "message": msg} for nodeid, msg in skips],
+        "environment": {
             "python": sys.version.split()[0],
-            "platform": _platform.platform(),
-            "pytest_cmd": cmd,
-            "artifacts": {
-                "full_log": str(full_log_path),
-                "junit_xml": str(junit_path),
-                "reportlog": str(reportlog_path) if plugin_available("pytest_reportlog") else None,
-                "html_report": str(html_report_path) if supports.get("--html", False) else None,
-                "coverage_xml": str(cov_xml_path) if cov_enabled else None,
-                "coverage_html": str(cov_html_dir) if cov_enabled else None,
-            },
-            "plugins": {
-                "xdist": xdist_used,
-                "cov": cov_enabled,
-                "reruns": reruns_enabled,
-                "reportlog": supports.get("--report-log", False),
-                "html": supports.get("--html", False),
-            },
-            "exit_code": rc,
-            "terminated": terminated,
-        }
-        # Annotate signal termination info if applicable
-        if isinstance(rc, int) and rc < 0:
-            manifest["signal"] = abs(rc)
-        try:
-            suite = ElementTree.parse(junit_path).getroot().find("testsuite")
-            if suite is not None:
-                manifest["junit"] = {
-                    "tests": int(suite.get("tests", "0")),
-                    "failures": int(suite.get("failures", "0")),
-                    "errors": int(suite.get("errors", "0")),
-                    "skipped": int(suite.get("skipped", "0")),
-                    "time": float(suite.get("time", "0")),
-                }
-        except Exception as e:
-            logging.warning("Failed to parse JUnit XML: %s", e)
+            "platform": sys.platform,
+            "using_defusedxml": _USING_DEFUSEDXML,
+            "plugins": supports,
+        },
+        "provenance": {
+            "legacy": {
+                "full_log": str(legacy_paths["full_log"]),
+                "failed_summary": str(legacy_paths["failed_log"]),
+                "skip_summary": str(legacy_paths["skip_log"]),
+                "junit": str(junit_path),
+                "reportlog": str(reportlog_path),
+                "html_report": str(html_report_path),
+                "coverage_xml": str(cov_xml_path),
+                "coverage_html_dir": str(cov_html_dir),
+            }
+        },
+    }
 
-        manifest_path = logs_dir / f"manifest_{ts}.json"
-        with manifest_path.open("w", encoding="utf-8") as mf:
-            _json.dump(manifest, mf, indent=2)
-        logging.info("Saved manifest: %s", manifest_path)
-    except Exception as e:
-        logging.warning("Failed to write manifest: %s", e)
+    artifacts: list[ReportArtifact] = [
+        ReportArtifact("report.json", "latest_report.json", "json", report_payload),
+        ReportArtifact("report.md", "latest_report.md", "text", markdown_payload),
+        ReportArtifact("bundle_summary.json", "latest_bundle_summary.json", "json", bundle_summary),
+        ReportArtifact("failures.tsv", "latest_failures.tsv", "text", failures_tsv),
+        ReportArtifact("failures.csv", "latest_failures.csv", "text", failures_csv),
+        ReportArtifact("skips.tsv", "latest_skips.tsv", "text", skips_tsv),
+        ReportArtifact("skips.csv", "latest_skips.csv", "text", skips_csv),
+        ReportArtifact("failures.txt", "latest_failures.txt", "text", failure_summary_text),
+        ReportArtifact("skips.txt", "latest_skips.txt", "text", skip_summary_text),
+        ReportArtifact("full_log.txt", "latest_full_log.txt", "text", output),
+    ]
 
-    # Return the actual pytest exit code
-    return rc
+    if junit_path.exists():
+        artifacts.append(
+            ReportArtifact("junit.xml", "latest_junit.xml", "text", junit_path.read_text(encoding="utf-8", errors="ignore"))
+        )
+
+    write_result = write_report_artifacts(
+        stem=RUN_STEM,
+        timestamp=generated_at,
+        output_dir=paths.output_dir,
+        artifacts=artifacts,
+        keep=options.artifacts_to_keep,
+    )
+    logger.info("Structured artifacts written to %s", write_result.run_dir)
+
+    write_summary(legacy_paths["failed_log"], "FAILED tests", failures)
+    write_summary(legacy_paths["skip_log"], "SKIPPED tests", skips)
+    logger.info("Saved failed summary: %s", legacy_paths["failed_log"])
+    logger.info("Saved skipped summary: %s", legacy_paths["skip_log"])
+
+    return {
+        "exit_code": rc,
+        "run_dir": str(write_result.run_dir),
+        "report_json": str(write_result.artifacts["report.json"]),
+        "report_md": str(write_result.artifacts["report.md"]),
+        "bundle_summary": str(write_result.artifacts["bundle_summary.json"]),
+        "failures_tsv": str(write_result.artifacts["failures.tsv"]),
+        "skips_tsv": str(write_result.artifacts["skips.tsv"]),
+        "summary": summary_payload,
+    }
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    result = run(argv)
+    return int(result["exit_code"])
 
 
 if __name__ == "__main__":
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s %(levelname)s %(message)s",
-    )
-    if not _USING_DEFUSEDXML:
-        logging.warning("defusedxml not available; falling back to xml.etree.ElementTree")
     raise SystemExit(main())
