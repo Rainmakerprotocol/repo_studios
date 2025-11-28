@@ -7,7 +7,7 @@ Health Suite Summary — Compose a compact summary into one markdown from:
 - Test Log Health (pytest warnings/exceptions + slowest tests)
 - Churn × Complexity Heatmap (top risk items)
 
-Writes: .repo_studios/health_suite/health_suite_YYYY-MM-DD_HHMM.md
+Writes: .repo_studios/reports/summarizer_reports/health_suite_summary_reports/health_suite_YYYY-MM-DD_HHMM.md
 """
 
 from __future__ import annotations
@@ -16,6 +16,9 @@ import argparse
 import datetime as dt
 import json
 from pathlib import Path
+
+SUMMARY_OUTPUT_DEFAULT = ".repo_studios/reports/summarizer_reports/health_suite_summary_reports"
+LEGACY_SUMMARY_DIR = ".repo_studios/health_suite"
 
 
 def _read_text(path: Path, default: str = "(missing)") -> str:
@@ -559,7 +562,7 @@ def _compose_churn_section(lines: list[str], table_rows: list[str], cc_dir: Path
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Compose health suite summary")
     parser.add_argument("--repo-root", default=".")
-    parser.add_argument("--output-dir", default=".repo_studios/health_suite")
+    parser.add_argument("--output-dir", default=SUMMARY_OUTPUT_DEFAULT)
     parser.add_argument("--timestamp", default="")
     return parser
 
@@ -625,6 +628,18 @@ def main() -> int:
 
     output = "\n".join(lines).strip("\n") + "\n"
     out_path.write_text(output, encoding="utf-8")
+    legacy_dir = (root / LEGACY_SUMMARY_DIR).resolve()
+    try:
+        legacy_dir.mkdir(parents=True, exist_ok=True)
+        (legacy_dir / out_path.name).write_text(output, encoding="utf-8")
+        marker = legacy_dir / "MOVED.txt"
+        if not marker.exists():
+            marker.write_text(
+                f"Summaries now live under {out_dir.resolve()}\n",
+                encoding="utf-8",
+            )
+    except Exception:
+        pass
     return 0
 
 

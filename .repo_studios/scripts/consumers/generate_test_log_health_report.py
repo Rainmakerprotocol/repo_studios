@@ -15,13 +15,15 @@ import argparse
 import csv
 import json
 import logging
+import os
 import shutil
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Sequence
 
-LOGS_DIR_DEFAULT = ".repo_studios/pytest_logs"
+LOGS_DIR_DEFAULT = ".repo_studios/reports/orchestrator_logs/pytest_log_capture_logs"
+LEGACY_LOGS_DIR = ".repo_studios/pytest_logs"
 PRODUCER_REPORT_DEFAULT = ".repo_studios/reports/producer_reports/test_log_reports/latest_report.json"
 OUTPUT_BASE_DEFAULT = ".repo_studios/reports/consumer_reports/test_log_health_reports"
 DEFAULT_ARTIFACTS_TO_KEEP = 5
@@ -189,6 +191,18 @@ def _select_logs_dir(logs_dir: Path) -> Path | None:
         return logs_dir
     runs = _discover_log_runs(logs_dir)
     return runs[0] if runs else None
+
+
+def _allow_legacy_logs() -> bool:
+    flag = os.environ.get("TEST_LOG_HEALTH_ALLOW_LEGACY", "1").strip().lower()
+    return flag not in {"0", "false", "no", "off"}
+
+
+def _resolve_legacy_logs_base(repo_root: Path) -> Path:
+    base = Path(LEGACY_LOGS_DIR)
+    if not base.is_absolute():
+        base = (repo_root / base).resolve()
+    return base
 
 
 def _empty_report(logs_dir: Path) -> dict[str, Any]:
@@ -386,6 +400,8 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     logs_dir = Path(args.logs_dir)
     if not logs_dir.is_absolute():
         logs_dir = (repo_root / logs_dir).resolve()
+    else:
+        logs_dir = logs_dir.resolve()
 
     out_base = Path(args.output_base)
     if not out_base.is_absolute():
@@ -408,6 +424,18 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         source = "logs"
         logging.info("Structured pytest log report not found; analyzing logs under %s", logs_dir)
         logs_source = _select_logs_dir(logs_dir)
+        if logs_source is None and _allow_legacy_logs():
+            legacy_base = _resolve_legacy_logs_base(repo_root)
+            if legacy_base.exists():
+                legacy_candidate = _select_logs_dir(legacy_base)
+                if legacy_candidate is not None:
+                    logging.info(
+                        "Logs directory %s missing artifacts; falling back to legacy %s",
+                        logs_dir,
+                        legacy_base,
+                    )
+                    logs_dir = legacy_base
+                    logs_source = legacy_candidate
         if logs_source is None:
             logging.info("No pytest artifacts discovered under %s; emitting empty report", logs_dir)
             payload = _empty_report(logs_dir)

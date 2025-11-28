@@ -6,7 +6,7 @@ Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py`
 
 ## Current State
 
-- **Inputs:** ad-hoc `git log` queries, direct AST walks over the repo tree, and raw `junit_*.xml` files under `.repo_studios/pytest_logs/`.
+- **Inputs:** ad-hoc `git log` queries, direct AST walks over the repo tree, and raw `junit_*.xml` files under `.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs/` (with optional legacy fallback during cutover).
 - **Outputs:** single run directory under `.repo_studios/reports/aggregator_reports/churn_complexity_heatmap/<ts>/` containing `heatmap.json` and `heatmap.md`.
 - **Traceability:** no metadata about source commits, pytest bundle provenance, or calculation parameters.
 - **Retention:** relies on callers to prune old runs; no CLI controls.

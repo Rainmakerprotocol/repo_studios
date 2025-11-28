@@ -12,6 +12,7 @@ import argparse
 import csv
 import json
 import logging
+import os
 import shutil
 import sys
 from dataclasses import dataclass, replace
@@ -46,7 +47,8 @@ from utilities.fault_run_analysis import (  # noqa: E402
     build_fault_report,
 )
 
-DEFAULT_RUNS_RELATIVE = Path(".repo_studios/faulthandler")
+DEFAULT_RUNS_RELATIVE = Path(".repo_studios/reports/orchestrator_logs/faulthandler_logs")
+LEGACY_RUNS_RELATIVE = Path(".repo_studios/faulthandler")
 DEFAULT_OUTPUT_RELATIVE = Path(".repo_studios/reports/producer_reports/faulthandler_reports")
 DEFAULT_COMMAND_CENTER_RELATIVE = Path(".repo_studios/command_center/reports/fault_artifacts_producer")
 RUN_PREFIX = "faulthandler_report"
@@ -169,6 +171,31 @@ def build_options(args: argparse.Namespace) -> Options:
 
 def configure_logging(level: str) -> None:
     logging.basicConfig(level=getattr(logging, level.upper()), format="%(levelname)s %(message)s")
+
+
+def _allow_legacy_runs() -> bool:
+    flag = os.environ.get("FAULTHANDLER_ALLOW_LEGACY", "1").strip().lower()
+    return flag not in {"0", "false", "no", "off"}
+
+
+def _resolve_runs_base(paths: Paths) -> Path:
+    runs_dir = paths.runs_dir
+    if runs_dir.exists():
+        return runs_dir
+
+    legacy = LEGACY_RUNS_RELATIVE
+    if not legacy.is_absolute():
+        legacy = paths.repo_root / legacy
+
+    if _allow_legacy_runs() and legacy.exists():
+        logging.getLogger("faulthandler_report").info(
+            "Faulthandler runs directory %s missing; falling back to legacy %s",
+            runs_dir,
+            legacy,
+        )
+        return legacy
+
+    return runs_dir
 
 
 def _find_latest_run(runs_base: Path) -> Path | None:
@@ -460,12 +487,14 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     configure_logging(options.log_level)
     log = logging.getLogger("faulthandler_report")
 
+    runs_dir = _resolve_runs_base(paths)
+
     if options.validate_only:
         return _validate_latest(paths, log)
 
-    run_dir_path = _resolve_run_dir(args.run_dir, paths.runs_dir)
+    run_dir_path = _resolve_run_dir(args.run_dir, runs_dir)
     if run_dir_path is None or not Path(run_dir_path).exists():
-        log.info("No faulthandler runs available under %s", paths.runs_dir)
+        log.info("No faulthandler runs available under %s", runs_dir)
         return {
             "run_dir": None,
             "artifacts": None,

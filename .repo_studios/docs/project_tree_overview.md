@@ -3,7 +3,7 @@
 This document is refreshed automatically by `run_batch_cleanup.py`. Edits outside the tree block are preserved, but avoid modifying the block between the markers.
 
 <!-- tree:begin -->
-Updated: 11/24/2025_23:37:41
+Updated: 11/27/2025_17:56:35
 
 ```text
 repo_studios/
@@ -31,6 +31,9 @@ repo_studios/
 │   │   ├── reports/
 │   │   │   ├── automation_metrics_demo/
 │   │   │   ├── duplicates_scan/
+│   │   │   ├── fault_artifacts_consumer/
+│   │   │   ├── fault_artifacts_producer/
+│   │   │   ├── fault_pipeline_orchestrator/
 │   │   │   ├── index_scan/
 │   │   │   ├── index_scan_analysis/
 │   │   │   └── repo-studios__command-center__automation_run/
@@ -56,6 +59,11 @@ repo_studios/
 │   │   │   ├── global/
 │   │   │   └── project/
 │   │   └── templates/
+│   ├── faulthandler/
+│   │   ├── 2025-11-27_1500/
+│   │   └── 20251126_144316/
+│   │       └── dumps/
+│   ├── health_suite/
 │   ├── inventory_schema/
 │   │   ├── scripts/
 │   │   ├── tests/
@@ -63,35 +71,40 @@ repo_studios/
 │   ├── monkey_patch/
 │   │   ├── 20251124_175233/
 │   │   └── latest/
+│   ├── pytest_logs/
+│   │   ├── pytest_failed_logs/
+│   │   └── pytest_skip_logs/
 │   ├── reports/
 │   │   ├── aggregator_reports/
 │   │   │   ├── churn_complexity_heatmap/
 │   │   │   ├── churn_complexity_heatmap_reports/
+│   │   │   ├── docs_health_signals/
 │   │   │   ├── monkey_patch_trends/
 │   │   │   └── monkey_patch_trends_reports/
 │   │   ├── consumer_reports/
 │   │   │   ├── anchor_health_reports/
 │   │   │   ├── fault_artifact_reports/
+│   │   │   ├── fault_artifacts/
 │   │   │   ├── monkey_patch_risk/
-│   │   │   ├── monkey_patch_risk_reports/
 │   │   │   └── test_log_health_reports/
 │   │   ├── docs/
 │   │   │   └── latest/
 │   │   ├── manifest_reports/
 │   │   │   ├── scripts_manifest_reports/
 │   │   │   └── standards_manifest_reports/
-│   │   ├── orchestrator_logs/
-│   │   │   ├── batch_cleanup_logs/
-│   │   │   ├── health_suite_logs/
-│   │   │   ├── pytest_log_capture_logs/
-│   │   │   └── standards_index_cli_logs/
 │   │   ├── orchestrator_runs/
-│   │   │   └── run_batch_cleanup/
+│   │   │   ├── fault_pipeline/
+│   │   │   ├── pytest_log_capture/
+│   │   │   ├── run_batch_cleanup/
+│   │   │   └── standards_index_cli/
 │   │   ├── producer_reports/
 │   │   │   ├── anchor_inventory_reports/
+│   │   │   ├── code_doc_churn_reports/
 │   │   │   ├── code_placeholder_scans/
 │   │   │   ├── dependency_hygiene_reports/
+│   │   │   ├── doc_index/
 │   │   │   ├── docs_integrity_reports/
+│   │   │   ├── faulthandler_reports/
 │   │   │   ├── import_boundary_reports/
 │   │   │   ├── import_graph_reports/
 │   │   │   ├── inventory_health_reports/
@@ -101,7 +114,6 @@ repo_studios/
 │   │   │   ├── lizard_reports/
 │   │   │   ├── markdown_anchor_validation_reports/
 │   │   │   ├── metrics_anchor_stub_reports/
-│   │   │   ├── monkey_patch_scan_reports/
 │   │   │   ├── monkey_patch_scans/
 │   │   │   ├── placeholder_scan_reports/
 │   │   │   ├── render_inventory_views/
@@ -116,6 +128,7 @@ repo_studios/
 │   │   │   ├── test_log_reports/
 │   │   │   ├── test_run_coverage/
 │   │   │   ├── typecheck_reports/
+│   │   │   ├── undocumented_logic_reports/
 │   │   │   └── validate_inventory/
 │   │   ├── scripts/
 │   │   │   └── latest/
@@ -131,6 +144,7 @@ repo_studios/
 │   │       ├── faulthandler_snapshot_logs/
 │   │       └── mypy_baseline_reports/
 │   ├── scripts/
+│   │   ├── .repo_studios/
 │   │   ├── aggregators/
 │   │   │   └── aggregators_index/
 │   │   ├── consumers/

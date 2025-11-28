@@ -36,7 +36,7 @@ These notes summarize the October 2025 sweep across Repo Studios documentation s
 
 ## Observations
 
-- `.repo_studios/health_suite/` runs create many status artifacts with limited long-term value.
+- `.repo_studios/reports/orchestrator_logs/health_suite_logs/` runs create many status artifacts (legacy folder keeps mirrored status files) with limited long-term value.
 - `docs/` (170 files) and `mrp/` (93 files) appear current through September 2025.
 - `memory-bank/` governance content covers 31 focused items for review.
 - Voice subsystem docs document latency, queue smoothing, prompt policy, and feature flags; all align with offline-first design but require metric verification.

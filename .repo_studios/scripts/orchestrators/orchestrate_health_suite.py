@@ -7,23 +7,28 @@ Each step is considered complete whether it succeeds or fails; failures are
 logged to per-step error logs and included in a final status summary.
 
 Requested order (with tolerant filename matching for historical typos):
-  1) batch_clean.py
-  2) pytest_log_runner.py
-    3) scan_monkey_patches.py
-    4) generate_dependency_hygiene_report.py (alias dep_hygiene_report.py)
-    5) analyze_monkey_patch_trends.py (alias compare_monkey_patch_trends.py)
-    6) validate_import_boundaries.py (alias check_import_boundaries.py)
-  7) test_log_health_report.py
-    8) generate_import_graph_report.py (alias import_graph_report.py)
-  9) churn_complexity_heatmap.py
- 10) dump_faulthandler_once.py (best-effort)
- 11) generate_fault_artifacts.py (best-effort)
- 12) scripts/health/faulthandler_aggregate.py (best-effort)
- 13) scripts/ci_faulthandler_gate.py (best-effort, report-only)
- 14) health_suite_summary.py
+    1) batch_clean.py
+    2) run_pytest_log_capture.py (alias pytest_log_runner.py)
+    3) collect_test_log_reports.py
+    4) scan_monkey_patches.py
+    5) generate_dependency_hygiene_report.py (alias dep_hygiene_report.py)
+    6) analyze_monkey_patch_trends.py (alias compare_monkey_patch_trends.py)
+    7) validate_import_boundaries.py (alias check_import_boundaries.py)
+    8) generate_test_log_health_report.py
+    9) generate_typecheck_report.py (alias typecheck_report.py)
+ 10) refresh_mypy_baselines.py
+ 11) generate_import_graph_report.py (alias import_graph_report.py)
+ 12) churn_complexity_heatmap.py
+ 13) generate_lizard_report.py
+ 14) dump_faulthandler_once.py (best-effort)
+ 15) generate_fault_artifacts.py (best-effort)
+ 16) scripts/health/faulthandler_aggregate.py (best-effort)
+ 17) scripts/ci_faulthandler_gate.py (best-effort, report-only)
+ 18) anchor_health_report.py
+ 19) health_suite_summary.py
 
 Outputs:
-- Per-step logs under .repo_studios/health_suite/logs/<timestamp>/
+- Per-step logs under .repo_studios/reports/orchestrator_logs/health_suite_logs/<timestamp>/
 - A machine-readable status.json and a brief status.md under the same folder
 
 Exit code: always 0 (so the suite never aborts mid-chain). Inspect status for
@@ -47,7 +52,14 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[3]
 ROOT = REPO_ROOT / ".repo_studios"
 repo_DIR = ROOT
-LOG_BASE = repo_DIR / "health_suite" / "logs"
+REPORTS_ROOT = repo_DIR / "reports"
+LOG_BASE = REPORTS_ROOT / "orchestrator_logs" / "health_suite_logs"
+PYTEST_LOGS_DIR = REPORTS_ROOT / "orchestrator_logs" / "pytest_log_capture_logs"
+LEGACY_LOG_BASE = repo_DIR / "health_suite" / "logs"
+FAULT_RUN_ROOT = REPORTS_ROOT / "orchestrator_logs" / "faulthandler_logs"
+LEGACY_FAULT_ROOT = repo_DIR / "faulthandler"
+SUMMARY_BASE = REPORTS_ROOT / "summarizer_reports" / "health_suite_summary_reports"
+LEGACY_SUMMARY_BASE = repo_DIR / "health_suite"
 
 SCRIPT_ALIASES: dict[str, str] = {
     "batch_clean.py": "scripts/orchestrators/run_batch_cleanup.py",
@@ -66,6 +78,7 @@ SCRIPT_ALIASES: dict[str, str] = {
     "health_suite_summary.py": "scripts/summarizers/summarize_health_suite.py",
     "heath_suite_summary.py": "scripts/summarizers/summarize_health_suite.py",
     "anchor_health_report.py": "scripts/consumers/generate_anchor_health_report.py",
+    "refresh_mypy_baselines.py": "scripts/utilities/refresh_mypy_baselines.py",
 }
 
 
@@ -126,14 +139,23 @@ def make_steps(ts: str) -> list[Step]:
     steps: list[Step] = []
     # Prepare a shared FAULT_OUTDIR for fault steps so all child processes
     # write into a deterministic run folder for this orchestrator execution.
-    fault_base = repo_DIR / "faulthandler" / ts
+    fault_base = FAULT_RUN_ROOT / ts
     try:
         fault_base.mkdir(parents=True, exist_ok=True)
+    except Exception:
+        pass
+    legacy_fault_base = LEGACY_FAULT_ROOT / ts
+    try:
+        legacy_fault_base.mkdir(parents=True, exist_ok=True)
+        marker = legacy_fault_base / "MOVED.txt"
+        if not marker.exists():
+            marker.write_text(f"Fault artifacts now live at {fault_base.resolve()}\n", encoding="utf-8")
     except Exception:
         pass
     fault_env = {
         "FAULT_ENABLE": "1",
         "FAULT_OUTDIR": str(fault_base),
+        "FAULT_LEGACY_OUTDIR": str(legacy_fault_base),
         # Avoid background repeating timers during the suite run
         "FAULT_DUMP_LATER": os.getenv("FAULT_DUMP_LATER", "0"),
     }
@@ -177,7 +199,7 @@ def make_steps(ts: str) -> list[Step]:
                 *(
                     [
                         "--logs-dir",
-                        str(repo_DIR / "pytest_logs"),
+                        str(PYTEST_LOGS_DIR),
                         "--output-dir",
                         str(repo_DIR / "reports/producer_reports/test_log_reports"),
                         "--artifacts-to-keep",
@@ -285,7 +307,7 @@ def make_steps(ts: str) -> list[Step]:
                 py,
                 str(consumer_script) if consumer_script.exists() else "-c",
                 "--logs-dir",
-                str(repo_DIR / "pytest_logs"),
+                str(PYTEST_LOGS_DIR),
                 "--output-base",
                 str(repo_DIR / "reports/consumer_reports/test_log_health_reports"),
                 "--producer-report",
@@ -305,7 +327,7 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # New) generate_typecheck_report.py — run mypy and produce artifacts (optional)
+    # 9) generate_typecheck_report.py — run mypy and produce artifacts (optional)
     script = find_script("typecheck_report.py")
     steps.append(
         Step(
@@ -326,7 +348,7 @@ def make_steps(ts: str) -> list[Step]:
                     ]
                     if script
                     else [
-                        "import sys; print('missing typecheck_report.py', file=sys.stderr); sys.exit(1)",
+                        "import sys; print('missing generate_typecheck_report.py', file=sys.stderr); sys.exit(1)",
                     ]
                 ),
             ],
@@ -334,7 +356,32 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 9) generate_import_graph_report.py
+    # 10) refresh_mypy_baselines.py (utilities)
+    script = find_script("refresh_mypy_baselines.py")
+    steps.append(
+        Step(
+            name="refresh_mypy_baselines",
+            argv=[
+                py,
+                str(script) if script else "-c",
+                *(
+                    [
+                        "--repo-root",
+                        ".",
+                        "--log-level",
+                        os.environ.get("COMMAND_CENTER_LOG_LEVEL", "INFO"),
+                    ]
+                    if script
+                    else [
+                        "import sys; print('missing refresh_mypy_baselines.py', file=sys.stderr); sys.exit(1)",
+                    ]
+                ),
+            ],
+            optional=script is None,
+        )
+    )
+
+    # 11) generate_import_graph_report.py
     script = find_script("import_graph_report.py")
     steps.append(
         Step(
@@ -355,7 +402,7 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 10) churn_complexity_heatmap.py
+    # 12) churn_complexity_heatmap.py
     script = find_script("churn_complexity_heatmap.py")
     steps.append(
         Step(
@@ -368,7 +415,7 @@ def make_steps(ts: str) -> list[Step]:
                 "--output-base",
                 str(repo_DIR / "reports/aggregator_reports/churn_complexity_heatmap"),
                 "--logs-dir",
-                str(repo_DIR / "pytest_logs"),
+                str(PYTEST_LOGS_DIR),
             ]
             if script
             else [py, "-c", "import sys; sys.exit(1)"],
@@ -376,7 +423,7 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 10.5) lizard complexity report (optional but expected in CI)
+    # 13) lizard complexity report (optional but expected in CI)
     lizard_script = repo_DIR / "lizard_report.py"
     steps.append(
         Step(
@@ -395,7 +442,7 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 11) one-time faulthandler dump (best-effort)
+    # 14) one-time faulthandler dump (best-effort)
     script = find_script("dump_faulthandler_once.py")
     steps.append(
         Step(
@@ -406,7 +453,7 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 12) faulthandler artifacts generator (best-effort)
+    # 15) faulthandler artifacts generator (best-effort)
     script = find_script("generate_fault_artifacts.py")
     steps.append(
         Step(
@@ -417,7 +464,7 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 13) faulthandler aggregator under scripts/health (best-effort)
+    # 16) faulthandler aggregator under scripts/health (best-effort)
     agg_script = Path("scripts/health/faulthandler_aggregate.py")
     steps.append(
         Step(
@@ -428,7 +475,7 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 14) ci gate (best-effort, non-blocking in the suite)
+    # 17) ci gate (best-effort, non-blocking in the suite)
     gate_script = Path("scripts/ci_faulthandler_gate.py")
     steps.append(
         Step(
@@ -439,7 +486,7 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 14.5) anchor health (generate timestamped anchor report artifacts)
+    # 18) anchor health (generate timestamped anchor report artifacts)
     anchor_script = repo_DIR / "anchor_health_report.py"
     steps.append(
         Step(
@@ -449,9 +496,9 @@ def make_steps(ts: str) -> list[Step]:
         )
     )
 
-    # 15) health_suite_summary.py (typo-tolerant) — now includes anchor health section
+    # 19) health_suite_summary.py (typo-tolerant) — now includes anchor health section
     script = find_script("health_suite_summary.py", "heath_suite_summary.py")
-    out_dir = repo_DIR / "health_suite"
+    out_dir = SUMMARY_BASE
     steps.append(
         Step(
             name="health_suite_summary",
@@ -681,6 +728,16 @@ def write_status(log_dir: Path, run_status: dict) -> None:
             lines.append(f"    ↳ gate triage listing: {s['triage_listing']}")
     (log_dir / "status.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
+    legacy_dir = LEGACY_LOG_BASE / log_dir.name
+    try:
+        legacy_dir.mkdir(parents=True, exist_ok=True)
+        for name in ("status.json", "status.md"):
+            src = log_dir / name
+            dest = legacy_dir / name
+            dest.write_bytes(src.read_bytes())
+    except Exception:
+        pass
+
 
 def main(argv: Sequence[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Run health suite steps sequentially, never aborting on errors.")
@@ -712,6 +769,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     ts = args.timestamp
     log_dir = LOG_BASE / ts
     log_dir.mkdir(parents=True, exist_ok=True)
+    legacy_log_dir = LEGACY_LOG_BASE / ts
+    try:
+        legacy_log_dir.mkdir(parents=True, exist_ok=True)
+        marker = legacy_log_dir / "MOVED.txt"
+        if not marker.exists():
+            marker.write_text(f"Logs relocated to {log_dir.resolve()}\n", encoding="utf-8")
+    except Exception:
+        pass
 
     steps = make_steps(ts)
     run = {
@@ -720,7 +785,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         "steps": [],
     }
     # Echo the resolved fault outdir for this run (if created by make_steps)
-    run["fault_outdir"] = str(repo_DIR / "faulthandler" / ts)
+    run["fault_outdir"] = str((FAULT_RUN_ROOT / ts).resolve())
+    run["fault_outdir_legacy"] = str((LEGACY_FAULT_ROOT / ts).resolve())
 
     # Configure logging — show live progress if requested
     logging.basicConfig(level=logging.INFO if args.live else logging.WARNING, format="%(message)s")

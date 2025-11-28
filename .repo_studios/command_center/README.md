@@ -25,6 +25,20 @@
 - **When**: After refreshing inventories via the pipeline or update launcher so selector data and diagrams reflect the latest artifacts.
 - **How**: Follow the 5-step quick start in the viewer README, then dive into `docs/mermaid/README.md` for roadmap/history context.
 
+> **Quick launch (PowerShell):**
+>
+> ```powershell
+> $env:PYTHONPATH=".repo_studios"; .venv\Scripts\python.exe .repo_studios/command_center/viewer/serve_viewer.py
+> ```
+>
+> **Quick launch (Unix/macOS):**
+>
+> ```bash
+> PYTHONPATH=.repo_studios .venv/bin/python .repo_studios/command_center/viewer/serve_viewer.py
+> ```
+>
+> Both commands serve from the repo root and print the viewer URL (`http://localhost:8000/.repo_studios/command_center/viewer/ui/`).
+
 > **Note:** Keep raw producer reports elsewhere (e.g., `.repo_studios/reports/producer_reports/`). Only place library-integration-specific artifacts and slugged mirrors here so this workspace stays focused.
 
 ---

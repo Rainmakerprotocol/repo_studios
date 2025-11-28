@@ -7,6 +7,7 @@ import argparse
 import json
 import logging
 import math
+import os
 import shutil
 import subprocess
 from collections import Counter
@@ -20,7 +21,8 @@ DEFAULT_OUTPUT_BASE = Path(".repo_studios/reports/aggregator_reports/churn_compl
 DEFAULT_TEST_LOG_SUMMARY = Path(
     ".repo_studios/reports/consumer_reports/test_log_health_reports/latest/bundle_summary.json"
 )
-DEFAULT_LOGS_DIR = Path(".repo_studios/pytest_logs")
+DEFAULT_LOGS_DIR = Path(".repo_studios/reports/orchestrator_logs/pytest_log_capture_logs")
+LEGACY_LOGS_DIR = Path(".repo_studios/pytest_logs")
 DEFAULT_METRICS_SOURCE: Path | None = None
 DEFAULT_WINDOW = 500
 DEFAULT_ARTIFACTS_TO_KEEP = 10
@@ -306,6 +308,29 @@ def _discover_logs_junit(logs_dir: Path) -> Path | None:
     return junit_candidates[0] if junit_candidates else None
 
 
+def _allow_legacy_logs() -> bool:
+    flag = os.environ.get("CHURN_HEATMAP_ALLOW_LEGACY", "1").strip().lower()
+    return flag not in {"0", "false", "no", "off"}
+
+
+def _choose_logs_dir(repo_root: Path, candidate: Path, logger: logging.Logger) -> tuple[Path, Path | None]:
+    junit = _discover_logs_junit(candidate)
+    if junit is not None or not _allow_legacy_logs():
+        return candidate, junit
+
+    legacy = _resolve_path(repo_root, LEGACY_LOGS_DIR)
+    legacy_junit = _discover_logs_junit(legacy)
+    if legacy_junit is not None:
+        logger.info(
+            "JUnit artifacts not found under %s; falling back to legacy logs at %s",
+            candidate,
+            legacy,
+        )
+        return legacy, legacy_junit
+
+    return candidate, junit
+
+
 def _git_head(repo_root: Path, logger: logging.Logger) -> str | None:
     try:
         result = subprocess.run(
@@ -459,6 +484,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     repo_root = _resolve_path(Path.cwd(), args.repo_root)
     output_base = _resolve_path(repo_root, args.output_base)
     logs_dir = _resolve_path(repo_root, args.logs_dir)
+    primary_logs_dir = logs_dir
     metrics_source = args.metrics_source
     if metrics_source is not None and not metrics_source.is_absolute():
         metrics_source = (repo_root / metrics_source).resolve()
@@ -487,12 +513,15 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     junit_path = _discover_junit_from_summary(summary_payload, report_payload, logger)
     mode = "consumer"
     if junit_path is None:
-        junit_path = _discover_logs_junit(logs_dir)
+        logs_dir, junit_candidate = _choose_logs_dir(repo_root, logs_dir, logger)
+        junit_path = junit_candidate
         if junit_path is None:
             notes.append("JUnit artifact not found; failure density defaults to zero")
             mode = "logs_fallback"
         else:
             notes.append(f"Consumer summary unavailable; JUnit inferred from logs at {junit_path}")
+            if logs_dir != primary_logs_dir:
+                notes.append(f"Pytest logs sourced from legacy directory {logs_dir}")
             mode = "logs_fallback"
 
     failures = _load_junit_failures(junit_path, repo_root, logger)

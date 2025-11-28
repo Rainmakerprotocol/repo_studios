@@ -1,3 +1,0 @@
-signature_id,count,top_module,top_func,top_file,top_line,threads,first_seen_ts,last_seen_ts
-32af38317e8bad7c,1,helper,assist,/svc/helper.py,3,Thread 0x0002:,2025-11-26T15:14:13+00:00,2025-11-26T15:14:13+00:00
-650320c2bda19304,1,worker,work,/svc/worker.py,8,Current thread 0x0001:,2025-11-26T15:14:13+00:00,2025-11-26T15:14:13+00:00

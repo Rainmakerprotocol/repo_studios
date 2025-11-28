@@ -7,10 +7,11 @@ import argparse
 import importlib.util
 import json
 import logging
+import os
 import shutil
 import sys
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Mapping, Sequence
@@ -30,7 +31,8 @@ from command_center.scripts.libraries.cli import (
 )
 
 SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_RUNS_REL = Path(".repo_studios/faulthandler")
+DEFAULT_RUNS_REL = Path(".repo_studios/reports/orchestrator_logs/faulthandler_logs")
+LEGACY_RUNS_REL = Path(".repo_studios/faulthandler")
 DEFAULT_PRODUCER_OUTPUT_REL = Path(".repo_studios/reports/producer_reports/faulthandler_reports")
 DEFAULT_PRODUCER_CC_REL = Path(".repo_studios/command_center/reports/fault_artifacts_producer")
 DEFAULT_CONSUMER_OUTPUT_REL = Path(".repo_studios/reports/consumer_reports/fault_artifacts")
@@ -151,6 +153,31 @@ def _consumer_module() -> Any:
     if _CONSUMER_MODULE is None:
         _CONSUMER_MODULE = _load_module("repo_studios.generate_fault_artifacts", CONSUMER_PATH)
     return _CONSUMER_MODULE
+
+
+def _allow_legacy_runs() -> bool:
+    flag = os.environ.get("FAULT_PIPELINE_ALLOW_LEGACY", "1").strip().lower()
+    return flag not in {"0", "false", "no", "off"}
+
+
+def _resolve_runs_dir(paths: Paths) -> Path:
+    runs_dir = paths.runs_dir
+    if runs_dir.exists():
+        return runs_dir
+
+    legacy = LEGACY_RUNS_REL
+    if not legacy.is_absolute():
+        legacy = paths.repo_root / legacy
+
+    if _allow_legacy_runs() and legacy.exists():
+        logging.getLogger("fault_pipeline_orchestrator").info(
+            "Faulthandler runs directory %s missing; falling back to legacy %s",
+            runs_dir,
+            legacy,
+        )
+        return legacy
+
+    return runs_dir
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
@@ -374,6 +401,7 @@ def _mirror_to_command_center(bundle_dir: Path, *, command_center_dir: Path, kee
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     args = parse_args(argv)
     paths = build_paths(args)
+    paths = replace(paths, runs_dir=_resolve_runs_dir(paths))
     options = build_options(args)
 
     log_level = getattr(logging, options.log_level.upper(), logging.INFO)

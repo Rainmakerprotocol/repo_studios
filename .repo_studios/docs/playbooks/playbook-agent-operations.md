@@ -80,7 +80,7 @@ Always cite the relevant standard in commit summaries or agent notes when deviat
 ## Logging & Observability
 
 - Timestamped cleanup reports live in `.repo_studios/cleanup_logs/`—read the latest entry before beginning new refactors.
-- Health suite artifacts live under `.repo_studios/health_suite/`; run `make health-suite` for a consolidated snapshot when onboarding or diagnosing regressions.
+- Health suite artifacts live under `.repo_studios/reports/orchestrator_logs/health_suite_logs/`; run `make health-suite` for a consolidated snapshot when onboarding or diagnosing regressions (status files are mirrored into the legacy folder for convenience).
 - Monkey patch trends surface in `.repo_studios/reports/producer_reports/monkey_patch_scans/trend_latest.md`; investigate any growth in active patches immediately.
 
 ---

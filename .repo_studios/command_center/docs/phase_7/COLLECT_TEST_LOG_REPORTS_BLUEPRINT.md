@@ -11,7 +11,7 @@ Design the dedicated pytest log producer so downstream consumers and orchestrato
 ## Entry Criteria
 
 - Shared helpers for pytest log parsing exist (`utilities.test_log_analysis`).
-- Orchestrators capture pytest runs into `.repo_studios/pytest_logs/<slug>/<timestamp>/` directories.
+- Orchestrators capture pytest runs into `.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs/<slug>/<timestamp>/` directories (legacy `.repo_studios/pytest_logs/` runs remain available during the migration window).
 - Consumer (`generate_test_log_health_report.py`) still owns on-demand parsing logic.
 - No structured producer currently mirrors pytest log health data under `.repo_studios/reports/producer_reports/`.
 
@@ -37,7 +37,7 @@ Design the dedicated pytest log producer so downstream consumers and orchestrato
 
 | Dependency | Notes |
 | --- | --- |
-| `.repo_studios/pytest_logs/<slug>/<timestamp>/` | Expected directory tree created by `run_pytest_log_capture.py`; producer selects latest if none supplied. |
+| `.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs/<slug>/<timestamp>/` | Expected directory tree created by `run_pytest_log_capture.py`; producer selects latest if none supplied. |
 | `utilities.test_log_analysis` | Provides `build_test_log_report` and markdown rendering; producer must import utilities via scripts root path shim for test friendliness. |
 | `defusedxml` (optional) | Used by utilities; producer must handle absence gracefully (utility already falls back to stdlib). |
 
@@ -61,7 +61,7 @@ Design the dedicated pytest log producer so downstream consumers and orchestrato
 
 ## CLI & Behaviour Notes
 
-1. `--logs-dir`: Base directory (default `.repo_studios/pytest_logs`).
+1. `--logs-dir`: Base directory (default `.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs`; legacy `.repo_studios/pytest_logs` discovery remains available while the migration flag `PYTEST_LOG_REPORTS_ALLOW_LEGACY` is enabled).
 2. `--logs-run`: Explicit run folder; when omitted select best run via heuristics:
    - prefer latest directory under `logs-dir` (sorted by mtime).
    - allow slug subdirectories; if `logs-dir` contains child folders, inspect each for latest run.

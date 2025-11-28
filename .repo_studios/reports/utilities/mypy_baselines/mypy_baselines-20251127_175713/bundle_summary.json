@@ -1,0 +1,40 @@
+{
+  "append_timestamp": true,
+  "generated_utc": "2025-11-27T17:57:13.506437+00:00",
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "run_slug": "20251127_175713",
+  "schema_version": 1,
+  "status": "error",
+  "targets_meta": {
+    "agents_full": {
+      "append_timestamp": true,
+      "command": [
+        "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+        "-m",
+        "mypy",
+        "--hide-error-context",
+        "--no-error-summary",
+        "agents"
+      ],
+      "duration_seconds": 0.224,
+      "exit_code": 2,
+      "filename": "mypy_agents_full.txt",
+      "latest_pointer": null
+    },
+    "monitoring_full": {
+      "append_timestamp": true,
+      "command": [
+        "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+        "-m",
+        "mypy",
+        "--hide-error-context",
+        "--no-error-summary",
+        "agents/core/monitoring"
+      ],
+      "duration_seconds": 0.226,
+      "exit_code": 2,
+      "filename": "mypy_monitoring_full.txt",
+      "latest_pointer": null
+    }
+  }
+}

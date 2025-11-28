@@ -32,15 +32,28 @@ Run the command from the repository root (or pass an explicit path with `--repo-
 
 ### Option 1: Using the Python Server (Recommended)
 
-The custom server serves from the repo root so the viewer can access CommandView reports:
+1. Ensure the repository root is on `PYTHONPATH` so `command_center` modules resolve:
 
-```bash
-# From the viewer directory
-python serve_viewer.py
+  ```powershell
+  # PowerShell
+  $env:PYTHONPATH=".repo_studios"
+  ```
 
-# Or specify a custom port
-python serve_viewer.py --port 8080
-```
+  ```bash
+  # Unix/macOS shells
+  export PYTHONPATH=.repo_studios
+  ```
+
+2. Launch the custom server from the repo root so the viewer can access CommandView reports:
+
+  ```bash
+  # From the repo root
+  .venv/bin/python .repo_studios/command_center/viewer/serve_viewer.py
+  ```
+
+  (On Windows PowerShell, use `.venv\Scripts\python.exe`.)
+
+  Add `--port 8080` (or any open port) if the default is in use.
 
 Then open your browser to: [http://localhost:8000/.repo_studios/command_center/viewer/ui/](http://localhost:8000/.repo_studios/command_center/viewer/ui/)
 
@@ -171,6 +184,21 @@ window.viewerConfig = {
 
 - Use `serve_viewer.py` which sets proper MIME types
 - Or configure your server to serve `.js` files as `application/javascript`
+
+### `ModuleNotFoundError: No module named 'command_center'`
+
+**Cause**: The repo root is not on `PYTHONPATH` before launching the server.
+
+**Solution**:
+
+```powershell
+$env:PYTHONPATH=".repo_studios"
+.venv\Scripts\python.exe .repo_studios/command_center/viewer/serve_viewer.py
+```
+
+```bash
+PYTHONPATH=.repo_studios .venv/bin/python .repo_studios/command_center/viewer/serve_viewer.py
+```
 
 ## Browser Console Debugging
 

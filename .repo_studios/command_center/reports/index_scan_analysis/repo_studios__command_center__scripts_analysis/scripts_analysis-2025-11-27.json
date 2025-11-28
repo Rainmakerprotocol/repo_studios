@@ -4759,7 +4759,7 @@
           "targets": [
             "aggregators/generate_automation_manifest.py:383",
             "aggregators/generate_metrics_summary.py:255",
-            "producers/analyze_standards_index_gaps.py:436",
+            "producers/analyze_standards_index_gaps.py:454",
             "producers/audit_helper_adoption.py:456"
           ],
           "type": "review_duplicate_function"
@@ -4858,13 +4858,13 @@
             {
               "callee": "run",
               "caller": {
-                "lineno": 438,
+                "lineno": 456,
                 "module": "scripts.producers.analyze_standards_index_gaps",
                 "qualified_name": "scripts.producers.analyze_standards_index_gaps::main",
                 "symbol": "main"
               },
               "is_attribute": false,
-              "lineno": 438,
+              "lineno": 456,
               "root": "run"
             },
             {
@@ -4872,13 +4872,13 @@
               "binding_expression": "logging.getLogger('analyze_standards_index_gaps')",
               "callee": "logging.getLogger('analyze_standards_index_gaps').error",
               "caller": {
-                "lineno": 440,
+                "lineno": 458,
                 "module": "scripts.producers.analyze_standards_index_gaps",
                 "qualified_name": "scripts.producers.analyze_standards_index_gaps::main",
                 "symbol": "main"
               },
               "is_attribute": true,
-              "lineno": 440,
+              "lineno": 458,
               "root": "logging"
             },
             {
@@ -4886,13 +4886,13 @@
               "binding": "logging",
               "callee": "logging.getLogger",
               "caller": {
-                "lineno": 440,
+                "lineno": 458,
                 "module": "scripts.producers.analyze_standards_index_gaps",
                 "qualified_name": "scripts.producers.analyze_standards_index_gaps::main",
                 "symbol": "main"
               },
               "is_attribute": true,
-              "lineno": 440,
+              "lineno": 458,
               "root": "logging"
             }
           ],
@@ -4904,7 +4904,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 436,
+          "line": 454,
           "line_count": 7,
           "logging_calls": [],
           "module_id": "scripts.producers.analyze_standards_index_gaps",
@@ -10619,7 +10619,7 @@
           "description": "Review duplicate implementations for consolidation or reuse.",
           "targets": [
             "orchestrators/run_automation_dry_run.py:79",
-            "producers/analyze_standards_index_gaps.py:102"
+            "producers/analyze_standards_index_gaps.py:119"
           ],
           "type": "review_duplicate_function"
         }
@@ -11005,118 +11005,6 @@
               "binding": "argparse",
               "callee": "argparse.ArgumentParser",
               "caller": {
-                "lineno": 103,
-                "module": "scripts.producers.analyze_standards_index_gaps",
-                "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
-                "symbol": "parse_args"
-              },
-              "is_attribute": true,
-              "lineno": 103,
-              "root": "argparse"
-            },
-            {
-              "attribute": "parser.add_argument",
-              "binding": "parser",
-              "callee": "parser.add_argument",
-              "caller": {
-                "lineno": 104,
-                "module": "scripts.producers.analyze_standards_index_gaps",
-                "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
-                "symbol": "parse_args"
-              },
-              "is_attribute": true,
-              "lineno": 104,
-              "root": "parser"
-            },
-            {
-              "attribute": "parser.add_argument",
-              "binding": "parser",
-              "callee": "parser.add_argument",
-              "caller": {
-                "lineno": 105,
-                "module": "scripts.producers.analyze_standards_index_gaps",
-                "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
-                "symbol": "parse_args"
-              },
-              "is_attribute": true,
-              "lineno": 105,
-              "root": "parser"
-            },
-            {
-              "attribute": "parser.add_argument",
-              "binding": "parser",
-              "callee": "parser.add_argument",
-              "caller": {
-                "lineno": 106,
-                "module": "scripts.producers.analyze_standards_index_gaps",
-                "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
-                "symbol": "parse_args"
-              },
-              "is_attribute": true,
-              "lineno": 106,
-              "root": "parser"
-            },
-            {
-              "attribute": "parser.add_argument",
-              "binding": "parser",
-              "callee": "parser.add_argument",
-              "caller": {
-                "lineno": 107,
-                "module": "scripts.producers.analyze_standards_index_gaps",
-                "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
-                "symbol": "parse_args"
-              },
-              "is_attribute": true,
-              "lineno": 107,
-              "root": "parser"
-            },
-            {
-              "attribute": "parser.add_argument",
-              "binding": "parser",
-              "callee": "parser.add_argument",
-              "caller": {
-                "lineno": 108,
-                "module": "scripts.producers.analyze_standards_index_gaps",
-                "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
-                "symbol": "parse_args"
-              },
-              "is_attribute": true,
-              "lineno": 108,
-              "root": "parser"
-            },
-            {
-              "attribute": "parser.add_argument",
-              "binding": "parser",
-              "callee": "parser.add_argument",
-              "caller": {
-                "lineno": 109,
-                "module": "scripts.producers.analyze_standards_index_gaps",
-                "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
-                "symbol": "parse_args"
-              },
-              "is_attribute": true,
-              "lineno": 109,
-              "root": "parser"
-            },
-            {
-              "attribute": "parser.add_argument",
-              "binding": "parser",
-              "callee": "parser.add_argument",
-              "caller": {
-                "lineno": 116,
-                "module": "scripts.producers.analyze_standards_index_gaps",
-                "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
-                "symbol": "parse_args"
-              },
-              "is_attribute": true,
-              "lineno": 116,
-              "root": "parser"
-            },
-            {
-              "attribute": "parser.add_argument",
-              "binding": "parser",
-              "callee": "parser.add_argument",
-              "caller": {
                 "lineno": 120,
                 "module": "scripts.producers.analyze_standards_index_gaps",
                 "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
@@ -11124,6 +11012,76 @@
               },
               "is_attribute": true,
               "lineno": 120,
+              "root": "argparse"
+            },
+            {
+              "attribute": "parser.add_argument",
+              "binding": "parser",
+              "callee": "parser.add_argument",
+              "caller": {
+                "lineno": 121,
+                "module": "scripts.producers.analyze_standards_index_gaps",
+                "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
+                "symbol": "parse_args"
+              },
+              "is_attribute": true,
+              "lineno": 121,
+              "root": "parser"
+            },
+            {
+              "attribute": "parser.add_argument",
+              "binding": "parser",
+              "callee": "parser.add_argument",
+              "caller": {
+                "lineno": 122,
+                "module": "scripts.producers.analyze_standards_index_gaps",
+                "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
+                "symbol": "parse_args"
+              },
+              "is_attribute": true,
+              "lineno": 122,
+              "root": "parser"
+            },
+            {
+              "attribute": "parser.add_argument",
+              "binding": "parser",
+              "callee": "parser.add_argument",
+              "caller": {
+                "lineno": 123,
+                "module": "scripts.producers.analyze_standards_index_gaps",
+                "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
+                "symbol": "parse_args"
+              },
+              "is_attribute": true,
+              "lineno": 123,
+              "root": "parser"
+            },
+            {
+              "attribute": "parser.add_argument",
+              "binding": "parser",
+              "callee": "parser.add_argument",
+              "caller": {
+                "lineno": 124,
+                "module": "scripts.producers.analyze_standards_index_gaps",
+                "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
+                "symbol": "parse_args"
+              },
+              "is_attribute": true,
+              "lineno": 124,
+              "root": "parser"
+            },
+            {
+              "attribute": "parser.add_argument",
+              "binding": "parser",
+              "callee": "parser.add_argument",
+              "caller": {
+                "lineno": 125,
+                "module": "scripts.producers.analyze_standards_index_gaps",
+                "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
+                "symbol": "parse_args"
+              },
+              "is_attribute": true,
+              "lineno": 125,
               "root": "parser"
             },
             {
@@ -11141,17 +11099,59 @@
               "root": "parser"
             },
             {
-              "attribute": "parser.parse_args",
+              "attribute": "parser.add_argument",
               "binding": "parser",
-              "callee": "parser.parse_args",
+              "callee": "parser.add_argument",
               "caller": {
-                "lineno": 132,
+                "lineno": 133,
                 "module": "scripts.producers.analyze_standards_index_gaps",
                 "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
                 "symbol": "parse_args"
               },
               "is_attribute": true,
-              "lineno": 132,
+              "lineno": 133,
+              "root": "parser"
+            },
+            {
+              "attribute": "parser.add_argument",
+              "binding": "parser",
+              "callee": "parser.add_argument",
+              "caller": {
+                "lineno": 137,
+                "module": "scripts.producers.analyze_standards_index_gaps",
+                "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
+                "symbol": "parse_args"
+              },
+              "is_attribute": true,
+              "lineno": 137,
+              "root": "parser"
+            },
+            {
+              "attribute": "parser.add_argument",
+              "binding": "parser",
+              "callee": "parser.add_argument",
+              "caller": {
+                "lineno": 143,
+                "module": "scripts.producers.analyze_standards_index_gaps",
+                "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
+                "symbol": "parse_args"
+              },
+              "is_attribute": true,
+              "lineno": 143,
+              "root": "parser"
+            },
+            {
+              "attribute": "parser.parse_args",
+              "binding": "parser",
+              "callee": "parser.parse_args",
+              "caller": {
+                "lineno": 149,
+                "module": "scripts.producers.analyze_standards_index_gaps",
+                "qualified_name": "scripts.producers.analyze_standards_index_gaps::parse_args",
+                "symbol": "parse_args"
+              },
+              "is_attribute": true,
+              "lineno": 149,
               "root": "parser"
             }
           ],
@@ -11163,7 +11163,7 @@
             "reads": false,
             "writes": false
           },
-          "line": 102,
+          "line": 119,
           "line_count": 31,
           "logging_calls": [],
           "module_id": "scripts.producers.analyze_standards_index_gaps",
@@ -11414,11 +11414,11 @@
     "analysis_version": "1.0.0",
     "folder_name": "scripts",
     "folder_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts",
-    "generated_at": "2025-11-27T15:38:14.126656+00:00",
+    "generated_at": "2025-11-27T17:57:02.466900+00:00",
     "repo_root": "C:\\Users\\genet\\repo_studios",
-    "source_index_file": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\scripts_index\\scripts_commandview_20251127-1538.json",
-    "source_index_generated_at": "2025-11-27T15:38:14.004414+00:00",
-    "source_index_hash": "ad165e426419cee686bde24c3a054145057c2498a072a60e119a12b0bbc7ae09"
+    "source_index_file": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\scripts_index\\scripts_commandview_20251127-1757.json",
+    "source_index_generated_at": "2025-11-27T17:57:02.347028+00:00",
+    "source_index_hash": "48aee5ffd84e7288e5cf34705a47136f0c3280516614166a5e3d45cef039983f"
   },
   "schema_version": 1,
   "summary": {

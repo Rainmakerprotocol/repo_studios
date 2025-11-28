@@ -5,15 +5,20 @@
 `generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so
 operators can track warning spikes, failure patterns, and slow tests without rereading entire logs.
 The script prefers the curated JSON emitted by `collect_test_log_reports.py` and gracefully falls
-back to scanning `.repo_studios/pytest_logs/` when the producer bundle is missing.
+back to scanning `.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs/` (or the legacy
+`.repo_studios/pytest_logs/` tree when allowed) when the producer bundle is missing.
 
 ## Inputs
 
 - **Structured producer bundle (preferred):** `.repo_studios/reports/producer_reports/test_log_reports/latest_report.json`.
-- **Fallback logs directory:** `.repo_studios/pytest_logs/` (any nested run with `pytest_*.txt`
-  and optional `junit_*.xml`).
+- **Fallback logs directory:** `.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs/`
+  by default; legacy `.repo_studios/pytest_logs/` runs are discovered when
+  `TEST_LOG_HEALTH_ALLOW_LEGACY` is not set to `0`.
 - **CLI flags:**
-  - `--logs-dir`: Root directory containing pytest log runs (default `.repo_studios/pytest_logs`).
+  - `--logs-dir`: Root directory containing pytest log runs (default
+    `.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs`; falls back to
+    `.repo_studios/pytest_logs` when the new tree is missing and `TEST_LOG_HEALTH_ALLOW_LEGACY`
+    remains enabled).
   - `--producer-report`: Path to the producer JSON bundle (default `.repo_studios/reports/producer_reports/test_log_reports/latest_report.json`).
   - `--output-base`: Target directory for timestamped consumer bundles (default `.repo_studios/reports/consumer_reports/test_log_health_reports`).
   - `--artifacts-to-keep`: Number of run directories to retain (default `5`).
@@ -43,7 +48,8 @@ deeper history; `0` disables pruning.
 
 ## Typical Workflow
 
-1. Capture logs with `run_pytest_log_capture.py` or existing CI suites.
+1. Capture logs with `run_pytest_log_capture.py` or existing CI suites (the orchestrator now
+  defaults to `.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs/`).
 1. Run `collect_test_log_reports.py` to build the structured producer bundle.
 1. Execute `generate_test_log_health_report.py` (or the Make target below) to emit consumer
   artifacts.
@@ -78,3 +84,5 @@ pytest .repo_studios/tests/tests_consumers/test_generate_test_log_health_report.
   (`slow_test_<n>`) for quick triage.
 - Markdown outputs append a "Source References" section pointing to the producer bundle, raw logs,
   and CSV export for easy drill-down as part of human reviews.
+- Disable legacy log discovery by exporting `TEST_LOG_HEALTH_ALLOW_LEGACY=0` once CI callers fully
+  migrate to the structured reports hierarchy.

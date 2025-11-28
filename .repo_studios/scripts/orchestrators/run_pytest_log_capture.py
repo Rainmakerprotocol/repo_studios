@@ -14,7 +14,7 @@ parses the output to write two additional summaries:
 
 Defaults (auto-detected workspace):
 * cwd: current working directory (or GITHUB_WORKSPACE when set)
-* logs_dir: <cwd>/.repo_studios/pytest_logs
+* logs_dir: <cwd>/.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs
 * pytest command:
     /bin/python -m pytest -vv -ra -rs --color=no \
         --show-capture=all --durations=25 --durations-min=0.50 \
@@ -50,7 +50,7 @@ from pathlib import Path
 from typing import Any, Iterable, Sequence
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/orchestrator_runs/pytest_log_capture")
-DEFAULT_LEGACY_LOGS_DIR = Path(".repo_studios/pytest_logs")
+DEFAULT_LOGS_DIR = Path(".repo_studios/reports/orchestrator_logs/pytest_log_capture_logs")
 DEFAULT_ARTIFACTS_TO_KEEP = 5
 RUN_STEM = "pytest_log_capture"
 SCHEMA_VERSION = 1
@@ -120,7 +120,7 @@ PATH_CONFIG = PathsConfig(
     dataclass_type=Paths,
     path_specs={
         "output_dir": PathSpec(field="output_dir", default=DEFAULT_OUTPUT_DIR, ensure_dir=True, within_repo=True),
-        "logs_dir": PathSpec(field="logs_dir", default=DEFAULT_LEGACY_LOGS_DIR, ensure_dir=True, within_repo=True),
+        "logs_dir": PathSpec(field="logs_dir", default=DEFAULT_LOGS_DIR, ensure_dir=True, within_repo=True),
     },
     repo_root_depth=4,
 )

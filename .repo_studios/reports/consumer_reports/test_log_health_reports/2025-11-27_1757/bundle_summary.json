@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "generated_at": "2025-11-27T17:57:12+00:00",
+  "source": "producer",
+  "producer_report": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\test_log_reports\\latest_report.json",
+  "logs_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\pytest_logs",
+  "logs_source": null,
+  "artifacts": {
+    "report_json": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\consumer_reports\\test_log_health_reports\\2025-11-27_1757\\report.json",
+    "report_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\consumer_reports\\test_log_health_reports\\2025-11-27_1757\\report.md",
+    "report_csv": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\consumer_reports\\test_log_health_reports\\2025-11-27_1757\\report.csv"
+  },
+  "summary": {
+    "errors": 0,
+    "failed": 1,
+    "passed": 343,
+    "skipped": 0,
+    "total": 344,
+    "tracebacks": 0,
+    "warnings_total": 0,
+    "xfailed": 0
+  },
+  "comparisons": {
+    "previous_run": {
+      "summary_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\consumer_reports\\test_log_health_reports\\2025-11-26_1637",
+      "pass_rate": {
+        "current": 99.71,
+        "previous": 100.0,
+        "delta": -0.29
+      }
+    }
+  }
+}

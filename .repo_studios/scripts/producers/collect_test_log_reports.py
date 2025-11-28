@@ -7,6 +7,7 @@ import argparse
 import csv
 import json
 import logging
+import os
 import shutil
 import sys
 from datetime import UTC, datetime
@@ -19,7 +20,8 @@ if str(SCRIPTS_ROOT) not in sys.path:
 
 from utilities.test_log_analysis import TestLogAnalysisResult, build_test_log_report  # noqa: E402
 
-DEFAULT_LOGS_BASE = Path(".repo_studios/pytest_logs")
+DEFAULT_LOGS_BASE = Path(".repo_studios/reports/orchestrator_logs/pytest_log_capture_logs")
+LEGACY_LOGS_BASE = Path(".repo_studios/pytest_logs")
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/test_log_reports")
 RUN_PREFIX = "test_log_report"
 DEFAULT_KEEP = 10
@@ -223,7 +225,16 @@ def run(argv: Sequence[str] | None = None) -> dict[str, object]:
     )
     log = logging.getLogger("test_log_reports")
 
-    logs_dir = args.logs_dir.resolve()
+    logs_dir = args.logs_dir if isinstance(args.logs_dir, Path) else Path(args.logs_dir)
+    logs_dir = logs_dir if logs_dir.is_absolute() else (Path.cwd() / logs_dir)
+    logs_dir = logs_dir.resolve()
+    if not logs_dir.exists():
+        legacy = LEGACY_LOGS_BASE if LEGACY_LOGS_BASE.is_absolute() else (Path.cwd() / LEGACY_LOGS_BASE)
+        legacy = legacy.resolve()
+        allow_legacy = os.environ.get("PYTEST_LOG_REPORTS_ALLOW_LEGACY", "1").strip().lower()
+        if allow_legacy not in {"0", "false", "no", "off"} and legacy.exists():
+            log.info("Logs directory %s missing; falling back to legacy %s", logs_dir, legacy)
+            logs_dir = legacy
     logs_run = args.logs_run.resolve() if args.logs_run else _resolve_run_dir(None, logs_dir)
     if logs_run is None or not logs_run.exists():
         log.info("No pytest log runs found under %s", logs_dir)
