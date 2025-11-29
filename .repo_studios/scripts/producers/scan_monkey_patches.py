@@ -59,7 +59,6 @@ from collections import Counter
 from collections.abc import Iterable
 from dataclasses import asdict, dataclass
 from pathlib import Path
-import shutil
 from typing import Any
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
@@ -72,6 +71,7 @@ try:
         PathsConfig,
         build_standard_options,
         build_standard_paths,
+        prune_run_directories,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -83,6 +83,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
         PathsConfig,
         build_standard_options,
         build_standard_paths,
+        prune_run_directories,
     )
 
 # Defaults (workspace-relative)
@@ -1002,6 +1003,7 @@ def _legacy_alias_run_name(run_dir: Path) -> str:
 def _sync_legacy_latest(alias_root: Path, alias_run_dir: Path) -> None:
     latest_dir = alias_root / "latest"
     latest_dir.mkdir(parents=True, exist_ok=True)
+    (latest_dir / ".keep").touch(exist_ok=True)
     files = [
         "report.json",
         "matches.json",
@@ -1019,20 +1021,18 @@ def _sync_legacy_latest(alias_root: Path, alias_run_dir: Path) -> None:
             dest.unlink()
 
 
-def _prune_legacy_alias(alias_root: Path, keep: int) -> None:
+def _prune_legacy_alias(alias_root: Path, keep: int, *, logger: logging.Logger | None) -> None:
     if not alias_root.exists():
         return
-    keep = max(keep, 1)
-    candidates = sorted(
-        [p for p in alias_root.iterdir() if p.is_dir() and p.name != "latest"],
-        key=lambda item: item.name,
+    prune_run_directories(
+        alias_root,
+        keep=max(keep, 1) + 1,
+        current_run=None,
+        logger=logger,
     )
-    excess = len(candidates) - keep
-    for old_dir in candidates[: max(excess, 0)]:
-        shutil.rmtree(old_dir, ignore_errors=True)
 
 
-def _sync_legacy_alias(run_dir: Path, output_dir: Path, keep: int) -> None:
+def _sync_legacy_alias(run_dir: Path, output_dir: Path, keep: int, *, logger: logging.Logger | None) -> None:
     alias_root = _legacy_alias_root(output_dir)
     alias_root.mkdir(parents=True, exist_ok=True)
 
@@ -1061,7 +1061,7 @@ def _sync_legacy_alias(run_dir: Path, output_dir: Path, keep: int) -> None:
             dest.unlink()
 
     _sync_legacy_latest(alias_root, alias_run_dir)
-    _prune_legacy_alias(alias_root, keep)
+    _prune_legacy_alias(alias_root, keep, logger=logger)
 
 
 def write_artifacts(
@@ -1070,8 +1070,11 @@ def write_artifacts(
     payload: dict[str, object],
     findings: list[Finding],
     output_dir: Path,
+    logger: logging.Logger | None,
 ) -> None:
     run_dir.mkdir(parents=True, exist_ok=True)
+    if logger:
+        logger.debug("Writing artifacts to %s", run_dir)
     (run_dir / "report.json").write_text(
         json.dumps(payload, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
@@ -1107,17 +1110,15 @@ def write_artifacts(
     _write_latest_artifacts(run_dir, output_dir)
 
 
-def prune_history(base_dir: Path, keep: int) -> None:
-    keep = max(keep, 1)
-    if not base_dir.exists():
-        return
-    run_dirs = sorted(
-        (path for path in base_dir.iterdir() if path.is_dir() and path.name.startswith(RUN_PREFIX)),
-        key=lambda item: item.name,
+def prune_history(base_dir: Path, keep: int, *, current_run: Path | None, logger: logging.Logger | None) -> list[Path]:
+    result = prune_run_directories(
+        base_dir,
+        keep=max(keep, 1),
+        stem_prefix=RUN_PREFIX,
+        current_run=current_run,
+        logger=logger,
     )
-    excess = len(run_dirs) - keep
-    for old_dir in run_dirs[: max(excess, 0)]:
-        shutil.rmtree(old_dir, ignore_errors=True)
+    return result.removed
 
 
 def scan_repository(paths: Paths, options: ScanOptions) -> tuple[list[Finding], int, int]:
@@ -1321,10 +1322,12 @@ def run(argv: list[str] | None = None) -> dict[str, object]:
         artifacts_to_keep=resolved_options.artifacts_to_keep,
     )
 
-    logging.info("Scanning repo: %s", paths.repo_root)
-    logging.info("Scan root: %s", paths.scan_root)
-    logging.info("Output directory: %s", paths.output_dir)
-    logging.info("Project packages: %s", ", ".join(sorted(options.project_packages)))
+    logger = logging.getLogger(__name__)
+
+    logger.info("Scanning repo: %s", paths.repo_root)
+    logger.info("Scan root: %s", paths.scan_root)
+    logger.info("Output directory: %s", paths.output_dir)
+    logger.info("Project packages: %s", ", ".join(sorted(options.project_packages)))
 
     findings, parse_errors, files_scanned = scan_repository(paths, options)
     augment_findings_with_git(findings, paths.repo_root, options.with_git)
@@ -1341,13 +1344,26 @@ def run(argv: list[str] | None = None) -> dict[str, object]:
 
     run_id = str(payload["run_id"])
     run_dir = ensure_run_directory(paths.output_dir, run_id)
-    write_artifacts(run_dir=run_dir, payload=payload, findings=findings, output_dir=paths.output_dir)
-    _sync_legacy_alias(run_dir, paths.output_dir, options.artifacts_to_keep)
-    prune_history(paths.output_dir, options.artifacts_to_keep)
+    write_artifacts(
+        run_dir=run_dir,
+        payload=payload,
+        findings=findings,
+        output_dir=paths.output_dir,
+        logger=logger,
+    )
+    _sync_legacy_alias(run_dir, paths.output_dir, options.artifacts_to_keep, logger=logger)
+    removed = prune_history(
+        paths.output_dir,
+        options.artifacts_to_keep,
+        current_run=run_dir,
+        logger=logger,
+    )
+    if removed:
+        logger.debug("Pruned historical runs: %s", ", ".join(sorted(path.name for path in removed)))
 
-    logging.info("Done. Findings: %d", len(findings))
+    logger.info("Done. Findings: %d", len(findings))
     if parse_errors:
-        log_fn = logging.error if options.strict else logging.warning
+        log_fn = logger.error if options.strict else logger.warning
         log_fn("%d file(s) failed to parse.", parse_errors)
 
     return payload

@@ -8,8 +8,8 @@ import json
 import logging
 import math
 import os
-import shutil
 import subprocess
+import sys
 from collections import Counter
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -33,6 +33,18 @@ HEATMAP_MD = "heatmap.md"
 BUNDLE_SUMMARY = "bundle_summary.json"
 
 PY_EXT = ".py"
+
+ROOT = Path(__file__).resolve().parents[3]
+root_str = str(ROOT)
+if root_str and root_str not in sys.path:
+    sys.path.insert(0, root_str)
+
+LIBRARIES_ROOT = ROOT / "command_center" / "scripts"
+libraries_root_str = str(LIBRARIES_ROOT)
+if libraries_root_str and libraries_root_str not in sys.path:
+    sys.path.insert(0, libraries_root_str)
+
+from command_center.scripts.libraries import prune_run_directories  # noqa: E402
 
 
 @dataclass(frozen=True)
@@ -459,22 +471,22 @@ def _update_latest(base: Path, run_dir: Path) -> None:
             dest.write_bytes(src.read_bytes())
 
 
-def _prune_history(base: Path, current: Path, keep: int) -> list[Path]:
-    keep = max(int(keep), 1)
-    if not base.exists():
-        return []
-    runs = sorted(
-        [path for path in base.iterdir() if path.is_dir() and path.name.startswith(RUN_PREFIX) and path != current],
-        key=lambda path: path.name,
-        reverse=True,
+def _prune_history(base: Path, current: Path, keep: int, *, logger: logging.Logger | None) -> list[Path]:
+    try:
+        keep_count = int(keep)
+    except Exception:
+        keep_count = DEFAULT_ARTIFACTS_TO_KEEP
+    if keep_count < 0:
+        keep_count = DEFAULT_ARTIFACTS_TO_KEEP
+    keep_count = max(keep_count, 1)
+    result = prune_run_directories(
+        base,
+        keep=keep_count,
+        stem_prefix=RUN_PREFIX,
+        current_run=current,
+        logger=logger,
     )
-    stale = runs[keep - 1 :]
-    for path in stale:
-        try:
-            shutil.rmtree(path, ignore_errors=False)
-        except Exception:
-            continue
-    return stale
+    return result.removed
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
@@ -586,7 +598,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     _write_json(bundle_summary_path, bundle_summary)
 
     _update_latest(output_base, run_dir)
-    pruned = _prune_history(output_base, run_dir, args.artifacts_to_keep)
+    pruned = _prune_history(output_base, run_dir, args.artifacts_to_keep, logger=logger)
 
     logger.info(
         "Heatmap bundle written to %s (mode=%s, files=%d, pruned=%d)",

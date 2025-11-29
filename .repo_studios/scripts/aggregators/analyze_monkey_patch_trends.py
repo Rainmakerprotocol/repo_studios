@@ -6,7 +6,6 @@ from __future__ import annotations
 import argparse
 import json
 import logging
-import shutil
 import sys
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -44,6 +43,7 @@ from utilities.monkey_patch_risk import (  # noqa: E402
     FindingSignals,
     classify_monkey_patch,
 )
+from command_center.scripts.libraries import prune_run_directories  # noqa: E402
 
 
 @dataclass(frozen=True)
@@ -373,27 +373,22 @@ def _update_latest(base: Path, bundle_dir: Path, filenames: Sequence[str]) -> No
             dest.write_bytes(src.read_bytes())
 
 
-def _prune_history(base: Path, current: Path, keep: int) -> list[Path]:
+def _prune_history(base: Path, current: Path, keep: int, *, logger: logging.Logger | None) -> list[Path]:
     try:
-        keep_count = max(int(keep), 0)
+        keep_count = int(keep)
     except Exception:
         keep_count = DEFAULT_ARTIFACTS_TO_KEEP
-    if not base.exists():
-        return []
-    bundles = sorted(
-        [
-            path
-            for path in base.iterdir()
-            if path.is_dir() and path.name.startswith(AGGREGATOR_PREFIX) and path != current
-        ],
-        key=lambda p: p.name,
-        reverse=True,
+    if keep_count < 0:
+        keep_count = DEFAULT_ARTIFACTS_TO_KEEP
+    keep_count = max(keep_count, 1)
+    result = prune_run_directories(
+        base,
+        keep=keep_count,
+        stem_prefix=AGGREGATOR_PREFIX,
+        current_run=current,
+        logger=logger,
     )
-    limit = max(keep_count - 1, 0)
-    stale = bundles[limit:]
-    for path in stale:
-        shutil.rmtree(path, ignore_errors=True)
-    return stale
+    return result.removed
 
 
 def _copy_markdown_to_consumer(latest_run: TrendRun, trend_md: Path, logger: logging.Logger) -> Path | None:
@@ -489,7 +484,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         bundle_dir,
         [TREND_JSON_NAME, TREND_MD_NAME, AGGREGATOR_BUNDLE_SUMMARY_NAME],
     )
-    pruned = _prune_history(output_base, bundle_dir, args.artifacts_to_keep)
+    pruned = _prune_history(output_base, bundle_dir, args.artifacts_to_keep, logger=logger)
 
     consumer_snapshot = None
     if runs and runs[-1].bundle_dir:

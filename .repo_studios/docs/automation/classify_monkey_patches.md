@@ -10,7 +10,10 @@ modifications first. The consumer prefers structured bundles from
 `scan_monkey_patches.py` (`matches.json` + `report.json`) and mirrors legacy
 `RISK_SUMMARY.*` files for downstream compatibility while emitting refreshed
 consumer bundles under
-`.repo_studios/reports/consumer_reports/monkey_patch_risk/`.
+`.repo_studios/reports/consumer_reports/monkey_patch_risk/`. Retention now
+rides on the shared Command Center helper (`prune_run_directories`), ensuring
+`.keep` sentinels and the current bundle stay protected as historical runs are
+rotated.
 
 Risk rules align with `docs/standards/global/std-global-monkey-patching.md`:
 
@@ -45,7 +48,7 @@ call the consumer directly after `scan_monkey_patches.py` completes.
   `summary.json`, `SUMMARY.md`, and `bundle_summary.json` plus `latest_*`
   links for orchestrators.
 - `--artifacts-to-keep`: Number of historical consumer bundles retained after
-  pruning (minimum 1, default 10).
+  pruning (minimum 1, default 10, enforced by the shared helper).
 - `--log-level` / `--verbose`: Logging controls shared across the structured
   pipeline.
 

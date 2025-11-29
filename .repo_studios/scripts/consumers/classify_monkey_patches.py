@@ -26,7 +26,6 @@ import argparse
 import json
 import logging
 import os
-import shutil
 import sys
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Sequence
@@ -42,10 +41,21 @@ for candidate in (SCRIPTS_ROOT, UTILITIES_ROOT):
     if candidate_str not in sys.path:
         sys.path.insert(0, candidate_str)
 
+ROOT = Path(__file__).resolve().parents[3]
+root_str = str(ROOT)
+if root_str and root_str not in sys.path:
+    sys.path.insert(0, root_str)
+
+COMMAND_CENTER_ROOT = ROOT / "command_center" / "scripts"
+command_center_root_str = str(COMMAND_CENTER_ROOT)
+if command_center_root_str and command_center_root_str not in sys.path:
+    sys.path.insert(0, command_center_root_str)
+
 from utilities.monkey_patch_risk import (  # noqa: E402
     FindingSignals,
     classify_monkey_patch as classify_monkey_patch_from_signals,
 )
+from command_center.scripts.libraries import prune_run_directories  # noqa: E402
 
 DEFAULT_STRUCTURED_ROOT = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
 LEGACY_ROOT = Path(".repo_studios/monkey_patch")
@@ -249,6 +259,7 @@ def _write_consumer_bundle(
     source: str,
     producer_report: Path | None,
     keep: int,
+    logger: logging.Logger | None,
 ) -> tuple[Path, Path, list[Path]]:
     output_base.mkdir(parents=True, exist_ok=True)
     ts = _utcnow()
@@ -291,7 +302,7 @@ def _write_consumer_bundle(
     bundle_summary_path.write_text(json.dumps(bundle_summary, indent=2) + "\n", encoding="utf-8")
 
     _update_latest(output_base, bundle_dir, ["summary.json", "SUMMARY.md", "bundle_summary.json"])
-    pruned = _prune_history(output_base, keep=keep, current=bundle_dir)
+    pruned = _prune_history(output_base, keep=keep, current=bundle_dir, logger=logger)
     return bundle_dir, bundle_summary_path, pruned
 
 
@@ -307,25 +318,24 @@ def _update_latest(base: Path, bundle_dir: Path, filenames: list[str]) -> None:
             dest.write_bytes(src.read_bytes())
 
 
-def _prune_history(base: Path, *, keep: int | None, current: Path) -> list[Path]:
+def _prune_history(base: Path, *, keep: int | None, current: Path, logger: logging.Logger | None) -> list[Path]:
     if keep is None:
         return []
     try:
-        keep_count = max(int(keep), 0)
+        keep_count = int(keep)
     except Exception:
         keep_count = DEFAULT_ARTIFACTS_TO_KEEP
-    if not base.exists():
-        return []
-    bundles = sorted(
-        [path for path in base.iterdir() if path.is_dir() and path.name.startswith(BUNDLE_PREFIX) and path != current],
-        key=lambda p: p.name,
-        reverse=True,
+    if keep_count < 0:
+        keep_count = DEFAULT_ARTIFACTS_TO_KEEP
+    keep_count = max(keep_count, 1)
+    result = prune_run_directories(
+        base,
+        keep=keep_count,
+        stem_prefix=BUNDLE_PREFIX,
+        current_run=current,
+        logger=logger,
     )
-    limit = max(keep_count - 1, 0)
-    stale = bundles[limit:]
-    for path in stale:
-        shutil.rmtree(path, ignore_errors=True)
-    return stale
+    return result.removed
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
@@ -404,6 +414,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         source=source,
         producer_report=producer_report_path,
         keep=args.artifacts_to_keep,
+        logger=logger,
     )
     logger.info(
         "Wrote monkey patch risk bundle to %s (source=%s, pruned=%d)",

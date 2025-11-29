@@ -47,6 +47,7 @@ try:
         PathsConfig,
         build_standard_options,
         build_standard_paths,
+        prune_run_directories,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -58,6 +59,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
         PathsConfig,
         build_standard_options,
         build_standard_paths,
+        prune_run_directories,
     )
 
 
@@ -413,7 +415,11 @@ def write_artifacts(
     payload: dict[str, object],
     records: list[PlaceholderRecord],
     output_dir: Path,
+    logger: logging.Logger | None,
 ) -> None:
+    run_dir.mkdir(parents=True, exist_ok=True)
+    if logger:
+        logger.debug("Writing placeholder artifacts to %s", run_dir)
     (run_dir / "report.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     (run_dir / "report.md").write_text(render_markdown_report(payload, records), encoding="utf-8")
     (run_dir / "log.txt").write_text(render_log(payload), encoding="utf-8")
@@ -444,16 +450,21 @@ def _write_latest_artifacts(run_dir: Path, output_dir: Path) -> None:
             shutil.copyfile(source, target)
 
 
-def prune_history(base_dir: Path, keep: int) -> None:
-    if keep < 1:
-        keep = 1
-    run_dirs = sorted(
-        (path for path in base_dir.iterdir() if path.is_dir() and path.name.startswith(RUN_PREFIX)),
-        key=lambda item: item.name,
+def prune_history(
+    base_dir: Path,
+    keep: int,
+    *,
+    current_run: Path | None,
+    logger: logging.Logger | None,
+) -> list[Path]:
+    result = prune_run_directories(
+        base_dir,
+        keep=max(keep, 1),
+        stem_prefix=RUN_PREFIX,
+        current_run=current_run,
+        logger=logger,
     )
-    excess = len(run_dirs) - keep
-    for old_dir in run_dirs[: max(excess, 0)]:
-        shutil.rmtree(old_dir, ignore_errors=True)
+    return result.removed
 
 
 def configure_logging(level: str) -> None:
@@ -463,6 +474,7 @@ def configure_logging(level: str) -> None:
 def run(argv: list[str] | None = None) -> dict[str, object]:
     args = parse_args(argv)
     configure_logging(args.log_level)
+    logger = logging.getLogger(__name__)
     paths = build_paths(args)
     paths.output_dir.mkdir(parents=True, exist_ok=True)
     patterns = normalize_patterns(args.patterns)
@@ -495,8 +507,21 @@ def run(argv: list[str] | None = None) -> dict[str, object]:
     payload = compose_payload(paths=paths, options=options, records=records, timestamp=timestamp)
     run_id = payload["run_id"]  # type: ignore[index]
     run_dir = ensure_run_directory(paths.output_dir, str(run_id))
-    write_artifacts(run_dir=run_dir, payload=payload, records=records, output_dir=paths.output_dir)
-    prune_history(paths.output_dir, options.artifacts_to_keep)
+    write_artifacts(
+        run_dir=run_dir,
+        payload=payload,
+        records=records,
+        output_dir=paths.output_dir,
+        logger=logger,
+    )
+    removed = prune_history(
+        paths.output_dir,
+        options.artifacts_to_keep,
+        current_run=run_dir,
+        logger=logger,
+    )
+    if removed:
+        logger.debug("Pruned placeholder runs: %s", ", ".join(sorted(path.name for path in removed)))
     return payload
 
 

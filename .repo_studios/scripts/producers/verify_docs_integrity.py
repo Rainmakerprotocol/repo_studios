@@ -36,6 +36,7 @@ try:
         PathsConfig,
         build_standard_options,
         build_standard_paths,
+        prune_run_directories,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -47,6 +48,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
         PathsConfig,
         build_standard_options,
         build_standard_paths,
+        prune_run_directories,
     )
 
 
@@ -515,8 +517,16 @@ def render_log(payload: dict[str, Any]) -> str:
     return "\n".join(entries) + "\n"
 
 
-def write_artifacts(run_dir: Path, output_dir: Path, payload: dict[str, Any]) -> None:
+def write_artifacts(
+    run_dir: Path,
+    output_dir: Path,
+    payload: dict[str, Any],
+    *,
+    logger: logging.Logger | None,
+) -> None:
     run_dir.mkdir(parents=True, exist_ok=True)
+    if logger:
+        logger.debug("Writing docs integrity artifacts to %s", run_dir)
     (run_dir / "report.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     (run_dir / "report.md").write_text(render_markdown_report(payload), encoding="utf-8")
     (run_dir / "log.txt").write_text(render_log(payload), encoding="utf-8")
@@ -539,34 +549,33 @@ def write_artifacts(run_dir: Path, output_dir: Path, payload: dict[str, Any]) ->
             target.write_bytes(src_path.read_bytes())
 
 
-def prune_history(base_dir: Path, keep: int) -> None:
-    if not base_dir.exists():
-        return
-    run_dirs = sorted(
-        [p for p in base_dir.iterdir() if p.is_dir() and p.name.startswith(RUN_PREFIX)],
-        key=lambda p: p.name,
+def prune_history(
+    base_dir: Path,
+    keep: int,
+    *,
+    current_run: Path | None,
+    logger: logging.Logger | None,
+) -> list[Path]:
+    result = prune_run_directories(
+        base_dir,
+        keep=max(keep, 1),
+        stem_prefix=RUN_PREFIX,
+        current_run=current_run,
+        logger=logger,
     )
-    excess = len(run_dirs) - keep
-    if excess <= 0:
-        return
-    for directory in run_dirs[:excess]:
-        for child in sorted(directory.rglob("*"), key=lambda p: len(p.parts), reverse=True):
-            if child.is_file():
-                child.unlink(missing_ok=True)
-            elif child.is_dir():
-                child.rmdir()
-        directory.rmdir()
+    return result.removed
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     args = parse_args(argv)
     configure_logging(args.log_level)
+    logger = logging.getLogger(__name__)
 
     if args.exit_codes_hash:
         try:
             digest = compute_exit_codes_hash()
         except SystemExit as exc:  # pragma: no cover - legacy behavior
-            logging.exception("%s", exc)
+            logger.exception("%s", exc)
             return {
                 "status": "error",
                 "exit_code": 1,
@@ -574,7 +583,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
                 "timestamp": dt.datetime.now(dt.timezone.utc).isoformat(),
                 "run_id": "exit-codes-hash",
             }
-        logging.info("exit_codes_hash=%s", digest)
+        logger.info("exit_codes_hash=%s", digest)
         return {
             "status": "exit-codes-hash",
             "exit_code": 0,
@@ -588,9 +597,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     options = build_options(args)
     paths.output_dir.mkdir(parents=True, exist_ok=True)
 
-    logging.info("Repo root: %s", paths.repo_root)
-    logging.info("Index path: %s", paths.index_path)
-    logging.info("Output directory: %s", paths.output_dir)
+    logger.info("Repo root: %s", paths.repo_root)
+    logger.info("Index path: %s", paths.index_path)
+    logger.info("Output directory: %s", paths.output_dir)
 
     timestamp = dt.datetime.now(dt.timezone.utc)
     run_id = f"{RUN_PREFIX}_{timestamp.strftime('%Y%m%dT%H%M%SZ')}"
@@ -599,8 +608,15 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     payload = compose_payload(paths, options, outcome, run_id, timestamp)
 
     run_dir = paths.output_dir / run_id
-    write_artifacts(run_dir, paths.output_dir, payload)
-    prune_history(paths.output_dir, options.artifacts_to_keep)
+    write_artifacts(run_dir, paths.output_dir, payload, logger=logger)
+    removed = prune_history(
+        paths.output_dir,
+        options.artifacts_to_keep,
+        current_run=run_dir,
+        logger=logger,
+    )
+    if removed:
+        logger.debug("Pruned docs integrity runs: %s", ", ".join(sorted(path.name for path in removed)))
 
     return payload
 

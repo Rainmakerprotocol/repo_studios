@@ -32,6 +32,7 @@ try:
         PathsConfig,
         build_standard_options,
         build_standard_paths,
+        prune_run_directories,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback when package path isn't configured
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -43,6 +44,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when package path isn
         PathsConfig,
         build_standard_options,
         build_standard_paths,
+        prune_run_directories,
     )
 
 
@@ -570,9 +572,17 @@ def render_log(payload: dict) -> str:
     return "\n".join(entries) + "\n"
 
 
-def write_artifacts(paths: Paths, payload: dict, timestamp: dt.datetime) -> Path:
+def write_artifacts(
+    paths: Paths,
+    payload: dict,
+    timestamp: dt.datetime,
+    *,
+    logger: logging.Logger | None,
+) -> Path:
     run_dir = paths.output_dir / f"{RUN_PREFIX}-{timestamp.strftime('%Y%m%d_%H%M%S')}"
     run_dir.mkdir(parents=True, exist_ok=True)
+    if logger:
+        logger.debug("Writing test hardening artifacts to %s", run_dir)
     (run_dir / "report.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     (run_dir / "report.md").write_text(render_markdown_report(payload), encoding="utf-8")
     (run_dir / "log.txt").write_text(render_log(payload), encoding="utf-8")
@@ -594,18 +604,21 @@ def write_artifacts(paths: Paths, payload: dict, timestamp: dt.datetime) -> Path
     return run_dir
 
 
-def prune_history(output_dir: Path, keep: int) -> None:
-    if not output_dir.exists():
-        return
-    candidates = [p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith(RUN_PREFIX)]
-    candidates.sort(key=lambda node: node.name, reverse=True)
-    for stale in candidates[keep:]:
-        for child in sorted(stale.rglob("*"), key=lambda item: len(item.parts), reverse=True):
-            if child.is_file():
-                child.unlink(missing_ok=True)
-            elif child.is_dir():
-                child.rmdir()
-        stale.rmdir()
+def prune_history(
+    output_dir: Path,
+    keep: int,
+    *,
+    current_run: Path | None,
+    logger: logging.Logger | None,
+) -> list[Path]:
+    result = prune_run_directories(
+        output_dir,
+        keep=max(keep, 1),
+        stem_prefix=RUN_PREFIX,
+        current_run=current_run,
+        logger=logger,
+    )
+    return result.removed
 
 
 def _relativize(path: Path, repo_root: Path) -> str:
@@ -620,12 +633,20 @@ def run(argv: Sequence[str] | None = None) -> dict:
     paths = build_paths(args)
     options = build_options(args)
     configure_logging(options.log_level)
+    logger = logging.getLogger(__name__)
     paths.output_dir.mkdir(parents=True, exist_ok=True)
     timestamp = dt.datetime.now(dt.timezone.utc)
     results = analyze_all(paths)
     payload = compose_payload(paths, options, results, timestamp)
-    write_artifacts(paths, payload, timestamp)
-    prune_history(paths.output_dir, options.artifacts_to_keep)
+    run_dir = write_artifacts(paths, payload, timestamp, logger=logger)
+    removed = prune_history(
+        paths.output_dir,
+        options.artifacts_to_keep,
+        current_run=run_dir,
+        logger=logger,
+    )
+    if removed:
+        logger.debug("Pruned test hardening runs: %s", ", ".join(sorted(path.name for path in removed)))
     return payload
 
 

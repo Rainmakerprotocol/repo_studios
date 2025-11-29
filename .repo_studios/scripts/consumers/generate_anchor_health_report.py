@@ -26,7 +26,7 @@ import argparse
 import json
 import logging
 import re
-import shutil
+import sys
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Iterable, Sequence
@@ -240,33 +240,40 @@ def build_report(*, inventory: dict | None, inventory_path: Path | None) -> dict
     return report
 
 
+ROOT = Path(__file__).resolve().parents[3]
+root_str = str(ROOT)
+if root_str and root_str not in sys.path:
+    sys.path.insert(0, root_str)
+
+LIBRARIES_ROOT = ROOT / "command_center" / "scripts"
+libraries_root_str = str(LIBRARIES_ROOT)
+if libraries_root_str and libraries_root_str not in sys.path:
+    sys.path.insert(0, libraries_root_str)
+
+from command_center.scripts.libraries import prune_run_directories  # noqa: E402
+
+
 def _run_dir(ts: datetime, base: Path = OUTPUT_DIR) -> Path:
     stamp = ts.strftime("%Y-%m-%d_%H%M")
     return base / f"{RUN_PREFIX}{stamp}"
 
 
-def _prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> list[Path]:
-    if keep is None:
-        return []
-    keep = max(int(keep), 0)
-    if not output_dir.exists():
-        return []
-    run_dirs = sorted(
-        [
-            path
-            for path in output_dir.iterdir()
-            if path.is_dir() and path.name.startswith(RUN_PREFIX) and path != current_run
-        ],
-        key=lambda p: p.name,
-        reverse=True,
+def _prune_old_runs(output_dir: Path, *, keep: int, current_run: Path, logger: logging.Logger | None) -> list[Path]:
+    try:
+        keep_count = int(keep)
+    except Exception:
+        keep_count = DEFAULT_ARTIFACTS_TO_KEEP
+    if keep_count < 0:
+        keep_count = DEFAULT_ARTIFACTS_TO_KEEP
+    keep_count = max(keep_count, 1)
+    result = prune_run_directories(
+        output_dir,
+        keep=keep_count,
+        stem_prefix=RUN_PREFIX,
+        current_run=current_run,
+        logger=logger,
     )
-    limit = max(keep - 1, 0)
-    stale = run_dirs[limit:]
-    for path in stale:
-        shutil.rmtree(path, ignore_errors=True)
-    if stale:
-        logging.debug("Pruned %s old anchor health runs", len(stale))
-    return stale
+    return result.removed
 
 
 def _build_summary(report: dict[str, Any]) -> dict[str, Any]:
@@ -496,11 +503,18 @@ def run(
     log_level = getattr(logging, str(args.log_level).upper(), logging.INFO)
     logging.basicConfig(level=log_level, format="%(levelname)s %(message)s", force=True)
 
+    log = logging.getLogger("anchor_health")
+
     inventory_payload, inventory_path = load_inventory_report(args.inventory_report)
     report = build_report(inventory=inventory_payload, inventory_path=inventory_path)
     target_output = args.output_dir if args.output_dir is not None else OUTPUT_DIR
     artifact_info = write_artifacts(report, output_dir=target_output)
-    pruned = _prune_old_runs(target_output, keep=args.artifacts_to_keep, current_run=artifact_info["bundle_dir"])
+    pruned = _prune_old_runs(
+        target_output,
+        keep=args.artifacts_to_keep,
+        current_run=artifact_info["bundle_dir"],
+        logger=log,
+    )
     return {
         "report": report,
         "summary": artifact_info["summary"],

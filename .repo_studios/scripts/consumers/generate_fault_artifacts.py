@@ -27,13 +27,13 @@ import csv
 import json
 import logging
 import os
-import shutil
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Sequence
 
 from command_center.scripts.libraries.artifacts import copy_latest_artifact  # noqa: E402
+from command_center.scripts.libraries import prune_run_directories  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
 RUNS_BASE = REPO_ROOT / ".repo_studios/faulthandler"
@@ -398,6 +398,7 @@ def _mirror_to_command_center(
     bundle_dir: Path,
     command_center_dir: Path,
     keep: int,
+    logger: logging.Logger | None,
 ) -> None:
     command_center_dir.mkdir(parents=True, exist_ok=True)
     mirror_dir = command_center_dir / bundle_dir.name
@@ -413,35 +414,33 @@ def _mirror_to_command_center(
         dest.write_bytes(src.read_bytes())
         copy_latest_artifact(src, command_center_dir / f"latest_{name}")
 
-    _prune_history(command_center_dir, keep, mirror_dir)
+    prune_run_directories(
+        command_center_dir,
+        keep=max(1, keep),
+        stem_prefix=CONSUMER_DIR_PREFIX,
+        current_run=mirror_dir,
+        logger=logger,
+    )
 
 
-def _prune_history(root: Path, keep: int | None, current: Path) -> list[Path]:
+def _prune_history(root: Path, keep: int | None, current: Path, *, logger: logging.Logger | None) -> list[Path]:
     if keep is None:
         return []
     try:
-        keep_count = max(int(keep), 0)
+        keep_count = int(keep)
     except Exception:
         keep_count = DEFAULT_ARTIFACTS_TO_KEEP
-    if not root.exists():
-        return []
-    candidates = sorted(
-        [
-            path
-            for path in root.iterdir()
-            if path.is_dir() and path.name.startswith(CONSUMER_DIR_PREFIX) and path != current
-        ],
-        key=lambda p: p.name,
-        reverse=True,
+    if keep_count < 0:
+        keep_count = DEFAULT_ARTIFACTS_TO_KEEP
+    keep_count = max(keep_count, 1)
+    result = prune_run_directories(
+        root,
+        keep=keep_count,
+        stem_prefix=CONSUMER_DIR_PREFIX,
+        current_run=current,
+        logger=logger,
     )
-    limit = max(keep_count - 1, 0)
-    stale = candidates[limit:]
-    for path in stale:
-        try:
-            shutil.rmtree(path, ignore_errors=True)
-        except Exception:
-            continue
-    return stale
+    return result.removed
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
@@ -539,8 +538,13 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     )
     bundle_dir = artifact_paths["bundle_dir"]
     _update_latest_pointers(bundle_dir, target_root)
-    _mirror_to_command_center(bundle_dir=bundle_dir, command_center_dir=command_center_dir, keep=args.artifacts_to_keep)
-    pruned = _prune_history(target_root, args.artifacts_to_keep, bundle_dir)
+    _mirror_to_command_center(
+        bundle_dir=bundle_dir,
+        command_center_dir=command_center_dir,
+        keep=args.artifacts_to_keep,
+        logger=log,
+    )
+    pruned = _prune_history(target_root, args.artifacts_to_keep, bundle_dir, logger=log)
 
     source_report_log = str(source_path) if source_path else "scan"
     severity = report.get("summary", {}).get("severity_buckets", {}) if isinstance(report, dict) else {}

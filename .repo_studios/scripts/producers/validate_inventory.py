@@ -35,6 +35,7 @@ try:
         build_standard_options,
         build_standard_paths,
         copy_latest_artifact,
+        prune_run_directories,
         resolve_path,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback when executed as script
@@ -48,6 +49,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when executed as scri
         build_standard_options,
         build_standard_paths,
         copy_latest_artifact,
+        prune_run_directories,
         resolve_path,
     )
 
@@ -221,21 +223,6 @@ def _prepare_run_dir(output_dir: Path, slug: str) -> Path:
     return run_dir
 
 
-def prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> None:
-    keep = max(keep, 1)
-    if not output_dir.exists():
-        return
-    runs = [node for node in output_dir.iterdir() if node.is_dir() and node.name.startswith(f"{RUN_PREFIX}-")]
-    runs.sort(key=lambda node: node.name, reverse=True)
-    for index, node in enumerate(runs):
-        if index < keep or node == current_run:
-            continue
-        for child in node.iterdir():
-            if child.is_file():
-                child.unlink(missing_ok=True)
-        node.rmdir()
-
-
 _copy_latest = copy_latest_artifact
 
 
@@ -248,6 +235,23 @@ def update_latest_artifacts(run_dir: Path, output_dir: Path) -> None:
     }
     for filename, src in mapping.items():
         _copy_latest(src, output_dir / filename)
+
+
+def prune_history(
+    base_dir: Path,
+    *,
+    keep: int,
+    current_run: Path,
+    logger: logging.Logger | None,
+) -> list[Path]:
+    result = prune_run_directories(
+        base_dir,
+        keep=max(keep, 1),
+        stem_prefix=RUN_PREFIX,
+        current_run=current_run,
+        logger=logger,
+    )
+    return result.removed
 
 
 def _resolve_candidate_paths(path_value: str, repo_root: Path, schema_root: Path) -> List[Path]:
@@ -697,6 +701,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     logging.basicConfig(
         level=getattr(logging, options.log_level.upper(), logging.INFO), format="%(levelname)s: %(message)s"
     )
+    logger = logging.getLogger(__name__)
 
     generated_at = _current_time() if options.timestamp is None else datetime.fromisoformat(options.timestamp)
     slug = _format_slug(generated_at)
@@ -740,7 +745,14 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     write_run_artifacts(run_dir, report_payload, raw_payload)
     update_latest_artifacts(run_dir, paths.output_dir)
-    prune_old_runs(paths.output_dir, keep=options.artifacts_to_keep, current_run=run_dir)
+    removed_runs = prune_history(
+        paths.output_dir,
+        keep=options.artifacts_to_keep,
+        current_run=run_dir,
+        logger=logger,
+    )
+    if removed_runs:
+        logger.debug("Pruned inventory runs: %s", ", ".join(sorted(path.name for path in removed_runs)))
 
     if options.emit_json:
         print(ValidationReport(issues=report.issues).to_json(paths.repo_root))

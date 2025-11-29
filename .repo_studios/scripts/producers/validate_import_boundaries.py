@@ -31,6 +31,7 @@ try:
         PathsConfig,
         build_standard_options,
         build_standard_paths,
+        prune_run_directories,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -42,6 +43,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
         PathsConfig,
         build_standard_options,
         build_standard_paths,
+        prune_run_directories,
     )
 
 
@@ -365,8 +367,11 @@ def write_artifacts(
     run_dir: Path,
     output_dir: Path,
     payload: dict[str, Any],
+    logger: logging.Logger | None,
 ) -> None:
     run_dir.mkdir(parents=True, exist_ok=True)
+    if logger:
+        logger.debug("Writing import boundary artifacts to %s", run_dir)
     (run_dir / "report.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     (run_dir / "report.md").write_text(render_markdown_report(payload), encoding="utf-8")
     (run_dir / "log.txt").write_text(render_log(payload), encoding="utf-8")
@@ -377,23 +382,21 @@ def write_artifacts(
     _write_latest_artifacts(run_dir, output_dir)
 
 
-def prune_history(base_dir: Path, keep: int) -> None:
-    if not base_dir.exists():
-        return
-    run_dirs = sorted(
-        [p for p in base_dir.iterdir() if p.is_dir() and p.name.startswith(RUN_PREFIX)],
-        key=lambda p: p.name,
+def prune_history(
+    base_dir: Path,
+    keep: int,
+    *,
+    current_run: Path | None,
+    logger: logging.Logger | None,
+) -> list[Path]:
+    result = prune_run_directories(
+        base_dir,
+        keep=max(keep, 1),
+        stem_prefix=RUN_PREFIX,
+        current_run=current_run,
+        logger=logger,
     )
-    excess = len(run_dirs) - keep
-    if excess <= 0:
-        return
-    for directory in run_dirs[:excess]:
-        for child in sorted(directory.rglob("*"), key=lambda p: len(p.parts), reverse=True):
-            if child.is_file():
-                child.unlink(missing_ok=True)
-            elif child.is_dir():
-                child.rmdir()
-        directory.rmdir()
+    return result.removed
 
 
 def compose_payload(
@@ -429,18 +432,19 @@ def compose_payload(
 def run(argv: list[str] | None = None) -> dict[str, Any]:
     args = parse_args(argv)
     configure_logging(args.log_level)
+    logger = logging.getLogger(__name__)
     paths = build_paths(args)
     options = build_options(args, paths)
     paths.output_dir.mkdir(parents=True, exist_ok=True)
 
-    logging.info("Repo root: %s", paths.repo_root)
-    logging.info("Output directory: %s", paths.output_dir)
+    logger.info("Repo root: %s", paths.repo_root)
+    logger.info("Output directory: %s", paths.output_dir)
 
     graph_path = options.graph_path or _latest_graph_json(paths.graph_dir)
     if graph_path:
-        logging.info("Graph path: %s", graph_path)
+        logger.info("Graph path: %s", graph_path)
     else:
-        logging.warning("No import graph found; cycle detection limited to static scan results")
+        logger.warning("No import graph found; cycle detection limited to static scan results")
 
     graph = _load_graph(graph_path)
     allowlist = _load_allowlist(paths.allowlist_path)
@@ -464,16 +468,28 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
     )
 
     run_dir = paths.output_dir / payload["run_id"]
-    write_artifacts(run_dir=run_dir, output_dir=paths.output_dir, payload=payload)
-    prune_history(paths.output_dir, options.artifacts_to_keep)
+    write_artifacts(
+        run_dir=run_dir,
+        output_dir=paths.output_dir,
+        payload=payload,
+        logger=logger,
+    )
+    removed = prune_history(
+        paths.output_dir,
+        options.artifacts_to_keep,
+        current_run=run_dir,
+        logger=logger,
+    )
+    if removed:
+        logger.debug("Pruned import boundary runs: %s", ", ".join(sorted(path.name for path in removed)))
 
     if payload["summary"]["violation_count"] == 0:
-        logging.info("[check-imports] OK — no violations (beyond allowlist)")
+        logger.info("[check-imports] OK — no violations (beyond allowlist)")
     else:
-        logging.error("[check-imports] Violations detected (%s)", payload["summary"]["violation_count"])
+        logger.error("[check-imports] Violations detected (%s)", payload["summary"]["violation_count"])
         for violation in payload["violations"]:
             loc = f" ({violation['file']})" if violation.get("file") else ""
-            logging.error("  - %s: %s%s", violation["kind"], violation["detail"], loc)
+            logger.error("  - %s: %s%s", violation["kind"], violation["detail"], loc)
 
     return payload
 
