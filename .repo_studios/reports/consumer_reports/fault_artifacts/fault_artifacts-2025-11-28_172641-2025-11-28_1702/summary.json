@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "generated_at": "2025-11-28T17:26:41+00:00",
+  "source": "producer",
+  "source_report": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\faulthandler_reports\\faulthandler_report-20251128_172641\\report.json",
+  "run_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702",
+  "summary": {
+    "active_signature_count": 0,
+    "first_seen_utc": null,
+    "last_seen_utc": null,
+    "severity_buckets": {
+      "multi_hit": 0,
+      "repeat_offender": 0,
+      "single_hit": 0
+    },
+    "signature_count": 0,
+    "stack_log_exists": true,
+    "stack_text_bytes": 0,
+    "thread_block_count": 0,
+    "top_frame_limit": 10
+  },
+  "signatures": [],
+  "artifacts": {
+    "run_summary_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702\\SUMMARY.md",
+    "stacks_csv": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702\\stacks.csv",
+    "combined_txt": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702\\dumps\\combined.txt"
+  }
+}

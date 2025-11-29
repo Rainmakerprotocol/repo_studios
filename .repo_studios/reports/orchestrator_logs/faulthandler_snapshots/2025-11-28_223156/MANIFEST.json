@@ -1,0 +1,28 @@
+{
+  "ts": "2025-11-28T22:31:56+00:00",
+  "snapshot_file": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_snapshots\\2025-11-28_223156\\snapshot.txt",
+  "faulthandler": {
+    "imported": true,
+    "enabled_before": false,
+    "enabled_after": true,
+    "dumped": true,
+    "errors": []
+  },
+  "resolved": {
+    "outdir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_snapshots\\2025-11-28_223156",
+    "base_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_snapshots",
+    "derived_outdir": true,
+    "allow_legacy": false,
+    "artifacts_to_keep": 10
+  },
+  "retention": {
+    "keep": 10,
+    "pruned": 0
+  },
+  "environment": {
+    "FAULT_SNAPSHOT_BASE_DIR": "",
+    "FAULT_SNAPSHOT_OUTDIR": "",
+    "FAULT_SNAPSHOT_TO_KEEP": "",
+    "FAULT_LOGS_ALLOW_LEGACY": "0"
+  }
+}

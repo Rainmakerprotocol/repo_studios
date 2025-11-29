@@ -73,7 +73,15 @@ studio-generate-fault-artifacts:
 
 .PHONY: studio-run-fault-pipeline
 studio-run-fault-pipeline:
-	$(PYTHON) .repo_studios/scripts/orchestrators/run_fault_pipeline.py --repo-root . --artifacts-to-keep 10 --producer-artifacts-to-keep 10 --consumer-artifacts-to-keep 10 --log-level INFO
+	cd "$(REPO_ROOT)" && $(PYTHON) ".repo_studios/scripts/orchestrators/run_fault_pipeline.py" --repo-root "$(REPO_ROOT)" --artifacts-to-keep 10 --producer-artifacts-to-keep 10 --consumer-artifacts-to-keep 10 --log-level INFO
+
+.PHONY: studio-configure-faulthandler-runtime-smoke
+studio-configure-faulthandler-runtime-smoke:
+	$(PYTHON) "$(CURDIR)/scripts/utilities/configure_faulthandler_runtime.py"
+
+.PHONY: studio-dump-faulthandler-snapshot-smoke
+studio-dump-faulthandler-snapshot-smoke:
+	$(PYTHON) "$(CURDIR)/scripts/utilities/dump_faulthandler_snapshot.py"
 
 .PHONY: studio-collect-test-log-reports
 studio-collect-test-log-reports:

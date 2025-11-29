@@ -6,8 +6,9 @@
 consumer (`generate_fault_artifacts.py`) so the stack capture flow can be refreshed through a single
 command. The orchestrator writes timestamped run bundles, mirrors summaries into the Command Center tree,
 and enforces retention across producer, consumer, and orchestrator tiers. Use this entry point when new
-stack captures land under `.repo_studios/faulthandler/<ts>/` or when you need to rebuild consumer bundles
-from an existing producer report.
+stack captures land under `.repo_studios/reports/orchestrator_logs/faulthandler_logs/<ts>/` (the default
+output from `configure_faulthandler_runtime.py`) or when you need to rebuild consumer bundles from an
+existing producer report.
 
 ## Invocation
 

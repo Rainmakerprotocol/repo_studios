@@ -1,4 +1,4 @@
 Starting collect_faulthandler_reports
-collect_faulthandler_reports completed in 0.22s
+collect_faulthandler_reports completed in 0.04s
 Starting generate_fault_artifacts
-generate_fault_artifacts completed in 0.03s
+generate_fault_artifacts completed in 0.02s

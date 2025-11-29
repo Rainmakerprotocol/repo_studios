@@ -1,0 +1,4 @@
+Current thread 0x00006584 (most recent call first):
+  File "C:\Users\genet\repo_studios\.repo_studios\scripts\utilities\dump_faulthandler_snapshot.py", line 203 in dump_snapshot
+  File "C:\Users\genet\repo_studios\.repo_studios\scripts\utilities\dump_faulthandler_snapshot.py", line 272 in main
+  File "C:\Users\genet\repo_studios\.repo_studios\scripts\utilities\dump_faulthandler_snapshot.py", line 277 in <module>

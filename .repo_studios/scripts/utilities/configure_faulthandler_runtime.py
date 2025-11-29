@@ -1,217 +1,385 @@
-"""Repository bootstrap and warning filters (relocated from sitecustomize.py).
+"""Faulthandler bootstrap and runtime configuration helpers.
 
-This module carries the previous sitecustomize.py behavior (import-time side
-effects) to ensure consistent path setup and warning hygiene across all Python
-entry points when executed via the sitecustomize shim.
-
-Actions performed:
-- Ensure the repository root is on sys.path so that imports like `agents.*`
-  succeed when invoked from nested contexts.
-- Apply a small set of global warning filters to reduce non-actionable noise
-  (e.g., transient sqlite ResourceWarnings; pydantic v2 config deprecation).
-
-Note: This module is executed by the root-level sitecustomize shim using a
-file-loader to avoid name conflicts with the stdlib module `faulthandler`.
+This module keeps the historical sitecustomize side effects but now routes the
+faulthandler setup through testable helpers so we can exercise retention,
+manifests, and import-time behaviour safely. It is imported by the repository
+sitecustomize shim.
 """
 
 from __future__ import annotations
 
+import importlib
+import json
 import os
+import platform
+import shutil
 import sys
+import threading
 import warnings
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Callable, Dict, Mapping, MutableMapping, Optional
 
-root = Path(__file__).resolve().parent.parent  # repo root
+root = Path(__file__).resolve().parents[3]  # repository root
 root_str = str(root)
 if root_str and root_str not in sys.path:
     sys.path.insert(0, root_str)
 
-# Reduce noise from known, non-actionable warnings across all entry points:
-# - ResourceWarning about transient unclosed sqlite3 connections (coverage and
-#   other libs may open/close handles at process teardown, which can trigger GC
-#   warnings after pytest's own filtering window). Filter specifically on the
-#   message to avoid hiding other ResourceWarnings.
+# Reduce noise from known, non-actionable warnings across all entry points.
 warnings.filterwarnings(
     "ignore",
     category=ResourceWarning,
     message=r".*unclosed database in <sqlite3\.Connection object.*",
 )
-
-# - Pydantic v2 deprecation about class-based `config` seen in upstream libs.
-#   Safe to ignore globally for test runs; pytest.ini also filters this, but we
-#   include it here to catch non-pytest entry points.
 warnings.filterwarnings(
     "ignore",
     category=DeprecationWarning,
     message=r".*Support for class-based `config` is deprecated.*",
 )
 
-# ---------------------------------------------------------------------------
-# Standardize faulthandler environment flags and output layout
-# ---------------------------------------------------------------------------
+_LOCK = threading.Lock()
+try:  # POSIX-only; ignored elsewhere.
+    import fcntl as _FCNTL  # type: ignore
+except Exception:  # pragma: no cover - Windows and other platforms
+    _FCNTL = None  # type: ignore
 
 
-def _is_ci() -> bool:
-    """Best-effort CI detection (GitHub Actions, generic CI)."""
-    return os.getenv("GITHUB_ACTIONS") == "1" or os.getenv("CI") == "1"
+def _default_base_dir(allow_legacy: bool) -> Path:
+    if allow_legacy:
+        return root / ".repo_studios" / "faulthandler"
+    return root / ".repo_studios" / "reports" / "orchestrator_logs" / "faulthandler_logs"
 
 
-"""Compute local defaults for FAULT_* without mutating the environment."""
-_FAULT_ENABLE = os.getenv("FAULT_ENABLE", "1" if _is_ci() else "0")
-_FAULT_MIN_INTERVAL_SEC = os.getenv("FAULT_MIN_INTERVAL_SEC", "60")
-_FAULT_DUMP_TIMEOUT = os.getenv("FAULT_DUMP_TIMEOUT", "300")
-_FAULT_MAX_DUMPS_PER_RUN = os.getenv("FAULT_MAX_DUMPS_PER_RUN", "5")
-_FAULT_DUMP_LATER = os.getenv("FAULT_DUMP_LATER", "1" if _is_ci() else "0")
-_FAULT_REDACT_PATHS = os.getenv("FAULT_REDACT_PATHS", "0")
-_FAULT_OUTDIR = os.getenv("FAULT_OUTDIR")
+def _is_truthy(value: Optional[str], *, default: bool) -> bool:
+    if value is None:
+        return default
+    return value.strip().lower() not in {"0", "false", "no", "off"}
 
-if _FAULT_ENABLE == "1":  # only derive paths and create dirs when enabled
-    # Base output dir under repo root
-    base_dir = root / ".repo_studios" / "faulthandler"
-    # Timestamp (UTC) for run folder; e.g., 2025-09-10_1553
-    ts = datetime.now(UTC).strftime("%Y-%m-%d_%H%M")
-    # Respect explicit FAULT_OUTDIR if provided; else derive from timestamp
-    default_outdir = str(base_dir / ts)
-    outdir = _FAULT_OUTDIR or default_outdir
-    # Create directory if possible; ignore failures to avoid breaking startup
-    try:  # pragma: no cover - import-time and filesystem dependent
-        Path(outdir).mkdir(parents=True, exist_ok=True)
+
+def _get_env(env: Mapping[str, str], key: str, default: str) -> str:
+    value = env.get(key)
+    return value if value is not None else default
+
+
+def _safe_int(value: str, fallback: int) -> int:
+    try:
+        return int(value)
     except Exception:
-        # Non-fatal: continue without artifact directory if filesystem not writable
-        pass
+        return fallback
 
-    # Enable stdlib faulthandler with safe fallbacks
-    try:  # pragma: no cover - import-time behavior depends on platform
-        import faulthandler as _fh
-        import json as _json
-        import platform as _platform
-        import sys as _sys
-        import threading as _threading
 
-        try:
-            import fcntl as _fcntl  # POSIX-only
-        except Exception:  # pragma: no cover - non-POSIX
-            _fcntl = None  # type: ignore
+def _is_ci(env: Mapping[str, str]) -> bool:
+    return env.get("GITHUB_ACTIONS") == "1" or env.get("CI") == "1"
 
-        _lock = _threading.Lock()
 
-        class _LockedFile:
-            """Append-only file wrapper with optional POSIX flock and thread lock.
+@dataclass
+class FaultSettings:
+    enable: bool
+    dump_later: bool
+    tee_stderr: bool
+    min_interval: int
+    dump_timeout: int
+    max_dumps_per_run: int
+    redact_paths: bool
+    artifacts_to_keep: int
+    outdir: Path
+    base_dir: Path
+    derived_outdir: bool
+    allow_legacy: bool
+    env_snapshot: Dict[str, str]
 
-            Also tees writes to stderr so CI logs capture activation and dumps.
-            """
 
-            def __init__(self, path: Path, tee_stderr: bool = True):
-                self._path = path
-                self._tee = tee_stderr
-                # Use line buffering if possible
-                self._fh = open(path, "a", buffering=1, encoding="utf-8", errors="replace")
+def _resolve_fault_settings(
+    env: Mapping[str, str],
+    now_factory: Callable[[], datetime],
+) -> FaultSettings:
+    ci_default = "1" if _is_ci(env) else "0"
+    enable_flag = _get_env(env, "FAULT_ENABLE", ci_default)
+    dump_later_flag = _get_env(env, "FAULT_DUMP_LATER", ci_default)
+    tee_stderr_flag = _get_env(env, "FAULT_TEE_STDERR", "1")
+    artifacts_flag = _get_env(env, "FAULT_ARTIFACTS_TO_KEEP", "10")
 
-            def write(self, data: str) -> int:  # type: ignore[override]
-                with _lock:
-                    if _fcntl is not None:
-                        try:
-                            _fcntl.flock(self._fh.fileno(), _fcntl.LOCK_EX)
-                        except Exception:
-                            pass
-                    try:
-                        self._fh.write(data)
-                        self._fh.flush()
-                    finally:
-                        if _fcntl is not None:
-                            try:
-                                _fcntl.flock(self._fh.fileno(), _fcntl.LOCK_UN)
-                            except Exception:
-                                pass
-                if self._tee:
-                    try:
-                        _sys.stderr.write(data)
-                        _sys.stderr.flush()
-                    except Exception:
-                        pass
-                return len(data)
+    allow_legacy_flag = _get_env(env, "FAULT_LOGS_ALLOW_LEGACY", "0")
+    allow_legacy = _is_truthy(allow_legacy_flag, default=False)
 
-            def flush(self) -> None:
-                with _lock:
-                    try:
-                        self._fh.flush()
-                    except Exception:
-                        pass
+    base_override = env.get("FAULT_BASE_DIR")
+    base_dir = Path(base_override) if base_override else _default_base_dir(allow_legacy)
 
-            def fileno(self) -> int:  # for faulthandler compliance
-                return self._fh.fileno()
+    outdir_override = env.get("FAULT_OUTDIR")
+    if outdir_override:
+        outdir = Path(outdir_override)
+        derived = False
+    else:
+        ts = now_factory().strftime("%Y-%m-%d_%H%M")
+        outdir = base_dir / ts
+        derived = True
 
-        _writer = None
-        out_path = Path(outdir) / "stacks.log" if outdir else None
-        if out_path is not None:
-            try:
-                _writer = _LockedFile(out_path)
-            except Exception:
-                _writer = None
+    env_snapshot = {
+        "FAULT_ENABLE": enable_flag,
+        "FAULT_OUTDIR": outdir_override or "",
+        "FAULT_BASE_DIR": base_override or "",
+        "FAULT_MIN_INTERVAL_SEC": _get_env(env, "FAULT_MIN_INTERVAL_SEC", "60"),
+        "FAULT_DUMP_TIMEOUT": _get_env(env, "FAULT_DUMP_TIMEOUT", "300"),
+        "FAULT_MAX_DUMPS_PER_RUN": _get_env(env, "FAULT_MAX_DUMPS_PER_RUN", "5"),
+        "FAULT_DUMP_LATER": dump_later_flag,
+        "FAULT_REDACT_PATHS": _get_env(env, "FAULT_REDACT_PATHS", "0"),
+        "FAULT_TEE_STDERR": tee_stderr_flag,
+        "FAULT_ARTIFACTS_TO_KEEP": artifacts_flag,
+        "FAULT_LOGS_ALLOW_LEGACY": allow_legacy_flag,
+    }
 
-        # Activation banner (compact)
-        try:
-            _sys.stderr.write(f"[faulthandler] enable=1 outdir={outdir or '-'} dump_later={_FAULT_DUMP_LATER}\n")
-            _sys.stderr.flush()
-        except Exception:
-            pass
+    return FaultSettings(
+        enable=_is_truthy(enable_flag, default=_is_truthy(ci_default, default=False)),
+        dump_later=_is_truthy(dump_later_flag, default=_is_truthy(ci_default, default=False)),
+        tee_stderr=_is_truthy(tee_stderr_flag, default=True),
+        min_interval=_safe_int(env_snapshot["FAULT_MIN_INTERVAL_SEC"], 60),
+        dump_timeout=_safe_int(env_snapshot["FAULT_DUMP_TIMEOUT"], 300),
+        max_dumps_per_run=_safe_int(env_snapshot["FAULT_MAX_DUMPS_PER_RUN"], 5),
+        redact_paths=_is_truthy(env_snapshot["FAULT_REDACT_PATHS"], default=False),
+        artifacts_to_keep=max(0, _safe_int(artifacts_flag, 10)),
+        outdir=outdir,
+        base_dir=base_dir,
+        derived_outdir=derived,
+        allow_legacy=allow_legacy,
+        env_snapshot=env_snapshot,
+    )
 
-        # Enable with all threads; prefer file writer when available
-        try:
-            _fh.enable(file=_writer or _sys.stderr, all_threads=True)
-        except Exception:
-            # Minimal fallback
-            with _lock:
+
+class _LockedFile:
+    def __init__(self, path: Path, tee_stderr: bool) -> None:
+        self._path = path
+        self._tee = tee_stderr
+        self._fh = open(path, "a", buffering=1, encoding="utf-8", errors="replace")
+
+    def write(self, data: str) -> int:  # type: ignore[override]
+        with _LOCK:
+            if _FCNTL is not None:
                 try:
-                    _fh.enable()
+                    _FCNTL.flock(self._fh.fileno(), _FCNTL.LOCK_EX)
                 except Exception:
                     pass
-
-        # Register SIGUSR1 if available for on-demand dumps
-        try:
-            import signal as _signal
-
-            if hasattr(_signal, "SIGUSR1"):
-                with _lock:
-                    _fh.register(_signal.SIGUSR1, file=_writer or _sys.stderr, all_threads=True)
-        except Exception:
-            # Non-POSIX or registration failure; ignore
-            pass
-
-        # Optional repeating hang dumps
-        if _FAULT_DUMP_LATER == "1":
             try:
-                timeout = int(_FAULT_DUMP_TIMEOUT or 300)
+                self._fh.write(data)
+                self._fh.flush()
+            finally:
+                if _FCNTL is not None:
+                    try:
+                        _FCNTL.flock(self._fh.fileno(), _FCNTL.LOCK_UN)
+                    except Exception:
+                        pass
+        if self._tee:
+            try:
+                sys.stderr.write(data)
+                sys.stderr.flush()
             except Exception:
-                timeout = 300
+                pass
+        return len(data)
+
+    def flush(self) -> None:
+        with _LOCK:
             try:
-                _fh.dump_traceback_later(timeout, repeat=True, file=_writer or _sys.stderr)
+                self._fh.flush()
             except Exception:
                 pass
 
-        # MANIFEST.json (machine-readable)
+    def fileno(self) -> int:
+        return self._fh.fileno()
+
+
+def _build_writer(outdir: Path, tee_stderr: bool) -> tuple[Optional[_LockedFile], str]:
+    out_path = outdir / "stacks.log"
+    try:
+        return _LockedFile(out_path, tee_stderr=tee_stderr), "file"
+    except Exception:
+        return None, "stderr"
+
+
+def _prune_old_runs(base_dir: Path, keep: int, latest: Path) -> int:
+    if keep <= 0:
+        return 0
+    if not base_dir.exists():
+        return 0
+
+    try:
+        runs = [p for p in base_dir.iterdir() if p.is_dir()]
+    except Exception:
+        return 0
+
+    runs.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+    prunable = [p for p in runs if p != latest]
+    removed = 0
+    keep_remainder = max(keep - 1, 0)
+    for path in prunable[keep_remainder:]:
         try:
-            manifest_json = {
-                "ts": datetime.now(UTC).isoformat(timespec="seconds"),
-                "pid": os.getpid(),
-                "python": _sys.version.split(" ")[0],
-                "platform": _platform.platform(),
-                "flags": {
-                    "FAULT_ENABLE": _FAULT_ENABLE,
-                    "FAULT_OUTDIR": outdir,
-                    "FAULT_MIN_INTERVAL_SEC": _FAULT_MIN_INTERVAL_SEC,
-                    "FAULT_DUMP_LATER": _FAULT_DUMP_LATER,
-                    "FAULT_DUMP_TIMEOUT": _FAULT_DUMP_TIMEOUT,
-                    "FAULT_MAX_DUMPS_PER_RUN": _FAULT_MAX_DUMPS_PER_RUN,
-                    "FAULT_REDACT_PATHS": _FAULT_REDACT_PATHS,
-                },
-                "out_file": str(out_path) if out_path else None,
-                "writer": "ok" if _writer is not None else "stderr",
-            }
-            (Path(outdir) / "MANIFEST.json").write_text(_json.dumps(manifest_json, indent=2))
+            shutil.rmtree(path, ignore_errors=True)
         except Exception:
             pass
+        else:
+            removed += 1
+    return removed
+
+
+def _activate_faulthandler(writer: Optional[_LockedFile], tee_label: str, dump_later: bool, dump_timeout: int) -> Dict[str, object]:
+    info: Dict[str, object] = {
+        "activated": False,
+        "writer": tee_label,
+        "registered_sigusr1": False,
+        "dump_later": False,
+        "errors": [],
+    }
+
+    try:
+        fh = importlib.import_module("faulthandler")
+    except Exception as exc:  # pragma: no cover - happens when module absent
+        info["errors"].append(f"import_failed:{exc}")
+        return info
+
+    target = writer or sys.stderr
+
+    try:
+        fh.enable(file=target, all_threads=True)
+        info["activated"] = True
+    except Exception as exc:
+        info["errors"].append(f"enable_failed:{exc}")
+        try:
+            fh.enable()
+            info["activated"] = True
+            info["writer"] = "stderr"
+        except Exception as inner:
+            info["errors"].append(f"fallback_failed:{inner}")
+
+    try:
+        import signal
+
+        if hasattr(signal, "SIGUSR1"):
+            fh.register(signal.SIGUSR1, file=target, all_threads=True)
+            info["registered_sigusr1"] = True
+    except Exception as exc:
+        info["errors"].append(f"sigusr1_failed:{exc}")
+
+    if dump_later:
+        try:
+            fh.dump_traceback_later(dump_timeout, repeat=True, file=target)
+            info["dump_later"] = True
+        except Exception as exc:
+            info["errors"].append(f"dump_later_failed:{exc}")
+
+    return info
+
+
+def _write_json(path: Path, payload: Dict[str, object]) -> None:
+    try:
+        path.write_text(json.dumps(payload, indent=2))
     except Exception:
-        # If faulthandler is missing or any step fails, do not interrupt startup
         pass
+
+
+ACTIVE_WRITER: Optional[_LockedFile] = None
+LAST_BOOTSTRAP: Optional[Dict[str, object]] = None
+
+
+def bootstrap(
+    env: Optional[Mapping[str, str]] = None,
+    now_factory: Optional[Callable[[], datetime]] = None,
+) -> Dict[str, object]:
+    effective_env: MutableMapping[str, str] = dict(env or os.environ)
+    if _is_truthy(effective_env.get("FAULT_DISABLE"), default=False):
+        return {"status": "skipped", "reason": "disabled_by_env"}
+
+    now = now_factory or (lambda: datetime.now(UTC))
+    settings = _resolve_fault_settings(effective_env, now)
+
+    result: Dict[str, object] = {
+        "status": "enabled" if settings.enable else "disabled",
+        "outdir": str(settings.outdir if settings.enable else ""),
+        "base_dir": str(settings.base_dir),
+        "artifacts_to_keep": settings.artifacts_to_keep,
+        "allow_legacy": settings.allow_legacy,
+        "derived_outdir": settings.derived_outdir,
+    }
+
+    if not settings.enable:
+        return result
+
+    try:
+        settings.outdir.mkdir(parents=True, exist_ok=True)
+    except Exception:
+        result["status"] = "error"
+        result["reason"] = "mkdir_failed"
+        return result
+
+    writer, label = _build_writer(settings.outdir, settings.tee_stderr)
+    global ACTIVE_WRITER
+    ACTIVE_WRITER = writer
+
+    try:
+        sys.stderr.write(
+            f"[faulthandler] enable=1 outdir={settings.outdir} dump_later={int(settings.dump_later)}\n"
+        )
+        sys.stderr.flush()
+    except Exception:
+        pass
+
+    prune_count = 0
+    if settings.derived_outdir and settings.outdir.parent == settings.base_dir:
+        prune_count = _prune_old_runs(settings.base_dir, settings.artifacts_to_keep, settings.outdir)
+
+    activation = _activate_faulthandler(writer, label, settings.dump_later, settings.dump_timeout)
+
+    manifest = {
+        "ts": now().isoformat(timespec="seconds"),
+        "pid": os.getpid(),
+        "python": platform.python_version(),
+        "platform": platform.platform(),
+        "flags": settings.env_snapshot,
+        "resolved": {
+            "outdir": str(settings.outdir),
+            "base_dir": str(settings.base_dir),
+            "tee_stderr": settings.tee_stderr,
+            "artifacts_to_keep": settings.artifacts_to_keep,
+            "derived_outdir": settings.derived_outdir,
+            "allow_legacy": settings.allow_legacy,
+        },
+        "faulthandler": activation,
+        "retention": {"keep": settings.artifacts_to_keep, "pruned": prune_count},
+    }
+    _write_json(settings.outdir / "MANIFEST.json", manifest)
+
+    bundle_summary = {
+        "status": result["status"],
+        "outdir": manifest["resolved"]["outdir"],
+        "writer": activation["writer"],
+        "retention": manifest["retention"],
+        "flags": settings.env_snapshot,
+    }
+    _write_json(settings.outdir / "bundle_summary.json", bundle_summary)
+
+    result.update({
+        "manifest": manifest,
+        "bundle_summary": bundle_summary,
+        "pruned": prune_count,
+    })
+    if activation.get("errors"):
+        result["status"] = "warning"
+    return result
+
+
+def _auto_bootstrap() -> None:
+    global LAST_BOOTSTRAP
+    try:
+        LAST_BOOTSTRAP = bootstrap()
+    except Exception:
+        LAST_BOOTSTRAP = {"status": "error"}
+
+
+if not _is_truthy(os.getenv("FAULT_DISABLE"), default=False):
+    _auto_bootstrap()
+
+
+if __name__ == "__main__":
+    payload = LAST_BOOTSTRAP if LAST_BOOTSTRAP is not None else bootstrap()
+    try:
+        print(json.dumps(payload, indent=2))
+    except Exception:
+        print(payload)

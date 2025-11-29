@@ -6,11 +6,13 @@
 
 `collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts, maintains `latest_*` pointers, and prunes historical runs to a configurable retention window. The producer wraps the shared `utilities.fault_run_analysis` helpers so the consumer and orchestration flows stay in sync.
 
+The producer now targets the orchestrator logs tree (`.repo_studios/reports/orchestrator_logs/faulthandler_logs/`) emitted by `configure_faulthandler_runtime.py`. Set `FAULT_LOGS_ALLOW_LEGACY=1` (or override `FAULT_OUTDIR`) to resume reading from `.repo_studios/faulthandler/` for historical migrations.
+
 ## Invocation
 
 ```bash
 python .repo_studios/scripts/producers/collect_faulthandler_reports.py \
-  --runs-dir .repo_studios/faulthandler \
+  --runs-dir .repo_studios/reports/orchestrator_logs/faulthandler_logs \
   --output-dir .repo_studios/reports/producer_reports/faulthandler_reports \
   --artifacts-to-keep 10 \
   --log-level INFO

@@ -1,23 +1,23 @@
 # Fault Diagnostics Summary
 
-Generated (UTC): 2025-11-26T15:14:13+00:00
+Generated (UTC): 2025-11-28T21:47:34+00:00
 
 ## Summary
 
-- signature_count: 2
-- active_signature_count: 2
-- thread_block_count: 2
+- signature_count: 0
+- active_signature_count: 0
+- thread_block_count: 0
 - top_frame_limit: 10
 - stack_log_exists: True
-- stack_text_bytes: 123
-- first_seen_utc: 2025-11-26T15:14:13+00:00
-- last_seen_utc: 2025-11-26T15:14:13+00:00
+- stack_text_bytes: 0
+- first_seen_utc: None
+- last_seen_utc: None
 
 ## Severity Buckets
 
 - repeat_offender: 0
 - multi_hit: 0
-- single_hit: 2
+- single_hit: 0
 
 ## Dumps
 
@@ -25,17 +25,14 @@ Generated (UTC): 2025-11-26T15:14:13+00:00
 
 ## Top Signatures
 
-| count | signature_id | top | file:line | threads |
-|------:|--------------|-----|----------:|---------|
-| 1 | 32af38317e8bad7c | helper.assist | /svc/helper.py:3 | Thread 0x0002: |
-| 1 | 650320c2bda19304 | worker.work | /svc/worker.py:8 | Current thread 0x0001: |
+(none)
 
 <!-- markdownlint-disable-next-line MD013 -->
 ## Source References
 
-- Run Directory: `C:\Users\genet\repo_studios\.repo_studios\faulthandler\20251126_144316`
+- Run Directory: `C:\Users\genet\repo_studios\.repo_studios\reports\orchestrator_logs\faulthandler_logs\2025-11-28_1702`
 - Source Type: producer
-- Producer Report: `C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\faulthandler_reports\faulthandler_report-20251126_151413\report.json`
-- Run Summary: `C:\Users\genet\repo_studios\.repo_studios\faulthandler\20251126_144316\SUMMARY.md`
-- Stacks CSV: `C:\Users\genet\repo_studios\.repo_studios\faulthandler\20251126_144316\stacks.csv`
-- Combined Stack Text: `C:\Users\genet\repo_studios\.repo_studios\faulthandler\20251126_144316\dumps\combined.txt`
+- Producer Report: `C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\faulthandler_reports\faulthandler_report-20251128_214734\report.json`
+- Run Summary: `C:\Users\genet\repo_studios\.repo_studios\reports\orchestrator_logs\faulthandler_logs\2025-11-28_1702\SUMMARY.md`
+- Stacks CSV: `C:\Users\genet\repo_studios\.repo_studios\reports\orchestrator_logs\faulthandler_logs\2025-11-28_1702\stacks.csv`
+- Combined Stack Text: `C:\Users\genet\repo_studios\.repo_studios\reports\orchestrator_logs\faulthandler_logs\2025-11-28_1702\dumps\combined.txt`

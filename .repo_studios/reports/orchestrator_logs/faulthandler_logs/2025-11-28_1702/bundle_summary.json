@@ -1,0 +1,22 @@
+{
+  "status": "enabled",
+  "outdir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702",
+  "writer": "file",
+  "retention": {
+    "keep": 10,
+    "pruned": 0
+  },
+  "flags": {
+    "FAULT_ENABLE": "1",
+    "FAULT_OUTDIR": "",
+    "FAULT_BASE_DIR": "",
+    "FAULT_MIN_INTERVAL_SEC": "60",
+    "FAULT_DUMP_TIMEOUT": "300",
+    "FAULT_MAX_DUMPS_PER_RUN": "5",
+    "FAULT_DUMP_LATER": "0",
+    "FAULT_REDACT_PATHS": "0",
+    "FAULT_TEE_STDERR": "1",
+    "FAULT_ARTIFACTS_TO_KEEP": "10",
+    "FAULT_LOGS_ALLOW_LEGACY": "0"
+  }
+}
