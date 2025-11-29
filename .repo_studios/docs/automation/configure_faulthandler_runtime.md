@@ -17,6 +17,8 @@ setup without triggering import-time side effects.
 - Resolves `FAULT_*` environment variables, derives a timestamped run
   directory when `FAULT_OUTDIR` is not provided, and prunes historical runs to a
   configurable retention window (`FAULT_ARTIFACTS_TO_KEEP`, default `10`).
+- Relies on the shared `prune_run_directories()` helper so `.keep` sentinels are
+  honoured consistently across faulthandler utilities.
 - Enables `faulthandler` with a thread-safe writer (`stacks.log`), optional
   stderr teeing (`FAULT_TEE_STDERR`), and recurring hang dumps when
   `FAULT_DUMP_LATER=1`.

@@ -18,7 +18,18 @@ SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
+ROOT = Path(__file__).resolve().parents[3]
+root_str = str(ROOT)
+if root_str and root_str not in sys.path:
+    sys.path.insert(0, root_str)
+
+LIBRARIES_ROOT = ROOT / ".repo_studios" / "command_center" / "scripts"
+libraries_root_str = str(LIBRARIES_ROOT)
+if libraries_root_str and libraries_root_str not in sys.path:
+    sys.path.insert(0, libraries_root_str)
+
 from utilities.test_log_analysis import TestLogAnalysisResult, build_test_log_report  # noqa: E402
+from libraries import prune_run_directories  # noqa: E402
 
 DEFAULT_LOGS_BASE = Path(".repo_studios/reports/orchestrator_logs/pytest_log_capture_logs")
 LEGACY_LOGS_BASE = Path(".repo_studios/pytest_logs")
@@ -175,25 +186,13 @@ def _update_latest(output_dir: Path, run_dir: Path) -> None:
             dest.write_bytes(src.read_bytes())
 
 
-def _prune_old_runs(output_dir: Path, keep: int, current_run: Path) -> list[Path]:
-    keep = max(1, keep)
-    if not output_dir.exists():
-        return []
-    runs = [child for child in output_dir.iterdir() if child.is_dir() and child.name.startswith(RUN_PREFIX)]
-    runs.sort(key=lambda path: path.name, reverse=True)
-    removed: list[Path] = []
-    for index, path in enumerate(runs):
-        if index < keep or path == current_run:
-            continue
-        try:
-            shutil.rmtree(path)
-            removed.append(path)
-        except Exception:
-            continue
-    return removed
-
-
-def _write_artifacts(result: TestLogAnalysisResult, output_dir: Path, *, keep: int) -> Path:
+def _write_artifacts(
+    result: TestLogAnalysisResult,
+    output_dir: Path,
+    *,
+    keep: int,
+    logger: logging.Logger | None,
+) -> Path:
     generated_at = str(result.report.get("meta", {}).get("generated_at")) if result.report.get("meta") else None
     run_dir = _ensure_run_dir(output_dir, generated_at)
     report_json = _write_json(run_dir, result)
@@ -214,7 +213,13 @@ def _write_artifacts(result: TestLogAnalysisResult, output_dir: Path, *, keep: i
     _write_slow_tests_csv(run_dir, slow_tests)
     _write_combined_log(run_dir, result.report)
     _update_latest(output_dir, run_dir)
-    _prune_old_runs(output_dir, keep, run_dir)
+    prune_run_directories(
+        output_dir,
+        keep=max(1, keep),
+        stem_prefix=RUN_PREFIX,
+        current_run=run_dir,
+        logger=logger,
+    )
     return run_dir
 
 
@@ -242,7 +247,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, object]:
 
     result = build_test_log_report(logs_run, generated=datetime.now(UTC))
     output_dir = args.output_dir.resolve()
-    artifacts_dir = _write_artifacts(result, output_dir, keep=args.artifacts_to_keep)
+    artifacts_dir = _write_artifacts(result, output_dir, keep=args.artifacts_to_keep, logger=log)
 
     summary = result.report.get("summary", {}) if isinstance(result.report, dict) else {}
     warnings_total = summary.get("warnings_total", 0)

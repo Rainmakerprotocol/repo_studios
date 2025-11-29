@@ -12,7 +12,6 @@ import importlib
 import json
 import os
 import platform
-import shutil
 import sys
 import threading
 import warnings
@@ -25,6 +24,13 @@ root = Path(__file__).resolve().parents[3]  # repository root
 root_str = str(root)
 if root_str and root_str not in sys.path:
     sys.path.insert(0, root_str)
+
+libraries_root = root / ".repo_studios" / "command_center" / "scripts"
+libraries_root_str = str(libraries_root)
+if libraries_root_str and libraries_root_str not in sys.path:
+    sys.path.insert(0, libraries_root_str)
+
+from libraries import prune_run_directories
 
 # Reduce noise from known, non-actionable warnings across all entry points.
 warnings.filterwarnings(
@@ -195,31 +201,6 @@ def _build_writer(outdir: Path, tee_stderr: bool) -> tuple[Optional[_LockedFile]
         return None, "stderr"
 
 
-def _prune_old_runs(base_dir: Path, keep: int, latest: Path) -> int:
-    if keep <= 0:
-        return 0
-    if not base_dir.exists():
-        return 0
-
-    try:
-        runs = [p for p in base_dir.iterdir() if p.is_dir()]
-    except Exception:
-        return 0
-
-    runs.sort(key=lambda p: p.stat().st_mtime, reverse=True)
-    prunable = [p for p in runs if p != latest]
-    removed = 0
-    keep_remainder = max(keep - 1, 0)
-    for path in prunable[keep_remainder:]:
-        try:
-            shutil.rmtree(path, ignore_errors=True)
-        except Exception:
-            pass
-        else:
-            removed += 1
-    return removed
-
-
 def _activate_faulthandler(writer: Optional[_LockedFile], tee_label: str, dump_later: bool, dump_timeout: int) -> Dict[str, object]:
     info: Dict[str, object] = {
         "activated": False,
@@ -323,7 +304,12 @@ def bootstrap(
 
     prune_count = 0
     if settings.derived_outdir and settings.outdir.parent == settings.base_dir:
-        prune_count = _prune_old_runs(settings.base_dir, settings.artifacts_to_keep, settings.outdir)
+        prune_summary = prune_run_directories(
+            settings.base_dir,
+            keep=settings.artifacts_to_keep,
+            current_run=settings.outdir,
+        )
+        prune_count = len(prune_summary.removed)
 
     activation = _activate_faulthandler(writer, label, settings.dump_later, settings.dump_timeout)
 

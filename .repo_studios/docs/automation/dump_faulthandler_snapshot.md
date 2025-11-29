@@ -15,7 +15,8 @@ prunes historical snapshot directories to a configurable retention window.
 - Import and enable `faulthandler` if necessary, then write a raw stack dump to
   `snapshot.txt` alongside structured metadata (`MANIFEST.json`,
   `bundle_summary.json`, `SUMMARY.md`).
-- Enforce retention (default keep `10`) while preserving the latest snapshot.
+- Enforce retention (default keep `10`) via the shared
+  `prune_run_directories()` helper while preserving the latest snapshot.
 
 ## Environment Flags
 

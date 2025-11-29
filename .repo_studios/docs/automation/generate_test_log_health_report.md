@@ -6,7 +6,10 @@
 operators can track warning spikes, failure patterns, and slow tests without rereading entire logs.
 The script prefers the curated JSON emitted by `collect_test_log_reports.py` and gracefully falls
 back to scanning `.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs/` (or the legacy
-`.repo_studios/pytest_logs/` tree when allowed) when the producer bundle is missing.
+`.repo_studios/pytest_logs/` tree when allowed) when the producer bundle is missing. Retention now
+rides on the shared Command Center pruning helper (`prune_run_directories`) so `.keep` sentinels and
+the active bundle remain protected while stale runs are removed consistently across producers and
+consumers.
 
 ## Inputs
 
@@ -21,7 +24,7 @@ back to scanning `.repo_studios/reports/orchestrator_logs/pytest_log_capture_log
     remains enabled).
   - `--producer-report`: Path to the producer JSON bundle (default `.repo_studios/reports/producer_reports/test_log_reports/latest_report.json`).
   - `--output-base`: Target directory for timestamped consumer bundles (default `.repo_studios/reports/consumer_reports/test_log_health_reports`).
-  - `--artifacts-to-keep`: Number of run directories to retain (default `5`).
+  - `--artifacts-to-keep`: Number of run directories to retain (default `5`, minimum enforced at `1`).
   - `--log-level`: Standard logging verbosity control.
 
 ## Outputs
@@ -44,7 +47,8 @@ to locate the freshest bundle.
 ## Retention & Pruning
 
 The consumer keeps the newest five runs by default. Adjust `--artifacts-to-keep` if you need
-deeper history; `0` disables pruning.
+deeper history; the shared helper enforces a minimum of one directory and honours `.keep` sentinels,
+so specifying `0` behaves like `1` (current bundle retained, older bundles pruned unless protected).
 
 ## Typical Workflow
 

@@ -13,7 +13,6 @@ import csv
 import json
 import logging
 import os
-import shutil
 import sys
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime
@@ -41,6 +40,7 @@ from command_center.scripts.libraries.cli import (  # noqa: E402
     build_standard_options,
     build_standard_paths,
 )
+from command_center.scripts.libraries import prune_run_directories  # noqa: E402
 from utilities.fault_run_analysis import (  # noqa: E402
     FaultAnalysisResult,
     FaultSignature,
@@ -405,23 +405,12 @@ def _write_artifacts(result: FaultAnalysisResult, output_dir: Path, *, keep: int
     )
 
 
-def _prune_command_center_history(root: Path, keep: int, current: Path) -> None:
-    keep = max(1, keep)
-    if not root.exists():
-        return
-    runs = [child for child in root.iterdir() if child.is_dir() and child.name.startswith(RUN_PREFIX)]
-    runs.sort(key=lambda path: path.name, reverse=True)
-    for index, path in enumerate(runs):
-        if index < keep or path == current:
-            continue
-        shutil.rmtree(path, ignore_errors=True)
-
-
 def _mirror_to_command_center(
     write_result: WriteReportArtifactsResult,
     command_center_dir: Path,
     *,
     keep: int,
+    logger: logging.Logger | None,
 ) -> None:
     command_center_dir.mkdir(parents=True, exist_ok=True)
     cc_run_dir = command_center_dir / write_result.run_dir.name
@@ -435,7 +424,13 @@ def _mirror_to_command_center(
         dest.write_bytes(src.read_bytes())
         copy_latest_artifact(src, command_center_dir / f"latest_{filename}")
 
-    _prune_command_center_history(command_center_dir, keep, cc_run_dir)
+    prune_run_directories(
+        command_center_dir,
+        keep=max(1, keep),
+        stem_prefix=RUN_PREFIX,
+        current_run=cc_run_dir,
+        logger=logger,
+    )
 
 
 def _validate_latest(paths: Paths, log: logging.Logger) -> dict[str, Any]:
@@ -508,7 +503,12 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         analysis = build_fault_report(run_dir)
 
     write_result = _write_artifacts(analysis, paths.output_dir, keep=options.artifacts_to_keep)
-    _mirror_to_command_center(write_result, paths.command_center_dir, keep=options.artifacts_to_keep)
+    _mirror_to_command_center(
+        write_result,
+        paths.command_center_dir,
+        keep=options.artifacts_to_keep,
+        logger=log,
+    )
 
     summary = analysis.report.get("summary", {}) if isinstance(analysis.report, dict) else {}
     severity = summary.get("severity_buckets", {}) if isinstance(summary, dict) else {}

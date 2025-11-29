@@ -83,6 +83,10 @@ studio-configure-faulthandler-runtime-smoke:
 studio-dump-faulthandler-snapshot-smoke:
 	$(PYTHON) "$(CURDIR)/scripts/utilities/dump_faulthandler_snapshot.py"
 
+.PHONY: studio-refresh-mypy-baselines
+studio-refresh-mypy-baselines:
+	cd "$(REPO_ROOT)" && $(PYTHON) ".repo_studios/scripts/utilities/refresh_mypy_baselines.py" --repo-root "$(REPO_ROOT)" --log-level INFO
+
 .PHONY: studio-collect-test-log-reports
 studio-collect-test-log-reports:
 	$(PYTHON) .repo_studios/scripts/producers/collect_test_log_reports.py --logs-dir .repo_studios/reports/orchestrator_logs/pytest_log_capture_logs --output-dir .repo_studios/reports/producer_reports/test_log_reports --artifacts-to-keep 10 --log-level INFO

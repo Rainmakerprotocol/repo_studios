@@ -47,6 +47,7 @@ from .metrics import (
     build_metrics_summary,
     write_metrics_summary,
 )
+from .prune_logs import PruneResult, prune_run_directories
 
 __all__ = [
     "slugify_relative",
@@ -84,4 +85,6 @@ __all__ = [
     "TestRunResult",
     "build_metrics_summary",
     "write_metrics_summary",
+    "PruneResult",
+    "prune_run_directories",
 ]

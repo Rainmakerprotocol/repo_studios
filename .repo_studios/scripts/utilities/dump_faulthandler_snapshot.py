@@ -25,6 +25,16 @@ def _repo_root() -> Path:
 
 
 ROOT = _repo_root()
+ROOT_STR = str(ROOT)
+if ROOT_STR and ROOT_STR not in sys.path:
+    sys.path.insert(0, ROOT_STR)
+
+LIBRARIES_ROOT = ROOT / ".repo_studios" / "command_center" / "scripts"
+LIBRARIES_ROOT_STR = str(LIBRARIES_ROOT)
+if LIBRARIES_ROOT_STR and LIBRARIES_ROOT_STR not in sys.path:
+    sys.path.insert(0, LIBRARIES_ROOT_STR)
+
+from libraries import prune_run_directories
 
 
 def _default_base_dir(allow_legacy: bool) -> Path:
@@ -89,35 +99,6 @@ def _resolve_settings(env: Mapping[str, str], now: Callable[[], datetime]) -> Sn
         artifacts_to_keep=keep,
         env_snapshot=env_snapshot,
     )
-
-
-def _prune_old_runs(base_dir: Path, latest: Path, keep: int) -> int:
-    if keep <= 0 or not base_dir.exists():
-        return 0
-
-    try:
-        runs = [p for p in base_dir.iterdir() if p.is_dir()]
-    except Exception:
-        return 0
-
-    runs.sort(key=lambda p: p.stat().st_mtime, reverse=True)
-    prunable = [p for p in runs if p != latest]
-    removed = 0
-    for path in prunable[keep - 1 :]:
-        try:
-            for child in path.glob("**/*"):
-                child.chmod(0o700)
-        except Exception:
-            pass
-        try:
-            import shutil
-
-            shutil.rmtree(path, ignore_errors=True)
-        except Exception:
-            pass
-        else:
-            removed += 1
-    return removed
 
 
 def _ensure_dir(path: Path) -> bool:
@@ -195,7 +176,12 @@ def dump_snapshot(
 
     pruned = 0
     if settings.derived_outdir and settings.base_dir == settings.outdir.parent:
-        pruned = _prune_old_runs(settings.base_dir, settings.outdir, settings.artifacts_to_keep)
+        prune_summary = prune_run_directories(
+            settings.base_dir,
+            keep=settings.artifacts_to_keep,
+            current_run=settings.outdir,
+        )
+        pruned = len(prune_summary.removed)
 
     _write_bundle(settings, snapshot_path, fh_status, result, now, pruned=pruned)
     return result

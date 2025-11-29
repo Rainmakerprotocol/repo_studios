@@ -1,61 +1,58 @@
 {
-  "generated_utc": "2025-11-28T21:47:34+00:00",
+  "generated_utc": "2025-11-29T15:20:10+00:00",
   "manifest": {
-    "faulthandler": {
-      "activated": true,
-      "dump_later": false,
-      "errors": [],
-      "registered_sigusr1": false,
-      "writer": "file"
-    },
-    "flags": {
-      "FAULT_ARTIFACTS_TO_KEEP": "10",
-      "FAULT_BASE_DIR": "",
-      "FAULT_DUMP_LATER": "0",
-      "FAULT_DUMP_TIMEOUT": "300",
-      "FAULT_ENABLE": "1",
-      "FAULT_LOGS_ALLOW_LEGACY": "0",
-      "FAULT_MAX_DUMPS_PER_RUN": "5",
-      "FAULT_MIN_INTERVAL_SEC": "60",
-      "FAULT_OUTDIR": "",
-      "FAULT_REDACT_PATHS": "0",
-      "FAULT_TEE_STDERR": "1"
-    },
-    "pid": 28640,
-    "platform": "Windows-10-10.0.26200-SP0",
-    "python": "3.11.9",
-    "resolved": {
-      "allow_legacy": false,
-      "artifacts_to_keep": 10,
-      "base_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs",
-      "derived_outdir": true,
-      "outdir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702",
-      "tee_stderr": true
-    },
-    "retention": {
-      "keep": 10,
-      "pruned": 0
-    },
-    "ts": "2025-11-28T17:02:14+00:00"
+    "flags": {},
+    "pid": null,
+    "platform": null,
+    "python": null,
+    "ts": "2025-11-29T15:20:10+00:00",
+    "writer": null
   },
-  "process_salt": "py=3.11.9|plat=Windows-10-10.0.26200-SP0|run=2025-11-28_1702",
-  "run_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702",
+  "process_salt": "py=3.13.3|plat=Windows-11-10.0.26200-SP0|run=2025-01-01_000000",
+  "run_dir": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-344\\test_collect_faulthandler_repo0\\repo\\.repo_studios\\faulthandler\\2025-01-01_000000",
   "schema_version": 1,
-  "signatures": [],
-  "stacks_log": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702\\stacks.log",
+  "signatures": [
+    {
+      "count": 1,
+      "first_seen_ts": "2025-11-29T15:20:10+00:00",
+      "last_seen_ts": "2025-11-29T15:20:10+00:00",
+      "signature_id": "069d1680e5e62635",
+      "threads": [
+        "Current thread 0x0001 (most recent call first):"
+      ],
+      "top_file": "/app/main.py",
+      "top_func": "run",
+      "top_line": 12,
+      "top_module": "main"
+    },
+    {
+      "count": 1,
+      "first_seen_ts": "2025-11-29T15:20:10+00:00",
+      "last_seen_ts": "2025-11-29T15:20:10+00:00",
+      "signature_id": "2f0a9b15e30c0afe",
+      "threads": [
+        "Thread 0x0002:"
+      ],
+      "top_file": "/lib/utils.py",
+      "top_func": "helper",
+      "top_line": 7,
+      "top_module": "utils"
+    }
+  ],
+  "stacks_log": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-344\\test_collect_faulthandler_repo0\\repo\\.repo_studios\\faulthandler\\2025-01-01_000000\\stacks.log",
   "summary": {
-    "active_signature_count": 0,
-    "first_seen_utc": null,
-    "last_seen_utc": null,
+    "active_signature_count": 2,
+    "first_seen_utc": "2025-11-29T15:20:10+00:00",
+    "last_seen_utc": "2025-11-29T15:20:10+00:00",
     "severity_buckets": {
       "multi_hit": 0,
       "repeat_offender": 0,
-      "single_hit": 0
+      "single_hit": 2
     },
-    "signature_count": 0,
+    "signature_count": 2,
     "stack_log_exists": true,
-    "stack_text_bytes": 0,
-    "thread_block_count": 0,
+    "stack_text_bytes": 189,
+    "thread_block_count": 2,
     "top_frame_limit": 10
   }
 }

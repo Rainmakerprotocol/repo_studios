@@ -13,6 +13,9 @@ artifacts into `.repo_studios/reports/orchestrator_runs/mypy_baselines/`, and ma
 python -m .repo_studios.scripts.utilities.refresh_mypy_baselines \
   --repo-root . \
   --log-level INFO
+
+# or via Make
+make -C .repo_studios studio-refresh-mypy-baselines PYTHON=.venv/Scripts/python.exe
 ```
 
 Key flags:

@@ -16,7 +16,6 @@ import csv
 import json
 import logging
 import os
-import shutil
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -30,12 +29,23 @@ DEFAULT_ARTIFACTS_TO_KEEP = 5
 
 SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
 UTILITIES_ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
+root_str = str(ROOT)
+if root_str and root_str not in sys.path:
+    sys.path.insert(0, root_str)
+
+LIBRARIES_ROOT = ROOT / "command_center" / "scripts"
+libraries_root_str = str(LIBRARIES_ROOT)
+if libraries_root_str and libraries_root_str not in sys.path:
+    sys.path.insert(0, libraries_root_str)
+
 for candidate in (SCRIPTS_ROOT, UTILITIES_ROOT):
     candidate_str = str(candidate)
     if candidate_str not in sys.path:
         sys.path.insert(0, candidate_str)
 
 from utilities.test_log_analysis import build_test_log_report, render_markdown  # noqa: E402
+from command_center.scripts.libraries import prune_run_directories  # noqa: E402
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
@@ -364,28 +374,23 @@ def _write_metadata(
     return meta_path
 
 
-def _prune_history(base: Path, keep: int | None, current: Path) -> list[Path]:
+def _prune_history(base: Path, keep: int | None, current: Path, *, logger: logging.Logger | None) -> list[Path]:
     if keep is None:
         return []
     try:
-        keep_count = max(int(keep), 0)
+        keep_count = int(keep)
     except Exception:
         keep_count = DEFAULT_ARTIFACTS_TO_KEEP
-    if not base.exists():
-        return []
-    candidates = sorted(
-        [path for path in base.iterdir() if path.is_dir() and path != current],
-        key=lambda p: p.name,
-        reverse=True,
+    if keep_count < 0:
+        keep_count = DEFAULT_ARTIFACTS_TO_KEEP
+    keep_count = max(keep_count, 1)
+    result = prune_run_directories(
+        base,
+        keep=keep_count,
+        current_run=current,
+        logger=logger,
     )
-    limit = max(keep_count - 1, 0)
-    stale = candidates[limit:]
-    for path in stale:
-        try:
-            shutil.rmtree(path, ignore_errors=True)
-        except Exception:
-            continue
-    return stale
+    return result.removed
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
@@ -464,8 +469,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         summary=summary,
         comparisons=comparisons,
     )
-    pruned = _prune_history(out_base, args.artifacts_to_keep, out_dir)
-    logging.info(
+    log = logging.getLogger("test_log_health")
+    pruned = _prune_history(out_base, args.artifacts_to_keep, out_dir, logger=log)
+    log.info(
         "Test log health report written to %s (source=%s, pruned=%d)",
         out_dir,
         source,
