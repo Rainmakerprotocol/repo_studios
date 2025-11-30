@@ -12,26 +12,33 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, Iterable
+from typing import Any, Iterable
 
-
-def _load_slugify() -> Callable[[Path], str]:
-    try:
-        module = importlib.import_module("libraries")
-    except ModuleNotFoundError:  # pragma: no cover - CLI fallback
-        script_dir = Path(__file__).resolve().parent
-        scripts_root = script_dir.parent
-        if str(scripts_root) not in sys.path:
-            sys.path.insert(0, str(scripts_root))
-        module = importlib.import_module("libraries")
-    return module.slugify_relative
-
-
-slugify_relative = _load_slugify()
+try:
+    from libraries import (  # type: ignore  # noqa: E402
+        ReportArtifact,
+        WriteReportArtifactsResult,
+        slugify_relative,
+        write_report_artifacts,
+    )
+except ModuleNotFoundError:  # pragma: no cover - CLI fallback
+    script_dir = Path(__file__).resolve().parent
+    scripts_root = script_dir.parent
+    if str(scripts_root) not in sys.path:
+        sys.path.insert(0, str(scripts_root))
+    from libraries import (  # type: ignore  # noqa: E402
+        ReportArtifact,
+        WriteReportArtifactsResult,
+        slugify_relative,
+        write_report_artifacts,
+    )
 
 DEFAULT_SCHEMA_VERSION = 1
 ANALYSIS_VERSION = "1.0.0"
-DEFAULT_REPORTS_ROOT_RELATIVE = Path(".repo_studios/command_center/reports/index_scan_analysis")
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
+DEFAULT_KEEP_RUNS = 1
+VIEWER_SLUG = "commandview"
+TOPIC_SLUG = "function_analysis"
 
 
 @dataclass(frozen=True)
@@ -39,7 +46,9 @@ class Paths:
     repo_root: Path
     target: Path
     target_relative: Path
-    reports_root: Path
+    output_dir: Path
+    target_slug: str
+    target_index_dir: Path
 
 
 @dataclass(frozen=True)
@@ -47,6 +56,15 @@ class Options:
     schema_version: int
     log_level: str
     inventory_file: Path | None
+
+
+@dataclass(frozen=True)
+class RunArtifacts:
+    """Locations of the emitted analysis artifacts."""
+
+    slug: str
+    viewer_analysis: Path
+    index_analysis: Path
 
 
 def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
@@ -66,8 +84,8 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--reports-root",
         help=(
-            "Optional directory for centralized analysis copies. Defaults to "
-            ".repo_studios/command_center/reports/duplicates_scan within the repo root."
+            "Optional base directory for viewer/topic analysis artifacts. Defaults to "
+            f"{DEFAULT_OUTPUT_DIR} within the repo root."
         ),
     )
     parser.add_argument(
@@ -104,16 +122,26 @@ def build_paths(args: argparse.Namespace) -> Paths:
     target_relative = target.relative_to(repo_root)
     if getattr(args, "reports_root", None):
         reports_candidate = Path(args.reports_root)
-        reports_root = reports_candidate if reports_candidate.is_absolute() else repo_root / reports_candidate
+        output_dir = reports_candidate if reports_candidate.is_absolute() else repo_root / reports_candidate
     else:
-        reports_root = repo_root / DEFAULT_REPORTS_ROOT_RELATIVE
-    reports_root = reports_root.resolve()
+        output_dir = repo_root / DEFAULT_OUTPUT_DIR
+    output_dir = output_dir.resolve()
     try:
-        reports_root.relative_to(repo_root)
+        output_dir.relative_to(repo_root)
     except ValueError as exc:
-        raise ValueError(f"Reports root must reside within repo root: {reports_root}") from exc
-    reports_root.mkdir(parents=True, exist_ok=True)
-    return Paths(repo_root=repo_root, target=target, target_relative=target_relative, reports_root=reports_root)
+        raise ValueError(f"Reports root must reside within repo root: {output_dir}") from exc
+    output_dir.mkdir(parents=True, exist_ok=True)
+    target_index_dir = target / f"{target.name}_index"
+    target_index_dir.mkdir(parents=True, exist_ok=True)
+    target_slug = slugify_relative(target_relative)
+    return Paths(
+        repo_root=repo_root,
+        target=target,
+        target_relative=target_relative,
+        output_dir=output_dir,
+        target_slug=target_slug,
+        target_index_dir=target_index_dir,
+    )
 
 
 def build_options(args: argparse.Namespace) -> Options:
@@ -130,7 +158,7 @@ def locate_inventory_file(paths: Paths, options: Options) -> Path:
         if not options.inventory_file.exists():
             raise FileNotFoundError(f"Inventory file not found: {options.inventory_file}")
         return options.inventory_file
-    index_dir = paths.target / f"{paths.target.name}_index"
+    index_dir = paths.target_index_dir
     if not index_dir.exists():
         raise FileNotFoundError(f"Inventory directory not found: {index_dir}")
     candidates = sorted(
@@ -279,56 +307,60 @@ def compose_payload(
     return payload
 
 
-def _write_analysis_copy(directory: Path, source_name: str, payload: dict[str, Any], date_stamp: str) -> Path:
-    directory.mkdir(parents=True, exist_ok=True)
-    legacy = directory / f"{source_name}_analysis.json"
+def _write_index_artifact(*, paths: Paths, payload: dict[str, Any], slug: str) -> Path:
+    filename = f"{paths.target.name}_analysis-{slug}.json"
+    legacy = paths.target_index_dir / f"{paths.target.name}_analysis.json"
     if legacy.exists():
         legacy.unlink()
-    for existing in directory.glob(f"{source_name}_analysis-*.json"):
-        if existing.is_file():
-            existing.unlink()
-    output_file = directory / f"{source_name}_analysis-{date_stamp}.json"
-    temp_file = output_file.with_suffix(".json.tmp")
-    temp_file.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
-    temp_file.replace(output_file)
-    latest_pointer = directory / "latest.json"
-    if latest_pointer.exists():
-        latest_pointer.unlink()
-    return output_file
+    destination = paths.target_index_dir / filename
+    destination.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return destination
 
 
-def analysis_date(inventory_path: Path, inventory_payload: dict[str, Any]) -> str:
-    stem = inventory_path.stem
-    parts = stem.split("-")
-    if parts and parts[-1].isdigit() and len(parts[-1]) == 8:
-        return f"{parts[-1][:4]}-{parts[-1][4:6]}-{parts[-1][6:]}"
-    if len(parts) >= 2:
-        candidate = parts[-1]
-        if len(candidate) == 10 and candidate[4] == "-" and candidate[7] == "-":
-            return candidate
-    generated_at = inventory_payload.get("metadata", {}).get("generated_at")
-    if generated_at:
+def _prune_index_artifacts(paths: Paths, *, keep: int) -> None:
+    keep = max(keep, 1)
+    pattern = f"{paths.target.name}_analysis-*.json"
+    candidates = sorted(paths.target_index_dir.glob(pattern), key=lambda item: item.name, reverse=True)
+    for stale in candidates[keep:]:
         try:
-            return datetime.fromisoformat(generated_at).strftime("%Y-%m-%d")
-        except ValueError:
-            pass
-    return datetime.now(timezone.utc).strftime("%Y-%m-%d")
+            stale.unlink()
+        except FileNotFoundError:
+            continue
 
 
 def write_analysis(
     paths: Paths,
-    inventory_path: Path,
-    inventory_payload: dict[str, Any],
     payload: dict[str, Any],
-) -> tuple[Path, Path]:
-    index_dir = inventory_path.parent
-    target_stem = paths.target.name
-    date_stamp = analysis_date(inventory_path, inventory_payload)
-    primary = _write_analysis_copy(index_dir, target_stem, payload, date_stamp)
-    reports_slug = _slugify_relative(paths.target_relative)
-    mirror_dir = paths.reports_root / f"{reports_slug}_analysis"
-    mirror = _write_analysis_copy(mirror_dir, target_stem, payload, date_stamp)
-    return primary, mirror
+    *,
+    timestamp: datetime | None = None,
+    keep: int = DEFAULT_KEEP_RUNS,
+) -> RunArtifacts:
+    moment = timestamp or datetime.now(timezone.utc)
+    analysis_filename = f"{paths.target.name}_analysis.json"
+
+    def _write_analysis(run_dir: Path) -> Path:
+        target = run_dir / analysis_filename
+        target.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        return target
+
+    report_result: WriteReportArtifactsResult = write_report_artifacts(
+        stem=f"{paths.target_slug}_function_analysis",
+        timestamp=moment,
+        output_dir=paths.output_dir,
+        artifacts=[ReportArtifact(filename=analysis_filename, writer=_write_analysis)],
+        keep=max(keep, 1),
+        viewer=VIEWER_SLUG,
+        topic=TOPIC_SLUG,
+    )
+
+    index_artifact = _write_index_artifact(paths=paths, payload=payload, slug=report_result.slug)
+    _prune_index_artifacts(paths=paths, keep=keep)
+
+    return RunArtifacts(
+        slug=report_result.slug,
+        viewer_analysis=report_result.artifacts[analysis_filename],
+        index_analysis=index_artifact,
+    )
 
 
 def run(argv: Iterable[str] | None = None) -> int:
@@ -360,11 +392,11 @@ def run(argv: Iterable[str] | None = None) -> int:
     duplicate_groups = identify_duplicate_groups(functions)
     findings = build_findings(duplicate_groups)
     analysis_payload = compose_payload(paths, options, inventory_path, inventory_payload, inventory_hash, findings)
-    primary_file, mirror_file = write_analysis(paths, inventory_path, inventory_payload, analysis_payload)
+    artifacts = write_analysis(paths, analysis_payload)
     logging.info(
-        "Analysis generated: primary=%s mirror=%s duplicate_groups=%d duplicates=%d",
-        primary_file,
-        mirror_file,
+        "Analysis generated: viewer=%s index=%s duplicate_groups=%d duplicates=%d",
+        artifacts.viewer_analysis,
+        artifacts.index_analysis,
         len(findings),
         sum(len(group) for group in duplicate_groups),
     )

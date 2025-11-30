@@ -163,3 +163,62 @@ def test_write_report_artifacts_with_writer_and_callable_content(tmp_path: Path)
     assert payload["graph_path"].endswith("graph.json")
     assert payload["run_directory"] == str(run_dir)
     assert payload["status"] == "ok"
+
+
+def test_write_report_artifacts_hierarchical_layout(tmp_path: Path) -> None:
+    timestamp = datetime(2024, 3, 10, 18, 45, tzinfo=timezone.utc)
+    artifacts = [
+        ReportArtifact(
+            filename="summary.json",
+            kind="json",
+            content={"status": "ok"},
+            pointer="latest_summary.json",
+        ),
+        ReportArtifact(
+            filename="summary.md",
+            kind="text",
+            content="\n".join(["# Summary", "- status: ok", ""]),
+            pointer="latest_summary.md",
+        ),
+    ]
+
+    result = write_report_artifacts(
+        stem="duplicate_scan",
+        timestamp=timestamp,
+        output_dir=tmp_path,
+        artifacts=artifacts,
+        keep=2,
+        viewer="commandview",
+        topic="duplicate_scan",
+    )
+
+    expected_dir = tmp_path / "commandview" / "duplicate_scan" / "20240310-1845"
+    assert result.run_dir == expected_dir
+    assert result.slug == "20240310-1845"
+    assert result.viewer == "commandview"
+    assert result.topic == "duplicate_scan"
+
+    assert json.loads((expected_dir / "summary.json").read_text(encoding="utf-8")) == {"status": "ok"}
+    assert (expected_dir / "summary.md").read_text(encoding="utf-8") == "# Summary\n- status: ok\n"
+
+    # Latest pointers stay untouched when using hierarchical layout
+    assert not (tmp_path / "latest_summary.json").exists()
+    assert not (tmp_path / "latest_summary.md").exists()
+
+    # Ensure pruning only keeps the most recent runs under the topic directory
+    stale = tmp_path / "commandview" / "duplicate_scan" / "20240310-1745"
+    stale.mkdir(parents=True, exist_ok=True)
+
+    write_report_artifacts(
+        stem="duplicate_scan",
+        timestamp=datetime(2024, 3, 10, 19, 0, tzinfo=timezone.utc),
+        output_dir=tmp_path,
+        artifacts=artifacts,
+        keep=2,
+        viewer="commandview",
+        topic="duplicate_scan",
+    )
+
+    topic_dir = tmp_path / "commandview" / "duplicate_scan"
+    remaining = {node.name for node in topic_dir.iterdir() if node.is_dir()}
+    assert remaining == {"20240310-1845", "20240310-1900"}

@@ -14,7 +14,9 @@ from typing import Any, Iterable, Sequence
 
 import yaml
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_gap_reports")
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
+VIEWER_SLUG = "commandview"
+TOPIC_SLUG = "standards_index_gaps"
 DEFAULT_INDEX_PATH = Path(
     ".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml"
 )
@@ -413,12 +415,11 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     }
 
     artifacts = [
-        ReportArtifact(filename="report.json", pointer="latest_report.json", kind="json", content=report),
-        ReportArtifact(filename="report.md", pointer="latest_report.md", kind="text", content=markdown_payload),
-        ReportArtifact(filename="candidates.tsv", pointer="latest_candidates.tsv", kind="text", content=tsv_payload),
+        ReportArtifact(filename="report.json", kind="json", content=report),
+        ReportArtifact(filename="report.md", kind="text", content=markdown_payload),
+        ReportArtifact(filename="candidates.tsv", kind="text", content=tsv_payload),
         ReportArtifact(
             filename="bundle_summary.json",
-            pointer="latest_bundle_summary.json",
             kind="json",
             content=bundle_summary,
         ),
@@ -430,6 +431,8 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         output_dir=paths.output_dir,
         artifacts=artifacts,
         keep=options.artifacts_to_keep,
+        viewer=VIEWER_SLUG,
+        topic=TOPIC_SLUG,
     )
 
     emit_runtime_log(logger, report, max_show=options.max_show)

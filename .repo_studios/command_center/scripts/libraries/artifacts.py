@@ -86,6 +86,8 @@ class WriteReportArtifactsResult:
     run_dir: Path
     slug: str
     artifacts: dict[str, Path]
+    viewer: str | None = None
+    topic: str | None = None
 
 
 def _normalize_timestamp(moment: datetime) -> datetime:
@@ -108,6 +110,20 @@ def _prune_old_runs(output_dir: Path, *, stem: str, keep: int, current_run: Path
         shutil.rmtree(node, ignore_errors=True)
 
 
+def _prune_topic_runs(topic_dir: Path, *, keep: int) -> None:
+    keep = max(keep, 1)
+    if not topic_dir.exists():
+        return
+    candidates = [node for node in topic_dir.iterdir() if node.is_dir()]
+    candidates.sort(key=lambda node: node.name, reverse=True)
+    for index, node in enumerate(candidates):
+        if index < keep:
+            continue
+        if (node / ".keep").exists():
+            continue
+        shutil.rmtree(node, ignore_errors=True)
+
+
 def write_report_artifacts(
     *,
     stem: str,
@@ -115,8 +131,10 @@ def write_report_artifacts(
     output_dir: Path,
     artifacts: Iterable[ReportArtifact],
     keep: int,
+    viewer: str | None = None,
+    topic: str | None = None,
 ) -> WriteReportArtifactsResult:
-    """Write report artifacts and mirror latest pointers.
+    """Write report artifacts using timestamped run directories.
 
     Parameters
     ----------
@@ -125,26 +143,46 @@ def write_report_artifacts(
     timestamp:
         Timestamp associated with the run; naive values assume UTC.
     output_dir:
-        Directory that will contain the timestamped run folder and latest pointers.
+        Directory that will contain the timestamped run folder or hierarchical tree.
     artifacts:
         Iterable of :class:`ReportArtifact` descriptors describing files to write.
     keep:
         Number of historical runs to retain (minimum of one).
+    viewer:
+        Optional viewer slug enabling the ``viewer/topic/timestamp`` layout.
+    topic:
+        Optional topic slug enabling the ``viewer/topic/timestamp`` layout.
     """
 
     normalized = _normalize_timestamp(timestamp)
-    slug = normalized.strftime("%Y%m%d_%H%M%S")
-    output_dir.mkdir(parents=True, exist_ok=True)
-    run_dir = output_dir / f"{stem}-{slug}"
-    run_dir.mkdir(parents=True, exist_ok=True)
+
+    use_hierarchical_layout = viewer is not None and topic is not None
+
+    if use_hierarchical_layout:
+        slug = normalized.strftime("%Y%m%d-%H%M")
+        run_dir = output_dir / viewer / topic / slug
+        run_dir.mkdir(parents=True, exist_ok=True)
+        _prune_topic_runs(run_dir.parent, keep=keep)
+    else:
+        slug = normalized.strftime("%Y%m%d_%H%M%S")
+        output_dir.mkdir(parents=True, exist_ok=True)
+        run_dir = output_dir / f"{stem}-{slug}"
+        run_dir.mkdir(parents=True, exist_ok=True)
 
     written: dict[str, Path] = {}
     for descriptor in artifacts:
         path = descriptor.materialize(run_dir)
         written[descriptor.filename] = path
-        if descriptor.pointer:
+        if descriptor.pointer and not use_hierarchical_layout:
             copy_latest_artifact(path, output_dir / descriptor.pointer)
 
-    _prune_old_runs(output_dir, stem=stem, keep=keep, current_run=run_dir)
+    if not use_hierarchical_layout:
+        _prune_old_runs(output_dir, stem=stem, keep=keep, current_run=run_dir)
 
-    return WriteReportArtifactsResult(run_dir=run_dir, slug=slug, artifacts=written)
+    return WriteReportArtifactsResult(
+        run_dir=run_dir,
+        slug=slug,
+        artifacts=written,
+        viewer=viewer,
+        topic=topic,
+    )

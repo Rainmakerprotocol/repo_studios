@@ -44,11 +44,12 @@ except ModuleNotFoundError:  # pragma: no cover - CLI fallback for script execut
         write_report_artifacts,
     )
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports/automation_metrics")
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
+VIEWER_SLUG = "commandview"
+TOPIC_SLUG = "automation_metrics"
 DEFAULT_KEEP = 3
 RUN_STEM = "metrics_summary"
 SUMMARY_FILENAME = "metrics_summary.json"
-LATEST_POINTER = "latest_metrics_summary.json"
 DEFAULT_SCHEMA_VERSION = "1.0"
 
 
@@ -235,7 +236,6 @@ def run(argv: Sequence[str] | None = None) -> int:
     artifacts = [
         ReportArtifact(
             filename=SUMMARY_FILENAME,
-            pointer=LATEST_POINTER,
             writer=_write_summary,
         )
     ]
@@ -246,6 +246,8 @@ def run(argv: Sequence[str] | None = None) -> int:
         output_dir=paths.output_dir,
         artifacts=artifacts,
         keep=options.artifacts_to_keep,
+        viewer=VIEWER_SLUG,
+        topic=TOPIC_SLUG,
     )
 
     logging.info("Metrics summary written to %s", result.artifacts[SUMMARY_FILENAME])

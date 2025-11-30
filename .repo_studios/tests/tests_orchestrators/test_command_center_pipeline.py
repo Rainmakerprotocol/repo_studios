@@ -64,8 +64,14 @@ TARGET_DIR = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 
 def _duplicate_run_dir(repo_root: Path, target: Path) -> Path:
-    slug = slugify_relative(target.relative_to(repo_root))
-    return repo_root / ".repo_studios" / "command_center" / "reports" / "duplicates_scan" / f"{slug}_duplicate_scan"
+    return (
+        repo_root
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / AGGREGATOR_MODULE.VIEWER_SLUG
+        / AGGREGATOR_MODULE.TOPIC_SLUG
+    )
 
 
 def test_pipeline_smoke_updates_artifacts() -> None:
@@ -76,18 +82,24 @@ def test_pipeline_smoke_updates_artifacts() -> None:
     exit_code = orchestrator_run_fn(["--repo-root", str(repo_root), "--log-level", "INFO", str(target)])
     assert exit_code == 0
 
-    run_dir = _duplicate_run_dir(repo_root, target)
-    assert run_dir.exists(), "Expected duplicate scan output directory to exist."
-    matrix_pattern = f"{target.name}_duplicate_matrix-*.json"
-    matrix_files = list(run_dir.glob(matrix_pattern))
-    assert matrix_files, "Expected duplicate matrix artifacts after pipeline run."
-    assert len(matrix_files) == 1
-    assert matrix_files[0].stat().st_mtime >= start_time
+    viewer_base = _duplicate_run_dir(repo_root, target)
+    assert viewer_base.exists(), "Expected duplicate scan viewer directory to exist."
+    run_dirs = sorted(node for node in viewer_base.iterdir() if node.is_dir())
+    assert run_dirs, "Expected at least one duplicate scan run directory."
+    latest_run = run_dirs[-1]
+    matrix_path = latest_run / f"{target.name}_duplicate_matrix.json"
+    summary_path = latest_run / f"{target.name}_duplicate_summary.md"
+    assert matrix_path.exists(), "Expected duplicate matrix artifact after pipeline run."
+    assert summary_path.exists(), "Expected duplicate summary artifact after pipeline run."
+    assert matrix_path.stat().st_mtime >= start_time
 
     inventory_dir = target / f"{target.name}_index"
     inventory_files = list(inventory_dir.glob(f"{target.name}_commandview_[0-9]*.json"))
     assert inventory_files, "Expected inventory artifacts after pipeline run."
     assert any(path.stat().st_mtime >= start_time for path in inventory_files)
+    index_matrices = list(inventory_dir.glob(f"{target.name}_duplicate_matrix-*.json"))
+    assert index_matrices, "Expected duplicate index artifacts after pipeline run."
+    assert any(path.stat().st_mtime >= start_time for path in index_matrices)
 
 
 def test_pipeline_failure_propagates_exit_code() -> None:
@@ -105,5 +117,6 @@ def test_pipeline_allows_repo_root_prefixed_target() -> None:
     target = "/.repo_studios/command_center/scripts"
     exit_code = orchestrator_run_fn(["--repo-root", str(repo_root), target])
     assert exit_code == 0
-    run_dir = _duplicate_run_dir(repo_root, TARGET_DIR)
-    assert list(run_dir.glob("scripts_duplicate_matrix-*.json"))
+    viewer_base = _duplicate_run_dir(repo_root, TARGET_DIR)
+    run_dirs = sorted(node for node in viewer_base.iterdir() if node.is_dir())
+    assert run_dirs

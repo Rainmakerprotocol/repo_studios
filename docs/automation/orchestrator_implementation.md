@@ -187,6 +187,8 @@ roadmap.
   - [ ] Implement `build_topic_pipeline`, `summarizer_runner`, `telemetry_emitters`, and
     `catalog_registry` helpers with unit tests.
   - [ ] Ensure helpers honour ASCII naming, repo logging configuration, and pruning semantics.
+  - [ ] Deliver `reports_naming_audit` utility under `.repo_studios/command_center/scripts/utilities/`
+    with `run(argv)` shim and JSON/Markdown outputs for orchestrator consumption.
   - [ ] Document helper usage patterns inside `.repo_studios/command_center/docs/`.
   - [ ] Provide migration notes demonstrating how existing orchestrators would call the helpers if
     they were rewritten today, helping reviewers validate parity.
@@ -218,6 +220,8 @@ roadmap.
     logging guidance for local runs.
   - [ ] Introduce telemetry counters for runtime and artifact sizing to inform future
     parallelisation decisions and support Healthview dashboard instrumentation.
+  - [ ] Invoke the naming-audit utility inside documentation/reporting orchestrators to block
+    non-compliant artifacts.
 - [ ] Phase 6 – Documentation and Adoption
   - [ ] Update `.repo_studios/scripts/script_inventory_architecture.md` and automation guides with
     new orchestrators and helper references.
@@ -238,6 +242,94 @@ roadmap.
     verified, recording the change in the decision log.
   - [ ] Delete or archive obsolete artifacts under previous report folders, ensuring Healthview
     becomes the canonical destination.
+
+## Healthview Viewer Wiring Reference
+
+Capture the manifest payload now so wiring the Healthview tab is a data-mapping exercise later. The
+viewer selector mirrors CommandView’s `selector.json` format with topic-specific slugs and bundle
+paths:
+
+```python
+healthview_selector_stub = {
+  "generated_at": "<iso8601 timestamp>",
+  "entries": [
+    {
+      "slug": "healthview",
+      "options": [
+        {
+          "slug": "test-execution-telemetry",
+          "category": "healthview",
+          "label": "Test Execution Telemetry (2025-11-29 21:02 UTC)",
+          "relative_path": "healthview/test_execution_telemetry/healthview_test_execution_telemetry_20251129-2102.json",
+          "absolute_path": "C:/Users/genet/repo_studios/.repo_studios/command_center/reports/healthview/test_execution_telemetry/healthview_test_execution_telemetry_20251129-2102.json",
+          "target_path": "C:/Users/genet/repo_studios/.repo_studios/command_center/reports/healthview/test_execution_telemetry",
+          "target_repo_relative": ".repo_studios/command_center/reports/healthview/test_execution_telemetry",
+          "timestamp": "20251129-2102",
+          "timestamp_iso": "2025-11-29T21:02:00+00:00"
+        }
+      ]
+    }
+  ]
+}
+```
+
+Populate one `options` entry per topic bundle (Fault Diagnostics, Docs Health, and so on) once the
+Healthview artifacts land. Retaining `category`, `slug`, and dual absolute/relative paths keeps the
+viewer dropdown logic compatible with existing CommandView plumbing.
+
+## Report Naming Standard Initiative
+
+The naming convention below is now **approved** (see `REPORT_NAMING_STANDARDS.md`) and should guide
+all future artifact emissions under `.repo_studios/command_center/reports/`. Legacy bundles remain
+grandfathered until migration tasks execute, but new outputs must comply immediately.
+
+- [ ] **Audit** – author a reporting script that scans `/reports/` (CommandView, Healthview
+  previews, legacy bundles) and emits a variance matrix covering slug position, timestamp stem, and
+  artifact suffixes per topic.
+- [ ] **Convention Adoption** – update helpers and orchestrators so fresh Healthview and
+  CommandView-compatible bundles emit in the approved layout without `latest_*` aliases. *(2025-11-29:
+  automation manifest and metrics summary producers now emit under `commandview/<topic>/<timestamp>`;
+  tests `test_generate_automation_manifest.py` and `test_generate_metrics_summary.py` updated and
+  passing. Duplicate scan aggregator and function analysis summarizer now mirror artifacts to
+  `commandview/duplicate_scan/<ts>/` and `commandview/function_analysis/<ts>/` with
+  `test_scan_duplicates.py`, `test_generate_function_analysis.py`, and the orchestrator smoke suite
+  all green after rerun.)*
+- [ ] **Legacy Migration Plan** – identify high-traffic legacy directories that need shims or
+  redirects, staging renames after Phase 4 when new artifacts are live but before Phase 8 cleanup.
+- [ ] **Compliance Report** – bolt the audit script into Phase 5 validation so nightly runs flag
+  non-conforming artifacts until the migration is complete.
+
+### Proposed schema sketch
+
+| Component | Description | Example |
+| --- | --- | --- |
+| `<root>` | Physical root on disk | `C:/Users/genet/repo_studios/.repo_studios/command_center/reports` |
+| `<viewer_slug>` | Primary tab identifier (`commandview`, `healthview`, `jarvis`) | `healthview` |
+| `<topic>` | Topic or orchestrator slug using kebab-case | `test_execution_telemetry` |
+| `<timestamp>` | UTC stamp `YYYYMMDD-HHMM` matching bundle contents | `20251129-2102` |
+| `<artifact_role>` | Describes payload type (`manifest`, `summary`, `matrix`, `telemetry`) | `manifest` |
+| `<ext>` | File extension aligned with content type | `json` |
+
+Example manifest path: `.../healthview/test_execution_telemetry/20251129-2102/manifest.json`
+
+### Audit automation expectations
+
+- List every artifact under `/reports/`, decomposing the current path into the schema components.
+- Highlight deviations (missing slug, inconsistent timestamp format, unexpected suffix) in both
+  stdout and a machine-consumable JSON report to feed future CI checks.
+- Provide roll-up metrics (per topic compliance ratios, top offenders) to inform migration order.
+- Offer a `--dry-run-rename` option that prints the proposed new path without mutating files.
+- Flag `latest_*` shortcuts so they can be removed; instead point consumers at the newest
+  timestamped bundle using the standard hierarchy.
+
+### Integration checkpoints
+
+- Gate helper updates in Phase 2 after prototype naming schema is ratified so new topics never emit
+  non-compliant paths.
+- Schedule the legacy rename window between Phase 4 (artifacts live) and Phase 6 (documentation
+  refresh) to ensure docs capture final locations.
+- Fold compliance reporting into Phase 7 validation, marking the project complete only after the
+  nightly audit reports zero variances for CommandView and Healthview.
   - [ ] Update make targets, CI jobs, and agent scripts to drop references to retired entry points
     and confirm the CommandView index reflects the new orchestrator set only.
 

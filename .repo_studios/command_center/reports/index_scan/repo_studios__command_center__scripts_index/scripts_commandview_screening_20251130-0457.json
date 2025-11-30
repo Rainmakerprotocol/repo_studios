@@ -571,11 +571,11 @@
       ],
       [
         "scripts.aggregators.scan_duplicates::FunctionInfo.to_occurrence",
-        "line.strip"
+        "max"
       ],
       [
         "scripts.aggregators.scan_duplicates::FunctionInfo.to_occurrence",
-        "max"
+        "self.body_lines[0].strip"
       ],
       [
         "scripts.aggregators.scan_duplicates::_ast_node_similarity",
@@ -624,22 +624,6 @@
       [
         "scripts.aggregators.scan_duplicates::_ast_node_similarity",
         "zip"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::_atomic_write_bytes",
-        "destination.parent.mkdir"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::_atomic_write_bytes",
-        "destination.with_suffix"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::_atomic_write_bytes",
-        "temp_path.replace"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::_atomic_write_bytes",
-        "temp_path.write_bytes"
       ],
       [
         "scripts.aggregators.scan_duplicates::_average_pairwise_similarity",
@@ -818,26 +802,6 @@
         "spec.loader.exec_module"
       ],
       [
-        "scripts.aggregators.scan_duplicates::_load_slugify",
-        "Path"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::_load_slugify",
-        "Path(__file__).resolve"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::_load_slugify",
-        "importlib.import_module"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::_load_slugify",
-        "str"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::_load_slugify",
-        "sys.path.insert"
-      ],
-      [
         "scripts.aggregators.scan_duplicates::_load_source_line",
         "(repo_root / path).resolve"
       ],
@@ -900,6 +864,34 @@
       [
         "scripts.aggregators.scan_duplicates::_pairwise",
         "range"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_prune_index_artifacts",
+        "max"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_prune_index_artifacts",
+        "paths.target_index_dir.glob"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_prune_index_artifacts",
+        "sorted"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_prune_index_artifacts",
+        "stale.stem.replace"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_prune_index_artifacts",
+        "stale.unlink"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_prune_index_artifacts",
+        "summary_path.exists"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::_prune_index_artifacts",
+        "summary_path.unlink"
       ],
       [
         "scripts.aggregators.scan_duplicates::_resolve_script_path",
@@ -1038,24 +1030,20 @@
         "str(rel).replace"
       ],
       [
-        "scripts.aggregators.scan_duplicates::apply_retention",
-        "directory.glob"
+        "scripts.aggregators.scan_duplicates::_write_index_artifacts",
+        "json.dumps"
       ],
       [
-        "scripts.aggregators.scan_duplicates::apply_retention",
-        "item.stat"
+        "scripts.aggregators.scan_duplicates::_write_index_artifacts",
+        "matrix_path.write_text"
       ],
       [
-        "scripts.aggregators.scan_duplicates::apply_retention",
-        "prune"
+        "scripts.aggregators.scan_duplicates::_write_index_artifacts",
+        "paths.target_index_dir.mkdir"
       ],
       [
-        "scripts.aggregators.scan_duplicates::apply_retention",
-        "sorted"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::apply_retention",
-        "stale.unlink"
+        "scripts.aggregators.scan_duplicates::_write_index_artifacts",
+        "summary_path.write_text"
       ],
       [
         "scripts.aggregators.scan_duplicates::build_duplicate_groups",
@@ -1155,7 +1143,11 @@
       ],
       [
         "scripts.aggregators.scan_duplicates::build_paths",
-        "run_root.mkdir"
+        "getattr"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::build_paths",
+        "output_dir.mkdir"
       ],
       [
         "scripts.aggregators.scan_duplicates::build_paths",
@@ -1350,18 +1342,6 @@
         "set"
       ],
       [
-        "scripts.aggregators.scan_duplicates::initialise_run_paths",
-        "RunPaths"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::initialise_run_paths",
-        "output_dir.mkdir"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::initialise_run_paths",
-        "paths.target_index_dir.mkdir"
-      ],
-      [
         "scripts.aggregators.scan_duplicates::load_source_duplicates",
         "analysis_path.read_text"
       ],
@@ -1507,10 +1487,6 @@
       ],
       [
         "scripts.aggregators.scan_duplicates::run",
-        "apply_retention"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::run",
         "build_options"
       ],
       [
@@ -1528,10 +1504,6 @@
       [
         "scripts.aggregators.scan_duplicates::run",
         "generate_summary"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::run",
-        "initialise_run_paths"
       ],
       [
         "scripts.aggregators.scan_duplicates::run",
@@ -1575,10 +1547,6 @@
       ],
       [
         "scripts.aggregators.scan_duplicates::run",
-        "scripts.aggregators.scan_duplicates::apply_retention"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::run",
         "scripts.aggregators.scan_duplicates::build_options"
       ],
       [
@@ -1596,10 +1564,6 @@
       [
         "scripts.aggregators.scan_duplicates::run",
         "scripts.aggregators.scan_duplicates::generate_summary"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::run",
-        "scripts.aggregators.scan_duplicates::initialise_run_paths"
       ],
       [
         "scripts.aggregators.scan_duplicates::run",
@@ -1699,11 +1663,19 @@
       ],
       [
         "scripts.aggregators.scan_duplicates::write_outputs",
+        "ReportArtifact"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::write_outputs",
         "RunArtifacts"
       ],
       [
         "scripts.aggregators.scan_duplicates::write_outputs",
-        "_atomic_write_bytes"
+        "_prune_index_artifacts"
+      ],
+      [
+        "scripts.aggregators.scan_duplicates::write_outputs",
+        "_write_index_artifacts"
       ],
       [
         "scripts.aggregators.scan_duplicates::write_outputs",
@@ -1715,39 +1687,23 @@
       ],
       [
         "scripts.aggregators.scan_duplicates::write_outputs",
-        "json.dumps(payload, indent=2, sort_keys=True).encode"
+        "max"
       ],
       [
         "scripts.aggregators.scan_duplicates::write_outputs",
-        "matrix_paths.append"
+        "scripts.aggregators.scan_duplicates::_prune_index_artifacts"
       ],
       [
         "scripts.aggregators.scan_duplicates::write_outputs",
-        "now.strftime"
+        "scripts.aggregators.scan_duplicates::_write_index_artifacts"
       ],
       [
         "scripts.aggregators.scan_duplicates::write_outputs",
-        "root.glob"
+        "target.write_text"
       ],
       [
         "scripts.aggregators.scan_duplicates::write_outputs",
-        "scripts.aggregators.scan_duplicates::_atomic_write_bytes"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::write_outputs",
-        "stale.unlink"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::write_outputs",
-        "summary.encode"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::write_outputs",
-        "summary_paths.append"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates::write_outputs",
-        "tuple"
+        "write_report_artifacts"
       ],
       [
         "scripts.libraries.artifacts::ReportArtifact.materialize",
@@ -1870,6 +1826,38 @@
         "shutil.rmtree"
       ],
       [
+        "scripts.libraries.artifacts::_prune_topic_runs",
+        "(node / '.keep').exists"
+      ],
+      [
+        "scripts.libraries.artifacts::_prune_topic_runs",
+        "candidates.sort"
+      ],
+      [
+        "scripts.libraries.artifacts::_prune_topic_runs",
+        "enumerate"
+      ],
+      [
+        "scripts.libraries.artifacts::_prune_topic_runs",
+        "max"
+      ],
+      [
+        "scripts.libraries.artifacts::_prune_topic_runs",
+        "node.is_dir"
+      ],
+      [
+        "scripts.libraries.artifacts::_prune_topic_runs",
+        "shutil.rmtree"
+      ],
+      [
+        "scripts.libraries.artifacts::_prune_topic_runs",
+        "topic_dir.exists"
+      ],
+      [
+        "scripts.libraries.artifacts::_prune_topic_runs",
+        "topic_dir.iterdir"
+      ],
+      [
         "scripts.libraries.artifacts::copy_latest_artifact",
         "dest.exists"
       ],
@@ -1903,6 +1891,10 @@
       ],
       [
         "scripts.libraries.artifacts::write_report_artifacts",
+        "_prune_topic_runs"
+      ],
+      [
+        "scripts.libraries.artifacts::write_report_artifacts",
         "copy_latest_artifact"
       ],
       [
@@ -1928,6 +1920,10 @@
       [
         "scripts.libraries.artifacts::write_report_artifacts",
         "scripts.libraries.artifacts::_prune_old_runs"
+      ],
+      [
+        "scripts.libraries.artifacts::write_report_artifacts",
+        "scripts.libraries.artifacts::_prune_topic_runs"
       ],
       [
         "scripts.libraries.artifacts::write_report_artifacts",
@@ -2602,6 +2598,106 @@
         "parts.append"
       ],
       [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "(entry / '.keep').exists"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "PruneResult"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "_is_current"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "base_dir.exists"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "base_dir.iterdir"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "candidate.name.startswith"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "child.chmod"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "current_run.resolve"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "entry.chmod"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "entry.rglob"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "failures.append"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "filtered.append"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "filtered.sort"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "kept.append"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "len"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "logger.debug"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "logger.warning"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "max"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "node.is_dir"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "path.resolve"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "path.stat"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "protected.append"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "removed.append"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "shutil.rmtree"
+      ],
+      [
+        "scripts.libraries.prune_logs::prune_run_directories",
+        "skipped.append"
+      ],
+      [
         "scripts.orchestrators.run_automation_dry_run::_build_post_run_snapshot",
         "matrix_reference.as_posix"
       ],
@@ -3020,6 +3116,10 @@
       [
         "scripts.orchestrators.run_automation_dry_run::run",
         "configure_logging"
+      ],
+      [
+        "scripts.orchestrators.run_automation_dry_run::run",
+        "getattr"
       ],
       [
         "scripts.orchestrators.run_automation_dry_run::run",
@@ -7722,108 +7822,36 @@
         "scripts.producers.generate_commandview_inventory::_write_screening_copy"
       ],
       [
-        "scripts.summarizers.generate_function_analysis::_load_slugify",
-        "Path"
+        "scripts.summarizers.generate_function_analysis::_prune_index_artifacts",
+        "max"
       ],
       [
-        "scripts.summarizers.generate_function_analysis::_load_slugify",
-        "Path(__file__).resolve"
+        "scripts.summarizers.generate_function_analysis::_prune_index_artifacts",
+        "paths.target_index_dir.glob"
       ],
       [
-        "scripts.summarizers.generate_function_analysis::_load_slugify",
-        "importlib.import_module"
+        "scripts.summarizers.generate_function_analysis::_prune_index_artifacts",
+        "sorted"
       ],
       [
-        "scripts.summarizers.generate_function_analysis::_load_slugify",
-        "str"
+        "scripts.summarizers.generate_function_analysis::_prune_index_artifacts",
+        "stale.unlink"
       ],
       [
-        "scripts.summarizers.generate_function_analysis::_load_slugify",
-        "sys.path.insert"
+        "scripts.summarizers.generate_function_analysis::_write_index_artifact",
+        "destination.write_text"
       ],
       [
-        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
-        "directory.glob"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
-        "directory.mkdir"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
-        "existing.is_file"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
-        "existing.unlink"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
+        "scripts.summarizers.generate_function_analysis::_write_index_artifact",
         "json.dumps"
       ],
       [
-        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
-        "latest_pointer.exists"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
-        "latest_pointer.unlink"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
+        "scripts.summarizers.generate_function_analysis::_write_index_artifact",
         "legacy.exists"
       ],
       [
-        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
+        "scripts.summarizers.generate_function_analysis::_write_index_artifact",
         "legacy.unlink"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
-        "output_file.with_suffix"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
-        "temp_file.replace"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::_write_analysis_copy",
-        "temp_file.write_text"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::analysis_date",
-        "datetime.fromisoformat"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::analysis_date",
-        "datetime.fromisoformat(generated_at).strftime"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::analysis_date",
-        "datetime.now"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::analysis_date",
-        "datetime.now(timezone.utc).strftime"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::analysis_date",
-        "inventory_payload.get"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::analysis_date",
-        "inventory_payload.get('metadata', {}).get"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::analysis_date",
-        "len"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::analysis_date",
-        "parts[-1].isdigit"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::analysis_date",
-        "stem.split"
       ],
       [
         "scripts.summarizers.generate_function_analysis::build_findings",
@@ -7899,19 +7927,23 @@
       ],
       [
         "scripts.summarizers.generate_function_analysis::build_paths",
+        "output_dir.mkdir"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::build_paths",
+        "output_dir.relative_to"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::build_paths",
+        "output_dir.resolve"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::build_paths",
         "reports_candidate.is_absolute"
       ],
       [
         "scripts.summarizers.generate_function_analysis::build_paths",
-        "reports_root.mkdir"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::build_paths",
-        "reports_root.relative_to"
-      ],
-      [
-        "scripts.summarizers.generate_function_analysis::build_paths",
-        "reports_root.resolve"
+        "slugify_relative"
       ],
       [
         "scripts.summarizers.generate_function_analysis::build_paths",
@@ -7924,6 +7956,10 @@
       [
         "scripts.summarizers.generate_function_analysis::build_paths",
         "target_candidate.is_absolute"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::build_paths",
+        "target_index_dir.mkdir"
       ],
       [
         "scripts.summarizers.generate_function_analysis::collect_functions",
@@ -8215,23 +8251,383 @@
       ],
       [
         "scripts.summarizers.generate_function_analysis::write_analysis",
-        "_slugify_relative"
+        "ReportArtifact"
       ],
       [
         "scripts.summarizers.generate_function_analysis::write_analysis",
-        "_write_analysis_copy"
+        "RunArtifacts"
       ],
       [
         "scripts.summarizers.generate_function_analysis::write_analysis",
-        "analysis_date"
+        "_prune_index_artifacts"
       ],
       [
         "scripts.summarizers.generate_function_analysis::write_analysis",
-        "scripts.summarizers.generate_function_analysis::_write_analysis_copy"
+        "_write_index_artifact"
       ],
       [
         "scripts.summarizers.generate_function_analysis::write_analysis",
-        "scripts.summarizers.generate_function_analysis::analysis_date"
+        "datetime.now"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::write_analysis",
+        "json.dumps"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::write_analysis",
+        "max"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::write_analysis",
+        "scripts.summarizers.generate_function_analysis::_prune_index_artifacts"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::write_analysis",
+        "scripts.summarizers.generate_function_analysis::_write_index_artifact"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::write_analysis",
+        "target.write_text"
+      ],
+      [
+        "scripts.summarizers.generate_function_analysis::write_analysis",
+        "write_report_artifacts"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_default_output_dir",
+        "now.strftime"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_issues_for_path",
+        "_SLUG_PATTERN.match"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_issues_for_path",
+        "_TIMESTAMP_PATTERN.match"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_issues_for_path",
+        "any"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_issues_for_path",
+        "filename.lower"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_issues_for_path",
+        "filename.lower().startswith"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_issues_for_path",
+        "issues.append"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_issues_for_path",
+        "len"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_issues_for_path",
+        "part.lower"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_issues_for_path",
+        "part.startswith"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_parse_args",
+        "argparse.ArgumentParser"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_parse_args",
+        "parser.add_argument"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_parse_args",
+        "parser.parse_args"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_should_ignore",
+        "posix_path.startswith"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_should_ignore",
+        "prefix.rstrip"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_should_ignore",
+        "rel_path.as_posix"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_write_json",
+        "json.dumps"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_write_json",
+        "path.parent.mkdir"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_write_json",
+        "path.write_text"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_write_markdown",
+        "', '.join"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_write_markdown",
+        "'\\n'.join"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_write_markdown",
+        "issue_totals.items"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_write_markdown",
+        "lines.append"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_write_markdown",
+        "path.parent.mkdir"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_write_markdown",
+        "path.write_text"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_write_markdown",
+        "payload.get"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::_write_markdown",
+        "sorted"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "AuditEntry"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "_issues_for_path"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "_should_ignore"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "any"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "datetime.now"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "datetime.now(timezone.utc).isoformat"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "entries.append"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "entry.path.as_posix"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "float"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "issue_totals.get"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "latest_aliases.append"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "len"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "list"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "logging.warning"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "path.is_file"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "path.relative_to"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "rel_path.as_posix"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "reports_root.exists"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "reports_root.rglob"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "scripts.utilities.reports_naming_audit::_issues_for_path"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "scripts.utilities.reports_naming_audit::_should_ignore"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "set"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "sorted"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "str"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::audit_reports",
+        "violations.append"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::main",
+        "int"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::main",
+        "run"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::main",
+        "scripts.utilities.reports_naming_audit::run"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::main",
+        "summary.get"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "Path"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "Path(args.json_output).expanduser"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "Path(args.json_output).expanduser().resolve"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "Path(args.markdown_output).expanduser"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "Path(args.markdown_output).expanduser().resolve"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "Path(args.output_dir).expanduser"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "Path(args.output_dir).expanduser().resolve"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "Path(args.reports_root).expanduser"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "Path(args.reports_root).expanduser().resolve"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "_default_output_dir"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "_parse_args"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "_write_json"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "_write_markdown"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "args.log_level.upper"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "audit_reports"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "datetime.now"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "getattr"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "int"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "logging.basicConfig"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "logging.error"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "logging.info"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "max"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "scripts.utilities.reports_naming_audit::_default_output_dir"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "scripts.utilities.reports_naming_audit::_parse_args"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "scripts.utilities.reports_naming_audit::_write_json"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "scripts.utilities.reports_naming_audit::_write_markdown"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "scripts.utilities.reports_naming_audit::audit_reports"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit::run",
+        "summary.get"
       ]
     ],
     "cross_module_calls": [],
@@ -8394,10 +8790,6 @@
       ],
       [
         "scripts.aggregators.scan_duplicates",
-        "typing.Callable"
-      ],
-      [
-        "scripts.aggregators.scan_duplicates",
         "typing.Iterable"
       ],
       [
@@ -8547,6 +8939,14 @@
       [
         "scripts.libraries",
         "pathing.slugify_relative"
+      ],
+      [
+        "scripts.libraries",
+        "prune_logs.PruneResult"
+      ],
+      [
+        "scripts.libraries",
+        "prune_logs.prune_run_directories"
       ],
       [
         "scripts.libraries.artifacts",
@@ -8763,6 +9163,26 @@
       [
         "scripts.libraries.pathing",
         "pathlib.Path"
+      ],
+      [
+        "scripts.libraries.prune_logs",
+        "__future__.annotations"
+      ],
+      [
+        "scripts.libraries.prune_logs",
+        "dataclasses.dataclass"
+      ],
+      [
+        "scripts.libraries.prune_logs",
+        "logging"
+      ],
+      [
+        "scripts.libraries.prune_logs",
+        "pathlib.Path"
+      ],
+      [
+        "scripts.libraries.prune_logs",
+        "shutil"
       ],
       [
         "scripts.orchestrators.run_automation_dry_run",
@@ -9106,11 +9526,51 @@
       ],
       [
         "scripts.summarizers.generate_function_analysis",
-        "typing.Callable"
+        "typing.Iterable"
       ],
       [
-        "scripts.summarizers.generate_function_analysis",
+        "scripts.utilities.reports_naming_audit",
+        "__future__.annotations"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit",
+        "argparse"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit",
+        "dataclasses.dataclass"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit",
+        "datetime.datetime"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit",
+        "datetime.timezone"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit",
+        "json"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit",
+        "logging"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit",
+        "pathlib.Path"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit",
+        "re"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit",
         "typing.Iterable"
+      ],
+      [
+        "scripts.utilities.reports_naming_audit",
+        "typing.Sequence"
       ]
     ]
   },
@@ -9207,7 +9667,7 @@
         }
       },
       "scripts.aggregators.generate_automation_manifest::run": {
-        "hash": "3bebf1be0ef53c5ba067444b4762f8dc574e51caae64e835f2d60754b6876b1f",
+        "hash": "b0a85c1b564bb1a28805fe804d7f32ced9bcdd928e2d4a30883d4483d8794297",
         "io_effects": {
           "env": false,
           "network": false,
@@ -9270,7 +9730,7 @@
         }
       },
       "scripts.aggregators.generate_metrics_summary::run": {
-        "hash": "5154677f658e16e4c770d81c67499a841641bdf07e10139b7250dc5c933f7c06",
+        "hash": "8e689273179f8d47d590e84754aa792fe6a6540e5ddb44efc1c187d0beeddeb7",
         "io_effects": {
           "env": false,
           "network": false,
@@ -9324,7 +9784,7 @@
         }
       },
       "scripts.aggregators.scan_duplicates::FunctionInfo.to_occurrence": {
-        "hash": "7029f8f4f941f1e9c3cc8e7834960bd680f6a8569bc8af359502f5b7f393d3ec",
+        "hash": "72e662ff78ad48cc9ddc5454426f809a3c23462e01dd2dc8710ed72ac4d44367",
         "io_effects": {
           "env": false,
           "network": false,
@@ -9334,15 +9794,6 @@
       },
       "scripts.aggregators.scan_duplicates::_ast_node_similarity": {
         "hash": "168aed8e42588c66e190eb419182229b3890f1fa4c0d6b52d08e27c4988c723e",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "scripts.aggregators.scan_duplicates::_atomic_write_bytes": {
-        "hash": "f9cd67f5316b98c606ef77db83c2a9f409077307b3f0f660ef5ab8a4de7dcdcc",
         "io_effects": {
           "env": false,
           "network": false,
@@ -9413,15 +9864,6 @@
           "writes": false
         }
       },
-      "scripts.aggregators.scan_duplicates::_load_slugify": {
-        "hash": "10ab2d2622a64426d94b5f344fc1ac6ec0d214863c4a8c4815d8896382232fd9",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
       "scripts.aggregators.scan_duplicates::_load_source_line": {
         "hash": "ed47290af4cb4f9948a62edf55060fb00b155a4f25ad2ecdeecb20be55b695a0",
         "io_effects": {
@@ -9451,6 +9893,15 @@
       },
       "scripts.aggregators.scan_duplicates::_pairwise": {
         "hash": "e9c0e2624d8c3112aeba14ece278b9efe6817170fdab644f335bfabcbb7f63d9",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "scripts.aggregators.scan_duplicates::_prune_index_artifacts": {
+        "hash": "3c2e9b62a3bb15e6ef3648b3eee01880bb557b8d910186ab11f57b6dcacd8bcc",
         "io_effects": {
           "env": false,
           "network": false,
@@ -9512,8 +9963,8 @@
           "writes": false
         }
       },
-      "scripts.aggregators.scan_duplicates::apply_retention": {
-        "hash": "ab6622af092921ffc9bc52dc8f0142c0c6abdafe09b1bd23bb6ecc9361ed3faa",
+      "scripts.aggregators.scan_duplicates::_write_index_artifacts": {
+        "hash": "a91794171f743aaf95645d4bffafefd2e843f448eb8a673b593c2083d1b83a2f",
         "io_effects": {
           "env": false,
           "network": false,
@@ -9540,7 +9991,7 @@
         }
       },
       "scripts.aggregators.scan_duplicates::build_paths": {
-        "hash": "1646e3a1abab07ec267f7180b42909dedb76d60703907671077a5eba5a180179",
+        "hash": "59ded7b5314d893ae0b9d6176250d629e6d61b5401e65e3995554a00c8c080df",
         "io_effects": {
           "env": false,
           "network": false,
@@ -9602,15 +10053,6 @@
           "writes": false
         }
       },
-      "scripts.aggregators.scan_duplicates::initialise_run_paths": {
-        "hash": "b615617584c7fa5152e93db4fa055f6a6a6586d475ce66b9c5156c14579a2261",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
       "scripts.aggregators.scan_duplicates::load_source_duplicates": {
         "hash": "be6a110391fe247396b680b317e2b03bb40660c9915cb840b94b293f9b76ac81",
         "io_effects": {
@@ -9657,7 +10099,7 @@
         }
       },
       "scripts.aggregators.scan_duplicates::parse_args": {
-        "hash": "0176218636c40d96cf5ec6d76b6ccb5e817f8bea56783adb4bb47d85589701f3",
+        "hash": "ed0eb0bed03e0c15b35b62d42176bcd701f2e36636d2aa0fbb2178062d272d03",
         "io_effects": {
           "env": false,
           "network": false,
@@ -9666,7 +10108,7 @@
         }
       },
       "scripts.aggregators.scan_duplicates::run": {
-        "hash": "c96c09bde4d7c2d638cc4fb7e4fc821a31cf546b800e7adc6cd05aa1caa1b6c3",
+        "hash": "e4ed9eac9cbe1f738b8d93838bebe8b1617afb8bfc979cd8ee7128cdce353912",
         "io_effects": {
           "env": false,
           "network": false,
@@ -9693,7 +10135,7 @@
         }
       },
       "scripts.aggregators.scan_duplicates::write_outputs": {
-        "hash": "8c0b3feb30928c03437581e8f2cb2747607a1c5f70a895ef3be9be0fd5c05ac7",
+        "hash": "6e6a53a6bb5a51982dbb9f59781941a72f98e5b860a24df3a395a7cdcecb4212",
         "io_effects": {
           "env": false,
           "network": false,
@@ -9728,6 +10170,15 @@
           "writes": false
         }
       },
+      "scripts.libraries.artifacts::_prune_topic_runs": {
+        "hash": "2a612a1ee60ffc024fc9c59e893ae195efe5b874556a72f825aee0153e66a79f",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
       "scripts.libraries.artifacts::copy_latest_artifact": {
         "hash": "1afddc260c442579dc59d27f6ef06108e1725f2c563f9ad000328d6465490ea3",
         "io_effects": {
@@ -9738,7 +10189,7 @@
         }
       },
       "scripts.libraries.artifacts::write_report_artifacts": {
-        "hash": "37cb697af57049a1a3b03095a7add78d4f1baee6cbab3d9f451bb9fc304e91fd",
+        "hash": "24b9e60aca3bd19407d512274e98d028206d8d8aadf00558783dada60c4ff398",
         "io_effects": {
           "env": false,
           "network": false,
@@ -10061,6 +10512,15 @@
           "writes": false
         }
       },
+      "scripts.libraries.prune_logs::prune_run_directories": {
+        "hash": "606301aba3f44077d70637fbda1a142f42d026ea575bcfdae5ee2f3ebde33e2d",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
       "scripts.orchestrators.run_automation_dry_run::_build_post_run_snapshot": {
         "hash": "f4af65181ab7a47c2d39da18e415423cb22d510dadeb4002a6ed1b4a66f1d1a2",
         "io_effects": {
@@ -10143,7 +10603,7 @@
         }
       },
       "scripts.orchestrators.run_automation_dry_run::_slug_from_timestamp": {
-        "hash": "07b7ced7ac21fb6585516a51d03ee1ec5d28a92157303cbbe35566d3d78c730e",
+        "hash": "f2c962112f4d062eacecb207ae40d3ba9f229fb0e78ea5af28275639a125a0b5",
         "io_effects": {
           "env": false,
           "network": false,
@@ -10188,7 +10648,7 @@
         }
       },
       "scripts.orchestrators.run_automation_dry_run::build_paths": {
-        "hash": "3189fbcd956a81c06ca1c78c9ee766731a4280ee8ecb251fd81b8b7ddd3c8a26",
+        "hash": "b5fb602c6a854f8ad1ea503737a5c9e73f7320706e373ddd2b0f9d8bf40c5713",
         "io_effects": {
           "env": false,
           "network": false,
@@ -10224,7 +10684,7 @@
         }
       },
       "scripts.orchestrators.run_automation_dry_run::run": {
-        "hash": "61d02be4004d3d87afa6b7600d4a18afded7a78c12e9a184351235b93146bbc1",
+        "hash": "0ab2bc5f6c3b6b34db747675ad60a2a13ca874662a3b3d48be5906252f57b52d",
         "io_effects": {
           "env": false,
           "network": false,
@@ -10521,7 +10981,7 @@
         }
       },
       "scripts.producers.analyze_standards_index_gaps::run": {
-        "hash": "5286147211651ec0092568673c606a22c5de7a547126d89b7f47e07ed8673300",
+        "hash": "f73c77cb5d583204cafd63596a75c666722b126d1238ad085c89bef78ccb85ef",
         "io_effects": {
           "env": false,
           "network": false,
@@ -10701,7 +11161,7 @@
         }
       },
       "scripts.producers.audit_helper_adoption::run": {
-        "hash": "14f5faf509edf36c587e6c319603ff42078f3466b193e51dff8e857bcdb67ec2",
+        "hash": "af1ad0541e85a6e348f38ee4d674edf5d59fe3121d3c99b9ec9af9f0a3f4f5e3",
         "io_effects": {
           "env": false,
           "network": false,
@@ -11600,8 +12060,8 @@
           "writes": false
         }
       },
-      "scripts.summarizers.generate_function_analysis::_load_slugify": {
-        "hash": "10ab2d2622a64426d94b5f344fc1ac6ec0d214863c4a8c4815d8896382232fd9",
+      "scripts.summarizers.generate_function_analysis::_prune_index_artifacts": {
+        "hash": "a7f3f625cddb453fcb48d899631bcd1e9dfcc5a778a994103aeb06fbab995e87",
         "io_effects": {
           "env": false,
           "network": false,
@@ -11609,17 +12069,8 @@
           "writes": false
         }
       },
-      "scripts.summarizers.generate_function_analysis::_write_analysis_copy": {
-        "hash": "630d46f5f82eeebefbb19f847bbee2eb23bb747650943f8779341d74557bb4ab",
-        "io_effects": {
-          "env": false,
-          "network": false,
-          "reads": false,
-          "writes": false
-        }
-      },
-      "scripts.summarizers.generate_function_analysis::analysis_date": {
-        "hash": "a4d6d73f5febc435f81f297eea53f8bae422b7b44cc7d6cd3ba22632d1b00b71",
+      "scripts.summarizers.generate_function_analysis::_write_index_artifact": {
+        "hash": "12b7dd471253e39de365edc50ac3a6b64abb82bef2ddd676752fc79ee5aacf63",
         "io_effects": {
           "env": false,
           "network": false,
@@ -11646,7 +12097,7 @@
         }
       },
       "scripts.summarizers.generate_function_analysis::build_paths": {
-        "hash": "c4b7739b630176403c5d8faa0b7c08d5b2f3834ff672f1c8312abf3256f39884",
+        "hash": "ba84c3365efb64ad5beb5051d4174b85d9d42aa6cae53b30632c3847e97e69c0",
         "io_effects": {
           "env": false,
           "network": false,
@@ -11691,7 +12142,7 @@
         }
       },
       "scripts.summarizers.generate_function_analysis::locate_inventory_file": {
-        "hash": "379cb18a39375813e0cd0f1cfa1c5e761856aef8f2dd1ff75f47da5dad79322c",
+        "hash": "07e16d81a51220cdc7b741e978e119ad9b8a0cb891d7e6edf0da25c9b6d48e04",
         "io_effects": {
           "env": false,
           "network": false,
@@ -11709,7 +12160,7 @@
         }
       },
       "scripts.summarizers.generate_function_analysis::parse_args": {
-        "hash": "ba325615330a97e3d2be283551ef154a8da82d35090eb77517abfce810a1fd84",
+        "hash": "6b256cf1de1e061c89873b74dc36c5e73c4f71af6bb0c7cd6913be77c8ec9dfb",
         "io_effects": {
           "env": false,
           "network": false,
@@ -11727,7 +12178,7 @@
         }
       },
       "scripts.summarizers.generate_function_analysis::run": {
-        "hash": "cb29e0435112f9b54376393d8e7ba14371bcf334bebe3d10711e2f1b6db0473c",
+        "hash": "cff3ce7dff45c17d81c65527638ffb78ef3705fc7ef7dfd7171a9633508719bf",
         "io_effects": {
           "env": false,
           "network": false,
@@ -11745,7 +12196,97 @@
         }
       },
       "scripts.summarizers.generate_function_analysis::write_analysis": {
-        "hash": "c911e3c8c3db474579308d76927ba1bf51d7bc159dc54029a48be0f59373575f",
+        "hash": "11a4b58c136f5455bf52b8c2fb94657025b6e3291bdf4298c26be301e4835038",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "scripts.utilities.reports_naming_audit::AuditEntry.is_compliant": {
+        "hash": "f2b8548d98247c4ace75e8905442852230184fc84e65b030e44862e43fd9bf43",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "scripts.utilities.reports_naming_audit::_default_output_dir": {
+        "hash": "31928bf7992351138d019abd7b859017845e4003940e64566b52b905e00ea46c",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "scripts.utilities.reports_naming_audit::_issues_for_path": {
+        "hash": "a8fd323d730c19953692fbb508a4429a96229e212b3069b973885de80d8bbf0b",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "scripts.utilities.reports_naming_audit::_parse_args": {
+        "hash": "2bd0e041111b0b6e817c824d2dd3b6a094cb3ecbfa5d01a4f2d7df968ca27ef8",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "scripts.utilities.reports_naming_audit::_should_ignore": {
+        "hash": "75ae0fbecf15c9ae9a4bae8da1d5ebbcd1e0327d42126d2511a16e5a8977c770",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "scripts.utilities.reports_naming_audit::_write_json": {
+        "hash": "fc54a2d765da4791298d6e141e4436fde8a64c699be6514684e0baba86c7bede",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "scripts.utilities.reports_naming_audit::_write_markdown": {
+        "hash": "ca6533a1ce76e060e0cb05cb32191b3144fbfe16ee63cbc26101c971ee477051",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "scripts.utilities.reports_naming_audit::audit_reports": {
+        "hash": "6609cdade32099171e9ce001d9b2663c907390f5398cdb1ec63abe7eaa5f7d21",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "scripts.utilities.reports_naming_audit::main": {
+        "hash": "755c7447563459f916486ea4146f502f76f5d7fa86538370d676025c77f949bb",
+        "io_effects": {
+          "env": false,
+          "network": false,
+          "reads": false,
+          "writes": false
+        }
+      },
+      "scripts.utilities.reports_naming_audit::run": {
+        "hash": "145678b4bf64300b6775c81f7b4898e924d357d323be81a57f3b55193cf2df9c",
         "io_effects": {
           "env": false,
           "network": false,
@@ -12435,17 +12976,153 @@
         "total_packs": 1
       },
       "timestamp": "2025-11-27T17:57:02.354602+00:00"
+    },
+    {
+      "context": {
+        "folder_name": "scripts",
+        "inventory_generated_at": "2025-11-30T04:56:16.004935+00:00",
+        "inventory_schema_version": 2
+      },
+      "packs": [
+        {
+          "coverage_ratio": 0.046357615894039736,
+          "description": "Percentage of functions and methods that include a docstring.",
+          "id": "docstring_coverage",
+          "label": "Docstring Coverage",
+          "metrics": {
+            "docstrings_with_parameters_section": 0,
+            "docstrings_with_returns_section": 0,
+            "functions_documented": 14,
+            "functions_missing": 288,
+            "functions_total": 302,
+            "missing_parameter_mentions": 539
+          },
+          "score": 4.64,
+          "severity": "critical",
+          "thresholds": {
+            "failure": 60.0,
+            "warning": 80.0
+          },
+          "unit": "percent"
+        }
+      ],
+      "summary": {
+        "total_packs": 1
+      },
+      "timestamp": "2025-11-30T04:56:16.013870+00:00"
+    },
+    {
+      "context": {
+        "folder_name": "scripts",
+        "inventory_generated_at": "2025-11-30T04:56:22.052523+00:00",
+        "inventory_schema_version": 2
+      },
+      "packs": [
+        {
+          "coverage_ratio": 0.046357615894039736,
+          "description": "Percentage of functions and methods that include a docstring.",
+          "id": "docstring_coverage",
+          "label": "Docstring Coverage",
+          "metrics": {
+            "docstrings_with_parameters_section": 0,
+            "docstrings_with_returns_section": 0,
+            "functions_documented": 14,
+            "functions_missing": 288,
+            "functions_total": 302,
+            "missing_parameter_mentions": 539
+          },
+          "score": 4.64,
+          "severity": "critical",
+          "thresholds": {
+            "failure": 60.0,
+            "warning": 80.0
+          },
+          "unit": "percent"
+        }
+      ],
+      "summary": {
+        "total_packs": 1
+      },
+      "timestamp": "2025-11-30T04:56:22.061147+00:00"
+    },
+    {
+      "context": {
+        "folder_name": "scripts",
+        "inventory_generated_at": "2025-11-30T04:57:24.882515+00:00",
+        "inventory_schema_version": 2
+      },
+      "packs": [
+        {
+          "coverage_ratio": 0.046357615894039736,
+          "description": "Percentage of functions and methods that include a docstring.",
+          "id": "docstring_coverage",
+          "label": "Docstring Coverage",
+          "metrics": {
+            "docstrings_with_parameters_section": 0,
+            "docstrings_with_returns_section": 0,
+            "functions_documented": 14,
+            "functions_missing": 288,
+            "functions_total": 302,
+            "missing_parameter_mentions": 539
+          },
+          "score": 4.64,
+          "severity": "critical",
+          "thresholds": {
+            "failure": 60.0,
+            "warning": 80.0
+          },
+          "unit": "percent"
+        }
+      ],
+      "summary": {
+        "total_packs": 1
+      },
+      "timestamp": "2025-11-30T04:57:24.891259+00:00"
+    },
+    {
+      "context": {
+        "folder_name": "scripts",
+        "inventory_generated_at": "2025-11-30T04:57:30.834980+00:00",
+        "inventory_schema_version": 2
+      },
+      "packs": [
+        {
+          "coverage_ratio": 0.046357615894039736,
+          "description": "Percentage of functions and methods that include a docstring.",
+          "id": "docstring_coverage",
+          "label": "Docstring Coverage",
+          "metrics": {
+            "docstrings_with_parameters_section": 0,
+            "docstrings_with_returns_section": 0,
+            "functions_documented": 14,
+            "functions_missing": 288,
+            "functions_total": 302,
+            "missing_parameter_mentions": 539
+          },
+          "score": 4.64,
+          "severity": "critical",
+          "thresholds": {
+            "failure": 60.0,
+            "warning": 80.0
+          },
+          "unit": "percent"
+        }
+      ],
+      "summary": {
+        "total_packs": 1
+      },
+      "timestamp": "2025-11-30T04:57:30.843167+00:00"
     }
   ],
   "score_latest": {
     "context": {
       "folder_name": "scripts",
-      "inventory_generated_at": "2025-11-27T17:57:02.347028+00:00",
+      "inventory_generated_at": "2025-11-30T04:57:30.834980+00:00",
       "inventory_schema_version": 2
     },
     "packs": [
       {
-        "coverage_ratio": 0.04778156996587031,
+        "coverage_ratio": 0.046357615894039736,
         "description": "Percentage of functions and methods that include a docstring.",
         "id": "docstring_coverage",
         "label": "Docstring Coverage",
@@ -12453,11 +13130,11 @@
           "docstrings_with_parameters_section": 0,
           "docstrings_with_returns_section": 0,
           "functions_documented": 14,
-          "functions_missing": 279,
-          "functions_total": 293,
-          "missing_parameter_mentions": 519
+          "functions_missing": 288,
+          "functions_total": 302,
+          "missing_parameter_mentions": 539
         },
-        "score": 4.78,
+        "score": 4.64,
         "severity": "critical",
         "thresholds": {
           "failure": 60.0,
@@ -12469,17 +13146,17 @@
     "summary": {
       "total_packs": 1
     },
-    "timestamp": "2025-11-27T17:57:02.354602+00:00"
+    "timestamp": "2025-11-30T04:57:30.843167+00:00"
   },
   "score_snapshot": {
     "context": {
       "folder_name": "scripts",
-      "inventory_generated_at": "2025-11-27T17:57:02.347028+00:00",
+      "inventory_generated_at": "2025-11-30T04:57:30.834980+00:00",
       "inventory_schema_version": 2
     },
     "packs": [
       {
-        "coverage_ratio": 0.04778156996587031,
+        "coverage_ratio": 0.046357615894039736,
         "description": "Percentage of functions and methods that include a docstring.",
         "id": "docstring_coverage",
         "label": "Docstring Coverage",
@@ -12487,11 +13164,11 @@
           "docstrings_with_parameters_section": 0,
           "docstrings_with_returns_section": 0,
           "functions_documented": 14,
-          "functions_missing": 279,
-          "functions_total": 293,
-          "missing_parameter_mentions": 519
+          "functions_missing": 288,
+          "functions_total": 302,
+          "missing_parameter_mentions": 539
         },
-        "score": 4.78,
+        "score": 4.64,
         "severity": "critical",
         "thresholds": {
           "failure": 60.0,
@@ -12503,7 +13180,7 @@
     "summary": {
       "total_packs": 1
     },
-    "timestamp": "2025-11-27T17:57:02.354602+00:00"
+    "timestamp": "2025-11-30T04:57:30.843167+00:00"
   },
   "violations": {
     "cycles": false

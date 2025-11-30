@@ -106,14 +106,22 @@ def test_analysis_detects_duplicate_functions(tmp_path: Path) -> None:
     assert len(analysis_files) == 1
     analysis_file = analysis_files[0]
     analysis_payload = _load_json(analysis_file)
-    slug = slugify_relative(target.relative_to(repo_root))
-    mirror_dir = repo_root / ".repo_studios" / "command_center" / "reports" / "index_scan_analysis" / f"{slug}_analysis"
-    mirror_files = list(mirror_dir.glob("sample_pkg_analysis-*.json"))
-    assert len(mirror_files) == 1
-    mirror_payload = _load_json(mirror_files[0])
-    assert mirror_payload == analysis_payload
+    viewer_base = (
+        repo_root
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / ANALYSIS_MODULE.VIEWER_SLUG
+        / ANALYSIS_MODULE.TOPIC_SLUG
+    )
+    analysis_slug = analysis_file.stem.split("sample_pkg_analysis-")[1]
+    viewer_dir = viewer_base / analysis_slug
+    viewer_file = viewer_dir / "sample_pkg_analysis.json"
+    assert viewer_file.exists()
+    viewer_payload = _load_json(viewer_file)
+    assert viewer_payload == analysis_payload
     assert not (inventory_dir / "latest.json").exists()
-    assert not (mirror_dir / "latest.json").exists()
+    assert not list(viewer_base.glob("latest_*"))
 
     inv_generated_at = inventory_payload["metadata"]["generated_at"]
     analysis_metadata = analysis_payload["metadata"]
@@ -162,16 +170,21 @@ def test_analysis_replaces_existing_outputs(tmp_path: Path) -> None:
     assert run_inventory(["--repo-root", str(repo_root), str(target)]) == 0
 
     index_dir = target / "pkg_index"
-    slug = slugify_relative(target.relative_to(repo_root))
-    mirror_dir = repo_root / ".repo_studios" / "command_center" / "reports" / "index_scan_analysis" / f"{slug}_analysis"
+    viewer_base = (
+        repo_root
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / ANALYSIS_MODULE.VIEWER_SLUG
+        / ANALYSIS_MODULE.TOPIC_SLUG
+    )
     old_file = index_dir / "pkg_analysis-2000-01-01.json"
     _write(old_file, "{}")
     legacy_file = index_dir / "pkg_analysis.json"
     _write(legacy_file, "{}")
-    old_mirror = mirror_dir / "pkg_analysis-1999-12-31.json"
-    _write(old_mirror, "{}")
-    legacy_mirror = mirror_dir / "pkg_analysis.json"
-    _write(legacy_mirror, "{}")
+    old_viewer_dir = viewer_base / "19990101-0000"
+    old_viewer_dir.mkdir(parents=True, exist_ok=True)
+    _write(old_viewer_dir / "pkg_analysis.json", "{}")
 
     assert run_analysis(["--repo-root", str(repo_root), str(target)]) == 0
 
@@ -180,9 +193,9 @@ def test_analysis_replaces_existing_outputs(tmp_path: Path) -> None:
     analysis_file = analysis_files[0]
     assert analysis_file.name != old_file.name
     assert not legacy_file.exists()
-    mirror_files = list(mirror_dir.glob("pkg_analysis-*.json"))
-    assert len(mirror_files) == 1
-    mirror_file = mirror_files[0]
-    assert mirror_file.name != old_mirror.name
-    assert not legacy_mirror.exists()
-    assert not (mirror_dir / "latest.json").exists()
+    viewer_dirs = sorted(node for node in viewer_base.iterdir() if node.is_dir())
+    assert len(viewer_dirs) == 1
+    viewer_dir = viewer_dirs[0]
+    assert viewer_dir.name != "19990101-0000"
+    assert not (viewer_base / "latest.json").exists()
+    assert (viewer_dir / "pkg_analysis.json").exists()

@@ -68,7 +68,7 @@ def test_generate_automation_manifest_bundle(tmp_path: Path) -> None:
         encoding="utf-8",
     )
 
-    output_dir = tmp_path / "reports" / "automation_runs"
+    output_dir = tmp_path / "reports"
 
     exit_code = mod.main(
         [
@@ -110,7 +110,7 @@ def test_generate_automation_manifest_bundle(tmp_path: Path) -> None:
 
     assert exit_code == 0
 
-    run_dir = output_dir / f"{mod.RUN_STEM}-20251102_193000"
+    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20251102-1930"
     manifest_path = run_dir / mod.MANIFEST_FILENAME
     metrics_path = run_dir / mod.METRICS_FILENAME
     assert manifest_path.is_file()
@@ -126,12 +126,8 @@ def test_generate_automation_manifest_bundle(tmp_path: Path) -> None:
     assert guardrails["files_considered"] == 2
     assert guardrails["config_path"].endswith("automation_config.yaml")
 
-    manifest_pointer = output_dir / mod.MANIFEST_POINTER
-    metrics_pointer = output_dir / mod.METRICS_POINTER
-    assert manifest_pointer.is_file()
-    assert metrics_pointer.is_file()
-    assert manifest_pointer.read_text(encoding="utf-8") == manifest_path.read_text(encoding="utf-8")
-    assert metrics_pointer.read_text(encoding="utf-8") == metrics_path.read_text(encoding="utf-8")
+    assert not (output_dir / "latest_automation_manifest.json").exists()
+    assert not (output_dir / "latest_metrics_summary.json").exists()
 
 
 def test_manifest_files_changed_mismatch(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:

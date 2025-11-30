@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import ast
 import importlib
-import os
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from textwrap import dedent
 from typing import Callable
@@ -34,14 +34,14 @@ if str(MODULE_DIR) not in sys.path:
 from scan_duplicates import (  # type: ignore  # noqa: E402
     FunctionExtractor,
     FunctionInfo,
-    Options,
     Paths,
-    RunPaths,
+    RunArtifacts,
+    VIEWER_SLUG,
+    TOPIC_SLUG,
     compute_ast_similarity,
     group_duplicates,
     scan_python_files,
     write_outputs,
-    apply_retention,
     _extract_top_offenders,
     _slugify_relative,
 )
@@ -278,13 +278,13 @@ class TestFileScanning:
 
 
 class TestOutputMirroring:
-    def _build_paths(self, repo_root: Path, target: Path, run_root: Path) -> Paths:
+    def _build_paths(self, repo_root: Path, target: Path, reports_root: Path) -> Paths:
         slug = slugify_relative(target.relative_to(repo_root))
         index_dir = target / f"{target.name}_index"
         return Paths(
             repo_root=repo_root,
             target=target,
-            run_root=run_root,
+            output_dir=reports_root,
             target_slug=slug,
             source_name=target.name,
             target_index_dir=index_dir,
@@ -295,56 +295,69 @@ class TestOutputMirroring:
         repo_root.mkdir()
         target = repo_root / "src"
         target.mkdir()
-        run_root = repo_root / "reports"
-        paths = self._build_paths(repo_root, target, run_root)
-        run_paths = RunPaths(
-            output_dir=run_root / f"{paths.target_slug}_duplicate_scan",
-            index_dir=paths.target_index_dir,
-        )
+        reports_root = repo_root / "reports"
+        paths = self._build_paths(repo_root, target, reports_root)
         payload = {"metadata": {"target": "src"}, "stats": {}, "entries": []}
         summary = "# Summary\n"
+        timestamp = datetime(2025, 11, 29, 21, 2, tzinfo=timezone.utc)
 
-        artifacts = write_outputs(payload, summary, run_paths, paths)
+        artifacts = write_outputs(payload, summary, paths, timestamp=timestamp, keep=3)
 
-        for path in (*artifacts.matrix_paths, *artifacts.summary_paths):
+        assert isinstance(artifacts, RunArtifacts)
+
+        viewer_dir = reports_root / VIEWER_SLUG / TOPIC_SLUG / artifacts.slug
+        assert artifacts.viewer_matrix.parent == viewer_dir
+        assert artifacts.viewer_summary.parent == viewer_dir
+
+        for path in (
+            artifacts.viewer_matrix,
+            artifacts.viewer_summary,
+            artifacts.index_matrix,
+            artifacts.index_summary,
+        ):
             assert path.exists()
             assert path.read_text(encoding="utf-8")
 
-        mirror_matrix = artifacts.matrix_paths[0].read_text(encoding="utf-8")
-        index_matrix = artifacts.matrix_paths[-1].read_text(encoding="utf-8")
-        assert mirror_matrix == index_matrix
+        assert artifacts.viewer_matrix.read_text(encoding="utf-8") == artifacts.index_matrix.read_text(encoding="utf-8")
+        assert artifacts.viewer_summary.read_text(encoding="utf-8") == artifacts.index_summary.read_text(encoding="utf-8")
 
-        for root in (run_paths.output_dir, run_paths.index_dir):
-            matrices = list(root.glob(f"{paths.source_name}_duplicate_matrix-*.json"))
-            summaries = list(root.glob(f"{paths.source_name}_duplicate_summary-*.md"))
-            assert len(matrices) == 1
-            assert len(summaries) == 1
-            assert matrices[0].stem.count("-") == 4  # includes YYYY, MM, DD, HHMM parts
-            assert summaries[0].stem.count("-") == 4
+        assert artifacts.viewer_matrix.name == f"{paths.source_name}_duplicate_matrix.json"
+        assert artifacts.index_matrix.name == f"{paths.source_name}_duplicate_matrix-{artifacts.slug}.json"
+        assert artifacts.index_summary.name == f"{paths.source_name}_duplicate_summary-{artifacts.slug}.md"
 
-    def test_apply_retention_prunes_old_runs(self, tmp_path: Path) -> None:
+        matrices = list(paths.target_index_dir.glob(f"{paths.source_name}_duplicate_matrix-*.json"))
+        summaries = list(paths.target_index_dir.glob(f"{paths.source_name}_duplicate_summary-*.md"))
+        assert matrices == [artifacts.index_matrix]
+        assert summaries == [artifacts.index_summary]
+
+        latest_aliases = list((reports_root / VIEWER_SLUG / TOPIC_SLUG).glob("latest_*"))
+        assert not latest_aliases
+
+    def test_retention_prunes_old_runs(self, tmp_path: Path) -> None:
         repo_root = tmp_path / "repo"
         repo_root.mkdir()
         target = repo_root / "src"
         target.mkdir()
-        run_root = repo_root / "reports"
-        paths = self._build_paths(repo_root, target, run_root)
-        run_paths = RunPaths(
-            output_dir=run_root / f"{paths.target_slug}_duplicate_scan",
-            index_dir=paths.target_index_dir,
-        )
-        run_paths.output_dir.mkdir(parents=True, exist_ok=True)
+        reports_root = repo_root / "reports"
+        paths = self._build_paths(repo_root, target, reports_root)
+        payload = {"metadata": {"target": "src"}, "stats": {}, "entries": []}
+        summary = "# Summary\n"
+        timestamps: list[datetime] = []
         for offset in range(5):
-            matrix = run_paths.output_dir / f"{paths.source_name}_duplicate_matrix-2025-10-{20 + offset}.json"
-            summary = run_paths.output_dir / f"{paths.source_name}_duplicate_summary-2025-10-{20 + offset}.md"
-            matrix.write_text("{}", encoding="utf-8")
-            summary.write_text("# summary", encoding="utf-8")
-            timestamp = 1_000_000 + offset
-            os.utime(matrix, (timestamp, timestamp))
-            os.utime(summary, (timestamp, timestamp))
+            moment = datetime(2025, 10, 20 + offset, 12, offset, tzinfo=timezone.utc)
+            timestamps.append(moment)
+            write_outputs(payload, summary, paths, timestamp=moment, keep=2)
 
-        options = Options(keep_runs=2)
-        apply_retention(run_paths, paths, options)
+        matrices = sorted(paths.target_index_dir.glob(f"{paths.source_name}_duplicate_matrix-*.json"))
+        assert len(matrices) == 2
+        actual_slugs = sorted(
+            path.stem.split(f"{paths.source_name}_duplicate_matrix-")[1] for path in matrices
+        )
+        expected_slugs = sorted(moment.strftime("%Y%m%d-%H%M") for moment in timestamps[-2:])
+        assert actual_slugs == expected_slugs
 
-        remaining_matrices = sorted(run_paths.output_dir.glob(f"{paths.source_name}_duplicate_matrix-*.json"))
-        assert len(remaining_matrices) == options.keep_runs
+        topic_dir = reports_root / VIEWER_SLUG / TOPIC_SLUG
+        run_dirs = sorted(node for node in topic_dir.iterdir() if node.is_dir())
+        assert len(run_dirs) == 2
+        viewer_slugs = sorted(node.name for node in run_dirs)
+        assert viewer_slugs == expected_slugs

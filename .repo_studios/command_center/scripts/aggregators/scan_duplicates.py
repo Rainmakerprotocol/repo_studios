@@ -9,8 +9,8 @@ core responsibilities are:
 * Group exact and near-duplicate functions with similarity metrics.
 * Merge scanner results with the producers companion analysis so teams obtain a
   unified duplicate matrix for prioritisation.
-* Emit dual outputs (timestamped run folder + rolling ``latest`` copy) while
-  pruning historical runs to keep the repository tidy.
+* Emit artifacts in the viewer/topic/timestamp hierarchy while mirroring the
+    latest run into the producer index directory and pruning stale history.
 
 The CLI entry point follows the same "run/main" pattern used throughout Repo
 Studios scripts so that other tooling can shell out consistently.
@@ -30,71 +30,57 @@ from collections import Counter, OrderedDict, defaultdict
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, Iterable, Iterator, Sequence
+from typing import Any, Iterable, Iterator, Sequence
 
-
-def _load_slugify() -> Callable[[Path], str]:
-    try:
-        module = importlib.import_module("libraries")
-    except ModuleNotFoundError:  # pragma: no cover - CLI fallback
-        script_dir = Path(__file__).resolve().parent
-        scripts_root = script_dir.parent
-        if str(scripts_root) not in sys.path:
-            sys.path.insert(0, str(scripts_root))
-        module = importlib.import_module("libraries")
-    return module.slugify_relative
-
-
-slugify_relative = _load_slugify()
+try:
+    from libraries import (  # type: ignore  # noqa: E402
+        ReportArtifact,
+        WriteReportArtifactsResult,
+        slugify_relative,
+        write_report_artifacts,
+    )
+except ModuleNotFoundError:  # pragma: no cover - CLI fallback
+    SCRIPT_DIR = Path(__file__).resolve().parent
+    SCRIPTS_ROOT = SCRIPT_DIR.parent
+    if str(SCRIPTS_ROOT) not in sys.path:
+        sys.path.insert(0, str(SCRIPTS_ROOT))
+    from libraries import (  # type: ignore  # noqa: E402
+        ReportArtifact,
+        WriteReportArtifactsResult,
+        slugify_relative,
+        write_report_artifacts,
+    )
 
 DEFAULT_SIMILARITY_THRESHOLD = 0.85
 DEFAULT_MIN_LINES = 3
 DEFAULT_KEEP_RUNS = 3
 DEFAULT_TARGET_RELATIVE = Path(".repo_studios/command_center/scripts/producers")
-DEFAULT_RUN_ROOT_RELATIVE = Path(".repo_studios/command_center/reports/duplicates_scan")
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
+
+INVENTORY_SCRIPT_RELATIVE = Path(
+    ".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py"
+)
+ANALYSIS_SCRIPT_RELATIVE = Path(
+    ".repo_studios/command_center/scripts/summarizers/generate_function_analysis.py"
+)
+
 DEFAULT_IGNORE_DIRS = {
     "__pycache__",
     ".git",
-    ".hg",
-    ".svn",
-    ".venv",
-    "venv",
-    "node_modules",
+    ".repo_studios",
     "build",
     "dist",
-    ".tox",
+    "node_modules",
+    "venv",
 }
-INVENTORY_SCRIPT_RELATIVE = Path(".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py")
-ANALYSIS_SCRIPT_RELATIVE = Path(".repo_studios/command_center/scripts/summarizers/generate_function_analysis.py")
 
-
-@dataclass(frozen=True)
-class Paths:
-    """Resolved filesystem paths required for the scan."""
-
-    repo_root: Path
-    target: Path
-    run_root: Path
-    target_slug: str
-    source_name: str
-    target_index_dir: Path
-
-
-@dataclass(frozen=True)
-class Options:
-    """Runtime options provided by the operator."""
-
-    similarity_threshold: float = DEFAULT_SIMILARITY_THRESHOLD
-    min_lines: int = DEFAULT_MIN_LINES
-    keep_runs: int = DEFAULT_KEEP_RUNS
-    analysis_path: Path | None = None
-    log_level: str = "INFO"
-    skip_upstream: bool = False
+VIEWER_SLUG = "commandview"
+TOPIC_SLUG = "duplicate_scan"
 
 
 @dataclass
 class FunctionInfo:
-    """Information extracted for a single function definition."""
+    """Metadata captured for each discovered function."""
 
     file: str
     line_start: int
@@ -107,24 +93,41 @@ class FunctionInfo:
     ast_node: ast.AST | None = None
 
     def to_occurrence(self) -> dict[str, Any]:
-        """Convert to a lightweight JSON-serialisable occurrence object."""
-        first_line = ""
-        for line in self.body_lines:
-            stripped = line.strip()
-            if stripped:
-                first_line = stripped
-                break
+        line_count = max(self.line_end - self.line_start + 1, 0)
+        sample_line = self.body_lines[0].strip() if self.body_lines else ""
         return {
             "file": self.file,
             "line_start": self.line_start,
             "line_end": self.line_end,
+            "line_count": line_count,
             "function_name": self.function_name,
-            "is_function": self.is_function,
-            "code_hash": self.code_hash,
-            "line_span": max(self.line_end - self.line_start + 1, 0),
-            "sample_line": first_line,
+            "signature": self.signature,
+            "sample_line": sample_line,
         }
 
+
+@dataclass(frozen=True)
+class Paths:
+    """Resolved filesystem locations used during a scan run."""
+
+    repo_root: Path
+    target: Path
+    output_dir: Path
+    target_slug: str
+    source_name: str
+    target_index_dir: Path
+
+
+@dataclass(frozen=True)
+class Options:
+    """Runtime configuration flags for the duplicate scan."""
+
+    similarity_threshold: float
+    min_lines: int
+    keep_runs: int
+    analysis_path: Path | None
+    log_level: str
+    skip_upstream: bool
 
 @dataclass
 class DuplicateGroup:
@@ -160,10 +163,13 @@ class ScanResult:
 
 @dataclass(frozen=True)
 class RunArtifacts:
-    """File paths emitted for a duplicate scan run."""
+    """File locations emitted for a duplicate scan run."""
 
-    matrix_paths: tuple[Path, ...]
-    summary_paths: tuple[Path, ...]
+    slug: str
+    viewer_matrix: Path
+    viewer_summary: Path
+    index_matrix: Path
+    index_summary: Path
 
 
 def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
@@ -183,8 +189,12 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument(
         "--run-root",
-        default=str(DEFAULT_RUN_ROOT_RELATIVE),
-        help="Base directory for duplicate scan outputs (timestamped folders + latest copy).",
+        default=str(DEFAULT_OUTPUT_DIR),
+        help="Base reports directory for duplicate scan outputs (viewer/topic/timestamp layout).",
+    )
+    parser.add_argument(
+        "--output-dir",
+        help=argparse.SUPPRESS,
     )
     parser.add_argument(
         "--keep-runs",
@@ -235,18 +245,19 @@ def configure_logging(level: str) -> None:
 def build_paths(args: argparse.Namespace) -> Paths:
     repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[4]
     target = _resolve_within_repo(repo_root, Path(args.target))
-    run_root = _resolve_within_repo(repo_root, Path(args.run_root))
+    output_arg = getattr(args, "output_dir", None) or args.run_root
+    output_dir = _resolve_within_repo(repo_root, Path(output_arg))
     if not target.exists() or not target.is_dir():
         raise FileNotFoundError(f"Target directory not found or not a directory: {target}")
     source_name = target.name
     target_slug = _slugify_relative(target.relative_to(repo_root))
     target_index_dir = target / f"{source_name}_index"
-    run_root.mkdir(parents=True, exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
     target_index_dir.mkdir(parents=True, exist_ok=True)
     return Paths(
         repo_root=repo_root,
         target=target,
-        run_root=run_root,
+        output_dir=output_dir,
         target_slug=target_slug,
         source_name=source_name,
         target_index_dir=target_index_dir,
@@ -863,80 +874,92 @@ def compose_payload(
     }
 
 
-@dataclass(frozen=True)
-class RunPaths:
-    output_dir: Path
-    index_dir: Path
-
-
-def initialise_run_paths(paths: Paths) -> RunPaths:
-    output_dir = paths.run_root / f"{paths.target_slug}_duplicate_scan"
-    output_dir.mkdir(parents=True, exist_ok=True)
+def _write_index_artifacts(
+    *,
+    payload: dict[str, Any],
+    summary: str,
+    paths: Paths,
+    slug: str,
+) -> tuple[Path, Path]:
+    matrix_name = f"{paths.source_name}_duplicate_matrix-{slug}.json"
+    summary_name = f"{paths.source_name}_duplicate_summary-{slug}.md"
     paths.target_index_dir.mkdir(parents=True, exist_ok=True)
-    return RunPaths(output_dir=output_dir, index_dir=paths.target_index_dir)
+    matrix_path = paths.target_index_dir / matrix_name
+    summary_path = paths.target_index_dir / summary_name
+    matrix_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    summary_path.write_text(summary, encoding="utf-8")
+    return matrix_path, summary_path
 
 
-def _atomic_write_bytes(destination: Path, payload: bytes) -> Path:
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    temp_path = destination.with_suffix(destination.suffix + ".tmp")
-    temp_path.write_bytes(payload)
-    temp_path.replace(destination)
-    return destination
+def _prune_index_artifacts(paths: Paths, *, keep: int) -> None:
+    keep = max(keep, 1)
+    pattern = f"{paths.source_name}_duplicate_matrix-*.json"
+    matrix_files = sorted(paths.target_index_dir.glob(pattern), key=lambda item: item.name, reverse=True)
+    for stale in matrix_files[keep:]:
+        slug = stale.stem.replace(f"{paths.source_name}_duplicate_matrix-", "")
+        summary_path = paths.target_index_dir / f"{paths.source_name}_duplicate_summary-{slug}.md"
+        try:
+            stale.unlink()
+        except FileNotFoundError:
+            pass
+        if summary_path.exists():
+            try:
+                summary_path.unlink()
+            except FileNotFoundError:
+                pass
 
 
 def write_outputs(
     payload: dict[str, Any],
     summary: str,
-    run_paths: RunPaths,
     paths: Paths,
+    *,
+    timestamp: datetime | None = None,
+    keep: int = DEFAULT_KEEP_RUNS,
 ) -> RunArtifacts:
-    json_bytes = json.dumps(payload, indent=2, sort_keys=True).encode("utf-8")
-    summary_bytes = summary.encode("utf-8")
-    now = datetime.now(timezone.utc)
-    date_stamp = now.strftime("%Y-%m-%d")
-    time_stamp = now.strftime("%H%M")
-    suffix = f"{date_stamp}-{time_stamp}"
-    matrix_name = f"{paths.source_name}_duplicate_matrix-{suffix}.json"
-    summary_name = f"{paths.source_name}_duplicate_summary-{suffix}.md"
-    matrix_paths: list[Path] = []
-    summary_paths: list[Path] = []
-    for root in (run_paths.output_dir, run_paths.index_dir):
-        for stale in root.glob(f"{paths.source_name}_duplicate_matrix-*.json"):
-            try:
-                stale.unlink()
-            except FileNotFoundError:
-                continue
-        for stale in root.glob(f"{paths.source_name}_duplicate_summary-*.md"):
-            try:
-                stale.unlink()
-            except FileNotFoundError:
-                continue
-        matrix_paths.append(_atomic_write_bytes(root / matrix_name, json_bytes))
-        summary_paths.append(_atomic_write_bytes(root / summary_name, summary_bytes))
-    return RunArtifacts(matrix_paths=tuple(matrix_paths), summary_paths=tuple(summary_paths))
+    moment = timestamp or datetime.now(timezone.utc)
+    matrix_filename = f"{paths.source_name}_duplicate_matrix.json"
+    summary_filename = f"{paths.source_name}_duplicate_summary.md"
 
+    def _write_matrix(run_dir: Path) -> Path:
+        target = run_dir / matrix_filename
+        target.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        return target
 
-def apply_retention(run_paths: RunPaths, paths: Paths, options: Options) -> None:
-    if options.keep_runs <= 0:
-        return
+    def _write_summary(run_dir: Path) -> Path:
+        target = run_dir / summary_filename
+        target.write_text(summary, encoding="utf-8")
+        return target
 
-    def prune(directory: Path, pattern: str) -> None:
-        candidates = sorted(
-            directory.glob(pattern),
-            key=lambda item: item.stat().st_mtime,
-            reverse=True,
-        )
-        for stale in candidates[options.keep_runs :]:
-            try:
-                stale.unlink()
-            except FileNotFoundError:
-                continue
+    report_result: WriteReportArtifactsResult = write_report_artifacts(
+        stem=f"{paths.target_slug}_duplicate_scan",
+        timestamp=moment,
+        output_dir=paths.output_dir,
+        artifacts=[
+            ReportArtifact(filename=matrix_filename, writer=_write_matrix),
+            ReportArtifact(filename=summary_filename, writer=_write_summary),
+        ],
+        keep=max(keep, 1),
+        viewer=VIEWER_SLUG,
+        topic=TOPIC_SLUG,
+    )
 
-    prune(run_paths.output_dir, f"{paths.source_name}_duplicate_matrix-*.json")
-    prune(run_paths.output_dir, f"{paths.source_name}_duplicate_summary-*.md")
-    prune(run_paths.index_dir, f"{paths.source_name}_duplicate_matrix-*.json")
-    prune(run_paths.index_dir, f"{paths.source_name}_duplicate_summary-*.md")
+    index_matrix, index_summary = _write_index_artifacts(
+        payload=payload,
+        summary=summary,
+        paths=paths,
+        slug=report_result.slug,
+    )
 
+    _prune_index_artifacts(paths=paths, keep=keep)
+
+    return RunArtifacts(
+        slug=report_result.slug,
+        viewer_matrix=report_result.artifacts[matrix_filename],
+        viewer_summary=report_result.artifacts[summary_filename],
+        index_matrix=index_matrix,
+        index_summary=index_summary,
+    )
 
 def run(argv: Iterable[str] | None = None) -> int:
     args = parse_args(argv)
@@ -964,9 +987,7 @@ def run(argv: Iterable[str] | None = None) -> int:
     matrix, stats = merge_duplicates(producer_entries, scan_result.duplicate_groups)
     payload = compose_payload(matrix, stats, scan_result, paths, analysis_path)
     summary = generate_summary(stats, scan_result, analysis_path, paths, matrix)
-    run_paths = initialise_run_paths(paths)
-    artifacts = write_outputs(payload, summary, run_paths, paths)
-    apply_retention(run_paths, paths, options)
+    artifacts = write_outputs(payload=payload, summary=summary, paths=paths, keep=options.keep_runs)
     logging.info(
         "Duplicate scan complete: files=%d functions=%d scanner_groups=%d producers=%d",
         scan_result.files_scanned,
@@ -975,11 +996,12 @@ def run(argv: Iterable[str] | None = None) -> int:
         stats["producer_groups"],
     )
     logging.debug(
-        "Artifacts mirrored: run_matrix=%s index_matrix=%s run_summary=%s index_summary=%s",
-        artifacts.matrix_paths[0],
-        artifacts.matrix_paths[-1],
-        artifacts.summary_paths[0],
-        artifacts.summary_paths[-1],
+        "Artifacts mirrored: slug=%s viewer_matrix=%s index_matrix=%s viewer_summary=%s index_summary=%s",
+        artifacts.slug,
+        artifacts.viewer_matrix,
+        artifacts.index_matrix,
+        artifacts.viewer_summary,
+        artifacts.index_summary,
     )
     return 0
 
@@ -991,6 +1013,13 @@ def main() -> None:  # pragma: no cover - thin wrapper for CLI usage
 __all__ = [
     "FunctionExtractor",
     "FunctionInfo",
+    "Paths",
+    "Options",
+    "RunArtifacts",
+    "VIEWER_SLUG",
+    "TOPIC_SLUG",
+    "scan_python_files",
+    "write_outputs",
     "compute_ast_similarity",
     "group_duplicates",
     "run",

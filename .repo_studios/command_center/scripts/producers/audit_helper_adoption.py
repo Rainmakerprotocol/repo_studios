@@ -40,7 +40,9 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running as scrip
         write_report_artifacts,
     )
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports/helper_adoption")
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
+VIEWER_SLUG = "commandview"
+TOPIC_SLUG = "helper_adoption"
 DEFAULT_ALLOW_LIST = Path(".repo_studios/command_center/docs/guardrails/allowed_targets.yaml")
 DEFAULT_HELPERS: tuple[str, ...] = (
     "slugify_relative",
@@ -51,9 +53,7 @@ DEFAULT_HELPERS: tuple[str, ...] = (
 )
 RUN_STEM = "helper_adoption"
 JSON_FILENAME = "helper_adoption.json"
-JSON_POINTER = "latest_helper_adoption.json"
 MARKDOWN_FILENAME = "helper_adoption.md"
-MARKDOWN_POINTER = "latest_helper_adoption.md"
 DEFAULT_KEEP = 3
 DEFAULT_SCHEMA_VERSION = "1.0"
 STATUSES: tuple[str, ...] = ("adopted", "legacy", "not_applicable")
@@ -418,7 +418,6 @@ def run(argv: Sequence[str] | None = None) -> int:
         artifacts.append(
             ReportArtifact(
                 filename=JSON_FILENAME,
-                pointer=JSON_POINTER,
                 kind="json",
                 content=lambda payload=report: payload,
             )
@@ -428,7 +427,6 @@ def run(argv: Sequence[str] | None = None) -> int:
         artifacts.append(
             ReportArtifact(
                 filename=MARKDOWN_FILENAME,
-                pointer=MARKDOWN_POINTER,
                 kind="text",
                 content=markdown,
             )
@@ -439,6 +437,8 @@ def run(argv: Sequence[str] | None = None) -> int:
         output_dir=paths.output_dir,
         artifacts=artifacts,
         keep=opts.artifacts_to_keep,
+        viewer=VIEWER_SLUG,
+        topic=TOPIC_SLUG,
     )
     for helper in report["helpers"]:
         summary = helper["summary"]

@@ -58,13 +58,13 @@ except ModuleNotFoundError:  # pragma: no cover - CLI fallback for script execut
         write_report_artifacts,
     )
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports/automation_runs")
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
+VIEWER_SLUG = "commandview"
+TOPIC_SLUG = "automation_runs"
 DEFAULT_KEEP = 3
 RUN_STEM = "automation_manifest"
 MANIFEST_FILENAME = "manifest.json"
-MANIFEST_POINTER = "latest_automation_manifest.json"
 METRICS_FILENAME = "metrics_summary.json"
-METRICS_POINTER = "latest_metrics_summary.json"
 DEFAULT_MANIFEST_SCHEMA_VERSION = "1.0"
 DEFAULT_METRICS_SCHEMA_VERSION = "1.0"
 _ALLOWED_FILE_STATUSES = ("updated", "skipped", "conflicted")
@@ -357,12 +357,10 @@ def run(argv: Sequence[str] | None = None) -> int:
     artifacts = [
         ReportArtifact(
             filename=METRICS_FILENAME,
-            pointer=METRICS_POINTER,
             writer=_write_metrics,
         ),
         ReportArtifact(
             filename=MANIFEST_FILENAME,
-            pointer=MANIFEST_POINTER,
             writer=_write_manifest,
         ),
     ]
@@ -373,6 +371,8 @@ def run(argv: Sequence[str] | None = None) -> int:
         output_dir=paths.output_dir,
         artifacts=artifacts,
         keep=options.artifacts_to_keep,
+        viewer=VIEWER_SLUG,
+        topic=TOPIC_SLUG,
     )
 
     logging.info("Automation manifest written to %s", result.artifacts[MANIFEST_FILENAME])

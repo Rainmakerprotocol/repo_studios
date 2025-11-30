@@ -190,8 +190,12 @@ The last consideration is the best view for agents to consume. Would they want t
 
 ## 13. Decision Record
 
-- TBD during RFC review. Decisions, approvals, and follow-up actions will be
-  logged in this section as the initiative progresses.
+- **2025-11-29 – Report Naming Standard**: Adopt the viewer-centric path schema
+  `<root>/<viewer_slug>/<topic>/<timestamp>/<artifact_role>.<ext>` for all
+  orchestrator and Command Center reports. New artifacts must comply
+  immediately; historical bundles remain grandfathered until migrated during
+  implementation. `latest_*` aliases are deprecated and will be removed once
+  the audit and helper updates land. Canonical reference: `REPORT_NAMING_STANDARDS.md`.
 
 ## 14. References
 

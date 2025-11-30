@@ -37,7 +37,7 @@ def test_metrics_summary_run(tmp_path: Path) -> None:
     tests_file = tmp_path / "tests.json"
     tests_file.write_text(json.dumps(tests_payload), encoding="utf-8")
 
-    output_dir = tmp_path / "reports" / "automation_metrics"
+    output_dir = tmp_path / "reports"
 
     exit_code = mod.main(
         [
@@ -72,7 +72,7 @@ def test_metrics_summary_run(tmp_path: Path) -> None:
 
     assert exit_code == 0
 
-    run_dir = output_dir / f"{mod.RUN_STEM}-20251102_193000"
+    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20251102-1930"
     summary_path = run_dir / mod.SUMMARY_FILENAME
     assert summary_path.is_file()
 
@@ -82,9 +82,7 @@ def test_metrics_summary_run(tmp_path: Path) -> None:
     assert payload["targets"] == ["library"]
     assert payload["tests_executed"]["library_integration"]["status"] == "passed"
 
-    latest_pointer = output_dir / mod.LATEST_POINTER
-    assert latest_pointer.is_file()
-    assert latest_pointer.read_text(encoding="utf-8") == summary_path.read_text(encoding="utf-8")
+    assert not (output_dir / "latest_metrics_summary.json").exists()
 
 
 def test_invalid_tests_payload(tmp_path: Path, caplog) -> None:

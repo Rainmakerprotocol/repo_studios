@@ -121,7 +121,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 def build_paths(args: argparse.Namespace) -> Paths:
     repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[4]
     output_dir = _resolve_within_repo(
-        repo_root, args.output_dir or ".repo_studios/command_center/reports/automation_runs"
+        repo_root, args.output_dir or ".repo_studios/command_center/reports"
     )
     matrix_candidate = args.post_run_matrix or str(DEFAULT_POST_RUN_MATRIX)
     post_run_matrix = _resolve_within_repo(repo_root, matrix_candidate)
@@ -194,7 +194,7 @@ def _write_readme(
 
 def _slug_from_timestamp(moment: datetime) -> str:
     normalized = moment.astimezone(timezone.utc)
-    return normalized.strftime("%Y%m%d_%H%M%S")
+    return normalized.strftime("%Y%m%d-%H%M")
 
 
 def _trim_table_header(rows: Sequence[str]) -> Sequence[str]:
@@ -393,7 +393,9 @@ def run(argv: Sequence[str] | None = None) -> int:
         return exit_code
 
     slug = _slug_from_timestamp(timestamp)
-    run_dir = paths.output_dir / f"{module.RUN_STEM}-{slug}"
+    viewer = getattr(module, "VIEWER_SLUG", "commandview")
+    topic = getattr(module, "TOPIC_SLUG", module.RUN_STEM)
+    run_dir = paths.output_dir / viewer / topic / slug
     if not run_dir.exists():
         logging.error("Expected automation run directory not found: %s", run_dir)
         return 1
