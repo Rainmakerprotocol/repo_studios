@@ -28,8 +28,11 @@ libraries_root_str = str(LIBRARIES_ROOT)
 if libraries_root_str and libraries_root_str not in sys.path:
     sys.path.insert(0, libraries_root_str)
 
-from utilities.test_log_analysis import TestLogAnalysisResult, build_test_log_report  # noqa: E402
-from libraries import prune_run_directories  # noqa: E402
+from libraries import (  # noqa: E402
+    TestLogAnalysisResult,
+    build_test_log_report,
+    prune_run_directories,
+)
 
 DEFAULT_LOGS_BASE = Path(".repo_studios/reports/orchestrator_logs/pytest_log_capture_logs")
 LEGACY_LOGS_BASE = Path(".repo_studios/pytest_logs")

@@ -75,6 +75,10 @@ studio-generate-fault-artifacts:
 studio-run-fault-pipeline:
 	cd "$(REPO_ROOT)" && $(PYTHON) ".repo_studios/scripts/orchestrators/run_fault_pipeline.py" --repo-root "$(REPO_ROOT)" --artifacts-to-keep 10 --producer-artifacts-to-keep 10 --consumer-artifacts-to-keep 10 --log-level INFO
 
+.PHONY: studio-orchestrate-standards
+studio-orchestrate-standards:
+	$(PYTHON) "$(CURDIR)/command_center/scripts/orchestrators/run_standards_integrity.py" --repo-root "$(REPO_ROOT)"
+
 .PHONY: studio-configure-faulthandler-runtime-smoke
 studio-configure-faulthandler-runtime-smoke:
 	$(PYTHON) "$(CURDIR)/scripts/utilities/configure_faulthandler_runtime.py"

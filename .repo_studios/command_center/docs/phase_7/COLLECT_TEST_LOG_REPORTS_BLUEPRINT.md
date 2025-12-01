@@ -6,11 +6,11 @@
 
 ## Purpose
 
-Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in `utilities.test_log_analysis` and emit timestamped JSON/Markdown/csv snapshots under the standard reports hierarchy with pruning and latest pointers.
+Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in `command_center.scripts.libraries.test_log_analysis` and emit timestamped JSON/Markdown/csv snapshots under the standard reports hierarchy with pruning and latest pointers.
 
 ## Entry Criteria
 
-- Shared helpers for pytest log parsing exist (`utilities.test_log_analysis`).
+- Shared helpers for pytest log parsing exist (`command_center.scripts.libraries.test_log_analysis`).
 - Orchestrators capture pytest runs into `.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs/<slug>/<timestamp>/` directories (legacy `.repo_studios/pytest_logs/` runs remain available during the migration window).
 - Consumer (`generate_test_log_health_report.py`) still owns on-demand parsing logic.
 - No structured producer currently mirrors pytest log health data under `.repo_studios/reports/producer_reports/`.
@@ -38,7 +38,7 @@ Design the dedicated pytest log producer so downstream consumers and orchestrato
 | Dependency | Notes |
 | --- | --- |
 | `.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs/<slug>/<timestamp>/` | Expected directory tree created by `run_pytest_log_capture.py`; producer selects latest if none supplied. |
-| `utilities.test_log_analysis` | Provides `build_test_log_report` and markdown rendering; producer must import utilities via scripts root path shim for test friendliness. |
+| `command_center.scripts.libraries.test_log_analysis` | Provides `build_test_log_report` and markdown rendering; producer imports through the shared Command Center library path with the legacy utility shim retained for older callers. |
 | `defusedxml` (optional) | Used by utilities; producer must handle absence gracefully (utility already falls back to stdlib). |
 
 ## Output Layout

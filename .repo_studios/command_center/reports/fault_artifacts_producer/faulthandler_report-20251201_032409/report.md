@@ -1,7 +1,7 @@
 # Faulthandler Report Summary
 
-Generated (UTC): 2025-11-29T15:20:10+00:00
-Source Run Dir: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-344\test_collect_faulthandler_repo0\repo\.repo_studios\faulthandler\2025-01-01_000000
+Generated (UTC): 2025-12-01T03:24:09+00:00
+Source Run Dir: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-380\test_collect_faulthandler_repo0\repo\.repo_studios\faulthandler\2025-01-01_000000
 
 ## Summary
 
@@ -11,8 +11,8 @@ Source Run Dir: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-344\tes
 - top_frame_limit: 10
 - stack_log_exists: True
 - stack_text_bytes: 189
-- first_seen_utc: 2025-11-29T15:20:10+00:00
-- last_seen_utc: 2025-11-29T15:20:10+00:00
+- first_seen_utc: 2025-12-01T03:24:09+00:00
+- last_seen_utc: 2025-12-01T03:24:09+00:00
 
 ## Severity Buckets
 

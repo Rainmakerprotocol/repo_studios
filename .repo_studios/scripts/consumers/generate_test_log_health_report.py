@@ -44,8 +44,11 @@ for candidate in (SCRIPTS_ROOT, UTILITIES_ROOT):
     if candidate_str not in sys.path:
         sys.path.insert(0, candidate_str)
 
-from utilities.test_log_analysis import build_test_log_report, render_markdown  # noqa: E402
-from command_center.scripts.libraries import prune_run_directories  # noqa: E402
+from command_center.scripts.libraries import (  # noqa: E402
+    build_test_log_report,
+    prune_run_directories,
+    render_markdown,
+)
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:

@@ -1,45 +1,16 @@
 from __future__ import annotations
 
-import importlib.util
 import json
-import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest
 
-_CONSUMER_PATH = Path(__file__).resolve().parents[2] / "scripts" / "consumers" / "classify_monkey_patches.py"
-
-
-def _load_module(name: str, path: Path):
-    sys.modules.pop(name, None)
-    spec = importlib.util.spec_from_file_location(name, path)
-    module = importlib.util.module_from_spec(spec)
-    assert spec.loader is not None
-    sys.modules[name] = module
-    spec.loader.exec_module(module)
-    return module
-
-
-def _write_structured_run(
-    root: Path,
-    name: str,
-    matches: list[dict[str, object]],
-    metadata: dict[str, object] | None = None,
-) -> Path:
-    run_dir = root / name
-    run_dir.mkdir(parents=True, exist_ok=True)
-    (run_dir / "matches.json").write_text(json.dumps(matches), encoding="utf-8")
-    if metadata is not None:
-        (run_dir / "report.json").write_text(json.dumps(metadata), encoding="utf-8")
-    return run_dir
-
-
-def _write_legacy_run(root: Path, name: str, findings: list[dict[str, object]]) -> Path:
-    run_dir = root / name
-    run_dir.mkdir(parents=True, exist_ok=True)
-    (run_dir / "report.json").write_text(json.dumps(findings), encoding="utf-8")
-    return run_dir
+from tests.tests_command_center.monkey_patch.helpers import (
+    load_classify_consumer_module,
+    write_legacy_scan_run,
+    write_structured_scan_run,
+)
 
 
 @pytest.mark.parametrize(
@@ -60,7 +31,7 @@ def _write_legacy_run(root: Path, name: str, findings: list[dict[str, object]]) 
     ],
 )
 def test_classify_matrix(category, is_test, is_module_scope, expected):
-    consumer = _load_module("classify_monkey_patches", _CONSUMER_PATH)
+    consumer = load_classify_consumer_module()
     finding = consumer.Finding(
         file="src/example.py",
         line=1,
@@ -73,7 +44,7 @@ def test_classify_matrix(category, is_test, is_module_scope, expected):
 
 
 def test_run_prefers_structured_matches(tmp_path):
-    consumer = _load_module("classify_monkey_patches", _CONSUMER_PATH)
+    consumer = load_classify_consumer_module()
 
     base_dir = tmp_path / "structured"
     output_base = tmp_path / "consumer"
@@ -96,7 +67,7 @@ def test_run_prefers_structured_matches(tmp_path):
         },
     ]
     meta = {"run_id": "scan-1", "total_findings": 2}
-    run_dir = _write_structured_run(base_dir, "monkey_patch_scan-20251124_010101", matches, meta)
+    run_dir = write_structured_scan_run(base_dir, "monkey_patch_scan-20251124_010101", matches, meta)
 
     result = consumer.run(
         [
@@ -131,7 +102,7 @@ def test_run_prefers_structured_matches(tmp_path):
 
 
 def test_run_falls_back_to_legacy(tmp_path):
-    consumer = _load_module("classify_monkey_patches", _CONSUMER_PATH)
+    consumer = load_classify_consumer_module()
 
     legacy_dir = tmp_path / "legacy"
     output_base = tmp_path / "consumer"
@@ -145,7 +116,7 @@ def test_run_falls_back_to_legacy(tmp_path):
             "import_base": "legacy",
         }
     ]
-    run_dir = _write_legacy_run(legacy_dir, "20250101_000000", findings)
+    run_dir = write_legacy_scan_run(legacy_dir, "20250101_000000", findings)
 
     result = consumer.run(
         [
@@ -164,7 +135,7 @@ def test_run_falls_back_to_legacy(tmp_path):
 
 
 def test_retention_prunes_old_runs(tmp_path):
-    consumer = _load_module("classify_monkey_patches", _CONSUMER_PATH)
+    consumer = load_classify_consumer_module()
 
     base_dir = tmp_path / "structured"
     output_base = tmp_path / "consumer"
@@ -192,7 +163,7 @@ def test_retention_prunes_old_runs(tmp_path):
     try:
         results = []
         for idx in range(3):
-            run_dir = _write_structured_run(
+            run_dir = write_structured_scan_run(
                 base_dir,
                 f"monkey_patch_scan-20251124_0{idx}0000",
                 matches,

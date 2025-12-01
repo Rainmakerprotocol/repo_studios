@@ -1,21 +1,21 @@
 {
-  "generated_utc": "2025-11-29T15:20:10+00:00",
+  "generated_utc": "2025-12-01T03:24:09+00:00",
   "manifest": {
     "flags": {},
     "pid": null,
     "platform": null,
     "python": null,
-    "ts": "2025-11-29T15:20:10+00:00",
+    "ts": "2025-12-01T03:24:09+00:00",
     "writer": null
   },
   "process_salt": "py=3.13.3|plat=Windows-11-10.0.26200-SP0|run=2025-01-01_000000",
-  "run_dir": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-344\\test_collect_faulthandler_repo0\\repo\\.repo_studios\\faulthandler\\2025-01-01_000000",
+  "run_dir": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-380\\test_collect_faulthandler_repo0\\repo\\.repo_studios\\faulthandler\\2025-01-01_000000",
   "schema_version": 1,
   "signatures": [
     {
       "count": 1,
-      "first_seen_ts": "2025-11-29T15:20:10+00:00",
-      "last_seen_ts": "2025-11-29T15:20:10+00:00",
+      "first_seen_ts": "2025-12-01T03:24:09+00:00",
+      "last_seen_ts": "2025-12-01T03:24:09+00:00",
       "signature_id": "069d1680e5e62635",
       "threads": [
         "Current thread 0x0001 (most recent call first):"
@@ -27,8 +27,8 @@
     },
     {
       "count": 1,
-      "first_seen_ts": "2025-11-29T15:20:10+00:00",
-      "last_seen_ts": "2025-11-29T15:20:10+00:00",
+      "first_seen_ts": "2025-12-01T03:24:09+00:00",
+      "last_seen_ts": "2025-12-01T03:24:09+00:00",
       "signature_id": "2f0a9b15e30c0afe",
       "threads": [
         "Thread 0x0002:"
@@ -39,11 +39,11 @@
       "top_module": "utils"
     }
   ],
-  "stacks_log": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-344\\test_collect_faulthandler_repo0\\repo\\.repo_studios\\faulthandler\\2025-01-01_000000\\stacks.log",
+  "stacks_log": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-380\\test_collect_faulthandler_repo0\\repo\\.repo_studios\\faulthandler\\2025-01-01_000000\\stacks.log",
   "summary": {
     "active_signature_count": 2,
-    "first_seen_utc": "2025-11-29T15:20:10+00:00",
-    "last_seen_utc": "2025-11-29T15:20:10+00:00",
+    "first_seen_utc": "2025-12-01T03:24:09+00:00",
+    "last_seen_utc": "2025-12-01T03:24:09+00:00",
     "severity_buckets": {
       "multi_hit": 0,
       "repeat_offender": 0,

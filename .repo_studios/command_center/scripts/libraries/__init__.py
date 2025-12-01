@@ -64,6 +64,14 @@ from .summarizer_runner import load_summarizer, run_summarizer, SummarizerError
 from .telemetry_emitters import TopicTelemetry, build_pipeline_telemetry
 from .catalog_registry import CatalogEntry, CatalogRegistry
 from .prune_logs import PruneResult, prune_run_directories
+from .test_log_analysis import (
+    TestHealth,
+    TestLogAnalysisResult,
+    build_test_log_report,
+    render_markdown,
+    select_full_log,
+    select_junit_artifact,
+)
 
 __all__ = [
     "slugify_relative",
@@ -121,4 +129,10 @@ __all__ = [
     "CatalogRegistry",
     "PruneResult",
     "prune_run_directories",
+    "TestHealth",
+    "TestLogAnalysisResult",
+    "select_junit_artifact",
+    "select_full_log",
+    "build_test_log_report",
+    "render_markdown",
 ]

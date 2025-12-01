@@ -11,32 +11,15 @@ from types import ModuleType
 
 import pytest
 
+from tests.fixtures.test_execution_telemetry import (
+    BASIC_JUNIT,
+    BASIC_LOG,
+    SUMMARY_TIMESTAMP,
+    write_pytest_bundle,
+)
+
 REPO_ROOT = Path(__file__).resolve().parents[3]
 MODULE_PATH = REPO_ROOT / ".repo_studios" / "scripts" / "orchestrators" / "run_pytest_log_capture.py"
-SUMMARY_TIMESTAMP = "2025-01-01_1200"
-SUMMARY_LOG = """============================= test session starts =============================
-platform win32 -- Python 3.11.0, pytest-7.4.4
-rootdir: /repo
-collected 2 items
-
-tests/test_sample.py::test_fail FAILED                                          [50%]
-tests/test_sample.py::test_skip SKIPPED (not run)
-
-=========================== short test summary info ===========================
-FAILED tests/test_sample.py::test_fail - AssertionError: boom
-SKIPPED tests/test_sample.py::test_skip - reason
-=================== 1 failed, 1 skipped in 0.12s ==============================
-"""
-SUMMARY_JUNIT = """<?xml version='1.0' encoding='utf-8'?>
-<testsuite name="pytest" tests="2" failures="1" errors="0" skipped="1" time="0.12">
-  <testcase classname="tests.test_sample" name="test_fail" file="tests/test_sample.py" time="0.01">
-    <failure message="AssertionError: boom">details</failure>
-  </testcase>
-  <testcase classname="tests.test_sample" name="test_skip" file="tests/test_sample.py" time="0.0">
-    <skipped message="reason" />
-  </testcase>
-</testsuite>
-"""
 
 
 def _load_module() -> ModuleType:
@@ -63,10 +46,12 @@ def test_summary_mode_produces_structured_bundle(tmp_path: Path) -> None:
     module = _load_module()
     repo_root, logs_dir, output_dir = _prepare_repo(tmp_path)
 
-    log_path = logs_dir / f"pytest_{SUMMARY_TIMESTAMP}.txt"
-    junit_path = logs_dir / f"junit_{SUMMARY_TIMESTAMP}.xml"
-    log_path.write_text(SUMMARY_LOG, encoding="utf-8")
-    junit_path.write_text(SUMMARY_JUNIT, encoding="utf-8")
+    log_path, junit_path = write_pytest_bundle(
+        logs_dir,
+        SUMMARY_TIMESTAMP,
+        log_text=BASIC_LOG,
+        junit_text=BASIC_JUNIT,
+    )
 
     result = module.run(
         [
@@ -124,8 +109,8 @@ def test_execute_mode_captures_and_writes_artifacts(tmp_path: Path, monkeypatch:
         junit_arg = next((part for part in cmd if part.startswith("--junitxml=")), None)
         assert junit_arg is not None
         junit_target = Path(junit_arg.split("=", 1)[1])
-        junit_target.write_text(SUMMARY_JUNIT, encoding="utf-8")
-        return SUMMARY_LOG, 1, False
+        junit_target.write_text(BASIC_JUNIT, encoding="utf-8")
+        return BASIC_LOG, 1, False
 
     monkeypatch.setattr(module, "run_pytest_and_capture", _fake_run_pytest)
 

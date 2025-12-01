@@ -32,3 +32,7 @@ This index enumerates governed documentation surfaces that participate in Repo S
 | Global | std_global_markdown_authoring | standards/global/std-global-markdown-authoring.md | std_global_markdown_ | no | stable |
 
 <!-- END:DOCS_INDEX_TABLE -->
+
+## Healthview Artifacts
+
+The Standards Integrity orchestrator (`.repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py`) publishes Healthview bundles to `.repo_studios/command_center/reports/healthview/standards_integrity/`, writing `manifest.json`, `summary.md`, and `telemetry.json` for each timestamped run. Invoke `make -C .repo_studios studio-orchestrate-standards` to refresh the artifacts alongside the standards index producers.

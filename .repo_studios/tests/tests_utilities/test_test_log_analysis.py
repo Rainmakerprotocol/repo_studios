@@ -1,19 +1,11 @@
 from __future__ import annotations
 
-import importlib.util
 from pathlib import Path
 
-
-MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "utilities" / "test_log_analysis.py"
-
-
-def _load_module():
-    spec = importlib.util.spec_from_file_location("test_log_analysis", MODULE_PATH)
-    if spec is None or spec.loader is None:
-        raise ImportError(f"Unable to load module from {MODULE_PATH}")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+from command_center.scripts.libraries import (
+    build_test_log_report,
+    select_junit_artifact,
+)
 
 
 def _write_junit(path: Path, *, tests: int = 2, failures: int = 1, skipped: int = 0, errors: int = 0) -> None:
@@ -45,7 +37,6 @@ AssertionError: boom
 
 
 def test_build_test_log_report_parses_artifacts(tmp_path: Path) -> None:
-    module = _load_module()
     logs_dir = tmp_path / "logs"
     logs_dir.mkdir()
     junit_path = logs_dir / "junit_run.xml"
@@ -53,7 +44,7 @@ def test_build_test_log_report_parses_artifacts(tmp_path: Path) -> None:
     _write_junit(junit_path)
     _write_pytest_log(log_path)
 
-    result = module.build_test_log_report(logs_dir)
+    result = build_test_log_report(logs_dir)
 
     summary = result.report["summary"]
     assert summary["total"] == 2
@@ -69,7 +60,6 @@ def test_build_test_log_report_parses_artifacts(tmp_path: Path) -> None:
 
 
 def test_select_junit_artifact_skips_internal_only(tmp_path: Path) -> None:
-    module = _load_module()
     logs_dir = tmp_path / "logs"
     logs_dir.mkdir()
 
@@ -85,6 +75,6 @@ def test_select_junit_artifact_skips_internal_only(tmp_path: Path) -> None:
     preferred = logs_dir / "junit_real.xml"
     _write_junit(preferred, tests=4, failures=0, skipped=0, errors=0)
 
-    selected = module.select_junit_artifact(logs_dir)
+    selected = select_junit_artifact(logs_dir)
 
     assert selected == preferred

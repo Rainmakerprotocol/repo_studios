@@ -1,61 +1,18 @@
 from __future__ import annotations
 
-import importlib.util
 import json
-import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
-_AGGREGATOR_PATH = Path(__file__).resolve().parents[2] / "scripts" / "aggregators" / "analyze_monkey_patch_trends.py"
-
-
-def _load_module(name: str, path: Path):
-    sys.modules.pop(name, None)
-    spec = importlib.util.spec_from_file_location(name, path)
-    module = importlib.util.module_from_spec(spec)
-    assert spec.loader is not None
-    sys.modules[name] = module
-    spec.loader.exec_module(module)
-    return module
-
-
-def _write_consumer_bundle(
-    root: Path,
-    dt: datetime,
-    *,
-    total: int,
-    counts: dict[str, int],
-    scan_dir: Path,
-) -> Path:
-    name = f"monkey_patch_risk-{dt.strftime('%Y-%m-%d_%H%M%S')}"
-    bundle_dir = root / name
-    bundle_dir.mkdir(parents=True, exist_ok=True)
-    summary = {
-        "total_findings": total,
-        "counts_by_risk": counts,
-        "run_metadata": {"scan_dir": str(scan_dir)},
-    }
-    (bundle_dir / "summary.json").write_text(json.dumps(summary), encoding="utf-8")
-    metadata = {
-        "schema_version": 1,
-        "generated_at": dt.isoformat(timespec="seconds").replace("+00:00", "Z"),
-        "source": "consumer",
-        "scan_dir": str(scan_dir),
-    }
-    (bundle_dir / "bundle_summary.json").write_text(json.dumps(metadata), encoding="utf-8")
-    return bundle_dir
-
-
-def _write_producer_run(root: Path, dt: datetime, findings: list[dict[str, object]]) -> Path:
-    name = dt.strftime("%Y-%m-%d_%H%M%S")
-    run_dir = root / name
-    run_dir.mkdir(parents=True, exist_ok=True)
-    (run_dir / "report.json").write_text(json.dumps(findings), encoding="utf-8")
-    return run_dir
+from tests.tests_command_center.monkey_patch.helpers import (
+    load_monkey_patch_trends_aggregator_module,
+    write_consumer_bundle,
+    write_producer_run,
+)
 
 
 def test_prefers_consumer_bundles(tmp_path):
-    aggregator = _load_module("analyze_monkey_patch_trends", _AGGREGATOR_PATH)
+    aggregator = load_monkey_patch_trends_aggregator_module()
 
     consumer_base = tmp_path / "consumer"
     producer_base = tmp_path / "producer"
@@ -68,14 +25,14 @@ def test_prefers_consumer_bundles(tmp_path):
 
     dt1 = datetime(2025, 11, 23, 16, 0, tzinfo=UTC)
     dt2 = datetime(2025, 11, 24, 16, 0, tzinfo=UTC)
-    _write_consumer_bundle(
+    write_consumer_bundle(
         consumer_base,
         dt1,
         total=5,
         counts={"HIGH": 2, "MODERATE": 1, "SAFE": 2},
         scan_dir=scan_a,
     )
-    _write_consumer_bundle(
+    write_consumer_bundle(
         consumer_base,
         dt2,
         total=6,
@@ -113,7 +70,7 @@ def test_prefers_consumer_bundles(tmp_path):
 
 
 def test_fallback_to_producer_reports(tmp_path):
-    aggregator = _load_module("analyze_monkey_patch_trends", _AGGREGATOR_PATH)
+    aggregator = load_monkey_patch_trends_aggregator_module()
 
     consumer_base = tmp_path / "consumer"
     producer_base = tmp_path / "producer"
@@ -121,7 +78,7 @@ def test_fallback_to_producer_reports(tmp_path):
 
     dt1 = datetime(2025, 11, 22, 12, 0, tzinfo=UTC)
     dt2 = datetime(2025, 11, 23, 12, 0, tzinfo=UTC)
-    _write_producer_run(
+    write_producer_run(
         producer_base,
         dt1,
         findings=[
@@ -129,7 +86,7 @@ def test_fallback_to_producer_reports(tmp_path):
             {"category": "attribute_reassignment_on_import", "is_test": True},
         ],
     )
-    _write_producer_run(
+    write_producer_run(
         producer_base,
         dt2,
         findings=[
@@ -163,7 +120,7 @@ def test_fallback_to_producer_reports(tmp_path):
 
 
 def test_retention_prunes_old_runs(tmp_path):
-    aggregator = _load_module("analyze_monkey_patch_trends", _AGGREGATOR_PATH)
+    aggregator = load_monkey_patch_trends_aggregator_module()
 
     consumer_base = tmp_path / "consumer"
     producer_base = tmp_path / "producer"
@@ -174,14 +131,14 @@ def test_retention_prunes_old_runs(tmp_path):
     scan_dir.mkdir(parents=True, exist_ok=True)
     dt1 = datetime(2025, 11, 23, 10, 0, tzinfo=UTC)
     dt2 = datetime(2025, 11, 24, 10, 0, tzinfo=UTC)
-    _write_consumer_bundle(
+    write_consumer_bundle(
         consumer_base,
         dt1,
         total=4,
         counts={"HIGH": 1, "MODERATE": 1, "SAFE": 2},
         scan_dir=scan_dir,
     )
-    _write_consumer_bundle(
+    write_consumer_bundle(
         consumer_base,
         dt2,
         total=5,

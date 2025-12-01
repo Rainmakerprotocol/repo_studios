@@ -1,24 +1,13 @@
 from __future__ import annotations
 
-import importlib.util
 import json
-import sys
 from pathlib import Path
 
-_MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "scan_monkey_patches.py"
-
-
-def _load_module():
-    spec = importlib.util.spec_from_file_location("scan_monkey_patches", _MODULE_PATH)
-    module = importlib.util.module_from_spec(spec)
-    assert spec.loader is not None
-    sys.modules[spec.name] = module
-    spec.loader.exec_module(module)
-    return module
+from tests.tests_command_center.monkey_patch.helpers import load_scan_producer_module
 
 
 def test_structured_artifacts(tmp_path: Path) -> None:
-    mod = _load_module()
+    mod = load_scan_producer_module()
 
     repo_root = tmp_path / "workspace"
     src_dir = repo_root / "src"
@@ -102,7 +91,7 @@ os.environ[\"EXAMPLE_FLAG\"] = \"1\"
 
 
 def test_prune_history(tmp_path: Path) -> None:
-    mod = _load_module()
+    mod = load_scan_producer_module()
 
     repo_root = tmp_path / "workspace"
     src_dir = repo_root / "src"
