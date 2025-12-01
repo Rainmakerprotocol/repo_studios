@@ -11,7 +11,7 @@
 
 - Total scripts under management: 47.
 - Scripts covered by `orchestrate_health_suite.py`: 15.
-- Scripts additionally covered by other orchestrators (`run_fault_pipeline.py`,
+- Scripts additionally covered by other orchestrators (`command_center/scripts/orchestrators/run_fault_diagnostics_overview.py`,
     `run_standards_gap_suite.py`): 3.
 - Scripts without orchestrator coverage: 29 (spanning aggregators, consumers, orchestrators,
     producers, summarizers, utilities).

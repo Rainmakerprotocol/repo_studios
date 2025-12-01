@@ -71,9 +71,12 @@ studio-collect-faulthandler-reports:
 studio-generate-fault-artifacts:
 	$(PYTHON) .repo_studios/scripts/consumers/generate_fault_artifacts.py --output-dir .repo_studios/reports/consumer_reports/fault_artifacts --command-center-dir .repo_studios/command_center/reports/fault_artifacts_consumer --artifacts-to-keep 10 --log-level INFO
 
+.PHONY: studio-orchestrate-fault-diagnostics
+studio-orchestrate-fault-diagnostics:
+	cd "$(REPO_ROOT)" && $(PYTHON) ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py" --repo-root "$(REPO_ROOT)" --artifacts-to-keep 10 --producer-artifacts-to-keep 10 --consumer-artifacts-to-keep 10 --summarizer-artifacts-to-keep 10 --log-level INFO
+
 .PHONY: studio-run-fault-pipeline
-studio-run-fault-pipeline:
-	cd "$(REPO_ROOT)" && $(PYTHON) ".repo_studios/scripts/orchestrators/run_fault_pipeline.py" --repo-root "$(REPO_ROOT)" --artifacts-to-keep 10 --producer-artifacts-to-keep 10 --consumer-artifacts-to-keep 10 --log-level INFO
+studio-run-fault-pipeline: studio-orchestrate-fault-diagnostics
 
 .PHONY: studio-orchestrate-standards
 studio-orchestrate-standards:

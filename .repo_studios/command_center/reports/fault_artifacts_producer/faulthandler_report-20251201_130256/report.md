@@ -1,6 +1,7 @@
-# Fault Diagnostics Summary
+# Faulthandler Report Summary
 
-Generated (UTC): 2025-12-01T13:13:30+00:00
+Generated (UTC): 2025-12-01T13:02:56+00:00
+Source Run Dir: C:\Users\genet\repo_studios\.repo_studios\reports\orchestrator_logs\faulthandler_logs\2025-11-28_1702
 
 ## Summary
 
@@ -19,11 +20,6 @@ Generated (UTC): 2025-12-01T13:13:30+00:00
 - multi_hit: 0
 - single_hit: 0
 
-## Dumps
-
-- combined.txt
-
-## Top Signatures
+## Top Signatures (up to 25)
 
 (none)
-

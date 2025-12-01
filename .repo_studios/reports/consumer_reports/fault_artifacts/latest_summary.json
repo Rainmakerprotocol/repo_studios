@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2025-11-28T21:47:34+00:00",
+  "generated_at": "2025-12-01T13:13:30+00:00",
   "source": "producer",
-  "source_report": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\faulthandler_reports\\faulthandler_report-20251128_214734\\report.json",
+  "source_report": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\faulthandler_reports\\faulthandler_report-20251201_131330\\report.json",
   "run_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702",
   "summary": {
     "active_signature_count": 0,

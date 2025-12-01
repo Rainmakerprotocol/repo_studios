@@ -1,6 +1,6 @@
 # Fault Diagnostics Summary
 
-Generated (UTC): 2025-11-28T21:47:34+00:00
+Generated (UTC): 2025-12-01T13:13:30+00:00
 
 ## Summary
 
@@ -32,7 +32,7 @@ Generated (UTC): 2025-11-28T21:47:34+00:00
 
 - Run Directory: `C:\Users\genet\repo_studios\.repo_studios\reports\orchestrator_logs\faulthandler_logs\2025-11-28_1702`
 - Source Type: producer
-- Producer Report: `C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\faulthandler_reports\faulthandler_report-20251128_214734\report.json`
+- Producer Report: `C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\faulthandler_reports\faulthandler_report-20251201_131330\report.json`
 - Run Summary: `C:\Users\genet\repo_studios\.repo_studios\reports\orchestrator_logs\faulthandler_logs\2025-11-28_1702\SUMMARY.md`
 - Stacks CSV: `C:\Users\genet\repo_studios\.repo_studios\reports\orchestrator_logs\faulthandler_logs\2025-11-28_1702\stacks.csv`
 - Combined Stack Text: `C:\Users\genet\repo_studios\.repo_studios\reports\orchestrator_logs\faulthandler_logs\2025-11-28_1702\dumps\combined.txt`

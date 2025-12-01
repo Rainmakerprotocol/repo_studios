@@ -77,7 +77,7 @@ write_report_artifacts(
   `tests/tests_command_center/test_topic_pipeline.py` already cover log retention and pipeline
   error handling.
 
-## Fault Diagnostics (legacy: `run_fault_pipeline.py`)
+## Fault Diagnostics (replaces legacy `run_fault_pipeline.py`)
 
 ### Proposed Structure
 
@@ -92,9 +92,9 @@ from command_center.scripts.libraries import (
 
 registry = CatalogRegistry()
 registry.register(
-    script_path=".repo_studios/scripts/orchestrators/run_fault_pipeline.py",
-    topic="fault-diagnostics",
-    role="orchestrator",
+  script_path=".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py",
+  topic="fault-diagnostics",
+  role="orchestrator",
 )
 
 context = TopicContext(paths=paths_cfg, options=options_cfg)
@@ -130,8 +130,9 @@ telemetry = build_pipeline_telemetry(
 
 ### Validation Hooks
 
-- `tests/tests_command_center/orchestrators/test_run_fault_pipeline.py` validates producer/consumer
-  handoffs and retention semantics that the migration must preserve.
+- `tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py` validates
+  producer/consumer handoffs, summarizer wiring, and retention semantics that the migration must
+  preserve.
 
 ## Docs Health (legacy suite of producer scripts)
 

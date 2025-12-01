@@ -1,0 +1,42 @@
+{
+  "finished_at": "2025-12-01T13:13:30.132111+00:00",
+  "run_slug": "20251201-1313",
+  "started_at": "2025-12-01T13:13:30.061494+00:00",
+  "steps": [
+    {
+      "detail": "signatures=0, repeat_offender=0",
+      "finished_at": "2025-12-01T13:13:30.093042+00:00",
+      "name": "producer",
+      "payload": {
+        "repeat_offender": 0,
+        "signatures": 0
+      },
+      "started_at": "2025-12-01T13:13:30.061663+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "signatures=0, repeat_offender=0",
+      "finished_at": "2025-12-01T13:13:30.116612+00:00",
+      "name": "consumer",
+      "payload": {
+        "repeat_offender": 0,
+        "signatures": 0
+      },
+      "started_at": "2025-12-01T13:13:30.093226+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "slug=20251201_131330",
+      "finished_at": "2025-12-01T13:13:30.131973+00:00",
+      "name": "summarizer",
+      "payload": {
+        "slug": "20251201_131330"
+      },
+      "started_at": "2025-12-01T13:13:30.116805+00:00",
+      "status": "success"
+    }
+  ],
+  "success": true,
+  "topic": "fault_diagnostics",
+  "viewer": "commandview"
+}

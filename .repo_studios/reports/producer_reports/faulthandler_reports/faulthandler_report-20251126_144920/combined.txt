@@ -1,5 +1,0 @@
-Current thread 0x0001:
-  File "/svc/worker.py", line 8, in work
-
-Thread 0x0002:
-  File "/svc/helper.py", line 3, in assist

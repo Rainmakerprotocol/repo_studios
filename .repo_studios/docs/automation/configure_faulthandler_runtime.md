@@ -60,7 +60,8 @@ Run the tests with:
 ## Legacy Compatibility
 
 The helper defaults to the orchestrator logs tree, matching
-`collect_faulthandler_reports.py` and `run_fault_pipeline.py`. Set
+`collect_faulthandler_reports.py` and the fault diagnostics orchestrator
+(`command_center/scripts/orchestrators/run_fault_diagnostics_overview.py`). Set
 `FAULT_LOGS_ALLOW_LEGACY=1` (or explicitly provide `FAULT_OUTDIR`) when you need
 captures under the historical `.repo_studios/faulthandler/` path for older
 artifacts or reproductions.

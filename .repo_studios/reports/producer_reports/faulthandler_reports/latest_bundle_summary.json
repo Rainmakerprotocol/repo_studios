@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "bundle": "faulthandler_report-20251128_214734",
-  "generated_at": "2025-11-28T21:47:34+00:00",
+  "bundle": "faulthandler_report-20251201_131330",
+  "generated_at": "2025-12-01T13:13:30+00:00",
   "source": "collect_faulthandler_reports",
   "run_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702",
   "metrics": {
@@ -13,11 +13,11 @@
     "thread_block_count": 0
   },
   "artifacts": {
-    "report_json": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\faulthandler_reports\\faulthandler_report-20251128_214734\\report.json",
-    "report_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\faulthandler_reports\\faulthandler_report-20251128_214734\\report.md",
-    "stacks_csv": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\faulthandler_reports\\faulthandler_report-20251128_214734\\stacks.csv",
-    "combined_txt": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\faulthandler_reports\\faulthandler_report-20251128_214734\\combined.txt",
-    "log_txt": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\faulthandler_reports\\faulthandler_report-20251128_214734\\log.txt"
+    "report_json": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\faulthandler_reports\\faulthandler_report-20251201_131330\\report.json",
+    "report_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\faulthandler_reports\\faulthandler_report-20251201_131330\\report.md",
+    "stacks_csv": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\faulthandler_reports\\faulthandler_report-20251201_131330\\stacks.csv",
+    "combined_txt": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\faulthandler_reports\\faulthandler_report-20251201_131330\\combined.txt",
+    "log_txt": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\faulthandler_reports\\faulthandler_report-20251201_131330\\log.txt"
   },
   "summary": {
     "signature_count": 0,

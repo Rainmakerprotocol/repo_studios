@@ -208,7 +208,7 @@ The last consideration is the best view for agents to consume. Would they want t
 
 - `.repo_studios/scripts/orchestrator_refactor_plan_temp.md`
 - `.repo_studios/scripts/script_inventory_architecture.md`
-- Existing orchestrators: `orchestrate_health_suite.py`, `run_fault_pipeline.py`,
+- Existing orchestrators: `orchestrate_health_suite.py`, `command_center/scripts/orchestrators/run_fault_diagnostics_overview.py`,
   `run_standards_gap_suite.py`
 - Command Center helper modules in
   `.repo_studios/command_center/scripts/libraries/`
