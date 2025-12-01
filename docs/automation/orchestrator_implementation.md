@@ -243,8 +243,16 @@ roadmap.
     `studio-verify-docs-integrity`, `studio-generate-undocumented-logic-report`). Updated the
     implementation plan to note that the forthcoming Docs Health orchestrator needs mirrored make
     targets (`studio-orchestrate-docs-health`) plus cross-links in
-    `orchestrator_automation_hooks.md` once the topic runner ships; documentation edits will land as
-    part of that orchestrator PR.
+    `orchestrator_automation_hooks.md` once the topic runner ships; documentation edits shipped with
+    the orchestrator rollout on 2025-12-02.
+  - [x] 2025-12-02: Delivered the Docs Health topic orchestrator and smoke suite. The run module
+    (`.repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py`) threads the
+    doc index, anchor inventory, anchor validation, docs integrity, metrics stub, code/doc churn, and
+    undocumented logic producers into the aggregator, mirrors Healthview manifests via
+    `write_report_artifacts`, and registers catalog coverage for every dependency. Added
+    `.repo_studios/tests/tests_command_center/docs_health/test_run_docs_health_overview.py` to assert
+    manifest emission against seeded fixture data and refreshed `.repo_studios/Makefile` with the
+    `studio-orchestrate-docs-health` target for local operators and CI.
 - **Standards Integrity**
   - [x] Consolidated the Standards Integrity roster by cross-referencing
     `.repo_studios/scripts/script_inventory_architecture.md` with the automation guides for
@@ -272,6 +280,13 @@ roadmap.
   `.repo_studios/docs/standards/docs_index.md` with Healthview bundle guidance, added
   `studio-orchestrate-standards` to `.repo_studios/Makefile`, and wired
   `.github/workflows/studio-inventory.yml` to execute the new target.
+  - 2025-12-01: Landed `.repo_studios/tests/tests_command_center/standards_integrity/test_run_standards_integrity.py`
+    to monkey-patch the producer shims, seed minimal outputs, and assert that the orchestrator
+    writes Healthview `manifest.json`, `summary.md`, and `telemetry.json` bundles with the expected
+    step telemetry. Confirmed the contract with
+    `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/standards_integrity -q`
+    and spot-checked a live run via
+    `PYTHONPATH="C:/Users/genet/repo_studios/.repo_studios" make -C .repo_studios studio-orchestrate-standards PYTHON=.venv/Scripts/python.exe`.
 - **Dependency & Import Hygiene**
   - 2025-11-30: Outlined the Dependency & Import Hygiene execution order so the forthcoming topic
   orchestrator can reuse a shared timestamp and retention budget. The run will start with
@@ -393,8 +408,17 @@ roadmap.
       summary assertions cover success and log-missing scenarios.
     - Verified the generated manifest/telemetry payload mirrors step outcomes and surfaces relative
       artifact paths per `REPORT_NAMING_STANDARDS.md` viewer/topic guidance.
-  - [ ] Deliver Fault Diagnostics orchestrator with aligned CLI surfaces.
-  - [ ] Deliver Docs Health orchestrator with aligned CLI surfaces.
+  - 2025-12-01: Delivered the Fault Diagnostics orchestrator with aligned CLI surfaces, wiring
+    `run_fault_diagnostics_overview.py` through the shared helper stack, updating
+    `.repo_studios/Makefile` with the `studio-orchestrate-fault-diagnostics` target (aliasing the
+    legacy fault pipeline entry point), refreshing automation docs (`orchestrator_automation_hooks.md`,
+    `run_fault_pipeline.md`), and confirming viewer/topic bundles under
+    `.repo_studios/command_center/reports/commandview/fault_diagnostics/20251201-1313/` alongside the
+    producer/consumer mirrors; validated end-to-end via `make -C .repo_studios
+    studio-orchestrate-fault-diagnostics PYTHON=.venv/Scripts/python.exe` and
+    `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/fault_diagnostics -q`.
+  - [x] Deliver Docs Health orchestrator with aligned CLI surfaces.
+    - 2025-12-02: Added `command_center/scripts/orchestrators/run_docs_health_overview.py`, wiring the Docs Health producers and aggregator through the shared topic pipeline with catalog registration, Healthview manifest emission, and retention knobs for every dependency. Published the `studio-orchestrate-docs-health` make target and validated the runner via `make -C .repo_studios studio-orchestrate-docs-health PYTHON=.venv/Scripts/python.exe` together with `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/docs_health -q`.
   - [ ] Deliver Standards Integrity orchestrator with aligned CLI surfaces.
   - [ ] Deliver Dependency & Import Hygiene orchestrator with aligned CLI surfaces.
   - 2025-12-01: Delivered the Monkey Patch Oversight orchestrator and companion summarizer with
@@ -649,3 +673,9 @@ Example manifest path: `.../healthview/test_execution_telemetry/20251129-2102/ma
   (`monkey_patch_risk-2025-12-01_115542`), aggregator (`monkey_patch_trends-2025-12-01_115542`), and
   summarizer (`monkey_patch_overview-20251201_115540`) bundles; contract coverage reconfirmed via
   `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/monkey_patch -q`.
+- 2025-12-01: Validated Fault Diagnostics orchestrator delivery by executing
+  `make -C .repo_studios studio-orchestrate-fault-diagnostics PYTHON=.venv/Scripts/python.exe`,
+  inspecting `.repo_studios/command_center/reports/commandview/fault_diagnostics/20251201-1313/manifest.json`
+  for aligned artifact pointers, and running
+  `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/fault_diagnostics -q`
+  to confirm orchestrator + summarizer test coverage.

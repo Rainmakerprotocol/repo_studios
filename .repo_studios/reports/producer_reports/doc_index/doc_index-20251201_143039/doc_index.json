@@ -1,27 +1,27 @@
 {
   "schema_version": 1,
-  "generated_utc": "2025-11-25T03:38:45.960103+00:00",
+  "generated_utc": "2025-12-01T14:30:39.071989+00:00",
   "repo_root": "C:\\Users\\genet\\repo_studios",
   "summary": {
-    "total_documents": 192,
-    "total_h1": 176,
-    "total_h2": 1038,
-    "total_headings": 1214,
+    "total_documents": 221,
+    "total_h1": 205,
+    "total_h2": 1234,
+    "total_headings": 1439,
     "total_links": 2
   },
   "metrics": {
     "documents_per_directory": [
       {
+        "directory": ".repo_studios/docs/automation",
+        "count": 41
+      },
+      {
         "directory": ".repo_studios/command_center/docs/mermaid/view_specs",
         "count": 28
       },
       {
-        "directory": ".repo_studios/docs/automation",
-        "count": 27
-      },
-      {
         "directory": ".repo_studios/command_center/docs",
-        "count": 11
+        "count": 12
       },
       {
         "directory": ".repo_studios/docs/standards/global",
@@ -40,16 +40,20 @@
         "count": 8
       },
       {
+        "directory": ".repo_studios/docs/automation/traceability",
+        "count": 8
+      },
+      {
         "directory": ".repo_studios/command_center/docs/phase_6",
         "count": 7
       },
       {
-        "directory": ".repo_studios/command_center/viewer",
+        "directory": ".",
         "count": 6
       },
       {
-        "directory": ".",
-        "count": 5
+        "directory": ".repo_studios/command_center/viewer",
+        "count": 6
       },
       {
         "directory": ".github",
@@ -57,10 +61,6 @@
       },
       {
         "directory": ".repo_studios/command_center/docs/mermaid",
-        "count": 5
-      },
-      {
-        "directory": ".repo_studios/docs/automation/traceability",
         "count": 5
       },
       {
@@ -80,25 +80,25 @@
         "count": 4
       },
       {
+        "directory": ".repo_studios/scripts",
+        "count": 4
+      },
+      {
         "directory": ".repo_studios/command_center/docs/metrics",
         "count": 3
       },
       {
-        "directory": ".repo_studios/docs/standards/project",
-        "count": 3
-      },
-      {
-        "directory": ".repo_studios/scripts",
+        "directory": ".repo_studios/command_center/scripts/scripts_index",
         "count": 3
       }
     ],
-    "documents_missing_description_count": 34,
+    "documents_missing_description_count": 35,
     "documents_without_h1_count": 20,
     "documents_without_h2_count": 21,
-    "placeholder_documents_count": 37,
+    "placeholder_documents_count": 46,
     "duplicate_slug_count": 6,
-    "documents_outside_docs_tree_count": 116,
-    "link_density": 0.010416666666666666
+    "documents_outside_docs_tree_count": 124,
+    "link_density": 0.00904977375565611
   },
   "advisories": {
     "documents_missing_description": [
@@ -125,7 +125,7 @@
       ".repo_studios/docs/standards/global/std-global-markdown-authoring.md",
       ".repo_studios/docs/standards/global/std-global-mission-parameters.md",
       ".repo_studios/docs/templates/script_inventory.md",
-      ".repo_studios/monkey_patch/20251124_175233/report.md",
+      ".repo_studios/monkey_patch/20251201_115542/report.md",
       ".repo_studios/monkey_patch/latest/report.md"
     ],
     "documents_without_h1": [
@@ -160,18 +160,18 @@
       ".repo_studios/command_center/docs/phase_7/PRODUCER_CONSUMER_TRACEABILITY_AUDIT.md",
       ".repo_studios/command_center/scripts/script_inventory.md",
       ".repo_studios/command_center/viewer/cache/README.md",
+      ".repo_studios/docs/governance/alignment-ledger.md",
       ".repo_studios/docs/project_tree_overview.md",
-      ".repo_studios/docs/standards/docs_index.md",
       ".repo_studios/docs/templates/agent_note_template.md",
       ".repo_studios/docs/templates/script_inventory.md",
       ".repo_studios/docs/templates/structural_checklist_template.md",
       ".repo_studios/inventory_schema/views/README.md",
+      ".repo_studios/scripts/scripts_index/scripts_duplicate_summary-20251130-0333.md",
       "README.md",
       "command_center_script_verification_temp.md",
       "docs/standards/global/std-docs-integrity-handbook.md",
       "docs/standards/global/std-global-chainlit-ui.md",
-      "docs/standards/global/std-global-html-coding.md",
-      "docs/standards/project/std-project-python-instructions.md"
+      "docs/standards/global/std-global-html-coding.md"
     ],
     "placeholder_documents": [
       ".repo_studios/command_center/checklists/2025-10-24.md",
@@ -186,6 +186,7 @@
       ".repo_studios/command_center/docs/mermaid/mermaid_viewer.md",
       ".repo_studios/command_center/docs/mermaid/view_specs/class_inheritance_hierarchy.md",
       ".repo_studios/command_center/docs/mermaid/view_specs/git_churn_risk_map.md",
+      ".repo_studios/command_center/docs/orchestrator_migration_notes.md",
       ".repo_studios/command_center/docs/phase_4/POST_RUN_TEST_MATRIX.md",
       ".repo_studios/command_center/docs/phase_4/PR_CHECKLIST_TEMPLATE.md",
       ".repo_studios/command_center/docs/phase_7/CI_INTEGRATION_STRATEGY.md",
@@ -194,11 +195,10 @@
       ".repo_studios/command_center/docs/phase_7/REPORTING_INTERFACE_PLAN.md",
       ".repo_studios/command_center/docs/phase_7/placeholder_scan_blocking_transition_brief.md",
       ".repo_studios/command_center/docs/run_log_template.md",
+      ".repo_studios/docs/automation/aggregate_docs_health_signals.md",
+      ".repo_studios/docs/automation/generate_anchor_health_report.md",
       ".repo_studios/docs/automation/generate_doc_index.md",
-      ".repo_studios/docs/automation/orchestrator_automation_hooks.md",
-      ".repo_studios/docs/automation/scan_code_placeholders.md",
-      ".repo_studios/docs/automation/traceability/producer_consumer_traceability_audit.md",
-      ".repo_studios/docs/inventory/inventory-notes.md"
+      ".repo_studios/docs/automation/orchestrator_automation_hooks.md"
     ],
     "documents_outside_docs_tree": [
       ".copilot_todo.md",
@@ -216,6 +216,7 @@
       ".repo_studios/command_center/command_center_architecture.md",
       ".repo_studios/command_center/docs/build_paths_extraction_brief.md",
       ".repo_studios/command_center/docs/code_library/code_library_status.md",
+      ".repo_studios/command_center/docs/code_library/helper_usage_patterns.md",
       ".repo_studios/command_center/docs/decision_log.md",
       ".repo_studios/command_center/docs/duplicate_detection_schema_alignment.md",
       ".repo_studios/command_center/docs/duplicate_target_mappings.md",
@@ -224,8 +225,7 @@
       ".repo_studios/command_center/docs/library_integration_checklist.md",
       ".repo_studios/command_center/docs/library_readme_adjustments.md",
       ".repo_studios/command_center/docs/manual_extraction_checklist.md",
-      ".repo_studios/command_center/docs/manual_extraction_operator_brief.md",
-      ".repo_studios/command_center/docs/mermaid/README.md"
+      ".repo_studios/command_center/docs/manual_extraction_operator_brief.md"
     ],
     "duplicate_slugs": {
       "library-integration-alignment-plan": [
@@ -233,7 +233,9 @@
         ".repo_studios/command_center/docs/library_integration_checklist.md"
       ],
       "duplicate-scan-summary": [
-        ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-24-2338.md",
+        ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md",
+        ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md",
+        ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md",
         ".repo_studios/scripts/aggregators/aggregators_index/aggregators_duplicate_summary-2025-10-28-0942.md",
         ".repo_studios/scripts/consumers/consumers_index/consumers_duplicate_summary-2025-10-28-0934.md",
         ".repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md",
@@ -255,7 +257,7 @@
         ".repo_studios/docs/templates/script_inventory_template.md"
       ],
       "monkey-patch-scan-report": [
-        ".repo_studios/monkey_patch/20251124_175233/report.md",
+        ".repo_studios/monkey_patch/20251201_115542/report.md",
         ".repo_studios/monkey_patch/latest/report.md"
       ]
     }
@@ -621,36 +623,36 @@
         {
           "title": "Testing & Validation",
           "slug": "testing-validation",
-          "line": 29,
+          "line": 30,
           "parent_title": "Repo Studios Copilot Playbook",
           "parent_slug": "repo-studios-copilot-playbook"
         },
         {
           "title": "Reference Material",
           "slug": "reference-material",
-          "line": 34,
+          "line": 35,
           "parent_title": "Repo Studios Copilot Playbook",
           "parent_slug": "repo-studios-copilot-playbook"
         },
         {
           "title": "Collaboration Tips",
           "slug": "collaboration-tips",
-          "line": 41,
+          "line": 42,
           "parent_title": "Repo Studios Copilot Playbook",
           "parent_slug": "repo-studios-copilot-playbook"
         },
         {
           "title": "Terminal Coordination",
           "slug": "terminal-coordination",
-          "line": 47,
+          "line": 48,
           "parent_title": "Repo Studios Copilot Playbook",
           "parent_slug": "repo-studios-copilot-playbook"
         }
       ],
       "links": [],
       "description": null,
-      "size_bytes": 7422,
-      "modified_utc": "2025-11-07T03:43:35.020145+00:00",
+      "size_bytes": 7624,
+      "modified_utc": "2025-11-30T01:23:50.960100+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -993,57 +995,57 @@
         {
           "title": "Shared Helper Modules",
           "slug": "shared-helper-modules",
-          "line": 32,
+          "line": 46,
           "parent_title": "Library Integration Protocol",
           "parent_slug": "library-integration-protocol"
         },
         {
           "title": "Artifact Retention Policy",
           "slug": "artifact-retention-policy",
-          "line": 45,
+          "line": 59,
           "parent_title": "Library Integration Protocol",
           "parent_slug": "library-integration-protocol"
         },
         {
           "title": "Micro-Cycle Blueprint",
           "slug": "micro-cycle-blueprint",
-          "line": 53,
+          "line": 67,
           "parent_title": "Library Integration Protocol",
           "parent_slug": "library-integration-protocol"
         },
         {
           "title": "Automation Entry Points",
           "slug": "automation-entry-points",
-          "line": 77,
+          "line": 91,
           "parent_title": "Library Integration Protocol",
           "parent_slug": "library-integration-protocol"
         },
         {
           "title": "Usage Instructions",
           "slug": "usage-instructions",
-          "line": 119,
+          "line": 133,
           "parent_title": "Library Integration Protocol",
           "parent_slug": "library-integration-protocol"
         },
         {
           "title": "References",
           "slug": "references",
-          "line": 142,
+          "line": 156,
           "parent_title": "Library Integration Protocol",
           "parent_slug": "library-integration-protocol"
         },
         {
           "title": "Onboarding Checklist",
           "slug": "onboarding-checklist",
-          "line": 151,
+          "line": 165,
           "parent_title": "Library Integration Protocol",
           "parent_slug": "library-integration-protocol"
         }
       ],
       "links": [],
       "description": "Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical\u2026",
-      "size_bytes": 14418,
-      "modified_utc": "2025-11-23T11:14:18.336713+00:00",
+      "size_bytes": 14886,
+      "modified_utc": "2025-11-28T14:18:05.271026+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -1330,48 +1332,120 @@
         {
           "title": "Progress Recap",
           "slug": "progress-recap",
-          "line": 67,
+          "line": 69,
           "parent_title": "Code Library Integration Status \u2014 2025-11-23",
           "parent_slug": "code-library-integration-status-2025-11-23"
         },
         {
           "title": "Outstanding Work",
           "slug": "outstanding-work",
-          "line": 136,
+          "line": 138,
           "parent_title": "Code Library Integration Status \u2014 2025-11-23",
           "parent_slug": "code-library-integration-status-2025-11-23"
         },
         {
           "title": "Key References",
           "slug": "key-references",
-          "line": 156,
+          "line": 158,
           "parent_title": "Code Library Integration Status \u2014 2025-11-23",
           "parent_slug": "code-library-integration-status-2025-11-23"
         },
         {
           "title": "Suggested Next Actions (for the next contributor)",
           "slug": "suggested-next-actions-for-the-next-contributor",
-          "line": 166,
+          "line": 168,
           "parent_title": "Code Library Integration Status \u2014 2025-11-23",
           "parent_slug": "code-library-integration-status-2025-11-23"
         },
         {
           "title": "Maintenance Tips",
           "slug": "maintenance-tips",
-          "line": 174,
+          "line": 176,
           "parent_title": "Code Library Integration Status \u2014 2025-11-23",
           "parent_slug": "code-library-integration-status-2025-11-23"
         }
       ],
       "links": [],
       "description": "Summarize the current state of Repo Studios\u2019 duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This\u2026",
-      "size_bytes": 13812,
-      "modified_utc": "2025-11-23T11:23:20.546419+00:00",
+      "size_bytes": 14122,
+      "modified_utc": "2025-12-01T01:01:45.347271+00:00",
       "tags": [],
       "owners": [],
       "status": null,
       "frontmatter": null,
       "contains_placeholder": true
+    },
+    {
+      "folder": ".repo_studios/command_center/docs/code_library",
+      "filename": ".repo_studios/command_center/docs/code_library/helper_usage_patterns.md",
+      "slug": "command-center-helper-usage-patterns-2025-11-30",
+      "h1_headings": [
+        {
+          "title": "Command Center Helper Usage Patterns \u2014 2025-11-30",
+          "slug": "command-center-helper-usage-patterns-2025-11-30",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Scope",
+          "slug": "scope",
+          "line": 3,
+          "parent_title": "Command Center Helper Usage Patterns \u2014 2025-11-30",
+          "parent_slug": "command-center-helper-usage-patterns-2025-11-30"
+        },
+        {
+          "title": "Topic Pipeline Assembly",
+          "slug": "topic-pipeline-assembly",
+          "line": 9,
+          "parent_title": "Command Center Helper Usage Patterns \u2014 2025-11-30",
+          "parent_slug": "command-center-helper-usage-patterns-2025-11-30"
+        },
+        {
+          "title": "Summarizer Runner Integration",
+          "slug": "summarizer-runner-integration",
+          "line": 56,
+          "parent_title": "Command Center Helper Usage Patterns \u2014 2025-11-30",
+          "parent_slug": "command-center-helper-usage-patterns-2025-11-30"
+        },
+        {
+          "title": "Telemetry Emitters",
+          "slug": "telemetry-emitters",
+          "line": 78,
+          "parent_title": "Command Center Helper Usage Patterns \u2014 2025-11-30",
+          "parent_slug": "command-center-helper-usage-patterns-2025-11-30"
+        },
+        {
+          "title": "Catalog Registry",
+          "slug": "catalog-registry",
+          "line": 104,
+          "parent_title": "Command Center Helper Usage Patterns \u2014 2025-11-30",
+          "parent_slug": "command-center-helper-usage-patterns-2025-11-30"
+        },
+        {
+          "title": "CLI Integration Checklist",
+          "slug": "cli-integration-checklist",
+          "line": 130,
+          "parent_title": "Command Center Helper Usage Patterns \u2014 2025-11-30",
+          "parent_slug": "command-center-helper-usage-patterns-2025-11-30"
+        },
+        {
+          "title": "References",
+          "slug": "references",
+          "line": 143,
+          "parent_title": "Command Center Helper Usage Patterns \u2014 2025-11-30",
+          "parent_slug": "command-center-helper-usage-patterns-2025-11-30"
+        }
+      ],
+      "links": [],
+      "description": "Capture how the Phase 2 shared helpers are intended to be wired into topic orchestrators so engineers and agents can reuse them consistently. Each section lists the helper location, dependencies, execution contract, and verification tests.",
+      "size_bytes": 6829,
+      "modified_utc": "2025-12-01T00:53:06.675177+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/command_center/docs",
@@ -1387,8 +1461,8 @@
       "h2_headings": [],
       "links": [],
       "description": null,
-      "size_bytes": 20019,
-      "modified_utc": "2025-11-24T23:59:30.978451+00:00",
+      "size_bytes": 22558,
+      "modified_utc": "2025-12-01T01:26:52.466224+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -2532,50 +2606,50 @@
         {
           "title": "Inputs",
           "slug": "inputs",
-          "line": 9,
+          "line": 10,
           "parent_title": "Dead Code Detection View Spec",
           "parent_slug": "dead-code-detection-view-spec"
         },
         {
           "title": "Transformations",
           "slug": "transformations",
-          "line": 17,
+          "line": 18,
           "parent_title": "Dead Code Detection View Spec",
           "parent_slug": "dead-code-detection-view-spec"
         },
         {
           "title": "Mermaid Output Structure",
           "slug": "mermaid-output-structure",
-          "line": 26,
+          "line": 33,
           "parent_title": "Dead Code Detection View Spec",
           "parent_slug": "dead-code-detection-view-spec"
         },
         {
           "title": "Implementation References",
           "slug": "implementation-references",
-          "line": 42,
+          "line": 49,
           "parent_title": "Dead Code Detection View Spec",
           "parent_slug": "dead-code-detection-view-spec"
         },
         {
           "title": "Verification & Hardening",
           "slug": "verification-hardening",
-          "line": 48,
+          "line": 60,
           "parent_title": "Dead Code Detection View Spec",
           "parent_slug": "dead-code-detection-view-spec"
         },
         {
           "title": "Future Enhancements",
           "slug": "future-enhancements",
-          "line": 54,
+          "line": 70,
           "parent_title": "Dead Code Detection View Spec",
           "parent_slug": "dead-code-detection-view-spec"
         }
       ],
       "links": [],
       "description": "Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.",
-      "size_bytes": 4341,
-      "modified_utc": "2025-11-13T13:29:06.677630+00:00",
+      "size_bytes": 4393,
+      "modified_utc": "2025-11-25T19:41:38.796364+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -4104,6 +4178,92 @@
       "contains_placeholder": false
     },
     {
+      "folder": ".repo_studios/command_center/docs",
+      "filename": ".repo_studios/command_center/docs/orchestrator_migration_notes.md",
+      "slug": "orchestrator-migration-notes-2025-11-30",
+      "h1_headings": [
+        {
+          "title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "slug": "orchestrator-migration-notes-2025-11-30",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Purpose",
+          "slug": "purpose",
+          "line": 3,
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "parent_slug": "orchestrator-migration-notes-2025-11-30"
+        },
+        {
+          "title": "Test Execution Telemetry (legacy: `run_pytest_log_capture.py`)",
+          "slug": "test-execution-telemetry-legacy-runpytestlogcapturepy",
+          "line": 15,
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "parent_slug": "orchestrator-migration-notes-2025-11-30"
+        },
+        {
+          "title": "Fault Diagnostics (replaces legacy `run_fault_pipeline.py`)",
+          "slug": "fault-diagnostics-replaces-legacy-runfaultpipelinepy",
+          "line": 80,
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "parent_slug": "orchestrator-migration-notes-2025-11-30"
+        },
+        {
+          "title": "Docs Health (legacy suite of producer scripts)",
+          "slug": "docs-health-legacy-suite-of-producer-scripts",
+          "line": 137,
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "parent_slug": "orchestrator-migration-notes-2025-11-30"
+        },
+        {
+          "title": "Standards Integrity (legacy: `run_standards_gap_suite.py` + `run_standards_index_cli.py`)",
+          "slug": "standards-integrity-legacy-runstandardsgapsuitepy-runstandardsindexclipy",
+          "line": 173,
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "parent_slug": "orchestrator-migration-notes-2025-11-30"
+        },
+        {
+          "title": "Dependency & Import Hygiene (legacy: `run_batch_cleanup.py`)",
+          "slug": "dependency-import-hygiene-legacy-runbatchcleanuppy",
+          "line": 183,
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "parent_slug": "orchestrator-migration-notes-2025-11-30"
+        },
+        {
+          "title": "Monkey Patch Oversight",
+          "slug": "monkey-patch-oversight",
+          "line": 191,
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "parent_slug": "orchestrator-migration-notes-2025-11-30"
+        },
+        {
+          "title": "Implementation Checklist",
+          "slug": "implementation-checklist",
+          "line": 197,
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "parent_slug": "orchestrator-migration-notes-2025-11-30"
+        },
+        {
+          "title": "References",
+          "slug": "references",
+          "line": 209,
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "parent_slug": "orchestrator-migration-notes-2025-11-30"
+        }
+      ],
+      "links": [],
+      "description": "Show how the legacy Command Center orchestrators would integrate the Phase 2 helper modules if they were rewritten today. The goal is to give reviewers parity confidence before we begin migrating the existing entry points.",
+      "size_bytes": 8056,
+      "modified_utc": "2025-12-01T13:19:36.912676+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
+    },
+    {
       "folder": ".repo_studios/command_center/docs/phase_4",
       "filename": ".repo_studios/command_center/docs/phase_4/AUTOMATION_PLANNING_NOTES.md",
       "slug": "phase-4-automation-planning-notes",
@@ -5175,9 +5335,9 @@
         }
       ],
       "links": [],
-      "description": "Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in `utilities.test_log_analysis` and emit\u2026",
-      "size_bytes": 6040,
-      "modified_utc": "2025-11-23T23:22:54.838677+00:00",
+      "description": "Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in\u2026",
+      "size_bytes": 6485,
+      "modified_utc": "2025-12-01T01:26:52.466224+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -5764,7 +5924,7 @@
     },
     {
       "folder": ".repo_studios/command_center/scripts/scripts_index",
-      "filename": ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-24-2338.md",
+      "filename": ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md",
       "slug": "duplicate-scan-summary",
       "h1_headings": [
         {
@@ -5806,7 +5966,109 @@
       "links": [],
       "description": "1. `configure_logging` \u2014 12 duplicate(s)",
       "size_bytes": 7126,
-      "modified_utc": "2025-11-24T23:38:11.764488+00:00",
+      "modified_utc": "2025-11-27T17:57:02.808160+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".repo_studios/command_center/scripts/scripts_index",
+      "filename": ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md",
+      "slug": "duplicate-scan-summary",
+      "h1_headings": [
+        {
+          "title": "Duplicate Scan Summary",
+          "slug": "duplicate-scan-summary",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Overview",
+          "slug": "overview",
+          "line": 3,
+          "parent_title": "Duplicate Scan Summary",
+          "parent_slug": "duplicate-scan-summary"
+        },
+        {
+          "title": "Inputs",
+          "slug": "inputs",
+          "line": 13,
+          "parent_title": "Duplicate Scan Summary",
+          "parent_slug": "duplicate-scan-summary"
+        },
+        {
+          "title": "Top Duplicate Offenders",
+          "slug": "top-duplicate-offenders",
+          "line": 18,
+          "parent_title": "Duplicate Scan Summary",
+          "parent_slug": "duplicate-scan-summary"
+        },
+        {
+          "title": "Next Steps",
+          "slug": "next-steps",
+          "line": 101,
+          "parent_title": "Duplicate Scan Summary",
+          "parent_slug": "duplicate-scan-summary"
+        }
+      ],
+      "links": [],
+      "description": "1. `configure_logging` \u2014 12 duplicate(s)",
+      "size_bytes": 7198,
+      "modified_utc": "2025-11-30T04:56:22.549708+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".repo_studios/command_center/scripts/scripts_index",
+      "filename": ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md",
+      "slug": "duplicate-scan-summary",
+      "h1_headings": [
+        {
+          "title": "Duplicate Scan Summary",
+          "slug": "duplicate-scan-summary",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Overview",
+          "slug": "overview",
+          "line": 3,
+          "parent_title": "Duplicate Scan Summary",
+          "parent_slug": "duplicate-scan-summary"
+        },
+        {
+          "title": "Inputs",
+          "slug": "inputs",
+          "line": 13,
+          "parent_title": "Duplicate Scan Summary",
+          "parent_slug": "duplicate-scan-summary"
+        },
+        {
+          "title": "Top Duplicate Offenders",
+          "slug": "top-duplicate-offenders",
+          "line": 18,
+          "parent_title": "Duplicate Scan Summary",
+          "parent_slug": "duplicate-scan-summary"
+        },
+        {
+          "title": "Next Steps",
+          "slug": "next-steps",
+          "line": 101,
+          "parent_title": "Duplicate Scan Summary",
+          "parent_slug": "duplicate-scan-summary"
+        }
+      ],
+      "links": [],
+      "description": "1. `configure_logging` \u2014 12 duplicate(s)",
+      "size_bytes": 7198,
+      "modified_utc": "2025-11-30T04:57:31.343343+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -5849,56 +6111,56 @@
         {
           "title": "File Structure",
           "slug": "file-structure",
-          "line": 77,
+          "line": 90,
           "parent_title": "Command Center Viewer",
           "parent_slug": "command-center-viewer"
         },
         {
           "title": "Configuration",
           "slug": "configuration",
-          "line": 92,
+          "line": 105,
           "parent_title": "Command Center Viewer",
           "parent_slug": "command-center-viewer"
         },
         {
           "title": "Troubleshooting",
           "slug": "troubleshooting",
-          "line": 112,
+          "line": 125,
           "parent_title": "Command Center Viewer",
           "parent_slug": "command-center-viewer"
         },
         {
           "title": "Browser Console Debugging",
           "slug": "browser-console-debugging",
-          "line": 175,
+          "line": 203,
           "parent_title": "Command Center Viewer",
           "parent_slug": "command-center-viewer"
         },
         {
           "title": "Development",
           "slug": "development",
-          "line": 203,
+          "line": 231,
           "parent_title": "Command Center Viewer",
           "parent_slug": "command-center-viewer"
         },
         {
           "title": "Architecture",
           "slug": "architecture",
-          "line": 235,
+          "line": 263,
           "parent_title": "Command Center Viewer",
           "parent_slug": "command-center-viewer"
         },
         {
           "title": "VS Code Theme",
           "slug": "vs-code-theme",
-          "line": 242,
+          "line": 270,
           "parent_title": "Command Center Viewer",
           "parent_slug": "command-center-viewer"
         },
         {
           "title": "Documentation Map",
           "slug": "documentation-map",
-          "line": 254,
+          "line": 282,
           "parent_title": "Command Center Viewer",
           "parent_slug": "command-center-viewer"
         }
@@ -5908,8 +6170,8 @@
         "http://localhost:8000/"
       ],
       "description": "A modern VS Code-styled progressive detail viewer for CommandView artifacts.",
-      "size_bytes": 8558,
-      "modified_utc": "2025-11-23T11:14:18.336713+00:00",
+      "size_bytes": 9292,
+      "modified_utc": "2025-11-28T14:18:05.271026+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -6533,6 +6795,85 @@
     },
     {
       "folder": ".repo_studios/docs/automation",
+      "filename": ".repo_studios/docs/automation/aggregate_docs_health_signals.md",
+      "slug": "aggregatedocshealthsignals",
+      "h1_headings": [
+        {
+          "title": "aggregate_docs_health_signals",
+          "slug": "aggregatedocshealthsignals",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Purpose",
+          "slug": "purpose",
+          "line": 3,
+          "parent_title": "aggregate_docs_health_signals",
+          "parent_slug": "aggregatedocshealthsignals"
+        },
+        {
+          "title": "Upstream Inputs",
+          "slug": "upstream-inputs",
+          "line": 16,
+          "parent_title": "aggregate_docs_health_signals",
+          "parent_slug": "aggregatedocshealthsignals"
+        },
+        {
+          "title": "Output Bundle",
+          "slug": "output-bundle",
+          "line": 43,
+          "parent_title": "aggregate_docs_health_signals",
+          "parent_slug": "aggregatedocshealthsignals"
+        },
+        {
+          "title": "CLI Surface",
+          "slug": "cli-surface",
+          "line": 65,
+          "parent_title": "aggregate_docs_health_signals",
+          "parent_slug": "aggregatedocshealthsignals"
+        },
+        {
+          "title": "Score Model",
+          "slug": "score-model",
+          "line": 91,
+          "parent_title": "aggregate_docs_health_signals",
+          "parent_slug": "aggregatedocshealthsignals"
+        },
+        {
+          "title": "Implementation Checklist",
+          "slug": "implementation-checklist",
+          "line": 106,
+          "parent_title": "aggregate_docs_health_signals",
+          "parent_slug": "aggregatedocshealthsignals"
+        },
+        {
+          "title": "Testing Plan",
+          "slug": "testing-plan",
+          "line": 118,
+          "parent_title": "aggregate_docs_health_signals",
+          "parent_slug": "aggregatedocshealthsignals"
+        },
+        {
+          "title": "Follow-Up Opportunities",
+          "slug": "follow-up-opportunities",
+          "line": 127,
+          "parent_title": "aggregate_docs_health_signals",
+          "parent_slug": "aggregatedocshealthsignals"
+        }
+      ],
+      "links": [],
+      "description": "`aggregate_docs_health_signals.py` will fuse disparate documentation quality signals into a single dashboard that highlights where Repo Studios needs renewed attention. The aggregator focuses on three questions:",
+      "size_bytes": 6807,
+      "modified_utc": "2025-11-27T14:42:44.934383+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
+    },
+    {
+      "folder": ".repo_studios/docs/automation",
       "filename": ".repo_studios/docs/automation/analyze_test_hardening.md",
       "slug": "analyzetesthardeningpy",
       "h1_headings": [
@@ -6649,6 +6990,64 @@
     },
     {
       "folder": ".repo_studios/docs/automation",
+      "filename": ".repo_studios/docs/automation/classify_monkey_patches.md",
+      "slug": "classifymonkeypatchespy",
+      "h1_headings": [
+        {
+          "title": "classify_monkey_patches.py",
+          "slug": "classifymonkeypatchespy",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Purpose",
+          "slug": "purpose",
+          "line": 5,
+          "parent_title": "classify_monkey_patches.py",
+          "parent_slug": "classifymonkeypatchespy"
+        },
+        {
+          "title": "Invocation",
+          "slug": "invocation",
+          "line": 28,
+          "parent_title": "classify_monkey_patches.py",
+          "parent_slug": "classifymonkeypatchespy"
+        },
+        {
+          "title": "Outputs",
+          "slug": "outputs",
+          "line": 55,
+          "parent_title": "classify_monkey_patches.py",
+          "parent_slug": "classifymonkeypatchespy"
+        },
+        {
+          "title": "Testing",
+          "slug": "testing",
+          "line": 73,
+          "parent_title": "classify_monkey_patches.py",
+          "parent_slug": "classifymonkeypatchespy"
+        },
+        {
+          "title": "Operational Notes",
+          "slug": "operational-notes",
+          "line": 77,
+          "parent_title": "classify_monkey_patches.py",
+          "parent_slug": "classifymonkeypatchespy"
+        }
+      ],
+      "links": [],
+      "description": "`classify_monkey_patches.py` ingests monkey-patch scan artifacts and assigns HIGH/MODERATE/SAFE risk tiers so teams can triage the most dangerous runtime modifications first. The consumer prefers structured bundles from\u2026",
+      "size_bytes": 3865,
+      "modified_utc": "2025-11-29T16:10:11.345704+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".repo_studios/docs/automation",
       "filename": ".repo_studios/docs/automation/collect_faulthandler_reports.md",
       "slug": "collectfaulthandlerreportspy",
       "h1_headings": [
@@ -6669,43 +7068,43 @@
         {
           "title": "Invocation",
           "slug": "invocation",
-          "line": 9,
+          "line": 19,
           "parent_title": "collect_faulthandler_reports.py",
           "parent_slug": "collectfaulthandlerreportspy"
         },
         {
           "title": "Outputs",
           "slug": "outputs",
-          "line": 30,
+          "line": 44,
           "parent_title": "collect_faulthandler_reports.py",
           "parent_slug": "collectfaulthandlerreportspy"
         },
         {
           "title": "Diagnostics",
           "slug": "diagnostics",
-          "line": 42,
+          "line": 61,
           "parent_title": "collect_faulthandler_reports.py",
           "parent_slug": "collectfaulthandlerreportspy"
         },
         {
           "title": "Testing",
           "slug": "testing",
-          "line": 54,
+          "line": 73,
           "parent_title": "collect_faulthandler_reports.py",
           "parent_slug": "collectfaulthandlerreportspy"
         },
         {
           "title": "Operational notes",
           "slug": "operational-notes",
-          "line": 60,
+          "line": 80,
           "parent_title": "collect_faulthandler_reports.py",
           "parent_slug": "collectfaulthandlerreportspy"
         }
       ],
       "links": [],
       "description": "`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,\u2026",
-      "size_bytes": 4095,
-      "modified_utc": "2025-11-24T00:04:56.269286+00:00",
+      "size_bytes": 4828,
+      "modified_utc": "2025-11-29T15:23:01.952399+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -6769,8 +7168,66 @@
       ],
       "links": [],
       "description": "`collect_test_log_reports.py` converts raw pytest log runs into structured artifacts that downstream consumers and dashboards can reuse without reparsing warning blocks or slow-test sections. The producer leverages\u2026",
-      "size_bytes": 4176,
-      "modified_utc": "2025-11-24T00:04:56.272246+00:00",
+      "size_bytes": 4899,
+      "modified_utc": "2025-11-29T15:13:46.818089+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".repo_studios/docs/automation",
+      "filename": ".repo_studios/docs/automation/configure_faulthandler_runtime.md",
+      "slug": "configurefaulthandlerruntimepy",
+      "h1_headings": [
+        {
+          "title": "configure_faulthandler_runtime.py",
+          "slug": "configurefaulthandlerruntimepy",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Overview",
+          "slug": "overview",
+          "line": 3,
+          "parent_title": "configure_faulthandler_runtime.py",
+          "parent_slug": "configurefaulthandlerruntimepy"
+        },
+        {
+          "title": "Responsibilities",
+          "slug": "responsibilities",
+          "line": 13,
+          "parent_title": "configure_faulthandler_runtime.py",
+          "parent_slug": "configurefaulthandlerruntimepy"
+        },
+        {
+          "title": "Environment Flags",
+          "slug": "environment-flags",
+          "line": 29,
+          "parent_title": "configure_faulthandler_runtime.py",
+          "parent_slug": "configurefaulthandlerruntimepy"
+        },
+        {
+          "title": "Testing",
+          "slug": "testing",
+          "line": 46,
+          "parent_title": "configure_faulthandler_runtime.py",
+          "parent_slug": "configurefaulthandlerruntimepy"
+        },
+        {
+          "title": "Legacy Compatibility",
+          "slug": "legacy-compatibility",
+          "line": 60,
+          "parent_title": "configure_faulthandler_runtime.py",
+          "parent_slug": "configurefaulthandlerruntimepy"
+        }
+      ],
+      "links": [],
+      "description": "`configure_faulthandler_runtime.py` runs during interpreter start via the repository sitecustomize shim. It standardises faulthandler defaults across every entry point, creates structured artifacts under\u2026",
+      "size_bytes": 3282,
+      "modified_utc": "2025-12-01T13:19:36.907672+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -6836,6 +7293,78 @@
       "description": "`diff_standards_index.py` compares two standards index YAML snapshots (typically the baseline catalog and a regenerated proposal) and produces structured artifacts that highlight rule-level changes. Summaries classify per-rule deltas\u2026",
       "size_bytes": 4388,
       "modified_utc": "2025-10-23T00:14:57.649053+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".repo_studios/docs/automation",
+      "filename": ".repo_studios/docs/automation/dump_faulthandler_snapshot.md",
+      "slug": "dumpfaulthandlersnapshotpy",
+      "h1_headings": [
+        {
+          "title": "dump_faulthandler_snapshot.py",
+          "slug": "dumpfaulthandlersnapshotpy",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Overview",
+          "slug": "overview",
+          "line": 3,
+          "parent_title": "dump_faulthandler_snapshot.py",
+          "parent_slug": "dumpfaulthandlersnapshotpy"
+        },
+        {
+          "title": "Responsibilities",
+          "slug": "responsibilities",
+          "line": 11,
+          "parent_title": "dump_faulthandler_snapshot.py",
+          "parent_slug": "dumpfaulthandlersnapshotpy"
+        },
+        {
+          "title": "Environment Flags",
+          "slug": "environment-flags",
+          "line": 21,
+          "parent_title": "dump_faulthandler_snapshot.py",
+          "parent_slug": "dumpfaulthandlersnapshotpy"
+        },
+        {
+          "title": "Usage",
+          "slug": "usage",
+          "line": 34,
+          "parent_title": "dump_faulthandler_snapshot.py",
+          "parent_slug": "dumpfaulthandlersnapshotpy"
+        },
+        {
+          "title": "Testing",
+          "slug": "testing",
+          "line": 44,
+          "parent_title": "dump_faulthandler_snapshot.py",
+          "parent_slug": "dumpfaulthandlersnapshotpy"
+        },
+        {
+          "title": "Automation",
+          "slug": "automation",
+          "line": 53,
+          "parent_title": "dump_faulthandler_snapshot.py",
+          "parent_slug": "dumpfaulthandlersnapshotpy"
+        },
+        {
+          "title": "Legacy Compatibility",
+          "slug": "legacy-compatibility",
+          "line": 65,
+          "parent_title": "dump_faulthandler_snapshot.py",
+          "parent_slug": "dumpfaulthandlersnapshotpy"
+        }
+      ],
+      "links": [],
+      "description": "`dump_faulthandler_snapshot.py` captures a one-off faulthandler stack dump and stores it as a structured bundle under `.repo_studios/reports/orchestrator_logs/faulthandler_snapshots/`. The utility is idempotent, keeps the latest stacks\u2026",
+      "size_bytes": 2571,
+      "modified_utc": "2025-11-29T15:06:25.874741+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -7053,6 +7582,194 @@
     },
     {
       "folder": ".repo_studios/docs/automation",
+      "filename": ".repo_studios/docs/automation/generate_anchor_health_report.md",
+      "slug": "generateanchorhealthreport",
+      "h1_headings": [
+        {
+          "title": "generate_anchor_health_report",
+          "slug": "generateanchorhealthreport",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Purpose",
+          "slug": "purpose",
+          "line": 3,
+          "parent_title": "generate_anchor_health_report",
+          "parent_slug": "generateanchorhealthreport"
+        },
+        {
+          "title": "Inputs",
+          "slug": "inputs",
+          "line": 9,
+          "parent_title": "generate_anchor_health_report",
+          "parent_slug": "generateanchorhealthreport"
+        },
+        {
+          "title": "Operation Notes",
+          "slug": "operation-notes",
+          "line": 26,
+          "parent_title": "generate_anchor_health_report",
+          "parent_slug": "generateanchorhealthreport"
+        },
+        {
+          "title": "Usage Example",
+          "slug": "usage-example",
+          "line": 32,
+          "parent_title": "generate_anchor_health_report",
+          "parent_slug": "generateanchorhealthreport"
+        },
+        {
+          "title": "Testing",
+          "slug": "testing",
+          "line": 41,
+          "parent_title": "generate_anchor_health_report",
+          "parent_slug": "generateanchorhealthreport"
+        },
+        {
+          "title": "Integration Checklist",
+          "slug": "integration-checklist",
+          "line": 45,
+          "parent_title": "generate_anchor_health_report",
+          "parent_slug": "generateanchorhealthreport"
+        }
+      ],
+      "links": [],
+      "description": "(`.repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json`) when present.",
+      "size_bytes": 2260,
+      "modified_utc": "2025-11-26T13:03:51.845884+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
+    },
+    {
+      "folder": ".repo_studios/docs/automation",
+      "filename": ".repo_studios/docs/automation/generate_anchor_inventory.md",
+      "slug": "generateanchorinventorypy",
+      "h1_headings": [
+        {
+          "title": "generate_anchor_inventory.py",
+          "slug": "generateanchorinventorypy",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Purpose",
+          "slug": "purpose",
+          "line": 5,
+          "parent_title": "generate_anchor_inventory.py",
+          "parent_slug": "generateanchorinventorypy"
+        },
+        {
+          "title": "Output Contract",
+          "slug": "output-contract",
+          "line": 12,
+          "parent_title": "generate_anchor_inventory.py",
+          "parent_slug": "generateanchorinventorypy"
+        },
+        {
+          "title": "Data Shape",
+          "slug": "data-shape",
+          "line": 34,
+          "parent_title": "generate_anchor_inventory.py",
+          "parent_slug": "generateanchorinventorypy"
+        },
+        {
+          "title": "CLI Reference",
+          "slug": "cli-reference",
+          "line": 66,
+          "parent_title": "generate_anchor_inventory.py",
+          "parent_slug": "generateanchorinventorypy"
+        },
+        {
+          "title": "Implementation Summary",
+          "slug": "implementation-summary",
+          "line": 80,
+          "parent_title": "generate_anchor_inventory.py",
+          "parent_slug": "generateanchorinventorypy"
+        },
+        {
+          "title": "Notes for AI Consumers",
+          "slug": "notes-for-ai-consumers",
+          "line": 96,
+          "parent_title": "generate_anchor_inventory.py",
+          "parent_slug": "generateanchorinventorypy"
+        }
+      ],
+      "links": [],
+      "description": "`generate_anchor_inventory.py` scans the documentation corpus for H1/H2 headings, normalises their slugs, and reports collision risk across files. The producer now also captures per-document anchor coverage so AI agents can spot missing\u2026",
+      "size_bytes": 4946,
+      "modified_utc": "2025-11-25T14:01:43.710515+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".repo_studios/docs/automation",
+      "filename": ".repo_studios/docs/automation/generate_code_doc_churn_report.md",
+      "slug": "generatecodedocchurnreport",
+      "h1_headings": [
+        {
+          "title": "generate_code_doc_churn_report",
+          "slug": "generatecodedocchurnreport",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Purpose",
+          "slug": "purpose",
+          "line": 3,
+          "parent_title": "generate_code_doc_churn_report",
+          "parent_slug": "generatecodedocchurnreport"
+        },
+        {
+          "title": "Inputs",
+          "slug": "inputs",
+          "line": 11,
+          "parent_title": "generate_code_doc_churn_report",
+          "parent_slug": "generatecodedocchurnreport"
+        },
+        {
+          "title": "Outputs",
+          "slug": "outputs",
+          "line": 26,
+          "parent_title": "generate_code_doc_churn_report",
+          "parent_slug": "generatecodedocchurnreport"
+        },
+        {
+          "title": "Usage",
+          "slug": "usage",
+          "line": 43,
+          "parent_title": "generate_code_doc_churn_report",
+          "parent_slug": "generatecodedocchurnreport"
+        },
+        {
+          "title": "Testing",
+          "slug": "testing",
+          "line": 64,
+          "parent_title": "generate_code_doc_churn_report",
+          "parent_slug": "generatecodedocchurnreport"
+        }
+      ],
+      "links": [],
+      "description": "`generate_code_doc_churn_report.py` scans recent git history to surface modules that accumulated code churn without a matching documentation update. The script produces structured artifacts (JSON, Markdown, TSV, summary) with retention and\u2026",
+      "size_bytes": 3127,
+      "modified_utc": "2025-11-25T16:26:37.538852+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".repo_studios/docs/automation",
       "filename": ".repo_studios/docs/automation/generate_dependency_hygiene_report.md",
       "slug": "generatedependencyhygienereportpy",
       "h1_headings": [
@@ -7145,36 +7862,36 @@
         {
           "title": "Data Shape",
           "slug": "data-shape",
-          "line": 31,
+          "line": 34,
           "parent_title": "generate_doc_index.py",
           "parent_slug": "generatedocindexpy"
         },
         {
           "title": "CLI Reference",
           "slug": "cli-reference",
-          "line": 55,
+          "line": 71,
           "parent_title": "generate_doc_index.py",
           "parent_slug": "generatedocindexpy"
         },
         {
           "title": "Implementation Summary",
           "slug": "implementation-summary",
-          "line": 68,
+          "line": 84,
           "parent_title": "generate_doc_index.py",
           "parent_slug": "generatedocindexpy"
         },
         {
           "title": "Notes for AI Consumers",
           "slug": "notes-for-ai-consumers",
-          "line": 84,
+          "line": 101,
           "parent_title": "generate_doc_index.py",
           "parent_slug": "generatedocindexpy"
         }
       ],
       "links": [],
       "description": "`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem. The producer normalises H1/H2\u2026",
-      "size_bytes": 4844,
-      "modified_utc": "2025-11-25T03:00:52.637362+00:00",
+      "size_bytes": 6010,
+      "modified_utc": "2025-11-25T11:20:45.453873+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -7302,9 +8019,9 @@
         }
       ],
       "links": [],
-      "description": "`generate_standards_index.py` assembles the canonical `repo_standards_index.yaml` by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a structured artifact bundle\u2026",
-      "size_bytes": 5095,
-      "modified_utc": "2025-10-23T01:16:24.453566+00:00",
+      "description": "`generate_standards_index.py` assembles the canonical standards index and refreshes the `latest_index.yaml` pointer by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a\u2026",
+      "size_bytes": 5212,
+      "modified_utc": "2025-11-27T17:20:15.673436+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -7378,6 +8095,85 @@
     },
     {
       "folder": ".repo_studios/docs/automation",
+      "filename": ".repo_studios/docs/automation/generate_test_log_health_report.md",
+      "slug": "generate-test-log-health-report",
+      "h1_headings": [
+        {
+          "title": "Generate Test Log Health Report",
+          "slug": "generate-test-log-health-report",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Purpose",
+          "slug": "purpose",
+          "line": 3,
+          "parent_title": "Generate Test Log Health Report",
+          "parent_slug": "generate-test-log-health-report"
+        },
+        {
+          "title": "Inputs",
+          "slug": "inputs",
+          "line": 14,
+          "parent_title": "Generate Test Log Health Report",
+          "parent_slug": "generate-test-log-health-report"
+        },
+        {
+          "title": "Outputs",
+          "slug": "outputs",
+          "line": 30,
+          "parent_title": "Generate Test Log Health Report",
+          "parent_slug": "generate-test-log-health-report"
+        },
+        {
+          "title": "Retention & Pruning",
+          "slug": "retention-pruning",
+          "line": 47,
+          "parent_title": "Generate Test Log Health Report",
+          "parent_slug": "generate-test-log-health-report"
+        },
+        {
+          "title": "Typical Workflow",
+          "slug": "typical-workflow",
+          "line": 53,
+          "parent_title": "Generate Test Log Health Report",
+          "parent_slug": "generate-test-log-health-report"
+        },
+        {
+          "title": "Make Target",
+          "slug": "make-target",
+          "line": 63,
+          "parent_title": "Generate Test Log Health Report",
+          "parent_slug": "generate-test-log-health-report"
+        },
+        {
+          "title": "Testing",
+          "slug": "testing",
+          "line": 73,
+          "parent_title": "Generate Test Log Health Report",
+          "parent_slug": "generate-test-log-health-report"
+        },
+        {
+          "title": "Notes",
+          "slug": "notes",
+          "line": 83,
+          "parent_title": "Generate Test Log Health Report",
+          "parent_slug": "generate-test-log-health-report"
+        }
+      ],
+      "links": [],
+      "description": "`generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so operators can track warning spikes, failure patterns, and slow tests without rereading entire logs. The script prefers the curated JSON emitted\u2026",
+      "size_bytes": 4787,
+      "modified_utc": "2025-11-29T15:33:45.034376+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".repo_studios/docs/automation",
       "filename": ".repo_studios/docs/automation/generate_typecheck_report.md",
       "slug": "typecheck-report-producer",
       "h1_headings": [
@@ -7422,6 +8218,64 @@
     },
     {
       "folder": ".repo_studios/docs/automation",
+      "filename": ".repo_studios/docs/automation/generate_undocumented_logic_report.md",
+      "slug": "generateundocumentedlogicreport",
+      "h1_headings": [
+        {
+          "title": "generate_undocumented_logic_report",
+          "slug": "generateundocumentedlogicreport",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Purpose",
+          "slug": "purpose",
+          "line": 3,
+          "parent_title": "generate_undocumented_logic_report",
+          "parent_slug": "generateundocumentedlogicreport"
+        },
+        {
+          "title": "Inputs",
+          "slug": "inputs",
+          "line": 10,
+          "parent_title": "generate_undocumented_logic_report",
+          "parent_slug": "generateundocumentedlogicreport"
+        },
+        {
+          "title": "Outputs",
+          "slug": "outputs",
+          "line": 27,
+          "parent_title": "generate_undocumented_logic_report",
+          "parent_slug": "generateundocumentedlogicreport"
+        },
+        {
+          "title": "Usage",
+          "slug": "usage",
+          "line": 43,
+          "parent_title": "generate_undocumented_logic_report",
+          "parent_slug": "generateundocumentedlogicreport"
+        },
+        {
+          "title": "Testing",
+          "slug": "testing",
+          "line": 58,
+          "parent_title": "generate_undocumented_logic_report",
+          "parent_slug": "generateundocumentedlogicreport"
+        }
+      ],
+      "links": [],
+      "description": "`generate_undocumented_logic_report.py` scans the repo automation scripts for public functions, classes, and methods that lack docstrings. The report helps identify code paths that should have documentation anchors or docstring coverage\u2026",
+      "size_bytes": 2696,
+      "modified_utc": "2025-11-25T18:18:22.678815+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".repo_studios/docs/automation",
       "filename": ".repo_studios/docs/automation/orchestrator_automation_hooks.md",
       "slug": "orchestrator-automation-hooks",
       "h1_headings": [
@@ -7435,15 +8289,15 @@
         {
           "title": "Notes",
           "slug": "notes",
-          "line": 14,
+          "line": 19,
           "parent_title": "Orchestrator Automation Hooks",
           "parent_slug": "orchestrator-automation-hooks"
         }
       ],
       "links": [],
       "description": "This reference captures the current run surfaces, automation wiring, and success criteria for the Repo Studios orchestrator tier. Record changes here before altering orchestrator code so downstream automation stays aligned with expected\u2026",
-      "size_bytes": 2487,
-      "modified_utc": "2025-11-24T18:55:36.604719+00:00",
+      "size_bytes": 6379,
+      "modified_utc": "2025-12-01T14:02:44.321031+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -7517,6 +8371,64 @@
     },
     {
       "folder": ".repo_studios/docs/automation",
+      "filename": ".repo_studios/docs/automation/refresh_mypy_baselines.md",
+      "slug": "refresh-mypy-baselines",
+      "h1_headings": [
+        {
+          "title": "Refresh mypy baselines",
+          "slug": "refresh-mypy-baselines",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Purpose",
+          "slug": "purpose",
+          "line": 3,
+          "parent_title": "Refresh mypy baselines",
+          "parent_slug": "refresh-mypy-baselines"
+        },
+        {
+          "title": "Invocation",
+          "slug": "invocation",
+          "line": 10,
+          "parent_title": "Refresh mypy baselines",
+          "parent_slug": "refresh-mypy-baselines"
+        },
+        {
+          "title": "Outputs",
+          "slug": "outputs",
+          "line": 28,
+          "parent_title": "Refresh mypy baselines",
+          "parent_slug": "refresh-mypy-baselines"
+        },
+        {
+          "title": "Retention",
+          "slug": "retention",
+          "line": 43,
+          "parent_title": "Refresh mypy baselines",
+          "parent_slug": "refresh-mypy-baselines"
+        },
+        {
+          "title": "Validation",
+          "slug": "validation",
+          "line": 49,
+          "parent_title": "Refresh mypy baselines",
+          "parent_slug": "refresh-mypy-baselines"
+        }
+      ],
+      "links": [],
+      "description": "`refresh_mypy_baselines.py` standardises the stored mypy output snapshots that agents and soft gates consume. It runs mypy for each configured target, writes structured artifacts into\u2026",
+      "size_bytes": 1999,
+      "modified_utc": "2025-11-29T04:07:24.447006+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".repo_studios/docs/automation",
       "filename": ".repo_studios/docs/automation/render_inventory_views.md",
       "slug": "render-inventory-views-producer",
       "h1_headings": [
@@ -7553,6 +8465,194 @@
       "description": "The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation.",
       "size_bytes": 2019,
       "modified_utc": "2025-10-23T09:50:23.539274+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".repo_studios/docs/automation",
+      "filename": ".repo_studios/docs/automation/run_fault_pipeline.md",
+      "slug": "fault-diagnostics-overview-orchestrator",
+      "h1_headings": [
+        {
+          "title": "Fault Diagnostics Overview Orchestrator",
+          "slug": "fault-diagnostics-overview-orchestrator",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Overview",
+          "slug": "overview",
+          "line": 3,
+          "parent_title": "Fault Diagnostics Overview Orchestrator",
+          "parent_slug": "fault-diagnostics-overview-orchestrator"
+        },
+        {
+          "title": "Invocation",
+          "slug": "invocation",
+          "line": 15,
+          "parent_title": "Fault Diagnostics Overview Orchestrator",
+          "parent_slug": "fault-diagnostics-overview-orchestrator"
+        },
+        {
+          "title": "Outputs",
+          "slug": "outputs",
+          "line": 56,
+          "parent_title": "Fault Diagnostics Overview Orchestrator",
+          "parent_slug": "fault-diagnostics-overview-orchestrator"
+        },
+        {
+          "title": "Testing",
+          "slug": "testing",
+          "line": 70,
+          "parent_title": "Fault Diagnostics Overview Orchestrator",
+          "parent_slug": "fault-diagnostics-overview-orchestrator"
+        },
+        {
+          "title": "Follow-Ups",
+          "slug": "follow-ups",
+          "line": 82,
+          "parent_title": "Fault Diagnostics Overview Orchestrator",
+          "parent_slug": "fault-diagnostics-overview-orchestrator"
+        }
+      ],
+      "links": [],
+      "description": "`command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` coordinates the faulthandler producer (`collect_faulthandler_reports.py`), consumer (`generate_fault_artifacts.py`), and the overview summarizer\u2026",
+      "size_bytes": 4338,
+      "modified_utc": "2025-12-01T13:19:36.907672+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".repo_studios/docs/automation",
+      "filename": ".repo_studios/docs/automation/run_pytest_log_capture.md",
+      "slug": "runpytestlogcapturepy",
+      "h1_headings": [
+        {
+          "title": "run_pytest_log_capture.py",
+          "slug": "runpytestlogcapturepy",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Overview",
+          "slug": "overview",
+          "line": 5,
+          "parent_title": "run_pytest_log_capture.py",
+          "parent_slug": "runpytestlogcapturepy"
+        },
+        {
+          "title": "Invocation",
+          "slug": "invocation",
+          "line": 14,
+          "parent_title": "run_pytest_log_capture.py",
+          "parent_slug": "runpytestlogcapturepy"
+        },
+        {
+          "title": "Outputs",
+          "slug": "outputs",
+          "line": 50,
+          "parent_title": "run_pytest_log_capture.py",
+          "parent_slug": "runpytestlogcapturepy"
+        },
+        {
+          "title": "Diagnostics",
+          "slug": "diagnostics",
+          "line": 73,
+          "parent_title": "run_pytest_log_capture.py",
+          "parent_slug": "runpytestlogcapturepy"
+        },
+        {
+          "title": "Testing",
+          "slug": "testing",
+          "line": 87,
+          "parent_title": "run_pytest_log_capture.py",
+          "parent_slug": "runpytestlogcapturepy"
+        },
+        {
+          "title": "Operational Notes",
+          "slug": "operational-notes",
+          "line": 97,
+          "parent_title": "run_pytest_log_capture.py",
+          "parent_slug": "runpytestlogcapturepy"
+        }
+      ],
+      "links": [],
+      "description": "`run_pytest_log_capture.py` executes the repository's pytest suite (or summarizes an existing run) and emits a structured artifact bundle alongside timestamped raw outputs under\u2026",
+      "size_bytes": 5605,
+      "modified_utc": "2025-11-28T14:18:05.288540+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".repo_studios/docs/automation",
+      "filename": ".repo_studios/docs/automation/run_standards_index_cli.md",
+      "slug": "runstandardsindexclipy",
+      "h1_headings": [
+        {
+          "title": "run_standards_index_cli.py",
+          "slug": "runstandardsindexclipy",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Overview",
+          "slug": "overview",
+          "line": 5,
+          "parent_title": "run_standards_index_cli.py",
+          "parent_slug": "runstandardsindexclipy"
+        },
+        {
+          "title": "Invocation",
+          "slug": "invocation",
+          "line": 11,
+          "parent_title": "run_standards_index_cli.py",
+          "parent_slug": "runstandardsindexclipy"
+        },
+        {
+          "title": "Outputs",
+          "slug": "outputs",
+          "line": 50,
+          "parent_title": "run_standards_index_cli.py",
+          "parent_slug": "runstandardsindexclipy"
+        },
+        {
+          "title": "Diagnostics",
+          "slug": "diagnostics",
+          "line": 63,
+          "parent_title": "run_standards_index_cli.py",
+          "parent_slug": "runstandardsindexclipy"
+        },
+        {
+          "title": "Testing",
+          "slug": "testing",
+          "line": 75,
+          "parent_title": "run_standards_index_cli.py",
+          "parent_slug": "runstandardsindexclipy"
+        },
+        {
+          "title": "Operational Notes",
+          "slug": "operational-notes",
+          "line": 89,
+          "parent_title": "run_standards_index_cli.py",
+          "parent_slug": "runstandardsindexclipy"
+        }
+      ],
+      "links": [],
+      "description": "`run_standards_index_cli.py` wraps the Repo Studios standards index in a modernized orchestrator surface. The CLI still prints human-friendly results for `list`, `search`, `show`, and `stats`, while now emitting structured bundles so\u2026",
+      "size_bytes": 4944,
+      "modified_utc": "2025-11-27T17:20:15.674439+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -7753,8 +8853,8 @@
       ],
       "links": [],
       "description": "`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can\u2026",
-      "size_bytes": 3752,
-      "modified_utc": "2025-10-23T18:08:31.195120+00:00",
+      "size_bytes": 3787,
+      "modified_utc": "2025-11-27T17:20:15.674439+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -8033,9 +9133,9 @@
         }
       ],
       "links": [],
-      "description": "This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.",
-      "size_bytes": 5239,
-      "modified_utc": "2025-10-21T12:02:58.658325+00:00",
+      "description": "This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",
+      "size_bytes": 5316,
+      "modified_utc": "2025-11-27T17:20:15.678074+00:00",
       "tags": [
         "standards",
         "schema",
@@ -8056,8 +9156,8 @@
         ],
         "status": "draft",
         "version": "0.2.0",
-        "updated": "2025-10-18",
-        "summary": "Schema contract for `repo_standards_index.yaml`, detailing the deterministic structure consumed by Repo Studios automation and agents.",
+        "updated": "2025-11-27",
+        "summary": "Schema contract for the standards index bundle referenced by `latest_index.yaml`, detailing the deterministic structure consumed by Repo Studios automation and agents.",
         "tags": [
           "standards",
           "schema",
@@ -8065,6 +9165,57 @@
         ],
         "legacy_source": ".repo_studios_legacy/repo_docs/standards_index_schema.md"
       },
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".repo_studios/docs/automation",
+      "filename": ".repo_studios/docs/automation/summarize_standards.md",
+      "slug": "summarizestandardspy",
+      "h1_headings": [
+        {
+          "title": "summarize_standards.py",
+          "slug": "summarizestandardspy",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Purpose",
+          "slug": "purpose",
+          "line": 5,
+          "parent_title": "summarize_standards.py",
+          "parent_slug": "summarizestandardspy"
+        },
+        {
+          "title": "Invocation",
+          "slug": "invocation",
+          "line": 13,
+          "parent_title": "summarize_standards.py",
+          "parent_slug": "summarizestandardspy"
+        },
+        {
+          "title": "Outputs",
+          "slug": "outputs",
+          "line": 28,
+          "parent_title": "summarize_standards.py",
+          "parent_slug": "summarizestandardspy"
+        },
+        {
+          "title": "Testing",
+          "slug": "testing",
+          "line": 40,
+          "parent_title": "summarize_standards.py",
+          "parent_slug": "summarizestandardspy"
+        }
+      ],
+      "links": [],
+      "description": "`summarize_standards.py` provides a lightweight telemetry probe for the standards catalog. It reads the canonical standards index (surfaced through the `latest_index.yaml` pointer) and the optional pending extraction queue, then emits log\u2026",
+      "size_bytes": 1878,
+      "modified_utc": "2025-11-27T17:28:24.141509+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
       "contains_placeholder": false
     },
     {
@@ -8192,6 +9343,78 @@
     },
     {
       "folder": ".repo_studios/docs/automation/traceability",
+      "filename": ".repo_studios/docs/automation/traceability/fault_pipeline_aggregator_plan.md",
+      "slug": "fault-pipeline-aggregator-blueprint",
+      "h1_headings": [
+        {
+          "title": "Fault Pipeline Aggregator Blueprint",
+          "slug": "fault-pipeline-aggregator-blueprint",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Status",
+          "slug": "status",
+          "line": 3,
+          "parent_title": "Fault Pipeline Aggregator Blueprint",
+          "parent_slug": "fault-pipeline-aggregator-blueprint"
+        },
+        {
+          "title": "Purpose",
+          "slug": "purpose",
+          "line": 9,
+          "parent_title": "Fault Pipeline Aggregator Blueprint",
+          "parent_slug": "fault-pipeline-aggregator-blueprint"
+        },
+        {
+          "title": "Context",
+          "slug": "context",
+          "line": 14,
+          "parent_title": "Fault Pipeline Aggregator Blueprint",
+          "parent_slug": "fault-pipeline-aggregator-blueprint"
+        },
+        {
+          "title": "Open Questions",
+          "slug": "open-questions",
+          "line": 23,
+          "parent_title": "Fault Pipeline Aggregator Blueprint",
+          "parent_slug": "fault-pipeline-aggregator-blueprint"
+        },
+        {
+          "title": "Proposed Next Steps",
+          "slug": "proposed-next-steps",
+          "line": 30,
+          "parent_title": "Fault Pipeline Aggregator Blueprint",
+          "parent_slug": "fault-pipeline-aggregator-blueprint"
+        },
+        {
+          "title": "Risks",
+          "slug": "risks",
+          "line": 38,
+          "parent_title": "Fault Pipeline Aggregator Blueprint",
+          "parent_slug": "fault-pipeline-aggregator-blueprint"
+        },
+        {
+          "title": "Notes",
+          "slug": "notes",
+          "line": 43,
+          "parent_title": "Fault Pipeline Aggregator Blueprint",
+          "parent_slug": "fault-pipeline-aggregator-blueprint"
+        }
+      ],
+      "links": [],
+      "description": "Capture the scope, dependencies, and success criteria for a future faulthandler aggregator that will blend multiple orchestrator runs into trend summaries.",
+      "size_bytes": 2023,
+      "modified_utc": "2025-11-26T14:39:08.308088+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".repo_studios/docs/automation/traceability",
       "filename": ".repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md",
       "slug": "generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24",
       "h1_headings": [
@@ -8254,8 +9477,108 @@
       ],
       "links": [],
       "description": "Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",
-      "size_bytes": 5560,
-      "modified_utc": "2025-11-24T17:47:49.125843+00:00",
+      "size_bytes": 5645,
+      "modified_utc": "2025-11-28T14:18:05.280027+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".repo_studios/docs/automation/traceability",
+      "filename": ".repo_studios/docs/automation/traceability/generate_code_doc_churn_report_plan.md",
+      "slug": "generatecodedocchurnreport-planning-notes",
+      "h1_headings": [
+        {
+          "title": "generate_code_doc_churn_report Planning Notes",
+          "slug": "generatecodedocchurnreport-planning-notes",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Objective",
+          "slug": "objective",
+          "line": 3,
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "parent_slug": "generatecodedocchurnreport-planning-notes"
+        },
+        {
+          "title": "Implementation Status (2025-11-25)",
+          "slug": "implementation-status-2025-11-25",
+          "line": 12,
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "parent_slug": "generatecodedocchurnreport-planning-notes"
+        },
+        {
+          "title": "Primary Inputs",
+          "slug": "primary-inputs",
+          "line": 25,
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "parent_slug": "generatecodedocchurnreport-planning-notes"
+        },
+        {
+          "title": "Proposed CLI Interface",
+          "slug": "proposed-cli-interface",
+          "line": 32,
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "parent_slug": "generatecodedocchurnreport-planning-notes"
+        },
+        {
+          "title": "Artifact Plan",
+          "slug": "artifact-plan",
+          "line": 45,
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "parent_slug": "generatecodedocchurnreport-planning-notes"
+        },
+        {
+          "title": "Detection Heuristics",
+          "slug": "detection-heuristics",
+          "line": 55,
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "parent_slug": "generatecodedocchurnreport-planning-notes"
+        },
+        {
+          "title": "Logging & Provenance",
+          "slug": "logging-provenance",
+          "line": 70,
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "parent_slug": "generatecodedocchurnreport-planning-notes"
+        },
+        {
+          "title": "Testing Strategy",
+          "slug": "testing-strategy",
+          "line": 75,
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "parent_slug": "generatecodedocchurnreport-planning-notes"
+        },
+        {
+          "title": "Documentation Tasks",
+          "slug": "documentation-tasks",
+          "line": 85,
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "parent_slug": "generatecodedocchurnreport-planning-notes"
+        },
+        {
+          "title": "Outstanding Questions",
+          "slug": "outstanding-questions",
+          "line": 92,
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "parent_slug": "generatecodedocchurnreport-planning-notes"
+        },
+        {
+          "title": "Next Steps",
+          "slug": "next-steps",
+          "line": 99,
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "parent_slug": "generatecodedocchurnreport-planning-notes"
+        }
+      ],
+      "links": [],
+      "description": "target missing change logs, upgrade guides, or doc refreshes.",
+      "size_bytes": 5514,
+      "modified_utc": "2025-11-25T18:18:22.678815+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -8312,8 +9635,8 @@
       ],
       "links": [],
       "description": "1. Treat the four hardened consumer bundles as the canonical inputs for upcoming aggregator rewires; aggregators should ingest the consumer summary JSON (`summary.json`, `anchor_report.json`, `bundle_summary.json`, `RISK_SUMMARY.json`)\u2026",
-      "size_bytes": 7719,
-      "modified_utc": "2025-11-25T00:58:05.672960+00:00",
+      "size_bytes": 7771,
+      "modified_utc": "2025-11-26T16:39:05.740452+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -8393,6 +9716,85 @@
       "description": "Existing tables below retain the pre-modernization snapshot for historical context.",
       "size_bytes": 5364,
       "modified_utc": "2025-11-24T18:55:36.604719+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".repo_studios/docs/automation/traceability",
+      "filename": ".repo_studios/docs/automation/traceability/run_standards_index_cli_modernization_plan.md",
+      "slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27",
+      "h1_headings": [
+        {
+          "title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)",
+          "slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Status",
+          "slug": "status",
+          "line": 3,
+          "parent_title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)",
+          "parent_slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27"
+        },
+        {
+          "title": "Objective",
+          "slug": "objective",
+          "line": 8,
+          "parent_title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)",
+          "parent_slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27"
+        },
+        {
+          "title": "Current State",
+          "slug": "current-state",
+          "line": 15,
+          "parent_title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)",
+          "parent_slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27"
+        },
+        {
+          "title": "Target Architecture",
+          "slug": "target-architecture",
+          "line": 28,
+          "parent_title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)",
+          "parent_slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27"
+        },
+        {
+          "title": "Implementation Steps",
+          "slug": "implementation-steps",
+          "line": 41,
+          "parent_title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)",
+          "parent_slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27"
+        },
+        {
+          "title": "Dependencies & Coordination",
+          "slug": "dependencies-coordination",
+          "line": 56,
+          "parent_title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)",
+          "parent_slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27"
+        },
+        {
+          "title": "Acceptance Criteria",
+          "slug": "acceptance-criteria",
+          "line": 63,
+          "parent_title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)",
+          "parent_slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27"
+        },
+        {
+          "title": "Open Questions",
+          "slug": "open-questions",
+          "line": 72,
+          "parent_title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)",
+          "parent_slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27"
+        }
+      ],
+      "links": [],
+      "description": "Modernize `.repo_studios/scripts/orchestrators/run_standards_index_cli.py` so standards analysts and tooling receive structured, retainable outputs while preserving its lightweight CLI ergonomics. The refactor will introduce an import-safe\u2026",
+      "size_bytes": 5052,
+      "modified_utc": "2025-11-27T16:29:59.403519+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -8530,43 +9932,43 @@
         {
           "title": "Invocation",
           "slug": "invocation",
-          "line": 9,
+          "line": 12,
           "parent_title": "validate_markdown_anchors.py",
           "parent_slug": "validatemarkdownanchorspy"
         },
         {
           "title": "Outputs",
           "slug": "outputs",
-          "line": 29,
+          "line": 33,
           "parent_title": "validate_markdown_anchors.py",
           "parent_slug": "validatemarkdownanchorspy"
         },
         {
           "title": "Status semantics",
           "slug": "status-semantics",
-          "line": 38,
+          "line": 45,
           "parent_title": "validate_markdown_anchors.py",
           "parent_slug": "validatemarkdownanchorspy"
         },
         {
           "title": "Testing",
           "slug": "testing",
-          "line": 47,
+          "line": 55,
           "parent_title": "validate_markdown_anchors.py",
           "parent_slug": "validatemarkdownanchorspy"
         },
         {
           "title": "Operational notes",
           "slug": "operational-notes",
-          "line": 55,
+          "line": 63,
           "parent_title": "validate_markdown_anchors.py",
           "parent_slug": "validatemarkdownanchorspy"
         }
       ],
       "links": [],
       "description": "`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and\u2026",
-      "size_bytes": 3046,
-      "modified_utc": "2025-11-23T19:36:19.831021+00:00",
+      "size_bytes": 3062,
+      "modified_utc": "2025-11-25T19:39:48.109027+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -8748,6 +10150,28 @@
       "contains_placeholder": false
     },
     {
+      "folder": ".repo_studios/docs/governance",
+      "filename": ".repo_studios/docs/governance/alignment-ledger.md",
+      "slug": "repo-studios-alignment-ledger",
+      "h1_headings": [
+        {
+          "title": "Repo Studios Alignment Ledger",
+          "slug": "repo-studios-alignment-ledger",
+          "line": 1
+        }
+      ],
+      "h2_headings": [],
+      "links": [],
+      "description": "This ledger tracks documentation alignment batches, remediation work, and follow-up actions. Populate entries chronologically with timestamps, owners, scopes, and outstanding notes to maintain an auditable trail.",
+      "size_bytes": 251,
+      "modified_utc": "2025-11-26T19:48:04.423689+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
       "folder": ".repo_studios/docs/inventory",
       "filename": ".repo_studios/docs/inventory/inventory-notes.md",
       "slug": "documentation-inventory-notes",
@@ -8804,8 +10228,8 @@
       ],
       "links": [],
       "description": "Date: 2025-10-01 | Status: Draft | Phase: Discovery",
-      "size_bytes": 11741,
-      "modified_utc": "2025-10-21T12:02:58.660326+00:00",
+      "size_bytes": 11816,
+      "modified_utc": "2025-11-28T14:18:05.289540+00:00",
       "tags": [
         "inventory",
         "notes"
@@ -9117,8 +10541,8 @@
       ],
       "links": [],
       "description": "Audience: Repo Studios automation | Human developers | Partner agents",
-      "size_bytes": 4806,
-      "modified_utc": "2025-11-24T12:14:55.737022+00:00",
+      "size_bytes": 4904,
+      "modified_utc": "2025-11-28T14:18:05.280027+00:00",
       "tags": [
         "playbook",
         "operations",
@@ -9455,8 +10879,8 @@
       "h2_headings": [],
       "links": [],
       "description": "This document is refreshed automatically by `run_batch_cleanup.py`. Edits outside the tree block are preserved, but avoid modifying the block between the markers.",
-      "size_bytes": 7804,
-      "modified_utc": "2025-11-24T23:37:41.293374+00:00",
+      "size_bytes": 8381,
+      "modified_utc": "2025-11-27T17:56:35.814451+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -9560,11 +10984,19 @@
           "line": 1
         }
       ],
-      "h2_headings": [],
+      "h2_headings": [
+        {
+          "title": "Healthview Artifacts",
+          "slug": "healthview-artifacts",
+          "line": 36,
+          "parent_title": "Repo Studios Documentation Index",
+          "parent_slug": "repo-studios-documentation-index"
+        }
+      ],
       "links": [],
       "description": "This index enumerates governed documentation surfaces that participate in Repo Studios integrity checks.",
-      "size_bytes": 1161,
-      "modified_utc": "2025-10-24T00:50:09.673913+00:00",
+      "size_bytes": 1626,
+      "modified_utc": "2025-12-01T04:26:35.221102+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -11297,8 +12729,8 @@
       "contains_placeholder": false
     },
     {
-      "folder": ".repo_studios/monkey_patch/20251124_175233",
-      "filename": ".repo_studios/monkey_patch/20251124_175233/report.md",
+      "folder": ".repo_studios/monkey_patch/20251201_115542",
+      "filename": ".repo_studios/monkey_patch/20251201_115542/report.md",
       "slug": "monkey-patch-scan-report",
       "h1_headings": [
         {
@@ -11339,8 +12771,8 @@
       ],
       "links": [],
       "description": null,
-      "size_bytes": 1696,
-      "modified_utc": "2025-11-24T17:52:33.912420+00:00",
+      "size_bytes": 1723,
+      "modified_utc": "2025-12-01T11:55:42.709604+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -11390,8 +12822,8 @@
       ],
       "links": [],
       "description": null,
-      "size_bytes": 1696,
-      "modified_utc": "2025-11-24T17:52:33.916251+00:00",
+      "size_bytes": 1723,
+      "modified_utc": "2025-12-01T11:55:42.712782+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -11582,6 +13014,106 @@
       "contains_placeholder": true
     },
     {
+      "folder": ".repo_studios/scripts",
+      "filename": ".repo_studios/scripts/orchestrator_refactor_plan_temp.md",
+      "slug": "orchestrator-refactor-plan-working-notes",
+      "h1_headings": [
+        {
+          "title": "Orchestrator Refactor Plan (Working Notes)",
+          "slug": "orchestrator-refactor-plan-working-notes",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "1. Purpose",
+          "slug": "1-purpose",
+          "line": 3,
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "parent_slug": "orchestrator-refactor-plan-working-notes"
+        },
+        {
+          "title": "2. Current Snapshot",
+          "slug": "2-current-snapshot",
+          "line": 10,
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "parent_slug": "orchestrator-refactor-plan-working-notes"
+        },
+        {
+          "title": "3. Target Topology",
+          "slug": "3-target-topology",
+          "line": 20,
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "parent_slug": "orchestrator-refactor-plan-working-notes"
+        },
+        {
+          "title": "4. Topic Buckets and Script Assignments (Draft)",
+          "slug": "4-topic-buckets-and-script-assignments-draft",
+          "line": 41,
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "parent_slug": "orchestrator-refactor-plan-working-notes"
+        },
+        {
+          "title": "5. Testing Strategy",
+          "slug": "5-testing-strategy",
+          "line": 53,
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "parent_slug": "orchestrator-refactor-plan-working-notes"
+        },
+        {
+          "title": "6. Shared Helper Opportunities (Command Center Library)",
+          "slug": "6-shared-helper-opportunities-command-center-library",
+          "line": 67,
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "parent_slug": "orchestrator-refactor-plan-working-notes"
+        },
+        {
+          "title": "7. Artifact Management & Pruning",
+          "slug": "7-artifact-management-pruning",
+          "line": 76,
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "parent_slug": "orchestrator-refactor-plan-working-notes"
+        },
+        {
+          "title": "8. Documentation & Inventory Updates",
+          "slug": "8-documentation-inventory-updates",
+          "line": 84,
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "parent_slug": "orchestrator-refactor-plan-working-notes"
+        },
+        {
+          "title": "9. Execution Phases (Draft Timeline)",
+          "slug": "9-execution-phases-draft-timeline",
+          "line": 95,
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "parent_slug": "orchestrator-refactor-plan-working-notes"
+        },
+        {
+          "title": "10. Risks & Open Questions",
+          "slug": "10-risks-open-questions",
+          "line": 108,
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "parent_slug": "orchestrator-refactor-plan-working-notes"
+        },
+        {
+          "title": "11. Next Actions",
+          "slug": "11-next-actions",
+          "line": 118,
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "parent_slug": "orchestrator-refactor-plan-working-notes"
+        }
+      ],
+      "links": [],
+      "description": "in an orchestrator-run pipeline.",
+      "size_bytes": 9376,
+      "modified_utc": "2025-12-01T13:19:36.908675+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
+    },
+    {
       "folder": ".repo_studios/scripts/orchestrators/orchestrators_index",
       "filename": ".repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md",
       "slug": "duplicate-scan-summary",
@@ -11712,78 +13244,78 @@
         {
           "title": "1. Script Producers",
           "slug": "1-script-producers",
-          "line": 86,
+          "line": 110,
           "parent_title": "Script Inventory Architecture",
           "parent_slug": "script-inventory-architecture"
         },
         {
           "title": "2. Script Consumers",
           "slug": "2-script-consumers",
-          "line": 171,
+          "line": 199,
           "parent_title": "Script Inventory Architecture",
           "parent_slug": "script-inventory-architecture"
         },
         {
           "title": "3. Script Aggregators",
           "slug": "3-script-aggregators",
-          "line": 200,
+          "line": 228,
           "parent_title": "Script Inventory Architecture",
           "parent_slug": "script-inventory-architecture"
         },
         {
           "title": "4. Script Orchestrators",
           "slug": "4-script-orchestrators",
-          "line": 226,
+          "line": 259,
           "parent_title": "Script Inventory Architecture",
           "parent_slug": "script-inventory-architecture"
         },
         {
           "title": "5. Script Summarizers",
           "slug": "5-script-summarizers",
-          "line": 246,
+          "line": 283,
           "parent_title": "Script Inventory Architecture",
           "parent_slug": "script-inventory-architecture"
         },
         {
           "title": "6. Script Utilities",
           "slug": "6-script-utilities",
-          "line": 260,
+          "line": 299,
           "parent_title": "Script Inventory Architecture",
           "parent_slug": "script-inventory-architecture"
         },
         {
           "title": "7. Script Undefined / Triage",
           "slug": "7-script-undefined-triage",
-          "line": 276,
+          "line": 323,
           "parent_title": "Script Inventory Architecture",
           "parent_slug": "script-inventory-architecture"
         },
         {
           "title": "Cross-Cutting Follow-Ups",
           "slug": "cross-cutting-follow-ups",
-          "line": 291,
+          "line": 338,
           "parent_title": "Script Inventory Architecture",
           "parent_slug": "script-inventory-architecture"
         },
         {
           "title": "Open Questions",
           "slug": "open-questions",
-          "line": 296,
+          "line": 343,
           "parent_title": "Script Inventory Architecture",
           "parent_slug": "script-inventory-architecture"
         },
         {
           "title": "Appendix: YAML Mapping Placeholder",
           "slug": "appendix-yaml-mapping-placeholder",
-          "line": 300,
+          "line": 347,
           "parent_title": "Script Inventory Architecture",
           "parent_slug": "script-inventory-architecture"
         }
       ],
       "links": [],
       "description": "Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent\u2026",
-      "size_bytes": 46381,
-      "modified_utc": "2025-11-25T02:53:56.349953+00:00",
+      "size_bytes": 64099,
+      "modified_utc": "2025-12-01T13:19:36.904676+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -11840,6 +13372,28 @@
       "status": null,
       "frontmatter": null,
       "contains_placeholder": true
+    },
+    {
+      "folder": ".repo_studios/scripts/scripts_index",
+      "filename": ".repo_studios/scripts/scripts_index/scripts_duplicate_summary-20251130-0333.md",
+      "slug": "summary",
+      "h1_headings": [
+        {
+          "title": "Summary",
+          "slug": "summary",
+          "line": 1
+        }
+      ],
+      "h2_headings": [],
+      "links": [],
+      "description": null,
+      "size_bytes": 11,
+      "modified_utc": "2025-11-30T03:33:07.215521+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
     },
     {
       "folder": ".repo_studios/scripts/summarizers/summarizers_index",
@@ -11944,6 +13498,36 @@
       "contains_placeholder": false
     },
     {
+      "folder": ".repo_studios/tmp_manual/automation_dry_run_9f5c157dea2e4b4fbd98dc969cbe2a41/reports/commandview/automation_runs/20251102-1930",
+      "filename": ".repo_studios/tmp_manual/automation_dry_run_9f5c157dea2e4b4fbd98dc969cbe2a41/reports/commandview/automation_runs/20251102-1930/README.md",
+      "slug": "automation-dry-run-bundle",
+      "h1_headings": [
+        {
+          "title": "Automation Dry-Run Bundle",
+          "slug": "automation-dry-run-bundle",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Notes",
+          "slug": "notes",
+          "line": 11,
+          "parent_title": "Automation Dry-Run Bundle",
+          "parent_slug": "automation-dry-run-bundle"
+        }
+      ],
+      "links": [],
+      "description": "dry run bundle",
+      "size_bytes": 244,
+      "modified_utc": "2025-11-30T12:23:31.861612+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
       "folder": ".",
       "filename": "README.md",
       "slug": "about-this-folder",
@@ -11957,8 +13541,80 @@
       "h2_headings": [],
       "links": [],
       "description": "To reduce confusion with the root-level `README.md`, the detailed guide for AI agents and contributors has been moved to `AGENTS_GUIDE.md` in this same folder.",
-      "size_bytes": 633,
-      "modified_utc": "2025-11-24T23:21:19.649681+00:00",
+      "size_bytes": 692,
+      "modified_utc": "2025-11-30T01:23:50.960100+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": false
+    },
+    {
+      "folder": ".",
+      "filename": "REPORT_NAMING_STANDARDS.md",
+      "slug": "report-naming-standards",
+      "h1_headings": [
+        {
+          "title": "Report Naming Standards",
+          "slug": "report-naming-standards",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Naming Convention Index",
+          "slug": "naming-convention-index",
+          "line": 9,
+          "parent_title": "Report Naming Standards",
+          "parent_slug": "report-naming-standards"
+        },
+        {
+          "title": "Artifact Role Registry",
+          "slug": "artifact-role-registry",
+          "line": 29,
+          "parent_title": "Report Naming Standards",
+          "parent_slug": "report-naming-standards"
+        },
+        {
+          "title": "Viewer Slug Registry",
+          "slug": "viewer-slug-registry",
+          "line": 43,
+          "parent_title": "Report Naming Standards",
+          "parent_slug": "report-naming-standards"
+        },
+        {
+          "title": "Grandfathered Artifacts",
+          "slug": "grandfathered-artifacts",
+          "line": 55,
+          "parent_title": "Report Naming Standards",
+          "parent_slug": "report-naming-standards"
+        },
+        {
+          "title": "Audit Utility Specification",
+          "slug": "audit-utility-specification",
+          "line": 62,
+          "parent_title": "Report Naming Standards",
+          "parent_slug": "report-naming-standards"
+        },
+        {
+          "title": "Compliance Expectations",
+          "slug": "compliance-expectations",
+          "line": 85,
+          "parent_title": "Report Naming Standards",
+          "parent_slug": "report-naming-standards"
+        },
+        {
+          "title": "Change Management",
+          "slug": "change-management",
+          "line": 96,
+          "parent_title": "Report Naming Standards",
+          "parent_slug": "report-naming-standards"
+        }
+      ],
+      "links": [],
+      "description": "This document defines the uniform naming scheme for all artifacts stored under `.repo_studios/command_center/reports/`. New automation, orchestrators, and helpers MUST emit bundles that follow this structure. Legacy directories remain in\u2026",
+      "size_bytes": 4572,
+      "modified_utc": "2025-11-30T01:23:50.956101+00:00",
       "tags": [],
       "owners": [],
       "status": null,
@@ -12067,6 +13723,286 @@
       "contains_placeholder": false
     },
     {
+      "folder": "docs/automation",
+      "filename": "docs/automation/orchestrator_implementation.md",
+      "slug": "orchestrator-implementation-plan",
+      "h1_headings": [
+        {
+          "title": "Orchestrator Implementation Plan",
+          "slug": "orchestrator-implementation-plan",
+          "line": 13
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Context",
+          "slug": "context",
+          "line": 19,
+          "parent_title": "Orchestrator Implementation Plan",
+          "parent_slug": "orchestrator-implementation-plan"
+        },
+        {
+          "title": "Current Progress (2025-11-30)",
+          "slug": "current-progress-2025-11-30",
+          "line": 29,
+          "parent_title": "Orchestrator Implementation Plan",
+          "parent_slug": "orchestrator-implementation-plan"
+        },
+        {
+          "title": "Implementation Objectives",
+          "slug": "implementation-objectives",
+          "line": 38,
+          "parent_title": "Orchestrator Implementation Plan",
+          "parent_slug": "orchestrator-implementation-plan"
+        },
+        {
+          "title": "Deliverables",
+          "slug": "deliverables",
+          "line": 47,
+          "parent_title": "Orchestrator Implementation Plan",
+          "parent_slug": "orchestrator-implementation-plan"
+        },
+        {
+          "title": "Legacy-to-Target Parity Matrix",
+          "slug": "legacy-to-target-parity-matrix",
+          "line": 57,
+          "parent_title": "Orchestrator Implementation Plan",
+          "parent_slug": "orchestrator-implementation-plan"
+        },
+        {
+          "title": "Legacy Retirement Targets",
+          "slug": "legacy-retirement-targets",
+          "line": 68,
+          "parent_title": "Orchestrator Implementation Plan",
+          "parent_slug": "orchestrator-implementation-plan"
+        },
+        {
+          "title": "Testing and Fixture Migration Requirements",
+          "slug": "testing-and-fixture-migration-requirements",
+          "line": 82,
+          "parent_title": "Orchestrator Implementation Plan",
+          "parent_slug": "orchestrator-implementation-plan"
+        },
+        {
+          "title": "Operational Impact Inventory",
+          "slug": "operational-impact-inventory",
+          "line": 93,
+          "parent_title": "Orchestrator Implementation Plan",
+          "parent_slug": "orchestrator-implementation-plan"
+        },
+        {
+          "title": "Legacy Removal Ticket Backlog (to be opened)",
+          "slug": "legacy-removal-ticket-backlog-to-be-opened",
+          "line": 109,
+          "parent_title": "Orchestrator Implementation Plan",
+          "parent_slug": "orchestrator-implementation-plan"
+        },
+        {
+          "title": "Topic Assignment Validation (2025-11-30)",
+          "slug": "topic-assignment-validation-2025-11-30",
+          "line": 135,
+          "parent_title": "Orchestrator Implementation Plan",
+          "parent_slug": "orchestrator-implementation-plan"
+        },
+        {
+          "title": "Healthview Manifest Mapping (2025-11-30)",
+          "slug": "healthview-manifest-mapping-2025-11-30",
+          "line": 175,
+          "parent_title": "Orchestrator Implementation Plan",
+          "parent_slug": "orchestrator-implementation-plan"
+        },
+        {
+          "title": "Topic Implementation Workstreams",
+          "slug": "topic-implementation-workstreams",
+          "line": 187,
+          "parent_title": "Orchestrator Implementation Plan",
+          "parent_slug": "orchestrator-implementation-plan"
+        },
+        {
+          "title": "Phase Checklist",
+          "slug": "phase-checklist",
+          "line": 357,
+          "parent_title": "Orchestrator Implementation Plan",
+          "parent_slug": "orchestrator-implementation-plan"
+        },
+        {
+          "title": "Healthview Viewer Wiring Reference",
+          "slug": "healthview-viewer-wiring-reference",
+          "line": 467,
+          "parent_title": "Orchestrator Implementation Plan",
+          "parent_slug": "orchestrator-implementation-plan"
+        },
+        {
+          "title": "Report Naming Standard Initiative",
+          "slug": "report-naming-standard-initiative",
+          "line": 501,
+          "parent_title": "Orchestrator Implementation Plan",
+          "parent_slug": "orchestrator-implementation-plan"
+        },
+        {
+          "title": "Dependencies and Tooling",
+          "slug": "dependencies-and-tooling",
+          "line": 557,
+          "parent_title": "Orchestrator Implementation Plan",
+          "parent_slug": "orchestrator-implementation-plan"
+        },
+        {
+          "title": "Reporting and Tracking",
+          "slug": "reporting-and-tracking",
+          "line": 564,
+          "parent_title": "Orchestrator Implementation Plan",
+          "parent_slug": "orchestrator-implementation-plan"
+        }
+      ],
+      "links": [],
+      "description": "This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",
+      "size_bytes": 57566,
+      "modified_utc": "2025-12-01T14:02:44.340382+00:00",
+      "tags": [
+        "automation",
+        "orchestrators",
+        "command-center"
+      ],
+      "owners": [
+        "repo_studios_ai"
+      ],
+      "status": "draft",
+      "frontmatter": {
+        "title": "Orchestrator Implementation Plan",
+        "status": "draft",
+        "version": "2025-11-29",
+        "last_updated": "2025-11-30",
+        "owner": "repo_studios_ai",
+        "tags": [
+          "automation",
+          "orchestrators",
+          "command-center"
+        ]
+      },
+      "contains_placeholder": true
+    },
+    {
+      "folder": "docs/automation",
+      "filename": "docs/automation/orchestrator_topic_refactor_rfc.md",
+      "slug": "rfc-topic-oriented-orchestrator-refactor",
+      "h1_headings": [
+        {
+          "title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "slug": "rfc-topic-oriented-orchestrator-refactor",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "1. Overview",
+          "slug": "1-overview",
+          "line": 3,
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor"
+        },
+        {
+          "title": "2. Motivation",
+          "slug": "2-motivation",
+          "line": 12,
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor"
+        },
+        {
+          "title": "3. Goals",
+          "slug": "3-goals",
+          "line": 24,
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor"
+        },
+        {
+          "title": "4. Non-Goals",
+          "slug": "4-non-goals",
+          "line": 36,
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor"
+        },
+        {
+          "title": "5. Proposed Architecture",
+          "slug": "5-proposed-architecture",
+          "line": 45,
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor"
+        },
+        {
+          "title": "6. Shared Helper Enhancements",
+          "slug": "6-shared-helper-enhancements",
+          "line": 83,
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor"
+        },
+        {
+          "title": "7. Artifact Management and Retention",
+          "slug": "7-artifact-management-and-retention",
+          "line": 99,
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor"
+        },
+        {
+          "title": "8. Testing Strategy",
+          "slug": "8-testing-strategy",
+          "line": 108,
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor"
+        },
+        {
+          "title": "9. Documentation Plan",
+          "slug": "9-documentation-plan",
+          "line": 122,
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor"
+        },
+        {
+          "title": "10. Rollout Phases",
+          "slug": "10-rollout-phases",
+          "line": 136,
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor"
+        },
+        {
+          "title": "11. Risks and Mitigations",
+          "slug": "11-risks-and-mitigations",
+          "line": 154,
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor"
+        },
+        {
+          "title": "12. Open Questions",
+          "slug": "12-open-questions",
+          "line": 168,
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor"
+        },
+        {
+          "title": "13. Decision Record",
+          "slug": "13-decision-record",
+          "line": 191,
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor"
+        },
+        {
+          "title": "14. References",
+          "slug": "14-references",
+          "line": 207,
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor"
+        }
+      ],
+      "links": [],
+      "description": "This RFC proposes restructuring the Repo Studios orchestration layer around topic-aligned pipelines so every automation script is executed through a consistent orchestrator entry point. The document summarizes roadmap context, expected\u2026",
+      "size_bytes": 12548,
+      "modified_utc": "2025-12-01T13:19:36.908675+00:00",
+      "tags": [],
+      "owners": [],
+      "status": null,
+      "frontmatter": null,
+      "contains_placeholder": true
+    },
+    {
       "folder": "docs/standards/global",
       "filename": "docs/standards/global/std-docs-integrity-handbook.md",
       "slug": "docs-integrity-handbook",
@@ -12167,27 +14103,62 @@
           "parent_slug": ""
         },
         {
+          "title": "Document Placement",
+          "slug": "document-placement",
+          "line": 19,
+          "parent_title": "",
+          "parent_slug": ""
+        },
+        {
+          "title": "Headings & Outline",
+          "slug": "headings-outline",
+          "line": 24,
+          "parent_title": "",
+          "parent_slug": ""
+        },
+        {
+          "title": "Lead Summary Paragraph",
+          "slug": "lead-summary-paragraph",
+          "line": 31,
+          "parent_title": "",
+          "parent_slug": ""
+        },
+        {
+          "title": "Metadata Hygiene",
+          "slug": "metadata-hygiene",
+          "line": 36,
+          "parent_title": "",
+          "parent_slug": ""
+        },
+        {
           "title": "Style Essentials",
           "slug": "style-essentials",
-          "line": 18,
+          "line": 43,
+          "parent_title": "",
+          "parent_slug": ""
+        },
+        {
+          "title": "Cross-Document Consistency",
+          "slug": "cross-document-consistency",
+          "line": 49,
           "parent_title": "",
           "parent_slug": ""
         }
       ],
       "links": [],
       "description": null,
-      "size_bytes": 1034,
-      "modified_utc": "2025-11-24T23:31:22.862853+00:00",
+      "size_bytes": 3318,
+      "modified_utc": "2025-11-25T11:35:24.181372+00:00",
       "tags": [],
       "owners": [],
       "status": "draft",
       "frontmatter": {
         "title": "Global Markdown Authoring Standard",
         "status": "draft",
-        "version": "2025-10-23",
-        "last_updated": "2025-10-23"
+        "version": "2025-11-25",
+        "last_updated": "2025-11-25"
       },
-      "contains_placeholder": false
+      "contains_placeholder": true
     },
     {
       "folder": "docs/standards/global",
@@ -12331,22 +14302,29 @@
           "line": 18,
           "parent_title": "",
           "parent_slug": ""
+        },
+        {
+          "title": "Documentation Hygiene",
+          "slug": "documentation-hygiene",
+          "line": 24,
+          "parent_title": "",
+          "parent_slug": ""
         }
       ],
       "links": [],
       "description": null,
-      "size_bytes": 1180,
-      "modified_utc": "2025-11-24T23:31:22.871630+00:00",
+      "size_bytes": 2027,
+      "modified_utc": "2025-11-25T11:35:24.181372+00:00",
       "tags": [],
       "owners": [],
       "status": "draft",
       "frontmatter": {
         "title": "Project Operating Standard",
         "status": "draft",
-        "version": "2025-10-23",
-        "last_updated": "2025-10-23"
+        "version": "2025-11-25",
+        "last_updated": "2025-11-25"
       },
-      "contains_placeholder": false
+      "contains_placeholder": true
     },
     {
       "folder": "docs/standards/project",
@@ -12356,14 +14334,111 @@
         {
           "title": "Project Python Instructions",
           "slug": "project-python-instructions",
-          "line": 3
+          "line": 15
         }
       ],
-      "h2_headings": [],
+      "h2_headings": [
+        {
+          "title": "Environment",
+          "slug": "environment",
+          "line": 19,
+          "parent_title": "Project Python Instructions",
+          "parent_slug": "project-python-instructions"
+        },
+        {
+          "title": "Documentation Expectations",
+          "slug": "documentation-expectations",
+          "line": 25,
+          "parent_title": "Project Python Instructions",
+          "parent_slug": "project-python-instructions"
+        },
+        {
+          "title": "Testing Discipline",
+          "slug": "testing-discipline",
+          "line": 32,
+          "parent_title": "Project Python Instructions",
+          "parent_slug": "project-python-instructions"
+        }
+      ],
       "links": [],
-      "description": "Placeholder instructions for Python setup and workflows. Replace with authoritative content when documentation is available.",
-      "size_bytes": 236,
-      "modified_utc": "2025-11-24T23:31:22.871630+00:00",
+      "description": "This guide documents the baseline expectations for Python contributors and automation authors.",
+      "size_bytes": 1867,
+      "modified_utc": "2025-11-25T11:35:24.181372+00:00",
+      "tags": [
+        "python",
+        "documentation",
+        "automation"
+      ],
+      "owners": [
+        "repo_studios_ai"
+      ],
+      "status": "draft",
+      "frontmatter": {
+        "title": "Project Python Instructions",
+        "status": "draft",
+        "version": "2025-11-25",
+        "last_updated": "2025-11-25",
+        "owner": "repo_studios_ai",
+        "tags": [
+          "python",
+          "documentation",
+          "automation"
+        ]
+      },
+      "contains_placeholder": true
+    },
+    {
+      "folder": "docs/templates",
+      "filename": "docs/templates/test_execution_telemetry_summary_template.md",
+      "slug": "test-execution-telemetry-summary-template",
+      "h1_headings": [
+        {
+          "title": "Test Execution Telemetry Summary Template",
+          "slug": "test-execution-telemetry-summary-template",
+          "line": 1
+        }
+      ],
+      "h2_headings": [
+        {
+          "title": "Run Context",
+          "slug": "run-context",
+          "line": 7,
+          "parent_title": "Test Execution Telemetry Summary Template",
+          "parent_slug": "test-execution-telemetry-summary-template"
+        },
+        {
+          "title": "Runtime Metrics",
+          "slug": "runtime-metrics",
+          "line": 21,
+          "parent_title": "Test Execution Telemetry Summary Template",
+          "parent_slug": "test-execution-telemetry-summary-template"
+        },
+        {
+          "title": "Failure Highlights",
+          "slug": "failure-highlights",
+          "line": 29,
+          "parent_title": "Test Execution Telemetry Summary Template",
+          "parent_slug": "test-execution-telemetry-summary-template"
+        },
+        {
+          "title": "Artifact Locations",
+          "slug": "artifact-locations",
+          "line": 36,
+          "parent_title": "Test Execution Telemetry Summary Template",
+          "parent_slug": "test-execution-telemetry-summary-template"
+        },
+        {
+          "title": "Step Outcomes",
+          "slug": "step-outcomes",
+          "line": 45,
+          "parent_title": "Test Execution Telemetry Summary Template",
+          "parent_slug": "test-execution-telemetry-summary-template"
+        }
+      ],
+      "links": [],
+      "description": "Use this template when authoring Healthview Markdown summaries for Test Execution Telemetry runs. Replace bracketed placeholders with the values emitted by the orchestrator (`run_test_execution_telemetry.py`) and remove any sections that\u2026",
+      "size_bytes": 2092,
+      "modified_utc": "2025-12-01T03:07:09.755953+00:00",
       "tags": [],
       "owners": [],
       "status": null,

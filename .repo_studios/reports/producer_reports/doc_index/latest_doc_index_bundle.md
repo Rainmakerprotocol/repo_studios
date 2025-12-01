@@ -1,8 +1,8 @@
 ---
 schema_version: 1
-generated_utc: 2025-11-25T03:38:45.960103+00:00
-total_documents: 192
-total_headings: 1214
+generated_utc: 2025-12-01T14:30:39.071989+00:00
+total_documents: 221
+total_headings: 1439
 total_links: 2
 ---
 
@@ -16,18 +16,18 @@ total_links: 2
 
 ## Summary
 
-- documents: 192
-- h1 headings: 176
-- h2 headings: 1038
+- documents: 221
+- h1 headings: 205
+- h2 headings: 1234
 - links: 2
 
 ## Metrics
 
-- link density: 0.010
+- link density: 0.009
 - duplicate slug groups: 6
-- placeholder documents: 37
-- documents outside docs tree: 116
-- top directories: .repo_studios/command_center/docs/mermaid/view_specs (28), .repo_studios/docs/automation (27), .repo_studios/command_center/docs (11), .repo_studios/docs/standards/global (11), .repo_studios/command_center/docs/phase_7 (10)
+- placeholder documents: 46
+- documents outside docs tree: 124
+- top directories: .repo_studios/docs/automation (41), .repo_studios/command_center/docs/mermaid/view_specs (28), .repo_studios/command_center/docs (12), .repo_studios/docs/standards/global (11), .repo_studios/command_center/docs/phase_7 (10)
 - see JSON section for full metric payload.
 
 ## Advisories
@@ -37,7 +37,7 @@ total_links: 2
 - documents without h2: .copilot_todo.md, .repo_studios/command_center/docs/decision_log.md, .repo_studios/command_center/docs/mermaid/view_specs/cross_module_function_references.md, .repo_studios/command_center/docs/mermaid/view_specs/module_dependency_graph.md, .repo_studios/command_center/docs/phase_4/dry_run_samples/README.md, …
 - placeholder documents: .repo_studios/command_center/checklists/2025-10-24.md, .repo_studios/command_center/command_center_architecture.md, .repo_studios/command_center/docs/code_library/code_library_status.md, .repo_studios/command_center/docs/decision_log.md, .repo_studios/command_center/docs/duplicate_target_mappings.md, …
 - documents outside docs tree: .copilot_todo.md, .github/architect.chatmode.md, .github/ask.chatmode.md, .github/code.chatmode.md, .github/copilot-instructions.md, …
-- duplicate slugs: 6 groups; examples: library-integration-alignment-plan (2 files); duplicate-scan-summary (8 files); std-global-markdown-authoring (2 files)
+- duplicate slugs: 6 groups; examples: library-integration-alignment-plan (2 files); duplicate-scan-summary (10 files); std-global-markdown-authoring (2 files)
 - see JSON section for full advisory payload.
 
 ## JSON
@@ -69,7 +69,7 @@ total_links: 2
       ".repo_studios/docs/standards/global/std-global-markdown-authoring.md",
       ".repo_studios/docs/standards/global/std-global-mission-parameters.md",
       ".repo_studios/docs/templates/script_inventory.md",
-      ".repo_studios/monkey_patch/20251124_175233/report.md",
+      ".repo_studios/monkey_patch/20251201_115542/report.md",
       ".repo_studios/monkey_patch/latest/report.md"
     ],
     "documents_outside_docs_tree": [
@@ -88,6 +88,7 @@ total_links: 2
       ".repo_studios/command_center/command_center_architecture.md",
       ".repo_studios/command_center/docs/build_paths_extraction_brief.md",
       ".repo_studios/command_center/docs/code_library/code_library_status.md",
+      ".repo_studios/command_center/docs/code_library/helper_usage_patterns.md",
       ".repo_studios/command_center/docs/decision_log.md",
       ".repo_studios/command_center/docs/duplicate_detection_schema_alignment.md",
       ".repo_studios/command_center/docs/duplicate_target_mappings.md",
@@ -96,8 +97,7 @@ total_links: 2
       ".repo_studios/command_center/docs/library_integration_checklist.md",
       ".repo_studios/command_center/docs/library_readme_adjustments.md",
       ".repo_studios/command_center/docs/manual_extraction_checklist.md",
-      ".repo_studios/command_center/docs/manual_extraction_operator_brief.md",
-      ".repo_studios/command_center/docs/mermaid/README.md"
+      ".repo_studios/command_center/docs/manual_extraction_operator_brief.md"
     ],
     "documents_without_h1": [
       ".repo_studios/command_center/docs/mermaid/view_specs/callback_registration_map.md",
@@ -131,22 +131,24 @@ total_links: 2
       ".repo_studios/command_center/docs/phase_7/PRODUCER_CONSUMER_TRACEABILITY_AUDIT.md",
       ".repo_studios/command_center/scripts/script_inventory.md",
       ".repo_studios/command_center/viewer/cache/README.md",
+      ".repo_studios/docs/governance/alignment-ledger.md",
       ".repo_studios/docs/project_tree_overview.md",
-      ".repo_studios/docs/standards/docs_index.md",
       ".repo_studios/docs/templates/agent_note_template.md",
       ".repo_studios/docs/templates/script_inventory.md",
       ".repo_studios/docs/templates/structural_checklist_template.md",
       ".repo_studios/inventory_schema/views/README.md",
+      ".repo_studios/scripts/scripts_index/scripts_duplicate_summary-20251130-0333.md",
       "README.md",
       "command_center_script_verification_temp.md",
       "docs/standards/global/std-docs-integrity-handbook.md",
       "docs/standards/global/std-global-chainlit-ui.md",
-      "docs/standards/global/std-global-html-coding.md",
-      "docs/standards/project/std-project-python-instructions.md"
+      "docs/standards/global/std-global-html-coding.md"
     ],
     "duplicate_slugs": {
       "duplicate-scan-summary": [
-        ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-24-2338.md",
+        ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md",
+        ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md",
+        ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md",
         ".repo_studios/scripts/aggregators/aggregators_index/aggregators_duplicate_summary-2025-10-28-0942.md",
         ".repo_studios/scripts/consumers/consumers_index/consumers_duplicate_summary-2025-10-28-0934.md",
         ".repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md",
@@ -160,7 +162,7 @@ total_links: 2
         ".repo_studios/command_center/docs/library_integration_checklist.md"
       ],
       "monkey-patch-scan-report": [
-        ".repo_studios/monkey_patch/20251124_175233/report.md",
+        ".repo_studios/monkey_patch/20251201_115542/report.md",
         ".repo_studios/monkey_patch/latest/report.md"
       ],
       "script-inventory-template": [
@@ -189,6 +191,7 @@ total_links: 2
       ".repo_studios/command_center/docs/mermaid/mermaid_viewer.md",
       ".repo_studios/command_center/docs/mermaid/view_specs/class_inheritance_hierarchy.md",
       ".repo_studios/command_center/docs/mermaid/view_specs/git_churn_risk_map.md",
+      ".repo_studios/command_center/docs/orchestrator_migration_notes.md",
       ".repo_studios/command_center/docs/phase_4/POST_RUN_TEST_MATRIX.md",
       ".repo_studios/command_center/docs/phase_4/PR_CHECKLIST_TEMPLATE.md",
       ".repo_studios/command_center/docs/phase_7/CI_INTEGRATION_STRATEGY.md",
@@ -197,11 +200,10 @@ total_links: 2
       ".repo_studios/command_center/docs/phase_7/REPORTING_INTERFACE_PLAN.md",
       ".repo_studios/command_center/docs/phase_7/placeholder_scan_blocking_transition_brief.md",
       ".repo_studios/command_center/docs/run_log_template.md",
+      ".repo_studios/docs/automation/aggregate_docs_health_signals.md",
+      ".repo_studios/docs/automation/generate_anchor_health_report.md",
       ".repo_studios/docs/automation/generate_doc_index.md",
-      ".repo_studios/docs/automation/orchestrator_automation_hooks.md",
-      ".repo_studios/docs/automation/scan_code_placeholders.md",
-      ".repo_studios/docs/automation/traceability/producer_consumer_traceability_audit.md",
-      ".repo_studios/docs/inventory/inventory-notes.md"
+      ".repo_studios/docs/automation/orchestrator_automation_hooks.md"
     ]
   },
   "documents": [
@@ -565,28 +567,28 @@ total_links: 2
           "title": "Conventions & Patterns"
         },
         {
-          "line": 29,
+          "line": 30,
           "parent_slug": "repo-studios-copilot-playbook",
           "parent_title": "Repo Studios Copilot Playbook",
           "slug": "testing-validation",
           "title": "Testing & Validation"
         },
         {
-          "line": 34,
+          "line": 35,
           "parent_slug": "repo-studios-copilot-playbook",
           "parent_title": "Repo Studios Copilot Playbook",
           "slug": "reference-material",
           "title": "Reference Material"
         },
         {
-          "line": 41,
+          "line": 42,
           "parent_slug": "repo-studios-copilot-playbook",
           "parent_title": "Repo Studios Copilot Playbook",
           "slug": "collaboration-tips",
           "title": "Collaboration Tips"
         },
         {
-          "line": 47,
+          "line": 48,
           "parent_slug": "repo-studios-copilot-playbook",
           "parent_title": "Repo Studios Copilot Playbook",
           "slug": "terminal-coordination",
@@ -594,9 +596,9 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-07T03:43:35.020145+00:00",
+      "modified_utc": "2025-11-30T01:23:50.960100+00:00",
       "owners": [],
-      "size_bytes": 7422,
+      "size_bytes": 7624,
       "slug": "repo-studios-copilot-playbook",
       "status": null,
       "tags": []
@@ -937,49 +939,49 @@ total_links: 2
           "title": "Directory Layout"
         },
         {
-          "line": 32,
+          "line": 46,
           "parent_slug": "library-integration-protocol",
           "parent_title": "Library Integration Protocol",
           "slug": "shared-helper-modules",
           "title": "Shared Helper Modules"
         },
         {
-          "line": 45,
+          "line": 59,
           "parent_slug": "library-integration-protocol",
           "parent_title": "Library Integration Protocol",
           "slug": "artifact-retention-policy",
           "title": "Artifact Retention Policy"
         },
         {
-          "line": 53,
+          "line": 67,
           "parent_slug": "library-integration-protocol",
           "parent_title": "Library Integration Protocol",
           "slug": "micro-cycle-blueprint",
           "title": "Micro-Cycle Blueprint"
         },
         {
-          "line": 77,
+          "line": 91,
           "parent_slug": "library-integration-protocol",
           "parent_title": "Library Integration Protocol",
           "slug": "automation-entry-points",
           "title": "Automation Entry Points"
         },
         {
-          "line": 119,
+          "line": 133,
           "parent_slug": "library-integration-protocol",
           "parent_title": "Library Integration Protocol",
           "slug": "usage-instructions",
           "title": "Usage Instructions"
         },
         {
-          "line": 142,
+          "line": 156,
           "parent_slug": "library-integration-protocol",
           "parent_title": "Library Integration Protocol",
           "slug": "references",
           "title": "References"
         },
         {
-          "line": 151,
+          "line": 165,
           "parent_slug": "library-integration-protocol",
           "parent_title": "Library Integration Protocol",
           "slug": "onboarding-checklist",
@@ -987,9 +989,9 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-23T11:14:18.336713+00:00",
+      "modified_utc": "2025-11-28T14:18:05.271026+00:00",
       "owners": [],
-      "size_bytes": 14418,
+      "size_bytes": 14886,
       "slug": "library-integration-protocol",
       "status": null,
       "tags": []
@@ -1274,35 +1276,35 @@ total_links: 2
           "title": "Current Assets"
         },
         {
-          "line": 67,
+          "line": 69,
           "parent_slug": "code-library-integration-status-2025-11-23",
           "parent_title": "Code Library Integration Status \u2014 2025-11-23",
           "slug": "progress-recap",
           "title": "Progress Recap"
         },
         {
-          "line": 136,
+          "line": 138,
           "parent_slug": "code-library-integration-status-2025-11-23",
           "parent_title": "Code Library Integration Status \u2014 2025-11-23",
           "slug": "outstanding-work",
           "title": "Outstanding Work"
         },
         {
-          "line": 156,
+          "line": 158,
           "parent_slug": "code-library-integration-status-2025-11-23",
           "parent_title": "Code Library Integration Status \u2014 2025-11-23",
           "slug": "key-references",
           "title": "Key References"
         },
         {
-          "line": 166,
+          "line": 168,
           "parent_slug": "code-library-integration-status-2025-11-23",
           "parent_title": "Code Library Integration Status \u2014 2025-11-23",
           "slug": "suggested-next-actions-for-the-next-contributor",
           "title": "Suggested Next Actions (for the next contributor)"
         },
         {
-          "line": 174,
+          "line": 176,
           "parent_slug": "code-library-integration-status-2025-11-23",
           "parent_title": "Code Library Integration Status \u2014 2025-11-23",
           "slug": "maintenance-tips",
@@ -1310,10 +1312,82 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-23T11:23:20.546419+00:00",
+      "modified_utc": "2025-12-01T01:01:45.347271+00:00",
       "owners": [],
-      "size_bytes": 13812,
+      "size_bytes": 14122,
       "slug": "code-library-integration-status-2025-11-23",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
+      "description": "Capture how the Phase 2 shared helpers are intended to be wired into topic orchestrators so engineers and agents can reuse them consistently. Each section lists the helper location, dependencies, execution contract, and verification tests.",
+      "filename": ".repo_studios/command_center/docs/code_library/helper_usage_patterns.md",
+      "folder": ".repo_studios/command_center/docs/code_library",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "command-center-helper-usage-patterns-2025-11-30",
+          "title": "Command Center Helper Usage Patterns \u2014 2025-11-30"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "command-center-helper-usage-patterns-2025-11-30",
+          "parent_title": "Command Center Helper Usage Patterns \u2014 2025-11-30",
+          "slug": "scope",
+          "title": "Scope"
+        },
+        {
+          "line": 9,
+          "parent_slug": "command-center-helper-usage-patterns-2025-11-30",
+          "parent_title": "Command Center Helper Usage Patterns \u2014 2025-11-30",
+          "slug": "topic-pipeline-assembly",
+          "title": "Topic Pipeline Assembly"
+        },
+        {
+          "line": 56,
+          "parent_slug": "command-center-helper-usage-patterns-2025-11-30",
+          "parent_title": "Command Center Helper Usage Patterns \u2014 2025-11-30",
+          "slug": "summarizer-runner-integration",
+          "title": "Summarizer Runner Integration"
+        },
+        {
+          "line": 78,
+          "parent_slug": "command-center-helper-usage-patterns-2025-11-30",
+          "parent_title": "Command Center Helper Usage Patterns \u2014 2025-11-30",
+          "slug": "telemetry-emitters",
+          "title": "Telemetry Emitters"
+        },
+        {
+          "line": 104,
+          "parent_slug": "command-center-helper-usage-patterns-2025-11-30",
+          "parent_title": "Command Center Helper Usage Patterns \u2014 2025-11-30",
+          "slug": "catalog-registry",
+          "title": "Catalog Registry"
+        },
+        {
+          "line": 130,
+          "parent_slug": "command-center-helper-usage-patterns-2025-11-30",
+          "parent_title": "Command Center Helper Usage Patterns \u2014 2025-11-30",
+          "slug": "cli-integration-checklist",
+          "title": "CLI Integration Checklist"
+        },
+        {
+          "line": 143,
+          "parent_slug": "command-center-helper-usage-patterns-2025-11-30",
+          "parent_title": "Command Center Helper Usage Patterns \u2014 2025-11-30",
+          "slug": "references",
+          "title": "References"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-01T00:53:06.675177+00:00",
+      "owners": [],
+      "size_bytes": 6829,
+      "slug": "command-center-helper-usage-patterns-2025-11-30",
       "status": null,
       "tags": []
     },
@@ -1332,9 +1406,9 @@ total_links: 2
       ],
       "h2_headings": [],
       "links": [],
-      "modified_utc": "2025-11-24T23:59:30.978451+00:00",
+      "modified_utc": "2025-12-01T01:26:52.466224+00:00",
       "owners": [],
-      "size_bytes": 20019,
+      "size_bytes": 22558,
       "slug": "decision-log",
       "status": null,
       "tags": []
@@ -2476,42 +2550,42 @@ total_links: 2
           "title": "Goal"
         },
         {
-          "line": 9,
+          "line": 10,
           "parent_slug": "dead-code-detection-view-spec",
           "parent_title": "Dead Code Detection View Spec",
           "slug": "inputs",
           "title": "Inputs"
         },
         {
-          "line": 17,
+          "line": 18,
           "parent_slug": "dead-code-detection-view-spec",
           "parent_title": "Dead Code Detection View Spec",
           "slug": "transformations",
           "title": "Transformations"
         },
         {
-          "line": 26,
+          "line": 33,
           "parent_slug": "dead-code-detection-view-spec",
           "parent_title": "Dead Code Detection View Spec",
           "slug": "mermaid-output-structure",
           "title": "Mermaid Output Structure"
         },
         {
-          "line": 42,
+          "line": 49,
           "parent_slug": "dead-code-detection-view-spec",
           "parent_title": "Dead Code Detection View Spec",
           "slug": "implementation-references",
           "title": "Implementation References"
         },
         {
-          "line": 48,
+          "line": 60,
           "parent_slug": "dead-code-detection-view-spec",
           "parent_title": "Dead Code Detection View Spec",
           "slug": "verification-hardening",
           "title": "Verification & Hardening"
         },
         {
-          "line": 54,
+          "line": 70,
           "parent_slug": "dead-code-detection-view-spec",
           "parent_title": "Dead Code Detection View Spec",
           "slug": "future-enhancements",
@@ -2519,9 +2593,9 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-13T13:29:06.677630+00:00",
+      "modified_utc": "2025-11-25T19:41:38.796364+00:00",
       "owners": [],
-      "size_bytes": 4341,
+      "size_bytes": 4393,
       "slug": "dead-code-detection-view-spec",
       "status": null,
       "tags": []
@@ -4048,6 +4122,92 @@ total_links: 2
       "tags": []
     },
     {
+      "contains_placeholder": true,
+      "description": "Show how the legacy Command Center orchestrators would integrate the Phase 2 helper modules if they were rewritten today. The goal is to give reviewers parity confidence before we begin migrating the existing entry points.",
+      "filename": ".repo_studios/command_center/docs/orchestrator_migration_notes.md",
+      "folder": ".repo_studios/command_center/docs",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "orchestrator-migration-notes-2025-11-30",
+          "title": "Orchestrator Migration Notes \u2014 2025-11-30"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "orchestrator-migration-notes-2025-11-30",
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "slug": "purpose",
+          "title": "Purpose"
+        },
+        {
+          "line": 15,
+          "parent_slug": "orchestrator-migration-notes-2025-11-30",
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "slug": "test-execution-telemetry-legacy-runpytestlogcapturepy",
+          "title": "Test Execution Telemetry (legacy: `run_pytest_log_capture.py`)"
+        },
+        {
+          "line": 80,
+          "parent_slug": "orchestrator-migration-notes-2025-11-30",
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "slug": "fault-diagnostics-replaces-legacy-runfaultpipelinepy",
+          "title": "Fault Diagnostics (replaces legacy `run_fault_pipeline.py`)"
+        },
+        {
+          "line": 137,
+          "parent_slug": "orchestrator-migration-notes-2025-11-30",
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "slug": "docs-health-legacy-suite-of-producer-scripts",
+          "title": "Docs Health (legacy suite of producer scripts)"
+        },
+        {
+          "line": 173,
+          "parent_slug": "orchestrator-migration-notes-2025-11-30",
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "slug": "standards-integrity-legacy-runstandardsgapsuitepy-runstandardsindexclipy",
+          "title": "Standards Integrity (legacy: `run_standards_gap_suite.py` + `run_standards_index_cli.py`)"
+        },
+        {
+          "line": 183,
+          "parent_slug": "orchestrator-migration-notes-2025-11-30",
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "slug": "dependency-import-hygiene-legacy-runbatchcleanuppy",
+          "title": "Dependency & Import Hygiene (legacy: `run_batch_cleanup.py`)"
+        },
+        {
+          "line": 191,
+          "parent_slug": "orchestrator-migration-notes-2025-11-30",
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "slug": "monkey-patch-oversight",
+          "title": "Monkey Patch Oversight"
+        },
+        {
+          "line": 197,
+          "parent_slug": "orchestrator-migration-notes-2025-11-30",
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "slug": "implementation-checklist",
+          "title": "Implementation Checklist"
+        },
+        {
+          "line": 209,
+          "parent_slug": "orchestrator-migration-notes-2025-11-30",
+          "parent_title": "Orchestrator Migration Notes \u2014 2025-11-30",
+          "slug": "references",
+          "title": "References"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-01T13:19:36.912676+00:00",
+      "owners": [],
+      "size_bytes": 8056,
+      "slug": "orchestrator-migration-notes-2025-11-30",
+      "status": null,
+      "tags": []
+    },
+    {
       "contains_placeholder": false,
       "description": "Deliver a vetted blueprint for automated duplicate extraction that adheres to Phase 3 guardrails, maintains auditability, and minimizes regression risk. Implementation remains manual until this brief is approved.",
       "filename": ".repo_studios/command_center/docs/phase_4/AUTOMATION_PLANNING_NOTES.md",
@@ -5037,7 +5197,7 @@ total_links: 2
     },
     {
       "contains_placeholder": false,
-      "description": "Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in `utilities.test_log_analysis` and emit\u2026",
+      "description": "Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in\u2026",
       "filename": ".repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md",
       "folder": ".repo_studios/command_center/docs/phase_7",
       "frontmatter": null,
@@ -5121,9 +5281,9 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-23T23:22:54.838677+00:00",
+      "modified_utc": "2025-12-01T01:26:52.466224+00:00",
       "owners": [],
-      "size_bytes": 6040,
+      "size_bytes": 6485,
       "slug": "collecttestlogreportspy-blueprint",
       "status": null,
       "tags": []
@@ -5709,7 +5869,7 @@ total_links: 2
     {
       "contains_placeholder": false,
       "description": "1. `configure_logging` \u2014 12 duplicate(s)",
-      "filename": ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-24-2338.md",
+      "filename": ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md",
       "folder": ".repo_studios/command_center/scripts/scripts_index",
       "frontmatter": null,
       "h1_headings": [
@@ -5750,9 +5910,111 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-24T23:38:11.764488+00:00",
+      "modified_utc": "2025-11-27T17:57:02.808160+00:00",
       "owners": [],
       "size_bytes": 7126,
+      "slug": "duplicate-scan-summary",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
+      "description": "1. `configure_logging` \u2014 12 duplicate(s)",
+      "filename": ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md",
+      "folder": ".repo_studios/command_center/scripts/scripts_index",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "duplicate-scan-summary",
+          "title": "Duplicate Scan Summary"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "duplicate-scan-summary",
+          "parent_title": "Duplicate Scan Summary",
+          "slug": "overview",
+          "title": "Overview"
+        },
+        {
+          "line": 13,
+          "parent_slug": "duplicate-scan-summary",
+          "parent_title": "Duplicate Scan Summary",
+          "slug": "inputs",
+          "title": "Inputs"
+        },
+        {
+          "line": 18,
+          "parent_slug": "duplicate-scan-summary",
+          "parent_title": "Duplicate Scan Summary",
+          "slug": "top-duplicate-offenders",
+          "title": "Top Duplicate Offenders"
+        },
+        {
+          "line": 101,
+          "parent_slug": "duplicate-scan-summary",
+          "parent_title": "Duplicate Scan Summary",
+          "slug": "next-steps",
+          "title": "Next Steps"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-30T04:56:22.549708+00:00",
+      "owners": [],
+      "size_bytes": 7198,
+      "slug": "duplicate-scan-summary",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
+      "description": "1. `configure_logging` \u2014 12 duplicate(s)",
+      "filename": ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md",
+      "folder": ".repo_studios/command_center/scripts/scripts_index",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "duplicate-scan-summary",
+          "title": "Duplicate Scan Summary"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "duplicate-scan-summary",
+          "parent_title": "Duplicate Scan Summary",
+          "slug": "overview",
+          "title": "Overview"
+        },
+        {
+          "line": 13,
+          "parent_slug": "duplicate-scan-summary",
+          "parent_title": "Duplicate Scan Summary",
+          "slug": "inputs",
+          "title": "Inputs"
+        },
+        {
+          "line": 18,
+          "parent_slug": "duplicate-scan-summary",
+          "parent_title": "Duplicate Scan Summary",
+          "slug": "top-duplicate-offenders",
+          "title": "Top Duplicate Offenders"
+        },
+        {
+          "line": 101,
+          "parent_slug": "duplicate-scan-summary",
+          "parent_title": "Duplicate Scan Summary",
+          "slug": "next-steps",
+          "title": "Next Steps"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-30T04:57:31.343343+00:00",
+      "owners": [],
+      "size_bytes": 7198,
       "slug": "duplicate-scan-summary",
       "status": null,
       "tags": []
@@ -5793,56 +6055,56 @@ total_links: 2
           "title": "Quick Start"
         },
         {
-          "line": 77,
+          "line": 90,
           "parent_slug": "command-center-viewer",
           "parent_title": "Command Center Viewer",
           "slug": "file-structure",
           "title": "File Structure"
         },
         {
-          "line": 92,
+          "line": 105,
           "parent_slug": "command-center-viewer",
           "parent_title": "Command Center Viewer",
           "slug": "configuration",
           "title": "Configuration"
         },
         {
-          "line": 112,
+          "line": 125,
           "parent_slug": "command-center-viewer",
           "parent_title": "Command Center Viewer",
           "slug": "troubleshooting",
           "title": "Troubleshooting"
         },
         {
-          "line": 175,
+          "line": 203,
           "parent_slug": "command-center-viewer",
           "parent_title": "Command Center Viewer",
           "slug": "browser-console-debugging",
           "title": "Browser Console Debugging"
         },
         {
-          "line": 203,
+          "line": 231,
           "parent_slug": "command-center-viewer",
           "parent_title": "Command Center Viewer",
           "slug": "development",
           "title": "Development"
         },
         {
-          "line": 235,
+          "line": 263,
           "parent_slug": "command-center-viewer",
           "parent_title": "Command Center Viewer",
           "slug": "architecture",
           "title": "Architecture"
         },
         {
-          "line": 242,
+          "line": 270,
           "parent_slug": "command-center-viewer",
           "parent_title": "Command Center Viewer",
           "slug": "vs-code-theme",
           "title": "VS Code Theme"
         },
         {
-          "line": 254,
+          "line": 282,
           "parent_slug": "command-center-viewer",
           "parent_title": "Command Center Viewer",
           "slug": "documentation-map",
@@ -5853,9 +6115,9 @@ total_links: 2
         "http://localhost:8000/.repo_studios/command_center/viewer/ui/",
         "http://localhost:8000/"
       ],
-      "modified_utc": "2025-11-23T11:14:18.336713+00:00",
+      "modified_utc": "2025-11-28T14:18:05.271026+00:00",
       "owners": [],
-      "size_bytes": 8558,
+      "size_bytes": 9292,
       "slug": "command-center-viewer",
       "status": null,
       "tags": []
@@ -6476,6 +6738,85 @@ total_links: 2
       "tags": []
     },
     {
+      "contains_placeholder": true,
+      "description": "`aggregate_docs_health_signals.py` will fuse disparate documentation quality signals into a single dashboard that highlights where Repo Studios needs renewed attention. The aggregator focuses on three questions:",
+      "filename": ".repo_studios/docs/automation/aggregate_docs_health_signals.md",
+      "folder": ".repo_studios/docs/automation",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "aggregatedocshealthsignals",
+          "title": "aggregate_docs_health_signals"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "aggregatedocshealthsignals",
+          "parent_title": "aggregate_docs_health_signals",
+          "slug": "purpose",
+          "title": "Purpose"
+        },
+        {
+          "line": 16,
+          "parent_slug": "aggregatedocshealthsignals",
+          "parent_title": "aggregate_docs_health_signals",
+          "slug": "upstream-inputs",
+          "title": "Upstream Inputs"
+        },
+        {
+          "line": 43,
+          "parent_slug": "aggregatedocshealthsignals",
+          "parent_title": "aggregate_docs_health_signals",
+          "slug": "output-bundle",
+          "title": "Output Bundle"
+        },
+        {
+          "line": 65,
+          "parent_slug": "aggregatedocshealthsignals",
+          "parent_title": "aggregate_docs_health_signals",
+          "slug": "cli-surface",
+          "title": "CLI Surface"
+        },
+        {
+          "line": 91,
+          "parent_slug": "aggregatedocshealthsignals",
+          "parent_title": "aggregate_docs_health_signals",
+          "slug": "score-model",
+          "title": "Score Model"
+        },
+        {
+          "line": 106,
+          "parent_slug": "aggregatedocshealthsignals",
+          "parent_title": "aggregate_docs_health_signals",
+          "slug": "implementation-checklist",
+          "title": "Implementation Checklist"
+        },
+        {
+          "line": 118,
+          "parent_slug": "aggregatedocshealthsignals",
+          "parent_title": "aggregate_docs_health_signals",
+          "slug": "testing-plan",
+          "title": "Testing Plan"
+        },
+        {
+          "line": 127,
+          "parent_slug": "aggregatedocshealthsignals",
+          "parent_title": "aggregate_docs_health_signals",
+          "slug": "follow-up-opportunities",
+          "title": "Follow-Up Opportunities"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-27T14:42:44.934383+00:00",
+      "owners": [],
+      "size_bytes": 6807,
+      "slug": "aggregatedocshealthsignals",
+      "status": null,
+      "tags": []
+    },
+    {
       "contains_placeholder": false,
       "description": "`analyze_test_hardening.py` inspects repository test modules for maintainability risks such as missing assertions, vague test names, excessive length, global state usage, and reliance on `time.sleep()`. The producer emits structured\u2026",
       "filename": ".repo_studios/docs/automation/analyze_test_hardening.md",
@@ -6593,6 +6934,64 @@ total_links: 2
     },
     {
       "contains_placeholder": false,
+      "description": "`classify_monkey_patches.py` ingests monkey-patch scan artifacts and assigns HIGH/MODERATE/SAFE risk tiers so teams can triage the most dangerous runtime modifications first. The consumer prefers structured bundles from\u2026",
+      "filename": ".repo_studios/docs/automation/classify_monkey_patches.md",
+      "folder": ".repo_studios/docs/automation",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "classifymonkeypatchespy",
+          "title": "classify_monkey_patches.py"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 5,
+          "parent_slug": "classifymonkeypatchespy",
+          "parent_title": "classify_monkey_patches.py",
+          "slug": "purpose",
+          "title": "Purpose"
+        },
+        {
+          "line": 28,
+          "parent_slug": "classifymonkeypatchespy",
+          "parent_title": "classify_monkey_patches.py",
+          "slug": "invocation",
+          "title": "Invocation"
+        },
+        {
+          "line": 55,
+          "parent_slug": "classifymonkeypatchespy",
+          "parent_title": "classify_monkey_patches.py",
+          "slug": "outputs",
+          "title": "Outputs"
+        },
+        {
+          "line": 73,
+          "parent_slug": "classifymonkeypatchespy",
+          "parent_title": "classify_monkey_patches.py",
+          "slug": "testing",
+          "title": "Testing"
+        },
+        {
+          "line": 77,
+          "parent_slug": "classifymonkeypatchespy",
+          "parent_title": "classify_monkey_patches.py",
+          "slug": "operational-notes",
+          "title": "Operational Notes"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-29T16:10:11.345704+00:00",
+      "owners": [],
+      "size_bytes": 3865,
+      "slug": "classifymonkeypatchespy",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
       "description": "`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,\u2026",
       "filename": ".repo_studios/docs/automation/collect_faulthandler_reports.md",
       "folder": ".repo_studios/docs/automation",
@@ -6613,35 +7012,35 @@ total_links: 2
           "title": "Purpose"
         },
         {
-          "line": 9,
+          "line": 19,
           "parent_slug": "collectfaulthandlerreportspy",
           "parent_title": "collect_faulthandler_reports.py",
           "slug": "invocation",
           "title": "Invocation"
         },
         {
-          "line": 30,
+          "line": 44,
           "parent_slug": "collectfaulthandlerreportspy",
           "parent_title": "collect_faulthandler_reports.py",
           "slug": "outputs",
           "title": "Outputs"
         },
         {
-          "line": 42,
+          "line": 61,
           "parent_slug": "collectfaulthandlerreportspy",
           "parent_title": "collect_faulthandler_reports.py",
           "slug": "diagnostics",
           "title": "Diagnostics"
         },
         {
-          "line": 54,
+          "line": 73,
           "parent_slug": "collectfaulthandlerreportspy",
           "parent_title": "collect_faulthandler_reports.py",
           "slug": "testing",
           "title": "Testing"
         },
         {
-          "line": 60,
+          "line": 80,
           "parent_slug": "collectfaulthandlerreportspy",
           "parent_title": "collect_faulthandler_reports.py",
           "slug": "operational-notes",
@@ -6649,9 +7048,9 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-24T00:04:56.269286+00:00",
+      "modified_utc": "2025-11-29T15:23:01.952399+00:00",
       "owners": [],
-      "size_bytes": 4095,
+      "size_bytes": 4828,
       "slug": "collectfaulthandlerreportspy",
       "status": null,
       "tags": []
@@ -6714,10 +7113,68 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-24T00:04:56.272246+00:00",
+      "modified_utc": "2025-11-29T15:13:46.818089+00:00",
       "owners": [],
-      "size_bytes": 4176,
+      "size_bytes": 4899,
       "slug": "collecttestlogreportspy",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
+      "description": "`configure_faulthandler_runtime.py` runs during interpreter start via the repository sitecustomize shim. It standardises faulthandler defaults across every entry point, creates structured artifacts under\u2026",
+      "filename": ".repo_studios/docs/automation/configure_faulthandler_runtime.md",
+      "folder": ".repo_studios/docs/automation",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "configurefaulthandlerruntimepy",
+          "title": "configure_faulthandler_runtime.py"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "configurefaulthandlerruntimepy",
+          "parent_title": "configure_faulthandler_runtime.py",
+          "slug": "overview",
+          "title": "Overview"
+        },
+        {
+          "line": 13,
+          "parent_slug": "configurefaulthandlerruntimepy",
+          "parent_title": "configure_faulthandler_runtime.py",
+          "slug": "responsibilities",
+          "title": "Responsibilities"
+        },
+        {
+          "line": 29,
+          "parent_slug": "configurefaulthandlerruntimepy",
+          "parent_title": "configure_faulthandler_runtime.py",
+          "slug": "environment-flags",
+          "title": "Environment Flags"
+        },
+        {
+          "line": 46,
+          "parent_slug": "configurefaulthandlerruntimepy",
+          "parent_title": "configure_faulthandler_runtime.py",
+          "slug": "testing",
+          "title": "Testing"
+        },
+        {
+          "line": 60,
+          "parent_slug": "configurefaulthandlerruntimepy",
+          "parent_title": "configure_faulthandler_runtime.py",
+          "slug": "legacy-compatibility",
+          "title": "Legacy Compatibility"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-01T13:19:36.907672+00:00",
+      "owners": [],
+      "size_bytes": 3282,
+      "slug": "configurefaulthandlerruntimepy",
       "status": null,
       "tags": []
     },
@@ -6783,6 +7240,78 @@ total_links: 2
       "owners": [],
       "size_bytes": 4388,
       "slug": "diffstandardsindexpy",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
+      "description": "`dump_faulthandler_snapshot.py` captures a one-off faulthandler stack dump and stores it as a structured bundle under `.repo_studios/reports/orchestrator_logs/faulthandler_snapshots/`. The utility is idempotent, keeps the latest stacks\u2026",
+      "filename": ".repo_studios/docs/automation/dump_faulthandler_snapshot.md",
+      "folder": ".repo_studios/docs/automation",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "dumpfaulthandlersnapshotpy",
+          "title": "dump_faulthandler_snapshot.py"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "dumpfaulthandlersnapshotpy",
+          "parent_title": "dump_faulthandler_snapshot.py",
+          "slug": "overview",
+          "title": "Overview"
+        },
+        {
+          "line": 11,
+          "parent_slug": "dumpfaulthandlersnapshotpy",
+          "parent_title": "dump_faulthandler_snapshot.py",
+          "slug": "responsibilities",
+          "title": "Responsibilities"
+        },
+        {
+          "line": 21,
+          "parent_slug": "dumpfaulthandlersnapshotpy",
+          "parent_title": "dump_faulthandler_snapshot.py",
+          "slug": "environment-flags",
+          "title": "Environment Flags"
+        },
+        {
+          "line": 34,
+          "parent_slug": "dumpfaulthandlersnapshotpy",
+          "parent_title": "dump_faulthandler_snapshot.py",
+          "slug": "usage",
+          "title": "Usage"
+        },
+        {
+          "line": 44,
+          "parent_slug": "dumpfaulthandlersnapshotpy",
+          "parent_title": "dump_faulthandler_snapshot.py",
+          "slug": "testing",
+          "title": "Testing"
+        },
+        {
+          "line": 53,
+          "parent_slug": "dumpfaulthandlersnapshotpy",
+          "parent_title": "dump_faulthandler_snapshot.py",
+          "slug": "automation",
+          "title": "Automation"
+        },
+        {
+          "line": 65,
+          "parent_slug": "dumpfaulthandlersnapshotpy",
+          "parent_title": "dump_faulthandler_snapshot.py",
+          "slug": "legacy-compatibility",
+          "title": "Legacy Compatibility"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-29T15:06:25.874741+00:00",
+      "owners": [],
+      "size_bytes": 2571,
+      "slug": "dumpfaulthandlersnapshotpy",
       "status": null,
       "tags": []
     },
@@ -6996,6 +7525,194 @@ total_links: 2
       "tags": []
     },
     {
+      "contains_placeholder": true,
+      "description": "(`.repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json`) when present.",
+      "filename": ".repo_studios/docs/automation/generate_anchor_health_report.md",
+      "folder": ".repo_studios/docs/automation",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "generateanchorhealthreport",
+          "title": "generate_anchor_health_report"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "generateanchorhealthreport",
+          "parent_title": "generate_anchor_health_report",
+          "slug": "purpose",
+          "title": "Purpose"
+        },
+        {
+          "line": 9,
+          "parent_slug": "generateanchorhealthreport",
+          "parent_title": "generate_anchor_health_report",
+          "slug": "inputs",
+          "title": "Inputs"
+        },
+        {
+          "line": 26,
+          "parent_slug": "generateanchorhealthreport",
+          "parent_title": "generate_anchor_health_report",
+          "slug": "operation-notes",
+          "title": "Operation Notes"
+        },
+        {
+          "line": 32,
+          "parent_slug": "generateanchorhealthreport",
+          "parent_title": "generate_anchor_health_report",
+          "slug": "usage-example",
+          "title": "Usage Example"
+        },
+        {
+          "line": 41,
+          "parent_slug": "generateanchorhealthreport",
+          "parent_title": "generate_anchor_health_report",
+          "slug": "testing",
+          "title": "Testing"
+        },
+        {
+          "line": 45,
+          "parent_slug": "generateanchorhealthreport",
+          "parent_title": "generate_anchor_health_report",
+          "slug": "integration-checklist",
+          "title": "Integration Checklist"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-26T13:03:51.845884+00:00",
+      "owners": [],
+      "size_bytes": 2260,
+      "slug": "generateanchorhealthreport",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
+      "description": "`generate_anchor_inventory.py` scans the documentation corpus for H1/H2 headings, normalises their slugs, and reports collision risk across files. The producer now also captures per-document anchor coverage so AI agents can spot missing\u2026",
+      "filename": ".repo_studios/docs/automation/generate_anchor_inventory.md",
+      "folder": ".repo_studios/docs/automation",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "generateanchorinventorypy",
+          "title": "generate_anchor_inventory.py"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 5,
+          "parent_slug": "generateanchorinventorypy",
+          "parent_title": "generate_anchor_inventory.py",
+          "slug": "purpose",
+          "title": "Purpose"
+        },
+        {
+          "line": 12,
+          "parent_slug": "generateanchorinventorypy",
+          "parent_title": "generate_anchor_inventory.py",
+          "slug": "output-contract",
+          "title": "Output Contract"
+        },
+        {
+          "line": 34,
+          "parent_slug": "generateanchorinventorypy",
+          "parent_title": "generate_anchor_inventory.py",
+          "slug": "data-shape",
+          "title": "Data Shape"
+        },
+        {
+          "line": 66,
+          "parent_slug": "generateanchorinventorypy",
+          "parent_title": "generate_anchor_inventory.py",
+          "slug": "cli-reference",
+          "title": "CLI Reference"
+        },
+        {
+          "line": 80,
+          "parent_slug": "generateanchorinventorypy",
+          "parent_title": "generate_anchor_inventory.py",
+          "slug": "implementation-summary",
+          "title": "Implementation Summary"
+        },
+        {
+          "line": 96,
+          "parent_slug": "generateanchorinventorypy",
+          "parent_title": "generate_anchor_inventory.py",
+          "slug": "notes-for-ai-consumers",
+          "title": "Notes for AI Consumers"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-25T14:01:43.710515+00:00",
+      "owners": [],
+      "size_bytes": 4946,
+      "slug": "generateanchorinventorypy",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
+      "description": "`generate_code_doc_churn_report.py` scans recent git history to surface modules that accumulated code churn without a matching documentation update. The script produces structured artifacts (JSON, Markdown, TSV, summary) with retention and\u2026",
+      "filename": ".repo_studios/docs/automation/generate_code_doc_churn_report.md",
+      "folder": ".repo_studios/docs/automation",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "generatecodedocchurnreport",
+          "title": "generate_code_doc_churn_report"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "generatecodedocchurnreport",
+          "parent_title": "generate_code_doc_churn_report",
+          "slug": "purpose",
+          "title": "Purpose"
+        },
+        {
+          "line": 11,
+          "parent_slug": "generatecodedocchurnreport",
+          "parent_title": "generate_code_doc_churn_report",
+          "slug": "inputs",
+          "title": "Inputs"
+        },
+        {
+          "line": 26,
+          "parent_slug": "generatecodedocchurnreport",
+          "parent_title": "generate_code_doc_churn_report",
+          "slug": "outputs",
+          "title": "Outputs"
+        },
+        {
+          "line": 43,
+          "parent_slug": "generatecodedocchurnreport",
+          "parent_title": "generate_code_doc_churn_report",
+          "slug": "usage",
+          "title": "Usage"
+        },
+        {
+          "line": 64,
+          "parent_slug": "generatecodedocchurnreport",
+          "parent_title": "generate_code_doc_churn_report",
+          "slug": "testing",
+          "title": "Testing"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-25T16:26:37.538852+00:00",
+      "owners": [],
+      "size_bytes": 3127,
+      "slug": "generatecodedocchurnreport",
+      "status": null,
+      "tags": []
+    },
+    {
       "contains_placeholder": false,
       "description": "`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally\u2026",
       "filename": ".repo_studios/docs/automation/generate_dependency_hygiene_report.md",
@@ -7089,28 +7806,28 @@ total_links: 2
           "title": "Output Contract"
         },
         {
-          "line": 31,
+          "line": 34,
           "parent_slug": "generatedocindexpy",
           "parent_title": "generate_doc_index.py",
           "slug": "data-shape",
           "title": "Data Shape"
         },
         {
-          "line": 55,
+          "line": 71,
           "parent_slug": "generatedocindexpy",
           "parent_title": "generate_doc_index.py",
           "slug": "cli-reference",
           "title": "CLI Reference"
         },
         {
-          "line": 68,
+          "line": 84,
           "parent_slug": "generatedocindexpy",
           "parent_title": "generate_doc_index.py",
           "slug": "implementation-summary",
           "title": "Implementation Summary"
         },
         {
-          "line": 84,
+          "line": 101,
           "parent_slug": "generatedocindexpy",
           "parent_title": "generate_doc_index.py",
           "slug": "notes-for-ai-consumers",
@@ -7118,9 +7835,9 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-25T03:00:52.637362+00:00",
+      "modified_utc": "2025-11-25T11:20:45.453873+00:00",
       "owners": [],
-      "size_bytes": 4844,
+      "size_bytes": 6010,
       "slug": "generatedocindexpy",
       "status": null,
       "tags": []
@@ -7192,7 +7909,7 @@ total_links: 2
     },
     {
       "contains_placeholder": false,
-      "description": "`generate_standards_index.py` assembles the canonical `repo_standards_index.yaml` by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a structured artifact bundle\u2026",
+      "description": "`generate_standards_index.py` assembles the canonical standards index and refreshes the `latest_index.yaml` pointer by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a\u2026",
       "filename": ".repo_studios/docs/automation/generate_standards_index.md",
       "folder": ".repo_studios/docs/automation",
       "frontmatter": null,
@@ -7248,9 +7965,9 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-10-23T01:16:24.453566+00:00",
+      "modified_utc": "2025-11-27T17:20:15.673436+00:00",
       "owners": [],
-      "size_bytes": 5095,
+      "size_bytes": 5212,
       "slug": "generatestandardsindexpy",
       "status": null,
       "tags": []
@@ -7322,6 +8039,85 @@ total_links: 2
     },
     {
       "contains_placeholder": false,
+      "description": "`generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so operators can track warning spikes, failure patterns, and slow tests without rereading entire logs. The script prefers the curated JSON emitted\u2026",
+      "filename": ".repo_studios/docs/automation/generate_test_log_health_report.md",
+      "folder": ".repo_studios/docs/automation",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "generate-test-log-health-report",
+          "title": "Generate Test Log Health Report"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "generate-test-log-health-report",
+          "parent_title": "Generate Test Log Health Report",
+          "slug": "purpose",
+          "title": "Purpose"
+        },
+        {
+          "line": 14,
+          "parent_slug": "generate-test-log-health-report",
+          "parent_title": "Generate Test Log Health Report",
+          "slug": "inputs",
+          "title": "Inputs"
+        },
+        {
+          "line": 30,
+          "parent_slug": "generate-test-log-health-report",
+          "parent_title": "Generate Test Log Health Report",
+          "slug": "outputs",
+          "title": "Outputs"
+        },
+        {
+          "line": 47,
+          "parent_slug": "generate-test-log-health-report",
+          "parent_title": "Generate Test Log Health Report",
+          "slug": "retention-pruning",
+          "title": "Retention & Pruning"
+        },
+        {
+          "line": 53,
+          "parent_slug": "generate-test-log-health-report",
+          "parent_title": "Generate Test Log Health Report",
+          "slug": "typical-workflow",
+          "title": "Typical Workflow"
+        },
+        {
+          "line": 63,
+          "parent_slug": "generate-test-log-health-report",
+          "parent_title": "Generate Test Log Health Report",
+          "slug": "make-target",
+          "title": "Make Target"
+        },
+        {
+          "line": 73,
+          "parent_slug": "generate-test-log-health-report",
+          "parent_title": "Generate Test Log Health Report",
+          "slug": "testing",
+          "title": "Testing"
+        },
+        {
+          "line": 83,
+          "parent_slug": "generate-test-log-health-report",
+          "parent_title": "Generate Test Log Health Report",
+          "slug": "notes",
+          "title": "Notes"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-29T15:33:45.034376+00:00",
+      "owners": [],
+      "size_bytes": 4787,
+      "slug": "generate-test-log-health-report",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
       "description": "The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and captures a structured set of artifacts for observability.",
       "filename": ".repo_studios/docs/automation/generate_typecheck_report.md",
       "folder": ".repo_studios/docs/automation",
@@ -7365,6 +8161,64 @@ total_links: 2
       "tags": []
     },
     {
+      "contains_placeholder": false,
+      "description": "`generate_undocumented_logic_report.py` scans the repo automation scripts for public functions, classes, and methods that lack docstrings. The report helps identify code paths that should have documentation anchors or docstring coverage\u2026",
+      "filename": ".repo_studios/docs/automation/generate_undocumented_logic_report.md",
+      "folder": ".repo_studios/docs/automation",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "generateundocumentedlogicreport",
+          "title": "generate_undocumented_logic_report"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "generateundocumentedlogicreport",
+          "parent_title": "generate_undocumented_logic_report",
+          "slug": "purpose",
+          "title": "Purpose"
+        },
+        {
+          "line": 10,
+          "parent_slug": "generateundocumentedlogicreport",
+          "parent_title": "generate_undocumented_logic_report",
+          "slug": "inputs",
+          "title": "Inputs"
+        },
+        {
+          "line": 27,
+          "parent_slug": "generateundocumentedlogicreport",
+          "parent_title": "generate_undocumented_logic_report",
+          "slug": "outputs",
+          "title": "Outputs"
+        },
+        {
+          "line": 43,
+          "parent_slug": "generateundocumentedlogicreport",
+          "parent_title": "generate_undocumented_logic_report",
+          "slug": "usage",
+          "title": "Usage"
+        },
+        {
+          "line": 58,
+          "parent_slug": "generateundocumentedlogicreport",
+          "parent_title": "generate_undocumented_logic_report",
+          "slug": "testing",
+          "title": "Testing"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-25T18:18:22.678815+00:00",
+      "owners": [],
+      "size_bytes": 2696,
+      "slug": "generateundocumentedlogicreport",
+      "status": null,
+      "tags": []
+    },
+    {
       "contains_placeholder": true,
       "description": "This reference captures the current run surfaces, automation wiring, and success criteria for the Repo Studios orchestrator tier. Record changes here before altering orchestrator code so downstream automation stays aligned with expected\u2026",
       "filename": ".repo_studios/docs/automation/orchestrator_automation_hooks.md",
@@ -7379,7 +8233,7 @@ total_links: 2
       ],
       "h2_headings": [
         {
-          "line": 14,
+          "line": 19,
           "parent_slug": "orchestrator-automation-hooks",
           "parent_title": "Orchestrator Automation Hooks",
           "slug": "notes",
@@ -7387,9 +8241,9 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-24T18:55:36.604719+00:00",
+      "modified_utc": "2025-12-01T14:02:44.321031+00:00",
       "owners": [],
-      "size_bytes": 2487,
+      "size_bytes": 6379,
       "slug": "orchestrator-automation-hooks",
       "status": null,
       "tags": []
@@ -7461,6 +8315,64 @@ total_links: 2
     },
     {
       "contains_placeholder": false,
+      "description": "`refresh_mypy_baselines.py` standardises the stored mypy output snapshots that agents and soft gates consume. It runs mypy for each configured target, writes structured artifacts into\u2026",
+      "filename": ".repo_studios/docs/automation/refresh_mypy_baselines.md",
+      "folder": ".repo_studios/docs/automation",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "refresh-mypy-baselines",
+          "title": "Refresh mypy baselines"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "refresh-mypy-baselines",
+          "parent_title": "Refresh mypy baselines",
+          "slug": "purpose",
+          "title": "Purpose"
+        },
+        {
+          "line": 10,
+          "parent_slug": "refresh-mypy-baselines",
+          "parent_title": "Refresh mypy baselines",
+          "slug": "invocation",
+          "title": "Invocation"
+        },
+        {
+          "line": 28,
+          "parent_slug": "refresh-mypy-baselines",
+          "parent_title": "Refresh mypy baselines",
+          "slug": "outputs",
+          "title": "Outputs"
+        },
+        {
+          "line": 43,
+          "parent_slug": "refresh-mypy-baselines",
+          "parent_title": "Refresh mypy baselines",
+          "slug": "retention",
+          "title": "Retention"
+        },
+        {
+          "line": 49,
+          "parent_slug": "refresh-mypy-baselines",
+          "parent_title": "Refresh mypy baselines",
+          "slug": "validation",
+          "title": "Validation"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-29T04:07:24.447006+00:00",
+      "owners": [],
+      "size_bytes": 1999,
+      "slug": "refresh-mypy-baselines",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
       "description": "The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation.",
       "filename": ".repo_studios/docs/automation/render_inventory_views.md",
       "folder": ".repo_studios/docs/automation",
@@ -7500,6 +8412,194 @@ total_links: 2
       "owners": [],
       "size_bytes": 2019,
       "slug": "render-inventory-views-producer",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
+      "description": "`command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` coordinates the faulthandler producer (`collect_faulthandler_reports.py`), consumer (`generate_fault_artifacts.py`), and the overview summarizer\u2026",
+      "filename": ".repo_studios/docs/automation/run_fault_pipeline.md",
+      "folder": ".repo_studios/docs/automation",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "fault-diagnostics-overview-orchestrator",
+          "title": "Fault Diagnostics Overview Orchestrator"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "fault-diagnostics-overview-orchestrator",
+          "parent_title": "Fault Diagnostics Overview Orchestrator",
+          "slug": "overview",
+          "title": "Overview"
+        },
+        {
+          "line": 15,
+          "parent_slug": "fault-diagnostics-overview-orchestrator",
+          "parent_title": "Fault Diagnostics Overview Orchestrator",
+          "slug": "invocation",
+          "title": "Invocation"
+        },
+        {
+          "line": 56,
+          "parent_slug": "fault-diagnostics-overview-orchestrator",
+          "parent_title": "Fault Diagnostics Overview Orchestrator",
+          "slug": "outputs",
+          "title": "Outputs"
+        },
+        {
+          "line": 70,
+          "parent_slug": "fault-diagnostics-overview-orchestrator",
+          "parent_title": "Fault Diagnostics Overview Orchestrator",
+          "slug": "testing",
+          "title": "Testing"
+        },
+        {
+          "line": 82,
+          "parent_slug": "fault-diagnostics-overview-orchestrator",
+          "parent_title": "Fault Diagnostics Overview Orchestrator",
+          "slug": "follow-ups",
+          "title": "Follow-Ups"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-01T13:19:36.907672+00:00",
+      "owners": [],
+      "size_bytes": 4338,
+      "slug": "fault-diagnostics-overview-orchestrator",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
+      "description": "`run_pytest_log_capture.py` executes the repository's pytest suite (or summarizes an existing run) and emits a structured artifact bundle alongside timestamped raw outputs under\u2026",
+      "filename": ".repo_studios/docs/automation/run_pytest_log_capture.md",
+      "folder": ".repo_studios/docs/automation",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "runpytestlogcapturepy",
+          "title": "run_pytest_log_capture.py"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 5,
+          "parent_slug": "runpytestlogcapturepy",
+          "parent_title": "run_pytest_log_capture.py",
+          "slug": "overview",
+          "title": "Overview"
+        },
+        {
+          "line": 14,
+          "parent_slug": "runpytestlogcapturepy",
+          "parent_title": "run_pytest_log_capture.py",
+          "slug": "invocation",
+          "title": "Invocation"
+        },
+        {
+          "line": 50,
+          "parent_slug": "runpytestlogcapturepy",
+          "parent_title": "run_pytest_log_capture.py",
+          "slug": "outputs",
+          "title": "Outputs"
+        },
+        {
+          "line": 73,
+          "parent_slug": "runpytestlogcapturepy",
+          "parent_title": "run_pytest_log_capture.py",
+          "slug": "diagnostics",
+          "title": "Diagnostics"
+        },
+        {
+          "line": 87,
+          "parent_slug": "runpytestlogcapturepy",
+          "parent_title": "run_pytest_log_capture.py",
+          "slug": "testing",
+          "title": "Testing"
+        },
+        {
+          "line": 97,
+          "parent_slug": "runpytestlogcapturepy",
+          "parent_title": "run_pytest_log_capture.py",
+          "slug": "operational-notes",
+          "title": "Operational Notes"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-28T14:18:05.288540+00:00",
+      "owners": [],
+      "size_bytes": 5605,
+      "slug": "runpytestlogcapturepy",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
+      "description": "`run_standards_index_cli.py` wraps the Repo Studios standards index in a modernized orchestrator surface. The CLI still prints human-friendly results for `list`, `search`, `show`, and `stats`, while now emitting structured bundles so\u2026",
+      "filename": ".repo_studios/docs/automation/run_standards_index_cli.md",
+      "folder": ".repo_studios/docs/automation",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "runstandardsindexclipy",
+          "title": "run_standards_index_cli.py"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 5,
+          "parent_slug": "runstandardsindexclipy",
+          "parent_title": "run_standards_index_cli.py",
+          "slug": "overview",
+          "title": "Overview"
+        },
+        {
+          "line": 11,
+          "parent_slug": "runstandardsindexclipy",
+          "parent_title": "run_standards_index_cli.py",
+          "slug": "invocation",
+          "title": "Invocation"
+        },
+        {
+          "line": 50,
+          "parent_slug": "runstandardsindexclipy",
+          "parent_title": "run_standards_index_cli.py",
+          "slug": "outputs",
+          "title": "Outputs"
+        },
+        {
+          "line": 63,
+          "parent_slug": "runstandardsindexclipy",
+          "parent_title": "run_standards_index_cli.py",
+          "slug": "diagnostics",
+          "title": "Diagnostics"
+        },
+        {
+          "line": 75,
+          "parent_slug": "runstandardsindexclipy",
+          "parent_title": "run_standards_index_cli.py",
+          "slug": "testing",
+          "title": "Testing"
+        },
+        {
+          "line": 89,
+          "parent_slug": "runstandardsindexclipy",
+          "parent_title": "run_standards_index_cli.py",
+          "slug": "operational-notes",
+          "title": "Operational Notes"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-27T17:20:15.674439+00:00",
+      "owners": [],
+      "size_bytes": 4944,
+      "slug": "runstandardsindexclipy",
       "status": null,
       "tags": []
     },
@@ -7698,9 +8798,9 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-10-23T18:08:31.195120+00:00",
+      "modified_utc": "2025-11-27T17:20:15.674439+00:00",
       "owners": [],
-      "size_bytes": 3752,
+      "size_bytes": 3787,
       "slug": "seedstandardspromptspy",
       "status": null,
       "tags": []
@@ -7874,7 +8974,7 @@ total_links: 2
     },
     {
       "contains_placeholder": false,
-      "description": "This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.",
+      "description": "This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",
       "filename": ".repo_studios/docs/automation/standards-index-schema.md",
       "folder": ".repo_studios/docs/automation",
       "frontmatter": {
@@ -7887,14 +8987,14 @@ total_links: 2
           "repo_studios_ai"
         ],
         "status": "draft",
-        "summary": "Schema contract for `repo_standards_index.yaml`, detailing the deterministic structure consumed by Repo Studios automation and agents.",
+        "summary": "Schema contract for the standards index bundle referenced by `latest_index.yaml`, detailing the deterministic structure consumed by Repo Studios automation and agents.",
         "tags": [
           "standards",
           "schema",
           "automation"
         ],
         "title": "Standards Index Schema Specification",
-        "updated": "2025-10-18",
+        "updated": "2025-11-27",
         "version": "0.2.0"
       },
       "h1_headings": [
@@ -7998,11 +9098,11 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-10-21T12:02:58.658325+00:00",
+      "modified_utc": "2025-11-27T17:20:15.678074+00:00",
       "owners": [
         "repo_studios_ai"
       ],
-      "size_bytes": 5239,
+      "size_bytes": 5316,
       "slug": "standards-index-schema-specification",
       "status": "draft",
       "tags": [
@@ -8010,6 +9110,57 @@ total_links: 2
         "schema",
         "automation"
       ]
+    },
+    {
+      "contains_placeholder": false,
+      "description": "`summarize_standards.py` provides a lightweight telemetry probe for the standards catalog. It reads the canonical standards index (surfaced through the `latest_index.yaml` pointer) and the optional pending extraction queue, then emits log\u2026",
+      "filename": ".repo_studios/docs/automation/summarize_standards.md",
+      "folder": ".repo_studios/docs/automation",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "summarizestandardspy",
+          "title": "summarize_standards.py"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 5,
+          "parent_slug": "summarizestandardspy",
+          "parent_title": "summarize_standards.py",
+          "slug": "purpose",
+          "title": "Purpose"
+        },
+        {
+          "line": 13,
+          "parent_slug": "summarizestandardspy",
+          "parent_title": "summarize_standards.py",
+          "slug": "invocation",
+          "title": "Invocation"
+        },
+        {
+          "line": 28,
+          "parent_slug": "summarizestandardspy",
+          "parent_title": "summarize_standards.py",
+          "slug": "outputs",
+          "title": "Outputs"
+        },
+        {
+          "line": 40,
+          "parent_slug": "summarizestandardspy",
+          "parent_title": "summarize_standards.py",
+          "slug": "testing",
+          "title": "Testing"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-27T17:28:24.141509+00:00",
+      "owners": [],
+      "size_bytes": 1878,
+      "slug": "summarizestandardspy",
+      "status": null,
+      "tags": []
     },
     {
       "contains_placeholder": false,
@@ -8136,6 +9287,78 @@ total_links: 2
     },
     {
       "contains_placeholder": false,
+      "description": "Capture the scope, dependencies, and success criteria for a future faulthandler aggregator that will blend multiple orchestrator runs into trend summaries.",
+      "filename": ".repo_studios/docs/automation/traceability/fault_pipeline_aggregator_plan.md",
+      "folder": ".repo_studios/docs/automation/traceability",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "fault-pipeline-aggregator-blueprint",
+          "title": "Fault Pipeline Aggregator Blueprint"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "fault-pipeline-aggregator-blueprint",
+          "parent_title": "Fault Pipeline Aggregator Blueprint",
+          "slug": "status",
+          "title": "Status"
+        },
+        {
+          "line": 9,
+          "parent_slug": "fault-pipeline-aggregator-blueprint",
+          "parent_title": "Fault Pipeline Aggregator Blueprint",
+          "slug": "purpose",
+          "title": "Purpose"
+        },
+        {
+          "line": 14,
+          "parent_slug": "fault-pipeline-aggregator-blueprint",
+          "parent_title": "Fault Pipeline Aggregator Blueprint",
+          "slug": "context",
+          "title": "Context"
+        },
+        {
+          "line": 23,
+          "parent_slug": "fault-pipeline-aggregator-blueprint",
+          "parent_title": "Fault Pipeline Aggregator Blueprint",
+          "slug": "open-questions",
+          "title": "Open Questions"
+        },
+        {
+          "line": 30,
+          "parent_slug": "fault-pipeline-aggregator-blueprint",
+          "parent_title": "Fault Pipeline Aggregator Blueprint",
+          "slug": "proposed-next-steps",
+          "title": "Proposed Next Steps"
+        },
+        {
+          "line": 38,
+          "parent_slug": "fault-pipeline-aggregator-blueprint",
+          "parent_title": "Fault Pipeline Aggregator Blueprint",
+          "slug": "risks",
+          "title": "Risks"
+        },
+        {
+          "line": 43,
+          "parent_slug": "fault-pipeline-aggregator-blueprint",
+          "parent_title": "Fault Pipeline Aggregator Blueprint",
+          "slug": "notes",
+          "title": "Notes"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-26T14:39:08.308088+00:00",
+      "owners": [],
+      "size_bytes": 2023,
+      "slug": "fault-pipeline-aggregator-blueprint",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
       "description": "Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",
       "filename": ".repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md",
       "folder": ".repo_studios/docs/automation/traceability",
@@ -8199,10 +9422,110 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-24T17:47:49.125843+00:00",
+      "modified_utc": "2025-11-28T14:18:05.280027+00:00",
       "owners": [],
-      "size_bytes": 5560,
+      "size_bytes": 5645,
       "slug": "generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
+      "description": "target missing change logs, upgrade guides, or doc refreshes.",
+      "filename": ".repo_studios/docs/automation/traceability/generate_code_doc_churn_report_plan.md",
+      "folder": ".repo_studios/docs/automation/traceability",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "generatecodedocchurnreport-planning-notes",
+          "title": "generate_code_doc_churn_report Planning Notes"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "generatecodedocchurnreport-planning-notes",
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "slug": "objective",
+          "title": "Objective"
+        },
+        {
+          "line": 12,
+          "parent_slug": "generatecodedocchurnreport-planning-notes",
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "slug": "implementation-status-2025-11-25",
+          "title": "Implementation Status (2025-11-25)"
+        },
+        {
+          "line": 25,
+          "parent_slug": "generatecodedocchurnreport-planning-notes",
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "slug": "primary-inputs",
+          "title": "Primary Inputs"
+        },
+        {
+          "line": 32,
+          "parent_slug": "generatecodedocchurnreport-planning-notes",
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "slug": "proposed-cli-interface",
+          "title": "Proposed CLI Interface"
+        },
+        {
+          "line": 45,
+          "parent_slug": "generatecodedocchurnreport-planning-notes",
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "slug": "artifact-plan",
+          "title": "Artifact Plan"
+        },
+        {
+          "line": 55,
+          "parent_slug": "generatecodedocchurnreport-planning-notes",
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "slug": "detection-heuristics",
+          "title": "Detection Heuristics"
+        },
+        {
+          "line": 70,
+          "parent_slug": "generatecodedocchurnreport-planning-notes",
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "slug": "logging-provenance",
+          "title": "Logging & Provenance"
+        },
+        {
+          "line": 75,
+          "parent_slug": "generatecodedocchurnreport-planning-notes",
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "slug": "testing-strategy",
+          "title": "Testing Strategy"
+        },
+        {
+          "line": 85,
+          "parent_slug": "generatecodedocchurnreport-planning-notes",
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "slug": "documentation-tasks",
+          "title": "Documentation Tasks"
+        },
+        {
+          "line": 92,
+          "parent_slug": "generatecodedocchurnreport-planning-notes",
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "slug": "outstanding-questions",
+          "title": "Outstanding Questions"
+        },
+        {
+          "line": 99,
+          "parent_slug": "generatecodedocchurnreport-planning-notes",
+          "parent_title": "generate_code_doc_churn_report Planning Notes",
+          "slug": "next-steps",
+          "title": "Next Steps"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-25T18:18:22.678815+00:00",
+      "owners": [],
+      "size_bytes": 5514,
+      "slug": "generatecodedocchurnreport-planning-notes",
       "status": null,
       "tags": []
     },
@@ -8257,9 +9580,9 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-25T00:58:05.672960+00:00",
+      "modified_utc": "2025-11-26T16:39:05.740452+00:00",
       "owners": [],
-      "size_bytes": 7719,
+      "size_bytes": 7771,
       "slug": "producer-consumer-traceability-audit-draft-2025-11-24",
       "status": null,
       "tags": []
@@ -8340,6 +9663,85 @@ total_links: 2
       "owners": [],
       "size_bytes": 5364,
       "slug": "run-batch-cleanup-modernization-plan-draft-2025-11-24",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
+      "description": "Modernize `.repo_studios/scripts/orchestrators/run_standards_index_cli.py` so standards analysts and tooling receive structured, retainable outputs while preserving its lightweight CLI ergonomics. The refactor will introduce an import-safe\u2026",
+      "filename": ".repo_studios/docs/automation/traceability/run_standards_index_cli_modernization_plan.md",
+      "folder": ".repo_studios/docs/automation/traceability",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27",
+          "title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27",
+          "parent_title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)",
+          "slug": "status",
+          "title": "Status"
+        },
+        {
+          "line": 8,
+          "parent_slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27",
+          "parent_title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)",
+          "slug": "objective",
+          "title": "Objective"
+        },
+        {
+          "line": 15,
+          "parent_slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27",
+          "parent_title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)",
+          "slug": "current-state",
+          "title": "Current State"
+        },
+        {
+          "line": 28,
+          "parent_slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27",
+          "parent_title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)",
+          "slug": "target-architecture",
+          "title": "Target Architecture"
+        },
+        {
+          "line": 41,
+          "parent_slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27",
+          "parent_title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)",
+          "slug": "implementation-steps",
+          "title": "Implementation Steps"
+        },
+        {
+          "line": 56,
+          "parent_slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27",
+          "parent_title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)",
+          "slug": "dependencies-coordination",
+          "title": "Dependencies & Coordination"
+        },
+        {
+          "line": 63,
+          "parent_slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27",
+          "parent_title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)",
+          "slug": "acceptance-criteria",
+          "title": "Acceptance Criteria"
+        },
+        {
+          "line": 72,
+          "parent_slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27",
+          "parent_title": "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)",
+          "slug": "open-questions",
+          "title": "Open Questions"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-27T16:29:59.403519+00:00",
+      "owners": [],
+      "size_bytes": 5052,
+      "slug": "run-standards-index-cli-modernization-plan-draft-2025-11-27",
       "status": null,
       "tags": []
     },
@@ -8474,35 +9876,35 @@ total_links: 2
           "title": "Purpose"
         },
         {
-          "line": 9,
+          "line": 12,
           "parent_slug": "validatemarkdownanchorspy",
           "parent_title": "validate_markdown_anchors.py",
           "slug": "invocation",
           "title": "Invocation"
         },
         {
-          "line": 29,
+          "line": 33,
           "parent_slug": "validatemarkdownanchorspy",
           "parent_title": "validate_markdown_anchors.py",
           "slug": "outputs",
           "title": "Outputs"
         },
         {
-          "line": 38,
+          "line": 45,
           "parent_slug": "validatemarkdownanchorspy",
           "parent_title": "validate_markdown_anchors.py",
           "slug": "status-semantics",
           "title": "Status semantics"
         },
         {
-          "line": 47,
+          "line": 55,
           "parent_slug": "validatemarkdownanchorspy",
           "parent_title": "validate_markdown_anchors.py",
           "slug": "testing",
           "title": "Testing"
         },
         {
-          "line": 55,
+          "line": 63,
           "parent_slug": "validatemarkdownanchorspy",
           "parent_title": "validate_markdown_anchors.py",
           "slug": "operational-notes",
@@ -8510,9 +9912,9 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-23T19:36:19.831021+00:00",
+      "modified_utc": "2025-11-25T19:39:48.109027+00:00",
       "owners": [],
-      "size_bytes": 3046,
+      "size_bytes": 3062,
       "slug": "validatemarkdownanchorspy",
       "status": null,
       "tags": []
@@ -8692,6 +10094,28 @@ total_links: 2
       "tags": []
     },
     {
+      "contains_placeholder": false,
+      "description": "This ledger tracks documentation alignment batches, remediation work, and follow-up actions. Populate entries chronologically with timestamps, owners, scopes, and outstanding notes to maintain an auditable trail.",
+      "filename": ".repo_studios/docs/governance/alignment-ledger.md",
+      "folder": ".repo_studios/docs/governance",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "repo-studios-alignment-ledger",
+          "title": "Repo Studios Alignment Ledger"
+        }
+      ],
+      "h2_headings": [],
+      "links": [],
+      "modified_utc": "2025-11-26T19:48:04.423689+00:00",
+      "owners": [],
+      "size_bytes": 251,
+      "slug": "repo-studios-alignment-ledger",
+      "status": null,
+      "tags": []
+    },
+    {
       "contains_placeholder": true,
       "description": "Date: 2025-10-01 | Status: Draft | Phase: Discovery",
       "filename": ".repo_studios/docs/inventory/inventory-notes.md",
@@ -8767,11 +10191,11 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-10-21T12:02:58.660326+00:00",
+      "modified_utc": "2025-11-28T14:18:05.289540+00:00",
       "owners": [
         "repo_studios_ai"
       ],
-      "size_bytes": 11741,
+      "size_bytes": 11816,
       "slug": "documentation-inventory-notes",
       "status": "draft",
       "tags": [
@@ -9082,12 +10506,12 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-24T12:14:55.737022+00:00",
+      "modified_utc": "2025-11-28T14:18:05.280027+00:00",
       "owners": [
         "repo_studios_ai",
         "repo_studios_team@rainmakerprotocol.dev"
       ],
-      "size_bytes": 4806,
+      "size_bytes": 4904,
       "slug": "repo-studios-agent-operations-playbook",
       "status": "draft",
       "tags": [
@@ -9400,9 +10824,9 @@ total_links: 2
       ],
       "h2_headings": [],
       "links": [],
-      "modified_utc": "2025-11-24T23:37:41.293374+00:00",
+      "modified_utc": "2025-11-27T17:56:35.814451+00:00",
       "owners": [],
-      "size_bytes": 7804,
+      "size_bytes": 8381,
       "slug": "project-tree-overview",
       "status": null,
       "tags": []
@@ -9506,11 +10930,19 @@ total_links: 2
           "title": "Repo Studios Documentation Index"
         }
       ],
-      "h2_headings": [],
+      "h2_headings": [
+        {
+          "line": 36,
+          "parent_slug": "repo-studios-documentation-index",
+          "parent_title": "Repo Studios Documentation Index",
+          "slug": "healthview-artifacts",
+          "title": "Healthview Artifacts"
+        }
+      ],
       "links": [],
-      "modified_utc": "2025-10-24T00:50:09.673913+00:00",
+      "modified_utc": "2025-12-01T04:26:35.221102+00:00",
       "owners": [],
-      "size_bytes": 1161,
+      "size_bytes": 1626,
       "slug": "repo-studios-documentation-index",
       "status": null,
       "tags": []
@@ -11243,8 +12675,8 @@ total_links: 2
     {
       "contains_placeholder": false,
       "description": null,
-      "filename": ".repo_studios/monkey_patch/20251124_175233/report.md",
-      "folder": ".repo_studios/monkey_patch/20251124_175233",
+      "filename": ".repo_studios/monkey_patch/20251201_115542/report.md",
+      "folder": ".repo_studios/monkey_patch/20251201_115542",
       "frontmatter": null,
       "h1_headings": [
         {
@@ -11284,9 +12716,9 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-24T17:52:33.912420+00:00",
+      "modified_utc": "2025-12-01T11:55:42.709604+00:00",
       "owners": [],
-      "size_bytes": 1696,
+      "size_bytes": 1723,
       "slug": "monkey-patch-scan-report",
       "status": null,
       "tags": []
@@ -11335,9 +12767,9 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-24T17:52:33.916251+00:00",
+      "modified_utc": "2025-12-01T11:55:42.712782+00:00",
       "owners": [],
-      "size_bytes": 1696,
+      "size_bytes": 1723,
       "slug": "monkey-patch-scan-report",
       "status": null,
       "tags": []
@@ -11526,6 +12958,106 @@ total_links: 2
       "tags": []
     },
     {
+      "contains_placeholder": true,
+      "description": "in an orchestrator-run pipeline.",
+      "filename": ".repo_studios/scripts/orchestrator_refactor_plan_temp.md",
+      "folder": ".repo_studios/scripts",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "orchestrator-refactor-plan-working-notes",
+          "title": "Orchestrator Refactor Plan (Working Notes)"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "orchestrator-refactor-plan-working-notes",
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "slug": "1-purpose",
+          "title": "1. Purpose"
+        },
+        {
+          "line": 10,
+          "parent_slug": "orchestrator-refactor-plan-working-notes",
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "slug": "2-current-snapshot",
+          "title": "2. Current Snapshot"
+        },
+        {
+          "line": 20,
+          "parent_slug": "orchestrator-refactor-plan-working-notes",
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "slug": "3-target-topology",
+          "title": "3. Target Topology"
+        },
+        {
+          "line": 41,
+          "parent_slug": "orchestrator-refactor-plan-working-notes",
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "slug": "4-topic-buckets-and-script-assignments-draft",
+          "title": "4. Topic Buckets and Script Assignments (Draft)"
+        },
+        {
+          "line": 53,
+          "parent_slug": "orchestrator-refactor-plan-working-notes",
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "slug": "5-testing-strategy",
+          "title": "5. Testing Strategy"
+        },
+        {
+          "line": 67,
+          "parent_slug": "orchestrator-refactor-plan-working-notes",
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "slug": "6-shared-helper-opportunities-command-center-library",
+          "title": "6. Shared Helper Opportunities (Command Center Library)"
+        },
+        {
+          "line": 76,
+          "parent_slug": "orchestrator-refactor-plan-working-notes",
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "slug": "7-artifact-management-pruning",
+          "title": "7. Artifact Management & Pruning"
+        },
+        {
+          "line": 84,
+          "parent_slug": "orchestrator-refactor-plan-working-notes",
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "slug": "8-documentation-inventory-updates",
+          "title": "8. Documentation & Inventory Updates"
+        },
+        {
+          "line": 95,
+          "parent_slug": "orchestrator-refactor-plan-working-notes",
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "slug": "9-execution-phases-draft-timeline",
+          "title": "9. Execution Phases (Draft Timeline)"
+        },
+        {
+          "line": 108,
+          "parent_slug": "orchestrator-refactor-plan-working-notes",
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "slug": "10-risks-open-questions",
+          "title": "10. Risks & Open Questions"
+        },
+        {
+          "line": 118,
+          "parent_slug": "orchestrator-refactor-plan-working-notes",
+          "parent_title": "Orchestrator Refactor Plan (Working Notes)",
+          "slug": "11-next-actions",
+          "title": "11. Next Actions"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-01T13:19:36.908675+00:00",
+      "owners": [],
+      "size_bytes": 9376,
+      "slug": "orchestrator-refactor-plan-working-notes",
+      "status": null,
+      "tags": []
+    },
+    {
       "contains_placeholder": false,
       "description": "1. `cmd_list` \u2014 2 duplicate(s)",
       "filename": ".repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md",
@@ -11656,70 +13188,70 @@ total_links: 2
           "title": "How to Use This Template"
         },
         {
-          "line": 86,
+          "line": 110,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "1-script-producers",
           "title": "1. Script Producers"
         },
         {
-          "line": 171,
+          "line": 199,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "2-script-consumers",
           "title": "2. Script Consumers"
         },
         {
-          "line": 200,
+          "line": 228,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "3-script-aggregators",
           "title": "3. Script Aggregators"
         },
         {
-          "line": 226,
+          "line": 259,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "4-script-orchestrators",
           "title": "4. Script Orchestrators"
         },
         {
-          "line": 246,
+          "line": 283,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "5-script-summarizers",
           "title": "5. Script Summarizers"
         },
         {
-          "line": 260,
+          "line": 299,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "6-script-utilities",
           "title": "6. Script Utilities"
         },
         {
-          "line": 276,
+          "line": 323,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "7-script-undefined-triage",
           "title": "7. Script Undefined / Triage"
         },
         {
-          "line": 291,
+          "line": 338,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "cross-cutting-follow-ups",
           "title": "Cross-Cutting Follow-Ups"
         },
         {
-          "line": 296,
+          "line": 343,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "open-questions",
           "title": "Open Questions"
         },
         {
-          "line": 300,
+          "line": 347,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "appendix-yaml-mapping-placeholder",
@@ -11727,9 +13259,9 @@ total_links: 2
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-25T02:53:56.349953+00:00",
+      "modified_utc": "2025-12-01T13:19:36.904676+00:00",
       "owners": [],
-      "size_bytes": 46381,
+      "size_bytes": 64099,
       "slug": "script-inventory-architecture",
       "status": null,
       "tags": []
@@ -11782,6 +13314,28 @@ total_links: 2
       "owners": [],
       "size_bytes": 14434,
       "slug": "duplicate-scan-summary",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
+      "description": null,
+      "filename": ".repo_studios/scripts/scripts_index/scripts_duplicate_summary-20251130-0333.md",
+      "folder": ".repo_studios/scripts/scripts_index",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "summary",
+          "title": "Summary"
+        }
+      ],
+      "h2_headings": [],
+      "links": [],
+      "modified_utc": "2025-11-30T03:33:07.215521+00:00",
+      "owners": [],
+      "size_bytes": 11,
+      "slug": "summary",
       "status": null,
       "tags": []
     },
@@ -11889,6 +13443,36 @@ total_links: 2
     },
     {
       "contains_placeholder": false,
+      "description": "dry run bundle",
+      "filename": ".repo_studios/tmp_manual/automation_dry_run_9f5c157dea2e4b4fbd98dc969cbe2a41/reports/commandview/automation_runs/20251102-1930/README.md",
+      "folder": ".repo_studios/tmp_manual/automation_dry_run_9f5c157dea2e4b4fbd98dc969cbe2a41/reports/commandview/automation_runs/20251102-1930",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "automation-dry-run-bundle",
+          "title": "Automation Dry-Run Bundle"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 11,
+          "parent_slug": "automation-dry-run-bundle",
+          "parent_title": "Automation Dry-Run Bundle",
+          "slug": "notes",
+          "title": "Notes"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-30T12:23:31.861612+00:00",
+      "owners": [],
+      "size_bytes": 244,
+      "slug": "automation-dry-run-bundle",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
       "description": "To reduce confusion with the root-level `README.md`, the detailed guide for AI agents and contributors has been moved to `AGENTS_GUIDE.md` in this same folder.",
       "filename": "README.md",
       "folder": ".",
@@ -11902,10 +13486,82 @@ total_links: 2
       ],
       "h2_headings": [],
       "links": [],
-      "modified_utc": "2025-11-24T23:21:19.649681+00:00",
+      "modified_utc": "2025-11-30T01:23:50.960100+00:00",
       "owners": [],
-      "size_bytes": 633,
+      "size_bytes": 692,
       "slug": "about-this-folder",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
+      "description": "This document defines the uniform naming scheme for all artifacts stored under `.repo_studios/command_center/reports/`. New automation, orchestrators, and helpers MUST emit bundles that follow this structure. Legacy directories remain in\u2026",
+      "filename": "REPORT_NAMING_STANDARDS.md",
+      "folder": ".",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "report-naming-standards",
+          "title": "Report Naming Standards"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 9,
+          "parent_slug": "report-naming-standards",
+          "parent_title": "Report Naming Standards",
+          "slug": "naming-convention-index",
+          "title": "Naming Convention Index"
+        },
+        {
+          "line": 29,
+          "parent_slug": "report-naming-standards",
+          "parent_title": "Report Naming Standards",
+          "slug": "artifact-role-registry",
+          "title": "Artifact Role Registry"
+        },
+        {
+          "line": 43,
+          "parent_slug": "report-naming-standards",
+          "parent_title": "Report Naming Standards",
+          "slug": "viewer-slug-registry",
+          "title": "Viewer Slug Registry"
+        },
+        {
+          "line": 55,
+          "parent_slug": "report-naming-standards",
+          "parent_title": "Report Naming Standards",
+          "slug": "grandfathered-artifacts",
+          "title": "Grandfathered Artifacts"
+        },
+        {
+          "line": 62,
+          "parent_slug": "report-naming-standards",
+          "parent_title": "Report Naming Standards",
+          "slug": "audit-utility-specification",
+          "title": "Audit Utility Specification"
+        },
+        {
+          "line": 85,
+          "parent_slug": "report-naming-standards",
+          "parent_title": "Report Naming Standards",
+          "slug": "compliance-expectations",
+          "title": "Compliance Expectations"
+        },
+        {
+          "line": 96,
+          "parent_slug": "report-naming-standards",
+          "parent_title": "Report Naming Standards",
+          "slug": "change-management",
+          "title": "Change Management"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-11-30T01:23:50.956101+00:00",
+      "owners": [],
+      "size_bytes": 4572,
+      "slug": "report-naming-standards",
       "status": null,
       "tags": []
     },
@@ -12011,6 +13667,286 @@ total_links: 2
       "tags": []
     },
     {
+      "contains_placeholder": true,
+      "description": "This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",
+      "filename": "docs/automation/orchestrator_implementation.md",
+      "folder": "docs/automation",
+      "frontmatter": {
+        "last_updated": "2025-11-30",
+        "owner": "repo_studios_ai",
+        "status": "draft",
+        "tags": [
+          "automation",
+          "orchestrators",
+          "command-center"
+        ],
+        "title": "Orchestrator Implementation Plan",
+        "version": "2025-11-29"
+      },
+      "h1_headings": [
+        {
+          "line": 13,
+          "slug": "orchestrator-implementation-plan",
+          "title": "Orchestrator Implementation Plan"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 19,
+          "parent_slug": "orchestrator-implementation-plan",
+          "parent_title": "Orchestrator Implementation Plan",
+          "slug": "context",
+          "title": "Context"
+        },
+        {
+          "line": 29,
+          "parent_slug": "orchestrator-implementation-plan",
+          "parent_title": "Orchestrator Implementation Plan",
+          "slug": "current-progress-2025-11-30",
+          "title": "Current Progress (2025-11-30)"
+        },
+        {
+          "line": 38,
+          "parent_slug": "orchestrator-implementation-plan",
+          "parent_title": "Orchestrator Implementation Plan",
+          "slug": "implementation-objectives",
+          "title": "Implementation Objectives"
+        },
+        {
+          "line": 47,
+          "parent_slug": "orchestrator-implementation-plan",
+          "parent_title": "Orchestrator Implementation Plan",
+          "slug": "deliverables",
+          "title": "Deliverables"
+        },
+        {
+          "line": 57,
+          "parent_slug": "orchestrator-implementation-plan",
+          "parent_title": "Orchestrator Implementation Plan",
+          "slug": "legacy-to-target-parity-matrix",
+          "title": "Legacy-to-Target Parity Matrix"
+        },
+        {
+          "line": 68,
+          "parent_slug": "orchestrator-implementation-plan",
+          "parent_title": "Orchestrator Implementation Plan",
+          "slug": "legacy-retirement-targets",
+          "title": "Legacy Retirement Targets"
+        },
+        {
+          "line": 82,
+          "parent_slug": "orchestrator-implementation-plan",
+          "parent_title": "Orchestrator Implementation Plan",
+          "slug": "testing-and-fixture-migration-requirements",
+          "title": "Testing and Fixture Migration Requirements"
+        },
+        {
+          "line": 93,
+          "parent_slug": "orchestrator-implementation-plan",
+          "parent_title": "Orchestrator Implementation Plan",
+          "slug": "operational-impact-inventory",
+          "title": "Operational Impact Inventory"
+        },
+        {
+          "line": 109,
+          "parent_slug": "orchestrator-implementation-plan",
+          "parent_title": "Orchestrator Implementation Plan",
+          "slug": "legacy-removal-ticket-backlog-to-be-opened",
+          "title": "Legacy Removal Ticket Backlog (to be opened)"
+        },
+        {
+          "line": 135,
+          "parent_slug": "orchestrator-implementation-plan",
+          "parent_title": "Orchestrator Implementation Plan",
+          "slug": "topic-assignment-validation-2025-11-30",
+          "title": "Topic Assignment Validation (2025-11-30)"
+        },
+        {
+          "line": 175,
+          "parent_slug": "orchestrator-implementation-plan",
+          "parent_title": "Orchestrator Implementation Plan",
+          "slug": "healthview-manifest-mapping-2025-11-30",
+          "title": "Healthview Manifest Mapping (2025-11-30)"
+        },
+        {
+          "line": 187,
+          "parent_slug": "orchestrator-implementation-plan",
+          "parent_title": "Orchestrator Implementation Plan",
+          "slug": "topic-implementation-workstreams",
+          "title": "Topic Implementation Workstreams"
+        },
+        {
+          "line": 357,
+          "parent_slug": "orchestrator-implementation-plan",
+          "parent_title": "Orchestrator Implementation Plan",
+          "slug": "phase-checklist",
+          "title": "Phase Checklist"
+        },
+        {
+          "line": 467,
+          "parent_slug": "orchestrator-implementation-plan",
+          "parent_title": "Orchestrator Implementation Plan",
+          "slug": "healthview-viewer-wiring-reference",
+          "title": "Healthview Viewer Wiring Reference"
+        },
+        {
+          "line": 501,
+          "parent_slug": "orchestrator-implementation-plan",
+          "parent_title": "Orchestrator Implementation Plan",
+          "slug": "report-naming-standard-initiative",
+          "title": "Report Naming Standard Initiative"
+        },
+        {
+          "line": 557,
+          "parent_slug": "orchestrator-implementation-plan",
+          "parent_title": "Orchestrator Implementation Plan",
+          "slug": "dependencies-and-tooling",
+          "title": "Dependencies and Tooling"
+        },
+        {
+          "line": 564,
+          "parent_slug": "orchestrator-implementation-plan",
+          "parent_title": "Orchestrator Implementation Plan",
+          "slug": "reporting-and-tracking",
+          "title": "Reporting and Tracking"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-01T14:02:44.340382+00:00",
+      "owners": [
+        "repo_studios_ai"
+      ],
+      "size_bytes": 57566,
+      "slug": "orchestrator-implementation-plan",
+      "status": "draft",
+      "tags": [
+        "automation",
+        "orchestrators",
+        "command-center"
+      ]
+    },
+    {
+      "contains_placeholder": true,
+      "description": "This RFC proposes restructuring the Repo Studios orchestration layer around topic-aligned pipelines so every automation script is executed through a consistent orchestrator entry point. The document summarizes roadmap context, expected\u2026",
+      "filename": "docs/automation/orchestrator_topic_refactor_rfc.md",
+      "folder": "docs/automation",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "rfc-topic-oriented-orchestrator-refactor",
+          "title": "RFC: Topic-Oriented Orchestrator Refactor"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor",
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "slug": "1-overview",
+          "title": "1. Overview"
+        },
+        {
+          "line": 12,
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor",
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "slug": "2-motivation",
+          "title": "2. Motivation"
+        },
+        {
+          "line": 24,
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor",
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "slug": "3-goals",
+          "title": "3. Goals"
+        },
+        {
+          "line": 36,
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor",
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "slug": "4-non-goals",
+          "title": "4. Non-Goals"
+        },
+        {
+          "line": 45,
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor",
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "slug": "5-proposed-architecture",
+          "title": "5. Proposed Architecture"
+        },
+        {
+          "line": 83,
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor",
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "slug": "6-shared-helper-enhancements",
+          "title": "6. Shared Helper Enhancements"
+        },
+        {
+          "line": 99,
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor",
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "slug": "7-artifact-management-and-retention",
+          "title": "7. Artifact Management and Retention"
+        },
+        {
+          "line": 108,
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor",
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "slug": "8-testing-strategy",
+          "title": "8. Testing Strategy"
+        },
+        {
+          "line": 122,
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor",
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "slug": "9-documentation-plan",
+          "title": "9. Documentation Plan"
+        },
+        {
+          "line": 136,
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor",
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "slug": "10-rollout-phases",
+          "title": "10. Rollout Phases"
+        },
+        {
+          "line": 154,
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor",
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "slug": "11-risks-and-mitigations",
+          "title": "11. Risks and Mitigations"
+        },
+        {
+          "line": 168,
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor",
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "slug": "12-open-questions",
+          "title": "12. Open Questions"
+        },
+        {
+          "line": 191,
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor",
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "slug": "13-decision-record",
+          "title": "13. Decision Record"
+        },
+        {
+          "line": 207,
+          "parent_slug": "rfc-topic-oriented-orchestrator-refactor",
+          "parent_title": "RFC: Topic-Oriented Orchestrator Refactor",
+          "slug": "14-references",
+          "title": "14. References"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-01T13:19:36.908675+00:00",
+      "owners": [],
+      "size_bytes": 12548,
+      "slug": "rfc-topic-oriented-orchestrator-refactor",
+      "status": null,
+      "tags": []
+    },
+    {
       "contains_placeholder": false,
       "description": "This handbook defines the governed documentation surfaces used by Repo Studios tooling.",
       "filename": "docs/standards/global/std-docs-integrity-handbook.md",
@@ -12098,15 +14034,15 @@ total_links: 2
       "tags": []
     },
     {
-      "contains_placeholder": false,
+      "contains_placeholder": true,
       "description": null,
       "filename": "docs/standards/global/std-global-markdown-authoring.md",
       "folder": "docs/standards/global",
       "frontmatter": {
-        "last_updated": "2025-10-23",
+        "last_updated": "2025-11-25",
         "status": "draft",
         "title": "Global Markdown Authoring Standard",
-        "version": "2025-10-23"
+        "version": "2025-11-25"
       },
       "h1_headings": [],
       "h2_headings": [
@@ -12118,17 +14054,52 @@ total_links: 2
           "title": "Front Matter"
         },
         {
-          "line": 18,
+          "line": 19,
+          "parent_slug": "",
+          "parent_title": "",
+          "slug": "document-placement",
+          "title": "Document Placement"
+        },
+        {
+          "line": 24,
+          "parent_slug": "",
+          "parent_title": "",
+          "slug": "headings-outline",
+          "title": "Headings & Outline"
+        },
+        {
+          "line": 31,
+          "parent_slug": "",
+          "parent_title": "",
+          "slug": "lead-summary-paragraph",
+          "title": "Lead Summary Paragraph"
+        },
+        {
+          "line": 36,
+          "parent_slug": "",
+          "parent_title": "",
+          "slug": "metadata-hygiene",
+          "title": "Metadata Hygiene"
+        },
+        {
+          "line": 43,
           "parent_slug": "",
           "parent_title": "",
           "slug": "style-essentials",
           "title": "Style Essentials"
+        },
+        {
+          "line": 49,
+          "parent_slug": "",
+          "parent_title": "",
+          "slug": "cross-document-consistency",
+          "title": "Cross-Document Consistency"
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-24T23:31:22.862853+00:00",
+      "modified_utc": "2025-11-25T11:35:24.181372+00:00",
       "owners": [],
-      "size_bytes": 1034,
+      "size_bytes": 3318,
       "slug": "std-global-markdown-authoring",
       "status": "draft",
       "tags": []
@@ -12257,15 +14228,15 @@ total_links: 2
       "tags": []
     },
     {
-      "contains_placeholder": false,
+      "contains_placeholder": true,
       "description": null,
       "filename": "docs/standards/project/std-project-operating-standard.md",
       "folder": "docs/standards/project",
       "frontmatter": {
-        "last_updated": "2025-10-23",
+        "last_updated": "2025-11-25",
         "status": "draft",
         "title": "Project Operating Standard",
-        "version": "2025-10-23"
+        "version": "2025-11-25"
       },
       "h1_headings": [],
       "h2_headings": [
@@ -12282,35 +14253,139 @@ total_links: 2
           "parent_title": "",
           "slug": "automation-visibility",
           "title": "Automation Visibility"
+        },
+        {
+          "line": 24,
+          "parent_slug": "",
+          "parent_title": "",
+          "slug": "documentation-hygiene",
+          "title": "Documentation Hygiene"
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-24T23:31:22.871630+00:00",
+      "modified_utc": "2025-11-25T11:35:24.181372+00:00",
       "owners": [],
-      "size_bytes": 1180,
+      "size_bytes": 2027,
       "slug": "std-project-operating-standard",
       "status": "draft",
       "tags": []
     },
     {
       "contains_placeholder": true,
-      "description": "Placeholder instructions for Python setup and workflows. Replace with authoritative content when documentation is available.",
+      "description": "This guide documents the baseline expectations for Python contributors and automation authors.",
       "filename": "docs/standards/project/std-project-python-instructions.md",
       "folder": "docs/standards/project",
-      "frontmatter": null,
+      "frontmatter": {
+        "last_updated": "2025-11-25",
+        "owner": "repo_studios_ai",
+        "status": "draft",
+        "tags": [
+          "python",
+          "documentation",
+          "automation"
+        ],
+        "title": "Project Python Instructions",
+        "version": "2025-11-25"
+      },
       "h1_headings": [
         {
-          "line": 3,
+          "line": 15,
           "slug": "project-python-instructions",
           "title": "Project Python Instructions"
         }
       ],
-      "h2_headings": [],
+      "h2_headings": [
+        {
+          "line": 19,
+          "parent_slug": "project-python-instructions",
+          "parent_title": "Project Python Instructions",
+          "slug": "environment",
+          "title": "Environment"
+        },
+        {
+          "line": 25,
+          "parent_slug": "project-python-instructions",
+          "parent_title": "Project Python Instructions",
+          "slug": "documentation-expectations",
+          "title": "Documentation Expectations"
+        },
+        {
+          "line": 32,
+          "parent_slug": "project-python-instructions",
+          "parent_title": "Project Python Instructions",
+          "slug": "testing-discipline",
+          "title": "Testing Discipline"
+        }
+      ],
       "links": [],
-      "modified_utc": "2025-11-24T23:31:22.871630+00:00",
-      "owners": [],
-      "size_bytes": 236,
+      "modified_utc": "2025-11-25T11:35:24.181372+00:00",
+      "owners": [
+        "repo_studios_ai"
+      ],
+      "size_bytes": 1867,
       "slug": "project-python-instructions",
+      "status": "draft",
+      "tags": [
+        "python",
+        "documentation",
+        "automation"
+      ]
+    },
+    {
+      "contains_placeholder": true,
+      "description": "Use this template when authoring Healthview Markdown summaries for Test Execution Telemetry runs. Replace bracketed placeholders with the values emitted by the orchestrator (`run_test_execution_telemetry.py`) and remove any sections that\u2026",
+      "filename": "docs/templates/test_execution_telemetry_summary_template.md",
+      "folder": "docs/templates",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "test-execution-telemetry-summary-template",
+          "title": "Test Execution Telemetry Summary Template"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 7,
+          "parent_slug": "test-execution-telemetry-summary-template",
+          "parent_title": "Test Execution Telemetry Summary Template",
+          "slug": "run-context",
+          "title": "Run Context"
+        },
+        {
+          "line": 21,
+          "parent_slug": "test-execution-telemetry-summary-template",
+          "parent_title": "Test Execution Telemetry Summary Template",
+          "slug": "runtime-metrics",
+          "title": "Runtime Metrics"
+        },
+        {
+          "line": 29,
+          "parent_slug": "test-execution-telemetry-summary-template",
+          "parent_title": "Test Execution Telemetry Summary Template",
+          "slug": "failure-highlights",
+          "title": "Failure Highlights"
+        },
+        {
+          "line": 36,
+          "parent_slug": "test-execution-telemetry-summary-template",
+          "parent_title": "Test Execution Telemetry Summary Template",
+          "slug": "artifact-locations",
+          "title": "Artifact Locations"
+        },
+        {
+          "line": 45,
+          "parent_slug": "test-execution-telemetry-summary-template",
+          "parent_title": "Test Execution Telemetry Summary Template",
+          "slug": "step-outcomes",
+          "title": "Step Outcomes"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-01T03:07:09.755953+00:00",
+      "owners": [],
+      "size_bytes": 2092,
+      "slug": "test-execution-telemetry-summary-template",
       "status": null,
       "tags": []
     },
@@ -12391,21 +14466,21 @@ total_links: 2
       ]
     }
   ],
-  "generated_utc": "2025-11-25T03:38:45.960103+00:00",
+  "generated_utc": "2025-12-01T14:30:39.071989+00:00",
   "metrics": {
-    "documents_missing_description_count": 34,
-    "documents_outside_docs_tree_count": 116,
+    "documents_missing_description_count": 35,
+    "documents_outside_docs_tree_count": 124,
     "documents_per_directory": [
+      {
+        "count": 41,
+        "directory": ".repo_studios/docs/automation"
+      },
       {
         "count": 28,
         "directory": ".repo_studios/command_center/docs/mermaid/view_specs"
       },
       {
-        "count": 27,
-        "directory": ".repo_studios/docs/automation"
-      },
-      {
-        "count": 11,
+        "count": 12,
         "directory": ".repo_studios/command_center/docs"
       },
       {
@@ -12425,16 +14500,20 @@ total_links: 2
         "directory": ".repo_studios/docs"
       },
       {
+        "count": 8,
+        "directory": ".repo_studios/docs/automation/traceability"
+      },
+      {
         "count": 7,
         "directory": ".repo_studios/command_center/docs/phase_6"
       },
       {
         "count": 6,
-        "directory": ".repo_studios/command_center/viewer"
+        "directory": "."
       },
       {
-        "count": 5,
-        "directory": "."
+        "count": 6,
+        "directory": ".repo_studios/command_center/viewer"
       },
       {
         "count": 5,
@@ -12443,10 +14522,6 @@ total_links: 2
       {
         "count": 5,
         "directory": ".repo_studios/command_center/docs/mermaid"
-      },
-      {
-        "count": 5,
-        "directory": ".repo_studios/docs/automation/traceability"
       },
       {
         "count": 5,
@@ -12465,23 +14540,23 @@ total_links: 2
         "directory": ".repo_studios/docs/playbooks"
       },
       {
+        "count": 4,
+        "directory": ".repo_studios/scripts"
+      },
+      {
         "count": 3,
         "directory": ".repo_studios/command_center/docs/metrics"
       },
       {
         "count": 3,
-        "directory": ".repo_studios/docs/standards/project"
-      },
-      {
-        "count": 3,
-        "directory": ".repo_studios/scripts"
+        "directory": ".repo_studios/command_center/scripts/scripts_index"
       }
     ],
     "documents_without_h1_count": 20,
     "documents_without_h2_count": 21,
     "duplicate_slug_count": 6,
-    "link_density": 0.010416666666666666,
-    "placeholder_documents_count": 37
+    "link_density": 0.00904977375565611,
+    "placeholder_documents_count": 46
   },
   "outputs": {
     "files": {
@@ -12512,10 +14587,10 @@ total_links: 2
   },
   "schema_version": 1,
   "summary": {
-    "total_documents": 192,
-    "total_h1": 176,
-    "total_h2": 1038,
-    "total_headings": 1214,
+    "total_documents": 221,
+    "total_h1": 205,
+    "total_h2": 1234,
+    "total_headings": 1439,
     "total_links": 2
   }
 }
@@ -12525,22 +14600,22 @@ total_links: 2
 
 ```yaml
 schema_version: 1
-generated_utc: '2025-11-25T03:38:45.960103+00:00'
+generated_utc: '2025-12-01T14:30:39.071989+00:00'
 repo_root: C:\Users\genet\repo_studios
 summary:
-  total_documents: 192
-  total_h1: 176
-  total_h2: 1038
-  total_headings: 1214
+  total_documents: 221
+  total_h1: 205
+  total_h2: 1234
+  total_headings: 1439
   total_links: 2
 metrics:
   documents_per_directory:
+  - directory: .repo_studios/docs/automation
+    count: 41
   - directory: .repo_studios/command_center/docs/mermaid/view_specs
     count: 28
-  - directory: .repo_studios/docs/automation
-    count: 27
   - directory: .repo_studios/command_center/docs
-    count: 11
+    count: 12
   - directory: .repo_studios/docs/standards/global
     count: 11
   - directory: .repo_studios/command_center/docs/phase_7
@@ -12549,17 +14624,17 @@ metrics:
     count: 9
   - directory: .repo_studios/docs
     count: 8
+  - directory: .repo_studios/docs/automation/traceability
+    count: 8
   - directory: .repo_studios/command_center/docs/phase_6
     count: 7
+  - directory: .
+    count: 6
   - directory: .repo_studios/command_center/viewer
     count: 6
-  - directory: .
-    count: 5
   - directory: .github
     count: 5
   - directory: .repo_studios/command_center/docs/mermaid
-    count: 5
-  - directory: .repo_studios/docs/automation/traceability
     count: 5
   - directory: .repo_studios/docs/templates
     count: 5
@@ -12569,19 +14644,19 @@ metrics:
     count: 4
   - directory: .repo_studios/docs/playbooks
     count: 4
+  - directory: .repo_studios/scripts
+    count: 4
   - directory: .repo_studios/command_center/docs/metrics
     count: 3
-  - directory: .repo_studios/docs/standards/project
+  - directory: .repo_studios/command_center/scripts/scripts_index
     count: 3
-  - directory: .repo_studios/scripts
-    count: 3
-  documents_missing_description_count: 34
+  documents_missing_description_count: 35
   documents_without_h1_count: 20
   documents_without_h2_count: 21
-  placeholder_documents_count: 37
+  placeholder_documents_count: 46
   duplicate_slug_count: 6
-  documents_outside_docs_tree_count: 116
-  link_density: 0.010416666666666666
+  documents_outside_docs_tree_count: 124
+  link_density: 0.00904977375565611
 advisories:
   documents_missing_description:
   - .copilot_todo.md
@@ -12607,7 +14682,7 @@ advisories:
   - .repo_studios/docs/standards/global/std-global-markdown-authoring.md
   - .repo_studios/docs/standards/global/std-global-mission-parameters.md
   - .repo_studios/docs/templates/script_inventory.md
-  - .repo_studios/monkey_patch/20251124_175233/report.md
+  - .repo_studios/monkey_patch/20251201_115542/report.md
   - .repo_studios/monkey_patch/latest/report.md
   documents_without_h1:
   - .repo_studios/command_center/docs/mermaid/view_specs/callback_registration_map.md
@@ -12640,18 +14715,18 @@ advisories:
   - .repo_studios/command_center/docs/phase_7/PRODUCER_CONSUMER_TRACEABILITY_AUDIT.md
   - .repo_studios/command_center/scripts/script_inventory.md
   - .repo_studios/command_center/viewer/cache/README.md
+  - .repo_studios/docs/governance/alignment-ledger.md
   - .repo_studios/docs/project_tree_overview.md
-  - .repo_studios/docs/standards/docs_index.md
   - .repo_studios/docs/templates/agent_note_template.md
   - .repo_studios/docs/templates/script_inventory.md
   - .repo_studios/docs/templates/structural_checklist_template.md
   - .repo_studios/inventory_schema/views/README.md
+  - .repo_studios/scripts/scripts_index/scripts_duplicate_summary-20251130-0333.md
   - README.md
   - command_center_script_verification_temp.md
   - docs/standards/global/std-docs-integrity-handbook.md
   - docs/standards/global/std-global-chainlit-ui.md
   - docs/standards/global/std-global-html-coding.md
-  - docs/standards/project/std-project-python-instructions.md
   placeholder_documents:
   - .repo_studios/command_center/checklists/2025-10-24.md
   - .repo_studios/command_center/command_center_architecture.md
@@ -12665,6 +14740,7 @@ advisories:
   - .repo_studios/command_center/docs/mermaid/mermaid_viewer.md
   - .repo_studios/command_center/docs/mermaid/view_specs/class_inheritance_hierarchy.md
   - .repo_studios/command_center/docs/mermaid/view_specs/git_churn_risk_map.md
+  - .repo_studios/command_center/docs/orchestrator_migration_notes.md
   - .repo_studios/command_center/docs/phase_4/POST_RUN_TEST_MATRIX.md
   - .repo_studios/command_center/docs/phase_4/PR_CHECKLIST_TEMPLATE.md
   - .repo_studios/command_center/docs/phase_7/CI_INTEGRATION_STRATEGY.md
@@ -12673,11 +14749,10 @@ advisories:
   - .repo_studios/command_center/docs/phase_7/REPORTING_INTERFACE_PLAN.md
   - .repo_studios/command_center/docs/phase_7/placeholder_scan_blocking_transition_brief.md
   - .repo_studios/command_center/docs/run_log_template.md
+  - .repo_studios/docs/automation/aggregate_docs_health_signals.md
+  - .repo_studios/docs/automation/generate_anchor_health_report.md
   - .repo_studios/docs/automation/generate_doc_index.md
   - .repo_studios/docs/automation/orchestrator_automation_hooks.md
-  - .repo_studios/docs/automation/scan_code_placeholders.md
-  - .repo_studios/docs/automation/traceability/producer_consumer_traceability_audit.md
-  - .repo_studios/docs/inventory/inventory-notes.md
   documents_outside_docs_tree:
   - .copilot_todo.md
   - .github/architect.chatmode.md
@@ -12694,6 +14769,7 @@ advisories:
   - .repo_studios/command_center/command_center_architecture.md
   - .repo_studios/command_center/docs/build_paths_extraction_brief.md
   - .repo_studios/command_center/docs/code_library/code_library_status.md
+  - .repo_studios/command_center/docs/code_library/helper_usage_patterns.md
   - .repo_studios/command_center/docs/decision_log.md
   - .repo_studios/command_center/docs/duplicate_detection_schema_alignment.md
   - .repo_studios/command_center/docs/duplicate_target_mappings.md
@@ -12703,13 +14779,14 @@ advisories:
   - .repo_studios/command_center/docs/library_readme_adjustments.md
   - .repo_studios/command_center/docs/manual_extraction_checklist.md
   - .repo_studios/command_center/docs/manual_extraction_operator_brief.md
-  - .repo_studios/command_center/docs/mermaid/README.md
   duplicate_slugs:
     library-integration-alignment-plan:
     - .repo_studios/command_center/checklists/2025-10-24.md
     - .repo_studios/command_center/docs/library_integration_checklist.md
     duplicate-scan-summary:
-    - .repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-24-2338.md
+    - .repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md
+    - .repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md
+    - .repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md
     - .repo_studios/scripts/aggregators/aggregators_index/aggregators_duplicate_summary-2025-10-28-0942.md
     - .repo_studios/scripts/consumers/consumers_index/consumers_duplicate_summary-2025-10-28-0934.md
     - .repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md
@@ -12727,7 +14804,7 @@ advisories:
     - .repo_studios/docs/templates/script_inventory.md
     - .repo_studios/docs/templates/script_inventory_template.md
     monkey-patch-scan-report:
-    - .repo_studios/monkey_patch/20251124_175233/report.md
+    - .repo_studios/monkey_patch/20251201_115542/report.md
     - .repo_studios/monkey_patch/latest/report.md
 documents:
 - folder: .
@@ -13019,28 +15096,28 @@ documents:
     parent_slug: repo-studios-copilot-playbook
   - title: Testing & Validation
     slug: testing-validation
-    line: 29
+    line: 30
     parent_title: Repo Studios Copilot Playbook
     parent_slug: repo-studios-copilot-playbook
   - title: Reference Material
     slug: reference-material
-    line: 34
+    line: 35
     parent_title: Repo Studios Copilot Playbook
     parent_slug: repo-studios-copilot-playbook
   - title: Collaboration Tips
     slug: collaboration-tips
-    line: 41
+    line: 42
     parent_title: Repo Studios Copilot Playbook
     parent_slug: repo-studios-copilot-playbook
   - title: Terminal Coordination
     slug: terminal-coordination
-    line: 47
+    line: 48
     parent_title: Repo Studios Copilot Playbook
     parent_slug: repo-studios-copilot-playbook
   links: []
   description: null
-  size_bytes: 7422
-  modified_utc: '2025-11-07T03:43:35.020145+00:00'
+  size_bytes: 7624
+  modified_utc: '2025-11-30T01:23:50.960100+00:00'
   tags: []
   owners: []
   status: null
@@ -13306,45 +15383,45 @@ documents:
     parent_slug: library-integration-protocol
   - title: Shared Helper Modules
     slug: shared-helper-modules
-    line: 32
+    line: 46
     parent_title: Library Integration Protocol
     parent_slug: library-integration-protocol
   - title: Artifact Retention Policy
     slug: artifact-retention-policy
-    line: 45
+    line: 59
     parent_title: Library Integration Protocol
     parent_slug: library-integration-protocol
   - title: Micro-Cycle Blueprint
     slug: micro-cycle-blueprint
-    line: 53
+    line: 67
     parent_title: Library Integration Protocol
     parent_slug: library-integration-protocol
   - title: Automation Entry Points
     slug: automation-entry-points
-    line: 77
+    line: 91
     parent_title: Library Integration Protocol
     parent_slug: library-integration-protocol
   - title: Usage Instructions
     slug: usage-instructions
-    line: 119
+    line: 133
     parent_title: Library Integration Protocol
     parent_slug: library-integration-protocol
   - title: References
     slug: references
-    line: 142
+    line: 156
     parent_title: Library Integration Protocol
     parent_slug: library-integration-protocol
   - title: Onboarding Checklist
     slug: onboarding-checklist
-    line: 151
+    line: 165
     parent_title: Library Integration Protocol
     parent_slug: library-integration-protocol
   links: []
   description: "Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/`\
     \ so producers, summarisers, and orchestrators share the same implementation.\
     \ This folder is a **staging area** until the canonical\u2026"
-  size_bytes: 14418
-  modified_utc: '2025-11-23T11:14:18.336713+00:00'
+  size_bytes: 14886
+  modified_utc: '2025-11-28T14:18:05.271026+00:00'
   tags: []
   owners: []
   status: null
@@ -13554,27 +15631,27 @@ documents:
     parent_slug: code-library-integration-status-2025-11-23
   - title: Progress Recap
     slug: progress-recap
-    line: 67
+    line: 69
     parent_title: "Code Library Integration Status \u2014 2025-11-23"
     parent_slug: code-library-integration-status-2025-11-23
   - title: Outstanding Work
     slug: outstanding-work
-    line: 136
+    line: 138
     parent_title: "Code Library Integration Status \u2014 2025-11-23"
     parent_slug: code-library-integration-status-2025-11-23
   - title: Key References
     slug: key-references
-    line: 156
+    line: 158
     parent_title: "Code Library Integration Status \u2014 2025-11-23"
     parent_slug: code-library-integration-status-2025-11-23
   - title: Suggested Next Actions (for the next contributor)
     slug: suggested-next-actions-for-the-next-contributor
-    line: 166
+    line: 168
     parent_title: "Code Library Integration Status \u2014 2025-11-23"
     parent_slug: code-library-integration-status-2025-11-23
   - title: Maintenance Tips
     slug: maintenance-tips
-    line: 174
+    line: 176
     parent_title: "Code Library Integration Status \u2014 2025-11-23"
     parent_slug: code-library-integration-status-2025-11-23
   links: []
@@ -13582,13 +15659,68 @@ documents:
     \ and shared-library initiative so future contributors can quickly understand\
     \ the existing tooling, documentation, and open work streams before resuming development.\
     \ This\u2026"
-  size_bytes: 13812
-  modified_utc: '2025-11-23T11:23:20.546419+00:00'
+  size_bytes: 14122
+  modified_utc: '2025-12-01T01:01:45.347271+00:00'
   tags: []
   owners: []
   status: null
   frontmatter: null
   contains_placeholder: true
+- folder: .repo_studios/command_center/docs/code_library
+  filename: .repo_studios/command_center/docs/code_library/helper_usage_patterns.md
+  slug: command-center-helper-usage-patterns-2025-11-30
+  h1_headings:
+  - title: "Command Center Helper Usage Patterns \u2014 2025-11-30"
+    slug: command-center-helper-usage-patterns-2025-11-30
+    line: 1
+  h2_headings:
+  - title: Scope
+    slug: scope
+    line: 3
+    parent_title: "Command Center Helper Usage Patterns \u2014 2025-11-30"
+    parent_slug: command-center-helper-usage-patterns-2025-11-30
+  - title: Topic Pipeline Assembly
+    slug: topic-pipeline-assembly
+    line: 9
+    parent_title: "Command Center Helper Usage Patterns \u2014 2025-11-30"
+    parent_slug: command-center-helper-usage-patterns-2025-11-30
+  - title: Summarizer Runner Integration
+    slug: summarizer-runner-integration
+    line: 56
+    parent_title: "Command Center Helper Usage Patterns \u2014 2025-11-30"
+    parent_slug: command-center-helper-usage-patterns-2025-11-30
+  - title: Telemetry Emitters
+    slug: telemetry-emitters
+    line: 78
+    parent_title: "Command Center Helper Usage Patterns \u2014 2025-11-30"
+    parent_slug: command-center-helper-usage-patterns-2025-11-30
+  - title: Catalog Registry
+    slug: catalog-registry
+    line: 104
+    parent_title: "Command Center Helper Usage Patterns \u2014 2025-11-30"
+    parent_slug: command-center-helper-usage-patterns-2025-11-30
+  - title: CLI Integration Checklist
+    slug: cli-integration-checklist
+    line: 130
+    parent_title: "Command Center Helper Usage Patterns \u2014 2025-11-30"
+    parent_slug: command-center-helper-usage-patterns-2025-11-30
+  - title: References
+    slug: references
+    line: 143
+    parent_title: "Command Center Helper Usage Patterns \u2014 2025-11-30"
+    parent_slug: command-center-helper-usage-patterns-2025-11-30
+  links: []
+  description: Capture how the Phase 2 shared helpers are intended to be wired into
+    topic orchestrators so engineers and agents can reuse them consistently. Each
+    section lists the helper location, dependencies, execution contract, and verification
+    tests.
+  size_bytes: 6829
+  modified_utc: '2025-12-01T00:53:06.675177+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
 - folder: .repo_studios/command_center/docs
   filename: .repo_studios/command_center/docs/decision_log.md
   slug: decision-log
@@ -13599,8 +15731,8 @@ documents:
   h2_headings: []
   links: []
   description: null
-  size_bytes: 20019
-  modified_utc: '2025-11-24T23:59:30.978451+00:00'
+  size_bytes: 22558
+  modified_utc: '2025-12-01T01:26:52.466224+00:00'
   tags: []
   owners: []
   status: null
@@ -14462,40 +16594,40 @@ documents:
     parent_slug: dead-code-detection-view-spec
   - title: Inputs
     slug: inputs
-    line: 9
+    line: 10
     parent_title: Dead Code Detection View Spec
     parent_slug: dead-code-detection-view-spec
   - title: Transformations
     slug: transformations
-    line: 17
+    line: 18
     parent_title: Dead Code Detection View Spec
     parent_slug: dead-code-detection-view-spec
   - title: Mermaid Output Structure
     slug: mermaid-output-structure
-    line: 26
+    line: 33
     parent_title: Dead Code Detection View Spec
     parent_slug: dead-code-detection-view-spec
   - title: Implementation References
     slug: implementation-references
-    line: 42
+    line: 49
     parent_title: Dead Code Detection View Spec
     parent_slug: dead-code-detection-view-spec
   - title: Verification & Hardening
     slug: verification-hardening
-    line: 48
+    line: 60
     parent_title: Dead Code Detection View Spec
     parent_slug: dead-code-detection-view-spec
   - title: Future Enhancements
     slug: future-enhancements
-    line: 54
+    line: 70
     parent_title: Dead Code Detection View Spec
     parent_slug: dead-code-detection-view-spec
   links: []
   description: Highlight modules that accumulate unused symbols so reviewers can prioritize
     clean-up of unreachable functions and imports that inflate maintenance cost or
     mask refactoring opportunities.
-  size_bytes: 4341
-  modified_utc: '2025-11-13T13:29:06.677630+00:00'
+  size_bytes: 4393
+  modified_utc: '2025-11-25T19:41:38.796364+00:00'
   tags: []
   owners: []
   status: null
@@ -15658,6 +17790,70 @@ documents:
   status: null
   frontmatter: null
   contains_placeholder: false
+- folder: .repo_studios/command_center/docs
+  filename: .repo_studios/command_center/docs/orchestrator_migration_notes.md
+  slug: orchestrator-migration-notes-2025-11-30
+  h1_headings:
+  - title: "Orchestrator Migration Notes \u2014 2025-11-30"
+    slug: orchestrator-migration-notes-2025-11-30
+    line: 1
+  h2_headings:
+  - title: Purpose
+    slug: purpose
+    line: 3
+    parent_title: "Orchestrator Migration Notes \u2014 2025-11-30"
+    parent_slug: orchestrator-migration-notes-2025-11-30
+  - title: 'Test Execution Telemetry (legacy: `run_pytest_log_capture.py`)'
+    slug: test-execution-telemetry-legacy-runpytestlogcapturepy
+    line: 15
+    parent_title: "Orchestrator Migration Notes \u2014 2025-11-30"
+    parent_slug: orchestrator-migration-notes-2025-11-30
+  - title: Fault Diagnostics (replaces legacy `run_fault_pipeline.py`)
+    slug: fault-diagnostics-replaces-legacy-runfaultpipelinepy
+    line: 80
+    parent_title: "Orchestrator Migration Notes \u2014 2025-11-30"
+    parent_slug: orchestrator-migration-notes-2025-11-30
+  - title: Docs Health (legacy suite of producer scripts)
+    slug: docs-health-legacy-suite-of-producer-scripts
+    line: 137
+    parent_title: "Orchestrator Migration Notes \u2014 2025-11-30"
+    parent_slug: orchestrator-migration-notes-2025-11-30
+  - title: 'Standards Integrity (legacy: `run_standards_gap_suite.py` + `run_standards_index_cli.py`)'
+    slug: standards-integrity-legacy-runstandardsgapsuitepy-runstandardsindexclipy
+    line: 173
+    parent_title: "Orchestrator Migration Notes \u2014 2025-11-30"
+    parent_slug: orchestrator-migration-notes-2025-11-30
+  - title: 'Dependency & Import Hygiene (legacy: `run_batch_cleanup.py`)'
+    slug: dependency-import-hygiene-legacy-runbatchcleanuppy
+    line: 183
+    parent_title: "Orchestrator Migration Notes \u2014 2025-11-30"
+    parent_slug: orchestrator-migration-notes-2025-11-30
+  - title: Monkey Patch Oversight
+    slug: monkey-patch-oversight
+    line: 191
+    parent_title: "Orchestrator Migration Notes \u2014 2025-11-30"
+    parent_slug: orchestrator-migration-notes-2025-11-30
+  - title: Implementation Checklist
+    slug: implementation-checklist
+    line: 197
+    parent_title: "Orchestrator Migration Notes \u2014 2025-11-30"
+    parent_slug: orchestrator-migration-notes-2025-11-30
+  - title: References
+    slug: references
+    line: 209
+    parent_title: "Orchestrator Migration Notes \u2014 2025-11-30"
+    parent_slug: orchestrator-migration-notes-2025-11-30
+  links: []
+  description: Show how the legacy Command Center orchestrators would integrate the
+    Phase 2 helper modules if they were rewritten today. The goal is to give reviewers
+    parity confidence before we begin migrating the existing entry points.
+  size_bytes: 8056
+  modified_utc: '2025-12-01T13:19:36.912676+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: true
 - folder: .repo_studios/command_center/docs/phase_4
   filename: .repo_studios/command_center/docs/phase_4/AUTOMATION_PLANNING_NOTES.md
   slug: phase-4-automation-planning-notes
@@ -16468,10 +18664,9 @@ documents:
   links: []
   description: "Design the dedicated pytest log producer so downstream consumers and\
     \ orchestrators can reuse structured artifacts instead of re-parsing raw log bundles.\
-    \ The producer will wrap the shared helpers in `utilities.test_log_analysis` and\
-    \ emit\u2026"
-  size_bytes: 6040
-  modified_utc: '2025-11-23T23:22:54.838677+00:00'
+    \ The producer will wrap the shared helpers in\u2026"
+  size_bytes: 6485
+  modified_utc: '2025-12-01T01:26:52.466224+00:00'
   tags: []
   owners: []
   status: null
@@ -16909,7 +19104,7 @@ documents:
   frontmatter: null
   contains_placeholder: false
 - folder: .repo_studios/command_center/scripts/scripts_index
-  filename: .repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-24-2338.md
+  filename: .repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md
   slug: duplicate-scan-summary
   h1_headings:
   - title: Duplicate Scan Summary
@@ -16939,7 +19134,81 @@ documents:
   links: []
   description: "1. `configure_logging` \u2014 12 duplicate(s)"
   size_bytes: 7126
-  modified_utc: '2025-11-24T23:38:11.764488+00:00'
+  modified_utc: '2025-11-27T17:57:02.808160+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .repo_studios/command_center/scripts/scripts_index
+  filename: .repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md
+  slug: duplicate-scan-summary
+  h1_headings:
+  - title: Duplicate Scan Summary
+    slug: duplicate-scan-summary
+    line: 1
+  h2_headings:
+  - title: Overview
+    slug: overview
+    line: 3
+    parent_title: Duplicate Scan Summary
+    parent_slug: duplicate-scan-summary
+  - title: Inputs
+    slug: inputs
+    line: 13
+    parent_title: Duplicate Scan Summary
+    parent_slug: duplicate-scan-summary
+  - title: Top Duplicate Offenders
+    slug: top-duplicate-offenders
+    line: 18
+    parent_title: Duplicate Scan Summary
+    parent_slug: duplicate-scan-summary
+  - title: Next Steps
+    slug: next-steps
+    line: 101
+    parent_title: Duplicate Scan Summary
+    parent_slug: duplicate-scan-summary
+  links: []
+  description: "1. `configure_logging` \u2014 12 duplicate(s)"
+  size_bytes: 7198
+  modified_utc: '2025-11-30T04:56:22.549708+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .repo_studios/command_center/scripts/scripts_index
+  filename: .repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md
+  slug: duplicate-scan-summary
+  h1_headings:
+  - title: Duplicate Scan Summary
+    slug: duplicate-scan-summary
+    line: 1
+  h2_headings:
+  - title: Overview
+    slug: overview
+    line: 3
+    parent_title: Duplicate Scan Summary
+    parent_slug: duplicate-scan-summary
+  - title: Inputs
+    slug: inputs
+    line: 13
+    parent_title: Duplicate Scan Summary
+    parent_slug: duplicate-scan-summary
+  - title: Top Duplicate Offenders
+    slug: top-duplicate-offenders
+    line: 18
+    parent_title: Duplicate Scan Summary
+    parent_slug: duplicate-scan-summary
+  - title: Next Steps
+    slug: next-steps
+    line: 101
+    parent_title: Duplicate Scan Summary
+    parent_slug: duplicate-scan-summary
+  links: []
+  description: "1. `configure_logging` \u2014 12 duplicate(s)"
+  size_bytes: 7198
+  modified_utc: '2025-11-30T04:57:31.343343+00:00'
   tags: []
   owners: []
   status: null
@@ -16970,50 +19239,50 @@ documents:
     parent_slug: command-center-viewer
   - title: File Structure
     slug: file-structure
-    line: 77
+    line: 90
     parent_title: Command Center Viewer
     parent_slug: command-center-viewer
   - title: Configuration
     slug: configuration
-    line: 92
+    line: 105
     parent_title: Command Center Viewer
     parent_slug: command-center-viewer
   - title: Troubleshooting
     slug: troubleshooting
-    line: 112
+    line: 125
     parent_title: Command Center Viewer
     parent_slug: command-center-viewer
   - title: Browser Console Debugging
     slug: browser-console-debugging
-    line: 175
+    line: 203
     parent_title: Command Center Viewer
     parent_slug: command-center-viewer
   - title: Development
     slug: development
-    line: 203
+    line: 231
     parent_title: Command Center Viewer
     parent_slug: command-center-viewer
   - title: Architecture
     slug: architecture
-    line: 235
+    line: 263
     parent_title: Command Center Viewer
     parent_slug: command-center-viewer
   - title: VS Code Theme
     slug: vs-code-theme
-    line: 242
+    line: 270
     parent_title: Command Center Viewer
     parent_slug: command-center-viewer
   - title: Documentation Map
     slug: documentation-map
-    line: 254
+    line: 282
     parent_title: Command Center Viewer
     parent_slug: command-center-viewer
   links:
   - http://localhost:8000/.repo_studios/command_center/viewer/ui/
   - http://localhost:8000/
   description: A modern VS Code-styled progressive detail viewer for CommandView artifacts.
-  size_bytes: 8558
-  modified_utc: '2025-11-23T11:14:18.336713+00:00'
+  size_bytes: 9292
+  modified_utc: '2025-11-28T14:18:05.271026+00:00'
   tags: []
   owners: []
   status: null
@@ -17480,6 +19749,65 @@ documents:
   frontmatter: null
   contains_placeholder: false
 - folder: .repo_studios/docs/automation
+  filename: .repo_studios/docs/automation/aggregate_docs_health_signals.md
+  slug: aggregatedocshealthsignals
+  h1_headings:
+  - title: aggregate_docs_health_signals
+    slug: aggregatedocshealthsignals
+    line: 1
+  h2_headings:
+  - title: Purpose
+    slug: purpose
+    line: 3
+    parent_title: aggregate_docs_health_signals
+    parent_slug: aggregatedocshealthsignals
+  - title: Upstream Inputs
+    slug: upstream-inputs
+    line: 16
+    parent_title: aggregate_docs_health_signals
+    parent_slug: aggregatedocshealthsignals
+  - title: Output Bundle
+    slug: output-bundle
+    line: 43
+    parent_title: aggregate_docs_health_signals
+    parent_slug: aggregatedocshealthsignals
+  - title: CLI Surface
+    slug: cli-surface
+    line: 65
+    parent_title: aggregate_docs_health_signals
+    parent_slug: aggregatedocshealthsignals
+  - title: Score Model
+    slug: score-model
+    line: 91
+    parent_title: aggregate_docs_health_signals
+    parent_slug: aggregatedocshealthsignals
+  - title: Implementation Checklist
+    slug: implementation-checklist
+    line: 106
+    parent_title: aggregate_docs_health_signals
+    parent_slug: aggregatedocshealthsignals
+  - title: Testing Plan
+    slug: testing-plan
+    line: 118
+    parent_title: aggregate_docs_health_signals
+    parent_slug: aggregatedocshealthsignals
+  - title: Follow-Up Opportunities
+    slug: follow-up-opportunities
+    line: 127
+    parent_title: aggregate_docs_health_signals
+    parent_slug: aggregatedocshealthsignals
+  links: []
+  description: '`aggregate_docs_health_signals.py` will fuse disparate documentation
+    quality signals into a single dashboard that highlights where Repo Studios needs
+    renewed attention. The aggregator focuses on three questions:'
+  size_bytes: 6807
+  modified_utc: '2025-11-27T14:42:44.934383+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: true
+- folder: .repo_studios/docs/automation
   filename: .repo_studios/docs/automation/analyze_test_hardening.md
   slug: analyzetesthardeningpy
   h1_headings:
@@ -17566,6 +19894,50 @@ documents:
   frontmatter: null
   contains_placeholder: false
 - folder: .repo_studios/docs/automation
+  filename: .repo_studios/docs/automation/classify_monkey_patches.md
+  slug: classifymonkeypatchespy
+  h1_headings:
+  - title: classify_monkey_patches.py
+    slug: classifymonkeypatchespy
+    line: 1
+  h2_headings:
+  - title: Purpose
+    slug: purpose
+    line: 5
+    parent_title: classify_monkey_patches.py
+    parent_slug: classifymonkeypatchespy
+  - title: Invocation
+    slug: invocation
+    line: 28
+    parent_title: classify_monkey_patches.py
+    parent_slug: classifymonkeypatchespy
+  - title: Outputs
+    slug: outputs
+    line: 55
+    parent_title: classify_monkey_patches.py
+    parent_slug: classifymonkeypatchespy
+  - title: Testing
+    slug: testing
+    line: 73
+    parent_title: classify_monkey_patches.py
+    parent_slug: classifymonkeypatchespy
+  - title: Operational Notes
+    slug: operational-notes
+    line: 77
+    parent_title: classify_monkey_patches.py
+    parent_slug: classifymonkeypatchespy
+  links: []
+  description: "`classify_monkey_patches.py` ingests monkey-patch scan artifacts and\
+    \ assigns HIGH/MODERATE/SAFE risk tiers so teams can triage the most dangerous\
+    \ runtime modifications first. The consumer prefers structured bundles from\u2026"
+  size_bytes: 3865
+  modified_utc: '2025-11-29T16:10:11.345704+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .repo_studios/docs/automation
   filename: .repo_studios/docs/automation/collect_faulthandler_reports.md
   slug: collectfaulthandlerreportspy
   h1_headings:
@@ -17580,27 +19952,27 @@ documents:
     parent_slug: collectfaulthandlerreportspy
   - title: Invocation
     slug: invocation
-    line: 9
+    line: 19
     parent_title: collect_faulthandler_reports.py
     parent_slug: collectfaulthandlerreportspy
   - title: Outputs
     slug: outputs
-    line: 30
+    line: 44
     parent_title: collect_faulthandler_reports.py
     parent_slug: collectfaulthandlerreportspy
   - title: Diagnostics
     slug: diagnostics
-    line: 42
+    line: 61
     parent_title: collect_faulthandler_reports.py
     parent_slug: collectfaulthandlerreportspy
   - title: Testing
     slug: testing
-    line: 54
+    line: 73
     parent_title: collect_faulthandler_reports.py
     parent_slug: collectfaulthandlerreportspy
   - title: Operational notes
     slug: operational-notes
-    line: 60
+    line: 80
     parent_title: collect_faulthandler_reports.py
     parent_slug: collectfaulthandlerreportspy
   links: []
@@ -17608,8 +19980,8 @@ documents:
     \ directories into structured bundles that downstream consumers can reuse without\
     \ re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log\
     \ artifacts,\u2026"
-  size_bytes: 4095
-  modified_utc: '2025-11-24T00:04:56.269286+00:00'
+  size_bytes: 4828
+  modified_utc: '2025-11-29T15:23:01.952399+00:00'
   tags: []
   owners: []
   status: null
@@ -17657,8 +20029,52 @@ documents:
   description: "`collect_test_log_reports.py` converts raw pytest log runs into structured\
     \ artifacts that downstream consumers and dashboards can reuse without reparsing\
     \ warning blocks or slow-test sections. The producer leverages\u2026"
-  size_bytes: 4176
-  modified_utc: '2025-11-24T00:04:56.272246+00:00'
+  size_bytes: 4899
+  modified_utc: '2025-11-29T15:13:46.818089+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .repo_studios/docs/automation
+  filename: .repo_studios/docs/automation/configure_faulthandler_runtime.md
+  slug: configurefaulthandlerruntimepy
+  h1_headings:
+  - title: configure_faulthandler_runtime.py
+    slug: configurefaulthandlerruntimepy
+    line: 1
+  h2_headings:
+  - title: Overview
+    slug: overview
+    line: 3
+    parent_title: configure_faulthandler_runtime.py
+    parent_slug: configurefaulthandlerruntimepy
+  - title: Responsibilities
+    slug: responsibilities
+    line: 13
+    parent_title: configure_faulthandler_runtime.py
+    parent_slug: configurefaulthandlerruntimepy
+  - title: Environment Flags
+    slug: environment-flags
+    line: 29
+    parent_title: configure_faulthandler_runtime.py
+    parent_slug: configurefaulthandlerruntimepy
+  - title: Testing
+    slug: testing
+    line: 46
+    parent_title: configure_faulthandler_runtime.py
+    parent_slug: configurefaulthandlerruntimepy
+  - title: Legacy Compatibility
+    slug: legacy-compatibility
+    line: 60
+    parent_title: configure_faulthandler_runtime.py
+    parent_slug: configurefaulthandlerruntimepy
+  links: []
+  description: "`configure_faulthandler_runtime.py` runs during interpreter start\
+    \ via the repository sitecustomize shim. It standardises faulthandler defaults\
+    \ across every entry point, creates structured artifacts under\u2026"
+  size_bytes: 3282
+  modified_utc: '2025-12-01T13:19:36.907672+00:00'
   tags: []
   owners: []
   status: null
@@ -17708,6 +20124,60 @@ documents:
     \ artifacts that highlight rule-level changes. Summaries classify per-rule deltas\u2026"
   size_bytes: 4388
   modified_utc: '2025-10-23T00:14:57.649053+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .repo_studios/docs/automation
+  filename: .repo_studios/docs/automation/dump_faulthandler_snapshot.md
+  slug: dumpfaulthandlersnapshotpy
+  h1_headings:
+  - title: dump_faulthandler_snapshot.py
+    slug: dumpfaulthandlersnapshotpy
+    line: 1
+  h2_headings:
+  - title: Overview
+    slug: overview
+    line: 3
+    parent_title: dump_faulthandler_snapshot.py
+    parent_slug: dumpfaulthandlersnapshotpy
+  - title: Responsibilities
+    slug: responsibilities
+    line: 11
+    parent_title: dump_faulthandler_snapshot.py
+    parent_slug: dumpfaulthandlersnapshotpy
+  - title: Environment Flags
+    slug: environment-flags
+    line: 21
+    parent_title: dump_faulthandler_snapshot.py
+    parent_slug: dumpfaulthandlersnapshotpy
+  - title: Usage
+    slug: usage
+    line: 34
+    parent_title: dump_faulthandler_snapshot.py
+    parent_slug: dumpfaulthandlersnapshotpy
+  - title: Testing
+    slug: testing
+    line: 44
+    parent_title: dump_faulthandler_snapshot.py
+    parent_slug: dumpfaulthandlersnapshotpy
+  - title: Automation
+    slug: automation
+    line: 53
+    parent_title: dump_faulthandler_snapshot.py
+    parent_slug: dumpfaulthandlersnapshotpy
+  - title: Legacy Compatibility
+    slug: legacy-compatibility
+    line: 65
+    parent_title: dump_faulthandler_snapshot.py
+    parent_slug: dumpfaulthandlersnapshotpy
+  links: []
+  description: "`dump_faulthandler_snapshot.py` captures a one-off faulthandler stack\
+    \ dump and stores it as a structured bundle under `.repo_studios/reports/orchestrator_logs/faulthandler_snapshots/`.\
+    \ The utility is idempotent, keeps the latest stacks\u2026"
+  size_bytes: 2571
+  modified_utc: '2025-11-29T15:06:25.874741+00:00'
   tags: []
   owners: []
   status: null
@@ -17871,6 +20341,149 @@ documents:
   frontmatter: null
   contains_placeholder: false
 - folder: .repo_studios/docs/automation
+  filename: .repo_studios/docs/automation/generate_anchor_health_report.md
+  slug: generateanchorhealthreport
+  h1_headings:
+  - title: generate_anchor_health_report
+    slug: generateanchorhealthreport
+    line: 1
+  h2_headings:
+  - title: Purpose
+    slug: purpose
+    line: 3
+    parent_title: generate_anchor_health_report
+    parent_slug: generateanchorhealthreport
+  - title: Inputs
+    slug: inputs
+    line: 9
+    parent_title: generate_anchor_health_report
+    parent_slug: generateanchorhealthreport
+  - title: Operation Notes
+    slug: operation-notes
+    line: 26
+    parent_title: generate_anchor_health_report
+    parent_slug: generateanchorhealthreport
+  - title: Usage Example
+    slug: usage-example
+    line: 32
+    parent_title: generate_anchor_health_report
+    parent_slug: generateanchorhealthreport
+  - title: Testing
+    slug: testing
+    line: 41
+    parent_title: generate_anchor_health_report
+    parent_slug: generateanchorhealthreport
+  - title: Integration Checklist
+    slug: integration-checklist
+    line: 45
+    parent_title: generate_anchor_health_report
+    parent_slug: generateanchorhealthreport
+  links: []
+  description: (`.repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json`)
+    when present.
+  size_bytes: 2260
+  modified_utc: '2025-11-26T13:03:51.845884+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: true
+- folder: .repo_studios/docs/automation
+  filename: .repo_studios/docs/automation/generate_anchor_inventory.md
+  slug: generateanchorinventorypy
+  h1_headings:
+  - title: generate_anchor_inventory.py
+    slug: generateanchorinventorypy
+    line: 1
+  h2_headings:
+  - title: Purpose
+    slug: purpose
+    line: 5
+    parent_title: generate_anchor_inventory.py
+    parent_slug: generateanchorinventorypy
+  - title: Output Contract
+    slug: output-contract
+    line: 12
+    parent_title: generate_anchor_inventory.py
+    parent_slug: generateanchorinventorypy
+  - title: Data Shape
+    slug: data-shape
+    line: 34
+    parent_title: generate_anchor_inventory.py
+    parent_slug: generateanchorinventorypy
+  - title: CLI Reference
+    slug: cli-reference
+    line: 66
+    parent_title: generate_anchor_inventory.py
+    parent_slug: generateanchorinventorypy
+  - title: Implementation Summary
+    slug: implementation-summary
+    line: 80
+    parent_title: generate_anchor_inventory.py
+    parent_slug: generateanchorinventorypy
+  - title: Notes for AI Consumers
+    slug: notes-for-ai-consumers
+    line: 96
+    parent_title: generate_anchor_inventory.py
+    parent_slug: generateanchorinventorypy
+  links: []
+  description: "`generate_anchor_inventory.py` scans the documentation corpus for\
+    \ H1/H2 headings, normalises their slugs, and reports collision risk across files.\
+    \ The producer now also captures per-document anchor coverage so AI agents can\
+    \ spot missing\u2026"
+  size_bytes: 4946
+  modified_utc: '2025-11-25T14:01:43.710515+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .repo_studios/docs/automation
+  filename: .repo_studios/docs/automation/generate_code_doc_churn_report.md
+  slug: generatecodedocchurnreport
+  h1_headings:
+  - title: generate_code_doc_churn_report
+    slug: generatecodedocchurnreport
+    line: 1
+  h2_headings:
+  - title: Purpose
+    slug: purpose
+    line: 3
+    parent_title: generate_code_doc_churn_report
+    parent_slug: generatecodedocchurnreport
+  - title: Inputs
+    slug: inputs
+    line: 11
+    parent_title: generate_code_doc_churn_report
+    parent_slug: generatecodedocchurnreport
+  - title: Outputs
+    slug: outputs
+    line: 26
+    parent_title: generate_code_doc_churn_report
+    parent_slug: generatecodedocchurnreport
+  - title: Usage
+    slug: usage
+    line: 43
+    parent_title: generate_code_doc_churn_report
+    parent_slug: generatecodedocchurnreport
+  - title: Testing
+    slug: testing
+    line: 64
+    parent_title: generate_code_doc_churn_report
+    parent_slug: generatecodedocchurnreport
+  links: []
+  description: "`generate_code_doc_churn_report.py` scans recent git history to surface\
+    \ modules that accumulated code churn without a matching documentation update.\
+    \ The script produces structured artifacts (JSON, Markdown, TSV, summary) with\
+    \ retention and\u2026"
+  size_bytes: 3127
+  modified_utc: '2025-11-25T16:26:37.538852+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .repo_studios/docs/automation
   filename: .repo_studios/docs/automation/generate_dependency_hygiene_report.md
   slug: generatedependencyhygienereportpy
   h1_headings:
@@ -17939,22 +20552,22 @@ documents:
     parent_slug: generatedocindexpy
   - title: Data Shape
     slug: data-shape
-    line: 31
+    line: 34
     parent_title: generate_doc_index.py
     parent_slug: generatedocindexpy
   - title: CLI Reference
     slug: cli-reference
-    line: 55
+    line: 71
     parent_title: generate_doc_index.py
     parent_slug: generatedocindexpy
   - title: Implementation Summary
     slug: implementation-summary
-    line: 68
+    line: 84
     parent_title: generate_doc_index.py
     parent_slug: generatedocindexpy
   - title: Notes for AI Consumers
     slug: notes-for-ai-consumers
-    line: 84
+    line: 101
     parent_title: generate_doc_index.py
     parent_slug: generatedocindexpy
   links: []
@@ -17962,8 +20575,8 @@ documents:
     \ so AI agents and operators can locate content, follow cross-links, and understand\
     \ section structure without rescanning the filesystem. The producer normalises\
     \ H1/H2\u2026"
-  size_bytes: 4844
-  modified_utc: '2025-11-25T03:00:52.637362+00:00'
+  size_bytes: 6010
+  modified_utc: '2025-11-25T11:20:45.453873+00:00'
   tags: []
   owners: []
   status: null
@@ -18058,11 +20671,12 @@ documents:
     parent_title: generate_standards_index.py
     parent_slug: generatestandardsindexpy
   links: []
-  description: "`generate_standards_index.py` assembles the canonical `repo_standards_index.yaml`\
-    \ by blending curated seed rules with optional heuristic extractions from markdown\
-    \ sources. The producer now emits a structured artifact bundle\u2026"
-  size_bytes: 5095
-  modified_utc: '2025-10-23T01:16:24.453566+00:00'
+  description: "`generate_standards_index.py` assembles the canonical standards index\
+    \ and refreshes the `latest_index.yaml` pointer by blending curated seed rules\
+    \ with optional heuristic extractions from markdown sources. The producer now\
+    \ emits a\u2026"
+  size_bytes: 5212
+  modified_utc: '2025-11-27T17:20:15.673436+00:00'
   tags: []
   owners: []
   status: null
@@ -18119,6 +20733,66 @@ documents:
   frontmatter: null
   contains_placeholder: false
 - folder: .repo_studios/docs/automation
+  filename: .repo_studios/docs/automation/generate_test_log_health_report.md
+  slug: generate-test-log-health-report
+  h1_headings:
+  - title: Generate Test Log Health Report
+    slug: generate-test-log-health-report
+    line: 1
+  h2_headings:
+  - title: Purpose
+    slug: purpose
+    line: 3
+    parent_title: Generate Test Log Health Report
+    parent_slug: generate-test-log-health-report
+  - title: Inputs
+    slug: inputs
+    line: 14
+    parent_title: Generate Test Log Health Report
+    parent_slug: generate-test-log-health-report
+  - title: Outputs
+    slug: outputs
+    line: 30
+    parent_title: Generate Test Log Health Report
+    parent_slug: generate-test-log-health-report
+  - title: Retention & Pruning
+    slug: retention-pruning
+    line: 47
+    parent_title: Generate Test Log Health Report
+    parent_slug: generate-test-log-health-report
+  - title: Typical Workflow
+    slug: typical-workflow
+    line: 53
+    parent_title: Generate Test Log Health Report
+    parent_slug: generate-test-log-health-report
+  - title: Make Target
+    slug: make-target
+    line: 63
+    parent_title: Generate Test Log Health Report
+    parent_slug: generate-test-log-health-report
+  - title: Testing
+    slug: testing
+    line: 73
+    parent_title: Generate Test Log Health Report
+    parent_slug: generate-test-log-health-report
+  - title: Notes
+    slug: notes
+    line: 83
+    parent_title: Generate Test Log Health Report
+    parent_slug: generate-test-log-health-report
+  links: []
+  description: "`generate_test_log_health_report.py` turns raw pytest output into\
+    \ a structured health bundle so operators can track warning spikes, failure patterns,\
+    \ and slow tests without rereading entire logs. The script prefers the curated\
+    \ JSON emitted\u2026"
+  size_bytes: 4787
+  modified_utc: '2025-11-29T15:33:45.034376+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .repo_studios/docs/automation
   filename: .repo_studios/docs/automation/generate_typecheck_report.md
   slug: typecheck-report-producer
   h1_headings:
@@ -18152,6 +20826,51 @@ documents:
   frontmatter: null
   contains_placeholder: false
 - folder: .repo_studios/docs/automation
+  filename: .repo_studios/docs/automation/generate_undocumented_logic_report.md
+  slug: generateundocumentedlogicreport
+  h1_headings:
+  - title: generate_undocumented_logic_report
+    slug: generateundocumentedlogicreport
+    line: 1
+  h2_headings:
+  - title: Purpose
+    slug: purpose
+    line: 3
+    parent_title: generate_undocumented_logic_report
+    parent_slug: generateundocumentedlogicreport
+  - title: Inputs
+    slug: inputs
+    line: 10
+    parent_title: generate_undocumented_logic_report
+    parent_slug: generateundocumentedlogicreport
+  - title: Outputs
+    slug: outputs
+    line: 27
+    parent_title: generate_undocumented_logic_report
+    parent_slug: generateundocumentedlogicreport
+  - title: Usage
+    slug: usage
+    line: 43
+    parent_title: generate_undocumented_logic_report
+    parent_slug: generateundocumentedlogicreport
+  - title: Testing
+    slug: testing
+    line: 58
+    parent_title: generate_undocumented_logic_report
+    parent_slug: generateundocumentedlogicreport
+  links: []
+  description: "`generate_undocumented_logic_report.py` scans the repo automation\
+    \ scripts for public functions, classes, and methods that lack docstrings. The\
+    \ report helps identify code paths that should have documentation anchors or docstring\
+    \ coverage\u2026"
+  size_bytes: 2696
+  modified_utc: '2025-11-25T18:18:22.678815+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .repo_studios/docs/automation
   filename: .repo_studios/docs/automation/orchestrator_automation_hooks.md
   slug: orchestrator-automation-hooks
   h1_headings:
@@ -18161,7 +20880,7 @@ documents:
   h2_headings:
   - title: Notes
     slug: notes
-    line: 14
+    line: 19
     parent_title: Orchestrator Automation Hooks
     parent_slug: orchestrator-automation-hooks
   links: []
@@ -18169,8 +20888,8 @@ documents:
     \ and success criteria for the Repo Studios orchestrator tier. Record changes\
     \ here before altering orchestrator code so downstream automation stays aligned\
     \ with expected\u2026"
-  size_bytes: 2487
-  modified_utc: '2025-11-24T18:55:36.604719+00:00'
+  size_bytes: 6379
+  modified_utc: '2025-12-01T14:02:44.321031+00:00'
   tags: []
   owners: []
   status: null
@@ -18226,6 +20945,50 @@ documents:
   frontmatter: null
   contains_placeholder: false
 - folder: .repo_studios/docs/automation
+  filename: .repo_studios/docs/automation/refresh_mypy_baselines.md
+  slug: refresh-mypy-baselines
+  h1_headings:
+  - title: Refresh mypy baselines
+    slug: refresh-mypy-baselines
+    line: 1
+  h2_headings:
+  - title: Purpose
+    slug: purpose
+    line: 3
+    parent_title: Refresh mypy baselines
+    parent_slug: refresh-mypy-baselines
+  - title: Invocation
+    slug: invocation
+    line: 10
+    parent_title: Refresh mypy baselines
+    parent_slug: refresh-mypy-baselines
+  - title: Outputs
+    slug: outputs
+    line: 28
+    parent_title: Refresh mypy baselines
+    parent_slug: refresh-mypy-baselines
+  - title: Retention
+    slug: retention
+    line: 43
+    parent_title: Refresh mypy baselines
+    parent_slug: refresh-mypy-baselines
+  - title: Validation
+    slug: validation
+    line: 49
+    parent_title: Refresh mypy baselines
+    parent_slug: refresh-mypy-baselines
+  links: []
+  description: "`refresh_mypy_baselines.py` standardises the stored mypy output snapshots\
+    \ that agents and soft gates consume. It runs mypy for each configured target,\
+    \ writes structured artifacts into\u2026"
+  size_bytes: 1999
+  modified_utc: '2025-11-29T04:07:24.447006+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .repo_studios/docs/automation
   filename: .repo_studios/docs/automation/render_inventory_views.md
   slug: render-inventory-views-producer
   h1_headings:
@@ -18254,6 +21017,149 @@ documents:
     structured artifacts for downstream automation.
   size_bytes: 2019
   modified_utc: '2025-10-23T09:50:23.539274+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .repo_studios/docs/automation
+  filename: .repo_studios/docs/automation/run_fault_pipeline.md
+  slug: fault-diagnostics-overview-orchestrator
+  h1_headings:
+  - title: Fault Diagnostics Overview Orchestrator
+    slug: fault-diagnostics-overview-orchestrator
+    line: 1
+  h2_headings:
+  - title: Overview
+    slug: overview
+    line: 3
+    parent_title: Fault Diagnostics Overview Orchestrator
+    parent_slug: fault-diagnostics-overview-orchestrator
+  - title: Invocation
+    slug: invocation
+    line: 15
+    parent_title: Fault Diagnostics Overview Orchestrator
+    parent_slug: fault-diagnostics-overview-orchestrator
+  - title: Outputs
+    slug: outputs
+    line: 56
+    parent_title: Fault Diagnostics Overview Orchestrator
+    parent_slug: fault-diagnostics-overview-orchestrator
+  - title: Testing
+    slug: testing
+    line: 70
+    parent_title: Fault Diagnostics Overview Orchestrator
+    parent_slug: fault-diagnostics-overview-orchestrator
+  - title: Follow-Ups
+    slug: follow-ups
+    line: 82
+    parent_title: Fault Diagnostics Overview Orchestrator
+    parent_slug: fault-diagnostics-overview-orchestrator
+  links: []
+  description: "`command_center/scripts/orchestrators/run_fault_diagnostics_overview.py`\
+    \ coordinates the faulthandler producer (`collect_faulthandler_reports.py`), consumer\
+    \ (`generate_fault_artifacts.py`), and the overview summarizer\u2026"
+  size_bytes: 4338
+  modified_utc: '2025-12-01T13:19:36.907672+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .repo_studios/docs/automation
+  filename: .repo_studios/docs/automation/run_pytest_log_capture.md
+  slug: runpytestlogcapturepy
+  h1_headings:
+  - title: run_pytest_log_capture.py
+    slug: runpytestlogcapturepy
+    line: 1
+  h2_headings:
+  - title: Overview
+    slug: overview
+    line: 5
+    parent_title: run_pytest_log_capture.py
+    parent_slug: runpytestlogcapturepy
+  - title: Invocation
+    slug: invocation
+    line: 14
+    parent_title: run_pytest_log_capture.py
+    parent_slug: runpytestlogcapturepy
+  - title: Outputs
+    slug: outputs
+    line: 50
+    parent_title: run_pytest_log_capture.py
+    parent_slug: runpytestlogcapturepy
+  - title: Diagnostics
+    slug: diagnostics
+    line: 73
+    parent_title: run_pytest_log_capture.py
+    parent_slug: runpytestlogcapturepy
+  - title: Testing
+    slug: testing
+    line: 87
+    parent_title: run_pytest_log_capture.py
+    parent_slug: runpytestlogcapturepy
+  - title: Operational Notes
+    slug: operational-notes
+    line: 97
+    parent_title: run_pytest_log_capture.py
+    parent_slug: runpytestlogcapturepy
+  links: []
+  description: "`run_pytest_log_capture.py` executes the repository's pytest suite\
+    \ (or summarizes an existing run) and emits a structured artifact bundle alongside\
+    \ timestamped raw outputs under\u2026"
+  size_bytes: 5605
+  modified_utc: '2025-11-28T14:18:05.288540+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .repo_studios/docs/automation
+  filename: .repo_studios/docs/automation/run_standards_index_cli.md
+  slug: runstandardsindexclipy
+  h1_headings:
+  - title: run_standards_index_cli.py
+    slug: runstandardsindexclipy
+    line: 1
+  h2_headings:
+  - title: Overview
+    slug: overview
+    line: 5
+    parent_title: run_standards_index_cli.py
+    parent_slug: runstandardsindexclipy
+  - title: Invocation
+    slug: invocation
+    line: 11
+    parent_title: run_standards_index_cli.py
+    parent_slug: runstandardsindexclipy
+  - title: Outputs
+    slug: outputs
+    line: 50
+    parent_title: run_standards_index_cli.py
+    parent_slug: runstandardsindexclipy
+  - title: Diagnostics
+    slug: diagnostics
+    line: 63
+    parent_title: run_standards_index_cli.py
+    parent_slug: runstandardsindexclipy
+  - title: Testing
+    slug: testing
+    line: 75
+    parent_title: run_standards_index_cli.py
+    parent_slug: runstandardsindexclipy
+  - title: Operational Notes
+    slug: operational-notes
+    line: 89
+    parent_title: run_standards_index_cli.py
+    parent_slug: runstandardsindexclipy
+  links: []
+  description: "`run_standards_index_cli.py` wraps the Repo Studios standards index\
+    \ in a modernized orchestrator surface. The CLI still prints human-friendly results\
+    \ for `list`, `search`, `show`, and `stats`, while now emitting structured bundles\
+    \ so\u2026"
+  size_bytes: 4944
+  modified_utc: '2025-11-27T17:20:15.674439+00:00'
   tags: []
   owners: []
   status: null
@@ -18407,8 +21313,8 @@ documents:
     \ prompt seeds for AI workflows. It selects critical, error, and optionally warn\
     \ rules, groups them by category, and publishes structured bundles so downstream\
     \ agents can\u2026"
-  size_bytes: 3752
-  modified_utc: '2025-10-23T18:08:31.195120+00:00'
+  size_bytes: 3787
+  modified_utc: '2025-11-27T17:20:15.674439+00:00'
   tags: []
   owners: []
   status: null
@@ -18611,11 +21517,11 @@ documents:
     parent_title: Standards Index Schema Specification
     parent_slug: standards-index-schema-specification
   links: []
-  description: This specification defines the structure of `repo_standards_index.yaml`,
-    which aggregates normalized rule objects for Repo Studios automation and agent
-    workflows.
-  size_bytes: 5239
-  modified_utc: '2025-10-21T12:02:58.658325+00:00'
+  description: This specification defines the structure of the standards index YAML
+    (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule
+    objects for Repo Studios automation and agent workflows.
+  size_bytes: 5316
+  modified_utc: '2025-11-27T17:20:15.678074+00:00'
   tags:
   - standards
   - schema
@@ -18632,14 +21538,55 @@ documents:
     - repo_studios_ai
     status: draft
     version: 0.2.0
-    updated: '2025-10-18'
-    summary: Schema contract for `repo_standards_index.yaml`, detailing the deterministic
-      structure consumed by Repo Studios automation and agents.
+    updated: '2025-11-27'
+    summary: Schema contract for the standards index bundle referenced by `latest_index.yaml`,
+      detailing the deterministic structure consumed by Repo Studios automation and
+      agents.
     tags:
     - standards
     - schema
     - automation
     legacy_source: .repo_studios_legacy/repo_docs/standards_index_schema.md
+  contains_placeholder: false
+- folder: .repo_studios/docs/automation
+  filename: .repo_studios/docs/automation/summarize_standards.md
+  slug: summarizestandardspy
+  h1_headings:
+  - title: summarize_standards.py
+    slug: summarizestandardspy
+    line: 1
+  h2_headings:
+  - title: Purpose
+    slug: purpose
+    line: 5
+    parent_title: summarize_standards.py
+    parent_slug: summarizestandardspy
+  - title: Invocation
+    slug: invocation
+    line: 13
+    parent_title: summarize_standards.py
+    parent_slug: summarizestandardspy
+  - title: Outputs
+    slug: outputs
+    line: 28
+    parent_title: summarize_standards.py
+    parent_slug: summarizestandardspy
+  - title: Testing
+    slug: testing
+    line: 40
+    parent_title: summarize_standards.py
+    parent_slug: summarizestandardspy
+  links: []
+  description: "`summarize_standards.py` provides a lightweight telemetry probe for\
+    \ the standards catalog. It reads the canonical standards index (surfaced through\
+    \ the `latest_index.yaml` pointer) and the optional pending extraction queue,\
+    \ then emits log\u2026"
+  size_bytes: 1878
+  modified_utc: '2025-11-27T17:28:24.141509+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
   contains_placeholder: false
 - folder: .repo_studios/docs/automation/traceability
   filename: .repo_studios/docs/automation/traceability/aggregator_dependency_audit.md
@@ -18734,6 +21681,60 @@ documents:
   frontmatter: null
   contains_placeholder: false
 - folder: .repo_studios/docs/automation/traceability
+  filename: .repo_studios/docs/automation/traceability/fault_pipeline_aggregator_plan.md
+  slug: fault-pipeline-aggregator-blueprint
+  h1_headings:
+  - title: Fault Pipeline Aggregator Blueprint
+    slug: fault-pipeline-aggregator-blueprint
+    line: 1
+  h2_headings:
+  - title: Status
+    slug: status
+    line: 3
+    parent_title: Fault Pipeline Aggregator Blueprint
+    parent_slug: fault-pipeline-aggregator-blueprint
+  - title: Purpose
+    slug: purpose
+    line: 9
+    parent_title: Fault Pipeline Aggregator Blueprint
+    parent_slug: fault-pipeline-aggregator-blueprint
+  - title: Context
+    slug: context
+    line: 14
+    parent_title: Fault Pipeline Aggregator Blueprint
+    parent_slug: fault-pipeline-aggregator-blueprint
+  - title: Open Questions
+    slug: open-questions
+    line: 23
+    parent_title: Fault Pipeline Aggregator Blueprint
+    parent_slug: fault-pipeline-aggregator-blueprint
+  - title: Proposed Next Steps
+    slug: proposed-next-steps
+    line: 30
+    parent_title: Fault Pipeline Aggregator Blueprint
+    parent_slug: fault-pipeline-aggregator-blueprint
+  - title: Risks
+    slug: risks
+    line: 38
+    parent_title: Fault Pipeline Aggregator Blueprint
+    parent_slug: fault-pipeline-aggregator-blueprint
+  - title: Notes
+    slug: notes
+    line: 43
+    parent_title: Fault Pipeline Aggregator Blueprint
+    parent_slug: fault-pipeline-aggregator-blueprint
+  links: []
+  description: Capture the scope, dependencies, and success criteria for a future
+    faulthandler aggregator that will blend multiple orchestrator runs into trend
+    summaries.
+  size_bytes: 2023
+  modified_utc: '2025-11-26T14:39:08.308088+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .repo_studios/docs/automation/traceability
   filename: .repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md
   slug: generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24
   h1_headings:
@@ -18788,8 +21789,80 @@ documents:
   description: Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py`
     with the hardened producer/consumer pipeline by formalizing inputs, provenance,
     retention, and testing.
-  size_bytes: 5560
-  modified_utc: '2025-11-24T17:47:49.125843+00:00'
+  size_bytes: 5645
+  modified_utc: '2025-11-28T14:18:05.280027+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .repo_studios/docs/automation/traceability
+  filename: .repo_studios/docs/automation/traceability/generate_code_doc_churn_report_plan.md
+  slug: generatecodedocchurnreport-planning-notes
+  h1_headings:
+  - title: generate_code_doc_churn_report Planning Notes
+    slug: generatecodedocchurnreport-planning-notes
+    line: 1
+  h2_headings:
+  - title: Objective
+    slug: objective
+    line: 3
+    parent_title: generate_code_doc_churn_report Planning Notes
+    parent_slug: generatecodedocchurnreport-planning-notes
+  - title: Implementation Status (2025-11-25)
+    slug: implementation-status-2025-11-25
+    line: 12
+    parent_title: generate_code_doc_churn_report Planning Notes
+    parent_slug: generatecodedocchurnreport-planning-notes
+  - title: Primary Inputs
+    slug: primary-inputs
+    line: 25
+    parent_title: generate_code_doc_churn_report Planning Notes
+    parent_slug: generatecodedocchurnreport-planning-notes
+  - title: Proposed CLI Interface
+    slug: proposed-cli-interface
+    line: 32
+    parent_title: generate_code_doc_churn_report Planning Notes
+    parent_slug: generatecodedocchurnreport-planning-notes
+  - title: Artifact Plan
+    slug: artifact-plan
+    line: 45
+    parent_title: generate_code_doc_churn_report Planning Notes
+    parent_slug: generatecodedocchurnreport-planning-notes
+  - title: Detection Heuristics
+    slug: detection-heuristics
+    line: 55
+    parent_title: generate_code_doc_churn_report Planning Notes
+    parent_slug: generatecodedocchurnreport-planning-notes
+  - title: Logging & Provenance
+    slug: logging-provenance
+    line: 70
+    parent_title: generate_code_doc_churn_report Planning Notes
+    parent_slug: generatecodedocchurnreport-planning-notes
+  - title: Testing Strategy
+    slug: testing-strategy
+    line: 75
+    parent_title: generate_code_doc_churn_report Planning Notes
+    parent_slug: generatecodedocchurnreport-planning-notes
+  - title: Documentation Tasks
+    slug: documentation-tasks
+    line: 85
+    parent_title: generate_code_doc_churn_report Planning Notes
+    parent_slug: generatecodedocchurnreport-planning-notes
+  - title: Outstanding Questions
+    slug: outstanding-questions
+    line: 92
+    parent_title: generate_code_doc_churn_report Planning Notes
+    parent_slug: generatecodedocchurnreport-planning-notes
+  - title: Next Steps
+    slug: next-steps
+    line: 99
+    parent_title: generate_code_doc_churn_report Planning Notes
+    parent_slug: generatecodedocchurnreport-planning-notes
+  links: []
+  description: target missing change logs, upgrade guides, or doc refreshes.
+  size_bytes: 5514
+  modified_utc: '2025-11-25T18:18:22.678815+00:00'
   tags: []
   owners: []
   status: null
@@ -18832,8 +21905,8 @@ documents:
   description: "1. Treat the four hardened consumer bundles as the canonical inputs\
     \ for upcoming aggregator rewires; aggregators should ingest the consumer summary\
     \ JSON (`summary.json`, `anchor_report.json`, `bundle_summary.json`, `RISK_SUMMARY.json`)\u2026"
-  size_bytes: 7719
-  modified_utc: '2025-11-25T00:58:05.672960+00:00'
+  size_bytes: 7771
+  modified_utc: '2025-11-26T16:39:05.740452+00:00'
   tags: []
   owners: []
   status: null
@@ -18892,6 +21965,65 @@ documents:
     context.
   size_bytes: 5364
   modified_utc: '2025-11-24T18:55:36.604719+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .repo_studios/docs/automation/traceability
+  filename: .repo_studios/docs/automation/traceability/run_standards_index_cli_modernization_plan.md
+  slug: run-standards-index-cli-modernization-plan-draft-2025-11-27
+  h1_headings:
+  - title: "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)"
+    slug: run-standards-index-cli-modernization-plan-draft-2025-11-27
+    line: 1
+  h2_headings:
+  - title: Status
+    slug: status
+    line: 3
+    parent_title: "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)"
+    parent_slug: run-standards-index-cli-modernization-plan-draft-2025-11-27
+  - title: Objective
+    slug: objective
+    line: 8
+    parent_title: "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)"
+    parent_slug: run-standards-index-cli-modernization-plan-draft-2025-11-27
+  - title: Current State
+    slug: current-state
+    line: 15
+    parent_title: "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)"
+    parent_slug: run-standards-index-cli-modernization-plan-draft-2025-11-27
+  - title: Target Architecture
+    slug: target-architecture
+    line: 28
+    parent_title: "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)"
+    parent_slug: run-standards-index-cli-modernization-plan-draft-2025-11-27
+  - title: Implementation Steps
+    slug: implementation-steps
+    line: 41
+    parent_title: "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)"
+    parent_slug: run-standards-index-cli-modernization-plan-draft-2025-11-27
+  - title: Dependencies & Coordination
+    slug: dependencies-coordination
+    line: 56
+    parent_title: "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)"
+    parent_slug: run-standards-index-cli-modernization-plan-draft-2025-11-27
+  - title: Acceptance Criteria
+    slug: acceptance-criteria
+    line: 63
+    parent_title: "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)"
+    parent_slug: run-standards-index-cli-modernization-plan-draft-2025-11-27
+  - title: Open Questions
+    slug: open-questions
+    line: 72
+    parent_title: "Run Standards Index CLI \u2014 Modernization Plan (Draft 2025-11-27)"
+    parent_slug: run-standards-index-cli-modernization-plan-draft-2025-11-27
+  links: []
+  description: "Modernize `.repo_studios/scripts/orchestrators/run_standards_index_cli.py`\
+    \ so standards analysts and tooling receive structured, retainable outputs while\
+    \ preserving its lightweight CLI ergonomics. The refactor will introduce an import-safe\u2026"
+  size_bytes: 5052
+  modified_utc: '2025-11-27T16:29:59.403519+00:00'
   tags: []
   owners: []
   status: null
@@ -18994,27 +22126,27 @@ documents:
     parent_slug: validatemarkdownanchorspy
   - title: Invocation
     slug: invocation
-    line: 9
+    line: 12
     parent_title: validate_markdown_anchors.py
     parent_slug: validatemarkdownanchorspy
   - title: Outputs
     slug: outputs
-    line: 29
+    line: 33
     parent_title: validate_markdown_anchors.py
     parent_slug: validatemarkdownanchorspy
   - title: Status semantics
     slug: status-semantics
-    line: 38
+    line: 45
     parent_title: validate_markdown_anchors.py
     parent_slug: validatemarkdownanchorspy
   - title: Testing
     slug: testing
-    line: 47
+    line: 55
     parent_title: validate_markdown_anchors.py
     parent_slug: validatemarkdownanchorspy
   - title: Operational notes
     slug: operational-notes
-    line: 55
+    line: 63
     parent_title: validate_markdown_anchors.py
     parent_slug: validatemarkdownanchorspy
   links: []
@@ -19022,8 +22154,8 @@ documents:
     \ anchor references and cross-file links, verifying that every referenced document\
     \ exists and that GitHub-style heading slugs resolve. The producer emits JSON\
     \ and\u2026"
-  size_bytes: 3046
-  modified_utc: '2025-11-23T19:36:19.831021+00:00'
+  size_bytes: 3062
+  modified_utc: '2025-11-25T19:39:48.109027+00:00'
   tags: []
   owners: []
   status: null
@@ -19160,6 +22292,25 @@ documents:
   status: null
   frontmatter: null
   contains_placeholder: false
+- folder: .repo_studios/docs/governance
+  filename: .repo_studios/docs/governance/alignment-ledger.md
+  slug: repo-studios-alignment-ledger
+  h1_headings:
+  - title: Repo Studios Alignment Ledger
+    slug: repo-studios-alignment-ledger
+    line: 1
+  h2_headings: []
+  links: []
+  description: This ledger tracks documentation alignment batches, remediation work,
+    and follow-up actions. Populate entries chronologically with timestamps, owners,
+    scopes, and outstanding notes to maintain an auditable trail.
+  size_bytes: 251
+  modified_utc: '2025-11-26T19:48:04.423689+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
 - folder: .repo_studios/docs/inventory
   filename: .repo_studios/docs/inventory/inventory-notes.md
   slug: documentation-inventory-notes
@@ -19200,8 +22351,8 @@ documents:
     parent_slug: documentation-inventory-notes
   links: []
   description: 'Date: 2025-10-01 | Status: Draft | Phase: Discovery'
-  size_bytes: 11741
-  modified_utc: '2025-10-21T12:02:58.660326+00:00'
+  size_bytes: 11816
+  modified_utc: '2025-11-28T14:18:05.289540+00:00'
   tags:
   - inventory
   - notes
@@ -19428,8 +22579,8 @@ documents:
     parent_slug: repo-studios-agent-operations-playbook
   links: []
   description: 'Audience: Repo Studios automation | Human developers | Partner agents'
-  size_bytes: 4806
-  modified_utc: '2025-11-24T12:14:55.737022+00:00'
+  size_bytes: 4904
+  modified_utc: '2025-11-28T14:18:05.280027+00:00'
   tags:
   - playbook
   - operations
@@ -19685,8 +22836,8 @@ documents:
   description: This document is refreshed automatically by `run_batch_cleanup.py`.
     Edits outside the tree block are preserved, but avoid modifying the block between
     the markers.
-  size_bytes: 7804
-  modified_utc: '2025-11-24T23:37:41.293374+00:00'
+  size_bytes: 8381
+  modified_utc: '2025-11-27T17:56:35.814451+00:00'
   tags: []
   owners: []
   status: null
@@ -19761,12 +22912,17 @@ documents:
   - title: Repo Studios Documentation Index
     slug: repo-studios-documentation-index
     line: 1
-  h2_headings: []
+  h2_headings:
+  - title: Healthview Artifacts
+    slug: healthview-artifacts
+    line: 36
+    parent_title: Repo Studios Documentation Index
+    parent_slug: repo-studios-documentation-index
   links: []
   description: This index enumerates governed documentation surfaces that participate
     in Repo Studios integrity checks.
-  size_bytes: 1161
-  modified_utc: '2025-10-24T00:50:09.673913+00:00'
+  size_bytes: 1626
+  modified_utc: '2025-12-01T04:26:35.221102+00:00'
   tags: []
   owners: []
   status: null
@@ -21060,8 +24216,8 @@ documents:
   status: null
   frontmatter: null
   contains_placeholder: false
-- folder: .repo_studios/monkey_patch/20251124_175233
-  filename: .repo_studios/monkey_patch/20251124_175233/report.md
+- folder: .repo_studios/monkey_patch/20251201_115542
+  filename: .repo_studios/monkey_patch/20251201_115542/report.md
   slug: monkey-patch-scan-report
   h1_headings:
   - title: Monkey Patch Scan Report
@@ -21090,8 +24246,8 @@ documents:
     parent_slug: monkey-patch-scan-report
   links: []
   description: null
-  size_bytes: 1696
-  modified_utc: '2025-11-24T17:52:33.912420+00:00'
+  size_bytes: 1723
+  modified_utc: '2025-12-01T11:55:42.709604+00:00'
   tags: []
   owners: []
   status: null
@@ -21127,8 +24283,8 @@ documents:
     parent_slug: monkey-patch-scan-report
   links: []
   description: null
-  size_bytes: 1696
-  modified_utc: '2025-11-24T17:52:33.916251+00:00'
+  size_bytes: 1723
+  modified_utc: '2025-12-01T11:55:42.712782+00:00'
   tags: []
   owners: []
   status: null
@@ -21272,6 +24428,78 @@ documents:
   status: null
   frontmatter: null
   contains_placeholder: true
+- folder: .repo_studios/scripts
+  filename: .repo_studios/scripts/orchestrator_refactor_plan_temp.md
+  slug: orchestrator-refactor-plan-working-notes
+  h1_headings:
+  - title: Orchestrator Refactor Plan (Working Notes)
+    slug: orchestrator-refactor-plan-working-notes
+    line: 1
+  h2_headings:
+  - title: 1. Purpose
+    slug: 1-purpose
+    line: 3
+    parent_title: Orchestrator Refactor Plan (Working Notes)
+    parent_slug: orchestrator-refactor-plan-working-notes
+  - title: 2. Current Snapshot
+    slug: 2-current-snapshot
+    line: 10
+    parent_title: Orchestrator Refactor Plan (Working Notes)
+    parent_slug: orchestrator-refactor-plan-working-notes
+  - title: 3. Target Topology
+    slug: 3-target-topology
+    line: 20
+    parent_title: Orchestrator Refactor Plan (Working Notes)
+    parent_slug: orchestrator-refactor-plan-working-notes
+  - title: 4. Topic Buckets and Script Assignments (Draft)
+    slug: 4-topic-buckets-and-script-assignments-draft
+    line: 41
+    parent_title: Orchestrator Refactor Plan (Working Notes)
+    parent_slug: orchestrator-refactor-plan-working-notes
+  - title: 5. Testing Strategy
+    slug: 5-testing-strategy
+    line: 53
+    parent_title: Orchestrator Refactor Plan (Working Notes)
+    parent_slug: orchestrator-refactor-plan-working-notes
+  - title: 6. Shared Helper Opportunities (Command Center Library)
+    slug: 6-shared-helper-opportunities-command-center-library
+    line: 67
+    parent_title: Orchestrator Refactor Plan (Working Notes)
+    parent_slug: orchestrator-refactor-plan-working-notes
+  - title: 7. Artifact Management & Pruning
+    slug: 7-artifact-management-pruning
+    line: 76
+    parent_title: Orchestrator Refactor Plan (Working Notes)
+    parent_slug: orchestrator-refactor-plan-working-notes
+  - title: 8. Documentation & Inventory Updates
+    slug: 8-documentation-inventory-updates
+    line: 84
+    parent_title: Orchestrator Refactor Plan (Working Notes)
+    parent_slug: orchestrator-refactor-plan-working-notes
+  - title: 9. Execution Phases (Draft Timeline)
+    slug: 9-execution-phases-draft-timeline
+    line: 95
+    parent_title: Orchestrator Refactor Plan (Working Notes)
+    parent_slug: orchestrator-refactor-plan-working-notes
+  - title: 10. Risks & Open Questions
+    slug: 10-risks-open-questions
+    line: 108
+    parent_title: Orchestrator Refactor Plan (Working Notes)
+    parent_slug: orchestrator-refactor-plan-working-notes
+  - title: 11. Next Actions
+    slug: 11-next-actions
+    line: 118
+    parent_title: Orchestrator Refactor Plan (Working Notes)
+    parent_slug: orchestrator-refactor-plan-working-notes
+  links: []
+  description: in an orchestrator-run pipeline.
+  size_bytes: 9376
+  modified_utc: '2025-12-01T13:19:36.908675+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: true
 - folder: .repo_studios/scripts/orchestrators/orchestrators_index
   filename: .repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md
   slug: duplicate-scan-summary
@@ -21366,52 +24594,52 @@ documents:
     parent_slug: script-inventory-architecture
   - title: 1. Script Producers
     slug: 1-script-producers
-    line: 86
+    line: 110
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: 2. Script Consumers
     slug: 2-script-consumers
-    line: 171
+    line: 199
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: 3. Script Aggregators
     slug: 3-script-aggregators
-    line: 200
+    line: 228
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: 4. Script Orchestrators
     slug: 4-script-orchestrators
-    line: 226
+    line: 259
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: 5. Script Summarizers
     slug: 5-script-summarizers
-    line: 246
+    line: 283
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: 6. Script Utilities
     slug: 6-script-utilities
-    line: 260
+    line: 299
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: 7. Script Undefined / Triage
     slug: 7-script-undefined-triage
-    line: 276
+    line: 323
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: Cross-Cutting Follow-Ups
     slug: cross-cutting-follow-ups
-    line: 291
+    line: 338
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: Open Questions
     slug: open-questions
-    line: 296
+    line: 343
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: 'Appendix: YAML Mapping Placeholder'
     slug: appendix-yaml-mapping-placeholder
-    line: 300
+    line: 347
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   links: []
@@ -21419,8 +24647,8 @@ documents:
     \ role so agents can migrate legacy assets, document dependencies, and prepare\
     \ YAML catalog entries. Fill sections as you classify each script. Keep formatting\
     \ consistent\u2026"
-  size_bytes: 46381
-  modified_utc: '2025-11-25T02:53:56.349953+00:00'
+  size_bytes: 64099
+  modified_utc: '2025-12-01T13:19:36.904676+00:00'
   tags: []
   owners: []
   status: null
@@ -21463,6 +24691,23 @@ documents:
   status: null
   frontmatter: null
   contains_placeholder: true
+- folder: .repo_studios/scripts/scripts_index
+  filename: .repo_studios/scripts/scripts_index/scripts_duplicate_summary-20251130-0333.md
+  slug: summary
+  h1_headings:
+  - title: Summary
+    slug: summary
+    line: 1
+  h2_headings: []
+  links: []
+  description: null
+  size_bytes: 11
+  modified_utc: '2025-11-30T03:33:07.215521+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
 - folder: .repo_studios/scripts/summarizers/summarizers_index
   filename: .repo_studios/scripts/summarizers/summarizers_index/summarizers_duplicate_summary-2025-11-04-2010.md
   slug: duplicate-scan-summary
@@ -21537,6 +24782,28 @@ documents:
   status: null
   frontmatter: null
   contains_placeholder: false
+- folder: .repo_studios/tmp_manual/automation_dry_run_9f5c157dea2e4b4fbd98dc969cbe2a41/reports/commandview/automation_runs/20251102-1930
+  filename: .repo_studios/tmp_manual/automation_dry_run_9f5c157dea2e4b4fbd98dc969cbe2a41/reports/commandview/automation_runs/20251102-1930/README.md
+  slug: automation-dry-run-bundle
+  h1_headings:
+  - title: Automation Dry-Run Bundle
+    slug: automation-dry-run-bundle
+    line: 1
+  h2_headings:
+  - title: Notes
+    slug: notes
+    line: 11
+    parent_title: Automation Dry-Run Bundle
+    parent_slug: automation-dry-run-bundle
+  links: []
+  description: dry run bundle
+  size_bytes: 244
+  modified_utc: '2025-11-30T12:23:31.861612+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
 - folder: .
   filename: README.md
   slug: about-this-folder
@@ -21549,8 +24816,63 @@ documents:
   description: To reduce confusion with the root-level `README.md`, the detailed guide
     for AI agents and contributors has been moved to `AGENTS_GUIDE.md` in this same
     folder.
-  size_bytes: 633
-  modified_utc: '2025-11-24T23:21:19.649681+00:00'
+  size_bytes: 692
+  modified_utc: '2025-11-30T01:23:50.960100+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .
+  filename: REPORT_NAMING_STANDARDS.md
+  slug: report-naming-standards
+  h1_headings:
+  - title: Report Naming Standards
+    slug: report-naming-standards
+    line: 1
+  h2_headings:
+  - title: Naming Convention Index
+    slug: naming-convention-index
+    line: 9
+    parent_title: Report Naming Standards
+    parent_slug: report-naming-standards
+  - title: Artifact Role Registry
+    slug: artifact-role-registry
+    line: 29
+    parent_title: Report Naming Standards
+    parent_slug: report-naming-standards
+  - title: Viewer Slug Registry
+    slug: viewer-slug-registry
+    line: 43
+    parent_title: Report Naming Standards
+    parent_slug: report-naming-standards
+  - title: Grandfathered Artifacts
+    slug: grandfathered-artifacts
+    line: 55
+    parent_title: Report Naming Standards
+    parent_slug: report-naming-standards
+  - title: Audit Utility Specification
+    slug: audit-utility-specification
+    line: 62
+    parent_title: Report Naming Standards
+    parent_slug: report-naming-standards
+  - title: Compliance Expectations
+    slug: compliance-expectations
+    line: 85
+    parent_title: Report Naming Standards
+    parent_slug: report-naming-standards
+  - title: Change Management
+    slug: change-management
+    line: 96
+    parent_title: Report Naming Standards
+    parent_slug: report-naming-standards
+  links: []
+  description: "This document defines the uniform naming scheme for all artifacts\
+    \ stored under `.repo_studios/command_center/reports/`. New automation, orchestrators,\
+    \ and helpers MUST emit bundles that follow this structure. Legacy directories\
+    \ remain in\u2026"
+  size_bytes: 4572
+  modified_utc: '2025-11-30T01:23:50.956101+00:00'
   tags: []
   owners: []
   status: null
@@ -21631,6 +24953,213 @@ documents:
   status: null
   frontmatter: null
   contains_placeholder: false
+- folder: docs/automation
+  filename: docs/automation/orchestrator_implementation.md
+  slug: orchestrator-implementation-plan
+  h1_headings:
+  - title: Orchestrator Implementation Plan
+    slug: orchestrator-implementation-plan
+    line: 13
+  h2_headings:
+  - title: Context
+    slug: context
+    line: 19
+    parent_title: Orchestrator Implementation Plan
+    parent_slug: orchestrator-implementation-plan
+  - title: Current Progress (2025-11-30)
+    slug: current-progress-2025-11-30
+    line: 29
+    parent_title: Orchestrator Implementation Plan
+    parent_slug: orchestrator-implementation-plan
+  - title: Implementation Objectives
+    slug: implementation-objectives
+    line: 38
+    parent_title: Orchestrator Implementation Plan
+    parent_slug: orchestrator-implementation-plan
+  - title: Deliverables
+    slug: deliverables
+    line: 47
+    parent_title: Orchestrator Implementation Plan
+    parent_slug: orchestrator-implementation-plan
+  - title: Legacy-to-Target Parity Matrix
+    slug: legacy-to-target-parity-matrix
+    line: 57
+    parent_title: Orchestrator Implementation Plan
+    parent_slug: orchestrator-implementation-plan
+  - title: Legacy Retirement Targets
+    slug: legacy-retirement-targets
+    line: 68
+    parent_title: Orchestrator Implementation Plan
+    parent_slug: orchestrator-implementation-plan
+  - title: Testing and Fixture Migration Requirements
+    slug: testing-and-fixture-migration-requirements
+    line: 82
+    parent_title: Orchestrator Implementation Plan
+    parent_slug: orchestrator-implementation-plan
+  - title: Operational Impact Inventory
+    slug: operational-impact-inventory
+    line: 93
+    parent_title: Orchestrator Implementation Plan
+    parent_slug: orchestrator-implementation-plan
+  - title: Legacy Removal Ticket Backlog (to be opened)
+    slug: legacy-removal-ticket-backlog-to-be-opened
+    line: 109
+    parent_title: Orchestrator Implementation Plan
+    parent_slug: orchestrator-implementation-plan
+  - title: Topic Assignment Validation (2025-11-30)
+    slug: topic-assignment-validation-2025-11-30
+    line: 135
+    parent_title: Orchestrator Implementation Plan
+    parent_slug: orchestrator-implementation-plan
+  - title: Healthview Manifest Mapping (2025-11-30)
+    slug: healthview-manifest-mapping-2025-11-30
+    line: 175
+    parent_title: Orchestrator Implementation Plan
+    parent_slug: orchestrator-implementation-plan
+  - title: Topic Implementation Workstreams
+    slug: topic-implementation-workstreams
+    line: 187
+    parent_title: Orchestrator Implementation Plan
+    parent_slug: orchestrator-implementation-plan
+  - title: Phase Checklist
+    slug: phase-checklist
+    line: 357
+    parent_title: Orchestrator Implementation Plan
+    parent_slug: orchestrator-implementation-plan
+  - title: Healthview Viewer Wiring Reference
+    slug: healthview-viewer-wiring-reference
+    line: 467
+    parent_title: Orchestrator Implementation Plan
+    parent_slug: orchestrator-implementation-plan
+  - title: Report Naming Standard Initiative
+    slug: report-naming-standard-initiative
+    line: 501
+    parent_title: Orchestrator Implementation Plan
+    parent_slug: orchestrator-implementation-plan
+  - title: Dependencies and Tooling
+    slug: dependencies-and-tooling
+    line: 557
+    parent_title: Orchestrator Implementation Plan
+    parent_slug: orchestrator-implementation-plan
+  - title: Reporting and Tracking
+    slug: reporting-and-tracking
+    line: 564
+    parent_title: Orchestrator Implementation Plan
+    parent_slug: orchestrator-implementation-plan
+  links: []
+  description: This plan sequences the work required to deliver topic-oriented orchestrators,
+    shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate
+    from the RFC to an executable roadmap.
+  size_bytes: 57566
+  modified_utc: '2025-12-01T14:02:44.340382+00:00'
+  tags:
+  - automation
+  - orchestrators
+  - command-center
+  owners:
+  - repo_studios_ai
+  status: draft
+  frontmatter:
+    title: Orchestrator Implementation Plan
+    status: draft
+    version: '2025-11-29'
+    last_updated: '2025-11-30'
+    owner: repo_studios_ai
+    tags:
+    - automation
+    - orchestrators
+    - command-center
+  contains_placeholder: true
+- folder: docs/automation
+  filename: docs/automation/orchestrator_topic_refactor_rfc.md
+  slug: rfc-topic-oriented-orchestrator-refactor
+  h1_headings:
+  - title: 'RFC: Topic-Oriented Orchestrator Refactor'
+    slug: rfc-topic-oriented-orchestrator-refactor
+    line: 1
+  h2_headings:
+  - title: 1. Overview
+    slug: 1-overview
+    line: 3
+    parent_title: 'RFC: Topic-Oriented Orchestrator Refactor'
+    parent_slug: rfc-topic-oriented-orchestrator-refactor
+  - title: 2. Motivation
+    slug: 2-motivation
+    line: 12
+    parent_title: 'RFC: Topic-Oriented Orchestrator Refactor'
+    parent_slug: rfc-topic-oriented-orchestrator-refactor
+  - title: 3. Goals
+    slug: 3-goals
+    line: 24
+    parent_title: 'RFC: Topic-Oriented Orchestrator Refactor'
+    parent_slug: rfc-topic-oriented-orchestrator-refactor
+  - title: 4. Non-Goals
+    slug: 4-non-goals
+    line: 36
+    parent_title: 'RFC: Topic-Oriented Orchestrator Refactor'
+    parent_slug: rfc-topic-oriented-orchestrator-refactor
+  - title: 5. Proposed Architecture
+    slug: 5-proposed-architecture
+    line: 45
+    parent_title: 'RFC: Topic-Oriented Orchestrator Refactor'
+    parent_slug: rfc-topic-oriented-orchestrator-refactor
+  - title: 6. Shared Helper Enhancements
+    slug: 6-shared-helper-enhancements
+    line: 83
+    parent_title: 'RFC: Topic-Oriented Orchestrator Refactor'
+    parent_slug: rfc-topic-oriented-orchestrator-refactor
+  - title: 7. Artifact Management and Retention
+    slug: 7-artifact-management-and-retention
+    line: 99
+    parent_title: 'RFC: Topic-Oriented Orchestrator Refactor'
+    parent_slug: rfc-topic-oriented-orchestrator-refactor
+  - title: 8. Testing Strategy
+    slug: 8-testing-strategy
+    line: 108
+    parent_title: 'RFC: Topic-Oriented Orchestrator Refactor'
+    parent_slug: rfc-topic-oriented-orchestrator-refactor
+  - title: 9. Documentation Plan
+    slug: 9-documentation-plan
+    line: 122
+    parent_title: 'RFC: Topic-Oriented Orchestrator Refactor'
+    parent_slug: rfc-topic-oriented-orchestrator-refactor
+  - title: 10. Rollout Phases
+    slug: 10-rollout-phases
+    line: 136
+    parent_title: 'RFC: Topic-Oriented Orchestrator Refactor'
+    parent_slug: rfc-topic-oriented-orchestrator-refactor
+  - title: 11. Risks and Mitigations
+    slug: 11-risks-and-mitigations
+    line: 154
+    parent_title: 'RFC: Topic-Oriented Orchestrator Refactor'
+    parent_slug: rfc-topic-oriented-orchestrator-refactor
+  - title: 12. Open Questions
+    slug: 12-open-questions
+    line: 168
+    parent_title: 'RFC: Topic-Oriented Orchestrator Refactor'
+    parent_slug: rfc-topic-oriented-orchestrator-refactor
+  - title: 13. Decision Record
+    slug: 13-decision-record
+    line: 191
+    parent_title: 'RFC: Topic-Oriented Orchestrator Refactor'
+    parent_slug: rfc-topic-oriented-orchestrator-refactor
+  - title: 14. References
+    slug: 14-references
+    line: 207
+    parent_title: 'RFC: Topic-Oriented Orchestrator Refactor'
+    parent_slug: rfc-topic-oriented-orchestrator-refactor
+  links: []
+  description: "This RFC proposes restructuring the Repo Studios orchestration layer\
+    \ around topic-aligned pipelines so every automation script is executed through\
+    \ a consistent orchestrator entry point. The document summarizes roadmap context,\
+    \ expected\u2026"
+  size_bytes: 12548
+  modified_utc: '2025-12-01T13:19:36.908675+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: true
 - folder: docs/standards/global
   filename: docs/standards/global/std-docs-integrity-handbook.md
   slug: docs-integrity-handbook
@@ -21713,24 +25242,49 @@ documents:
     line: 12
     parent_title: ''
     parent_slug: ''
+  - title: Document Placement
+    slug: document-placement
+    line: 19
+    parent_title: ''
+    parent_slug: ''
+  - title: Headings & Outline
+    slug: headings-outline
+    line: 24
+    parent_title: ''
+    parent_slug: ''
+  - title: Lead Summary Paragraph
+    slug: lead-summary-paragraph
+    line: 31
+    parent_title: ''
+    parent_slug: ''
+  - title: Metadata Hygiene
+    slug: metadata-hygiene
+    line: 36
+    parent_title: ''
+    parent_slug: ''
   - title: Style Essentials
     slug: style-essentials
-    line: 18
+    line: 43
+    parent_title: ''
+    parent_slug: ''
+  - title: Cross-Document Consistency
+    slug: cross-document-consistency
+    line: 49
     parent_title: ''
     parent_slug: ''
   links: []
   description: null
-  size_bytes: 1034
-  modified_utc: '2025-11-24T23:31:22.862853+00:00'
+  size_bytes: 3318
+  modified_utc: '2025-11-25T11:35:24.181372+00:00'
   tags: []
   owners: []
   status: draft
   frontmatter:
     title: Global Markdown Authoring Standard
     status: draft
-    version: '2025-10-23'
-    last_updated: '2025-10-23'
-  contains_placeholder: false
+    version: '2025-11-25'
+    last_updated: '2025-11-25'
+  contains_placeholder: true
 - folder: docs/standards/global
   filename: docs/standards/global/std-global-mission-parameters.md
   slug: std-global-mission-parameters
@@ -21843,32 +25397,110 @@ documents:
     line: 18
     parent_title: ''
     parent_slug: ''
+  - title: Documentation Hygiene
+    slug: documentation-hygiene
+    line: 24
+    parent_title: ''
+    parent_slug: ''
   links: []
   description: null
-  size_bytes: 1180
-  modified_utc: '2025-11-24T23:31:22.871630+00:00'
+  size_bytes: 2027
+  modified_utc: '2025-11-25T11:35:24.181372+00:00'
   tags: []
   owners: []
   status: draft
   frontmatter:
     title: Project Operating Standard
     status: draft
-    version: '2025-10-23'
-    last_updated: '2025-10-23'
-  contains_placeholder: false
+    version: '2025-11-25'
+    last_updated: '2025-11-25'
+  contains_placeholder: true
 - folder: docs/standards/project
   filename: docs/standards/project/std-project-python-instructions.md
   slug: project-python-instructions
   h1_headings:
   - title: Project Python Instructions
     slug: project-python-instructions
-    line: 3
-  h2_headings: []
+    line: 15
+  h2_headings:
+  - title: Environment
+    slug: environment
+    line: 19
+    parent_title: Project Python Instructions
+    parent_slug: project-python-instructions
+  - title: Documentation Expectations
+    slug: documentation-expectations
+    line: 25
+    parent_title: Project Python Instructions
+    parent_slug: project-python-instructions
+  - title: Testing Discipline
+    slug: testing-discipline
+    line: 32
+    parent_title: Project Python Instructions
+    parent_slug: project-python-instructions
   links: []
-  description: Placeholder instructions for Python setup and workflows. Replace with
-    authoritative content when documentation is available.
-  size_bytes: 236
-  modified_utc: '2025-11-24T23:31:22.871630+00:00'
+  description: This guide documents the baseline expectations for Python contributors
+    and automation authors.
+  size_bytes: 1867
+  modified_utc: '2025-11-25T11:35:24.181372+00:00'
+  tags:
+  - python
+  - documentation
+  - automation
+  owners:
+  - repo_studios_ai
+  status: draft
+  frontmatter:
+    title: Project Python Instructions
+    status: draft
+    version: '2025-11-25'
+    last_updated: '2025-11-25'
+    owner: repo_studios_ai
+    tags:
+    - python
+    - documentation
+    - automation
+  contains_placeholder: true
+- folder: docs/templates
+  filename: docs/templates/test_execution_telemetry_summary_template.md
+  slug: test-execution-telemetry-summary-template
+  h1_headings:
+  - title: Test Execution Telemetry Summary Template
+    slug: test-execution-telemetry-summary-template
+    line: 1
+  h2_headings:
+  - title: Run Context
+    slug: run-context
+    line: 7
+    parent_title: Test Execution Telemetry Summary Template
+    parent_slug: test-execution-telemetry-summary-template
+  - title: Runtime Metrics
+    slug: runtime-metrics
+    line: 21
+    parent_title: Test Execution Telemetry Summary Template
+    parent_slug: test-execution-telemetry-summary-template
+  - title: Failure Highlights
+    slug: failure-highlights
+    line: 29
+    parent_title: Test Execution Telemetry Summary Template
+    parent_slug: test-execution-telemetry-summary-template
+  - title: Artifact Locations
+    slug: artifact-locations
+    line: 36
+    parent_title: Test Execution Telemetry Summary Template
+    parent_slug: test-execution-telemetry-summary-template
+  - title: Step Outcomes
+    slug: step-outcomes
+    line: 45
+    parent_title: Test Execution Telemetry Summary Template
+    parent_slug: test-execution-telemetry-summary-template
+  links: []
+  description: "Use this template when authoring Healthview Markdown summaries for\
+    \ Test Execution Telemetry runs. Replace bracketed placeholders with the values\
+    \ emitted by the orchestrator (`run_test_execution_telemetry.py`) and remove any\
+    \ sections that\u2026"
+  size_bytes: 2092
+  modified_utc: '2025-12-01T03:07:09.755953+00:00'
   tags: []
   owners: []
   status: null
@@ -21981,15 +25613,15 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .github,.github/code.chatmode.md,h2,Core Responsibilities,core-responsibilities,code-expert,"You are an expert programmer in this workspace. Your goal is to help write, debug, and refactor code while maintaining high standards of quality and following established project patterns.",7684,2025-11-04T14:45:21.943680+00:00,,,,no,
 .github,.github/code.chatmode.md,h2,Project Context,project-context,code-expert,"You are an expert programmer in this workspace. Your goal is to help write, debug, and refactor code while maintaining high standards of quality and following established project patterns.",7684,2025-11-04T14:45:21.943680+00:00,,,,no,
 .github,.github/code.chatmode.md,h2,Guidelines,guidelines,code-expert,"You are an expert programmer in this workspace. Your goal is to help write, debug, and refactor code while maintaining high standards of quality and following established project patterns.",7684,2025-11-04T14:45:21.943680+00:00,,,,no,
-.github,.github/copilot-instructions.md,h1,Repo Studios Copilot Playbook,repo-studios-copilot-playbook,,,7422,2025-11-07T03:43:35.020145+00:00,,,,no,
-.github,.github/copilot-instructions.md,h2,Big Picture,big-picture,repo-studios-copilot-playbook,,7422,2025-11-07T03:43:35.020145+00:00,,,,no,
-.github,.github/copilot-instructions.md,h2,Core Workflows,core-workflows,repo-studios-copilot-playbook,,7422,2025-11-07T03:43:35.020145+00:00,,,,no,
-.github,.github/copilot-instructions.md,h2,Command Center Orchestrator,command-center-orchestrator,repo-studios-copilot-playbook,,7422,2025-11-07T03:43:35.020145+00:00,,,,no,
-.github,.github/copilot-instructions.md,h2,Conventions & Patterns,conventions-patterns,repo-studios-copilot-playbook,,7422,2025-11-07T03:43:35.020145+00:00,,,,no,
-.github,.github/copilot-instructions.md,h2,Testing & Validation,testing-validation,repo-studios-copilot-playbook,,7422,2025-11-07T03:43:35.020145+00:00,,,,no,
-.github,.github/copilot-instructions.md,h2,Reference Material,reference-material,repo-studios-copilot-playbook,,7422,2025-11-07T03:43:35.020145+00:00,,,,no,
-.github,.github/copilot-instructions.md,h2,Collaboration Tips,collaboration-tips,repo-studios-copilot-playbook,,7422,2025-11-07T03:43:35.020145+00:00,,,,no,
-.github,.github/copilot-instructions.md,h2,Terminal Coordination,terminal-coordination,repo-studios-copilot-playbook,,7422,2025-11-07T03:43:35.020145+00:00,,,,no,
+.github,.github/copilot-instructions.md,h1,Repo Studios Copilot Playbook,repo-studios-copilot-playbook,,,7624,2025-11-30T01:23:50.960100+00:00,,,,no,
+.github,.github/copilot-instructions.md,h2,Big Picture,big-picture,repo-studios-copilot-playbook,,7624,2025-11-30T01:23:50.960100+00:00,,,,no,
+.github,.github/copilot-instructions.md,h2,Core Workflows,core-workflows,repo-studios-copilot-playbook,,7624,2025-11-30T01:23:50.960100+00:00,,,,no,
+.github,.github/copilot-instructions.md,h2,Command Center Orchestrator,command-center-orchestrator,repo-studios-copilot-playbook,,7624,2025-11-30T01:23:50.960100+00:00,,,,no,
+.github,.github/copilot-instructions.md,h2,Conventions & Patterns,conventions-patterns,repo-studios-copilot-playbook,,7624,2025-11-30T01:23:50.960100+00:00,,,,no,
+.github,.github/copilot-instructions.md,h2,Testing & Validation,testing-validation,repo-studios-copilot-playbook,,7624,2025-11-30T01:23:50.960100+00:00,,,,no,
+.github,.github/copilot-instructions.md,h2,Reference Material,reference-material,repo-studios-copilot-playbook,,7624,2025-11-30T01:23:50.960100+00:00,,,,no,
+.github,.github/copilot-instructions.md,h2,Collaboration Tips,collaboration-tips,repo-studios-copilot-playbook,,7624,2025-11-30T01:23:50.960100+00:00,,,,no,
+.github,.github/copilot-instructions.md,h2,Terminal Coordination,terminal-coordination,repo-studios-copilot-playbook,,7624,2025-11-30T01:23:50.960100+00:00,,,,no,
 .github,.github/debug.chatmode.md,h1,Debug Expert,debug-expert,,"You are a debugging expert in this workspace. Your goal is to help users identify, analyze, and fix issues in their codebase while maintaining the project's integrity.",7534,2025-11-04T14:45:21.944681+00:00,,,,no,
 .github,.github/debug.chatmode.md,h2,Memory Bank Status Rules,memory-bank-status-rules,debug-expert,"You are a debugging expert in this workspace. Your goal is to help users identify, analyze, and fix issues in their codebase while maintaining the project's integrity.",7534,2025-11-04T14:45:21.944681+00:00,,,,no,
 .github,.github/debug.chatmode.md,h2,Memory Bank Updates,memory-bank-updates,debug-expert,"You are a debugging expert in this workspace. Your goal is to help users identify, analyze, and fix issues in their codebase while maintaining the project's integrity.",7534,2025-11-04T14:45:21.944681+00:00,,,,no,
@@ -22019,15 +25651,15 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios,.repo_studios/alignment_protocol.md,h2,5. Decision Logging,5-decision-logging,alignment-protocol-ai-developer-collaboration,"This document captures the working blueprint for collaborative cycles between the coding agent (GitHub Copilot) and the human developer. It is meant to stay lightweight, evolve over time, and provide repeatable guardrails for future…",4269,2025-10-21T14:59:31.821261+00:00,,,,no,
 .repo_studios,.repo_studios/alignment_protocol.md,h2,6. Extending the Protocol,6-extending-the-protocol,alignment-protocol-ai-developer-collaboration,"This document captures the working blueprint for collaborative cycles between the coding agent (GitHub Copilot) and the human developer. It is meant to stay lightweight, evolve over time, and provide repeatable guardrails for future…",4269,2025-10-21T14:59:31.821261+00:00,,,,no,
 .repo_studios,.repo_studios/alignment_protocol.md,h2,7. Open Items,7-open-items,alignment-protocol-ai-developer-collaboration,"This document captures the working blueprint for collaborative cycles between the coding agent (GitHub Copilot) and the human developer. It is meant to stay lightweight, evolve over time, and provide repeatable guardrails for future…",4269,2025-10-21T14:59:31.821261+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h1,Library Integration Protocol,library-integration-protocol,,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14418,2025-11-23T11:14:18.336713+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Directory Layout,directory-layout,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14418,2025-11-23T11:14:18.336713+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Shared Helper Modules,shared-helper-modules,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14418,2025-11-23T11:14:18.336713+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Artifact Retention Policy,artifact-retention-policy,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14418,2025-11-23T11:14:18.336713+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Micro-Cycle Blueprint,micro-cycle-blueprint,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14418,2025-11-23T11:14:18.336713+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Automation Entry Points,automation-entry-points,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14418,2025-11-23T11:14:18.336713+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Usage Instructions,usage-instructions,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14418,2025-11-23T11:14:18.336713+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h2,References,references,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14418,2025-11-23T11:14:18.336713+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Onboarding Checklist,onboarding-checklist,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14418,2025-11-23T11:14:18.336713+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h1,Library Integration Protocol,library-integration-protocol,,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Directory Layout,directory-layout,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Shared Helper Modules,shared-helper-modules,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Artifact Retention Policy,artifact-retention-policy,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Micro-Cycle Blueprint,micro-cycle-blueprint,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Automation Entry Points,automation-entry-points,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Usage Instructions,usage-instructions,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h2,References,references,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Onboarding Checklist,onboarding-checklist,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
 .repo_studios/command_center/checklists,.repo_studios/command_center/checklists/2025-10-24.md,h1,Library Integration Alignment Plan,library-integration-alignment-plan,,"Legend: In discovery = gathering facts, Not started = pending alignment, Deferred = intentionally out of scope for now.",14558,2025-10-27T17:59:50.299412+00:00,,,,yes,
 .repo_studios/command_center/checklists,.repo_studios/command_center/checklists/2025-10-24.md,h2,Phase Overview,phase-overview,library-integration-alignment-plan,"Legend: In discovery = gathering facts, Not started = pending alignment, Deferred = intentionally out of scope for now.",14558,2025-10-27T17:59:50.299412+00:00,,,,yes,
 .repo_studios/command_center/checklists,.repo_studios/command_center/checklists/2025-10-24.md,h2,Phase 1 – Foundation Setup,phase-1-foundation-setup,library-integration-alignment-plan,"Legend: In discovery = gathering facts, Not started = pending alignment, Deferred = intentionally out of scope for now.",14558,2025-10-27T17:59:50.299412+00:00,,,,yes,
@@ -22056,16 +25688,24 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/build_paths_extraction_brief.md,h2,Migration Sequence,migration-sequence,buildpaths-buildoptions-extraction-brief,This brief captures the concrete plan for centralising the duplicated `build_paths` and `build_options` helpers into the shared `libraries` staging package.,4461,2025-10-30T11:23:59.998614+00:00,,,,no,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/build_paths_extraction_brief.md,h2,Documentation & Reporting,documentation-reporting,buildpaths-buildoptions-extraction-brief,This brief captures the concrete plan for centralising the duplicated `build_paths` and `build_options` helpers into the shared `libraries` staging package.,4461,2025-10-30T11:23:59.998614+00:00,,,,no,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/build_paths_extraction_brief.md,h2,Open Questions,open-questions,buildpaths-buildoptions-extraction-brief,This brief captures the concrete plan for centralising the duplicated `build_paths` and `build_options` helpers into the shared `libraries` staging package.,4461,2025-10-30T11:23:59.998614+00:00,,,,no,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h1,Code Library Integration Status — 2025-11-23,code-library-integration-status-2025-11-23,,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",13812,2025-11-23T11:23:20.546419+00:00,,,,yes,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Purpose,purpose,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",13812,2025-11-23T11:23:20.546419+00:00,,,,yes,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,5W1H Snapshot,5w1h-snapshot,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",13812,2025-11-23T11:23:20.546419+00:00,,,,yes,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Current Assets,current-assets,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",13812,2025-11-23T11:23:20.546419+00:00,,,,yes,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Progress Recap,progress-recap,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",13812,2025-11-23T11:23:20.546419+00:00,,,,yes,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Outstanding Work,outstanding-work,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",13812,2025-11-23T11:23:20.546419+00:00,,,,yes,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Key References,key-references,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",13812,2025-11-23T11:23:20.546419+00:00,,,,yes,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Suggested Next Actions (for the next contributor),suggested-next-actions-for-the-next-contributor,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",13812,2025-11-23T11:23:20.546419+00:00,,,,yes,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Maintenance Tips,maintenance-tips,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",13812,2025-11-23T11:23:20.546419+00:00,,,,yes,
-.repo_studios/command_center/docs,.repo_studios/command_center/docs/decision_log.md,h1,Decision Log,decision-log,,,20019,2025-11-24T23:59:30.978451+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h1,Code Library Integration Status — 2025-11-23,code-library-integration-status-2025-11-23,,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Purpose,purpose,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,5W1H Snapshot,5w1h-snapshot,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Current Assets,current-assets,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Progress Recap,progress-recap,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Outstanding Work,outstanding-work,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Key References,key-references,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Suggested Next Actions (for the next contributor),suggested-next-actions-for-the-next-contributor,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Maintenance Tips,maintenance-tips,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/helper_usage_patterns.md,h1,Command Center Helper Usage Patterns — 2025-11-30,command-center-helper-usage-patterns-2025-11-30,,"Capture how the Phase 2 shared helpers are intended to be wired into topic orchestrators so engineers and agents can reuse them consistently. Each section lists the helper location, dependencies, execution contract, and verification tests.",6829,2025-12-01T00:53:06.675177+00:00,,,,no,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/helper_usage_patterns.md,h2,Scope,scope,command-center-helper-usage-patterns-2025-11-30,"Capture how the Phase 2 shared helpers are intended to be wired into topic orchestrators so engineers and agents can reuse them consistently. Each section lists the helper location, dependencies, execution contract, and verification tests.",6829,2025-12-01T00:53:06.675177+00:00,,,,no,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/helper_usage_patterns.md,h2,Topic Pipeline Assembly,topic-pipeline-assembly,command-center-helper-usage-patterns-2025-11-30,"Capture how the Phase 2 shared helpers are intended to be wired into topic orchestrators so engineers and agents can reuse them consistently. Each section lists the helper location, dependencies, execution contract, and verification tests.",6829,2025-12-01T00:53:06.675177+00:00,,,,no,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/helper_usage_patterns.md,h2,Summarizer Runner Integration,summarizer-runner-integration,command-center-helper-usage-patterns-2025-11-30,"Capture how the Phase 2 shared helpers are intended to be wired into topic orchestrators so engineers and agents can reuse them consistently. Each section lists the helper location, dependencies, execution contract, and verification tests.",6829,2025-12-01T00:53:06.675177+00:00,,,,no,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/helper_usage_patterns.md,h2,Telemetry Emitters,telemetry-emitters,command-center-helper-usage-patterns-2025-11-30,"Capture how the Phase 2 shared helpers are intended to be wired into topic orchestrators so engineers and agents can reuse them consistently. Each section lists the helper location, dependencies, execution contract, and verification tests.",6829,2025-12-01T00:53:06.675177+00:00,,,,no,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/helper_usage_patterns.md,h2,Catalog Registry,catalog-registry,command-center-helper-usage-patterns-2025-11-30,"Capture how the Phase 2 shared helpers are intended to be wired into topic orchestrators so engineers and agents can reuse them consistently. Each section lists the helper location, dependencies, execution contract, and verification tests.",6829,2025-12-01T00:53:06.675177+00:00,,,,no,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/helper_usage_patterns.md,h2,CLI Integration Checklist,cli-integration-checklist,command-center-helper-usage-patterns-2025-11-30,"Capture how the Phase 2 shared helpers are intended to be wired into topic orchestrators so engineers and agents can reuse them consistently. Each section lists the helper location, dependencies, execution contract, and verification tests.",6829,2025-12-01T00:53:06.675177+00:00,,,,no,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/helper_usage_patterns.md,h2,References,references,command-center-helper-usage-patterns-2025-11-30,"Capture how the Phase 2 shared helpers are intended to be wired into topic orchestrators so engineers and agents can reuse them consistently. Each section lists the helper location, dependencies, execution contract, and verification tests.",6829,2025-12-01T00:53:06.675177+00:00,,,,no,
+.repo_studios/command_center/docs,.repo_studios/command_center/docs/decision_log.md,h1,Decision Log,decision-log,,,22558,2025-12-01T01:26:52.466224+00:00,,,,yes,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/duplicate_detection_schema_alignment.md,h1,Duplicate Detection Schema Alignment – 2025-10-24,duplicate-detection-schema-alignment-2025-10-24,,"Translate `scan_code_duplicates.py` output into the data products Repo Studios already consumes (health-suite summaries, companion analysis exports, and future automation inputs).",4145,2025-10-25T14:24:46.937636+00:00,,,,no,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/duplicate_detection_schema_alignment.md,h2,Goal,goal,duplicate-detection-schema-alignment-2025-10-24,"Translate `scan_code_duplicates.py` output into the data products Repo Studios already consumes (health-suite summaries, companion analysis exports, and future automation inputs).",4145,2025-10-25T14:24:46.937636+00:00,,,,no,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/duplicate_detection_schema_alignment.md,h2,Source Schemas,source-schemas,duplicate-detection-schema-alignment-2025-10-24,"Translate `scan_code_duplicates.py` output into the data products Repo Studios already consumes (health-suite summaries, companion analysis exports, and future automation inputs).",4145,2025-10-25T14:24:46.937636+00:00,,,,no,
@@ -22184,14 +25824,14 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/complexity_heatmap.md,h2,Future Enhancements,future-enhancements,complexity-heatmap-view-spec,Surface functions with high cyclomatic complexity so maintainers can prioritize refactoring efforts. The heatmap will cluster functions by severity buckets and highlight modules concentrating complex logic.,4827,2025-11-09T18:47:12.657650+00:00,,,,no,
 .repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/cross_module_function_references.md,h1,Cross-Module Function References View Spec,cross-module-function-references-view-spec,,"graph LR classDef moduleBase fill:#0f172a,stroke:#38bdf8,color:#f8fafc classDef moduleCaution fill:#78350f,stroke:#f59e0b,color:#fef3c7 classDef moduleAlert fill:#7f1d1d,stroke:#f87171,color:#fee2e2 classDef moduleFocus…",5173,2025-11-13T00:44:40.567019+00:00,,,,no,
 .repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/cyclomatic_complexity_map.md,document,,cyclomaticcomplexitymap,,,5467,2025-11-12T21:30:49.588627+00:00,,,,no,
-.repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/dead_code_detection.md,h1,Dead Code Detection View Spec,dead-code-detection-view-spec,,Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.,4341,2025-11-13T13:29:06.677630+00:00,,,,no,
-.repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/dead_code_detection.md,h2,Goal,goal,dead-code-detection-view-spec,Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.,4341,2025-11-13T13:29:06.677630+00:00,,,,no,
-.repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/dead_code_detection.md,h2,Inputs,inputs,dead-code-detection-view-spec,Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.,4341,2025-11-13T13:29:06.677630+00:00,,,,no,
-.repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/dead_code_detection.md,h2,Transformations,transformations,dead-code-detection-view-spec,Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.,4341,2025-11-13T13:29:06.677630+00:00,,,,no,
-.repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/dead_code_detection.md,h2,Mermaid Output Structure,mermaid-output-structure,dead-code-detection-view-spec,Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.,4341,2025-11-13T13:29:06.677630+00:00,,,,no,
-.repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/dead_code_detection.md,h2,Implementation References,implementation-references,dead-code-detection-view-spec,Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.,4341,2025-11-13T13:29:06.677630+00:00,,,,no,
-.repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/dead_code_detection.md,h2,Verification & Hardening,verification-hardening,dead-code-detection-view-spec,Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.,4341,2025-11-13T13:29:06.677630+00:00,,,,no,
-.repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/dead_code_detection.md,h2,Future Enhancements,future-enhancements,dead-code-detection-view-spec,Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.,4341,2025-11-13T13:29:06.677630+00:00,,,,no,
+.repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/dead_code_detection.md,h1,Dead Code Detection View Spec,dead-code-detection-view-spec,,Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.,4393,2025-11-25T19:41:38.796364+00:00,,,,no,
+.repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/dead_code_detection.md,h2,Goal,goal,dead-code-detection-view-spec,Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.,4393,2025-11-25T19:41:38.796364+00:00,,,,no,
+.repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/dead_code_detection.md,h2,Inputs,inputs,dead-code-detection-view-spec,Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.,4393,2025-11-25T19:41:38.796364+00:00,,,,no,
+.repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/dead_code_detection.md,h2,Transformations,transformations,dead-code-detection-view-spec,Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.,4393,2025-11-25T19:41:38.796364+00:00,,,,no,
+.repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/dead_code_detection.md,h2,Mermaid Output Structure,mermaid-output-structure,dead-code-detection-view-spec,Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.,4393,2025-11-25T19:41:38.796364+00:00,,,,no,
+.repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/dead_code_detection.md,h2,Implementation References,implementation-references,dead-code-detection-view-spec,Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.,4393,2025-11-25T19:41:38.796364+00:00,,,,no,
+.repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/dead_code_detection.md,h2,Verification & Hardening,verification-hardening,dead-code-detection-view-spec,Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.,4393,2025-11-25T19:41:38.796364+00:00,,,,no,
+.repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/dead_code_detection.md,h2,Future Enhancements,future-enhancements,dead-code-detection-view-spec,Highlight modules that accumulate unused symbols so reviewers can prioritize clean-up of unreachable functions and imports that inflate maintenance cost or mask refactoring opportunities.,4393,2025-11-25T19:41:38.796364+00:00,,,,no,
 .repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/decorator_usage_map.md,h1,Decorator Usage Map View Spec,decorator-usage-map-view-spec,,"Cluster functions by decorator usage so maintainers can audit annotation patterns, confirm policy-enforced decorators are present, and spot modules that overuse or lack critical decorators during reviews.",4036,2025-11-10T02:50:17.687901+00:00,,,,no,
 .repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/decorator_usage_map.md,h2,Goal,goal,decorator-usage-map-view-spec,"Cluster functions by decorator usage so maintainers can audit annotation patterns, confirm policy-enforced decorators are present, and spot modules that overuse or lack critical decorators during reviews.",4036,2025-11-10T02:50:17.687901+00:00,,,,no,
 .repo_studios/command_center/docs/mermaid/view_specs,.repo_studios/command_center/docs/mermaid/view_specs/decorator_usage_map.md,h2,Inputs,inputs,decorator-usage-map-view-spec,"Cluster functions by decorator usage so maintainers can audit annotation patterns, confirm policy-enforced decorators are present, and spot modules that overuse or lack critical decorators during reviews.",4036,2025-11-10T02:50:17.687901+00:00,,,,no,
@@ -22356,6 +25996,16 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/naming_conventions.md,h2,📊 Validation Checklist,validation-checklist,repostudios-library-naming-training-guide,"This guide trains agents on how to interpret, enforce, and validate naming conventions inside `.repo_studios/library`. Use it as an operational playbook, not just a reference.",12668,2025-11-06T09:44:23.975246+00:00,,,,no,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/naming_conventions.md,h2,🔄 Evolution Rules,evolution-rules,repostudios-library-naming-training-guide,"This guide trains agents on how to interpret, enforce, and validate naming conventions inside `.repo_studios/library`. Use it as an operational playbook, not just a reference.",12668,2025-11-06T09:44:23.975246+00:00,,,,no,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/naming_conventions.md,h2,🎯 Summary,summary,repostudios-library-naming-training-guide,"This guide trains agents on how to interpret, enforce, and validate naming conventions inside `.repo_studios/library`. Use it as an operational playbook, not just a reference.",12668,2025-11-06T09:44:23.975246+00:00,,,,no,
+.repo_studios/command_center/docs,.repo_studios/command_center/docs/orchestrator_migration_notes.md,h1,Orchestrator Migration Notes — 2025-11-30,orchestrator-migration-notes-2025-11-30,,Show how the legacy Command Center orchestrators would integrate the Phase 2 helper modules if they were rewritten today. The goal is to give reviewers parity confidence before we begin migrating the existing entry points.,8056,2025-12-01T13:19:36.912676+00:00,,,,yes,
+.repo_studios/command_center/docs,.repo_studios/command_center/docs/orchestrator_migration_notes.md,h2,Purpose,purpose,orchestrator-migration-notes-2025-11-30,Show how the legacy Command Center orchestrators would integrate the Phase 2 helper modules if they were rewritten today. The goal is to give reviewers parity confidence before we begin migrating the existing entry points.,8056,2025-12-01T13:19:36.912676+00:00,,,,yes,
+.repo_studios/command_center/docs,.repo_studios/command_center/docs/orchestrator_migration_notes.md,h2,Test Execution Telemetry (legacy: `run_pytest_log_capture.py`),test-execution-telemetry-legacy-runpytestlogcapturepy,orchestrator-migration-notes-2025-11-30,Show how the legacy Command Center orchestrators would integrate the Phase 2 helper modules if they were rewritten today. The goal is to give reviewers parity confidence before we begin migrating the existing entry points.,8056,2025-12-01T13:19:36.912676+00:00,,,,yes,
+.repo_studios/command_center/docs,.repo_studios/command_center/docs/orchestrator_migration_notes.md,h2,Fault Diagnostics (replaces legacy `run_fault_pipeline.py`),fault-diagnostics-replaces-legacy-runfaultpipelinepy,orchestrator-migration-notes-2025-11-30,Show how the legacy Command Center orchestrators would integrate the Phase 2 helper modules if they were rewritten today. The goal is to give reviewers parity confidence before we begin migrating the existing entry points.,8056,2025-12-01T13:19:36.912676+00:00,,,,yes,
+.repo_studios/command_center/docs,.repo_studios/command_center/docs/orchestrator_migration_notes.md,h2,Docs Health (legacy suite of producer scripts),docs-health-legacy-suite-of-producer-scripts,orchestrator-migration-notes-2025-11-30,Show how the legacy Command Center orchestrators would integrate the Phase 2 helper modules if they were rewritten today. The goal is to give reviewers parity confidence before we begin migrating the existing entry points.,8056,2025-12-01T13:19:36.912676+00:00,,,,yes,
+.repo_studios/command_center/docs,.repo_studios/command_center/docs/orchestrator_migration_notes.md,h2,Standards Integrity (legacy: `run_standards_gap_suite.py` + `run_standards_index_cli.py`),standards-integrity-legacy-runstandardsgapsuitepy-runstandardsindexclipy,orchestrator-migration-notes-2025-11-30,Show how the legacy Command Center orchestrators would integrate the Phase 2 helper modules if they were rewritten today. The goal is to give reviewers parity confidence before we begin migrating the existing entry points.,8056,2025-12-01T13:19:36.912676+00:00,,,,yes,
+.repo_studios/command_center/docs,.repo_studios/command_center/docs/orchestrator_migration_notes.md,h2,Dependency & Import Hygiene (legacy: `run_batch_cleanup.py`),dependency-import-hygiene-legacy-runbatchcleanuppy,orchestrator-migration-notes-2025-11-30,Show how the legacy Command Center orchestrators would integrate the Phase 2 helper modules if they were rewritten today. The goal is to give reviewers parity confidence before we begin migrating the existing entry points.,8056,2025-12-01T13:19:36.912676+00:00,,,,yes,
+.repo_studios/command_center/docs,.repo_studios/command_center/docs/orchestrator_migration_notes.md,h2,Monkey Patch Oversight,monkey-patch-oversight,orchestrator-migration-notes-2025-11-30,Show how the legacy Command Center orchestrators would integrate the Phase 2 helper modules if they were rewritten today. The goal is to give reviewers parity confidence before we begin migrating the existing entry points.,8056,2025-12-01T13:19:36.912676+00:00,,,,yes,
+.repo_studios/command_center/docs,.repo_studios/command_center/docs/orchestrator_migration_notes.md,h2,Implementation Checklist,implementation-checklist,orchestrator-migration-notes-2025-11-30,Show how the legacy Command Center orchestrators would integrate the Phase 2 helper modules if they were rewritten today. The goal is to give reviewers parity confidence before we begin migrating the existing entry points.,8056,2025-12-01T13:19:36.912676+00:00,,,,yes,
+.repo_studios/command_center/docs,.repo_studios/command_center/docs/orchestrator_migration_notes.md,h2,References,references,orchestrator-migration-notes-2025-11-30,Show how the legacy Command Center orchestrators would integrate the Phase 2 helper modules if they were rewritten today. The goal is to give reviewers parity confidence before we begin migrating the existing entry points.,8056,2025-12-01T13:19:36.912676+00:00,,,,yes,
 .repo_studios/command_center/docs/phase_4,.repo_studios/command_center/docs/phase_4/AUTOMATION_PLANNING_NOTES.md,h1,Phase 4 Automation Planning Notes,phase-4-automation-planning-notes,,"Deliver a vetted blueprint for automated duplicate extraction that adheres to Phase 3 guardrails, maintains auditability, and minimizes regression risk. Implementation remains manual until this brief is approved.",20578,2025-11-04T14:29:02.460996+00:00,,,,no,
 .repo_studios/command_center/docs/phase_4,.repo_studios/command_center/docs/phase_4/AUTOMATION_PLANNING_NOTES.md,h2,Guardrail Follow-ups,guardrail-follow-ups,phase-4-automation-planning-notes,"Deliver a vetted blueprint for automated duplicate extraction that adheres to Phase 3 guardrails, maintains auditability, and minimizes regression risk. Implementation remains manual until this brief is approved.",20578,2025-11-04T14:29:02.460996+00:00,,,,no,
 .repo_studios/command_center/docs/phase_4,.repo_studios/command_center/docs/phase_4/AUTOMATION_PLANNING_NOTES.md,h2,Metrics Integration Tasks,metrics-integration-tasks,phase-4-automation-planning-notes,"Deliver a vetted blueprint for automated duplicate extraction that adheres to Phase 3 guardrails, maintains auditability, and minimizes regression risk. Implementation remains manual until this brief is approved.",20578,2025-11-04T14:29:02.460996+00:00,,,,no,
@@ -22454,17 +26104,17 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/CI_INTEGRATION_STRATEGY.md,h2,Dependencies,dependencies,phase-7-ci-integration-strategy-draft-2025-11-04,1. **Observation (Weeks 1–2)**,4207,2025-11-23T20:48:09.158067+00:00,,,,yes,
 .repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/CI_INTEGRATION_STRATEGY.md,h2,Next Actions,next-actions,phase-7-ci-integration-strategy-draft-2025-11-04,1. **Observation (Weeks 1–2)**,4207,2025-11-23T20:48:09.158067+00:00,,,,yes,
 .repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/CI_ROLLOUT_LOG.md,h1,Phase 7 CI Rollout Log,phase-7-ci-rollout-log,,Document transitions from warning to blocking enforcement for new guardrail workflows. Record every run used to validate thresholds so reviewers can audit readiness decisions.,1042,2025-11-24T23:59:30.979170+00:00,,,,yes,
-.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h1,collect_test_log_reports.py Blueprint,collecttestlogreportspy-blueprint,,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in `utilities.test_log_analysis` and emit…,6040,2025-11-23T23:22:54.838677+00:00,,,,no,
-.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Purpose,purpose,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in `utilities.test_log_analysis` and emit…,6040,2025-11-23T23:22:54.838677+00:00,,,,no,
-.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Entry Criteria,entry-criteria,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in `utilities.test_log_analysis` and emit…,6040,2025-11-23T23:22:54.838677+00:00,,,,no,
-.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Exit Criteria,exit-criteria,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in `utilities.test_log_analysis` and emit…,6040,2025-11-23T23:22:54.838677+00:00,,,,no,
-.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Inputs & Dependencies,inputs-dependencies,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in `utilities.test_log_analysis` and emit…,6040,2025-11-23T23:22:54.838677+00:00,,,,no,
-.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Output Layout,output-layout,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in `utilities.test_log_analysis` and emit…,6040,2025-11-23T23:22:54.838677+00:00,,,,no,
-.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,CLI & Behaviour Notes,cli-behaviour-notes,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in `utilities.test_log_analysis` and emit…,6040,2025-11-23T23:22:54.838677+00:00,,,,no,
-.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Implementation Plan,implementation-plan,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in `utilities.test_log_analysis` and emit…,6040,2025-11-23T23:22:54.838677+00:00,,,,no,
-.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Testing Strategy,testing-strategy,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in `utilities.test_log_analysis` and emit…,6040,2025-11-23T23:22:54.838677+00:00,,,,no,
-.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Integration & Sequencing,integration-sequencing,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in `utilities.test_log_analysis` and emit…,6040,2025-11-23T23:22:54.838677+00:00,,,,no,
-.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Open Questions,open-questions,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in `utilities.test_log_analysis` and emit…,6040,2025-11-23T23:22:54.838677+00:00,,,,no,
+.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h1,collect_test_log_reports.py Blueprint,collecttestlogreportspy-blueprint,,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in…,6485,2025-12-01T01:26:52.466224+00:00,,,,no,
+.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Purpose,purpose,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in…,6485,2025-12-01T01:26:52.466224+00:00,,,,no,
+.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Entry Criteria,entry-criteria,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in…,6485,2025-12-01T01:26:52.466224+00:00,,,,no,
+.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Exit Criteria,exit-criteria,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in…,6485,2025-12-01T01:26:52.466224+00:00,,,,no,
+.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Inputs & Dependencies,inputs-dependencies,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in…,6485,2025-12-01T01:26:52.466224+00:00,,,,no,
+.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Output Layout,output-layout,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in…,6485,2025-12-01T01:26:52.466224+00:00,,,,no,
+.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,CLI & Behaviour Notes,cli-behaviour-notes,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in…,6485,2025-12-01T01:26:52.466224+00:00,,,,no,
+.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Implementation Plan,implementation-plan,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in…,6485,2025-12-01T01:26:52.466224+00:00,,,,no,
+.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Testing Strategy,testing-strategy,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in…,6485,2025-12-01T01:26:52.466224+00:00,,,,no,
+.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Integration & Sequencing,integration-sequencing,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in…,6485,2025-12-01T01:26:52.466224+00:00,,,,no,
+.repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md,h2,Open Questions,open-questions,collecttestlogreportspy-blueprint,Design the dedicated pytest log producer so downstream consumers and orchestrators can reuse structured artifacts instead of re-parsing raw log bundles. The producer will wrap the shared helpers in…,6485,2025-12-01T01:26:52.466224+00:00,,,,no,
 .repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/FALSE_POSITIVE_FEEDBACK_LOOP.md,h1,Phase 7 False-Positive Feedback Loop (Draft 2025-11-04),phase-7-false-positive-feedback-loop-draft-2025-11-04,,1. **Detection**,2694,2025-11-04T14:45:22.719421+00:00,,,,no,
 .repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/FALSE_POSITIVE_FEEDBACK_LOOP.md,h2,Purpose,purpose,phase-7-false-positive-feedback-loop-draft-2025-11-04,1. **Detection**,2694,2025-11-04T14:45:22.719421+00:00,,,,no,
 .repo_studios/command_center/docs/phase_7,.repo_studios/command_center/docs/phase_7/FALSE_POSITIVE_FEEDBACK_LOOP.md,h2,Workflow Summary,workflow-summary,phase-7-false-positive-feedback-loop-draft-2025-11-04,1. **Detection**,2694,2025-11-04T14:45:22.719421+00:00,,,,no,
@@ -22525,23 +26175,33 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/run_log_template.md,h2,Usage Checklist,usage-checklist,command-center-run-log-template,make -C .repo_studios command-center COMMAND_CENTER_TARGET=[target] PYTHON=.venv/Scripts/python.exe [additional commands],2161,2025-10-30T20:01:02.588368+00:00,,,,yes,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/run_log_template.md,h2,Entry Block Template,entry-block-template,command-center-run-log-template,make -C .repo_studios command-center COMMAND_CENTER_TARGET=[target] PYTHON=.venv/Scripts/python.exe [additional commands],2161,2025-10-30T20:01:02.588368+00:00,,,,yes,
 .repo_studios/command_center/scripts,.repo_studios/command_center/scripts/script_inventory.md,h1,Command Center Script Inventory,command-center-script-inventory,,,1523,2025-10-25T14:43:05.753999+00:00,,,,no,
-.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-24-2338.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,1. `configure_logging` — 12 duplicate(s),7126,2025-11-24T23:38:11.764488+00:00,,,,no,
-.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-24-2338.md,h2,Overview,overview,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7126,2025-11-24T23:38:11.764488+00:00,,,,no,
-.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-24-2338.md,h2,Inputs,inputs,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7126,2025-11-24T23:38:11.764488+00:00,,,,no,
-.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-24-2338.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7126,2025-11-24T23:38:11.764488+00:00,,,,no,
-.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-24-2338.md,h2,Next Steps,next-steps,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7126,2025-11-24T23:38:11.764488+00:00,,,,no,
-.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h1,Command Center Viewer,command-center-viewer,,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,8558,2025-11-23T11:14:18.336713+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
-.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,5W1H Snapshot,5w1h-snapshot,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,8558,2025-11-23T11:14:18.336713+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
-.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,Features,features,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,8558,2025-11-23T11:14:18.336713+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
-.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,Quick Start,quick-start,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,8558,2025-11-23T11:14:18.336713+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
-.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,File Structure,file-structure,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,8558,2025-11-23T11:14:18.336713+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
-.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,Configuration,configuration,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,8558,2025-11-23T11:14:18.336713+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
-.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,Troubleshooting,troubleshooting,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,8558,2025-11-23T11:14:18.336713+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
-.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,Browser Console Debugging,browser-console-debugging,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,8558,2025-11-23T11:14:18.336713+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
-.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,Development,development,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,8558,2025-11-23T11:14:18.336713+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
-.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,Architecture,architecture,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,8558,2025-11-23T11:14:18.336713+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
-.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,VS Code Theme,vs-code-theme,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,8558,2025-11-23T11:14:18.336713+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
-.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,Documentation Map,documentation-map,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,8558,2025-11-23T11:14:18.336713+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,1. `configure_logging` — 12 duplicate(s),7126,2025-11-27T17:57:02.808160+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md,h2,Overview,overview,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7126,2025-11-27T17:57:02.808160+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md,h2,Inputs,inputs,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7126,2025-11-27T17:57:02.808160+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7126,2025-11-27T17:57:02.808160+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md,h2,Next Steps,next-steps,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7126,2025-11-27T17:57:02.808160+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,1. `configure_logging` — 12 duplicate(s),7198,2025-11-30T04:56:22.549708+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md,h2,Overview,overview,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-11-30T04:56:22.549708+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md,h2,Inputs,inputs,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-11-30T04:56:22.549708+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-11-30T04:56:22.549708+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md,h2,Next Steps,next-steps,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-11-30T04:56:22.549708+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,1. `configure_logging` — 12 duplicate(s),7198,2025-11-30T04:57:31.343343+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md,h2,Overview,overview,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-11-30T04:57:31.343343+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md,h2,Inputs,inputs,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-11-30T04:57:31.343343+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-11-30T04:57:31.343343+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md,h2,Next Steps,next-steps,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-11-30T04:57:31.343343+00:00,,,,no,
+.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h1,Command Center Viewer,command-center-viewer,,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,9292,2025-11-28T14:18:05.271026+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
+.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,5W1H Snapshot,5w1h-snapshot,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,9292,2025-11-28T14:18:05.271026+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
+.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,Features,features,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,9292,2025-11-28T14:18:05.271026+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
+.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,Quick Start,quick-start,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,9292,2025-11-28T14:18:05.271026+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
+.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,File Structure,file-structure,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,9292,2025-11-28T14:18:05.271026+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
+.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,Configuration,configuration,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,9292,2025-11-28T14:18:05.271026+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
+.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,Troubleshooting,troubleshooting,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,9292,2025-11-28T14:18:05.271026+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
+.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,Browser Console Debugging,browser-console-debugging,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,9292,2025-11-28T14:18:05.271026+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
+.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,Development,development,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,9292,2025-11-28T14:18:05.271026+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
+.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,Architecture,architecture,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,9292,2025-11-28T14:18:05.271026+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
+.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,VS Code Theme,vs-code-theme,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,9292,2025-11-28T14:18:05.271026+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
+.repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,Documentation Map,documentation-map,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,9292,2025-11-28T14:18:05.271026+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
 .repo_studios/command_center/viewer,.repo_studios/command_center/viewer/SCREENING_TIMELINE_VERIFICATION.md,h1,Screening Signal Timeline - Verification Guide,screening-signal-timeline-verification-guide,,The Screening Signal Timeline feature has been implemented and regression tests are passing. This guide will help you verify the end-to-end functionality in the browser.,8701,2025-11-08T23:00:23.526480+00:00,,,,no,
 .repo_studios/command_center/viewer,.repo_studios/command_center/viewer/SCREENING_TIMELINE_VERIFICATION.md,h2,✅ Feature Status: IMPLEMENTED · Multi-View Coexistence Verified (2025-11-08),feature-status-implemented-multi-view-coexistence-verified-2025-11-08,screening-signal-timeline-verification-guide,The Screening Signal Timeline feature has been implemented and regression tests are passing. This guide will help you verify the end-to-end functionality in the browser.,8701,2025-11-08T23:00:23.526480+00:00,,,,no,
 .repo_studios/command_center/viewer,.repo_studios/command_center/viewer/SCREENING_TIMELINE_VERIFICATION.md,h2,📋 Prerequisites,prerequisites,screening-signal-timeline-verification-guide,The Screening Signal Timeline feature has been implemented and regression tests are passing. This guide will help you verify the end-to-end functionality in the browser.,8701,2025-11-08T23:00:23.526480+00:00,,,,no,
@@ -22614,6 +26274,15 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs,.repo_studios/docs/Repo_Studios_MOU_Strategic_Architecture.md,h2,IX. AFFIRMATION,ix-affirmation,memorandum-of-understanding,"Repo Studios is a **preventative infrastructure template** designed to eliminate entire classes of technical debt before they can form. It encodes hard-won lessons from the Jarvis Project into reusable, AI-optimized tooling that transforms…",17528,2025-10-24T16:47:03.308768+00:00,,,,no,
 .repo_studios/docs,.repo_studios/docs/Repo_Studios_MOU_Strategic_Architecture.md,h2,X. SIGNATURES & ATTESTATION,x-signatures-attestation,memorandum-of-understanding,"Repo Studios is a **preventative infrastructure template** designed to eliminate entire classes of technical debt before they can form. It encodes hard-won lessons from the Jarvis Project into reusable, AI-optimized tooling that transforms…",17528,2025-10-24T16:47:03.308768+00:00,,,,no,
 .repo_studios/docs,.repo_studios/docs/Repo_Studios_MOU_Strategic_Architecture.md,h2,APPENDICES,appendices,memorandum-of-understanding,"Repo Studios is a **preventative infrastructure template** designed to eliminate entire classes of technical debt before they can form. It encodes hard-won lessons from the Jarvis Project into reusable, AI-optimized tooling that transforms…",17528,2025-10-24T16:47:03.308768+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/aggregate_docs_health_signals.md,h1,aggregate_docs_health_signals,aggregatedocshealthsignals,,`aggregate_docs_health_signals.py` will fuse disparate documentation quality signals into a single dashboard that highlights where Repo Studios needs renewed attention. The aggregator focuses on three questions:,6807,2025-11-27T14:42:44.934383+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/aggregate_docs_health_signals.md,h2,Purpose,purpose,aggregatedocshealthsignals,`aggregate_docs_health_signals.py` will fuse disparate documentation quality signals into a single dashboard that highlights where Repo Studios needs renewed attention. The aggregator focuses on three questions:,6807,2025-11-27T14:42:44.934383+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/aggregate_docs_health_signals.md,h2,Upstream Inputs,upstream-inputs,aggregatedocshealthsignals,`aggregate_docs_health_signals.py` will fuse disparate documentation quality signals into a single dashboard that highlights where Repo Studios needs renewed attention. The aggregator focuses on three questions:,6807,2025-11-27T14:42:44.934383+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/aggregate_docs_health_signals.md,h2,Output Bundle,output-bundle,aggregatedocshealthsignals,`aggregate_docs_health_signals.py` will fuse disparate documentation quality signals into a single dashboard that highlights where Repo Studios needs renewed attention. The aggregator focuses on three questions:,6807,2025-11-27T14:42:44.934383+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/aggregate_docs_health_signals.md,h2,CLI Surface,cli-surface,aggregatedocshealthsignals,`aggregate_docs_health_signals.py` will fuse disparate documentation quality signals into a single dashboard that highlights where Repo Studios needs renewed attention. The aggregator focuses on three questions:,6807,2025-11-27T14:42:44.934383+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/aggregate_docs_health_signals.md,h2,Score Model,score-model,aggregatedocshealthsignals,`aggregate_docs_health_signals.py` will fuse disparate documentation quality signals into a single dashboard that highlights where Repo Studios needs renewed attention. The aggregator focuses on three questions:,6807,2025-11-27T14:42:44.934383+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/aggregate_docs_health_signals.md,h2,Implementation Checklist,implementation-checklist,aggregatedocshealthsignals,`aggregate_docs_health_signals.py` will fuse disparate documentation quality signals into a single dashboard that highlights where Repo Studios needs renewed attention. The aggregator focuses on three questions:,6807,2025-11-27T14:42:44.934383+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/aggregate_docs_health_signals.md,h2,Testing Plan,testing-plan,aggregatedocshealthsignals,`aggregate_docs_health_signals.py` will fuse disparate documentation quality signals into a single dashboard that highlights where Repo Studios needs renewed attention. The aggregator focuses on three questions:,6807,2025-11-27T14:42:44.934383+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/aggregate_docs_health_signals.md,h2,Follow-Up Opportunities,follow-up-opportunities,aggregatedocshealthsignals,`aggregate_docs_health_signals.py` will fuse disparate documentation quality signals into a single dashboard that highlights where Repo Studios needs renewed attention. The aggregator focuses on three questions:,6807,2025-11-27T14:42:44.934383+00:00,,,,yes,
 .repo_studios/docs/automation,.repo_studios/docs/automation/analyze_test_hardening.md,h1,analyze_test_hardening.py,analyzetesthardeningpy,,"`analyze_test_hardening.py` inspects repository test modules for maintainability risks such as missing assertions, vague test names, excessive length, global state usage, and reliance on `time.sleep()`. The producer emits structured…",3455,2025-10-24T10:37:09.893282+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/analyze_test_hardening.md,h2,Purpose,purpose,analyzetesthardeningpy,"`analyze_test_hardening.py` inspects repository test modules for maintainability risks such as missing assertions, vague test names, excessive length, global state usage, and reliance on `time.sleep()`. The producer emits structured…",3455,2025-10-24T10:37:09.893282+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/analyze_test_hardening.md,h2,Invocation,invocation,analyzetesthardeningpy,"`analyze_test_hardening.py` inspects repository test modules for maintainability risks such as missing assertions, vague test names, excessive length, global state usage, and reliance on `time.sleep()`. The producer emits structured…",3455,2025-10-24T10:37:09.893282+00:00,,,,no,
@@ -22626,20 +26295,32 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation,.repo_studios/docs/automation/ci_metrics_checks.md,h2,Proposed Pipeline Steps,proposed-pipeline-steps,ci-metrics-checks-for-inventory-reports,Last updated: 2025-10-18,2331,2025-10-21T12:02:58.657326+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/ci_metrics_checks.md,h2,Implementation Notes,implementation-notes,ci-metrics-checks-for-inventory-reports,Last updated: 2025-10-18,2331,2025-10-21T12:02:58.657326+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/ci_metrics_checks.md,h2,Next Actions,next-actions,ci-metrics-checks-for-inventory-reports,Last updated: 2025-10-18,2331,2025-10-21T12:02:58.657326+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/collect_faulthandler_reports.md,h1,collect_faulthandler_reports.py,collectfaulthandlerreportspy,,"`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,…",4095,2025-11-24T00:04:56.269286+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/collect_faulthandler_reports.md,h2,Purpose,purpose,collectfaulthandlerreportspy,"`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,…",4095,2025-11-24T00:04:56.269286+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/collect_faulthandler_reports.md,h2,Invocation,invocation,collectfaulthandlerreportspy,"`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,…",4095,2025-11-24T00:04:56.269286+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/collect_faulthandler_reports.md,h2,Outputs,outputs,collectfaulthandlerreportspy,"`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,…",4095,2025-11-24T00:04:56.269286+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/collect_faulthandler_reports.md,h2,Diagnostics,diagnostics,collectfaulthandlerreportspy,"`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,…",4095,2025-11-24T00:04:56.269286+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/collect_faulthandler_reports.md,h2,Testing,testing,collectfaulthandlerreportspy,"`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,…",4095,2025-11-24T00:04:56.269286+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/collect_faulthandler_reports.md,h2,Operational notes,operational-notes,collectfaulthandlerreportspy,"`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,…",4095,2025-11-24T00:04:56.269286+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/collect_test_log_reports.md,h1,collect_test_log_reports.py,collecttestlogreportspy,,`collect_test_log_reports.py` converts raw pytest log runs into structured artifacts that downstream consumers and dashboards can reuse without reparsing warning blocks or slow-test sections. The producer leverages…,4176,2025-11-24T00:04:56.272246+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/collect_test_log_reports.md,h2,Purpose,purpose,collecttestlogreportspy,`collect_test_log_reports.py` converts raw pytest log runs into structured artifacts that downstream consumers and dashboards can reuse without reparsing warning blocks or slow-test sections. The producer leverages…,4176,2025-11-24T00:04:56.272246+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/collect_test_log_reports.md,h2,Invocation,invocation,collecttestlogreportspy,`collect_test_log_reports.py` converts raw pytest log runs into structured artifacts that downstream consumers and dashboards can reuse without reparsing warning blocks or slow-test sections. The producer leverages…,4176,2025-11-24T00:04:56.272246+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/collect_test_log_reports.md,h2,Outputs,outputs,collecttestlogreportspy,`collect_test_log_reports.py` converts raw pytest log runs into structured artifacts that downstream consumers and dashboards can reuse without reparsing warning blocks or slow-test sections. The producer leverages…,4176,2025-11-24T00:04:56.272246+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/collect_test_log_reports.md,h2,Diagnostics,diagnostics,collecttestlogreportspy,`collect_test_log_reports.py` converts raw pytest log runs into structured artifacts that downstream consumers and dashboards can reuse without reparsing warning blocks or slow-test sections. The producer leverages…,4176,2025-11-24T00:04:56.272246+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/collect_test_log_reports.md,h2,Testing,testing,collecttestlogreportspy,`collect_test_log_reports.py` converts raw pytest log runs into structured artifacts that downstream consumers and dashboards can reuse without reparsing warning blocks or slow-test sections. The producer leverages…,4176,2025-11-24T00:04:56.272246+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/collect_test_log_reports.md,h2,Operational notes,operational-notes,collecttestlogreportspy,`collect_test_log_reports.py` converts raw pytest log runs into structured artifacts that downstream consumers and dashboards can reuse without reparsing warning blocks or slow-test sections. The producer leverages…,4176,2025-11-24T00:04:56.272246+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/classify_monkey_patches.md,h1,classify_monkey_patches.py,classifymonkeypatchespy,,`classify_monkey_patches.py` ingests monkey-patch scan artifacts and assigns HIGH/MODERATE/SAFE risk tiers so teams can triage the most dangerous runtime modifications first. The consumer prefers structured bundles from…,3865,2025-11-29T16:10:11.345704+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/classify_monkey_patches.md,h2,Purpose,purpose,classifymonkeypatchespy,`classify_monkey_patches.py` ingests monkey-patch scan artifacts and assigns HIGH/MODERATE/SAFE risk tiers so teams can triage the most dangerous runtime modifications first. The consumer prefers structured bundles from…,3865,2025-11-29T16:10:11.345704+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/classify_monkey_patches.md,h2,Invocation,invocation,classifymonkeypatchespy,`classify_monkey_patches.py` ingests monkey-patch scan artifacts and assigns HIGH/MODERATE/SAFE risk tiers so teams can triage the most dangerous runtime modifications first. The consumer prefers structured bundles from…,3865,2025-11-29T16:10:11.345704+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/classify_monkey_patches.md,h2,Outputs,outputs,classifymonkeypatchespy,`classify_monkey_patches.py` ingests monkey-patch scan artifacts and assigns HIGH/MODERATE/SAFE risk tiers so teams can triage the most dangerous runtime modifications first. The consumer prefers structured bundles from…,3865,2025-11-29T16:10:11.345704+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/classify_monkey_patches.md,h2,Testing,testing,classifymonkeypatchespy,`classify_monkey_patches.py` ingests monkey-patch scan artifacts and assigns HIGH/MODERATE/SAFE risk tiers so teams can triage the most dangerous runtime modifications first. The consumer prefers structured bundles from…,3865,2025-11-29T16:10:11.345704+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/classify_monkey_patches.md,h2,Operational Notes,operational-notes,classifymonkeypatchespy,`classify_monkey_patches.py` ingests monkey-patch scan artifacts and assigns HIGH/MODERATE/SAFE risk tiers so teams can triage the most dangerous runtime modifications first. The consumer prefers structured bundles from…,3865,2025-11-29T16:10:11.345704+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/collect_faulthandler_reports.md,h1,collect_faulthandler_reports.py,collectfaulthandlerreportspy,,"`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,…",4828,2025-11-29T15:23:01.952399+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/collect_faulthandler_reports.md,h2,Purpose,purpose,collectfaulthandlerreportspy,"`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,…",4828,2025-11-29T15:23:01.952399+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/collect_faulthandler_reports.md,h2,Invocation,invocation,collectfaulthandlerreportspy,"`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,…",4828,2025-11-29T15:23:01.952399+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/collect_faulthandler_reports.md,h2,Outputs,outputs,collectfaulthandlerreportspy,"`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,…",4828,2025-11-29T15:23:01.952399+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/collect_faulthandler_reports.md,h2,Diagnostics,diagnostics,collectfaulthandlerreportspy,"`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,…",4828,2025-11-29T15:23:01.952399+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/collect_faulthandler_reports.md,h2,Testing,testing,collectfaulthandlerreportspy,"`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,…",4828,2025-11-29T15:23:01.952399+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/collect_faulthandler_reports.md,h2,Operational notes,operational-notes,collectfaulthandlerreportspy,"`collect_faulthandler_reports.py` converts raw faulthandler capture directories into structured bundles that downstream consumers can reuse without re-parsing stack logs. Each run produces JSON, Markdown, CSV, and combined log artifacts,…",4828,2025-11-29T15:23:01.952399+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/collect_test_log_reports.md,h1,collect_test_log_reports.py,collecttestlogreportspy,,`collect_test_log_reports.py` converts raw pytest log runs into structured artifacts that downstream consumers and dashboards can reuse without reparsing warning blocks or slow-test sections. The producer leverages…,4899,2025-11-29T15:13:46.818089+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/collect_test_log_reports.md,h2,Purpose,purpose,collecttestlogreportspy,`collect_test_log_reports.py` converts raw pytest log runs into structured artifacts that downstream consumers and dashboards can reuse without reparsing warning blocks or slow-test sections. The producer leverages…,4899,2025-11-29T15:13:46.818089+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/collect_test_log_reports.md,h2,Invocation,invocation,collecttestlogreportspy,`collect_test_log_reports.py` converts raw pytest log runs into structured artifacts that downstream consumers and dashboards can reuse without reparsing warning blocks or slow-test sections. The producer leverages…,4899,2025-11-29T15:13:46.818089+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/collect_test_log_reports.md,h2,Outputs,outputs,collecttestlogreportspy,`collect_test_log_reports.py` converts raw pytest log runs into structured artifacts that downstream consumers and dashboards can reuse without reparsing warning blocks or slow-test sections. The producer leverages…,4899,2025-11-29T15:13:46.818089+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/collect_test_log_reports.md,h2,Diagnostics,diagnostics,collecttestlogreportspy,`collect_test_log_reports.py` converts raw pytest log runs into structured artifacts that downstream consumers and dashboards can reuse without reparsing warning blocks or slow-test sections. The producer leverages…,4899,2025-11-29T15:13:46.818089+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/collect_test_log_reports.md,h2,Testing,testing,collecttestlogreportspy,`collect_test_log_reports.py` converts raw pytest log runs into structured artifacts that downstream consumers and dashboards can reuse without reparsing warning blocks or slow-test sections. The producer leverages…,4899,2025-11-29T15:13:46.818089+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/collect_test_log_reports.md,h2,Operational notes,operational-notes,collecttestlogreportspy,`collect_test_log_reports.py` converts raw pytest log runs into structured artifacts that downstream consumers and dashboards can reuse without reparsing warning blocks or slow-test sections. The producer leverages…,4899,2025-11-29T15:13:46.818089+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/configure_faulthandler_runtime.md,h1,configure_faulthandler_runtime.py,configurefaulthandlerruntimepy,,"`configure_faulthandler_runtime.py` runs during interpreter start via the repository sitecustomize shim. It standardises faulthandler defaults across every entry point, creates structured artifacts under…",3282,2025-12-01T13:19:36.907672+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/configure_faulthandler_runtime.md,h2,Overview,overview,configurefaulthandlerruntimepy,"`configure_faulthandler_runtime.py` runs during interpreter start via the repository sitecustomize shim. It standardises faulthandler defaults across every entry point, creates structured artifacts under…",3282,2025-12-01T13:19:36.907672+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/configure_faulthandler_runtime.md,h2,Responsibilities,responsibilities,configurefaulthandlerruntimepy,"`configure_faulthandler_runtime.py` runs during interpreter start via the repository sitecustomize shim. It standardises faulthandler defaults across every entry point, creates structured artifacts under…",3282,2025-12-01T13:19:36.907672+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/configure_faulthandler_runtime.md,h2,Environment Flags,environment-flags,configurefaulthandlerruntimepy,"`configure_faulthandler_runtime.py` runs during interpreter start via the repository sitecustomize shim. It standardises faulthandler defaults across every entry point, creates structured artifacts under…",3282,2025-12-01T13:19:36.907672+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/configure_faulthandler_runtime.md,h2,Testing,testing,configurefaulthandlerruntimepy,"`configure_faulthandler_runtime.py` runs during interpreter start via the repository sitecustomize shim. It standardises faulthandler defaults across every entry point, creates structured artifacts under…",3282,2025-12-01T13:19:36.907672+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/configure_faulthandler_runtime.md,h2,Legacy Compatibility,legacy-compatibility,configurefaulthandlerruntimepy,"`configure_faulthandler_runtime.py` runs during interpreter start via the repository sitecustomize shim. It standardises faulthandler defaults across every entry point, creates structured artifacts under…",3282,2025-12-01T13:19:36.907672+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/diff_standards_index.md,h1,diff_standards_index.py,diffstandardsindexpy,,`diff_standards_index.py` compares two standards index YAML snapshots (typically the baseline catalog and a regenerated proposal) and produces structured artifacts that highlight rule-level changes. Summaries classify per-rule deltas…,4388,2025-10-23T00:14:57.649053+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/diff_standards_index.md,h2,Purpose,purpose,diffstandardsindexpy,`diff_standards_index.py` compares two standards index YAML snapshots (typically the baseline catalog and a regenerated proposal) and produces structured artifacts that highlight rule-level changes. Summaries classify per-rule deltas…,4388,2025-10-23T00:14:57.649053+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/diff_standards_index.md,h2,Invocation,invocation,diffstandardsindexpy,`diff_standards_index.py` compares two standards index YAML snapshots (typically the baseline catalog and a regenerated proposal) and produces structured artifacts that highlight rule-level changes. Summaries classify per-rule deltas…,4388,2025-10-23T00:14:57.649053+00:00,,,,no,
@@ -22647,6 +26328,14 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation,.repo_studios/docs/automation/diff_standards_index.md,h2,Status semantics,status-semantics,diffstandardsindexpy,`diff_standards_index.py` compares two standards index YAML snapshots (typically the baseline catalog and a regenerated proposal) and produces structured artifacts that highlight rule-level changes. Summaries classify per-rule deltas…,4388,2025-10-23T00:14:57.649053+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/diff_standards_index.md,h2,Testing,testing,diffstandardsindexpy,`diff_standards_index.py` compares two standards index YAML snapshots (typically the baseline catalog and a regenerated proposal) and produces structured artifacts that highlight rule-level changes. Summaries classify per-rule deltas…,4388,2025-10-23T00:14:57.649053+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/diff_standards_index.md,h2,Operational notes,operational-notes,diffstandardsindexpy,`diff_standards_index.py` compares two standards index YAML snapshots (typically the baseline catalog and a regenerated proposal) and produces structured artifacts that highlight rule-level changes. Summaries classify per-rule deltas…,4388,2025-10-23T00:14:57.649053+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/dump_faulthandler_snapshot.md,h1,dump_faulthandler_snapshot.py,dumpfaulthandlersnapshotpy,,"`dump_faulthandler_snapshot.py` captures a one-off faulthandler stack dump and stores it as a structured bundle under `.repo_studios/reports/orchestrator_logs/faulthandler_snapshots/`. The utility is idempotent, keeps the latest stacks…",2571,2025-11-29T15:06:25.874741+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/dump_faulthandler_snapshot.md,h2,Overview,overview,dumpfaulthandlersnapshotpy,"`dump_faulthandler_snapshot.py` captures a one-off faulthandler stack dump and stores it as a structured bundle under `.repo_studios/reports/orchestrator_logs/faulthandler_snapshots/`. The utility is idempotent, keeps the latest stacks…",2571,2025-11-29T15:06:25.874741+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/dump_faulthandler_snapshot.md,h2,Responsibilities,responsibilities,dumpfaulthandlersnapshotpy,"`dump_faulthandler_snapshot.py` captures a one-off faulthandler stack dump and stores it as a structured bundle under `.repo_studios/reports/orchestrator_logs/faulthandler_snapshots/`. The utility is idempotent, keeps the latest stacks…",2571,2025-11-29T15:06:25.874741+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/dump_faulthandler_snapshot.md,h2,Environment Flags,environment-flags,dumpfaulthandlersnapshotpy,"`dump_faulthandler_snapshot.py` captures a one-off faulthandler stack dump and stores it as a structured bundle under `.repo_studios/reports/orchestrator_logs/faulthandler_snapshots/`. The utility is idempotent, keeps the latest stacks…",2571,2025-11-29T15:06:25.874741+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/dump_faulthandler_snapshot.md,h2,Usage,usage,dumpfaulthandlersnapshotpy,"`dump_faulthandler_snapshot.py` captures a one-off faulthandler stack dump and stores it as a structured bundle under `.repo_studios/reports/orchestrator_logs/faulthandler_snapshots/`. The utility is idempotent, keeps the latest stacks…",2571,2025-11-29T15:06:25.874741+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/dump_faulthandler_snapshot.md,h2,Testing,testing,dumpfaulthandlersnapshotpy,"`dump_faulthandler_snapshot.py` captures a one-off faulthandler stack dump and stores it as a structured bundle under `.repo_studios/reports/orchestrator_logs/faulthandler_snapshots/`. The utility is idempotent, keeps the latest stacks…",2571,2025-11-29T15:06:25.874741+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/dump_faulthandler_snapshot.md,h2,Automation,automation,dumpfaulthandlersnapshotpy,"`dump_faulthandler_snapshot.py` captures a one-off faulthandler stack dump and stores it as a structured bundle under `.repo_studios/reports/orchestrator_logs/faulthandler_snapshots/`. The utility is idempotent, keeps the latest stacks…",2571,2025-11-29T15:06:25.874741+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/dump_faulthandler_snapshot.md,h2,Legacy Compatibility,legacy-compatibility,dumpfaulthandlersnapshotpy,"`dump_faulthandler_snapshot.py` captures a one-off faulthandler stack dump and stores it as a structured bundle under `.repo_studios/reports/orchestrator_logs/faulthandler_snapshots/`. The utility is idempotent, keeps the latest stacks…",2571,2025-11-29T15:06:25.874741+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/extract_standards_rules.md,h1,extract_standards_rules.py,extractstandardsrulespy,,"`extract_standards_rules.py` parses curated markdown sources for guardrail rules that enrich the standards index build. It gathers candidate rules from dedicated HTML marker blocks and heading conventions, normalizes their metadata…",4451,2025-10-23T11:45:54.459576+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/extract_standards_rules.md,h2,Purpose,purpose,extractstandardsrulespy,"`extract_standards_rules.py` parses curated markdown sources for guardrail rules that enrich the standards index build. It gathers candidate rules from dedicated HTML marker blocks and heading conventions, normalizes their metadata…",4451,2025-10-23T11:45:54.459576+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/extract_standards_rules.md,h2,Supported patterns,supported-patterns,extractstandardsrulespy,"`extract_standards_rules.py` parses curated markdown sources for guardrail rules that enrich the standards index build. It gathers candidate rules from dedicated HTML marker blocks and heading conventions, normalizes their metadata…",4451,2025-10-23T11:45:54.459576+00:00,,,,no,
@@ -22670,6 +26359,26 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation,.repo_studios/docs/automation/function_inventory_integration_plan.md,h2,design_decisions_required,designdecisionsrequired,function-inventory-integration-plan,This living checklist captures the sequential work required to integrate the Jarvis Function Inventory System into Repo Studios. We will refine and approve these steps before implementation.,19430,2025-11-08T23:02:25.037373+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/function_inventory_integration_plan.md,h2,Questions to Resolve,questions-to-resolve,function-inventory-integration-plan,This living checklist captures the sequential work required to integrate the Jarvis Function Inventory System into Repo Studios. We will refine and approve these steps before implementation.,19430,2025-11-08T23:02:25.037373+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/function_inventory_integration_plan.md,h2,Questions from Agent,questions-from-agent,function-inventory-integration-plan,This living checklist captures the sequential work required to integrate the Jarvis Function Inventory System into Repo Studios. We will refine and approve these steps before implementation.,19430,2025-11-08T23:02:25.037373+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_anchor_health_report.md,h1,generate_anchor_health_report,generateanchorhealthreport,,(`.repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json`) when present.,2260,2025-11-26T13:03:51.845884+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_anchor_health_report.md,h2,Purpose,purpose,generateanchorhealthreport,(`.repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json`) when present.,2260,2025-11-26T13:03:51.845884+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_anchor_health_report.md,h2,Inputs,inputs,generateanchorhealthreport,(`.repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json`) when present.,2260,2025-11-26T13:03:51.845884+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_anchor_health_report.md,h2,Operation Notes,operation-notes,generateanchorhealthreport,(`.repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json`) when present.,2260,2025-11-26T13:03:51.845884+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_anchor_health_report.md,h2,Usage Example,usage-example,generateanchorhealthreport,(`.repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json`) when present.,2260,2025-11-26T13:03:51.845884+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_anchor_health_report.md,h2,Testing,testing,generateanchorhealthreport,(`.repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json`) when present.,2260,2025-11-26T13:03:51.845884+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_anchor_health_report.md,h2,Integration Checklist,integration-checklist,generateanchorhealthreport,(`.repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json`) when present.,2260,2025-11-26T13:03:51.845884+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_anchor_inventory.md,h1,generate_anchor_inventory.py,generateanchorinventorypy,,"`generate_anchor_inventory.py` scans the documentation corpus for H1/H2 headings, normalises their slugs, and reports collision risk across files. The producer now also captures per-document anchor coverage so AI agents can spot missing…",4946,2025-11-25T14:01:43.710515+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_anchor_inventory.md,h2,Purpose,purpose,generateanchorinventorypy,"`generate_anchor_inventory.py` scans the documentation corpus for H1/H2 headings, normalises their slugs, and reports collision risk across files. The producer now also captures per-document anchor coverage so AI agents can spot missing…",4946,2025-11-25T14:01:43.710515+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_anchor_inventory.md,h2,Output Contract,output-contract,generateanchorinventorypy,"`generate_anchor_inventory.py` scans the documentation corpus for H1/H2 headings, normalises their slugs, and reports collision risk across files. The producer now also captures per-document anchor coverage so AI agents can spot missing…",4946,2025-11-25T14:01:43.710515+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_anchor_inventory.md,h2,Data Shape,data-shape,generateanchorinventorypy,"`generate_anchor_inventory.py` scans the documentation corpus for H1/H2 headings, normalises their slugs, and reports collision risk across files. The producer now also captures per-document anchor coverage so AI agents can spot missing…",4946,2025-11-25T14:01:43.710515+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_anchor_inventory.md,h2,CLI Reference,cli-reference,generateanchorinventorypy,"`generate_anchor_inventory.py` scans the documentation corpus for H1/H2 headings, normalises their slugs, and reports collision risk across files. The producer now also captures per-document anchor coverage so AI agents can spot missing…",4946,2025-11-25T14:01:43.710515+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_anchor_inventory.md,h2,Implementation Summary,implementation-summary,generateanchorinventorypy,"`generate_anchor_inventory.py` scans the documentation corpus for H1/H2 headings, normalises their slugs, and reports collision risk across files. The producer now also captures per-document anchor coverage so AI agents can spot missing…",4946,2025-11-25T14:01:43.710515+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_anchor_inventory.md,h2,Notes for AI Consumers,notes-for-ai-consumers,generateanchorinventorypy,"`generate_anchor_inventory.py` scans the documentation corpus for H1/H2 headings, normalises their slugs, and reports collision risk across files. The producer now also captures per-document anchor coverage so AI agents can spot missing…",4946,2025-11-25T14:01:43.710515+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_code_doc_churn_report.md,h1,generate_code_doc_churn_report,generatecodedocchurnreport,,"`generate_code_doc_churn_report.py` scans recent git history to surface modules that accumulated code churn without a matching documentation update. The script produces structured artifacts (JSON, Markdown, TSV, summary) with retention and…",3127,2025-11-25T16:26:37.538852+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_code_doc_churn_report.md,h2,Purpose,purpose,generatecodedocchurnreport,"`generate_code_doc_churn_report.py` scans recent git history to surface modules that accumulated code churn without a matching documentation update. The script produces structured artifacts (JSON, Markdown, TSV, summary) with retention and…",3127,2025-11-25T16:26:37.538852+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_code_doc_churn_report.md,h2,Inputs,inputs,generatecodedocchurnreport,"`generate_code_doc_churn_report.py` scans recent git history to surface modules that accumulated code churn without a matching documentation update. The script produces structured artifacts (JSON, Markdown, TSV, summary) with retention and…",3127,2025-11-25T16:26:37.538852+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_code_doc_churn_report.md,h2,Outputs,outputs,generatecodedocchurnreport,"`generate_code_doc_churn_report.py` scans recent git history to surface modules that accumulated code churn without a matching documentation update. The script produces structured artifacts (JSON, Markdown, TSV, summary) with retention and…",3127,2025-11-25T16:26:37.538852+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_code_doc_churn_report.md,h2,Usage,usage,generatecodedocchurnreport,"`generate_code_doc_churn_report.py` scans recent git history to surface modules that accumulated code churn without a matching documentation update. The script produces structured artifacts (JSON, Markdown, TSV, summary) with retention and…",3127,2025-11-25T16:26:37.538852+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_code_doc_churn_report.md,h2,Testing,testing,generatecodedocchurnreport,"`generate_code_doc_churn_report.py` scans recent git history to surface modules that accumulated code churn without a matching documentation update. The script produces structured artifacts (JSON, Markdown, TSV, summary) with retention and…",3127,2025-11-25T16:26:37.538852+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h1,generate_dependency_hygiene_report.py,generatedependencyhygienereportpy,,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3898,2025-10-22T23:47:19.955116+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h2,Purpose,purpose,generatedependencyhygienereportpy,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3898,2025-10-22T23:47:19.955116+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h2,Invocation,invocation,generatedependencyhygienereportpy,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3898,2025-10-22T23:47:19.955116+00:00,,,,no,
@@ -22677,13 +26386,13 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h2,Status semantics,status-semantics,generatedependencyhygienereportpy,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3898,2025-10-22T23:47:19.955116+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h2,Testing,testing,generatedependencyhygienereportpy,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3898,2025-10-22T23:47:19.955116+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h2,Operational notes,operational-notes,generatedependencyhygienereportpy,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3898,2025-10-22T23:47:19.955116+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h1,generate_doc_index.py,generatedocindexpy,,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem. The producer normalises H1/H2…",4844,2025-11-25T03:00:52.637362+00:00,,,,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Purpose,purpose,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem. The producer normalises H1/H2…",4844,2025-11-25T03:00:52.637362+00:00,,,,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Output Contract,output-contract,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem. The producer normalises H1/H2…",4844,2025-11-25T03:00:52.637362+00:00,,,,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Data Shape,data-shape,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem. The producer normalises H1/H2…",4844,2025-11-25T03:00:52.637362+00:00,,,,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,CLI Reference,cli-reference,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem. The producer normalises H1/H2…",4844,2025-11-25T03:00:52.637362+00:00,,,,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Implementation Summary,implementation-summary,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem. The producer normalises H1/H2…",4844,2025-11-25T03:00:52.637362+00:00,,,,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Notes for AI Consumers,notes-for-ai-consumers,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem. The producer normalises H1/H2…",4844,2025-11-25T03:00:52.637362+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h1,generate_doc_index.py,generatedocindexpy,,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem. The producer normalises H1/H2…",6010,2025-11-25T11:20:45.453873+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Purpose,purpose,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem. The producer normalises H1/H2…",6010,2025-11-25T11:20:45.453873+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Output Contract,output-contract,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem. The producer normalises H1/H2…",6010,2025-11-25T11:20:45.453873+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Data Shape,data-shape,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem. The producer normalises H1/H2…",6010,2025-11-25T11:20:45.453873+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,CLI Reference,cli-reference,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem. The producer normalises H1/H2…",6010,2025-11-25T11:20:45.453873+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Implementation Summary,implementation-summary,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem. The producer normalises H1/H2…",6010,2025-11-25T11:20:45.453873+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Notes for AI Consumers,notes-for-ai-consumers,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem. The producer normalises H1/H2…",6010,2025-11-25T11:20:45.453873+00:00,,,,yes,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h1,generate_lizard_report.py,generatelizardreportpy,,"`generate_lizard_report.py` runs `python -m lizard` across the owned source tree, captures the JSON output, and emits structured artifacts so downstream agents can track cyclomatic complexity hotspots and long functions. It is designed to…",4795,2025-10-22T21:38:16.995302+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h2,Purpose,purpose,generatelizardreportpy,"`generate_lizard_report.py` runs `python -m lizard` across the owned source tree, captures the JSON output, and emits structured artifacts so downstream agents can track cyclomatic complexity hotspots and long functions. It is designed to…",4795,2025-10-22T21:38:16.995302+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h2,Invocation,invocation,generatelizardreportpy,"`generate_lizard_report.py` runs `python -m lizard` across the owned source tree, captures the JSON output, and emits structured artifacts so downstream agents can track cyclomatic complexity hotspots and long functions. It is designed to…",4795,2025-10-22T21:38:16.995302+00:00,,,,no,
@@ -22691,13 +26400,13 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h2,Status semantics,status-semantics,generatelizardreportpy,"`generate_lizard_report.py` runs `python -m lizard` across the owned source tree, captures the JSON output, and emits structured artifacts so downstream agents can track cyclomatic complexity hotspots and long functions. It is designed to…",4795,2025-10-22T21:38:16.995302+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h2,Testing,testing,generatelizardreportpy,"`generate_lizard_report.py` runs `python -m lizard` across the owned source tree, captures the JSON output, and emits structured artifacts so downstream agents can track cyclomatic complexity hotspots and long functions. It is designed to…",4795,2025-10-22T21:38:16.995302+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h2,Operational notes,operational-notes,generatelizardreportpy,"`generate_lizard_report.py` runs `python -m lizard` across the owned source tree, captures the JSON output, and emits structured artifacts so downstream agents can track cyclomatic complexity hotspots and long functions. It is designed to…",4795,2025-10-22T21:38:16.995302+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h1,generate_standards_index.py,generatestandardsindexpy,,`generate_standards_index.py` assembles the canonical `repo_standards_index.yaml` by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a structured artifact bundle…,5095,2025-10-23T01:16:24.453566+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h2,Purpose,purpose,generatestandardsindexpy,`generate_standards_index.py` assembles the canonical `repo_standards_index.yaml` by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a structured artifact bundle…,5095,2025-10-23T01:16:24.453566+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h2,Invocation,invocation,generatestandardsindexpy,`generate_standards_index.py` assembles the canonical `repo_standards_index.yaml` by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a structured artifact bundle…,5095,2025-10-23T01:16:24.453566+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h2,Outputs,outputs,generatestandardsindexpy,`generate_standards_index.py` assembles the canonical `repo_standards_index.yaml` by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a structured artifact bundle…,5095,2025-10-23T01:16:24.453566+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h2,Status semantics,status-semantics,generatestandardsindexpy,`generate_standards_index.py` assembles the canonical `repo_standards_index.yaml` by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a structured artifact bundle…,5095,2025-10-23T01:16:24.453566+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h2,Testing,testing,generatestandardsindexpy,`generate_standards_index.py` assembles the canonical `repo_standards_index.yaml` by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a structured artifact bundle…,5095,2025-10-23T01:16:24.453566+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h2,Operational notes,operational-notes,generatestandardsindexpy,`generate_standards_index.py` assembles the canonical `repo_standards_index.yaml` by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a structured artifact bundle…,5095,2025-10-23T01:16:24.453566+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h1,generate_standards_index.py,generatestandardsindexpy,,`generate_standards_index.py` assembles the canonical standards index and refreshes the `latest_index.yaml` pointer by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a…,5212,2025-11-27T17:20:15.673436+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h2,Purpose,purpose,generatestandardsindexpy,`generate_standards_index.py` assembles the canonical standards index and refreshes the `latest_index.yaml` pointer by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a…,5212,2025-11-27T17:20:15.673436+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h2,Invocation,invocation,generatestandardsindexpy,`generate_standards_index.py` assembles the canonical standards index and refreshes the `latest_index.yaml` pointer by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a…,5212,2025-11-27T17:20:15.673436+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h2,Outputs,outputs,generatestandardsindexpy,`generate_standards_index.py` assembles the canonical standards index and refreshes the `latest_index.yaml` pointer by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a…,5212,2025-11-27T17:20:15.673436+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h2,Status semantics,status-semantics,generatestandardsindexpy,`generate_standards_index.py` assembles the canonical standards index and refreshes the `latest_index.yaml` pointer by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a…,5212,2025-11-27T17:20:15.673436+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h2,Testing,testing,generatestandardsindexpy,`generate_standards_index.py` assembles the canonical standards index and refreshes the `latest_index.yaml` pointer by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a…,5212,2025-11-27T17:20:15.673436+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h2,Operational notes,operational-notes,generatestandardsindexpy,`generate_standards_index.py` assembles the canonical standards index and refreshes the `latest_index.yaml` pointer by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a…,5212,2025-11-27T17:20:15.673436+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h1,generate_test_coverage_inventory.py,generatetestcoverageinventorypy,,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered. The producer emits JSON, Markdown, CSV,…",4223,2025-11-23T12:12:27.820382+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,Purpose,purpose,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered. The producer emits JSON, Markdown, CSV,…",4223,2025-11-23T12:12:27.820382+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,Invocation,invocation,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered. The producer emits JSON, Markdown, CSV,…",4223,2025-11-23T12:12:27.820382+00:00,,,,no,
@@ -22705,12 +26414,27 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,Status semantics,status-semantics,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered. The producer emits JSON, Markdown, CSV,…",4223,2025-11-23T12:12:27.820382+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,Testing,testing,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered. The producer emits JSON, Markdown, CSV,…",4223,2025-11-23T12:12:27.820382+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,Operational notes,operational-notes,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered. The producer emits JSON, Markdown, CSV,…",4223,2025-11-23T12:12:27.820382+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_log_health_report.md,h1,Generate Test Log Health Report,generate-test-log-health-report,,"`generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so operators can track warning spikes, failure patterns, and slow tests without rereading entire logs. The script prefers the curated JSON emitted…",4787,2025-11-29T15:33:45.034376+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_log_health_report.md,h2,Purpose,purpose,generate-test-log-health-report,"`generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so operators can track warning spikes, failure patterns, and slow tests without rereading entire logs. The script prefers the curated JSON emitted…",4787,2025-11-29T15:33:45.034376+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_log_health_report.md,h2,Inputs,inputs,generate-test-log-health-report,"`generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so operators can track warning spikes, failure patterns, and slow tests without rereading entire logs. The script prefers the curated JSON emitted…",4787,2025-11-29T15:33:45.034376+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_log_health_report.md,h2,Outputs,outputs,generate-test-log-health-report,"`generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so operators can track warning spikes, failure patterns, and slow tests without rereading entire logs. The script prefers the curated JSON emitted…",4787,2025-11-29T15:33:45.034376+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_log_health_report.md,h2,Retention & Pruning,retention-pruning,generate-test-log-health-report,"`generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so operators can track warning spikes, failure patterns, and slow tests without rereading entire logs. The script prefers the curated JSON emitted…",4787,2025-11-29T15:33:45.034376+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_log_health_report.md,h2,Typical Workflow,typical-workflow,generate-test-log-health-report,"`generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so operators can track warning spikes, failure patterns, and slow tests without rereading entire logs. The script prefers the curated JSON emitted…",4787,2025-11-29T15:33:45.034376+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_log_health_report.md,h2,Make Target,make-target,generate-test-log-health-report,"`generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so operators can track warning spikes, failure patterns, and slow tests without rereading entire logs. The script prefers the curated JSON emitted…",4787,2025-11-29T15:33:45.034376+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_log_health_report.md,h2,Testing,testing,generate-test-log-health-report,"`generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so operators can track warning spikes, failure patterns, and slow tests without rereading entire logs. The script prefers the curated JSON emitted…",4787,2025-11-29T15:33:45.034376+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_log_health_report.md,h2,Notes,notes,generate-test-log-health-report,"`generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so operators can track warning spikes, failure patterns, and slow tests without rereading entire logs. The script prefers the curated JSON emitted…",4787,2025-11-29T15:33:45.034376+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_typecheck_report.md,h1,Typecheck Report Producer,typecheck-report-producer,,The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and captures a structured set of artifacts for observability.,1895,2025-10-23T02:03:40.458715+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_typecheck_report.md,h2,Invocation,invocation,typecheck-report-producer,The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and captures a structured set of artifacts for observability.,1895,2025-10-23T02:03:40.458715+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_typecheck_report.md,h2,Outputs,outputs,typecheck-report-producer,The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and captures a structured set of artifacts for observability.,1895,2025-10-23T02:03:40.458715+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_typecheck_report.md,h2,Testing,testing,typecheck-report-producer,The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and captures a structured set of artifacts for observability.,1895,2025-10-23T02:03:40.458715+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/orchestrator_automation_hooks.md,h1,Orchestrator Automation Hooks,orchestrator-automation-hooks,,"This reference captures the current run surfaces, automation wiring, and success criteria for the Repo Studios orchestrator tier. Record changes here before altering orchestrator code so downstream automation stays aligned with expected…",2487,2025-11-24T18:55:36.604719+00:00,,,,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/orchestrator_automation_hooks.md,h2,Notes,notes,orchestrator-automation-hooks,"This reference captures the current run surfaces, automation wiring, and success criteria for the Repo Studios orchestrator tier. Record changes here before altering orchestrator code so downstream automation stays aligned with expected…",2487,2025-11-24T18:55:36.604719+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h1,generate_undocumented_logic_report,generateundocumentedlogicreport,,"`generate_undocumented_logic_report.py` scans the repo automation scripts for public functions, classes, and methods that lack docstrings. The report helps identify code paths that should have documentation anchors or docstring coverage…",2696,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h2,Purpose,purpose,generateundocumentedlogicreport,"`generate_undocumented_logic_report.py` scans the repo automation scripts for public functions, classes, and methods that lack docstrings. The report helps identify code paths that should have documentation anchors or docstring coverage…",2696,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h2,Inputs,inputs,generateundocumentedlogicreport,"`generate_undocumented_logic_report.py` scans the repo automation scripts for public functions, classes, and methods that lack docstrings. The report helps identify code paths that should have documentation anchors or docstring coverage…",2696,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h2,Outputs,outputs,generateundocumentedlogicreport,"`generate_undocumented_logic_report.py` scans the repo automation scripts for public functions, classes, and methods that lack docstrings. The report helps identify code paths that should have documentation anchors or docstring coverage…",2696,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h2,Usage,usage,generateundocumentedlogicreport,"`generate_undocumented_logic_report.py` scans the repo automation scripts for public functions, classes, and methods that lack docstrings. The report helps identify code paths that should have documentation anchors or docstring coverage…",2696,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h2,Testing,testing,generateundocumentedlogicreport,"`generate_undocumented_logic_report.py` scans the repo automation scripts for public functions, classes, and methods that lack docstrings. The report helps identify code paths that should have documentation anchors or docstring coverage…",2696,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/orchestrator_automation_hooks.md,h1,Orchestrator Automation Hooks,orchestrator-automation-hooks,,"This reference captures the current run surfaces, automation wiring, and success criteria for the Repo Studios orchestrator tier. Record changes here before altering orchestrator code so downstream automation stays aligned with expected…",6379,2025-12-01T14:02:44.321031+00:00,,,,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/orchestrator_automation_hooks.md,h2,Notes,notes,orchestrator-automation-hooks,"This reference captures the current run surfaces, automation wiring, and success criteria for the Repo Studios orchestrator tier. Record changes here before altering orchestrator code so downstream automation stays aligned with expected…",6379,2025-12-01T14:02:44.321031+00:00,,,,yes,
 .repo_studios/docs/automation,.repo_studios/docs/automation/refactor_library_integration_notes.md,h1,Refactor Library Integration Notes,refactor-library-integration-notes,,"Legend: ✓ complete, 🔄 in-progress research, 🚧 blocked by dependencies, ⚠️ risk, 📌 planned decision, ❓ unanswered question, 💤 deferred.",8675,2025-10-24T17:35:53.640323+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/refactor_library_integration_notes.md,h2,Phase Snapshot,phase-snapshot,refactor-library-integration-notes,"Legend: ✓ complete, 🔄 in-progress research, 🚧 blocked by dependencies, ⚠️ risk, 📌 planned decision, ❓ unanswered question, 💤 deferred.",8675,2025-10-24T17:35:53.640323+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/refactor_library_integration_notes.md,h2,Key Assets Provided (Phases 1–3),key-assets-provided-phases-13,refactor-library-integration-notes,"Legend: ✓ complete, 🔄 in-progress research, 🚧 blocked by dependencies, ⚠️ risk, 📌 planned decision, ❓ unanswered question, 💤 deferred.",8675,2025-10-24T17:35:53.640323+00:00,,,,no,
@@ -22718,10 +26442,36 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation,.repo_studios/docs/automation/refactor_library_integration_notes.md,h2,Research Actions (Open),research-actions-open,refactor-library-integration-notes,"Legend: ✓ complete, 🔄 in-progress research, 🚧 blocked by dependencies, ⚠️ risk, 📌 planned decision, ❓ unanswered question, 💤 deferred.",8675,2025-10-24T17:35:53.640323+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/refactor_library_integration_notes.md,h2,Decision Log (Pending),decision-log-pending,refactor-library-integration-notes,"Legend: ✓ complete, 🔄 in-progress research, 🚧 blocked by dependencies, ⚠️ risk, 📌 planned decision, ❓ unanswered question, 💤 deferred.",8675,2025-10-24T17:35:53.640323+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/refactor_library_integration_notes.md,h2,References,references,refactor-library-integration-notes,"Legend: ✓ complete, 🔄 in-progress research, 🚧 blocked by dependencies, ⚠️ risk, 📌 planned decision, ❓ unanswered question, 💤 deferred.",8675,2025-10-24T17:35:53.640323+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/refresh_mypy_baselines.md,h1,Refresh mypy baselines,refresh-mypy-baselines,,"`refresh_mypy_baselines.py` standardises the stored mypy output snapshots that agents and soft gates consume. It runs mypy for each configured target, writes structured artifacts into…",1999,2025-11-29T04:07:24.447006+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/refresh_mypy_baselines.md,h2,Purpose,purpose,refresh-mypy-baselines,"`refresh_mypy_baselines.py` standardises the stored mypy output snapshots that agents and soft gates consume. It runs mypy for each configured target, writes structured artifacts into…",1999,2025-11-29T04:07:24.447006+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/refresh_mypy_baselines.md,h2,Invocation,invocation,refresh-mypy-baselines,"`refresh_mypy_baselines.py` standardises the stored mypy output snapshots that agents and soft gates consume. It runs mypy for each configured target, writes structured artifacts into…",1999,2025-11-29T04:07:24.447006+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/refresh_mypy_baselines.md,h2,Outputs,outputs,refresh-mypy-baselines,"`refresh_mypy_baselines.py` standardises the stored mypy output snapshots that agents and soft gates consume. It runs mypy for each configured target, writes structured artifacts into…",1999,2025-11-29T04:07:24.447006+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/refresh_mypy_baselines.md,h2,Retention,retention,refresh-mypy-baselines,"`refresh_mypy_baselines.py` standardises the stored mypy output snapshots that agents and soft gates consume. It runs mypy for each configured target, writes structured artifacts into…",1999,2025-11-29T04:07:24.447006+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/refresh_mypy_baselines.md,h2,Validation,validation,refresh-mypy-baselines,"`refresh_mypy_baselines.py` standardises the stored mypy output snapshots that agents and soft gates consume. It runs mypy for each configured target, writes structured artifacts into…",1999,2025-11-29T04:07:24.447006+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/render_inventory_views.md,h1,Render Inventory Views Producer,render-inventory-views-producer,,"The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation.",2019,2025-10-23T09:50:23.539274+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/render_inventory_views.md,h2,Invocation,invocation,render-inventory-views-producer,"The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation.",2019,2025-10-23T09:50:23.539274+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/render_inventory_views.md,h2,Outputs,outputs,render-inventory-views-producer,"The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation.",2019,2025-10-23T09:50:23.539274+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/render_inventory_views.md,h2,Testing,testing,render-inventory-views-producer,"The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation.",2019,2025-10-23T09:50:23.539274+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_fault_pipeline.md,h1,Fault Diagnostics Overview Orchestrator,fault-diagnostics-overview-orchestrator,,"`command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` coordinates the faulthandler producer (`collect_faulthandler_reports.py`), consumer (`generate_fault_artifacts.py`), and the overview summarizer…",4338,2025-12-01T13:19:36.907672+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_fault_pipeline.md,h2,Overview,overview,fault-diagnostics-overview-orchestrator,"`command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` coordinates the faulthandler producer (`collect_faulthandler_reports.py`), consumer (`generate_fault_artifacts.py`), and the overview summarizer…",4338,2025-12-01T13:19:36.907672+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_fault_pipeline.md,h2,Invocation,invocation,fault-diagnostics-overview-orchestrator,"`command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` coordinates the faulthandler producer (`collect_faulthandler_reports.py`), consumer (`generate_fault_artifacts.py`), and the overview summarizer…",4338,2025-12-01T13:19:36.907672+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_fault_pipeline.md,h2,Outputs,outputs,fault-diagnostics-overview-orchestrator,"`command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` coordinates the faulthandler producer (`collect_faulthandler_reports.py`), consumer (`generate_fault_artifacts.py`), and the overview summarizer…",4338,2025-12-01T13:19:36.907672+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_fault_pipeline.md,h2,Testing,testing,fault-diagnostics-overview-orchestrator,"`command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` coordinates the faulthandler producer (`collect_faulthandler_reports.py`), consumer (`generate_fault_artifacts.py`), and the overview summarizer…",4338,2025-12-01T13:19:36.907672+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_fault_pipeline.md,h2,Follow-Ups,follow-ups,fault-diagnostics-overview-orchestrator,"`command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` coordinates the faulthandler producer (`collect_faulthandler_reports.py`), consumer (`generate_fault_artifacts.py`), and the overview summarizer…",4338,2025-12-01T13:19:36.907672+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_pytest_log_capture.md,h1,run_pytest_log_capture.py,runpytestlogcapturepy,,`run_pytest_log_capture.py` executes the repository's pytest suite (or summarizes an existing run) and emits a structured artifact bundle alongside timestamped raw outputs under…,5605,2025-11-28T14:18:05.288540+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_pytest_log_capture.md,h2,Overview,overview,runpytestlogcapturepy,`run_pytest_log_capture.py` executes the repository's pytest suite (or summarizes an existing run) and emits a structured artifact bundle alongside timestamped raw outputs under…,5605,2025-11-28T14:18:05.288540+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_pytest_log_capture.md,h2,Invocation,invocation,runpytestlogcapturepy,`run_pytest_log_capture.py` executes the repository's pytest suite (or summarizes an existing run) and emits a structured artifact bundle alongside timestamped raw outputs under…,5605,2025-11-28T14:18:05.288540+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_pytest_log_capture.md,h2,Outputs,outputs,runpytestlogcapturepy,`run_pytest_log_capture.py` executes the repository's pytest suite (or summarizes an existing run) and emits a structured artifact bundle alongside timestamped raw outputs under…,5605,2025-11-28T14:18:05.288540+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_pytest_log_capture.md,h2,Diagnostics,diagnostics,runpytestlogcapturepy,`run_pytest_log_capture.py` executes the repository's pytest suite (or summarizes an existing run) and emits a structured artifact bundle alongside timestamped raw outputs under…,5605,2025-11-28T14:18:05.288540+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_pytest_log_capture.md,h2,Testing,testing,runpytestlogcapturepy,`run_pytest_log_capture.py` executes the repository's pytest suite (or summarizes an existing run) and emits a structured artifact bundle alongside timestamped raw outputs under…,5605,2025-11-28T14:18:05.288540+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_pytest_log_capture.md,h2,Operational Notes,operational-notes,runpytestlogcapturepy,`run_pytest_log_capture.py` executes the repository's pytest suite (or summarizes an existing run) and emits a structured artifact bundle alongside timestamped raw outputs under…,5605,2025-11-28T14:18:05.288540+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_standards_index_cli.md,h1,run_standards_index_cli.py,runstandardsindexclipy,,"`run_standards_index_cli.py` wraps the Repo Studios standards index in a modernized orchestrator surface. The CLI still prints human-friendly results for `list`, `search`, `show`, and `stats`, while now emitting structured bundles so…",4944,2025-11-27T17:20:15.674439+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_standards_index_cli.md,h2,Overview,overview,runstandardsindexclipy,"`run_standards_index_cli.py` wraps the Repo Studios standards index in a modernized orchestrator surface. The CLI still prints human-friendly results for `list`, `search`, `show`, and `stats`, while now emitting structured bundles so…",4944,2025-11-27T17:20:15.674439+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_standards_index_cli.md,h2,Invocation,invocation,runstandardsindexclipy,"`run_standards_index_cli.py` wraps the Repo Studios standards index in a modernized orchestrator surface. The CLI still prints human-friendly results for `list`, `search`, `show`, and `stats`, while now emitting structured bundles so…",4944,2025-11-27T17:20:15.674439+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_standards_index_cli.md,h2,Outputs,outputs,runstandardsindexclipy,"`run_standards_index_cli.py` wraps the Repo Studios standards index in a modernized orchestrator surface. The CLI still prints human-friendly results for `list`, `search`, `show`, and `stats`, while now emitting structured bundles so…",4944,2025-11-27T17:20:15.674439+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_standards_index_cli.md,h2,Diagnostics,diagnostics,runstandardsindexclipy,"`run_standards_index_cli.py` wraps the Repo Studios standards index in a modernized orchestrator surface. The CLI still prints human-friendly results for `list`, `search`, `show`, and `stats`, while now emitting structured bundles so…",4944,2025-11-27T17:20:15.674439+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_standards_index_cli.md,h2,Testing,testing,runstandardsindexclipy,"`run_standards_index_cli.py` wraps the Repo Studios standards index in a modernized orchestrator surface. The CLI still prints human-friendly results for `list`, `search`, `show`, and `stats`, while now emitting structured bundles so…",4944,2025-11-27T17:20:15.674439+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/run_standards_index_cli.md,h2,Operational Notes,operational-notes,runstandardsindexclipy,"`run_standards_index_cli.py` wraps the Repo Studios standards index in a modernized orchestrator surface. The CLI still prints human-friendly results for `list`, `search`, `show`, and `stats`, while now emitting structured bundles so…",4944,2025-11-27T17:20:15.674439+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h1,scan_code_placeholders.py,scancodeplaceholderspy,,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6420,2025-11-25T00:22:28.965573+00:00,,,,yes,
 .repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h2,Purpose,purpose,scancodeplaceholderspy,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6420,2025-11-25T00:22:28.965573+00:00,,,,yes,
 .repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h2,Invocation,invocation,scancodeplaceholderspy,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6420,2025-11-25T00:22:28.965573+00:00,,,,yes,
@@ -22737,13 +26487,13 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h2,Diagnostics,diagnostics,scanmonkeypatchespy,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5224,2025-11-23T22:11:45.717043+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h2,Testing,testing,scanmonkeypatchespy,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5224,2025-11-23T22:11:45.717043+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h2,Operational notes,operational-notes,scanmonkeypatchespy,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5224,2025-11-23T22:11:45.717043+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h1,seed_standards_prompts.py,seedstandardspromptspy,,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3752,2025-10-23T18:08:31.195120+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Purpose,purpose,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3752,2025-10-23T18:08:31.195120+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Invocation,invocation,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3752,2025-10-23T18:08:31.195120+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Outputs,outputs,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3752,2025-10-23T18:08:31.195120+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Diagnostics,diagnostics,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3752,2025-10-23T18:08:31.195120+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Testing,testing,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3752,2025-10-23T18:08:31.195120+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Operational notes,operational-notes,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3752,2025-10-23T18:08:31.195120+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h1,seed_standards_prompts.py,seedstandardspromptspy,,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-11-27T17:20:15.674439+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Purpose,purpose,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-11-27T17:20:15.674439+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Invocation,invocation,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-11-27T17:20:15.674439+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Outputs,outputs,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-11-27T17:20:15.674439+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Diagnostics,diagnostics,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-11-27T17:20:15.674439+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Testing,testing,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-11-27T17:20:15.674439+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Operational notes,operational-notes,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-11-27T17:20:15.674439+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/standards-extraction-spec.md,h1,Standards Rule Extraction Specification,standards-rule-extraction-specification,,Defines deterministic heuristic pipeline converting Markdown standards sources into normalized `rule` objects prior to overrides.,6217,2025-10-21T12:02:58.658325+00:00,standards;automation;extraction,repo_studios_ai,draft,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/standards-extraction-spec.md,h2,Goals,goals,standards-rule-extraction-specification,Defines deterministic heuristic pipeline converting Markdown standards sources into normalized `rule` objects prior to overrides.,6217,2025-10-21T12:02:58.658325+00:00,standards;automation;extraction,repo_studios_ai,draft,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/standards-extraction-spec.md,h2,Input Sources,input-sources,standards-rule-extraction-specification,Defines deterministic heuristic pipeline converting Markdown standards sources into normalized `rule` objects prior to overrides.,6217,2025-10-21T12:02:58.658325+00:00,standards;automation;extraction,repo_studios_ai,draft,no,
@@ -22762,20 +26512,25 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation,.repo_studios/docs/automation/standards-extraction-spec.md,h2,Pseudo-code (Simplified),pseudo-code-simplified,standards-rule-extraction-specification,Defines deterministic heuristic pipeline converting Markdown standards sources into normalized `rule` objects prior to overrides.,6217,2025-10-21T12:02:58.658325+00:00,standards;automation;extraction,repo_studios_ai,draft,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/standards-extraction-spec.md,h2,Validation Hooks (Pre-Index),validation-hooks-pre-index,standards-rule-extraction-specification,Defines deterministic heuristic pipeline converting Markdown standards sources into normalized `rule` objects prior to overrides.,6217,2025-10-21T12:02:58.658325+00:00,standards;automation;extraction,repo_studios_ai,draft,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/standards-extraction-spec.md,h2,Future Enhancements,future-enhancements,standards-rule-extraction-specification,Defines deterministic heuristic pipeline converting Markdown standards sources into normalized `rule` objects prior to overrides.,6217,2025-10-21T12:02:58.658325+00:00,standards;automation;extraction,repo_studios_ai,draft,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h1,Standards Index Schema Specification,standards-index-schema-specification,,"This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5239,2025-10-21T12:02:58.658325+00:00,standards;schema;automation,repo_studios_ai,draft,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Top-Level Structure,top-level-structure,standards-index-schema-specification,"This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5239,2025-10-21T12:02:58.658325+00:00,standards;schema;automation,repo_studios_ai,draft,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Object: source,object-source,standards-index-schema-specification,"This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5239,2025-10-21T12:02:58.658325+00:00,standards;schema;automation,repo_studios_ai,draft,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Object: category,object-category,standards-index-schema-specification,"This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5239,2025-10-21T12:02:58.658325+00:00,standards;schema;automation,repo_studios_ai,draft,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Object: rule,object-rule,standards-index-schema-specification,"This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5239,2025-10-21T12:02:58.658325+00:00,standards;schema;automation,repo_studios_ai,draft,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Object: examples,object-examples,standards-index-schema-specification,"This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5239,2025-10-21T12:02:58.658325+00:00,standards;schema;automation,repo_studios_ai,draft,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Object: source_ref,object-sourceref,standards-index-schema-specification,"This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5239,2025-10-21T12:02:58.658325+00:00,standards;schema;automation,repo_studios_ai,draft,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Object: coverage,object-coverage,standards-index-schema-specification,"This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5239,2025-10-21T12:02:58.658325+00:00,standards;schema;automation,repo_studios_ai,draft,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Object: metadata,object-metadata,standards-index-schema-specification,"This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5239,2025-10-21T12:02:58.658325+00:00,standards;schema;automation,repo_studios_ai,draft,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Integrity Hash Algorithm,integrity-hash-algorithm,standards-index-schema-specification,"This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5239,2025-10-21T12:02:58.658325+00:00,standards;schema;automation,repo_studios_ai,draft,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Deterministic Ordering,deterministic-ordering,standards-index-schema-specification,"This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5239,2025-10-21T12:02:58.658325+00:00,standards;schema;automation,repo_studios_ai,draft,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Validation Rules,validation-rules,standards-index-schema-specification,"This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5239,2025-10-21T12:02:58.658325+00:00,standards;schema;automation,repo_studios_ai,draft,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Backward Compatibility,backward-compatibility,standards-index-schema-specification,"This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5239,2025-10-21T12:02:58.658325+00:00,standards;schema;automation,repo_studios_ai,draft,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Future Reserved Fields,future-reserved-fields,standards-index-schema-specification,"This specification defines the structure of `repo_standards_index.yaml`, which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5239,2025-10-21T12:02:58.658325+00:00,standards;schema;automation,repo_studios_ai,draft,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h1,Standards Index Schema Specification,standards-index-schema-specification,,"This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5316,2025-11-27T17:20:15.678074+00:00,standards;schema;automation,repo_studios_ai,draft,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Top-Level Structure,top-level-structure,standards-index-schema-specification,"This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5316,2025-11-27T17:20:15.678074+00:00,standards;schema;automation,repo_studios_ai,draft,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Object: source,object-source,standards-index-schema-specification,"This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5316,2025-11-27T17:20:15.678074+00:00,standards;schema;automation,repo_studios_ai,draft,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Object: category,object-category,standards-index-schema-specification,"This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5316,2025-11-27T17:20:15.678074+00:00,standards;schema;automation,repo_studios_ai,draft,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Object: rule,object-rule,standards-index-schema-specification,"This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5316,2025-11-27T17:20:15.678074+00:00,standards;schema;automation,repo_studios_ai,draft,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Object: examples,object-examples,standards-index-schema-specification,"This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5316,2025-11-27T17:20:15.678074+00:00,standards;schema;automation,repo_studios_ai,draft,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Object: source_ref,object-sourceref,standards-index-schema-specification,"This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5316,2025-11-27T17:20:15.678074+00:00,standards;schema;automation,repo_studios_ai,draft,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Object: coverage,object-coverage,standards-index-schema-specification,"This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5316,2025-11-27T17:20:15.678074+00:00,standards;schema;automation,repo_studios_ai,draft,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Object: metadata,object-metadata,standards-index-schema-specification,"This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5316,2025-11-27T17:20:15.678074+00:00,standards;schema;automation,repo_studios_ai,draft,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Integrity Hash Algorithm,integrity-hash-algorithm,standards-index-schema-specification,"This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5316,2025-11-27T17:20:15.678074+00:00,standards;schema;automation,repo_studios_ai,draft,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Deterministic Ordering,deterministic-ordering,standards-index-schema-specification,"This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5316,2025-11-27T17:20:15.678074+00:00,standards;schema;automation,repo_studios_ai,draft,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Validation Rules,validation-rules,standards-index-schema-specification,"This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5316,2025-11-27T17:20:15.678074+00:00,standards;schema;automation,repo_studios_ai,draft,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Backward Compatibility,backward-compatibility,standards-index-schema-specification,"This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5316,2025-11-27T17:20:15.678074+00:00,standards;schema;automation,repo_studios_ai,draft,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/standards-index-schema.md,h2,Future Reserved Fields,future-reserved-fields,standards-index-schema-specification,"This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",5316,2025-11-27T17:20:15.678074+00:00,standards;schema;automation,repo_studios_ai,draft,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/summarize_standards.md,h1,summarize_standards.py,summarizestandardspy,,"`summarize_standards.py` provides a lightweight telemetry probe for the standards catalog. It reads the canonical standards index (surfaced through the `latest_index.yaml` pointer) and the optional pending extraction queue, then emits log…",1878,2025-11-27T17:28:24.141509+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/summarize_standards.md,h2,Purpose,purpose,summarizestandardspy,"`summarize_standards.py` provides a lightweight telemetry probe for the standards catalog. It reads the canonical standards index (surfaced through the `latest_index.yaml` pointer) and the optional pending extraction queue, then emits log…",1878,2025-11-27T17:28:24.141509+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/summarize_standards.md,h2,Invocation,invocation,summarizestandardspy,"`summarize_standards.py` provides a lightweight telemetry probe for the standards catalog. It reads the canonical standards index (surfaced through the `latest_index.yaml` pointer) and the optional pending extraction queue, then emits log…",1878,2025-11-27T17:28:24.141509+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/summarize_standards.md,h2,Outputs,outputs,summarizestandardspy,"`summarize_standards.py` provides a lightweight telemetry probe for the standards catalog. It reads the canonical standards index (surfaced through the `latest_index.yaml` pointer) and the optional pending extraction queue, then emits log…",1878,2025-11-27T17:28:24.141509+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/summarize_standards.md,h2,Testing,testing,summarizestandardspy,"`summarize_standards.py` provides a lightweight telemetry probe for the standards catalog. It reads the canonical standards index (surfaced through the `latest_index.yaml` pointer) and the optional pending extraction queue, then emits log…",1878,2025-11-27T17:28:24.141509+00:00,,,,no,
 .repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/aggregator_dependency_audit.md,h1,Aggregator Dependency Audit (Draft 2025-11-24),aggregator-dependency-audit-draft-2025-11-24,,1. **Monkey Patch Trends** _(modernization complete — reference plan: `.repo_studios/docs/automation/traceability/analyze_monkey_patch_trends_modernization_plan.md`)_,3390,2025-11-24T17:47:49.125843+00:00,,,,no,
 .repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/aggregator_dependency_audit.md,h2,Purpose,purpose,aggregator-dependency-audit-draft-2025-11-24,1. **Monkey Patch Trends** _(modernization complete — reference plan: `.repo_studios/docs/automation/traceability/analyze_monkey_patch_trends_modernization_plan.md`)_,3390,2025-11-24T17:47:49.125843+00:00,,,,no,
 .repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/aggregator_dependency_audit.md,h2,Current Aggregator Inputs,current-aggregator-inputs,aggregator-dependency-audit-draft-2025-11-24,1. **Monkey Patch Trends** _(modernization complete — reference plan: `.repo_studios/docs/automation/traceability/analyze_monkey_patch_trends_modernization_plan.md`)_,3390,2025-11-24T17:47:49.125843+00:00,,,,no,
@@ -22789,20 +26544,40 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/analyze_monkey_patch_trends_modernization_plan.md,h2,Dependencies & Coordination,dependencies-coordination,analyze-monkey-patch-trends-modernization-plan-draft-2025-11-24,"Retool `.repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py` so it ingests the hardened consumer risk summaries, retains provenance, and publishes history-managed artifacts under the aggregator reports hierarchy.",4888,2025-11-24T18:09:28.195246+00:00,,,,no,
 .repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/analyze_monkey_patch_trends_modernization_plan.md,h2,Acceptance Criteria,acceptance-criteria,analyze-monkey-patch-trends-modernization-plan-draft-2025-11-24,"Retool `.repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py` so it ingests the hardened consumer risk summaries, retains provenance, and publishes history-managed artifacts under the aggregator reports hierarchy.",4888,2025-11-24T18:09:28.195246+00:00,,,,no,
 .repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/analyze_monkey_patch_trends_modernization_plan.md,h2,Open Questions,open-questions,analyze-monkey-patch-trends-modernization-plan-draft-2025-11-24,"Retool `.repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py` so it ingests the hardened consumer risk summaries, retains provenance, and publishes history-managed artifacts under the aggregator reports hierarchy.",4888,2025-11-24T18:09:28.195246+00:00,,,,no,
-.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md,h1,Generate Churn × Complexity Heatmap — Modernization Plan (Draft 2025-11-24),generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24,,"Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",5560,2025-11-24T17:47:49.125843+00:00,,,,no,
-.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md,h2,Objective,objective,generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24,"Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",5560,2025-11-24T17:47:49.125843+00:00,,,,no,
-.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md,h2,Current State,current-state,generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24,"Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",5560,2025-11-24T17:47:49.125843+00:00,,,,no,
-.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md,h2,Target Architecture,target-architecture,generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24,"Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",5560,2025-11-24T17:47:49.125843+00:00,,,,no,
-.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md,h2,Implementation Steps,implementation-steps,generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24,"Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",5560,2025-11-24T17:47:49.125843+00:00,,,,no,
-.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md,h2,Implementation Notes (2025-11-24),implementation-notes-2025-11-24,generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24,"Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",5560,2025-11-24T17:47:49.125843+00:00,,,,no,
-.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md,h2,Risks & Considerations,risks-considerations,generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24,"Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",5560,2025-11-24T17:47:49.125843+00:00,,,,no,
-.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md,h2,Open Questions,open-questions,generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24,"Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",5560,2025-11-24T17:47:49.125843+00:00,,,,no,
-.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/producer_consumer_traceability_audit.md,h1,Producer → Consumer Traceability Audit (Draft 2025-11-24),producer-consumer-traceability-audit-draft-2025-11-24,,"1. Treat the four hardened consumer bundles as the canonical inputs for upcoming aggregator rewires; aggregators should ingest the consumer summary JSON (`summary.json`, `anchor_report.json`, `bundle_summary.json`, `RISK_SUMMARY.json`)…",7719,2025-11-25T00:58:05.672960+00:00,,,,yes,
-.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/producer_consumer_traceability_audit.md,h2,Overview,overview,producer-consumer-traceability-audit-draft-2025-11-24,"1. Treat the four hardened consumer bundles as the canonical inputs for upcoming aggregator rewires; aggregators should ingest the consumer summary JSON (`summary.json`, `anchor_report.json`, `bundle_summary.json`, `RISK_SUMMARY.json`)…",7719,2025-11-25T00:58:05.672960+00:00,,,,yes,
-.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/producer_consumer_traceability_audit.md,h2,Evidence Sources,evidence-sources,producer-consumer-traceability-audit-draft-2025-11-24,"1. Treat the four hardened consumer bundles as the canonical inputs for upcoming aggregator rewires; aggregators should ingest the consumer summary JSON (`summary.json`, `anchor_report.json`, `bundle_summary.json`, `RISK_SUMMARY.json`)…",7719,2025-11-25T00:58:05.672960+00:00,,,,yes,
-.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/producer_consumer_traceability_audit.md,h2,Active Producer → Consumer Pairings,active-producer-consumer-pairings,producer-consumer-traceability-audit-draft-2025-11-24,"1. Treat the four hardened consumer bundles as the canonical inputs for upcoming aggregator rewires; aggregators should ingest the consumer summary JSON (`summary.json`, `anchor_report.json`, `bundle_summary.json`, `RISK_SUMMARY.json`)…",7719,2025-11-25T00:58:05.672960+00:00,,,,yes,
-.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/producer_consumer_traceability_audit.md,h2,Unpaired Producers & Proposed Consumers,unpaired-producers-proposed-consumers,producer-consumer-traceability-audit-draft-2025-11-24,"1. Treat the four hardened consumer bundles as the canonical inputs for upcoming aggregator rewires; aggregators should ingest the consumer summary JSON (`summary.json`, `anchor_report.json`, `bundle_summary.json`, `RISK_SUMMARY.json`)…",7719,2025-11-25T00:58:05.672960+00:00,,,,yes,
-.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/producer_consumer_traceability_audit.md,h2,Recommendations,recommendations,producer-consumer-traceability-audit-draft-2025-11-24,"1. Treat the four hardened consumer bundles as the canonical inputs for upcoming aggregator rewires; aggregators should ingest the consumer summary JSON (`summary.json`, `anchor_report.json`, `bundle_summary.json`, `RISK_SUMMARY.json`)…",7719,2025-11-25T00:58:05.672960+00:00,,,,yes,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/fault_pipeline_aggregator_plan.md,h1,Fault Pipeline Aggregator Blueprint,fault-pipeline-aggregator-blueprint,,"Capture the scope, dependencies, and success criteria for a future faulthandler aggregator that will blend multiple orchestrator runs into trend summaries.",2023,2025-11-26T14:39:08.308088+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/fault_pipeline_aggregator_plan.md,h2,Status,status,fault-pipeline-aggregator-blueprint,"Capture the scope, dependencies, and success criteria for a future faulthandler aggregator that will blend multiple orchestrator runs into trend summaries.",2023,2025-11-26T14:39:08.308088+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/fault_pipeline_aggregator_plan.md,h2,Purpose,purpose,fault-pipeline-aggregator-blueprint,"Capture the scope, dependencies, and success criteria for a future faulthandler aggregator that will blend multiple orchestrator runs into trend summaries.",2023,2025-11-26T14:39:08.308088+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/fault_pipeline_aggregator_plan.md,h2,Context,context,fault-pipeline-aggregator-blueprint,"Capture the scope, dependencies, and success criteria for a future faulthandler aggregator that will blend multiple orchestrator runs into trend summaries.",2023,2025-11-26T14:39:08.308088+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/fault_pipeline_aggregator_plan.md,h2,Open Questions,open-questions,fault-pipeline-aggregator-blueprint,"Capture the scope, dependencies, and success criteria for a future faulthandler aggregator that will blend multiple orchestrator runs into trend summaries.",2023,2025-11-26T14:39:08.308088+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/fault_pipeline_aggregator_plan.md,h2,Proposed Next Steps,proposed-next-steps,fault-pipeline-aggregator-blueprint,"Capture the scope, dependencies, and success criteria for a future faulthandler aggregator that will blend multiple orchestrator runs into trend summaries.",2023,2025-11-26T14:39:08.308088+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/fault_pipeline_aggregator_plan.md,h2,Risks,risks,fault-pipeline-aggregator-blueprint,"Capture the scope, dependencies, and success criteria for a future faulthandler aggregator that will blend multiple orchestrator runs into trend summaries.",2023,2025-11-26T14:39:08.308088+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/fault_pipeline_aggregator_plan.md,h2,Notes,notes,fault-pipeline-aggregator-blueprint,"Capture the scope, dependencies, and success criteria for a future faulthandler aggregator that will blend multiple orchestrator runs into trend summaries.",2023,2025-11-26T14:39:08.308088+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md,h1,Generate Churn × Complexity Heatmap — Modernization Plan (Draft 2025-11-24),generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24,,"Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",5645,2025-11-28T14:18:05.280027+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md,h2,Objective,objective,generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24,"Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",5645,2025-11-28T14:18:05.280027+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md,h2,Current State,current-state,generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24,"Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",5645,2025-11-28T14:18:05.280027+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md,h2,Target Architecture,target-architecture,generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24,"Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",5645,2025-11-28T14:18:05.280027+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md,h2,Implementation Steps,implementation-steps,generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24,"Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",5645,2025-11-28T14:18:05.280027+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md,h2,Implementation Notes (2025-11-24),implementation-notes-2025-11-24,generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24,"Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",5645,2025-11-28T14:18:05.280027+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md,h2,Risks & Considerations,risks-considerations,generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24,"Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",5645,2025-11-28T14:18:05.280027+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md,h2,Open Questions,open-questions,generate-churn-complexity-heatmap-modernization-plan-draft-2025-11-24,"Realign `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` with the hardened producer/consumer pipeline by formalizing inputs, provenance, retention, and testing.",5645,2025-11-28T14:18:05.280027+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_code_doc_churn_report_plan.md,h1,generate_code_doc_churn_report Planning Notes,generatecodedocchurnreport-planning-notes,,"target missing change logs, upgrade guides, or doc refreshes.",5514,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_code_doc_churn_report_plan.md,h2,Objective,objective,generatecodedocchurnreport-planning-notes,"target missing change logs, upgrade guides, or doc refreshes.",5514,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_code_doc_churn_report_plan.md,h2,Implementation Status (2025-11-25),implementation-status-2025-11-25,generatecodedocchurnreport-planning-notes,"target missing change logs, upgrade guides, or doc refreshes.",5514,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_code_doc_churn_report_plan.md,h2,Primary Inputs,primary-inputs,generatecodedocchurnreport-planning-notes,"target missing change logs, upgrade guides, or doc refreshes.",5514,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_code_doc_churn_report_plan.md,h2,Proposed CLI Interface,proposed-cli-interface,generatecodedocchurnreport-planning-notes,"target missing change logs, upgrade guides, or doc refreshes.",5514,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_code_doc_churn_report_plan.md,h2,Artifact Plan,artifact-plan,generatecodedocchurnreport-planning-notes,"target missing change logs, upgrade guides, or doc refreshes.",5514,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_code_doc_churn_report_plan.md,h2,Detection Heuristics,detection-heuristics,generatecodedocchurnreport-planning-notes,"target missing change logs, upgrade guides, or doc refreshes.",5514,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_code_doc_churn_report_plan.md,h2,Logging & Provenance,logging-provenance,generatecodedocchurnreport-planning-notes,"target missing change logs, upgrade guides, or doc refreshes.",5514,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_code_doc_churn_report_plan.md,h2,Testing Strategy,testing-strategy,generatecodedocchurnreport-planning-notes,"target missing change logs, upgrade guides, or doc refreshes.",5514,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_code_doc_churn_report_plan.md,h2,Documentation Tasks,documentation-tasks,generatecodedocchurnreport-planning-notes,"target missing change logs, upgrade guides, or doc refreshes.",5514,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_code_doc_churn_report_plan.md,h2,Outstanding Questions,outstanding-questions,generatecodedocchurnreport-planning-notes,"target missing change logs, upgrade guides, or doc refreshes.",5514,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/generate_code_doc_churn_report_plan.md,h2,Next Steps,next-steps,generatecodedocchurnreport-planning-notes,"target missing change logs, upgrade guides, or doc refreshes.",5514,2025-11-25T18:18:22.678815+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/producer_consumer_traceability_audit.md,h1,Producer → Consumer Traceability Audit (Draft 2025-11-24),producer-consumer-traceability-audit-draft-2025-11-24,,"1. Treat the four hardened consumer bundles as the canonical inputs for upcoming aggregator rewires; aggregators should ingest the consumer summary JSON (`summary.json`, `anchor_report.json`, `bundle_summary.json`, `RISK_SUMMARY.json`)…",7771,2025-11-26T16:39:05.740452+00:00,,,,yes,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/producer_consumer_traceability_audit.md,h2,Overview,overview,producer-consumer-traceability-audit-draft-2025-11-24,"1. Treat the four hardened consumer bundles as the canonical inputs for upcoming aggregator rewires; aggregators should ingest the consumer summary JSON (`summary.json`, `anchor_report.json`, `bundle_summary.json`, `RISK_SUMMARY.json`)…",7771,2025-11-26T16:39:05.740452+00:00,,,,yes,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/producer_consumer_traceability_audit.md,h2,Evidence Sources,evidence-sources,producer-consumer-traceability-audit-draft-2025-11-24,"1. Treat the four hardened consumer bundles as the canonical inputs for upcoming aggregator rewires; aggregators should ingest the consumer summary JSON (`summary.json`, `anchor_report.json`, `bundle_summary.json`, `RISK_SUMMARY.json`)…",7771,2025-11-26T16:39:05.740452+00:00,,,,yes,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/producer_consumer_traceability_audit.md,h2,Active Producer → Consumer Pairings,active-producer-consumer-pairings,producer-consumer-traceability-audit-draft-2025-11-24,"1. Treat the four hardened consumer bundles as the canonical inputs for upcoming aggregator rewires; aggregators should ingest the consumer summary JSON (`summary.json`, `anchor_report.json`, `bundle_summary.json`, `RISK_SUMMARY.json`)…",7771,2025-11-26T16:39:05.740452+00:00,,,,yes,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/producer_consumer_traceability_audit.md,h2,Unpaired Producers & Proposed Consumers,unpaired-producers-proposed-consumers,producer-consumer-traceability-audit-draft-2025-11-24,"1. Treat the four hardened consumer bundles as the canonical inputs for upcoming aggregator rewires; aggregators should ingest the consumer summary JSON (`summary.json`, `anchor_report.json`, `bundle_summary.json`, `RISK_SUMMARY.json`)…",7771,2025-11-26T16:39:05.740452+00:00,,,,yes,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/producer_consumer_traceability_audit.md,h2,Recommendations,recommendations,producer-consumer-traceability-audit-draft-2025-11-24,"1. Treat the four hardened consumer bundles as the canonical inputs for upcoming aggregator rewires; aggregators should ingest the consumer summary JSON (`summary.json`, `anchor_report.json`, `bundle_summary.json`, `RISK_SUMMARY.json`)…",7771,2025-11-26T16:39:05.740452+00:00,,,,yes,
 .repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_batch_cleanup_modernization_plan.md,h1,Run Batch Cleanup — Modernization Plan (Draft 2025-11-24),run-batch-cleanup-modernization-plan-draft-2025-11-24,,Existing tables below retain the pre-modernization snapshot for historical context.,5364,2025-11-24T18:55:36.604719+00:00,,,,no,
 .repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_batch_cleanup_modernization_plan.md,h2,Status,status,run-batch-cleanup-modernization-plan-draft-2025-11-24,Existing tables below retain the pre-modernization snapshot for historical context.,5364,2025-11-24T18:55:36.604719+00:00,,,,no,
 .repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_batch_cleanup_modernization_plan.md,h2,Objective,objective,run-batch-cleanup-modernization-plan-draft-2025-11-24,Existing tables below retain the pre-modernization snapshot for historical context.,5364,2025-11-24T18:55:36.604719+00:00,,,,no,
@@ -22812,6 +26587,15 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_batch_cleanup_modernization_plan.md,h2,Dependencies & Coordination,dependencies-coordination,run-batch-cleanup-modernization-plan-draft-2025-11-24,Existing tables below retain the pre-modernization snapshot for historical context.,5364,2025-11-24T18:55:36.604719+00:00,,,,no,
 .repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_batch_cleanup_modernization_plan.md,h2,Acceptance Criteria,acceptance-criteria,run-batch-cleanup-modernization-plan-draft-2025-11-24,Existing tables below retain the pre-modernization snapshot for historical context.,5364,2025-11-24T18:55:36.604719+00:00,,,,no,
 .repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_batch_cleanup_modernization_plan.md,h2,Open Questions,open-questions,run-batch-cleanup-modernization-plan-draft-2025-11-24,Existing tables below retain the pre-modernization snapshot for historical context.,5364,2025-11-24T18:55:36.604719+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_standards_index_cli_modernization_plan.md,h1,Run Standards Index CLI — Modernization Plan (Draft 2025-11-27),run-standards-index-cli-modernization-plan-draft-2025-11-27,,"Modernize `.repo_studios/scripts/orchestrators/run_standards_index_cli.py` so standards analysts and tooling receive structured, retainable outputs while preserving its lightweight CLI ergonomics. The refactor will introduce an import-safe…",5052,2025-11-27T16:29:59.403519+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_standards_index_cli_modernization_plan.md,h2,Status,status,run-standards-index-cli-modernization-plan-draft-2025-11-27,"Modernize `.repo_studios/scripts/orchestrators/run_standards_index_cli.py` so standards analysts and tooling receive structured, retainable outputs while preserving its lightweight CLI ergonomics. The refactor will introduce an import-safe…",5052,2025-11-27T16:29:59.403519+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_standards_index_cli_modernization_plan.md,h2,Objective,objective,run-standards-index-cli-modernization-plan-draft-2025-11-27,"Modernize `.repo_studios/scripts/orchestrators/run_standards_index_cli.py` so standards analysts and tooling receive structured, retainable outputs while preserving its lightweight CLI ergonomics. The refactor will introduce an import-safe…",5052,2025-11-27T16:29:59.403519+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_standards_index_cli_modernization_plan.md,h2,Current State,current-state,run-standards-index-cli-modernization-plan-draft-2025-11-27,"Modernize `.repo_studios/scripts/orchestrators/run_standards_index_cli.py` so standards analysts and tooling receive structured, retainable outputs while preserving its lightweight CLI ergonomics. The refactor will introduce an import-safe…",5052,2025-11-27T16:29:59.403519+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_standards_index_cli_modernization_plan.md,h2,Target Architecture,target-architecture,run-standards-index-cli-modernization-plan-draft-2025-11-27,"Modernize `.repo_studios/scripts/orchestrators/run_standards_index_cli.py` so standards analysts and tooling receive structured, retainable outputs while preserving its lightweight CLI ergonomics. The refactor will introduce an import-safe…",5052,2025-11-27T16:29:59.403519+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_standards_index_cli_modernization_plan.md,h2,Implementation Steps,implementation-steps,run-standards-index-cli-modernization-plan-draft-2025-11-27,"Modernize `.repo_studios/scripts/orchestrators/run_standards_index_cli.py` so standards analysts and tooling receive structured, retainable outputs while preserving its lightweight CLI ergonomics. The refactor will introduce an import-safe…",5052,2025-11-27T16:29:59.403519+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_standards_index_cli_modernization_plan.md,h2,Dependencies & Coordination,dependencies-coordination,run-standards-index-cli-modernization-plan-draft-2025-11-27,"Modernize `.repo_studios/scripts/orchestrators/run_standards_index_cli.py` so standards analysts and tooling receive structured, retainable outputs while preserving its lightweight CLI ergonomics. The refactor will introduce an import-safe…",5052,2025-11-27T16:29:59.403519+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_standards_index_cli_modernization_plan.md,h2,Acceptance Criteria,acceptance-criteria,run-standards-index-cli-modernization-plan-draft-2025-11-27,"Modernize `.repo_studios/scripts/orchestrators/run_standards_index_cli.py` so standards analysts and tooling receive structured, retainable outputs while preserving its lightweight CLI ergonomics. The refactor will introduce an import-safe…",5052,2025-11-27T16:29:59.403519+00:00,,,,no,
+.repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_standards_index_cli_modernization_plan.md,h2,Open Questions,open-questions,run-standards-index-cli-modernization-plan-draft-2025-11-27,"Modernize `.repo_studios/scripts/orchestrators/run_standards_index_cli.py` so standards analysts and tooling receive structured, retainable outputs while preserving its lightweight CLI ergonomics. The refactor will introduce an import-safe…",5052,2025-11-27T16:29:59.403519+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/validate_import_boundaries.md,h1,validate_import_boundaries.py,validateimportboundariespy,,"`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level…",3680,2025-10-23T20:46:06.804068+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/validate_import_boundaries.md,h2,Purpose,purpose,validateimportboundariespy,"`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level…",3680,2025-10-23T20:46:06.804068+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/validate_import_boundaries.md,h2,Invocation,invocation,validateimportboundariespy,"`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level…",3680,2025-10-23T20:46:06.804068+00:00,,,,no,
@@ -22823,13 +26607,13 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation,.repo_studios/docs/automation/validate_inventory.md,h2,Invocation,invocation,validate-inventory-producer,"The `validate_inventory.py` producer walks the inventory catalog, enforces schema conventions, and writes structured validation bundles for downstream tooling.",1882,2025-10-23T11:18:26.650942+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/validate_inventory.md,h2,Outputs,outputs,validate-inventory-producer,"The `validate_inventory.py` producer walks the inventory catalog, enforces schema conventions, and writes structured validation bundles for downstream tooling.",1882,2025-10-23T11:18:26.650942+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/validate_inventory.md,h2,Testing,testing,validate-inventory-producer,"The `validate_inventory.py` producer walks the inventory catalog, enforces schema conventions, and writes structured validation bundles for downstream tooling.",1882,2025-10-23T11:18:26.650942+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h1,validate_markdown_anchors.py,validatemarkdownanchorspy,,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3046,2025-11-23T19:36:19.831021+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Purpose,purpose,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3046,2025-11-23T19:36:19.831021+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Invocation,invocation,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3046,2025-11-23T19:36:19.831021+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Outputs,outputs,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3046,2025-11-23T19:36:19.831021+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Status semantics,status-semantics,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3046,2025-11-23T19:36:19.831021+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Testing,testing,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3046,2025-11-23T19:36:19.831021+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Operational notes,operational-notes,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3046,2025-11-23T19:36:19.831021+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h1,validate_markdown_anchors.py,validatemarkdownanchorspy,,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3062,2025-11-25T19:39:48.109027+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Purpose,purpose,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3062,2025-11-25T19:39:48.109027+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Invocation,invocation,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3062,2025-11-25T19:39:48.109027+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Outputs,outputs,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3062,2025-11-25T19:39:48.109027+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Status semantics,status-semantics,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3062,2025-11-25T19:39:48.109027+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Testing,testing,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3062,2025-11-25T19:39:48.109027+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Operational notes,operational-notes,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3062,2025-11-25T19:39:48.109027+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/validate_metrics_anchor_stubs.md,h1,validate_metrics_anchor_stubs.py,validatemetricsanchorstubspy,,`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry. The refactor emits structured artifacts…,3140,2025-10-23T23:24:42.780107+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/validate_metrics_anchor_stubs.md,h2,Purpose,purpose,validatemetricsanchorstubspy,`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry. The refactor emits structured artifacts…,3140,2025-10-23T23:24:42.780107+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/validate_metrics_anchor_stubs.md,h2,Invocation,invocation,validatemetricsanchorstubspy,`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry. The refactor emits structured artifacts…,3140,2025-10-23T23:24:42.780107+00:00,,,,no,
@@ -22848,13 +26632,14 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs,.repo_studios/docs/directory_layout.md,h2,Legacy Mapping,legacy-mapping,directory-layout-reference,Last updated: 2025-10-17,2677,2025-10-21T12:02:58.658325+00:00,,,,no,
 .repo_studios/docs,.repo_studios/docs/directory_layout.md,h2,Operational Notes,operational-notes,directory-layout-reference,Last updated: 2025-10-17,2677,2025-10-21T12:02:58.658325+00:00,,,,no,
 .repo_studios/docs,.repo_studios/docs/directory_layout.md,h2,Reports Roadmap,reports-roadmap,directory-layout-reference,Last updated: 2025-10-17,2677,2025-10-21T12:02:58.658325+00:00,,,,no,
-.repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h1,Documentation Inventory Notes,documentation-inventory-notes,,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11741,2025-10-21T12:02:58.660326+00:00,inventory;notes,repo_studios_ai,draft,yes,
-.repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h2,Summary Metrics,summary-metrics,documentation-inventory-notes,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11741,2025-10-21T12:02:58.660326+00:00,inventory;notes,repo_studios_ai,draft,yes,
-.repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h2,Observations,observations,documentation-inventory-notes,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11741,2025-10-21T12:02:58.660326+00:00,inventory;notes,repo_studios_ai,draft,yes,
-.repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h2,Action Items,action-items,documentation-inventory-notes,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11741,2025-10-21T12:02:58.660326+00:00,inventory;notes,repo_studios_ai,draft,yes,
-.repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h2,Concerns,concerns,documentation-inventory-notes,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11741,2025-10-21T12:02:58.660326+00:00,inventory;notes,repo_studios_ai,draft,yes,
-.repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h2,Gaps to Investigate,gaps-to-investigate,documentation-inventory-notes,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11741,2025-10-21T12:02:58.660326+00:00,inventory;notes,repo_studios_ai,draft,yes,
-.repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h2,Next Steps,next-steps,documentation-inventory-notes,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11741,2025-10-21T12:02:58.660326+00:00,inventory;notes,repo_studios_ai,draft,yes,
+.repo_studios/docs/governance,.repo_studios/docs/governance/alignment-ledger.md,h1,Repo Studios Alignment Ledger,repo-studios-alignment-ledger,,"This ledger tracks documentation alignment batches, remediation work, and follow-up actions. Populate entries chronologically with timestamps, owners, scopes, and outstanding notes to maintain an auditable trail.",251,2025-11-26T19:48:04.423689+00:00,,,,no,
+.repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h1,Documentation Inventory Notes,documentation-inventory-notes,,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11816,2025-11-28T14:18:05.289540+00:00,inventory;notes,repo_studios_ai,draft,yes,
+.repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h2,Summary Metrics,summary-metrics,documentation-inventory-notes,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11816,2025-11-28T14:18:05.289540+00:00,inventory;notes,repo_studios_ai,draft,yes,
+.repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h2,Observations,observations,documentation-inventory-notes,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11816,2025-11-28T14:18:05.289540+00:00,inventory;notes,repo_studios_ai,draft,yes,
+.repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h2,Action Items,action-items,documentation-inventory-notes,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11816,2025-11-28T14:18:05.289540+00:00,inventory;notes,repo_studios_ai,draft,yes,
+.repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h2,Concerns,concerns,documentation-inventory-notes,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11816,2025-11-28T14:18:05.289540+00:00,inventory;notes,repo_studios_ai,draft,yes,
+.repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h2,Gaps to Investigate,gaps-to-investigate,documentation-inventory-notes,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11816,2025-11-28T14:18:05.289540+00:00,inventory;notes,repo_studios_ai,draft,yes,
+.repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h2,Next Steps,next-steps,documentation-inventory-notes,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11816,2025-11-28T14:18:05.289540+00:00,inventory;notes,repo_studios_ai,draft,yes,
 .repo_studios/docs,.repo_studios/docs/inventory_reports.md,h1,Inventory Reports Overview,inventory-reports-overview,,Last updated: 2025-10-18,2574,2025-10-21T12:02:58.661326+00:00,,,,no,
 .repo_studios/docs,.repo_studios/docs/inventory_reports.md,h2,Running the Renderer,running-the-renderer,inventory-reports-overview,Last updated: 2025-10-18,2574,2025-10-21T12:02:58.661326+00:00,,,,no,
 .repo_studios/docs,.repo_studios/docs/inventory_reports.md,h2,Report Layout,report-layout,inventory-reports-overview,Last updated: 2025-10-18,2574,2025-10-21T12:02:58.661326+00:00,,,,no,
@@ -22877,14 +26662,14 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs,.repo_studios/docs/naming_conventions.md,h2,Scripts & Automation,scripts-automation,repo-studios-naming-conventions,Last updated: 2025-10-18,1625,2025-10-21T12:02:58.662325+00:00,,,,no,
 .repo_studios/docs,.repo_studios/docs/naming_conventions.md,h2,Tests & Fixtures,tests-fixtures,repo-studios-naming-conventions,Last updated: 2025-10-18,1625,2025-10-21T12:02:58.662325+00:00,,,,no,
 .repo_studios/docs,.repo_studios/docs/naming_conventions.md,h2,Inventory IDs,inventory-ids,repo-studios-naming-conventions,Last updated: 2025-10-18,1625,2025-10-21T12:02:58.662325+00:00,,,,no,
-.repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-agent-operations.md,h1,Repo Studios Agent Operations Playbook,repo-studios-agent-operations-playbook,,Audience: Repo Studios automation | Human developers | Partner agents,4806,2025-11-24T12:14:55.737022+00:00,playbook;operations;repo-studios,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,draft,no,
-.repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-agent-operations.md,h2,System Snapshot,system-snapshot,repo-studios-agent-operations-playbook,Audience: Repo Studios automation | Human developers | Partner agents,4806,2025-11-24T12:14:55.737022+00:00,playbook;operations;repo-studios,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,draft,no,
-.repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-agent-operations.md,h2,Core Responsibilities,core-responsibilities,repo-studios-agent-operations-playbook,Audience: Repo Studios automation | Human developers | Partner agents,4806,2025-11-24T12:14:55.737022+00:00,playbook;operations;repo-studios,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,draft,no,
-.repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-agent-operations.md,h2,Daily Command Checklist,daily-command-checklist,repo-studios-agent-operations-playbook,Audience: Repo Studios automation | Human developers | Partner agents,4806,2025-11-24T12:14:55.737022+00:00,playbook;operations;repo-studios,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,draft,no,
-.repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-agent-operations.md,h2,Standards Reference Map,standards-reference-map,repo-studios-agent-operations-playbook,Audience: Repo Studios automation | Human developers | Partner agents,4806,2025-11-24T12:14:55.737022+00:00,playbook;operations;repo-studios,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,draft,no,
-.repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-agent-operations.md,h2,Logging & Observability,logging-observability,repo-studios-agent-operations-playbook,Audience: Repo Studios automation | Human developers | Partner agents,4806,2025-11-24T12:14:55.737022+00:00,playbook;operations;repo-studios,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,draft,no,
-.repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-agent-operations.md,h2,Collaboration Protocol,collaboration-protocol,repo-studios-agent-operations-playbook,Audience: Repo Studios automation | Human developers | Partner agents,4806,2025-11-24T12:14:55.737022+00:00,playbook;operations;repo-studios,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,draft,no,
-.repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-agent-operations.md,h2,Agent Block (Machine-Readable),agent-block-machine-readable,repo-studios-agent-operations-playbook,Audience: Repo Studios automation | Human developers | Partner agents,4806,2025-11-24T12:14:55.737022+00:00,playbook;operations;repo-studios,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-agent-operations.md,h1,Repo Studios Agent Operations Playbook,repo-studios-agent-operations-playbook,,Audience: Repo Studios automation | Human developers | Partner agents,4904,2025-11-28T14:18:05.280027+00:00,playbook;operations;repo-studios,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-agent-operations.md,h2,System Snapshot,system-snapshot,repo-studios-agent-operations-playbook,Audience: Repo Studios automation | Human developers | Partner agents,4904,2025-11-28T14:18:05.280027+00:00,playbook;operations;repo-studios,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-agent-operations.md,h2,Core Responsibilities,core-responsibilities,repo-studios-agent-operations-playbook,Audience: Repo Studios automation | Human developers | Partner agents,4904,2025-11-28T14:18:05.280027+00:00,playbook;operations;repo-studios,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-agent-operations.md,h2,Daily Command Checklist,daily-command-checklist,repo-studios-agent-operations-playbook,Audience: Repo Studios automation | Human developers | Partner agents,4904,2025-11-28T14:18:05.280027+00:00,playbook;operations;repo-studios,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-agent-operations.md,h2,Standards Reference Map,standards-reference-map,repo-studios-agent-operations-playbook,Audience: Repo Studios automation | Human developers | Partner agents,4904,2025-11-28T14:18:05.280027+00:00,playbook;operations;repo-studios,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-agent-operations.md,h2,Logging & Observability,logging-observability,repo-studios-agent-operations-playbook,Audience: Repo Studios automation | Human developers | Partner agents,4904,2025-11-28T14:18:05.280027+00:00,playbook;operations;repo-studios,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-agent-operations.md,h2,Collaboration Protocol,collaboration-protocol,repo-studios-agent-operations-playbook,Audience: Repo Studios automation | Human developers | Partner agents,4904,2025-11-28T14:18:05.280027+00:00,playbook;operations;repo-studios,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-agent-operations.md,h2,Agent Block (Machine-Readable),agent-block-machine-readable,repo-studios-agent-operations-playbook,Audience: Repo Studios automation | Human developers | Partner agents,4904,2025-11-28T14:18:05.280027+00:00,playbook;operations;repo-studios,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,draft,no,
 .repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-memory-refresh.md,h1,Repo Studios Memory Refresh Playbook,repo-studios-memory-refresh-playbook,,Audience: Repo Studios automation | Memory maintainers,4891,2025-10-21T12:02:58.663326+00:00,memory;playbook;rag,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,approved,no,
 .repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-memory-refresh.md,h2,Triggers,triggers,repo-studios-memory-refresh-playbook,Audience: Repo Studios automation | Memory maintainers,4891,2025-10-21T12:02:58.663326+00:00,memory;playbook;rag,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,approved,no,
 .repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-memory-refresh.md,h2,Preconditions,preconditions,repo-studios-memory-refresh-playbook,Audience: Repo Studios automation | Memory maintainers,4891,2025-10-21T12:02:58.663326+00:00,memory;playbook;rag,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,approved,no,
@@ -22908,7 +26693,7 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-prompt-library.md,h2,Reference Commands,reference-commands,repo-studios-prompt-library-playbook,Audience: Repo Studios automation | Human collaborators,3166,2025-11-04T14:45:22.667537+00:00,prompts;playbook;ai-ingestion,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,approved,no,
 .repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-prompt-library.md,h2,Governance Notes,governance-notes,repo-studios-prompt-library-playbook,Audience: Repo Studios automation | Human collaborators,3166,2025-11-04T14:45:22.667537+00:00,prompts;playbook;ai-ingestion,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,approved,no,
 .repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-prompt-library.md,h2,Agent Block (Machine-Readable),agent-block-machine-readable,repo-studios-prompt-library-playbook,Audience: Repo Studios automation | Human collaborators,3166,2025-11-04T14:45:22.667537+00:00,prompts;playbook;ai-ingestion,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,approved,no,
-.repo_studios/docs,.repo_studios/docs/project_tree_overview.md,h1,Project Tree Overview,project-tree-overview,,"This document is refreshed automatically by `run_batch_cleanup.py`. Edits outside the tree block are preserved, but avoid modifying the block between the markers.",7804,2025-11-24T23:37:41.293374+00:00,,,,yes,
+.repo_studios/docs,.repo_studios/docs/project_tree_overview.md,h1,Project Tree Overview,project-tree-overview,,"This document is refreshed automatically by `run_batch_cleanup.py`. Edits outside the tree block are preserved, but avoid modifying the block between the markers.",8381,2025-11-27T17:56:35.814451+00:00,,,,yes,
 .repo_studios/docs,.repo_studios/docs/repo_studios_build_plan.md,h1,Repo Studios Build Plan,repo-studios-build-plan,,_Last updated: 2025-10-17_,7647,2025-10-21T12:02:58.665326+00:00,,,,no,
 .repo_studios/docs,.repo_studios/docs/repo_studios_build_plan.md,h2,Guiding Principles,guiding-principles,repo-studios-build-plan,_Last updated: 2025-10-17_,7647,2025-10-21T12:02:58.665326+00:00,,,,no,
 .repo_studios/docs,.repo_studios/docs/repo_studios_build_plan.md,h2,Phase 0 — Alignment (Complete),phase-0-alignment-complete,repo-studios-build-plan,_Last updated: 2025-10-17_,7647,2025-10-21T12:02:58.665326+00:00,,,,no,
@@ -22919,7 +26704,8 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs,.repo_studios/docs/repo_studios_build_plan.md,h2,Phase 5 — Governance & Onboarding Assets,phase-5-governance-onboarding-assets,repo-studios-build-plan,_Last updated: 2025-10-17_,7647,2025-10-21T12:02:58.665326+00:00,,,,no,
 .repo_studios/docs,.repo_studios/docs/repo_studios_build_plan.md,h2,Parallel Workstreams,parallel-workstreams,repo-studios-build-plan,_Last updated: 2025-10-17_,7647,2025-10-21T12:02:58.665326+00:00,,,,no,
 .repo_studios/docs,.repo_studios/docs/repo_studios_build_plan.md,h2,Deliverables Snapshot,deliverables-snapshot,repo-studios-build-plan,_Last updated: 2025-10-17_,7647,2025-10-21T12:02:58.665326+00:00,,,,no,
-.repo_studios/docs/standards,.repo_studios/docs/standards/docs_index.md,h1,Repo Studios Documentation Index,repo-studios-documentation-index,,This index enumerates governed documentation surfaces that participate in Repo Studios integrity checks.,1161,2025-10-24T00:50:09.673913+00:00,,,,no,
+.repo_studios/docs/standards,.repo_studios/docs/standards/docs_index.md,h1,Repo Studios Documentation Index,repo-studios-documentation-index,,This index enumerates governed documentation surfaces that participate in Repo Studios integrity checks.,1626,2025-12-01T04:26:35.221102+00:00,,,,no,
+.repo_studios/docs/standards,.repo_studios/docs/standards/docs_index.md,h2,Healthview Artifacts,healthview-artifacts,repo-studios-documentation-index,This index enumerates governed documentation surfaces that participate in Repo Studios integrity checks.,1626,2025-12-01T04:26:35.221102+00:00,,,,no,
 .repo_studios/docs/standards/global,.repo_studios/docs/standards/global/README.md,h1,Global Standards Catalog,global-standards-catalog,,Last updated: 2025-10-18,1094,2025-10-21T12:02:58.666326+00:00,,,,no,
 .repo_studios/docs/standards/global,.repo_studios/docs/standards/global/README.md,h2,Authoring Guidelines,authoring-guidelines,global-standards-catalog,Last updated: 2025-10-18,1094,2025-10-21T12:02:58.666326+00:00,,,,no,
 .repo_studios/docs/standards/global,.repo_studios/docs/standards/global/README.md,h2,Migration Notes,migration-notes,global-standards-catalog,Last updated: 2025-10-18,1094,2025-10-21T12:02:58.666326+00:00,,,,no,
@@ -23084,16 +26870,16 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/templates,.repo_studios/docs/templates/script_inventory_template.md,h2,YAML Conversion Example,yaml-conversion-example,script-inventory-template,Last updated: 2025-10-21,2293,2025-10-21T14:59:28.496722+00:00,,,,no,
 .repo_studios/docs/templates,.repo_studios/docs/templates/structural_checklist_template.md,h1,Structural Checklist Template,structural-checklist-template,,Last updated: 2025-10-18,1189,2025-10-21T12:02:58.672327+00:00,,,,no,
 .repo_studios/inventory_schema/views,.repo_studios/inventory_schema/views/README.md,h1,Inventory Secondary Views,inventory-secondary-views,,Derived views in this folder are generated by `.repo_studios/scripts/render_inventory_views.py`. They provide read-only summaries of the authoritative catalogs so agents can quickly scan asset coverage without duplicating source data.,860,2025-10-21T12:02:58.677327+00:00,,,,no,
-.repo_studios/monkey_patch/20251124_175233,.repo_studios/monkey_patch/20251124_175233/report.md,h1,Monkey Patch Scan Report,monkey-patch-scan-report,,,1696,2025-11-24T17:52:33.912420+00:00,,,,no,
-.repo_studios/monkey_patch/20251124_175233,.repo_studios/monkey_patch/20251124_175233/report.md,h2,Findings by Category,findings-by-category,monkey-patch-scan-report,,1696,2025-11-24T17:52:33.912420+00:00,,,,no,
-.repo_studios/monkey_patch/20251124_175233,.repo_studios/monkey_patch/20251124_175233/report.md,h2,Patched Import Bases,patched-import-bases,monkey-patch-scan-report,,1696,2025-11-24T17:52:33.912420+00:00,,,,no,
-.repo_studios/monkey_patch/20251124_175233,.repo_studios/monkey_patch/20251124_175233/report.md,h2,Files With Highest Patch Counts,files-with-highest-patch-counts,monkey-patch-scan-report,,1696,2025-11-24T17:52:33.912420+00:00,,,,no,
-.repo_studios/monkey_patch/20251124_175233,.repo_studios/monkey_patch/20251124_175233/report.md,h2,Next Steps,next-steps,monkey-patch-scan-report,,1696,2025-11-24T17:52:33.912420+00:00,,,,no,
-.repo_studios/monkey_patch/latest,.repo_studios/monkey_patch/latest/report.md,h1,Monkey Patch Scan Report,monkey-patch-scan-report,,,1696,2025-11-24T17:52:33.916251+00:00,,,,no,
-.repo_studios/monkey_patch/latest,.repo_studios/monkey_patch/latest/report.md,h2,Findings by Category,findings-by-category,monkey-patch-scan-report,,1696,2025-11-24T17:52:33.916251+00:00,,,,no,
-.repo_studios/monkey_patch/latest,.repo_studios/monkey_patch/latest/report.md,h2,Patched Import Bases,patched-import-bases,monkey-patch-scan-report,,1696,2025-11-24T17:52:33.916251+00:00,,,,no,
-.repo_studios/monkey_patch/latest,.repo_studios/monkey_patch/latest/report.md,h2,Files With Highest Patch Counts,files-with-highest-patch-counts,monkey-patch-scan-report,,1696,2025-11-24T17:52:33.916251+00:00,,,,no,
-.repo_studios/monkey_patch/latest,.repo_studios/monkey_patch/latest/report.md,h2,Next Steps,next-steps,monkey-patch-scan-report,,1696,2025-11-24T17:52:33.916251+00:00,,,,no,
+.repo_studios/monkey_patch/20251201_115542,.repo_studios/monkey_patch/20251201_115542/report.md,h1,Monkey Patch Scan Report,monkey-patch-scan-report,,,1723,2025-12-01T11:55:42.709604+00:00,,,,no,
+.repo_studios/monkey_patch/20251201_115542,.repo_studios/monkey_patch/20251201_115542/report.md,h2,Findings by Category,findings-by-category,monkey-patch-scan-report,,1723,2025-12-01T11:55:42.709604+00:00,,,,no,
+.repo_studios/monkey_patch/20251201_115542,.repo_studios/monkey_patch/20251201_115542/report.md,h2,Patched Import Bases,patched-import-bases,monkey-patch-scan-report,,1723,2025-12-01T11:55:42.709604+00:00,,,,no,
+.repo_studios/monkey_patch/20251201_115542,.repo_studios/monkey_patch/20251201_115542/report.md,h2,Files With Highest Patch Counts,files-with-highest-patch-counts,monkey-patch-scan-report,,1723,2025-12-01T11:55:42.709604+00:00,,,,no,
+.repo_studios/monkey_patch/20251201_115542,.repo_studios/monkey_patch/20251201_115542/report.md,h2,Next Steps,next-steps,monkey-patch-scan-report,,1723,2025-12-01T11:55:42.709604+00:00,,,,no,
+.repo_studios/monkey_patch/latest,.repo_studios/monkey_patch/latest/report.md,h1,Monkey Patch Scan Report,monkey-patch-scan-report,,,1723,2025-12-01T11:55:42.712782+00:00,,,,no,
+.repo_studios/monkey_patch/latest,.repo_studios/monkey_patch/latest/report.md,h2,Findings by Category,findings-by-category,monkey-patch-scan-report,,1723,2025-12-01T11:55:42.712782+00:00,,,,no,
+.repo_studios/monkey_patch/latest,.repo_studios/monkey_patch/latest/report.md,h2,Patched Import Bases,patched-import-bases,monkey-patch-scan-report,,1723,2025-12-01T11:55:42.712782+00:00,,,,no,
+.repo_studios/monkey_patch/latest,.repo_studios/monkey_patch/latest/report.md,h2,Files With Highest Patch Counts,files-with-highest-patch-counts,monkey-patch-scan-report,,1723,2025-12-01T11:55:42.712782+00:00,,,,no,
+.repo_studios/monkey_patch/latest,.repo_studios/monkey_patch/latest/report.md,h2,Next Steps,next-steps,monkey-patch-scan-report,,1723,2025-12-01T11:55:42.712782+00:00,,,,no,
 .repo_studios/scripts,.repo_studios/scripts/README.md,h1,Repo Studios Script Layout,repo-studios-script-layout,,This directory houses the active automation suite for Repo Studios. Scripts are grouped by the role they play in the data and automation pipeline so coding agents can locate the right tool quickly.,2391,2025-11-04T09:50:54.154871+00:00,,,,no,
 .repo_studios/scripts,.repo_studios/scripts/README.md,h2,Category Map,category-map,repo-studios-script-layout,This directory houses the active automation suite for Repo Studios. Scripts are grouped by the role they play in the data and automation pipeline so coding agents can locate the right tool quickly.,2391,2025-11-04T09:50:54.154871+00:00,,,,no,
 .repo_studios/scripts,.repo_studios/scripts/README.md,h2,Operating Notes,operating-notes,repo-studios-script-layout,This directory houses the active automation suite for Repo Studios. Scripts are grouped by the role they play in the data and automation pipeline so coding agents can locate the right tool quickly.,2391,2025-11-04T09:50:54.154871+00:00,,,,no,
@@ -23111,6 +26897,18 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/scripts,.repo_studios/scripts/legacy_repo_scripts_overview.md,h1,Repo Scripts Tier Overview,repo-scripts-tier-overview,,This document maps the active automation suite under `.repo_studios/scripts/` using the producer → consumer → aggregator → orchestrator → summarizer tier model. Use it as a quick reference when deciding where a script lives or which…,4879,2025-10-21T16:07:43.334091+00:00,,,,yes,
 .repo_studios/scripts,.repo_studios/scripts/legacy_repo_scripts_overview.md,h2,Flowchart,flowchart,repo-scripts-tier-overview,This document maps the active automation suite under `.repo_studios/scripts/` using the producer → consumer → aggregator → orchestrator → summarizer tier model. Use it as a quick reference when deciding where a script lives or which…,4879,2025-10-21T16:07:43.334091+00:00,,,,yes,
 .repo_studios/scripts,.repo_studios/scripts/legacy_repo_scripts_overview.md,h2,Interpretation Notes,interpretation-notes,repo-scripts-tier-overview,This document maps the active automation suite under `.repo_studios/scripts/` using the producer → consumer → aggregator → orchestrator → summarizer tier model. Use it as a quick reference when deciding where a script lives or which…,4879,2025-10-21T16:07:43.334091+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/orchestrator_refactor_plan_temp.md,h1,Orchestrator Refactor Plan (Working Notes),orchestrator-refactor-plan-working-notes,,in an orchestrator-run pipeline.,9376,2025-12-01T13:19:36.908675+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/orchestrator_refactor_plan_temp.md,h2,1. Purpose,1-purpose,orchestrator-refactor-plan-working-notes,in an orchestrator-run pipeline.,9376,2025-12-01T13:19:36.908675+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/orchestrator_refactor_plan_temp.md,h2,2. Current Snapshot,2-current-snapshot,orchestrator-refactor-plan-working-notes,in an orchestrator-run pipeline.,9376,2025-12-01T13:19:36.908675+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/orchestrator_refactor_plan_temp.md,h2,3. Target Topology,3-target-topology,orchestrator-refactor-plan-working-notes,in an orchestrator-run pipeline.,9376,2025-12-01T13:19:36.908675+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/orchestrator_refactor_plan_temp.md,h2,4. Topic Buckets and Script Assignments (Draft),4-topic-buckets-and-script-assignments-draft,orchestrator-refactor-plan-working-notes,in an orchestrator-run pipeline.,9376,2025-12-01T13:19:36.908675+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/orchestrator_refactor_plan_temp.md,h2,5. Testing Strategy,5-testing-strategy,orchestrator-refactor-plan-working-notes,in an orchestrator-run pipeline.,9376,2025-12-01T13:19:36.908675+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/orchestrator_refactor_plan_temp.md,h2,6. Shared Helper Opportunities (Command Center Library),6-shared-helper-opportunities-command-center-library,orchestrator-refactor-plan-working-notes,in an orchestrator-run pipeline.,9376,2025-12-01T13:19:36.908675+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/orchestrator_refactor_plan_temp.md,h2,7. Artifact Management & Pruning,7-artifact-management-pruning,orchestrator-refactor-plan-working-notes,in an orchestrator-run pipeline.,9376,2025-12-01T13:19:36.908675+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/orchestrator_refactor_plan_temp.md,h2,8. Documentation & Inventory Updates,8-documentation-inventory-updates,orchestrator-refactor-plan-working-notes,in an orchestrator-run pipeline.,9376,2025-12-01T13:19:36.908675+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/orchestrator_refactor_plan_temp.md,h2,9. Execution Phases (Draft Timeline),9-execution-phases-draft-timeline,orchestrator-refactor-plan-working-notes,in an orchestrator-run pipeline.,9376,2025-12-01T13:19:36.908675+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/orchestrator_refactor_plan_temp.md,h2,10. Risks & Open Questions,10-risks-open-questions,orchestrator-refactor-plan-working-notes,in an orchestrator-run pipeline.,9376,2025-12-01T13:19:36.908675+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/orchestrator_refactor_plan_temp.md,h2,11. Next Actions,11-next-actions,orchestrator-refactor-plan-working-notes,in an orchestrator-run pipeline.,9376,2025-12-01T13:19:36.908675+00:00,,,,yes,
 .repo_studios/scripts/orchestrators/orchestrators_index,.repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,1. `cmd_list` — 2 duplicate(s),1191,2025-10-28T09:55:41.218181+00:00,,,,no,
 .repo_studios/scripts/orchestrators/orchestrators_index,.repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md,h2,Overview,overview,duplicate-scan-summary,1. `cmd_list` — 2 duplicate(s),1191,2025-10-28T09:55:41.218181+00:00,,,,no,
 .repo_studios/scripts/orchestrators/orchestrators_index,.repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md,h2,Inputs,inputs,duplicate-scan-summary,1. `cmd_list` — 2 duplicate(s),1191,2025-10-28T09:55:41.218181+00:00,,,,no,
@@ -23121,24 +26919,25 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/scripts/producers/producers_index,.repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md,h2,Inputs,inputs,duplicate-scan-summary,1. `configure_logging` — 19 duplicate(s),11966,2025-11-05T11:25:43.763687+00:00,,,,yes,
 .repo_studios/scripts/producers/producers_index,.repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,1. `configure_logging` — 19 duplicate(s),11966,2025-11-05T11:25:43.763687+00:00,,,,yes,
 .repo_studios/scripts/producers/producers_index,.repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md,h2,Next Steps,next-steps,duplicate-scan-summary,1. `configure_logging` — 19 duplicate(s),11966,2025-11-05T11:25:43.763687+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h1,Script Inventory Architecture,script-inventory-architecture,,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",46381,2025-11-25T02:53:56.349953+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,Document Metadata,document-metadata,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",46381,2025-11-25T02:53:56.349953+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,How to Use This Template,how-to-use-this-template,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",46381,2025-11-25T02:53:56.349953+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,1. Script Producers,1-script-producers,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",46381,2025-11-25T02:53:56.349953+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,2. Script Consumers,2-script-consumers,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",46381,2025-11-25T02:53:56.349953+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,3. Script Aggregators,3-script-aggregators,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",46381,2025-11-25T02:53:56.349953+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,4. Script Orchestrators,4-script-orchestrators,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",46381,2025-11-25T02:53:56.349953+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,5. Script Summarizers,5-script-summarizers,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",46381,2025-11-25T02:53:56.349953+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,6. Script Utilities,6-script-utilities,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",46381,2025-11-25T02:53:56.349953+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,7. Script Undefined / Triage,7-script-undefined-triage,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",46381,2025-11-25T02:53:56.349953+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,Cross-Cutting Follow-Ups,cross-cutting-follow-ups,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",46381,2025-11-25T02:53:56.349953+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,Open Questions,open-questions,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",46381,2025-11-25T02:53:56.349953+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,Appendix: YAML Mapping Placeholder,appendix-yaml-mapping-placeholder,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",46381,2025-11-25T02:53:56.349953+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h1,Script Inventory Architecture,script-inventory-architecture,,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",64099,2025-12-01T13:19:36.904676+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,Document Metadata,document-metadata,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",64099,2025-12-01T13:19:36.904676+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,How to Use This Template,how-to-use-this-template,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",64099,2025-12-01T13:19:36.904676+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,1. Script Producers,1-script-producers,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",64099,2025-12-01T13:19:36.904676+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,2. Script Consumers,2-script-consumers,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",64099,2025-12-01T13:19:36.904676+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,3. Script Aggregators,3-script-aggregators,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",64099,2025-12-01T13:19:36.904676+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,4. Script Orchestrators,4-script-orchestrators,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",64099,2025-12-01T13:19:36.904676+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,5. Script Summarizers,5-script-summarizers,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",64099,2025-12-01T13:19:36.904676+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,6. Script Utilities,6-script-utilities,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",64099,2025-12-01T13:19:36.904676+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,7. Script Undefined / Triage,7-script-undefined-triage,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",64099,2025-12-01T13:19:36.904676+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,Cross-Cutting Follow-Ups,cross-cutting-follow-ups,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",64099,2025-12-01T13:19:36.904676+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,Open Questions,open-questions,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",64099,2025-12-01T13:19:36.904676+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,Appendix: YAML Mapping Placeholder,appendix-yaml-mapping-placeholder,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",64099,2025-12-01T13:19:36.904676+00:00,,,,yes,
 .repo_studios/scripts/scripts_index,.repo_studios/scripts/scripts_index/scripts_duplicate_summary-2025-10-27.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,1. `prune_old_runs` — 20 duplicate(s),14434,2025-10-27T12:08:34.090771+00:00,,,,yes,
 .repo_studios/scripts/scripts_index,.repo_studios/scripts/scripts_index/scripts_duplicate_summary-2025-10-27.md,h2,Overview,overview,duplicate-scan-summary,1. `prune_old_runs` — 20 duplicate(s),14434,2025-10-27T12:08:34.090771+00:00,,,,yes,
 .repo_studios/scripts/scripts_index,.repo_studios/scripts/scripts_index/scripts_duplicate_summary-2025-10-27.md,h2,Inputs,inputs,duplicate-scan-summary,1. `prune_old_runs` — 20 duplicate(s),14434,2025-10-27T12:08:34.090771+00:00,,,,yes,
 .repo_studios/scripts/scripts_index,.repo_studios/scripts/scripts_index/scripts_duplicate_summary-2025-10-27.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,1. `prune_old_runs` — 20 duplicate(s),14434,2025-10-27T12:08:34.090771+00:00,,,,yes,
 .repo_studios/scripts/scripts_index,.repo_studios/scripts/scripts_index/scripts_duplicate_summary-2025-10-27.md,h2,Next Steps,next-steps,duplicate-scan-summary,1. `prune_old_runs` — 20 duplicate(s),14434,2025-10-27T12:08:34.090771+00:00,,,,yes,
+.repo_studios/scripts/scripts_index,.repo_studios/scripts/scripts_index/scripts_duplicate_summary-20251130-0333.md,h1,Summary,summary,,,11,2025-11-30T03:33:07.215521+00:00,,,,no,
 .repo_studios/scripts/summarizers/summarizers_index,.repo_studios/scripts/summarizers/summarizers_index/summarizers_duplicate_summary-2025-11-04-2010.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,1. `append_table` — 2 duplicate(s),982,2025-11-04T20:10:52.055388+00:00,,,,no,
 .repo_studios/scripts/summarizers/summarizers_index,.repo_studios/scripts/summarizers/summarizers_index/summarizers_duplicate_summary-2025-11-04-2010.md,h2,Overview,overview,duplicate-scan-summary,1. `append_table` — 2 duplicate(s),982,2025-11-04T20:10:52.055388+00:00,,,,no,
 .repo_studios/scripts/summarizers/summarizers_index,.repo_studios/scripts/summarizers/summarizers_index/summarizers_duplicate_summary-2025-11-04-2010.md,h2,Inputs,inputs,duplicate-scan-summary,1. `append_table` — 2 duplicate(s),982,2025-11-04T20:10:52.055388+00:00,,,,no,
@@ -23149,7 +26948,17 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/scripts/utilities/utilities_index,.repo_studios/scripts/utilities/utilities_index/utilities_duplicate_summary-2025-10-28-1344.md,h2,Inputs,inputs,duplicate-scan-summary,,724,2025-10-28T13:44:35.047795+00:00,,,,no,
 .repo_studios/scripts/utilities/utilities_index,.repo_studios/scripts/utilities/utilities_index/utilities_duplicate_summary-2025-10-28-1344.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,,724,2025-10-28T13:44:35.047795+00:00,,,,no,
 .repo_studios/scripts/utilities/utilities_index,.repo_studios/scripts/utilities/utilities_index/utilities_duplicate_summary-2025-10-28-1344.md,h2,Next Steps,next-steps,duplicate-scan-summary,,724,2025-10-28T13:44:35.047795+00:00,,,,no,
-.,README.md,h1,About this folder,about-this-folder,,"To reduce confusion with the root-level `README.md`, the detailed guide for AI agents and contributors has been moved to `AGENTS_GUIDE.md` in this same folder.",633,2025-11-24T23:21:19.649681+00:00,,,,no,
+.repo_studios/tmp_manual/automation_dry_run_9f5c157dea2e4b4fbd98dc969cbe2a41/reports/commandview/automation_runs/20251102-1930,.repo_studios/tmp_manual/automation_dry_run_9f5c157dea2e4b4fbd98dc969cbe2a41/reports/commandview/automation_runs/20251102-1930/README.md,h1,Automation Dry-Run Bundle,automation-dry-run-bundle,,dry run bundle,244,2025-11-30T12:23:31.861612+00:00,,,,no,
+.repo_studios/tmp_manual/automation_dry_run_9f5c157dea2e4b4fbd98dc969cbe2a41/reports/commandview/automation_runs/20251102-1930,.repo_studios/tmp_manual/automation_dry_run_9f5c157dea2e4b4fbd98dc969cbe2a41/reports/commandview/automation_runs/20251102-1930/README.md,h2,Notes,notes,automation-dry-run-bundle,dry run bundle,244,2025-11-30T12:23:31.861612+00:00,,,,no,
+.,README.md,h1,About this folder,about-this-folder,,"To reduce confusion with the root-level `README.md`, the detailed guide for AI agents and contributors has been moved to `AGENTS_GUIDE.md` in this same folder.",692,2025-11-30T01:23:50.960100+00:00,,,,no,
+.,REPORT_NAMING_STANDARDS.md,h1,Report Naming Standards,report-naming-standards,,"This document defines the uniform naming scheme for all artifacts stored under `.repo_studios/command_center/reports/`. New automation, orchestrators, and helpers MUST emit bundles that follow this structure. Legacy directories remain in…",4572,2025-11-30T01:23:50.956101+00:00,,,,no,
+.,REPORT_NAMING_STANDARDS.md,h2,Naming Convention Index,naming-convention-index,report-naming-standards,"This document defines the uniform naming scheme for all artifacts stored under `.repo_studios/command_center/reports/`. New automation, orchestrators, and helpers MUST emit bundles that follow this structure. Legacy directories remain in…",4572,2025-11-30T01:23:50.956101+00:00,,,,no,
+.,REPORT_NAMING_STANDARDS.md,h2,Artifact Role Registry,artifact-role-registry,report-naming-standards,"This document defines the uniform naming scheme for all artifacts stored under `.repo_studios/command_center/reports/`. New automation, orchestrators, and helpers MUST emit bundles that follow this structure. Legacy directories remain in…",4572,2025-11-30T01:23:50.956101+00:00,,,,no,
+.,REPORT_NAMING_STANDARDS.md,h2,Viewer Slug Registry,viewer-slug-registry,report-naming-standards,"This document defines the uniform naming scheme for all artifacts stored under `.repo_studios/command_center/reports/`. New automation, orchestrators, and helpers MUST emit bundles that follow this structure. Legacy directories remain in…",4572,2025-11-30T01:23:50.956101+00:00,,,,no,
+.,REPORT_NAMING_STANDARDS.md,h2,Grandfathered Artifacts,grandfathered-artifacts,report-naming-standards,"This document defines the uniform naming scheme for all artifacts stored under `.repo_studios/command_center/reports/`. New automation, orchestrators, and helpers MUST emit bundles that follow this structure. Legacy directories remain in…",4572,2025-11-30T01:23:50.956101+00:00,,,,no,
+.,REPORT_NAMING_STANDARDS.md,h2,Audit Utility Specification,audit-utility-specification,report-naming-standards,"This document defines the uniform naming scheme for all artifacts stored under `.repo_studios/command_center/reports/`. New automation, orchestrators, and helpers MUST emit bundles that follow this structure. Legacy directories remain in…",4572,2025-11-30T01:23:50.956101+00:00,,,,no,
+.,REPORT_NAMING_STANDARDS.md,h2,Compliance Expectations,compliance-expectations,report-naming-standards,"This document defines the uniform naming scheme for all artifacts stored under `.repo_studios/command_center/reports/`. New automation, orchestrators, and helpers MUST emit bundles that follow this structure. Legacy directories remain in…",4572,2025-11-30T01:23:50.956101+00:00,,,,no,
+.,REPORT_NAMING_STANDARDS.md,h2,Change Management,change-management,report-naming-standards,"This document defines the uniform naming scheme for all artifacts stored under `.repo_studios/command_center/reports/`. New automation, orchestrators, and helpers MUST emit bundles that follow this structure. Legacy directories remain in…",4572,2025-11-30T01:23:50.956101+00:00,,,,no,
 .,alignment_notes_temp.md,h1,Temporary Alignment Notes,temporary-alignment-notes,,This document is a scratch pad for understanding the transplanted tooling. We will delete it once alignment is complete.,29288,2025-11-08T23:03:00.112443+00:00,,,,yes,
 .,alignment_notes_temp.md,h2,Last updated: 2025-10-21,last-updated-2025-10-21,temporary-alignment-notes,This document is a scratch pad for understanding the transplanted tooling. We will delete it once alignment is complete.,29288,2025-11-08T23:03:00.112443+00:00,,,,yes,
 .,alignment_notes_temp.md,h2,Snapshot (read-only observations),snapshot-read-only-observations,temporary-alignment-notes,This document is a scratch pad for understanding the transplanted tooling. We will delete it once alignment is complete.,29288,2025-11-08T23:03:00.112443+00:00,,,,yes,
@@ -23160,20 +26969,68 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .,alignment_notes_temp.md,h2,Follow-up Questions (round 4),follow-up-questions-round-4,temporary-alignment-notes,This document is a scratch pad for understanding the transplanted tooling. We will delete it once alignment is complete.,29288,2025-11-08T23:03:00.112443+00:00,,,,yes,
 .,alignment_notes_temp.md,h2,Follow-up Questions (round 5),follow-up-questions-round-5,temporary-alignment-notes,This document is a scratch pad for understanding the transplanted tooling. We will delete it once alignment is complete.,29288,2025-11-08T23:03:00.112443+00:00,,,,yes,
 .,command_center_script_verification_temp.md,h1,Command Center Script Verification (Temporary),command-center-script-verification-temporary,,This file tracks command center script executions requested on 2025-11-04.,4905,2025-11-08T23:03:02.374057+00:00,,,,no,
+docs/automation,docs/automation/orchestrator_implementation.md,h1,Orchestrator Implementation Plan,orchestrator-implementation-plan,,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Context,context,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Current Progress (2025-11-30),current-progress-2025-11-30,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Implementation Objectives,implementation-objectives,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Deliverables,deliverables,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Legacy-to-Target Parity Matrix,legacy-to-target-parity-matrix,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Legacy Retirement Targets,legacy-retirement-targets,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Testing and Fixture Migration Requirements,testing-and-fixture-migration-requirements,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Operational Impact Inventory,operational-impact-inventory,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Legacy Removal Ticket Backlog (to be opened),legacy-removal-ticket-backlog-to-be-opened,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Topic Assignment Validation (2025-11-30),topic-assignment-validation-2025-11-30,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Healthview Manifest Mapping (2025-11-30),healthview-manifest-mapping-2025-11-30,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Topic Implementation Workstreams,topic-implementation-workstreams,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Phase Checklist,phase-checklist,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Healthview Viewer Wiring Reference,healthview-viewer-wiring-reference,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Report Naming Standard Initiative,report-naming-standard-initiative,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Dependencies and Tooling,dependencies-and-tooling,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Reporting and Tracking,reporting-and-tracking,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",57566,2025-12-01T14:02:44.340382+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_topic_refactor_rfc.md,h1,RFC: Topic-Oriented Orchestrator Refactor,rfc-topic-oriented-orchestrator-refactor,,"This RFC proposes restructuring the Repo Studios orchestration layer around topic-aligned pipelines so every automation script is executed through a consistent orchestrator entry point. The document summarizes roadmap context, expected…",12548,2025-12-01T13:19:36.908675+00:00,,,,yes,
+docs/automation,docs/automation/orchestrator_topic_refactor_rfc.md,h2,1. Overview,1-overview,rfc-topic-oriented-orchestrator-refactor,"This RFC proposes restructuring the Repo Studios orchestration layer around topic-aligned pipelines so every automation script is executed through a consistent orchestrator entry point. The document summarizes roadmap context, expected…",12548,2025-12-01T13:19:36.908675+00:00,,,,yes,
+docs/automation,docs/automation/orchestrator_topic_refactor_rfc.md,h2,2. Motivation,2-motivation,rfc-topic-oriented-orchestrator-refactor,"This RFC proposes restructuring the Repo Studios orchestration layer around topic-aligned pipelines so every automation script is executed through a consistent orchestrator entry point. The document summarizes roadmap context, expected…",12548,2025-12-01T13:19:36.908675+00:00,,,,yes,
+docs/automation,docs/automation/orchestrator_topic_refactor_rfc.md,h2,3. Goals,3-goals,rfc-topic-oriented-orchestrator-refactor,"This RFC proposes restructuring the Repo Studios orchestration layer around topic-aligned pipelines so every automation script is executed through a consistent orchestrator entry point. The document summarizes roadmap context, expected…",12548,2025-12-01T13:19:36.908675+00:00,,,,yes,
+docs/automation,docs/automation/orchestrator_topic_refactor_rfc.md,h2,4. Non-Goals,4-non-goals,rfc-topic-oriented-orchestrator-refactor,"This RFC proposes restructuring the Repo Studios orchestration layer around topic-aligned pipelines so every automation script is executed through a consistent orchestrator entry point. The document summarizes roadmap context, expected…",12548,2025-12-01T13:19:36.908675+00:00,,,,yes,
+docs/automation,docs/automation/orchestrator_topic_refactor_rfc.md,h2,5. Proposed Architecture,5-proposed-architecture,rfc-topic-oriented-orchestrator-refactor,"This RFC proposes restructuring the Repo Studios orchestration layer around topic-aligned pipelines so every automation script is executed through a consistent orchestrator entry point. The document summarizes roadmap context, expected…",12548,2025-12-01T13:19:36.908675+00:00,,,,yes,
+docs/automation,docs/automation/orchestrator_topic_refactor_rfc.md,h2,6. Shared Helper Enhancements,6-shared-helper-enhancements,rfc-topic-oriented-orchestrator-refactor,"This RFC proposes restructuring the Repo Studios orchestration layer around topic-aligned pipelines so every automation script is executed through a consistent orchestrator entry point. The document summarizes roadmap context, expected…",12548,2025-12-01T13:19:36.908675+00:00,,,,yes,
+docs/automation,docs/automation/orchestrator_topic_refactor_rfc.md,h2,7. Artifact Management and Retention,7-artifact-management-and-retention,rfc-topic-oriented-orchestrator-refactor,"This RFC proposes restructuring the Repo Studios orchestration layer around topic-aligned pipelines so every automation script is executed through a consistent orchestrator entry point. The document summarizes roadmap context, expected…",12548,2025-12-01T13:19:36.908675+00:00,,,,yes,
+docs/automation,docs/automation/orchestrator_topic_refactor_rfc.md,h2,8. Testing Strategy,8-testing-strategy,rfc-topic-oriented-orchestrator-refactor,"This RFC proposes restructuring the Repo Studios orchestration layer around topic-aligned pipelines so every automation script is executed through a consistent orchestrator entry point. The document summarizes roadmap context, expected…",12548,2025-12-01T13:19:36.908675+00:00,,,,yes,
+docs/automation,docs/automation/orchestrator_topic_refactor_rfc.md,h2,9. Documentation Plan,9-documentation-plan,rfc-topic-oriented-orchestrator-refactor,"This RFC proposes restructuring the Repo Studios orchestration layer around topic-aligned pipelines so every automation script is executed through a consistent orchestrator entry point. The document summarizes roadmap context, expected…",12548,2025-12-01T13:19:36.908675+00:00,,,,yes,
+docs/automation,docs/automation/orchestrator_topic_refactor_rfc.md,h2,10. Rollout Phases,10-rollout-phases,rfc-topic-oriented-orchestrator-refactor,"This RFC proposes restructuring the Repo Studios orchestration layer around topic-aligned pipelines so every automation script is executed through a consistent orchestrator entry point. The document summarizes roadmap context, expected…",12548,2025-12-01T13:19:36.908675+00:00,,,,yes,
+docs/automation,docs/automation/orchestrator_topic_refactor_rfc.md,h2,11. Risks and Mitigations,11-risks-and-mitigations,rfc-topic-oriented-orchestrator-refactor,"This RFC proposes restructuring the Repo Studios orchestration layer around topic-aligned pipelines so every automation script is executed through a consistent orchestrator entry point. The document summarizes roadmap context, expected…",12548,2025-12-01T13:19:36.908675+00:00,,,,yes,
+docs/automation,docs/automation/orchestrator_topic_refactor_rfc.md,h2,12. Open Questions,12-open-questions,rfc-topic-oriented-orchestrator-refactor,"This RFC proposes restructuring the Repo Studios orchestration layer around topic-aligned pipelines so every automation script is executed through a consistent orchestrator entry point. The document summarizes roadmap context, expected…",12548,2025-12-01T13:19:36.908675+00:00,,,,yes,
+docs/automation,docs/automation/orchestrator_topic_refactor_rfc.md,h2,13. Decision Record,13-decision-record,rfc-topic-oriented-orchestrator-refactor,"This RFC proposes restructuring the Repo Studios orchestration layer around topic-aligned pipelines so every automation script is executed through a consistent orchestrator entry point. The document summarizes roadmap context, expected…",12548,2025-12-01T13:19:36.908675+00:00,,,,yes,
+docs/automation,docs/automation/orchestrator_topic_refactor_rfc.md,h2,14. References,14-references,rfc-topic-oriented-orchestrator-refactor,"This RFC proposes restructuring the Repo Studios orchestration layer around topic-aligned pipelines so every automation script is executed through a consistent orchestrator entry point. The document summarizes roadmap context, expected…",12548,2025-12-01T13:19:36.908675+00:00,,,,yes,
 docs/standards/global,docs/standards/global/std-docs-integrity-handbook.md,h1,Docs Integrity Handbook,docs-integrity-handbook,,This handbook defines the governed documentation surfaces used by Repo Studios tooling.,284,2025-10-24T00:50:07.867124+00:00,,,,no,
 docs/standards/global,docs/standards/global/std-global-chainlit-ui.md,h1,Global Chainlit UI Standard,global-chainlit-ui-standard,,Placeholder overview of Chainlit UI conventions. Update with the real standard when synced from the documentation source.,233,2025-11-24T23:31:22.862853+00:00,,,,yes,
 docs/standards/global,docs/standards/global/std-global-code-cleanup.md,document,,std-global-code-cleanup,,,747,2025-11-24T23:31:22.862853+00:00,,,draft,yes,
 docs/standards/global,docs/standards/global/std-global-html-coding.md,h1,Global HTML Coding Standard,global-html-coding-standard,,Temporary HTML coding guidance. Replace this stub with the official standard when syncing the documentation repository.,231,2025-11-24T23:31:22.862853+00:00,,,,no,
-docs/standards/global,docs/standards/global/std-global-markdown-authoring.md,h2,Front Matter,front-matter,,,1034,2025-11-24T23:31:22.862853+00:00,,,draft,no,
-docs/standards/global,docs/standards/global/std-global-markdown-authoring.md,h2,Style Essentials,style-essentials,,,1034,2025-11-24T23:31:22.862853+00:00,,,draft,no,
+docs/standards/global,docs/standards/global/std-global-markdown-authoring.md,h2,Front Matter,front-matter,,,3318,2025-11-25T11:35:24.181372+00:00,,,draft,yes,
+docs/standards/global,docs/standards/global/std-global-markdown-authoring.md,h2,Document Placement,document-placement,,,3318,2025-11-25T11:35:24.181372+00:00,,,draft,yes,
+docs/standards/global,docs/standards/global/std-global-markdown-authoring.md,h2,Headings & Outline,headings-outline,,,3318,2025-11-25T11:35:24.181372+00:00,,,draft,yes,
+docs/standards/global,docs/standards/global/std-global-markdown-authoring.md,h2,Lead Summary Paragraph,lead-summary-paragraph,,,3318,2025-11-25T11:35:24.181372+00:00,,,draft,yes,
+docs/standards/global,docs/standards/global/std-global-markdown-authoring.md,h2,Metadata Hygiene,metadata-hygiene,,,3318,2025-11-25T11:35:24.181372+00:00,,,draft,yes,
+docs/standards/global,docs/standards/global/std-global-markdown-authoring.md,h2,Style Essentials,style-essentials,,,3318,2025-11-25T11:35:24.181372+00:00,,,draft,yes,
+docs/standards/global,docs/standards/global/std-global-markdown-authoring.md,h2,Cross-Document Consistency,cross-document-consistency,,,3318,2025-11-25T11:35:24.181372+00:00,,,draft,yes,
 docs/standards/global,docs/standards/global/std-global-mission-parameters.md,h2,Decisions,decisions,,,644,2025-11-24T23:31:22.862853+00:00,,,draft,no,
 docs/standards/global,docs/standards/global/std-global-monkey-patching.md,h2,Builtin Constraints,builtin-constraints,,,702,2025-11-24T23:31:22.862853+00:00,,,draft,yes,
 docs/standards/global,docs/standards/global/std-global-prompt-engineering.md,h2,Evaluation Cases,evaluation-cases,,,710,2025-11-24T23:31:22.863855+00:00,,,draft,yes,
 docs/standards/global,docs/standards/global/std-global-python-engineering.md,h2,Error Handling,error-handling,,,1087,2025-11-24T23:31:22.871630+00:00,,,draft,no,
 docs/standards/global,docs/standards/global/std-global-python-engineering.md,h2,Logging,logging,,,1087,2025-11-24T23:31:22.871630+00:00,,,draft,no,
-docs/standards/project,docs/standards/project/std-project-operating-standard.md,h2,Dependency Management,dependency-management,,,1180,2025-11-24T23:31:22.871630+00:00,,,draft,no,
-docs/standards/project,docs/standards/project/std-project-operating-standard.md,h2,Automation Visibility,automation-visibility,,,1180,2025-11-24T23:31:22.871630+00:00,,,draft,no,
-docs/standards/project,docs/standards/project/std-project-python-instructions.md,h1,Project Python Instructions,project-python-instructions,,Placeholder instructions for Python setup and workflows. Replace with authoritative content when documentation is available.,236,2025-11-24T23:31:22.871630+00:00,,,,yes,
+docs/standards/project,docs/standards/project/std-project-operating-standard.md,h2,Dependency Management,dependency-management,,,2027,2025-11-25T11:35:24.181372+00:00,,,draft,yes,
+docs/standards/project,docs/standards/project/std-project-operating-standard.md,h2,Automation Visibility,automation-visibility,,,2027,2025-11-25T11:35:24.181372+00:00,,,draft,yes,
+docs/standards/project,docs/standards/project/std-project-operating-standard.md,h2,Documentation Hygiene,documentation-hygiene,,,2027,2025-11-25T11:35:24.181372+00:00,,,draft,yes,
+docs/standards/project,docs/standards/project/std-project-python-instructions.md,h1,Project Python Instructions,project-python-instructions,,This guide documents the baseline expectations for Python contributors and automation authors.,1867,2025-11-25T11:35:24.181372+00:00,python;documentation;automation,repo_studios_ai,draft,yes,
+docs/standards/project,docs/standards/project/std-project-python-instructions.md,h2,Environment,environment,project-python-instructions,This guide documents the baseline expectations for Python contributors and automation authors.,1867,2025-11-25T11:35:24.181372+00:00,python;documentation;automation,repo_studios_ai,draft,yes,
+docs/standards/project,docs/standards/project/std-project-python-instructions.md,h2,Documentation Expectations,documentation-expectations,project-python-instructions,This guide documents the baseline expectations for Python contributors and automation authors.,1867,2025-11-25T11:35:24.181372+00:00,python;documentation;automation,repo_studios_ai,draft,yes,
+docs/standards/project,docs/standards/project/std-project-python-instructions.md,h2,Testing Discipline,testing-discipline,project-python-instructions,This guide documents the baseline expectations for Python contributors and automation authors.,1867,2025-11-25T11:35:24.181372+00:00,python;documentation;automation,repo_studios_ai,draft,yes,
+docs/templates,docs/templates/test_execution_telemetry_summary_template.md,h1,Test Execution Telemetry Summary Template,test-execution-telemetry-summary-template,,Use this template when authoring Healthview Markdown summaries for Test Execution Telemetry runs. Replace bracketed placeholders with the values emitted by the orchestrator (`run_test_execution_telemetry.py`) and remove any sections that…,2092,2025-12-01T03:07:09.755953+00:00,,,,yes,
+docs/templates,docs/templates/test_execution_telemetry_summary_template.md,h2,Run Context,run-context,test-execution-telemetry-summary-template,Use this template when authoring Healthview Markdown summaries for Test Execution Telemetry runs. Replace bracketed placeholders with the values emitted by the orchestrator (`run_test_execution_telemetry.py`) and remove any sections that…,2092,2025-12-01T03:07:09.755953+00:00,,,,yes,
+docs/templates,docs/templates/test_execution_telemetry_summary_template.md,h2,Runtime Metrics,runtime-metrics,test-execution-telemetry-summary-template,Use this template when authoring Healthview Markdown summaries for Test Execution Telemetry runs. Replace bracketed placeholders with the values emitted by the orchestrator (`run_test_execution_telemetry.py`) and remove any sections that…,2092,2025-12-01T03:07:09.755953+00:00,,,,yes,
+docs/templates,docs/templates/test_execution_telemetry_summary_template.md,h2,Failure Highlights,failure-highlights,test-execution-telemetry-summary-template,Use this template when authoring Healthview Markdown summaries for Test Execution Telemetry runs. Replace bracketed placeholders with the values emitted by the orchestrator (`run_test_execution_telemetry.py`) and remove any sections that…,2092,2025-12-01T03:07:09.755953+00:00,,,,yes,
+docs/templates,docs/templates/test_execution_telemetry_summary_template.md,h2,Artifact Locations,artifact-locations,test-execution-telemetry-summary-template,Use this template when authoring Healthview Markdown summaries for Test Execution Telemetry runs. Replace bracketed placeholders with the values emitted by the orchestrator (`run_test_execution_telemetry.py`) and remove any sections that…,2092,2025-12-01T03:07:09.755953+00:00,,,,yes,
+docs/templates,docs/templates/test_execution_telemetry_summary_template.md,h2,Step Outcomes,step-outcomes,test-execution-telemetry-summary-template,Use this template when authoring Healthview Markdown summaries for Test Execution Telemetry runs. Replace bracketed placeholders with the values emitted by the orchestrator (`run_test_execution_telemetry.py`) and remove any sections that…,2092,2025-12-01T03:07:09.755953+00:00,,,,yes,
 .,repo_prompts.md,h1,Repo Studios Prompt Library,repo-studios-prompt-library,,Audience: Repo Studios automation | Human collaborators,11283,2025-11-04T14:45:21.938679+00:00,prompts;library;repo-studios,repo_studios_ai,active,no,
 .,repo_prompts.md,h2,Prompt Index,prompt-index,repo-studios-prompt-library,Audience: Repo Studios automation | Human collaborators,11283,2025-11-04T14:45:21.938679+00:00,prompts;library;repo-studios,repo_studios_ai,active,no,
 .,repo_prompts.md,h2,Atomic Prompts,atomic-prompts,repo-studios-prompt-library,Audience: Repo Studios automation | Human collaborators,11283,2025-11-04T14:45:21.938679+00:00,prompts;library;repo-studios,repo_studios_ai,active,no,

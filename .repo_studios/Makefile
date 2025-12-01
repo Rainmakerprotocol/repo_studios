@@ -75,6 +75,10 @@ studio-generate-fault-artifacts:
 studio-orchestrate-fault-diagnostics:
 	cd "$(REPO_ROOT)" && $(PYTHON) ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py" --repo-root "$(REPO_ROOT)" --artifacts-to-keep 10 --producer-artifacts-to-keep 10 --consumer-artifacts-to-keep 10 --summarizer-artifacts-to-keep 10 --log-level INFO
 
+.PHONY: studio-orchestrate-docs-health
+studio-orchestrate-docs-health:
+	cd "$(REPO_ROOT)" && $(PYTHON) ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py" --repo-root "$(REPO_ROOT)" --log-level INFO
+
 .PHONY: studio-run-fault-pipeline
 studio-run-fault-pipeline: studio-orchestrate-fault-diagnostics
 

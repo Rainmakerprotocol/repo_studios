@@ -1,0 +1,112 @@
+{
+  "finished_at": "2025-12-01T14:30:42.757186+00:00",
+  "run_slug": "20251201-1430",
+  "started_at": "2025-12-01T14:30:39.072149+00:00",
+  "steps": [
+    {
+      "detail": "docs=221, headings=1439",
+      "finished_at": "2025-12-01T14:30:39.933983+00:00",
+      "name": "doc-index",
+      "payload": {
+        "run_dir": ".repo_studios/reports/producer_reports/doc_index/doc_index-20251201_143039",
+        "slug": "20251201_143039"
+      },
+      "started_at": "2025-12-01T14:30:39.072157+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "slugs=487, duplicates=49",
+      "finished_at": "2025-12-01T14:30:40.001451+00:00",
+      "name": "anchor-inventory",
+      "payload": {
+        "run_dir": ".repo_studios/reports/producer_reports/anchor_inventory_reports/anchor_inventory-20251201_143039",
+        "slug": "20251201_143039"
+      },
+      "started_at": "2025-12-01T14:30:39.934004+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "status=ok, issues=0",
+      "finished_at": "2025-12-01T14:30:40.015969+00:00",
+      "name": "anchor-validation",
+      "payload": {
+        "issues": 0,
+        "report": ".repo_studios/reports/producer_reports/markdown_anchor_validation_reports/markdown_anchor_validation-20251201_143039/report.json",
+        "status": "ok"
+      },
+      "started_at": "2025-12-01T14:30:40.001463+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "status=error, mismatches=0",
+      "finished_at": "2025-12-01T14:30:40.067279+00:00",
+      "name": "docs-integrity",
+      "payload": {
+        "mismatches": 0,
+        "run_dir": ".repo_studios/reports/producer_reports/docs_integrity_reports/docs_integrity_20251201T143040Z",
+        "status": "error"
+      },
+      "started_at": "2025-12-01T14:30:40.015977+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "status=ok, missing=0",
+      "finished_at": "2025-12-01T14:30:40.284305+00:00",
+      "name": "metrics-stub",
+      "payload": {
+        "missing": 0,
+        "run_dir": ".repo_studios/reports/producer_reports/metrics_anchor_stub_reports/metrics_anchor_stub_check-20251201_143040",
+        "status": "ok"
+      },
+      "started_at": "2025-12-01T14:30:40.067288+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "missing_docs=1",
+      "finished_at": "2025-12-01T14:30:42.287955+00:00",
+      "name": "code-doc-churn",
+      "payload": {
+        "run_dir": ".repo_studios/reports/producer_reports/code_doc_churn_reports/code_doc_churn-20251201_143042",
+        "summary": {
+          "allowlisted_modules": [],
+          "modules_with_code_churn": 2,
+          "modules_with_doc_updates": 1,
+          "modules_without_doc_updates": 1
+        }
+      },
+      "started_at": "2025-12-01T14:30:40.284312+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "modules_with_findings=69",
+      "finished_at": "2025-12-01T14:30:42.733744+00:00",
+      "name": "undocumented-logic",
+      "payload": {
+        "run_dir": ".repo_studios/reports/producer_reports/undocumented_logic_reports/undocumented_logic-20251201_143042",
+        "summary": {
+          "docstring_coverage_percent": 8.45,
+          "entities_missing_docs": 737,
+          "entities_scanned": 805,
+          "modules_scanned": 80,
+          "modules_with_findings": 69
+        }
+      },
+      "started_at": "2025-12-01T14:30:42.287967+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "overall=37.96",
+      "finished_at": "2025-12-01T14:30:42.757178+00:00",
+      "name": "aggregate",
+      "payload": {
+        "overall_score": 37.96,
+        "run_dir": ".repo_studios/reports/aggregator_reports/docs_health_signals/docs_health_signals-20251201_143042"
+      },
+      "started_at": "2025-12-01T14:30:42.733752+00:00",
+      "status": "success"
+    }
+  ],
+  "success": true,
+  "topic": "docs_health",
+  "viewer": "healthview"
+}
