@@ -60,6 +60,7 @@ Related tests reside in `.repo_studios/tests/tests_library_integration/libraries
 | `docs/manual_extraction_checklist.md` and `docs/manual_extraction_operator_brief.md` | Step-by-step manual refactor procedure plus operator expectations. |
 | `docs/build_paths_extraction_brief.md` | Execution plan for consolidating CLI helper duplicates. |
 | `docs/guardrails/library_extraction_guardrails.md` | Non-negotiable safeguards, lock workflow, and regression monitoring steps. |
+| `docs/code_library/helper_usage_patterns.md` | Helper usage patterns for topic pipeline, summarizer runner, telemetry emitters, and catalog registry modules. |
 | `docs/phase_4/`, `docs/phase_5/`, `docs/phase_6/`, `docs/phase_7/` | Phase-specific planning notes, templates, and decision logs for automation, targets, prompt updates, and validation cadence. |
 
 Navigation tip: ensure new documents under `docs/code_library/` are linked from `.repo_studios/command_center/README.md` during the next README refresh (tracked under Outstanding Work).

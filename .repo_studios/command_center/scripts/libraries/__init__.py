@@ -47,6 +47,22 @@ from .metrics import (
     build_metrics_summary,
     write_metrics_summary,
 )
+from .topic_pipeline import (
+    SkipTopicStep,
+    TopicContext,
+    TopicPipeline,
+    TopicPipelineResult,
+    TopicStep,
+    TopicStepOutcome,
+    TopicStepReport,
+    build_topic_pipeline,
+    step_failed,
+    step_skipped,
+    step_success,
+)
+from .summarizer_runner import load_summarizer, run_summarizer, SummarizerError
+from .telemetry_emitters import TopicTelemetry, build_pipeline_telemetry
+from .catalog_registry import CatalogEntry, CatalogRegistry
 from .prune_logs import PruneResult, prune_run_directories
 
 __all__ = [
@@ -85,6 +101,24 @@ __all__ = [
     "TestRunResult",
     "build_metrics_summary",
     "write_metrics_summary",
+    "TopicStepOutcome",
+    "TopicStepReport",
+    "TopicStep",
+    "TopicContext",
+    "SkipTopicStep",
+    "TopicPipeline",
+    "TopicPipelineResult",
+    "build_topic_pipeline",
+    "step_success",
+    "step_skipped",
+    "step_failed",
+    "SummarizerError",
+    "load_summarizer",
+    "run_summarizer",
+    "TopicTelemetry",
+    "build_pipeline_telemetry",
+    "CatalogEntry",
+    "CatalogRegistry",
     "PruneResult",
     "prune_run_directories",
 ]

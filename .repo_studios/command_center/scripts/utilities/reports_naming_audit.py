@@ -86,6 +86,11 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
         help="Maximum allowed violation count before exiting with a non-zero status (default: 0).",
     )
     parser.add_argument(
+        "--dry-run-rename",
+        action="store_true",
+        help="Suggest compliant target paths for non-conforming artifacts without mutating files.",
+    )
+    parser.add_argument(
         "--log-level",
         default="INFO",
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
@@ -136,12 +141,59 @@ def _issues_for_path(
     return issues
 
 
+def _slugify(value: str) -> str:
+    normalized = re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")
+    normalized = re.sub(r"-+", "-", normalized)
+    return normalized or value.lower()
+
+
+def _suggest_timestamp(segment: str) -> str | None:
+    if _TIMESTAMP_PATTERN.match(segment):
+        return segment
+    digits = re.findall(r"\d", segment)
+    if len(digits) >= 12:
+        candidate = "".join(digits[:12])
+        return f"{candidate[:8]}-{candidate[8:12]}"
+    return None
+
+
+def _suggest_filename(filename: str, artifact_roles: set[str]) -> str | None:
+    if filename in artifact_roles:
+        return filename
+    lower = filename.lower()
+    for role in artifact_roles:
+        if role.lower() == lower:
+            return role
+    return None
+
+
+def _suggest_rename(rel_path: Path, *, artifact_roles: set[str]) -> Path | None:
+    parts = list(rel_path.parts)
+    if len(parts) < 4:
+        return None
+    viewer = _slugify(parts[0])
+    topic = _slugify(parts[1])
+    timestamp = _suggest_timestamp(parts[2])
+    if timestamp is None:
+        return None
+    tail = parts[3:]
+    if not tail:
+        return None
+    directories = [_slugify(segment) for segment in tail[:-1]]
+    filename = _suggest_filename(tail[-1], artifact_roles)
+    if filename is None:
+        return None
+    candidate_parts = [viewer, topic, timestamp, *directories, filename]
+    return Path(*candidate_parts)
+
+
 def audit_reports(
     reports_root: Path,
     *,
     artifact_roles: Iterable[str],
     allowed_viewers: Iterable[str] | None,
     ignore_prefixes: Iterable[str],
+    collect_suggestions: bool = False,
 ) -> dict[str, object]:
     roles = {role for role in artifact_roles}
     if not roles:
@@ -178,6 +230,7 @@ def audit_reports(
     issue_totals: dict[str, int] = {}
     violations: list[dict[str, object]] = []
     compliant = 0
+    rename_suggestions: list[dict[str, str]] = []
     for entry in entries:
         if entry.is_compliant:
             compliant += 1
@@ -185,6 +238,12 @@ def audit_reports(
         violations.append({"path": entry.path.as_posix(), "issues": entry.issues})
         for issue in entry.issues:
             issue_totals[issue] = issue_totals.get(issue, 0) + 1
+        if collect_suggestions:
+            suggestion = _suggest_rename(entry.path, artifact_roles=roles)
+            if suggestion is not None and suggestion.as_posix() != entry.path.as_posix():
+                rename_suggestions.append(
+                    {"current": entry.path.as_posix(), "suggested": suggestion.as_posix()}
+                )
     timestamp = datetime.now(timezone.utc).isoformat()
     summary: dict[str, object] = {
         "reports_root": str(reports_root),
@@ -199,6 +258,7 @@ def audit_reports(
         "artifact_roles": sorted(roles),
         "allowed_viewers": sorted(viewers) if viewers is not None else None,
         "ignore_prefixes": list(ignore_prefixes),
+        "rename_suggestions": rename_suggestions if collect_suggestions else [],
     }
     return summary
 
@@ -255,6 +315,15 @@ def _write_markdown(path: Path, payload: dict[str, object]) -> None:
         for alias in latest_aliases:
             lines.append(f"- `{alias}`")
         lines.append("")
+    suggestions = payload.get("rename_suggestions", [])
+    if suggestions:
+        lines.append("## Rename Suggestions")
+        lines.append("")
+        lines.append("| Current Path | Suggested Path |")
+        lines.append("| --- | --- |")
+        for suggestion in suggestions:
+            lines.append(f"| `{suggestion['current']}` | `{suggestion['suggested']}` |")
+        lines.append("")
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("\n".join(lines), encoding="utf-8")
 
@@ -269,6 +338,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, object]:
         artifact_roles=args.artifact_roles or _DEFAULT_ARTIFACT_ROLES,
         allowed_viewers=args.allowed_viewers or _DEFAULT_VIEWERS,
         ignore_prefixes=args.ignore_prefix,
+        collect_suggestions=args.dry_run_rename,
     )
     threshold = max(args.fail_threshold, 0)
     summary["fail_threshold"] = threshold
@@ -281,6 +351,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, object]:
     _write_json(json_path, summary)
     logging.info("Writing Markdown summary to %s", markdown_path)
     _write_markdown(markdown_path, summary)
+    if args.dry_run_rename and summary.get("rename_suggestions"):
+        for entry in summary["rename_suggestions"]:
+            logging.info("Suggest rename: %s -> %s", entry["current"], entry["suggested"])
     violations = int(summary.get("violation_count", 0))
     threshold = summary.get("fail_threshold", 0)
     if violations > threshold:

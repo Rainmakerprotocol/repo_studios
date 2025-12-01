@@ -2,7 +2,7 @@
 title: Orchestrator Implementation Plan
 status: draft
 version: 2025-11-29
-last_updated: 2025-11-29
+last_updated: 2025-11-30
 owner: repo_studios_ai
 tags:
   - automation
@@ -25,6 +25,15 @@ roadmap.
   tracked files, 897 functions, and 118 classes across the automation tree.
 - CommandView remains the microscope on source files, while Healthview will expose orchestrator
   outputs via a new slug to avoid conflicts with existing JS and CSS bindings.
+
+## Current Progress (2025-11-30)
+
+- Duplicate scan aggregator (`command_center/scripts/aggregators/scan_duplicates.py`) now emits viewer/topic/timestamp bundles with mirrored index artifacts; integration tests pass and the command center pipeline incorporates the refactor.
+- Function analysis summarizer (`command_center/scripts/summarizers/generate_function_analysis.py`) mirrors analysis JSON into the CommandView index while publishing viewer artifacts; producer tests and pipeline smoke checks are green.
+- `docs/automation/orchestrator_implementation.md` and `script_inventory_architecture.md` capture the Command Center migrations, so prerequisites for topic orchestrator sequencing are in place.
+- Healthview naming adoption work is partially complete: Command Center duplicate outputs comply with the approved slug/timestamp schema, and helper usage is consistent across the migrated scripts.
+- Phase 2 helper scaffolding landed on 2025-11-30; the pipeline, summarizer runner, telemetry emitter, and catalog registry modules now ship with unit tests under `tests/tests_command_center` and align with the ASCII/logging conventions.
+- Topic pipeline helper now emits structured logging for each step while catalog registry documentation stays ASCII-only, confirming compliance with repository logging and naming guidance.
 
 ## Implementation Objectives
 
@@ -112,16 +121,66 @@ roadmap.
 - `Ticket: Sunset run_standards_index_cli.py` – collapse CLI shim into Standards Integrity topic or
   Engineering Complexity Watch scope.
 
-## Topic Assignment Validation (2025-11-29)
+### Legacy Orchestrator Ticket Matrix (2025-11-30)
 
-- CommandView bundle `scripts_commandview_20251129-2102.json` confirms 45 of 46 planned topic
-  scripts are present; `test_log_analysis.py` lives under `.repo_studios/scripts/utilities/` and
-  requires inclusion or alternative coverage in the Test Execution Telemetry pipeline.
-- All other topic lists (Fault Diagnostics, Docs Health, Standards Integrity, Dependency & Import
-  Hygiene, Monkey Patch Oversight, Engineering Complexity Watch) align with the inventory by
-  basename.
-- Next step: decide whether to import `test_log_analysis.py` via helper wiring or run the utility
-  directly from the topic orchestrator to maintain parity with current workflows.
+| Ticket Stub | Legacy Scope | Replacement Topic | Dependencies & Exit Criteria | Notes |
+| --- | --- | --- | --- | --- |
+| `Ticket: Sunset orchestrate_health_suite.py` | `orchestrate_health_suite.py`, health-suite fixtures, legacy summary wiring | Test Execution Telemetry (plus meta-orchestrator) | Meta-runner reproduces status manifest, Healthview summary online, legacy make target alias documented | Coordinate deprecation announcement with Command Center operators. |
+| `Ticket: Sunset run_fault_pipeline.py` | `run_fault_pipeline.py`, fault smoke tests, command center mirrors | Fault Diagnostics | Topic orchestrator supports reuse flags, emits viewer/topic bundles, cleans legacy report directories | Ensure crash triage docs updated with new CLI. |
+| `Ticket: Sunset run_pytest_log_capture.py` | `run_pytest_log_capture.py`, pytest log fixtures, orchestrator docs | Test Execution Telemetry | Topic orchestrator exposes pytest passthrough, retention knobs, CI smoke job flipped | Keep shim until new orchestrator validated across weekly runs. |
+| `Ticket: Sunset run_batch_cleanup.py` | `run_batch_cleanup.py`, batch cleanup logs, placeholder debt docs | Dependency & Import Hygiene | Topic orchestrator sequences static cleanup tasks, replaces make targets, updates placeholder plan references | Align with placeholder remediation milestones prior to removal. |
+| `Ticket: Sunset run_standards_gap_suite.py` | `run_standards_gap_suite.py`, gap fixtures, command center mirrors | Standards Integrity | Topic orchestrator reproduces gap markdown, analysis JSON, and standards CI wiring | Schedule standards team review before final removal. |
+| `Ticket: Sunset run_standards_index_cli.py` | `run_standards_index_cli.py`, CLI smoke tests, docs | Standards Integrity / Engineering Complexity Watch | Provide new CLI wrapper/subcommand, migrate docs & agent prompts | Plan staged deprecation messaging for manual operators. |
+
+## Topic Assignment Validation (2025-11-30)
+
+- CommandView bundle `scripts_commandview_20251129-2102.json` inventories 46 automation scripts
+  (26 producers, 4 consumers, 3 aggregators, 6 orchestrators, 2 summarizers, 5 utilities) and
+  matches the topic scope outlined in the RFC.
+- Topic coverage snapshot using the 2025-11-29 inventory:
+  - **Test Execution Telemetry** – `run_pytest_log_capture.py`, `collect_test_log_reports.py`,
+    `generate_test_log_health_report.py`, `generate_churn_complexity_heatmap.py`,
+    `generate_test_coverage_inventory.py`, `analyze_test_hardening.py`,
+    `summarize_health_suite.py`; helper dependency on `utilities/test_log_analysis.py` remains
+    outside the CommandView bundle.
+  - **Fault Diagnostics** – `run_fault_pipeline.py`, `collect_faulthandler_reports.py`,
+    `generate_fault_artifacts.py`, `configure_faulthandler_runtime.py`,
+    `dump_faulthandler_snapshot.py`, `fault_run_analysis.py`.
+  - **Docs Health** – `aggregate_docs_health_signals.py`, `generate_doc_index.py`,
+    `generate_anchor_inventory.py`, `generate_anchor_health_report.py`,
+    `validate_markdown_anchors.py`, `verify_docs_integrity.py`,
+    `generate_code_doc_churn_report.py`, `generate_undocumented_logic_report.py`.
+  - **Standards Integrity** – `run_standards_gap_suite.py`, `run_standards_index_cli.py`,
+    `generate_standards_index.py`, `analyze_standards_index_gaps.py`, `diff_standards_index.py`,
+    `extract_standards_rules.py`, `validate_inventory.py`, `seed_standards_prompts.py`,
+    `summarize_standards.py`.
+  - **Dependency & Import Hygiene** – `run_batch_cleanup.py`,
+    `generate_dependency_hygiene_report.py`, `generate_import_graph_report.py`,
+    `scan_code_placeholders.py`, `validate_import_boundaries.py`, `generate_typecheck_report.py`,
+    `generate_lizard_report.py`, `refresh_mypy_baselines.py`.
+  - **Monkey Patch Oversight** – `scan_monkey_patches.py`, `classify_monkey_patches.py`,
+    `analyze_monkey_patch_trends.py`, `monkey_patch_risk.py`.
+  - **Engineering Complexity Watch (stretch)** – `generate_lizard_report.py`,
+    `generate_dependency_hygiene_report.py`, `generate_undocumented_logic_report.py`,
+    `generate_doc_index.py`, `validate_metrics_anchor_stubs.py`; confirm final scope once stretch
+    charter is ratified.
+- Gap tracking: `utilities/test_log_analysis.py` is absent from the CommandView index, so Phase 2
+  helper work must decide whether to import it explicitly or provide an alternative ingestion
+  path for Test Execution Telemetry.
+- Next step: incorporate the inventory snapshot into Phase 1 documentation updates and capture the
+  `test_log_analysis.py` decision in the RFC decision log.
+
+## Healthview Manifest Mapping (2025-11-30)
+
+- CommandView selector fields map 1:1 to Healthview with only the viewer slug changing:
+  - `slug` → topic slug (e.g., `test-execution-telemetry`).
+  - `category` → viewer namespace (`healthview`).
+  - `label` → human-readable label including timestamp.
+  - `relative_path` / `absolute_path` / `target_path` / `target_repo_relative` → reuse path layout with viewer slug swapped to `healthview` and topic folder names matching the report naming convention.
+  - `timestamp` / `timestamp_iso` → identical semantics; generated alongside artifacts via shared timestamp helper.
+- Healthview manifest JSON mirrors the CommandView schema; only the base directory (`.repo_studios/command_center/reports/healthview/<topic>/`) and slug strings differ.
+- Metadata additions: include `source_viewer` to help agents distinguish CommandView vs. Healthview entries when both are loaded.
+- Action item: incorporate the mapping into Phase 2 helper work so `write_report_artifacts` can emit both CommandView and Healthview selector entries without duplication.
 
 ## Topic Implementation Workstreams
 
@@ -176,22 +235,33 @@ roadmap.
 ## Phase Checklist
 
 - [ ] Phase 1 – Design Convergence
-  - [ ] Validate topic script assignments against the 2025-11-29 inventory bundle.
-  - [ ] Finalise Healthview manifest schema by mapping CommandView fields to the new slug layout.
-  - [ ] Record RFC decisions in section 13 with approvals and outstanding risks.
-  - [ ] Document legacy removal scope (modules, tests, docs, artifacts) in issue tracker tickets so
-    teams can claim discrete workstreams.
-  - [ ] Open issue tickets for legacy orchestrator retirement (one per legacy runner) and link them
-    to the parity matrix for cross-team tracking.
+  - [x] Validate topic script assignments against the 2025-11-29 inventory bundle (see 2025-11-30 snapshot).
+  - [x] Finalise Healthview manifest schema by mapping CommandView fields to the new slug layout (see Healthview Manifest Mapping section).
+  - [x] Record RFC decisions in section 13 with approvals and outstanding risks (see 2025-11-30 entry).
+  - [x] Document legacy removal scope (modules, tests, docs, artifacts) in issue tracker tickets so
+    teams can claim discrete workstreams (see Legacy Orchestrator Ticket Matrix).
+  - [x] Open issue tickets for legacy orchestrator retirement (one per legacy runner) and link them
+    to the parity matrix for cross-team tracking (ticket stubs recorded above).
 - [ ] Phase 2 – Library Foundations
-  - [ ] Implement `build_topic_pipeline`, `summarizer_runner`, `telemetry_emitters`, and
-    `catalog_registry` helpers with unit tests.
-  - [ ] Ensure helpers honour ASCII naming, repo logging configuration, and pruning semantics.
-  - [ ] Deliver `reports_naming_audit` utility under `.repo_studios/command_center/scripts/utilities/`
-    with `run(argv)` shim and JSON/Markdown outputs for orchestrator consumption.
-  - [ ] Document helper usage patterns inside `.repo_studios/command_center/docs/`.
+  - Implemented `build_topic_pipeline`, `summarizer_runner`, `telemetry_emitters`, and
+    `catalog_registry` helpers with unit tests on 2025-11-30; validated with
+    `pytest .repo_studios/tests/tests_command_center` and the helper-focused suites to confirm the
+    viewer/topic output layout and pruning semantics.
+  - Verified helper modules honour ASCII naming, repository logging configuration, and pruning
+    semantics on 2025-11-30 by instrumenting `topic_pipeline` logging, auditing
+    `catalog_registry` docstrings for ASCII-only content, and rerunning
+    `pytest .repo_studios/tests/tests_command_center/test_topic_pipeline.py` together with the full
+    Command Center suite.
+  - Delivered `reports_naming_audit.py` under `.repo_studios/command_center/scripts/utilities/` on
+    2025-11-30, wiring the `run(argv)` shim to emit JSON and Markdown summaries plus optional rename
+    hints for orchestrator consumption; validated with
+    `.venv/Scripts/python.exe -u -m pytest .repo_studios/tests/tests_command_center/test_reports_naming_audit.py`.
+  - Documented helper usage patterns inside `.repo_studios/command_center/docs/code_library/helper_usage_patterns.md`
+    on 2025-11-30, outlining orchestration wiring, telemetry emission, and catalog registry usage
+    with pointers to the supporting test suites.
   - [ ] Provide migration notes demonstrating how existing orchestrators would call the helpers if
     they were rewritten today, helping reviewers validate parity.
+  - [ ] Stage migration of `test_log_analysis.py` into the shared library once naming-compliant scaffolding ships (tracked for Phase 2).
 - [ ] Phase 3 – Topic Orchestrator Delivery
   - [ ] Ship Test Execution Telemetry orchestrator with end-to-end fixtures and Markdown snapshot
     tests.
@@ -283,9 +353,9 @@ The naming convention below is now **approved** (see `REPORT_NAMING_STANDARDS.md
 all future artifact emissions under `.repo_studios/command_center/reports/`. Legacy bundles remain
 grandfathered until migration tasks execute, but new outputs must comply immediately.
 
-- [ ] **Audit** – author a reporting script that scans `/reports/` (CommandView, Healthview
-  previews, legacy bundles) and emits a variance matrix covering slug position, timestamp stem, and
-  artifact suffixes per topic.
+- **Audit** – reports naming audit script now scans `/reports/` directories (CommandView, Healthview
+  previews, legacy bundles) and emits JSON plus Markdown variance summaries covering slug position,
+  timestamp stem, and artifact suffixes per topic.
 - [ ] **Convention Adoption** – update helpers and orchestrators so fresh Healthview and
   CommandView-compatible bundles emit in the approved layout without `latest_*` aliases. *(2025-11-29:
   automation manifest and metrics summary producers now emit under `commandview/<topic>/<timestamp>`;
@@ -348,3 +418,23 @@ Example manifest path: `.../healthview/test_execution_telemetry/20251129-2102/ma
   reconcile plan vs. execution quickly.
 - Store Healthview manifest examples under `docs/automation/examples/` once stabilised to keep
   reviewers aligned on expected outputs.
+
+### Governance Notes (2025-11-30)
+
+- Completed Phase 2 helper scaffolding (`build_topic_pipeline`, `summarizer_runner`,
+  `telemetry_emitters`, `catalog_registry`) with coverage backed by
+  `tests/tests_command_center/test_topic_pipeline.py`, `test_summarizer_runner.py`,
+  `test_telemetry_emitters.py`, and `test_catalog_registry.py`; full suite validation captured via
+  `pytest .repo_studios/tests/tests_command_center` on 2025-11-30.
+- Confirmed helper compliance with ASCII-only naming and repository logging guidance by updating
+  `topic_pipeline.py` to emit `logging`-based step telemetry, normalising
+  `catalog_registry.py` docstrings, and rerunning
+  `pytest .repo_studios/tests/tests_command_center/test_topic_pipeline.py` followed by the full
+  Command Center suite (2025-11-30).
+- Added `reports_naming_audit.py` utility to the shared library catalogue on 2025-11-30, producing
+  JSON and Markdown audit bundles under `.repo_studios/command_center/reports/reports_naming_audit/`
+  and validating its CLI via `.venv/Scripts/python.exe -u -m pytest
+  .repo_studios/tests/tests_command_center/test_reports_naming_audit.py`.
+- Authored `docs/code_library/helper_usage_patterns.md` on 2025-11-30 to document usage patterns for
+  the topic pipeline, summarizer runner, telemetry emitter, and catalog registry helpers; crosslinks
+  include the helper test suites under `.repo_studios/tests/tests_command_center/`.

@@ -196,6 +196,12 @@ The last consideration is the best view for agents to consume. Would they want t
   immediately; historical bundles remain grandfathered until migrated during
   implementation. `latest_*` aliases are deprecated and will be removed once
   the audit and helper updates land. Canonical reference: `REPORT_NAMING_STANDARDS.md`.
+- **2025-11-30 – Topic Assignment Snapshot**: Validated CommandView inventory
+  (`scripts_commandview_20251129-2102.json`) against planned topic orchestrator
+  scope; `test_log_analysis.py` stays in the utilities staging area until Phase
+  2 library helpers are in place. Manifest mapping uses the CommandView schema
+  with the viewer slug swapped to `healthview` and adds `source_viewer` so
+  agents can differentiate entries when both viewers are loaded.
 
 ## 14. References
 

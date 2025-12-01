@@ -1,0 +1,21 @@
+{
+  "duplicate_groups_resolved": 1,
+  "files_changed": 2,
+  "lines_touched": 120,
+  "notes": "dry run bundle",
+  "run_id": "run-123",
+  "runtime_seconds": 18.5,
+  "schema_version": "1.0",
+  "targets": [
+    "library"
+  ],
+  "tests_executed": {
+    "library_integration": {
+      "artifacts": [
+        "reports/library.xml"
+      ],
+      "duration_seconds": 45.0,
+      "status": "passed"
+    }
+  }
+}

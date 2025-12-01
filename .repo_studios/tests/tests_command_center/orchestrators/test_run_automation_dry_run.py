@@ -136,7 +136,13 @@ def test_run_creates_bundle() -> None:
         )
         assert exit_code == 0
 
-        run_dir = output_dir / "automation_manifest-20251102_193000"
+        script_path = (repo_root / mod.AUTOMATION_SCRIPT_RELATIVE).resolve()
+        aggregator_module, _ = mod._load_run_function(script_path)
+        viewer = getattr(aggregator_module, "VIEWER_SLUG", "commandview")
+        topic = getattr(aggregator_module, "TOPIC_SLUG", getattr(aggregator_module, "RUN_STEM", "automation_manifest"))
+        slug = mod._slug_from_timestamp(mod._parse_timestamp(timestamp))
+
+        run_dir = output_dir / viewer / topic / slug
         manifest_path = run_dir / "manifest.json"
         metrics_path = run_dir / "metrics_summary.json"
         readme_path = run_dir / "README.md"
