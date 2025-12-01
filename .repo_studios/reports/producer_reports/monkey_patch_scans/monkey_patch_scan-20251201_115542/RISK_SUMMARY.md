@@ -1,7 +1,5 @@
 # Monkey-Patch Risk Summary
 
-Generated (UTC): 2025-12-01T11:55:42+00:00
-
 - Total Findings: 104
 
 ## Counts by Risk
@@ -33,10 +31,3 @@ Generated (UTC): 2025-12-01T11:55:42+00:00
 ## High-Risk Focus
 
 - sys_modules_assignment: 10
-
-## Source References
-
-- Source Type: structured
-- Scan Directory: `C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\monkey_patch_scans\monkey_patch_scan-20251201_115542`
-- Producer Report: `C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\monkey_patch_scans\monkey_patch_scan-20251201_115542\report.json`
-- Consumer Bundle: `C:\Users\genet\repo_studios\.repo_studios\reports\consumer_reports\monkey_patch_risk\monkey_patch_risk-2025-12-01_115542`

@@ -1,0 +1,54 @@
+{
+  "finished_at": "2025-12-01T11:55:42.787403+00:00",
+  "run_slug": "20251201-1155",
+  "started_at": "2025-12-01T11:55:40.496787+00:00",
+  "steps": [
+    {
+      "detail": "status=ok, findings=104",
+      "finished_at": "2025-12-01T11:55:42.717278+00:00",
+      "name": "producer",
+      "payload": {
+        "run_id": "monkey_patch_scan-20251201_115542",
+        "status": "ok",
+        "total_findings": 104
+      },
+      "started_at": "2025-12-01T11:55:40.496794+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "source=structured",
+      "finished_at": "2025-12-01T11:55:42.749615+00:00",
+      "name": "consumer",
+      "payload": {
+        "bundle_dir": ".repo_studios/reports/consumer_reports/monkey_patch_risk/monkey_patch_risk-2025-12-01_115542",
+        "source": "structured"
+      },
+      "started_at": "2025-12-01T11:55:42.717287+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "mode=consumer",
+      "finished_at": "2025-12-01T11:55:42.775510+00:00",
+      "name": "aggregator",
+      "payload": {
+        "mode": "consumer",
+        "runs": 4
+      },
+      "started_at": "2025-12-01T11:55:42.749627+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "slug=20251201_115540",
+      "finished_at": "2025-12-01T11:55:42.787395+00:00",
+      "name": "summarizer",
+      "payload": {
+        "slug": "20251201_115540"
+      },
+      "started_at": "2025-12-01T11:55:42.775521+00:00",
+      "status": "success"
+    }
+  ],
+  "success": true,
+  "topic": "monkey_patch_oversight",
+  "viewer": "commandview"
+}

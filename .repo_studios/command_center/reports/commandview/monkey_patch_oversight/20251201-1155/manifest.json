@@ -1,0 +1,112 @@
+{
+  "artifacts": {
+    "consumer_bundle": ".repo_studios/reports/consumer_reports/monkey_patch_risk/monkey_patch_risk-2025-12-01_115542",
+    "consumer_summary": ".repo_studios/reports/consumer_reports/monkey_patch_risk/monkey_patch_risk-2025-12-01_115542/bundle_summary.json",
+    "overview_monkey_patch_overview.json": ".repo_studios/reports/summarizer_reports/monkey_patch_overview/monkey_patch_overview-20251201_115540/monkey_patch_overview.json",
+    "overview_monkey_patch_overview.md": ".repo_studios/reports/summarizer_reports/monkey_patch_overview/monkey_patch_overview-20251201_115540/monkey_patch_overview.md",
+    "producer_matches": ".repo_studios/reports/producer_reports/monkey_patch_scans/monkey_patch_scan-20251201_115542/matches.json",
+    "producer_report": ".repo_studios/reports/producer_reports/monkey_patch_scans/monkey_patch_scan-20251201_115542/report.json",
+    "summarizer_run": ".repo_studios/reports/summarizer_reports/monkey_patch_overview/monkey_patch_overview-20251201_115540",
+    "trend_dir": ".repo_studios/reports/aggregator_reports/monkey_patch_trends/monkey_patch_trends-2025-12-01_115542",
+    "trend_json": ".repo_studios/reports/aggregator_reports/monkey_patch_trends/monkey_patch_trends-2025-12-01_115542/trend.json",
+    "trend_markdown": ".repo_studios/reports/aggregator_reports/monkey_patch_trends/monkey_patch_trends-2025-12-01_115542/trend.md"
+  },
+  "catalog": [
+    {
+      "role": "aggregator",
+      "script_path": ".repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py",
+      "topic": "monkey-patch-oversight"
+    },
+    {
+      "role": "consumer",
+      "script_path": ".repo_studios/scripts/consumers/classify_monkey_patches.py",
+      "topic": "monkey-patch-oversight"
+    },
+    {
+      "role": "orchestrator",
+      "script_path": ".repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py",
+      "topic": "monkey-patch-oversight"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/scan_monkey_patches.py",
+      "topic": "monkey-patch-oversight"
+    },
+    {
+      "role": "summarizer",
+      "script_path": ".repo_studios/command_center/scripts/summarizers/summarize_monkey_patch_overview.py",
+      "topic": "monkey-patch-oversight"
+    },
+    {
+      "role": "utility",
+      "script_path": ".repo_studios/scripts/utilities/monkey_patch_risk.py",
+      "topic": "monkey-patch-oversight"
+    }
+  ],
+  "generated_at": "2025-12-01T11:55:42.787446+00:00",
+  "inputs": {
+    "duplicate_matrix": null,
+    "producer_strict": false,
+    "producer_with_git": false,
+    "scan_root": ".",
+    "trend_max_runs": 20
+  },
+  "run_slug": "20251201-1155",
+  "schema_version": 1,
+  "telemetry": {
+    "finished_at": "2025-12-01T11:55:42.787403+00:00",
+    "run_slug": "20251201-1155",
+    "started_at": "2025-12-01T11:55:40.496787+00:00",
+    "steps": [
+      {
+        "detail": "status=ok, findings=104",
+        "finished_at": "2025-12-01T11:55:42.717278+00:00",
+        "name": "producer",
+        "payload": {
+          "run_id": "monkey_patch_scan-20251201_115542",
+          "status": "ok",
+          "total_findings": 104
+        },
+        "started_at": "2025-12-01T11:55:40.496794+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "source=structured",
+        "finished_at": "2025-12-01T11:55:42.749615+00:00",
+        "name": "consumer",
+        "payload": {
+          "bundle_dir": ".repo_studios/reports/consumer_reports/monkey_patch_risk/monkey_patch_risk-2025-12-01_115542",
+          "source": "structured"
+        },
+        "started_at": "2025-12-01T11:55:42.717287+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "mode=consumer",
+        "finished_at": "2025-12-01T11:55:42.775510+00:00",
+        "name": "aggregator",
+        "payload": {
+          "mode": "consumer",
+          "runs": 4
+        },
+        "started_at": "2025-12-01T11:55:42.749627+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "slug=20251201_115540",
+        "finished_at": "2025-12-01T11:55:42.787395+00:00",
+        "name": "summarizer",
+        "payload": {
+          "slug": "20251201_115540"
+        },
+        "started_at": "2025-12-01T11:55:42.775521+00:00",
+        "status": "success"
+      }
+    ],
+    "success": true,
+    "topic": "monkey_patch_oversight",
+    "viewer": "commandview"
+  },
+  "topic": "monkey_patch_oversight",
+  "viewer": "commandview"
+}
