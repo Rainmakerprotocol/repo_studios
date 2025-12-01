@@ -5,6 +5,12 @@ ifneq ($(filter ./% ../% .venv/%,$(PYTHON)),)
 	override PYTHON := $(abspath $(REPO_ROOT)/$(PYTHON))
 endif
 
+ifeq ($(OS),Windows_NT)
+PYTHONPATH_EXPORT := set "PYTHONPATH=$(CURDIR)" &&
+else
+PYTHONPATH_EXPORT := PYTHONPATH="$(CURDIR)"
+endif
+
 .PHONY: command-center
 command-center:
 ifeq ($(strip $(COMMAND_CENTER_TARGET)),)
@@ -84,7 +90,9 @@ studio-run-fault-pipeline: studio-orchestrate-fault-diagnostics
 
 .PHONY: studio-orchestrate-standards
 studio-orchestrate-standards:
-	$(PYTHON) "$(CURDIR)/command_center/scripts/orchestrators/run_standards_integrity.py" --repo-root "$(REPO_ROOT)"
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py" \
+		--repo-root "$(REPO_ROOT)" --log-level INFO
 
 .PHONY: studio-configure-faulthandler-runtime-smoke
 studio-configure-faulthandler-runtime-smoke:

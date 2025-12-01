@@ -774,3 +774,7 @@ def main(argv: Sequence[str] | None = None) -> None:
 
 
 __all__ = ["run", "main", "parse_args", "build_paths", "build_options"]
+
+
+if __name__ == "__main__":
+    main()
