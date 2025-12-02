@@ -8,6 +8,7 @@ import sys
 import uuid
 from pathlib import Path
 from types import ModuleType
+from typing import Sequence
 
 import pytest
 
@@ -42,9 +43,48 @@ def _prepare_repo(tmp_path: Path) -> tuple[Path, Path, Path]:
     return repo_root, logs_dir, output_dir
 
 
-def test_summary_mode_produces_structured_bundle(tmp_path: Path) -> None:
+def test_redirects_to_topic_runner(monkeypatch: pytest.MonkeyPatch) -> None:
+    module = _load_module()
+    monkeypatch.delenv("PYTEST_LOG_CAPTURE_USE_LEGACY", raising=False)
+
+    captured: dict[str, list[str]] = {}
+
+    def fake_run(args: Sequence[str] | None = None) -> int:
+        captured["argv"] = list(args or [])
+        return 0
+
+    monkeypatch.setattr(module.telemetry_topic_runner, "run", fake_run)
+
+    result = module.run(
+        [
+            "--repo-root",
+            ".",
+            "--logs-dir",
+            "./telemetry/logs",
+            "--output-dir",
+            "./health",
+            "--artifacts-to-keep",
+            "4",
+        ]
+    )
+
+    assert result["status"] == "success"
+    assert result["exit_code"] == 0
+    redirect = result["redirect"]
+    assert redirect["target"] == module.TOPIC_TARGET
+    forwarded_args = captured["argv"]
+    assert redirect["argv"] == forwarded_args
+    assert "--healthview-root" in forwarded_args
+    expected_keep = [flag for flag in forwarded_args if flag.startswith("--collector-artifacts-to-keep")]
+    assert expected_keep, "collector retention flag missing"
+    assert "4" in forwarded_args
+
+
+def test_summary_mode_produces_structured_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     module = _load_module()
     repo_root, logs_dir, output_dir = _prepare_repo(tmp_path)
+
+    monkeypatch.setenv("PYTEST_LOG_CAPTURE_USE_LEGACY", "1")
 
     log_path, junit_path = write_pytest_bundle(
         logs_dir,
@@ -97,6 +137,8 @@ def test_summary_mode_produces_structured_bundle(tmp_path: Path) -> None:
 def test_execute_mode_captures_and_writes_artifacts(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     module = _load_module()
     repo_root, logs_dir, output_dir = _prepare_repo(tmp_path)
+
+    monkeypatch.setenv("PYTEST_LOG_CAPTURE_USE_LEGACY", "1")
 
     run_timestamp = "2025-01-02_1010"
     monkeypatch.setattr(module, "timestamp", lambda: run_timestamp)

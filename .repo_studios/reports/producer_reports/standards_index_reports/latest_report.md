@@ -1,6 +1,6 @@
 # Standards Index Build Report
 
-- generated_utc: 2025-12-01T18:57:34.358598+00:00
+- generated_utc: 2025-12-01T17:44:00+00:00
 - status: ok
 - index_path: .repo_studios\reports\producer_reports\standards_index_reports\latest_index.yaml
 - output_dir: .repo_studios\reports\producer_reports\standards_index_reports

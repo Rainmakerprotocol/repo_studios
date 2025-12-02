@@ -49,11 +49,16 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Sequence
 
+from command_center.scripts.orchestrators import run_test_execution_telemetry as telemetry_topic_runner
+
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/orchestrator_runs/pytest_log_capture")
 DEFAULT_LOGS_DIR = Path(".repo_studios/reports/orchestrator_logs/pytest_log_capture_logs")
 DEFAULT_ARTIFACTS_TO_KEEP = 5
 RUN_STEM = "pytest_log_capture"
 SCHEMA_VERSION = 1
+TOPIC_TARGET = "command_center.scripts.orchestrators.run_test_execution_telemetry"
+LEGACY_ENV_FLAG = "PYTEST_LOG_CAPTURE_USE_LEGACY"
+_LEGACY_ONLY_FLAGS = ("--from-log", "--from-junit", "--cwd")
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
@@ -101,6 +106,88 @@ _SUPPRESS_LINE_SUBSTR = [
     'self.code = compile(text, filename, "exec", dont_inherit=True)',
     "return compile(source, filename, mode, flags",
 ]
+
+
+def _use_legacy_runner(argv: Sequence[str] | None) -> bool:
+    flag = os.environ.get(LEGACY_ENV_FLAG)
+    if flag is not None and flag.strip().lower() in {"1", "true", "yes", "on"}:
+        return True
+    raw = list(argv) if argv is not None else []
+    if "--" in raw:
+        return True
+    for option in _LEGACY_ONLY_FLAGS:
+        for entry in raw:
+            if entry == option or entry.startswith(f"{option}="):
+                return True
+    return False
+
+
+def _has_option(args: Sequence[str], option: str) -> bool:
+    prefix = f"{option}="
+    return any(entry == option or entry.startswith(prefix) for entry in args)
+
+
+def _collect_option_value(args: Sequence[str], option: str) -> str | None:
+    prefix = f"{option}="
+    for index, entry in enumerate(args):
+        if entry == option:
+            if index + 1 < len(args):
+                return args[index + 1]
+            return None
+        if entry.startswith(prefix):
+            return entry.split("=", 1)[1]
+    return None
+
+
+def _normalize_topic_args(argv: Sequence[str] | None) -> list[str]:
+    raw = list(argv) if argv is not None else []
+    normalized: list[str] = []
+    skip_next = False
+    for index, entry in enumerate(raw):
+        if skip_next:
+            skip_next = False
+            continue
+        if entry == "--output-dir":
+            normalized.append("--healthview-root")
+            if index + 1 < len(raw):
+                normalized.append(raw[index + 1])
+                skip_next = True
+            continue
+        if entry.startswith("--output-dir="):
+            normalized.append(entry.replace("--output-dir", "--healthview-root", 1))
+            continue
+        normalized.append(entry)
+
+    keep_value = _collect_option_value(normalized, "--artifacts-to-keep")
+    if keep_value is None:
+        keep_value = str(DEFAULT_ARTIFACTS_TO_KEEP)
+        normalized.extend(["--artifacts-to-keep", keep_value])
+
+    for option in (
+        "--collector-artifacts-to-keep",
+        "--health-artifacts-to-keep",
+        "--coverage-artifacts-to-keep",
+        "--heatmap-artifacts-to-keep",
+        "--hardening-artifacts-to-keep",
+    ):
+        if not _has_option(normalized, option):
+            normalized.extend([option, keep_value])
+
+    return normalized
+
+
+def _redirect_to_topic(argv: Sequence[str] | None) -> dict[str, Any]:
+    normalized = _normalize_topic_args(argv)
+    exit_code = telemetry_topic_runner.run(normalized)
+    status = "success" if exit_code == 0 else "failed"
+    return {
+        "status": status,
+        "exit_code": exit_code,
+        "redirect": {
+            "target": TOPIC_TARGET,
+            "argv": normalized,
+        },
+    }
 
 
 @dataclass(frozen=True)
@@ -609,7 +696,7 @@ def _strip_after_flag(lst: list[str], flag: str) -> list[str]:
     return out
 
 
-def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+def _legacy_run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     args = parse_args(argv)
     _configure_logging(args.log_level)
     logger = logging.getLogger("run_pytest_log_capture")
@@ -901,6 +988,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     logger.info("Saved skipped summary: %s", legacy_paths["skip_log"])
 
     return {
+        "status": "success" if rc == 0 else "failed",
         "exit_code": rc,
         "run_dir": str(write_result.run_dir),
         "report_json": str(write_result.artifacts["report.json"]),
@@ -910,6 +998,12 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         "skips_tsv": str(write_result.artifacts["skips.tsv"]),
         "summary": summary_payload,
     }
+
+
+def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    if not _use_legacy_runner(argv):
+        return _redirect_to_topic(argv)
+    return _legacy_run(argv)
 
 
 def main(argv: Sequence[str] | None = None) -> int:

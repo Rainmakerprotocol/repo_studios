@@ -8,7 +8,9 @@ import sys
 import uuid
 from pathlib import Path
 from types import ModuleType
+from typing import Sequence
 
+import pytest
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -63,13 +65,62 @@ def _write_index(repo_root: Path) -> Path:
     return index_path
 
 
-def test_list_command_writes_structured_bundle(tmp_path: Path) -> None:
+def _enable_legacy(module: ModuleType, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv(module.LEGACY_ENV_FLAG, "1")
+
+
+def test_redirects_to_topic_runner(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    module = _load_module()
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    _write_index(repo_root)
+    output_dir = repo_root / "out"
+
+    monkeypatch.delenv(module.LEGACY_ENV_FLAG, raising=False)
+
+    captured: dict[str, list[str]] = {}
+
+    def fake_run(args: Sequence[str] | None = None) -> int:
+        captured["argv"] = list(args or [])
+        return 0
+
+    monkeypatch.setattr(module.standards_topic_runner, "run", fake_run)
+
+    result = module.run([
+        "--repo-root",
+        str(repo_root),
+        "--output-dir",
+        str(output_dir),
+        "stats",
+    ])
+
+    assert result["redirect"]["target"] == module.TOPIC_TARGET
+    assert result["redirect"]["status"] == "success"
+    redirected_args = captured["argv"]
+    assert redirected_args[0:2] == ["--repo-root", str(repo_root.resolve())]
+    for flag in (
+        "--index-output-dir",
+        "--index-path",
+        "--artifacts-to-keep",
+        "--index-artifacts-to-keep",
+        "--gap-artifacts-to-keep",
+        "--diff-artifacts-to-keep",
+        "--prompt-artifacts-to-keep",
+    ):
+        assert flag in redirected_args
+    assert result["exit_code"] == 0
+    assert result["summary"]["severity_counts"] == {"info": 1, "error": 1}
+
+
+def test_list_command_writes_structured_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     module = _load_module()
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
     index_path = _write_index(repo_root)
     assert index_path.exists()
     output_dir = repo_root / "out"
+
+    _enable_legacy(module, monkeypatch)
 
     result = module.run(
         [
@@ -102,13 +153,15 @@ def test_list_command_writes_structured_bundle(tmp_path: Path) -> None:
     assert report_payload["results"]["rule_ids"] == ["STD002"]
 
 
-def test_show_missing_rule_returns_exit_three(tmp_path: Path) -> None:
+def test_show_missing_rule_returns_exit_three(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     module = _load_module()
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
     index_path = _write_index(repo_root)
     assert index_path.exists()
     output_dir = repo_root / "out"
+
+    _enable_legacy(module, monkeypatch)
 
     result = module.run(
         [
@@ -132,13 +185,15 @@ def test_show_missing_rule_returns_exit_three(tmp_path: Path) -> None:
     assert report_payload["error"] == "rule not found: UNKNOWN"
 
 
-def test_stats_command_reports_severity_counts(tmp_path: Path) -> None:
+def test_stats_command_reports_severity_counts(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     module = _load_module()
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
     index_path = _write_index(repo_root)
     assert index_path.exists()
     output_dir = repo_root / "out"
+
+    _enable_legacy(module, monkeypatch)
 
     result = module.run(
         [

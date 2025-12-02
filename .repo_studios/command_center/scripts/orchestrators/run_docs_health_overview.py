@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Topic orchestrator for the Docs Health workflow."""
+"""Topic orchestrator for the Docs Health workflow.
+
+Exports Healthview bundles to `.repo_studios/command_center/reports/healthview/docs_health/<timestamp>/`
+and replaces the legacy docs inventory/anchor/analysis chain that previously ran ad hoc. The
+pipeline regenerates the doc index, validates anchors, aggregates health signals, and publishes the
+summary bundle that feeds both CommandView and Healthview. Typical runs span roughly six to eight
+minutes depending on anchor validation and churn aggregation time.
+"""
 
 from __future__ import annotations
 

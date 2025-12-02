@@ -6,6 +6,9 @@ import sys
 import uuid
 from pathlib import Path
 from types import ModuleType
+from typing import Sequence
+
+import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 MODULE_PATH = REPO_ROOT / ".repo_studios" / "scripts" / "orchestrators" / "run_fault_pipeline.py"
@@ -40,9 +43,44 @@ def _prepare_repo(tmp_path: Path) -> Path:
     return repo_root
 
 
-def test_run_fault_pipeline_executes_producer_and_consumer(tmp_path: Path) -> None:
+def test_redirects_to_topic_runner(monkeypatch: pytest.MonkeyPatch) -> None:
+    module = _load_module()
+    monkeypatch.delenv("FAULT_PIPELINE_USE_LEGACY", raising=False)
+
+    captured: dict[str, list[str]] = {}
+
+    def fake_run(args: Sequence[str] | None = None) -> int:
+        captured["argv"] = list(args or [])
+        return 0
+
+    monkeypatch.setattr(module.fault_topic_runner, "run", fake_run)
+
+    result = module.run([
+        "--repo-root",
+        ".",
+        "--output-dir",
+        "./summaries",
+        "--command-center-dir",
+        "./cc/fault",
+        "--artifacts-to-keep",
+        "7",
+    ])
+
+    assert result["status"] == "success"
+    assert result["exit_code"] == 0
+    redirect = result["redirect"]
+    assert redirect["target"] == module.TOPIC_TARGET
+    forwarded_args = captured["argv"]
+    assert "--summarizer-output-dir" in forwarded_args
+    assert "--healthview-root" in forwarded_args
+    assert "--summarizer-artifacts-to-keep" in forwarded_args
+    assert redirect["argv"] == forwarded_args
+
+
+def test_run_fault_pipeline_executes_producer_and_consumer(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     repo_root = _prepare_repo(tmp_path)
     module = _load_module()
+    monkeypatch.setenv("FAULT_PIPELINE_USE_LEGACY", "1")
 
     result = module.run(["--repo-root", str(repo_root), "--log-level", "INFO"])
 
@@ -66,9 +104,10 @@ def test_run_fault_pipeline_executes_producer_and_consumer(tmp_path: Path) -> No
     assert latest_summary.exists()
 
 
-def test_run_fault_pipeline_can_skip_producer_with_reuse(tmp_path: Path) -> None:
+def test_run_fault_pipeline_can_skip_producer_with_reuse(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     repo_root = _prepare_repo(tmp_path)
     module = _load_module()
+    monkeypatch.setenv("FAULT_PIPELINE_USE_LEGACY", "1")
 
     first = module.run(["--repo-root", str(repo_root), "--log-level", "INFO"])
     assert first["status"] == "success"
@@ -93,9 +132,10 @@ def test_run_fault_pipeline_can_skip_producer_with_reuse(tmp_path: Path) -> None
     assert consumer_step["status"] == "success"
 
 
-def test_run_fault_pipeline_prunes_history(tmp_path: Path) -> None:
+def test_run_fault_pipeline_prunes_history(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     repo_root = _prepare_repo(tmp_path)
     module = _load_module()
+    monkeypatch.setenv("FAULT_PIPELINE_USE_LEGACY", "1")
 
     output_dir = repo_root / ".repo_studios" / "reports" / "orchestrator_runs" / "fault_pipeline"
     for slug in ("20240101_000000", "20240102_000000", "20240103_000000"):

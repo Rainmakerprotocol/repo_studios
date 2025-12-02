@@ -2,7 +2,7 @@
 title: Orchestrator Implementation Plan
 status: draft
 version: 2025-11-29
-last_updated: 2025-11-30
+last_updated: 2025-12-01
 owner: repo_studios_ai
 tags:
   - automation
@@ -65,6 +65,17 @@ roadmap.
 | `.repo_studios/scripts/orchestrators/run_standards_gap_suite.py` | Standards gap detection orchestrator running index builders and gap analysers | `--repo-root`, `--log-level`, `--artifacts-to-keep`, `--skip-upstream` | `.repo_studios/command_center/reports/standards_gap_suite/` bundles and Markdown summary | Standards Integrity | Ensure gap analysis markdown migrates to Healthview; update standards docs and CI jobs using the suite. |
 | `.repo_studios/scripts/orchestrators/run_standards_index_cli.py` | Wrapper for regenerating standards index and optional gap summary | `--repo-root`, `--log-level`, `--artifacts-to-keep`, positional selectors | `.repo_studios/reports/orchestratorRuns/standards_index_cli/` (legacy) and command center mirrors | Standards Integrity, Engineering Complexity Watch (if split) | Fold index regeneration into topic pipeline; archive CLI shim once make targets pivot to new entry point, documenting new slug usage. |
 
+### Detailed Legacy-to-Topic Parity Mapping (2025-12-01)
+
+| Legacy Entry Point | Topic Replacement | CLI / Flag Parity | Artifact Mapping | Retention Expectations |
+| --- | --- | --- | --- | --- |
+| `.repo_studios/scripts/orchestrators/orchestrate_health_suite.py`<br>`make studio-orchestrate-health-suite` | Combination of `run_test_execution_telemetry.py`, `run_fault_diagnostics_overview.py`, `run_docs_health_overview.py`, `run_dependency_import_hygiene.py`, `run_monkey_patch_oversight.py`, and `run_standards_integrity.py` (meta-runner to follow via `run_command_center_pipeline.py`) | Legacy suite exposed `--timestamp`, `--live`, and timeout knobs but no per-step skips; each topic orchestrator now shares the standard `--repo-root` / `--log-level` surface plus targeted skip/keep flags (for example `--skip-typecheck`, `--skip-producer`) via the shared CLI builders; the upcoming meta orchestrator will carry the old “never stop” vs. “stop on first failure” semantics explicitly. | Health suite logged to `.repo_studios/reports/orchestrator_logs/health_suite_logs/<ts>/status.{json,md}`; each topic now emits `manifest.json`, `summary.md`, and `telemetry.json` under `.repo_studios/command_center/reports/healthview/<topic>/<timestamp>/` while continuing to mirror producer/consumer artifacts (for example dependency hygiene, fault artifacts) in their existing directories. | Legacy retention relied on manual pruning of `health_suite_logs`; the topic orchestrators default to three retained topic bundles (`--artifacts-to-keep`) with per-step budgets between 3–10 runs enforced through `build_standard_options`, keeping parity with the historical log footprint while preventing unbounded growth. |
+| `.repo_studios/scripts/orchestrators/run_pytest_log_capture.py`<br>`make studio-run-pytest-log-capture` | `command_center/scripts/orchestrators/run_test_execution_telemetry.py` (invoked directly or through `run_command_center_pipeline.py test-execution-telemetry`) | Legacy runner exposed `--repo-root`, `--logs-dir`, `--output-dir`, `--artifacts-to-keep`, `--from-log`, and passthrough pytest args; the replacement preserves repo/root and log-directory overrides while adding granular `--collector-artifacts-to-keep`, `--health-artifacts-to-keep`, `--heatmap-window`, and metrics source flags. Direct pytest execution remains available through the underlying runner and is expected to be chained ahead of the topic orchestrator until the meta-runner shells it automatically. | Legacy bundles lived at `.repo_studios/reports/orchestrator_runs/pytest_log_capture/pytest_log_capture-<ts>/` with raw logs in `.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs/`; the topic orchestrator now emits Healthview bundles in `.repo_studios/command_center/reports/healthview/test_execution_telemetry/<timestamp>/` while refreshing the collector, health report, heatmap, coverage, and hardening artifacts in their existing producer/consumer directories. | Old orchestrator defaulted to keeping five structured runs (`--artifacts-to-keep 5`) and left raw log retention to the caller; the new runner defaults to three topic manifests plus `--collector-artifacts-to-keep 10`, `--health-artifacts-to-keep 5`, and similar knobs so downstream consumers keep the same history without manual cleanup. |
+| `.repo_studios/scripts/orchestrators/run_fault_pipeline.py`<br>`make studio-run-fault-pipeline` | `command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` (`make -C .repo_studios studio-orchestrate-fault-diagnostics`) | Legacy flags (`--runs-dir`, `--run-dir`, `--reuse-report`, `--skip-producer`, `--skip-consumer`, `--artifacts-to-keep`) map one-to-one onto the topic orchestrator, which adds `--skip-summarizer`, per-step retention knobs, and catalog registration while keeping repo-root detection identical. | Legacy outputs under `.repo_studios/reports/orchestrator_runs/fault_pipeline/` and the Command Center mirrors are now replaced by `commandview/fault_diagnostics/<timestamp>/manifest.json|summary.md|telemetry.json`; producer/consumer outputs continue to land in `.repo_studios/reports/{producer,consumer}_reports/*` with the same filenames. | Historical pipeline kept ten runs by default; the topic runner keeps ten producer/consumer runs and three orchestrator manifests via `--producer-artifacts-to-keep`, `--consumer-artifacts-to-keep`, `--summarizer-artifacts-to-keep`, and `--artifacts-to-keep`, preserving audit depth while aligning with helper-enforced pruning. |
+| `.repo_studios/scripts/orchestrators/run_batch_cleanup.py`<br>`make studio-run-batch-cleanup` | `command_center/scripts/orchestrators/run_dependency_import_hygiene.py` (trigger batch step with `--trigger-batch-cleanup`) | Legacy cleanup exposed `-t/--target`, `--mode`, `--dry-run`, `--no-pytest`, and retention toggles; the new topic orchestrator threads equivalent controls via `--trigger-batch-cleanup`, `--cleanup-artifacts-to-keep`, `--dependency-*`, `--skip-typecheck`, and `--skip-import-graph` while still honoring dry-run semantics and repo-root discovery when it invokes the underlying cleanup runner. | Legacy bundles wrote to `.repo_studios/reports/orchestrator_runs/run_batch_cleanup/run_batch_cleanup-<ts>/`; the topic pipeline now mirrors the cleanup report alongside dependency hygiene, import graph, placeholder, and typecheck artifacts, and publishes Healthview bundles at `.repo_studios/command_center/reports/healthview/dependency_import_hygiene/<timestamp>/`. | Legacy retention kept five cleanup runs unless manually pruned; the replacement enforces per-step retention (`--dependency-artifacts-to-keep`, `--cleanup-artifacts-to-keep`, etc.) plus a three-run orchestrator manifest window, matching historical history while preventing runaway cleanup archives. |
+| `.repo_studios/scripts/orchestrators/run_standards_gap_suite.py`<br>`make studio-run-standards-gap-suite` | `command_center/scripts/orchestrators/run_standards_integrity.py` (`make -C .repo_studios studio-orchestrate-standards`) | Gap suite previously offered `--repo-root`, `--skip-index`, `--timestamp`, and `--legacy-json`; the topic runner preserves repo-root overrides while adding path overrides for every producer (`--index-output-dir`, `--gap-output-dir`, `--prompt-output-dir`), diff controls (`--diff-old-index`, `--diff-fail-on`), and catalog toggles. The gap analyzer still accepts `--gap-max-show`, letting operators reproduce legacy behaviour. | Legacy outputs under `.repo_studios/command_center/reports/standards_gap_suite/<timestamp>/` are now replaced by Healthview bundles in `.repo_studios/command_center/reports/healthview/standards_integrity/<timestamp>/`, with index, gap, diff, and prompt artifacts refreshed in the same producer/consumer directories to maintain downstream compatibility. | Gap suite keep counts were enforced manually; the topic runner maintains per-step keep knobs (`--index-artifacts-to-keep`, `--gap-artifacts-to-keep`, `--diff-artifacts-to-keep`, `--prompt-artifacts-to-keep`) plus three orchestrator manifests, delivering tighter, helper-managed pruning. |
+| `.repo_studios/scripts/orchestrators/run_standards_index_cli.py` | Standards Integrity orchestrator plus ongoing CLI shim (`run_standards_index_cli.py`) for ad-hoc queries | The CLI still supports `list/search/show/stats` with `--severity`, `--category`, and `--artifacts-to-keep`; Standards Integrity now captures the same catalog data inside its manifest and summary, and automation should invoke the topic runner directly (for example `make -C .repo_studios studio-orchestrate-standards`) while the shim handles interactive lookups. | CLI artifacts in `.repo_studios/reports/orchestrator_runs/standards_index_cli/` are now mirrored into the Standards Integrity Healthview bundle (summary embeds rule counts, manifest records index metadata) so operators can retire the legacy directory once dashboards consume the new payload. | CLI retention relied on `--artifacts-to-keep 5`; the Standards Integrity runner centralises retention with helper-managed keep counts (three manifests by default, producer-specific keeps for index/diff/prompt). |
+
 ## Legacy Retirement Targets
 
 - `.repo_studios/scripts/orchestrators/` modules listed above (and their `__main__` shims).
@@ -93,9 +104,10 @@ roadmap.
 ## Operational Impact Inventory
 
 - **Make Targets**: `studio-orchestrate-health-suite`, `studio-orchestrate-fault-diagnostics` (`studio-run-fault-pipeline` alias),
-  `studio-run-pytest-log-capture`, `studio-run-batch-cleanup`, `studio-run-standards-gap-suite`,
-  `studio-run-standards-index` – document successor targets, note interim aliases, and prepare MR
-  to adjust `.repo_studios/Makefile` with deprecation warnings.
+  `studio-run-pytest-log-capture`, `studio-run-batch-cleanup`, `studio-run-standards-gap-suite` –
+  document successor targets, note interim aliases, and prepare MR to adjust `.repo_studios/Makefile`
+  with deprecation warnings (legacy `studio-run-standards-index` alias retired 2025-12-01; use
+  `studio-orchestrate-standards`).
 - **CI Jobs**: Identify pipelines invoking the legacy orchestrators (health suite nightly,
   fault-pipeline smoke, standards gap weekly) and draft changes to point at topic runners and the
   meta orchestrator once live.
@@ -283,10 +295,12 @@ roadmap.
   - 2025-12-01: Landed `.repo_studios/tests/tests_command_center/standards_integrity/test_run_standards_integrity.py`
     to monkey-patch the producer shims, seed minimal outputs, and assert that the orchestrator
     writes Healthview `manifest.json`, `summary.md`, and `telemetry.json` bundles with the expected
-    step telemetry. Confirmed the contract with
+    step telemetry. Refined `studio-orchestrate-standards` to export `PYTHONPATH` cross-platform and
+    added a `__main__` guard to `run_standards_integrity.py` so direct `python` invocations execute
+    the pipeline. Confirmed the contract with
     `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/standards_integrity -q`
-    and spot-checked a live run via
-    `PYTHONPATH="C:/Users/genet/repo_studios/.repo_studios" make -C .repo_studios studio-orchestrate-standards PYTHON=.venv/Scripts/python.exe`.
+    and spot-checked live runs via `make -C .repo_studios studio-orchestrate-standards PYTHON=.venv/Scripts/python.exe`
+    and `C:/Users/genet/repo_studios/.venv/Scripts/python.exe .repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py --repo-root C:/Users/genet/repo_studios --log-level INFO`.
 - **Dependency & Import Hygiene**
   - 2025-11-30: Outlined the Dependency & Import Hygiene execution order so the forthcoming topic
   orchestrator can reuse a shared timestamp and retention budget. The run will start with
@@ -316,6 +330,14 @@ roadmap.
   `libraries` helpers alongside the legacy boundary allowlist
   (`.repo_studios/config/import_boundary_rules.yaml`). The orchestrator will surface overrides for
   each hook and mirror default retention to keep parity with the standalone producers.
+  - 2025-12-01: Added `command_center/scripts/orchestrators/run_dependency_import_hygiene.py`, wiring
+    dependency hygiene → import graph → placeholder scan → optional batch cleanup → typecheck → optional
+    mypy baseline refresh through the shared topic pipeline helpers with skip/trigger flags, shared
+    timestamps, and Healthview artifact emission. Introduced
+    `.repo_studios/tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py`
+    to cover artifact emission and skip-flag behaviour, and validated via
+    `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest
+    .repo_studios/tests/tests_command_center/dependency_import_hygiene -q`.
 - **Monkey Patch Oversight**
   - 2025-11-30: Collected the Monkey Patch Oversight pipeline assets—`scan_monkey_patches.py` produces
   structured findings under `.repo_studios/reports/producer_reports/monkey_patch_scans/` with legacy
@@ -355,23 +377,49 @@ roadmap.
     `.repo_studios/reports/{producer,consumer,aggregator,summarizer}_reports/monkey_patch_*`, confirming
     retention pruning and duplicate matrix threading behave as documented.
 - **Engineering Complexity Watch (stretch)**
-  - [ ] Decide whether to merge structural complexity and inventory governance or stage separate
-    orchestrators.
-  - [ ] Enumerate script set (lizard report, inventory validation, metrics stubs, standards index
-    CLI) and identify any tooling gaps.
-  - [ ] Document rollout conditions (runtime budgets, stakeholder sign-off) before implementation.
+  - 2025-12-01: Confirmed we will stage Engineering Complexity Watch as its own orchestrator instead
+    of merging structural complexity and inventory governance into Standards Integrity, aligning with
+    RFC section 12 plus the runtime/ownership analysis from
+    `.repo_studios/docs/automation/generate_lizard_report.md` and
+    `.repo_studios/docs/automation/generate_dependency_hygiene_report.md`. The follow-up runner will
+    ingest the existing Docs Health and Dependency & Import Hygiene artifacts alongside the standards
+    summary so inventory governance can evolve independently.
+  - 2025-12-01: Enumerated the Engineering Complexity Watch inputs by cross-referencing
+    `.repo_studios/scripts/script_inventory_architecture.md` and the automation docs for
+    `generate_lizard_report.py`, `render_inventory_views.py`, `check_inventory_health.py`,
+    `validate_inventory.py`, `validate_metrics_anchor_stubs.py`, `generate_dependency_hygiene_report.py`,
+    and the legacy `run_standards_index_cli.py` helper. All producers already emit structured
+    bundles with pruning, pytest coverage, and Make targets, while the CLI surfaces filtered views of
+    `latest_index.yaml`. Identified three gaps for the forthcoming orchestrator: (1) no shared
+    summarizer currently blends the lizard, dependency hygiene, and inventory signals into a single
+    Markdown/JSON Healthview payload; (2) `run_standards_index_cli.py` still writes to
+    `.repo_studios/reports/orchestrator_runs/standards_index_cli/`, so the topic runner must mirror
+    outputs into the Command Center Healthview slug and likely wrap the query logic behind a
+    callable helper; (3) `check_inventory_health.py` depends on
+    `reports/summary/latest/summary.json` plus `config/ci_inventory_thresholds.json`, so the
+    orchestrator needs to schedule `render_inventory_views.py` (or another summary refresh) before
+    invoking the health check and expose baseline overrides for CI parity.
+  - 2025-12-01: Recorded rollout conditions for Engineering Complexity Watch—per
+    `docs/automation/orchestrator_topic_refactor_rfc.md` section 10 the topic runner will remain in
+    nightly-only mode until we capture runtime telemetry across the full `generate_lizard_report.py`
+    + dependency hygiene + inventory sequence and review it with Platform Engineering and Standards
+    Governance. The `generate_lizard_report.py` guide documents the repo-wide scan footprint, so the
+    initial rollout avoids PR gating until runtime data demonstrates the pipeline fits existing CI
+    budgets. The orchestrator will reuse `check_inventory_health.py` thresholds outlined in
+    `docs/automation/ci_metrics_checks.md`, and stakeholder sign-off must confirm those guardrails are
+    acceptable before wiring the topic into the meta-orchestrator schedule.
+  - 2025-12-02: Re-evaluated the Engineering Complexity Watch scope against
+    `.repo_studios/docs/automation/generate_lizard_report.md`,
+    `.repo_studios/docs/automation/generate_dependency_hygiene_report.md`, and RFC section 12,
+    confirming the rollout remains a unified orchestrator while documenting prerequisites (net-new
+    summarizer, Healthview bundle wiring, runtime telemetry review) that must land before we schedule
+    implementation.
 
 ## Phase Checklist
 
-- [ ] Phase 1 – Design Convergence
-  - [x] Validate topic script assignments against the 2025-11-29 inventory bundle (see 2025-11-30 snapshot).
-  - [x] Finalise Healthview manifest schema by mapping CommandView fields to the new slug layout
-    (see Healthview Manifest Mapping section).
-  - [x] Record RFC decisions in section 13 with approvals and outstanding risks (see 2025-11-30 entry).
-  - [x] Document legacy removal scope (modules, tests, docs, artifacts) in issue tracker tickets so
-    teams can claim discrete workstreams (see Legacy Orchestrator Ticket Matrix).
-  - [x] Open issue tickets for legacy orchestrator retirement (one per legacy runner) and link them
-    to the parity matrix for cross-team tracking (ticket stubs recorded above).
+- [x] Phase 1 – Design Convergence — Completed 2025-12-02 after validating the 2025-11-29 topic
+  inventory snapshot, mapping Healthview manifest fields, recording RFC approvals, documenting
+  legacy retirement scope, and opening linked tickets for each legacy orchestrator.
 - [ ] Phase 2 – Library Foundations
   - Implemented `build_topic_pipeline`, `summarizer_runner`, `telemetry_emitters`, and
     `catalog_registry` helpers with unit tests on 2025-11-30; validated with
@@ -417,22 +465,78 @@ roadmap.
     producer/consumer mirrors; validated end-to-end via `make -C .repo_studios
     studio-orchestrate-fault-diagnostics PYTHON=.venv/Scripts/python.exe` and
     `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/fault_diagnostics -q`.
+  - 2025-12-01: Staged the legacy `run_fault_pipeline.py` shim to forward into
+    `command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` by default, translating
+    key CLI knobs (`--output-dir`, `--command-center-dir`, `--artifacts-to-keep`) and injecting a
+    `FAULT_PIPELINE_USE_LEGACY=1` escape hatch for the original pipeline. Updated
+    `.repo_studios/tests/tests_orchestrators/test_run_fault_pipeline.py` to cover both the redirect
+    and the legacy execution path, and backfilled the consumer module with a defensive `shutil`
+    export so reuse flows remain intact during the transition.
   - [x] Deliver Docs Health orchestrator with aligned CLI surfaces.
     - 2025-12-02: Added `command_center/scripts/orchestrators/run_docs_health_overview.py`, wiring the Docs Health producers and aggregator through the shared topic pipeline with catalog registration, Healthview manifest emission, and retention knobs for every dependency. Published the `studio-orchestrate-docs-health` make target and validated the runner via `make -C .repo_studios studio-orchestrate-docs-health PYTHON=.venv/Scripts/python.exe` together with `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/docs_health -q`.
-  - [ ] Deliver Standards Integrity orchestrator with aligned CLI surfaces.
-  - [ ] Deliver Dependency & Import Hygiene orchestrator with aligned CLI surfaces.
+  - 2025-12-01: Delivered the Standards Integrity orchestrator with aligned CLI surfaces—retained the
+    topic pipeline wiring in `run_standards_integrity.py`, added the `__main__` guard for direct CLI
+    execution, and refreshed `studio-orchestrate-standards` to set `PYTHONPATH` on Windows and POSIX
+    shells before launching the runner. Verified Healthview bundles under
+    `.repo_studios/command_center/reports/healthview/standards_integrity/20251201-1857/` alongside
+    refreshed producer outputs, and exercised the contract via
+    `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/standards_integrity -q`
+    together with `make -C .repo_studios studio-orchestrate-standards PYTHON=.venv/Scripts/python.exe`.
+  - 2025-12-01: Delivered the Dependency & Import Hygiene orchestrator with aligned CLI surfaces.
   - 2025-12-01: Delivered the Monkey Patch Oversight orchestrator and companion summarizer with
     aligned CLI retention knobs, catalog registration, and viewer/topic manifest emission; see
     `.repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py` and
     `.repo_studios/command_center/scripts/summarizers/summarize_monkey_patch_overview.py`.
-  - [ ] Produce a parity matrix that maps every existing orchestrator invocation and artifact to
-    its replacement topic pipeline, including scripts, CLI flags, and retention expectations.
-  - [ ] Stage redirects or temporary shims for legacy orchestrators so tests and make targets can
+  - 2025-12-01: Produced the detailed legacy-to-topic parity matrix in this plan (see “Detailed
+    Legacy-to-Topic Parity Mapping”) documenting replacement scripts, CLI parity, artifact
+    destinations, and retention knobs for `orchestrate_health_suite.py`, `run_pytest_log_capture.py`,
+    `run_fault_pipeline.py`, `run_batch_cleanup.py`, `run_standards_gap_suite.py`, and
+    `run_standards_index_cli.py`.
+  - [x] Stage redirects or temporary shims for legacy orchestrators so tests and make targets can
     point to the new entry points without breaking interim workflows.
-  - [ ] Evaluate the Engineering Complexity Watch pipeline scope and either implement the unified
-    orchestrator or split follow-up work as agreed in RFC Q&A.
-  - [ ] Update topic orchestrator READMEs and inline module docstrings to reference Healthview
-    artifact locations, replacements for legacy outputs, and expected runtime characteristics.
+    - 2025-12-01: Fault pipeline shim now delegates to `run_fault_diagnostics_overview.py`.
+    - 2025-12-01: Pytest log capture shim now defaults to
+      `command_center/scripts/orchestrators/run_test_execution_telemetry.py`, translating CLI knobs such
+      as `--output-dir` → `--healthview-root` and mirroring `--artifacts-to-keep` across the topic
+      retention flags while preserving `PYTEST_LOG_CAPTURE_USE_LEGACY` for summary and pytest passthrough
+      workflows; validated via `.venv/Scripts/python.exe -m pytest
+      .repo_studios/tests/tests_orchestrators/test_run_pytest_log_capture.py -q`.
+    - 2025-12-01: Standards gap suite shim now fronts
+      `command_center/scripts/orchestrators/run_standards_integrity.py`, remapping `--max-show` to
+      `--gap-max-show`, threading index/gap directory overrides, and honoring
+      `STANDARDS_GAP_USE_LEGACY` plus `--skip-index`/`--legacy-json` fallbacks for legacy parity;
+      validated via `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_orchestrators/test_run_standards_gap_suite.py -q`
+      and `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/standards_integrity -q`.
+    - 2025-12-01: Batch cleanup shim now delegates to
+      `command_center/scripts/orchestrators/run_dependency_import_hygiene.py` by default, translating
+      retention knobs (`--artifacts-to-keep` → `--cleanup-artifacts-to-keep`), enforcing topic-only
+      execution unless `RUN_BATCH_CLEANUP_USE_LEGACY=1` or legacy-only flags are supplied, and
+      auto-appending `--skip-import-graph` / `--skip-typecheck` so the redirect mirrors the original
+      cleanup scope. Covered via `.venv/Scripts/python.exe -m pytest
+      .repo_studios/tests/tests_orchestrators/test_run_batch_cleanup.py -q`.
+    - 2025-12-01: Standards index CLI now shells into
+      `command_center/scripts/orchestrators/run_standards_integrity.py` ahead of processing `list`
+      / `search` / `show` / `stats` commands, forwarding repo-root and retention knobs while
+      exposing `RUN_STANDARDS_INDEX_CLI_USE_LEGACY=1` for operators who need the standalone query
+      workflow. The shim still emits structured CLI artifacts and reports redirect telemetry, with
+      coverage added via `.venv/Scripts/python.exe -m pytest
+      .repo_studios/tests/tests_orchestrators/test_run_standards_index_cli.py -q`.
+    - 2025-12-01: Audited make aliases and ad-hoc scripts; none shell the CLI in automation, and interactive guidance now sets `RUN_STANDARDS_INDEX_CLI_USE_LEGACY` only when operators intentionally skip the redirect.
+    - 2025-12-01: Distributed the updated CLI instructions to Standards Ops analysts (Slack #standards-index) with links to the refreshed runbook so manual queries adopt the redirect-aware workflow.
+    - 2025-12-02: `orchestrate_health_suite.py` now shells into the topic orchestrators by default,
+      triggering Dependency & Import Hygiene (with batch cleanup and mypy baseline refresh), Test
+      Execution Telemetry, Docs Health, Fault Diagnostics, Monkey Patch Oversight, and Standards
+      Integrity via their shared `run()` shims while preserving the legacy pipeline behind
+      `HEALTH_SUITE_USE_LEGACY=1`; the shim continues to emit health-suite status artifacts and
+      logs the redirect for operators.
+  - [x] Evaluated the Engineering Complexity Watch pipeline scope on 2025-12-02, reaffirming the
+    RFC section 12 decision to stage a unified orchestrator while cataloguing prerequisites (net-new
+    summarizer, Healthview bundle wiring, runtime telemetry review) and deferring implementation
+    until those gating items land.
+  - [x] Updated the topic orchestrator README and inline module docstrings on 2025-12-02 to document
+    Healthview artifact locations, legacy replacements, and expected runtime footprints for each
+    topic runner (`.repo_studios/command_center/scripts/orchestrators/README.md` and module docstrings
+    refreshed accordingly).
 - [ ] Phase 4 – Summaries and Healthview Artifacts
   - [ ] Update existing summarizers (health suite, standards) to consume helper APIs and emit
     Healthview-compatible Markdown.
@@ -673,9 +777,61 @@ Example manifest path: `.../healthview/test_execution_telemetry/20251129-2102/ma
   (`monkey_patch_risk-2025-12-01_115542`), aggregator (`monkey_patch_trends-2025-12-01_115542`), and
   summarizer (`monkey_patch_overview-20251201_115540`) bundles; contract coverage reconfirmed via
   `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/monkey_patch -q`.
+- 2025-12-02: Re-evaluated Engineering Complexity Watch prerequisites by reviewing
+  `.repo_studios/docs/automation/generate_lizard_report.md`,
+  `.repo_studios/docs/automation/generate_dependency_hygiene_report.md`, and
+  `docs/automation/orchestrator_topic_refactor_rfc.md` section 12, documenting the unified-orchestrator
+  decision and gating actions in `docs/automation/orchestrator_implementation.md`; documentation-only,
+  no tests executed.
+- 2025-12-01: Redirected `run_pytest_log_capture.py` to the Test Execution Telemetry orchestrator by
+  default, retaining the `PYTEST_LOG_CAPTURE_USE_LEGACY` escape hatch for summary and pytest
+  passthrough flows and confirming both redirect and legacy behaviour via
+  `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_orchestrators/test_run_pytest_log_capture.py -q`
+  and `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_orchestrators/test_run_fault_pipeline.py -q`.
+- 2025-12-01: Redirected `run_standards_gap_suite.py` to the Standards Integrity topic runner by
+  default, translating `--max-show` to `--gap-max-show`, carrying directory overrides forward, and
+  retaining `STANDARDS_GAP_USE_LEGACY` / `--skip-index` / `--legacy-json` escape hatches; confirmed via
+  `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_orchestrators/test_run_standards_gap_suite.py -q`
+  together with `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/standards_integrity -q`.
 - 2025-12-01: Validated Fault Diagnostics orchestrator delivery by executing
   `make -C .repo_studios studio-orchestrate-fault-diagnostics PYTHON=.venv/Scripts/python.exe`,
   inspecting `.repo_studios/command_center/reports/commandview/fault_diagnostics/20251201-1313/manifest.json`
   for aligned artifact pointers, and running
   `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/fault_diagnostics -q`
   to confirm orchestrator + summarizer test coverage.
+- 2025-12-01: Verified Standards Integrity delivery end-to-end—ran
+  `make -C .repo_studios studio-orchestrate-standards PYTHON=.venv/Scripts/python.exe` after baking the
+  cross-platform `PYTHONPATH` export, inspected
+  `.repo_studios/command_center/reports/healthview/standards_integrity/20251201-1857/manifest.json`, and
+  reran the contract test suite via
+  `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/standards_integrity -q`.
+- 2025-12-01: Finalised Engineering Complexity Watch scope by revisiting RFC section 12 together with
+  `.repo_studios/docs/automation/generate_lizard_report.md` and
+  `.repo_studios/docs/automation/generate_dependency_hygiene_report.md`, confirming the topic will
+  remain a standalone orchestrator that reuses existing Docs Health and Dependency & Import Hygiene
+  artifacts via the follow-up runner. Documentation-only decision; no code changes or tests executed.
+- 2025-12-01: Enumerated the Engineering Complexity Watch inputs using
+  `.repo_studios/scripts/script_inventory_architecture.md` plus the automation docs for
+  `generate_lizard_report.py`, `render_inventory_views.py`, `check_inventory_health.py`,
+  `validate_inventory.py`, `validate_metrics_anchor_stubs.py`, `generate_dependency_hygiene_report.py`,
+  and `run_standards_index_cli.py`, noting the absence of a blended summarizer, the need to relocate
+  the CLI outputs into Healthview-friendly directories, and the requirement to refresh inventory
+  summaries before running `check_inventory_health.py`. Documentation review only; tests were not
+  executed.
+- 2025-12-01: Documented Engineering Complexity Watch rollout conditions, keeping the topic runner
+  in nightly-only mode until runtime telemetry from `generate_lizard_report.py` + dependency hygiene +
+  inventory checks is reviewed with Platform Engineering and Standards Governance stakeholders.
+  Confirmed the orchestrator will reuse the `check_inventory_health.py` thresholds from
+  `docs/automation/ci_metrics_checks.md` and defer meta-orchestrator wiring until approvals land.
+- 2025-12-02: Closed Phase 1 – Design Convergence after re-checking the 2025-11-29
+  CommandView inventory bundle (`.repo_studios/scripts/scripts_index/scripts_commandview_20251129-2102.json`),
+  confirming the Healthview manifest mapping updates in this plan, and ensuring every legacy
+  retirement ticket recorded in the parity matrix remains linked to its orchestrator scope.
+- 2025-12-01: Compiled the detailed legacy-to-topic parity matrix inside this plan, capturing CLI
+  parity, artifact destinations, and retention expectations for every legacy orchestrator; no code
+  changes or tests were required (documentation update only).
+- 2025-12-01: Staged the `run_fault_pipeline.py` redirect to
+  `command_center/scripts/orchestrators/run_fault_diagnostics_overview.py`, added the
+  `FAULT_PIPELINE_USE_LEGACY` escape hatch for reuse flows, patched the topic orchestrator return
+  indentation, injected a defensive `shutil` export for the legacy consumer hook, and validated with
+  `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_orchestrators/test_run_fault_pipeline.py -q`.

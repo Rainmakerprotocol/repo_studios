@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-"""Topic orchestrator for the Monkey Patch Oversight workflow."""
+"""Topic orchestrator for the Monkey Patch Oversight workflow.
+
+Outputs Healthview bundles at
+`.repo_studios/command_center/reports/healthview/monkey_patch_oversight/<timestamp>/` and replaces the
+monkey patch stages that previously lived inside `orchestrate_health_suite.py` alongside the
+standalone summarizer invocation. The pipeline scans, classifies, aggregates, and summarizes monkey
+patch risk before emitting manifest, summary, and telemetry artifacts. Runs usually finish within
+four to seven minutes when Git history enrichment is enabled; trend aggregation scales with the
+configured history window.
+"""
 
 from __future__ import annotations
 

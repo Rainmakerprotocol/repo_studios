@@ -45,6 +45,7 @@ import subprocess
 import sys
 import threading
 import time
+from datetime import datetime, timezone
 from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -80,6 +81,74 @@ SCRIPT_ALIASES: dict[str, str] = {
     "anchor_health_report.py": "scripts/consumers/generate_anchor_health_report.py",
     "refresh_mypy_baselines.py": "scripts/utilities/refresh_mypy_baselines.py",
 }
+
+USING_LEGACY = False
+
+
+def _use_legacy_pipeline() -> bool:
+    raw = os.getenv("HEALTH_SUITE_USE_LEGACY")
+    if raw is None:
+        return False
+    return raw.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _ts_to_iso(ts: str) -> str | None:
+    try:
+        parsed = datetime.strptime(ts, "%Y-%m-%d_%H%M")
+    except ValueError:
+        return None
+    return parsed.replace(tzinfo=timezone.utc).isoformat()
+
+
+def _make_topic_steps(ts: str) -> list["Step"]:
+    py = exe()
+    repo_root = str(REPO_ROOT)
+    log_level = os.environ.get("COMMAND_CENTER_LOG_LEVEL", "INFO")
+    orchestrators_root = ROOT / "command_center" / "scripts" / "orchestrators"
+    iso_ts = _ts_to_iso(ts)
+
+    def _build_step(name: str, relative_path: str, extra_args: Sequence[str] | None = None) -> "Step":
+        script_path = orchestrators_root / relative_path
+        if not script_path.exists():
+            return Step(
+                name=f"{name}(MISSING)",
+                argv=[
+                    py,
+                    "-c",
+                    (
+                        f"import sys; print('missing {relative_path}', file=sys.stderr); sys.exit(1)"
+                    ),
+                ],
+                optional=True,
+            )
+        argv = [
+            py,
+            str(script_path),
+            "--repo-root",
+            repo_root,
+            "--log-level",
+            log_level,
+        ]
+        if iso_ts:
+            argv.extend(["--timestamp", iso_ts])
+        if extra_args:
+            argv.extend(extra_args)
+        return Step(name=name, argv=argv)
+
+    steps: list[Step] = []
+    steps.append(
+        _build_step(
+            "dependency_import_hygiene",
+            "run_dependency_import_hygiene.py",
+            ["--trigger-batch-cleanup", "--refresh-mypy-baselines"],
+        )
+    )
+    steps.append(_build_step("test_execution_telemetry", "run_test_execution_telemetry.py"))
+    steps.append(_build_step("docs_health_overview", "run_docs_health_overview.py"))
+    steps.append(_build_step("fault_diagnostics_overview", "run_fault_diagnostics_overview.py"))
+    steps.append(_build_step("monkey_patch_oversight", "run_monkey_patch_oversight.py"))
+    steps.append(_build_step("standards_integrity", "run_standards_integrity.py"))
+    return steps
 
 
 def _ts_default() -> str:
@@ -135,6 +204,11 @@ class Step:
 
 
 def make_steps(ts: str) -> list[Step]:
+    global USING_LEGACY
+    if not _use_legacy_pipeline():
+        USING_LEGACY = False
+        return _make_topic_steps(ts)
+    USING_LEGACY = True
     py = exe()
     steps: list[Step] = []
     # Prepare a shared FAULT_OUTDIR for fault steps so all child processes
@@ -784,12 +858,20 @@ def main(argv: Sequence[str] | None = None) -> int:
         "started_at": time.time(),
         "steps": [],
     }
-    # Echo the resolved fault outdir for this run (if created by make_steps)
-    run["fault_outdir"] = str((FAULT_RUN_ROOT / ts).resolve())
-    run["fault_outdir_legacy"] = str((LEGACY_FAULT_ROOT / ts).resolve())
+    if USING_LEGACY:
+        run["fault_outdir"] = str((FAULT_RUN_ROOT / ts).resolve())
+        run["fault_outdir_legacy"] = str((LEGACY_FAULT_ROOT / ts).resolve())
+    else:
+        run["fault_outdir"] = ""
+        run["fault_outdir_legacy"] = ""
 
     # Configure logging — show live progress if requested
     logging.basicConfig(level=logging.INFO if args.live else logging.WARNING, format="%(message)s")
+    if not USING_LEGACY:
+        logging.warning(
+            "Health suite orchestrator now defers to topic orchestrators. Set HEALTH_SUITE_USE_LEGACY=1 to run the "
+            "legacy pipeline."
+        )
 
     def _capture_fault_gate_triage(outdir: Path, into_log_dir: Path) -> Path | None:
         try:

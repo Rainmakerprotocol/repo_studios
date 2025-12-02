@@ -4,6 +4,7 @@
 
 - 2025-11-27: Plan drafted; implementation not yet started.
 - 2025-12-02: Modernization delivered; adoption follow-up pending.
+- 2025-12-02: Interactive guidance updated to require `RUN_STANDARDS_INDEX_CLI_USE_LEGACY=1` only when analysts intentionally bypass the Standards Integrity redirect.
 
 ## Objective
 

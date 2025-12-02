@@ -29,6 +29,7 @@ from command_center.scripts.libraries.cli import (
     build_standard_options,
     build_standard_paths,
 )
+from command_center.scripts.orchestrators import run_fault_diagnostics_overview as fault_topic_runner
 
 SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RUNS_REL = Path(".repo_studios/reports/orchestrator_logs/faulthandler_logs")
@@ -48,6 +49,9 @@ PIPELINE_LOG = "pipeline.log"
 
 PRODUCER_PATH = SCRIPTS_ROOT / "producers" / "collect_faulthandler_reports.py"
 CONSUMER_PATH = SCRIPTS_ROOT / "consumers" / "generate_fault_artifacts.py"
+
+TOPIC_TARGET = "command_center.scripts.orchestrators.run_fault_diagnostics_overview"
+LEGACY_ENV_FLAG = "FAULT_PIPELINE_USE_LEGACY"
 
 
 @dataclass(frozen=True)
@@ -78,6 +82,83 @@ class Options:
     skip_producer: bool = False
     skip_consumer: bool = False
     reuse_report: Path | None = None
+
+
+def _use_legacy_pipeline() -> bool:
+    flag = os.environ.get(LEGACY_ENV_FLAG)
+    if flag is None:
+        return False
+    return flag.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _has_option(args: Sequence[str], option: str) -> bool:
+    prefix = f"{option}="
+    return any(entry == option or entry.startswith(prefix) for entry in args)
+
+
+def _collect_option_value(args: Sequence[str], option: str) -> str | None:
+    prefix = f"{option}="
+    for index, entry in enumerate(args):
+        if entry == option:
+            if index + 1 < len(args):
+                return args[index + 1]
+            return None
+        if entry.startswith(prefix):
+            return entry.split("=", 1)[1]
+    return None
+
+
+def _normalize_topic_args(argv: Sequence[str] | None) -> list[str]:
+    raw = list(argv) if argv is not None else []
+    normalized: list[str] = []
+    skip_next = False
+    for index, entry in enumerate(raw):
+        if skip_next:
+            skip_next = False
+            continue
+        if entry == "--output-dir":
+            normalized.append("--summarizer-output-dir")
+            if index + 1 < len(raw):
+                normalized.append(raw[index + 1])
+                skip_next = True
+            continue
+        if entry.startswith("--output-dir="):
+            normalized.append(entry.replace("--output-dir", "--summarizer-output-dir", 1))
+            continue
+        if entry == "--command-center-dir":
+            normalized.append("--healthview-root")
+            if index + 1 < len(raw):
+                normalized.append(raw[index + 1])
+                skip_next = True
+            continue
+        if entry.startswith("--command-center-dir="):
+            normalized.append(entry.replace("--command-center-dir", "--healthview-root", 1))
+            continue
+        normalized.append(entry)
+
+    keep_value = _collect_option_value(normalized, "--artifacts-to-keep")
+    if keep_value is None:
+        keep_value = str(DEFAULT_KEEP)
+        normalized.extend(["--artifacts-to-keep", keep_value])
+
+    if not _has_option(normalized, "--summarizer-artifacts-to-keep"):
+        normalized.extend(["--summarizer-artifacts-to-keep", keep_value])
+
+    return normalized
+
+
+def _redirect_to_topic(argv: Sequence[str] | None) -> dict[str, Any]:
+    normalized = _normalize_topic_args(argv)
+    exit_code = fault_topic_runner.run(normalized)
+    status = "success" if exit_code == 0 else "failed"
+    return {
+        "status": status,
+        "exit_code": exit_code,
+        "redirect": {
+            "target": TOPIC_TARGET,
+            "argv": normalized,
+        },
+    }
 
 
 PATHS_CONFIG = PathsConfig(
@@ -398,7 +479,7 @@ def _mirror_to_command_center(bundle_dir: Path, *, command_center_dir: Path, kee
             shutil.rmtree(node, ignore_errors=True)
 
 
-def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+def _legacy_run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     args = parse_args(argv)
     paths = build_paths(args)
     paths = replace(paths, runs_dir=_resolve_runs_dir(paths))
@@ -558,7 +639,10 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
             log_lines.append("Starting generate_fault_artifacts")
             start = time.perf_counter()
             try:
-                consumer_result = _consumer_module().run(consumer_args)
+                consumer_module = _consumer_module()
+                if not hasattr(consumer_module, "shutil"):
+                    consumer_module.shutil = shutil  # type: ignore[attr-defined]
+                consumer_result = consumer_module.run(consumer_args)
                 duration = time.perf_counter() - start
                 bundle_dir = Path(consumer_result.get("consumer_report")) if consumer_result.get("consumer_report") else None
                 severity = _extract_severity(bundle_dir) if bundle_dir else {}
@@ -694,12 +778,22 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         "producer": producer_info,
         "consumer": consumer_info,
         "steps": steps,
+        "exit_code": 0 if overall_status == "success" else 1,
     }
 
 
+def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    if _use_legacy_pipeline():
+        return _legacy_run(argv)
+    return _redirect_to_topic(argv)
+
+
 def main(argv: Sequence[str] | None = None) -> int:
-    run(argv)
-    return 0
+    result = run(argv)
+    exit_code = result.get("exit_code")
+    if exit_code is None:
+        return 0 if result.get("status") == "success" else 1
+    return int(exit_code)
 
 
 if __name__ == "__main__":  # pragma: no cover

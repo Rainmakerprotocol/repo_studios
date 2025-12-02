@@ -1,6 +1,6 @@
 # run_standards_index_cli.py
 
-**Last updated:** 2025-11-27
+**Last updated:** 2025-12-01
 
 ## Overview
 
@@ -10,7 +10,10 @@ automation can rely on retained history, provenance metadata, and standard Comma
 
 ## Invocation
 
-Full-suite invocation (writes artifacts and prints results to stdout):
+### Automation (redirect enabled)
+
+Allow the shim to redirect into the Standards Integrity topic orchestrator while still
+emitting CLI artifacts:
 
 ```bash
 python .repo_studios/scripts/orchestrators/run_standards_index_cli.py \
@@ -21,7 +24,7 @@ python .repo_studios/scripts/orchestrators/run_standards_index_cli.py \
   stats
 ```
 
-Subset filtering example (only `error` severity rules with matching text):
+For filtered automation runs (no legacy flag):
 
 ```bash
 python .repo_studios/scripts/orchestrators/run_standards_index_cli.py \
@@ -31,6 +34,28 @@ python .repo_studios/scripts/orchestrators/run_standards_index_cli.py \
   list \
   --severity error \
   --category security
+```
+
+### Interactive CLI (skip redirect)
+
+Set `RUN_STANDARDS_INDEX_CLI_USE_LEGACY=1` only for ad-hoc queries when you want to
+avoid the standards integrity redirect. Remember to clear the flag after use.
+
+```powershell
+$old = $env:RUN_STANDARDS_INDEX_CLI_USE_LEGACY
+$env:RUN_STANDARDS_INDEX_CLI_USE_LEGACY = "1"
+try {
+    python .repo_studios/scripts/orchestrators/run_standards_index_cli.py stats
+} finally {
+    if ($null -eq $old) { Remove-Item Env:RUN_STANDARDS_INDEX_CLI_USE_LEGACY -ErrorAction SilentlyContinue }
+    else { $env:RUN_STANDARDS_INDEX_CLI_USE_LEGACY = $old }
+}
+```
+
+```bash
+# bash/zsh interactive example
+RUN_STANDARDS_INDEX_CLI_USE_LEGACY=1 \
+  python .repo_studios/scripts/orchestrators/run_standards_index_cli.py list --severity warn
 ```
 
 Key flags:

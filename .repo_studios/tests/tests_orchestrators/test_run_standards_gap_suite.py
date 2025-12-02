@@ -24,8 +24,45 @@ def _load_module() -> ModuleType:
     return module
 
 
+def test_redirects_to_topic_runner(monkeypatch: pytest.MonkeyPatch) -> None:
+    module = _load_module()
+    monkeypatch.delenv("STANDARDS_GAP_USE_LEGACY", raising=False)
+
+    captured: dict[str, list[str]] = {}
+
+    def fake_run(args: Sequence[str] | None = None) -> int:
+        captured["argv"] = list(args or [])
+        return 0
+
+    monkeypatch.setattr(module.standards_topic_runner, "run", fake_run)
+
+    result = module.run(
+        [
+            "--repo-root",
+            ".",
+            "--index-output-dir",
+            "./index",
+            "--gap-output-dir",
+            "./gap",
+            "--max-show",
+            "7",
+        ]
+    )
+
+    assert result["status"] == "success"
+    assert result["exit_code"] == 0
+    redirect = result["redirect"]
+    assert redirect["target"] == module.TOPIC_TARGET
+    forwarded = captured["argv"]
+    assert redirect["argv"] == forwarded
+    assert "--gap-max-show" in forwarded
+    assert "--max-show" not in forwarded
+    assert "./gap" in forwarded
+
+
 def test_run_success_invokes_both_steps(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     module = _load_module()
+    monkeypatch.setenv("STANDARDS_GAP_USE_LEGACY", "1")
 
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
@@ -93,6 +130,7 @@ def test_run_success_invokes_both_steps(tmp_path: Path, monkeypatch: pytest.Monk
 
 def test_run_index_failure_short_circuits_gap(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     module = _load_module()
+    monkeypatch.setenv("STANDARDS_GAP_USE_LEGACY", "1")
 
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
@@ -125,6 +163,7 @@ def test_run_index_failure_short_circuits_gap(tmp_path: Path, monkeypatch: pytes
 
 def test_run_gap_failure_reports_error(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     module = _load_module()
+    monkeypatch.setenv("STANDARDS_GAP_USE_LEGACY", "1")
 
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
@@ -183,7 +222,7 @@ def test_run_skip_index_bypasses_generator(tmp_path: Path, monkeypatch: pytest.M
 def test_main_uses_status(monkeypatch: pytest.MonkeyPatch) -> None:
     module = _load_module()
 
-    monkeypatch.setattr(module, "run", lambda argv=None: {"status": "success", "index": None, "gap": None})
+    monkeypatch.setattr(module, "run", lambda argv=None: {"status": "success"})
     assert module.main([]) == 0
 
     monkeypatch.setattr(
@@ -199,3 +238,9 @@ def test_main_uses_status(monkeypatch: pytest.MonkeyPatch) -> None:
         lambda argv=None: {"status": "gap_failed", "index": None, "gap": {"exit_code": 4}},
     )
     assert module.main([]) == 4
+
+    monkeypatch.setattr(module, "run", lambda argv=None: {"status": "failed", "exit_code": 5})
+    assert module.main([]) == 5
+
+    monkeypatch.setattr(module, "run", lambda argv=None: {"status": "unknown"})
+    assert module.main([]) == 1

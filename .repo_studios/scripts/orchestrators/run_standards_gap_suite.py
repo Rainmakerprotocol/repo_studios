@@ -6,10 +6,13 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import logging
+import os
 import sys
 from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, Callable, Sequence
+
+from command_center.scripts.orchestrators import run_standards_integrity as standards_topic_runner
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[2] / "command_center" / "scripts"
 
@@ -48,6 +51,10 @@ DEFAULT_CATEGORIES_PATH = Path(".repo_studios/scripts/.repo_studios/standards_ca
 
 DEFAULT_ARTIFACTS_TO_KEEP = 5
 DEFAULT_MAX_SHOW = 8
+
+TOPIC_TARGET = "command_center.scripts.orchestrators.run_standards_integrity"
+LEGACY_ENV_FLAG = "STANDARDS_GAP_USE_LEGACY"
+_LEGACY_ONLY_FLAGS = ("--legacy-json", "--skip-index")
 
 
 @dataclass(frozen=True)
@@ -126,6 +133,74 @@ OPTIONS_CONFIG = OptionsConfig(
         "gap_keep": KeepSpec(field="gap_artifacts_to_keep", minimum=1),
     },
 )
+
+
+def _use_legacy_runner(argv: Sequence[str] | None) -> bool:
+    flag = os.environ.get(LEGACY_ENV_FLAG)
+    if flag is not None and flag.strip().lower() in {"1", "true", "yes", "on"}:
+        return True
+    raw = list(argv) if argv is not None else []
+    for option in _LEGACY_ONLY_FLAGS:
+        for entry in raw:
+            if entry == option or entry.startswith(f"{option}="):
+                return True
+    return False
+
+
+def _has_option(args: Sequence[str], option: str) -> bool:
+    prefix = f"{option}="
+    return any(entry == option or entry.startswith(prefix) for entry in args)
+
+
+def _collect_option_value(args: Sequence[str], option: str) -> str | None:
+    prefix = f"{option}="
+    for index, entry in enumerate(args):
+        if entry == option:
+            if index + 1 < len(args):
+                return args[index + 1]
+            return None
+        if entry.startswith(prefix):
+            return entry.split("=", 1)[1]
+    return None
+
+
+def _normalize_topic_args(argv: Sequence[str] | None) -> list[str]:
+    raw = list(argv) if argv is not None else []
+    normalized: list[str] = []
+    skip_next = False
+    for index, entry in enumerate(raw):
+        if skip_next:
+            skip_next = False
+            continue
+        if entry == "--max-show":
+            normalized.append("--gap-max-show")
+            if index + 1 < len(raw):
+                normalized.append(raw[index + 1])
+                skip_next = True
+            continue
+        if entry.startswith("--max-show="):
+            normalized.append(entry.replace("--max-show", "--gap-max-show", 1))
+            continue
+        normalized.append(entry)
+
+    if not _has_option(normalized, "--gap-max-show"):
+        normalized.extend(["--gap-max-show", str(DEFAULT_MAX_SHOW)])
+
+    return normalized
+
+
+def _redirect_to_topic(argv: Sequence[str] | None) -> dict[str, Any]:
+    normalized = _normalize_topic_args(argv)
+    exit_code = standards_topic_runner.run(normalized)
+    status = "success" if exit_code == 0 else "failed"
+    return {
+        "status": status,
+        "exit_code": exit_code,
+        "redirect": {
+            "target": TOPIC_TARGET,
+            "argv": normalized,
+        },
+    }
 
 
 def _ensure_index_path(paths: Paths, logger: logging.Logger) -> Paths:
@@ -302,7 +377,7 @@ def _run_gap_analysis(paths: Paths, options: Options) -> StepOutcome:
     )
 
 
-def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+def _legacy_run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     args = parse_args(argv)
     logger = _configure_logging(args.log_level)
     paths = build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__).resolve())
@@ -344,6 +419,12 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     return result
 
 
+def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    if not _use_legacy_runner(argv):
+        return _redirect_to_topic(argv)
+    return _legacy_run(argv)
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     result = run(argv)
     status = result.get("status")
@@ -357,6 +438,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         gap_info = result.get("gap")
         exit_code = gap_info.get("exit_code") if isinstance(gap_info, dict) else None
         return exit_code if isinstance(exit_code, int) and exit_code > 0 else 1
+    exit_code = result.get("exit_code")
+    if isinstance(exit_code, int):
+        return exit_code
     return 1
 
 

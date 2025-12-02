@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-"""Topic orchestrator for standards integrity."""
+"""Topic orchestrator for standards integrity.
+
+Publishes consolidated manifest, summary, and telemetry files to
+`.repo_studios/command_center/reports/healthview/standards_integrity/<timestamp>/` and supersedes both
+`scripts/orchestrators/run_standards_gap_suite.py` and
+`scripts/orchestrators/run_standards_index_cli.py`. The pipeline regenerates the standards index,
+performs gap analysis and diffing, seeds prompt packs, and invokes the summarizer so Healthview and
+CommandView stay aligned. Runtime typically lands between five and eight minutes, with diff scopes
+and prompt generation driving the upper bound.
+"""
 
 from __future__ import annotations
 

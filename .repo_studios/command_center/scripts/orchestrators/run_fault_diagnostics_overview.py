@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-"""Topic orchestrator for the Fault Diagnostics workflow."""
+"""Topic orchestrator for the Fault Diagnostics workflow.
+
+Writes manifest, summary, and telemetry bundles to
+`.repo_studios/command_center/reports/healthview/fault_diagnostics/<timestamp>/` while mirroring the
+CommandView compatibility set. This runner replaces `scripts/orchestrators/run_fault_pipeline.py`
+and sequentially executes faulthandler collection, artifact generation, and summary emission. Most
+runs complete within three to five minutes, with producer log replay accounting for the majority of
+execution time; the summarizer step is tolerant so investigations continue even when only warnings
+are raised.
+"""
 
 from __future__ import annotations
 

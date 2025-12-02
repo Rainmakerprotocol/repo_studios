@@ -14,10 +14,16 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Callable, Sequence
 
+from command_center.scripts.orchestrators import run_dependency_import_hygiene as hygiene_topic_runner
+
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_TARGET_REL = Path("metrics_storage") / "storage"
 DEFAULT_OUTPUT_BASE = Path(".repo_studios/reports/orchestrator_runs/run_batch_cleanup")
 DEFAULT_ARTIFACTS_TO_KEEP = 5
+
+TOPIC_TARGET = "command_center.scripts.orchestrators.run_dependency_import_hygiene"
+LEGACY_ENV_FLAG = "RUN_BATCH_CLEANUP_USE_LEGACY"
+_LEGACY_ONLY_FLAGS = ("--target", "-t", "--mode", "--backup", "--refresh-only", "--dry-run", "--no-pytest")
 
 RUFF_CONFIG = PROJECT_ROOT / ".repo_studios" / "ruff_clean.toml"
 PROJECT_TREE_DOC_REL = Path(".repo_studios/docs/project_tree_overview.md")
@@ -74,6 +80,101 @@ class CommandResult:
 
 
 CommandExecutor = Callable[[Sequence[str]], subprocess.CompletedProcess[str]]
+
+
+def _has_option(args: Sequence[str], option: str) -> bool:
+    prefix = f"{option}="
+    return any(entry == option or entry.startswith(prefix) for entry in args)
+
+
+def _use_legacy_runner(argv: Sequence[str] | None) -> bool:
+    flag = os.environ.get(LEGACY_ENV_FLAG)
+    if flag is not None and flag.strip().lower() in {"1", "true", "yes", "on"}:
+        return True
+    raw = list(argv) if argv is not None else []
+    if any(entry in raw for entry in ("-t",)):
+        return True
+    for option in _LEGACY_ONLY_FLAGS:
+        if option == "-t":
+            continue
+        if _has_option(raw, option):
+            return True
+    return False
+
+
+def _normalize_topic_args(argv: Sequence[str] | None) -> list[str]:
+    raw = list(argv) if argv is not None else []
+    normalized: list[str] = ["--repo-root", str(PROJECT_ROOT)]
+    skip_next = False
+    seen_log_level = False
+    for index, entry in enumerate(raw):
+        if skip_next:
+            skip_next = False
+            continue
+        if entry == "--output-base":
+            if index + 1 < len(raw):
+                normalized.extend(["--batch-cleanup-output-base", raw[index + 1]])
+                skip_next = True
+            continue
+        if entry.startswith("--output-base="):
+            normalized.append(entry.replace("--output-base", "--batch-cleanup-output-base", 1))
+            continue
+        if entry == "--artifacts-to-keep":
+            if index + 1 < len(raw):
+                normalized.extend(["--cleanup-artifacts-to-keep", raw[index + 1]])
+                skip_next = True
+            continue
+        if entry.startswith("--artifacts-to-keep="):
+            normalized.append(entry.replace("--artifacts-to-keep", "--cleanup-artifacts-to-keep", 1))
+            continue
+        if entry == "--log-level":
+            seen_log_level = True
+            if index + 1 < len(raw):
+                normalized.extend(["--log-level", raw[index + 1]])
+                skip_next = True
+            continue
+        if entry.startswith("--log-level="):
+            seen_log_level = True
+            normalized.append(entry)
+            continue
+        if entry == "--verbose":
+            normalized.extend(["--log-level", "DEBUG"])
+            seen_log_level = True
+            continue
+        normalized.append(entry)
+
+    if not _has_option(normalized, "--cleanup-artifacts-to-keep"):
+        normalized.extend(["--cleanup-artifacts-to-keep", str(DEFAULT_ARTIFACTS_TO_KEEP)])
+
+    if not seen_log_level and not _has_option(normalized, "--log-level"):
+        normalized.extend(["--log-level", "INFO"])
+
+    if not _has_option(normalized, "--batch-cleanup-output-base"):
+        normalized.extend(["--batch-cleanup-output-base", str(DEFAULT_OUTPUT_BASE)])
+
+    if not _has_option(normalized, "--skip-import-graph"):
+        normalized.append("--skip-import-graph")
+    if not _has_option(normalized, "--skip-typecheck"):
+        normalized.append("--skip-typecheck")
+
+    if not _has_option(normalized, "--trigger-batch-cleanup"):
+        normalized.append("--trigger-batch-cleanup")
+
+    return normalized
+
+
+def _redirect_to_topic(argv: Sequence[str] | None) -> dict[str, object]:
+    normalized = _normalize_topic_args(argv)
+    exit_code = hygiene_topic_runner.run(normalized)
+    status = "success" if exit_code == 0 else "failed"
+    return {
+        "status": status,
+        "exit_code": exit_code,
+        "redirect": {
+            "target": TOPIC_TARGET,
+            "argv": normalized,
+        },
+    }
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
@@ -593,6 +694,8 @@ def _prune_history(output_base: Path, current_dir: Path, keep: int) -> list[str]
 
 
 def run(argv: Sequence[str] | None = None, *, executor: CommandExecutor | None = None) -> dict[str, object]:
+    if not _use_legacy_runner(argv):
+        return _redirect_to_topic(argv)
     args = _parse_args(argv)
     options = _prepare_options(args)
     log_level = getattr(logging, options.log_level.upper(), logging.INFO)

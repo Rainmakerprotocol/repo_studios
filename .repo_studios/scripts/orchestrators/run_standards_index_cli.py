@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+import os
 import sys
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
@@ -12,6 +13,8 @@ from pathlib import Path
 from typing import Any, Iterable, Sequence
 
 import yaml
+
+from command_center.scripts.orchestrators import run_standards_integrity as standards_topic_runner
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/orchestrator_runs/standards_index_cli")
 DEFAULT_INDEX_PATH = Path(
@@ -26,6 +29,9 @@ CANONICAL_SEVERITIES = {"info", "warn", "error", "critical"}
 ALIAS_SEVERITY_MAP = {"low": "info", "medium": "warn", "high": "error"}
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
+
+TOPIC_TARGET = "command_center.scripts.orchestrators.run_standards_integrity"
+LEGACY_ENV_FLAG = "RUN_STANDARDS_INDEX_CLI_USE_LEGACY"
 
 try:  # pragma: no cover - prefer import when packaged
     from libraries import (  # type: ignore
@@ -82,6 +88,45 @@ OPTIONS_CONFIG = OptionsConfig(
     dataclass_type=Options,
     keep_specs={"artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1)},
 )
+
+
+def _env_truthy(value: str | None) -> bool:
+    if value is None:
+        return False
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _use_legacy_runner(argv: Sequence[str] | None) -> bool:
+    return _env_truthy(os.environ.get(LEGACY_ENV_FLAG))
+
+
+def _build_topic_args(paths: Paths, options: Options) -> list[str]:
+    repo_root = str(paths.repo_root.resolve())
+    index_parent = str(paths.index_path.parent)
+    index_path = str(paths.index_path)
+    keep = max(1, int(options.artifacts_to_keep))
+    topic_args: list[str] = ["--repo-root", repo_root]
+    topic_args.extend(["--log-level", str(options.log_level or "INFO")])
+    topic_args.extend(["--index-output-dir", index_parent])
+    topic_args.extend(["--index-path", index_path])
+    topic_args.extend(["--artifacts-to-keep", str(max(keep, 3))])
+    topic_args.extend(["--index-artifacts-to-keep", str(keep)])
+    topic_args.extend(["--gap-artifacts-to-keep", str(keep)])
+    topic_args.extend(["--diff-artifacts-to-keep", str(keep)])
+    topic_args.extend(["--prompt-artifacts-to-keep", str(keep)])
+    return topic_args
+
+
+def _redirect_to_topic(paths: Paths, options: Options) -> dict[str, Any]:
+    normalized = _build_topic_args(paths, options)
+    exit_code = standards_topic_runner.run(normalized)
+    status = "success" if exit_code == 0 else "failed"
+    return {
+        "target": TOPIC_TARGET,
+        "argv": normalized,
+        "exit_code": exit_code,
+        "status": status,
+    }
 
 
 def _ensure_index_path(paths: Paths) -> Paths:
@@ -425,10 +470,15 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         }
 
     paths = build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
-    paths = _ensure_index_path(paths)
     options = build_standard_options(args, OPTIONS_CONFIG)
     options = replace(options, log_level=args.log_level)
     _configure_logging(options.log_level)
+
+    redirect_info: dict[str, Any] | None = None
+    if not _use_legacy_runner(argv):
+        redirect_info = _redirect_to_topic(paths, options)
+
+    paths = _ensure_index_path(paths)
 
     timestamp_utc = datetime.now(timezone.utc)
     stdout_lines: list[str] = []
@@ -513,7 +563,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         keep=options.artifacts_to_keep,
     )
 
-    return {
+    result = {
         "exit_code": exit_code,
         "stdout_lines": stdout_lines,
         "summary": summary_payload,
@@ -524,6 +574,11 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         "bundle_summary": str(write_result.artifacts["bundle_summary.json"]),
         "report_md": str(write_result.artifacts["report.md"]),
     }
+
+    if redirect_info is not None:
+        result["redirect"] = redirect_info
+
+    return result
 
 
 def main(argv: Sequence[str] | None = None) -> int:

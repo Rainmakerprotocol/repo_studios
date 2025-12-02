@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-"""Topic orchestrator for test execution telemetry."""
+"""Topic orchestrator for test execution telemetry.
+
+Emits Healthview bundles under
+`.repo_studios/command_center/reports/healthview/test_execution_telemetry/<timestamp>/` and replaces
+the legacy `scripts/orchestrators/run_pytest_log_capture.py` flow by chaining log collection,
+coverage inventory, churn heatmap, hardening analysis, and the health report summarizer. Expect a
+roughly five to six minute runtime in CI when churn analysis is enabled; the pipeline stops on the
+first hard failure so log gaps surface quickly.
+"""
 
 from __future__ import annotations
 

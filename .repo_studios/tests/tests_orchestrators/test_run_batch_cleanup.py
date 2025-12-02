@@ -72,7 +72,13 @@ def _stub_executor(
     return _run, calls
 
 
-def _patch_common(module: ModuleType, repo_root: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def _patch_common(
+    module: ModuleType,
+    repo_root: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    *,
+    use_legacy: bool = True,
+) -> None:
     monkeypatch.setattr(module, "PROJECT_ROOT", repo_root)
     monkeypatch.setattr(module, "RUFF_CONFIG", repo_root / ".repo_studios" / "ruff_clean.toml")
     monkeypatch.setattr(module, "DEFAULT_OUTPUT_BASE", Path(".reports/run_batch_cleanup"))
@@ -80,6 +86,51 @@ def _patch_common(module: ModuleType, repo_root: Path, monkeypatch: pytest.Monke
     monkeypatch.delenv("BATCH_CLEAN_TARGET_DIR", raising=False)
     monkeypatch.delenv("BATCH_CLEAN_TARGETS", raising=False)
     monkeypatch.delenv("BATCH_CLEAN_NO_PYTEST", raising=False)
+    if use_legacy:
+        monkeypatch.setenv(module.LEGACY_ENV_FLAG, "1")
+    else:
+        monkeypatch.delenv(module.LEGACY_ENV_FLAG, raising=False)
+
+
+def test_redirects_to_topic_runner(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    repo_root = _prepare_repo(tmp_path)
+    module = _load_module()
+    _patch_common(module, repo_root, monkeypatch, use_legacy=False)
+
+    captured: dict[str, list[str]] = {}
+
+    def _fake_run(args: Sequence[str] | None = None) -> int:
+        captured["argv"] = list(args or [])
+        return 0
+
+    monkeypatch.setattr(module.hygiene_topic_runner, "run", _fake_run)
+
+    result = module.run([
+        "--output-base",
+        "./custom",
+        "--artifacts-to-keep",
+        "3",
+        "--verbose",
+    ])
+
+    assert result["status"] == "success"
+    assert result["exit_code"] == 0
+    redirect = result["redirect"]
+    assert redirect["target"] == module.TOPIC_TARGET
+    forwarded = redirect["argv"]
+    assert forwarded == captured["argv"]
+    assert forwarded[0] == "--repo-root"
+    assert forwarded[1] == str(repo_root)
+    assert "--trigger-batch-cleanup" in forwarded
+    assert "--skip-import-graph" in forwarded
+    assert "--skip-typecheck" in forwarded
+    assert "--cleanup-artifacts-to-keep" in forwarded
+    assert "3" in forwarded
+    assert "--batch-cleanup-output-base" in forwarded
+    assert "./custom" in forwarded
+    # verbose should promote log-level to DEBUG for the redirect
+    assert "--log-level" in forwarded
+    assert "DEBUG" in forwarded
 
 
 def test_run_creates_structured_bundle_success(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

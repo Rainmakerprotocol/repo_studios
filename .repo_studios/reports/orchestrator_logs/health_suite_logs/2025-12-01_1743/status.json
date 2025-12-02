@@ -1,0 +1,113 @@
+{
+  "timestamp": "2025-12-01_1743",
+  "started_at": 1764629036.558872,
+  "steps": [
+    {
+      "name": "dependency_import_hygiene",
+      "argv": [
+        "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_dependency_import_hygiene.py",
+        "--repo-root",
+        "C:\\Users\\genet\\repo_studios",
+        "--log-level",
+        "INFO",
+        "--timestamp",
+        "2025-12-01T17:43:00+00:00",
+        "--trigger-batch-cleanup",
+        "--refresh-mypy-baselines"
+      ],
+      "start": 1764629036.5591319,
+      "exit_code": 0,
+      "duration_sec": 0.19,
+      "status": "OK"
+    },
+    {
+      "name": "test_execution_telemetry",
+      "argv": [
+        "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_test_execution_telemetry.py",
+        "--repo-root",
+        "C:\\Users\\genet\\repo_studios",
+        "--log-level",
+        "INFO",
+        "--timestamp",
+        "2025-12-01T17:43:00+00:00"
+      ],
+      "start": 1764629036.7492054,
+      "exit_code": 0,
+      "duration_sec": 0.176,
+      "status": "OK"
+    },
+    {
+      "name": "docs_health_overview",
+      "argv": [
+        "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_docs_health_overview.py",
+        "--repo-root",
+        "C:\\Users\\genet\\repo_studios",
+        "--log-level",
+        "INFO",
+        "--timestamp",
+        "2025-12-01T17:43:00+00:00"
+      ],
+      "start": 1764629036.9254942,
+      "exit_code": 0,
+      "duration_sec": 0.186,
+      "status": "OK"
+    },
+    {
+      "name": "fault_diagnostics_overview",
+      "argv": [
+        "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_fault_diagnostics_overview.py",
+        "--repo-root",
+        "C:\\Users\\genet\\repo_studios",
+        "--log-level",
+        "INFO",
+        "--timestamp",
+        "2025-12-01T17:43:00+00:00"
+      ],
+      "start": 1764629037.1115997,
+      "exit_code": 0,
+      "duration_sec": 0.173,
+      "status": "OK"
+    },
+    {
+      "name": "monkey_patch_oversight",
+      "argv": [
+        "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_monkey_patch_oversight.py",
+        "--repo-root",
+        "C:\\Users\\genet\\repo_studios",
+        "--log-level",
+        "INFO",
+        "--timestamp",
+        "2025-12-01T17:43:00+00:00"
+      ],
+      "start": 1764629037.2850618,
+      "exit_code": 0,
+      "duration_sec": 0.181,
+      "status": "OK"
+    },
+    {
+      "name": "standards_integrity",
+      "argv": [
+        "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_standards_integrity.py",
+        "--repo-root",
+        "C:\\Users\\genet\\repo_studios",
+        "--log-level",
+        "INFO",
+        "--timestamp",
+        "2025-12-01T17:43:00+00:00"
+      ],
+      "start": 1764629037.4664614,
+      "exit_code": 0,
+      "duration_sec": 0.307,
+      "status": "OK"
+    }
+  ],
+  "fault_outdir": "",
+  "fault_outdir_legacy": "",
+  "finished_at": 1764629037.7738888
+}
