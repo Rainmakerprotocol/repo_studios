@@ -13,12 +13,153 @@ Writes: .repo_studios/reports/summarizer_reports/health_suite_summary_reports/he
 from __future__ import annotations
 
 import argparse
-import datetime as dt
 import json
+import logging
+from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any, Iterable, Mapping
 
-SUMMARY_OUTPUT_DEFAULT = ".repo_studios/reports/summarizer_reports/health_suite_summary_reports"
-LEGACY_SUMMARY_DIR = ".repo_studios/health_suite"
+from command_center.scripts.libraries import (
+    KeepSpec,
+    OptionsConfig,
+    PathSpec,
+    PathsConfig,
+    ReportArtifact,
+    WriteReportArtifactsResult,
+    build_standard_options,
+    build_standard_paths,
+    write_report_artifacts,
+)
+
+SUMMARY_OUTPUT_DEFAULT = Path(".repo_studios/command_center/reports")
+LEGACY_SUMMARY_DIR = Path(".repo_studios/health_suite")
+SUMMARY_STEM = "health_suite_summary"
+VIEWER_SLUG = "healthview"
+TOPIC_SLUG = "health_suite_overview"
+SCHEMA_VERSION = 1
+DEFAULT_ARTIFACTS_TO_KEEP = 5
+
+
+@dataclass(frozen=True)
+class Paths:
+    repo_root: Path
+    output_dir: Path
+    legacy_dir: Path
+
+
+PATHS_CONFIG = PathsConfig(
+    dataclass_type=Paths,
+    path_specs={
+        "output_dir": PathSpec(field="output_dir", default=SUMMARY_OUTPUT_DEFAULT, ensure_dir=True, within_repo=False),
+        "legacy_dir": PathSpec(field="legacy_dir", default=LEGACY_SUMMARY_DIR, ensure_dir=True, within_repo=False),
+    },
+    repo_root_depth=5,
+)
+
+
+@dataclass(frozen=True)
+class Options:
+    log_level: str
+    artifacts_to_keep: int
+    run_timestamp: datetime
+    mirror_legacy: bool
+
+
+@dataclass(frozen=True)
+class KeepValues:
+    artifacts_to_keep: int
+
+
+OPTIONS_CONFIG = OptionsConfig(
+    dataclass_type=KeepValues,
+    keep_specs={"artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1)},
+)
+
+
+def _parse_args(argv: Iterable[str] | None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__ or "")
+    parser.add_argument("--repo-root", help="Repository root override")
+    parser.add_argument(
+        "--output-dir",
+        default=str(SUMMARY_OUTPUT_DEFAULT),
+        help="Root directory for Healthview artifacts",
+    )
+    parser.add_argument(
+        "--legacy-dir",
+        default=str(LEGACY_SUMMARY_DIR),
+        help="Optional legacy mirror directory for markdown copies",
+    )
+    parser.add_argument(
+        "--timestamp",
+        help="ISO-8601 timestamp for emitted artifacts (defaults to current UTC time)",
+    )
+    parser.add_argument(
+        "--artifacts-to-keep",
+        type=int,
+        default=DEFAULT_ARTIFACTS_TO_KEEP,
+        help="Retention budget for Healthview runs",
+    )
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        help="Logging verbosity",
+    )
+    parser.add_argument(
+        "--skip-legacy-mirror",
+        action="store_true",
+        help="Disable legacy markdown mirror in .repo_studios/health_suite",
+    )
+    return parser.parse_args(argv)
+
+
+def _parse_timestamp(raw: str | None) -> datetime:
+    if not raw:
+        return datetime.now(timezone.utc)
+    try:
+        parsed = datetime.fromisoformat(raw)
+    except ValueError as exc:  # pragma: no cover - defensive parsing
+        raise SystemExit(f"Invalid --timestamp value: {raw}") from exc
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def _timestamp_slug(moment: datetime) -> str:
+    return moment.astimezone(timezone.utc).strftime("%Y-%m-%d_%H%M")
+
+
+def _healthview_run_slug(moment: datetime) -> str:
+    return moment.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
+
+
+def _normalize_relative(path: Path | None, repo_root: Path) -> str | None:
+    if path is None:
+        return None
+    try:
+        return path.resolve().relative_to(repo_root.resolve()).as_posix()
+    except ValueError:
+        return path.resolve().as_posix()
+
+
+def configure_logging(level: str) -> None:
+    logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
+
+
+def build_paths(args: argparse.Namespace) -> Paths:
+    return build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+
+
+def build_options(args: argparse.Namespace) -> Options:
+    keep_values = build_standard_options(args, OPTIONS_CONFIG)
+    artifacts_to_keep = max(int(getattr(keep_values, "artifacts_to_keep", DEFAULT_ARTIFACTS_TO_KEEP)), 1)
+    return Options(
+        log_level=str(args.log_level),
+        artifacts_to_keep=artifacts_to_keep,
+        run_timestamp=_parse_timestamp(getattr(args, "timestamp", None)),
+        mirror_legacy=not bool(getattr(args, "skip_legacy_mirror", False)),
+    )
 
 
 def _read_text(path: Path, default: str = "(missing)") -> str:
@@ -151,12 +292,11 @@ def _extract_markdown_list(report: str, heading: str, limit: int | None = None) 
     return items
 
 
-def _load_trend_head(root: Path) -> list[str]:
+def _load_trend_head(root: Path) -> tuple[list[str], Path | None]:
     trend_latest = root / ".repo_studios/reports/producer_reports/monkey_patch_scans/trend_latest.md"
     trend_txt = _read_text(trend_latest, "").strip()
-    if not trend_txt:
-        return []
-    return [line.rstrip() for line in trend_txt.splitlines()[:40]]
+    lines = [line.rstrip() for line in trend_txt.splitlines()[:40]] if trend_txt else []
+    return lines, trend_latest if trend_latest.exists() else None
 
 
 def _load_dep_summary(root: Path, ts: str) -> tuple[str, Path | None]:
@@ -559,29 +699,24 @@ def _compose_churn_section(lines: list[str], table_rows: list[str], cc_dir: Path
         )
 
 
-def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Compose health suite summary")
-    parser.add_argument("--repo-root", default=".")
-    parser.add_argument("--output-dir", default=SUMMARY_OUTPUT_DEFAULT)
-    parser.add_argument("--timestamp", default="")
-    return parser
+def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
+    args = _parse_args(argv)
+    paths = build_paths(args)
+    options = build_options(args)
+    configure_logging(options.log_level)
+    logger = logging.getLogger("summarize_health_suite")
 
+    timestamp_slug = _timestamp_slug(options.run_timestamp)
+    run_slug = _healthview_run_slug(options.run_timestamp)
+    repo_root = paths.repo_root
 
-def main() -> int:
-    args = _build_parser().parse_args()
-    root = Path(args.repo_root).resolve()
-    out_dir = (root / args.output_dir).resolve()
-    out_dir.mkdir(parents=True, exist_ok=True)
-    ts = args.timestamp or dt.datetime.now().strftime("%Y-%m-%d_%H%M")
-    out_path = out_dir / f"health_suite_{ts}.md"
-
-    trend_excerpt = _load_trend_head(root)
-    dep_summary_text, dep_dir = _load_dep_summary(root, ts)
-    fan_in, fan_out, cycles, ig_dir = _load_import_graph(root, ts)
-    th_summary_items, th_dir = _load_test_health_summary(root, ts)
-    cc_table_rows, cc_dir = _load_churn_table(root, ts)
-    fh_trends = _load_fault_trends(root)
-    tc_status, tc_total_errors, tc_files_with_issues, tc_samples, tc_dir = _load_typecheck_summary(root, ts)
+    trend_excerpt, trend_path = _load_trend_head(repo_root)
+    dep_summary_text, dep_dir = _load_dep_summary(repo_root, timestamp_slug)
+    fan_in, fan_out, cycles, ig_dir = _load_import_graph(repo_root, timestamp_slug)
+    th_summary_items, th_dir = _load_test_health_summary(repo_root, timestamp_slug)
+    cc_table_rows, cc_dir = _load_churn_table(repo_root, timestamp_slug)
+    fh_trends = _load_fault_trends(repo_root)
+    tc_status, tc_total_errors, tc_files_with_issues, tc_samples, tc_dir = _load_typecheck_summary(repo_root, timestamp_slug)
     (
         lizard_status,
         lizard_issue_count,
@@ -591,15 +726,123 @@ def main() -> int:
         lizard_max_length,
         lizard_offenders,
         lizard_dir,
-    ) = _load_lizard_summary(root, ts)
-    anchor_data, anchor_dir = _load_anchor_data(root, ts)
+    ) = _load_lizard_summary(repo_root, timestamp_slug)
+    anchor_data, anchor_dir = _load_anchor_data(repo_root, timestamp_slug)
+
+    notes: list[str] = []
+    if not trend_excerpt:
+        notes.append("Monkey patch trend preview unavailable; rerun generate_monkey_patch_trend.")
+    if dep_dir is None:
+        notes.append("Dependency hygiene report not located; rerun the dependency hygiene pipeline.")
+    if ig_dir is None:
+        notes.append("Import graph report missing; rerun the import graph producer.")
+    if th_dir is None:
+        notes.append("Test log health summary missing; rerun the test log health consumer.")
+    if tc_dir is None:
+        notes.append("Typecheck summary missing; rerun the typecheck pipeline.")
+    if lizard_dir is None:
+        notes.append("Lizard complexity report missing; rerun generate_lizard_report.")
+    if cc_dir is None:
+        notes.append("Churn × Complexity heatmap missing; rerun the churn complexity aggregator.")
+    if anchor_data is None:
+        notes.append("Anchor health dataset missing; rerun anchor health pipeline.")
+
+    fault_trends_path = repo_root / ".repo_studios/health/faulthandler/trends.json"
+    anchor_latest_json = repo_root / ".repo_studios/anchor_health/anchor_report_latest.json"
+
+    artifact_paths = {
+        "monkey_patch_trend": _normalize_relative(trend_path, repo_root),
+        "dependency_report": _normalize_relative(dep_dir / "report.md" if dep_dir else None, repo_root),
+        "import_graph_report": _normalize_relative(ig_dir / "report.md" if ig_dir else None, repo_root),
+        "test_log_health_report": _normalize_relative(th_dir / "report.md" if th_dir else None, repo_root),
+        "churn_complexity_heatmap": _normalize_relative(cc_dir / "heatmap.md" if cc_dir else None, repo_root),
+        "fault_trends": _normalize_relative(fault_trends_path if fault_trends_path.exists() else None, repo_root),
+        "typecheck_report": _normalize_relative(tc_dir / "report.json" if tc_dir else None, repo_root),
+        "lizard_report": _normalize_relative(lizard_dir / "report.json" if lizard_dir else None, repo_root),
+        "lizard_raw": _normalize_relative(
+            lizard_dir / "raw.json" if lizard_dir and (lizard_dir / "raw.json").exists() else None,
+            repo_root,
+        ),
+        "anchor_report_directory": _normalize_relative(anchor_dir, repo_root),
+        "anchor_report_latest": _normalize_relative(anchor_latest_json if anchor_latest_json.exists() else None, repo_root),
+    }
+
+    anchor_metrics = None
+    anchor_clusters: list[dict[str, Any]] = []
+    if isinstance(anchor_data, dict):
+        anchor_metrics = {
+            "strict_duplicate_count": anchor_data.get("strict_duplicate_count"),
+            "baseline_cross_file_duplicates": anchor_data.get("baseline_cross_file_duplicates"),
+            "delta_vs_baseline": anchor_data.get("delta_vs_baseline"),
+        }
+        clusters = anchor_data.get("clusters")
+        if isinstance(clusters, list):
+            for entry in clusters[:10]:
+                if isinstance(entry, dict):
+                    anchor_clusters.append(
+                        {
+                            "slug": entry.get("slug"),
+                            "file_count": entry.get("file_count"),
+                        }
+                    )
+
+    fault_trend_section = [
+        {"metric": name, "direction": symbol, "value": value}
+        for name, symbol, value in fh_trends
+    ]
+
+    lizard_offender_section = [
+        {"function": name, "file": file_name, "ccn": ccn_val, "length": length_val}
+        for name, file_name, ccn_val, length_val in lizard_offenders[:10]
+    ]
+
+    sections = {
+        "anchor_health": {
+            "metrics": anchor_metrics,
+            "top_clusters": anchor_clusters,
+            "bundle": anchor_dir.name if anchor_dir else None,
+        },
+        "fault_handler": {"trends": fault_trend_section},
+        "monkey_patch_trend": {"excerpt": trend_excerpt},
+        "dependency_hygiene": {"summary": dep_summary_text},
+        "import_graph": {"fan_in": fan_in, "fan_out": fan_out, "cycles": cycles},
+        "test_log_health": {"summary": th_summary_items},
+        "typecheck": {
+            "status": tc_status,
+            "total_errors": tc_total_errors,
+            "files_with_issues": tc_files_with_issues,
+            "samples": tc_samples,
+        },
+        "lizard_complexity": {
+            "status": lizard_status,
+            "issue_count": lizard_issue_count,
+            "notes": lizard_notes,
+            "targets": lizard_targets,
+            "thresholds": {"max_ccn": lizard_max_ccn, "max_length": lizard_max_length},
+            "top_offenders": lizard_offender_section,
+        },
+        "churn_complexity": {"table_rows": cc_table_rows},
+    }
+
+    summary_payload: dict[str, Any] = {
+        "schema_version": SCHEMA_VERSION,
+        "viewer": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "generated_at": options.run_timestamp.isoformat(timespec="seconds"),
+        "run_slug": run_slug,
+        "timestamp_slug": timestamp_slug,
+        "artifacts": artifact_paths,
+        "sections": sections,
+        "notes": notes,
+    }
 
     lines: list[str] = []
     _append_section_header(lines, 1, "Health Suite Summary")
-    lines.append(f"Date: {dt.datetime.now().isoformat()}")
+    lines.append(f"Generated (UTC): {options.run_timestamp.isoformat(timespec='seconds')}")
+    lines.append(f"Run slug: {run_slug}")
     lines.append("")
 
-    _compose_anchor_section(lines, anchor_data, anchor_dir)
+    _compose_anchor_section(lines, anchor_data if isinstance(anchor_data, dict) else None, anchor_dir)
     _compose_fault_handler_section(lines, fh_trends)
     _compose_repo_insight_section(lines, trend_excerpt)
     _compose_dependency_section(lines, dep_summary_text, dep_dir)
@@ -625,23 +868,58 @@ def main() -> int:
         lizard_dir,
     )
     _compose_churn_section(lines, cc_table_rows, cc_dir)
+    if notes:
+        _append_section_header(lines, 2, "Notes")
+        _append_list(lines, notes)
 
-    output = "\n".join(lines).strip("\n") + "\n"
-    out_path.write_text(output, encoding="utf-8")
-    legacy_dir = (root / LEGACY_SUMMARY_DIR).resolve()
-    try:
-        legacy_dir.mkdir(parents=True, exist_ok=True)
-        (legacy_dir / out_path.name).write_text(output, encoding="utf-8")
-        marker = legacy_dir / "MOVED.txt"
+    summary_markdown = "\n".join(lines).strip("\n") + "\n"
+
+    artifacts = [
+        ReportArtifact(filename=f"{SUMMARY_STEM}.json", kind="json", content=lambda: summary_payload),
+        ReportArtifact(filename=f"{SUMMARY_STEM}.md", kind="text", content=lambda: summary_markdown),
+    ]
+    result: WriteReportArtifactsResult = write_report_artifacts(
+        stem=SUMMARY_STEM,
+        timestamp=options.run_timestamp,
+        output_dir=paths.output_dir,
+        artifacts=artifacts,
+        keep=options.artifacts_to_keep,
+        viewer=VIEWER_SLUG,
+        topic=TOPIC_SLUG,
+    )
+
+    legacy_path: Path | None = None
+    if options.mirror_legacy:
+        legacy_path = paths.legacy_dir / f"{SUMMARY_STEM}_{timestamp_slug}.md"
+        legacy_path.write_text(summary_markdown, encoding="utf-8")
+        marker = paths.legacy_dir / "MOVED.txt"
         if not marker.exists():
             marker.write_text(
-                f"Summaries now live under {out_dir.resolve()}\n",
+                f"Summaries now emit via write_report_artifacts under {(paths.output_dir / VIEWER_SLUG / TOPIC_SLUG).as_posix()}/\n",
                 encoding="utf-8",
             )
-    except Exception:
-        pass
-    return 0
+
+    logger.info("Health suite summary artifacts written to %s (slug=%s)", result.run_dir, result.slug)
+
+    response = {
+        "status": "ok",
+        "run_dir": str(result.run_dir),
+        "slug": result.slug,
+        "artifacts": {name: str(path) for name, path in result.artifacts.items()},
+        "notes": notes,
+    }
+    if legacy_path is not None:
+        response["legacy_markdown"] = str(legacy_path)
+    return response
 
 
-if __name__ == "__main__":
-    raise SystemExit(main())
+def main(argv: Iterable[str] | None = None) -> None:
+    result = run(argv)
+    raise SystemExit(0 if result.get("status") == "ok" else 1)
+
+
+__all__ = ["run", "main", "build_paths", "build_options"]
+
+
+if __name__ == "__main__":  # pragma: no cover
+    main()

@@ -1,113 +1,358 @@
-#!/usr/bin/env python
-"""Print a concise summary of the current standards index / pending file.
-
-Usage:
-    python scripts/standards_summary.py [--label grow|sync]
-
-Environment (optional):
-    INDEX_PATH   Path to index YAML (default: .repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml)
-    PENDING_PATH Path to pending YAML (default: .repo_studios/scripts/repo_standards_pending.yaml)
-"""
+#!/usr/bin/env python3
+"""Generate a Healthview-ready summary of the standards index."""
 
 from __future__ import annotations
 
 import argparse
 import logging
 import os
-import sys
+from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
-
-DEFAULT_INDEX_PATH = Path(
-    ".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml"
-)
-LEGACY_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
-DEFAULT_PENDING_PATH = Path(".repo_studios/scripts/repo_standards_pending.yaml")
+from typing import Any, Iterable, Mapping
 
 try:
     import yaml  # type: ignore
-except Exception as exc:  # pragma: no cover - simple util
-    logging.warning("[standards-summary] missing PyYAML: %s", exc)
-    sys.exit(0)
+except Exception as exc:  # pragma: no cover - import guard
+    YAML_IMPORT_ERROR = exc
+    yaml = None
+else:  # pragma: no cover - executed when import succeeds
+    YAML_IMPORT_ERROR = None
+
+from command_center.scripts.libraries import (
+    KeepSpec,
+    OptionsConfig,
+    PathSpec,
+    PathsConfig,
+    ReportArtifact,
+    WriteReportArtifactsResult,
+    build_standard_options,
+    build_standard_paths,
+    write_report_artifacts,
+)
+
+DEFAULT_INDEX_PATH = Path(".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml")
+LEGACY_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
+DEFAULT_PENDING_PATH = Path(".repo_studios/scripts/repo_standards_pending.yaml")
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
+SUMMARY_STEM = "standards_overview"
+VIEWER_SLUG = "healthview"
+TOPIC_SLUG = "standards_overview"
+SCHEMA_VERSION = 1
+DEFAULT_ARTIFACTS_TO_KEEP = 5
 
 
-def _resolve_path(path: Path) -> Path:
-    """Return an absolute path for the supplied value."""
+@dataclass(frozen=True)
+class Paths:
+    repo_root: Path
+    index_path: Path
+    pending_path: Path
+    output_dir: Path
 
-    return path if path.is_absolute() else (Path.cwd() / path).resolve()
+
+PATHS_CONFIG = PathsConfig(
+    dataclass_type=Paths,
+    path_specs={
+        "index_path": PathSpec(field="index_path", default=DEFAULT_INDEX_PATH, within_repo=False),
+        "pending_path": PathSpec(field="pending_path", default=DEFAULT_PENDING_PATH, within_repo=False),
+        "output_dir": PathSpec(field="output_dir", default=DEFAULT_OUTPUT_DIR, ensure_dir=True, within_repo=False),
+    },
+    repo_root_depth=5,
+)
 
 
-def _resolve_index_path(label: str, candidate: Path) -> Path:
-    """Return the index path, falling back to the legacy snapshot when needed."""
+@dataclass(frozen=True)
+class Options:
+    label: str
+    log_level: str
+    artifacts_to_keep: int
+    run_timestamp: datetime
 
-    absolute_candidate = _resolve_path(candidate)
-    if absolute_candidate.exists():
-        return absolute_candidate
 
-    legacy_candidate = _resolve_path(LEGACY_INDEX_PATH)
+@dataclass(frozen=True)
+class KeepValues:
+    artifacts_to_keep: int
+
+
+OPTIONS_CONFIG = OptionsConfig(
+    dataclass_type=KeepValues,
+    keep_specs={"artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1)},
+)
+
+
+def _parse_args(argv: Iterable[str] | None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__ or "")
+    parser.add_argument("--repo-root", help="Repository root override")
+    parser.add_argument(
+        "--index-path",
+        default=os.environ.get("INDEX_PATH", str(DEFAULT_INDEX_PATH)),
+        help="Path to the standards index YAML",
+    )
+    parser.add_argument(
+        "--pending-path",
+        default=os.environ.get("PENDING_PATH", str(DEFAULT_PENDING_PATH)),
+        help="Path to the pending rules YAML",
+    )
+    parser.add_argument(
+        "--output-dir",
+        default=str(DEFAULT_OUTPUT_DIR),
+        help="Root directory for Healthview artifact emission",
+    )
+    parser.add_argument("--label", default="summary", help="Label used in emitted metadata")
+    parser.add_argument(
+        "--timestamp",
+        help="ISO-8601 timestamp for emitted artifacts (defaults to current UTC time)",
+    )
+    parser.add_argument(
+        "--artifacts-to-keep",
+        type=int,
+        default=DEFAULT_ARTIFACTS_TO_KEEP,
+        help="Retention budget for Healthview runs",
+    )
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        help="Logging verbosity",
+    )
+    return parser.parse_args(argv)
+
+
+def _parse_timestamp(raw: str | None) -> datetime:
+    if not raw:
+        return datetime.now(timezone.utc)
+    try:
+        parsed = datetime.fromisoformat(raw)
+    except ValueError as exc:  # pragma: no cover - defensive parsing
+        raise SystemExit(f"Invalid --timestamp value: {raw}") from exc
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def configure_logging(level: str) -> None:
+    logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
+
+
+def build_paths(args: argparse.Namespace) -> Paths:
+    return build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+
+
+def build_options(args: argparse.Namespace) -> Options:
+    keep_values = build_standard_options(args, OPTIONS_CONFIG)
+    artifacts_to_keep = max(int(getattr(keep_values, "artifacts_to_keep", DEFAULT_ARTIFACTS_TO_KEEP)), 1)
+    return Options(
+        label=str(args.label),
+        log_level=str(args.log_level),
+        artifacts_to_keep=artifacts_to_keep,
+        run_timestamp=_parse_timestamp(getattr(args, "timestamp", None)),
+    )
+
+
+def _normalize_relative(path: Path | None, repo_root: Path) -> str | None:
+    if path is None:
+        return None
+    try:
+        return path.resolve().relative_to(repo_root.resolve()).as_posix()
+    except ValueError:
+        return path.resolve().as_posix()
+
+
+def _resolve_index_path(paths: Paths, options: Options) -> Path:
+    candidate = paths.index_path
+    if candidate.exists():
+        return candidate
+    legacy_candidate = (paths.repo_root / LEGACY_INDEX_PATH).resolve()
     if legacy_candidate.exists():
         logging.warning(
             "[standards-%s] index missing at %s; falling back to legacy snapshot %s",
-            label,
-            absolute_candidate,
+            options.label,
+            candidate,
             legacy_candidate,
         )
         return legacy_candidate
+    return candidate
 
-    return absolute_candidate
 
-
-def summarize(label: str, index_path: Path, pending_path: Path) -> int:
-    """Summarize the current standards index and optional pending file."""
-    if not index_path.exists():
-        logging.warning("[standards-%s] index missing (%s)", label, index_path)
-        return 0
+def _load_index_payload(path: Path) -> Mapping[str, Any] | None:
+    if yaml is None or not path.exists():
+        return None
     try:
-        data = yaml.safe_load(index_path.read_text(encoding="utf-8")) or {}
-    except Exception as exc:  # pragma: no cover
-        logging.exception("[standards-%s] failed to load index: %s", label, exc)
-        return 1
+        loaded = yaml.safe_load(path.read_text(encoding="utf-8"))  # type: ignore[call-arg]
+    except Exception:  # pragma: no cover - defensive read
+        return None
+    return loaded if isinstance(loaded, Mapping) else None
 
-    extraction = (data.get("metadata", {}) or {}).get("extraction", {}) or {}
-    rules = data.get("rules", []) or []
-    logging.info(
-        "[standards-%s] rules=%d extracted_count=%s auto_accept=%s pending_file=%s",
-        label,
-        len(rules),
-        extraction.get("extracted_count"),
-        extraction.get("auto_accept"),
-        extraction.get("pending_file"),
+
+def _count_pending_lines(path: Path) -> int | None:
+    if not path.exists():
+        return None
+    try:
+        with path.open("r", encoding="utf-8") as handle:
+            return sum(1 for _ in handle)
+    except OSError:  # pragma: no cover - defensive
+        return None
+
+
+def _extract_markdown_rules(rules: Any) -> list[str]:
+    if not isinstance(rules, list):
+        return []
+    collected: list[str] = []
+    for entry in rules:
+        if isinstance(entry, Mapping):
+            rule_id = entry.get("id")
+            if isinstance(rule_id, str) and rule_id.startswith("markdown-"):
+                collected.append(rule_id)
+    return sorted(set(collected))
+
+
+def _build_markdown(
+    *,
+    generated_at: datetime,
+    label: str,
+    metrics: Mapping[str, Any],
+    markdown_sample: list[str],
+    pending_lines: int | None,
+    notes: list[str],
+) -> str:
+    lines: list[str] = ["# Standards Overview", ""]
+    lines.append(f"Generated (UTC): {generated_at.isoformat(timespec='seconds')}")
+    lines.append(f"Label: {label}")
+    lines.append("")
+    lines.append("## Metrics")
+    lines.append("")
+    lines.append(f"- Rules: {metrics.get('rule_count', 0)}")
+    lines.append(f"- Markdown rules: {metrics.get('markdown_rule_count', 0)}")
+    lines.append(f"- Extracted count: {metrics.get('extracted_count')}")
+    lines.append(f"- Auto accept: {metrics.get('auto_accept')}")
+    lines.append(f"- Pending lines: {pending_lines if pending_lines is not None else 'unknown'}")
+    lines.append("")
+    if markdown_sample:
+        lines.append("## Markdown Rule Sample")
+        lines.append("")
+        for rule in markdown_sample:
+            lines.append(f"- {rule}")
+        lines.append("")
+    if notes:
+        lines.append("## Notes")
+        lines.append("")
+        for note in notes:
+            lines.append(f"- {note}")
+        lines.append("")
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
+    if YAML_IMPORT_ERROR is not None:
+        logging.warning("[standards-summary] missing PyYAML: %s", YAML_IMPORT_ERROR)
+        return {"status": "skipped", "reason": "missing PyYAML"}
+
+    args = _parse_args(argv)
+    paths = build_paths(args)
+    options = build_options(args)
+    configure_logging(options.log_level)
+    logger = logging.getLogger("summarize_standards")
+
+    repo_root = paths.repo_root
+    index_path = _resolve_index_path(paths, options)
+    pending_path = paths.pending_path
+    run_slug = options.run_timestamp.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
+    timestamp_slug = options.run_timestamp.astimezone(timezone.utc).strftime("%Y-%m-%d_%H%M")
+
+    notes: list[str] = []
+    index_payload = _load_index_payload(index_path)
+    if index_payload is None:
+        notes.append("Standards index not found or unreadable; metrics may be stale.")
+        extraction: Mapping[str, Any] = {}
+        rules: list[Any] = []
+    else:
+        metadata = index_payload.get("metadata")
+        extraction_candidate = metadata.get("extraction") if isinstance(metadata, Mapping) else {}
+        extraction = extraction_candidate or {}
+        rules_raw = index_payload.get("rules")
+        rules = rules_raw if isinstance(rules_raw, list) else []
+
+    markdown_rules = _extract_markdown_rules(rules)
+    markdown_sample = markdown_rules[:5]
+
+    metrics = {
+        "rule_count": len(rules),
+        "markdown_rule_count": len(markdown_rules),
+        "extracted_count": extraction.get("extracted_count") if isinstance(extraction, Mapping) else None,
+        "auto_accept": extraction.get("auto_accept") if isinstance(extraction, Mapping) else None,
+    }
+
+    pending_lines = _count_pending_lines(pending_path)
+    if pending_lines is None:
+        notes.append("Pending file missing or unreadable; pending line count unavailable.")
+
+    artifact_paths = {
+        "index_yaml": _normalize_relative(index_path if index_path.exists() else None, repo_root),
+        "pending_yaml": _normalize_relative(pending_path if pending_path.exists() else None, repo_root),
+        "legacy_index_yaml": _normalize_relative(
+            (repo_root / LEGACY_INDEX_PATH).resolve() if (repo_root / LEGACY_INDEX_PATH).exists() else None,
+            repo_root,
+        ),
+    }
+
+    summary_payload = {
+        "schema_version": SCHEMA_VERSION,
+        "viewer": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "generated_at": options.run_timestamp.isoformat(timespec="seconds"),
+        "run_slug": run_slug,
+        "timestamp_slug": timestamp_slug,
+        "label": options.label,
+        "metrics": metrics,
+        "markdown_rule_sample": markdown_sample,
+        "pending_lines": pending_lines,
+        "artifacts": artifact_paths,
+        "notes": notes,
+    }
+
+    summary_markdown = _build_markdown(
+        generated_at=options.run_timestamp,
+        label=options.label,
+        metrics=metrics,
+        markdown_sample=markdown_sample,
+        pending_lines=pending_lines,
+        notes=notes,
     )
 
-    md_ids = [r.get("id") for r in rules if isinstance(r, dict) and str(r.get("id", "")).startswith("markdown-")]
-    if md_ids:
-        md_ids_sorted = sorted(set(md_ids))
-        logging.info(
-            "[standards-%s] markdown-rule-count=%d sample=%s",
-            label,
-            len(md_ids_sorted),
-            ", ".join(md_ids_sorted[:5]),
-        )
+    artifacts = [
+        ReportArtifact(filename=f"{SUMMARY_STEM}.json", kind="json", content=lambda: summary_payload),
+        ReportArtifact(filename=f"{SUMMARY_STEM}.md", kind="text", content=lambda: summary_markdown),
+    ]
+    result: WriteReportArtifactsResult = write_report_artifacts(
+        stem=SUMMARY_STEM,
+        timestamp=options.run_timestamp,
+        output_dir=paths.output_dir,
+        artifacts=artifacts,
+        keep=options.artifacts_to_keep,
+        viewer=VIEWER_SLUG,
+        topic=TOPIC_SLUG,
+    )
 
-    if extraction.get("pending_file") and pending_path.exists():
-        try:
-            pending_lines = sum(1 for _ in pending_path.open("r", encoding="utf-8"))
-            logging.info("[standards-%s] pending_lines=%d", label, pending_lines)
-        except Exception:  # pragma: no cover
-            pass
-    return 0
+    logger.info("Standards overview artifacts written to %s (slug=%s)", result.run_dir, result.slug)
+
+    return {
+        "status": "ok",
+        "run_dir": str(result.run_dir),
+        "slug": result.slug,
+        "artifacts": {name: str(path) for name, path in result.artifacts.items()},
+        "notes": notes,
+    }
 
 
-def main() -> int:  # pragma: no cover - tiny wrapper
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--label", default="summary", help="label for log prefix (grow|sync|summary)")
-    args = parser.parse_args()
-    logging.basicConfig(level=os.environ.get("STANDARDS_SUMMARY_LOG_LEVEL", "INFO"))
-    index_path_env = Path(os.environ.get("INDEX_PATH", str(DEFAULT_INDEX_PATH)))
-    pending_path_env = Path(os.environ.get("PENDING_PATH", str(DEFAULT_PENDING_PATH)))
-    index_path = _resolve_index_path(args.label, index_path_env)
-    pending_path = _resolve_path(pending_path_env)
-    return summarize(args.label, index_path, pending_path)
+def main(argv: Iterable[str] | None = None) -> None:
+    result = run(argv)
+    status = result.get("status")
+    exit_code = 0 if status in {"ok", "skipped"} else 1
+    raise SystemExit(exit_code)
+
+
+__all__ = ["run", "main", "build_paths", "build_options", "_resolve_index_path", "Paths", "Options"]
 
 
 if __name__ == "__main__":  # pragma: no cover
-    raise SystemExit(main())
+    main()

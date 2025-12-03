@@ -420,7 +420,7 @@ roadmap.
 - [x] Phase 1 – Design Convergence — Completed 2025-12-02 after validating the 2025-11-29 topic
   inventory snapshot, mapping Healthview manifest fields, recording RFC approvals, documenting
   legacy retirement scope, and opening linked tickets for each legacy orchestrator.
-- [ ] Phase 2 – Library Foundations
+- [x] Phase 2 – Library Foundations — Completed 2025-11-30
   - Implemented `build_topic_pipeline`, `summarizer_runner`, `telemetry_emitters`, and
     `catalog_registry` helpers with unit tests on 2025-11-30; validated with
     `pytest .repo_studios/tests/tests_command_center` and the helper-focused suites to confirm the
@@ -441,10 +441,10 @@ roadmap.
     to demonstrate how legacy orchestrators integrate the topic pipeline, summarizer runner,
     telemetry emitters, and catalog registry helpers; cross-references the helper unit tests under
     `.repo_studios/tests/tests_command_center/` for parity validation.
-  - [x] Stage migration of `test_log_analysis.py` into the shared library once naming-compliant
-  scaffolding ships (2025-11-30: helper relocated to `command_center/scripts/libraries/test_log_analysis.py`,
-  with the legacy utility shim re-exporting the new module and pytest/documentation updates recorded).
-- [ ] Phase 3 – Topic Orchestrator Delivery
+  - Stage migration of `test_log_analysis.py` into the shared library once naming-compliant
+    scaffolding shipped on 2025-11-30 (helper relocated to `command_center/scripts/libraries/test_log_analysis.py`,
+    with the legacy utility shim re-exporting the new module and pytest/documentation updates recorded).
+- [x] Phase 3 – Topic Orchestrator Delivery — Completed 2025-12-02
   - [x] Ship Test Execution Telemetry orchestrator with end-to-end fixtures and Markdown snapshot
     tests.
     - 2025-12-01: Added `.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py`
@@ -482,7 +482,17 @@ roadmap.
     refreshed producer outputs, and exercised the contract via
     `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/standards_integrity -q`
     together with `make -C .repo_studios studio-orchestrate-standards PYTHON=.venv/Scripts/python.exe`.
-  - 2025-12-01: Delivered the Dependency & Import Hygiene orchestrator with aligned CLI surfaces.
+  - 2025-12-01: Delivered the Dependency & Import Hygiene orchestrator with aligned CLI surfaces,
+    threading dependency hygiene → import graph → placeholder scan → optional batch cleanup →
+    typecheck → optional mypy baseline refresh via the shared topic pipeline helpers. The runner
+    mirrors Healthview manifests to
+    `.repo_studios/command_center/reports/healthview/dependency_import_hygiene/<timestamp>/`,
+    registers each producer/utility in the catalog, honours retention knobs, and forwards skip or
+    trigger flags (`--skip-import-graph`, `--skip-typecheck`, `--trigger-batch-cleanup`,
+    `--refresh-mypy-baselines`). Validation covers artifact emission and failure telemetry through
+    `.repo_studios/tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py`,
+    exercised with
+    `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/dependency_import_hygiene -q`.
   - 2025-12-01: Delivered the Monkey Patch Oversight orchestrator and companion summarizer with
     aligned CLI retention knobs, catalog registration, and viewer/topic manifest emission; see
     `.repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py` and
@@ -793,6 +803,15 @@ Example manifest path: `.../healthview/test_execution_telemetry/20251129-2102/ma
   retaining `STANDARDS_GAP_USE_LEGACY` / `--skip-index` / `--legacy-json` escape hatches; confirmed via
   `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_orchestrators/test_run_standards_gap_suite.py -q`
   together with `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/standards_integrity -q`.
+- 2025-12-02: Marked Phase 2 – Library Foundations complete in
+  `docs/automation/orchestrator_implementation.md` and revalidated the Dependency & Import Hygiene
+  orchestrator plan by running `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest
+  .repo_studios/tests/tests_command_center/dependency_import_hygiene -q`, confirming Healthview bundle
+  emission and telemetry alignment without additional code changes.
+- 2025-12-02: Closed Phase 3 – Topic Orchestrator Delivery after auditing
+  `docs/automation/orchestrator_implementation.md` to ensure every topic orchestrator milestone and
+  associated validation is captured; phase checklist updated to reflect completion (documentation
+  change only, no new test command executed).
 - 2025-12-01: Validated Fault Diagnostics orchestrator delivery by executing
   `make -C .repo_studios studio-orchestrate-fault-diagnostics PYTHON=.venv/Scripts/python.exe`,
   inspecting `.repo_studios/command_center/reports/commandview/fault_diagnostics/20251201-1313/manifest.json`

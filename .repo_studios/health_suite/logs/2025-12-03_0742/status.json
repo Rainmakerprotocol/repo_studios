@@ -1,0 +1,119 @@
+{
+  "timestamp": "2025-12-03_0742",
+  "started_at": 1764765724.3752978,
+  "steps": [
+    {
+      "name": "dependency_import_hygiene",
+      "argv": [
+        "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_dependency_import_hygiene.py",
+        "--repo-root",
+        "C:\\Users\\genet\\repo_studios",
+        "--log-level",
+        "INFO",
+        "--timestamp",
+        "2025-12-03T07:42:00+00:00",
+        "--trigger-batch-cleanup",
+        "--refresh-mypy-baselines"
+      ],
+      "start": 1764765724.3754954,
+      "exit_code": 1,
+      "duration_sec": 0.117,
+      "status": "ERROR",
+      "error_log": "reports\\orchestrator_logs\\health_suite_logs\\2025-12-03_0742\\dependency_import_hygiene.err.log"
+    },
+    {
+      "name": "test_execution_telemetry",
+      "argv": [
+        "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_test_execution_telemetry.py",
+        "--repo-root",
+        "C:\\Users\\genet\\repo_studios",
+        "--log-level",
+        "INFO",
+        "--timestamp",
+        "2025-12-03T07:42:00+00:00"
+      ],
+      "start": 1764765724.492341,
+      "exit_code": 1,
+      "duration_sec": 0.116,
+      "status": "ERROR",
+      "error_log": "reports\\orchestrator_logs\\health_suite_logs\\2025-12-03_0742\\test_execution_telemetry.err.log"
+    },
+    {
+      "name": "docs_health_overview",
+      "argv": [
+        "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_docs_health_overview.py",
+        "--repo-root",
+        "C:\\Users\\genet\\repo_studios",
+        "--log-level",
+        "INFO",
+        "--timestamp",
+        "2025-12-03T07:42:00+00:00"
+      ],
+      "start": 1764765724.6089137,
+      "exit_code": 1,
+      "duration_sec": 0.118,
+      "status": "ERROR",
+      "error_log": "reports\\orchestrator_logs\\health_suite_logs\\2025-12-03_0742\\docs_health_overview.err.log"
+    },
+    {
+      "name": "fault_diagnostics_overview",
+      "argv": [
+        "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_fault_diagnostics_overview.py",
+        "--repo-root",
+        "C:\\Users\\genet\\repo_studios",
+        "--log-level",
+        "INFO",
+        "--timestamp",
+        "2025-12-03T07:42:00+00:00"
+      ],
+      "start": 1764765724.7274969,
+      "exit_code": 1,
+      "duration_sec": 0.116,
+      "status": "ERROR",
+      "error_log": "reports\\orchestrator_logs\\health_suite_logs\\2025-12-03_0742\\fault_diagnostics_overview.err.log"
+    },
+    {
+      "name": "monkey_patch_oversight",
+      "argv": [
+        "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_monkey_patch_oversight.py",
+        "--repo-root",
+        "C:\\Users\\genet\\repo_studios",
+        "--log-level",
+        "INFO",
+        "--timestamp",
+        "2025-12-03T07:42:00+00:00"
+      ],
+      "start": 1764765724.843327,
+      "exit_code": 1,
+      "duration_sec": 0.113,
+      "status": "ERROR",
+      "error_log": "reports\\orchestrator_logs\\health_suite_logs\\2025-12-03_0742\\monkey_patch_oversight.err.log"
+    },
+    {
+      "name": "standards_integrity",
+      "argv": [
+        "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_standards_integrity.py",
+        "--repo-root",
+        "C:\\Users\\genet\\repo_studios",
+        "--log-level",
+        "INFO",
+        "--timestamp",
+        "2025-12-03T07:42:00+00:00"
+      ],
+      "start": 1764765724.9562154,
+      "exit_code": 1,
+      "duration_sec": 0.117,
+      "status": "ERROR",
+      "error_log": "reports\\orchestrator_logs\\health_suite_logs\\2025-12-03_0742\\standards_integrity.err.log"
+    }
+  ],
+  "fault_outdir": "",
+  "fault_outdir_legacy": "",
+  "finished_at": 1764765725.0735288
+}
