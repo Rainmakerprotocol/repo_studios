@@ -1,6 +1,0 @@
-status=ok
-timestamp=2025-11-27T17:13:53.975275+00:00
-index_path=C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\standards_index_reports\latest_index.yaml
-include_warn=false
-categories=0
-total_rules=0

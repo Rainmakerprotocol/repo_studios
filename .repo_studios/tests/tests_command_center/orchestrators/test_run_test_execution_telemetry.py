@@ -206,7 +206,8 @@ def test_run_generates_healthview_bundle(tmp_path: Path, monkeypatch: pytest.Mon
     assert len(runs) == 1
     run_folder = runs[0]
     manifest_path = run_folder / "manifest.json"
-    summary_path = run_folder / "summary.md"
+    summary_path = run_folder / "test_execution_telemetry_summary.md"
+    summary_json_path = run_folder / "test_execution_telemetry_summary.json"
     telemetry_path = run_folder / "telemetry.json"
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -220,34 +221,37 @@ def test_run_generates_healthview_bundle(tmp_path: Path, monkeypatch: pytest.Mon
         "hardening",
         "health_report",
         "health_bundle_summary",
+        "summary_markdown",
+        "summary_json",
     }
     assert set(manifest["artifacts"].keys()) == expected_artifacts
+    assert manifest["artifacts"]["summary_markdown"].endswith("test_execution_telemetry/20251201-0101/test_execution_telemetry_summary.md")
+    assert manifest["artifacts"]["summary_json"].endswith("test_execution_telemetry/20251201-0101/test_execution_telemetry_summary.json")
 
     summary_text = summary_path.read_text(encoding="utf-8")
-    expected_summary = """
-# Test Execution Telemetry Summary
+    assert "# Test Execution Telemetry Summary" in summary_text
+    assert "- run_slug: `20251201-0101`" in summary_text
+    assert "- pipeline_status: success" in summary_text
+    assert "- log_report_available: yes" in summary_text
+    assert "- warnings_total: 1" in summary_text
+    assert "- slow_tests_over_threshold: 1" in summary_text
+    assert "- heatmap_mode: fixture" in summary_text
+    assert "- hardening_status: ok" in summary_text
+    assert "- coverage_status: ok" in summary_text
+    assert "- health_report_source: producer" in summary_text
+    assert "## Runtime Metrics" in summary_text
+    assert "| collect | success" in summary_text
+    assert "## Failure Highlights" in summary_text
+    assert "## Artifact Locations" in summary_text
+    assert "## Step Outcomes" in summary_text
+    assert "- summarize: success" in summary_text
 
-- run_slug: `20251201-0101`
-- pipeline_status: success
-- log_report_available: yes
-- warnings_total: 1
-- heatmap_mode: fixture
-- hardening_status: ok
-- hardening_high_severity: 0
-- coverage_status: ok
-- health_report_source: producer
-
-## Step Outcomes
-
-- collect: success
-  - detail: log report captured
-- analyse: success
-  - detail: analysis completed
-- summarize: success
-  - detail: health summary generated
-
-""".strip() + "\n"
-    assert summary_text == expected_summary
+    summary_json = json.loads(summary_json_path.read_text(encoding="utf-8"))
+    assert summary_json["viewer"] == "healthview"
+    assert summary_json["topic"] == "test_execution_telemetry"
+    assert summary_json["metrics"]["pipeline_status"] == "success"
+    assert summary_json["metrics"]["slow_tests_over_threshold"] == 1
+    assert summary_json["failures"]["detected"] == 0
 
     telemetry_payload = json.loads(telemetry_path.read_text(encoding="utf-8"))
     assert telemetry_payload["topic"] == "test-execution-telemetry"
@@ -353,6 +357,6 @@ def test_run_handles_missing_logs(tmp_path: Path, monkeypatch: pytest.MonkeyPatc
     topic_dir = healthview_root / "healthview" / "test_execution_telemetry"
     runs = sorted(child for child in topic_dir.iterdir() if child.is_dir())
     assert len(runs) == 1
-    summary_text = (runs[0] / "summary.md").read_text(encoding="utf-8")
+    summary_text = (runs[0] / "test_execution_telemetry_summary.md").read_text(encoding="utf-8")
     assert "log_report_available: no" in summary_text
     assert "- summarize: skipped" in summary_text

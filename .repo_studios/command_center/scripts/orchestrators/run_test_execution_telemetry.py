@@ -19,7 +19,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable, Sequence
+from typing import Any, Sequence
 
 from command_center.scripts.libraries import (
     CatalogRegistry,
@@ -58,6 +58,10 @@ HEALTH_MODULE = "scripts.consumers.generate_test_log_health_report"
 HEATMAP_MODULE = "scripts.aggregators.generate_churn_complexity_heatmap"
 COVERAGE_MODULE = "scripts.producers.generate_test_coverage_inventory"
 HARDENING_MODULE = "scripts.producers.analyze_test_hardening"
+SUMMARIZER_SCRIPT = Path(
+    ".repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py"
+)
+SUMMARIZER_MODULE = "command_center.scripts.summarizers.summarize_test_execution_telemetry"
 
 DEFAULT_LOGS_DIR = Path(".repo_studios/reports/orchestrator_logs/pytest_log_capture_logs")
 DEFAULT_TEST_LOG_REPORTS_DIR = Path(".repo_studios/reports/producer_reports/test_log_reports")
@@ -459,50 +463,7 @@ def _register_scripts(registry: CatalogRegistry) -> None:
     registry.register(script_path=str(HEATMAP_SCRIPT), topic=TOPIC_SLUG, role="aggregator")
     registry.register(script_path=str(COVERAGE_SCRIPT), topic=TOPIC_SLUG, role="producer")
     registry.register(script_path=str(HARDENING_SCRIPT), topic=TOPIC_SLUG, role="producer")
-
-
-def _summarize_markdown(
-    *,
-    slug: str,
-    telemetry_success: bool,
-    collect_outcome: CollectOutcome,
-    coverage_outcome: CoverageOutcome,
-    heatmap_outcome: HeatmapOutcome,
-    hardening_outcome: HardeningOutcome,
-    health_outcome: HealthReportOutcome | None,
-    step_reports: Iterable[tuple[str, str, str | None]],
-) -> str:
-    lines: list[str] = []
-    lines.append("# Test Execution Telemetry Summary")
-    lines.append("")
-    lines.append(f"- run_slug: `{slug}`")
-    lines.append(f"- pipeline_status: {'success' if telemetry_success else 'failed'}")
-    lines.append(
-        f"- log_report_available: {'yes' if collect_outcome.report_dir is not None else 'no'}"
-    )
-    warning_detail = collect_outcome.warnings_total if collect_outcome.warnings_total is not None else "unknown"
-    lines.append(f"- warnings_total: {warning_detail}")
-    lines.append(f"- heatmap_mode: {heatmap_outcome.payload.get('mode', 'unknown') if heatmap_outcome.payload else 'unknown'}")
-    hardening_summary = hardening_outcome.payload.get("summary") if isinstance(hardening_outcome.payload, dict) else {}
-    high_issues = hardening_summary.get("severity_totals", {}).get("high", 0) if isinstance(hardening_summary, dict) else 0
-    hardening_status = hardening_outcome.payload.get("status") if isinstance(hardening_outcome.payload, dict) else None
-    lines.append(f"- hardening_status: {hardening_status or 'unknown'}")
-    lines.append(f"- hardening_high_severity: {high_issues}")
-    coverage_status = coverage_outcome.summary.get("status") if coverage_outcome.summary else None
-    lines.append(f"- coverage_status: {coverage_status or 'unknown'}")
-    summarizer_source = None
-    if health_outcome and isinstance(health_outcome.payload, dict):
-        summarizer_source = health_outcome.payload.get("source")
-    lines.append(f"- health_report_source: {summarizer_source or 'none'}")
-    lines.append("")
-    lines.append("## Step Outcomes")
-    lines.append("")
-    for name, status, detail in step_reports:
-        lines.append(f"- {name}: {status}")
-        if detail:
-            lines.append(f"  - detail: {detail}")
-    lines.append("")
-    return "\n".join(lines)
+    registry.register(script_path=str(SUMMARIZER_SCRIPT), topic=TOPIC_SLUG, role="summarizer")
 
 
 def run(argv: Sequence[str] | None = None) -> int:
@@ -617,13 +578,14 @@ def run(argv: Sequence[str] | None = None) -> int:
         ),
     }
 
+    telemetry_payload = telemetry.as_dict()
     manifest = {
         "schema_version": SCHEMA_VERSION,
         "viewer": VIEWER_SLUG,
         "topic": HEALTHVIEW_TOPIC,
         "run_slug": run_slug,
         "generated_at": completed_at.isoformat(),
-        "telemetry": telemetry.as_dict(),
+        "telemetry": telemetry_payload,
         "artifacts": artifacts_section,
         "inputs": {
             "logs_dir": _relativize(paths.logs_dir, paths.repo_root),
@@ -633,23 +595,11 @@ def run(argv: Sequence[str] | None = None) -> int:
         "catalog": [entry.__dict__ for entry in registry.all_entries()],
     }
 
-    summary_content = _summarize_markdown(
-        slug=run_slug,
-        telemetry_success=telemetry.success,
-        collect_outcome=collect_outcome,
-        coverage_outcome=coverage_outcome,
-        heatmap_outcome=heatmap_outcome,
-        hardening_outcome=hardening_outcome,
-        health_outcome=health_outcome,
-        step_reports=[(step.name, step.status, step.detail) for step in result.steps],
-    )
-
     artifacts = [
         ReportArtifact(filename="manifest.json", kind="json", content=lambda: manifest),
-        ReportArtifact(filename="summary.md", kind="text", content=lambda: summary_content),
-        ReportArtifact(filename="telemetry.json", kind="json", content=lambda: telemetry.as_dict()),
+        ReportArtifact(filename="telemetry.json", kind="json", content=lambda: telemetry_payload),
     ]
-    write_report_artifacts(
+    result_artifacts = write_report_artifacts(
         stem=HEALTHVIEW_TOPIC,
         timestamp=options.run_timestamp,
         output_dir=paths.healthview_root,
@@ -658,6 +608,47 @@ def run(argv: Sequence[str] | None = None) -> int:
         viewer=VIEWER_SLUG,
         topic=HEALTHVIEW_TOPIC,
     )
+
+    summarizer_run = _load_run_callable(paths.repo_root / SUMMARIZER_SCRIPT, SUMMARIZER_MODULE)
+    summary_args = [
+        "--repo-root",
+        str(paths.repo_root),
+        "--manifest",
+        str(result_artifacts.artifacts["manifest.json"]),
+        "--telemetry",
+        str(result_artifacts.artifacts["telemetry.json"]),
+        "--output-dir",
+        str(paths.healthview_root),
+        "--artifacts-to-keep",
+        str(options.artifacts_to_keep),
+        "--log-level",
+        options.log_level,
+    ]
+    summary_payload = summarizer_run(summary_args)
+    if not isinstance(summary_payload, dict) or summary_payload.get("status") != "ok":
+        raise RuntimeError("summarize_test_execution_telemetry returned unexpected payload")
+
+    summary_artifacts = summary_payload.get("artifacts") if isinstance(summary_payload.get("artifacts"), dict) else {}
+
+    summary_markdown_path = None
+    summary_json_path = None
+    for name, path_str in summary_artifacts.items():
+        candidate_path = Path(path_str)
+        if name.endswith(".md"):
+            summary_markdown_path = candidate_path
+        elif name.endswith(".json"):
+            summary_json_path = candidate_path
+
+    if summary_markdown_path:
+        artifacts_section["summary_markdown"] = _relativize(summary_markdown_path, paths.repo_root)
+    if summary_json_path:
+        artifacts_section["summary_json"] = _relativize(summary_json_path, paths.repo_root)
+
+    manifest_path = result_artifacts.artifacts["manifest.json"]
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    telemetry_path = result_artifacts.artifacts["telemetry.json"]
+    telemetry_path.write_text(json.dumps(telemetry_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     LOGGER.info("Test Execution Telemetry orchestrator complete (slug=%s)", run_slug)
     return 0

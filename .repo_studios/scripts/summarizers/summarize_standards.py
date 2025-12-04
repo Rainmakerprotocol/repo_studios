@@ -351,7 +351,28 @@ def main(argv: Iterable[str] | None = None) -> None:
     raise SystemExit(exit_code)
 
 
-__all__ = ["run", "main", "build_paths", "build_options", "_resolve_index_path", "Paths", "Options"]
+
+
+def summarize(label: str, index_path: Path, pending_path: Path) -> int:
+    """Backward-compatible shim for legacy orchestrators expecting summarize()."""
+
+    repo_root = Path(__file__).resolve().parents[3]
+    argv = [
+        "--repo-root",
+        str(repo_root),
+        "--index-path",
+        str(index_path),
+        "--pending-path",
+        str(pending_path),
+        "--label",
+        str(label),
+    ]
+    result = run(argv)
+    status = result.get("status")
+    return 0 if status in {"ok", "skipped"} else 1
+
+
+__all__ = ["run", "main", "summarize", "build_paths", "build_options", "_resolve_index_path", "Paths", "Options"]
 
 
 if __name__ == "__main__":  # pragma: no cover

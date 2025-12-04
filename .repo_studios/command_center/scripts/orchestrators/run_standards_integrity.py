@@ -217,7 +217,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         "--diff-artifacts-to-keep", type=int, default=10, help="Retention budget for diff runs"
     )
     parser.add_argument(
-        "--prompt-artifacts-to-keep", type=int, default=10, help="Retention budget for prompt seed runs"
+        "--prompt-artifacts-to-keep", type=int, default=5, help="Retention budget for prompt seed runs"
     )
     parser.add_argument("--timestamp", help="ISO8601 timestamp for delegated scripts")
     parser.add_argument(

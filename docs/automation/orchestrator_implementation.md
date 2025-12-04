@@ -548,13 +548,21 @@ roadmap.
     topic runner (`.repo_studios/command_center/scripts/orchestrators/README.md` and module docstrings
     refreshed accordingly).
 - [ ] Phase 4 – Summaries and Healthview Artifacts
-  - [ ] Update existing summarizers (health suite, standards) to consume helper APIs and emit
-    Healthview-compatible Markdown.
-  - [ ] Author new summarizers where topic coverage is net-new, starting with Test Execution
-    Telemetry.
-  - [ ] Publish the Healthview manifest schema and JSON example alongside viewer integration notes,
-    including the slug placement and bundle naming strategy that distinguishes Healthview from
-    CommandView.
+  - 2025-12-03: Updated the health suite and standards summarizers to consume the shared command
+    center helper stack, emit Healthview-aligned JSON/Markdown bundles, and prune legacy mirrors;
+    refreshed `.repo_studios/scripts/summarizers/summarize_health_suite.py` and
+    `.repo_studios/scripts/summarizers/summarize_standards.py`, added the legacy `summarize()` shim
+    for orchestrator compatibility, and validated via
+    `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_summarizers/test_summarize_health_suite.py .repo_studios/tests/tests_summarizers/test_summarize_standards.py`.
+  - 2025-12-04: Authored the Test Execution Telemetry summarizer
+    (`.repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py`),
+    wiring the orchestrator manifest to consume it, capturing JSON/Markdown Healthview bundles, and
+    validating with `.venv/Scripts/python.exe -m pytest
+    .repo_studios/tests/tests_command_center/test_execution_telemetry/test_summarize_test_execution_telemetry.py
+    .repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py`.
+  - 2025-12-04: Published the Healthview manifest schema narrative and JSON example under
+    `docs/automation/examples/healthview_manifest_example.md` and refreshed the plan section to
+    reference slug placement, bundle naming, and viewer integration notes.
 - [ ] Phase 5 – Meta-Orchestrator and Tooling
   - [ ] Implement `orchestrate_full_diagnostic.py` with include/exclude controls, manifest
     emission, and stop-on-first-failure toggles.
@@ -777,6 +785,21 @@ Example manifest path: `.../healthview/test_execution_telemetry/20251129-2102/ma
   review, no tests required.
 - 2025-11-30: Updated Standards Integrity governance touchpoints—edited `.repo_studios/docs/automation/orchestrator_automation_hooks.md`, `.repo_studios/docs/standards/docs_index.md`, `.repo_studios/Makefile`, and `.github/workflows/studio-inventory.yml`; validated integration with `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center` to keep coverage baselines intact.
 - 2025-11-30: Documented the Dependency & Import Hygiene pipeline ordering in `docs/automation/orchestrator_implementation.md`; documentation-only change, no tests required.
+- 2025-12-03: Modernised the health suite and standards summarizers to write Healthview-compliant
+  bundles via `write_report_artifacts`, retained orchestrator compatibility with a legacy shim in
+  `.repo_studios/scripts/summarizers/summarize_standards.py`, tightened prompt retention defaults in
+  `command_center/scripts/orchestrators/run_standards_integrity.py`, and revalidated coverage with
+  `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_summarizers/test_summarize_health_suite.py .repo_studios/tests/tests_summarizers/test_summarize_standards.py`.
+- 2025-12-04: Landed the Test Execution Telemetry summarizer at
+  `.repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py`, updated
+  `run_test_execution_telemetry.py` to register the Healthview summary artifacts, and validated the
+  workflow via `.venv/Scripts/python.exe -m pytest
+  .repo_studios/tests/tests_command_center/test_execution_telemetry/test_summarize_test_execution_telemetry.py
+  .repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py` to
+  keep coverage above the 80% threshold for both the summarizer and orchestrator modules.
+- 2025-12-04: Published the Healthview manifest example under
+  `docs/automation/examples/healthview_manifest_example.md`, documenting slug placement, bundle
+  naming, and selector integration guidance; documentation-only update, no tests required.
 - 2025-11-30: Reconciled Dependency & Import Hygiene make targets with the forthcoming CLI—tracked legacy recipes (`studio-generate-dependency-hygiene`, `studio-generate-import-graph`, `studio-scan-code-placeholders`, `studio-run-batch-cleanup`, `studio-generate-typecheck-report`, `studio-refresh-mypy-baselines`) and noted the orchestrator pass-through flags for parity; documentation-only, no tests.
 - 2025-11-30: Recorded supporting utility hooks for the hygiene orchestrator—`scan_code_placeholders.py` consumes `.repo_studios/config/placeholder_allowlist.txt` and the governance cadence in `command_center/docs/phase_7/PLACEHOLDER_DEBT_PLAN.md`; the typecheck/refresh duo reads targets and strictness from `pyproject.toml` (`tool.mypy.targets`, `tool.mypy.overrides`, `tool.repo_studios.strict`) while deferring to `HEALTH_TYPECHECK_FAST`; import hygiene relies on the command center library helpers plus the boundary configuration surfaced by `validate_import_boundaries.py`. Documentation-only, test suite unchanged.
 - 2025-11-30: Catalogued Monkey Patch Oversight scripts and artifact flows—`scan_monkey_patches.py` → `classify_monkey_patches.py` → `analyze_monkey_patch_trends.py`, with shared risk helpers; documentation-only update.
