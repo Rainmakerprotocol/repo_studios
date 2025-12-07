@@ -28,10 +28,10 @@ def step_success(*, detail: str | None = None, payload: dict[str, Any] | None = 
     return TopicStepOutcome(status="success", detail=detail, payload=payload)
 
 
-def step_skipped(*, detail: str | None = None) -> TopicStepOutcome:
+def step_skipped(*, detail: str | None = None, payload: dict[str, Any] | None = None) -> TopicStepOutcome:
     """Construct a skipped :class:`TopicStepOutcome`."""
 
-    return TopicStepOutcome(status="skipped", detail=detail, payload=None)
+    return TopicStepOutcome(status="skipped", detail=detail, payload=payload)
 
 
 def step_failed(*, detail: str | None = None, payload: dict[str, Any] | None = None) -> TopicStepOutcome:

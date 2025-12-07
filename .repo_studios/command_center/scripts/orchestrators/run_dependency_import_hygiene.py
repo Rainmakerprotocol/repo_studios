@@ -813,11 +813,18 @@ def run(argv: Sequence[str] | None = None) -> int:
         ctx.add_metadata("typecheck", outcome.payload)
         status = outcome.payload.get("status") if outcome.payload else None
         summary = outcome.payload.get("summary") if outcome.payload else None
+        notes = outcome.payload.get("notes") if outcome.payload else None
         detail = f"status {status}" if status else "typecheck completed"
+        if status == "skipped" and isinstance(notes, str) and notes:
+            detail = notes
         payload = {
             "status": status,
             "summary": summary,
         } if isinstance(summary, dict) else {"status": status}
+        if notes:
+            payload["notes"] = notes
+        if status == "skipped":
+            return step_skipped(detail=detail, payload=payload)
         if status not in {"ok"}:
             return step_failed(detail=detail, payload=payload)
         return step_success(detail=detail, payload=payload)

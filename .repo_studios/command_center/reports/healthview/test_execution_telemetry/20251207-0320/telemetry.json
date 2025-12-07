@@ -1,0 +1,60 @@
+{
+  "finished_at": "2025-12-07T13:35:18.703798+00:00",
+  "metrics": {
+    "artifact_bytes": 12890,
+    "artifact_files": 4,
+    "runtime_seconds": 5.826588,
+    "step_count": 3,
+    "steps_failed": 0,
+    "steps_skipped": 1,
+    "steps_succeeded": 2
+  },
+  "run_slug": "20251207-0320",
+  "started_at": "2025-12-07T13:35:12.877210+00:00",
+  "steps": [
+    {
+      "detail": "no pytest logs discovered",
+      "finished_at": "2025-12-07T13:35:13.039364+00:00",
+      "name": "collect",
+      "payload": {
+        "coverage": {
+          "covered_functions": 64,
+          "files_below_threshold": [],
+          "include_empty": false,
+          "overall_coverage_pct": 90.14,
+          "status": "ok",
+          "threshold": null,
+          "total_files": 10,
+          "total_functions": 71
+        },
+        "log_report": {
+          "slow_tests": null,
+          "warnings_total": null
+        }
+      },
+      "started_at": "2025-12-07T13:35:12.877221+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "analysis completed",
+      "finished_at": "2025-12-07T13:35:18.703735+00:00",
+      "name": "analyse",
+      "payload": {
+        "hardening_status": "ok",
+        "heatmap_mode": "logs_fallback"
+      },
+      "started_at": "2025-12-07T13:35:13.039375+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "no structured log report found",
+      "finished_at": "2025-12-07T13:35:18.703752+00:00",
+      "name": "summarize",
+      "started_at": "2025-12-07T13:35:18.703748+00:00",
+      "status": "skipped"
+    }
+  ],
+  "success": true,
+  "topic": "test-execution-telemetry",
+  "viewer": "healthview"
+}

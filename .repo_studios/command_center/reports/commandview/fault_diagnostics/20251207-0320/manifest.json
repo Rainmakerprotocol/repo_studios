@@ -1,0 +1,106 @@
+{
+  "artifacts": {
+    "consumer_bundle": ".repo_studios/reports/consumer_reports/fault_artifacts/fault_artifacts-2025-12-07_133522-2025-11-28_1702",
+    "consumer_bundle_summary": ".repo_studios/reports/consumer_reports/fault_artifacts/fault_artifacts-2025-12-07_133522-2025-11-28_1702/bundle_summary.json",
+    "overview_fault_diagnostics_overview.json": ".repo_studios/reports/summarizer_reports/fault_diagnostics_overview/fault_diagnostics_overview-20251207_032000/fault_diagnostics_overview.json",
+    "overview_fault_diagnostics_overview.md": ".repo_studios/reports/summarizer_reports/fault_diagnostics_overview/fault_diagnostics_overview-20251207_032000/fault_diagnostics_overview.md",
+    "producer_report": ".repo_studios/reports/producer_reports/faulthandler_reports/faulthandler_report-20251207_133522/report.json",
+    "summarizer_run": ".repo_studios/reports/summarizer_reports/fault_diagnostics_overview/fault_diagnostics_overview-20251207_032000"
+  },
+  "catalog": [
+    {
+      "role": "consumer",
+      "script_path": ".repo_studios/scripts/consumers/generate_fault_artifacts.py",
+      "topic": "fault-diagnostics"
+    },
+    {
+      "role": "orchestrator",
+      "script_path": ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py",
+      "topic": "fault-diagnostics"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/collect_faulthandler_reports.py",
+      "topic": "fault-diagnostics"
+    },
+    {
+      "role": "summarizer",
+      "script_path": ".repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py",
+      "topic": "fault-diagnostics"
+    }
+  ],
+  "generated_at": "2025-12-07T13:35:22.585394+00:00",
+  "inputs": {
+    "producer_top_frames": null,
+    "reuse_report": null,
+    "run_dir": null,
+    "runs_dir": ".repo_studios/reports/orchestrator_logs/faulthandler_logs",
+    "skip_consumer": false,
+    "skip_producer": false,
+    "skip_summarizer": false
+  },
+  "metrics": {
+    "artifact_bytes": 5116,
+    "artifact_files": 3,
+    "runtime_seconds": 0.07219,
+    "step_count": 3,
+    "steps_failed": 0,
+    "steps_skipped": 0,
+    "steps_succeeded": 3
+  },
+  "run_slug": "20251207-0320",
+  "schema_version": 1,
+  "telemetry": {
+    "finished_at": "2025-12-07T13:35:22.585355+00:00",
+    "metrics": {
+      "artifact_bytes": 5116,
+      "artifact_files": 3,
+      "runtime_seconds": 0.07219,
+      "step_count": 3,
+      "steps_failed": 0,
+      "steps_skipped": 0,
+      "steps_succeeded": 3
+    },
+    "run_slug": "20251207-0320",
+    "started_at": "2025-12-07T13:35:22.513165+00:00",
+    "steps": [
+      {
+        "detail": "signatures=0, repeat_offender=0",
+        "finished_at": "2025-12-07T13:35:22.546700+00:00",
+        "name": "producer",
+        "payload": {
+          "repeat_offender": 0,
+          "signatures": 0
+        },
+        "started_at": "2025-12-07T13:35:22.513167+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "signatures=0, repeat_offender=0",
+        "finished_at": "2025-12-07T13:35:22.572255+00:00",
+        "name": "consumer",
+        "payload": {
+          "repeat_offender": 0,
+          "signatures": 0
+        },
+        "started_at": "2025-12-07T13:35:22.546709+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "slug=20251207_032000",
+        "finished_at": "2025-12-07T13:35:22.585348+00:00",
+        "name": "summarizer",
+        "payload": {
+          "slug": "20251207_032000"
+        },
+        "started_at": "2025-12-07T13:35:22.572268+00:00",
+        "status": "success"
+      }
+    ],
+    "success": true,
+    "topic": "fault_diagnostics",
+    "viewer": "commandview"
+  },
+  "topic": "fault_diagnostics",
+  "viewer": "commandview"
+}

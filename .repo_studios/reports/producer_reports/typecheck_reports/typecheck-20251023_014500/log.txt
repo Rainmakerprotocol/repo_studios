@@ -1,6 +1,0 @@
-status=error
-timestamp=20251023_014500
-error_count=50
-files_with_issues=18
-paths_checked=1
-mypy_version=mypy 1.18.2 (compiled: yes)

@@ -421,15 +421,25 @@ def main(argv: list[str] | None = None) -> int:
 
     mypy_version = _get_mypy_version(repo_root)
     invocation = _build_invocation(strict, targets)
-    stdout_combined, return_code = _run_mypy(repo_root, invocation)
 
-    total_errors, files_with_issues, success_flag = _parse_summary(stdout_combined)
-    samples = _parse_samples(stdout_combined)
-    if not success_flag and total_errors == 0:
-        total_errors = len(samples)
-        files_with_issues = len({sample.path for sample in samples})
-
-    status = _compute_status(success_flag, total_errors, files_with_issues, return_code)
+    skipped_note = ""
+    if targets:
+        stdout_combined, return_code = _run_mypy(repo_root, invocation)
+        total_errors, files_with_issues, success_flag = _parse_summary(stdout_combined)
+        samples = _parse_samples(stdout_combined)
+        if not success_flag and total_errors == 0:
+            total_errors = len(samples)
+            files_with_issues = len({sample.path for sample in samples})
+        status = _compute_status(success_flag, total_errors, files_with_issues, return_code)
+    else:
+        stdout_combined = "No typecheck targets discovered; skipping mypy execution.\n"
+        return_code = 0
+        total_errors = 0
+        files_with_issues = 0
+        success_flag = True
+        samples: list[ErrorSample] = []
+        status = "skipped"
+        skipped_note = "No typecheck targets discovered; skipping mypy execution."
 
     stats = BuildStats(
         status=status,
@@ -449,6 +459,8 @@ def main(argv: list[str] | None = None) -> int:
         status=status,
         stats=stats,
     )
+    if skipped_note:
+        payload["notes"] = skipped_note
 
     artifacts = [
         ReportArtifact(

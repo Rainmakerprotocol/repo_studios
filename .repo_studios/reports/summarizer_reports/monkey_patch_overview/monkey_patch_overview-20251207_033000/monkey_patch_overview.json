@@ -1,0 +1,24 @@
+{
+  "artifacts": {
+    "consumer_bundle_summary": ".repo_studios/reports/consumer_reports/monkey_patch_risk/monkey_patch_risk-2025-12-07_133804/bundle_summary.json",
+    "consumer_summary": ".repo_studios/reports/consumer_reports/monkey_patch_risk/monkey_patch_risk-2025-12-07_133804/summary.json",
+    "duplicate_matrix": null,
+    "producer_matches": ".repo_studios/reports/producer_reports/monkey_patch_scans/monkey_patch_scan-20251207_133804/matches.json",
+    "producer_report": ".repo_studios/reports/producer_reports/monkey_patch_scans/monkey_patch_scan-20251207_133804/report.json",
+    "trend_bundle_summary": ".repo_studios/reports/aggregator_reports/monkey_patch_trends/monkey_patch_trends-2025-12-07_133804/bundle_summary.json",
+    "trend_json": ".repo_studios/reports/aggregator_reports/monkey_patch_trends/monkey_patch_trends-2025-12-07_133804/trend.json",
+    "trend_markdown": ".repo_studios/reports/aggregator_reports/monkey_patch_trends/monkey_patch_trends-2025-12-07_133804/trend.md"
+  },
+  "counts_by_risk": {
+    "HIGH": 13,
+    "MODERATE": 52,
+    "SAFE": 65
+  },
+  "generated_at": "2025-12-07T03:30:00+00:00",
+  "notes": [],
+  "overlap": [],
+  "schema_version": 1,
+  "topic": "monkey_patch_overview",
+  "total_findings": 130,
+  "viewer": "commandview"
+}

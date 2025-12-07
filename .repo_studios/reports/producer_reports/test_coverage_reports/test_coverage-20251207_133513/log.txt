@@ -1,0 +1,5 @@
+status=ok
+total_files=10
+total_functions=71
+covered_functions=64
+overall_coverage_pct=90.14

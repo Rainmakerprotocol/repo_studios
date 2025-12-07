@@ -1,0 +1,16 @@
+{
+  "generated_utc": "2025-12-07T03:20:00+00:00",
+  "issue_count": 0,
+  "issues": [],
+  "patterns": [
+    "README.md",
+    "docs/agents/config_quickstart.md",
+    "docs/agents/step5_agent_config_system.md"
+  ],
+  "root": "C:\\Users\\genet\\repo_studios",
+  "scanned_files": [
+    "README.md"
+  ],
+  "schema_version": 1,
+  "status": "ok"
+}
