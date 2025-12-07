@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from contextlib import contextmanager
 from pathlib import Path
 
 from command_center.scripts.orchestrators import run_docs_health_overview as orchestrator
@@ -80,15 +81,8 @@ def _seed_aggregator_inputs(base_dir: Path) -> None:
     )
 
 
-def test_orchestrator_writes_healthview_manifest(tmp_path: Path) -> None:
-    repo_root = Path(__file__).resolve().parents[4]
-
-    aggregator_inputs = tmp_path / "inputs"
-    _seed_aggregator_inputs(aggregator_inputs)
-
-    healthview_root = tmp_path / "healthview"
-    aggregator_output = tmp_path / "aggregator_output"
-
+@contextmanager
+def _patched_aggregator(repo_root: Path, aggregator_output: Path):
     original_loader = orchestrator._load_callable
 
     def _fake_loader(script_path: Path, module_name: str, attribute: str):
@@ -122,8 +116,22 @@ def test_orchestrator_writes_healthview_manifest(tmp_path: Path) -> None:
         return original_loader(script_path, module_name, attribute)
 
     orchestrator._load_callable = _fake_loader
-
     try:
+        yield
+    finally:
+        orchestrator._load_callable = original_loader
+
+
+def test_orchestrator_writes_healthview_manifest(tmp_path: Path) -> None:
+    repo_root = Path(__file__).resolve().parents[4]
+
+    aggregator_inputs = tmp_path / "inputs"
+    _seed_aggregator_inputs(aggregator_inputs)
+
+    healthview_root = tmp_path / "healthview"
+    aggregator_output = tmp_path / "aggregator_output"
+
+    with _patched_aggregator(repo_root, aggregator_output):
         exit_code = orchestrator.run(
             [
                 "--repo-root",
@@ -164,8 +172,6 @@ def test_orchestrator_writes_healthview_manifest(tmp_path: Path) -> None:
                 "DEBUG",
             ]
         )
-    finally:
-        orchestrator._load_callable = original_loader
 
     assert exit_code == 0
 
@@ -183,3 +189,62 @@ def test_orchestrator_writes_healthview_manifest(tmp_path: Path) -> None:
     assert summary_path.exists()
     telemetry_path = manifest_path.with_name("telemetry.json")
     assert telemetry_path.exists()
+
+
+def test_orchestrator_blocks_invalid_topic_alias(tmp_path: Path) -> None:
+    repo_root = Path(__file__).resolve().parents[4]
+
+    aggregator_inputs = tmp_path / "inputs"
+    _seed_aggregator_inputs(aggregator_inputs)
+
+    healthview_root = tmp_path / "healthview"
+    alias_dir = healthview_root / "healthview" / "docs_health"
+    alias_dir.mkdir(parents=True, exist_ok=True)
+    (alias_dir / "latest_summary.md").write_text("stub", encoding="utf-8")
+
+    aggregator_output = tmp_path / "aggregator_output"
+
+    with _patched_aggregator(repo_root, aggregator_output):
+        exit_code = orchestrator.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--doc-index-output-dir",
+                str(tmp_path / "doc_index"),
+                "--anchor-inventory-output-dir",
+                str(aggregator_inputs / "anchor_inventory"),
+                "--anchor-validation-output-dir",
+                str(aggregator_inputs / "anchor_validation"),
+                "--docs-integrity-output-dir",
+                str(aggregator_inputs / "docs_integrity"),
+                "--metrics-stub-output-dir",
+                str(aggregator_inputs / "metrics_stub"),
+                "--churn-output-dir",
+                str(aggregator_inputs / "churn"),
+                "--undocumented-output-dir",
+                str(aggregator_inputs / "undocumented"),
+                "--aggregator-output-dir",
+                str(aggregator_output),
+                "--healthview-root",
+                str(healthview_root),
+                "--artifacts-to-keep",
+                "2",
+                "--aggregator-artifacts-to-keep",
+                "2",
+                "--skip-doc-index",
+                "--skip-anchor-inventory",
+                "--skip-anchor-validation",
+                "--skip-docs-integrity",
+                "--skip-metrics-stub",
+                "--skip-churn",
+                "--skip-undocumented",
+                "--skip-hygiene-signals",
+                "--timestamp",
+                "2024-01-03T12:00:00+00:00",
+                "--log-level",
+                "DEBUG",
+            ]
+        )
+
+    assert exit_code == 1
+    assert (alias_dir / "latest_summary.md").exists()

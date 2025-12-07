@@ -1,5 +1,6 @@
 PYTHON ?= python3
 REPO_ROOT := $(abspath $(CURDIR)/..)
+LOG_LEVEL ?= INFO
 
 ifneq ($(filter ./% ../% .venv/%,$(PYTHON)),)
 	override PYTHON := $(abspath $(REPO_ROOT)/$(PYTHON))
@@ -79,20 +80,56 @@ studio-generate-fault-artifacts:
 
 .PHONY: studio-orchestrate-fault-diagnostics
 studio-orchestrate-fault-diagnostics:
-	cd "$(REPO_ROOT)" && $(PYTHON) ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py" --repo-root "$(REPO_ROOT)" --artifacts-to-keep 10 --producer-artifacts-to-keep 10 --consumer-artifacts-to-keep 10 --summarizer-artifacts-to-keep 10 --log-level INFO
+	@echo Running fault diagnostics orchestrator with log level $(LOG_LEVEL). Override via LOG_LEVEL=DEBUG for verbose output.
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py" \
+		--repo-root "$(REPO_ROOT)" --artifacts-to-keep 10 --producer-artifacts-to-keep 10 \
+		--consumer-artifacts-to-keep 10 --summarizer-artifacts-to-keep 10 --log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-orchestrate-docs-health
 studio-orchestrate-docs-health:
-	cd "$(REPO_ROOT)" && $(PYTHON) ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py" --repo-root "$(REPO_ROOT)" --log-level INFO
+	@echo Running docs health orchestrator with log level $(LOG_LEVEL). Override via LOG_LEVEL=DEBUG for verbose output.
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py" \
+		--repo-root "$(REPO_ROOT)" --log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-run-fault-pipeline
 studio-run-fault-pipeline: studio-orchestrate-fault-diagnostics
 
 .PHONY: studio-orchestrate-standards
 studio-orchestrate-standards:
+	@echo Running standards integrity orchestrator with log level $(LOG_LEVEL). Override via LOG_LEVEL=DEBUG for verbose output.
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py" \
-		--repo-root "$(REPO_ROOT)" --log-level INFO
+		--repo-root "$(REPO_ROOT)" --log-level "$(LOG_LEVEL)"
+
+.PHONY: studio-orchestrate-test-execution-telemetry
+studio-orchestrate-test-execution-telemetry:
+	@echo Running test execution telemetry orchestrator with log level $(LOG_LEVEL). Override via LOG_LEVEL=DEBUG for verbose output.
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py" \
+		--repo-root "$(REPO_ROOT)" --log-level "$(LOG_LEVEL)"
+
+.PHONY: studio-orchestrate-dependency-import-hygiene
+studio-orchestrate-dependency-import-hygiene:
+	@echo Running dependency and import hygiene orchestrator with log level $(LOG_LEVEL). Override via LOG_LEVEL=DEBUG for verbose output.
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py" \
+		--repo-root "$(REPO_ROOT)" --log-level "$(LOG_LEVEL)"
+
+.PHONY: studio-orchestrate-monkey-patch-oversight
+studio-orchestrate-monkey-patch-oversight:
+	@echo Running monkey patch oversight orchestrator with log level $(LOG_LEVEL). Override via LOG_LEVEL=DEBUG for verbose output.
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py" \
+		--repo-root "$(REPO_ROOT)" --log-level "$(LOG_LEVEL)"
+
+.PHONY: studio-orchestrate-full-diagnostic
+studio-orchestrate-full-diagnostic:
+	@echo Running full diagnostic orchestrator with log level $(LOG_LEVEL). Override via LOG_LEVEL=DEBUG for verbose output.
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py" \
+		--repo-root "$(REPO_ROOT)" --log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-configure-faulthandler-runtime-smoke
 studio-configure-faulthandler-runtime-smoke:

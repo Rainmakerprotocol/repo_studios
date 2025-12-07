@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import json
 import logging
 import sys
 from dataclasses import dataclass
@@ -34,6 +35,7 @@ from command_center.scripts.libraries import (
     build_standard_options,
     build_standard_paths,
     build_topic_pipeline,
+    measure_artifact_directory,
     step_failed,
     step_skipped,
     step_success,
@@ -527,6 +529,7 @@ def run(argv: Sequence[str] | None = None) -> int:
     run_slug = options.run_timestamp.strftime("%Y%m%d-%H%M")
     telemetry = build_pipeline_telemetry(result, viewer=VIEWER_SLUG, topic=HEALTHVIEW_TOPIC, run_slug=run_slug)
     completed_at = datetime.now(timezone.utc)
+    telemetry_payload = telemetry.as_dict()
 
     artifacts_section = {
         "producer_report": _relativize(producer_outcome.report_path if producer_outcome else None, paths.repo_root),
@@ -546,7 +549,7 @@ def run(argv: Sequence[str] | None = None) -> int:
         "topic": HEALTHVIEW_TOPIC,
         "run_slug": run_slug,
         "generated_at": completed_at.isoformat(),
-        "telemetry": telemetry.as_dict(),
+        "telemetry": telemetry_payload,
         "artifacts": artifacts_section,
         "inputs": {
             "runs_dir": _relativize(paths.runs_dir, paths.repo_root),
@@ -565,9 +568,9 @@ def run(argv: Sequence[str] | None = None) -> int:
     artifacts = [
         ReportArtifact(filename="manifest.json", kind="json", content=lambda: manifest),
         ReportArtifact(filename="summary.md", kind="text", content=lambda: summary_markdown),
-        ReportArtifact(filename="telemetry.json", kind="json", content=lambda: telemetry.as_dict()),
+        ReportArtifact(filename="telemetry.json", kind="json", content=lambda: telemetry_payload),
     ]
-    write_report_artifacts(
+    result_artifacts = write_report_artifacts(
         stem=HEALTHVIEW_TOPIC,
         timestamp=options.run_timestamp,
         output_dir=paths.healthview_root,
@@ -576,6 +579,18 @@ def run(argv: Sequence[str] | None = None) -> int:
         viewer=VIEWER_SLUG,
         topic=HEALTHVIEW_TOPIC,
     )
+
+    artifact_metrics = measure_artifact_directory(result_artifacts.run_dir)
+    metrics_section = telemetry_payload.setdefault("metrics", {})
+    metrics_section.update(artifact_metrics.as_dict())
+    manifest["telemetry"] = telemetry_payload
+    manifest["metrics"] = dict(metrics_section)
+
+    manifest_path = result_artifacts.artifacts["manifest.json"]
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    telemetry_path = result_artifacts.artifacts["telemetry.json"]
+    telemetry_path.write_text(json.dumps(telemetry_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     LOGGER.info("Fault Diagnostics orchestrator complete (slug=%s)", run_slug)
     return 0

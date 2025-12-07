@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Iterable, Sequence
 
 import yaml
+from command_center.scripts.utilities import reports_naming_audit
 
 
 class GuardrailConfigError(ValueError):
@@ -98,3 +99,100 @@ def enforce_run_size_limit(
             )
         )
     return limit, run_size
+
+
+def _topic_ignore_prefixes(reports_root: Path, viewer: str, topic: str) -> list[str]:
+    prefixes: list[str] = []
+    if not reports_root.exists():
+        return prefixes
+    for entry in reports_root.iterdir():
+        name = entry.name
+        if entry.is_dir():
+            if name != viewer:
+                prefixes.append(name)
+                continue
+            for child in entry.iterdir():
+                child_name = child.name
+                child_prefix = f"{viewer}/{child_name}"
+                if child.is_dir():
+                    if child_name != topic:
+                        prefixes.append(child_prefix)
+                else:
+                    prefixes.append(child_prefix)
+        else:
+            prefixes.append(name)
+    return prefixes
+
+
+def enforce_report_naming(
+    *,
+    reports_root: Path,
+    run_dir: Path,
+    viewer: str,
+    topic: str,
+    artifact_roles: Iterable[str] | None = None,
+    extra_ignore_prefixes: Iterable[str] | None = None,
+) -> dict[str, object]:
+    resolved_root = reports_root.resolve()
+    resolved_run_dir = run_dir.resolve()
+    try:
+        rel_run_dir = resolved_run_dir.relative_to(resolved_root)
+    except ValueError as exc:
+        raise GuardrailViolationError(
+            f"Run directory {resolved_run_dir} is not within reports root {resolved_root}."
+        ) from exc
+    parts = rel_run_dir.parts
+    if len(parts) < 3:
+        raise GuardrailViolationError(
+            f"Run directory {resolved_run_dir} is missing viewer/topic/timestamp depth."
+        )
+    run_viewer, run_topic = parts[0], parts[1]
+    if run_viewer != viewer or run_topic != topic:
+        raise GuardrailViolationError(
+            (
+                "Run directory {dir} mapped to viewer/topic {found_viewer}/{found_topic} "
+                "does not match expected {expected_viewer}/{expected_topic}."
+            ).format(
+                dir=resolved_run_dir,
+                found_viewer=run_viewer,
+                found_topic=run_topic,
+                expected_viewer=viewer,
+                expected_topic=topic,
+            )
+        )
+
+    ignore_prefixes = list(extra_ignore_prefixes or [])
+    ignore_prefixes.extend(_topic_ignore_prefixes(resolved_root, viewer, topic))
+
+    roles = tuple(str(role) for role in (artifact_roles or ()))
+    summary = reports_naming_audit.audit_reports(
+        resolved_root,
+        artifact_roles=roles,
+        allowed_viewers=[viewer],
+        ignore_prefixes=ignore_prefixes,
+    )
+
+    topic_prefix = f"{viewer}/{topic}"
+    violations = []
+    for entry in summary.get("violations", []):
+        if not isinstance(entry, dict):
+            continue
+        raw_path = entry.get("path")
+        if not isinstance(raw_path, str):
+            continue
+        if not raw_path.startswith(topic_prefix):
+            continue
+        issues = entry.get("issues", [])
+        rendered = ", ".join(str(issue) for issue in issues) if isinstance(issues, list) else ""
+        violations.append((raw_path, rendered))
+
+    if violations:
+        details = "\n".join(f"{path}: {detail}" if detail else path for path, detail in violations)
+        raise GuardrailViolationError(
+            (
+                f"Report naming violations detected under {topic_prefix}:\n"
+                f"{details}"
+            )
+        )
+
+    return summary

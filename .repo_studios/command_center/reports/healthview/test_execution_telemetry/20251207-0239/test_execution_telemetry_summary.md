@@ -1,0 +1,45 @@
+# Test Execution Telemetry Summary
+
+- run_slug: `20251207-0239`
+- pipeline_status: success
+- log_report_available: no
+- warnings_total: unknown
+- slow_tests_over_threshold: unknown
+- heatmap_mode: logs_fallback
+- hardening_status: ok
+- hardening_high_severity: unknown
+- coverage_status: ok
+- health_report_source: none
+- completed_at: 2025-12-07T02:39:23+00:00
+
+## Runtime Metrics
+
+| Step | Status | Duration (s) | Detail |
+| --- | --- | --- | --- |
+| collect | success | 0.17 | no pytest logs discovered |
+| analyse | success | 6.38 | analysis completed |
+| summarize | skipped | 0.00 | no structured log report found |
+
+## Failure Highlights
+
+- detected_failures: 0
+- failure_examples:
+  - none
+
+## Artifact Locations
+
+- log_report: (missing)
+- coverage_report: `.repo_studios/reports/producer_reports/test_coverage_reports/test_coverage-20251207_023916`
+- heatmap: `.repo_studios/reports/aggregator_reports/churn_complexity_heatmap/churn_complexity_heatmap-2025-12-07_023923`
+- hardening: `.repo_studios/reports/producer_reports/test_hardening_reports/test_hardening-20251207_023916`
+- health_report: (missing)
+- health_bundle_summary: (missing)
+
+## Step Outcomes
+
+- collect: success
+  - detail: no pytest logs discovered
+- analyse: success
+  - detail: analysis completed
+- summarize: skipped
+  - detail: no structured log report found

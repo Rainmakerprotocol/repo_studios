@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import importlib
+import json
 import logging
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -17,6 +18,8 @@ from command_center.scripts.libraries import (
     PathSpec,
     PathsConfig,
     ReportArtifact,
+    ArtifactMetrics,
+    measure_artifact_directory,
     build_standard_options,
     build_standard_paths,
     write_report_artifacts,
@@ -299,6 +302,8 @@ def run(argv: Sequence[str] | None = None) -> int:
     options = build_options(args)
     configure_logging(options.log_level)
 
+    meta_started = datetime.now(timezone.utc)
+
     LOGGER.info("Starting full diagnostic orchestrator (stop_on_first_failure=%s)", options.stop_on_first_failure)
 
     selected_order = _select_topics(
@@ -398,6 +403,62 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     finished_at = datetime.now(timezone.utc)
 
+    artifact_metrics_by_slug: dict[str, ArtifactMetrics] = {}
+    total_topic_runtime = 0.0
+    succeeded_topics = 0
+    failed_topics = 0
+    skipped_topics = 0
+    artifact_file_total = 0
+    artifact_byte_total = 0
+
+    for record in records:
+        metrics = measure_artifact_directory(record.artifact_dir)
+        artifact_metrics_by_slug[record.slug] = metrics
+        artifact_file_total += metrics.file_count
+        artifact_byte_total += metrics.total_bytes
+        duration = record.duration_seconds()
+        if duration:
+            total_topic_runtime += duration
+        if record.status == "succeeded":
+            succeeded_topics += 1
+        elif record.status == "failed":
+            failed_topics += 1
+        else:
+            skipped_topics += 1
+
+    overall_runtime = (finished_at - meta_started).total_seconds()
+    metrics_payload: dict[str, float | int] = {
+        "topics_total": len(records),
+        "topics_succeeded": succeeded_topics,
+        "topics_failed": failed_topics,
+        "topics_skipped": skipped_topics,
+        "topics_duration_seconds": total_topic_runtime,
+        "runtime_seconds": overall_runtime if overall_runtime >= 0 else 0.0,
+        "artifact_files": artifact_file_total,
+        "artifact_bytes": artifact_byte_total,
+    }
+
+    manifest_topics = [
+        {
+            "slug": record.slug,
+            "module": record.module,
+            "viewer": record.viewer,
+            "topic": record.topic,
+            "status": record.status,
+            "exit_code": record.exit_code,
+            "started_at": record.started_at.isoformat() if record.started_at else None,
+            "finished_at": record.finished_at.isoformat() if record.finished_at else None,
+            "duration_seconds": record.duration_seconds(),
+            "run_slug": record.run_slug,
+            "artifact_dir": _relativize(record.artifact_dir, paths.repo_root),
+            "artifact_files": artifact_metrics_by_slug[record.slug].file_count,
+            "artifact_bytes": artifact_metrics_by_slug[record.slug].total_bytes,
+            "argv": list(record.argv),
+            "message": record.message,
+        }
+        for record in records
+    ]
+
     manifest = {
         "schema_version": SCHEMA_VERSION,
         "viewer": META_VIEWER,
@@ -413,58 +474,63 @@ def run(argv: Sequence[str] | None = None) -> int:
             "exclude": list(options.exclude),
             "artifacts_to_keep": options.artifacts_to_keep,
         },
-        "topics": [
-            {
-                "slug": record.slug,
-                "module": record.module,
-                "viewer": record.viewer,
-                "topic": record.topic,
-                "status": record.status,
-                "exit_code": record.exit_code,
-                "started_at": record.started_at.isoformat() if record.started_at else None,
-                "finished_at": record.finished_at.isoformat() if record.finished_at else None,
-                "duration_seconds": record.duration_seconds(),
-                "run_slug": record.run_slug,
-                "artifact_dir": _relativize(record.artifact_dir, paths.repo_root),
-                "argv": list(record.argv),
-                "message": record.message,
-            }
-            for record in records
-        ],
+        "topics": manifest_topics,
+        "metrics": dict(metrics_payload),
     }
 
     summary_markdown = _summarize(records)
-    telemetry = {
+    telemetry_topics = [
+        {
+            "slug": record.slug,
+            "status": record.status,
+            "exit_code": record.exit_code,
+            "duration_seconds": record.duration_seconds(),
+            "artifact_files": artifact_metrics_by_slug[record.slug].file_count,
+            "artifact_bytes": artifact_metrics_by_slug[record.slug].total_bytes,
+        }
+        for record in records
+    ]
+
+    telemetry_payload = {
         "viewer": META_VIEWER,
         "topic": META_TOPIC,
         "run_slug": meta_run_slug,
         "success": success,
         "started_at": options.run_timestamp.isoformat(),
         "finished_at": finished_at.isoformat(),
-        "topics": [
-            {
-                "slug": record.slug,
-                "status": record.status,
-                "exit_code": record.exit_code,
-                "duration_seconds": record.duration_seconds(),
-            }
-            for record in records
-        ],
+        "topics": telemetry_topics,
+        "metrics": dict(metrics_payload),
     }
 
-    write_report_artifacts(
+    report_artifacts = write_report_artifacts(
         stem=META_TOPIC,
         timestamp=options.run_timestamp,
         output_dir=paths.reports_root,
         artifacts=[
             ReportArtifact(filename="manifest.json", kind="json", content=lambda: manifest),
             ReportArtifact(filename="summary.md", kind="text", content=lambda: summary_markdown),
-            ReportArtifact(filename="telemetry.json", kind="json", content=lambda: telemetry),
+            ReportArtifact(filename="telemetry.json", kind="json", content=lambda: telemetry_payload),
         ],
         keep=options.artifacts_to_keep,
         viewer=META_VIEWER,
         topic=META_TOPIC,
     )
+
+    meta_artifact_metrics = measure_artifact_directory(report_artifacts.run_dir)
+    metrics_payload.update(
+        {
+            "meta_artifact_files": meta_artifact_metrics.file_count,
+            "meta_artifact_bytes": meta_artifact_metrics.total_bytes,
+        }
+    )
+    manifest["metrics"] = dict(metrics_payload)
+    telemetry_payload["metrics"] = dict(metrics_payload)
+
+    manifest_path = report_artifacts.artifacts["manifest.json"]
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    telemetry_path = report_artifacts.artifacts["telemetry.json"]
+    telemetry_path.write_text(json.dumps(telemetry_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     if success:
         LOGGER.info("Full diagnostic orchestrator completed successfully")

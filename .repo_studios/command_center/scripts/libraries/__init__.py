@@ -31,6 +31,7 @@ from .guardrails import (
     GuardrailConfigError,
     GuardrailConstraints,
     GuardrailViolationError,
+    enforce_report_naming,
     enforce_run_size_limit,
     load_guardrail_config,
 )
@@ -61,7 +62,12 @@ from .topic_pipeline import (
     step_success,
 )
 from .summarizer_runner import load_summarizer, run_summarizer, SummarizerError
-from .telemetry_emitters import TopicTelemetry, build_pipeline_telemetry
+from .telemetry_emitters import (
+    ArtifactMetrics,
+    TopicTelemetry,
+    build_pipeline_telemetry,
+    measure_artifact_directory,
+)
 from .catalog_registry import CatalogEntry, CatalogRegistry
 from .prune_logs import PruneResult, prune_run_directories
 from .test_log_analysis import (
@@ -100,6 +106,7 @@ __all__ = [
     "GuardrailViolationError",
     "load_guardrail_config",
     "enforce_run_size_limit",
+    "enforce_report_naming",
     "AutomationManifest",
     "GuardrailState",
     "ManifestFile",
@@ -125,6 +132,8 @@ __all__ = [
     "run_summarizer",
     "TopicTelemetry",
     "build_pipeline_telemetry",
+    "ArtifactMetrics",
+    "measure_artifact_directory",
     "CatalogEntry",
     "CatalogRegistry",
     "PruneResult",

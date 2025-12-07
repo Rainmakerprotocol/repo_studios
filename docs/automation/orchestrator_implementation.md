@@ -2,7 +2,7 @@
 title: Orchestrator Implementation Plan
 status: draft
 version: 2025-11-29
-last_updated: 2025-12-01
+last_updated: 2025-12-07
 owner: repo_studios_ai
 tags:
   - automation
@@ -564,26 +564,71 @@ roadmap.
     `docs/automation/examples/healthview_manifest_example.md` and refreshed the plan section to
     reference slug placement, bundle naming, and viewer integration notes.
 - [ ] Phase 5 – Meta-Orchestrator and Tooling
-  - [ ] Implement `orchestrate_full_diagnostic.py` with include/exclude controls, manifest
+  - [x] Implement `orchestrate_full_diagnostic.py` with include/exclude controls, manifest
     emission, and stop-on-first-failure toggles.
-  - [ ] Add `studio-orchestrate-<topic>` and `studio-orchestrate-full-diagnostic` make targets with
+    - 2025-12-04: Added `.repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py`
+      with module caching, topic selection guards, manifest/summary/telemetry emission via
+      `write_report_artifacts`, and CLI options for include/exclude plus failure handling; validated
+      with `.venv/Scripts/python.exe -m pytest
+      .repo_studios/tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py -q`.
+  - [x] Add `studio-orchestrate-<topic>` and `studio-orchestrate-full-diagnostic` make targets with
     logging guidance for local runs.
-  - [ ] Introduce telemetry counters for runtime and artifact sizing to inform future
-    parallelisation decisions and support Healthview dashboard instrumentation.
-  - [ ] Invoke the naming-audit utility inside documentation/reporting orchestrators to block
-    non-compliant artifacts.
+    - 2025-12-04: Expanded `.repo_studios/Makefile` with `LOG_LEVEL` defaults, pre-run logging
+      prompts, and new targets for `studio-orchestrate-test-execution-telemetry`,
+      `studio-orchestrate-dependency-import-hygiene`, `studio-orchestrate-monkey-patch-oversight`,
+      and `studio-orchestrate-full-diagnostic`; refreshed existing topic targets to honour the same
+      log-level override so local runs can dial verbosity without editing Python modules.
+  - 2025-12-05: Introduced telemetry counters for runtime and artifact sizing, updating
+    `command_center/scripts/libraries/telemetry_emitters.py` and
+    `command_center/scripts/orchestrators/orchestrate_full_diagnostic.py` to record per-topic and
+    meta-level runtimes plus artifact counts; validated via
+    `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/orchestrators -q`
+    and confirmed manifest/telemetry outputs at
+    `.repo_studios/command_center/reports/healthview/full_diagnostic/20251205-1448/` before cleanup.
+  - 2025-12-05: Invoked the naming-audit utility inside documentation/reporting orchestrators so
+    Docs Health and Standards Integrity runs fail fast when `latest_*` aliases or other
+    non-compliant artifacts linger.
 - [ ] Phase 6 – Documentation and Adoption
-  - [ ] Update `.repo_studios/scripts/script_inventory_architecture.md` and automation guides with
+  - [x] Update `.repo_studios/scripts/script_inventory_architecture.md` and automation guides with
     new orchestrators and helper references.
-  - [ ] Publish Healthview onboarding material for Command Center, including tab wiring notes,
+    - 2025-12-05: Refreshed the script inventory to catalog Docs Health, Dependency & Import Hygiene,
+      Standards Integrity, and the Command Center pipeline orchestrators alongside the
+      `guardrails` helper, and expanded `orchestrator_automation_hooks.md` with dependency/import hygiene
+      surfaces plus naming-audit guardrail enforcement notes. Validated the updates via
+      `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/standards_integrity/test_run_standards_integrity.py -q`.
+  - [x] Publish Healthview onboarding material for Command Center, including tab wiring notes,
     slug placement, and viewer-specific CSS/JS considerations.
-  - [ ] Announce migration timelines, flag deprecated targets, and capture agent integration
+    - 2025-12-05: Authored `docs/automation/healthview_onboarding.md`, detailing selector wiring,
+      viewer tab integration, naming expectations, and CSS/JS guardrails so Command Center crews can
+      activate the Healthview tab without regressions. Documentation-only change; no tests required
+      beyond existing linting standards.
+  - [x] Announce migration timelines, flag deprecated targets, and capture agent integration
     outcomes.
-  - [ ] Produce a cleanup checklist covering legacy doc pages, README pointers, and references in
+    - 2025-12-05: Published `docs/automation/orchestrator_migration_announcement.md` with the cutover
+      schedule, flagged legacy aliases in
+      `.repo_studios/docs/automation/orchestrator_automation_hooks.md`, and recorded the Healthview
+      prompt validation (`.repo_studios/command_center/docs/phase_6/validation_runs/2025-12-05-healthview_prompt_review.md`,
+      `PROMPT_VALIDATION_RESULTS.md`) confirming agents recognise the new viewer and topic targets.
+  - [x] Produce a cleanup checklist covering legacy doc pages, README pointers, and references in
     tests so removal work is traceable.
+    - 2025-12-05: Authored `docs/automation/orchestrator_legacy_cleanup_checklist.md` capturing
+      documentation, Makefile, test, CI, and artifact retirement tasks so Phase 8 can track shim
+      removal and report cleanup.
 - [ ] Phase 7 – Validation and Rollout
-  - [ ] Run sequential dry runs across all topics, recording runtimes, artifact paths, and
+  - [x] Run sequential dry runs across all topics, recording runtimes, artifact paths, and
     summariser outputs.
+    - 2025-12-07: Invoked the full diagnostic meta orchestrator via
+      `command_center.scripts.orchestrators.orchestrate_full_diagnostic.run()` with `--keep-going`
+      (repo root `C:/Users/genet/repo_studios`), producing
+      `.repo_studios/command_center/reports/healthview/full_diagnostic/20251207-0239/` with a
+      19.1s runtime (5/6 topics succeeded). The dependency/import hygiene topic exited with status
+      `failed` because the typecheck step reported `status=error` despite zero logged errors in
+      `.repo_studios/reports/producer_reports/typecheck_reports/typecheck-20251207_023916/`; captured
+      telemetry lives alongside the slugged bundle for follow-up analysis.
+    - Follow-up: Audit the dependency/import hygiene telemetry at
+      `.repo_studios/command_center/reports/healthview/dependency_import_hygiene/20251207-0239/` and
+      the associated typecheck producer output to determine why the run surfaced `status=error`
+      before rerunning the suite.
   - [ ] Enable CI coverage and ensure tests gate on orchestrator and helper suites.
   - [ ] Close any backlog items opened for missing utilities or schema adjustments before marking
     the project live.
@@ -800,6 +845,39 @@ Example manifest path: `.../healthview/test_execution_telemetry/20251129-2102/ma
 - 2025-12-04: Published the Healthview manifest example under
   `docs/automation/examples/healthview_manifest_example.md`, documenting slug placement, bundle
   naming, and selector integration guidance; documentation-only update, no tests required.
+- [x] 2025-12-05: Captured runtime and artifact sizing telemetry in
+  `command_center/scripts/libraries/telemetry_emitters.py` and the meta orchestrator, exercised via
+  `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/orchestrators -q`
+  with manual verification of `.repo_studios/command_center/reports/healthview/full_diagnostic/20251205-1448/{manifest.json,telemetry.json}`.
+- [x] 2025-12-05: Wired `enforce_report_naming` guardrails into Docs Health
+  (`.repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py`) and Standards
+  Integrity (`.repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py`),
+  extending failure-path coverage in
+  `.repo_studios/tests/tests_command_center/docs_health/test_run_docs_health_overview.py` and
+  `.repo_studios/tests/tests_command_center/standards_integrity/test_run_standards_integrity.py`;
+  validated with
+  `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/docs_health/test_run_docs_health_overview.py`
+  and
+  `C:/Users/genet/repo_studios/.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/standards_integrity/test_run_standards_integrity.py`
+  to confirm non-compliant artifacts now halt the orchestrators.
+- [x] 2025-12-05: Published `docs/automation/healthview_onboarding.md`, capturing selector wiring,
+  viewer tab integration steps, naming expectations, and CSS/JS safeguards for the Healthview
+  launch. Documentation-only update; no tests required beyond existing markdown standards.
+- 2025-12-05: Posted `docs/automation/orchestrator_migration_announcement.md`, added migration
+  notices to `.repo_studios/docs/automation/orchestrator_automation_hooks.md`, and archived the
+  Healthview prompt review results in
+  `.repo_studios/command_center/docs/phase_6/validation_runs/2025-12-05-healthview_prompt_review.md`
+  plus `PROMPT_VALIDATION_RESULTS.md`.
+- 2025-12-05: Created the legacy cleanup tracker at
+  `docs/automation/orchestrator_legacy_cleanup_checklist.md` so Phase 8 decommissioning can retire
+  documentation, Make aliases, tests, CI references, and legacy report folders in a controlled,
+  auditable sequence (documentation-only update).
+- [x] 2025-12-04: Added LOG_LEVEL-aware make targets in `.repo_studios/Makefile` for
+  `studio-orchestrate-test-execution-telemetry`, `studio-orchestrate-dependency-import-hygiene`,
+  `studio-orchestrate-monkey-patch-oversight`, and `studio-orchestrate-full-diagnostic`, plus
+  refreshed existing topic targets with the same logging guidance; verified wiring with
+  `make -C .repo_studios studio-orchestrate-test-execution-telemetry LOG_LEVEL=DEBUG --dry-run` to
+  confirm command resolution without kicking off long pipelines.
 - 2025-11-30: Reconciled Dependency & Import Hygiene make targets with the forthcoming CLI—tracked legacy recipes (`studio-generate-dependency-hygiene`, `studio-generate-import-graph`, `studio-scan-code-placeholders`, `studio-run-batch-cleanup`, `studio-generate-typecheck-report`, `studio-refresh-mypy-baselines`) and noted the orchestrator pass-through flags for parity; documentation-only, no tests.
 - 2025-11-30: Recorded supporting utility hooks for the hygiene orchestrator—`scan_code_placeholders.py` consumes `.repo_studios/config/placeholder_allowlist.txt` and the governance cadence in `command_center/docs/phase_7/PLACEHOLDER_DEBT_PLAN.md`; the typecheck/refresh duo reads targets and strictness from `pyproject.toml` (`tool.mypy.targets`, `tool.mypy.overrides`, `tool.repo_studios.strict`) while deferring to `HEALTH_TYPECHECK_FAST`; import hygiene relies on the command center library helpers plus the boundary configuration surfaced by `validate_import_boundaries.py`. Documentation-only, test suite unchanged.
 - 2025-11-30: Catalogued Monkey Patch Oversight scripts and artifact flows—`scan_monkey_patches.py` → `classify_monkey_patches.py` → `analyze_monkey_patch_trends.py`, with shared risk helpers; documentation-only update.

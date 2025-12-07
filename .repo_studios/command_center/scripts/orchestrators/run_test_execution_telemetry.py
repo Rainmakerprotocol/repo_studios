@@ -34,6 +34,7 @@ from command_center.scripts.libraries import (
     build_standard_options,
     build_standard_paths,
     build_topic_pipeline,
+    measure_artifact_directory,
     step_failed,
     step_skipped,
     step_success,
@@ -579,6 +580,7 @@ def run(argv: Sequence[str] | None = None) -> int:
     }
 
     telemetry_payload = telemetry.as_dict()
+
     manifest = {
         "schema_version": SCHEMA_VERSION,
         "viewer": VIEWER_SLUG,
@@ -643,6 +645,12 @@ def run(argv: Sequence[str] | None = None) -> int:
         artifacts_section["summary_markdown"] = _relativize(summary_markdown_path, paths.repo_root)
     if summary_json_path:
         artifacts_section["summary_json"] = _relativize(summary_json_path, paths.repo_root)
+
+    artifact_metrics = measure_artifact_directory(result_artifacts.run_dir)
+    metrics_section = telemetry_payload.setdefault("metrics", {})
+    metrics_section.update(artifact_metrics.as_dict())
+    manifest["telemetry"] = telemetry_payload
+    manifest["metrics"] = dict(metrics_section)
 
     manifest_path = result_artifacts.artifacts["manifest.json"]
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")

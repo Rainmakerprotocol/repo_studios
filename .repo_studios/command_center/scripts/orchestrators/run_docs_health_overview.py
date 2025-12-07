@@ -3,6 +3,7 @@
 
 Exports Healthview bundles to `.repo_studios/command_center/reports/healthview/docs_health/<timestamp>/`
 and replaces the legacy docs inventory/anchor/analysis chain that previously ran ad hoc. The
+)
 pipeline regenerates the doc index, validates anchors, aggregates health signals, and publishes the
 summary bundle that feeds both CommandView and Healthview. Typical runs span roughly six to eight
 minutes depending on anchor validation and churn aggregation time.
@@ -22,6 +23,7 @@ from typing import Any, Callable, Sequence
 
 from command_center.scripts.libraries import (
     CatalogRegistry,
+    GuardrailViolationError,
     KeepSpec,
     OptionsConfig,
     PathSpec,
@@ -33,6 +35,8 @@ from command_center.scripts.libraries import (
     build_standard_options,
     build_standard_paths,
     build_topic_pipeline,
+    enforce_report_naming,
+    measure_artifact_directory,
     step_failed,
     step_skipped,
     step_success,
@@ -945,6 +949,7 @@ def run(argv: Sequence[str] | None = None) -> int:
     run_slug = options.run_timestamp.strftime("%Y%m%d-%H%M")
     telemetry = build_pipeline_telemetry(result, viewer=VIEWER_SLUG, topic=HEALTHVIEW_TOPIC, run_slug=run_slug)
     completed_at = datetime.now(timezone.utc)
+    telemetry_payload = telemetry.as_dict()
 
     artifacts_section: dict[str, str | None] = {
         "doc_index_run": _relativize(doc_index_outcome.run_dir if doc_index_outcome else None, paths.repo_root),
@@ -995,7 +1000,7 @@ def run(argv: Sequence[str] | None = None) -> int:
         "topic": HEALTHVIEW_TOPIC,
         "run_slug": run_slug,
         "generated_at": completed_at.isoformat(),
-        "telemetry": telemetry.as_dict(),
+        "telemetry": telemetry_payload,
         "summary": aggregator_outcome.summary if aggregator_outcome and aggregator_outcome.summary else {},
         "artifacts": artifacts_section,
         "inputs": {
@@ -1027,9 +1032,9 @@ def run(argv: Sequence[str] | None = None) -> int:
     artifacts = [
         ReportArtifact(filename="manifest.json", kind="json", content=lambda: manifest),
         ReportArtifact(filename="summary.md", kind="text", content=lambda: summary_markdown),
-        ReportArtifact(filename="telemetry.json", kind="json", content=lambda: telemetry.as_dict()),
+        ReportArtifact(filename="telemetry.json", kind="json", content=lambda: telemetry_payload),
     ]
-    write_report_artifacts(
+    result_artifacts = write_report_artifacts(
         stem=HEALTHVIEW_TOPIC,
         timestamp=options.run_timestamp,
         output_dir=paths.healthview_root,
@@ -1038,6 +1043,30 @@ def run(argv: Sequence[str] | None = None) -> int:
         viewer=VIEWER_SLUG,
         topic=HEALTHVIEW_TOPIC,
     )
+
+    artifact_metrics = measure_artifact_directory(result_artifacts.run_dir)
+    metrics_section = telemetry_payload.setdefault("metrics", {})
+    metrics_section.update(artifact_metrics.as_dict())
+    manifest["telemetry"] = telemetry_payload
+    manifest["metrics"] = dict(metrics_section)
+
+    manifest_path = result_artifacts.artifacts["manifest.json"]
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    telemetry_path = result_artifacts.artifacts["telemetry.json"]
+    telemetry_path.write_text(json.dumps(telemetry_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    try:
+        enforce_report_naming(
+            reports_root=paths.healthview_root,
+            run_dir=result_artifacts.run_dir,
+            viewer=VIEWER_SLUG,
+            topic=HEALTHVIEW_TOPIC,
+            artifact_roles=("manifest.json", "summary.md", "summary.json", "telemetry.json"),
+        )
+    except GuardrailViolationError as exc:
+        LOGGER.error("Report naming audit failed: %s", exc)
+        return 1
 
     LOGGER.info("Docs Health orchestrator complete (slug=%s)", run_slug)
     return 0

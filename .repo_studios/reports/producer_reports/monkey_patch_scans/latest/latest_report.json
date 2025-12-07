@@ -24,36 +24,41 @@
     "src/audio/**",
     "src/vision/**"
   ],
-  "files_scanned": 212,
-  "files_with_findings": 59,
+  "files_scanned": 228,
+  "files_with_findings": 66,
   "parse_errors": 0,
   "project_packages": [
     "tests"
   ],
   "repo_root": "C:\\Users\\genet\\repo_studios",
-  "run_id": "monkey_patch_scan-20251201_115542",
+  "run_id": "monkey_patch_scan-20251207_023935",
   "scan_root": ".",
   "schema_version": 1,
   "status": "ok",
   "strict": false,
   "summary": {
     "by_category": {
-      "attribute_reassignment_on_import": 3,
+      "attribute_reassignment_on_import": 4,
       "global_env_mutation": 1,
-      "setattr_on_import_or_class": 46,
-      "sys_modules_assignment": 54
+      "setattr_on_import_or_class": 65,
+      "sys_modules_assignment": 60
     },
     "by_import_base": {
       "fcntl": 1,
-      "tomllib": 2
+      "tomllib": 2,
+      "yaml": 1
     },
     "top_files": [
       {
-        "count": 12,
+        "count": 13,
+        "path": ".repo_studios\\tests\\tests_command_center\\dependency_import_hygiene\\test_run_dependency_import_hygiene.py"
+      },
+      {
+        "count": 13,
         "path": ".repo_studios\\tests\\tests_orchestrators\\test_run_batch_cleanup.py"
       },
       {
-        "count": 8,
+        "count": 11,
         "path": ".repo_studios\\tests\\tests_orchestrators\\test_run_standards_gap_suite.py"
       },
       {
@@ -65,7 +70,7 @@
         "path": ".repo_studios\\tests\\tests_command_center\\viewer\\test_refresh.py"
       },
       {
-        "count": 4,
+        "count": 5,
         "path": ".repo_studios\\tests\\tests_orchestrators\\test_run_pytest_log_capture.py"
       },
       {
@@ -83,14 +88,10 @@
       {
         "count": 2,
         "path": ".repo_studios\\tests\\tests_consumers\\test_generate_fault_artifacts.py"
-      },
-      {
-        "count": 2,
-        "path": ".repo_studios\\tests\\tests_consumers\\test_generate_test_log_health_report.py"
       }
     ]
   },
-  "timestamp": "2025-12-01T11:55:42.700786+00:00",
-  "total_findings": 104,
+  "timestamp": "2025-12-07T02:39:35.371864+00:00",
+  "total_findings": 130,
   "with_git": false
 }

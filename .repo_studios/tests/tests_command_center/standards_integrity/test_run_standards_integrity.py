@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from contextlib import contextmanager
 from pathlib import Path
 
 from command_center.scripts.orchestrators import run_standards_integrity as orchestrator
@@ -15,21 +16,59 @@ def _arg_value(argv: list[str], option: str, default: Path) -> Path:
     return default
 
 
-def test_orchestrator_emits_healthview_bundle(tmp_path: Path) -> None:
-    repo_root = Path(__file__).resolve().parents[4]
+def _build_args(
+    *,
+    repo_root: Path,
+    index_output_dir: Path,
+    gap_output_dir: Path,
+    diff_output_dir: Path,
+    prompt_output_dir: Path,
+    pending_path: Path,
+    categories_path: Path,
+    healthview_root: Path,
+    timestamp: str,
+) -> list[str]:
+    return [
+        "--repo-root",
+        str(repo_root),
+        "--index-output-dir",
+        str(index_output_dir),
+        "--index-path",
+        str(index_output_dir / "latest_index.yaml"),
+        "--categories-path",
+        str(categories_path),
+        "--gap-output-dir",
+        str(gap_output_dir),
+        "--diff-output-dir",
+        str(diff_output_dir),
+        "--prompt-output-dir",
+        str(prompt_output_dir),
+        "--pending-path",
+        str(pending_path),
+        "--healthview-root",
+        str(healthview_root),
+        "--artifacts-to-keep",
+        "2",
+        "--index-artifacts-to-keep",
+        "2",
+        "--gap-artifacts-to-keep",
+        "2",
+        "--prompt-artifacts-to-keep",
+        "2",
+        "--timestamp",
+        timestamp,
+        "--log-level",
+        "DEBUG",
+    ]
 
-    index_output_dir = tmp_path / "index"
-    gap_output_dir = tmp_path / "gap"
-    diff_output_dir = tmp_path / "diff"
-    prompt_output_dir = tmp_path / "prompts"
-    healthview_root = tmp_path / "healthview"
-    pending_path = tmp_path / "pending.yaml"
-    pending_path.write_text("- item: test\n", encoding="utf-8")
 
-    categories_path = (
-        repo_root / ".repo_studios/scripts/.repo_studios/standards_categories.yaml"
-    )
-
+@contextmanager
+def _patched_loader(
+    repo_root: Path,
+    index_output_dir: Path,
+    gap_output_dir: Path,
+    prompt_output_dir: Path,
+):
     original_loader = orchestrator._load_callable
 
     def _fake_loader(script_path: Path, module_name: str, attribute: str):
@@ -37,9 +76,9 @@ def test_orchestrator_emits_healthview_bundle(tmp_path: Path) -> None:
 
         if resolved == (repo_root / orchestrator.GENERATE_SCRIPT).resolve():
             def _fake_generate(argv: list[str] | None = None) -> int:
-                argv = argv or []
-                output_dir = _arg_value(argv, "--output-dir", index_output_dir)
-                index_path = _arg_value(argv, "--index-path", index_output_dir / "latest_index.yaml")
+                argv_list = argv or []
+                output_dir = _arg_value(argv_list, "--output-dir", index_output_dir)
+                index_path = _arg_value(argv_list, "--index-path", index_output_dir / "latest_index.yaml")
                 output_dir.mkdir(parents=True, exist_ok=True)
                 slug = "20240102_120000"
                 run_dir = output_dir / f"{orchestrator.INDEX_RUN_PREFIX}{slug}"
@@ -66,8 +105,8 @@ def test_orchestrator_emits_healthview_bundle(tmp_path: Path) -> None:
 
         if resolved == (repo_root / orchestrator.GAP_SCRIPT).resolve():
             def _fake_gap(argv: list[str] | None = None) -> dict[str, object]:
-                argv = argv or []
-                output_dir = _arg_value(argv, "--output-dir", gap_output_dir)
+                argv_list = argv or []
+                output_dir = _arg_value(argv_list, "--output-dir", gap_output_dir)
                 output_dir.mkdir(parents=True, exist_ok=True)
                 run_dir = output_dir / "standards_gap-20240102_120000"
                 run_dir.mkdir(parents=True, exist_ok=True)
@@ -86,8 +125,8 @@ def test_orchestrator_emits_healthview_bundle(tmp_path: Path) -> None:
 
         if resolved == (repo_root / orchestrator.PROMPT_SCRIPT).resolve():
             def _fake_prompt(argv: list[str] | None = None) -> dict[str, object]:
-                argv = argv or []
-                output_dir = _arg_value(argv, "--output-dir", prompt_output_dir)
+                argv_list = argv or []
+                output_dir = _arg_value(argv_list, "--output-dir", prompt_output_dir)
                 output_dir.mkdir(parents=True, exist_ok=True)
                 run_dir = output_dir / "standards_prompt_seed-20240102_1200"
                 run_dir.mkdir(parents=True, exist_ok=True)
@@ -108,44 +147,40 @@ def test_orchestrator_emits_healthview_bundle(tmp_path: Path) -> None:
         return original_loader(script_path, module_name, attribute)
 
     orchestrator._load_callable = _fake_loader
-
     try:
-        exit_code = orchestrator.run(
-            [
-                "--repo-root",
-                str(repo_root),
-                "--index-output-dir",
-                str(index_output_dir),
-                "--index-path",
-                str(tmp_path / "index" / "latest_index.yaml"),
-                "--categories-path",
-                str(categories_path),
-                "--gap-output-dir",
-                str(gap_output_dir),
-                "--diff-output-dir",
-                str(diff_output_dir),
-                "--prompt-output-dir",
-                str(prompt_output_dir),
-                "--pending-path",
-                str(pending_path),
-                "--healthview-root",
-                str(healthview_root),
-                "--artifacts-to-keep",
-                "2",
-                "--index-artifacts-to-keep",
-                "2",
-                "--gap-artifacts-to-keep",
-                "2",
-                "--prompt-artifacts-to-keep",
-                "2",
-                "--timestamp",
-                "2024-01-02T12:00:00+00:00",
-                "--log-level",
-                "DEBUG",
-            ]
-        )
+        yield
     finally:
         orchestrator._load_callable = original_loader
+
+def test_orchestrator_emits_healthview_bundle(tmp_path: Path) -> None:
+    repo_root = Path(__file__).resolve().parents[4]
+
+    index_output_dir = tmp_path / "index"
+    gap_output_dir = tmp_path / "gap"
+    diff_output_dir = tmp_path / "diff"
+    prompt_output_dir = tmp_path / "prompts"
+    healthview_root = tmp_path / "healthview"
+    pending_path = tmp_path / "pending.yaml"
+    pending_path.write_text("- item: test\n", encoding="utf-8")
+
+    categories_path = (
+        repo_root / ".repo_studios/scripts/.repo_studios/standards_categories.yaml"
+    )
+
+    args = _build_args(
+        repo_root=repo_root,
+        index_output_dir=index_output_dir,
+        gap_output_dir=gap_output_dir,
+        diff_output_dir=diff_output_dir,
+        prompt_output_dir=prompt_output_dir,
+        pending_path=pending_path,
+        categories_path=categories_path,
+        healthview_root=healthview_root,
+        timestamp="2024-01-02T12:00:00+00:00",
+    )
+
+    with _patched_loader(repo_root, index_output_dir, gap_output_dir, prompt_output_dir):
+        exit_code = orchestrator.run(args)
 
     assert exit_code == 0
 
@@ -177,3 +212,41 @@ def test_orchestrator_emits_healthview_bundle(tmp_path: Path) -> None:
     assert artifacts_section["gap_report"].endswith("report.json")
     assert artifacts_section["gap_summary"].endswith("bundle_summary.json")
     assert artifacts_section["prompt_run"].endswith("standards_prompt_seed-20240102_1200")
+
+
+def test_orchestrator_fails_on_invalid_topic_alias(tmp_path: Path) -> None:
+    repo_root = Path(__file__).resolve().parents[4]
+
+    index_output_dir = tmp_path / "index"
+    gap_output_dir = tmp_path / "gap"
+    diff_output_dir = tmp_path / "diff"
+    prompt_output_dir = tmp_path / "prompts"
+    healthview_root = tmp_path / "healthview"
+    pending_path = tmp_path / "pending.yaml"
+    pending_path.write_text("- item: test\n", encoding="utf-8")
+
+    categories_path = (
+        repo_root / ".repo_studios/scripts/.repo_studios/standards_categories.yaml"
+    )
+
+    alias_dir = healthview_root / "healthview" / "standards_integrity"
+    alias_dir.mkdir(parents=True, exist_ok=True)
+    (alias_dir / "latest_manifest.json").write_text("{}", encoding="utf-8")
+
+    args = _build_args(
+        repo_root=repo_root,
+        index_output_dir=index_output_dir,
+        gap_output_dir=gap_output_dir,
+        diff_output_dir=diff_output_dir,
+        prompt_output_dir=prompt_output_dir,
+        pending_path=pending_path,
+        categories_path=categories_path,
+        healthview_root=healthview_root,
+        timestamp="2024-01-03T12:00:00+00:00",
+    )
+
+    with _patched_loader(repo_root, index_output_dir, gap_output_dir, prompt_output_dir):
+        exit_code = orchestrator.run(args)
+
+    assert exit_code == 1
+    assert (alias_dir / "latest_manifest.json").exists()
