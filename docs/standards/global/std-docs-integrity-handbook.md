@@ -1,3 +1,15 @@
+---
+title: Docs Integrity Handbook
+status: draft
+version: 2025-12-07
+last_updated: 2025-12-07
+owner: repo_studios_docs
+tags:
+  - documentation
+  - governance
+  - integrity
+---
+
 # Docs Integrity Handbook
 
 This handbook defines the governed documentation surfaces used by Repo Studios tooling.

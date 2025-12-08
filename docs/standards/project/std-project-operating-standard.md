@@ -1,11 +1,18 @@
 ---
 title: Project Operating Standard
 status: draft
-version: 2025-11-25
-last_updated: 2025-11-25
+version: 2025-12-07
+last_updated: 2025-12-07
+owner: repo_studios_ops
+tags:
+  - operations
+  - governance
+  - project-management
 ---
 
 <!-- markdownlint-disable MD013 -->
+
+# Project Operating Standard
 
 This standard outlines the baseline project hygiene practices that every contributor should apply until the long-form documentation is synced.
 

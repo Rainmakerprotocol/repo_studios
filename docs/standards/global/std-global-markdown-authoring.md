@@ -1,8 +1,13 @@
 ---
 title: Global Markdown Authoring Standard
 status: draft
-version: 2025-11-25
-last_updated: 2025-11-25
+version: 2025-12-07
+last_updated: 2025-12-07
+owner: repo_studios_docs
+tags:
+  - markdown
+  - documentation
+  - standards
 ---
 
 <!-- markdownlint-disable MD013 -->

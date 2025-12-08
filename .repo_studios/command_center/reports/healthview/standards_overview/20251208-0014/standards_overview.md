@@ -1,0 +1,16 @@
+# Standards Overview
+
+Generated (UTC): 2025-12-08T00:14:45+00:00
+Label: summary
+
+## Metrics
+
+- Rules: 2
+- Markdown rules: 0
+- Extracted count: 0
+- Auto accept: False
+- Pending lines: unknown
+
+## Notes
+
+- Pending file missing or unreadable; pending line count unavailable.
