@@ -547,7 +547,7 @@ roadmap.
     Healthview artifact locations, legacy replacements, and expected runtime footprints for each
     topic runner (`.repo_studios/command_center/scripts/orchestrators/README.md` and module docstrings
     refreshed accordingly).
-- [ ] Phase 4 – Summaries and Healthview Artifacts
+- [x] Phase 4 – Summaries and Healthview Artifacts — Completed 2025-12-07 after validating topic summarizer suites and publishing the Healthview manifest guidance.
   - 2025-12-03: Updated the health suite and standards summarizers to consume the shared command
     center helper stack, emit Healthview-aligned JSON/Markdown bundles, and prune legacy mirrors;
     refreshed `.repo_studios/scripts/summarizers/summarize_health_suite.py` and
@@ -746,6 +746,8 @@ Example manifest path: `.../healthview/test_execution_telemetry/20251129-2102/ma
 
 ### Governance Notes (2025-11-30)
 
+- [x] 2025-12-07: `./.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_summarizers/test_summarize_health_suite.py .repo_studios/tests/tests_summarizers/test_summarize_standards.py .repo_studios/tests/tests_command_center/test_execution_telemetry/test_summarize_test_execution_telemetry.py -q` — summarizer suites remain ≥80% coverage, confirming Phase 4 artifacts stay healthy.
+- [x] 2025-12-07: Updated `docs/automation/orchestrator_implementation.md` to mark Phase 4 complete and preserve Healthview manifest guidance for topic summaries.
 - Completed Phase 2 helper scaffolding (`build_topic_pipeline`, `summarizer_runner`,
   `telemetry_emitters`, `catalog_registry`) with coverage backed by
   `tests/tests_command_center/test_topic_pipeline.py`, `test_summarizer_runner.py`,

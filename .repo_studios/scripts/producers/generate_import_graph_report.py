@@ -16,7 +16,7 @@ from typing import Any
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/import_graph_reports")
 RUN_PREFIX = "import_graph"
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = 5
 OWNED_DEFAULT = {
     ".repo_studios",
     "legacy",

@@ -21,7 +21,7 @@ DEFAULT_TEMPLATE_PATH = DEFAULT_SCHEMA_ROOT / "inventory_entry_template.yaml"
 DEFAULT_CONFIG_PATH = DEFAULT_SCHEMA_ROOT / "validator_config.yaml"
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/validate_inventory")
 RUN_PREFIX = "validate_inventory"
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = 5
 SCHEMA_VERSION = 1
 
 LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scripts"

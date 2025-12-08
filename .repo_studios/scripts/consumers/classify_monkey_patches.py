@@ -62,7 +62,7 @@ LEGACY_ROOT = Path(".repo_studios/monkey_patch")
 LEGACY_REPORT_NAME = "report.json"
 STRUCTURED_MATCHES_NAME = "matches.json"
 DEFAULT_OUTPUT_BASE = Path(".repo_studios/reports/consumer_reports/monkey_patch_risk")
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = 5
 BUNDLE_PREFIX = "monkey_patch_risk-"
 
 

@@ -58,7 +58,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when executed directl
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/test_coverage_reports")
 DEFAULT_COVERAGE_XML = Path(".repo_studios/reports/producer_reports/test_run_coverage/coverage.xml")
 RUN_PREFIX = "test_coverage"
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = 5
 SCHEMA_VERSION = 1
 
 

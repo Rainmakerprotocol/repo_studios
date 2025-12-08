@@ -44,7 +44,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/dependency_hygiene_reports")
 RUN_PREFIX = "dependency_hygiene"
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = 5
 DEFAULT_REQ_PATTERNS: tuple[str, ...] = (
     "requirements.txt",
     "requirements-dev.txt",

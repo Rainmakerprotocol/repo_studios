@@ -89,7 +89,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
 # Defaults (workspace-relative)
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
 RUN_PREFIX = "monkey_patch_scan"
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = 5
 SCHEMA_VERSION = 1
 DEFAULT_EXCLUDES = {
     ".git",

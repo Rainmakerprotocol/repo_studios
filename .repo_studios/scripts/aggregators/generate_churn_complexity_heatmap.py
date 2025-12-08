@@ -25,7 +25,7 @@ DEFAULT_LOGS_DIR = Path(".repo_studios/reports/orchestrator_logs/pytest_log_capt
 LEGACY_LOGS_DIR = Path(".repo_studios/pytest_logs")
 DEFAULT_METRICS_SOURCE: Path | None = None
 DEFAULT_WINDOW = 500
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = 5
 
 RUN_PREFIX = "churn_complexity_heatmap-"
 HEATMAP_JSON = "heatmap.json"
