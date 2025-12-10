@@ -14,9 +14,9 @@
   "artifacts": {
     "summary_json": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\consumer_reports\\fault_artifacts\\fault_artifacts-2025-11-28_214734-2025-11-28_1702\\summary.json",
     "summary_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\consumer_reports\\fault_artifacts\\fault_artifacts-2025-11-28_214734-2025-11-28_1702\\SUMMARY.md",
-    "run_summary_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702\\SUMMARY.md",
-    "stacks_csv": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702\\stacks.csv",
-    "combined_txt": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702\\dumps\\combined.txt"
+    "run_summary_md": "C\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-11-28_1702\\SUMMARY.md",
+    "stacks_csv": "C\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-11-28_1702\\stacks.csv",
+    "combined_txt": "C\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-11-28_1702\\dumps\\combined.txt"
   },
   "source_report": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\faulthandler_reports\\faulthandler_report-20251128_214734\\report.json"
 }

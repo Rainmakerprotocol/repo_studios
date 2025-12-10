@@ -30,9 +30,9 @@ Generated (UTC): 2025-12-07T13:35:22+00:00
 <!-- markdownlint-disable-next-line MD013 -->
 ## Source References
 
-- Run Directory: `C:\Users\genet\repo_studios\.repo_studios\reports\orchestrator_logs\faulthandler_logs\2025-11-28_1702`
+- Run Directory: `C:\Users\genet\repo_studios\.repo_studios\command_center\reports\rawview\fault_diagnostics_runs\2025-11-28_1702`
 - Source Type: producer
 - Producer Report: `C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\faulthandler_reports\faulthandler_report-20251207_133522\report.json`
-- Run Summary: `C:\Users\genet\repo_studios\.repo_studios\reports\orchestrator_logs\faulthandler_logs\2025-11-28_1702\SUMMARY.md`
-- Stacks CSV: `C:\Users\genet\repo_studios\.repo_studios\reports\orchestrator_logs\faulthandler_logs\2025-11-28_1702\stacks.csv`
-- Combined Stack Text: `C:\Users\genet\repo_studios\.repo_studios\reports\orchestrator_logs\faulthandler_logs\2025-11-28_1702\dumps\combined.txt`
+- Run Summary: `C:\Users\genet\repo_studios\.repo_studios\command_center\reports\rawview\fault_diagnostics_runs\2025-11-28_1702\SUMMARY.md`
+- Stacks CSV: `C:\Users\genet\repo_studios\.repo_studios\command_center\reports\rawview\fault_diagnostics_runs\2025-11-28_1702\stacks.csv`
+- Combined Stack Text: `C:\Users\genet\repo_studios\.repo_studios\command_center\reports\rawview\fault_diagnostics_runs\2025-11-28_1702\dumps\combined.txt`

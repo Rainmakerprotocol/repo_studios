@@ -27,9 +27,9 @@
     "resolved": {
       "allow_legacy": false,
       "artifacts_to_keep": 10,
-      "base_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs",
+      "base_dir": "C\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs",
       "derived_outdir": true,
-      "outdir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702",
+      "outdir": "C\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-11-28_1702",
       "tee_stderr": true
     },
     "retention": {
@@ -39,10 +39,10 @@
     "ts": "2025-11-28T17:02:14+00:00"
   },
   "process_salt": "py=3.11.9|plat=Windows-10-10.0.26200-SP0|run=2025-11-28_1702",
-  "run_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702",
+  "run_dir": "C\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-11-28_1702",
   "schema_version": 1,
   "signatures": [],
-  "stacks_log": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702\\stacks.log",
+  "stacks_log": "C\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-11-28_1702\\stacks.log",
   "summary": {
     "active_signature_count": 0,
     "first_seen_utc": null,

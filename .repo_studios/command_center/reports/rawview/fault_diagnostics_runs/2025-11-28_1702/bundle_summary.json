@@ -1,6 +1,6 @@
 {
   "status": "enabled",
-  "outdir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702",
+  "outdir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-11-28_1702",
   "writer": "file",
   "retention": {
     "keep": 10,

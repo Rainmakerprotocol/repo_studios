@@ -17,8 +17,8 @@
     "FAULT_LOGS_ALLOW_LEGACY": "0"
   },
   "resolved": {
-    "outdir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs\\2025-11-28_1702",
-    "base_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\orchestrator_logs\\faulthandler_logs",
+    "outdir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-11-28_1702",
+    "base_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs",
     "tee_stderr": true,
     "artifacts_to_keep": 10,
     "derived_outdir": true,
