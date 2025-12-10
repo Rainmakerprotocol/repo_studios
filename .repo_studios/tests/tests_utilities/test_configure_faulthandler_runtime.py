@@ -72,7 +72,14 @@ def test_bootstrap_writes_artifacts(tmp_path: Path, monkeypatch: pytest.MonkeyPa
 
     assert result["status"] in {"enabled", "warning"}
 
-    base_dir = tmp_path / ".repo_studios" / "reports" / "orchestrator_logs" / "faulthandler_logs"
+    base_dir = (
+        tmp_path
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "rawview"
+        / "fault_diagnostics_runs"
+    )
     outdir = base_dir / "2025-01-02_0304"
 
     assert outdir.exists()
@@ -102,7 +109,14 @@ def test_bootstrap_prunes_old_runs(tmp_path: Path, monkeypatch: pytest.MonkeyPat
     module.ACTIVE_WRITER = None
     module.LAST_BOOTSTRAP = None
 
-    base_dir = tmp_path / ".repo_studios" / "reports" / "orchestrator_logs" / "faulthandler_logs"
+    base_dir = (
+        tmp_path
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "rawview"
+        / "fault_diagnostics_runs"
+    )
     base_dir.mkdir(parents=True)
     for index in range(3):
         run_dir = base_dir / f"2024-01-0{index}_0000"
@@ -134,5 +148,12 @@ def test_bootstrap_disabled(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     result = module.bootstrap(env=dict(os.environ), now_factory=lambda: datetime(2025, 1, 1, tzinfo=UTC))
     assert result["status"] == "disabled"
 
-    base_dir = tmp_path / ".repo_studios" / "reports" / "orchestrator_logs" / "faulthandler_logs"
+    base_dir = (
+        tmp_path
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "rawview"
+        / "fault_diagnostics_runs"
+    )
     assert not base_dir.exists()

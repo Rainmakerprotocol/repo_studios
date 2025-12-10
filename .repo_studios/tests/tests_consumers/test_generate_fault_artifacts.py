@@ -35,7 +35,15 @@ def test_fault_artifacts_prefers_producer_report(tmp_path):
     consumer_mod = _load_module("generate_fault_artifacts", _CONSUMER_PATH)
 
     repo = tmp_path / "repo"
-    run_dir = repo / ".repo_studios" / "faulthandler" / "2025-01-01_000000"
+    run_dir = (
+        repo
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "rawview"
+        / "fault_diagnostics_runs"
+        / "2025-01-01_000000"
+    )
     run_dir.mkdir(parents=True)
     (run_dir / "stacks.log").write_text(_sample_stacks(), encoding="utf-8")
 
@@ -109,7 +117,15 @@ def test_fault_artifacts_scans_without_producer(tmp_path):
     consumer_mod = _load_module("generate_fault_artifacts", _CONSUMER_PATH)
 
     repo = tmp_path / "repo"
-    run_dir = repo / ".repo_studios" / "faulthandler" / "2025-01-02_000000"
+    run_dir = (
+        repo
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "rawview"
+        / "fault_diagnostics_runs"
+        / "2025-01-02_000000"
+    )
     run_dir.mkdir(parents=True)
     (run_dir / "stacks.log").write_text(_sample_stacks(), encoding="utf-8")
 
@@ -141,7 +157,15 @@ def test_fault_artifacts_prunes_history(tmp_path, monkeypatch):
 
     repo = tmp_path / "repo"
     consumer_output_root = repo / ".repo_studios" / "reports" / "consumer_reports" / "fault_artifacts"
-    run_dir = repo / ".repo_studios" / "faulthandler" / "2025-01-03_000000"
+    run_dir = (
+        repo
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "rawview"
+        / "fault_diagnostics_runs"
+        / "2025-01-03_000000"
+    )
     run_dir.mkdir(parents=True)
     (run_dir / "stacks.log").write_text(_sample_stacks(), encoding="utf-8")
 

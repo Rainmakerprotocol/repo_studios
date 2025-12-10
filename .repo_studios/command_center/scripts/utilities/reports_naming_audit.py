@@ -26,7 +26,7 @@ _DEFAULT_ARTIFACT_ROLES = (
     "metrics.json",
     "metrics.md",
 )
-_DEFAULT_VIEWERS = ("commandview", "healthview", "jarvis", "vscode")
+_DEFAULT_VIEWERS = ("commandview", "rawview", "healthview", "jarvis", "vscode")
 
 
 @dataclass(frozen=True)
@@ -71,7 +71,7 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
         "--allowed-viewers",
         nargs="*",
         default=None,
-        help="Optional allowlist of viewer slugs. Defaults to commandview, healthview, jarvis, vscode.",
+        help="Optional allowlist of viewer slugs. Defaults to commandview, rawview, healthview, jarvis, vscode.",
     )
     parser.add_argument(
         "--ignore-prefix",

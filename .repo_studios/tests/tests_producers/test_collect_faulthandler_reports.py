@@ -30,7 +30,14 @@ def test_collect_faulthandler_reports_emits_artifacts(tmp_path):
     producer_mod = _load_module("collect_faulthandler_reports", _PRODUCER_PATH)
 
     repo = tmp_path / "repo"
-    runs_dir = repo / ".repo_studios" / "faulthandler"
+    runs_dir = (
+        repo
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "rawview"
+        / "fault_diagnostics_runs"
+    )
     run_dir = runs_dir / "2025-01-01_000000"
     run_dir.mkdir(parents=True)
     (run_dir / "stacks.log").write_text(_sample_stacks(), encoding="utf-8")

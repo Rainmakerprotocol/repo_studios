@@ -7487,7 +7487,7 @@
         }
       ],
       "links": [],
-      "description": "`dump_faulthandler_snapshot.py` captures a one-off faulthandler stack dump and stores it as a structured bundle under `.repo_studios/reports/orchestrator_logs/faulthandler_snapshots/`. The utility is idempotent, keeps the latest stacks\u2026",
+      "description": "`dump_faulthandler_snapshot.py` captures a one-off faulthandler stack dump and stores it as a structured bundle under `.repo_studios/command_center/reports/rawview/fault_snapshots/`. The utility is idempotent, keeps the latest stacks\u2026",
       "size_bytes": 2571,
       "modified_utc": "2025-11-29T15:06:25.874741+00:00",
       "tags": [],

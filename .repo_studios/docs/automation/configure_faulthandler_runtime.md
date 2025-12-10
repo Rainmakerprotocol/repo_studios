@@ -5,7 +5,7 @@
 `configure_faulthandler_runtime.py` runs during interpreter start via the repository
 sitecustomize shim. It standardises faulthandler defaults across every entry
 point, creates structured artifacts under
-`.repo_studios/reports/orchestrator_logs/faulthandler_logs/`, and writes the
+`.repo_studios/command_center/reports/rawview/fault_diagnostics_runs/`, and writes the
 metadata that downstream producers, consumers, and orchestrators rely on. The
 helper now exposes a `bootstrap()` function so tests and utilities can drive the
 setup without triggering import-time side effects.
@@ -33,7 +33,7 @@ setup without triggering import-time side effects.
 | `FAULT_DISABLE` | `0` | Skip bootstrap entirely when set to a truthy value. |
 | `FAULT_ENABLE` | `1` in CI, `0` locally | Controls whether faulthandler activation runs. |
 | `FAULT_OUTDIR` | derived | Absolute path override for the run directory. |
-| `FAULT_BASE_DIR` | derived | Base directory when overriding the default orchestrator logs path. |
+| `FAULT_BASE_DIR` | derived | Base directory when overriding the default rawview capture path. |
 | `FAULT_ARTIFACTS_TO_KEEP` | `10` | Retention limit (including the latest run). |
 | `FAULT_TEE_STDERR` | `1` | Mirror writes to stderr when truthy. |
 | `FAULT_DUMP_LATER` | `1` in CI, `0` locally | Enables recurring hang dumps via `dump_traceback_later`. |
@@ -59,7 +59,7 @@ Run the tests with:
 
 ## Legacy Compatibility
 
-The helper defaults to the orchestrator logs tree, matching
+The helper defaults to the rawview fault diagnostics tree, matching
 `collect_faulthandler_reports.py` and the fault diagnostics orchestrator
 (`command_center/scripts/orchestrators/run_fault_diagnostics_overview.py`). Set
 `FAULT_LOGS_ALLOW_LEGACY=1` (or explicitly provide `FAULT_OUTDIR`) when you need

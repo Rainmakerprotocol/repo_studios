@@ -4,7 +4,7 @@
 
 `dump_faulthandler_snapshot.py` captures a one-off faulthandler stack dump and
 stores it as a structured bundle under
-`.repo_studios/reports/orchestrator_logs/faulthandler_snapshots/`. The utility is
+`.repo_studios/command_center/reports/rawview/fault_snapshots/`. The utility is
 idempotent, keeps the latest stacks accessible via `latest_*` pointers, and
 prunes historical snapshot directories to a configurable retention window.
 
@@ -23,7 +23,7 @@ prunes historical snapshot directories to a configurable retention window.
 | Variable | Default | Description |
 | --- | --- | --- |
 | `FAULT_SNAPSHOT_OUTDIR` | derived | Overrides the exact output directory. |
-| `FAULT_SNAPSHOT_BASE_DIR` | derived | Overrides the base directory (defaults to orchestrator logs). |
+| `FAULT_SNAPSHOT_BASE_DIR` | derived | Overrides the base directory (defaults to the Command Center rawview tree). |
 | `FAULT_SNAPSHOT_TO_KEEP` | `10` | Retention window for snapshot directories. |
 | `FAULT_LOGS_ALLOW_LEGACY` | `0` | When `1`, fallback to the legacy `.repo_studios/faulthandler/` root. |
 | `FAULT_OUTDIR` | `''` | Reused when `FAULT_SNAPSHOT_OUTDIR` is unset for compatibility. |
@@ -67,4 +67,4 @@ faulthandler writer.
 When `FAULT_LOGS_ALLOW_LEGACY=1`, snapshots fall back to
 `.repo_studios/faulthandler/<ts>/snapshot.txt`, matching the historical layout
 used by the CI bootstrap script. This is intended for migration-only scenarios;
-new automation should rely on the orchestrator logs tree.
+new automation should rely on the Command Center rawview tree.

@@ -2,10 +2,11 @@
 """Emit a structured faulthandler snapshot bundle.
 
 This utility replaces the legacy best-effort stderr dump with structured
-artifacts under `.repo_studios/reports/orchestrator_logs/faulthandler_snapshots/`
-so downstream tooling can ingest on-demand stack captures. It is safe to invoke
-multiple times; the helper maintains retention and records provenance in
-`MANIFEST.json` and `bundle_summary.json` beside the raw snapshot output.
+artifacts under
+`.repo_studios/command_center/reports/rawview/fault_snapshots/` so downstream
+tooling can ingest on-demand stack captures. It is safe to invoke multiple
+times; the helper maintains retention and records provenance in `MANIFEST.json`
+and `bundle_summary.json` beside the raw snapshot output.
 """
 
 from __future__ import annotations
@@ -40,7 +41,14 @@ from libraries import prune_run_directories
 def _default_base_dir(allow_legacy: bool) -> Path:
     if allow_legacy:
         return ROOT / ".repo_studios" / "faulthandler"
-    return ROOT / ".repo_studios" / "reports" / "orchestrator_logs" / "faulthandler_snapshots"
+    return (
+        ROOT
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "rawview"
+        / "fault_snapshots"
+    )
 
 
 def _is_truthy(value: Optional[str], *, default: bool = False) -> bool:

@@ -47,7 +47,7 @@ from utilities.fault_run_analysis import (  # noqa: E402
     build_fault_report,
 )
 
-DEFAULT_RUNS_RELATIVE = Path(".repo_studios/reports/orchestrator_logs/faulthandler_logs")
+DEFAULT_RUNS_RELATIVE = Path(".repo_studios/command_center/reports/rawview/fault_diagnostics_runs")
 LEGACY_RUNS_RELATIVE = Path(".repo_studios/faulthandler")
 DEFAULT_OUTPUT_RELATIVE = Path(".repo_studios/reports/producer_reports/faulthandler_reports")
 DEFAULT_COMMAND_CENTER_RELATIVE = Path(".repo_studios/command_center/reports/fault_artifacts_producer")

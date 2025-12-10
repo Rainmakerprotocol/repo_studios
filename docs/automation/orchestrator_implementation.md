@@ -2,7 +2,7 @@
 title: Orchestrator Implementation Plan
 status: draft
 version: 2025-11-29
-last_updated: 2025-12-07
+last_updated: 2025-12-08
 owner: repo_studios_ai
 tags:
   - automation
@@ -563,7 +563,7 @@ roadmap.
   - 2025-12-04: Published the Healthview manifest schema narrative and JSON example under
     `docs/automation/examples/healthview_manifest_example.md` and refreshed the plan section to
     reference slug placement, bundle naming, and viewer integration notes.
-- [ ] Phase 5 – Meta-Orchestrator and Tooling
+- [x] Phase 5 – Meta-Orchestrator and Tooling — Completed 2025-12-08 after landing the meta orchestrator, LOG_LEVEL-aware make targets, telemetry counters, and naming-audit guardrails across the topic runners.
   - [x] Implement `orchestrate_full_diagnostic.py` with include/exclude controls, manifest
     emission, and stop-on-first-failure toggles.
     - 2025-12-04: Added `.repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py`
@@ -588,7 +588,7 @@ roadmap.
   - 2025-12-05: Invoked the naming-audit utility inside documentation/reporting orchestrators so
     Docs Health and Standards Integrity runs fail fast when `latest_*` aliases or other
     non-compliant artifacts linger.
-- [ ] Phase 6 – Documentation and Adoption
+- [x] Phase 6 – Documentation and Adoption — Completed 2025-12-05 after updating the script inventory and automation guides, publishing Healthview onboarding material, announcing migration timelines, and shipping the legacy cleanup checklist.
   - [x] Update `.repo_studios/scripts/script_inventory_architecture.md` and automation guides with
     new orchestrators and helper references.
     - 2025-12-05: Refreshed the script inventory to catalog Docs Health, Dependency & Import Hygiene,
@@ -629,12 +629,15 @@ roadmap.
       `.repo_studios/command_center/reports/healthview/dependency_import_hygiene/20251207-0239/` and
       the associated typecheck producer output to determine why the run surfaced `status=error`
       before rerunning the suite.
-  - [ ] Enable CI coverage and ensure tests gate on orchestrator and helper suites.
-  - [ ] Close any backlog items opened for missing utilities or schema adjustments before marking
-    the project live.
+  - [x] 2025-12-08: Enabled CI coverage reporting for orchestrator and helper suites by upgrading `.github/workflows/command-center-automation.yml` to run pytest with coverage, upload the resulting `coverage.xml` artifact, and adding `pytest-cov` to `requirements.txt`; validated locally with `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center --cov=.repo_studios/command_center/scripts/orchestrators --cov=.repo_studios/command_center/scripts/libraries --cov-report=term-missing --cov-report=xml`.
+  - [x] 2025-12-08: Reviewed `.repo_studios/command_center/docs/library_integration_checklist.md`, `docs/automation/orchestrator_migration_announcement.md`, and `docs/automation/orchestrator_legacy_cleanup_checklist.md` to confirm no backlog tickets remain open for missing utilities or schema adjustments before project launch.
 - [ ] Phase 8 – Legacy Decommissioning
-  - [ ] Remove superseded orchestrator modules, CLI shims, and associated unit tests once parity is
-    verified, recording the change in the decision log.
+  - [x] 2025-12-08: Removed superseded orchestrator modules, CLI shims, and associated unit tests after
+    verifying topic parity; retired `.repo_studios/scripts/orchestrators/` shims, deleted
+    `tests/tests_orchestrators/test_run_*` suites, and replaced the batch-cleanup bridge inside
+    `command_center/scripts/orchestrators/run_dependency_import_hygiene.py` with an internal dry-run
+    plan emitter plus regression test coverage (`.venv/Scripts/python.exe -m pytest
+    .repo_studios/tests/tests_command_center/dependency_import_hygiene -q`).
   - [ ] Delete or archive obsolete artifacts under previous report folders, ensuring Healthview
     becomes the canonical destination.
 
@@ -744,8 +747,12 @@ Example manifest path: `.../healthview/test_execution_telemetry/20251129-2102/ma
 - Store Healthview manifest examples under `docs/automation/examples/` once stabilised to keep
   reviewers aligned on expected outputs.
 
-### Governance Notes (2025-11-30)
+-### Governance Notes (2025-11-30)
 
+- [x] 2025-12-08: Audited utility/schema backlog references (`.repo_studios/command_center/docs/library_integration_checklist.md`, `docs/automation/orchestrator_migration_announcement.md`, `docs/automation/orchestrator_legacy_cleanup_checklist.md`) and confirmed no outstanding tickets remain before Phase 7 launch.
+- [x] 2025-12-08: Reviewed Phase 6 documentation deliverables (`docs/automation/orchestrator_implementation.md`, `docs/automation/healthview_onboarding.md`, `docs/automation/orchestrator_migration_announcement.md`, `docs/automation/orchestrator_legacy_cleanup_checklist.md`) and updated the plan to record completion; documentation-only verification, no tests required.
+- [x] 2025-12-08: Retired legacy orchestrator shims and tests (`.repo_studios/scripts/orchestrators/*.py`, `tests/tests_orchestrators/test_run_*.py`) while introducing the internal batch-cleanup plan hook inside `command_center/scripts/orchestrators/run_dependency_import_hygiene.py`; validated via `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/dependency_import_hygiene -q`.
+- [x] 2025-12-08: Closed Phase 5 after rerunning `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py -q` to validate the meta orchestrator tooling stack and updating `docs/automation/orchestrator_implementation.md` with the completion narrative.
 - [x] 2025-12-07: `./.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_summarizers/test_summarize_health_suite.py .repo_studios/tests/tests_summarizers/test_summarize_standards.py .repo_studios/tests/tests_command_center/test_execution_telemetry/test_summarize_test_execution_telemetry.py -q` — summarizer suites remain ≥80% coverage, confirming Phase 4 artifacts stay healthy.
 - [x] 2025-12-07: Updated `docs/automation/orchestrator_implementation.md` to mark Phase 4 complete and preserve Healthview manifest guidance for topic summaries.
 - Completed Phase 2 helper scaffolding (`build_topic_pipeline`, `summarizer_runner`,
@@ -787,8 +794,8 @@ Example manifest path: `.../healthview/test_execution_telemetry/20251129-2102/ma
   Healthview Markdown structure (run context bullets, runtime metrics table, failure highlights,
   artifact links) for Test Execution Telemetry reviews.
 - 2025-11-30: Mapped Fault Diagnostics handoffs by reviewing `run_fault_pipeline.py`, confirming the
-  `.repo_studios/reports/orchestrator_logs/faulthandler_logs` default with
-  `FAULT_PIPELINE_ALLOW_LEGACY` fallback, the producer’s `faulthandler_report-<ts>` +
+  `.repo_studios/command_center/reports/rawview/fault_diagnostics_runs` default with
+  legacy fallbacks controlled through `FAULT_LOGS_ALLOW_LEGACY`, the producer’s `faulthandler_report-<ts>` +
   `latest_report.json` mirrors, and the consumer’s reliance on `--outdir` / `--report` together with
   `FAULT_OUTDIR` and `FAULT_TOP_FRAMES_N` before mirroring artifacts to
   `.repo_studios/command_center/reports/fault_artifacts_consumer`.

@@ -65,7 +65,15 @@ def test_dump_snapshot_happy_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatc
     )
 
     assert result["status"] == "ok"
-    outdir = tmp_path / ".repo_studios" / "reports" / "orchestrator_logs" / "faulthandler_snapshots" / "2025-11-28_120000"
+    outdir = (
+        tmp_path
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "rawview"
+        / "fault_snapshots"
+        / "2025-11-28_120000"
+    )
     assert outdir.exists()
     snapshot_file = outdir / "snapshot.txt"
     manifest_file = outdir / "MANIFEST.json"
@@ -85,7 +93,14 @@ def test_dump_snapshot_prunes_history(tmp_path: Path, monkeypatch: pytest.Monkey
     module = _load_module(monkeypatch)
     monkeypatch.setitem(sys.modules, "faulthandler", FakeFaulthandler())
 
-    base_dir = tmp_path / ".repo_studios" / "reports" / "orchestrator_logs" / "faulthandler_snapshots"
+    base_dir = (
+        tmp_path
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "rawview"
+        / "fault_snapshots"
+    )
     base_dir.mkdir(parents=True)
     for idx in range(4):
         run_dir = base_dir / f"2025-11-28_11010{idx}"

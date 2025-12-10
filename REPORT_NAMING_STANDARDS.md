@@ -44,9 +44,10 @@ kept in sync.
 
 | Viewer Slug | Surface |
 | --- | --- |
-| `commandview` | Existing Command Center tab wiring | 
+| `commandview` | Existing Command Center tab wiring |
 | `healthview` | New orchestrator/health diagnostics tab |
 | `jarvis` | Agentic operations console |
+| `rawview` | Raw capture bundles and diagnostics inputs |
 | `vscode` | VS Code embedded viewer experiments |
 
 Additional slugs must remain lowercase ASCII and be registered here before

@@ -30,6 +30,8 @@ libraries_root_str = str(libraries_root)
 if libraries_root_str and libraries_root_str not in sys.path:
     sys.path.insert(0, libraries_root_str)
 
+RAWVIEW_RUNS_BASE = root / ".repo_studios" / "command_center" / "reports" / "rawview" / "fault_diagnostics_runs"
+
 from libraries import prune_run_directories
 
 # Reduce noise from known, non-actionable warnings across all entry points.
@@ -54,7 +56,7 @@ except Exception:  # pragma: no cover - Windows and other platforms
 def _default_base_dir(allow_legacy: bool) -> Path:
     if allow_legacy:
         return root / ".repo_studios" / "faulthandler"
-    return root / ".repo_studios" / "reports" / "orchestrator_logs" / "faulthandler_logs"
+    return RAWVIEW_RUNS_BASE
 
 
 def _is_truthy(value: Optional[str], *, default: bool) -> bool:

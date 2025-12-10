@@ -8,7 +8,7 @@ summarizer (`summarize_fault_diagnostics_overview.py`). The topic orchestrator s
 resolution through the shared Command Center path/option builders, threads skip/retention flags across each
 step, registers catalog metadata, and emits viewer/topic compliant bundles under
 `.repo_studios/command_center/reports/commandview/fault_diagnostics/<slug>/`. Use this entry point whenever
-new stack captures land under `.repo_studios/reports/orchestrator_logs/faulthandler_logs/<ts>/` (the default
+new stack captures land under `.repo_studios/command_center/reports/rawview/fault_diagnostics_runs/<ts>/` (the default
 output from `configure_faulthandler_runtime.py`) or when you need to rebuild consumer and summarizer assets
 from an existing producer report.
 
@@ -40,7 +40,7 @@ make -C .repo_studios studio-orchestrate-fault-diagnostics
 ```
 
 - `--repo-root`: Required outside the repo; defaults via helper heuristics when omitted.
-- `--runs-dir`: Source directory for faulthandler runs; defaults to the orchestrator logs tree.
+- `--runs-dir`: Source directory for faulthandler runs; defaults to the rawview capture tree.
 - `--run-dir`: Processes a specific run folder. Without it, the producer selects the newest capture.
 - `--reuse-report`: Points the consumer at an existing `report.json`, enabling producer skips.
 - `--producer-top-frames`: Overrides the producer’s captured frame count when deeper stacks are required.

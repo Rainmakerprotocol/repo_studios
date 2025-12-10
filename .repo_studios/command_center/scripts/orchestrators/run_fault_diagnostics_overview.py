@@ -57,7 +57,7 @@ SUMMARIZER_SCRIPT = Path(".repo_studios/command_center/scripts/summarizers/summa
 SUMMARIZER_MODULE = "command_center.scripts.summarizers.summarize_fault_diagnostics_overview"
 ORCHESTRATOR_SCRIPT = Path(".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py")
 
-DEFAULT_RUNS_DIR = Path(".repo_studios/reports/orchestrator_logs/faulthandler_logs")
+DEFAULT_RUNS_DIR = Path(".repo_studios/command_center/reports/rawview/fault_diagnostics_runs")
 DEFAULT_PRODUCER_OUTPUT = Path(".repo_studios/reports/producer_reports/faulthandler_reports")
 DEFAULT_PRODUCER_CC = Path(".repo_studios/command_center/reports/fault_artifacts_producer")
 DEFAULT_CONSUMER_OUTPUT = Path(".repo_studios/reports/consumer_reports/fault_artifacts")

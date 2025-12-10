@@ -11,8 +11,8 @@ via the shared Command Center helper (`prune_run_directories`) so `.keep` sentin
 stay protected while retention remains configurable. The producer wraps the shared
 `utilities.fault_run_analysis` helpers so the consumer and orchestration flows stay in sync.
 
-The producer now targets the orchestrator logs tree
-(`.repo_studios/reports/orchestrator_logs/faulthandler_logs/`) emitted by
+The producer now targets the rawview capture tree
+(`.repo_studios/command_center/reports/rawview/fault_diagnostics_runs/`) emitted by
 `configure_faulthandler_runtime.py`. Set `FAULT_LOGS_ALLOW_LEGACY=1` (or override `FAULT_OUTDIR`)
 to resume reading from `.repo_studios/faulthandler/` for historical migrations.
 
@@ -20,7 +20,7 @@ to resume reading from `.repo_studios/faulthandler/` for historical migrations.
 
 ```bash
 python .repo_studios/scripts/producers/collect_faulthandler_reports.py \
-  --runs-dir .repo_studios/reports/orchestrator_logs/faulthandler_logs \
+  --runs-dir .repo_studios/command_center/reports/rawview/fault_diagnostics_runs \
   --output-dir .repo_studios/reports/producer_reports/faulthandler_reports \
   --artifacts-to-keep 10 \
   --log-level INFO
@@ -31,7 +31,7 @@ repository defaults.
 
 ### Key arguments
 
-- `--runs-dir`: Directory containing timestamped faulthandler capture folders (default `.repo_studios/faulthandler`).
+- `--runs-dir`: Directory containing timestamped faulthandler capture folders (default `.repo_studios/command_center/reports/rawview/fault_diagnostics_runs`).
 - `--run-dir`: Explicit run directory to process; when omitted the producer selects the newest run
   under `--runs-dir`.
 - `--output-dir`: Destination for structured artifacts (default `.repo_studios/reports/producer_reports/faulthandler_reports`).
@@ -80,7 +80,7 @@ when captures are missing or malformed.
 ## Operational notes
 
 - Ensure `utilities.configure_faulthandler_runtime` and `utilities.dump_faulthandler_snapshot` populate
-  `.repo_studios/faulthandler/<timestamp>/` before running the producer; otherwise the command exits
+  `.repo_studios/command_center/reports/rawview/fault_diagnostics_runs/<timestamp>/` before running the producer; otherwise the command exits
   with a no-op message.
 - Downstream consumers (e.g., `generate_fault_artifacts.py`) now prefer the structured producer
   payloads while retaining a fallback to on-demand parsing.

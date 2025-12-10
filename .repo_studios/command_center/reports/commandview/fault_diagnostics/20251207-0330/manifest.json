@@ -34,7 +34,7 @@
     "producer_top_frames": null,
     "reuse_report": null,
     "run_dir": null,
-    "runs_dir": ".repo_studios/reports/orchestrator_logs/faulthandler_logs",
+    "runs_dir": ".repo_studios/command_center/reports/rawview/fault_diagnostics_runs",
     "skip_consumer": false,
     "skip_producer": false,
     "skip_summarizer": false

@@ -23,11 +23,39 @@ jobs:
     with:
       allow-ignore: ${{ github.event.inputs.allow-ignore || 'false' }}
 
-  note-placeholder:
-    name: Automation Placeholder
+  orchestrator-tests:
+    name: Orchestrator & Helper Tests
     needs: verify-locks
     runs-on: ubuntu-latest
     steps:
-      - name: Record placeholder status
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
         run: |
-          echo 'Command Center automation steps will be added in a future sprint.'
+          python -m venv .venv
+          . .venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run orchestrator and helper tests with coverage
+        run: |
+          . .venv/bin/activate
+          pytest .repo_studios/tests/tests_command_center \
+            --cov=.repo_studios/command_center/scripts/orchestrators \
+            --cov=.repo_studios/command_center/scripts/libraries \
+            --cov-report=term-missing \
+            --cov-report=xml
+
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: command-center-coverage
+          path: coverage.xml
+          if-no-files-found: warn

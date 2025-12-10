@@ -72,7 +72,7 @@ studio-verify-docs-integrity:
 
 .PHONY: studio-collect-faulthandler-reports
 studio-collect-faulthandler-reports:
-	$(PYTHON) .repo_studios/scripts/producers/collect_faulthandler_reports.py --runs-dir .repo_studios/reports/orchestrator_logs/faulthandler_logs --output-dir .repo_studios/reports/producer_reports/faulthandler_reports --artifacts-to-keep 10 --log-level INFO
+	$(PYTHON) .repo_studios/scripts/producers/collect_faulthandler_reports.py --runs-dir .repo_studios/command_center/reports/rawview/fault_diagnostics_runs --output-dir .repo_studios/reports/producer_reports/faulthandler_reports --artifacts-to-keep 10 --log-level INFO
 
 .PHONY: studio-generate-fault-artifacts
 studio-generate-fault-artifacts:

@@ -2,8 +2,8 @@
 Generate structured fault artifacts for a faulthandler run directory.
 
 Inputs (env / discovery):
-  - --outdir or FAULT_OUTDIR: target run dir. If unset, auto-pick the latest under
-    ./.repo_studios/faulthandler/<ts>/.
+    - --outdir or FAULT_OUTDIR: target run dir. If unset, auto-pick the latest under
+        ./.repo_studios/command_center/reports/rawview/fault_diagnostics_runs/<ts>/.
 
 Outputs (within FAULT_OUTDIR):
   - MANIFEST.json (best-effort: create minimal if missing)
@@ -36,7 +36,8 @@ from command_center.scripts.libraries.artifacts import copy_latest_artifact  # n
 from command_center.scripts.libraries import prune_run_directories  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
-RUNS_BASE = REPO_ROOT / ".repo_studios/faulthandler"
+RAWVIEW_RUNS_BASE = REPO_ROOT / ".repo_studios/command_center/reports/rawview/fault_diagnostics_runs"
+LEGACY_RUNS_BASE = REPO_ROOT / ".repo_studios/faulthandler"
 PRODUCER_BASE = REPO_ROOT / ".repo_studios/reports/producer_reports/faulthandler_reports"
 PRODUCER_LATEST = PRODUCER_BASE / "latest_report.json"
 CONSUMER_BASE = REPO_ROOT / ".repo_studios/reports/consumer_reports/fault_artifacts"
@@ -64,6 +65,25 @@ from utilities.fault_run_analysis import (  # noqa: E402
     ensure_manifest,
     read_stacks_text,
 )
+
+
+def _allow_legacy_runs() -> bool:
+    flag = os.getenv("FAULT_LOGS_ALLOW_LEGACY", "1").strip().lower()
+    return flag not in {"0", "false", "no", "off"}
+
+
+def _resolve_runs_base(logger: logging.Logger | None) -> Path:
+    if RAWVIEW_RUNS_BASE.exists():
+        return RAWVIEW_RUNS_BASE
+    if _allow_legacy_runs() and LEGACY_RUNS_BASE.exists():
+        if logger is not None:
+            logger.info(
+                "Faulthandler rawview runs directory %s missing; falling back to legacy %s",
+                RAWVIEW_RUNS_BASE,
+                LEGACY_RUNS_BASE,
+            )
+        return LEGACY_RUNS_BASE
+    return RAWVIEW_RUNS_BASE
 
 
 def _find_latest_outdir(runs_base: Path) -> Path | None:
@@ -445,7 +465,14 @@ def _prune_history(root: Path, keep: int | None, current: Path, *, logger: loggi
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate fault artifacts for a run directory")
-    parser.add_argument("--outdir", default=None, help="Run directory containing stacks.log (defaults to latest)")
+    parser.add_argument(
+        "--outdir",
+        default=None,
+        help=(
+            "Run directory containing stacks.log (defaults to latest under "
+            ".repo_studios/command_center/reports/rawview/fault_diagnostics_runs)"
+        ),
+    )
     parser.add_argument(
         "--report",
         type=Path,
@@ -484,7 +511,8 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     logging.basicConfig(level=log_level, format="[%(levelname)s] %(message)s", force=True)
     log = logging.getLogger("fault_artifacts")
 
-    outdir = _discover_outdir(args.outdir, RUNS_BASE)
+    runs_base = _resolve_runs_base(log)
+    outdir = _discover_outdir(args.outdir, runs_base)
     if outdir is None or not outdir.exists() or not outdir.is_dir():
         log.info("No valid FAULT_OUTDIR or runs found; nothing to generate")
         return {"outdir": None, "source_report": None, "signatures": 0}

@@ -15,6 +15,7 @@ import argparse
 import importlib.util
 import json
 import logging
+import shutil
 import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -51,14 +52,12 @@ SCHEMA_VERSION = 1
 DEPENDENCY_SCRIPT = Path(".repo_studios/scripts/producers/generate_dependency_hygiene_report.py")
 IMPORT_GRAPH_SCRIPT = Path(".repo_studios/scripts/producers/generate_import_graph_report.py")
 PLACEHOLDER_SCRIPT = Path(".repo_studios/scripts/producers/scan_code_placeholders.py")
-BATCH_CLEANUP_SCRIPT = Path(".repo_studios/scripts/orchestrators/run_batch_cleanup.py")
 TYPECHECK_SCRIPT = Path(".repo_studios/scripts/producers/generate_typecheck_report.py")
 REFRESH_BASELINES_SCRIPT = Path(".repo_studios/scripts/utilities/refresh_mypy_baselines.py")
 
 DEPENDENCY_MODULE = "scripts.producers.generate_dependency_hygiene_report"
 IMPORT_GRAPH_MODULE = "scripts.producers.generate_import_graph_report"
 PLACEHOLDER_MODULE = "scripts.producers.scan_code_placeholders"
-BATCH_CLEANUP_MODULE = "scripts.orchestrators.run_batch_cleanup"
 TYPECHECK_MODULE = "scripts.producers.generate_typecheck_report"
 REFRESH_BASELINES_MODULE = "scripts.utilities.refresh_mypy_baselines"
 
@@ -543,31 +542,172 @@ def _placeholder_scan(paths: Paths, options: Options) -> PlaceholderOutcome:
     )
 
 
-def _batch_cleanup(paths: Paths, options: Options) -> BatchCleanupOutcome:
-    LOGGER.info("Running batch cleanup (dry-run)")
-    run_callable = _load_callable(paths.repo_root / BATCH_CLEANUP_SCRIPT, BATCH_CLEANUP_MODULE, "run")
-    argv = [
-        "--dry-run",
-        "--no-pytest",
-        "--output-base",
-        str(paths.batch_cleanup_output_base),
-        "--artifacts-to-keep",
-        str(options.cleanup_keep),
-        "--log-level",
-        options.log_level,
+def _cleanup_step_commands(repo_root: Path) -> list[tuple[str, list[str]]]:
+    resolved_root = repo_root.resolve()
+    ruff_config = resolved_root / ".repo_studios" / "ruff_clean.toml"
+    markdown_config = resolved_root / ".markdownlint.json"
+    return [
+        ("Ruff format", ["ruff", "format", str(resolved_root), "--config", str(ruff_config)]),
+        (
+            "Ruff check --fix",
+            ["ruff", "check", str(resolved_root), "--fix", "--config", str(ruff_config)],
+        ),
+        (
+            "markdownlint --fix (npx)",
+            [
+                "npx",
+                "--yes",
+                "markdownlint-cli@0.39.0",
+                "**/*.md",
+                "--fix",
+                "--config",
+                str(markdown_config),
+            ],
+        ),
+        (
+            "markdownlint check (npx)",
+            [
+                "npx",
+                "--yes",
+                "markdownlint-cli@0.39.0",
+                "**/*.md",
+                "--config",
+                str(markdown_config),
+            ],
+        ),
+        ("Mypy", ["mypy"]),
+        ("Pytest", ["pytest", "-q"]),
     ]
-    payload = run_callable(argv)
-    bundle_dir = Path(payload.get("bundle_dir", "")).resolve() if isinstance(payload, dict) and payload.get("bundle_dir") else None
-    summary_path = Path(payload.get("summary_path", "")).resolve() if isinstance(payload, dict) and payload.get("summary_path") else None
-    log_path = Path(payload.get("log_path", "")).resolve() if isinstance(payload, dict) and payload.get("log_path") else None
-    bundle_summary = Path(payload.get("bundle_summary", "")).resolve() if isinstance(payload, dict) and payload.get("bundle_summary") else None
-    status = payload.get("status") if isinstance(payload, dict) else None
+
+
+def _update_cleanup_latest(bundle_dir: Path, output_base: Path) -> None:
+    mapping = {
+        "cleanup_summary.json": output_base / "latest_cleanup_summary.json",
+        "cleanup_log.txt": output_base / "latest_cleanup_log.txt",
+        "bundle_summary.json": output_base / "latest_bundle_summary.json",
+    }
+    for source_name, destination in mapping.items():
+        source_path = bundle_dir / source_name
+        if not source_path.exists():
+            continue
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            if destination.exists() or destination.is_symlink():
+                destination.unlink()
+            destination.hardlink_to(source_path)
+        except Exception:
+            shutil.copy2(source_path, destination)
+
+
+def _prune_cleanup_history(output_base: Path, current_dir: Path, keep: int) -> list[str]:
+    if keep <= 0 or not output_base.exists():
+        return []
+    bundles = sorted(
+        [path for path in output_base.iterdir() if path.is_dir() and path.name.startswith("run_batch_cleanup-")],
+        key=lambda candidate: candidate.name,
+        reverse=True,
+    )
+    pruned: list[str] = []
+    for obsolete in bundles[keep:]:
+        if obsolete == current_dir:
+            continue
+        shutil.rmtree(obsolete, ignore_errors=True)
+        pruned.append(str(obsolete.resolve()))
+    return pruned
+
+
+def _batch_cleanup(paths: Paths, options: Options) -> BatchCleanupOutcome:
+    LOGGER.info("Recording batch cleanup dry-run plan")
+    timestamp = options.run_timestamp.astimezone(timezone.utc)
+    slug = timestamp.strftime("%Y-%m-%d_%H%M%S")
+    bundle_dir = paths.batch_cleanup_output_base / f"run_batch_cleanup-{slug}"
+    bundle_dir.mkdir(parents=True, exist_ok=True)
+
+    commands = _cleanup_step_commands(paths.repo_root)
+    log_lines = [
+        "# 🧼 dependency cleanup dry-run",
+        f"Timestamp: {timestamp.isoformat()}",
+        f"Repo root: {paths.repo_root.resolve()}",
+        "",
+        "Legacy run_batch_cleanup shim removed; commands recorded for operator reference only.",
+        "",
+        "## Planned steps",
+    ]
+    for label, command in commands:
+        log_lines.append(f"- {label}: {' '.join(command)}")
+    log_path = bundle_dir / "cleanup_log.txt"
+    log_path.write_text("\n".join(log_lines) + "\n", encoding="utf-8")
+
+    steps_payload = [
+        {
+            "label": label,
+            "command": command,
+            "status": "skipped",
+            "returncode": None,
+            "stdout": "",
+            "stderr": "",
+            "duration_seconds": 0.0,
+            "skipped_reason": "dry-run planning; legacy shim retired",
+        }
+        for label, command in commands
+    ]
+
+    tree_markdown = paths.repo_root / ".repo_studios" / "docs" / "project_tree_overview.md"
+    tree_refresh = {
+        "markdown_path": str(tree_markdown.resolve() if tree_markdown.exists() else tree_markdown),
+        "root": str(paths.repo_root.resolve()),
+        "updated": False,
+        "found_markers": tree_markdown.exists(),
+        "timestamp": timestamp.strftime("%m/%d/%Y_%H:%M:%S"),
+    }
+
+    summary_payload = {
+        "schema_version": 1,
+        "generated_at": timestamp.isoformat(),
+        "status": "success",
+        "options": {
+            "targets": [str(paths.repo_root.resolve())],
+            "mode": "all",
+            "dry_run": True,
+            "backup": False,
+            "refresh_only": False,
+            "skip_pytest": True,
+            "artifacts_to_keep": options.cleanup_keep,
+        },
+        "steps": steps_payload,
+        "tree_refresh": tree_refresh,
+        "backups": [],
+        "notes": [
+            "dry-run mode executed; no cleanup commands were invoked",
+            "legacy batch cleanup shim removed; dependency/import hygiene orchestrator now emits plan",
+        ],
+        "exception": None,
+    }
+    summary_path = bundle_dir / "cleanup_summary.json"
+    summary_path.write_text(json.dumps(summary_payload, indent=2) + "\n", encoding="utf-8")
+
+    bundle_summary_payload = {
+        "schema_version": 1,
+        "generated_at": timestamp.isoformat(),
+        "status": "success",
+        "bundle_dir": str(bundle_dir.resolve()),
+        "artifacts": {
+            "cleanup_summary": str(summary_path.resolve()),
+            "cleanup_log": str(log_path.resolve()),
+        },
+    }
+    bundle_summary_path = bundle_dir / "bundle_summary.json"
+    bundle_summary_path.write_text(json.dumps(bundle_summary_payload, indent=2) + "\n", encoding="utf-8")
+
+    _update_cleanup_latest(bundle_dir, paths.batch_cleanup_output_base)
+    _prune_cleanup_history(paths.batch_cleanup_output_base, bundle_dir, options.cleanup_keep)
+
     return BatchCleanupOutcome(
-        bundle_dir=bundle_dir if bundle_dir and bundle_dir.exists() else None,
-        summary_path=summary_path if summary_path and summary_path.exists() else None,
-        log_path=log_path if log_path and log_path.exists() else None,
-        bundle_summary=bundle_summary if bundle_summary and bundle_summary.exists() else None,
-        status=str(status) if isinstance(status, str) else None,
+        bundle_dir=bundle_dir,
+        summary_path=summary_path,
+        log_path=log_path,
+        bundle_summary=bundle_summary_path,
+        status="success",
     )
 
 
@@ -656,7 +796,6 @@ def _register_scripts(registry: CatalogRegistry) -> None:
     registry.register(script_path=str(DEPENDENCY_SCRIPT), topic=TOPIC_SLUG, role="producer")
     registry.register(script_path=str(IMPORT_GRAPH_SCRIPT), topic=TOPIC_SLUG, role="producer")
     registry.register(script_path=str(PLACEHOLDER_SCRIPT), topic=TOPIC_SLUG, role="producer")
-    registry.register(script_path=str(BATCH_CLEANUP_SCRIPT), topic=TOPIC_SLUG, role="orchestrator")
     registry.register(script_path=str(TYPECHECK_SCRIPT), topic=TOPIC_SLUG, role="producer")
     registry.register(script_path=str(REFRESH_BASELINES_SCRIPT), topic=TOPIC_SLUG, role="utility")
 

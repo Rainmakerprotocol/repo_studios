@@ -601,7 +601,7 @@
       - .repo_studios/scripts/utilities/fault_run_analysis.py
     external_tools: []
     inputs:
-      - path: .repo_studios/faulthandler
+      - path: .repo_studios/command_center/reports/rawview/fault_diagnostics_runs
   consumers:
     - coding_agent
     - human_developer
