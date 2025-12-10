@@ -15,7 +15,7 @@ from typing import Iterable, NamedTuple, Sequence
 import subprocess
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/orchestrator_runs/mypy_baselines")
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports/rawview/mypy_baselines")
 DEFAULT_ARTIFACTS_TO_KEEP = 5
 RUN_STEM = "mypy_baselines"
 SCHEMA_VERSION = 1

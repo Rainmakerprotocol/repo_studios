@@ -1,9 +1,0 @@
-FAILED tests
-Generated: 2025-11-27T17:57:09+00:00
-Total: 1
-
-Grouped by file (count desc):
-     1  .repo_studios/tests/tests_producers/test_generate_standards_index.py
-
-Items:
-- .repo_studios/tests/tests_producers/test_generate_standards_index.py::test_structured_artifacts_success

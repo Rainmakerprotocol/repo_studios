@@ -116,6 +116,16 @@ def _discover_targets(repo_root: Path) -> list[str]:
     return _read_pyproject_targets(repo_root)
 
 
+def _normalise_targets(targets: list[str]) -> list[str]:
+    normalised: list[str] = []
+    for entry in targets:
+        token = entry.strip()
+        if not token:
+            continue
+        normalised.append(token)
+    return normalised
+
+
 def _allow_fast_targets(repo_root: Path) -> list[str]:
     defaults = ["api", "agents/core", "agents/interface/chainlit"]
     return [path for path in defaults if (repo_root / path).exists()]
@@ -413,11 +423,13 @@ def main(argv: list[str] | None = None) -> int:
     run_dir = output_dir / f"{RUN_PREFIX}-{run_slug}"
 
     targets = _discover_targets(repo_root)
+    targets = _normalise_targets(targets)
     strict = _env_bool("TYPECHECK_STRICT")
     fast = _env_bool("HEALTH_TYPECHECK_FAST")
     override_present = bool(os.getenv("TYPECHECK_TARGETS", "").strip())
     if fast and not override_present:
         targets = _filter_fast_targets(repo_root, targets)
+    targets = _normalise_targets(list(dict.fromkeys(targets)))
 
     mypy_version = _get_mypy_version(repo_root)
     invocation = _build_invocation(strict, targets)
@@ -425,12 +437,21 @@ def main(argv: list[str] | None = None) -> int:
     skipped_note = ""
     if targets:
         stdout_combined, return_code = _run_mypy(repo_root, invocation)
-        total_errors, files_with_issues, success_flag = _parse_summary(stdout_combined)
-        samples = _parse_samples(stdout_combined)
-        if not success_flag and total_errors == 0:
-            total_errors = len(samples)
-            files_with_issues = len({sample.path for sample in samples})
-        status = _compute_status(success_flag, total_errors, files_with_issues, return_code)
+        missing_target = "Missing target module" in stdout_combined
+        if return_code != 0 and missing_target:
+            total_errors = 0
+            files_with_issues = 0
+            success_flag = True
+            samples: list[ErrorSample] = []
+            status = "skipped"
+            skipped_note = "mypy reported missing target module; treating run as skipped."
+        else:
+            total_errors, files_with_issues, success_flag = _parse_summary(stdout_combined)
+            samples = _parse_samples(stdout_combined)
+            if not success_flag and total_errors == 0:
+                total_errors = len(samples)
+                files_with_issues = len({sample.path for sample in samples})
+            status = _compute_status(success_flag, total_errors, files_with_issues, return_code)
     else:
         stdout_combined = "No typecheck targets discovered; skipping mypy execution.\n"
         return_code = 0

@@ -129,3 +129,39 @@ def test_typecheck_failure(tmp_path: Path, monkeypatch):
 
     raw_txt = (run_dir / "raw.txt").read_text(encoding="utf-8")
     assert "Found 1 error" in raw_txt
+
+
+def test_typecheck_skips_when_no_targets(tmp_path: Path, monkeypatch):
+    _write_pyproject(tmp_path, [])
+
+    def runner(repo_root: Path, invocation: list[str]):
+        raise AssertionError("mypy should not run when no targets are configured")
+
+    module, out_dir, run_dir, slug = _run_with_module(tmp_path, monkeypatch, runner)
+    payload = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
+    assert payload["status"] == "skipped"
+    assert "skipping mypy execution" in payload.get("notes", "")
+    assert payload["summary"]["paths_checked"] == []
+
+    latest_json = out_dir / "latest_report.json"
+    assert json.loads(latest_json.read_text(encoding="utf-8"))["status"] == "skipped"
+    assert slug in payload["timestamp"]
+
+
+def test_typecheck_missing_target_output_is_skipped(tmp_path: Path, monkeypatch):
+    _write_pyproject(tmp_path, ["src"])
+
+    def runner(repo_root: Path, invocation: list[str]):
+        message = (
+            "usage: mypy [-h] [-v] [-V] [more options; see below]\n"
+            "            [-m MODULE] [-p PACKAGE] [-c PROGRAM_TEXT] [files ...]\n"
+            "mypy: error: Missing target module, package, files, or command.\n"
+        )
+        return message, 2
+
+    module, out_dir, run_dir, _slug = _run_with_module(tmp_path, monkeypatch, runner)
+    payload = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
+    assert payload["status"] == "skipped"
+    assert "missing target module" in payload.get("notes", "").lower()
+    assert payload["summary"]["error_count"] == 0
+    assert payload["summary"]["files_with_issues"] == 0

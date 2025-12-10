@@ -4,7 +4,7 @@
 
 `refresh_mypy_baselines.py` standardises the stored mypy output snapshots that agents and
 soft gates consume. It runs mypy for each configured target, writes structured
-artifacts into `.repo_studios/reports/orchestrator_runs/mypy_baselines/`, and maintains
+artifacts into `.repo_studios/command_center/reports/rawview/mypy_baselines/`, and maintains
 `latest_*.txt` pointers only when the run succeeds.
 
 ## Invocation
@@ -28,7 +28,7 @@ Key flags:
 ## Outputs
 
 Each run creates a timestamped folder (`mypy_baselines-YYYYMMDD_HHMMSS`) under
-`.repo_studios/reports/orchestrator_runs/mypy_baselines/` that
+`.repo_studios/command_center/reports/rawview/mypy_baselines/` that
 contains:
 
 - `bundle_summary.json` – structured metadata (status, commands, durations).

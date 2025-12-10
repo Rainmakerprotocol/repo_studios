@@ -19,7 +19,14 @@ def _load_module():
 
 def _repo_paths(tmp_path: Path):
     repo_root = tmp_path / "repo"
-    output_dir = repo_root / ".repo_studios" / "reports" / "orchestrator_runs" / "mypy_baselines"
+    output_dir = (
+        repo_root
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "rawview"
+        / "mypy_baselines"
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
     return repo_root, output_dir
 

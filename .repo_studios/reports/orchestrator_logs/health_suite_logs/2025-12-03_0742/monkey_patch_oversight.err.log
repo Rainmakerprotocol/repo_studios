@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "C:\Users\genet\repo_studios\.repo_studios\command_center\scripts\orchestrators\run_monkey_patch_oversight.py", line 24, in <module>
-    from command_center.scripts.libraries import (
-    ...<16 lines>...
-    )
-ModuleNotFoundError: No module named 'command_center'

@@ -1,5 +1,0 @@
-FAILED tests
-Generated: 2025-11-27T15:22:44+00:00
-Total: 0
-
-<none>

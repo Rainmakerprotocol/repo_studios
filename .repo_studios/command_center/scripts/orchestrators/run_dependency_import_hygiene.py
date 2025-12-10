@@ -65,9 +65,11 @@ DEFAULT_DEPENDENCY_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/dep
 DEFAULT_IMPORT_GRAPH_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/import_graph_reports")
 DEFAULT_PLACEHOLDER_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/code_placeholder_scans")
 DEFAULT_PLACEHOLDER_ALLOWLIST = Path(".repo_studios/config/placeholder_allowlist.txt")
-DEFAULT_BATCH_CLEANUP_OUTPUT_BASE = Path(".repo_studios/reports/orchestrator_runs/run_batch_cleanup")
+DEFAULT_BATCH_CLEANUP_OUTPUT_BASE = Path(
+    ".repo_studios/command_center/reports/rawview/dependency_import_hygiene_cleanup"
+)
 DEFAULT_TYPECHECK_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/typecheck_reports")
-DEFAULT_MYPY_BASELINES_OUTPUT_DIR = Path(".repo_studios/reports/orchestrator_runs/mypy_baselines")
+DEFAULT_MYPY_BASELINES_OUTPUT_DIR = Path(".repo_studios/command_center/reports/rawview/mypy_baselines")
 DEFAULT_HEALTHVIEW_ROOT = Path(".repo_studios/command_center/reports")
 
 DEPENDENCY_RUN_PREFIX = "dependency_hygiene"
