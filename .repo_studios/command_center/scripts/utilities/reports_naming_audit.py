@@ -26,6 +26,24 @@ _DEFAULT_ARTIFACT_ROLES = (
     "metrics.json",
     "metrics.md",
 )
+
+_ADDITIONAL_ARTIFACT_ROLES = (
+    "bundle_summary.json",
+    "candidates.tsv",
+    "combined.txt",
+    "scripts_analysis.json",
+    "scripts_duplicate_matrix.json",
+    "scripts_duplicate_summary.md",
+    "snapshot.txt",
+    "stacks.csv",
+    "stacks.log",
+    "standards_overview.json",
+    "standards_overview.md",
+    "test_execution_telemetry_summary.json",
+    "test_execution_telemetry_summary.md",
+    "MANIFEST.json",
+    "SUMMARY.md",
+)
 _DEFAULT_VIEWERS = ("commandview", "rawview", "healthview", "jarvis", "vscode")
 
 
@@ -122,7 +140,13 @@ def _issues_for_path(
         issues.append("insufficient_depth")
         return issues
     if len(parts) > 4:
-        issues.append("unexpected_nesting")
+        viewer_name = normalized_parts[0]
+        extra_segments = parts[3:-1]
+        allowed_extra = bool(extra_segments) and viewer_name == "rawview" and all(
+            segment in {"dumps"} for segment in extra_segments
+        )
+        if not allowed_extra:
+            issues.append("unexpected_nesting")
     viewer, topic, timestamp = parts[0], parts[1], parts[2]
     filename = parts[-1]
     if not _SLUG_PATTERN.match(viewer):
@@ -199,6 +223,7 @@ def audit_reports(
     if not roles:
         roles = set(_DEFAULT_ARTIFACT_ROLES)
     viewers = {viewer for viewer in allowed_viewers} if allowed_viewers is not None else None
+    roles.update(_ADDITIONAL_ARTIFACT_ROLES)
     files_scanned = 0
     entries: list[AuditEntry] = []
     latest_aliases: list[str] = []

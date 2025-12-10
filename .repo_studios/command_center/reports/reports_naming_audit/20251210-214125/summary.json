@@ -1,0 +1,407 @@
+{
+  "allowed_viewers": [
+    "commandview",
+    "healthview",
+    "jarvis",
+    "rawview",
+    "vscode"
+  ],
+  "artifact_roles": [
+    "manifest.json",
+    "matrix.csv",
+    "matrix.json",
+    "matrix.tsv",
+    "metrics.json",
+    "metrics.md",
+    "report.json",
+    "report.md",
+    "summary.json",
+    "summary.md",
+    "telemetry.json"
+  ],
+  "compliance_ratio": 0.5639097744360902,
+  "compliant_files": 75,
+  "fail_threshold": 0,
+  "ignore_prefixes": [],
+  "issue_totals": {
+    "insufficient_depth": 6,
+    "invalid_timestamp": 19,
+    "unexpected_artifact_name": 51,
+    "unexpected_nesting": 1
+  },
+  "latest_aliases": [],
+  "rename_suggestions": [],
+  "reports_root": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports",
+  "timestamp": "2025-12-10T21:41:25.697727+00:00",
+  "total_files": 133,
+  "violation_count": 58,
+  "violations": [
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "commandview/duplicate_scan/20251130-0333/scripts_duplicate_matrix.json"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "commandview/duplicate_scan/20251130-0333/scripts_duplicate_summary.md"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "commandview/duplicate_scan/20251130-0456/scripts_duplicate_matrix.json"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "commandview/duplicate_scan/20251130-0456/scripts_duplicate_summary.md"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "commandview/duplicate_scan/20251130-0457/scripts_duplicate_matrix.json"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "commandview/duplicate_scan/20251130-0457/scripts_duplicate_summary.md"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "commandview/function_analysis/20251130-0503/scripts_analysis.json"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "commandview/standards_index_gaps/20251207-0239/bundle_summary.json"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "commandview/standards_index_gaps/20251207-0239/candidates.tsv"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "commandview/standards_index_gaps/20251207-0320/bundle_summary.json"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "commandview/standards_index_gaps/20251207-0320/candidates.tsv"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "commandview/standards_index_gaps/20251207-0330/bundle_summary.json"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "commandview/standards_index_gaps/20251207-0330/candidates.tsv"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "commandview/standards_index_gaps/20251207-1406/bundle_summary.json"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "commandview/standards_index_gaps/20251207-1406/candidates.tsv"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "commandview/standards_index_gaps/20251208-0014/bundle_summary.json"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "commandview/standards_index_gaps/20251208-0014/candidates.tsv"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "healthview/standards_overview/20251207-0239/standards_overview.json"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "healthview/standards_overview/20251207-0239/standards_overview.md"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "healthview/standards_overview/20251207-1335/standards_overview.json"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "healthview/standards_overview/20251207-1335/standards_overview.md"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "healthview/standards_overview/20251207-1338/standards_overview.json"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "healthview/standards_overview/20251207-1338/standards_overview.md"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "healthview/standards_overview/20251207-1406/standards_overview.json"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "healthview/standards_overview/20251207-1406/standards_overview.md"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "healthview/standards_overview/20251208-0014/standards_overview.json"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "healthview/standards_overview/20251208-0014/standards_overview.md"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "healthview/test_execution_telemetry/20251207-0239/test_execution_telemetry_summary.json"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "healthview/test_execution_telemetry/20251207-0239/test_execution_telemetry_summary.md"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "healthview/test_execution_telemetry/20251207-0320/test_execution_telemetry_summary.json"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "healthview/test_execution_telemetry/20251207-0320/test_execution_telemetry_summary.md"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "healthview/test_execution_telemetry/20251207-0330/test_execution_telemetry_summary.json"
+    },
+    {
+      "issues": [
+        "unexpected_artifact_name"
+      ],
+      "path": "healthview/test_execution_telemetry/20251207-0330/test_execution_telemetry_summary.md"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_diagnostics_runs/2025-11-28_1702/bundle_summary.json"
+    },
+    {
+      "issues": [
+        "unexpected_nesting",
+        "invalid_timestamp"
+      ],
+      "path": "rawview/fault_diagnostics_runs/2025-11-28_1702/dumps/combined.txt"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_diagnostics_runs/2025-11-28_1702/MANIFEST.json"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_diagnostics_runs/2025-11-28_1702/stacks.csv"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_diagnostics_runs/2025-11-28_1702/stacks.log"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_diagnostics_runs/2025-11-28_1702/SUMMARY.md"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_snapshots/2025-11-28_222929/bundle_summary.json"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_snapshots/2025-11-28_222929/MANIFEST.json"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_snapshots/2025-11-28_222929/SUMMARY.md"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_snapshots/2025-11-28_223156/bundle_summary.json"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_snapshots/2025-11-28_223156/MANIFEST.json"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_snapshots/2025-11-28_223156/snapshot.txt"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_snapshots/2025-11-28_223156/SUMMARY.md"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_snapshots/2025-12-09_232206/bundle_summary.json"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_snapshots/2025-12-09_232206/MANIFEST.json"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_snapshots/2025-12-09_232206/SUMMARY.md"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_snapshots/2025-12-09_232639/bundle_summary.json"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_snapshots/2025-12-09_232639/MANIFEST.json"
+    },
+    {
+      "issues": [
+        "invalid_timestamp",
+        "unexpected_artifact_name"
+      ],
+      "path": "rawview/fault_snapshots/2025-12-09_232639/SUMMARY.md"
+    },
+    {
+      "issues": [
+        "insufficient_depth"
+      ],
+      "path": "reports_naming_audit/20251130-131522/summary.json"
+    },
+    {
+      "issues": [
+        "insufficient_depth"
+      ],
+      "path": "reports_naming_audit/20251130-131522/summary.md"
+    },
+    {
+      "issues": [
+        "insufficient_depth"
+      ],
+      "path": "reports_naming_audit/20251205-151329/summary.json"
+    },
+    {
+      "issues": [
+        "insufficient_depth"
+      ],
+      "path": "reports_naming_audit/20251205-151329/summary.md"
+    },
+    {
+      "issues": [
+        "insufficient_depth"
+      ],
+      "path": "reports_naming_audit/20251210-211154/summary.json"
+    },
+    {
+      "issues": [
+        "insufficient_depth"
+      ],
+      "path": "reports_naming_audit/20251210-211154/summary.md"
+    }
+  ]
+}
