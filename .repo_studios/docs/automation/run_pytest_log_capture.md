@@ -6,7 +6,13 @@
 
 `run_pytest_log_capture.py` executes the repository's pytest suite (or summarizes an existing run) and
 emits a structured artifact bundle alongside timestamped raw outputs under
-`.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs`.
+`.repo_studios/command_center/reports/rawview/test_execution_runs/`.
+
+> **Note**
+> Since 2025-12-01 this entry point is a thin shim that delegates to
+> `command_center/scripts/orchestrators/run_test_execution_telemetry.py`. All defaults documented
+> here forward directly to the Test Execution Telemetry topic orchestrator, including the new
+> rawview location and retention knobs.
 The orchestrator threads standard Command Center helpers for path resolution, logging configuration,
 and retention so downstream producers (for example `collect_test_log_reports.py`) can rely on
 consistent payload shapes without reparsing raw console logs.
@@ -18,7 +24,7 @@ Typical full-suite invocation (runs the targets defined in `pytest.ini::testpath
 ```bash
 python .repo_studios/scripts/orchestrators/run_pytest_log_capture.py \
   --repo-root . \
-  --logs-dir .repo_studios/reports/orchestrator_logs/pytest_log_capture_logs \
+  --logs-dir .repo_studios/command_center/reports/rawview/test_execution_runs \
   --output-dir .repo_studios/reports/orchestrator_runs/pytest_log_capture \
   --artifacts-to-keep 5 \
   --log-level INFO
@@ -29,7 +35,7 @@ Subset example (extra arguments after `--` filter pytest to the given selection)
 ```bash
 python .repo_studios/scripts/orchestrators/run_pytest_log_capture.py \
   --repo-root . \
-  --logs-dir .repo_studios/reports/orchestrator_logs/pytest_log_capture_logs \
+  --logs-dir .repo_studios/command_center/reports/rawview/test_execution_runs \
   --output-dir .repo_studios/reports/orchestrator_runs/pytest_log_capture \
   --log-level INFO \
   -- --maxfail=1 .repo_studios/tests/tests_orchestrators/test_run_pytest_log_capture.py
@@ -39,7 +45,7 @@ Key flags:
 
 - `--repo-root`: Overrides repository root discovery when running outside the tree.
 - `--logs-dir`: Directory containing timestamped pytest logs, JUnit XML, and summary text files
-  (defaults to `.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs`).
+  (defaults to `.repo_studios/command_center/reports/rawview/test_execution_runs`).
 - `--output-dir`: Destination for structured bundles (default `.repo_studios/reports/orchestrator_runs/pytest_log_capture`).
 - `--artifacts-to-keep`: Retention window for orchestrator bundles and pointer refresh (minimum 1,
   default 5).
@@ -64,7 +70,7 @@ with:
 
 Pointer files such as `latest_report.json`, `latest_bundle_summary.json`, and `latest_full_log.txt` are
 refreshed beside the bundle. Raw pytest transcripts, failure/skip summaries, and junit artifacts live
-under `.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs/` by default; override
+under `.repo_studios/command_center/reports/rawview/test_execution_runs/` by default; override
 `--logs-dir` when you need to populate an alternate tree (for example, the legacy
 `.repo_studios/pytest_logs` layout during cutover).
 

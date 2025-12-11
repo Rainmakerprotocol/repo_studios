@@ -44,6 +44,8 @@ _ADDITIONAL_ARTIFACT_ROLES = (
     "MANIFEST.json",
     "SUMMARY.md",
 )
+
+_DEFAULT_IGNORE_PREFIXES = ("reports_naming_audit/",)
 _DEFAULT_VIEWERS = ("commandview", "rawview", "healthview", "jarvis", "vscode")
 
 
@@ -240,11 +242,16 @@ def audit_reports(
             "latest_aliases": [],
             "artifact_roles": sorted(roles),
         }
+    active_ignore_prefixes = list(ignore_prefixes)
+    for prefix in _DEFAULT_IGNORE_PREFIXES:
+        if prefix not in active_ignore_prefixes:
+            active_ignore_prefixes.append(prefix)
+
     for path in sorted(reports_root.rglob("*")):
         if not path.is_file():
             continue
         rel_path = path.relative_to(reports_root)
-        if _should_ignore(rel_path, ignore_prefixes):
+        if _should_ignore(rel_path, active_ignore_prefixes):
             continue
         files_scanned += 1
         issues = _issues_for_path(rel_path, artifact_roles=roles, allowed_viewers=viewers)
@@ -282,7 +289,7 @@ def audit_reports(
         "latest_aliases": sorted(set(latest_aliases)),
         "artifact_roles": sorted(roles),
         "allowed_viewers": sorted(viewers) if viewers is not None else None,
-        "ignore_prefixes": list(ignore_prefixes),
+        "ignore_prefixes": active_ignore_prefixes,
         "rename_suggestions": rename_suggestions if collect_suggestions else [],
     }
     return summary

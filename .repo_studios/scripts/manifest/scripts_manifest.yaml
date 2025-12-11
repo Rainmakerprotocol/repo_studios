@@ -162,7 +162,7 @@ categories:
         comments: "Coordinates lint/format/test cleanup batches."
       - legacy_path: legacy/repo_scripts/pytest_log_runner.py
         current_module: .repo_studios/scripts/orchestrators/run_pytest_log_capture.py
-        artifact_target: .repo_studios/reports/orchestrator_logs/pytest_log_capture_logs
+        artifact_target: .repo_studios/command_center/reports/rawview/test_execution_runs
         status: migrated
         comments: "Captures pytest output and retries hanging suites."
       - legacy_path: legacy/repo_scripts/standards_index_cli.py

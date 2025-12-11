@@ -872,133 +872,133 @@
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_diagnostics_runs/2025-11-28_1702/bundle_summary.json"
+      "path": "rawview/fault_diagnostics_runs/20251128-1702/bundle_summary.json"
     },
     {
       "issues": [
         "unexpected_nesting",
         "invalid_timestamp"
       ],
-      "path": "rawview/fault_diagnostics_runs/2025-11-28_1702/dumps/combined.txt"
+      "path": "rawview/fault_diagnostics_runs/20251128-1702/dumps/combined.txt"
     },
     {
       "issues": [
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_diagnostics_runs/2025-11-28_1702/MANIFEST.json"
+      "path": "rawview/fault_diagnostics_runs/20251128-1702/MANIFEST.json"
     },
     {
       "issues": [
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_diagnostics_runs/2025-11-28_1702/stacks.csv"
+      "path": "rawview/fault_diagnostics_runs/20251128-1702/stacks.csv"
     },
     {
       "issues": [
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_diagnostics_runs/2025-11-28_1702/stacks.log"
+      "path": "rawview/fault_diagnostics_runs/20251128-1702/stacks.log"
     },
     {
       "issues": [
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_diagnostics_runs/2025-11-28_1702/SUMMARY.md"
+      "path": "rawview/fault_diagnostics_runs/20251128-1702/SUMMARY.md"
     },
     {
       "issues": [
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_snapshots/2025-11-28_222929/bundle_summary.json"
+      "path": "rawview/fault_snapshots/20251128-2229/bundle_summary.json"
     },
     {
       "issues": [
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_snapshots/2025-11-28_222929/MANIFEST.json"
+      "path": "rawview/fault_snapshots/20251128-2229/MANIFEST.json"
     },
     {
       "issues": [
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_snapshots/2025-11-28_222929/SUMMARY.md"
+      "path": "rawview/fault_snapshots/20251128-2229/SUMMARY.md"
     },
     {
       "issues": [
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_snapshots/2025-11-28_223156/bundle_summary.json"
+      "path": "rawview/fault_snapshots/20251128-2231/bundle_summary.json"
     },
     {
       "issues": [
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_snapshots/2025-11-28_223156/MANIFEST.json"
+      "path": "rawview/fault_snapshots/20251128-2231/MANIFEST.json"
     },
     {
       "issues": [
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_snapshots/2025-11-28_223156/snapshot.txt"
+      "path": "rawview/fault_snapshots/20251128-2231/snapshot.txt"
     },
     {
       "issues": [
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_snapshots/2025-11-28_223156/SUMMARY.md"
+      "path": "rawview/fault_snapshots/20251128-2231/SUMMARY.md"
     },
     {
       "issues": [
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_snapshots/2025-12-09_232206/bundle_summary.json"
+      "path": "rawview/fault_snapshots/20251209-2322/bundle_summary.json"
     },
     {
       "issues": [
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_snapshots/2025-12-09_232206/MANIFEST.json"
+      "path": "rawview/fault_snapshots/20251209-2322/MANIFEST.json"
     },
     {
       "issues": [
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_snapshots/2025-12-09_232206/SUMMARY.md"
+      "path": "rawview/fault_snapshots/20251209-2322/SUMMARY.md"
     },
     {
       "issues": [
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_snapshots/2025-12-09_232639/bundle_summary.json"
+      "path": "rawview/fault_snapshots/20251209-2326/bundle_summary.json"
     },
     {
       "issues": [
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_snapshots/2025-12-09_232639/MANIFEST.json"
+      "path": "rawview/fault_snapshots/20251209-2326/MANIFEST.json"
     },
     {
       "issues": [
         "invalid_timestamp",
         "unexpected_artifact_name"
       ],
-      "path": "rawview/fault_snapshots/2025-12-09_232639/SUMMARY.md"
+      "path": "rawview/fault_snapshots/20251209-2326/SUMMARY.md"
     },
     {
       "issues": [

@@ -10,7 +10,7 @@
 
 ```bash
 python .repo_studios/scripts/producers/collect_test_log_reports.py \
-  --logs-dir .repo_studios/reports/orchestrator_logs/pytest_log_capture_logs \
+  --logs-dir .repo_studios/command_center/reports/rawview/test_execution_runs \
   --output-dir .repo_studios/reports/producer_reports/test_log_reports \
   --artifacts-to-keep 10 \
   --log-level INFO
@@ -20,7 +20,7 @@ From `.repo_studios/`, run `make studio-collect-test-log-reports` to execute the
 
 ### Key arguments
 
-- `--logs-dir`: Base directory containing pytest log runs (default `.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs`; falls back to `.repo_studios/pytest_logs` when the new tree is missing and `PYTEST_LOG_REPORTS_ALLOW_LEGACY` is not set to `0`).
+- `--logs-dir`: Base directory containing pytest log runs (default `.repo_studios/command_center/reports/rawview/test_execution_runs`; falls back to `.repo_studios/pytest_logs` when the new tree is missing and `PYTEST_LOG_REPORTS_ALLOW_LEGACY` is not set to `0`).
 - `--logs-run`: Explicit run directory; when omitted the newest candidate under `--logs-dir` is selected automatically.
 - `--output-dir`: Destination for structured artifacts (default `.repo_studios/reports/producer_reports/test_log_reports`).
 - `--artifacts-to-keep`: Number of historical run directories retained after pruning (minimum 1, default 10, enforced by the shared helper).
@@ -61,7 +61,7 @@ The suite verifies artifact emission, CSV contents, latest-pointer refresh, prun
 
 ## Operational notes
 
-- Ensure `orchestrators/run_pytest_log_capture.py` (or equivalent) populates `.repo_studios/reports/orchestrator_logs/pytest_log_capture_logs/<slug>/<timestamp>/` prior to running the producer. Missing runs result in a no-op with an informational log entry. Legacy runs under `.repo_studios/pytest_logs` are still discovered when the environment variable `PYTEST_LOG_REPORTS_ALLOW_LEGACY` is not disabled.
+- Ensure `orchestrators/run_pytest_log_capture.py` (or equivalent) populates `.repo_studios/command_center/reports/rawview/test_execution_runs/<slug>/<timestamp>/` prior to running the producer. Missing runs result in a no-op with an informational log entry. Legacy runs under `.repo_studios/pytest_logs` are still discovered when the environment variable `PYTEST_LOG_REPORTS_ALLOW_LEGACY` is not disabled.
 - Downstream consumer `generate_test_log_health_report.py` will be updated to prefer these structured artifacts, keeping its on-demand parsing as fallback.
 - Adjust `--artifacts-to-keep` based on storage budgets; CI jobs typically run with smaller retention windows (5–10 runs) to preserve auditability while limiting disk usage. The shared pruning helper keeps the current run plus any `.keep`-marked directories regardless of the configured limit to avoid accidental data loss.
 - The producer tolerates absent JUnit or pytest log files by emitting empty tables with zeroed metrics so dashboards can differentiate between “no findings” and “no data.”

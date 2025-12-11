@@ -21,7 +21,7 @@ DEFAULT_OUTPUT_BASE = Path(".repo_studios/reports/aggregator_reports/churn_compl
 DEFAULT_TEST_LOG_SUMMARY = Path(
     ".repo_studios/reports/consumer_reports/test_log_health_reports/latest/bundle_summary.json"
 )
-DEFAULT_LOGS_DIR = Path(".repo_studios/reports/orchestrator_logs/pytest_log_capture_logs")
+DEFAULT_LOGS_DIR = Path(".repo_studios/command_center/reports/rawview/test_execution_runs")
 LEGACY_LOGS_DIR = Path(".repo_studios/pytest_logs")
 DEFAULT_METRICS_SOURCE: Path | None = None
 DEFAULT_WINDOW = 500

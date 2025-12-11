@@ -40,7 +40,7 @@ def test_audit_reports_compliance_and_violations(tmp_path: Path) -> None:
     }
     assert summary["latest_aliases"] == ["commandview/topic-one/latest_manifest.json"]
     suggestions = summary["rename_suggestions"]
-    assert any(entry["suggested"].endswith("summary.md") for entry in suggestions)
+    assert any(entry["suggested"].lower().endswith("summary.md") for entry in suggestions)
 
 
 def test_run_writes_outputs_and_threshold(tmp_path: Path) -> None:

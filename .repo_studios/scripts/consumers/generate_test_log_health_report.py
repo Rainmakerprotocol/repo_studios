@@ -21,7 +21,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Sequence
 
-LOGS_DIR_DEFAULT = ".repo_studios/reports/orchestrator_logs/pytest_log_capture_logs"
+LOGS_DIR_DEFAULT = ".repo_studios/command_center/reports/rawview/test_execution_runs"
 LEGACY_LOGS_DIR = ".repo_studios/pytest_logs"
 PRODUCER_REPORT_DEFAULT = ".repo_studios/reports/producer_reports/test_log_reports/latest_report.json"
 OUTPUT_BASE_DEFAULT = ".repo_studios/reports/consumer_reports/test_log_health_reports"

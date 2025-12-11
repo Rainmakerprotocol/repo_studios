@@ -156,25 +156,25 @@
 | `index_scan_analysis/repo_studios__scripts__producers_analysis/producers_analysis-2025-11-05.json` | insufficient_depth |
 | `index_scan_analysis/repo_studios__scripts__summarizers_analysis/summarizers_analysis-2025-11-04.json` | insufficient_depth |
 | `rawview/dependency_import_hygiene_cleanup/.gitkeep` | insufficient_depth |
-| `rawview/fault_diagnostics_runs/2025-11-28_1702/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_diagnostics_runs/2025-11-28_1702/dumps/combined.txt` | unexpected_nesting, invalid_timestamp |
-| `rawview/fault_diagnostics_runs/2025-11-28_1702/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_diagnostics_runs/2025-11-28_1702/stacks.csv` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_diagnostics_runs/2025-11-28_1702/stacks.log` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_diagnostics_runs/2025-11-28_1702/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-11-28_222929/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-11-28_222929/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-11-28_222929/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-11-28_223156/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-11-28_223156/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-11-28_223156/snapshot.txt` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-11-28_223156/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-12-09_232206/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-12-09_232206/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-12-09_232206/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-12-09_232639/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-12-09_232639/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-12-09_232639/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_diagnostics_runs/20251128-1702/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_diagnostics_runs/20251128-1702/dumps/combined.txt` | unexpected_nesting, invalid_timestamp |
+| `rawview/fault_diagnostics_runs/20251128-1702/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_diagnostics_runs/20251128-1702/stacks.csv` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_diagnostics_runs/20251128-1702/stacks.log` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_diagnostics_runs/20251128-1702/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251128-2229/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251128-2229/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251128-2229/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251128-2231/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251128-2231/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251128-2231/snapshot.txt` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251128-2231/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251209-2322/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251209-2322/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251209-2322/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251209-2326/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251209-2326/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251209-2326/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
 | `rawview/mypy_baselines/.gitkeep` | insufficient_depth |
 | `repo-studios__command-center__automation_run/automation_manifest-20251103_160000/inputs/automation_config.yaml` | invalid_viewer_slug, invalid_timestamp, unexpected_artifact_name |
 | `repo-studios__command-center__automation_run/automation_manifest-20251103_160000/inputs/files_sample.json` | invalid_viewer_slug, invalid_timestamp, unexpected_artifact_name |

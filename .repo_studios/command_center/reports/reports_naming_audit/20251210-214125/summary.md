@@ -53,25 +53,25 @@
 | `healthview/test_execution_telemetry/20251207-0320/test_execution_telemetry_summary.md` | unexpected_artifact_name |
 | `healthview/test_execution_telemetry/20251207-0330/test_execution_telemetry_summary.json` | unexpected_artifact_name |
 | `healthview/test_execution_telemetry/20251207-0330/test_execution_telemetry_summary.md` | unexpected_artifact_name |
-| `rawview/fault_diagnostics_runs/2025-11-28_1702/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_diagnostics_runs/2025-11-28_1702/dumps/combined.txt` | unexpected_nesting, invalid_timestamp |
-| `rawview/fault_diagnostics_runs/2025-11-28_1702/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_diagnostics_runs/2025-11-28_1702/stacks.csv` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_diagnostics_runs/2025-11-28_1702/stacks.log` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_diagnostics_runs/2025-11-28_1702/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-11-28_222929/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-11-28_222929/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-11-28_222929/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-11-28_223156/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-11-28_223156/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-11-28_223156/snapshot.txt` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-11-28_223156/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-12-09_232206/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-12-09_232206/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-12-09_232206/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-12-09_232639/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-12-09_232639/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
-| `rawview/fault_snapshots/2025-12-09_232639/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_diagnostics_runs/20251128-1702/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_diagnostics_runs/20251128-1702/dumps/combined.txt` | unexpected_nesting, invalid_timestamp |
+| `rawview/fault_diagnostics_runs/20251128-1702/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_diagnostics_runs/20251128-1702/stacks.csv` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_diagnostics_runs/20251128-1702/stacks.log` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_diagnostics_runs/20251128-1702/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251128-2229/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251128-2229/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251128-2229/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251128-2231/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251128-2231/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251128-2231/snapshot.txt` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251128-2231/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251209-2322/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251209-2322/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251209-2322/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251209-2326/bundle_summary.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251209-2326/MANIFEST.json` | invalid_timestamp, unexpected_artifact_name |
+| `rawview/fault_snapshots/20251209-2326/SUMMARY.md` | invalid_timestamp, unexpected_artifact_name |
 | `reports_naming_audit/20251130-131522/summary.json` | insufficient_depth |
 | `reports_naming_audit/20251130-131522/summary.md` | insufficient_depth |
 | `reports_naming_audit/20251205-151329/summary.json` | insufficient_depth |

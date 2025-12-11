@@ -34,7 +34,7 @@ from libraries import (  # noqa: E402
     prune_run_directories,
 )
 
-DEFAULT_LOGS_BASE = Path(".repo_studios/reports/orchestrator_logs/pytest_log_capture_logs")
+DEFAULT_LOGS_BASE = Path(".repo_studios/command_center/reports/rawview/test_execution_runs")
 LEGACY_LOGS_BASE = Path(".repo_studios/pytest_logs")
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/test_log_reports")
 RUN_PREFIX = "test_log_report"
