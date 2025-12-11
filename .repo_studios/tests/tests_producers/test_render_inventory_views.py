@@ -115,20 +115,49 @@ def test_render_inventory_views_structured_output(tmp_path: Path, artifacts_to_k
     assert latest_json.read_text(encoding="utf-8") == (run_dir / "report.json").read_text(encoding="utf-8")
 
     reports_root = tmp_path / ".repo_studios" / "reports"
-    docs_latest = reports_root / "docs" / "latest" / "docs_overview.yaml"
-    scripts_latest = reports_root / "scripts" / "latest" / "scripts_overview.yaml"
-    tests_latest = reports_root / "tests" / "latest" / "tests_overview.yaml"
-    summary_latest = reports_root / "summary" / "latest" / "summary.json"
+    docs_latest = output_dir / "latest_docs_overview.yaml"
+    scripts_latest = output_dir / "latest_scripts_overview.yaml"
+    tests_latest = output_dir / "latest_tests_overview.yaml"
+    summary_latest = output_dir / "latest_summary.json"
+    dashboard_latest = output_dir / "latest_dashboard.json"
     assert docs_latest.exists()
     assert scripts_latest.exists()
     assert tests_latest.exists()
     assert summary_latest.exists()
+    assert dashboard_latest.exists()
+
+    docs_payload = yaml.safe_load(docs_latest.read_text(encoding="utf-8"))
+    scripts_payload = yaml.safe_load(scripts_latest.read_text(encoding="utf-8"))
+    tests_payload = yaml.safe_load(tests_latest.read_text(encoding="utf-8"))
+    summary_payload = json.loads(summary_latest.read_text(encoding="utf-8"))
+    assert len(docs_payload) == 1
+    assert len(scripts_payload) == 1
+    assert len(tests_payload) == 1
+    assert summary_payload["total"] == 3
+
+    healthview_root = tmp_path / ".repo_studios" / "command_center" / "reports" / "healthview" / "inventory_overview"
+    assert healthview_root.exists()
+    healthview_dirs = [node.name for node in healthview_root.iterdir() if node.is_dir()]
+    assert healthview_dirs == ["20251022-1234"]
+    healthview_dir = healthview_root / healthview_dirs[0]
+    assert healthview_dir.exists()
+    assert (healthview_dir / "docs_overview.yaml").exists()
+    assert (healthview_dir / "summary.json").exists()
+
+    legacy_docs_dir = reports_root / "docs"
+    legacy_scripts_dir = reports_root / "scripts"
+    legacy_tests_dir = reports_root / "tests"
+    legacy_summary_dir = reports_root / "summary"
+    assert not legacy_docs_dir.exists()
+    assert not legacy_scripts_dir.exists()
+    assert not legacy_tests_dir.exists()
+    assert not legacy_summary_dir.exists()
 
     views_dir = tmp_path / ".repo_studios" / "inventory_schema" / "views"
     docs_stub = yaml.safe_load((views_dir / "docs_overview.yaml").read_text(encoding="utf-8"))
-    assert docs_stub[0]["redirect"] == "reports/docs/latest/docs_overview.yaml"
+    assert docs_stub[0]["redirect"] == "reports/producer_reports/render_inventory_views/latest_docs_overview.yaml"
     summary_stub = json.loads((views_dir / "summary.json").read_text(encoding="utf-8"))
-    assert summary_stub["redirect"] == "reports/summary/latest/summary.json"
+    assert summary_stub["redirect"] == "reports/producer_reports/render_inventory_views/latest_summary.json"
 
     remaining_runs = sorted(node.name for node in output_dir.iterdir() if node.is_dir())
     assert set(remaining_runs) == {f"render_inventory_views-{slug}", "render_inventory_views-20251020_010101"}

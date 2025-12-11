@@ -400,7 +400,8 @@ roadmap.
     `.repo_studios/reports/orchestrator_runs/standards_index_cli/`, so the topic runner must mirror
     outputs into the Command Center Healthview slug and likely wrap the query logic behind a
     callable helper; (3) `check_inventory_health.py` depends on
-    `reports/summary/latest/summary.json` plus `config/ci_inventory_thresholds.json`, so the
+    `reports/producer_reports/render_inventory_views/latest_summary.json` plus
+    `config/ci_inventory_thresholds.json`, so the
     orchestrator needs to schedule `render_inventory_views.py` (or another summary refresh) before
     invoking the health check and expose baseline overrides for CI parity.
   - 2025-12-01: Recorded rollout conditions for Engineering Complexity Watch—per
@@ -648,8 +649,10 @@ roadmap.
     `command_center/scripts/orchestrators/run_dependency_import_hygiene.py` with an internal dry-run
     plan emitter plus regression test coverage (`.venv/Scripts/python.exe -m pytest
     .repo_studios/tests/tests_command_center/dependency_import_hygiene -q`).
-  - [ ] Delete or archive obsolete artifacts under previous report folders, ensuring Healthview
-    becomes the canonical destination.
+  - [x] 2025-12-11: Deleted legacy `.repo_studios/reports/{docs,scripts,tests,summary}/` trees, updated
+    CI guidance to consume `render_inventory_views` outputs, refreshed directory layout docs, and
+    captured audit evidence via `reports_naming_audit` bundle `20251211-023933` to confirm Healthview
+    is the canonical destination.
 
 ## Healthview Viewer Wiring Reference
 

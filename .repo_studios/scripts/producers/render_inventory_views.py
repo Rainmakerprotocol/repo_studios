@@ -226,25 +226,8 @@ def build_views(entries: List[Dict[str, Any]], *, generated_at: datetime) -> Vie
     )
 
 
-def write_yaml(path: Path, data: Any) -> None:
-    with path.open("w", encoding="utf-8") as handle:
-        yaml.safe_dump(data, handle, default_flow_style=False, sort_keys=False)
-
-
-def write_json(path: Path, data: Any) -> None:
-    path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
-
-
-def ensure_report_topics(reports_root: Path) -> Dict[str, Path]:
-    topics = {
-        "docs": reports_root / "docs" / "latest",
-        "scripts": reports_root / "scripts" / "latest",
-        "tests": reports_root / "tests" / "latest",
-        "summary": reports_root / "summary" / "latest",
-    }
-    for path in topics.values():
-        path.mkdir(parents=True, exist_ok=True)
-    return topics
+def _dump_yaml(data: Any) -> str:
+    return yaml.safe_dump(data, sort_keys=False)
 
 
 def _compute_redirect(repo_root: Path, destination: Path) -> str:
@@ -260,17 +243,21 @@ def write_stub(path: Path, destination: Path, *, generated_at: datetime, repo_ro
     redirect = _compute_redirect(repo_root, destination)
     payload: Any
     if path.suffix == ".json":
-        payload = {"redirect": redirect, "generated_at": generated_at.isoformat()}
-        write_json(path, payload)
+        payload = {
+            "redirect": redirect,
+            "generated_at": generated_at.isoformat(),
+            "note": "View relocated under reports/producer_reports/render_inventory_views/.",
+        }
+        path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     else:
         payload = [
             {
                 "redirect": redirect,
                 "generated_at": generated_at.isoformat(),
-                "note": "View relocated under reports/<topic>/latest/.",
+                "note": "View relocated under reports/producer_reports/render_inventory_views/.",
             }
         ]
-        write_yaml(path, payload)
+        path.write_text(yaml.safe_dump(payload, sort_keys=False), encoding="utf-8")
 
 
 def compose_report_payload(
@@ -466,6 +453,7 @@ def main(argv: List[str] | None = None) -> int:
     views_dir = _resolve(repo_root, paths.views_dir)
     reports_root = _resolve(repo_root, paths.reports_root)
     output_dir = paths.output_dir
+    command_center_reports = repo_root / ".repo_studios/command_center/reports"
 
     generated_at = _parse_timestamp(options.timestamp)
     slug = _format_slug(generated_at)
@@ -510,6 +498,36 @@ def main(argv: List[str] | None = None) -> int:
             kind="json",
             content=lambda: raw_payload,
         ),
+        ReportArtifact(
+            filename="docs_overview.yaml",
+            pointer="latest_docs_overview.yaml",
+            kind="text",
+            content=lambda: _dump_yaml(bundle.docs),
+        ),
+        ReportArtifact(
+            filename="scripts_overview.yaml",
+            pointer="latest_scripts_overview.yaml",
+            kind="text",
+            content=lambda: _dump_yaml(bundle.scripts),
+        ),
+        ReportArtifact(
+            filename="tests_overview.yaml",
+            pointer="latest_tests_overview.yaml",
+            kind="text",
+            content=lambda: _dump_yaml(bundle.tests),
+        ),
+        ReportArtifact(
+            filename="summary.json",
+            pointer="latest_summary.json",
+            kind="json",
+            content=lambda: bundle.summary,
+        ),
+        ReportArtifact(
+            filename="dashboard.json",
+            pointer="latest_dashboard.json",
+            kind="json",
+            content=lambda: bundle.dashboard,
+        ),
     ]
 
     result = write_report_artifacts(
@@ -520,28 +538,40 @@ def main(argv: List[str] | None = None) -> int:
         keep=options.artifacts_to_keep,
     )
 
-    topic_paths = ensure_report_topics(reports_root)
+    healthview_artifacts = [
+        ReportArtifact(filename="report.json", kind="json", content=lambda: report_payload),
+        ReportArtifact(filename="raw.json", kind="json", content=lambda: raw_payload),
+        ReportArtifact(filename="docs_overview.yaml", kind="text", content=lambda: _dump_yaml(bundle.docs)),
+        ReportArtifact(filename="scripts_overview.yaml", kind="text", content=lambda: _dump_yaml(bundle.scripts)),
+        ReportArtifact(filename="tests_overview.yaml", kind="text", content=lambda: _dump_yaml(bundle.tests)),
+        ReportArtifact(filename="summary.json", kind="json", content=lambda: bundle.summary),
+        ReportArtifact(filename="dashboard.json", kind="json", content=lambda: bundle.dashboard),
+    ]
 
-    docs_path = topic_paths["docs"] / "docs_overview.yaml"
-    scripts_path = topic_paths["scripts"] / "scripts_overview.yaml"
-    tests_path = topic_paths["tests"] / "tests_overview.yaml"
-    summary_path = topic_paths["summary"] / "summary.json"
-    dashboard_path = topic_paths["summary"] / "dashboard.json"
+    healthview_result = write_report_artifacts(
+        stem="inventory_overview",
+        timestamp=generated_at,
+        output_dir=command_center_reports,
+        artifacts=healthview_artifacts,
+        keep=options.artifacts_to_keep,
+        viewer="healthview",
+        topic="inventory_overview",
+    )
 
-    write_yaml(docs_path, bundle.docs)
-    write_yaml(scripts_path, bundle.scripts)
-    write_yaml(tests_path, bundle.tests)
-    write_json(summary_path, bundle.summary)
-    write_json(dashboard_path, bundle.dashboard)
+    docs_latest = output_dir / "latest_docs_overview.yaml"
+    scripts_latest = output_dir / "latest_scripts_overview.yaml"
+    tests_latest = output_dir / "latest_tests_overview.yaml"
+    summary_latest = output_dir / "latest_summary.json"
 
-    write_stub(views_dir / "docs_overview.yaml", docs_path, generated_at=generated_at, repo_root=repo_root)
-    write_stub(views_dir / "scripts_overview.yaml", scripts_path, generated_at=generated_at, repo_root=repo_root)
-    write_stub(views_dir / "tests_overview.yaml", tests_path, generated_at=generated_at, repo_root=repo_root)
-    write_stub(views_dir / "summary.json", summary_path, generated_at=generated_at, repo_root=repo_root)
+    write_stub(views_dir / "docs_overview.yaml", docs_latest, generated_at=generated_at, repo_root=repo_root)
+    write_stub(views_dir / "scripts_overview.yaml", scripts_latest, generated_at=generated_at, repo_root=repo_root)
+    write_stub(views_dir / "tests_overview.yaml", tests_latest, generated_at=generated_at, repo_root=repo_root)
+    write_stub(views_dir / "summary.json", summary_latest, generated_at=generated_at, repo_root=repo_root)
 
     logging.info(
-        "render_inventory_views run_dir=%s status=%s total=%s docs=%s scripts=%s tests=%s",
+        "render_inventory_views run_dir=%s healthview_dir=%s status=%s total=%s docs=%s scripts=%s tests=%s",
         result.run_dir,
+        healthview_result.run_dir,
         report_payload["status"],
         report_payload["counts"]["totals"]["total"],
         report_payload["counts"]["totals"]["docs"],

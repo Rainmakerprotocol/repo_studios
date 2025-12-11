@@ -21,13 +21,13 @@ This guide describes the proposed CI automation that consumes `.repo_studios/rep
    - Treat any path-existence error or schema violation as a hard failure.
 
 3. **Health Assertions**
-   - Parse `.repo_studios/reports/summary/latest/summary.json` and fail if:
+   - Parse `.repo_studios/reports/producer_reports/render_inventory_views/latest_summary.json` and fail if:
      - `by_status.unknown` > 0.
      - `by_asset_kind.document` drops below a configured floor (default: 20).
      - Any consumer count unexpectedly hits zero when previously tracked (configure allowlist).
 
 4. **Change Detection**
-   - Compare current summary against the main-branch baseline stored in `reports/summary/main_baseline.json` (to be generated after pipeline adoption).
+   - Compare current summary against the main-branch baseline stored in `.repo_studios/config/inventory/inventory_summary_baseline.json` (to be generated after pipeline adoption).
    - Fail or warn when deltas exceed thresholds (for example, more than 5% drop in total assets).
 
 5. **Reporting Output**
@@ -42,5 +42,5 @@ This guide describes the proposed CI automation that consumes `.repo_studios/rep
 
 ## Next Actions
 
-1. Extend thresholds or baseline when inventory scope grows (update `.repo_studios/config/ci_inventory_thresholds.json` and `reports/summary/main_baseline.json`).
+1. Extend thresholds or baseline when inventory scope grows (update `.repo_studios/config/ci_inventory_thresholds.json` and `.repo_studios/config/inventory/inventory_summary_baseline.json`).
 2. Monitor CI results and adjust health check logic (`scripts/check_inventory_health.py`) as new metrics gain consumers.

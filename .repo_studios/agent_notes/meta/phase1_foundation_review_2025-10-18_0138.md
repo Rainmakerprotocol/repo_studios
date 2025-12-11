@@ -28,5 +28,5 @@
 ## Follow-up
 
 - [ ] Migrate remaining legacy standards into `docs/standards/global/` or `docs/standards/project/` and assign owners.
-- [ ] Define CI health checks that consume `reports/summary/latest/*.json` artifacts.
+- [ ] Define CI health checks that consume `reports/producer_reports/render_inventory_views/latest_*.json` artifacts.
 - [ ] Expand secondary views (dependency graphs, trend snapshots) once consumers are identified.

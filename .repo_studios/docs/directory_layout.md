@@ -30,6 +30,6 @@ The `.repo_studios/` subtree now uses concise folder names so agents and humans 
 
 ## Reports Roadmap
 
-- **Phase 1 (current):** Keep generated YAML/JSON summaries in `inventory_schema/views/` so the validator can inspect them while the migration plan matures.
-- **Phase 2 (after validator suppression work):** Introduce topic-specific subfolders such as `reports/docs/`, `reports/scripts/`, and `reports/tests/`; adjust the renderer to publish into those locations while leaving a pointer in `inventory_schema/views/` for backward compatibility.
-- **Phase 3 (reporting automation expansion):** Retire the temporary `inventory_schema/views/` copies once CI dashboards and consumers read directly from `reports/<topic>/latest/`; archive historical runs under `reports/<topic>/timeline/`.
+- **Phase 1 (legacy)** – Generated YAML/JSON views lived under `inventory_schema/views/` while the renderer migration plan matured.
+- **Phase 2 (complete)** – `render_inventory_views.py` now publishes timestamped runs under `reports/producer_reports/render_inventory_views/` with `latest_*` pointers; `inventory_schema/views/` only retains redirect stubs for backward compatibility.
+- **Phase 3 (current)** – Health and compliance scripts consume the render_inventory_views artifacts directly (for example `latest_summary.json`), allowing the retired `reports/{docs,scripts,tests,summary}/` trees to stay archived. Future expansion will archive long-term history alongside topic orchestrator outputs in Command Center.

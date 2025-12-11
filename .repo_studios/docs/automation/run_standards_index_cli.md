@@ -1,120 +1,47 @@
-# run_standards_index_cli.py
+# run_standards_index_cli.py (Retired Shim)
 
-**Last updated:** 2025-12-01
+**Last updated:** 2025-12-10
 
-## Overview
+## Status
 
-`run_standards_index_cli.py` wraps the Repo Studios standards index in a modernized orchestrator surface. The CLI still prints
-human-friendly results for `list`, `search`, `show`, and `stats`, while now emitting structured bundles so analysts and
-automation can rely on retained history, provenance metadata, and standard Command Center helpers for path/option resolution.
+The legacy CLI wrapper was removed during Phase 8 of the orchestrator rollout. All automation should now invoke
+`command_center/scripts/orchestrators/run_standards_integrity.py` or the meta orchestrator instead of the shim. Historical
+artifacts previously stored in `.repo_studios/reports/orchestrator_runs/standards_index_cli/` have been deleted; the Standards
+Integrity topic orchestrator produces canonical bundles under `.repo_studios/command_center/reports/healthview/standards_integrity/<timestamp>/`.
 
-## Invocation
+## Replacement Workflow
 
-### Automation (redirect enabled)
-
-Allow the shim to redirect into the Standards Integrity topic orchestrator while still
-emitting CLI artifacts:
+Run the topic orchestrator directly:
 
 ```bash
-python .repo_studios/scripts/orchestrators/run_standards_index_cli.py \
+python .repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py \
   --repo-root . \
-  --output-dir .repo_studios/reports/orchestrator_runs/standards_index_cli \
-  --artifacts-to-keep 5 \
-  --log-level INFO \
-  stats
+  --log-level INFO
 ```
 
-For filtered automation runs (no legacy flag):
+This entry point refreshes the standards index, gap analysis, diff, and prompt seeds, then publishes Healthview bundles and
+updates producer `latest_*` pointers (for example `.repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml`).
 
-```bash
-python .repo_studios/scripts/orchestrators/run_standards_index_cli.py \
-  --repo-root . \
-  --output-dir .repo_studios/reports/orchestrator_runs/standards_index_cli \
-  --index-path .repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml \
-  list \
-  --severity error \
-  --category security
-```
-
-### Interactive CLI (skip redirect)
-
-Set `RUN_STANDARDS_INDEX_CLI_USE_LEGACY=1` only for ad-hoc queries when you want to
-avoid the standards integrity redirect. Remember to clear the flag after use.
-
-```powershell
-$old = $env:RUN_STANDARDS_INDEX_CLI_USE_LEGACY
-$env:RUN_STANDARDS_INDEX_CLI_USE_LEGACY = "1"
-try {
-    python .repo_studios/scripts/orchestrators/run_standards_index_cli.py stats
-} finally {
-    if ($null -eq $old) { Remove-Item Env:RUN_STANDARDS_INDEX_CLI_USE_LEGACY -ErrorAction SilentlyContinue }
-    else { $env:RUN_STANDARDS_INDEX_CLI_USE_LEGACY = $old }
-}
-```
-
-```bash
-# bash/zsh interactive example
-RUN_STANDARDS_INDEX_CLI_USE_LEGACY=1 \
-  python .repo_studios/scripts/orchestrators/run_standards_index_cli.py list --severity warn
-```
-
-Key flags:
-
-- `--repo-root`: Optional override when running outside of the repo checkout.
-- `--output-dir`: Destination for structured run bundles (defaults to `.repo_studios/reports/orchestrator_runs/standards_index_cli`).
-- `--index-path`: Alternate standards index path (defaults to `.repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml`).
-- `--artifacts-to-keep`: Retention window for orchestrator bundles and latest pointers (minimum 1, default 5).
-- `--log-level`: Logging verbosity across helpers (`INFO` default).
-- Subcommands:
-  - `list`: Prints rule IDs matching optional filters.
-  - `search`: Prints `<id>: <summary>` rows for matches (requires `--text`).
-  - `show`: Renders a single rule as YAML via `--id`.
-  - `stats`: Outputs total count, severity distribution, and integrity hash.
-- Filtering options (`list`/`search`): `--severity`, `--category`, `--category-multi` (repeatable), `--applies`, `--source-frag`, `--text` (`search` only).
-
-## Outputs
-
-Each execution writes `standards_index_cli-<timestamp>/` under the configured `--output-dir`, containing:
-
-- `report.json`: Canonical payload describing command, filters, summary counts, provenance (index path, retention), stdout lines, and
-  results payload (rule IDs, matches, rule document, or stats).
-- `report.md`: Markdown summary mirroring the JSON core fields, filter set, and stdout snippet.
-- `bundle_summary.json`: Lightweight digest (`command`, `overall_status`, `items_returned`, `exit_code`).
-- `stdout.txt`: Captured stdout for the run, preserving interactive output for audit trails.
-
-Pointer files (`latest_report.json`, `latest_report.md`, `latest_bundle_summary.json`, `latest_stdout.txt`) update alongside each run. History
-is pruned to `--artifacts-to-keep` bundles.
-
-## Diagnostics
-
-Key fields in `report.json`:
-
-- `summary.exit_code`, `summary.overall_status`, `summary.items_returned`, `summary.total_rules`, `summary.severity_counts`.
-- `filters`: Canonical severity (aliases resolved), categories, text fragments, and rule IDs as applicable.
-- `results`: Command-specific payload (rule IDs, match summaries, YAML rule body, or stats map).
-- `error`: Present when exit code is non-zero (missing rule, invalid input, index failures).
-- `paths.index_path`: Absolute path to the standards index used for the run.
-
-Markdown reports embed filters and stdout output for quick review without opening JSON.
+For ad-hoc exploration, load the standards index JSON/YAML directly or build small utilities on top of the producer output. The
+deprecated CLI subcommands (`list`, `search`, `show`, `stats`) are intentionally absent to reduce maintenance overhead; replicate
+them by querying `latest_index.yaml` inside a notebook or script when necessary.
 
 ## Testing
 
-Unit coverage lives in `.repo_studios/tests/tests_orchestrators/test_run_standards_index_cli.py` and exercises:
-
-- `list` command filtering and artifact emission.
-- `show` command error handling (missing rule) with structured summary propagation.
-- `stats` command severity counts and stdout mirroring.
-
-Run with:
+Validate orchestrator behaviour with:
 
 ```bash
-.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_orchestrators/test_run_standards_index_cli.py
+.venv/Scripts/python.exe -m pytest \
+  .repo_studios/tests/tests_command_center/standards_integrity/test_run_standards_integrity.py
 ```
+
+The suite exercises catalog registration, retention budgets, manifest emission, and Healthview wiring.
 
 ## Operational Notes
 
-- The CLI remains stdout-first for interactive use; structured bundles are emitted in parallel for retention.
-- Severity aliases (`low`, `medium`, `high`) are mapped with warnings; prefer canonical severities in scripts.
-- `--index-path` simplifies testing and allows experimentation with alternate catalogs prior to committing updates.
-- The canonical index pointer lives at `.repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml`; if that pointer is missing, regenerate the bundle via `python .repo_studios/scripts/producers/generate_standards_index.py` or supply an alternate archive path with `--index-path`.
-- When wiring the command into broader orchestration, prefer calling the import-safe `run(argv=None)` helper instead of spawning a subprocess.
+- Remove any lingering references to `run_standards_index_cli.py` in scripts or playbooks; the module no longer ships with the
+  repository.
+- Standards catalog consumers should ingest the Healthview manifest or `latest_index.yaml`; both remain inside the producer report
+  hierarchy that the orchestration pipeline refreshes.
+- If a future CLI interface is required, prefer adding a subcommand to the Standards Integrity orchestrator so retention, logging,
+  and output contracts stay aligned with the new pipeline.

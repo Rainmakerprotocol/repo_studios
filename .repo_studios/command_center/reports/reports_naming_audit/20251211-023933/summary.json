@@ -1,0 +1,51 @@
+{
+  "allowed_viewers": [
+    "commandview",
+    "healthview",
+    "jarvis",
+    "rawview",
+    "vscode"
+  ],
+  "artifact_roles": [
+    "MANIFEST.json",
+    "SUMMARY.md",
+    "bundle_summary.json",
+    "candidates.tsv",
+    "combined.txt",
+    "manifest.json",
+    "matrix.csv",
+    "matrix.json",
+    "matrix.tsv",
+    "metrics.json",
+    "metrics.md",
+    "report.json",
+    "report.md",
+    "scripts_analysis.json",
+    "scripts_duplicate_matrix.json",
+    "scripts_duplicate_summary.md",
+    "snapshot.txt",
+    "stacks.csv",
+    "stacks.log",
+    "standards_overview.json",
+    "standards_overview.md",
+    "summary.json",
+    "summary.md",
+    "telemetry.json",
+    "test_execution_telemetry_summary.json",
+    "test_execution_telemetry_summary.md"
+  ],
+  "compliance_ratio": 1.0,
+  "compliant_files": 127,
+  "fail_threshold": 0,
+  "ignore_prefixes": [
+    "reports_naming_audit/"
+  ],
+  "issue_totals": {},
+  "latest_aliases": [],
+  "rename_suggestions": [],
+  "reports_root": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports",
+  "timestamp": "2025-12-11T02:39:33.646901+00:00",
+  "total_files": 127,
+  "violation_count": 0,
+  "violations": []
+}

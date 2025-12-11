@@ -1,4 +1,4 @@
 {
-  "redirect": "reports/summary/latest/summary.json",
+  "redirect": "reports/producer_reports/render_inventory_views/latest_summary.json",
   "generated_at": "2025-10-23T09:47:23.986051+00:00"
 }

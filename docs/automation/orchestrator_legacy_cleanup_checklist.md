@@ -58,7 +58,7 @@ Makefile changes, test rewrites, and CI/agent adjustments before removing legacy
 | Item | Legacy Path | Replacement Path | Verification |
 | --- | --- | --- | --- |
 | [x] Remove legacy report directories (`.repo_studios/reports/orchestrator_runs/*`, `.repo_studios/reports/orchestrator_logs/*`) once topic bundles and Healthview mirrors are canonical. | Legacy `orchestrator_runs`, `orchestrator_logs` trees | `.repo_studios/command_center/reports/{commandview,healthview}/<topic>/<timestamp>/` | 2025-12-10: Removed legacy trees and added rawview placeholders for dependency hygiene cleanup + mypy baselines (see PR diff & pytest `tests/tests_utilities/test_refresh_mypy_baselines.py`). |
-| [ ] Run `reports_naming_audit.py` to confirm no `latest_*` artifacts remain after deletions. | Various | Healthview/CommandView timestamped bundles only | |
+| [x] Run `reports_naming_audit.py` to confirm no `latest_*` artifacts remain after deletions. | Various | Healthview/CommandView timestamped bundles only | 2025-12-11: `C:/Users/genet/repo_studios/.venv/Scripts/python.exe .repo_studios/command_center/scripts/utilities/reports_naming_audit.py` → bundle `reports_naming_audit/20251211-023933/summary.md` |
 
 ## Tracking
 

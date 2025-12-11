@@ -24,8 +24,19 @@ def test_default_paths_point_to_repo_root():
     mod = _load_module()
     expected_root = Path(__file__).resolve().parents[2]
     assert mod.ROOT == expected_root
-    assert mod.SUMMARY_LATEST == expected_root / "reports" / "summary" / "latest" / "summary.json"
-    assert mod.BASELINE_PATH == expected_root / "reports" / "summary" / "main_baseline.json"
+    assert (
+        mod.SUMMARY_LATEST
+        == expected_root
+        / ".repo_studios"
+        / "reports"
+        / "producer_reports"
+        / "render_inventory_views"
+        / "latest_summary.json"
+    )
+    assert (
+        mod.BASELINE_PATH
+        == expected_root / ".repo_studios" / "config" / "inventory" / "inventory_summary_baseline.json"
+    )
     assert mod.THRESHOLD_PATH == expected_root / "config" / "ci_inventory_thresholds.json"
 
 
