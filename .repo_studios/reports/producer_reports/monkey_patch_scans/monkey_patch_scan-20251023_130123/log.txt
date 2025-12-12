@@ -1,8 +1,0 @@
-status=ok
-timestamp=2025-10-23T13:01:23.706927+00:00
-scan_root=.repo_studios\scripts\producers
-files_scanned=18
-files_with_findings=2
-total_findings=2
-parse_errors=0
-by_category_attribute_reassignment_on_import=2

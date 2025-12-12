@@ -1,0 +1,149 @@
+{
+  "categories_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\.repo_studios\\standards_categories.yaml",
+  "generated_utc": "2025-12-11T13:08:49.952960+00:00",
+  "index_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\standards_index_reports\\latest_index.yaml",
+  "schema_version": 1,
+  "sources": {
+    "docs\\standards\\global\\std-global-code-cleanup.md": [
+      {
+        "line": 32,
+        "text": "\tnever introduce regressions."
+      },
+      {
+        "line": 33,
+        "text": "- Prefer automated formatting and linting fixes as separate commits so behavioural changes remain easy to"
+      },
+      {
+        "line": 35,
+        "text": "- Use repository utilities for repetitive edits (for example shared library helpers) to avoid diverging"
+      }
+    ],
+    "docs\\standards\\global\\std-global-markdown-authoring.md": [
+      {
+        "line": 32,
+        "text": "- Ensure every substantive document includes at least one `##` subsection so the doc index can surface a meaningful table of contents."
+      },
+      {
+        "line": 33,
+        "text": "- Use descriptive, unique headings; when cloning a template, immediately rename sections to avoid duplicate slugs across the repository."
+      },
+      {
+        "line": 44,
+        "text": "- Use `owner` to capture the accountable team or alias (for example, `repo_studios_ai`)."
+      },
+      {
+        "line": 50,
+        "text": "- Ensure each file has only one top-level heading and organize subsections using `##`/`###` tiers for predictable anchors."
+      },
+      {
+        "line": 52,
+        "text": "- Prefer descriptive link text and repository-relative URLs to avoid rot when mirrors or forks consume the documentation."
+      }
+    ],
+    "docs\\standards\\global\\std-global-monkey-patching.md": [
+      {
+        "line": 22,
+        "text": "- Avoid patching Python builtins (`len`, `open`, `list`, etc.) outside of tightly scoped, clearly documented tests."
+      },
+      {
+        "line": 28,
+        "text": "- Prefer dependency injection, protocol adapters, or feature flags before reaching for monkey patches; treat"
+      },
+      {
+        "line": 38,
+        "text": "- Use `pytest` fixtures to apply patches; avoid global state changes in module import time."
+      },
+      {
+        "line": 39,
+        "text": "- Ensure teardown phases restore original objects even when tests error; include `addfinalizer` hooks for"
+      },
+      {
+        "line": 44,
+        "text": "- Never ship monkey patches in production code paths without explicit sign-off from the service owner."
+      },
+      {
+        "line": 45,
+        "text": "- Document any runtime patching (for example hotfix scripts) in the service runbook along with rollback"
+      }
+    ],
+    "docs\\standards\\global\\std-global-python-engineering.md": [
+      {
+        "line": 22,
+        "text": "- Prefer specific exception types (`ValueError`, `KeyError`, etc.) over bare `except:` clauses to avoid masking unexpected faults."
+      },
+      {
+        "line": 24,
+        "text": "- Use `try` blocks narrowly and confine remediation logic to the smallest scope that meaningfully handles the error."
+      },
+      {
+        "line": 29,
+        "text": "- Ensure log messages include actionable fields such as correlation IDs, user identifiers, or feature flags when applicable."
+      },
+      {
+        "line": 38,
+        "text": "- Use fixtures to manage shared setup and prefer factory helpers over ad-hoc object construction in tests."
+      },
+      {
+        "line": 42,
+        "text": "- Pin dependencies in `requirements.txt` or `pyproject.toml` and document rationale for each addition in the"
+      },
+      {
+        "line": 44,
+        "text": "- Avoid transitive imports from application entry points; import only what you use to keep import graphs"
+      }
+    ],
+    "docs\\standards\\project\\std-project-operating-standard.md": [
+      {
+        "line": 27,
+        "text": "- Document every new automation target or script addition in the repository Makefile and supporting docs to keep contributors informed."
+      }
+    ],
+    "docs\\standards\\project\\std-project-python-instructions.md": [
+      {
+        "line": 21,
+        "text": "- Use the repository-managed virtual environment (`.venv/`) for local development and testing. Regenerate it after any dependency change."
+      },
+      {
+        "line": 22,
+        "text": "- Pin new dependencies in `requirements.txt` or supporting lockfiles and document the reasoning in pull requests."
+      },
+      {
+        "line": 28,
+        "text": "- Ensure each doc adheres to the global markdown authoring standard: include front matter with `owner`, `tags`, and `status`, provide a single H1 with a descriptive summary paragraph, and add meaningful H2 sections for navigability."
+      }
+    ]
+  },
+  "summary": {
+    "scanned_sources": 6,
+    "sources_with_candidates": 6,
+    "top_source_candidates": 6,
+    "total_candidates": 24
+  },
+  "top_sources": [
+    {
+      "candidate_count": 6,
+      "path": "docs\\standards\\global\\std-global-monkey-patching.md"
+    },
+    {
+      "candidate_count": 6,
+      "path": "docs\\standards\\global\\std-global-python-engineering.md"
+    },
+    {
+      "candidate_count": 5,
+      "path": "docs\\standards\\global\\std-global-markdown-authoring.md"
+    },
+    {
+      "candidate_count": 3,
+      "path": "docs\\standards\\global\\std-global-code-cleanup.md"
+    },
+    {
+      "candidate_count": 3,
+      "path": "docs\\standards\\project\\std-project-python-instructions.md"
+    },
+    {
+      "candidate_count": 1,
+      "path": "docs\\standards\\project\\std-project-operating-standard.md"
+    }
+  ],
+  "total_candidates": 24
+}

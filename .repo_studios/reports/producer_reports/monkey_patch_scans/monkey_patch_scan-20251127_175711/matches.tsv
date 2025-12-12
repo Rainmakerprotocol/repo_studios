@@ -1,4 +1,0 @@
-file	line	category	import_base	intent	is_test	is_module_scope	code
-.repo_studios\scripts\producers\generate_dependency_hygiene_report.py	30	attribute_reassignment_on_import	tomllib	override third-party behavior	false	true	    tomllib = None  # type: ignore
-.repo_studios\scripts\producers\generate_typecheck_report.py	19	attribute_reassignment_on_import	tomllib	override third-party behavior	false	true	    tomllib = None  # type: ignore[assignment]
-.repo_studios\scripts\utilities\configure_faulthandler_runtime.py	95	attribute_reassignment_on_import	fcntl	override third-party behavior	false	true	            _fcntl = None  # type: ignore

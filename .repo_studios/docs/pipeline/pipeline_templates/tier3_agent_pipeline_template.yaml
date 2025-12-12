@@ -1,0 +1,287 @@
+# ============================================
+# TIER-3 AGENT PIPELINE TEMPLATE (YAML)
+# ============================================
+# Purpose: Machine-readable script specification for agent tool calling
+# Usage: Copy this template for each Command Center script
+# Naming: tier3_<script_name>.yaml (e.g., tier3_generate_commandview_inventory.yaml)
+# Location: .repo_studios/docs/pipeline/
+# ============================================
+
+# ============================================
+# SECTION 1: TOOL IDENTITY (Discovery)
+# Agent uses this section to discover and select appropriate tools
+# ============================================
+tool:
+  # Unique identifier - use snake_case matching script filename
+  id: "<script_name_without_extension>"
+  
+  # Human-readable name for tool
+  name: "<Descriptive Tool Name>"
+  
+  # One-sentence description - what does this tool do?
+  description: "<Brief description of tool's primary function>"
+  
+  # Keywords for semantic search - help agents discover this tool
+  keywords:
+    - "<keyword1>"
+    - "<keyword2>"
+    - "<keyword3>"
+  
+  # When should an agent use this tool?
+  use_when: "<Specific scenario or problem this tool solves>"
+  
+  # When should an agent NOT use this tool?
+  dont_use_when: "<Scenarios where this tool is inappropriate or will fail>"
+
+# ============================================
+# SECTION 2: INVOCATION (How to call it)
+# Agent uses this to construct the actual command
+# ============================================
+invocation:
+  # Command template with {variable} placeholders
+  # Agent will substitute variables with actual values
+  command_template: "python {script_path} --arg1 {value1} --arg2 {value2}"
+  
+  # Absolute path from repository root
+  script_path: ".repo_studios/scripts/<tier>/<script_name>.py"
+  
+  # Can this script be imported and called programmatically?
+  importable: true  # or false
+  
+  # If importable, what function should be called?
+  entry_function: "run"  # Typically run(argv) or main()
+  
+  # Environment requirements
+  environment:
+    python_min: "3.9"  # Minimum Python version
+    required_packages:  # List packages needed (from imports)
+      - "pathlib"
+      - "json"
+      - "argparse"
+    platform:  # Supported platforms
+      - "linux"
+      - "windows"
+      - "darwin"
+
+# ============================================
+# SECTION 3: PARAMETERS (What inputs it needs)
+# Critical for function calling APIs - must be precise
+# ============================================
+parameters:
+  # Each parameter follows this structure
+  - name: "<parameter_name>"
+    description: "<What this parameter controls>"
+    type: "string"  # string|path|int|float|bool|enum
+    required: true  # or false
+    default: null  # Default value if not required, or null
+    
+    # Validation rules (optional but recommended)
+    validation:
+      must_exist: false  # For paths - must exist on filesystem?
+      must_be: null  # For paths - "file" or "directory"?
+      min_value: null  # For numbers
+      max_value: null  # For numbers
+      pattern: null  # Regex pattern for strings
+    
+    # For enum types, list valid choices
+    choices: null  # ["choice1", "choice2"] or null
+    
+    # Example value to help agent understand
+    example: "<example_value>"
+  
+  # Add more parameters as needed...
+  # Common parameter: repo-root
+  - name: "repo-root"
+    description: "Repository root directory for resolving relative paths"
+    type: "path"
+    required: false
+    default: "."
+    validation:
+      must_exist: true
+      must_be: "directory"
+    example: "/workspaces/repo_studios"
+  
+  # Common parameter: log-level
+  - name: "log-level"
+    description: "Logging verbosity level"
+    type: "enum"
+    required: false
+    default: "INFO"
+    choices: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+
+# ============================================
+# SECTION 4: OUTPUTS (What it produces)
+# Agent needs to know what to expect and where to find it
+# ============================================
+outputs:
+  # Primary output - the main artifact produced
+  primary:
+    type: "file"  # file|stdout|json|database|none
+    format: "json"  # json|csv|md|txt|yaml|etc
+    path_pattern: "<output_directory>/<filename_pattern>"
+    description: "<What this output contains>"
+    
+    # Optional: describe the structure for validation
+    structure:
+      root_type: "object"  # object|array|string
+      required_keys:  # For JSON objects
+        - "key1"
+        - "key2"
+      schema_url: null  # Link to JSON Schema if available
+  
+  # Additional outputs (optional)
+  secondary:
+    - type: "stdout"
+      description: "<What gets printed to stdout>"
+    
+    - type: "exit_code"
+      description: "Process exit code"
+      success_value: 0
+      error_range: [1, 255]
+
+# ============================================
+# SECTION 5: BEHAVIOR (What to expect)
+# Critical for agent planning and execution
+# ============================================
+behavior:
+  # Can this be run multiple times safely?
+  idempotent: true  # true = safe to retry, false = creates duplicate work
+  
+  # What side effects does this have?
+  side_effects:
+    - "<Effect 1: e.g., Creates files in target directory>"
+    - "<Effect 2: e.g., Modifies database records>"
+  
+  # How long does this typically take?
+  duration_estimate: "<time range, e.g., '1-5 seconds for 100 files'>"
+  
+  # Does this block until completion?
+  blocking: true  # true = waits for completion, false = returns immediately
+  
+  # Does this modify the repository?
+  mutates_repo: false  # true = changes code/config, false = read-only
+  
+  # Does this modify the filesystem?
+  mutates_filesystem: true  # true = creates/modifies files, false = no changes
+
+# ============================================
+# SECTION 6: ERROR HANDLING (When things fail)
+# Agent needs to interpret failures and take corrective action
+# ============================================
+error_handling:
+  # Common error scenarios
+  common_errors:
+    - exit_code: 1
+      meaning: "<What this error means>"
+      agent_action: "<What agent should do to fix or handle this>"
+    
+    - exit_code: 2
+      meaning: "<Another error scenario>"
+      agent_action: "<Corrective action>"
+  
+  # Patterns to look for in stderr
+  stderr_patterns:
+    - pattern: "FileNotFoundError"
+      meaning: "Input file or directory not found"
+      agent_action: "Verify path exists and is accessible"
+    
+    - pattern: "PermissionError"
+      meaning: "Insufficient permissions"
+      agent_action: "Check file/directory permissions"
+
+# ============================================
+# SECTION 7: INTEGRATION (Using the output)
+# How does this tool fit into larger workflows?
+# ============================================
+integration:
+  # Typical workflow - how is this tool used in practice?
+  typical_workflow:
+    - "<Step 1: What happens before this tool runs>"
+    - "<Step 2: Run this tool>"
+    - "<Step 3: What happens with the output>"
+  
+  # What other tools consume this tool's output?
+  output_consumers:
+    - "<tool_name_1.py>"
+    - "<tool_name_2.py>"
+  
+  # What tools must run before this one?
+  input_producers:
+    - "<upstream_tool_1.py>"
+    - "<upstream_tool_2.py>"
+  
+  # Sample output to help agent understand structure
+  sample_output: |
+    {
+      "example": "Paste actual output here",
+      "for": "agent to understand format"
+    }
+
+# ============================================
+# SECTION 8: EXAMPLES (Show, don't tell)
+# Concrete examples help agents understand usage
+# ============================================
+examples:
+  # Example 1: Basic usage
+  - description: "<Describe what this example does>"
+    command: "python .repo_studios/scripts/<tier>/<script>.py --arg value"
+    expected_output: "<What the agent should see>"
+  
+  # Example 2: With all options
+  - description: "<More complex example>"
+    command: "python {script} --arg1 {val1} --arg2 {val2} --log-level DEBUG"
+    expected_output: "<Expected result>"
+  
+  # Example 3: Programmatic invocation (if importable)
+  - description: "Calling from Python code"
+    code: |
+      from <script_name> import run
+      result = run(['--arg', 'value'])
+      # Use result...
+
+# ============================================
+# SECTION 9: METADATA (For housekeeping)
+# Administrative information for tracking and categorization
+# ============================================
+metadata:
+  # Script category - matches directory structure
+  category: "producer"  # producer|consumer|aggregator|orchestrator|summarizer|utility
+  
+  # Always tier-3 for scripts
+  tier: "tier-3"
+  
+  # Current status
+  status: "active"  # template|draft|active|deprecated
+  
+  # Semantic version
+  version: "1.0.0"
+  
+  # Last update timestamp (ISO 8601)
+  last_updated: "2025-12-11"
+  
+  # Author/maintainer
+  author: "<Name or Team>"
+  
+  # Related tier-3 YAML files (dependencies)
+  dependencies_tier3:
+    - "tier3_cli.yaml"  # CLI argument patterns
+    - "tier3_artifacts.yaml"  # Artifact naming conventions
+  
+  # Which tier-2 roster docs reference this script?
+  tier2_rosters:
+    - "tier2_producers_roster.md"
+  
+  # Which tier-1 pipelines depend on this?
+  tier1_pipelines:
+    - "tier1_command_center_pipeline.md"
+
+# ============================================
+# TEMPLATE USAGE NOTES
+# ============================================
+# 1. Copy this file for each script you want to document
+# 2. Rename to tier3_<script_name>.yaml
+# 3. Replace all <placeholder> values with actual data
+# 4. Remove sections that don't apply (e.g., if not importable)
+# 5. Run generate_tier3_index.py to update the index
+# 6. Refresh doc-index to include in overall documentation system
+# ============================================

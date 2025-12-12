@@ -1,0 +1,32 @@
+{
+  "errors": [
+    "Global docs index JSON block not found"
+  ],
+  "exit_code": 1,
+  "message": "Errors encountered during documentation integrity verification.",
+  "mismatches": [],
+  "missing_documents": [],
+  "options": {
+    "artifacts_to_keep": 10,
+    "log_level": "INFO",
+    "regen_table": true,
+    "update": false
+  },
+  "output_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\docs_integrity_reports",
+  "paths": {
+    "index_path": "docs/standards/docs_index.md",
+    "repo_root": "C:\\Users\\genet\\repo_studios"
+  },
+  "run_id": "docs_integrity_20251211T131043Z",
+  "schema_version": 1,
+  "status": "error",
+  "summary": {
+    "documents_processed": 0,
+    "documents_updated": 0,
+    "index_blocks_checked": 0,
+    "json_blocks_checked": 0,
+    "mismatched_blocks": 0,
+    "table_regenerated": false
+  },
+  "timestamp": "2025-12-11T13:10:43.350566+00:00"
+}

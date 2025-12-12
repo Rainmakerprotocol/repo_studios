@@ -1,0 +1,65 @@
+- id: tests.faults.fault_pipeline_orchestrator
+  name: Fault Pipeline Orchestrator Tests
+  path: .repo_studios/tests/tests_orchestrators/test_run_fault_pipeline.py
+  status: active
+  related_assets:
+  - scripts.health.fault_pipeline_orchestrator
+  - scripts.health.collect_faulthandler_reports
+  - scripts.health.generate_fault_artifacts
+  artifact_type: py
+- id: tests.faults.generate_fault_artifacts
+  name: Generate Fault Artifacts Tests
+  path: .repo_studios/tests/tests_consumers/test_generate_fault_artifacts.py
+  status: active
+  related_assets:
+  - scripts.health.generate_fault_artifacts
+  - scripts.health.collect_faulthandler_reports
+  artifact_type: py
+- id: tests.health_suite.collect_faulthandler_reports
+  name: Collect Faulthandler Reports Tests
+  path: .repo_studios/tests/tests_producers/test_collect_faulthandler_reports.py
+  status: active
+  related_assets:
+  - scripts.health.collect_faulthandler_reports
+  - scripts.health.generate_fault_artifacts
+  artifact_type: py
+- id: tests.health_suite.generate_fault_artifacts
+  name: Generate Fault Artifacts Tests
+  path: .repo_studios/tests/tests_consumers/test_generate_fault_artifacts.py
+  status: active
+  related_assets:
+  - scripts.health.generate_fault_artifacts
+  - scripts.health.collect_faulthandler_reports
+  artifact_type: py
+- id: tests.health_suite.run_fault_pipeline
+  name: Run Fault Pipeline Orchestrator Tests
+  path: .repo_studios/tests/tests_orchestrators/test_run_fault_pipeline.py
+  status: active
+  related_assets:
+  - scripts.health.fault_pipeline_orchestrator
+  - scripts.health.collect_faulthandler_reports
+  - scripts.health.generate_fault_artifacts
+  artifact_type: py
+- id: tests.health_suite.generate_lizard_report
+  name: Generate Lizard Report Tests
+  path: .repo_studios/tests/tests_producers/test_generate_lizard_report.py
+  status: active
+  related_assets:
+  - scripts.health.lizard_report
+  artifact_type: py
+- id: tests.health_suite.generate_typecheck_report
+  name: Generate Typecheck Report Tests
+  path: .repo_studios/tests/tests_producers/test_generate_typecheck_report.py
+  status: active
+  related_assets:
+  - scripts.health.typecheck_report
+  - scripts.health.mypy_refresh_baselines
+  artifact_type: py
+- id: tests.health_suite.generate_test_log_health_report
+  name: Generate Test Log Health Report Tests
+  path: .repo_studios/tests/tests_consumers/test_generate_test_log_health_report.py
+  status: active
+  related_assets:
+  - scripts.health.test_log_health_report
+  - scripts.health.collect_test_log_reports
+  artifact_type: py

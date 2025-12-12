@@ -1,0 +1,196 @@
+# Tier-3: generate_commandview_inventory.py
+# Producer script that scans PowerShell scripts and generates CommandView inventory
+
+tool:
+  id: generate_commandview_inventory
+  name: Generate CommandView Inventory
+  description: |
+    Scans .ps1 scripts in target directory and generates CommandView inventory JSON.
+    Extracts function declarations, parameters, help comments, and metadata.
+  keywords:
+    - commandview
+    - inventory
+    - producer
+    - powershell
+    - functions
+  use_when:
+    - Need to refresh CommandView inventory after script changes
+    - Starting duplicate detection workflow
+    - Building function analysis input
+  dont_use_when:
+    - Only analyzing specific functions (use analysis script instead)
+    - Working with non-PowerShell scripts
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --target {target_dir} \
+      --output {output_path} \
+      --log-level {log_level}
+  script_path: .repo_studios/command_center/scripts/producers/generate_commandview_inventory.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.8"
+
+parameters:
+  - name: target_dir
+    type: path
+    required: true
+    description: Directory containing .ps1 scripts to scan
+    validation:
+      must_exist: true
+      must_be_directory: true
+    examples:
+      - .repo_studios/command_center
+      - scripts/automation
+  
+  - name: output_path
+    type: path
+    required: false
+    default: "{target_dir}/{slug}_index/{slug}_index-{date}.json"
+    description: Output JSON file path (auto-generated if not specified)
+    validation:
+      parent_must_exist: false
+  
+  - name: log_level
+    type: string
+    required: false
+    default: INFO
+    description: Logging level
+    choices: [DEBUG, INFO, WARNING, ERROR]
+
+outputs:
+  primary:
+    type: file
+    format: json
+    path_pattern: "{target_dir}/{slug}_index/{slug}_index-{date}.json"
+    structure:
+      inventory_metadata: metadata about scan
+      functions: array of function objects with signatures, parameters, help text
+  
+  secondary:
+    - type: log
+      format: text
+      description: Console logging output with scan statistics
+
+behavior:
+  idempotent: true
+  side_effects:
+    - Creates index directory if missing
+    - Writes timestamped JSON file
+    - Prunes old index files (keeps recent 5)
+  duration_estimate: "5-15 seconds for typical repos"
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 1
+      meaning: Target directory not found
+      agent_action: Verify --target path exists and is accessible
+    
+    - exit_code: 2
+      meaning: No .ps1 files found in target
+      agent_action: Check target directory contains PowerShell scripts
+    
+    - exit_code: 3
+      meaning: JSON write failed
+      agent_action: Check output directory permissions
+  
+  stderr_patterns:
+    - pattern: "FileNotFoundError"
+      meaning: Missing file or directory
+      agent_action: Validate all path parameters
+    
+    - pattern: "PermissionError"
+      meaning: Insufficient filesystem permissions
+      agent_action: Check write permissions on output directory
+
+integration:
+  typical_workflow:
+    - step: 1
+      action: Run generate_commandview_inventory
+      output: inventory JSON
+    
+    - step: 2
+      action: Pass inventory to generate_function_analysis
+      consumes: inventory JSON
+    
+    - step: 3
+      action: Pass analysis to scan_duplicates
+      consumes: analysis JSON
+  
+  output_consumers:
+    - generate_function_analysis.py
+    - scan_duplicates.py (via analysis)
+    - Manual code review workflows
+  
+  input_producers:
+    - Developer edits to .ps1 scripts
+    - Git pulls updating CommandView code
+  
+  sample_output:
+    file: command_center/command_center_index/command_center_index-2025-12-11.json
+    snippet: |
+      {
+        "inventory_metadata": {
+          "generated_at": "2025-12-11T10:30:00Z",
+          "scanned_directory": ".repo_studios/command_center",
+          "total_scripts": 42,
+          "total_functions": 156
+        },
+        "functions": [
+          {
+            "function_name": "Get-ProjectHealth",
+            "script_path": "scripts/health_check.ps1",
+            "parameters": ["ProjectPath", "Verbose"],
+            "help_synopsis": "Analyzes project health metrics"
+          }
+        ]
+      }
+
+examples:
+  - description: Standard CommandView scan
+    command: |
+      python .repo_studios/command_center/scripts/producers/generate_commandview_inventory.py \
+        --target .repo_studios/command_center \
+        --log-level INFO
+  
+  - description: Custom output location
+    command: |
+      python generate_commandview_inventory.py \
+        --target scripts/custom \
+        --output reports/custom_inventory.json
+  
+  - description: Programmatic invocation
+    language: python
+    code: |
+      from producers.generate_commandview_inventory import run
+      
+      exit_code = run([
+          "--target", ".repo_studios/command_center",
+          "--log-level", "DEBUG"
+      ])
+      
+      if exit_code == 0:
+          print("Inventory generated successfully")
+
+metadata:
+  category: producer
+  tier: 3
+  status: active
+  version: 2.1.0
+  author: Repo Studios Team
+  last_updated: 2025-12-11
+  dependencies_tier3:
+    - slugify_relative (library utility)
+  tier2_rosters:
+    - commandview_analysis_roster.md
+  tier1_pipelines:
+    - commandview_pipeline.md
+  testing:
+    test_file: tests/tests_producers/test_generate_commandview_inventory.py
+    coverage: 92%

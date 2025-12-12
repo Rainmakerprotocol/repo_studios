@@ -1,0 +1,22 @@
+{
+  "generated_utc": "2025-12-11T13:09:35.832255+00:00",
+  "issue_counts": [],
+  "issues": [],
+  "pyproject_path": null,
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "requirements_files": [
+    "requirements.txt"
+  ],
+  "requirements_patterns": [
+    "requirements.txt",
+    "requirements-dev.txt",
+    "requirements/*.txt"
+  ],
+  "schema_version": 1,
+  "summary": {
+    "issue_count": 0,
+    "pyproject_scanned": false,
+    "requirements_scanned": 1,
+    "status": "passed"
+  }
+}

@@ -1,11 +1,11 @@
 status=ok
-timestamp=2025-12-07T13:38:04.809419+00:00
+timestamp=2025-12-11T13:10:18.757861+00:00
 scan_root=.
-files_scanned=228
-files_with_findings=66
-total_findings=130
+files_scanned=222
+files_with_findings=63
+total_findings=103
 parse_errors=0
 by_category_attribute_reassignment_on_import=4
 by_category_global_env_mutation=1
-by_category_setattr_on_import_or_class=65
-by_category_sys_modules_assignment=60
+by_category_setattr_on_import_or_class=45
+by_category_sys_modules_assignment=53

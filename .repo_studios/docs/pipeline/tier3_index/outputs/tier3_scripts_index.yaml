@@ -1,0 +1,41 @@
+version: 1.0.0
+generated_at: '2025-12-11T22:18:04.487037+00:00'
+generator_version: 1.0.0
+repository:
+  name: repo_studios
+  root: /workspaces/repo_studios
+  branch: main
+statistics:
+  total_scripts: 1
+  categories:
+    producer: 1
+  status:
+    active: 1
+scripts:
+- script_id: generate_commandview_inventory
+  name: Generate CommandView Inventory
+  category: producer
+  tier3_file: tier3_generate_commandview_inventory.yaml
+  script_path: .repo_studios/command_center/scripts/producers/generate_commandview_inventory.py
+  summary: 'Scans .ps1 scripts in target directory and generates CommandView inventory JSON.
+
+    Extracts function declarations, parameters, help comments, and metadata.
+
+    '
+  keywords:
+  - commandview
+  - inventory
+  - producer
+  - powershell
+  - functions
+  status: active
+  entry_point: run
+  importable: true
+by_category:
+  producer:
+  - generate_commandview_inventory
+  consumer: []
+  aggregator: []
+  orchestrator: []
+  summarizer: []
+  utility: []

@@ -1,1 +1,7 @@
-Notes: Missing input files: C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\standards_index_snapshots\previous.yaml, C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\standards_index_snapshots\current.yaml
+{
+  "integrity_hash_old": "ac5fbce0d2185c4a1bbe2cd48da6cb42420fe38102d548a74749daecb8ac041a",
+  "integrity_hash_new": "ac5fbce0d2185c4a1bbe2cd48da6cb42420fe38102d548a74749daecb8ac041a",
+  "integrity_hash_changed": false,
+  "changes": [],
+  "summary": {}
+}

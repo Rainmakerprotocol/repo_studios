@@ -1,11 +1,11 @@
 # Monkey Patch Scan Report
 
 - Status: `ok`
-- Timestamp: `2025-12-07T13:38:04.809419+00:00`
+- Timestamp: `2025-12-11T13:10:18.757861+00:00`
 - Scan Root: `.`
-- Files Scanned: 228
-- Files With Findings: 66
-- Total Findings: 130
+- Files Scanned: 222
+- Files With Findings: 63
+- Total Findings: 103
 - Parse Errors: 0
 
 ## Findings by Category
@@ -14,8 +14,8 @@
 | --- | ---: |
 | attribute_reassignment_on_import | 4 |
 | global_env_mutation | 1 |
-| setattr_on_import_or_class | 65 |
-| sys_modules_assignment | 60 |
+| setattr_on_import_or_class | 45 |
+| sys_modules_assignment | 53 |
 
 ## Patched Import Bases
 
@@ -29,14 +29,14 @@
 
 | File | Count |
 | --- | ---: |
-| .repo_studios\tests\tests_command_center\dependency_import_hygiene\test_run_dependency_import_hygiene.py | 13 |
-| .repo_studios\tests\tests_orchestrators\test_run_batch_cleanup.py | 13 |
-| .repo_studios\tests\tests_orchestrators\test_run_standards_gap_suite.py | 11 |
+| .repo_studios\tests\tests_command_center\orchestrators\test_run_monkey_patch_oversight.py | 10 |
 | .repo_studios\tests\tests_command_center\orchestrators\test_run_test_execution_telemetry.py | 7 |
+| .repo_studios\tests\tests_command_center\orchestrators\test_run_command_center_pipeline.py | 5 |
 | .repo_studios\tests\tests_command_center\viewer\test_refresh.py | 5 |
-| .repo_studios\tests\tests_orchestrators\test_run_pytest_log_capture.py | 5 |
 | .repo_studios\tests\tests_utilities\test_refresh_mypy_baselines.py | 4 |
+| .repo_studios\tests\tests_command_center\dependency_import_hygiene\test_run_dependency_import_hygiene.py | 3 |
 | .repo_studios\tests\tests_producers\test_generate_typecheck_report.py | 3 |
+| .repo_studios\tests\tests_command_center\orchestrators\test_run_inventory_update.py | 2 |
 | .repo_studios\tests\tests_consumers\test_generate_anchor_health_report.py | 2 |
 | .repo_studios\tests\tests_consumers\test_generate_fault_artifacts.py | 2 |
 

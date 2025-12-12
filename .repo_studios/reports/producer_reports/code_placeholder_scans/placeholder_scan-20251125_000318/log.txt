@@ -1,7 +1,0 @@
-status=ok
-timestamp=2025-11-25T00:03:18.687250+00:00
-scan_root=.
-total_matches=0
-patterns=FIXME,NOTE,OPTIMIZE,REVIEW,TODO,XXX
-extensions=.js,.json,.md,.py,.ts,.txt,.yaml,.yml
-allowlist_size=0

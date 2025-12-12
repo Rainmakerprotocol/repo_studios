@@ -1,8 +1,0 @@
-status=ok
-timestamp=2025-11-27T17:57:11.586737+00:00
-scan_root=.
-files_scanned=190
-files_with_findings=3
-total_findings=3
-parse_errors=0
-by_category_attribute_reassignment_on_import=3

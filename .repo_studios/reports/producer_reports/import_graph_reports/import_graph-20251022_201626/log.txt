@@ -1,9 +1,0 @@
-status=ok
-module_count=4
-edge_count=0
-cycle_count=0
-top_fan_out[.repo_studios/docs]=0
-top_fan_out[.repo_studios/scripts]=0
-top_fan_out[.repo_studios/tests]=0
-top_fan_out[legacy/repo_tests]=0
-isolated_modules=.repo_studios/docs,.repo_studios/scripts,.repo_studios/tests,legacy/repo_tests
