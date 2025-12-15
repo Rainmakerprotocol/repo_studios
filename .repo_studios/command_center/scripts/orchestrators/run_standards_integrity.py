@@ -20,7 +20,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable, Sequence
+from typing import Any, Iterable, Sequence, cast
 
 from command_center.scripts.libraries import (
     CatalogRegistry,
@@ -164,8 +164,9 @@ class IndexOutcome:
 @dataclass(frozen=True)
 class GapOutcome:
     run_dir: Path | None
-    report_path: Path | None
-    bundle_summary: Path | None
+    manifest_path: Path | None
+    summary_md_path: Path | None
+    telemetry_path: Path | None
     payload: dict[str, Any] | None
 
 
@@ -254,7 +255,7 @@ def _resolve_optional_path(repo_root: Path, raw: str | None) -> Path | None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace, *, paths: Paths) -> Options:
@@ -400,16 +401,21 @@ def _execute_gap(paths: Paths, options: Options) -> GapOutcome:
     run_dir = Path(payload.get("run_dir", "")).resolve() if payload.get("run_dir") else None
     if run_dir and not run_dir.exists():
         run_dir = None
-    report_path = Path(payload.get("report_json", "")).resolve() if payload.get("report_json") else None
-    if report_path and not report_path.exists():
-        report_path = None
-    bundle_summary = Path(payload.get("bundle_summary", "")).resolve() if payload.get("bundle_summary") else None
-    if bundle_summary and not bundle_summary.exists():
-        bundle_summary = None
+
+    manifest_path = Path(payload.get("manifest_json", "")).resolve() if payload.get("manifest_json") else None
+    if manifest_path and not manifest_path.exists():
+        manifest_path = None
+    summary_md_path = Path(payload.get("summary_md", "")).resolve() if payload.get("summary_md") else None
+    if summary_md_path and not summary_md_path.exists():
+        summary_md_path = None
+    telemetry_path = Path(payload.get("telemetry_json", "")).resolve() if payload.get("telemetry_json") else None
+    if telemetry_path and not telemetry_path.exists():
+        telemetry_path = None
     return GapOutcome(
         run_dir=run_dir,
-        report_path=report_path,
-        bundle_summary=bundle_summary,
+        manifest_path=manifest_path,
+        summary_md_path=summary_md_path,
+        telemetry_path=telemetry_path,
         payload=payload,
     )
 
@@ -527,16 +533,18 @@ def _summarize_markdown(
     lines.append(f"- run_slug: `{slug}`")
     lines.append(f"- pipeline_status: {'success' if telemetry_success else 'failed'}")
 
-    index_payload = index_outcome.payload or {}
+    index_payload = index_outcome.payload if isinstance(index_outcome.payload, dict) else {}
     index_status = index_payload.get("status")
-    index_summary = index_payload.get("summary") if isinstance(index_payload.get("summary"), dict) else {}
+    raw_index_summary = index_payload.get("summary")
+    index_summary: dict[str, Any] = raw_index_summary if isinstance(raw_index_summary, dict) else {}
     lines.append(f"- index_status: {index_status or 'unknown'}")
     lines.append(f"- index_rule_count: {index_summary.get('rule_count', 'unknown')}")
     if index_payload.get("integrity_hash"):
         lines.append(f"- index_integrity_hash: `{index_payload['integrity_hash']}`")
 
     gap_payload = gap_outcome.payload if gap_outcome and isinstance(gap_outcome.payload, dict) else {}
-    gap_summary = gap_payload.get("summary") if isinstance(gap_payload.get("summary"), dict) else {}
+    raw_gap_summary = gap_payload.get("summary")
+    gap_summary: dict[str, Any] = raw_gap_summary if isinstance(raw_gap_summary, dict) else {}
     lines.append(f"- gap_total_candidates: {gap_summary.get('total_candidates', 'unknown')}")
     lines.append(f"- gap_sources_with_candidates: {gap_summary.get('sources_with_candidates', 'unknown')}")
 
@@ -556,7 +564,8 @@ def _summarize_markdown(
         lines.append(f"- diff_change_count: {change_value}")
 
     prompt_payload = prompt_outcome.payload if prompt_outcome and isinstance(prompt_outcome.payload, dict) else {}
-    prompt_summary = prompt_payload.get("summary") if isinstance(prompt_payload.get("summary"), dict) else {}
+    raw_prompt_summary = prompt_payload.get("summary")
+    prompt_summary: dict[str, Any] = raw_prompt_summary if isinstance(raw_prompt_summary, dict) else {}
     lines.append(f"- prompt_total_rules: {prompt_summary.get('total_rules', 'unknown')}")
     lines.append(f"- prompt_category_count: {prompt_summary.get('category_count', 'unknown')}")
 
@@ -597,8 +606,9 @@ def run(argv: Sequence[str] | None = None) -> int:
             return step_failed(detail=str(exc))
         index_holder["value"] = outcome
         ctx.add_metadata("index", outcome)
-        payload = outcome.payload or {}
-        summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
+        payload = outcome.payload if isinstance(outcome.payload, dict) else {}
+        raw_summary = payload.get("summary")
+        summary: dict[str, Any] = raw_summary if isinstance(raw_summary, dict) else {}
         detail_bits: list[str] = []
         if payload.get("status"):
             detail_bits.append(f"status={payload['status']}")
@@ -620,8 +630,9 @@ def run(argv: Sequence[str] | None = None) -> int:
             return step_failed(detail=str(exc))
         gap_holder["value"] = outcome
         ctx.add_metadata("gap", outcome)
-        payload = outcome.payload or {}
-        summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
+        payload = outcome.payload if isinstance(outcome.payload, dict) else {}
+        raw_summary = payload.get("summary")
+        summary: dict[str, Any] = raw_summary if isinstance(raw_summary, dict) else {}
         candidates = summary.get("total_candidates")
         detail = f"candidates={candidates}" if candidates is not None else "analysis completed"
         step_payload = {
@@ -642,7 +653,7 @@ def run(argv: Sequence[str] | None = None) -> int:
             return step_failed(detail=str(exc))
         diff_holder["value"] = outcome
         ctx.add_metadata("diff", outcome)
-        payload = outcome.payload or {}
+        payload = outcome.payload if isinstance(outcome.payload, dict) else {}
         change_count = payload.get("change_count")
         detail = f"changes={change_count}" if change_count is not None else "diff completed"
         step_payload = {
@@ -664,8 +675,9 @@ def run(argv: Sequence[str] | None = None) -> int:
             return step_failed(detail=str(exc))
         prompt_holder["value"] = outcome
         ctx.add_metadata("prompt", outcome)
-        payload = outcome.payload or {}
-        summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
+        payload = outcome.payload if isinstance(outcome.payload, dict) else {}
+        raw_summary = payload.get("summary")
+        summary: dict[str, Any] = raw_summary if isinstance(raw_summary, dict) else {}
         total_rules = summary.get("total_rules")
         detail = f"rules={total_rules}" if total_rules is not None else "prompt seed generated"
         step_payload = {
@@ -714,7 +726,13 @@ def run(argv: Sequence[str] | None = None) -> int:
     index_outcome = index_holder.get("value") or IndexOutcome(
         run_dir=None, report_path=None, payload=None, index_path=paths.index_latest_path if paths.index_latest_path.exists() else None
     )
-    gap_outcome = gap_holder.get("value") or GapOutcome(run_dir=None, report_path=None, bundle_summary=None, payload=None)
+    gap_outcome = gap_holder.get("value") or GapOutcome(
+        run_dir=None,
+        manifest_path=None,
+        summary_md_path=None,
+        telemetry_path=None,
+        payload=None,
+    )
     diff_outcome = diff_holder.get("value") or DiffOutcome(run_dir=None, report_path=None, payload=None, exit_code=None)
     prompt_outcome = prompt_holder.get("value") or PromptOutcome(run_dir=None, payload=None)
     summary_outcome = summary_holder.get("value") or SummaryOutcome(exit_code=None)
@@ -728,8 +746,9 @@ def run(argv: Sequence[str] | None = None) -> int:
         "index_run": _relativize(index_outcome.run_dir, paths.repo_root),
         "index_report": _relativize(index_outcome.report_path, paths.repo_root),
         "gap_run": _relativize(gap_outcome.run_dir, paths.repo_root),
-        "gap_report": _relativize(gap_outcome.report_path, paths.repo_root),
-        "gap_summary": _relativize(gap_outcome.bundle_summary, paths.repo_root),
+        "gap_manifest": _relativize(gap_outcome.manifest_path, paths.repo_root),
+        "gap_summary_md": _relativize(gap_outcome.summary_md_path, paths.repo_root),
+        "gap_telemetry": _relativize(gap_outcome.telemetry_path, paths.repo_root),
         "diff_run": _relativize(diff_outcome.run_dir, paths.repo_root),
         "diff_report": _relativize(diff_outcome.report_path, paths.repo_root),
         "prompt_run": _relativize(prompt_outcome.run_dir, paths.repo_root),

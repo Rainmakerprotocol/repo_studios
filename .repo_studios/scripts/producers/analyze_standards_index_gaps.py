@@ -10,6 +10,14 @@ from types import ModuleType
 
 
 def _load_command_center_module() -> ModuleType:
+    try:
+        return __import__(
+            "command_center.scripts.producers.analyze_standards_index_gaps",
+            fromlist=["*"],
+        )
+    except ModuleNotFoundError:
+        pass
+
     module_name = "repo_studios.command_center.producers.analyze_standards_index_gaps"
     script_path = (
         Path(__file__).resolve().parents[2]
@@ -32,6 +40,8 @@ def _load_command_center_module() -> ModuleType:
 _IMPL = _load_command_center_module()
 
 DEFAULT_OUTPUT_DIR = _IMPL.DEFAULT_OUTPUT_DIR
+VIEWER_SLUG = _IMPL.VIEWER_SLUG
+TOPIC_SLUG = _IMPL.TOPIC_SLUG
 DEFAULT_INDEX_PATH = _IMPL.DEFAULT_INDEX_PATH
 DEFAULT_CATEGORIES_PATH = _IMPL.DEFAULT_CATEGORIES_PATH
 DEFAULT_ARTIFACTS_TO_KEEP = _IMPL.DEFAULT_ARTIFACTS_TO_KEEP
@@ -50,6 +60,8 @@ build_report = _IMPL.build_report
 render_markdown = _IMPL.render_markdown
 render_tsv = _IMPL.render_tsv
 emit_runtime_log = _IMPL.emit_runtime_log
+build_manifest = _IMPL.build_manifest
+build_telemetry = _IMPL.build_telemetry
 
 COMMAND_CENTER_MODULE = _IMPL
 COMMAND_CENTER_SCRIPT_PATH = (
@@ -62,6 +74,8 @@ COMMAND_CENTER_SCRIPT_PATH = (
 
 __all__ = [
     "DEFAULT_OUTPUT_DIR",
+    "VIEWER_SLUG",
+    "TOPIC_SLUG",
     "DEFAULT_INDEX_PATH",
     "DEFAULT_CATEGORIES_PATH",
     "DEFAULT_ARTIFACTS_TO_KEEP",
@@ -80,6 +94,8 @@ __all__ = [
     "render_markdown",
     "render_tsv",
     "emit_runtime_log",
+    "build_manifest",
+    "build_telemetry",
     "COMMAND_CENTER_MODULE",
     "COMMAND_CENTER_SCRIPT_PATH",
 ]

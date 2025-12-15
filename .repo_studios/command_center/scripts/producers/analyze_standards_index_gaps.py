@@ -6,13 +6,15 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import re
+import subprocess
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Sequence
 
-import yaml
+import yaml  # type: ignore[import-untyped]
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
 VIEWER_SLUG = "commandview"
@@ -42,10 +44,8 @@ try:  # pragma: no cover - prefer import when packaged
         OptionsConfig,
         PathSpec,
         PathsConfig,
-        ReportArtifact,
         build_standard_options,
         build_standard_paths,
-        write_report_artifacts,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback when running in isolation
     import sys
@@ -57,11 +57,20 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running in isola
         OptionsConfig,
         PathSpec,
         PathsConfig,
-        ReportArtifact,
         build_standard_options,
         build_standard_paths,
-        write_report_artifacts,
     )
+
+try:  # pragma: no cover - prefer import when packaged
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
+except ModuleNotFoundError:  # pragma: no cover - fallback when running in isolation
+    import sys
+
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries.database_integration import create_storage  # type: ignore
+    from libraries.prune_logs import prune_run_directories  # type: ignore
 
 
 @dataclass(frozen=True)
@@ -177,20 +186,109 @@ def _resolve_timestamp(raw: str | None) -> datetime:
     return moment.astimezone(timezone.utc)
 
 
+def _timestamp_slug(moment: datetime) -> str:
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=timezone.utc)
+    return moment.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
+
+
+def _detect_trigger_type() -> str:
+    if os.getenv("MAKELEVEL"):
+        return "make"
+    if os.getenv("GITHUB_ACTIONS"):
+        return "ci"
+    return "cli"
+
+
+def _detect_requested_by() -> str | None:
+    return os.getenv("GITHUB_ACTOR") or os.getenv("USERNAME") or os.getenv("USER")
+
+
+def _detect_git_sha(repo_root: Path) -> str | None:
+    env_sha = os.getenv("GITHUB_SHA")
+    if env_sha:
+        return env_sha
+    if not (repo_root / ".git").exists():
+        return None
+    try:
+        value = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"],
+            cwd=str(repo_root),
+            text=True,
+            stderr=subprocess.DEVNULL,
+        )
+    except Exception:  # pragma: no cover - best effort
+        return None
+    sha = value.strip()
+    return sha or None
+
+
+def build_manifest(*, generated_ts: datetime, repo_root: Path, inputs: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": _timestamp_slug(generated_ts),
+        "generated_utc": generated_ts.astimezone(timezone.utc).isoformat(),
+        "git_sha": _detect_git_sha(repo_root),
+        "status": "ok",
+        "catalog": [
+            {
+                "script_path": ".repo_studios/command_center/scripts/producers/analyze_standards_index_gaps.py",
+                "role": "producer",
+                "topic": TOPIC_SLUG,
+            }
+        ],
+        "inputs": inputs,
+        "provenance": {
+            "requested_by": _detect_requested_by(),
+            "trigger_type": _detect_trigger_type(),
+        },
+    }
+
+
+def build_telemetry(
+    *,
+    report: dict[str, Any],
+    generated_ts: datetime,
+    inputs: dict[str, Any],
+) -> dict[str, Any]:
+    raw_summary = report.get("summary")
+    summary: dict[str, Any] = raw_summary if isinstance(raw_summary, dict) else {}
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "metric_timestamp": generated_ts.astimezone(timezone.utc).isoformat(),
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "metrics": {
+            "total_candidates": summary.get("total_candidates"),
+            "sources_with_candidates": summary.get("sources_with_candidates"),
+            "top_source_candidates": summary.get("top_source_candidates"),
+            "scanned_sources": summary.get("scanned_sources"),
+        },
+        "top_sources": report.get("top_sources", []),
+        "sources": report.get("sources", {}),
+        "inputs": inputs,
+    }
+
+
 def load_index(path: Path) -> dict[str, Any]:
     if not path.exists():
         raise RuntimeError(f"Standards index not found: {path}")
-    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-    if not isinstance(data, dict):
+    raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+    if raw is None:
+        return {}
+    if not isinstance(raw, dict):
         raise RuntimeError(f"Standards index payload must be a mapping: {path}")
-    return data
+    return raw
 
 
 def load_sources(categories_path: Path, repo_root: Path, logger: logging.Logger) -> list[Path]:
     if not categories_path.exists():
         logger.debug("Categories file missing; falling back to index sources")
         return []
-    payload = yaml.safe_load(categories_path.read_text(encoding="utf-8")) or {}
+    raw = yaml.safe_load(categories_path.read_text(encoding="utf-8"))
+    payload: dict[str, Any] = raw if isinstance(raw, dict) else {}
     sources: list[Path] = []
     for entry in payload.get("sources", []) or []:
         if not isinstance(entry, dict):
@@ -406,49 +504,48 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         source_count=len(sources),
     )
 
-    markdown_payload = render_markdown(report)
-    tsv_payload = render_tsv(report)
-    bundle_summary = {
-        "total_candidates": report["summary"]["total_candidates"],
-        "sources_with_candidates": report["summary"]["sources_with_candidates"],
-        "top_sources": report["top_sources"],
+    timestamp_slug = _timestamp_slug(generated_ts)
+    run_dir = (paths.output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp_slug).resolve()
+
+    inputs = {
+        "repo_root": str(paths.repo_root),
+        "index_path": str(paths.index_path),
+        "categories_path": str(paths.categories_path),
+        "max_show": options.max_show,
+        "artifacts_to_keep": options.artifacts_to_keep,
     }
+    manifest = build_manifest(generated_ts=generated_ts, repo_root=paths.repo_root, inputs=inputs)
+    telemetry = build_telemetry(report=report, generated_ts=generated_ts, inputs=inputs)
+    summary_md = render_markdown(report).replace("# Standards Index Gap Report", "# Standards Index Gaps")
 
-    artifacts = [
-        ReportArtifact(filename="report.json", kind="json", content=report),
-        ReportArtifact(filename="report.md", kind="text", content=markdown_payload),
-        ReportArtifact(filename="candidates.tsv", kind="text", content=tsv_payload),
-        ReportArtifact(
-            filename="bundle_summary.json",
-            kind="json",
-            content=bundle_summary,
-        ),
-    ]
+    storage = create_storage(paths.output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=timestamp_slug)
 
-    write_result = write_report_artifacts(
-        stem=RUN_STEM,
-        timestamp=generated_ts,
-        output_dir=paths.output_dir,
-        artifacts=artifacts,
-        keep=options.artifacts_to_keep,
-        viewer=VIEWER_SLUG,
-        topic=TOPIC_SLUG,
-    )
+    # DB_INTEGRATION_MARKER: standards index gaps manifest write
+    storage.write_manifest(manifest)
+    # DB_INTEGRATION_MARKER: standards index gaps summary markdown write
+    storage.write_summary({"markdown": summary_md}, format="md")
+    # DB_INTEGRATION_MARKER: standards index gaps telemetry write
+    storage.write_telemetry(telemetry)
+
+    topic_dir = (paths.output_dir / VIEWER_SLUG / TOPIC_SLUG).resolve()
+    prune_run_directories(topic_dir, keep=options.artifacts_to_keep, current_run=run_dir, logger=logger)
 
     emit_runtime_log(logger, report, max_show=options.max_show)
 
     legacy_json = _resolve_optional_path(paths.repo_root, args.legacy_json)
     if legacy_json:
         legacy_json.parent.mkdir(parents=True, exist_ok=True)
-        legacy_json.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        legacy_json.write_text(
+            json.dumps(telemetry, indent=2, sort_keys=True, ensure_ascii=True) + "\n",
+            encoding="utf-8",
+        )
         logger.info("Wrote legacy JSON payload: %s", legacy_json)
 
     return {
-        "run_dir": str(write_result.run_dir),
-        "report_json": str(write_result.artifacts["report.json"]),
-        "report_md": str(write_result.artifacts["report.md"]),
-        "candidates_tsv": str(write_result.artifacts["candidates.tsv"]),
-        "bundle_summary": str(write_result.artifacts["bundle_summary.json"]),
+        "run_dir": str(run_dir),
+        "manifest_json": str(run_dir / "manifest.json"),
+        "summary_md": str(run_dir / "summary.md"),
+        "telemetry_json": str(run_dir / "telemetry.json"),
         "legacy_json": str(legacy_json) if legacy_json else None,
         "summary": report["summary"],
     }

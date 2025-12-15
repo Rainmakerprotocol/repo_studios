@@ -7,6 +7,13 @@ from typing import Callable
 
 VALIDATOR_PATH = Path(__file__).resolve().parents[1] / "tools" / "validate_inventory.py"
 
+REPO_STUDIOS_ROOT = Path(__file__).resolve().parents[1]
+COMMAND_CENTER_SCRIPTS_ROOT = REPO_STUDIOS_ROOT / "command_center" / "scripts"
+
+for candidate in (REPO_STUDIOS_ROOT, COMMAND_CENTER_SCRIPTS_ROOT):
+    if str(candidate) not in sys.path:
+        sys.path.insert(0, str(candidate))
+
 
 def load_validator(tmp_path: Path, json_output: bool = False) -> Callable[[], tuple[int, str]]:
     schema_root = tmp_path / "inventory_schema"

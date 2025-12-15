@@ -108,16 +108,32 @@ def _patched_loader(
                 argv_list = argv or []
                 output_dir = _arg_value(argv_list, "--output-dir", gap_output_dir)
                 output_dir.mkdir(parents=True, exist_ok=True)
-                run_dir = output_dir / "standards_gap-20240102_120000"
+                run_dir = output_dir / "commandview" / "standards_index_gaps" / "20240102-1200"
                 run_dir.mkdir(parents=True, exist_ok=True)
-                report_path = run_dir / "report.json"
-                report_path.write_text(json.dumps({"summary": {"total_candidates": 3}}), encoding="utf-8")
-                bundle_summary = run_dir / "bundle_summary.json"
-                bundle_summary.write_text(json.dumps({"sources_with_candidates": 2}), encoding="utf-8")
+
+                manifest_path = run_dir / "manifest.json"
+                manifest_path.write_text(
+                    json.dumps({"viewer_slug": "commandview", "topic": "standards_index_gaps"}),
+                    encoding="utf-8",
+                )
+                summary_md = run_dir / "summary.md"
+                summary_md.write_text("# Standards Index Gaps\n", encoding="utf-8")
+                telemetry_path = run_dir / "telemetry.json"
+                telemetry_path.write_text(
+                    json.dumps(
+                        {
+                            "viewer_slug": "commandview",
+                            "topic": "standards_index_gaps",
+                            "metrics": {"total_candidates": 3, "sources_with_candidates": 2},
+                        }
+                    ),
+                    encoding="utf-8",
+                )
                 return {
                     "run_dir": str(run_dir),
-                    "report_json": str(report_path),
-                    "bundle_summary": str(bundle_summary),
+                    "manifest_json": str(manifest_path),
+                    "summary_md": str(summary_md),
+                    "telemetry_json": str(telemetry_path),
                     "summary": {"total_candidates": 3, "sources_with_candidates": 2},
                 }
 
@@ -209,8 +225,9 @@ def test_orchestrator_emits_healthview_bundle(tmp_path: Path) -> None:
 
     artifacts_section = manifest["artifacts"]
     assert artifacts_section["index_report"].endswith("report.json")
-    assert artifacts_section["gap_report"].endswith("report.json")
-    assert artifacts_section["gap_summary"].endswith("bundle_summary.json")
+    assert artifacts_section["gap_manifest"].endswith("manifest.json")
+    assert artifacts_section["gap_summary_md"].endswith("summary.md")
+    assert artifacts_section["gap_telemetry"].endswith("telemetry.json")
     assert artifacts_section["prompt_run"].endswith("standards_prompt_seed-20240102_1200")
 
 
