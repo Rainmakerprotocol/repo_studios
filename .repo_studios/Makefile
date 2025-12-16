@@ -5,6 +5,7 @@ PYTHON ?= python3
 endif
 REPO_ROOT := $(abspath $(CURDIR)/..)
 LOG_LEVEL ?= INFO
+FAIL_ON ?= any
 
 ifneq ($(filter ./% ../% .venv/%,$(PYTHON)),)
 	override PYTHON := $(abspath $(REPO_ROOT)/$(PYTHON))
@@ -157,7 +158,7 @@ studio-generate-test-log-health-report:
 
 .PHONY: studio-diff-standards-index
 studio-diff-standards-index:
-	$(PYTHON) .repo_studios/scripts/producers/diff_standards_index.py "$(old)" "$(new)" --repo-root . --output-dir .repo_studios/reports/producer_reports/standards_index_diff_reports --artifacts-to-keep 10 --fail-on any --log-level INFO
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/diff_standards_index.py" "$(abspath $(old))" "$(abspath $(new))" --repo-root "$(REPO_ROOT)" --output-dir ".repo_studios/command_center/reports" --artifacts-to-keep 10 --fail-on "$(FAIL_ON)" --log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-dependency-hygiene
 studio-generate-dependency-hygiene:

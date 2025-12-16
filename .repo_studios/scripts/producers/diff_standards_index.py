@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
-"""Diff two standards index YAML files and emit structured artifacts."""
+"""Diff two standards index YAML files and emit a canonical report bundle.
+
+This producer writes positional-encoded artifacts under the configured reports root:
+
+<reports_root>/<viewer_slug>/<topic>/<YYYYMMDD-HHMM>/
+
+Artifacts:
+- manifest.json
+- summary.md
+- telemetry.json
+"""
 
 from __future__ import annotations
 
@@ -26,19 +36,23 @@ CHANGE_KINDS = {
 }
 
 TOLERATE_DIFF_KEYS = {"last_updated"}
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_index_diff_reports")
-RUN_PREFIX = "standards_index_diff"
+
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
+VIEWER_SLUG = "rawview"
+TOPIC_SLUG = "standards_index_diff"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 try:
-    from libraries import copy_latest_artifact
+    from libraries import prune_run_directories
+    from libraries.database_integration import create_storage
 except ModuleNotFoundError:  # pragma: no cover - fallback when run as script
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import copy_latest_artifact
+    from libraries import prune_run_directories
+    from libraries.database_integration import create_storage
 
 
 class DiffError(Exception):
@@ -50,7 +64,7 @@ def _current_utc() -> datetime:
 
 
 def _format_run_slug(moment: datetime) -> str:
-    return moment.strftime("%Y%m%d_%H%M%S")
+    return moment.strftime("%Y%m%d-%H%M")
 
 
 def _resolve_timestamp(raw: str | None) -> tuple[str, datetime]:
@@ -65,46 +79,26 @@ def _resolve_timestamp(raw: str | None) -> tuple[str, datetime]:
             parsed = parsed.astimezone(timezone.utc)
         return _format_run_slug(parsed), parsed
     except ValueError:
-        return raw, _current_utc()
+        logging.warning("--timestamp value was not ISO-8601; falling back to current time")
+        now = _current_utc()
+        return _format_run_slug(now), now
+
+
+def _resolve_timestamp_slug(explicit: str | None) -> str:
+    if explicit is None:
+        return _current_utc().strftime("%Y%m%d-%H%M")
+
+    cleaned = explicit.strip()
+    if len(cleaned) != 13 or cleaned[8] != "-":
+        raise ValueError("run timestamp must be in YYYYMMDD-HHMM format")
+    if not (cleaned[:8] + cleaned[9:]).isdigit():
+        raise ValueError("run timestamp must be in YYYYMMDD-HHMM format")
+    return cleaned
 
 
 def _ensure_directory(path: Path) -> Path:
     path.mkdir(parents=True, exist_ok=True)
     return path
-
-
-def _sanitize_slug(slug: str) -> str:
-    """Make a filesystem-safe slug across platforms."""
-
-    sanitized = slug.replace("/", "_").replace("\\", "_")
-    if os.sep not in {"/", "\\"}:
-        sanitized = sanitized.replace(os.sep, "_")
-    return sanitized
-
-
-def _prepare_run_dir(output_dir: Path, run_slug: str) -> Path:
-    safe_slug = _sanitize_slug(run_slug)
-    run_dir = output_dir / f"{RUN_PREFIX}-{safe_slug}"
-    run_dir.mkdir(parents=True, exist_ok=True)
-    return run_dir
-
-
-def prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> None:
-    keep = max(keep, 1)
-    if not output_dir.exists():
-        return
-    dirs = [path for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(f"{RUN_PREFIX}-")]
-    dirs.sort(key=lambda item: item.name, reverse=True)
-    for index, path in enumerate(dirs):
-        if index < keep or path == current_run:
-            continue
-        for child in path.iterdir():
-            if child.is_file():
-                child.unlink(missing_ok=True)
-        path.rmdir()
-
-
-_copy_latest = copy_latest_artifact
 
 
 def _resolve_output_dir(output_value: str | None, repo_root: Path) -> Path:
@@ -127,6 +121,10 @@ def _rel_to_repo(path: Path, repo_root: Path) -> str:
         return str(path.resolve().relative_to(repo_root))
     except ValueError:
         return str(path.resolve())
+
+
+def _bundle_dir(output_dir: Path, *, timestamp: str) -> Path:
+    return output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp
 
 
 def load(path: Path) -> dict[str, Any]:
@@ -226,11 +224,16 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--output-dir",
         default=str(DEFAULT_OUTPUT_DIR),
-        help="Directory to write structured artifacts",
+        help="Reports root directory used to write positional artifacts",
     )
     parser.add_argument(
         "--timestamp",
-        help="ISO8601 timestamp for the run directory",
+        help="DEPRECATED: ISO8601 timestamp seed; use --run-timestamp for deterministic runs.",
+    )
+    parser.add_argument(
+        "--run-timestamp",
+        default=None,
+        help="Override run timestamp slug (UTC, YYYYMMDD-HHMM). Useful for deterministic tests.",
     )
     parser.add_argument(
         "--artifacts-to-keep",
@@ -259,9 +262,12 @@ def build_parser() -> argparse.ArgumentParser:
 def should_fail(changes: list[dict[str, Any]], fail_policy: str) -> bool:
     if not changes:
         return False
-    if fail_policy == "any":
+    cleaned = fail_policy.strip().lower()
+    if cleaned in {"", "none", "never"}:
+        return False
+    if cleaned == "any":
         return True
-    wanted = {part.strip() for part in fail_policy.split(",") if part.strip()}
+    wanted = {part.strip().lower() for part in fail_policy.split(",") if part.strip()}
     invalid = wanted - CHANGE_KINDS
     if invalid:
         logging.warning("Ignoring unknown fail-on kinds: %s", ", ".join(sorted(invalid)))
@@ -285,10 +291,9 @@ def _compose_report_payload(
     summary = diff["summary"] if diff else {}
     changes = diff["changes"] if diff else []
     return {
-        "schema_version": 1,
         "status": status,
-        "timestamp": run_slug,
-        "generated_utc": generated_at.isoformat(),
+        "run_timestamp": run_slug,
+        "generated_at": generated_at.isoformat(),
         "repo_root": str(repo_root),
         "old_index": _rel_to_repo(old_path, repo_root),
         "new_index": _rel_to_repo(new_path, repo_root),
@@ -304,12 +309,6 @@ def _compose_report_payload(
     }
 
 
-def _write_report_json(run_dir: Path, payload: dict[str, Any]) -> Path:
-    path = run_dir / "report.json"
-    path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-    return path
-
-
 def _format_change_row(change: dict[str, Any]) -> str:
     details: list[str] = []
     if change.get("from") is not None or change.get("to") is not None:
@@ -317,10 +316,11 @@ def _format_change_row(change: dict[str, Any]) -> str:
     return "; ".join(details) if details else ""
 
 
-def _write_report_md(payload: dict[str, Any]) -> str:
+def _write_summary_md(payload: dict[str, Any]) -> str:
     lines: list[str] = []
     lines.append("# Standards Index Diff Report\n\n")
-    lines.append(f"- generated_utc: {payload['generated_utc']}\n")
+    lines.append(f"- generated_at: {payload['generated_at']}\n")
+    lines.append(f"- run_timestamp: {payload['run_timestamp']}\n")
     lines.append(f"- status: {payload['status']}\n")
     lines.append(f"- old_index: {payload['old_index']}\n")
     lines.append(f"- new_index: {payload['new_index']}\n")
@@ -364,80 +364,101 @@ def _write_report_md(payload: dict[str, Any]) -> str:
     return "".join(lines)
 
 
-def _write_report_log(payload: dict[str, Any]) -> str:
-    lines = [
-        f"status={payload['status']}",
-        f"change_count={payload['change_count']}",
-        f"should_fail={str(payload['should_fail']).lower()}",
-        f"fail_policy={payload['fail_policy']}",
-        f"old_index={payload['old_index']}",
-        f"new_index={payload['new_index']}",
-        f"integrity_hash_old={payload.get('integrity_hash_old')}",
-        f"integrity_hash_new={payload.get('integrity_hash_new')}",
-        f"integrity_hash_changed={payload.get('integrity_hash_changed')}",
-    ]
-    if payload.get("notes"):
-        lines.append(f"notes={payload['notes']}")
-    lines.append("summary:")
-    for kind, count in sorted((payload.get("summary") or {}).items()):
-        lines.append(f"  {kind}={count}")
-    return "\n".join(lines) + "\n"
-
-
-def _write_raw_artifacts(
-    *,
-    run_dir: Path,
-    diff: dict[str, Any] | None,
-    notes: str,
-) -> tuple[Path | None, Path]:
-    raw_json_path: Path | None = None
-    raw_txt_path = run_dir / "raw.txt"
-    raw_chunks: list[str] = []
-
-    if diff is not None:
-        raw_json_path = run_dir / "raw.json"
-        raw_json_path.write_text(json.dumps(diff, indent=2) + "\n", encoding="utf-8")
-        raw_chunks.append(json.dumps(diff, indent=2))
-
-    if notes:
-        raw_chunks.append(f"Notes: {notes}")
-
-    if not raw_chunks:
-        raw_chunks.append("[]")
-
-    raw_txt_path.write_text("\n\n".join(raw_chunks) + "\n", encoding="utf-8")
-    return raw_json_path, raw_txt_path
-
-
 def write_artifacts(
     payload: dict[str, Any],
     *,
     diff: dict[str, Any] | None,
-    run_dir: Path,
     output_dir: Path,
+    timestamp: str,
     keep: int,
-) -> None:
-    report_json_path = _write_report_json(run_dir, payload)
-    report_md_path = run_dir / "report.md"
-    report_md_path.write_text(_write_report_md(payload), encoding="utf-8")
-    report_log_path = run_dir / "log.txt"
-    report_log_path.write_text(_write_report_log(payload), encoding="utf-8")
+    logger: logging.Logger,
+) -> Path:
+    bundle_dir = _bundle_dir(output_dir, timestamp=timestamp)
+    storage = create_storage(output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=timestamp)
 
-    raw_json_path, raw_txt_path = _write_raw_artifacts(run_dir=run_dir, diff=diff, notes=payload.get("notes", ""))
+    now_iso = payload["generated_at"]
+    repo_root = Path(payload["repo_root"]).resolve()
 
-    latest_pairs = [
-        (report_json_path, output_dir / "latest_report.json"),
-        (report_md_path, output_dir / "latest_report.md"),
-        (report_log_path, output_dir / "latest_report.log"),
-        (raw_txt_path, output_dir / "latest_raw.txt"),
-    ]
-    if raw_json_path is not None:
-        latest_pairs.append((raw_json_path, output_dir / "latest_raw.json"))
+    manifest_path = bundle_dir / "manifest.json"
+    summary_path = bundle_dir / "summary.md"
+    telemetry_path = bundle_dir / "telemetry.json"
 
-    for src, dest in latest_pairs:
-        _copy_latest(src, dest)
+    manifest: dict[str, object] = {
+        "schema_version": 1,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": timestamp,
+        "generated_at": now_iso,
+        "status": "ok" if payload["status"] != "error" else "error",
+        "git_sha": None,
+        "repo_root": str(repo_root),
+        "inputs": {
+            "old_index": payload["old_index"],
+            "new_index": payload["new_index"],
+            "fail_policy": payload["fail_policy"],
+            "artifacts_to_keep": max(1, keep),
+            "run_timestamp": timestamp,
+        },
+        "catalog": [
+            {"artifact": "manifest.json", "path": _rel_to_repo(manifest_path, repo_root)},
+            {"artifact": "summary.md", "path": _rel_to_repo(summary_path, repo_root)},
+            {"artifact": "telemetry.json", "path": _rel_to_repo(telemetry_path, repo_root)},
+        ],
+        "provenance": {
+            "script": "diff_standards_index.py",
+            "trigger": "cli",
+        },
+    }
 
-    prune_old_runs(output_dir, keep=keep, current_run=run_dir)
+    summary_md = _write_summary_md(payload)
+
+    summary_counts = payload.get("summary") or {}
+    change_count = int(payload.get("change_count", 0) or 0)
+    telemetry_metrics: dict[str, object] = {"change_count": change_count}
+    for kind in CHANGE_KINDS:
+        telemetry_metrics[kind] = int(summary_counts.get(kind, 0) or 0)
+    telemetry_metrics["integrity_hash_changed"] = bool(payload.get("integrity_hash_changed"))
+    telemetry_metrics["should_fail"] = bool(payload.get("should_fail"))
+
+    telemetry: dict[str, object] = {
+        "schema_version": 1,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": timestamp,
+        "generated_at": now_iso,
+        "status": payload["status"],
+        "metrics": telemetry_metrics,
+        "inputs": {
+            "old_index": payload["old_index"],
+            "new_index": payload["new_index"],
+            "fail_policy": payload["fail_policy"],
+        },
+        "payload": {
+            "summary": payload.get("summary") or {},
+            "changes": payload.get("changes") or [],
+            "integrity_hash_old": payload.get("integrity_hash_old"),
+            "integrity_hash_new": payload.get("integrity_hash_new"),
+            "integrity_hash_changed": payload.get("integrity_hash_changed"),
+            "notes": payload.get("notes") or "",
+        },
+    }
+
+    # DB_INTEGRATION_MARKER: standards index diff manifest write
+    storage.write_manifest(manifest)
+    # DB_INTEGRATION_MARKER: standards index diff summary markdown write
+    storage.write_summary({"markdown": summary_md}, format="md")
+    # DB_INTEGRATION_MARKER: standards index diff telemetry write
+    storage.write_telemetry(telemetry)
+
+    base_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG
+    prune_run_directories(
+        base_dir,
+        keep=max(1, keep),
+        current_run=bundle_dir,
+        logger=logger,
+    )
+
+    return bundle_dir
 
 
 def configure_logging(level: str) -> None:
@@ -450,12 +471,15 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     configure_logging(args.log_level)
+    log = logging.getLogger("standards_index_diff")
 
     repo_root = Path(args.repo_root).resolve()
     output_dir = _resolve_output_dir(args.output_dir, repo_root)
     _ensure_directory(output_dir)
+    timestamp_slug = _resolve_timestamp_slug(args.run_timestamp)
     run_slug, generated_at = _resolve_timestamp(args.timestamp)
-    run_dir = _prepare_run_dir(output_dir, run_slug)
+    if args.timestamp and not args.run_timestamp:
+        timestamp_slug = run_slug
 
     old_path = _resolve_input(args.old, repo_root)
     new_path = _resolve_input(args.new, repo_root)
@@ -463,7 +487,7 @@ def main(argv: list[str] | None = None) -> int:
     if not old_path.exists() or not new_path.exists():
         missing = [str(path) for path in (old_path, new_path) if not path.exists()]
         payload = _compose_report_payload(
-            run_slug=run_slug,
+            run_slug=timestamp_slug,
             generated_at=generated_at,
             repo_root=repo_root,
             old_path=old_path,
@@ -477,9 +501,10 @@ def main(argv: list[str] | None = None) -> int:
         write_artifacts(
             payload,
             diff=None,
-            run_dir=run_dir,
             output_dir=output_dir,
+            timestamp=timestamp_slug,
             keep=args.artifacts_to_keep,
+            logger=log,
         )
         return 2
 
@@ -493,7 +518,7 @@ def main(argv: list[str] | None = None) -> int:
     except DiffError as exc:
         notes = str(exc)
         payload = _compose_report_payload(
-            run_slug=run_slug,
+            run_slug=timestamp_slug,
             generated_at=generated_at,
             repo_root=repo_root,
             old_path=old_path,
@@ -507,9 +532,10 @@ def main(argv: list[str] | None = None) -> int:
         write_artifacts(
             payload,
             diff=None,
-            run_dir=run_dir,
             output_dir=output_dir,
+            timestamp=timestamp_slug,
             keep=args.artifacts_to_keep,
+            logger=log,
         )
         return 2
 
@@ -519,7 +545,7 @@ def main(argv: list[str] | None = None) -> int:
         Path(args.json_out).write_text(json.dumps(diff_data, indent=2) + "\n", encoding="utf-8")
 
     payload = _compose_report_payload(
-        run_slug=run_slug,
+        run_slug=timestamp_slug,
         generated_at=generated_at,
         repo_root=repo_root,
         old_path=old_path,
@@ -531,12 +557,13 @@ def main(argv: list[str] | None = None) -> int:
         notes=notes,
     )
 
-    write_artifacts(
+    bundle_dir = write_artifacts(
         payload,
         diff=diff_data,
-        run_dir=run_dir,
         output_dir=output_dir,
+        timestamp=timestamp_slug,
         keep=args.artifacts_to_keep,
+        logger=log,
     )
 
     if diff_data["integrity_hash_changed"]:
@@ -545,7 +572,7 @@ def main(argv: list[str] | None = None) -> int:
             diff_data["integrity_hash_old"],
             diff_data["integrity_hash_new"],
         )
-    logging.info("Standards index diff written to %s", run_dir)
+    logging.info("Standards index diff bundle written to %s", bundle_dir)
     return 1 if should_fail_flag else 0
 
 

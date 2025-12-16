@@ -28,7 +28,7 @@ def test_diff_detects_changes_and_writes_artifacts(tmp_path: Path) -> None:
 
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "standards_index_diff_reports"
+    output_dir = repo_root / ".repo_studios" / "command_center" / "reports"
 
     old_index = {
         "integrity_hash": "abc123",
@@ -86,8 +86,8 @@ def test_diff_detects_changes_and_writes_artifacts(tmp_path: Path) -> None:
             str(repo_root),
             "--output-dir",
             str(output_dir),
-            "--timestamp",
-            "2024-01-01T00:00:00+00:00",
+            "--run-timestamp",
+            "20240101-0000",
             "--artifacts-to-keep",
             "5",
             "--log-level",
@@ -97,41 +97,34 @@ def test_diff_detects_changes_and_writes_artifacts(tmp_path: Path) -> None:
 
     assert exit_code == 1
 
-    run_dir = output_dir / f"{mod.RUN_PREFIX}-20240101_000000"
-    assert run_dir.is_dir()
+    bundle_dir = output_dir / "rawview" / "standards_index_diff" / "20240101-0000"
+    assert bundle_dir.is_dir()
 
-    report = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
-    assert report["status"] == "changes"
-    assert report["should_fail"] is True
-    assert report["change_count"] == 4
-    assert report["integrity_hash_changed"] is True
+    manifest = json.loads((bundle_dir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["viewer_slug"] == "rawview"
+    assert manifest["topic"] == "standards_index_diff"
+    assert manifest["run_timestamp"] == "20240101-0000"
+    assert manifest["status"] == "ok"
+
+    telemetry = json.loads((bundle_dir / "telemetry.json").read_text(encoding="utf-8"))
+    assert telemetry["status"] == "changes"
+    assert telemetry["metrics"]["change_count"] == 4
+    assert telemetry["metrics"]["integrity_hash_changed"] is True
+    assert telemetry["metrics"]["should_fail"] is True
+    changes = telemetry["payload"]["changes"]
     assert {
         "id": "STD-001",
         "kind": "severity_changed",
         "from": "medium",
         "to": "high",
-    } in report["changes"]
-    assert {"id": "STD-002", "kind": "removed"} in report["changes"]
-    assert {"id": "STD-003", "kind": "added"} in report["changes"]
+    } in changes
+    assert {"id": "STD-002", "kind": "removed"} in changes
+    assert {"id": "STD-003", "kind": "added"} in changes
 
-    markdown = (run_dir / "report.md").read_text(encoding="utf-8")
+    markdown = (bundle_dir / "summary.md").read_text(encoding="utf-8")
     assert "# Standards Index Diff Report" in markdown
     assert "| STD-001 | severity_changed" in markdown
-
-    log_text = (run_dir / "log.txt").read_text(encoding="utf-8")
-    assert "status=changes" in log_text
-
-    raw_json = json.loads((run_dir / "raw.json").read_text(encoding="utf-8"))
-    assert raw_json["summary"]["severity_changed"] == 1
-
-    raw_txt = (run_dir / "raw.txt").read_text(encoding="utf-8")
-    assert "severity_changed" in raw_txt
-
-    assert (output_dir / "latest_report.json").is_file()
-    assert (output_dir / "latest_report.md").is_file()
-    assert (output_dir / "latest_report.log").is_file()
-    assert (output_dir / "latest_raw.json").is_file()
-    assert (output_dir / "latest_raw.txt").is_file()
+    assert telemetry["payload"]["summary"]["severity_changed"] == 1
 
 
 def test_no_changes_returns_zero_and_prunes(tmp_path: Path) -> None:
@@ -139,12 +132,13 @@ def test_no_changes_returns_zero_and_prunes(tmp_path: Path) -> None:
 
     repo_root = tmp_path / "workspace"
     repo_root.mkdir()
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "standards_index_diff_reports"
+    output_dir = repo_root / ".repo_studios" / "command_center" / "reports"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    stale_dir = output_dir / f"{mod.RUN_PREFIX}-20231231_235959"
+    base_dir = output_dir / "rawview" / "standards_index_diff"
+    stale_dir = base_dir / "20231231-2359"
     stale_dir.mkdir(parents=True, exist_ok=True)
-    (stale_dir / "report.json").write_text("{}\n", encoding="utf-8")
+    (stale_dir / "manifest.json").write_text("{}\n", encoding="utf-8")
 
     index_payload = {
         "integrity_hash": "zzz",
@@ -173,8 +167,8 @@ def test_no_changes_returns_zero_and_prunes(tmp_path: Path) -> None:
             str(repo_root),
             "--output-dir",
             str(output_dir),
-            "--timestamp",
-            "2024-02-01T12:00:00+00:00",
+            "--run-timestamp",
+            "20240201-1200",
             "--artifacts-to-keep",
             "1",
             "--log-level",
@@ -184,18 +178,14 @@ def test_no_changes_returns_zero_and_prunes(tmp_path: Path) -> None:
 
     assert exit_code == 0
 
-    run_dir = output_dir / f"{mod.RUN_PREFIX}-20240201_120000"
+    run_dir = output_dir / "rawview" / "standards_index_diff" / "20240201-1200"
     assert run_dir.is_dir()
     assert not stale_dir.exists()
 
-    report = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
-    assert report["status"] == "no_changes"
-    assert report["change_count"] == 0
-    assert report["should_fail"] is False
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    assert telemetry["status"] == "no_changes"
+    assert telemetry["metrics"]["change_count"] == 0
+    assert telemetry["metrics"]["should_fail"] is False
 
-    raw_txt = (run_dir / "raw.txt").read_text(encoding="utf-8")
-    assert "changes" in raw_txt
-
-    assert (output_dir / "latest_report.json").read_text(encoding="utf-8")
-    assert (output_dir / "latest_raw.json").is_file()
-    assert (output_dir / "latest_raw.txt").is_file()
+    manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["status"] == "ok"

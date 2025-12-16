@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "rawview",
+  "topic": "standards_index_diff",
+  "run_timestamp": "20251216-1245",
+  "generated_at": "2025-12-16T12:45:22.399806+00:00",
+  "status": "changes",
+  "metrics": {
+    "change_count": 3,
+    "added": 1,
+    "severity_changed": 1,
+    "other_changed": 0,
+    "rationale_changed": 0,
+    "categories_changed": 0,
+    "removed": 0,
+    "summary_changed": 1,
+    "applies_changed": 0,
+    "integrity_hash_changed": true,
+    "should_fail": false
+  },
+  "inputs": {
+    "old_index": ".repo_studios\\tmp_diff_old.yaml",
+    "new_index": ".repo_studios\\tmp_diff_new.yaml",
+    "fail_policy": "none"
+  },
+  "payload": {
+    "summary": {
+      "severity_changed": 1,
+      "summary_changed": 1,
+      "added": 1
+    },
+    "changes": [
+      {
+        "id": "STD-001",
+        "kind": "severity_changed",
+        "from": "low",
+        "to": "high"
+      },
+      {
+        "id": "STD-001",
+        "kind": "summary_changed"
+      },
+      {
+        "id": "STD-002",
+        "kind": "added"
+      }
+    ],
+    "integrity_hash_old": "abc",
+    "integrity_hash_new": "def",
+    "integrity_hash_changed": true,
+    "notes": ""
+  }
+}

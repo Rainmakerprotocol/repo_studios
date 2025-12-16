@@ -1,0 +1,397 @@
+{
+  "summary": {
+    "total_scripts": 77,
+    "scripts_with_markers": 8,
+    "complete_integrations": 7,
+    "in_progress": 7
+  },
+  "scripts": {
+    ".repo_studios\\command_center\\scripts\\libraries\\database_integration.py": {
+      "tier": "utility",
+      "marker_count": 37,
+      "has_import": false,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 4,
+          "text": "This module provides dormant database connectivity",
+          "type": "code"
+        },
+        {
+          "line": 38,
+          "text": "Configuration schema",
+          "type": "comment"
+        },
+        {
+          "line": 43,
+          "text": "Wire these fields when integrating with main repo DB.",
+          "type": "code"
+        },
+        {
+          "line": 56,
+          "text": "Main repo will provide REPO_STUDIOS_DB_URL.",
+          "type": "code"
+        },
+        {
+          "line": 67,
+          "text": "Air-gapped systems can use local config file.",
+          "type": "code"
+        },
+        {
+          "line": 87,
+          "text": "Storage protocol for polymorphic file/DB operations",
+          "type": "comment"
+        },
+        {
+          "line": 112,
+          "text": "File-based storage (current implementation)",
+          "type": "comment"
+        },
+        {
+          "line": 162,
+          "text": "Database storage (dormant until configured)",
+          "type": "comment"
+        },
+        {
+          "line": 166,
+          "text": "This class contains stub implementations that will be",
+          "type": "code"
+        },
+        {
+          "line": 185,
+          "text": "Database writes ENABLED\")",
+          "type": "code"
+        },
+        {
+          "line": 186,
+          "text": "Connection pool initialization here",
+          "type": "comment"
+        },
+        {
+          "line": 189,
+          "text": "Database writes DORMANT\")",
+          "type": "code"
+        },
+        {
+          "line": 194,
+          "text": "Target schema",
+          "type": "code"
+        },
+        {
+          "line": 214,
+          "text": "Actual INSERT logic here",
+          "type": "comment"
+        },
+        {
+          "line": 215,
+          "text": "Would write manifest for {data.get('topic', 'unknown')}\")",
+          "type": "code"
+        },
+        {
+          "line": 220,
+          "text": "Target schema",
+          "type": "code"
+        },
+        {
+          "line": 235,
+          "text": "Actual INSERT logic here",
+          "type": "comment"
+        },
+        {
+          "line": 238,
+          "text": "Would write {artifact_type} summary\")",
+          "type": "code"
+        },
+        {
+          "line": 243,
+          "text": "Target schemas",
+          "type": "code"
+        },
+        {
+          "line": 272,
+          "text": "Actual INSERT logic here",
+          "type": "comment"
+        },
+        {
+          "line": 273,
+          "text": "Would write telemetry + extracted metrics\")",
+          "type": "code"
+        },
+        {
+          "line": 278,
+          "text": "Target schema",
+          "type": "code"
+        },
+        {
+          "line": 308,
+          "text": "Actual INSERT logic here",
+          "type": "comment"
+        },
+        {
+          "line": 309,
+          "text": "Would write matrix data + function inventory\")",
+          "type": "code"
+        },
+        {
+          "line": 314,
+          "text": "Target schema",
+          "type": "code"
+        },
+        {
+          "line": 329,
+          "text": "Actual INSERT logic here",
+          "type": "comment"
+        },
+        {
+          "line": 330,
+          "text": "Would write aggregated metrics\")",
+          "type": "code"
+        },
+        {
+          "line": 333,
+          "text": "Dual-write orchestrator",
+          "type": "comment"
+        },
+        {
+          "line": 337,
+          "text": "Use this class in all scripts during transition phase.",
+          "type": "code"
+        },
+        {
+          "line": 363,
+          "text": "DB write failed (manifest): {e}\")",
+          "type": "code"
+        },
+        {
+          "line": 371,
+          "text": "DB write failed (summary): {e}\")",
+          "type": "code"
+        },
+        {
+          "line": 379,
+          "text": "DB write failed (telemetry): {e}\")",
+          "type": "code"
+        },
+        {
+          "line": 387,
+          "text": "DB write failed (matrix): {e}\")",
+          "type": "code"
+        },
+        {
+          "line": 395,
+          "text": "DB write failed (metrics): {e}\")",
+          "type": "code"
+        },
+        {
+          "line": 398,
+          "text": "Factory for easy script integration",
+          "type": "comment"
+        },
+        {
+          "line": 408,
+          "text": "Scripts should call this to get storage instance.",
+          "type": "code"
+        },
+        {
+          "line": 432,
+          "text": "Try config file first, then env vars",
+          "type": "comment"
+        }
+      ]
+    },
+    ".repo_studios\\command_center\\scripts\\producers\\analyze_standards_index_gaps.py": {
+      "tier": "producer",
+      "marker_count": 3,
+      "has_import": true,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 523,
+          "text": "standards index gaps manifest write",
+          "type": "comment"
+        },
+        {
+          "line": 525,
+          "text": "standards index gaps summary markdown write",
+          "type": "comment"
+        },
+        {
+          "line": 527,
+          "text": "standards index gaps telemetry write",
+          "type": "comment"
+        }
+      ]
+    },
+    ".repo_studios\\command_center\\scripts\\utilities\\list_db_markers.py": {
+      "tier": "utility",
+      "marker_count": 8,
+      "has_import": true,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 2,
+          "text": "locations for tracking integration progress.",
+          "type": "docstring"
+        },
+        {
+          "line": 4,
+          "text": "This utility helps track which scripts have been",
+          "type": "code"
+        },
+        {
+          "line": 34,
+          "text": "occurrence.\"\"\"",
+          "type": "docstring"
+        },
+        {
+          "line": 55,
+          "text": "occurrences in a file.\"\"\"",
+          "type": "docstring"
+        },
+        {
+          "line": 65,
+          "text": "with optional colon and description",
+          "type": "comment"
+        },
+        {
+          "line": 66,
+          "text": "?\\s*(.*)\")",
+          "type": "code"
+        },
+        {
+          "line": 274,
+          "text": "scan results**\",",
+          "type": "code"
+        },
+        {
+          "line": 336,
+          "text": "locations in the repository\"",
+          "type": "code"
+        }
+      ]
+    },
+    ".repo_studios\\scripts\\producers\\analyze_test_hardening.py": {
+      "tier": "producer",
+      "marker_count": 3,
+      "has_import": true,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 751,
+          "text": "test hardening manifest write",
+          "type": "comment"
+        },
+        {
+          "line": 753,
+          "text": "test hardening summary markdown write",
+          "type": "comment"
+        },
+        {
+          "line": 755,
+          "text": "test hardening telemetry write",
+          "type": "comment"
+        }
+      ]
+    },
+    ".repo_studios\\scripts\\producers\\check_inventory_health.py": {
+      "tier": "producer",
+      "marker_count": 3,
+      "has_import": true,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 430,
+          "text": "inventory health manifest",
+          "type": "comment"
+        },
+        {
+          "line": 433,
+          "text": "inventory health summary markdown",
+          "type": "comment"
+        },
+        {
+          "line": 436,
+          "text": "inventory health telemetry",
+          "type": "comment"
+        }
+      ]
+    },
+    ".repo_studios\\scripts\\producers\\collect_faulthandler_reports.py": {
+      "tier": "producer",
+      "marker_count": 3,
+      "has_import": true,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 403,
+          "text": "faulthandler manifest",
+          "type": "comment"
+        },
+        {
+          "line": 406,
+          "text": "faulthandler summary markdown",
+          "type": "comment"
+        },
+        {
+          "line": 409,
+          "text": "faulthandler telemetry",
+          "type": "comment"
+        }
+      ]
+    },
+    ".repo_studios\\scripts\\producers\\collect_test_log_reports.py": {
+      "tier": "producer",
+      "marker_count": 3,
+      "has_import": true,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 248,
+          "text": "Persist manifest bundle (report_runs + report_artifacts)",
+          "type": "comment"
+        },
+        {
+          "line": 250,
+          "text": "Persist human-readable report summary (report_artifacts)",
+          "type": "comment"
+        },
+        {
+          "line": 252,
+          "text": "Persist telemetry payload + extracted metrics (report_artifacts + test_metrics)",
+          "type": "comment"
+        }
+      ]
+    },
+    ".repo_studios\\scripts\\producers\\diff_standards_index.py": {
+      "tier": "producer",
+      "marker_count": 3,
+      "has_import": true,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 446,
+          "text": "standards index diff manifest write",
+          "type": "comment"
+        },
+        {
+          "line": 448,
+          "text": "standards index diff summary markdown write",
+          "type": "comment"
+        },
+        {
+          "line": 450,
+          "text": "standards index diff telemetry write",
+          "type": "comment"
+        }
+      ]
+    }
+  }
+}

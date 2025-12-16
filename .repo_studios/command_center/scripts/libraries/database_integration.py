@@ -127,35 +127,35 @@ class FileSystemStorage:
     def write_manifest(self, data: dict[str, Any]) -> None:
         """Write manifest.json to bundle directory."""
         manifest_path = self.bundle_dir / "manifest.json"
-        manifest_path.write_text(json.dumps(data, indent=2))
+        manifest_path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
         logger.debug(f"Wrote manifest to {manifest_path}")
     
     def write_summary(self, data: dict[str, Any], format: str = "json") -> None:
         """Write summary artifact."""
         if format == "json":
             summary_path = self.bundle_dir / "summary.json"
-            summary_path.write_text(json.dumps(data, indent=2))
+            summary_path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
         else:
             summary_path = self.bundle_dir / "summary.md"
-            summary_path.write_text(data.get("markdown", ""))
+            summary_path.write_text(data.get("markdown", ""), encoding="utf-8")
         logger.debug(f"Wrote summary to {summary_path}")
     
     def write_telemetry(self, data: dict[str, Any]) -> None:
         """Write telemetry.json."""
         telemetry_path = self.bundle_dir / "telemetry.json"
-        telemetry_path.write_text(json.dumps(data, indent=2))
+        telemetry_path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
         logger.debug(f"Wrote telemetry to {telemetry_path}")
     
     def write_matrix(self, data: dict[str, Any]) -> None:
         """Write matrix.json."""
         matrix_path = self.bundle_dir / "matrix.json"
-        matrix_path.write_text(json.dumps(data, indent=2))
+        matrix_path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
         logger.debug(f"Wrote matrix to {matrix_path}")
     
     def write_metrics(self, data: dict[str, Any]) -> None:
         """Write metrics.json."""
         metrics_path = self.bundle_dir / "metrics.json"
-        metrics_path.write_text(json.dumps(data, indent=2))
+        metrics_path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
         logger.debug(f"Wrote metrics to {metrics_path}")
 
 

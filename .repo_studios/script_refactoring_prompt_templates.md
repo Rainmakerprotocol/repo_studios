@@ -29,7 +29,7 @@ to align with positional encoding and database integration standards.
 
 Analyze the following script:
 `<SCRIPT_PATH>`
-`collect_test_log_reports.py`
+`diff_standards_index.py`
 
 Report the following information:
 
@@ -111,7 +111,7 @@ A structured report covering:
 ```text
 Based on the analysis of:
 `<SCRIPT_PATH>`
-`collect_test_log_reports.py`
+`diff_standards_index.py`
 
 Generate a detailed implementation plan to align this script with
 positional encoding and database integration standards.
@@ -318,7 +318,7 @@ A comprehensive implementation plan including:
 ````text
 Execute the implementation plan for:
 `<SCRIPT_PATH>`
-`collect_test_log_reports.py`
+`diff_standards_index.py`
 
 Follow the detailed plan from Phase 2.
 
