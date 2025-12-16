@@ -99,7 +99,7 @@ PATH_SPECS: dict[str, PathSpec] = {
     ),
     "anchor_inventory": PathSpec(
         field="anchor_inventory",
-        default=Path(".repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json"),
+        default=Path(".repo_studios/reports/producer_reports/healthview/anchor_inventory"),
         ensure_dir=False,
         within_repo=True,
     ),

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 from pathlib import Path
 
 _MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "generate_anchor_inventory.py"
@@ -31,7 +32,7 @@ def test_reports_written_with_duplicates(tmp_path):
         encoding="utf-8",
     )
 
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "anchor_inventory_reports"
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports"
 
     json_out = root / "baseline.json"
 
@@ -57,10 +58,11 @@ def test_reports_written_with_duplicates(tmp_path):
     )
 
     assert exit_code == 0
-    run_dir = output_dir / f"{mod.RUN_PREFIX}-20240101_000000"
+    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240101-0000"
     assert run_dir.is_dir()
 
-    report = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    report = telemetry["payload"]
     summary = report["summary"]
     assert summary["total_slugs"] == 3
     assert summary["cross_file_duplicates"] == 1
@@ -83,29 +85,9 @@ def test_reports_written_with_duplicates(tmp_path):
     assert documents["two.md"]["h1_count"] == 2
     assert documents["two.md"]["h2_count"] == 1
     assert documents["two.md"]["cross_file_duplicate_slugs"] == ["shared"]
-    assert (run_dir / "report.md").is_file()
-    assert (run_dir / "slugs.tsv").is_file()
-    assert (run_dir / "documents.csv").is_file()
-    assert (output_dir / "latest_report.json").is_file()
-    assert (output_dir / "latest_report.md").is_file()
-    assert (output_dir / "latest_slugs.tsv").is_file()
-    assert (output_dir / "latest_documents.csv").is_file()
-
-    tsv_lines = (run_dir / "slugs.tsv").read_text(encoding="utf-8").splitlines()
-    assert tsv_lines[0] == "slug\tcount\tfile_count\tfiles\tlocations"
-    shared_row = next(line for line in tsv_lines if line.startswith("shared\t"))
-    assert "one.md,two.md" in shared_row
-    assert "one.md:1;two.md:1" in shared_row
-
-    csv_lines = (run_dir / "documents.csv").read_text(encoding="utf-8").splitlines()
-    assert csv_lines[0] == (
-        "path,h1_count,h2_count,heading_count,unique_slugs,duplicate_slugs,cross_file_duplicate_slugs,allowlisted_slugs"
-    )
-    one_fields = csv_lines[1].split(",")
-    assert one_fields[0] == "one.md"
-    assert one_fields[1:5] == ["1", "0", "1", "1"]
-    assert one_fields[5] == ""
-    assert one_fields[6] == "shared"
+    assert (run_dir / "manifest.json").is_file()
+    assert (run_dir / "summary.md").is_file()
+    assert (run_dir / "telemetry.json").is_file()
 
     baseline = json.loads(json_out.read_text(encoding="utf-8"))
     assert baseline["summary"] == summary
@@ -117,18 +99,18 @@ def test_pruning_keeps_newest_run(tmp_path):
     docs = root / "docs"
     docs.mkdir(parents=True)
     (docs / "alpha.md").write_text("# Alpha\n", encoding="utf-8")
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "anchor_inventory_reports"
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports"
+    topic_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG
+    topic_dir.mkdir(parents=True, exist_ok=True)
 
-    stale_names = [
-        f"{mod.RUN_PREFIX}-20230101_000000",
-        f"{mod.RUN_PREFIX}-20230201_000000",
-        f"{mod.RUN_PREFIX}-20230301_000000",
-    ]
-    for name in stale_names:
-        stale_dir = output_dir / name
+    stale_names = ["20230101-0000", "20230201-0000", "20230301-0000"]
+    for index, name in enumerate(stale_names, start=1):
+        stale_dir = topic_dir / name
         stale_dir.mkdir()
-        (stale_dir / "report.json").write_text("{}", encoding="utf-8")
+        (stale_dir / "telemetry.json").write_text("{}", encoding="utf-8")
+        (stale_dir / "summary.md").write_text("# stale\n", encoding="utf-8")
+        (stale_dir / "manifest.json").write_text("{}", encoding="utf-8")
+        os.utime(stale_dir, (index, index))
 
     exit_code = mod.main(
         [
@@ -146,13 +128,11 @@ def test_pruning_keeps_newest_run(tmp_path):
     )
 
     assert exit_code == 0
-    expected = {
-        f"{mod.RUN_PREFIX}-20230301_000000",
-        f"{mod.RUN_PREFIX}-20240203_000000",
-    }
-    run_dirs = {path.name for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)}
+    expected = {"20230301-0000", "20240203-0000"}
+    run_dirs = {path.name for path in topic_dir.iterdir() if path.is_dir()}
     assert run_dirs == expected
-    assert (output_dir / "latest_report.json").is_file()
-    assert (output_dir / "latest_report.md").is_file()
-    assert (output_dir / "latest_slugs.tsv").is_file()
-    assert (output_dir / "latest_documents.csv").is_file()
+    for name in expected:
+        bundle_dir = topic_dir / name
+        assert (bundle_dir / "manifest.json").is_file()
+        assert (bundle_dir / "summary.md").is_file()
+        assert (bundle_dir / "telemetry.json").is_file()

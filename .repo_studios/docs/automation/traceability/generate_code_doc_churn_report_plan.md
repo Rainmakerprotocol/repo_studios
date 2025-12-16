@@ -36,7 +36,7 @@ python -m .repo_studios.scripts.producers.generate_code_doc_churn_report \
   --repo-root . \
   --git-window "14 days" \
   --doc-index .repo_studios/reports/producer_reports/doc_index/latest_doc_index.json \
-  --anchor-inventory .repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json \
+  --anchor-inventory .repo_studios/reports/producer_reports/healthview/anchor_inventory \
   --output-dir .repo_studios/reports/producer_reports/code_doc_churn_reports \
   --artifacts-to-keep 5 \
   --log-level INFO

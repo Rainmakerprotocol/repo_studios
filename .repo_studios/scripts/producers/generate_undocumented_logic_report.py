@@ -6,11 +6,20 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import sys
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Sequence
 import ast
+
+SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
+if str(SCRIPTS_ROOT) not in sys.path:  # pragma: no cover - import path bootstrap
+    sys.path.insert(0, str(SCRIPTS_ROOT))
+
+from utilities.anchor_inventory_loader import load_anchor_inventory  # noqa: E402
+
+logger = logging.getLogger(__name__)
 
 DEFAULT_OUTPUT_DIR = Path(
     ".repo_studios/reports/producer_reports/undocumented_logic_reports"
@@ -82,7 +91,7 @@ PATH_CONFIG = PathsConfig(
         "anchor_inventory": PathSpec(
             field="anchor_inventory",
             default=Path(
-                ".repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json"
+                ".repo_studios/reports/producer_reports/healthview/anchor_inventory"
             ),
             ensure_dir=False,
             within_repo=True,
@@ -136,7 +145,10 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument("--output-dir", help="Directory for report artifacts")
     parser.add_argument("--doc-index", help="Path to latest doc index JSON")
-    parser.add_argument("--anchor-inventory", help="Path to latest anchor inventory JSON")
+    parser.add_argument(
+        "--anchor-inventory",
+        help="Path to anchor inventory input (canonical topic/bundle dir or legacy report.json)",
+    )
     parser.add_argument("--allowlist", help="File listing modules or entities to skip")
     parser.add_argument(
         "--code-root",
@@ -577,7 +589,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         scans.append(scan)
 
     doc_index_raw = _load_json(paths.doc_index)
-    anchor_inventory_raw = _load_json(paths.anchor_inventory)
+    anchor_inventory_raw, anchor_inventory_path = load_anchor_inventory(paths.anchor_inventory, logger=logger)
+    if anchor_inventory_raw is None:
+        anchor_inventory_raw = {}
     doc_index = _build_doc_lookup(doc_index_raw)
     anchor_lookup = _build_anchor_lookup(anchor_inventory_raw)
 
@@ -589,7 +603,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         repo_root=paths.repo_root,
         generated_ts=generated_ts,
         doc_index_path=paths.doc_index,
-        anchor_inventory_path=paths.anchor_inventory,
+        anchor_inventory_path=anchor_inventory_path or paths.anchor_inventory,
         code_roots=code_roots,
     )
 

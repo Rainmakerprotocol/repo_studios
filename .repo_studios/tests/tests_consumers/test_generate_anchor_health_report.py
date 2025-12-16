@@ -40,7 +40,7 @@ def test_anchor_health_uses_inventory_artifacts(tmp_path):
         encoding="utf-8",
     )
 
-    inventory_output = repo / ".repo_studios" / "reports" / "producer_reports" / "anchor_inventory_reports"
+    inventory_output = repo / ".repo_studios" / "reports" / "producer_reports"
     inventory_output.mkdir(parents=True, exist_ok=True)
 
     exit_code = inventory_mod.main(
@@ -59,8 +59,8 @@ def test_anchor_health_uses_inventory_artifacts(tmp_path):
     )
     assert exit_code == 0
 
-    latest_report = inventory_output / "latest_report.json"
-    assert latest_report.exists()
+    topic_dir = inventory_output / inventory_mod.VIEWER_SLUG / inventory_mod.TOPIC_SLUG
+    assert topic_dir.exists()
 
     # Remove docs to ensure we do not fall back to rescan
     for child in docs.iterdir():
@@ -71,7 +71,7 @@ def test_anchor_health_uses_inventory_artifacts(tmp_path):
     os.chdir(repo)
     try:
         result = consumer_mod.run(
-            inventory_report=latest_report,
+            inventory_report=topic_dir,
             output_dir=repo
             / ".repo_studios"
             / "reports"

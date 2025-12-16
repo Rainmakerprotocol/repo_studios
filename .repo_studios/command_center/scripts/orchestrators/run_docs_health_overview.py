@@ -69,7 +69,7 @@ AGGREGATOR_MODULE = "scripts.aggregators.aggregate_docs_health_signals"
 ORCHESTRATOR_SCRIPT = Path(".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py")
 
 DEFAULT_DOC_INDEX_OUTPUT = Path(".repo_studios/reports/producer_reports/doc_index")
-DEFAULT_ANCHOR_INVENTORY_OUTPUT = Path(".repo_studios/reports/producer_reports/anchor_inventory_reports")
+DEFAULT_ANCHOR_INVENTORY_OUTPUT = Path(".repo_studios/reports/producer_reports")
 DEFAULT_ANCHOR_VALIDATION_OUTPUT = Path(".repo_studios/reports/producer_reports/markdown_anchor_validation_reports")
 DEFAULT_DOCS_INTEGRITY_OUTPUT = Path(".repo_studios/reports/producer_reports/docs_integrity_reports")
 DEFAULT_METRICS_STUB_OUTPUT = Path(".repo_studios/reports/producer_reports/metrics_anchor_stub_reports")
@@ -616,7 +616,7 @@ def _latest_pointer(paths: Paths, *, name: str) -> Path:
 
 
 def _latest_anchor_inventory(paths: Paths) -> Path:
-    return paths.anchor_inventory_output_dir / "latest_report.json"
+    return paths.anchor_inventory_output_dir / "healthview" / "anchor_inventory"
 
 
 def _latest_anchor_validation(paths: Paths) -> Path:
@@ -960,7 +960,7 @@ def run(argv: Sequence[str] | None = None) -> int:
             anchor_inventory_outcome.run_dir if anchor_inventory_outcome else None, paths.repo_root
         ),
         "anchor_inventory_report": _relativize(
-            anchor_inventory_outcome.artifacts.get("report.json") if anchor_inventory_outcome else None,
+            anchor_inventory_outcome.artifacts.get("telemetry.json") if anchor_inventory_outcome else None,
             paths.repo_root,
         ),
         "anchor_validation_report": _relativize(
@@ -1092,3 +1092,7 @@ __all__ = [
     "UndocumentedOutcome",
     "AggregatorOutcome",
 ]
+
+
+if __name__ == "__main__":
+    main()

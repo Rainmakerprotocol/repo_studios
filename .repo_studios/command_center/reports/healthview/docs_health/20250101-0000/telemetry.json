@@ -1,0 +1,79 @@
+{
+  "finished_at": "2025-12-16T15:12:56.321767+00:00",
+  "metrics": {
+    "artifact_bytes": 9038,
+    "artifact_files": 3,
+    "runtime_seconds": 0.094707,
+    "step_count": 8,
+    "steps_failed": 0,
+    "steps_skipped": 7,
+    "steps_succeeded": 1
+  },
+  "run_slug": "20250101-0000",
+  "started_at": "2025-12-16T15:12:56.227060+00:00",
+  "steps": [
+    {
+      "detail": "doc index skipped",
+      "finished_at": "2025-12-16T15:12:56.227077+00:00",
+      "name": "doc-index",
+      "started_at": "2025-12-16T15:12:56.227072+00:00",
+      "status": "skipped"
+    },
+    {
+      "detail": "slugs=664, duplicates=67",
+      "finished_at": "2025-12-16T15:12:56.321273+00:00",
+      "name": "anchor-inventory",
+      "payload": {
+        "run_dir": ".repo_studios/reports/producer_reports/healthview/anchor_inventory/20250101-0000",
+        "slug": "20250101-0000"
+      },
+      "started_at": "2025-12-16T15:12:56.227261+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "anchor validation skipped",
+      "finished_at": "2025-12-16T15:12:56.321290+00:00",
+      "name": "anchor-validation",
+      "started_at": "2025-12-16T15:12:56.321286+00:00",
+      "status": "skipped"
+    },
+    {
+      "detail": "docs integrity skipped",
+      "finished_at": "2025-12-16T15:12:56.321370+00:00",
+      "name": "docs-integrity",
+      "started_at": "2025-12-16T15:12:56.321364+00:00",
+      "status": "skipped"
+    },
+    {
+      "detail": "metrics stub skipped",
+      "finished_at": "2025-12-16T15:12:56.321459+00:00",
+      "name": "metrics-stub",
+      "started_at": "2025-12-16T15:12:56.321453+00:00",
+      "status": "skipped"
+    },
+    {
+      "detail": "churn skipped",
+      "finished_at": "2025-12-16T15:12:56.321542+00:00",
+      "name": "code-doc-churn",
+      "started_at": "2025-12-16T15:12:56.321538+00:00",
+      "status": "skipped"
+    },
+    {
+      "detail": "undocumented logic skipped",
+      "finished_at": "2025-12-16T15:12:56.321614+00:00",
+      "name": "undocumented-logic",
+      "started_at": "2025-12-16T15:12:56.321609+00:00",
+      "status": "skipped"
+    },
+    {
+      "detail": "aggregator skipped",
+      "finished_at": "2025-12-16T15:12:56.321693+00:00",
+      "name": "aggregate",
+      "started_at": "2025-12-16T15:12:56.321687+00:00",
+      "status": "skipped"
+    }
+  ],
+  "success": true,
+  "topic": "docs_health",
+  "viewer": "healthview"
+}

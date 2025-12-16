@@ -9,8 +9,7 @@
 ## Inputs
 
 - Latest anchor inventory bundle
-  (`.repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json`)
-  when present.
+  (`.repo_studios/reports/producer_reports/healthview/anchor_inventory/`) when present.
 - Fallback Markdown scan of `docs/` when inventory artifacts are unavailable.
 - Baseline file `tests/docs/anchor_slug_baseline.json` for regression deltas.
 
@@ -33,7 +32,7 @@
 
 ```shell
 python -m .repo_studios.scripts.consumers.generate_anchor_health_report \
-  --inventory-report .repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json \
+  --inventory-report .repo_studios/reports/producer_reports/healthview/anchor_inventory \
   --output-dir .repo_studios/reports/consumer_reports/anchor_health_reports \
   --artifacts-to-keep 5
 ```

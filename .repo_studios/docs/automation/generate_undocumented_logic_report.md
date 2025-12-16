@@ -15,7 +15,7 @@ before they feed downstream aggregators.
 - Documentation index JSON (`--doc-index`, defaults to
   `.repo_studios/reports/producer_reports/doc_index/latest_doc_index.json`)
 - Anchor inventory JSON (`--anchor-inventory`, defaults to
-  `.repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json`)
+  `.repo_studios/reports/producer_reports/healthview/anchor_inventory/`)
 - Optional allowlist file (`--allowlist`) with module or module::qualified-name
   entries to skip
 - Optional additional code roots (`--code-root` can be provided multiple times)

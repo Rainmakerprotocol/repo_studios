@@ -31,13 +31,17 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Iterable, Sequence
 
+SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
+if str(SCRIPTS_ROOT) not in sys.path:  # pragma: no cover - import path bootstrap
+    sys.path.insert(0, str(SCRIPTS_ROOT))
+
+from utilities.anchor_inventory_loader import load_anchor_inventory  # noqa: E402
+
 HEADING_RE = re.compile(r"^(#{1,2})\s+(.*)$")
 GENERIC_ALLOWED = {"overview", "introduction", "faq", "notes"}
 BASELINE_PATH = Path("tests/docs/anchor_slug_baseline.json")
 # Permanent root for anchor health artifacts (contains latest + historical runs)
 OUTPUT_DIR = Path(".repo_studios/reports/consumer_reports/anchor_health_reports")
-INVENTORY_DIR = Path(".repo_studios/reports/producer_reports/anchor_inventory_reports")
-INVENTORY_LATEST = INVENTORY_DIR / "latest_report.json"
 DEFAULT_ARTIFACTS_TO_KEEP = 5
 
 # Subfolder naming pattern: anchor_health-YYYY-MM-DD_hhmm
@@ -138,40 +142,13 @@ def _load_json(path: Path) -> dict | None:
         return None
 
 
-def _iter_inventory_reports(base_dir: Path) -> Iterable[Path]:
-    if not base_dir.exists():
-        return []
-    run_dirs = sorted(
-        (child for child in base_dir.iterdir() if child.is_dir() and child.name.startswith("anchor_inventory-")),
-        key=lambda p: p.name,
-        reverse=True,
-    )
-    for run_dir in run_dirs:
-        candidate = run_dir / "report.json"
-        if candidate.exists():
-            yield candidate
-
-
 def load_inventory_report(explicit: Path | None = None) -> tuple[dict, Path] | tuple[None, None]:
     """Load the latest anchor inventory report if available."""
 
-    if explicit is not None:
-        payload = _load_json(explicit)
-        if payload is not None:
-            return payload, explicit
+    payload, payload_path = load_anchor_inventory(explicit)
+    if payload is None or payload_path is None:
         return None, None
-
-    if INVENTORY_LATEST.exists():
-        payload = _load_json(INVENTORY_LATEST)
-        if payload is not None:
-            return payload, INVENTORY_LATEST
-
-    for candidate in _iter_inventory_reports(INVENTORY_DIR):
-        payload = _load_json(candidate)
-        if payload is not None:
-            return payload, candidate
-
-    return None, None
+    return payload, payload_path
 
 
 def _clusters_from_inventory(inventory: dict) -> list[Cluster]:

@@ -15,7 +15,7 @@ results directly.
 - Documentation index JSON (`--doc-index`), defaults to
   `.repo_studios/reports/producer_reports/doc_index/latest_doc_index.json`
 - Anchor inventory JSON (`--anchor-inventory`), defaults to
-  `.repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json`
+  `.repo_studios/reports/producer_reports/healthview/anchor_inventory/`
 - Optional module allowlist (`--allowlist`) listing modules that should be
   skipped, one name per line
 - `--output-dir` (defaults to

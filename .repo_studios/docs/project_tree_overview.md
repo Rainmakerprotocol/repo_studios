@@ -98,7 +98,7 @@ repo_studios/
 │   │   │   ├── run_batch_cleanup/
 │   │   │   └── standards_index_cli/
 │   │   ├── producer_reports/
-│   │   │   ├── anchor_inventory_reports/
+│   │   │   ├── healthview/
 │   │   │   ├── code_doc_churn_reports/
 │   │   │   ├── code_placeholder_scans/
 │   │   │   ├── dependency_hygiene_reports/

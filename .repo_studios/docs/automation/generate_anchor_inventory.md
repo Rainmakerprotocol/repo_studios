@@ -11,25 +11,18 @@ missing headings or repeated anchors without rerunning a raw filesystem scan.
 
 ## Output Contract
 
-- Timestamped run directories live under
-  `.repo_studios/reports/producer_reports/anchor_inventory_reports/`.
-- Each run emits:
-  - `report.json` – canonical payload with summary metrics, duplicate listings,
-    and per-document anchor coverage.
-  - `report.md` – human-oriented digest that highlights duplicate clusters,
-    per-root document totals, and remediation queues (missing H2, repeated
-    anchors).
-  - `slugs.tsv` – tab-separated list of every slug, its total heading count,
-    participating files, and exact locations.
-  - `documents.csv` – per-document metrics (H1/H2 counts, repeated anchors,
-    cross-file membership, allowlisted slugs) for quick spreadsheet triage.
-- Latest pointers (`latest_report.json`, `latest_report.md`,
-  `latest_slugs.tsv`, `latest_documents.csv`) mirror the newest run alongside
-  the timestamped directory.
-- Retention defaults to 5 runs (`--artifacts-to-keep`), with older directories
-  pruned automatically.
-- Optional `--json-out` writes a legacy baseline mirror for consumers that have
-  not yet migrated to the structured bundle.
+- Timestamped bundles live under:
+  `.repo_studios/reports/producer_reports/healthview/anchor_inventory/<YYYYMMDD-HHMM>/`.
+- Each bundle contains exactly:
+  - `manifest.json` – run metadata + artifact catalog.
+  - `summary.md` – human-readable digest.
+  - `telemetry.json` – structured metrics plus the historical inventory schema
+    embedded as `payload` for compatibility.
+- No mutable `latest_*` pointers are emitted.
+- Retention defaults to 5 bundles (`--artifacts-to-keep`), with older bundle
+  directories pruned automatically.
+- Optional `--json-out` writes a legacy JSON mirror of the `payload` report for
+  consumers that have not migrated.
 
 ## Data Shape
 
@@ -85,8 +78,8 @@ Each document entry exposes:
   and collects line-level locations for every heading.
 - Aggregates cross-file duplicate membership, builds per-document payloads, and
   renders CSV via `csv.writer` to ensure safe quoting.
-- Delegates artifact creation and pruning to `write_report_artifacts`, keeping
-  latest pointers in sync.
+- Delegates artifact creation to the shared storage abstraction
+  (`create_storage(...)`) and pruning to `prune_run_directories(...)`.
 - Logs headline metrics (missing headings, repeated anchors, cross-file members)
   to make command-line runs actionable without opening artifacts.
 - Pytest coverage (`tests/tests_producers/test_generate_anchor_inventory.py`)
@@ -95,12 +88,11 @@ Each document entry exposes:
 
 ## Notes for AI Consumers
 
-- Prefer `report.json` for structured ingestion; the Markdown digest mirrors
-  the same data for human review.
-- `documents.csv` is tailored for quick filtering (e.g. locate files missing H2
-  headings or repeated anchors) and aligns with spreadsheet tooling.
-- The producer now surfaces enough metadata for consumers like
-  `generate_anchor_health_report.py` to avoid re-parsing markdown when the JSON
-  bundle is present.
+- Prefer `telemetry.json` for structured ingestion; `telemetry.json["payload"]`
+  preserves the historical report schema.
+- `summary.md` mirrors the same information for human review.
+- The bundle contains enough metadata for consumers like
+  `generate_anchor_health_report.py` to avoid re-parsing markdown when the
+  payload is present.
 - Allowlist size from `test_global_anchors.py` is preserved in the summary so
   downstream checks can report drift against the enforced baseline.

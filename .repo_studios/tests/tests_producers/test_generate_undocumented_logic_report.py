@@ -100,9 +100,20 @@ def test_detects_missing_docstrings(tmp_path):
         / ".repo_studios"
         / "reports"
         / "producer_reports"
-        / "anchor_inventory_reports"
-        / "latest_report.json",
-        _minimal_anchor_inventory(doc_path),
+        / "healthview"
+        / "anchor_inventory"
+        / "20250101-0000"
+        / "telemetry.json",
+        {
+            "schema_version": 1,
+            "viewer_slug": "healthview",
+            "topic": "anchor_inventory",
+            "run_timestamp": "20250101-0000",
+            "generated_at": "2025-01-01T00:00:00+00:00",
+            "status": "ok",
+            "metrics": {},
+            "payload": _minimal_anchor_inventory(doc_path),
+        },
     )
 
     result = module.run(

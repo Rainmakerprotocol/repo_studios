@@ -8,10 +8,17 @@ import csv
 import io
 import json
 import logging
+import sys
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Sequence
+
+SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
+if str(SCRIPTS_ROOT) not in sys.path:  # pragma: no cover - import path bootstrap
+    sys.path.insert(0, str(SCRIPTS_ROOT))
+
+from utilities.anchor_inventory_loader import load_anchor_inventory  # noqa: E402
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/aggregator_reports/docs_health_signals")
 DEFAULT_CHURN_REPORT = Path(".repo_studios/reports/producer_reports/code_doc_churn_reports/latest_report.json")
@@ -19,7 +26,7 @@ DEFAULT_UNDOCUMENTED_REPORT = Path(
     ".repo_studios/reports/producer_reports/undocumented_logic_reports/latest_report.json"
 )
 DEFAULT_ANCHOR_INVENTORY = Path(
-    ".repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json"
+    ".repo_studios/reports/producer_reports/healthview/anchor_inventory"
 )
 DEFAULT_ANCHOR_VALIDATION = Path(
     ".repo_studios/reports/producer_reports/markdown_anchor_validation_reports/latest_report.json"
@@ -131,7 +138,13 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--output-dir", help="Output directory for aggregator artifacts")
     parser.add_argument("--churn-report", help="Path to code/doc churn report JSON")
     parser.add_argument("--undocumented-report", help="Path to undocumented logic report JSON")
-    parser.add_argument("--anchor-inventory", help="Path to anchor inventory report JSON")
+    parser.add_argument(
+        "--anchor-inventory",
+        help=(
+            "Path to anchor inventory input (canonical topic dir, specific bundle dir containing telemetry.json, "
+            "or legacy report.json)"
+        ),
+    )
     parser.add_argument("--anchor-validation", help="Path to markdown anchor validation report JSON")
     parser.add_argument("--docs-integrity", help="Path to docs integrity report JSON")
     parser.add_argument("--metrics-stub", help="Path to metrics anchor stub validation report JSON")
@@ -527,7 +540,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
     churn_report = _load_json(paths.churn_report, "churn report", logger)
     undocumented_report = _load_json(paths.undocumented_report, "undocumented logic report", logger)
-    anchor_inventory = _load_json(paths.anchor_inventory, "anchor inventory", logger)
+    anchor_inventory, anchor_inventory_path = load_anchor_inventory(paths.anchor_inventory, logger=logger)
+    if anchor_inventory is None:
+        logger.warning("anchor inventory path missing or unreadable: %s", paths.anchor_inventory)
     anchor_validation = _load_json(paths.anchor_validation, "markdown anchor validation", logger)
     docs_integrity = _load_json(paths.docs_integrity, "docs integrity", logger)
     metrics_stub = _load_json(paths.metrics_stub, "metrics anchor stub", logger)
@@ -608,7 +623,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
             "Structure",
             structure,
             [
-                (str(paths.anchor_inventory), anchor_inventory),
+                (str(anchor_inventory_path or paths.anchor_inventory), anchor_inventory),
                 (str(paths.anchor_validation), anchor_validation),
             ],
         ),

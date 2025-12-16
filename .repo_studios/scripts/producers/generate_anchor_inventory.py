@@ -2,12 +2,10 @@
 """Anchor Inventory Tool.
 
 Generates an inventory of top-level (H1/H2) markdown headings under the docs
-tree and emits structured artifacts (JSON/Markdown/TSV) with pruning and latest
-pointers managed by the shared Command Center helpers.
+tree and emits a canonical positional bundle (manifest/summary/telemetry).
 """
 
 import argparse
-import csv
 import json
 import logging
 import re
@@ -15,14 +13,15 @@ from collections import Counter, defaultdict
 from collections.abc import Iterable, Sequence
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
-from io import StringIO
 from pathlib import Path, PurePosixPath
 from typing import Any
 
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/anchor_inventory_reports")
-RUN_PREFIX = "anchor_inventory"
+VIEWER_SLUG = "healthview"
+TOPIC_SLUG = "anchor_inventory"
+
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
 DEFAULT_ARTIFACTS_TO_KEEP = 5
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
@@ -36,7 +35,8 @@ try:  # pragma: no cover - import guard for standalone execution
         build_standard_options,
         build_standard_paths,
     )
-    from libraries.artifacts import ReportArtifact, write_report_artifacts  # type: ignore import
+    from libraries.database_integration import create_storage  # type: ignore import
+    from libraries.prune_logs import prune_run_directories  # type: ignore import
 except ModuleNotFoundError:  # pragma: no cover - fallback when script is run directly
     import sys
 
@@ -50,7 +50,8 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when script is run di
         build_standard_options,
         build_standard_paths,
     )
-    from libraries.artifacts import ReportArtifact, write_report_artifacts  # type: ignore import
+    from libraries.database_integration import create_storage  # type: ignore import
+    from libraries.prune_logs import prune_run_directories  # type: ignore import
 
 
 @dataclass(frozen=True)
@@ -243,7 +244,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         "--output-dir",
         type=Path,
         default=DEFAULT_OUTPUT_DIR,
-        help="Directory for inventory artifacts",
+        help="Base directory for producer reports (canonical bundle stored under healthview/anchor_inventory)",
     )
     parser.add_argument("--artifacts-to-keep", type=int, default=DEFAULT_ARTIFACTS_TO_KEEP)
     parser.add_argument("--timestamp", help="Override run timestamp (ISO 8601)")
@@ -496,46 +497,6 @@ def render_markdown(report: dict[str, Any], ordered_slugs: list[SlugStat]) -> st
     return "\n".join(lines).rstrip() + "\n"
 
 
-def render_tsv(ordered_slugs: list[SlugStat]) -> str:
-    lines = ["slug\tcount\tfile_count\tfiles\tlocations"]
-    for stat in ordered_slugs:
-        files = ",".join(stat.files)
-        locations = ";".join(stat.locations)
-        lines.append(f"{stat.slug}\t{stat.count}\t{stat.file_count}\t{files}\t{locations}")
-    return "\n".join(lines)
-
-
-def render_documents_csv(documents: Sequence[dict[str, Any]]) -> str:
-    buffer = StringIO(newline="")
-    writer = csv.writer(buffer, lineterminator="\n")
-    writer.writerow(
-        [
-            "path",
-            "h1_count",
-            "h2_count",
-            "heading_count",
-            "unique_slugs",
-            "duplicate_slugs",
-            "cross_file_duplicate_slugs",
-            "allowlisted_slugs",
-        ]
-    )
-    for doc in documents:
-        writer.writerow(
-            [
-                doc["path"],
-                doc["h1_count"],
-                doc["h2_count"],
-                doc["heading_count"],
-                doc["unique_slugs"],
-                ";".join(doc.get("duplicate_slugs", [])),
-                ";".join(doc.get("cross_file_duplicate_slugs", [])),
-                ";".join(doc.get("allowlisted_slugs", [])),
-            ]
-        )
-    return buffer.getvalue().rstrip("\n")
-
-
 def emit_summary_log(
     logger: logging.Logger,
     ordered_slugs: list[SlugStat],
@@ -599,6 +560,23 @@ def _parse_timestamp(raw: str | None) -> datetime:
         raise SystemExit(f"Invalid --timestamp value: {exc}")
 
 
+def _normalize_timestamp(moment: datetime) -> datetime:
+    if moment.tzinfo is None:
+        return moment.replace(tzinfo=timezone.utc)
+    return moment.astimezone(timezone.utc)
+
+
+def _timestamp_slug(moment: datetime) -> str:
+    return _normalize_timestamp(moment).strftime("%Y%m%d-%H%M")
+
+
+def _rel_to_repo(path: Path, repo_root: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(repo_root.resolve()))
+    except ValueError:
+        return str(path.resolve())
+
+
 def maybe_write_legacy_json(path: Path | None, payload: dict[str, Any], logger: logging.Logger) -> None:
     if not path:
         return
@@ -657,7 +635,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     duplicates = build_cross_file_duplicates(stats, allow_set)
     allowlist_size = extract_test_allowlist_size(args.test_file) if args.test_file else None
     generated_ts = _parse_timestamp(args.timestamp)
-    report, ordered_slugs, documents_payload = build_report(
+    now_iso = datetime.now(timezone.utc).isoformat()
+    run_timestamp = _timestamp_slug(generated_ts)
+    report, ordered_slugs, _documents_payload = build_report(
         docs_root=docs_root,
         stats=stats,
         documents=documents,
@@ -668,47 +648,99 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         generated_ts=generated_ts,
     )
 
-    artifacts = [
-        ReportArtifact(
-            filename="report.json",
-            pointer="latest_report.json",
-            kind="json",
-            content=report,
-        ),
-        ReportArtifact(
-            filename="report.md",
-            pointer="latest_report.md",
-            kind="text",
-            content=render_markdown(report, ordered_slugs),
-        ),
-        ReportArtifact(
-            filename="slugs.tsv",
-            pointer="latest_slugs.tsv",
-            kind="text",
-            content=render_tsv(ordered_slugs) + "\n",
-        ),
-        ReportArtifact(
-            filename="documents.csv",
-            pointer="latest_documents.csv",
-            kind="text",
-            content=render_documents_csv(documents_payload) + "\n",
-        ),
-    ]
-    result = write_report_artifacts(
-        stem=RUN_PREFIX,
-        timestamp=generated_ts,
-        output_dir=paths.output_dir,
-        artifacts=artifacts,
-        keep=options.artifacts_to_keep,
+    storage = create_storage(
+        paths.output_dir,
+        VIEWER_SLUG,
+        TOPIC_SLUG,
+        timestamp=run_timestamp,
+    )
+    bundle_dir = storage.file_storage.bundle_dir
+
+    manifest_path = bundle_dir / "manifest.json"
+    summary_path = bundle_dir / "summary.md"
+    telemetry_path = bundle_dir / "telemetry.json"
+
+    manifest: dict[str, object] = {
+        "schema_version": 1,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": run_timestamp,
+        "generated_at": now_iso,
+        "status": "ok",
+        "git_sha": None,
+        "repo_root": str(paths.repo_root.resolve()),
+        "inputs": {
+            "docs_root": str(docs_root),
+            "additional_docs_roots": [str(root) for root, _ in doc_roots[1:]],
+            "allow_file": str(args.allow_file) if args.allow_file else None,
+            "test_file": str(args.test_file) if args.test_file else None,
+            "artifacts_to_keep": int(options.artifacts_to_keep),
+            "timestamp": args.timestamp,
+        },
+        "catalog": [
+            {"artifact": "manifest.json", "path": _rel_to_repo(manifest_path, paths.repo_root)},
+            {"artifact": "summary.md", "path": _rel_to_repo(summary_path, paths.repo_root)},
+            {"artifact": "telemetry.json", "path": _rel_to_repo(telemetry_path, paths.repo_root)},
+        ],
+        "provenance": {
+            "script": "generate_anchor_inventory.py",
+            "trigger": "cli",
+        },
+    }
+
+    summary = report.get("summary", {}) if isinstance(report, dict) else {}
+    telemetry: dict[str, object] = {
+        "schema_version": 1,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": run_timestamp,
+        "generated_at": now_iso,
+        "status": "ok",
+        "metrics": {
+            "total_slugs": int(summary.get("total_slugs", 0) or 0),
+            "cross_file_duplicates": int(summary.get("cross_file_duplicates", 0) or 0),
+            "total_documents": int(summary.get("total_documents", 0) or 0),
+            "documents_missing_h1": int(summary.get("documents_missing_h1", 0) or 0),
+            "documents_missing_h2": int(summary.get("documents_missing_h2", 0) or 0),
+            "documents_with_repeated_anchors": int(summary.get("documents_with_repeated_anchors", 0) or 0),
+            "documents_with_cross_file_duplicates": int(summary.get("documents_with_cross_file_duplicates", 0) or 0),
+            "generic_allow_size": int(summary.get("generic_allow_size", 0) or 0),
+        },
+        "inputs": {
+            "docs_root": str(docs_root),
+            "scanned_roots": [str(root) for root, _ in doc_roots],
+        },
+        "payload": report,
+    }
+
+    summary_md = render_markdown(report, ordered_slugs)
+
+    # DB_INTEGRATION_MARKER: anchor inventory manifest write
+    storage.write_manifest(manifest)
+    # DB_INTEGRATION_MARKER: anchor inventory summary markdown write
+    storage.write_summary({"markdown": summary_md}, format="md")
+    # DB_INTEGRATION_MARKER: anchor inventory telemetry write
+    storage.write_telemetry(telemetry)
+
+    base_dir = paths.output_dir / VIEWER_SLUG / TOPIC_SLUG
+    prune_run_directories(
+        base_dir,
+        keep=max(1, options.artifacts_to_keep),
+        current_run=bundle_dir,
+        logger=logger,
     )
 
     maybe_write_legacy_json(args.json_out, report, logger)
     emit_summary_log(logger, ordered_slugs, duplicates, report["summary"], report.get("documents", []))
 
     return {
-        "run_dir": str(result.run_dir),
-        "slug": result.slug,
-        "artifacts": {name: str(path) for name, path in result.artifacts.items()},
+        "run_dir": str(bundle_dir),
+        "slug": run_timestamp,
+        "artifacts": {
+            "manifest.json": str(manifest_path),
+            "summary.md": str(summary_path),
+            "telemetry.json": str(telemetry_path),
+        },
         "docs_root": str(docs_root),
         "total_slugs": report["summary"]["total_slugs"],
         "duplicates": len(duplicates),

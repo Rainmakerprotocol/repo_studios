@@ -421,7 +421,7 @@ The Docs Health Overview orchestrator chains eight scripts in producer → aggre
   * `telemetry.json` (time-series metrics)
 * **Intermediate artifacts** (retained per --artifacts-to-keep, default 1-5 depending on script):
   * Doc index: `.repo_studios/reports/producer_reports/doc_index/doc_index-<timestamp>/`
-  * Anchor inventory: `.repo_studios/reports/producer_reports/anchor_inventory_reports/anchor_inventory-<timestamp>/`
+  * Anchor inventory: `.repo_studios/reports/producer_reports/healthview/anchor_inventory/<YYYYMMDD-HHMM>/`
   * Anchor validation: `.repo_studios/reports/producer_reports/markdown_anchor_validation_reports/markdown_anchor_validation-<timestamp>/`
   * Docs integrity: `.repo_studios/reports/producer_reports/docs_integrity_reports/docs_integrity-<timestamp>/`
   * Metrics stubs: `.repo_studios/reports/producer_reports/metrics_anchor_stub_reports/metrics_anchor_stub-<timestamp>/`

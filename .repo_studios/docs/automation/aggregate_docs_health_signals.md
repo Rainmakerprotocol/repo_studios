@@ -24,7 +24,7 @@ stay available through CLI flags so test runs can point at fixtures.
 - Docstring coverage: `generate_undocumented_logic_report.py`
   (`.repo_studios/reports/producer_reports/undocumented_logic_reports/latest_report.json`)
 - Anchor coverage + duplicates: `generate_anchor_inventory.py`
-  (`.repo_studios/reports/producer_reports/anchor_inventory_reports/latest_report.json`)
+  (`.repo_studios/reports/producer_reports/healthview/anchor_inventory/`)
 - Anchor validation errors: `validate_markdown_anchors.py`
   (`.repo_studios/reports/producer_reports/markdown_anchor_validation_reports/latest_report.json`)
 - Docs integrity governance: `verify_docs_integrity.py`

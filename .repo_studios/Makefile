@@ -41,7 +41,7 @@ studio-validate-markdown-anchors:
 
 .PHONY: studio-generate-anchor-inventory
 studio-generate-anchor-inventory:
-	$(PYTHON) .repo_studios/scripts/producers/generate_anchor_inventory.py --docs-root docs --output-dir .repo_studios/reports/producer_reports/anchor_inventory_reports
+	$(PYTHON) .repo_studios/scripts/producers/generate_anchor_inventory.py --docs-root docs --output-dir .repo_studios/reports/producer_reports
 
 .PHONY: studio-analyze-standards-index-gaps
 studio-analyze-standards-index-gaps:

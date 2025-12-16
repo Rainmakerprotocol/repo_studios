@@ -29,7 +29,7 @@ to align with positional encoding and database integration standards.
 
 Analyze the following script:
 `<SCRIPT_PATH>`
-`diff_standards_index.py`
+`generate_anchor_inventory.py`
 
 Report the following information:
 
@@ -111,7 +111,7 @@ A structured report covering:
 ```text
 Based on the analysis of:
 `<SCRIPT_PATH>`
-`diff_standards_index.py`
+`generate_anchor_inventory.py`
 
 Generate a detailed implementation plan to align this script with
 positional encoding and database integration standards.
@@ -318,7 +318,7 @@ A comprehensive implementation plan including:
 ````text
 Execute the implementation plan for:
 `<SCRIPT_PATH>`
-`diff_standards_index.py`
+`generate_anchor_inventory.py`
 
 Follow the detailed plan from Phase 2.
 
