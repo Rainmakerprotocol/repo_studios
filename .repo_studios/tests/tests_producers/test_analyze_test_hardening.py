@@ -55,6 +55,8 @@ def run_analyzer(module, repo_root: Path, output_dir: Path) -> dict:
             "2",
             "--log-level",
             "DEBUG",
+            "--timestamp",
+            "2025-12-15T19:30:00+00:00",
         ]
     )
     return payload
@@ -71,7 +73,7 @@ def test_detects_missing_assertions_and_long_test(analyzer_module, repo_root: Pa
     lines.extend(f"    print({idx})" for idx in range(60))
     lines.append("    return value")
     write_test_file(repo_root, "tests/test_big.py", "\n".join(lines) + "\n")
-    output_dir = repo_root / ".repo_studios/reports/producer_reports/test_hardening_reports"
+    output_dir = repo_root / ".repo_studios/command_center/reports"
     payload = run_analyzer(analyzer_module, repo_root, output_dir)
     assert payload["summary"]["total_files"] == 1
     issues = payload["results"][0]["issues"]
@@ -87,7 +89,7 @@ def test_addition_given_when_then():
     assert 1 + 1 == 2
 """
     write_test_file(repo_root, "tests/test_clean.py", content)
-    output_dir = repo_root / ".repo_studios/reports/producer_reports/test_hardening_reports"
+    output_dir = repo_root / ".repo_studios/command_center/reports"
     payload = run_analyzer(analyzer_module, repo_root, output_dir)
     assert payload["summary"]["total_issues"] == 0
     assert payload["status"] == "ok"
@@ -101,12 +103,13 @@ def test_sleep():
     time.sleep(1)
     assert True
 """
-    output_dir = repo_root / ".repo_studios/reports/producer_reports/test_hardening_reports"
+    output_dir = repo_root / ".repo_studios/command_center/reports"
     write_test_file(repo_root, "tests/test_sleep.py", content)
     payload = run_analyzer(analyzer_module, repo_root, output_dir)
     assert payload["summary"]["total_files"] == 1
-    runs = sorted(output_dir.glob("test_hardening-*/report.json"))
-    assert runs, "expected report artifact"
-    latest_json = output_dir / "latest/latest_report.json"
-    data = json.loads(latest_json.read_text(encoding="utf-8"))
-    assert data["summary"]["total_files"] == 1
+    bundle_dir = Path(payload["output_dir"])
+    assert (bundle_dir / "manifest.json").exists()
+    assert (bundle_dir / "summary.md").exists()
+    assert (bundle_dir / "telemetry.json").exists()
+    telemetry = json.loads((bundle_dir / "telemetry.json").read_text(encoding="utf-8"))
+    assert telemetry["metrics"]["total_files"] == 1

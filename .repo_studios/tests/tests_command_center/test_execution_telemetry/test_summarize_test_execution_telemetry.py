@@ -47,16 +47,32 @@ def _seed_artifacts(repo_root: Path) -> dict[str, str]:
     heatmap_dir = base_reports / "aggregator_reports" / "churn_complexity_heatmap" / f"churn_complexity_heatmap-{COLLECT_SLUG}"
     _write_json(heatmap_dir / "bundle_summary.json", {"mode": "fixture"})
 
-    hardening_dir = base_reports / "producer_reports" / "test_hardening_reports" / f"test_hardening-{COLLECT_SLUG}"
+    hardening_dir = (
+        repo_root
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "healthview"
+        / "test_hardening"
+        / RUN_SLUG
+    )
     _write_json(
-        hardening_dir / "report.json",
+        hardening_dir / "telemetry.json",
         {
+            "schema_version": 1,
+            "viewer_slug": "healthview",
+            "topic": "test_hardening",
+            "run_timestamp": RUN_SLUG,
             "status": "ok",
-            "summary": {
-                "severity_totals": {
-                    "high": 0,
-                    "medium": 1,
-                    "low": 0,
+            "components": {
+                "hardening": {
+                    "summary": {
+                        "severity_totals": {
+                            "high": 0,
+                            "medium": 1,
+                            "low": 0,
+                        }
+                    }
                 }
             },
         },

@@ -15,8 +15,9 @@ from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import List, Sequence
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/test_hardening_reports")
-RUN_PREFIX = "test_hardening"
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
+VIEWER_SLUG = "healthview"
+TOPIC_SLUG = "test_hardening"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 SCHEMA_VERSION = 1
 TEST_PATTERNS = ("test_*.py", "*_test.py", "test*.py")
@@ -32,7 +33,6 @@ try:
         PathsConfig,
         build_standard_options,
         build_standard_paths,
-        prune_run_directories,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback when package path isn't configured
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -44,8 +44,16 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when package path isn
         PathsConfig,
         build_standard_options,
         build_standard_paths,
-        prune_run_directories,
     )
+
+try:  # pragma: no cover - prefer import when packaged
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
+except ModuleNotFoundError:  # pragma: no cover - fallback when running in isolation
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries.database_integration import create_storage  # type: ignore
+    from libraries.prune_logs import prune_run_directories  # type: ignore
 
 
 @dataclass(frozen=True)
@@ -67,7 +75,7 @@ PATH_CONFIG = PathsConfig(
             field="output_dir",
             default=DEFAULT_OUTPUT_DIR,
             ensure_dir=True,
-            within_repo=False,
+            within_repo=True,
         ),
     },
     repo_root_depth=4,
@@ -136,6 +144,10 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
         help="Logging verbosity",
     )
+    parser.add_argument(
+        "--timestamp",
+        help="Override run timestamp (ISO 8601) for deterministic runs",
+    )
     return parser.parse_args(argv)
 
 
@@ -150,6 +162,62 @@ def build_options(args: argparse.Namespace) -> Options:
 
 def configure_logging(level: str) -> None:
     logging.basicConfig(level=getattr(logging, level.upper()), format="%(levelname)s %(message)s")
+
+
+def _timestamp_slug(moment: dt.datetime) -> str:
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=dt.timezone.utc)
+    return moment.astimezone(dt.timezone.utc).strftime("%Y%m%d-%H%M")
+
+
+def _resolve_timestamp(raw: str | None) -> dt.datetime:
+    if not raw:
+        return dt.datetime.now(dt.timezone.utc)
+    try:
+        moment = dt.datetime.fromisoformat(raw)
+    except ValueError as exc:
+        raise RuntimeError(f"Invalid --timestamp value: {exc}") from exc
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=dt.timezone.utc)
+    return moment.astimezone(dt.timezone.utc)
+
+
+def _detect_trigger_type() -> str:
+    import os
+
+    if os.getenv("MAKELEVEL"):
+        return "make"
+    if os.getenv("GITHUB_ACTIONS"):
+        return "ci"
+    return "cli"
+
+
+def _detect_requested_by() -> str | None:
+    import os
+
+    return os.getenv("GITHUB_ACTOR") or os.getenv("USERNAME") or os.getenv("USER")
+
+
+def _detect_git_sha(repo_root: Path) -> str | None:
+    import os
+    import subprocess
+
+    env_sha = os.getenv("GITHUB_SHA")
+    if env_sha:
+        return env_sha
+    if not (repo_root / ".git").exists():
+        return None
+    try:
+        value = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"],
+            cwd=str(repo_root),
+            text=True,
+            stderr=subprocess.DEVNULL,
+        )
+    except Exception:  # pragma: no cover - best effort
+        return None
+    value = value.strip()
+    return value or None
 
 
 def discover_test_files(repo_root: Path) -> list[Path]:
@@ -556,65 +624,93 @@ def render_markdown_report(payload: dict) -> str:
     return "\n".join(lines)
 
 
-def render_log(payload: dict) -> str:
+def build_manifest(
+    *,
+    paths: Paths,
+    options: Options,
+    timestamp: dt.datetime,
+    timestamp_slug: str,
+    status: str,
+    exit_code: int,
+) -> dict:
+    bundle_dir = paths.output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp_slug
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": timestamp_slug,
+        "generated_at": timestamp.astimezone(dt.timezone.utc).isoformat(),
+        "git_sha": _detect_git_sha(paths.repo_root),
+        "status": status,
+        "exit_code": exit_code,
+        "catalog": [
+            {
+                "script_path": str(Path(".repo_studios/scripts/producers/analyze_test_hardening.py")),
+                "role": "producer",
+            }
+        ],
+        "paths": {
+            "repo_root": str(paths.repo_root),
+            "reports_root": str(paths.output_dir),
+            "bundle_dir": str(bundle_dir),
+        },
+        "inputs": {
+            "test_patterns": list(TEST_PATTERNS),
+            "ignored_parts": sorted(IGNORED_PARTS),
+            "artifacts_to_keep": options.artifacts_to_keep,
+            "log_level": options.log_level,
+        },
+        "provenance": {
+            "trigger_type": _detect_trigger_type(),
+            "requested_by": _detect_requested_by(),
+        },
+    }
+
+
+def build_telemetry(payload: dict, *, timestamp_slug: str) -> dict:
     summary = payload.get("summary", {})
     severities = summary.get("severity_totals", {})
-    entries = [
-        f"status={payload.get('status', 'unknown')}",
-        f"exit_code={payload.get('exit_code', 0)}",
-        f"total_files={summary.get('total_files', 0)}",
-        f"total_tests={summary.get('total_test_functions', 0)}",
-        f"issues_total={summary.get('total_issues', 0)}",
-        f"issues_high={severities.get('high', 0)}",
-        f"issues_medium={severities.get('medium', 0)}",
-        f"issues_low={severities.get('low', 0)}",
-    ]
-    return "\n".join(entries) + "\n"
-
-
-def write_artifacts(
-    paths: Paths,
-    payload: dict,
-    timestamp: dt.datetime,
-    *,
-    logger: logging.Logger | None,
-) -> Path:
-    run_dir = paths.output_dir / f"{RUN_PREFIX}-{timestamp.strftime('%Y%m%d_%H%M%S')}"
-    run_dir.mkdir(parents=True, exist_ok=True)
-    if logger:
-        logger.debug("Writing test hardening artifacts to %s", run_dir)
-    (run_dir / "report.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    (run_dir / "report.md").write_text(render_markdown_report(payload), encoding="utf-8")
-    (run_dir / "log.txt").write_text(render_log(payload), encoding="utf-8")
-    latest_dir = paths.output_dir / "latest"
-    latest_dir.mkdir(parents=True, exist_ok=True)
-    for src_name, latest_name in {
-        "report.json": "latest_report.json",
-        "report.md": "latest_report.md",
-        "log.txt": "latest_log.txt",
-    }.items():
-        src = run_dir / src_name
-        dest = latest_dir / latest_name
-        try:
-            if dest.exists():
-                dest.unlink()
-            dest.hardlink_to(src)
-        except OSError:
-            dest.write_bytes(src.read_bytes())
-    return run_dir
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": timestamp_slug,
+        "timestamp": payload.get("timestamp"),
+        "status": payload.get("status"),
+        "exit_code": payload.get("exit_code"),
+        "metrics": {
+            "total_files": summary.get("total_files", 0),
+            "total_test_functions": summary.get("total_test_functions", 0),
+            "total_issues": summary.get("total_issues", 0),
+            "severity": {
+                "high": severities.get("high", 0),
+                "medium": severities.get("medium", 0),
+                "low": severities.get("low", 0),
+            },
+            "high_priority_files": summary.get("high_priority_files", 0),
+            "clean_files": summary.get("clean_files", 0),
+        },
+        "components": {
+            "hardening": {
+                "summary": summary,
+                "top_priority": payload.get("top_priority", []),
+                "clean_files": payload.get("clean_files", []),
+                "results": payload.get("results", []),
+            }
+        },
+    }
 
 
 def prune_history(
-    output_dir: Path,
+    topic_dir: Path,
     keep: int,
     *,
     current_run: Path | None,
     logger: logging.Logger | None,
 ) -> list[Path]:
     result = prune_run_directories(
-        output_dir,
+        topic_dir,
         keep=max(keep, 1),
-        stem_prefix=RUN_PREFIX,
         current_run=current_run,
         logger=logger,
     )
@@ -635,18 +731,44 @@ def run(argv: Sequence[str] | None = None) -> dict:
     configure_logging(options.log_level)
     logger = logging.getLogger(__name__)
     paths.output_dir.mkdir(parents=True, exist_ok=True)
-    timestamp = dt.datetime.now(dt.timezone.utc)
+    timestamp = _resolve_timestamp(getattr(args, "timestamp", None))
+    timestamp_slug = _timestamp_slug(timestamp)
     results = analyze_all(paths)
     payload = compose_payload(paths, options, results, timestamp)
-    run_dir = write_artifacts(paths, payload, timestamp, logger=logger)
+    bundle_dir = (paths.output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp_slug).resolve()
+    storage = create_storage(paths.output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=timestamp_slug)
+    manifest = build_manifest(
+        paths=paths,
+        options=options,
+        timestamp=timestamp,
+        timestamp_slug=timestamp_slug,
+        status=str(payload.get("status", "unknown")),
+        exit_code=int(payload.get("exit_code", 0)),
+    )
+    summary_md = render_markdown_report(payload)
+    telemetry = build_telemetry(payload, timestamp_slug=timestamp_slug)
+
+    # DB_INTEGRATION_MARKER: test hardening manifest write
+    storage.write_manifest(manifest)
+    # DB_INTEGRATION_MARKER: test hardening summary markdown write
+    storage.write_summary({"markdown": summary_md}, format="md")
+    # DB_INTEGRATION_MARKER: test hardening telemetry write
+    storage.write_telemetry(telemetry)
+
+    topic_dir = (paths.output_dir / VIEWER_SLUG / TOPIC_SLUG).resolve()
     removed = prune_history(
-        paths.output_dir,
+        topic_dir,
         options.artifacts_to_keep,
-        current_run=run_dir,
+        current_run=bundle_dir,
         logger=logger,
     )
     if removed:
         logger.debug("Pruned test hardening runs: %s", ", ".join(sorted(path.name for path in removed)))
+
+    payload["viewer_slug"] = VIEWER_SLUG
+    payload["topic"] = TOPIC_SLUG
+    payload["run_timestamp"] = timestamp_slug
+    payload["output_dir"] = str(bundle_dir)
     return payload
 
 

@@ -27,10 +27,11 @@ import csv
 import json
 import logging
 import os
+import shutil
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any, Sequence, cast
 
 from command_center.scripts.libraries.artifacts import copy_latest_artifact  # noqa: E402
 from command_center.scripts.libraries import prune_run_directories  # noqa: E402
@@ -38,8 +39,6 @@ from command_center.scripts.libraries import prune_run_directories  # noqa: E402
 REPO_ROOT = Path(__file__).resolve().parents[4]
 RAWVIEW_RUNS_BASE = REPO_ROOT / ".repo_studios/command_center/reports/rawview/fault_diagnostics_runs"
 LEGACY_RUNS_BASE = REPO_ROOT / ".repo_studios/faulthandler"
-PRODUCER_BASE = REPO_ROOT / ".repo_studios/reports/producer_reports/faulthandler_reports"
-PRODUCER_LATEST = PRODUCER_BASE / "latest_report.json"
 CONSUMER_BASE = REPO_ROOT / ".repo_studios/reports/consumer_reports/fault_artifacts"
 COMMAND_CENTER_BASE = REPO_ROOT / ".repo_studios/command_center/reports/fault_artifacts_consumer"
 CONSUMER_DIR_PREFIX = "fault_artifacts-"
@@ -106,25 +105,19 @@ def _discover_outdir(explicit: str | None, runs_base: Path) -> Path | None:
     return _find_latest_outdir(runs_base)
 
 
-def _iter_producer_reports(base_dir: Path) -> list[Path]:
-    if not base_dir.exists():
-        return []
-    candidates: list[Path] = []
-    for child in base_dir.iterdir():
-        if not child.is_dir():
-            continue
-        if not child.name.startswith("faulthandler_report-"):
-            continue
-        candidate = child / "report.json"
-        if candidate.exists():
-            candidates.append(candidate)
-    candidates.sort(key=lambda p: p.parent.name, reverse=True)
-    return candidates
+def _is_compatible_producer_report(payload: dict[str, Any]) -> bool:
+    """Return True when payload looks like the legacy producer report schema."""
+    summary = payload.get("summary")
+    signatures = payload.get("signatures")
+    return isinstance(summary, dict) and isinstance(signatures, list)
 
 
 def _load_json(path: Path) -> dict[str, Any] | None:
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        if isinstance(payload, dict):
+            return cast(dict[str, Any], payload)
+        return None
     except Exception:
         return None
 
@@ -132,25 +125,9 @@ def _load_json(path: Path) -> dict[str, Any] | None:
 def _load_producer_report(explicit: Path | None, *, run_dir: Path | None) -> tuple[dict[str, Any] | None, Path | None]:
     if explicit is not None:
         payload = _load_json(explicit)
-        if payload is not None:
+        if payload is not None and _is_compatible_producer_report(payload):
             return payload, explicit.resolve()
         return None, None
-    target_run = run_dir.resolve() if run_dir else None
-    if PRODUCER_LATEST.exists():
-        payload = _load_json(PRODUCER_LATEST)
-        if payload is not None:
-            run_path = payload.get("run_dir")
-            if target_run is None:
-                return payload, PRODUCER_LATEST.resolve()
-            if run_path and Path(run_path).resolve() == target_run:
-                return payload, PRODUCER_LATEST.resolve()
-    for candidate in _iter_producer_reports(PRODUCER_BASE):
-        payload = _load_json(candidate)
-        if payload is None:
-            continue
-        run_path = payload.get("run_dir")
-        if target_run is None or (run_path and Path(run_path).resolve() == target_run):
-            return payload, candidate.resolve()
     return None, None
 
 

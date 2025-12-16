@@ -31,7 +31,6 @@ def _sample_stacks() -> str:
 
 
 def test_fault_artifacts_prefers_producer_report(tmp_path):
-    producer_mod = _load_module("collect_faulthandler_reports", _PRODUCER_PATH)
     consumer_mod = _load_module("generate_fault_artifacts", _CONSUMER_PATH)
 
     repo = tmp_path / "repo"
@@ -47,22 +46,50 @@ def test_fault_artifacts_prefers_producer_report(tmp_path):
     run_dir.mkdir(parents=True)
     (run_dir / "stacks.log").write_text(_sample_stacks(), encoding="utf-8")
 
-    output_dir = repo / ".repo_studios" / "reports" / "producer_reports" / "faulthandler_reports"
-
-    producer_mod.run(
-        [
-            "--runs-dir",
-            str(run_dir.parent),
-            "--run-dir",
-            str(run_dir),
-            "--output-dir",
-            str(output_dir),
-            "--log-level",
-            "ERROR",
-        ]
+    legacy_report = repo / "legacy_report.json"
+    legacy_report.write_text(
+        json.dumps(
+            {
+                "generated_utc": "2025-01-01T00:00:00+00:00",
+                "run_dir": str(run_dir),
+                "summary": {
+                    "signature_count": 2,
+                    "active_signature_count": 2,
+                    "thread_block_count": 0,
+                    "top_frame_limit": 0,
+                    "stack_log_exists": True,
+                    "stack_text_bytes": 10,
+                    "severity_buckets": {"repeat_offender": 0, "multi_hit": 0, "single_hit": 2},
+                },
+                "signatures": [
+                    {
+                        "signature_id": "sig-1",
+                        "count": 1,
+                        "top_module": "svc",
+                        "top_func": "work",
+                        "top_file": "/svc/worker.py",
+                        "top_line": 8,
+                        "threads": ["0x0001"],
+                        "first_seen_ts": "2025-01-01T00:00:00+00:00",
+                        "last_seen_ts": "2025-01-01T00:00:00+00:00",
+                    },
+                    {
+                        "signature_id": "sig-2",
+                        "count": 1,
+                        "top_module": "svc",
+                        "top_func": "assist",
+                        "top_file": "/svc/helper.py",
+                        "top_line": 3,
+                        "threads": ["0x0002"],
+                        "first_seen_ts": "2025-01-01T00:00:00+00:00",
+                        "last_seen_ts": "2025-01-01T00:00:00+00:00",
+                    },
+                ],
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
     )
-    latest_report = output_dir / "latest_report.json"
-    assert latest_report.exists()
 
     consumer_output_root = repo / ".repo_studios" / "reports" / "consumer_reports" / "fault_artifacts"
     result = consumer_mod.run(
@@ -70,7 +97,7 @@ def test_fault_artifacts_prefers_producer_report(tmp_path):
             "--outdir",
             str(run_dir),
             "--report",
-            str(latest_report),
+            str(legacy_report),
             "--output-dir",
             str(consumer_output_root),
             "--log-level",
@@ -79,7 +106,7 @@ def test_fault_artifacts_prefers_producer_report(tmp_path):
     )
 
     assert result["outdir"] == str(run_dir.resolve())
-    assert result["source_report"] == str(latest_report.resolve())
+    assert result["source_report"] == str(legacy_report.resolve())
     assert result["source"] == "producer"
 
     stacks_csv = run_dir / "stacks.csv"
@@ -97,14 +124,14 @@ def test_fault_artifacts_prefers_producer_report(tmp_path):
     manifest_path = run_dir / "MANIFEST.json"
     assert manifest_path.exists()
 
-    report = json.loads(latest_report.read_text(encoding="utf-8"))
+    report = json.loads(legacy_report.read_text(encoding="utf-8"))
     assert report["summary"]["signature_count"] == 2
 
     consumer_dir = Path(result["consumer_report"])
     assert consumer_dir.exists()
     summary_json = json.loads((consumer_dir / "summary.json").read_text(encoding="utf-8"))
     assert summary_json["source"] == "producer"
-    assert summary_json["source_report"] == str(latest_report.resolve())
+    assert summary_json["source_report"] == str(legacy_report.resolve())
     assert summary_json["run_dir"] == str(run_dir.resolve())
     assert summary_json["summary"]["signature_count"] == 2
     summary_md = (consumer_dir / "SUMMARY.md").read_text(encoding="utf-8")

@@ -1,19 +1,42 @@
-# Generate Test Log Health Report
+---
+title: generate_test_log_health_report.py
+audience:
+  - coding_agent
+  - human_developer
+owners:
+  - repo_studios_team@rainmakerprotocol.dev
+status: active
+version: 2.0.0
+updated: 2025-12-16
+tags:
+  - consumers
+  - rawview
+  - pytest
+  - reports
+related_files:
+  - ../../scripts/consumers/generate_test_log_health_report.py
+  - ../../tests/tests_consumers/test_generate_test_log_health_report.py
+  - ./collect_test_log_reports.md
+---
+
+# generate_test_log_health_report.py
 
 ## Purpose
 
 `generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so
 operators can track warning spikes, failure patterns, and slow tests without rereading entire logs.
-The script prefers the curated JSON emitted by `collect_test_log_reports.py` and gracefully falls
-back to scanning `.repo_studios/command_center/reports/rawview/test_execution_runs/` (or the legacy
-`.repo_studios/pytest_logs/` tree when allowed) when the producer bundle is missing. Retention now
-rides on the shared Command Center pruning helper (`prune_run_directories`) so `.keep` sentinels and
-the active bundle remain protected while stale runs are removed consistently across producers and
+The script prefers the positional bundle emitted by `collect_test_log_reports.py` (specifically the
+`telemetry.json` payload) and gracefully falls back to scanning
+`.repo_studios/command_center/reports/rawview/test_execution_runs/` (or the legacy
+`.repo_studios/pytest_logs/` tree when allowed) when no producer bundle is available. Retention rides
+on the shared Command Center pruning helper (`prune_run_directories`) so `.keep` sentinels and the
+active bundle remain protected while stale runs are removed consistently across producers and
 consumers.
 
 ## Inputs
 
-- **Structured producer bundle (preferred):** `.repo_studios/reports/producer_reports/test_log_reports/latest_report.json`.
+- **Structured producer bundle (preferred):**
+  `.repo_studios/command_center/reports/rawview/test_log_reports/<YYYYMMDD-HHMM>/telemetry.json`.
 - **Fallback logs directory:** `.repo_studios/command_center/reports/rawview/test_execution_runs/`
   by default; legacy `.repo_studios/pytest_logs/` runs are discovered when
   `TEST_LOG_HEALTH_ALLOW_LEGACY` is not set to `0`.
@@ -22,7 +45,11 @@ consumers.
     `.repo_studios/command_center/reports/rawview/test_execution_runs`; falls back to
     `.repo_studios/pytest_logs` when the new tree is missing and `TEST_LOG_HEALTH_ALLOW_LEGACY`
     remains enabled).
-  - `--producer-report`: Path to the producer JSON bundle (default `.repo_studios/reports/producer_reports/test_log_reports/latest_report.json`).
+  - `--producer-bundle-dir`: Explicit producer run directory containing `telemetry.json`.
+  - `--producer-reports-root`: Root directory containing timestamped producer bundles (default
+    `.repo_studios/command_center/reports/rawview/test_log_reports`).
+  - `--producer-report`: Legacy pointer to old-style `latest_report.json` / `report.json` payloads
+    (deprecated; avoid for new callers).
   - `--output-base`: Target directory for timestamped consumer bundles (default `.repo_studios/reports/consumer_reports/test_log_health_reports`).
   - `--artifacts-to-keep`: Number of run directories to retain (default `5`, minimum enforced at `1`).
   - `--log-level`: Standard logging verbosity control.

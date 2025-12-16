@@ -63,7 +63,15 @@ def test_generate_test_log_health_report_prefers_producer_bundle(tmp_path, monke
     repo.mkdir()
     monkeypatch.chdir(repo)
 
-    producer_dir = repo / ".repo_studios" / "reports" / "producer_reports" / "test_log_reports"
+    producer_dir = (
+        repo
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "rawview"
+        / "test_log_reports"
+        / "20250101-0000"
+    )
     producer_dir.mkdir(parents=True)
 
     logs_dir = repo / ".repo_studios" / "pytest_logs" / "run_a"
@@ -96,8 +104,34 @@ def test_generate_test_log_health_report_prefers_producer_bundle(tmp_path, monke
         ],
     }
 
-    report_path = producer_dir / "latest_report.json"
-    report_path.write_text(json.dumps(payload), encoding="utf-8")
+    telemetry_payload = {
+        "schema_version": 1,
+        "viewer_slug": "rawview",
+        "topic": "test_log_reports",
+        "run_timestamp": "20250101-0000",
+        "generated_at": "2025-11-23T12:00:00+00:00",
+        "status": "ok",
+        "metrics": {
+            "tests_total": 3,
+            "tests_passed": 1,
+            "tests_failed": 1,
+            "tests_skipped": 1,
+            "tests_xfailed": 1,
+            "tests_errors": 0,
+            "warnings_total": 2,
+            "tracebacks": 1,
+            "slow_tests_count": 1,
+        },
+        "payload": {
+            "summary": payload["summary"],
+            "warnings": payload["warnings"],
+            "slow_tests": payload["slow_tests"],
+            "meta": payload["meta"],
+        },
+    }
+
+    telemetry_path = producer_dir / "telemetry.json"
+    telemetry_path.write_text(json.dumps(telemetry_payload), encoding="utf-8")
 
     output_base = repo / ".repo_studios" / "reports" / "consumer_reports" / "test_log_health_reports"
 
@@ -107,8 +141,8 @@ def test_generate_test_log_health_report_prefers_producer_bundle(tmp_path, monke
             str(logs_dir),
             "--output-base",
             str(output_base),
-            "--producer-report",
-            str(report_path),
+            "--producer-bundle-dir",
+            str(producer_dir),
             "--log-level",
             "ERROR",
         ]
@@ -117,7 +151,8 @@ def test_generate_test_log_health_report_prefers_producer_bundle(tmp_path, monke
     artifacts_dir = Path(first_result["output_dir"])
     assert artifacts_dir.exists()
     assert first_result["source"] == "producer"
-    assert Path(first_result["producer_report"]).resolve() == report_path.resolve()
+    assert Path(first_result["producer_bundle_dir"]).resolve() == producer_dir.resolve()
+    assert first_result["producer_report"] is None
 
     report = json.loads((artifacts_dir / "report.json").read_text(encoding="utf-8"))
     assert report["summary"] == payload["summary"]
@@ -128,7 +163,8 @@ def test_generate_test_log_health_report_prefers_producer_bundle(tmp_path, monke
     assert "Source References" in markdown
     bundle_summary = json.loads((artifacts_dir / "bundle_summary.json").read_text(encoding="utf-8"))
     assert bundle_summary["source"] == "producer"
-    assert bundle_summary["producer_report"] == str(report_path.resolve())
+    assert bundle_summary["producer_report"] is None
+    assert bundle_summary["producer_bundle_dir"] == str(producer_dir.resolve())
     assert bundle_summary["summary"] == payload["summary"]
     assert bundle_summary["comparisons"]["previous_run"]["pass_rate"]["previous"] is None
     csv_path = Path(first_result["report_csv"])
@@ -141,7 +177,10 @@ def test_generate_test_log_health_report_prefers_producer_bundle(tmp_path, monke
     # second run to verify pass-rate delta and CSV update
     payload["summary"]["passed"] = 2
     payload["summary"]["failed"] = 0
-    report_path.write_text(json.dumps(payload), encoding="utf-8")
+    telemetry_payload["payload"]["summary"] = payload["summary"]
+    telemetry_payload["metrics"]["tests_passed"] = 2
+    telemetry_payload["metrics"]["tests_failed"] = 0
+    telemetry_path.write_text(json.dumps(telemetry_payload), encoding="utf-8")
 
     second_result = consumer_mod.run(
         [
@@ -149,8 +188,8 @@ def test_generate_test_log_health_report_prefers_producer_bundle(tmp_path, monke
             str(logs_dir),
             "--output-base",
             str(output_base),
-            "--producer-report",
-            str(report_path),
+            "--producer-bundle-dir",
+            str(producer_dir),
             "--log-level",
             "ERROR",
         ]
@@ -187,8 +226,6 @@ def test_generate_test_log_health_report_falls_back_to_logs(tmp_path, monkeypatc
             str(logs_base),
             "--output-base",
             str(output_base),
-            "--producer-report",
-            str(repo / "missing_report.json"),
             "--log-level",
             "ERROR",
         ]
@@ -222,8 +259,6 @@ def test_generate_test_log_health_report_falls_back_to_logs(tmp_path, monkeypatc
             str(logs_base),
             "--output-base",
             str(output_base),
-            "--producer-report",
-            str(repo / "missing.json"),
         ]
     )
     second_dir = Path(second_result["output_dir"])
@@ -274,8 +309,6 @@ def test_generate_test_log_health_report_prunes_history(tmp_path, monkeypatch):
                 str(logs_base),
                 "--output-base",
                 str(output_base),
-                "--producer-report",
-                str(repo / "missing.json"),
                 "--artifacts-to-keep",
                 "3",
             ]

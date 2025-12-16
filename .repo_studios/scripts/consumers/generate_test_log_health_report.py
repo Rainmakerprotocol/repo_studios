@@ -23,7 +23,7 @@ from typing import Any, Sequence
 
 LOGS_DIR_DEFAULT = ".repo_studios/command_center/reports/rawview/test_execution_runs"
 LEGACY_LOGS_DIR = ".repo_studios/pytest_logs"
-PRODUCER_REPORT_DEFAULT = ".repo_studios/reports/producer_reports/test_log_reports/latest_report.json"
+PRODUCER_REPORTS_ROOT_DEFAULT = ".repo_studios/command_center/reports/rawview/test_log_reports"
 OUTPUT_BASE_DEFAULT = ".repo_studios/reports/consumer_reports/test_log_health_reports"
 DEFAULT_ARTIFACTS_TO_KEEP = 5
 
@@ -55,7 +55,21 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate test log health report")
     parser.add_argument("--logs-dir", default=LOGS_DIR_DEFAULT)
     parser.add_argument("--output-base", default=OUTPUT_BASE_DEFAULT)
-    parser.add_argument("--producer-report", default=PRODUCER_REPORT_DEFAULT)
+    parser.add_argument(
+        "--producer-bundle-dir",
+        default=None,
+        help="Path to a collect_test_log_reports bundle directory containing telemetry.json",
+    )
+    parser.add_argument(
+        "--producer-reports-root",
+        default=PRODUCER_REPORTS_ROOT_DEFAULT,
+        help="Root directory containing timestamped collect_test_log_reports bundles",
+    )
+    parser.add_argument(
+        "--producer-report",
+        default=None,
+        help="(Legacy) Path to the old-style latest_report.json/report.json producer payload",
+    )
     parser.add_argument(
         "--log-level",
         default="INFO",
@@ -156,6 +170,50 @@ def _load_producer_report(path: Path) -> dict[str, Any] | None:
     except Exception:
         return None
     return payload if isinstance(payload, dict) else None
+
+
+def _is_timestamp_slug(name: str) -> bool:
+    if len(name) != 13 or name[8] != "-":
+        return False
+    digits = name[:8] + name[9:]
+    return digits.isdigit()
+
+
+def _select_latest_bundle_dir(root: Path) -> Path | None:
+    if not root.exists() or not root.is_dir():
+        return None
+    candidates = [child for child in root.iterdir() if child.is_dir() and _is_timestamp_slug(child.name)]
+    if not candidates:
+        return None
+    return sorted(candidates, key=lambda path: path.name)[-1]
+
+
+def _load_producer_bundle(bundle_dir: Path) -> tuple[dict[str, Any] | None, Path | None]:
+    telemetry_path = bundle_dir / "telemetry.json"
+    if not telemetry_path.exists():
+        return None, None
+    try:
+        telemetry = json.loads(telemetry_path.read_text(encoding="utf-8"))
+    except Exception:
+        return None, telemetry_path
+    if not isinstance(telemetry, dict):
+        return None, telemetry_path
+    payload = telemetry.get("payload")
+    if not isinstance(payload, dict):
+        return None, telemetry_path
+
+    summary = payload.get("summary")
+    if not isinstance(summary, dict):
+        return None, telemetry_path
+
+    report: dict[str, Any] = {
+        "schema_version": 1,
+        "meta": payload.get("meta") if isinstance(payload.get("meta"), dict) else {},
+        "summary": summary,
+        "warnings": payload.get("warnings") if isinstance(payload.get("warnings"), dict) else {},
+        "slow_tests": payload.get("slow_tests") if isinstance(payload.get("slow_tests"), list) else [],
+    }
+    return report, telemetry_path
 
 
 def _has_log_artifacts(directory: Path) -> bool:
@@ -333,6 +391,8 @@ def _write_metadata(
     out_dir: Path,
     *,
     source: str,
+    producer_bundle_dir: Path | None,
+    producer_telemetry: Path | None,
     producer_report: Path | None,
     logs_dir: Path,
     logs_source: Path | None,
@@ -344,6 +404,8 @@ def _write_metadata(
         "schema_version": 1,
         "generated_at": generated.isoformat(timespec="seconds"),
         "source": source,
+        "producer_bundle_dir": str(producer_bundle_dir.resolve()) if producer_bundle_dir else None,
+        "producer_telemetry": str(producer_telemetry.resolve()) if producer_telemetry else None,
         "producer_report": str(producer_report.resolve()) if producer_report else None,
         "logs_dir": str(logs_dir.resolve()),
         "logs_source": str(logs_source.resolve()) if logs_source else None,
@@ -365,6 +427,10 @@ def _write_metadata(
         lines.append("## Source References")
         lines.append("")
         lines.append(f"- Source: {source}")
+        if producer_bundle_dir:
+            lines.append(f"- Producer Bundle: `{producer_bundle_dir.resolve()}`")
+        if producer_telemetry:
+            lines.append(f"- Producer Telemetry: `{producer_telemetry.resolve()}`")
         if producer_report:
             lines.append(f"- Producer Report: `{producer_report.resolve()}`")
         if logs_source:
@@ -415,15 +481,37 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     if not out_base.is_absolute():
         out_base = (repo_root / out_base).resolve()
 
-    producer_report_path = Path(args.producer_report)
-    if not producer_report_path.is_absolute():
-        producer_report_path = (repo_root / producer_report_path).resolve()
+    producer_bundle_dir: Path | None = None
+    producer_telemetry: Path | None = None
+    producer_report_path: Path | None = None
+    if args.producer_report:
+        candidate = Path(args.producer_report)
+        producer_report_path = candidate if candidate.is_absolute() else (repo_root / candidate).resolve()
+
+    producer_reports_root = Path(args.producer_reports_root)
+    if not producer_reports_root.is_absolute():
+        producer_reports_root = (repo_root / producer_reports_root).resolve()
+    else:
+        producer_reports_root = producer_reports_root.resolve()
+
+    if args.producer_bundle_dir:
+        candidate = Path(args.producer_bundle_dir)
+        producer_bundle_dir = candidate if candidate.is_absolute() else (repo_root / candidate).resolve()
 
     payload = None
     source = "producer"
     used_report: Path | None = None
+    used_bundle: Path | None = None
     logs_source: Path | None = None
-    if producer_report_path.exists():
+    if producer_bundle_dir is None:
+        producer_bundle_dir = _select_latest_bundle_dir(producer_reports_root)
+    if producer_bundle_dir is not None and producer_bundle_dir.exists():
+        payload, producer_telemetry = _load_producer_bundle(producer_bundle_dir)
+        if payload is not None:
+            used_bundle = producer_bundle_dir
+            logging.info("Loaded pytest log bundle from %s", producer_bundle_dir)
+
+    if payload is None and producer_report_path is not None and producer_report_path.exists():
         payload = _load_producer_report(producer_report_path)
         if payload is not None:
             used_report = producer_report_path
@@ -466,6 +554,8 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     metadata_path = _write_metadata(
         out_dir,
         source=source,
+        producer_bundle_dir=used_bundle,
+        producer_telemetry=producer_telemetry,
         producer_report=used_report,
         logs_dir=logs_dir,
         logs_source=logs_source,
@@ -483,6 +573,8 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     return {
         "output_dir": str(out_dir.resolve()),
         "source": source,
+        "producer_bundle_dir": str(used_bundle) if used_bundle else None,
+        "producer_telemetry": str(producer_telemetry) if producer_telemetry else None,
         "producer_report": str(used_report) if used_report else None,
         "logs_dir": str(logs_dir.resolve()),
         "logs_source": str(logs_source.resolve()) if logs_source else None,

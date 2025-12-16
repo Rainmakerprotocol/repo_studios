@@ -1,4 +1,8 @@
+ifeq ($(OS),Windows_NT)
+PYTHON ?= python
+else
 PYTHON ?= python3
+endif
 REPO_ROOT := $(abspath $(CURDIR)/..)
 LOG_LEVEL ?= INFO
 
@@ -28,7 +32,7 @@ studio-validate-inventory:
 	$(PYTHON) .repo_studios/scripts/producers/validate_inventory.py
 
 studio-check-inventory-health: studio-render-views
-	$(PYTHON) .repo_studios/scripts/producers/check_inventory_health.py --output-dir .repo_studios/reports/producer_reports/inventory_health_reports
+	$(PYTHON) .repo_studios/scripts/producers/check_inventory_health.py --repo-root . --output-dir .repo_studios/command_center/reports
 
 .PHONY: studio-validate-markdown-anchors
 studio-validate-markdown-anchors:
@@ -64,7 +68,7 @@ studio-validate-metrics-anchor-stubs:
 
 .PHONY: studio-analyze-test-hardening
 studio-analyze-test-hardening:
-	$(PYTHON) .repo_studios/scripts/producers/analyze_test_hardening.py --repo-root . --output-dir .repo_studios/reports/producer_reports/test_hardening_reports
+	$(PYTHON) .repo_studios/scripts/producers/analyze_test_hardening.py --repo-root . --output-dir .repo_studios/command_center/reports
 
 .PHONY: studio-verify-docs-integrity
 studio-verify-docs-integrity:
@@ -72,7 +76,7 @@ studio-verify-docs-integrity:
 
 .PHONY: studio-collect-faulthandler-reports
 studio-collect-faulthandler-reports:
-	$(PYTHON) .repo_studios/scripts/producers/collect_faulthandler_reports.py --runs-dir .repo_studios/command_center/reports/rawview/fault_diagnostics_runs --output-dir .repo_studios/reports/producer_reports/faulthandler_reports --artifacts-to-keep 10 --log-level INFO
+	$(PYTHON) scripts/producers/collect_faulthandler_reports.py --runs-dir .repo_studios/command_center/reports/rawview/fault_diagnostics_runs --output-dir .repo_studios/command_center/reports --artifacts-to-keep 10 --log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-fault-artifacts
 studio-generate-fault-artifacts:
@@ -145,11 +149,11 @@ studio-refresh-mypy-baselines:
 
 .PHONY: studio-collect-test-log-reports
 studio-collect-test-log-reports:
-	$(PYTHON) .repo_studios/scripts/producers/collect_test_log_reports.py --logs-dir .repo_studios/command_center/reports/rawview/test_execution_runs --output-dir .repo_studios/reports/producer_reports/test_log_reports --artifacts-to-keep 10 --log-level INFO
+	$(PYTHON) scripts/producers/collect_test_log_reports.py --logs-dir command_center/reports/rawview/test_execution_runs --output-dir command_center/reports --artifacts-to-keep 10 --log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-test-log-health-report
 studio-generate-test-log-health-report:
-	$(PYTHON) .repo_studios/scripts/consumers/generate_test_log_health_report.py --logs-dir .repo_studios/command_center/reports/rawview/test_execution_runs --output-base .repo_studios/reports/consumer_reports/test_log_health_reports --producer-report .repo_studios/reports/producer_reports/test_log_reports/latest_report.json --artifacts-to-keep 5 --log-level INFO
+	$(PYTHON) .repo_studios/scripts/consumers/generate_test_log_health_report.py --logs-dir .repo_studios/command_center/reports/rawview/test_execution_runs --output-base .repo_studios/reports/consumer_reports/test_log_health_reports --producer-reports-root .repo_studios/command_center/reports/rawview/test_log_reports --artifacts-to-keep 5 --log-level INFO
 
 .PHONY: studio-diff-standards-index
 studio-diff-standards-index:

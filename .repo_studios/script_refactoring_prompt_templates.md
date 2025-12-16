@@ -8,7 +8,7 @@
 
 ## Workflow Overview
 
-```
+``` text
 Phase 1: Analysis       → Understand current state
 Phase 2: Planning       → Generate implementation plan
 Phase 3: Execution      → Apply changes with validation
@@ -22,12 +22,14 @@ Phase 3: Execution      → Apply changes with validation
 
 ### Prompt Template
 
-```
-We are reviewing scripts in `.repo_studios/scripts/<tier>/` to align with positional encoding and database integration standards.
+```text
+We are reviewing scripts in:
+`.repo_studios/scripts/producers/`
+to align with positional encoding and database integration standards.
 
 Analyze the following script:
-
-`.repo_studios/scripts/<tier>/<script_name>.py`
+`<SCRIPT_PATH>`
+`collect_test_log_reports.py`
 
 Report the following information:
 
@@ -89,6 +91,7 @@ Report the following information:
 ### Expected Output
 
 A structured report covering:
+
 - Script purpose and current behavior
 - Output paths, artifact names, and formats
 - Timestamp format and legacy pointer status
@@ -101,19 +104,24 @@ A structured report covering:
 
 ---
 
-## Phase 2: Implementation Plan Prompt
+## Phase 2: Implementation Plan
 
 **Goal:** Convert awareness into detailed implementation plan (planning)
 
-### Prompt Template
+```text
+Based on the analysis of:
+`<SCRIPT_PATH>`
+`collect_test_log_reports.py`
 
+Generate a detailed implementation plan to align this script with
+positional encoding and database integration standards.
 ```
-Based on the analysis of `.repo_studios/scripts/<tier>/<script_name>.py`, generate a detailed implementation plan to align this script with positional encoding and database integration standards.
 
 ### Target Standards
 
 **Positional Encoding (Path Structure):**
-```
+
+```text
 <reports_root>/<viewer_slug>/<topic>/<timestamp>/<artifact>
                └─────1─────┘ └───2──┘ └────3────┘ └───4───┘
 
@@ -124,6 +132,7 @@ Position 4: What (artifact role per registry)
 ```
 
 **Path Rules:**
+
 - `viewer_slug`: One of {healthview, commandview, rawview, jarvis, vscode}
 - `topic`: kebab-case or underscore_case slug (stable identifier, no timestamps)
 - `timestamp`: YYYYMMDD-HHMM format (UTC, sortable, 13 chars)
@@ -132,29 +141,36 @@ Position 4: What (artifact role per registry)
 **Output Format Standard (3 File Types Preferred):**
 
 **Required Outputs:**
+
 - `manifest.json` - Pipeline metadata (viewer_slug, topic, timestamp, catalog, inputs, provenance)
 - `summary.md` - Human-readable digest with findings and recommendations
 - `telemetry.json` - Extracted metrics for time-series DB ingestion
 
 **Optional Output (Exception Basis):**
+
 - `matrix.csv` - Tabular data when spreadsheet analysis adds value (duplicates, coverage thresholds)
 
 **Strongly Preferred File Types:**
+
 1. `.json` - All structured data (DB ingestion, AI agent queries)
-2. `.md` - All human-readable content (documentation, summaries)
-3. `.csv` - Tabular exports ONLY when format provides clear benefit
+1. `.md` - All human-readable content (documentation, summaries)
+1. `.csv` - Tabular exports ONLY when format provides clear benefit
 
 **Flexibility Clause:**
 If this script has legitimate requirements for additional file types or formats not covered above, explain:
+
 - Why the additional format is necessary
 - What use case it serves that .json/.md/.csv cannot
 - Whether it can be consolidated into one of the standard formats
 - Recommendation: keep or add the exception
 
 **Maximum Output Guideline:**
-Target ≤3 output files per report run. Acknowledge that some scripts may require exceptions (e.g., raw tool outputs, specialized formats), but justify any deviation from this guideline.
+Target ≤3 output files per report run. Acknowledge that some scripts may require
+exceptions (e.g., raw tool outputs, specialized formats), but justify any deviation
+from this guideline.
 
 **Deprecated Formats (Remove During Refactoring):**
+
 - `log.txt` - Embed in manifest.json or write to stdout only
 - `report.json` - Too generic; split into manifest.json + telemetry.json
 - `bundle_summary.json` - Rename to manifest.json
@@ -163,12 +179,14 @@ Target ≤3 output files per report run. Acknowledge that some scripts may requi
 - `raw.txt` - Convert to raw.json or embed in manifest (exception: lizard/radon if exact format needed)
 
 **Forbidden:**
+
 - `latest_*` or `current_*` aliases
 - Timestamps in topic names
 - Viewer prefixes in artifact names (e.g., `healthview_coverage.json`)
 - Generic names without path context (e.g., standalone `report.json`)
 
 **Database Integration:**
+
 - Use `create_storage()` from `scripts/libraries/database_integration.py`
 - Add `DB_INTEGRATION_MARKER` comments above write operations
 - Extract telemetry for `test_metrics` table
@@ -184,7 +202,7 @@ Generate a plan covering:
    - Viewer selection rationale
    - Topic slug choice
 
-2. **Output Format Alignment:**
+1. **Output Format Alignment:**
    - Target: ≤3 files (manifest.json, summary.md, telemetry.json)
    - List all current → target filename mappings
    - Remove any `latest_*` file generation
@@ -193,32 +211,32 @@ Generate a plan covering:
    - Convert any .txt logs to manifest.json embeddings
    - Justify any exceptions to 3-file guideline
 
-3. **Timestamp Conversion:**
+1. **Timestamp Conversion:**
    - Current format → YYYYMMDD-HHMM
    - Update folder name generation logic
    - Update any timestamp parsing code
 
-4. **manifest.json Creation:**
+1. **manifest.json Creation:**
    - Structure with: viewer_slug, topic, run_timestamp, git_sha, status
    - Populate catalog array with script roles
    - Include inputs JSONB with configuration
    - Add provenance: requested_by, trigger_type
 
-5. **telemetry.json Extraction:**
+1. **telemetry.json Extraction:**
    - Identify metrics to extract (coverage_pct, test counts, complexity, etc.)
    - Map to `test_metrics` table columns
    - Handle JSONB fields for nested data
 
-6. **Database Integration:**
+1. **Database Integration:**
    - Replace file writes with `storage.write_manifest(data)`
    - Replace summary writes with `storage.write_summary(content)`
    - Add `DB_INTEGRATION_MARKER: <description>` tags
    - Ensure graceful degradation if DB disabled
 
-7. **Pruning Standardization:**
-   
+1. **Pruning Standardization:**
+
    **Determine Pruning Mode:**
-   
+
    - **Overwrite Mode (keep=1):**
      - Intent: Expensive operations where only latest state matters, no trend analysis needed
      - Use: `prune_to_latest()` from `command_center.scripts.libraries.prune_logs`
@@ -226,7 +244,7 @@ Generate a plan covering:
      - No CLI argument needed (hardcoded to 1)
      - Examples: function_analysis (expensive), standards_index (latest-state-only)
      - Import: `from command_center.scripts.libraries.prune_logs import prune_to_latest`
-   
+
    - **History Mode (keep≥5):**
      - Intent: Time-series data, trend analysis, historical comparison
      - Use: `prune_run_directories(keep=N)` from `command_center.scripts.libraries.prune_logs`
@@ -234,49 +252,51 @@ Generate a plan covering:
      - Default: 5 runs (configurable via `--keep` CLI argument)
      - Examples: test_coverage, duplicate_scan, monkey_patch_tracking
      - Import: `from command_center.scripts.libraries.prune_logs import prune_run_directories`
-   
+
    **Migration Steps:**
    - Replace inline pruning logic (shutil.rmtree) with library function
    - For overwrite mode: Call `prune_to_latest(base_dir, stem_prefix="topic-", current_run=run_dir, logger=logger)`
-   - For history mode: Add `--keep` CLI argument with default=5, call `prune_run_directories(base_dir, keep=keep, stem_prefix="topic-", current_run=run_dir, logger=logger)`
+   - For history mode: Add `--keep` CLI argument with default=5, call
+      `prune_run_directories(base_dir, keep=keep, stem_prefix="topic-", current_run=run_dir, logger=logger)`
    - Remove custom `prune_old_runs()` or `_prune_history()` functions
    - Ensure current_run is passed to protect it from pruning
    - Log pruning results via returned `PruneResult` object
    - Update path construction to work with new viewer/topic structure
 
-8. **Code Changes:**
+1. **Code Changes:**
    - Function signatures to update
    - Import statements to add
    - Configuration parameters to change
    - Error handling for storage writes
 
-9. **Test Updates:**
+1. **Test Updates:**
    - Which test files need updating?
    - Path assertions to change
    - Artifact name assertions to update
    - Add DB integration tests (optional)
 
-10. **Documentation Updates:**
+1. **Documentation Updates:**
     - Update docstrings
     - Revise README sections
     - Create `db_integration_<script_name>.md`
 
-11. **Rollback Plan:**
+1. **Rollback Plan:**
     - How to revert if issues arise
     - Backward compatibility considerations
 
 ### Output Format
 
 Provide the plan as:
+
 - Numbered checklist of tasks
 - Before/after code snippets for key changes
 - File tree showing old vs new structure
 - Risk assessment (low/medium/high)
-```
 
 ### Expected Output
 
 A comprehensive implementation plan including:
+
 - Path migration strategy with viewer/topic justification
 - Complete artifact renaming table (before → after)
 - Timestamp conversion approach
@@ -295,8 +315,12 @@ A comprehensive implementation plan including:
 
 ### Prompt Template
 
-```
-Execute the implementation plan for `.repo_studios/scripts/<tier>/<script_name>.py` following the detailed plan from Phase 2.
+````text
+Execute the implementation plan for:
+`<SCRIPT_PATH>`
+`collect_test_log_reports.py`
+
+Follow the detailed plan from Phase 2.
 
 ### Execution Requirements
 
@@ -356,8 +380,23 @@ Execute the implementation plan for `.repo_studios/scripts/<tier>/<script_name>.
    # Expected: Exit code 0
    ```
 
+   Confirm via the Make target (if available for this script):
+   ```bash
+   make -C .repo_studios <make_target>
+   # Example:
+   # make -C .repo_studios studio-collect-test-log-reports
+   # make -C .repo_studios studio-collect-faulthandler-reports
+   # Expected: Exit code 0
+   # Expected: Artifacts written under <reports_root>/<viewer>/<topic>/<YYYYMMDD-HHMM>/
+   ```
+
 5. **Output Inspection:**
    - Verify new path structure created: `<viewer>/<topic>/<YYYYMMDD-HHMM>/`
+   - Verify the newest run folder contains exactly:
+     - `manifest.json`
+     - `summary.md`
+     - `telemetry.json`
+   - Verify `manifest.json` and `telemetry.json` parse as valid JSON (no decode errors)
    - Verify manifest.json contains: viewer_slug, topic, run_timestamp, catalog, inputs
    - Verify summary.md exists and is human-readable
    - Verify telemetry.json contains extracted metrics
@@ -378,9 +417,15 @@ Execute the implementation plan for `.repo_studios/scripts/<tier>/<script_name>.
    # Expected: Storage initialization found
    ```
 
+   On Windows (PowerShell), use:
+   ```powershell
+   Select-String -Path .repo_studios/scripts/<tier>/<script_name>.py -Pattern "DB_INTEGRATION_MARKER"
+   Select-String -Path .repo_studios/scripts/<tier>/<script_name>.py -Pattern "create_storage"
+   ```
+
 7. **Marker Audit:**
    ```bash
-   python .repo_studios/command_center/scripts/utilities/list_db_markers.py --format markdown
+   python .repo_studios/command_center/scripts/utilities/list_db_markers.py --format md
    # Expected: This script appears in output with marker count > 0
    ```
 
@@ -392,6 +437,7 @@ Execute the implementation plan for `.repo_studios/scripts/<tier>/<script_name>.
 4. Run mypy and verify CLEAN
 5. Execute script with test arguments
 6. Inspect output artifacts manually
+6. Run the Make target and confirm artifacts
 7. Verify coverage ≥ 80%
 8. Update documentation
 9. Run marker audit
@@ -418,7 +464,7 @@ If any validation check fails:
 2. Revert changes via git
 3. Report blocker in implementation plan
 4. Do NOT proceed to next script
-```
+````
 
 ### Expected Output
 
@@ -430,11 +476,10 @@ If any validation check fails:
 - Output artifacts inspected and validated
 - Documentation updated
 - DB markers present
-- Commit message with summary of changes
+- update `script_inventory_architecture.md` with new status
 
 ---
 
 ## Notes Section
 
-[Use this space for observations, edge cases, patterns discovered during refactoring]
-
+Use this space for observations, edge cases, patterns discovered during refactoring.

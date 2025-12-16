@@ -60,7 +60,7 @@ def test_collect_test_log_reports_emits_artifacts(tmp_path):
     _write_junit(run_dir)
     _write_pytest_log(run_dir)
 
-    output_dir = repo / ".repo_studios" / "reports" / "producer_reports" / "test_log_reports"
+    output_dir = repo / ".repo_studios" / "command_center" / "reports"
 
     result = producer_mod.run(
         [
@@ -70,6 +70,8 @@ def test_collect_test_log_reports_emits_artifacts(tmp_path):
             str(run_dir),
             "--output-dir",
             str(output_dir),
+            "--run-timestamp",
+            "20250101-0000",
             "--artifacts-to-keep",
             "2",
             "--log-level",
@@ -80,32 +82,35 @@ def test_collect_test_log_reports_emits_artifacts(tmp_path):
     artifacts_dir = Path(result["output_dir"])
     assert artifacts_dir.exists()
 
-    report_path = artifacts_dir / "report.json"
-    assert report_path.exists()
-    report = json.loads(report_path.read_text(encoding="utf-8"))
-    summary = report["summary"]
-    assert summary["total"] == 3
-    assert summary["warnings_total"] == 1
-    assert summary["tracebacks"] == 1
+    manifest_path = artifacts_dir / "manifest.json"
+    assert manifest_path.exists()
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["viewer_slug"] == "rawview"
+    assert manifest["topic"] == "test_log_reports"
+    assert manifest["run_timestamp"] == "20250101-0000"
 
-    warnings_by_type = (artifacts_dir / "warnings_by_type.csv").read_text(encoding="utf-8").splitlines()
-    assert warnings_by_type[0] == "type,count"
-    assert warnings_by_type[1] == "UserWarning,1"
+    telemetry_path = artifacts_dir / "telemetry.json"
+    assert telemetry_path.exists()
+    telemetry = json.loads(telemetry_path.read_text(encoding="utf-8"))
+    assert telemetry["viewer_slug"] == "rawview"
+    assert telemetry["topic"] == "test_log_reports"
+    assert telemetry["run_timestamp"] == "20250101-0000"
 
-    warnings_by_file = (artifacts_dir / "warnings_by_file.csv").read_text(encoding="utf-8").splitlines()
-    assert warnings_by_file[0] == "file,count"
-    assert "repo/tests/test_mod.py" in warnings_by_file[1]
+    metrics = telemetry["metrics"]
+    assert metrics["tests_total"] == 3
+    assert metrics["warnings_total"] == 1
+    assert metrics["tracebacks"] == 1
+    assert metrics["slow_tests_count"] == 2
 
-    slow_tests_csv = (artifacts_dir / "slow_tests.csv").read_text(encoding="utf-8").splitlines()
-    assert slow_tests_csv[0] == "seconds,nodeid"
-    assert "repo/tests/test_mod.py::test_warn" in slow_tests_csv[1]
+    summary_md = artifacts_dir / "summary.md"
+    assert summary_md.exists()
+    summary_text = summary_md.read_text(encoding="utf-8")
+    assert "Test Log Report" in summary_text
+    assert "Warnings: 1" in summary_text
+    assert "Tracebacks: 1" in summary_text
 
-    combined_log = artifacts_dir / "combined.log"
-    assert combined_log.exists()
-    assert "Traceback" in combined_log.read_text(encoding="utf-8")
-
-    assert (output_dir / "latest_report.json").exists()
-    assert (output_dir / "latest_warnings_by_type.csv").exists()
+    # No mutable latest_* pointers in canonical report bundles.
+    assert not (output_dir / "latest_report.json").exists()
 
 
 def test_collect_test_log_reports_prunes_history(tmp_path):
@@ -122,7 +127,7 @@ def test_collect_test_log_reports_prunes_history(tmp_path):
     _write_junit(second_run)
     _write_pytest_log(second_run)
 
-    output_dir = repo / ".repo_studios" / "reports" / "producer_reports" / "test_log_reports"
+    output_dir = repo / ".repo_studios" / "command_center" / "reports"
 
     producer_mod.run(
         [
@@ -132,6 +137,8 @@ def test_collect_test_log_reports_prunes_history(tmp_path):
             str(first_run),
             "--output-dir",
             str(output_dir),
+            "--run-timestamp",
+            "20250101-0000",
             "--artifacts-to-keep",
             "2",
             "--log-level",
@@ -147,6 +154,8 @@ def test_collect_test_log_reports_prunes_history(tmp_path):
             str(second_run),
             "--output-dir",
             str(output_dir),
+            "--run-timestamp",
+            "20250101-0001",
             "--artifacts-to-keep",
             "1",
             "--log-level",
@@ -155,7 +164,8 @@ def test_collect_test_log_reports_prunes_history(tmp_path):
     )
 
     artifacts_dir = Path(result["output_dir"])
-    runs = [child.name for child in output_dir.iterdir() if child.is_dir()]
+    runs_root = output_dir / "rawview" / "test_log_reports"
+    runs = [child.name for child in runs_root.iterdir() if child.is_dir()]
     assert len(runs) == 1
     assert artifacts_dir.name in runs
 

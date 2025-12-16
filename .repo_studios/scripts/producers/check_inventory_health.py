@@ -2,11 +2,10 @@
 """Inventory health validation with structured artifacts.
 
 Artifacts (default):
-    - `.repo_studios/reports/producer_reports/inventory_health_reports/`
-        - `inventory_health-<timestamp>/report.json`
-        - `inventory_health-<timestamp>/report.md`
-        - `inventory_health-<timestamp>/log.txt`
-        - `latest_report.(json|md|log)` copies for quick access
+    - `.repo_studios/command_center/reports/healthview/inventory_health/<YYYYMMDD-HHMM>/`
+        - `manifest.json`
+        - `summary.md`
+        - `telemetry.json`
 
 Exit codes:
     0 success (no threshold breaches)
@@ -30,32 +29,32 @@ try:
     from libraries import (  # type: ignore
         KeepSpec,
         PathSpec,
-        ReportArtifact,
         OptionsConfig,
         PathsConfig,
         build_standard_options,
         build_standard_paths,
-        write_report_artifacts,
+        prune_run_directories,
     )
+    from libraries.database_integration import create_storage  # type: ignore
 except ModuleNotFoundError:  # pragma: no cover - fallback during standalone execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
     from libraries import (  # type: ignore
         KeepSpec,
         PathSpec,
-        ReportArtifact,
         OptionsConfig,
         PathsConfig,
         build_standard_options,
         build_standard_paths,
-        write_report_artifacts,
+        prune_run_directories,
     )
+    from libraries.database_integration import create_storage  # type: ignore
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SUMMARY_PATH = Path(".repo_studios/reports/producer_reports/render_inventory_views/latest_summary.json")
 DEFAULT_BASELINE_PATH = Path(".repo_studios/config/inventory/inventory_summary_baseline.json")
 DEFAULT_THRESHOLDS_PATH = Path("config/ci_inventory_thresholds.json")
-DEFAULT_OUTPUT_PATH = Path(".repo_studios/reports/producer_reports/inventory_health_reports")
+DEFAULT_OUTPUT_PATH = Path(".repo_studios/command_center/reports")
 
 SUMMARY_LATEST = ROOT / DEFAULT_SUMMARY_PATH
 BASELINE_PATH = ROOT / DEFAULT_BASELINE_PATH
@@ -64,6 +63,11 @@ THRESHOLD_PATH = ROOT / DEFAULT_THRESHOLDS_PATH
 DEFAULT_OUTPUT_DIR = DEFAULT_OUTPUT_PATH
 RUN_PREFIX = "inventory_health"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
+
+VIEWER_SLUG = "healthview"
+TOPIC_SLUG = "inventory_health"
+
+logger = logging.getLogger(__name__)
 
 
 class Paths(NamedTuple):
@@ -172,6 +176,74 @@ def parse_timestamp(raw: str | None) -> datetime:
     return parsed.astimezone(timezone.utc)
 
 
+def _timestamp_slug(timestamp: datetime) -> str:
+    normalized = timestamp
+    if normalized.tzinfo is None:
+        normalized = normalized.replace(tzinfo=timezone.utc)
+    return normalized.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
+
+
+def build_manifest(
+    *,
+    status: str,
+    generated_ts: datetime,
+    run_slug: str,
+    summary_path: Path,
+    baseline_path: Path,
+    thresholds_path: Path,
+    artifacts_to_keep: int,
+) -> JsonDict:
+    return {
+        "schema_version": 1,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": run_slug,
+        "generated_at": generated_ts.astimezone(timezone.utc).isoformat(),
+        "status": status,
+        "catalog": ["scripts.inventory.check_inventory_health"],
+        "inputs": {
+            "summary_path": str(summary_path),
+            "baseline_path": str(baseline_path),
+            "thresholds_path": str(thresholds_path),
+            "artifacts_to_keep": artifacts_to_keep,
+        },
+    }
+
+
+def build_telemetry(
+    *,
+    status: str,
+    issues: Dict[str, str],
+    deltas: JsonDict,
+    current: JsonDict,
+    baseline: JsonDict,
+    thresholds: JsonDict,
+    generated_ts: datetime,
+    run_slug: str,
+) -> JsonDict:
+    issue_list = [{"id": key, "description": message} for key, message in sorted(issues.items())]
+    summary = {
+        "issues": len(issue_list),
+        "total_assets": current.get("total"),
+    }
+    return {
+        "schema_version": 1,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": run_slug,
+        "generated_utc": generated_ts.astimezone(timezone.utc).isoformat(),
+        "status": status,
+        "summary": summary,
+        "deltas": deltas,
+        "issues": issue_list,
+        "snapshots": {
+            "current": current,
+            "baseline": baseline,
+            "thresholds": thresholds,
+        },
+    }
+
+
 def build_report(
     *,
     status: str,
@@ -213,9 +285,9 @@ def write_markdown(report: JsonDict) -> str:
         "# Inventory Health Report",
         "",
         f"Generated (UTC): {report['generated_utc']}",
-        f"Summary Path: {report['summary_path']}",
-        f"Baseline Path: {report['baseline_path']}",
-        f"Threshold Path: {report['thresholds_path']}",
+        f"Summary Path: {report['inputs']['summary_path']}",
+        f"Baseline Path: {report['inputs']['baseline_path']}",
+        f"Threshold Path: {report['inputs']['thresholds_path']}",
         "",
         "## Outcome",
         "",
@@ -226,7 +298,12 @@ def write_markdown(report: JsonDict) -> str:
         "## Deltas",
         "",
     ]
-    deltas = report.get("deltas", [])
+    raw_deltas = report.get("deltas", {})
+    if isinstance(raw_deltas, dict):
+        deltas = [{"metric": key, "delta": raw_deltas[key]} for key in sorted(raw_deltas)]
+    else:
+        deltas = list(raw_deltas)
+
     if not deltas:
         lines.append("- (none)")
     else:
@@ -241,23 +318,6 @@ def write_markdown(report: JsonDict) -> str:
         for issue in issues:
             lines.append(f"- {issue['id']}: {issue['description']}")
 
-    return "\n".join(lines) + "\n"
-
-
-def write_log(report: JsonDict) -> str:
-    lines = [
-        f"status={report['status']}",
-        f"issues={report['summary']['issues']}",
-        f"total_assets={report['summary']['total_assets']}",
-        "deltas:",
-    ]
-    for item in report.get("deltas", []):
-        lines.append(f"  {item['metric']}={item['delta']:+d}")
-    lines.append("issues:")
-    for issue in report.get("issues", []):
-        lines.append(f"  {issue['id']}: {issue['description']}")
-    if report.get("issues"):
-        lines.append("failure_reason=threshold breach detected")
     return "\n".join(lines) + "\n"
 
 
@@ -342,7 +402,19 @@ def main(argv: list[str] | None = None) -> int:
     status, issues, deltas = evaluate(current, baseline, thresholds)
     generated_ts = parse_timestamp(options.timestamp)
 
-    report = build_report(
+    run_slug = _timestamp_slug(generated_ts)
+
+
+    manifest = build_manifest(
+        status=status,
+        generated_ts=generated_ts,
+        run_slug=run_slug,
+        summary_path=summary_path,
+        baseline_path=baseline_path,
+        thresholds_path=thresholds_path,
+        artifacts_to_keep=options.artifacts_to_keep,
+    )
+    telemetry = build_telemetry(
         status=status,
         issues=issues,
         deltas=deltas,
@@ -350,40 +422,29 @@ def main(argv: list[str] | None = None) -> int:
         baseline=baseline,
         thresholds=thresholds,
         generated_ts=generated_ts,
-        summary_path=summary_path,
-        baseline_path=baseline_path,
-        thresholds_path=thresholds_path,
+        run_slug=run_slug,
     )
 
-    artifacts = [
-        ReportArtifact(
-            filename="report.json",
-            pointer="latest_report.json",
-            kind="json",
-            content=lambda: report,
-        ),
-        ReportArtifact(
-            filename="report.md",
-            pointer="latest_report.md",
-            kind="text",
-            content=lambda: write_markdown(report),
-        ),
-        ReportArtifact(
-            filename="log.txt",
-            pointer="latest_report.log",
-            kind="text",
-            content=lambda: write_log(report),
-        ),
-    ]
+    storage = create_storage(output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=run_slug)
 
-    result = write_report_artifacts(
-        stem=RUN_PREFIX,
-        timestamp=generated_ts,
-        output_dir=output_dir,
-        artifacts=artifacts,
+    # DB_INTEGRATION_MARKER: inventory health manifest
+    storage.write_manifest(manifest)
+
+    # DB_INTEGRATION_MARKER: inventory health summary markdown
+    storage.write_summary({"markdown": write_markdown({**telemetry, "inputs": manifest["inputs"]})}, format="md")
+
+    # DB_INTEGRATION_MARKER: inventory health telemetry
+    storage.write_telemetry(telemetry)
+
+    run_dir = storage.file_storage.bundle_dir
+    prune_run_directories(
+        output_dir / VIEWER_SLUG / TOPIC_SLUG,
         keep=options.artifacts_to_keep,
+        current_run=run_dir,
+        logger=logger,
     )
-    logging.info("inventory health artifacts written to %s", result.run_dir)
+
+    logging.info("inventory health artifacts written to %s", run_dir)
 
     return 1 if status == "failed" else 0
 

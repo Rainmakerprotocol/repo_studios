@@ -11,7 +11,7 @@
 ```bash
 python .repo_studios/scripts/producers/analyze_test_hardening.py \
   --repo-root . \
-  --output-dir .repo_studios/reports/producer_reports/test_hardening_reports \
+  --output-dir .repo_studios/command_center/reports \
   --artifacts-to-keep 10 \
   --log-level INFO
 ```
@@ -29,17 +29,11 @@ The producer auto-discovers files matching `test_*.py`, `*_test.py`, and `test*.
 
 ## Outputs
 
-Each execution creates `.repo_studios/reports/producer_reports/test_hardening_reports/test_hardening-<timestamp>/` containing:
+Each execution creates `.repo_studios/command_center/reports/healthview/test_hardening/<YYYYMMDD-HHMM>/` containing:
 
-* `report.json`: Structured payload describing summary statistics, top priority files, clean files, and per-file findings.
-* `report.md`: Human-readable summary with severity breakdowns, key findings, and long-test highlights.
-* `log.txt`: Key-value digest (`status`, `exit_code`, totals) for CI ingestion.
-
-The producer also refreshes `.repo_studios/reports/producer_reports/test_hardening_reports/latest/` with pointers to the newest run:
-
-* `latest_report.json`
-* `latest_report.md`
-* `latest_log.txt`
+* `manifest.json`: Run metadata (viewer/topic, timestamp slug, git SHA, provenance, inputs).
+* `summary.md`: Human-readable summary with severity breakdowns, key findings, and long-test highlights.
+* `telemetry.json`: Structured metrics + detailed findings for agent/DB ingestion.
 
 Historical run directories are pruned after each execution according to `--artifacts-to-keep`.
 

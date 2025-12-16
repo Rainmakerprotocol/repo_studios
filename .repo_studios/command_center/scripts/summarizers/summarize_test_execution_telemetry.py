@@ -522,6 +522,21 @@ def _build_inputs_from_files(paths: Paths) -> SummaryInputs:
     hardening_payload = None
     hardening_dir = _resolve_artifact(artifacts.get("hardening"), repo_root)
     if hardening_dir is not None:
+        telemetry_json = hardening_dir / "telemetry.json"
+        loaded = _read_json(telemetry_json) if telemetry_json.exists() else None
+        if isinstance(loaded, Mapping):
+            components = loaded.get("components") if isinstance(loaded.get("components"), Mapping) else {}
+            hardening_component = components.get("hardening") if isinstance(components.get("hardening"), Mapping) else {}
+            summary = hardening_component.get("summary") if isinstance(hardening_component.get("summary"), Mapping) else None
+            status = loaded.get("status")
+            payload: dict[str, Any] = {}
+            if isinstance(status, str):
+                payload["status"] = status
+            if summary is not None:
+                payload["summary"] = dict(summary)
+            if payload:
+                hardening_payload = payload
+    if hardening_payload is None and hardening_dir is not None:
         report_json = hardening_dir / "report.json"
         loaded = _read_json(report_json)
         hardening_payload = loaded if isinstance(loaded, Mapping) else None

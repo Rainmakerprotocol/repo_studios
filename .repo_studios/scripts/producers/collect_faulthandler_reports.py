@@ -1,23 +1,26 @@
 #!/usr/bin/env python3
 """Collect structured summaries for faulthandler runs.
 
-This producer converts raw faulthandler run directories into timestamped
-artifacts under `.repo_studios/reports/producer_reports/faulthandler_reports/`.
-It emits JSON, Markdown, CSV, and log summaries that downstream consumers can
-reuse without re-parsing stacks. The script also mirrors key files into the
-Command Center reports tree so agents have a single discovery point.
+This producer converts raw faulthandler run directories into positional-encoded
+artifacts under:
+
+`.repo_studios/command_center/reports/rawview/fault_artifacts_producer/<YYYYMMDD-HHMM>/`
+
+It emits the canonical artifact trio:
+
+- `manifest.json`
+- `summary.md`
+- `telemetry.json`
 """
 
 import argparse
-import csv
-import json
 import logging
 import os
 import sys
 from dataclasses import dataclass, replace
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, Sequence
+from typing import Any, Sequence, cast
 
 SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
 REPO_LIB_ROOT = Path(__file__).resolve().parents[2]
@@ -26,12 +29,6 @@ for candidate in (SCRIPTS_ROOT, REPO_LIB_ROOT):
     if candidate_str not in sys.path:
         sys.path.insert(0, candidate_str)
 
-from command_center.scripts.libraries.artifacts import (  # noqa: E402
-    ReportArtifact,
-    WriteReportArtifactsResult,
-    copy_latest_artifact,
-    write_report_artifacts,
-)
 from command_center.scripts.libraries.cli import (  # noqa: E402
     KeepSpec,
     OptionsConfig,
@@ -40,34 +37,20 @@ from command_center.scripts.libraries.cli import (  # noqa: E402
     build_standard_options,
     build_standard_paths,
 )
-from command_center.scripts.libraries import prune_run_directories  # noqa: E402
+from command_center.scripts.libraries.database_integration import create_storage  # noqa: E402
+from command_center.scripts.libraries.prune_logs import prune_run_directories  # noqa: E402
 from utilities.fault_run_analysis import (  # noqa: E402
     FaultAnalysisResult,
-    FaultSignature,
     build_fault_report,
 )
 
 DEFAULT_RUNS_RELATIVE = Path(".repo_studios/command_center/reports/rawview/fault_diagnostics_runs")
 LEGACY_RUNS_RELATIVE = Path(".repo_studios/faulthandler")
-DEFAULT_OUTPUT_RELATIVE = Path(".repo_studios/reports/producer_reports/faulthandler_reports")
-DEFAULT_COMMAND_CENTER_RELATIVE = Path(".repo_studios/command_center/reports/fault_artifacts_producer")
-RUN_PREFIX = "faulthandler_report"
+DEFAULT_OUTPUT_RELATIVE = Path(".repo_studios/command_center/reports")
+VIEWER_SLUG = "rawview"
+TOPIC_SLUG = "fault_artifacts_producer"
 DEFAULT_KEEP = 5
-
-EXPECTED_SUMMARY_KEYS = frozenset(
-    {
-        "signature_count",
-        "thread_block_count",
-        "top_frame_limit",
-        "stack_log_exists",
-        "stack_text_bytes",
-        "severity_buckets",
-        "active_signature_count",
-        "first_seen_utc",
-        "last_seen_utc",
-    }
-)
-EXPECTED_BUCKET_KEYS = frozenset({"repeat_offender", "multi_hit", "single_hit"})
+SCHEMA_VERSION = 1
 
 
 @dataclass(frozen=True)
@@ -75,7 +58,6 @@ class Paths:
     repo_root: Path
     runs_dir: Path
     output_dir: Path
-    command_center_dir: Path
 
 
 @dataclass(frozen=True)
@@ -84,6 +66,7 @@ class Options:
     log_level: str = "INFO"
     validate_only: bool = False
     top_frames: int | None = None
+    timestamp: str | None = None
 
 
 PATH_CONFIG = PathsConfig(
@@ -93,12 +76,6 @@ PATH_CONFIG = PathsConfig(
         "output_dir": PathSpec(
             field="output_dir",
             default=DEFAULT_OUTPUT_RELATIVE,
-            ensure_dir=True,
-            within_repo=False,
-        ),
-        "command_center_dir": PathSpec(
-            field="command_center_dir",
-            default=DEFAULT_COMMAND_CENTER_RELATIVE,
             ensure_dir=True,
             within_repo=False,
         ),
@@ -124,16 +101,16 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--repo-root", help="Repository root (defaults to auto-detect)")
     parser.add_argument("--runs-dir", help="Directory containing faulthandler capture folders")
     parser.add_argument("--run-dir", help="Explicit faulthandler run directory to process")
-    parser.add_argument("--output-dir", help="Destination for structured producer artifacts")
-    parser.add_argument(
-        "--command-center-dir",
-        help="Mirror location under .repo_studios/command_center/reports for Command Center discovery",
-    )
+    parser.add_argument("--output-dir", help="Reports root directory for positional output bundles")
     parser.add_argument(
         "--artifacts-to-keep",
         type=int,
         default=DEFAULT_KEEP,
         help="Number of historical runs to retain (minimum 1)",
+    )
+    parser.add_argument(
+        "--timestamp",
+        help="Optional timestamp override (ISO-8601 or YYYYMMDD-HHMM; UTC assumed when absent)",
     )
     parser.add_argument(
         "--top-frames",
@@ -156,26 +133,87 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
-    base = build_standard_options(args, OPTIONS_CONFIG)
+    base = cast(Options, build_standard_options(args, OPTIONS_CONFIG))
     return replace(
         base,
         log_level=str(args.log_level),
         validate_only=bool(args.validate_only),
         top_frames=int(args.top_frames) if args.top_frames is not None else None,
+        timestamp=str(args.timestamp) if getattr(args, "timestamp", None) else None,
     )
 
 
 def configure_logging(level: str) -> None:
-    logging.basicConfig(level=getattr(logging, level.upper()), format="%(levelname)s %(message)s")
+    logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
 
 
 def _allow_legacy_runs() -> bool:
-    flag = os.environ.get("FAULTHANDLER_ALLOW_LEGACY", "1").strip().lower()
+    flag = os.environ.get("FAULT_LOGS_ALLOW_LEGACY", "1").strip().lower()
     return flag not in {"0", "false", "no", "off"}
+
+
+def _timestamp_slug(moment: datetime) -> str:
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=timezone.utc)
+    return moment.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
+
+
+def _resolve_timestamp(raw: str | None) -> datetime:
+    if not raw:
+        return datetime.now(timezone.utc)
+    raw = raw.strip()
+    if not raw:
+        return datetime.now(timezone.utc)
+    if len(raw) == 13 and raw[8] == "-":
+        try:
+            moment = datetime.strptime(raw, "%Y%m%d-%H%M").replace(tzinfo=timezone.utc)
+            return moment
+        except ValueError as exc:
+            raise RuntimeError(f"Invalid --timestamp value: {exc}") from exc
+    try:
+        moment = datetime.fromisoformat(raw)
+    except ValueError as exc:
+        raise RuntimeError(f"Invalid --timestamp value: {exc}") from exc
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=timezone.utc)
+    return moment.astimezone(timezone.utc)
+
+
+def _detect_trigger_type() -> str:
+    if os.getenv("MAKELEVEL"):
+        return "make"
+    if os.getenv("GITHUB_ACTIONS"):
+        return "ci"
+    return "cli"
+
+
+def _detect_requested_by() -> str | None:
+    return os.getenv("GITHUB_ACTOR") or os.getenv("USERNAME") or os.getenv("USER")
+
+
+def _detect_git_sha(repo_root: Path) -> str | None:
+    import subprocess
+
+    env_sha = os.getenv("GITHUB_SHA")
+    if env_sha:
+        return env_sha
+    if not (repo_root / ".git").exists():
+        return None
+    try:
+        value = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"],
+            cwd=str(repo_root),
+            text=True,
+            stderr=subprocess.DEVNULL,
+        )
+    except Exception:  # pragma: no cover - best effort
+        return None
+    value = value.strip()
+    return value or None
 
 
 def _resolve_runs_base(paths: Paths) -> Path:
@@ -215,8 +253,11 @@ def _resolve_run_dir(explicit: str | None, runs_base: Path) -> Path | None:
     return _find_latest_run(runs_base)
 
 
-def _render_markdown(report: dict[str, object], signatures: Sequence[FaultSignature]) -> str:
-    summary = report.get("summary") if isinstance(report.get("summary"), dict) else {}
+def _render_markdown(report: dict[str, Any]) -> str:
+    raw_summary = report.get("summary")
+    summary = cast(dict[str, Any], raw_summary) if isinstance(raw_summary, dict) else {}
+    raw_signatures = report.get("signatures")
+    signatures = raw_signatures if isinstance(raw_signatures, list) else []
     lines: list[str] = []
     lines.append("# Faulthandler Report Summary")
     lines.append("")
@@ -234,245 +275,98 @@ def _render_markdown(report: dict[str, object], signatures: Sequence[FaultSignat
     lines.append(f"- first_seen_utc: {summary.get('first_seen_utc')}")
     lines.append(f"- last_seen_utc: {summary.get('last_seen_utc')}")
     lines.append("")
-    severity = summary.get("severity_buckets") if isinstance(summary, dict) else {}
-    if isinstance(severity, dict):
+    raw_severity = summary.get("severity_buckets")
+    if isinstance(raw_severity, dict):
         lines.append("## Severity Buckets")
         lines.append("")
+        severity = cast(dict[str, Any], raw_severity)
         lines.append(f"- repeat_offender: {severity.get('repeat_offender', 0)}")
         lines.append(f"- multi_hit: {severity.get('multi_hit', 0)}")
         lines.append(f"- single_hit: {severity.get('single_hit', 0)}")
         lines.append("")
-    lines.append("## Top Signatures (up to 25)")
-    lines.append("")
-    if signatures:
-        lines.append("| count | signature_id | top | file:line | threads |")
-        lines.append("|------:|--------------|-----|----------:|---------|")
-        for sig in signatures[:25]:
-            top = f"{sig.top_module}.{sig.top_func}"
-            fileline = f"{sig.top_file}:{sig.top_line}"
-            thread_list = ",".join(sig.threads)
-            lines.append(f"| {sig.count} | {sig.signature_id} | {top} | {fileline} | {thread_list} |")
-    else:
-        lines.append("(none)")
     return "\n".join(lines) + "\n"
 
-
-def _write_csv_writer(signatures: Sequence[FaultSignature]) -> Callable[[Path], Path]:
-    def _writer(run_dir: Path) -> Path:
-        csv_path = run_dir / "stacks.csv"
-        with csv_path.open("w", newline="", encoding="utf-8") as fh:
-            writer = csv.DictWriter(
-                fh,
-                fieldnames=[
-                    "signature_id",
-                    "count",
-                    "top_module",
-                    "top_func",
-                    "top_file",
-                    "top_line",
-                    "threads",
-                    "first_seen_ts",
-                    "last_seen_ts",
-                ],
-            )
-            writer.writeheader()
-            for sig in signatures:
-                writer.writerow(
-                    {
-                        "signature_id": sig.signature_id,
-                        "count": sig.count,
-                        "top_module": sig.top_module,
-                        "top_func": sig.top_func,
-                        "top_file": sig.top_file,
-                        "top_line": sig.top_line,
-                        "threads": ",".join(sig.threads),
-                        "first_seen_ts": sig.first_seen_ts,
-                        "last_seen_ts": sig.last_seen_ts,
-                    }
-                )
-        return csv_path
-
-    return _writer
-
-
-def _write_combined_writer(combined_text: str) -> Callable[[Path], Path]:
-    def _writer(run_dir: Path) -> Path:
-        path = run_dir / "combined.txt"
-        path.write_text(combined_text, encoding="utf-8")
-        return path
-
-    return _writer
-
-
-def _write_log_writer(report: dict[str, Any], signatures: Sequence[FaultSignature]) -> Callable[[Path], Path]:
-    summary = report.get("summary") if isinstance(report.get("summary"), dict) else {}
-
-    def _writer(run_dir: Path) -> Path:
-        lines = [
-            f"generated_utc={report.get('generated_utc')}",
-            f"run_dir={report.get('run_dir')}",
-            f"signatures={len(signatures)}",
-            f"thread_block_count={summary.get('thread_block_count')}",
-            f"stack_text_bytes={summary.get('stack_text_bytes')}",
-            f"repeat_offender={summary.get('severity_buckets', {}).get('repeat_offender', 0)}",
-        ]
-        path = run_dir / "log.txt"
-        path.write_text("\n".join(lines) + "\n", encoding="utf-8")
-        return path
-
-    return _writer
-
-
-def _bundle_summary_writer(result: FaultAnalysisResult) -> Callable[[Path], Path]:
-    summary = result.report.get("summary") if isinstance(result.report.get("summary"), dict) else {}
-
-    def _writer(run_dir: Path) -> Path:
-        payload = {
-            "schema_version": 1,
-            "bundle": run_dir.name,
-            "generated_at": result.report.get("generated_utc"),
-            "source": "collect_faulthandler_reports",
-            "run_dir": result.report.get("run_dir"),
-            "metrics": {
-                "signature_count": summary.get("signature_count"),
-                "active_signature_count": summary.get("active_signature_count"),
-                "repeat_offender": summary.get("severity_buckets", {}).get("repeat_offender"),
-                "multi_hit": summary.get("severity_buckets", {}).get("multi_hit"),
-                "single_hit": summary.get("severity_buckets", {}).get("single_hit"),
-                "thread_block_count": summary.get("thread_block_count"),
-            },
-            "artifacts": {
-                "report_json": str((run_dir / "report.json").resolve()),
-                "report_md": str((run_dir / "report.md").resolve()),
-                "stacks_csv": str((run_dir / "stacks.csv").resolve()),
-                "combined_txt": str((run_dir / "combined.txt").resolve()) if (run_dir / "combined.txt").exists() else None,
-                "log_txt": str((run_dir / "log.txt").resolve()),
-            },
-            "summary": summary,
-        }
-        path = run_dir / "bundle_summary.json"
-        path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-        return path
-
-    return _writer
-
-
-def _write_artifacts(result: FaultAnalysisResult, output_dir: Path, *, keep: int) -> WriteReportArtifactsResult:
-    generated = result.report.get("generated_utc")
-    try:
-        timestamp = datetime.fromisoformat(str(generated))
-    except Exception:
-        timestamp = datetime.now(UTC)
-    return write_report_artifacts(
-        stem=RUN_PREFIX,
-        timestamp=timestamp,
-        output_dir=output_dir,
-        keep=keep,
-        artifacts=[
-            ReportArtifact(
-                filename="report.json",
-                kind="json",
-                content=result.report,
-                pointer="latest_report.json",
-            ),
-            ReportArtifact(
-                filename="report.md",
-                kind="text",
-                content=_render_markdown(result.report, result.signatures),
-                pointer="latest_report.md",
-            ),
-            ReportArtifact(
-                filename="stacks.csv",
-                writer=_write_csv_writer(result.signatures),
-                pointer="latest_stacks.csv",
-            ),
-            ReportArtifact(
-                filename="combined.txt",
-                writer=_write_combined_writer(result.combined_text),
-                pointer="latest_combined.txt",
-            ),
-            ReportArtifact(
-                filename="log.txt",
-                writer=_write_log_writer(result.report, result.signatures),
-                pointer="latest_log.txt",
-            ),
-            ReportArtifact(
-                filename="bundle_summary.json",
-                writer=_bundle_summary_writer(result),
-                pointer="latest_bundle_summary.json",
-            ),
+def build_manifest(*, paths: Paths, options: Options, analysis: FaultAnalysisResult, run_slug: str) -> dict[str, Any]:
+    bundle_dir = paths.output_dir / VIEWER_SLUG / TOPIC_SLUG / run_slug
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": run_slug,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "git_sha": _detect_git_sha(paths.repo_root),
+        "status": "ok",
+        "catalog": [
+            {
+                "script_path": str(Path(".repo_studios/scripts/producers/collect_faulthandler_reports.py")),
+                "role": "producer",
+            }
         ],
-    )
+        "paths": {
+            "repo_root": str(paths.repo_root),
+            "reports_root": str(paths.output_dir),
+            "bundle_dir": str(bundle_dir),
+        },
+        "inputs": {
+            "runs_dir": str(paths.runs_dir),
+            "run_dir": analysis.report.get("run_dir"),
+            "top_frames": options.top_frames,
+            "artifacts_to_keep": options.artifacts_to_keep,
+            "allow_legacy_runs": _allow_legacy_runs(),
+        },
+        "provenance": {
+            "trigger_type": _detect_trigger_type(),
+            "requested_by": _detect_requested_by(),
+        },
+    }
 
 
-def _mirror_to_command_center(
-    write_result: WriteReportArtifactsResult,
-    command_center_dir: Path,
-    *,
-    keep: int,
-    logger: logging.Logger | None,
-) -> None:
-    command_center_dir.mkdir(parents=True, exist_ok=True)
-    cc_run_dir = command_center_dir / write_result.run_dir.name
-    cc_run_dir.mkdir(parents=True, exist_ok=True)
-
-    for filename in ("report.json", "report.md", "bundle_summary.json"):
-        src = write_result.artifacts.get(filename)
-        if not src:
-            continue
-        dest = cc_run_dir / filename
-        dest.write_bytes(src.read_bytes())
-        copy_latest_artifact(src, command_center_dir / f"latest_{filename}")
-
-    prune_run_directories(
-        command_center_dir,
-        keep=max(1, keep),
-        stem_prefix=RUN_PREFIX,
-        current_run=cc_run_dir,
-        logger=logger,
-    )
+def build_telemetry(*, analysis: FaultAnalysisResult, run_slug: str) -> dict[str, Any]:
+    raw_summary = analysis.report.get("summary")
+    summary = cast(dict[str, Any], raw_summary) if isinstance(raw_summary, dict) else {}
+    raw_severity = summary.get("severity_buckets")
+    severity = cast(dict[str, Any], raw_severity) if isinstance(raw_severity, dict) else {}
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": run_slug,
+        "generated_utc": analysis.report.get("generated_utc"),
+        "status": "ok",
+        "metrics": {
+            "signature_count": summary.get("signature_count", len(analysis.signatures)),
+            "active_signature_count": summary.get("active_signature_count"),
+            "thread_block_count": summary.get("thread_block_count"),
+            "stack_text_bytes": summary.get("stack_text_bytes"),
+            "repeat_offender_signatures": severity.get("repeat_offender", 0),
+        },
+        "components": {
+            "faulthandler": {
+                "summary": summary,
+                "signatures": analysis.report.get("signatures", []),
+                "manifest": analysis.report.get("manifest"),
+            }
+        },
+    }
 
 
 def _validate_latest(paths: Paths, log: logging.Logger) -> dict[str, Any]:
-    latest_report = paths.output_dir / "latest_report.json"
+    topic_dir = paths.output_dir / VIEWER_SLUG / TOPIC_SLUG
+    if not topic_dir.exists():
+        return {"status": "fail", "issues": [f"missing topic dir: {topic_dir}"], "bundle_dir": None}
+    candidates = [p for p in topic_dir.iterdir() if p.is_dir()]
+    candidates.sort(key=lambda p: p.name, reverse=True)
+    if not candidates:
+        return {"status": "fail", "issues": ["no bundles found"], "bundle_dir": None}
+    bundle_dir = candidates[0]
     issues: list[str] = []
-    payload: dict[str, Any] | None = None
-    if not latest_report.exists():
-        issues.append("latest_report.json missing")
-    else:
-        try:
-            payload = json.loads(latest_report.read_text(encoding="utf-8"))
-        except json.JSONDecodeError as exc:  # pragma: no cover - defensive
-            issues.append(f"latest_report.json invalid JSON: {exc}")
-
-    summary = payload.get("summary") if isinstance(payload, dict) else None
-    if summary is None:
-        issues.append("summary section missing")
-    else:
-        missing = sorted(EXPECTED_SUMMARY_KEYS - summary.keys())
-        if missing:
-            issues.append(f"missing summary keys: {', '.join(missing)}")
-        buckets = summary.get("severity_buckets") if isinstance(summary, dict) else None
-        if not isinstance(buckets, dict):
-            issues.append("severity_buckets missing or not a dict")
-        else:
-            bucket_missing = sorted(EXPECTED_BUCKET_KEYS - buckets.keys())
-            if bucket_missing:
-                issues.append(f"missing severity bucket keys: {', '.join(bucket_missing)}")
-
-    for pointer in ("latest_bundle_summary.json", "latest_report.md", "latest_stacks.csv"):
-        if not (paths.output_dir / pointer).exists():
-            issues.append(f"{pointer} missing")
-
+    for required in ("manifest.json", "summary.md", "telemetry.json"):
+        if not (bundle_dir / required).exists():
+            issues.append(f"missing {required}")
     status = "pass" if not issues else "fail"
     for entry in issues:
         log.error("Validation issue: %s", entry)
-
-    return {
-        "status": status,
-        "issues": issues,
-        "report_path": str(latest_report.resolve()) if latest_report.exists() else None,
-    }
+    return {"status": status, "issues": issues, "bundle_dir": str(bundle_dir.resolve())}
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
@@ -497,16 +391,29 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         }
 
     run_dir = Path(run_dir_path).resolve()
-    if options.top_frames is not None:
-        analysis = build_fault_report(run_dir, top_n=options.top_frames)
-    else:
-        analysis = build_fault_report(run_dir)
+    now = _resolve_timestamp(options.timestamp)
+    analysis = build_fault_report(run_dir, now=now, top_n=options.top_frames or 0) if options.top_frames else build_fault_report(run_dir, now=now)
+    run_slug = _timestamp_slug(now)
 
-    write_result = _write_artifacts(analysis, paths.output_dir, keep=options.artifacts_to_keep)
-    _mirror_to_command_center(
-        write_result,
-        paths.command_center_dir,
+    storage = create_storage(paths.output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=run_slug)
+    manifest = build_manifest(paths=paths, options=options, analysis=analysis, run_slug=run_slug)
+    telemetry = build_telemetry(analysis=analysis, run_slug=run_slug)
+    markdown = _render_markdown(analysis.report)
+
+    # DB_INTEGRATION_MARKER: faulthandler manifest
+    storage.write_manifest(manifest)
+
+    # DB_INTEGRATION_MARKER: faulthandler summary markdown
+    storage.write_summary({"markdown": markdown}, format="md")
+
+    # DB_INTEGRATION_MARKER: faulthandler telemetry
+    storage.write_telemetry(telemetry)
+
+    run_bundle_dir = storage.file_storage.bundle_dir
+    prune_run_directories(
+        paths.output_dir / VIEWER_SLUG / TOPIC_SLUG,
         keep=options.artifacts_to_keep,
+        current_run=run_bundle_dir,
         logger=log,
     )
 
@@ -517,12 +424,14 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         run_dir,
         len(analysis.signatures),
         severity.get("repeat_offender", 0),
-        write_result.run_dir,
+        run_bundle_dir,
     )
     return {
         "run_dir": str(run_dir),
-        "output_dir": str(write_result.run_dir),
-        "report": str((write_result.artifacts.get("report.json") or (write_result.run_dir / "report.json")).resolve()),
+        "output_dir": str(run_bundle_dir),
+        "manifest": str((run_bundle_dir / "manifest.json").resolve()),
+        "summary_md": str((run_bundle_dir / "summary.md").resolve()),
+        "telemetry": str((run_bundle_dir / "telemetry.json").resolve()),
         "signatures": len(analysis.signatures),
         "repeat_offender_signatures": int(severity.get("repeat_offender", 0)),
     }

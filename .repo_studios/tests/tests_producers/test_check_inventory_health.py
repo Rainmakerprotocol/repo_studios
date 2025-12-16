@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 from pathlib import Path
 
 _MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "check_inventory_health.py"
@@ -69,7 +70,7 @@ def test_reports_written_without_issues(tmp_path):
         },
     )
 
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "inventory_health_reports"
+    output_dir = root / ".repo_studios" / "command_center" / "reports"
 
     exit_code = mod.main(
         [
@@ -91,38 +92,43 @@ def test_reports_written_without_issues(tmp_path):
     )
 
     assert exit_code == 0
-    run_dir = output_dir / f"{mod.RUN_PREFIX}-20240101_000000"
+    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240101-0000"
     assert run_dir.is_dir()
 
-    report = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
-    assert report["status"] == "passed"
-    assert report["summary"]["issues"] == 0
-    assert report["summary"]["total_assets"] == 5
+    manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["status"] == "passed"
+    assert manifest["viewer_slug"] == mod.VIEWER_SLUG
+    assert manifest["topic"] == mod.TOPIC_SLUG
+    assert manifest["run_timestamp"] == "20240101-0000"
 
-    markdown = (run_dir / "report.md").read_text(encoding="utf-8")
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    assert telemetry["status"] == "passed"
+    assert telemetry["summary"]["issues"] == 0
+    assert telemetry["summary"]["total_assets"] == 5
+
+    markdown = (run_dir / "summary.md").read_text(encoding="utf-8")
     assert "# Inventory Health Report" in markdown
     assert "- (none)" in markdown  # issues block when nothing flagged
 
-    assert (run_dir / "log.txt").is_file()
-    assert (output_dir / "latest_report.json").is_file()
-    assert (output_dir / "latest_report.md").is_file()
-    assert (output_dir / "latest_report.log").is_file()
+    assert not (output_dir / "latest_report.json").exists()
+    assert not (output_dir / "latest_report.md").exists()
+    assert not (output_dir / "latest_report.log").exists()
 
 
 def test_threshold_breach_and_pruning(tmp_path):
     mod = _load_module()
     root = tmp_path / "project"
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "inventory_health_reports"
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir = root / ".repo_studios" / "command_center" / "reports"
+    topic_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG
+    topic_dir.mkdir(parents=True, exist_ok=True)
 
-    stale_names = [
-        f"{mod.RUN_PREFIX}-20240101_000000",
-        f"{mod.RUN_PREFIX}-20240115_000000",
-    ]
-    for name in stale_names:
-        run_dir = output_dir / name
+    stale_names = ["20240101-0000", "20240115-0000"]
+    stale_mtimes = [1704067200, 1705276800]  # 2024-01-01, 2024-01-15 UTC
+    for name, mtime in zip(stale_names, stale_mtimes, strict=True):
+        run_dir = topic_dir / name
         run_dir.mkdir()
-        (run_dir / "report.json").write_text("{}\n", encoding="utf-8")
+        (run_dir / "manifest.json").write_text("{}\n", encoding="utf-8")
+        os.utime(run_dir, (mtime, mtime))
 
     summary = root / "summary.json"
     _write_json(
@@ -168,21 +174,15 @@ def test_threshold_breach_and_pruning(tmp_path):
     )
 
     assert exit_code == 1
-    run_dir = output_dir / f"{mod.RUN_PREFIX}-20240203_000000"
+    run_dir = topic_dir / "20240203-0000"
     assert run_dir.is_dir()
 
-    report = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
-    assert report["status"] == "failed"
-    assert report["summary"]["issues"] >= 1
-    issue_ids = {entry["id"] for entry in report["issues"]}
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    assert telemetry["status"] == "failed"
+    assert telemetry["summary"]["issues"] >= 1
+    issue_ids = {entry["id"] for entry in telemetry["issues"]}
     assert "status:deprecated" in issue_ids
     assert "asset:doc" in issue_ids
 
-    run_dirs = {path.name for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)}
-    assert run_dirs == {
-        f"{mod.RUN_PREFIX}-20240115_000000",
-        f"{mod.RUN_PREFIX}-20240203_000000",
-    }
-
-    latest_log = (output_dir / "latest_report.log").read_text(encoding="utf-8")
-    assert "failure_reason=threshold breach detected" in latest_log
+    run_dirs = {path.name for path in topic_dir.iterdir() if path.is_dir()}
+    assert run_dirs == {"20240115-0000", "20240203-0000"}

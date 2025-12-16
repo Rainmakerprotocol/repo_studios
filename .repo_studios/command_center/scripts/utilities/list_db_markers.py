@@ -109,7 +109,7 @@ def analyze_script_status(file_path: Path, markers: list[DBMarker], repo_root: P
     
     # Determine tier from path
     tier = "unknown"
-    path_str = str(file_path)
+    path_str = str(file_path).replace("\\", "/")
     if "/producers/" in path_str:
         tier = "producer"
     elif "/consumers/" in path_str:
@@ -124,8 +124,11 @@ def analyze_script_status(file_path: Path, markers: list[DBMarker], repo_root: P
         tier = "utility"
     
     # Check for integration milestones
-    has_import = "from libraries.database_integration import" in content or \
-                 "import database_integration" in content
+    has_import = (
+        "from command_center.scripts.libraries.database_integration import" in content
+        or "from libraries.database_integration import" in content
+        or "import database_integration" in content
+    )
     has_storage_init = "create_storage(" in content or \
                        "DualWriteStorage(" in content
     has_writes = "storage.write_" in content
@@ -222,6 +225,7 @@ def format_csv(statuses: dict[str, ScriptStatus], output_path: Path) -> None:
                 sample_marker[:100],  # Truncate
             ])
     
+
     logger.info(f"CSV report written to {output_path}")
 
 
@@ -258,7 +262,7 @@ def format_json(statuses: dict[str, ScriptStatus], output_path: Path) -> None:
         },
     }
     
-    output_path.write_text(json.dumps(output_data, indent=2))
+    output_path.write_text(json.dumps(output_data, indent=2), encoding="utf-8")
     logger.info(f"JSON report written to {output_path}")
 
 
@@ -322,7 +326,7 @@ def format_markdown(statuses: dict[str, ScriptStatus], output_path: Path) -> Non
         "",
     ])
     
-    output_path.write_text("\n".join(lines))
+    output_path.write_text("\n".join(lines), encoding="utf-8")
     logger.info(f"Markdown report written to {output_path}")
 
 

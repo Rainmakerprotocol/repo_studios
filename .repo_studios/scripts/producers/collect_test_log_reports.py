@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
-"""Collect structured summaries for pytest log runs."""
+"""Collect structured summaries for pytest log runs.
+
+This producer converts raw pytest log runs (JUnit XML + pytest text output) into
+the canonical Repo Studios report bundle:
+
+- manifest.json
+- summary.md
+- telemetry.json
+
+Outputs follow positional encoding under the configured reports root:
+<reports_root>/<viewer_slug>/<topic>/<YYYYMMDD-HHMM>/
+"""
 
 from __future__ import annotations
 
 import argparse
-import csv
-import json
 import logging
 import os
-import shutil
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -23,21 +31,28 @@ root_str = str(ROOT)
 if root_str and root_str not in sys.path:
     sys.path.insert(0, root_str)
 
+REPO_STUDIOS_ROOT = ROOT / ".repo_studios"
+repo_studios_root_str = str(REPO_STUDIOS_ROOT)
+if repo_studios_root_str and repo_studios_root_str not in sys.path:
+    sys.path.insert(0, repo_studios_root_str)
+
 LIBRARIES_ROOT = ROOT / ".repo_studios" / "command_center" / "scripts"
 libraries_root_str = str(LIBRARIES_ROOT)
 if libraries_root_str and libraries_root_str not in sys.path:
     sys.path.insert(0, libraries_root_str)
 
-from libraries import (  # noqa: E402
+from libraries import (  # type: ignore[import-not-found]  # noqa: E402
     TestLogAnalysisResult,
     build_test_log_report,
     prune_run_directories,
 )
+from libraries.database_integration import create_storage  # type: ignore[import-not-found]  # noqa: E402
 
 DEFAULT_LOGS_BASE = Path(".repo_studios/command_center/reports/rawview/test_execution_runs")
 LEGACY_LOGS_BASE = Path(".repo_studios/pytest_logs")
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/test_log_reports")
-RUN_PREFIX = "test_log_report"
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
+VIEWER_SLUG = "rawview"
+TOPIC_SLUG = "test_log_reports"
 DEFAULT_KEEP = 10
 
 
@@ -46,6 +61,11 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser.add_argument("--logs-dir", type=Path, default=DEFAULT_LOGS_BASE)
     parser.add_argument("--logs-run", type=Path, default=None, help="Explicit pytest log run directory")
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
+    parser.add_argument(
+        "--run-timestamp",
+        default=None,
+        help="Override run timestamp slug (UTC, YYYYMMDD-HHMM). Useful for deterministic tests.",
+    )
     parser.add_argument("--artifacts-to-keep", type=int, default=DEFAULT_KEEP)
     parser.add_argument(
         "--log-level",
@@ -87,143 +107,160 @@ def _resolve_run_dir(explicit: Path | None, logs_dir: Path) -> Path | None:
     candidates = _discover_run_candidates(logs_dir)
     return candidates[0] if candidates else None
 
+def _resolve_timestamp_slug(explicit: str | None) -> str:
+    if explicit is None:
+        return datetime.now(UTC).strftime("%Y%m%d-%H%M")
 
-def _format_timestamp(ts: datetime) -> str:
-    return ts.strftime("%Y%m%d_%H%M%S")
-
-
-def _ensure_run_dir(output_dir: Path, generated_at: str | None) -> Path:
-    output_dir.mkdir(parents=True, exist_ok=True)
-    if generated_at:
-        try:
-            parsed = datetime.fromisoformat(generated_at)
-            if parsed.tzinfo is None:
-                parsed = parsed.replace(tzinfo=UTC)
-        except Exception:
-            parsed = datetime.now(UTC)
-    else:
-        parsed = datetime.now(UTC)
-    run_dir = output_dir / f"{RUN_PREFIX}-{_format_timestamp(parsed)}"
-    run_dir.mkdir(parents=True, exist_ok=True)
-    return run_dir
+    cleaned = explicit.strip()
+    if len(cleaned) != 13 or cleaned[8] != "-":
+        raise ValueError("run timestamp must be in YYYYMMDD-HHMM format")
+    if not (cleaned[:8] + cleaned[9:]).isdigit():
+        raise ValueError("run timestamp must be in YYYYMMDD-HHMM format")
+    return cleaned
 
 
-def _write_json(run_dir: Path, result: TestLogAnalysisResult) -> Path:
-    path = run_dir / "report.json"
-    path.write_text(json.dumps(result.report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    return path
-
-
-def _write_markdown(run_dir: Path, result: TestLogAnalysisResult) -> Path:
-    path = run_dir / "report.md"
-    path.write_text(result.markdown, encoding="utf-8")
-    return path
-
-
-def _write_counter_csv(run_dir: Path, counter: dict[str, int], name: str) -> Path:
-    path = run_dir / f"{name}.csv"
-    with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.writer(handle)
-        if name == "warnings_by_type":
-            writer.writerow(["type", "count"])
-        elif name == "warnings_by_file":
-            writer.writerow(["file", "count"])
-        else:
-            writer.writerow(["key", "count"])
-        for key, value in sorted(counter.items(), key=lambda item: (-item[1], item[0])):
-            writer.writerow([key, value])
-    return path
-
-
-def _write_slow_tests_csv(run_dir: Path, slow_tests: list[dict[str, object]]) -> Path:
-    path = run_dir / "slow_tests.csv"
-    with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["seconds", "nodeid"])
-        writer.writeheader()
-        for item in slow_tests:
-            writer.writerow(
-                {
-                    "seconds": f"{float(item.get('seconds', 0.0)):.3f}",
-                    "nodeid": str(item.get("nodeid", "?")),
-                }
-            )
-    return path
-
-
-def _write_combined_log(run_dir: Path, report: dict[str, object]) -> Path | None:
-    combined_source = report.get("meta", {}).get("full_log")
-    if not combined_source:
+def _relativize(path: Path | None, repo_root: Path) -> str | None:
+    if path is None:
         return None
     try:
-        source_path = Path(str(combined_source)).resolve()
+        resolved = path.resolve()
+        return resolved.relative_to(repo_root.resolve()).as_posix()
     except Exception:
-        return None
-    if not source_path.exists():
-        return None
-    dest = run_dir / "combined.log"
-    try:
-        shutil.copy2(source_path, dest)
-    except Exception:
-        return None
-    return dest
+        return str(path)
 
 
-def _update_latest(output_dir: Path, run_dir: Path) -> None:
-    latest_pairs = {
-        "report.json": output_dir / "latest_report.json",
-        "report.md": output_dir / "latest_report.md",
-        "warnings_by_type.csv": output_dir / "latest_warnings_by_type.csv",
-        "warnings_by_file.csv": output_dir / "latest_warnings_by_file.csv",
-        "slow_tests.csv": output_dir / "latest_slow_tests.csv",
-        "combined.log": output_dir / "latest_combined.log",
-    }
-    for name, dest in latest_pairs.items():
-        src = run_dir / name
-        if not src.exists():
-            continue
-        try:
-            if dest.exists():
-                dest.unlink()
-            dest.hardlink_to(src)
-        except Exception:
-            dest.write_bytes(src.read_bytes())
+def _render_summary_markdown(
+    *,
+    timestamp: str,
+    logs_dir: Path,
+    logs_run: Path,
+    warnings_total: int,
+    slow_count: int,
+    tracebacks: int,
+    markdown_body: str,
+) -> str:
+    header = (
+        "# Test Log Report\n\n"
+        f"- Run slug: {timestamp} (UTC)\n"
+        f"- Logs base: {logs_dir.as_posix()}\n"
+        f"- Logs run: {logs_run.as_posix()}\n"
+        f"- Warnings: {warnings_total}\n"
+        f"- Slow tests: {slow_count}\n"
+        f"- Tracebacks: {tracebacks}\n\n"
+    )
+    body = markdown_body.strip()
+    return header + (body + "\n" if body else "")
 
 
 def _write_artifacts(
     result: TestLogAnalysisResult,
-    output_dir: Path,
     *,
+    output_dir: Path,
+    timestamp: str,
+    logs_dir: Path,
+    logs_run: Path,
     keep: int,
-    logger: logging.Logger | None,
+    logger: logging.Logger,
 ) -> Path:
-    generated_at = str(result.report.get("meta", {}).get("generated_at")) if result.report.get("meta") else None
-    run_dir = _ensure_run_dir(output_dir, generated_at)
-    report_json = _write_json(run_dir, result)
-    _ = report_json  # suppress unused warning in linters
-    _write_markdown(run_dir, result)
-    warnings = result.report.get("warnings", {})
-    by_type_data = warnings.get("by_type", {}) if isinstance(warnings, dict) else {}
-    by_file_data = warnings.get("by_file", {}) if isinstance(warnings, dict) else {}
-    if not isinstance(by_type_data, dict):
-        by_type_data = dict(by_type_data.items()) if hasattr(by_type_data, "items") else {}
-    if not isinstance(by_file_data, dict):
-        by_file_data = dict(by_file_data.items()) if hasattr(by_file_data, "items") else {}
-    _write_counter_csv(run_dir, by_type_data, "warnings_by_type")
-    _write_counter_csv(run_dir, by_file_data, "warnings_by_file")
+    summary = result.report.get("summary", {}) if isinstance(result.report, dict) else {}
+    warnings_total = int(summary.get("warnings_total", 0) or 0)
+    tracebacks = int(summary.get("tracebacks", 0) or 0)
     slow_tests = result.report.get("slow_tests", [])
-    if not isinstance(slow_tests, list):
-        slow_tests = []
-    _write_slow_tests_csv(run_dir, slow_tests)
-    _write_combined_log(run_dir, result.report)
-    _update_latest(output_dir, run_dir)
+    slow_count = len(slow_tests) if isinstance(slow_tests, list) else 0
+
+    storage = create_storage(output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=timestamp)
+    bundle_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp
+
+    manifest_path = bundle_dir / "manifest.json"
+    summary_path = bundle_dir / "summary.md"
+    telemetry_path = bundle_dir / "telemetry.json"
+
+    now_iso = datetime.now(UTC).isoformat()
+    repo_root = ROOT
+
+    manifest: dict[str, object] = {
+        "schema_version": 1,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": timestamp,
+        "generated_at": now_iso,
+        "status": "ok",
+        "git_sha": None,
+        "repo_root": str(repo_root),
+        "inputs": {
+            "logs_dir": _relativize(logs_dir, repo_root),
+            "logs_run": _relativize(logs_run, repo_root),
+            "allow_legacy": os.environ.get("PYTEST_LOG_REPORTS_ALLOW_LEGACY", "1"),
+            "artifacts_to_keep": max(1, keep),
+            "run_timestamp": timestamp,
+        },
+        "catalog": [
+            {"artifact": "manifest.json", "path": _relativize(manifest_path, repo_root)},
+            {"artifact": "summary.md", "path": _relativize(summary_path, repo_root)},
+            {"artifact": "telemetry.json", "path": _relativize(telemetry_path, repo_root)},
+        ],
+        "provenance": {
+            "script": "collect_test_log_reports.py",
+            "trigger": "cli",
+        },
+    }
+
+    telemetry: dict[str, object] = {
+        "schema_version": 1,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": timestamp,
+        "generated_at": now_iso,
+        "status": "ok",
+        "metrics": {
+            "tests_total": int(summary.get("total", 0) or 0),
+            "tests_passed": int(summary.get("passed", 0) or 0),
+            "tests_failed": int(summary.get("failed", 0) or 0),
+            "tests_skipped": int(summary.get("skipped", 0) or 0),
+            "tests_xfailed": int(summary.get("xfailed", 0) or 0),
+            "tests_errors": int(summary.get("errors", 0) or 0),
+            "warnings_total": warnings_total,
+            "tracebacks": tracebacks,
+            "slow_tests_count": slow_count,
+        },
+        "inputs": {
+            "logs_dir": _relativize(logs_dir, repo_root),
+            "logs_run": _relativize(logs_run, repo_root),
+        },
+        "payload": {
+            "summary": summary,
+            "warnings": result.report.get("warnings") if isinstance(result.report, dict) else None,
+            "slow_tests": slow_tests if isinstance(slow_tests, list) else [],
+            "meta": result.report.get("meta") if isinstance(result.report, dict) else None,
+        },
+    }
+
+    summary_markdown = _render_summary_markdown(
+        timestamp=timestamp,
+        logs_dir=logs_dir,
+        logs_run=logs_run,
+        warnings_total=warnings_total,
+        slow_count=slow_count,
+        tracebacks=tracebacks,
+        markdown_body=result.markdown,
+    )
+
+    # DB_INTEGRATION_MARKER: Persist manifest bundle (report_runs + report_artifacts)
+    storage.write_manifest(manifest)
+    # DB_INTEGRATION_MARKER: Persist human-readable report summary (report_artifacts)
+    storage.write_summary({"markdown": summary_markdown}, format="md")
+    # DB_INTEGRATION_MARKER: Persist telemetry payload + extracted metrics (report_artifacts + test_metrics)
+    storage.write_telemetry(telemetry)
+
+    base_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG
     prune_run_directories(
-        output_dir,
+        base_dir,
         keep=max(1, keep),
-        stem_prefix=RUN_PREFIX,
-        current_run=run_dir,
+        current_run=bundle_dir,
         logger=logger,
     )
-    return run_dir
+
+    return bundle_dir
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, object]:
@@ -250,10 +287,19 @@ def run(argv: Sequence[str] | None = None) -> dict[str, object]:
 
     result = build_test_log_report(logs_run, generated=datetime.now(UTC))
     output_dir = args.output_dir.resolve()
-    artifacts_dir = _write_artifacts(result, output_dir, keep=args.artifacts_to_keep, logger=log)
+    timestamp = _resolve_timestamp_slug(args.run_timestamp)
+    artifacts_dir = _write_artifacts(
+        result,
+        output_dir=output_dir,
+        timestamp=timestamp,
+        logs_dir=logs_dir,
+        logs_run=logs_run,
+        keep=args.artifacts_to_keep,
+        logger=log,
+    )
 
     summary = result.report.get("summary", {}) if isinstance(result.report, dict) else {}
-    warnings_total = summary.get("warnings_total", 0)
+    warnings_total = int(summary.get("warnings_total", 0) or 0)
     slow_tests = result.report.get("slow_tests", [])
     slow_count = len(slow_tests) if isinstance(slow_tests, list) else 0
 

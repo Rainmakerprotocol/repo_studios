@@ -65,12 +65,12 @@ SUMMARIZER_SCRIPT = Path(
 SUMMARIZER_MODULE = "command_center.scripts.summarizers.summarize_test_execution_telemetry"
 
 DEFAULT_LOGS_DIR = Path(".repo_studios/command_center/reports/rawview/test_execution_runs")
-DEFAULT_TEST_LOG_REPORTS_DIR = Path(".repo_studios/reports/producer_reports/test_log_reports")
+DEFAULT_TEST_LOG_REPORTS_DIR = Path(".repo_studios/command_center/reports")
 DEFAULT_TEST_LOG_HEALTH_DIR = Path(".repo_studios/reports/consumer_reports/test_log_health_reports")
 DEFAULT_COVERAGE_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/test_coverage_reports")
 DEFAULT_COVERAGE_XML = Path(".repo_studios/reports/producer_reports/test_run_coverage/coverage.xml")
 DEFAULT_HEATMAP_OUTPUT_DIR = Path(".repo_studios/reports/aggregator_reports/churn_complexity_heatmap")
-DEFAULT_HARDENING_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/test_hardening_reports")
+DEFAULT_HARDENING_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
 DEFAULT_HEALTHVIEW_ROOT = Path(".repo_studios/command_center/reports")
 
 
@@ -157,7 +157,7 @@ class Options:
 @dataclass(frozen=True)
 class CollectOutcome:
     report_dir: Path | None
-    producer_report: Path | None
+    producer_bundle_dir: Path | None
     warnings_total: int | None
     slow_tests: int | None
     payload: dict[str, Any]
@@ -361,12 +361,12 @@ def _execute_collect(paths: Paths, options: Options) -> CollectOutcome:
     if not isinstance(payload, dict):
         raise RuntimeError("collect_test_log_reports returned unexpected payload")
     report_dir = Path(payload["output_dir"]).resolve() if payload.get("output_dir") else None
-    producer_report = report_dir / "report.json" if report_dir is not None else None
+    producer_bundle_dir = report_dir
     warnings_total = payload.get("warnings_total") if isinstance(payload.get("warnings_total"), int) else None
     slow_tests = payload.get("slow_tests") if isinstance(payload.get("slow_tests"), int) else None
     return CollectOutcome(
         report_dir=report_dir,
-        producer_report=producer_report if producer_report and producer_report.exists() else None,
+        producer_bundle_dir=producer_bundle_dir if producer_bundle_dir and producer_bundle_dir.exists() else None,
         warnings_total=warnings_total,
         slow_tests=slow_tests,
         payload=payload,
@@ -413,21 +413,32 @@ def _execute_hardening(paths: Paths, options: Options) -> HardeningOutcome:
     payload = run_callable(argv)
     if not isinstance(payload, dict):
         raise RuntimeError("analyze_test_hardening returned unexpected payload")
-    timestamp = payload.get("timestamp")
     run_dir = None
-    if timestamp:
-        try:
-            parsed = datetime.fromisoformat(str(timestamp))
-            slug = parsed.strftime("%Y%m%d_%H%M%S")
-            candidate = paths.hardening_output_dir / f"test_hardening-{slug}"
-            if candidate.exists():
-                run_dir = candidate.resolve()
-        except ValueError:
-            run_dir = None
+    candidate_dir = payload.get("output_dir")
+    if candidate_dir:
+        candidate = Path(str(candidate_dir)).resolve()
+        if candidate.exists() and candidate.is_dir():
+            run_dir = candidate
+    if run_dir is None:
+        timestamp = payload.get("timestamp")
+        if timestamp:
+            try:
+                parsed = datetime.fromisoformat(str(timestamp))
+                slug = parsed.strftime("%Y%m%d_%H%M%S")
+                legacy_candidate = paths.hardening_output_dir / f"test_hardening-{slug}"
+                if legacy_candidate.exists():
+                    run_dir = legacy_candidate.resolve()
+            except ValueError:
+                run_dir = None
     return HardeningOutcome(run_dir=run_dir, payload=payload)
 
 
-def _execute_health_report(paths: Paths, options: Options, *, producer_report: Path | None) -> HealthReportOutcome:
+def _execute_health_report(
+    paths: Paths,
+    options: Options,
+    *,
+    producer_bundle_dir: Path | None,
+) -> HealthReportOutcome:
     run_callable = _load_run_callable(paths.repo_root / HEALTH_REPORT_SCRIPT, HEALTH_MODULE)
     argv = [
         "--logs-dir",
@@ -439,8 +450,8 @@ def _execute_health_report(paths: Paths, options: Options, *, producer_report: P
         "--log-level",
         options.log_level,
     ]
-    if producer_report is not None:
-        argv.extend(["--producer-report", str(producer_report)])
+    if producer_bundle_dir is not None:
+        argv.extend(["--producer-bundle-dir", str(producer_bundle_dir)])
     payload = run_callable(argv)
     if not isinstance(payload, dict):
         raise RuntimeError("generate_test_log_health_report returned unexpected payload")
@@ -522,10 +533,10 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     def summarize_step(ctx: TopicContext):
         collect_outcome = collect_outcome_holder.get("value")
-        if collect_outcome is None or collect_outcome.producer_report is None:
+        if collect_outcome is None or collect_outcome.producer_bundle_dir is None:
             return step_skipped(detail="no structured log report found")
         LOGGER.info("Generating test log health summary")
-        health = _execute_health_report(paths, options, producer_report=collect_outcome.producer_report)
+        health = _execute_health_report(paths, options, producer_bundle_dir=collect_outcome.producer_bundle_dir)
         ctx.add_metadata("health", health)
         health_outcome_holder["value"] = health
         return step_success(
@@ -552,7 +563,13 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     collect_outcome = collect_outcome_holder.get("value")
     if collect_outcome is None:
-        collect_outcome = CollectOutcome(report_dir=None, producer_report=None, warnings_total=None, slow_tests=None, payload={})
+        collect_outcome = CollectOutcome(
+            report_dir=None,
+            producer_bundle_dir=None,
+            warnings_total=None,
+            slow_tests=None,
+            payload={},
+        )
     coverage_outcome = coverage_outcome_holder.get("value")
     if coverage_outcome is None:
         coverage_outcome = CoverageOutcome(report_dir=None, summary=None)
