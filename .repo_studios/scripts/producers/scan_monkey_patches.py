@@ -21,13 +21,10 @@ Usage (examples):
     - Strict mode (disable regex fallback; fail on parse errors):
             python .repo_studios/scan_monkey_patches.py --strict --with-git
 
-Outputs (written to timestamped directory under `.repo_studios/reports/producer_reports/monkey_patch_scans/`):
-    - report.json  — structured summary payload with counts, metadata, and configuration context
-    - report.md    — human-readable summary with tables and recommended follow-up actions
-    - log.txt      — key-value diagnostics for CI consumption
-    - matches.json — full finding details
-    - matches.tsv  — tab-separated export of all findings (only when matches exist)
-    - latest/      — copies of the most recent artifacts for easy consumption
+Outputs (written under `.repo_studios/reports/producer_reports/<viewer>/<topic>/<YYYYMMDD-HHMM>/`):
+    - manifest.json  — run metadata + structured findings payload
+    - summary.md     — human-readable synopsis with tables and recommended follow-up actions
+    - telemetry.json — extracted metrics for time-series ingestion
 
 Exit codes:
   - 0 on success
@@ -55,11 +52,12 @@ import logging
 import re
 import subprocess
 import sys
+import time
 from collections import Counter
 from collections.abc import Iterable
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
@@ -73,10 +71,11 @@ try:
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.database_integration import create_storage
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import (  # type: ignore
+    from libraries import (
         KeepSpec,
         PathSpec,
         OptionsConfig,
@@ -85,12 +84,14 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.database_integration import create_storage
 
-# Defaults (workspace-relative)
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
-RUN_PREFIX = "monkey_patch_scan"
-DEFAULT_ARTIFACTS_TO_KEEP = 5
+# Defaults (repo-root-relative)
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
+DEFAULT_KEEP = 5
 SCHEMA_VERSION = 1
+VIEWER_SLUG = "healthview"
+TOPIC_SLUG = "monkey_patches"
 DEFAULT_EXCLUDES = {
     ".git",
     ".venv",
@@ -149,7 +150,7 @@ class Paths:
 
 @dataclass(frozen=True)
 class Options:
-    artifacts_to_keep: int
+    keep: int
 
 
 @dataclass(frozen=True)
@@ -160,7 +161,7 @@ class ScanOptions:
     context_lines: int
     with_git: bool
     strict: bool
-    artifacts_to_keep: int
+    keep: int
 
 
 @dataclass
@@ -191,7 +192,7 @@ PATH_SPECS: dict[str, PathSpec] = {
         field="output_dir",
         default=DEFAULT_OUTPUT_DIR,
         ensure_dir=True,
-        within_repo=False,
+        within_repo=True,
     ),
 }
 
@@ -206,7 +207,7 @@ PATH_CONFIG = PathsConfig(
 OPTIONS_CONFIG = OptionsConfig(
     dataclass_type=Options,
     keep_specs={
-        "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
+        "keep": KeepSpec(field="keep", minimum=1),
     },
 )
 
@@ -219,7 +220,7 @@ class ImportResolver(ast.NodeVisitor):
         self.alias_is_from_object: dict[str, tuple[str, str]] = {}
         self.import_lines: set[int] = set()
 
-    def visit_Import(self, node: ast.Import) -> Any:  # type: ignore[override]
+    def visit_Import(self, node: ast.Import) -> Any:
         self.import_lines.add(getattr(node, "lineno", -1))
         for alias in node.names:
             mod = alias.name  # full module path
@@ -227,7 +228,7 @@ class ImportResolver(ast.NodeVisitor):
             self.alias_to_module[asname] = mod
         return self.generic_visit(node)
 
-    def visit_ImportFrom(self, node: ast.ImportFrom) -> Any:  # type: ignore[override]
+    def visit_ImportFrom(self, node: ast.ImportFrom) -> Any:
         self.import_lines.add(getattr(node, "lineno", -1))
         module = node.module or ""
         for alias in node.names:
@@ -254,17 +255,17 @@ class ScopeTracker(ast.NodeVisitor):
                 cl = n
         return (len(self.stack) == 0, fn, cl)
 
-    def visit_FunctionDef(self, node: ast.FunctionDef) -> Any:  # type: ignore[override]
+    def visit_FunctionDef(self, node: ast.FunctionDef) -> Any:
         self.stack.append(("function", node.name))
         self.generic_visit(node)
         self.stack.pop()
 
-    def visit_AsyncFunctionDef(self, node: ast.AsyncFunctionDef) -> Any:  # type: ignore[override]
+    def visit_AsyncFunctionDef(self, node: ast.AsyncFunctionDef) -> Any:
         self.stack.append(("function", node.name))
         self.generic_visit(node)
         self.stack.pop()
 
-    def visit_ClassDef(self, node: ast.ClassDef) -> Any:  # type: ignore[override]
+    def visit_ClassDef(self, node: ast.ClassDef) -> Any:
         self.stack.append(("class", node.name))
         self.generic_visit(node)
         self.stack.pop()
@@ -435,27 +436,27 @@ class MonkeyPatchScanner(ast.NodeVisitor):
         self.findings: list[Finding] = []
 
     # Delegate to ScopeTracker to know scope during traversal
-    def generic_visit(self, node: ast.AST) -> Any:  # type: ignore[override]
+    def generic_visit(self, node: ast.AST) -> Any:
         # Manually route into scope tracker for nested defs
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
             # Push/pop handled by scope tracker methods; call them directly
-            self.scope.visit(node)  # type: ignore[arg-type]
+            self.scope.visit(node)
             return
         super().generic_visit(node)
 
-    def visit_Assign(self, node: ast.Assign) -> Any:  # type: ignore[override]
+    def visit_Assign(self, node: ast.Assign) -> Any:
         self._handle_assignment(node, getattr(node, "lineno", -1))
         return self.generic_visit(node)
 
-    def visit_AnnAssign(self, node: ast.AnnAssign) -> Any:  # type: ignore[override]
+    def visit_AnnAssign(self, node: ast.AnnAssign) -> Any:
         self._handle_assignment(node, getattr(node, "lineno", -1))
         return self.generic_visit(node)
 
-    def visit_AugAssign(self, node: ast.AugAssign) -> Any:  # type: ignore[override]
+    def visit_AugAssign(self, node: ast.AugAssign) -> Any:
         self._handle_assignment(node, getattr(node, "lineno", -1))
         return self.generic_visit(node)
 
-    def visit_Call(self, node: ast.Call) -> Any:  # type: ignore[override]
+    def visit_Call(self, node: ast.Call) -> Any:
         lineno = getattr(node, "lineno", -1)
         is_module_scope, fn_name, cl_name = self.scope.current()
         # setattr(...)
@@ -517,7 +518,7 @@ class MonkeyPatchScanner(ast.NodeVisitor):
                     )
         return self.generic_visit(node)
 
-    def visit_Delete(self, node: ast.Delete) -> Any:  # type: ignore[override]
+    def visit_Delete(self, node: ast.Delete) -> Any:
         lineno = getattr(node, "lineno", -1)
         for target in node.targets:
             if isinstance(target, ast.Subscript) and _is_sys_modules(target):
@@ -532,7 +533,7 @@ class MonkeyPatchScanner(ast.NodeVisitor):
                 )
         return self.generic_visit(node)
 
-    def visit_FunctionDef(self, node: ast.FunctionDef) -> Any:  # type: ignore[override]
+    def visit_FunctionDef(self, node: ast.FunctionDef) -> Any:
         # Detect module-level decorator @patch(...)
         if self.scope.current()[0]:
             for dec in node.decorator_list:
@@ -548,7 +549,7 @@ class MonkeyPatchScanner(ast.NodeVisitor):
                     )
         return self.generic_visit(node)
 
-    def visit_ClassDef(self, node: ast.ClassDef) -> Any:  # type: ignore[override]
+    def visit_ClassDef(self, node: ast.ClassDef) -> Any:
         if self.scope.current()[0]:
             for dec in node.decorator_list:
                 if _is_patch_decorator(dec, self.resolver):
@@ -608,13 +609,13 @@ class MonkeyPatchScanner(ast.NodeVisitor):
                     if dotted and "." in dotted:
                         base_alias = dotted.split(".", 1)[0]
                 if base_alias:
-                    external, base = is_alias_external(base_alias, self.resolver, self.project_pkgs)
-                    if base:
+                    external, base_name = is_alias_external(base_alias, self.resolver, self.project_pkgs)
+                    if base_name:
                         # Always record attribute reassignment
                         self._add_finding(
                             lineno,
                             CATEGORY_ATTRIBUTE_REASSIGNMENT,
-                            base,
+                            base_name,
                             is_module_scope,
                             fn_name,
                             cl_name,
@@ -624,7 +625,7 @@ class MonkeyPatchScanner(ast.NodeVisitor):
                             self._add_finding(
                                 lineno,
                                 CATEGORY_IMPORT_TIME,
-                                base,
+                                base_name,
                                 is_module_scope,
                                 fn_name,
                                 cl_name,
@@ -632,13 +633,13 @@ class MonkeyPatchScanner(ast.NodeVisitor):
                         continue
             # assignment to imported object alias (from X import Y; Y = ...)
             if isinstance(t, ast.Name) and t.id in self.resolver.alias_to_module:
-                base = base_module_name(self.resolver.alias_to_module.get(t.id))
-                if base:
+                base_module = base_module_name(self.resolver.alias_to_module.get(t.id))
+                if base_module:
                     # Rebinding an imported symbol
                     self._add_finding(
                         lineno,
                         CATEGORY_ATTRIBUTE_REASSIGNMENT,
-                        base,
+                        base_module,
                         is_module_scope,
                         fn_name,
                         cl_name,
@@ -856,14 +857,37 @@ def summarize_findings(
     return by_category, by_import_base, top_files
 
 
-def compose_payload(
+def _relativize(path: Path, repo_root: Path) -> str:
+    try:
+        return path.resolve().relative_to(repo_root.resolve()).as_posix()
+    except Exception:
+        return path.as_posix()
+
+
+def _resolve_run_timestamp(*, override: str | None, now: dt.datetime) -> str:
+    if override:
+        candidate = override.strip()
+        # Expected: YYYYMMDD-HHMM (13 chars)
+        try:
+            dt.datetime.strptime(candidate, "%Y%m%d-%H%M")
+        except ValueError as exc:
+            raise ValueError("--timestamp must be in YYYYMMDD-HHMM format (UTC)") from exc
+        return candidate
+    return now.strftime("%Y%m%d-%H%M")
+
+
+def compose_manifest(
     *,
     paths: Paths,
     options: ScanOptions,
     findings: list[Finding],
     timestamp: dt.datetime,
+    run_timestamp: str,
+    generated_at: str,
+    bundle_dir: Path,
     files_scanned: int,
     parse_errors: int,
+    duration_ms: int,
 ) -> dict[str, object]:
     by_category, by_import_base, top_files = summarize_findings(findings)
     files_with_findings = len({f.file for f in findings})
@@ -876,47 +900,103 @@ def compose_payload(
     except ValueError:
         scan_root_display = str(paths.scan_root)
 
-    payload: dict[str, object] = {
+    manifest_path = bundle_dir / "manifest.json"
+    summary_path = bundle_dir / "summary.md"
+    telemetry_path = bundle_dir / "telemetry.json"
+
+    manifest: dict[str, object] = {
         "schema_version": SCHEMA_VERSION,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": run_timestamp,
+        "generated_at": generated_at,
         "status": status,
-        "timestamp": timestamp.isoformat(),
-        "run_id": f"{RUN_PREFIX}-{timestamp.strftime('%Y%m%d_%H%M%S')}",
+        "git_sha": None,
         "repo_root": str(paths.repo_root),
-        "scan_root": scan_root_display,
-        "project_packages": sorted(options.project_packages),
-        "exclude_dirs": sorted(options.exclude_dirs),
-        "exclude_globs": sorted(options.exclude_globs),
-        "context_lines": options.context_lines,
-        "with_git": options.with_git,
-        "strict": options.strict,
-        "files_scanned": files_scanned,
-        "files_with_findings": files_with_findings,
-        "total_findings": len(findings),
-        "parse_errors": parse_errors,
-        "summary": {
-            "by_category": dict(sorted(by_category.items())),
-            "by_import_base": dict(sorted(by_import_base.items())),
-            "top_files": [{"path": path, "count": count} for path, count in top_files],
+        "inputs": {
+            "scan_root": scan_root_display,
+            "project_packages": sorted(options.project_packages),
+            "exclude_dirs": sorted(options.exclude_dirs),
+            "exclude_globs": sorted(options.exclude_globs),
+            "context_lines": options.context_lines,
+            "with_git": options.with_git,
+            "strict": options.strict,
+            "keep": max(1, int(options.keep)),
+            "timestamp": run_timestamp,
+        },
+        "catalog": [
+            {"artifact": "manifest.json", "path": _relativize(manifest_path, paths.repo_root)},
+            {"artifact": "summary.md", "path": _relativize(summary_path, paths.repo_root)},
+            {"artifact": "telemetry.json", "path": _relativize(telemetry_path, paths.repo_root)},
+        ],
+        "provenance": {
+            "script": "scan_monkey_patches.py",
+            "trigger": "cli",
+        },
+        "payload": {
+            "timestamp": timestamp.isoformat(),
+            "scan_root": scan_root_display,
+            "files_scanned": files_scanned,
+            "files_with_findings": files_with_findings,
+            "total_findings": len(findings),
+            "parse_errors": parse_errors,
+            "duration_ms": duration_ms,
+            "summary": {
+                "by_category": dict(sorted(by_category.items())),
+                "by_import_base": dict(sorted(by_import_base.items())),
+                "top_files": [{"path": path, "count": count} for path, count in top_files],
+            },
+            "findings": [finding.to_dict() for finding in findings],
         },
     }
-    return payload
+    return manifest
 
 
-def render_markdown_report(payload: dict[str, object]) -> str:
-    summary = payload.get("summary", {}) if isinstance(payload, dict) else {}
-    by_category = summary.get("by_category", {}) if isinstance(summary, dict) else {}
-    by_import_base = summary.get("by_import_base", {}) if isinstance(summary, dict) else {}
-    top_files = summary.get("top_files", []) if isinstance(summary, dict) else []
+def compose_telemetry(
+    *,
+    manifest: dict[str, object],
+    run_timestamp: str,
+    generated_at: str,
+) -> dict[str, object]:
+    payload_obj = cast(dict[str, Any], manifest.get("payload")) if isinstance(manifest.get("payload"), dict) else {}
+    summary = cast(dict[str, Any], payload_obj.get("summary")) if isinstance(payload_obj.get("summary"), dict) else {}
+    by_category = cast(dict[str, Any], summary.get("by_category")) if isinstance(summary.get("by_category"), dict) else {}
+    metrics: dict[str, object] = {
+        "files_scanned": int(payload_obj.get("files_scanned", 0) or 0),
+        "files_with_findings": int(payload_obj.get("files_with_findings", 0) or 0),
+        "total_findings": int(payload_obj.get("total_findings", 0) or 0),
+        "parse_errors": int(payload_obj.get("parse_errors", 0) or 0),
+        "duration_ms": int(payload_obj.get("duration_ms", 0) or 0),
+        "findings_by_category": by_category,
+    }
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": run_timestamp,
+        "generated_at": generated_at,
+        "status": manifest.get("status", "unknown") if isinstance(manifest, dict) else "unknown",
+        "metrics": metrics,
+        "inputs": manifest.get("inputs", {}) if isinstance(manifest.get("inputs"), dict) else {},
+    }
+
+
+def render_summary_markdown(manifest: dict[str, object]) -> str:
+    payload_obj = cast(dict[str, Any], manifest.get("payload")) if isinstance(manifest.get("payload"), dict) else {}
+    summary = cast(dict[str, Any], payload_obj.get("summary")) if isinstance(payload_obj.get("summary"), dict) else {}
+    by_category = cast(dict[str, Any], summary.get("by_category")) if isinstance(summary.get("by_category"), dict) else {}
+    by_import_base = cast(dict[str, Any], summary.get("by_import_base")) if isinstance(summary.get("by_import_base"), dict) else {}
+    top_files = cast(list[object], summary.get("top_files")) if isinstance(summary.get("top_files"), list) else []
 
     lines = [
         "# Monkey Patch Scan Report\n\n",
-        f"- Status: `{payload.get('status', 'unknown')}`\n",
-        f"- Timestamp: `{payload.get('timestamp', '')}`\n",
-        f"- Scan Root: `{payload.get('scan_root', '.')}`\n",
-        f"- Files Scanned: {payload.get('files_scanned', 0)}\n",
-        f"- Files With Findings: {payload.get('files_with_findings', 0)}\n",
-        f"- Total Findings: {payload.get('total_findings', 0)}\n",
-        f"- Parse Errors: {payload.get('parse_errors', 0)}\n\n",
+        f"- Status: `{manifest.get('status', 'unknown')}`\n",
+        f"- Run timestamp (UTC): `{manifest.get('run_timestamp', '')}`\n",
+        f"- Scan Root: `{payload_obj.get('scan_root', '.')}`\n",
+        f"- Files Scanned: {payload_obj.get('files_scanned', 0)}\n",
+        f"- Files With Findings: {payload_obj.get('files_with_findings', 0)}\n",
+        f"- Total Findings: {payload_obj.get('total_findings', 0)}\n",
+        f"- Parse Errors: {payload_obj.get('parse_errors', 0)}\n\n",
     ]
 
     if by_category:
@@ -937,7 +1017,9 @@ def render_markdown_report(payload: dict[str, object]) -> str:
         lines.append("## Files With Highest Patch Counts\n\n")
         lines.append("| File | Count |\n| --- | ---: |\n")
         for entry in top_files:
-            lines.append(f"| {entry['path']} | {entry['count']} |\n")
+            if not isinstance(entry, dict):
+                continue
+            lines.append(f"| {entry.get('path', '')} | {entry.get('count', 0)} |\n")
         lines.append("\n")
 
     lines.append("## Next Steps\n\n")
@@ -948,177 +1030,35 @@ def render_markdown_report(payload: dict[str, object]) -> str:
     return "".join(lines)
 
 
-def render_log(payload: dict[str, object]) -> str:
-    summary = payload.get("summary", {}) if isinstance(payload, dict) else {}
-    by_category = summary.get("by_category", {}) if isinstance(summary, dict) else {}
-    entries = [
-        f"status={payload.get('status', 'unknown')}",
-        f"timestamp={payload.get('timestamp', '')}",
-        f"scan_root={payload.get('scan_root', '.')}",
-        f"files_scanned={payload.get('files_scanned', 0)}",
-        f"files_with_findings={payload.get('files_with_findings', 0)}",
-        f"total_findings={payload.get('total_findings', 0)}",
-        f"parse_errors={payload.get('parse_errors', 0)}",
-    ]
-    for category, count in sorted(by_category.items(), key=lambda item: item[0]):
-        entries.append(f"by_category_{category}={count}")
-    return "\n".join(entries) + "\n"
-
-
-def ensure_run_directory(base_dir: Path, run_id: str) -> Path:
-    run_dir = base_dir / run_id
-    run_dir.mkdir(parents=True, exist_ok=True)
-    return run_dir
-
-
-def _write_latest_artifacts(run_dir: Path, output_dir: Path) -> None:
-    latest_dir = output_dir / "latest"
-    latest_dir.mkdir(parents=True, exist_ok=True)
-    mapping = {
-        "report.json": latest_dir / "latest_report.json",
-        "report.md": latest_dir / "latest_report.md",
-        "log.txt": latest_dir / "latest_log.txt",
-        "matches.json": latest_dir / "latest_matches.json",
-        "matches.tsv": latest_dir / "latest_matches.tsv",
-    }
-    for filename, target in mapping.items():
-        source = run_dir / filename
-        if source.exists():
-            target.write_bytes(source.read_bytes())
-
-
-def _legacy_alias_root(output_dir: Path) -> Path:
-    try:
-        return output_dir.parents[2] / "monkey_patch"
-    except IndexError:
-        return output_dir / "monkey_patch"
-
-
-def _legacy_alias_run_name(run_dir: Path) -> str:
-    parts = run_dir.name.split("-", 1)
-    candidate = parts[1] if len(parts) == 2 and parts[1] else run_dir.name
-    return candidate if candidate[:1].isdigit() else run_dir.name
-
-
-def _sync_legacy_latest(alias_root: Path, alias_run_dir: Path) -> None:
-    latest_dir = alias_root / "latest"
-    latest_dir.mkdir(parents=True, exist_ok=True)
-    (latest_dir / ".keep").touch(exist_ok=True)
-    files = [
-        "report.json",
-        "matches.json",
-        "summary.json",
-        "report.md",
-        "log.txt",
-        "matches.tsv",
-    ]
-    for name in files:
-        src = alias_run_dir / name
-        dest = latest_dir / name
-        if src.exists():
-            dest.write_bytes(src.read_bytes())
-        elif dest.exists():
-            dest.unlink()
-
-
-def _prune_legacy_alias(alias_root: Path, keep: int, *, logger: logging.Logger | None) -> None:
-    if not alias_root.exists():
-        return
-    prune_run_directories(
-        alias_root,
-        keep=max(keep, 1) + 1,
-        current_run=None,
-        logger=logger,
-    )
-
-
-def _sync_legacy_alias(run_dir: Path, output_dir: Path, keep: int, *, logger: logging.Logger | None) -> None:
-    alias_root = _legacy_alias_root(output_dir)
-    alias_root.mkdir(parents=True, exist_ok=True)
-
-    legacy_name = _legacy_alias_run_name(run_dir)
-    alias_run_dir = alias_root / legacy_name
-    alias_run_dir.mkdir(parents=True, exist_ok=True)
-
-    matches_path = run_dir / "matches.json"
-    if matches_path.exists():
-        data = matches_path.read_bytes()
-        (alias_run_dir / "report.json").write_bytes(data)
-        (alias_run_dir / "matches.json").write_bytes(data)
-    else:
-        (alias_run_dir / "report.json").write_text("[]\n", encoding="utf-8")
-
-    summary_path = run_dir / "report.json"
-    if summary_path.exists():
-        (alias_run_dir / "summary.json").write_bytes(summary_path.read_bytes())
-
-    for name in ("report.md", "log.txt", "matches.tsv"):
-        src = run_dir / name
-        dest = alias_run_dir / name
-        if src.exists():
-            dest.write_bytes(src.read_bytes())
-        elif dest.exists():
-            dest.unlink()
-
-    _sync_legacy_latest(alias_root, alias_run_dir)
-    _prune_legacy_alias(alias_root, keep, logger=logger)
-
-
-def write_artifacts(
+def write_bundle(
     *,
-    run_dir: Path,
-    payload: dict[str, object],
-    findings: list[Finding],
     output_dir: Path,
-    logger: logging.Logger | None,
-) -> None:
-    run_dir.mkdir(parents=True, exist_ok=True)
-    if logger:
-        logger.debug("Writing artifacts to %s", run_dir)
-    (run_dir / "report.json").write_text(
-        json.dumps(payload, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
-    (run_dir / "report.md").write_text(
-        render_markdown_report(payload),
-        encoding="utf-8",
-    )
-    (run_dir / "log.txt").write_text(render_log(payload), encoding="utf-8")
-    matches = [finding.to_dict() for finding in findings]
-    (run_dir / "matches.json").write_text(
-        json.dumps(matches, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
-    if findings:
-        tsv_lines = ["file\tline\tcategory\timport_base\tintent\tis_test\tis_module_scope\tcode"]
-        for finding in findings:
-            tsv_lines.append(
-                "\t".join(
-                    [
-                        finding.file,
-                        str(finding.line),
-                        finding.category,
-                        finding.import_base or "",
-                        finding.intent,
-                        "true" if finding.is_test else "false",
-                        "true" if finding.is_module_scope else "false",
-                        finding.code.replace("\t", " "),
-                    ]
-                )
-            )
-        (run_dir / "matches.tsv").write_text("\n".join(tsv_lines) + "\n", encoding="utf-8")
-    _write_latest_artifacts(run_dir, output_dir)
+    run_timestamp: str,
+    manifest: dict[str, object],
+    telemetry: dict[str, object],
+    summary_markdown: str,
+    keep: int,
+    logger: logging.Logger,
+) -> Path:
+    storage = create_storage(output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=run_timestamp)
+    bundle_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG / run_timestamp
 
+    # DB_INTEGRATION_MARKER: Persist manifest bundle (report_runs + report_artifacts)
+    storage.write_manifest(manifest)
+    # DB_INTEGRATION_MARKER: Persist human-readable report summary (report_artifacts)
+    storage.write_summary({"markdown": summary_markdown}, format="md")
+    # DB_INTEGRATION_MARKER: Persist telemetry payload + extracted metrics (report_artifacts + test_metrics)
+    storage.write_telemetry(telemetry)
 
-def prune_history(base_dir: Path, keep: int, *, current_run: Path | None, logger: logging.Logger | None) -> list[Path]:
-    result = prune_run_directories(
+    base_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG
+    prune_run_directories(
         base_dir,
-        keep=max(keep, 1),
-        stem_prefix=RUN_PREFIX,
-        current_run=current_run,
+        keep=max(1, keep),
+        current_run=bundle_dir,
         logger=logger,
     )
-    return result.removed
+
+    return bundle_dir
 
 
 def scan_repository(paths: Paths, options: ScanOptions) -> tuple[list[Finding], int, int]:
@@ -1237,7 +1177,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--output-dir",
         default=None,
-        help="Override for artifact output directory (defaults to producer_reports/monkey_patch_scans)",
+        help="Override for artifact output directory (defaults to .repo_studios/reports/producer_reports)",
     )
     parser.add_argument(
         "--project-packages",
@@ -1266,10 +1206,17 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--with-git", action="store_true", help="Include git blame metadata where available")
     parser.add_argument("--strict", action="store_true", help="Treat parse errors as fatal (after scanning)")
     parser.add_argument(
+        "--keep",
         "--artifacts-to-keep",
+        dest="keep",
         type=int,
-        default=DEFAULT_ARTIFACTS_TO_KEEP,
+        default=DEFAULT_KEEP,
         help="Number of historical run directories to retain (minimum 1)",
+    )
+    parser.add_argument(
+        "--timestamp",
+        default=None,
+        help="Override run timestamp slug (UTC) in YYYYMMDD-HHMM format (used for deterministic testing)",
     )
     parser.add_argument(
         "--log-level",
@@ -1286,7 +1233,7 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def run(argv: list[str] | None = None) -> dict[str, object]:
@@ -1319,7 +1266,7 @@ def run(argv: list[str] | None = None) -> dict[str, object]:
         context_lines=int(args.context_lines),
         with_git=bool(args.with_git),
         strict=bool(args.strict),
-        artifacts_to_keep=resolved_options.artifacts_to_keep,
+        keep=resolved_options.keep,
     )
 
     logger = logging.getLogger(__name__)
@@ -1329,51 +1276,72 @@ def run(argv: list[str] | None = None) -> dict[str, object]:
     logger.info("Output directory: %s", paths.output_dir)
     logger.info("Project packages: %s", ", ".join(sorted(options.project_packages)))
 
+    started = time.perf_counter()
     findings, parse_errors, files_scanned = scan_repository(paths, options)
     augment_findings_with_git(findings, paths.repo_root, options.with_git)
+    duration_ms = int((time.perf_counter() - started) * 1000)
 
-    timestamp = dt.datetime.now(dt.timezone.utc)
-    payload = compose_payload(
+    now = dt.datetime.now(dt.UTC)
+    run_timestamp = _resolve_run_timestamp(override=args.timestamp, now=now)
+    bundle_dir = paths.output_dir / VIEWER_SLUG / TOPIC_SLUG / run_timestamp
+    generated_at = now.isoformat()
+
+    manifest = compose_manifest(
         paths=paths,
         options=options,
         findings=findings,
-        timestamp=timestamp,
+        timestamp=now,
+        run_timestamp=run_timestamp,
+        generated_at=generated_at,
+        bundle_dir=bundle_dir,
         files_scanned=files_scanned,
         parse_errors=parse_errors,
+        duration_ms=duration_ms,
     )
+    telemetry = compose_telemetry(manifest=manifest, run_timestamp=run_timestamp, generated_at=generated_at)
+    summary_markdown = render_summary_markdown(manifest)
 
-    run_id = str(payload["run_id"])
-    run_dir = ensure_run_directory(paths.output_dir, run_id)
-    write_artifacts(
-        run_dir=run_dir,
-        payload=payload,
-        findings=findings,
+    run_dir = write_bundle(
         output_dir=paths.output_dir,
+        run_timestamp=run_timestamp,
+        manifest=manifest,
+        telemetry=telemetry,
+        summary_markdown=summary_markdown,
+        keep=options.keep,
         logger=logger,
     )
-    _sync_legacy_alias(run_dir, paths.output_dir, options.artifacts_to_keep, logger=logger)
-    removed = prune_history(
-        paths.output_dir,
-        options.artifacts_to_keep,
-        current_run=run_dir,
-        logger=logger,
-    )
-    if removed:
-        logger.debug("Pruned historical runs: %s", ", ".join(sorted(path.name for path in removed)))
 
     logger.info("Done. Findings: %d", len(findings))
     if parse_errors:
         log_fn = logger.error if options.strict else logger.warning
         log_fn("%d file(s) failed to parse.", parse_errors)
 
-    return payload
+    total_findings = 0
+    payload_obj = manifest.get("payload")
+    if isinstance(payload_obj, dict):
+        total_findings = int(payload_obj.get("total_findings", 0) or 0)
+
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "status": manifest.get("status", "unknown"),
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": run_timestamp,
+        "run_dir": str(run_dir),
+        "total_findings": total_findings,
+    }
 
 
 def main(argv: list[str] | None = None) -> int:
-    payload = run(argv)
+    payload: dict[str, object] = run(argv)
     status = payload.get("status")
     if status in {"self-test", "self-test-failed"}:
-        return int(payload.get("exit_code", 0))
+        exit_code = payload.get("exit_code", 0)
+        if isinstance(exit_code, int):
+            return exit_code
+        if isinstance(exit_code, str) and exit_code.isdigit():
+            return int(exit_code)
+        return 0
     if status == "error":
         return 1
     return 0

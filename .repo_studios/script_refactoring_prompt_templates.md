@@ -42,7 +42,7 @@ to align with positional encoding and database integration standards.
 
 Analyze the following script:
 `<SCRIPT_PATH>`
-`scan_monkey_patches.py`
+`seed_standards_prompts.py`
 
 Report the following information:
 

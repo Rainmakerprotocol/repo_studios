@@ -57,7 +57,11 @@ studio-scan-code-placeholders:
 
 .PHONY: studio-scan-monkey-patches
 studio-scan-monkey-patches:
-	$(PYTHON) .repo_studios/scripts/producers/scan_monkey_patches.py --repo-root .
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/producers/scan_monkey_patches.py" \
+		--repo-root . \
+		--output-dir .repo_studios/reports/producer_reports \
+		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-seed-standards-prompts
 studio-seed-standards-prompts:

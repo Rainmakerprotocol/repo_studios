@@ -1,10 +1,10 @@
 {
   "status": "enabled",
-  "outdir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-11-28_1702",
+  "outdir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-01_0000",
   "writer": "file",
   "retention": {
-    "keep": 10,
-    "pruned": 0
+    "keep": 2,
+    "pruned": 1
   },
   "flags": {
     "FAULT_ENABLE": "1",
@@ -16,7 +16,7 @@
     "FAULT_DUMP_LATER": "0",
     "FAULT_REDACT_PATHS": "0",
     "FAULT_TEE_STDERR": "1",
-    "FAULT_ARTIFACTS_TO_KEEP": "10",
+    "FAULT_ARTIFACTS_TO_KEEP": "2",
     "FAULT_LOGS_ALLOW_LEGACY": "0"
   }
 }

@@ -1,8 +1,8 @@
 {
-  "ts": "2025-11-28T17:02:14+00:00",
-  "pid": 28640,
-  "python": "3.11.9",
-  "platform": "Windows-10-10.0.26200-SP0",
+  "ts": "2025-01-02T03:04:00+00:00",
+  "pid": 33476,
+  "python": "3.13.3",
+  "platform": "Windows-11-10.0.26200-SP0",
   "flags": {
     "FAULT_ENABLE": "1",
     "FAULT_OUTDIR": "",
@@ -10,17 +10,17 @@
     "FAULT_MIN_INTERVAL_SEC": "60",
     "FAULT_DUMP_TIMEOUT": "300",
     "FAULT_MAX_DUMPS_PER_RUN": "5",
-    "FAULT_DUMP_LATER": "0",
+    "FAULT_DUMP_LATER": "1",
     "FAULT_REDACT_PATHS": "0",
-    "FAULT_TEE_STDERR": "1",
-    "FAULT_ARTIFACTS_TO_KEEP": "10",
+    "FAULT_TEE_STDERR": "0",
+    "FAULT_ARTIFACTS_TO_KEEP": "2",
     "FAULT_LOGS_ALLOW_LEGACY": "0"
   },
   "resolved": {
-    "outdir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-11-28_1702",
+    "outdir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-02_0304",
     "base_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs",
-    "tee_stderr": true,
-    "artifacts_to_keep": 10,
+    "tee_stderr": false,
+    "artifacts_to_keep": 2,
     "derived_outdir": true,
     "allow_legacy": false
   },
@@ -28,11 +28,11 @@
     "activated": true,
     "writer": "file",
     "registered_sigusr1": false,
-    "dump_later": false,
+    "dump_later": true,
     "errors": []
   },
   "retention": {
-    "keep": 10,
+    "keep": 2,
     "pruned": 0
   }
 }

@@ -16,6 +16,7 @@ class FakeFaulthandler:
         self.enable_calls: list[tuple[Any, bool]] = []
         self.register_calls: list[Any] = []
         self.dump_later_calls: list[tuple[int, bool, Any]] = []
+        self.cancel_later_calls: int = 0
 
     def enable(self, file=None, all_threads=False):  # noqa: D401 - mimic stdlib
         self.enable_calls.append((file, all_threads))
@@ -25,6 +26,9 @@ class FakeFaulthandler:
 
     def dump_traceback_later(self, timeout, repeat=False, file=None):  # noqa: D401
         self.dump_later_calls.append((timeout, repeat, file))
+
+    def cancel_dump_traceback_later(self) -> None:  # noqa: D401 - mimic stdlib
+        self.cancel_later_calls += 1
 
 
 MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "utilities" / "configure_faulthandler_runtime.py"

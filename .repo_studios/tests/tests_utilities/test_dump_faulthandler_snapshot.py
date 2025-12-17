@@ -43,6 +43,9 @@ class FakeFaulthandler(ModuleType):
         self.dump_calls.append({"all_threads": all_threads})
         file.write("fake traceback")
 
+    def cancel_dump_traceback_later(self) -> None:  # noqa: D401 - mimic stdlib
+        return None
+
 
 @pytest.fixture(autouse=True)
 def _clear_env(monkeypatch: pytest.MonkeyPatch):

@@ -28,7 +28,7 @@ __all__ = [
 def _resolve_repo_root() -> Path:
     current = Path(__file__).resolve()
     for candidate in current.parents:
-        if (candidate / ".repo_studios").is_dir():
+        if candidate.name != ".repo_studios" and (candidate / ".repo_studios").is_dir():
             return candidate
     raise RuntimeError("Unable to locate repository root containing .repo_studios directory")
 
