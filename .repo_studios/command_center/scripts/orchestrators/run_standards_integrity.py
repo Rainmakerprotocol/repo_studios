@@ -63,8 +63,8 @@ DIFF_MODULE = "scripts.producers.diff_standards_index"
 PROMPT_MODULE = "scripts.producers.seed_standards_prompts"
 SUMMARY_MODULE = "scripts.summarizers.summarize_standards"
 
-DEFAULT_INDEX_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_index_reports")
-DEFAULT_INDEX_PATH = Path(".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml")
+DEFAULT_INDEX_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
+DEFAULT_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
 DEFAULT_CATEGORIES_PATH = Path(".repo_studios/scripts/.repo_studios/standards_categories.yaml")
 DEFAULT_GAP_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
 DEFAULT_DIFF_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_index_diff_reports")
@@ -72,9 +72,16 @@ DEFAULT_PROMPT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standar
 DEFAULT_PENDING_PATH = Path(".repo_studios/scripts/repo_standards_pending.yaml")
 DEFAULT_HEALTHVIEW_ROOT = Path(".repo_studios/command_center/reports")
 
-INDEX_RUN_PREFIX = "standards_index-"
+INDEX_VIEWER_SLUG = "rawview"
+INDEX_TOPIC_SLUG = "standards_index"
 DIFF_RUN_PREFIX = "standards_index_diff-"
 PROMPT_RUN_PREFIX = "standards_prompt_seed-"
+
+
+def _format_run_slug(moment: datetime) -> str:
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=timezone.utc)
+    return moment.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
 
 
 @dataclass(frozen=True)
@@ -355,23 +362,15 @@ def _execute_index(paths: Paths, options: Options) -> IndexOutcome:
     if exit_code != 0:
         raise RuntimeError(f"generate_standards_index exit code {exit_code}")
 
-    latest_report = paths.index_output_dir / "latest_report.json"
-    payload = _read_json(latest_report)
+    run_slug = _format_run_slug(options.run_timestamp)
+    candidate_dir = paths.index_output_dir / INDEX_VIEWER_SLUG / INDEX_TOPIC_SLUG / run_slug
+    telemetry_path = candidate_dir / "telemetry.json"
+    payload = _read_json(telemetry_path)
     if payload is None:
-        raise RuntimeError("standards index report missing after run")
-
-    run_slug = str(payload.get("timestamp") or "")
-    candidate_dir = paths.index_output_dir / f"{INDEX_RUN_PREFIX}{run_slug}" if run_slug else None
-    if candidate_dir and not candidate_dir.exists():
-        candidate_dir = None
-    report_path = None
-    if candidate_dir:
-        report_candidate = candidate_dir / "report.json"
-        if report_candidate.exists():
-            report_path = report_candidate
+        raise RuntimeError("standards index telemetry missing after run")
 
     index_path = paths.index_latest_path if paths.index_latest_path.exists() else None
-    return IndexOutcome(run_dir=candidate_dir, report_path=report_path, payload=payload, index_path=index_path)
+    return IndexOutcome(run_dir=candidate_dir, report_path=telemetry_path, payload=payload, index_path=index_path)
 
 
 def _execute_gap(paths: Paths, options: Options) -> GapOutcome:

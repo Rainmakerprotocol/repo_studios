@@ -17,32 +17,70 @@ Key flags:
 - `--artifacts-to-keep` — number of historical runs to retain (default 10).
 - `--log-level` — standard logging level (INFO by default).
 
-Environment overrides:
+---
+title: Typecheck Report Producer
+audience:
+  - coding_agent
+  - human_developer
+owners:
+  - repo_studios_team@rainmakerprotocol.dev
+status: active
+version: 2.0.0
+updated: 2025-12-17
+tags:
+  - producer
+  - healthview
+  - typecheck
+related_files:
+  - ../../scripts/producers/generate_typecheck_report.py
+  - ../../tests/tests_producers/test_generate_typecheck_report.py
+  - ../../Makefile
+---
 
-- `TYPECHECK_TARGETS` — whitespace separated paths to check instead of the pyproject list.
-- `TYPECHECK_STRICT` — when set to a truthy value, append `--strict` to the `mypy` invocation.
-- `HEALTH_TYPECHECK_FAST` — when truthy and no explicit targets are supplied, limit execution to the curated fast-mode prefixes.
+# generate_typecheck_report.py
 
-## Outputs
+## Goals
 
-Artifacts are written to `.repo_studios/reports/producer_reports/typecheck_reports/` with the layout:
+* Run `mypy` with repo defaults (or configured overrides) and summarize the outcome for observability.
+* Emit a canonical Repo Studios 3-artifact positional bundle (no mutable `latest_*`).
+* Prune historical bundles according to `--artifacts-to-keep`.
 
-```text
-typecheck_reports/
-  typecheck-<timestamp>/
-    report.json
-    report.md
-    log.txt
-    raw.txt
-  latest_report.json
-  latest_report.md
-  latest_report.log
-  latest_raw.txt
+## System Context
+
+Default output:
+
+* `.repo_studios/reports/producer_reports/healthview/typecheck_report/<YYYYMMDD-HHMM>/`
+  * `manifest.json`
+  * `summary.md`
+  * `telemetry.json`
+
+## Invocation
+
+```bash
+python .repo_studios/scripts/producers/generate_typecheck_report.py \
+  --repo-root . \
+  --output-dir .repo_studios/reports/producer_reports \
+  --artifacts-to-keep 10 \
+  --log-level INFO
 ```
 
-The JSON payload includes `status`, `summary` counters, the captured invocation, and sampled error diagnostics. Markdown and log companions mirror the same information for humans and automation. `latest_*` files update on each run for easy consumption.
+Key flags:
 
-Old runs are pruned after each execution according to `--artifacts-to-keep`.
+* `--timestamp` — optional ISO8601 timestamp; omit to use current UTC.
+* `--artifacts-to-keep` — number of historical runs to retain (default 10).
+* `--log-level` — standard logging level.
+
+Environment overrides:
+
+* `TYPECHECK_TARGETS` — whitespace separated targets to check instead of the `pyproject.toml` list.
+* `TYPECHECK_STRICT` — when truthy, append `--strict` to the `mypy` invocation.
+* `HEALTH_TYPECHECK_FAST` — when truthy and no explicit targets are supplied, limit execution to curated fast-mode prefixes.
+
+## Agent Instructions
+
+* Treat `manifest.json` as the structured payload (includes raw mypy output and sampled errors).
+* Keep `summary.md` human-readable and stable for diffing.
+* Do not add extra artifacts beyond the canonical three.
 
 ## Testing
 
@@ -50,4 +88,6 @@ Old runs are pruned after each execution according to `--artifacts-to-keep`.
 python -m pytest .repo_studios/tests/tests_producers/test_generate_typecheck_report.py
 ```
 
-The test suite exercises success and failure flows, ensuring artifact creation, latest-link updates, and basic parsing of error samples.
+## Update Log
+
+* 2025-12-17 — Migrated to canonical `healthview/typecheck_report/<YYYYMMDD-HHMM>/` bundle and removed legacy `latest_*` artifacts.

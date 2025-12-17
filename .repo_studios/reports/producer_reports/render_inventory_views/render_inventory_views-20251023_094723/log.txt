@@ -1,6 +1,0 @@
-status=ok
-timestamp=20251023_094723
-total_entries=61
-docs=20
-scripts=31
-tests=10

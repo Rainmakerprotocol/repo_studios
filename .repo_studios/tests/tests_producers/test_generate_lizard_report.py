@@ -143,6 +143,8 @@ def test_no_targets_and_pruning(tmp_path: Path):
             str(output_dir),
             "--timestamp",
             "2024-02-03T00:00:00+00:00",
+            "--targets",
+            "missing_path",
             "--artifacts-to-keep",
             "2",
             "--log-level",
@@ -159,6 +161,9 @@ def test_no_targets_and_pruning(tmp_path: Path):
     assert report["status"] == "no_targets"
     assert report["issue_count"] == 0
     assert "No targets resolved" in report["notes"]
+
+    manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["inputs"]["targets_requested"] == ["missing_path"]
 
     log_text = report["log_text"]
     assert "status=no_targets" in log_text

@@ -11,14 +11,14 @@ import sys
 from collections import Counter
 from dataclasses import dataclass, replace
 from pathlib import Path
-from typing import Any, NamedTuple
+from typing import Any, NamedTuple, cast
 
 import yaml
 
-DEFAULT_RELATIVE_INDEX = Path(
+DEFAULT_RELATIVE_INDEX = Path(".repo_studios/scripts/repo_standards_index.yaml")
+LEGACY_INDEX_PATH = Path(
     ".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml"
 )
-LEGACY_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_prompt_seeds")
 RUN_PREFIX = "standards_prompt_seed"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
@@ -27,8 +27,10 @@ SCHEMA_VERSION = 1
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
+PACKAGE_ROOT = Path(__file__).resolve().parents[2]
+
 try:
-    from libraries import (
+    from command_center.scripts.libraries import (
         KeepSpec,
         PathSpec,
         OptionsConfig,
@@ -38,9 +40,9 @@ try:
         prune_run_directories,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
-    if str(LIBRARIES_ROOT) not in sys.path:
-        sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import (  # type: ignore
+    if str(PACKAGE_ROOT) not in sys.path:
+        sys.path.insert(0, str(PACKAGE_ROOT))
+    from command_center.scripts.libraries import (
         KeepSpec,
         PathSpec,
         OptionsConfig,
@@ -111,7 +113,7 @@ def parse_args(argv: list[str] | None) -> argparse.Namespace:
         "--index-path",
         help=(
             "Path to repo_standards_index.yaml (defaults to "
-            ".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml)"
+            ".repo_studios/scripts/repo_standards_index.yaml)"
         ),
     )
     parser.add_argument(
@@ -153,7 +155,7 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    paths = build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    paths = cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
     if paths.index_path.exists():
         return paths
     legacy_candidate = (paths.repo_root / LEGACY_INDEX_PATH).resolve()
@@ -253,7 +255,7 @@ def render_seed(seed: dict[str, Any], fmt: str) -> str:
             lines.append("")
         return "\n".join(lines).rstrip() + "\n"
     if fmt == "yaml":
-        return yaml.safe_dump(seed, sort_keys=True)
+        return str(yaml.safe_dump(seed, sort_keys=True))
     if fmt == "json":
         return json.dumps(seed, indent=2, sort_keys=True) + "\n"
     raise ValueError(f"unknown format: {fmt}")

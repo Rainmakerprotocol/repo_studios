@@ -11,7 +11,7 @@ This note packages the key resources operators need when executing Phase 3 manua
 - Latest duplicate pipeline artifacts for the chosen target (CommandView inventory, analysis, duplicate scan) mirrored under:
   - `<target>/<name>_index/`
   - `.repo_studios/command_center/reports/<slug>_duplicate_scan/`
-- Latest lizard complexity report in `.repo_studios/reports/producer_reports/lizard_reports/`. The `report.md` file now surfaces the top 10 offenders with path, line numbers, delta over thresholds, and recommended actions.
+- Latest lizard complexity report under `.repo_studios/reports/producer_reports/healthview/lizard_report/<YYYYMMDD-HHMM>/`. The `summary.md` file surfaces the top offenders with path, line numbers, delta over thresholds, and recommended actions.
 - Manual extraction checklist: `.repo_studios/command_center/docs/manual_extraction_checklist.md`
 - Run-folder summary template: `.repo_studios/command_center/docs/run_folder_summary_template.md`
 
@@ -20,7 +20,7 @@ This note packages the key resources operators need when executing Phase 3 manua
 ## Execution Checklist
 
 1. **Review Top Offenders**  
-   Open `latest_report.md` from the lizard report directory. Note any functions highlighted in orchestrator scripts or shared helpers. Confirm whether they overlap with the duplicate groups scheduled for extraction.
+   Open the newest `summary.md` in `.repo_studios/reports/producer_reports/healthview/lizard_report/<YYYYMMDD-HHMM>/`. Note any functions highlighted in orchestrator scripts or shared helpers. Confirm whether they overlap with the duplicate groups scheduled for extraction.
 2. **Refresh Duplicate Artifacts**  
    Run the command center orchestrator (`python .repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py <target> --repo-root .`) or the individual scripts to generate fresh CommandView inventory, analysis, and duplicate scan artifacts.
 3. **Walk the Manual Checklist**  

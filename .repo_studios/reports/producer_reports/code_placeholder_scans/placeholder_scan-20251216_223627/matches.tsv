@@ -1,8 +1,0 @@
-path	line	pattern	snippet
-.repo_studios/command_center/docs/db_integration_template.md	141	XXX	# Line ~XXX in main() or run()
-.repo_studios/command_center/docs/db_integration_template.md	151	XXX	# Line ~XXX - write manifest
-.repo_studios/command_center/docs/db_integration_template.md	154	XXX	# Line ~XXX - write telemetry
-.repo_studios/docs/pipeline/pipeline_templates/tier1_pipeline_template.md	192	TODO	* **Status:** `TODO | In Progress | Partial | Complete`.
-.repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_howto.md	80	TODO	* Populate a **Coverage Snapshot** table. Use `TODO/In Progress/Partial/Complete` statuses for each modality.
-.repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_template.md	87	TODO	* **Status:** `TODO | In Progress | Partial | Complete`
-.repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_template.md	100	TODO	* **Status:** `TODO | In Progress | Partial | Complete`

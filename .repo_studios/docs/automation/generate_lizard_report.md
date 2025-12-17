@@ -58,7 +58,7 @@ python .repo_studios/scripts/producers/generate_lizard_report.py \
 ### Key arguments
 
 * `--repo-root` (default `.`): working tree root used to resolve relative targets.
-* `--targets` (optional): explicit directories/packages to scan. When omitted the script probes the default set `("agents", "api", "scripts")` under the repo root (or `LIZARD_TARGETS` if set).
+* `--targets` (optional): explicit directories/packages to scan. When omitted the script probes the default set `(".repo_studios",)` under the repo root (or `LIZARD_TARGETS` if set).
 * `--extra-args`: verbatim switches appended before the targets (passes directly to `lizard`).
 * `--output-dir` (default `.repo_studios/reports/producer_reports`): base reports directory.
 * `--timestamp`: ISO8601 string (UTC preferred) to seed the run directory timestamp (`YYYYMMDD-HHMM`).

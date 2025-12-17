@@ -137,7 +137,7 @@ make -C .repo_studios command-center COMMAND_CENTER_TARGET=/.repo_studios/script
 1. **Point the agent here** when requesting duplicate remediation.
 2. **Trigger the orchestrator** (or run scripts manually) so the chosen target’s slug directories refresh.
 3. **Review the mirrored artifacts** under `<target>/<name>_index/` and `.repo_studios/command_center/reports/<slug>_duplicate_scan/` before prioritising work.
-4. **Consult the latest lizard complexity report** in `.repo_studios/reports/producer_reports/lizard_reports/latest_report.md`—the top-offender table now lists the highest risk functions with file locations, line numbers, and remediation suggestions to help sequence extractions.
+4. **Consult the latest lizard complexity report** under `.repo_studios/reports/producer_reports/healthview/lizard_report/<YYYYMMDD-HHMM>/summary.md`—the top-offender table lists the highest-risk functions with file locations, line numbers, and remediation suggestions to help sequence extractions.
 5. **Check the naming guides** (`que_for_integration/refactor_library/naming_conventions.md` and `docs/naming_conventions.md`) before adding or moving shared helpers so promotion to `.repo_studios/library/` stays frictionless.
 6. **Annotate the checklist** with decisions, edge cases, or approvals, then review changes before sign-off.
 
@@ -145,7 +145,7 @@ make -C .repo_studios command-center COMMAND_CENTER_TARGET=/.repo_studios/script
 
 1. **Read this README** to ingest expectations.  
 2. **Inspect the latest slugged mirrors** (`<target>/<name>_index/` and `.repo_studios/command_center/reports/<slug>_duplicate_scan/`) to understand duplicate groups and stock decisions.  
-3. **Review `.repo_studios/reports/producer_reports/lizard_reports/latest_report.md`** for a ranked list of the top 10 complexity offenders (with over-threshold deltas and recommended remediation actions) so extraction plans prioritise the highest pay-off targets.
+3. **Review `.repo_studios/reports/producer_reports/healthview/lizard_report/<YYYYMMDD-HHMM>/summary.md`** for a ranked list of the top 10 complexity offenders (with over-threshold deltas and recommended remediation actions) so extraction plans prioritise the highest pay-off targets.
 4. **Consult the naming guides** (`que_for_integration/refactor_library/naming_conventions.md` and `docs/naming_conventions.md`) before drafting new helpers; keep modules `verb_noun` and record the eventual library destination.  
 5. **Follow the micro-cycle**: extract → test → replace → document.  
 6. **Update artifacts** (tests run, imports added, follow-up items) before signaling completion.  

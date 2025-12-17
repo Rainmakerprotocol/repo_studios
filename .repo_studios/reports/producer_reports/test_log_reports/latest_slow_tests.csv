@@ -1,4 +1,0 @@
-seconds,nodeid
-5.420,.repo_studios/tests/tests_orchestrators/test_command_center_pipeline.py::test_pipeline_smoke_updates_artifacts
-5.370,.repo_studios/tests/tests_orchestrators/test_command_center_pipeline.py::test_pipeline_allows_repo_root_prefixed_target
-0.580,.repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_inventory_includes_git_churn_summary

@@ -1,4 +1,11 @@
-"""Run mypy and emit structured artifacts for the typecheck producer."""
+"""Run mypy and emit structured artifacts for the typecheck producer.
+
+Artifacts (default):
+    - `.repo_studios/reports/producer_reports/healthview/typecheck_report/<YYYYMMDD-HHMM>/`
+        - `manifest.json`
+        - `summary.md`
+        - `telemetry.json`
+"""
 
 from __future__ import annotations
 
@@ -11,7 +18,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, NamedTuple
+from typing import Any, NamedTuple, cast
 
 try:  # pragma: no cover - Python 3.11+
     import tomllib
@@ -20,37 +27,40 @@ except Exception:  # pragma: no cover - fallback if unavailable
 
 
 DEFAULT_REPO_ROOT = Path(__file__).resolve().parents[3]
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/typecheck_reports")
-RUN_PREFIX = "typecheck"
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
+RUN_PREFIX = "typecheck"  # legacy label; run directories now live under viewer/topic.
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 SCHEMA_VERSION = 1
+
+VIEWER_SLUG = "healthview"
+TOPIC_SLUG = "typecheck_report"
 
 LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 try:
-    from libraries import (  # type: ignore
+    from libraries import (
         KeepSpec,
         PathSpec,
-        ReportArtifact,
         OptionsConfig,
         PathsConfig,
         build_standard_options,
         build_standard_paths,
-        write_report_artifacts,
+        prune_run_directories,
     )
+    from libraries.database_integration import create_storage
 except ModuleNotFoundError:  # pragma: no cover - fallback when executed directly
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import (  # type: ignore
+    from libraries import (
         KeepSpec,
         PathSpec,
-        ReportArtifact,
         OptionsConfig,
         PathsConfig,
         build_standard_options,
         build_standard_paths,
-        write_report_artifacts,
+        prune_run_directories,
     )
+    from libraries.database_integration import create_storage
 
 
 @dataclass
@@ -80,7 +90,7 @@ def _current_utc() -> datetime:
 
 
 def _format_slug(moment: datetime) -> str:
-    return moment.strftime("%Y%m%d_%H%M%S")
+    return moment.strftime("%Y%m%d-%H%M")
 
 
 def _load_pyproject(repo_root: Path) -> dict[str, Any]:
@@ -246,7 +256,9 @@ def _compose_payload(
     run_slug: str,
     generated_at: datetime,
     repo_root: Path,
-    run_dir: Path,
+    reports_root: Path,
+    topic_dir: Path,
+    bundle_dir: Path,
     status: str,
     stats: BuildStats,
 ) -> dict[str, Any]:
@@ -266,11 +278,15 @@ def _compose_payload(
     ]
     return {
         "schema_version": SCHEMA_VERSION,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
         "status": status,
-        "timestamp": run_slug,
+        "run_timestamp": run_slug,
         "generated_utc": generated_at.isoformat(),
         "repo_root": str(repo_root),
-        "output_dir": str(run_dir.parent),
+        "reports_root": str(reports_root),
+        "topic_dir": str(topic_dir),
+        "bundle_dir": str(bundle_dir),
         "invocation": stats.invocation,
         "mypy_version": stats.mypy_version,
         "summary": summary,
@@ -286,7 +302,7 @@ def _render_markdown(payload: dict[str, Any]) -> str:
     lines.append(f"- generated_utc: {payload['generated_utc']}\n")
     lines.append(f"- status: {payload['status']}\n")
     lines.append(f"- mypy_version: {payload.get('mypy_version', 'unknown')}\n")
-    lines.append(f"- output_dir: {payload['output_dir']}\n")
+    lines.append(f"- bundle_dir: {payload.get('bundle_dir', '')}\n")
     lines.append("\n## Summary\n\n")
     lines.append("| Metric | Value |\n")
     lines.append("|---|---:|\n")
@@ -318,7 +334,7 @@ def _render_log(payload: dict[str, Any]) -> str:
         "\n".join(
             [
                 f"status={payload['status']}",
-                f"timestamp={payload['timestamp']}",
+                f"run_timestamp={payload.get('run_timestamp', '')}",
                 f"error_count={summary.get('error_count', 0)}",
                 f"files_with_issues={summary.get('files_with_issues', 0)}",
                 f"paths_checked={len(summary.get('paths_checked', []))}",
@@ -327,6 +343,57 @@ def _render_log(payload: dict[str, Any]) -> str:
         )
         + "\n"
     )
+
+
+def _build_manifest(
+    *,
+    payload: dict[str, Any],
+    strict: bool,
+    fast: bool,
+    return_code: int,
+    raw_output: str,
+    rendered_log: str,
+) -> dict[str, Any]:
+    manifest: dict[str, Any] = dict(payload)
+    manifest.update(
+        {
+            "strict": strict,
+            "fast_mode": fast,
+            "return_code": return_code,
+            "log": rendered_log,
+            "raw_output": raw_output,
+        }
+    )
+    return manifest
+
+
+def _build_telemetry(
+    *,
+    payload: dict[str, Any],
+    strict: bool,
+    fast: bool,
+    return_code: int,
+) -> dict[str, Any]:
+    summary = payload.get("summary", {})
+    return {
+        "viewer_slug": payload.get("viewer_slug"),
+        "topic": payload.get("topic"),
+        "run_timestamp": payload.get("run_timestamp"),
+        "generated_utc": payload.get("generated_utc"),
+        "metrics": {
+            "status": payload.get("status"),
+            "error_count": int(summary.get("error_count", 0) or 0),
+            "files_with_issues": int(summary.get("files_with_issues", 0) or 0),
+            "paths_checked": len(summary.get("paths_checked", []) or []),
+            "strict": bool(strict),
+            "fast_mode": bool(fast),
+            "return_code": int(return_code),
+        },
+        "payload": {
+            "mypy_version": payload.get("mypy_version"),
+            "invocation": payload.get("invocation"),
+        },
+    }
 
 
 def configure_logging(level: str) -> None:
@@ -387,14 +454,17 @@ OPTIONS_CONFIG = OptionsConfig(
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
-    base_options = build_standard_options(args, OPTIONS_CONFIG)
-    return base_options._replace(
+    base_options = cast(Options, build_standard_options(args, OPTIONS_CONFIG))
+    return cast(
+        Options,
+        base_options._replace(
         timestamp=getattr(args, "timestamp", None),
         log_level=str(getattr(args, "log_level", "INFO")),
+        ),
     )
 
 
@@ -420,7 +490,7 @@ def main(argv: list[str] | None = None) -> int:
         generated_at = _current_utc()
 
     run_slug = _format_slug(generated_at)
-    run_dir = output_dir / f"{RUN_PREFIX}-{run_slug}"
+    topic_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG
 
     targets = _discover_targets(repo_root)
     targets = _normalise_targets(targets)
@@ -435,15 +505,18 @@ def main(argv: list[str] | None = None) -> int:
     invocation = _build_invocation(strict, targets)
 
     skipped_note = ""
+    stdout_combined = ""
+    return_code = 0
+    total_errors = 0
+    files_with_issues = 0
+    success_flag = True
+    samples: list[ErrorSample] = []
+    status = "skipped"
+
     if targets:
         stdout_combined, return_code = _run_mypy(repo_root, invocation)
         missing_target = "Missing target module" in stdout_combined
         if return_code != 0 and missing_target:
-            total_errors = 0
-            files_with_issues = 0
-            success_flag = True
-            samples: list[ErrorSample] = []
-            status = "skipped"
             skipped_note = "mypy reported missing target module; treating run as skipped."
         else:
             total_errors, files_with_issues, success_flag = _parse_summary(stdout_combined)
@@ -454,12 +527,6 @@ def main(argv: list[str] | None = None) -> int:
             status = _compute_status(success_flag, total_errors, files_with_issues, return_code)
     else:
         stdout_combined = "No typecheck targets discovered; skipping mypy execution.\n"
-        return_code = 0
-        total_errors = 0
-        files_with_issues = 0
-        success_flag = True
-        samples: list[ErrorSample] = []
-        status = "skipped"
         skipped_note = "No typecheck targets discovered; skipping mypy execution."
 
     stats = BuildStats(
@@ -472,55 +539,53 @@ def main(argv: list[str] | None = None) -> int:
         samples=samples,
     )
 
+    storage = create_storage(output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=run_slug)
+    bundle_dir = storage.file_storage.bundle_dir
+
     payload = _compose_payload(
         run_slug=run_slug,
         generated_at=generated_at,
         repo_root=repo_root,
-        run_dir=run_dir,
+        reports_root=output_dir,
+        topic_dir=topic_dir,
+        bundle_dir=bundle_dir,
         status=status,
         stats=stats,
     )
     if skipped_note:
         payload["notes"] = skipped_note
+    rendered_log = _render_log(payload)
+    markdown = _render_markdown(payload)
 
-    artifacts = [
-        ReportArtifact(
-            filename="report.json",
-            pointer="latest_report.json",
-            kind="json",
-            content=lambda: payload,
-        ),
-        ReportArtifact(
-            filename="report.md",
-            pointer="latest_report.md",
-            kind="text",
-            content=lambda: _render_markdown(payload),
-        ),
-        ReportArtifact(
-            filename="log.txt",
-            pointer="latest_report.log",
-            kind="text",
-            content=lambda: _render_log(payload),
-        ),
-        ReportArtifact(
-            filename="raw.txt",
-            pointer="latest_raw.txt",
-            kind="text",
-            content=lambda: stdout_combined,
-        ),
-    ]
+    manifest = _build_manifest(
+        payload=payload,
+        strict=strict,
+        fast=fast,
+        return_code=return_code,
+        raw_output=stdout_combined,
+        rendered_log=rendered_log,
+    )
+    telemetry = _build_telemetry(payload=payload, strict=strict, fast=fast, return_code=return_code)
 
-    result = write_report_artifacts(
-        stem=RUN_PREFIX,
-        timestamp=generated_at,
-        output_dir=output_dir,
-        artifacts=artifacts,
+    # DB_INTEGRATION_MARKER: typecheck manifest write
+    storage.write_manifest(manifest)
+
+    # DB_INTEGRATION_MARKER: typecheck summary markdown write
+    storage.write_summary({"markdown": markdown}, format="md")
+
+    # DB_INTEGRATION_MARKER: typecheck telemetry write
+    storage.write_telemetry(telemetry)
+
+    prune_run_directories(
+        topic_dir,
         keep=options.artifacts_to_keep,
+        current_run=bundle_dir,
+        logger=logging.getLogger(__name__),
     )
 
     logging.info(
         "Typecheck run_dir=%s status=%s errors=%d files=%d",
-        result.run_dir,
+        bundle_dir,
         status,
         total_errors,
         files_with_issues,

@@ -79,6 +79,18 @@ studio-generate-lizard-report:
 		--output-dir .repo_studios/reports/producer_reports \
 		--log-level "$(LOG_LEVEL)"
 
+.PHONY: studio-generate-typecheck-report
+studio-generate-typecheck-report:
+	cd "$(CURDIR)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		"scripts/producers/generate_typecheck_report.py" \
+		--repo-root .. \
+		--output-dir .repo_studios/reports/producer_reports \
+		--artifacts-to-keep 10 \
+		--log-level "$(LOG_LEVEL)"
+
+.PHONY: typecheck
+typecheck: studio-generate-typecheck-report
+
 .PHONY: studio-validate-metrics-anchor-stubs
 studio-validate-metrics-anchor-stubs:
 	$(PYTHON) .repo_studios/scripts/producers/validate_metrics_anchor_stubs.py --repo-root .
@@ -183,6 +195,17 @@ studio-generate-dependency-hygiene:
 .PHONY: studio-generate-doc-index
 studio-generate-doc-index:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/generate_doc_index.py" --repo-root "$(REPO_ROOT)" --output-dir ".repo_studios/reports/producer_reports" --artifacts-to-keep 1 --log-level "$(LOG_LEVEL)"
+
+.PHONY: studio-generate-test-coverage-inventory
+studio-generate-test-coverage-inventory:
+	@echo Running test coverage inventory producer with log level $(LOG_LEVEL).
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/producers/generate_test_coverage_inventory.py" \
+		--repo-root "$(REPO_ROOT)" \
+		--coverage-xml ".repo_studios/tests/fixtures/test_run_coverage/coverage.xml" \
+		--output-dir ".repo_studios/reports/producer_reports" \
+		--artifacts-to-keep 5 \
+		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-code-doc-churn-report
 studio-generate-code-doc-churn-report:

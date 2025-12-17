@@ -1,7 +1,0 @@
-{
-  "integrity_hash_old": "13524ef1007a495d28fcca4395fa6a6fa8dbc3c150809a1661ea3156b11c8836",
-  "integrity_hash_new": "13524ef1007a495d28fcca4395fa6a6fa8dbc3c150809a1661ea3156b11c8836",
-  "integrity_hash_changed": false,
-  "changes": [],
-  "summary": {}
-}

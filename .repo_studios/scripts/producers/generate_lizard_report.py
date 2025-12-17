@@ -26,7 +26,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Sequence
 
-DEFAULT_TARGETS = ("agents", "api", "scripts")
+DEFAULT_TARGETS = (".repo_studios",)
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
 VIEWER_SLUG = "healthview"
 TOPIC = "lizard_report"

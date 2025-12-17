@@ -1,8 +1,0 @@
-status=ok
-exit_code=0
-total_files=0
-total_tests=0
-issues_total=0
-issues_high=0
-issues_medium=0
-issues_low=0

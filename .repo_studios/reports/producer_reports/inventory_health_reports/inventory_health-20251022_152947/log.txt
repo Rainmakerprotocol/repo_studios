@@ -1,6 +1,0 @@
-status=passed
-issues=0
-total_assets=62
-deltas:
-  total=+0
-issues:

@@ -28,9 +28,9 @@ def _load_module():
 
 
 def _write_index(repo_root: Path, pending_path: Path) -> Path:
-    reports_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "standards_index_reports"
-    reports_dir.mkdir(parents=True, exist_ok=True)
-    index_path = reports_dir / "latest_index.yaml"
+    scripts_dir = repo_root / ".repo_studios" / "scripts"
+    scripts_dir.mkdir(parents=True, exist_ok=True)
+    index_path = scripts_dir / "repo_standards_index.yaml"
     index_payload = {
         "rules": [
             {"id": "STD001"},
@@ -102,8 +102,15 @@ def test_resolve_index_path_falls_back_to_legacy(tmp_path: Path) -> None:
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
 
-    candidate_path = repo_root / ".repo_studios" / "reports" / "producer_reports" / "standards_index_reports" / "latest_index.yaml"
-    legacy_path = repo_root / ".repo_studios" / "scripts" / "repo_standards_index.yaml"
+    candidate_path = repo_root / ".repo_studios" / "scripts" / "repo_standards_index.yaml"
+    legacy_path = (
+        repo_root
+        / ".repo_studios"
+        / "reports"
+        / "producer_reports"
+        / "standards_index_reports"
+        / "latest_index.yaml"
+    )
     legacy_path.parent.mkdir(parents=True, exist_ok=True)
     legacy_payload = {"rules": []}
     legacy_path.write_text(yaml.safe_dump(legacy_payload, sort_keys=False), encoding="utf-8")

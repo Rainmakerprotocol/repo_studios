@@ -14,15 +14,15 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Sequence
 
-import yaml  # type: ignore[import-untyped]
+import yaml
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
 VIEWER_SLUG = "commandview"
 TOPIC_SLUG = "standards_index_gaps"
-DEFAULT_INDEX_PATH = Path(
+DEFAULT_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
+LEGACY_INDEX_PATH = Path(
     ".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml"
 )
-LEGACY_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
 DEFAULT_CATEGORIES_PATH = Path(".repo_studios/scripts/.repo_studios/standards_categories.yaml")
 DEFAULT_ARTIFACTS_TO_KEEP = 5
 RUN_STEM = "standards_index_gap"
@@ -36,10 +36,10 @@ IMP_VERBS = re.compile(
 STRIP_PREFIX = re.compile(r"^[-*]\s*|^\d+\.\s*")
 WORD_EXTRACTOR = re.compile(r"[a-zA-Z]{4,}")
 
-LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
+PACKAGE_ROOT = Path(__file__).resolve().parents[3]
 
 try:  # pragma: no cover - prefer import when packaged
-    from libraries import (
+    from command_center.scripts.libraries import (
         KeepSpec,
         OptionsConfig,
         PathSpec,
@@ -50,9 +50,9 @@ try:  # pragma: no cover - prefer import when packaged
 except ModuleNotFoundError:  # pragma: no cover - fallback when running in isolation
     import sys
 
-    if str(LIBRARIES_ROOT) not in sys.path:
-        sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import (  # type: ignore
+    if str(PACKAGE_ROOT) not in sys.path:
+        sys.path.insert(0, str(PACKAGE_ROOT))
+    from command_center.scripts.libraries import (
         KeepSpec,
         OptionsConfig,
         PathSpec,
@@ -62,15 +62,15 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running in isola
     )
 
 try:  # pragma: no cover - prefer import when packaged
-    from libraries.database_integration import create_storage
-    from libraries.prune_logs import prune_run_directories
+    from command_center.scripts.libraries.database_integration import create_storage
+    from command_center.scripts.libraries.prune_logs import prune_run_directories
 except ModuleNotFoundError:  # pragma: no cover - fallback when running in isolation
     import sys
 
-    if str(LIBRARIES_ROOT) not in sys.path:
-        sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries.database_integration import create_storage  # type: ignore
-    from libraries.prune_logs import prune_run_directories  # type: ignore
+    if str(PACKAGE_ROOT) not in sys.path:
+        sys.path.insert(0, str(PACKAGE_ROOT))
+    from command_center.scripts.libraries.database_integration import create_storage
+    from command_center.scripts.libraries.prune_logs import prune_run_directories
 
 
 @dataclass(frozen=True)

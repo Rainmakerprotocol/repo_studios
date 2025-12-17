@@ -9,15 +9,16 @@ import os
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable, Mapping
+from typing import Any, Mapping, Sequence, cast
 
 try:
-    import yaml  # type: ignore
-except Exception as exc:  # pragma: no cover - import guard
-    YAML_IMPORT_ERROR = exc
-    yaml = None
+    import yaml as yaml_module
+except ModuleNotFoundError as exc:  # pragma: no cover - import guard
+    YAML_IMPORT_ERROR: BaseException | None = exc
+    yaml: Any | None = None
 else:  # pragma: no cover - executed when import succeeds
     YAML_IMPORT_ERROR = None
+    yaml = yaml_module
 
 from command_center.scripts.libraries import (
     KeepSpec,
@@ -31,8 +32,8 @@ from command_center.scripts.libraries import (
     write_report_artifacts,
 )
 
-DEFAULT_INDEX_PATH = Path(".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml")
-LEGACY_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
+DEFAULT_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
+LEGACY_INDEX_PATH = Path(".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml")
 DEFAULT_PENDING_PATH = Path(".repo_studios/scripts/repo_standards_pending.yaml")
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
 SUMMARY_STEM = "standards_overview"
@@ -80,7 +81,7 @@ OPTIONS_CONFIG = OptionsConfig(
 )
 
 
-def _parse_args(argv: Iterable[str] | None) -> argparse.Namespace:
+def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__ or "")
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument(
@@ -135,7 +136,7 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
@@ -178,7 +179,7 @@ def _load_index_payload(path: Path) -> Mapping[str, Any] | None:
     if yaml is None or not path.exists():
         return None
     try:
-        loaded = yaml.safe_load(path.read_text(encoding="utf-8"))  # type: ignore[call-arg]
+        loaded = yaml.safe_load(path.read_text(encoding="utf-8"))
     except Exception:  # pragma: no cover - defensive read
         return None
     return loaded if isinstance(loaded, Mapping) else None
@@ -242,7 +243,7 @@ def _build_markdown(
     return "\n".join(lines).rstrip() + "\n"
 
 
-def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
+def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     if YAML_IMPORT_ERROR is not None:
         logging.warning("[standards-summary] missing PyYAML: %s", YAML_IMPORT_ERROR)
         return {"status": "skipped", "reason": "missing PyYAML"}
@@ -344,7 +345,7 @@ def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
     }
 
 
-def main(argv: Iterable[str] | None = None) -> None:
+def main(argv: Sequence[str] | None = None) -> None:
     result = run(argv)
     status = result.get("status")
     exit_code = 0 if status in {"ok", "skipped"} else 1

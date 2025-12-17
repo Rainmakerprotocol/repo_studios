@@ -20,6 +20,7 @@ def _build_args(
     *,
     repo_root: Path,
     index_output_dir: Path,
+    index_path: Path,
     gap_output_dir: Path,
     diff_output_dir: Path,
     prompt_output_dir: Path,
@@ -34,7 +35,7 @@ def _build_args(
         "--index-output-dir",
         str(index_output_dir),
         "--index-path",
-        str(index_output_dir / "latest_index.yaml"),
+        str(index_path),
         "--categories-path",
         str(categories_path),
         "--gap-output-dir",
@@ -66,6 +67,7 @@ def _build_args(
 def _patched_loader(
     repo_root: Path,
     index_output_dir: Path,
+    default_index_path: Path,
     gap_output_dir: Path,
     prompt_output_dir: Path,
 ):
@@ -78,27 +80,32 @@ def _patched_loader(
             def _fake_generate(argv: list[str] | None = None) -> int:
                 argv_list = argv or []
                 output_dir = _arg_value(argv_list, "--output-dir", index_output_dir)
-                index_path = _arg_value(argv_list, "--index-path", index_output_dir / "latest_index.yaml")
+                resolved_index_path = _arg_value(
+                    argv_list,
+                    "--index-path",
+                    default_index_path,
+                )
                 output_dir.mkdir(parents=True, exist_ok=True)
-                slug = "20240102_120000"
-                run_dir = output_dir / f"{orchestrator.INDEX_RUN_PREFIX}{slug}"
+                slug = "20240102-1200"
+                run_dir = output_dir / orchestrator.INDEX_VIEWER_SLUG / orchestrator.INDEX_TOPIC_SLUG / slug
                 run_dir.mkdir(parents=True, exist_ok=True)
-                (run_dir / "report.json").write_text(
-                    json.dumps({"summary": {"rule_count": 123}, "status": "ok"}),
+                (run_dir / "manifest.json").write_text(
+                    json.dumps({"viewer_slug": orchestrator.INDEX_VIEWER_SLUG, "topic": orchestrator.INDEX_TOPIC_SLUG}),
                     encoding="utf-8",
                 )
-                latest_payload = {
-                    "timestamp": slug,
-                    "status": "ok",
-                    "summary": {"rule_count": 123},
-                    "integrity_hash": "hash-123",
-                }
-                (output_dir / "latest_report.json").write_text(
-                    json.dumps(latest_payload),
+                (run_dir / "summary.md").write_text("# Standards Index Build Report\n", encoding="utf-8")
+                (run_dir / "telemetry.json").write_text(
+                    json.dumps(
+                        {
+                            "schema_version": 1,
+                            "metrics": {"status": "ok", "rule_count": 123},
+                            "payload": {"status": "ok", "summary": {"rule_count": 123}},
+                        }
+                    ),
                     encoding="utf-8",
                 )
-                index_path.parent.mkdir(parents=True, exist_ok=True)
-                index_path.write_text("rules: []\n", encoding="utf-8")
+                resolved_index_path.parent.mkdir(parents=True, exist_ok=True)
+                resolved_index_path.write_text("rules: []\n", encoding="utf-8")
                 return 0
 
             return _fake_generate
@@ -172,6 +179,7 @@ def test_orchestrator_emits_healthview_bundle(tmp_path: Path) -> None:
     repo_root = Path(__file__).resolve().parents[4]
 
     index_output_dir = tmp_path / "index"
+    index_path = tmp_path / "repo_standards_index.yaml"
     gap_output_dir = tmp_path / "gap"
     diff_output_dir = tmp_path / "diff"
     prompt_output_dir = tmp_path / "prompts"
@@ -186,6 +194,7 @@ def test_orchestrator_emits_healthview_bundle(tmp_path: Path) -> None:
     args = _build_args(
         repo_root=repo_root,
         index_output_dir=index_output_dir,
+        index_path=index_path,
         gap_output_dir=gap_output_dir,
         diff_output_dir=diff_output_dir,
         prompt_output_dir=prompt_output_dir,
@@ -195,7 +204,7 @@ def test_orchestrator_emits_healthview_bundle(tmp_path: Path) -> None:
         timestamp="2024-01-02T12:00:00+00:00",
     )
 
-    with _patched_loader(repo_root, index_output_dir, gap_output_dir, prompt_output_dir):
+    with _patched_loader(repo_root, index_output_dir, index_path, gap_output_dir, prompt_output_dir):
         exit_code = orchestrator.run(args)
 
     assert exit_code == 0
@@ -224,7 +233,7 @@ def test_orchestrator_emits_healthview_bundle(tmp_path: Path) -> None:
     assert telemetry_path.exists()
 
     artifacts_section = manifest["artifacts"]
-    assert artifacts_section["index_report"].endswith("report.json")
+    assert artifacts_section["index_report"].endswith("telemetry.json")
     assert artifacts_section["gap_manifest"].endswith("manifest.json")
     assert artifacts_section["gap_summary_md"].endswith("summary.md")
     assert artifacts_section["gap_telemetry"].endswith("telemetry.json")
@@ -235,6 +244,7 @@ def test_orchestrator_fails_on_invalid_topic_alias(tmp_path: Path) -> None:
     repo_root = Path(__file__).resolve().parents[4]
 
     index_output_dir = tmp_path / "index"
+    index_path = tmp_path / "repo_standards_index.yaml"
     gap_output_dir = tmp_path / "gap"
     diff_output_dir = tmp_path / "diff"
     prompt_output_dir = tmp_path / "prompts"
@@ -253,6 +263,7 @@ def test_orchestrator_fails_on_invalid_topic_alias(tmp_path: Path) -> None:
     args = _build_args(
         repo_root=repo_root,
         index_output_dir=index_output_dir,
+        index_path=index_path,
         gap_output_dir=gap_output_dir,
         diff_output_dir=diff_output_dir,
         prompt_output_dir=prompt_output_dir,
@@ -262,7 +273,7 @@ def test_orchestrator_fails_on_invalid_topic_alias(tmp_path: Path) -> None:
         timestamp="2024-01-03T12:00:00+00:00",
     )
 
-    with _patched_loader(repo_root, index_output_dir, gap_output_dir, prompt_output_dir):
+    with _patched_loader(repo_root, index_output_dir, index_path, gap_output_dir, prompt_output_dir):
         exit_code = orchestrator.run(args)
 
     assert exit_code == 1

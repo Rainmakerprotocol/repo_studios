@@ -1,5 +1,0 @@
-status=ok
-timestamp=2025-10-23T21:00:24.919812+00:00
-violations=0
-graph_path=C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\import_graph_reports\import_graph-20251022_201626\graph.json
-allowlist_path=C:\Users\genet\repo_studios\.repo_studios\scripts\producers\import_rules_allowlist.json

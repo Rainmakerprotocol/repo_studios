@@ -1,1 +1,0 @@
-No typecheck targets discovered; skipping mypy execution.

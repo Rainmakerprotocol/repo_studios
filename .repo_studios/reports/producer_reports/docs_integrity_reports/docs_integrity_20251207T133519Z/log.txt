@@ -1,8 +1,0 @@
-status=error
-exit_code=1
-timestamp=2025-12-07T13:35:19.790377+00:00
-documents_processed=0
-json_blocks_checked=0
-documents_updated=0
-table_regenerated=False
-errors=Index path not found: C:\Users\genet\repo_studios\docs\standards\docs_index.md

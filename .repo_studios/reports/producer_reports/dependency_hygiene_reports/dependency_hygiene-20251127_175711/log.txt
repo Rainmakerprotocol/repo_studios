@@ -1,6 +1,0 @@
-status=passed
-issue_count=0
-requirements_scanned=1
-pyproject_scanned=0
-issue_counts:
-issues:

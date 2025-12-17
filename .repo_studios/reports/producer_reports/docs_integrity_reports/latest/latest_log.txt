@@ -1,8 +1,0 @@
-status=error
-exit_code=1
-timestamp=2025-12-11T13:10:43.350566+00:00
-documents_processed=0
-json_blocks_checked=0
-documents_updated=0
-table_regenerated=False
-errors=Global docs index JSON block not found

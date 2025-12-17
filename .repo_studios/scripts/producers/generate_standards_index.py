@@ -1,4 +1,14 @@
-"""Build repo_standards_index.yaml and emit structured artifacts for auditing."""
+"""Build repo_standards_index.yaml and emit structured artifacts for auditing.
+
+This producer writes positional-encoded artifacts under the configured reports root:
+
+<reports_root>/<viewer_slug>/<topic>/<YYYYMMDD-HHMM>/
+
+Artifacts:
+- manifest.json
+- summary.md
+- telemetry.json
+"""
 
 from __future__ import annotations
 
@@ -16,7 +26,7 @@ from pathlib import Path
 from typing import Any, TypedDict, cast
 
 try:  # pragma: no cover - dependency issue surfaced early
-    import yaml  # type: ignore
+    import yaml
 except Exception as exc:  # pragma: no cover - dependency issue surfaced early
     logging.basicConfig(level=logging.ERROR, format="%(levelname)s %(message)s")
     logging.error("missing dependency pyyaml: %s", exc)
@@ -24,27 +34,28 @@ except Exception as exc:  # pragma: no cover - dependency issue surfaced early
 
 
 DEFAULT_REPO_ROOT = Path(__file__).resolve().parents[3]
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_index_reports")
-RUN_PREFIX = "standards_index"
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
+VIEWER_SLUG = "rawview"
+TOPIC_SLUG = "standards_index"
 DEFAULT_ARTIFACTS_TO_KEEP = 5
 SCHEMA_VERSION = 1
 
 DEFAULT_RELATIVE_CATEGORIES = Path(".repo_studios/scripts/.repo_studios/standards_categories.yaml")
 DEFAULT_RELATIVE_SEED = Path(".repo_studios/scripts/.repo_studios/standards_seed.yaml")
 DEFAULT_RELATIVE_EXTRACTION = Path(".repo_studios/scripts/.repo_studios/standards_extraction.py")
-DEFAULT_RELATIVE_INDEX = Path(
-    ".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml"
-)
+DEFAULT_RELATIVE_INDEX = Path(".repo_studios/scripts/repo_standards_index.yaml")
 DEFAULT_RELATIVE_PENDING = Path(".repo_studios/scripts/repo_standards_pending.yaml")
 
 LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 try:
-    from libraries import copy_latest_artifact
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
 except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import copy_latest_artifact
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
 
 
 @dataclass
@@ -82,7 +93,7 @@ class BuildStats:
     extracted_count: int
     accepted_count: int
     pending_written: bool
-    extraction_diags: list[dict[str, Any]]
+    extraction_diags: list[ExtractDiagnostics]
 
 
 class ExtractDiagnostics(TypedDict, total=False):
@@ -176,12 +187,17 @@ def _dynamic_import_extract(paths: Paths) -> ExtractFn:  # pragma: no cover - be
     spec_path = paths.extraction_module
     if not spec_path.exists():
 
-        def _absent(_: Path, __: list[str], ___: set[str], today: str | None = None):  # type: ignore[unused-ignore]
+        def _absent(
+            _: Path,
+            __: list[str],
+            ___: set[str],
+            today: str | None = None,
+        ) -> tuple[list[dict[str, Any]], ExtractDiagnostics]:
             return [], {"notes": ["extraction module not present"]}
 
         return cast(ExtractFn, _absent)
     try:
-        sandbox: dict[str, Any] = runpy.run_path(str(spec_path))  # type: ignore[assignment]
+        sandbox: dict[str, Any] = runpy.run_path(str(spec_path))
         fn = sandbox.get("extract_rules")
         if callable(fn):
             return cast(ExtractFn, fn)
@@ -190,7 +206,12 @@ def _dynamic_import_extract(paths: Paths) -> ExtractFn:  # pragma: no cover - be
         logging.warning("extraction import failed (sandbox path): %s", exc)
         message = f"extraction unavailable: {exc}"
 
-        def _empty(_: Path, __: list[str], ___: set[str], today: str | None = None):  # type: ignore[unused-ignore]
+        def _empty(
+            _: Path,
+            __: list[str],
+            ___: set[str],
+            today: str | None = None,
+        ) -> tuple[list[dict[str, Any]], ExtractDiagnostics]:
             return [], {"notes": [message]}
 
         return cast(ExtractFn, _empty)
@@ -218,13 +239,13 @@ def _maybe_extract_rules(
     seed_ids: set[str],
     enable: bool,
     auto_accept: bool,
-) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[ExtractDiagnostics]]:
     if not enable:
         return [], [], []
     extract_fn = _dynamic_import_extract(paths)
     today = date.today().isoformat()
     collected: list[dict[str, Any]] = []
-    diags: list[dict[str, Any]] = []
+    diags: list[ExtractDiagnostics] = []
     for src in sources:
         if src.path.suffix.lower() != ".md":
             continue
@@ -234,7 +255,9 @@ def _maybe_extract_rules(
             diags.append({"file": str(src.path), "errors": [f"extraction failed: {exc}"], "rules_found": 0})
             continue
         if isinstance(diag, dict):
-            diags.append(diag | {"file": str(src.path)})
+            diag_with_file = cast(ExtractDiagnostics, dict(diag))
+            diag_with_file.setdefault("file", str(src.path))
+            diags.append(diag_with_file)
         collected.extend(new_rules)
     extracted_sorted = _dedupe_extracted(collected, seed_ids)
     accepted = extracted_sorted if auto_accept else []
@@ -256,7 +279,7 @@ def _write_pending_file(
     paths: Paths,
     extracted_all: list[dict[str, Any]],
     auto_accept: bool,
-    extraction_diags: list[dict[str, Any]],
+    extraction_diags: list[ExtractDiagnostics],
     enable_extraction: bool,
 ) -> bool:
     if not (enable_extraction and not auto_accept and extracted_all):
@@ -381,7 +404,7 @@ def _current_utc() -> datetime:
 
 
 def _format_run_slug(moment: datetime) -> str:
-    return moment.strftime("%Y%m%d_%H%M%S")
+    return moment.strftime("%Y%m%d-%H%M")
 
 
 def _resolve_timestamp(raw: str | None) -> tuple[str, datetime]:
@@ -396,48 +419,9 @@ def _resolve_timestamp(raw: str | None) -> tuple[str, datetime]:
             parsed = parsed.astimezone(timezone.utc)
         return _format_run_slug(parsed), parsed
     except ValueError:
-        return raw, _current_utc()
-
-
-def _ensure_directory(path: Path) -> Path:
-    path.mkdir(parents=True, exist_ok=True)
-    return path
-
-
-def _sanitize_slug(slug: str) -> str:
-    sanitized = slug.replace("/", "_").replace("\\", "_")
-    if os.sep not in {"/", "\\"}:
-        sanitized = sanitized.replace(os.sep, "_")
-    return sanitized
-
-
-def _prepare_run_dir(output_dir: Path, run_slug: str) -> Path:
-    safe_slug = _sanitize_slug(run_slug)
-    run_dir = output_dir / f"{RUN_PREFIX}-{safe_slug}"
-    run_dir.mkdir(parents=True, exist_ok=True)
-    return run_dir
-
-
-def prune_old_runs(output_dir: Path, *, keep: int, current_run: Path) -> None:
-    keep = max(keep, 1)
-    if not output_dir.exists():
-        return
-    dirs = [
-        candidate
-        for candidate in output_dir.iterdir()
-        if candidate.is_dir() and candidate.name.startswith(f"{RUN_PREFIX}-")
-    ]
-    dirs.sort(key=lambda item: item.name, reverse=True)
-    for index, path in enumerate(dirs):
-        if index < keep or path == current_run:
-            continue
-        for child in path.iterdir():
-            if child.is_file():
-                child.unlink(missing_ok=True)
-        path.rmdir()
-
-
-_copy_latest = copy_latest_artifact
+        logging.warning("--timestamp value was not ISO-8601; falling back to current time")
+        now = _current_utc()
+        return _format_run_slug(now), now
 
 
 def _rel_to_repo(path: Path, repo_root: Path) -> str:
@@ -447,7 +431,7 @@ def _rel_to_repo(path: Path, repo_root: Path) -> str:
         return str(path.resolve())
 
 
-def _summarize_diags(diags: list[dict[str, Any]], limit: int = 5) -> str:
+def _summarize_diags(diags: list[ExtractDiagnostics], limit: int = 5) -> str:
     if not diags:
         return ""
     notes: list[str] = []
@@ -465,6 +449,7 @@ def _compose_report_payload(
     paths: Paths,
     run_slug: str,
     generated_at: datetime,
+    bundle_dir: Path,
     status: str,
     index: dict[str, Any] | None,
     stats: BuildStats | None,
@@ -490,13 +475,14 @@ def _compose_report_payload(
         "diagnostics": stats.extraction_diags if stats else [],
     }
     return {
-        "schema_version": 1,
+        "schema_version": SCHEMA_VERSION,
         "status": status,
         "timestamp": run_slug,
         "generated_utc": generated_at.isoformat(),
         "repo_root": str(paths.repo_root),
         "index_path": _rel_to_repo(paths.output_index, paths.repo_root),
         "output_dir": _rel_to_repo(paths.output_dir, paths.repo_root),
+        "bundle_dir": _rel_to_repo(bundle_dir, paths.repo_root),
         "pending_path": extraction["pending_file"],
         "integrity_hash": index.get("integrity_hash") if index else None,
         "version": index.get("version") if index else None,
@@ -513,6 +499,8 @@ def _render_report_md(payload: dict[str, Any]) -> str:
     lines.append(f"- status: {payload['status']}\n")
     lines.append(f"- index_path: {payload['index_path']}\n")
     lines.append(f"- output_dir: {payload['output_dir']}\n")
+    if payload.get("bundle_dir"):
+        lines.append(f"- bundle_dir: {payload['bundle_dir']}\n")
     lines.append(f"- integrity_hash: {payload.get('integrity_hash')}\n")
     if payload.get("notes"):
         lines.append(f"- notes: {payload['notes']}\n")
@@ -573,7 +561,8 @@ def _render_log_text(payload: dict[str, Any]) -> str:
 def write_artifacts(
     *,
     paths: Paths,
-    run_dir: Path,
+    storage: Any,
+    bundle_dir: Path,
     run_slug: str,
     generated_at: datetime,
     index: dict[str, Any] | None,
@@ -585,44 +574,59 @@ def write_artifacts(
         paths=paths,
         run_slug=run_slug,
         generated_at=generated_at,
+        bundle_dir=bundle_dir,
         status=status,
         index=index,
         stats=stats,
         notes=notes,
     )
-    report_json_path = run_dir / "report.json"
-    report_json_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
-    report_md_path = run_dir / "report.md"
-    report_md_path.write_text(_render_report_md(payload), encoding="utf-8")
+    markdown = _render_report_md(payload)
+    telemetry = {
+        "schema_version": SCHEMA_VERSION,
+        "generated_utc": generated_at.isoformat(),
+        "metrics": {
+            "status": status,
+            "rule_count": payload.get("summary", {}).get("rule_count", 0),
+            "category_count": payload.get("summary", {}).get("category_count", 0),
+            "source_count": payload.get("summary", {}).get("source_count", 0),
+            "extracted_count": payload.get("summary", {}).get("extracted_count", 0),
+            "accepted_count": payload.get("summary", {}).get("accepted_count", 0),
+            "pending_written": bool(payload.get("extraction", {}).get("pending_written")),
+        },
+        "payload": payload,
+    }
 
-    log_path = run_dir / "log.txt"
-    log_path.write_text(_render_log_text(payload), encoding="utf-8")
+    manifest = {
+        "schema_version": SCHEMA_VERSION,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": run_slug,
+        "git_sha": None,
+        "status": "ok" if status in {"ok", "pending_extractions"} else "failed",
+        "catalog": [
+            {"artifact": "manifest.json", "kind": "json"},
+            {"artifact": "summary.md", "kind": "markdown"},
+            {"artifact": "telemetry.json", "kind": "json"},
+        ],
+        "inputs": {
+            "repo_root": str(paths.repo_root),
+            "categories_path": _rel_to_repo(paths.categories_file, paths.repo_root),
+            "seed_path": _rel_to_repo(paths.seed_file, paths.repo_root),
+            "extraction_module": _rel_to_repo(paths.extraction_module, paths.repo_root),
+            "index_path": _rel_to_repo(paths.output_index, paths.repo_root),
+            "pending_path": _rel_to_repo(paths.pending_file, paths.repo_root),
+        },
+        "provenance": {"trigger_type": "manual"},
+        "summary": payload.get("summary", {}),
+    }
 
-    latest_pairs: list[tuple[Path, Path]] = [
-        (report_json_path, paths.output_dir / "latest_report.json"),
-        (report_md_path, paths.output_dir / "latest_report.md"),
-        (log_path, paths.output_dir / "latest_report.log"),
-    ]
-
-    if index is not None:
-        serialized = yaml.safe_dump(index, sort_keys=False, width=100)
-        run_index_path = run_dir / "index.yaml"
-        run_index_path.write_text(serialized, encoding="utf-8")
-        raw_yaml_path = run_dir / "raw.yaml"
-        raw_yaml_path.write_text(serialized, encoding="utf-8")
-        raw_txt_path = run_dir / "raw.txt"
-        raw_txt_path.write_text(serialized, encoding="utf-8")
-        latest_pairs.extend(
-            [
-                (run_index_path, paths.output_dir / "latest_index.yaml"),
-                (raw_yaml_path, paths.output_dir / "latest_raw.yaml"),
-                (raw_txt_path, paths.output_dir / "latest_raw.txt"),
-            ]
-        )
-
-    for src, dest in latest_pairs:
-        _copy_latest(src, dest)
+    # DB_INTEGRATION_MARKER: write manifest.json (report_runs)
+    storage.write_manifest(manifest)
+    # DB_INTEGRATION_MARKER: write summary.md (report_summaries)
+    storage.write_summary({"markdown": markdown}, format="markdown")
+    # DB_INTEGRATION_MARKER: write telemetry.json + extracted metrics (test_metrics)
+    storage.write_telemetry(telemetry)
 
 
 def configure_logging(level: str) -> None:
@@ -647,7 +651,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--index-path",
         default=str(DEFAULT_RELATIVE_INDEX),
-        help="Canonical index output path (defaults to latest_index.yaml bundle pointer)",
+        help="Canonical index output path (defaults to repo_standards_index.yaml snapshot)",
     )
     parser.add_argument("--pending-path", default=str(DEFAULT_RELATIVE_PENDING), help="Pending extraction output path")
     parser.add_argument("--timestamp", help="ISO8601 timestamp for the run directory")
@@ -660,7 +664,8 @@ def build_parser() -> argparse.ArgumentParser:
 
 def _paths_from_args(args: argparse.Namespace) -> Paths:
     repo_root = Path(args.repo_root).resolve()
-    output_dir = _ensure_directory(_resolve_path(repo_root, args.output_dir))
+    output_dir = _resolve_path(repo_root, args.output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
     return Paths(
         repo_root=repo_root,
         categories_file=_resolve_path(repo_root, args.categories_path),
@@ -679,8 +684,15 @@ def main(argv: list[str] | None = None) -> int:
 
     paths = _paths_from_args(args)
     run_slug, generated_at = _resolve_timestamp(args.timestamp)
-    run_dir = _prepare_run_dir(paths.output_dir, run_slug)
     keep = max(args.artifacts_to_keep, 1)
+
+    storage = create_storage(
+        paths.output_dir,
+        VIEWER_SLUG,
+        TOPIC_SLUG,
+        timestamp=run_slug,
+    )
+    bundle_dir = storage.file_storage.bundle_dir
 
     try:
         index, stats = build_index(paths)
@@ -689,7 +701,8 @@ def main(argv: list[str] | None = None) -> int:
         logging.exception("build failed: %s", exc)
         write_artifacts(
             paths=paths,
-            run_dir=run_dir,
+            storage=storage,
+            bundle_dir=bundle_dir,
             run_slug=run_slug,
             generated_at=generated_at,
             index=None,
@@ -697,7 +710,12 @@ def main(argv: list[str] | None = None) -> int:
             status="error",
             notes=notes,
         )
-        prune_old_runs(paths.output_dir, keep=keep, current_run=run_dir)
+        prune_run_directories(
+            paths.output_dir / VIEWER_SLUG / TOPIC_SLUG,
+            keep=keep,
+            current_run=bundle_dir,
+            logger=logging.getLogger(__name__),
+        )
         return 1
 
     write_index(paths, index)
@@ -705,7 +723,8 @@ def main(argv: list[str] | None = None) -> int:
     notes = _summarize_diags(stats.extraction_diags)
     write_artifacts(
         paths=paths,
-        run_dir=run_dir,
+        storage=storage,
+        bundle_dir=bundle_dir,
         run_slug=run_slug,
         generated_at=generated_at,
         index=index,
@@ -713,11 +732,20 @@ def main(argv: list[str] | None = None) -> int:
         status=status,
         notes=notes,
     )
-    prune_old_runs(paths.output_dir, keep=keep, current_run=run_dir)
+    prune_run_directories(
+        paths.output_dir / VIEWER_SLUG / TOPIC_SLUG,
+        keep=keep,
+        current_run=bundle_dir,
+        logger=logging.getLogger(__name__),
+    )
 
+    try:
+        index_path_display = paths.output_index.relative_to(paths.repo_root)
+    except ValueError:
+        index_path_display = paths.output_index
     logging.info(
         "Wrote %s (rules=%d, hash=%s)",
-        paths.output_index.relative_to(paths.repo_root),
+        index_path_display,
         len(index["rules"]),
         str(index["integrity_hash"])[:12],
     )

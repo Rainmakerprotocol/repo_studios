@@ -328,7 +328,7 @@ The Test Execution Telemetry orchestrator chains six scripts in producer → con
 **Inputs:**
 
 * Pytest log files and JUnit XML from `.repo_studios/command_center/reports/rawview/test_execution_runs/<timestamp>/`
-* `coverage.xml` from `.repo_studios/reports/producer_reports/test_run_coverage/coverage.xml`
+* `coverage.xml` from `.repo_studios/tests/fixtures/test_run_coverage/coverage.xml`
 * Git history for churn analysis (via git log)
 * Optional: Lizard complexity metrics source (JSON file, fallback to churn-only if missing)
 

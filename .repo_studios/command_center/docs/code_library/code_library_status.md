@@ -46,7 +46,7 @@ Related tests reside in `.repo_studios/tests/tests_library_integration/libraries
 | Location | Content |
 | --- | --- |
 | `.repo_studios/command_center/reports/<slug>_duplicate_scan/` | Matrices and Markdown summaries for each duplicate scan run (mirrored to target index folders). |
-| `.repo_studios/command_center/reports/producer_reports/lizard_reports/` | Lizard complexity outputs flagging high-risk modules prior to extraction. |
+| `.repo_studios/reports/producer_reports/healthview/lizard_report/<YYYYMMDD-HHMM>/` | Lizard complexity bundles flagging high-risk modules prior to extraction (`summary.md` includes the top offenders table). |
 | `.repo_studios/command_center/reports/repo-studios__command-center__automation_run/` | Dry-run automation bundles combining manifest, metrics, and guardrail evidence. |
 | `.repo_studios/command_center/docs/metrics/` | `metrics_summary.json`, weighted briefing template, and baseline log CSV. |
 

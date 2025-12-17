@@ -29,7 +29,7 @@ to align with positional encoding and database integration standards.
 
 Analyze the following script:
 `<SCRIPT_PATH>`
-`generate_lizard_report.py`
+`generate_undocumented_logic_report.py`
 
 Report the following information:
 
@@ -111,7 +111,7 @@ A structured report covering:
 ```text
 Based on the analysis of:
 `<SCRIPT_PATH>`
-`generate_lizard_report.py`
+`generate_undocumented_logic_report.py`
 
 Generate a detailed implementation plan to align this script with
 positional encoding and database integration standards.
@@ -318,7 +318,7 @@ A comprehensive implementation plan including:
 ````text
 Execute the implementation plan for:
 `<SCRIPT_PATH>`
-`generate_lizard_report.py`
+`generate_undocumented_logic_report.py`
 
 Follow the detailed plan from Phase 2.
 
@@ -441,7 +441,6 @@ Follow the detailed plan from Phase 2.
 7. Verify coverage ≥ 80%
 8. Update documentation
 9. Run marker audit
-10. Commit changes with descriptive message
 
 ### Success Criteria
 

@@ -20,7 +20,7 @@ def _load_module():
 
 
 def _write_coverage_fixture(repo_root: Path, *, hits_for_uncovered: int = 0) -> Path:
-    coverage_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "test_run_coverage"
+    coverage_dir = repo_root / ".repo_studios" / "tests" / "fixtures" / "test_run_coverage"
     coverage_dir.mkdir(parents=True, exist_ok=True)
     coverage_xml = coverage_dir / "coverage.xml"
     coverage_xml.write_text(
@@ -63,7 +63,7 @@ def test_generates_structured_artifacts(tmp_path: Path):
 
     coverage_xml = _write_coverage_fixture(repo_root)
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "test_coverage_reports"
+    output_root = repo_root / ".repo_studios" / "reports" / "producer_reports"
 
     exit_code = mod.main(
         [
@@ -72,7 +72,7 @@ def test_generates_structured_artifacts(tmp_path: Path):
             "--coverage-xml",
             str(coverage_xml),
             "--output-dir",
-            str(output_dir),
+            str(output_root),
             "--timestamp",
             "2024-01-01T00:00:00+00:00",
             "--log-level",
@@ -81,10 +81,26 @@ def test_generates_structured_artifacts(tmp_path: Path):
     )
 
     assert exit_code == 0
-    run_dir = output_dir / f"{mod.RUN_PREFIX}-20240101_000000"
+    run_dir = output_root / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240101-0000"
     assert run_dir.is_dir()
 
-    payload = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
+    bundle_files = sorted(path.name for path in run_dir.iterdir() if path.is_file())
+    assert bundle_files == ["manifest.json", "summary.md", "telemetry.json"]
+
+    manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["viewer_slug"] == mod.VIEWER_SLUG
+    assert manifest["topic"] == mod.TOPIC_SLUG
+    assert manifest["run_timestamp"] == "20240101-0000"
+    assert manifest["status"] == "ok"
+    assert "inputs" in manifest
+
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    assert telemetry["viewer_slug"] == mod.VIEWER_SLUG
+    assert telemetry["topic"] == mod.TOPIC_SLUG
+    assert telemetry["run_timestamp"] == "20240101-0000"
+    assert telemetry["status"] == "ok"
+
+    payload = telemetry["payload"]
     summary = payload["summary"]
     assert summary["status"] == "ok"
     assert summary["total_files"] == 1
@@ -100,22 +116,11 @@ def test_generates_structured_artifacts(tmp_path: Path):
     assert file_entry["functions_covered"] == 1
     assert file_entry["uncovered_functions"] == ["uncovered"]
 
-    latest_json = output_dir / "latest_report.json"
-    latest_md = output_dir / "latest_report.md"
-    latest_csv = output_dir / "latest_report.csv"
-    latest_log = output_dir / "latest_report.log"
-    assert latest_json.is_file()
-    assert latest_md.is_file()
-    assert latest_csv.is_file()
-    assert latest_log.is_file()
-
-    markdown = latest_md.read_text(encoding="utf-8")
+    markdown = (run_dir / "summary.md").read_text(encoding="utf-8")
     assert "Test Coverage Inventory" in markdown
     assert "src/alpha.py" in markdown
 
-    csv_lines = latest_csv.read_text(encoding="utf-8").strip().splitlines()
-    assert csv_lines[0] == "path,function_count,functions_covered,coverage_pct,uncovered_functions"
-    assert "src/alpha.py,2,1,50.00,uncovered" in csv_lines[1]
+    assert not list((output_root / mod.VIEWER_SLUG / mod.TOPIC_SLUG).glob("latest_*"))
 
 
 def test_threshold_enforcement_and_pruning(tmp_path: Path):
@@ -133,18 +138,15 @@ def test_threshold_enforcement_and_pruning(tmp_path: Path):
 
     coverage_xml = _write_coverage_fixture(repo_root)
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "test_coverage_reports"
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_root = repo_root / ".repo_studios" / "reports" / "producer_reports"
+    base_dir = output_root / mod.VIEWER_SLUG / mod.TOPIC_SLUG
+    base_dir.mkdir(parents=True, exist_ok=True)
 
-    stale_slugs = [
-        f"{mod.RUN_PREFIX}-20240101_000000",
-        f"{mod.RUN_PREFIX}-20240102_000000",
-        f"{mod.RUN_PREFIX}-20240103_000000",
-    ]
+    stale_slugs = ["20240101-0000", "20240102-0000", "20240103-0000"]
     for slug in stale_slugs:
-        run_dir = output_dir / slug
+        run_dir = base_dir / slug
         run_dir.mkdir(parents=True, exist_ok=True)
-        (run_dir / "report.json").write_text("{}\n", encoding="utf-8")
+        (run_dir / "telemetry.json").write_text("{}\n", encoding="utf-8")
 
     exit_code = mod.main(
         [
@@ -153,7 +155,7 @@ def test_threshold_enforcement_and_pruning(tmp_path: Path):
             "--coverage-xml",
             str(coverage_xml),
             "--output-dir",
-            str(output_dir),
+            str(output_root),
             "--timestamp",
             "2024-02-04T00:00:00+00:00",
             "--min-coverage",
@@ -167,22 +169,19 @@ def test_threshold_enforcement_and_pruning(tmp_path: Path):
 
     assert exit_code == 1
 
-    run_dir = output_dir / f"{mod.RUN_PREFIX}-20240204_000000"
+    run_dir = base_dir / "20240204-0000"
     assert run_dir.is_dir()
 
-    payload = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    payload = telemetry["payload"]
     summary = payload["summary"]
     assert summary["status"] == "threshold_failed"
     assert summary["files_below_threshold"] == ["src/alpha.py"]
 
-    log_text = (output_dir / "latest_report.log").read_text(encoding="utf-8")
-    assert "status=threshold_failed" in log_text
-    assert "files_below_threshold=1" in log_text
-
-    remaining = sorted(
-        path.name for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)
-    )
+    remaining = sorted(path.name for path in base_dir.iterdir() if path.is_dir())
     assert remaining == [
-        f"{mod.RUN_PREFIX}-20240103_000000",
-        f"{mod.RUN_PREFIX}-20240204_000000",
+        "20240103-0000",
+        "20240204-0000",
     ]
+
+    assert not list(base_dir.glob("latest_*"))

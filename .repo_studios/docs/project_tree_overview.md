@@ -110,8 +110,7 @@ repo_studios/
 │   │   │   ├── inventory_health_reports/
 │   │   │   ├── inventory_validation_reports/
 │   │   │   ├── inventory_view_reports/
-│   │   │   ├── lizard_metrics_reports/
-│   │   │   ├── lizard_reports/
+│   │   │   ├── healthview/ (positional bundles: lizard_report/, import_graph/, doc_index/, ...)
 │   │   │   ├── markdown_anchor_validation_reports/
 │   │   │   ├── metrics_anchor_stub_reports/
 │   │   │   ├── monkey_patch_scans/

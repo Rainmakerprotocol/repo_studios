@@ -1,6 +1,0 @@
-status=ok
-timestamp=20251126_195148
-files_checked=7
-records_checked=70
-errors=0
-warnings=0

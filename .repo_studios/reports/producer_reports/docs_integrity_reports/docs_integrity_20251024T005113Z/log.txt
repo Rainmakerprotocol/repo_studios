@@ -1,7 +1,0 @@
-status=ok
-exit_code=0
-timestamp=2025-10-24T00:51:13.714263+00:00
-documents_processed=1
-json_blocks_checked=2
-documents_updated=0
-table_regenerated=False
