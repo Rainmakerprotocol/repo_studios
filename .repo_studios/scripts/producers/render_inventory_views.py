@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-"""Render structured inventory views and maintain legacy compatibility."""
+"""Render structured inventory views and maintain legacy compatibility.
+
+This producer emits a positional canonical bundle under:
+    `.repo_studios/reports/producer_reports/healthview/inventory_overview/<YYYYMMDD-HHMM>/`
+
+The bundle contains exactly:
+    - manifest.json
+    - summary.md
+    - telemetry.json
+"""
 
 from __future__ import annotations
 
@@ -11,7 +20,7 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, NamedTuple
+from typing import Any, Dict, Iterable, List, NamedTuple, cast
 
 import yaml
 
@@ -19,38 +28,23 @@ DEFAULT_REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_SCHEMA_ROOT = Path(".repo_studios/inventory_schema")
 DEFAULT_VIEWS_DIR = Path(".repo_studios/inventory_schema/views")
 DEFAULT_REPORTS_ROOT = Path(".repo_studios/reports")
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/render_inventory_views")
-RUN_PREFIX = "render_inventory_views"
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
+VIEWER_SLUG = "healthview"
+TOPIC_SLUG = "inventory_overview"
+CATALOG_ID = "scripts.inventory.render_inventory_views"
 SCHEMA_VERSION = 1
 IGNORED_FILES = {"enums.yaml", "inventory_entry_template.yaml"}
 
 LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 try:
-    from libraries import (  # type: ignore
-        KeepSpec,
-        PathSpec,
-        ReportArtifact,
-        OptionsConfig,
-        PathsConfig,
-        build_standard_options,
-        build_standard_paths,
-        write_report_artifacts,
-    )
+    from libraries import PathSpec, OptionsConfig, PathsConfig, build_standard_options, build_standard_paths, prune_run_directories
+    from libraries.database_integration import create_storage
 except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import (  # type: ignore
-        KeepSpec,
-        PathSpec,
-        ReportArtifact,
-        OptionsConfig,
-        PathsConfig,
-        build_standard_options,
-        build_standard_paths,
-        write_report_artifacts,
-    )
+    from libraries import PathSpec, OptionsConfig, PathsConfig, build_standard_options, build_standard_paths, prune_run_directories
+    from libraries.database_integration import create_storage
 
 
 @dataclass(frozen=True)
@@ -77,13 +71,19 @@ def _parse_timestamp(raw: str | None) -> datetime:
     if not raw:
         return _current_time()
     try:
-        return datetime.fromisoformat(raw)
+        parsed = datetime.fromisoformat(raw)
     except ValueError as exc:
         raise ValueError(f"Invalid ISO timestamp '{raw}'") from exc
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
 
 
 def _format_slug(moment: datetime) -> str:
-    return moment.strftime("%Y%m%d_%H%M%S")
+    normalized = moment
+    if normalized.tzinfo is None:
+        normalized = normalized.replace(tzinfo=timezone.utc)
+    return normalized.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
 
 
 def load_inventory(schema_root: Path, views_dir: Path) -> List[Dict[str, Any]]:
@@ -227,7 +227,7 @@ def build_views(entries: List[Dict[str, Any]], *, generated_at: datetime) -> Vie
 
 
 def _dump_yaml(data: Any) -> str:
-    return yaml.safe_dump(data, sort_keys=False)
+    return cast(str, yaml.safe_dump(data, sort_keys=False))
 
 
 def _compute_redirect(repo_root: Path, destination: Path) -> str:
@@ -246,7 +246,7 @@ def write_stub(path: Path, destination: Path, *, generated_at: datetime, repo_ro
         payload = {
             "redirect": redirect,
             "generated_at": generated_at.isoformat(),
-            "note": "View relocated under reports/producer_reports/render_inventory_views/.",
+            "note": "View relocated under reports/producer_reports/healthview/inventory_overview/.",
         }
         path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     else:
@@ -254,7 +254,7 @@ def write_stub(path: Path, destination: Path, *, generated_at: datetime, repo_ro
             {
                 "redirect": redirect,
                 "generated_at": generated_at.isoformat(),
-                "note": "View relocated under reports/producer_reports/render_inventory_views/.",
+                "note": "View relocated under reports/producer_reports/healthview/inventory_overview/.",
             }
         ]
         path.write_text(yaml.safe_dump(payload, sort_keys=False), encoding="utf-8")
@@ -323,7 +323,7 @@ def render_markdown(report_payload: Dict[str, Any]) -> str:
     lines = ["# Render Inventory Views\n\n"]
     lines.append(f"- generated_utc: {report_payload['generated_utc']}\n")
     lines.append(f"- status: {report_payload['status']}\n")
-    lines.append(f"- output_dir: {report_payload['output_dir']}\n")
+    lines.append(f"- run_timestamp: {report_payload['timestamp']}\n")
     lines.append("\n## Totals\n\n")
     lines.append("| Metric | Value |\n")
     lines.append("|---|---:|\n")
@@ -375,12 +375,9 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--views-dir", default=str(DEFAULT_VIEWS_DIR), help="Legacy compatibility directory for views")
     parser.add_argument("--reports-root", default=str(DEFAULT_REPORTS_ROOT), help="Destination root for topic reports")
     parser.add_argument(
-        "--output-dir", default=str(DEFAULT_OUTPUT_DIR), help="Destination for structured producer artifacts"
+        "--output-dir", default=str(DEFAULT_OUTPUT_DIR), help="Base directory for structured producer artifacts"
     )
     parser.add_argument("--timestamp", help="ISO timestamp override for the run")
-    parser.add_argument(
-        "--artifacts-to-keep", type=int, default=DEFAULT_ARTIFACTS_TO_KEEP, help="Number of historical runs to retain"
-    )
     parser.add_argument("--log-level", default="INFO", help="Logging verbosity")
     return parser
 
@@ -394,7 +391,6 @@ class Paths(NamedTuple):
 
 
 class Options(NamedTuple):
-    artifacts_to_keep: int
     timestamp: str | None = None
     log_level: str = "INFO"
 
@@ -406,12 +402,6 @@ PATH_SPECS: dict[str, PathSpec] = {
     "output_dir": PathSpec(field="output_dir", default=DEFAULT_OUTPUT_DIR, ensure_dir=True, within_repo=False),
 }
 
-
-KEEP_SPECS: dict[str, KeepSpec] = {
-    "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
-}
-
-
 PATH_CONFIG = PathsConfig(
     dataclass_type=Paths,
     path_specs=PATH_SPECS,
@@ -421,16 +411,16 @@ PATH_CONFIG = PathsConfig(
 
 OPTIONS_CONFIG = OptionsConfig(
     dataclass_type=Options,
-    keep_specs=KEEP_SPECS,
+    keep_specs={},
 )
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
-    base_options = build_standard_options(args, OPTIONS_CONFIG)
+    base_options = cast(Options, build_standard_options(args, OPTIONS_CONFIG))
     return base_options._replace(
         timestamp=getattr(args, "timestamp", None),
         log_level=str(getattr(args, "log_level", "INFO")),
@@ -453,11 +443,13 @@ def main(argv: List[str] | None = None) -> int:
     views_dir = _resolve(repo_root, paths.views_dir)
     reports_root = _resolve(repo_root, paths.reports_root)
     output_dir = paths.output_dir
-    command_center_reports = repo_root / ".repo_studios/command_center/reports"
+    if output_dir.name == "render_inventory_views":
+        logging.warning("Legacy --output-dir detected (%s). Using parent directory instead.", output_dir)
+        output_dir = output_dir.parent
 
     generated_at = _parse_timestamp(options.timestamp)
     slug = _format_slug(generated_at)
-    run_dir = output_dir / f"{RUN_PREFIX}-{slug}"
+    run_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG / slug
 
     entries = load_inventory(schema_root, views_dir)
     bundle = build_views(entries, generated_at=generated_at)
@@ -472,106 +464,61 @@ def main(argv: List[str] | None = None) -> int:
         views_dir=views_dir,
         reports_root=reports_root,
     )
+    manifest = {
+        "schema_version": SCHEMA_VERSION,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": slug,
+        "generated_at": generated_at.astimezone(timezone.utc).isoformat(),
+        "status": report_payload.get("status", "ok"),
+        "catalog": [CATALOG_ID],
+        "inputs": {
+            "repo_root": str(repo_root),
+            "schema_root": str(schema_root),
+            "views_dir": str(views_dir),
+            "reports_root": str(reports_root),
+            "output_dir": str(output_dir),
+        },
+    }
 
-    artifacts = [
-        ReportArtifact(
-            filename="report.json",
-            pointer="latest_report.json",
-            kind="json",
-            content=lambda: report_payload,
-        ),
-        ReportArtifact(
-            filename="report.md",
-            pointer="latest_report.md",
-            kind="text",
-            content=lambda: render_markdown(report_payload),
-        ),
-        ReportArtifact(
-            filename="log.txt",
-            pointer="latest_report.log",
-            kind="text",
-            content=lambda: render_log(report_payload),
-        ),
-        ReportArtifact(
-            filename="raw.json",
-            pointer="latest_raw.json",
-            kind="json",
-            content=lambda: raw_payload,
-        ),
-        ReportArtifact(
-            filename="docs_overview.yaml",
-            pointer="latest_docs_overview.yaml",
-            kind="text",
-            content=lambda: _dump_yaml(bundle.docs),
-        ),
-        ReportArtifact(
-            filename="scripts_overview.yaml",
-            pointer="latest_scripts_overview.yaml",
-            kind="text",
-            content=lambda: _dump_yaml(bundle.scripts),
-        ),
-        ReportArtifact(
-            filename="tests_overview.yaml",
-            pointer="latest_tests_overview.yaml",
-            kind="text",
-            content=lambda: _dump_yaml(bundle.tests),
-        ),
-        ReportArtifact(
-            filename="summary.json",
-            pointer="latest_summary.json",
-            kind="json",
-            content=lambda: bundle.summary,
-        ),
-        ReportArtifact(
-            filename="dashboard.json",
-            pointer="latest_dashboard.json",
-            kind="json",
-            content=lambda: bundle.dashboard,
-        ),
-    ]
+    telemetry = {
+        "schema_version": SCHEMA_VERSION,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": slug,
+        "generated_at": generated_at.astimezone(timezone.utc).isoformat(),
+        "status": report_payload.get("status", "ok"),
+        "counts": report_payload.get("counts", {}),
+        "summary": bundle.summary,
+        "dashboard": bundle.dashboard,
+        "views": {
+            "docs": bundle.docs,
+            "scripts": bundle.scripts,
+            "tests": bundle.tests,
+        },
+        "top_tags": bundle.summary.get("top_tags", [])[:10],
+    }
+    summary_md = render_markdown(report_payload)
 
-    result = write_report_artifacts(
-        stem=RUN_PREFIX,
-        timestamp=generated_at,
-        output_dir=output_dir,
-        artifacts=artifacts,
-        keep=options.artifacts_to_keep,
-    )
+    storage = create_storage(output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=slug)
+    # DB_INTEGRATION_MARKER: write manifest
+    storage.write_manifest(manifest)
+    # DB_INTEGRATION_MARKER: write summary
+    storage.write_summary({"markdown": summary_md}, format="md")
+    # DB_INTEGRATION_MARKER: write telemetry
+    storage.write_telemetry(telemetry)
 
-    healthview_artifacts = [
-        ReportArtifact(filename="report.json", kind="json", content=lambda: report_payload),
-        ReportArtifact(filename="raw.json", kind="json", content=lambda: raw_payload),
-        ReportArtifact(filename="docs_overview.yaml", kind="text", content=lambda: _dump_yaml(bundle.docs)),
-        ReportArtifact(filename="scripts_overview.yaml", kind="text", content=lambda: _dump_yaml(bundle.scripts)),
-        ReportArtifact(filename="tests_overview.yaml", kind="text", content=lambda: _dump_yaml(bundle.tests)),
-        ReportArtifact(filename="summary.json", kind="json", content=lambda: bundle.summary),
-        ReportArtifact(filename="dashboard.json", kind="json", content=lambda: bundle.dashboard),
-    ]
+    topic_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG
+    prune_run_directories(topic_dir, keep=1, logger=logging.getLogger(__name__))
 
-    healthview_result = write_report_artifacts(
-        stem="inventory_overview",
-        timestamp=generated_at,
-        output_dir=command_center_reports,
-        artifacts=healthview_artifacts,
-        keep=options.artifacts_to_keep,
-        viewer="healthview",
-        topic="inventory_overview",
-    )
-
-    docs_latest = output_dir / "latest_docs_overview.yaml"
-    scripts_latest = output_dir / "latest_scripts_overview.yaml"
-    tests_latest = output_dir / "latest_tests_overview.yaml"
-    summary_latest = output_dir / "latest_summary.json"
-
-    write_stub(views_dir / "docs_overview.yaml", docs_latest, generated_at=generated_at, repo_root=repo_root)
-    write_stub(views_dir / "scripts_overview.yaml", scripts_latest, generated_at=generated_at, repo_root=repo_root)
-    write_stub(views_dir / "tests_overview.yaml", tests_latest, generated_at=generated_at, repo_root=repo_root)
-    write_stub(views_dir / "summary.json", summary_latest, generated_at=generated_at, repo_root=repo_root)
+    write_stub(views_dir / "docs_overview.yaml", topic_dir, generated_at=generated_at, repo_root=repo_root)
+    write_stub(views_dir / "scripts_overview.yaml", topic_dir, generated_at=generated_at, repo_root=repo_root)
+    write_stub(views_dir / "tests_overview.yaml", topic_dir, generated_at=generated_at, repo_root=repo_root)
+    write_stub(views_dir / "summary.json", topic_dir, generated_at=generated_at, repo_root=repo_root)
 
     logging.info(
-        "render_inventory_views run_dir=%s healthview_dir=%s status=%s total=%s docs=%s scripts=%s tests=%s",
-        result.run_dir,
-        healthview_result.run_dir,
+        "render_inventory_views run_dir=%s status=%s total=%s docs=%s scripts=%s tests=%s",
+        run_dir,
         report_payload["status"],
         report_payload["counts"]["totals"]["total"],
         report_payload["counts"]["totals"]["docs"],

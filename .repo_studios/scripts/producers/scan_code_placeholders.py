@@ -1,28 +1,32 @@
-"""Structured placeholder scan producer.
+"""Scan for placeholder comments and emit canonical Healthview artifacts.
 
-Transforms the legacy stdout-only placeholder search into a structured
-producer that emits JSON/Markdown/log artifacts with pruning and optional
-allowlisting support.
+This producer scans repository files for placeholder markers (e.g., TODO, FIXME)
+and emits a canonical 3-artifact bundle under
+`.repo_studios/reports/producer_reports/<viewer>/<topic>/<YYYYMMDD-HHMM>/`.
+
+Outputs:
+- manifest.json
+- summary.md
+- telemetry.json
 """
 
 from __future__ import annotations
 
 import argparse
-import json
 import logging
 import re
-import shutil
 import sys
 from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Iterable, NamedTuple
+from typing import Any, Iterable, NamedTuple, cast
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/code_placeholder_scans")
-RUN_PREFIX = "placeholder_scan"
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
 DEFAULT_ARTIFACTS_TO_KEEP = 5
 SCHEMA_VERSION = 1
+VIEWER_SLUG = "healthview"
+TOPIC_SLUG = "code_placeholders"
 DEFAULT_EXTENSIONS = (
     ".py",
     ".md",
@@ -49,10 +53,11 @@ try:
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.database_integration import create_storage
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import (  # type: ignore
+    from libraries import (
         KeepSpec,
         PathSpec,
         OptionsConfig,
@@ -61,6 +66,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.database_integration import create_storage
 
 
 @dataclass(frozen=True)
@@ -140,8 +146,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--output-dir",
         default=None,
-        help="Directory where structured artifacts are written (defaults to code_placeholder_scans)",
+        help="Base directory for structured artifacts (defaults to .repo_studios/reports/producer_reports)",
     )
+    parser.add_argument("--timestamp", default=None, help="ISO8601 timestamp to seed the run directory")
     parser.add_argument(
         "--include-ext",
         nargs="*",
@@ -183,7 +190,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def load_allowlist(path: str | None, repo_root: Path) -> set[tuple[str, int]]:
@@ -330,17 +337,25 @@ def compose_payload(
     paths: Paths,
     options: ScanOptions,
     records: list[PlaceholderRecord],
-    timestamp: datetime,
-) -> dict[str, object]:
+    run_slug: str,
+    generated_at: datetime,
+    bundle_dir: Path,
+) -> dict[str, Any]:
     rel_scan_root = str(paths.scan_root.resolve().relative_to(paths.repo_root))
     by_pattern: Counter[str] = Counter(record.pattern for record in records)
     by_extension: Counter[str] = Counter(Path(record.relative_path).suffix.lower() for record in records)
+    bundle_rel = _relativize(bundle_dir, paths.repo_root)
     payload = {
         "schema_version": SCHEMA_VERSION,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
         "status": "ok",
-        "timestamp": timestamp.isoformat(),
-        "run_id": f"{RUN_PREFIX}-{timestamp.strftime('%Y%m%d_%H%M%S')}",
+        "timestamp": generated_at.isoformat(),
+        "generated_utc": generated_at.isoformat(),
+        "run_timestamp": run_slug,
+        "run_id": run_slug,
         "repo_root": str(paths.repo_root),
+        "bundle_dir": bundle_rel,
         "scan_root": rel_scan_root,
         "include_extensions": list(options.extensions),
         "patterns": list(options.patterns),
@@ -357,15 +372,15 @@ def compose_payload(
     return payload
 
 
-def render_markdown_report(payload: dict[str, object], records: list[PlaceholderRecord]) -> str:
+def render_markdown_report(payload: dict[str, Any], records: list[PlaceholderRecord]) -> str:
     lines = [
         "# Placeholder Scan Report\n\n",
         f"- Status: `{payload['status']}`\n",
-        f"- Timestamp: `{payload['timestamp']}`\n",
+        f"- Run Timestamp: `{payload.get('run_timestamp', payload['timestamp'])}`\n",
         f"- Scan Root: `{payload['scan_root']}`\n",
         f"- Total Matches: {payload['total_matches']}\n",
-        f"- Patterns: {', '.join(payload['patterns'])}\n",
-        f"- Extensions: {', '.join(payload['include_extensions'])}\n",
+        f"- Patterns: {', '.join(cast(list[str], payload['patterns']))}\n",
+        f"- Extensions: {', '.join(cast(list[str], payload['include_extensions']))}\n",
         f"- Allowlist Entries: {payload['allowlist_size']}\n\n",
     ]
     summary = payload.get("summary", {})
@@ -387,15 +402,15 @@ def render_markdown_report(payload: dict[str, object], records: list[Placeholder
     return content
 
 
-def render_log(payload: dict[str, object]) -> str:
+def render_log(payload: dict[str, Any]) -> str:
     summary = payload.get("summary", {}) if isinstance(payload.get("summary"), dict) else {}
     entries = [
         f"status={payload['status']}",
-        f"timestamp={payload['timestamp']}",
+        f"run_timestamp={payload.get('run_timestamp', payload['timestamp'])}",
         f"scan_root={payload['scan_root']}",
         f"total_matches={payload['total_matches']}",
-        f"patterns={','.join(payload['patterns'])}",
-        f"extensions={','.join(payload['include_extensions'])}",
+        f"patterns={','.join(cast(list[str], payload['patterns']))}",
+        f"extensions={','.join(cast(list[str], payload['include_extensions']))}",
         f"allowlist_size={payload['allowlist_size']}",
     ]
     for token, count in sorted(summary.get("by_pattern", {}).items()):
@@ -403,75 +418,73 @@ def render_log(payload: dict[str, object]) -> str:
     return "\n".join(entries) + "\n"
 
 
-def ensure_run_directory(base_dir: Path, run_id: str) -> Path:
-    run_dir = base_dir / run_id
-    run_dir.mkdir(parents=True, exist_ok=True)
-    return run_dir
+def _parse_timestamp(raw: str | None) -> datetime:
+    if not raw:
+        return datetime.now(timezone.utc)
+    try:
+        parsed = datetime.fromisoformat(raw)
+    except ValueError as exc:  # pragma: no cover - defensive parsing
+        raise SystemExit(f"Invalid --timestamp value: {raw}") from exc
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
 
 
-def write_artifacts(
+def _timestamp_slug(moment: datetime) -> str:
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=timezone.utc)
+    return moment.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
+
+
+def _relativize(path: Path, repo_root: Path) -> str:
+    try:
+        return path.resolve().relative_to(repo_root.resolve()).as_posix()
+    except ValueError:
+        return path.resolve().as_posix()
+
+
+def _build_manifest(
     *,
-    run_dir: Path,
-    payload: dict[str, object],
+    payload: dict[str, Any],
+    rendered_log: str,
     records: list[PlaceholderRecord],
-    output_dir: Path,
-    logger: logging.Logger | None,
-) -> None:
-    run_dir.mkdir(parents=True, exist_ok=True)
-    if logger:
-        logger.debug("Writing placeholder artifacts to %s", run_dir)
-    (run_dir / "report.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    (run_dir / "report.md").write_text(render_markdown_report(payload, records), encoding="utf-8")
-    (run_dir / "log.txt").write_text(render_log(payload), encoding="utf-8")
-    matches = [record.to_dict() for record in records]
-    (run_dir / "matches.json").write_text(json.dumps(matches, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    if records:
-        tsv_lines = ["path\tline\tpattern\tsnippet"]
-        for record in records:
-            snippet = record.line_text.replace("\t", " ")
-            tsv_lines.append(f"{record.relative_path}\t{record.line_number}\t{record.pattern}\t{snippet}")
-        (run_dir / "matches.tsv").write_text("\n".join(tsv_lines) + "\n", encoding="utf-8")
-    _write_latest_artifacts(run_dir, output_dir)
+    sample_limit: int = 200,
+) -> dict[str, Any]:
+    manifest: dict[str, Any] = dict(payload)
+    manifest["log"] = rendered_log
+    manifest["matches_total"] = int(payload.get("total_matches", 0) or 0)
+    manifest["matches_sample_limit"] = sample_limit
+    manifest["matches_sample_truncated"] = len(records) > sample_limit
+    manifest["matches_sample"] = [record.to_dict() for record in records[:sample_limit]]
+    return manifest
 
 
-def _write_latest_artifacts(run_dir: Path, output_dir: Path) -> None:
-    latest_dir = output_dir / "latest"
-    latest_dir.mkdir(parents=True, exist_ok=True)
-    mapping = {
-        "report.json": latest_dir / "latest_report.json",
-        "report.md": latest_dir / "latest_report.md",
-        "log.txt": latest_dir / "latest_log.txt",
-        "matches.json": latest_dir / "latest_matches.json",
-        "matches.tsv": latest_dir / "latest_matches.tsv",
-    }
-    for filename, target in mapping.items():
-        source = run_dir / filename
-        if source.exists():
-            shutil.copyfile(source, target)
-
-
-def prune_history(
-    base_dir: Path,
-    keep: int,
+def _build_telemetry(
     *,
-    current_run: Path | None,
-    logger: logging.Logger | None,
-) -> list[Path]:
-    result = prune_run_directories(
-        base_dir,
-        keep=max(keep, 1),
-        stem_prefix=RUN_PREFIX,
-        current_run=current_run,
-        logger=logger,
-    )
-    return result.removed
+    payload: dict[str, Any],
+) -> dict[str, Any]:
+    total_matches = int(payload.get("total_matches", 0) or 0)
+    allowlist_size = int(payload.get("allowlist_size", 0) or 0)
+    return {
+        "viewer_slug": payload.get("viewer_slug"),
+        "topic": payload.get("topic"),
+        "run_timestamp": payload.get("run_timestamp"),
+        "generated_utc": payload.get("generated_utc"),
+        "metrics": {
+            "status": payload.get("status"),
+            "total_matches": total_matches,
+            "allowlist_size": allowlist_size,
+            "unallowlisted_matches": max(total_matches - allowlist_size, 0),
+        },
+        "summary": payload,
+    }
 
 
 def configure_logging(level: str) -> None:
     logging.basicConfig(level=getattr(logging, level), format="%(levelname)s %(message)s")
 
 
-def run(argv: list[str] | None = None) -> dict[str, object]:
+def run(argv: list[str] | None = None) -> dict[str, Any]:
     args = parse_args(argv)
     configure_logging(args.log_level)
     logger = logging.getLogger(__name__)
@@ -502,26 +515,47 @@ def run(argv: list[str] | None = None) -> dict[str, object]:
         default_exclusions_applied=default_exclusions_applied,
     )
     compiled_patterns = compile_pattern_regex(patterns)
-    timestamp = datetime.now(timezone.utc)
+
+    generated_at = _parse_timestamp(args.timestamp)
+    run_slug = _timestamp_slug(generated_at)
+    topic_dir = paths.output_dir / VIEWER_SLUG / TOPIC_SLUG
+    storage = create_storage(paths.output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=run_slug)
+    bundle_dir = storage.file_storage.bundle_dir
+
     records = scan_placeholders(paths, options, compiled_patterns)
-    payload = compose_payload(paths=paths, options=options, records=records, timestamp=timestamp)
-    run_id = payload["run_id"]  # type: ignore[index]
-    run_dir = ensure_run_directory(paths.output_dir, str(run_id))
-    write_artifacts(
-        run_dir=run_dir,
-        payload=payload,
+
+    payload = compose_payload(
+        paths=paths,
+        options=options,
         records=records,
-        output_dir=paths.output_dir,
+        run_slug=run_slug,
+        generated_at=generated_at,
+        bundle_dir=bundle_dir,
+    )
+    markdown = render_markdown_report(payload, records)
+    rendered_log = render_log(payload)
+    manifest = _build_manifest(payload=payload, rendered_log=rendered_log, records=records)
+    telemetry = _build_telemetry(payload=payload)
+
+    # DB_INTEGRATION_MARKER: placeholder scan manifest write
+    storage.write_manifest(manifest)
+
+    # DB_INTEGRATION_MARKER: placeholder scan summary markdown write
+    storage.write_summary({"markdown": markdown}, format="md")
+
+    # DB_INTEGRATION_MARKER: placeholder scan telemetry write
+    storage.write_telemetry(telemetry)
+
+    pruned = prune_run_directories(
+        topic_dir,
+        keep=options.artifacts_to_keep,
+        current_run=bundle_dir,
         logger=logger,
     )
-    removed = prune_history(
-        paths.output_dir,
-        options.artifacts_to_keep,
-        current_run=run_dir,
-        logger=logger,
-    )
-    if removed:
-        logger.debug("Pruned placeholder runs: %s", ", ".join(sorted(path.name for path in removed)))
+    if pruned.removed:
+        logger.debug("Pruned placeholder runs: %s", ", ".join(sorted(path.name for path in pruned.removed)))
+
+    logger.info("Placeholder scan run_dir=%s matches=%d", bundle_dir, len(records))
     return payload
 
 

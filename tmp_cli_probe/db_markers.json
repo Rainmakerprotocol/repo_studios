@@ -1,9 +1,9 @@
 {
   "summary": {
-    "total_scripts": 77,
-    "scripts_with_markers": 8,
-    "complete_integrations": 7,
-    "in_progress": 7
+    "total_scripts": 78,
+    "scripts_with_markers": 18,
+    "complete_integrations": 17,
+    "in_progress": 17
   },
   "scripts": {
     ".repo_studios\\command_center\\scripts\\libraries\\database_integration.py": {
@@ -208,17 +208,17 @@
       "has_writes": true,
       "markers": [
         {
-          "line": 523,
+          "line": 514,
           "text": "standards index gaps manifest write",
           "type": "comment"
         },
         {
-          "line": 525,
+          "line": 516,
           "text": "standards index gaps summary markdown write",
           "type": "comment"
         },
         {
-          "line": 527,
+          "line": 518,
           "text": "standards index gaps telemetry write",
           "type": "comment"
         }
@@ -389,6 +389,246 @@
         {
           "line": 450,
           "text": "standards index diff telemetry write",
+          "type": "comment"
+        }
+      ]
+    },
+    ".repo_studios\\scripts\\producers\\generate_anchor_inventory.py": {
+      "tier": "producer",
+      "marker_count": 3,
+      "has_import": true,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 718,
+          "text": "anchor inventory manifest write",
+          "type": "comment"
+        },
+        {
+          "line": 720,
+          "text": "anchor inventory summary markdown write",
+          "type": "comment"
+        },
+        {
+          "line": 722,
+          "text": "anchor inventory telemetry write",
+          "type": "comment"
+        }
+      ]
+    },
+    ".repo_studios\\scripts\\producers\\generate_code_doc_churn_report.py": {
+      "tier": "producer",
+      "marker_count": 3,
+      "has_import": true,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 627,
+          "text": "write manifest.json (report_runs)",
+          "type": "comment"
+        },
+        {
+          "line": 629,
+          "text": "write summary.md (report_summaries)",
+          "type": "comment"
+        },
+        {
+          "line": 631,
+          "text": "write telemetry.json + extracted metrics (test_metrics)",
+          "type": "comment"
+        }
+      ]
+    },
+    ".repo_studios\\scripts\\producers\\generate_dependency_hygiene_report.py": {
+      "tier": "producer",
+      "marker_count": 3,
+      "has_import": true,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 390,
+          "text": "write manifest.json (report_runs)",
+          "type": "comment"
+        },
+        {
+          "line": 392,
+          "text": "write summary.md (report_summaries)",
+          "type": "comment"
+        },
+        {
+          "line": 394,
+          "text": "write telemetry.json + extracted metrics (test_metrics)",
+          "type": "comment"
+        }
+      ]
+    },
+    ".repo_studios\\scripts\\producers\\generate_doc_index.py": {
+      "tier": "producer",
+      "marker_count": 3,
+      "has_import": true,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 816,
+          "text": "write manifest.json (report_runs)",
+          "type": "comment"
+        },
+        {
+          "line": 818,
+          "text": "write summary.md (report_summaries)",
+          "type": "comment"
+        },
+        {
+          "line": 820,
+          "text": "write telemetry.json + extracted metrics (test_metrics)",
+          "type": "comment"
+        }
+      ]
+    },
+    ".repo_studios\\scripts\\producers\\generate_import_graph_report.py": {
+      "tier": "producer",
+      "marker_count": 3,
+      "has_import": true,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 394,
+          "text": "write manifest.json (report_runs)",
+          "type": "comment"
+        },
+        {
+          "line": 396,
+          "text": "write summary.md (report_summaries)",
+          "type": "comment"
+        },
+        {
+          "line": 398,
+          "text": "write telemetry.json + extracted metrics (test_metrics)",
+          "type": "comment"
+        }
+      ]
+    },
+    ".repo_studios\\scripts\\producers\\generate_lizard_report.py": {
+      "tier": "producer",
+      "marker_count": 3,
+      "has_import": true,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 810,
+          "text": "write manifest.json (report_runs)",
+          "type": "comment"
+        },
+        {
+          "line": 812,
+          "text": "write summary.md (report_summaries)",
+          "type": "comment"
+        },
+        {
+          "line": 814,
+          "text": "write telemetry.json + extracted metrics (test_metrics)",
+          "type": "comment"
+        }
+      ]
+    },
+    ".repo_studios\\scripts\\producers\\generate_standards_index.py": {
+      "tier": "producer",
+      "marker_count": 3,
+      "has_import": true,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 624,
+          "text": "write manifest.json (report_runs)",
+          "type": "comment"
+        },
+        {
+          "line": 626,
+          "text": "write summary.md (report_summaries)",
+          "type": "comment"
+        },
+        {
+          "line": 628,
+          "text": "write telemetry.json + extracted metrics (test_metrics)",
+          "type": "comment"
+        }
+      ]
+    },
+    ".repo_studios\\scripts\\producers\\generate_test_coverage_inventory.py": {
+      "tier": "producer",
+      "marker_count": 3,
+      "has_import": true,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 563,
+          "text": "Persist manifest bundle (report_runs + report_artifacts)",
+          "type": "comment"
+        },
+        {
+          "line": 565,
+          "text": "Persist human-readable report summary (report_artifacts)",
+          "type": "comment"
+        },
+        {
+          "line": 567,
+          "text": "Persist telemetry payload + extracted metrics (report_artifacts + test_metrics)",
+          "type": "comment"
+        }
+      ]
+    },
+    ".repo_studios\\scripts\\producers\\generate_typecheck_report.py": {
+      "tier": "producer",
+      "marker_count": 3,
+      "has_import": true,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 779,
+          "text": "typecheck manifest write",
+          "type": "comment"
+        },
+        {
+          "line": 782,
+          "text": "typecheck summary markdown write",
+          "type": "comment"
+        },
+        {
+          "line": 785,
+          "text": "typecheck telemetry write",
+          "type": "comment"
+        }
+      ]
+    },
+    ".repo_studios\\scripts\\producers\\generate_undocumented_logic_report.py": {
+      "tier": "producer",
+      "marker_count": 3,
+      "has_import": true,
+      "has_storage_init": true,
+      "has_writes": true,
+      "markers": [
+        {
+          "line": 689,
+          "text": "write manifest.json (report_runs)",
+          "type": "comment"
+        },
+        {
+          "line": 691,
+          "text": "write summary.md (report_summaries)",
+          "type": "comment"
+        },
+        {
+          "line": 693,
+          "text": "write telemetry.json + extracted metrics (test_metrics)",
           "type": "comment"
         }
       ]

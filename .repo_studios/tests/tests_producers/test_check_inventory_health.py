@@ -31,8 +31,8 @@ def test_default_paths_point_to_repo_root():
         / ".repo_studios"
         / "reports"
         / "producer_reports"
-        / "render_inventory_views"
-        / "latest_summary.json"
+        / "healthview"
+        / "inventory_overview"
     )
     assert (
         mod.BASELINE_PATH

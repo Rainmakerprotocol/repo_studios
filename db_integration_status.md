@@ -3,7 +3,7 @@
 **DB_INTEGRATION_MARKER scan results**
 
 **Total scripts scanned:** 78
-**Scripts with markers:** 17
+**Scripts with markers:** 19
 
 ## Producer Scripts
 
@@ -13,7 +13,7 @@
    - Import: ✓
    - Storage init: ✓
    - Write calls: ✓
-   - First marker (L523): standards index gaps manifest write
+   - First marker (L514): standards index gaps manifest write
 
 [x] **analyze_test_hardening.py**
    - Path: `.repo_studios\scripts\producers\analyze_test_hardening.py`
@@ -29,7 +29,7 @@
    - Import: ✓
    - Storage init: ✓
    - Write calls: ✓
-   - First marker (L430): inventory health manifest
+   - First marker (L472): inventory health manifest
 
 [x] **collect_faulthandler_reports.py**
    - Path: `.repo_studios\scripts\producers\collect_faulthandler_reports.py`
@@ -125,7 +125,23 @@
    - Import: ✓
    - Storage init: ✓
    - Write calls: ✓
-   - First marker (L570): typecheck manifest write
+   - First marker (L779): typecheck manifest write
+
+[x] **generate_undocumented_logic_report.py**
+   - Path: `.repo_studios\scripts\producers\generate_undocumented_logic_report.py`
+   - Markers: 3
+   - Import: ✓
+   - Storage init: ✓
+   - Write calls: ✓
+   - First marker (L689): write manifest.json (report_runs)
+
+[x] **render_inventory_views.py**
+   - Path: `.repo_studios\scripts\producers\render_inventory_views.py`
+   - Markers: 3
+   - Import: ✓
+   - Storage init: ✓
+   - Write calls: ✓
+   - First marker (L504): write manifest
 
 ## Utility Scripts
 

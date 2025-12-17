@@ -25,7 +25,7 @@ LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
 if str(LIBRARIES_ROOT) not in sys.path:
     sys.path.insert(0, str(LIBRARIES_ROOT))
 
-from libraries import (
+from libraries import (  # noqa: E402
     CatalogRegistry,
     GuardrailViolationError,
     KeepSpec,
@@ -56,32 +56,56 @@ SCHEMA_VERSION = 1
 
 DOC_INDEX_SCRIPT = Path(".repo_studios/scripts/producers/generate_doc_index.py")
 DOC_INDEX_MODULE = "scripts.producers.generate_doc_index"
-ANCHOR_INVENTORY_SCRIPT = Path(".repo_studios/scripts/producers/generate_anchor_inventory.py")
+ANCHOR_INVENTORY_SCRIPT = Path(
+    ".repo_studios/scripts/producers/generate_anchor_inventory.py"
+)
 ANCHOR_INVENTORY_MODULE = "scripts.producers.generate_anchor_inventory"
-ANCHOR_VALIDATION_SCRIPT = Path(".repo_studios/scripts/producers/validate_markdown_anchors.py")
+ANCHOR_VALIDATION_SCRIPT = Path(
+    ".repo_studios/scripts/producers/validate_markdown_anchors.py"
+)
 ANCHOR_VALIDATION_MODULE = "scripts.producers.validate_markdown_anchors"
 DOCS_INTEGRITY_SCRIPT = Path(".repo_studios/scripts/producers/verify_docs_integrity.py")
 DOCS_INTEGRITY_MODULE = "scripts.producers.verify_docs_integrity"
-METRICS_STUB_SCRIPT = Path(".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py")
+METRICS_STUB_SCRIPT = Path(
+    ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py"
+)
 METRICS_STUB_MODULE = "scripts.producers.validate_metrics_anchor_stubs"
 CHURN_SCRIPT = Path(".repo_studios/scripts/producers/generate_code_doc_churn_report.py")
 CHURN_MODULE = "scripts.producers.generate_code_doc_churn_report"
-UNDOCUMENTED_SCRIPT = Path(".repo_studios/scripts/producers/generate_undocumented_logic_report.py")
+UNDOCUMENTED_SCRIPT = Path(
+    ".repo_studios/scripts/producers/generate_undocumented_logic_report.py"
+)
 UNDOCUMENTED_MODULE = "scripts.producers.generate_undocumented_logic_report"
-AGGREGATOR_SCRIPT = Path(".repo_studios/scripts/aggregators/aggregate_docs_health_signals.py")
+AGGREGATOR_SCRIPT = Path(
+    ".repo_studios/scripts/aggregators/aggregate_docs_health_signals.py"
+)
 AGGREGATOR_MODULE = "scripts.aggregators.aggregate_docs_health_signals"
-ORCHESTRATOR_SCRIPT = Path(".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py")
+ORCHESTRATOR_SCRIPT = Path(
+    ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py"
+)
 
 DEFAULT_DOC_INDEX_OUTPUT = Path(".repo_studios/reports/producer_reports")
 DEFAULT_ANCHOR_INVENTORY_OUTPUT = Path(".repo_studios/reports/producer_reports")
-DEFAULT_ANCHOR_VALIDATION_OUTPUT = Path(".repo_studios/reports/producer_reports/markdown_anchor_validation_reports")
-DEFAULT_DOCS_INTEGRITY_OUTPUT = Path(".repo_studios/reports/producer_reports/docs_integrity_reports")
-DEFAULT_METRICS_STUB_OUTPUT = Path(".repo_studios/reports/producer_reports/metrics_anchor_stub_reports")
+DEFAULT_ANCHOR_VALIDATION_OUTPUT = Path(
+    ".repo_studios/reports/producer_reports/markdown_anchor_validation_reports"
+)
+DEFAULT_DOCS_INTEGRITY_OUTPUT = Path(
+    ".repo_studios/reports/producer_reports/docs_integrity_reports"
+)
+DEFAULT_METRICS_STUB_OUTPUT = Path(
+    ".repo_studios/reports/producer_reports/metrics_anchor_stub_reports"
+)
 DEFAULT_CHURN_OUTPUT = Path(".repo_studios/reports/producer_reports")
-DEFAULT_UNDOCUMENTED_OUTPUT = Path(".repo_studios/reports/producer_reports/undocumented_logic_reports")
-DEFAULT_PLACEHOLDER_OUTPUT = Path(".repo_studios/reports/producer_reports/code_placeholder_scans")
-DEFAULT_MONKEY_PATCH_OUTPUT = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
-DEFAULT_AGGREGATOR_OUTPUT = Path(".repo_studios/reports/aggregator_reports/docs_health_signals")
+DEFAULT_UNDOCUMENTED_OUTPUT = Path(".repo_studios/reports/producer_reports")
+DEFAULT_PLACEHOLDER_OUTPUT = Path(
+    ".repo_studios/reports/producer_reports/code_placeholder_scans"
+)
+DEFAULT_MONKEY_PATCH_OUTPUT = Path(
+    ".repo_studios/reports/producer_reports/monkey_patch_scans"
+)
+DEFAULT_AGGREGATOR_OUTPUT = Path(
+    ".repo_studios/reports/aggregator_reports/docs_health_signals"
+)
 DEFAULT_HEALTHVIEW_ROOT = Path(".repo_studios/command_center/reports")
 
 ANCHOR_VALIDATION_PREFIX = "markdown_anchor_validation"
@@ -107,37 +131,70 @@ PATHS_CONFIG = PathsConfig(
     dataclass_type=Paths,
     path_specs={
         "doc_index_output_dir": PathSpec(
-            field="doc_index_output_dir", default=DEFAULT_DOC_INDEX_OUTPUT, ensure_dir=True, within_repo=False
+            field="doc_index_output_dir",
+            default=DEFAULT_DOC_INDEX_OUTPUT,
+            ensure_dir=True,
+            within_repo=False,
         ),
         "anchor_inventory_output_dir": PathSpec(
-            field="anchor_inventory_output_dir", default=DEFAULT_ANCHOR_INVENTORY_OUTPUT, ensure_dir=True, within_repo=False
+            field="anchor_inventory_output_dir",
+            default=DEFAULT_ANCHOR_INVENTORY_OUTPUT,
+            ensure_dir=True,
+            within_repo=False,
         ),
         "anchor_validation_output_dir": PathSpec(
-            field="anchor_validation_output_dir", default=DEFAULT_ANCHOR_VALIDATION_OUTPUT, ensure_dir=True, within_repo=False
+            field="anchor_validation_output_dir",
+            default=DEFAULT_ANCHOR_VALIDATION_OUTPUT,
+            ensure_dir=True,
+            within_repo=False,
         ),
         "docs_integrity_output_dir": PathSpec(
-            field="docs_integrity_output_dir", default=DEFAULT_DOCS_INTEGRITY_OUTPUT, ensure_dir=True, within_repo=False
+            field="docs_integrity_output_dir",
+            default=DEFAULT_DOCS_INTEGRITY_OUTPUT,
+            ensure_dir=True,
+            within_repo=False,
         ),
         "metrics_stub_output_dir": PathSpec(
-            field="metrics_stub_output_dir", default=DEFAULT_METRICS_STUB_OUTPUT, ensure_dir=True, within_repo=False
+            field="metrics_stub_output_dir",
+            default=DEFAULT_METRICS_STUB_OUTPUT,
+            ensure_dir=True,
+            within_repo=False,
         ),
         "churn_output_dir": PathSpec(
-            field="churn_output_dir", default=DEFAULT_CHURN_OUTPUT, ensure_dir=True, within_repo=False
+            field="churn_output_dir",
+            default=DEFAULT_CHURN_OUTPUT,
+            ensure_dir=True,
+            within_repo=False,
         ),
         "undocumented_output_dir": PathSpec(
-            field="undocumented_output_dir", default=DEFAULT_UNDOCUMENTED_OUTPUT, ensure_dir=True, within_repo=False
+            field="undocumented_output_dir",
+            default=DEFAULT_UNDOCUMENTED_OUTPUT,
+            ensure_dir=True,
+            within_repo=False,
         ),
         "placeholder_output_dir": PathSpec(
-            field="placeholder_output_dir", default=DEFAULT_PLACEHOLDER_OUTPUT, ensure_dir=True, within_repo=False
+            field="placeholder_output_dir",
+            default=DEFAULT_PLACEHOLDER_OUTPUT,
+            ensure_dir=True,
+            within_repo=False,
         ),
         "monkey_patch_output_dir": PathSpec(
-            field="monkey_patch_output_dir", default=DEFAULT_MONKEY_PATCH_OUTPUT, ensure_dir=True, within_repo=False
+            field="monkey_patch_output_dir",
+            default=DEFAULT_MONKEY_PATCH_OUTPUT,
+            ensure_dir=True,
+            within_repo=False,
         ),
         "aggregator_output_dir": PathSpec(
-            field="aggregator_output_dir", default=DEFAULT_AGGREGATOR_OUTPUT, ensure_dir=True, within_repo=False
+            field="aggregator_output_dir",
+            default=DEFAULT_AGGREGATOR_OUTPUT,
+            ensure_dir=True,
+            within_repo=False,
         ),
         "healthview_root": PathSpec(
-            field="healthview_root", default=DEFAULT_HEALTHVIEW_ROOT, ensure_dir=True, within_repo=False
+            field="healthview_root",
+            default=DEFAULT_HEALTHVIEW_ROOT,
+            ensure_dir=True,
+            within_repo=False,
         ),
     },
     repo_root_depth=4,
@@ -162,12 +219,22 @@ OPTIONS_CONFIG = OptionsConfig(
     keep_specs={
         "artifacts_to_keep": KeepSpec(field="artifacts_to_keep", minimum=1),
         "doc_index_keep": KeepSpec(field="doc_index_artifacts_to_keep", minimum=1),
-        "anchor_inventory_keep": KeepSpec(field="anchor_inventory_artifacts_to_keep", minimum=1),
-        "anchor_validation_keep": KeepSpec(field="anchor_validation_artifacts_to_keep", minimum=1),
-        "docs_integrity_keep": KeepSpec(field="docs_integrity_artifacts_to_keep", minimum=1),
-        "metrics_stub_keep": KeepSpec(field="metrics_stub_artifacts_to_keep", minimum=1),
+        "anchor_inventory_keep": KeepSpec(
+            field="anchor_inventory_artifacts_to_keep", minimum=1
+        ),
+        "anchor_validation_keep": KeepSpec(
+            field="anchor_validation_artifacts_to_keep", minimum=1
+        ),
+        "docs_integrity_keep": KeepSpec(
+            field="docs_integrity_artifacts_to_keep", minimum=1
+        ),
+        "metrics_stub_keep": KeepSpec(
+            field="metrics_stub_artifacts_to_keep", minimum=1
+        ),
         "churn_keep": KeepSpec(field="churn_artifacts_to_keep", minimum=1),
-        "undocumented_keep": KeepSpec(field="undocumented_artifacts_to_keep", minimum=1),
+        "undocumented_keep": KeepSpec(
+            field="undocumented_artifacts_to_keep", minimum=1
+        ),
         "aggregator_keep": KeepSpec(field="aggregator_artifacts_to_keep", minimum=1),
     },
 )
@@ -269,17 +336,38 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__ or "")
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument("--doc-index-output-dir", default=str(DEFAULT_DOC_INDEX_OUTPUT))
-    parser.add_argument("--anchor-inventory-output-dir", default=str(DEFAULT_ANCHOR_INVENTORY_OUTPUT))
-    parser.add_argument("--anchor-validation-output-dir", default=str(DEFAULT_ANCHOR_VALIDATION_OUTPUT))
-    parser.add_argument("--docs-integrity-output-dir", default=str(DEFAULT_DOCS_INTEGRITY_OUTPUT))
-    parser.add_argument("--metrics-stub-output-dir", default=str(DEFAULT_METRICS_STUB_OUTPUT))
+    parser.add_argument(
+        "--anchor-inventory-output-dir", default=str(DEFAULT_ANCHOR_INVENTORY_OUTPUT)
+    )
+    parser.add_argument(
+        "--anchor-validation-output-dir", default=str(DEFAULT_ANCHOR_VALIDATION_OUTPUT)
+    )
+    parser.add_argument(
+        "--docs-integrity-output-dir", default=str(DEFAULT_DOCS_INTEGRITY_OUTPUT)
+    )
+    parser.add_argument(
+        "--metrics-stub-output-dir", default=str(DEFAULT_METRICS_STUB_OUTPUT)
+    )
     parser.add_argument("--churn-output-dir", default=str(DEFAULT_CHURN_OUTPUT))
-    parser.add_argument("--undocumented-output-dir", default=str(DEFAULT_UNDOCUMENTED_OUTPUT))
-    parser.add_argument("--placeholder-output-dir", default=str(DEFAULT_PLACEHOLDER_OUTPUT))
-    parser.add_argument("--monkey-patch-output-dir", default=str(DEFAULT_MONKEY_PATCH_OUTPUT))
-    parser.add_argument("--aggregator-output-dir", default=str(DEFAULT_AGGREGATOR_OUTPUT))
+    parser.add_argument(
+        "--undocumented-output-dir", default=str(DEFAULT_UNDOCUMENTED_OUTPUT)
+    )
+    parser.add_argument(
+        "--placeholder-output-dir", default=str(DEFAULT_PLACEHOLDER_OUTPUT)
+    )
+    parser.add_argument(
+        "--monkey-patch-output-dir", default=str(DEFAULT_MONKEY_PATCH_OUTPUT)
+    )
+    parser.add_argument(
+        "--aggregator-output-dir", default=str(DEFAULT_AGGREGATOR_OUTPUT)
+    )
     parser.add_argument("--healthview-root", default=str(DEFAULT_HEALTHVIEW_ROOT))
-    parser.add_argument("--artifacts-to-keep", type=int, default=5, help="Healthview manifest retention budget")
+    parser.add_argument(
+        "--artifacts-to-keep",
+        type=int,
+        default=5,
+        help="Healthview manifest retention budget",
+    )
     parser.add_argument("--doc-index-artifacts-to-keep", type=int, default=1)
     parser.add_argument("--anchor-inventory-artifacts-to-keep", type=int, default=5)
     parser.add_argument("--anchor-validation-artifacts-to-keep", type=int, default=5)
@@ -297,7 +385,9 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--skip-undocumented", action="store_true")
     parser.add_argument("--skip-aggregator", action="store_true")
     parser.add_argument("--skip-hygiene-signals", action="store_true")
-    parser.add_argument("--timestamp", help="ISO-8601 timestamp for orchestrator outputs")
+    parser.add_argument(
+        "--timestamp", help="ISO-8601 timestamp for orchestrator outputs"
+    )
     parser.add_argument(
         "--log-level",
         default="INFO",
@@ -350,10 +440,15 @@ def build_options(args: argparse.Namespace) -> Options:
 
 
 def configure_logging(level: str) -> None:
-    logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
+    logging.basicConfig(
+        level=getattr(logging, level.upper(), logging.INFO),
+        format="%(levelname)s %(message)s",
+    )
 
 
-def _load_callable(script_path: Path, module_name: str, attribute: str) -> Callable[[Sequence[str] | None], Any]:
+def _load_callable(
+    script_path: Path, module_name: str, attribute: str
+) -> Callable[[Sequence[str] | None], Any]:
     script_abs = script_path.resolve()
     if module_name in sys.modules:
         module = sys.modules[module_name]
@@ -396,7 +491,9 @@ def _filter_artifacts(artifacts: dict[str, Path]) -> dict[str, Path]:
 
 
 def _execute_doc_index(paths: Paths, options: Options) -> DocIndexOutcome:
-    run_callable = _load_callable(paths.repo_root / DOC_INDEX_SCRIPT, DOC_INDEX_MODULE, "run")
+    run_callable = _load_callable(
+        paths.repo_root / DOC_INDEX_SCRIPT, DOC_INDEX_MODULE, "run"
+    )
     argv = [
         "--repo-root",
         str(paths.repo_root),
@@ -421,8 +518,12 @@ def _execute_doc_index(paths: Paths, options: Options) -> DocIndexOutcome:
         for name, value in artifacts_payload.items():
             candidate = Path(value)
             artifacts[name] = candidate
-    documents = payload.get("documents") if isinstance(payload.get("documents"), int) else None
-    headings = payload.get("headings") if isinstance(payload.get("headings"), int) else None
+    documents = (
+        payload.get("documents") if isinstance(payload.get("documents"), int) else None
+    )
+    headings = (
+        payload.get("headings") if isinstance(payload.get("headings"), int) else None
+    )
     links = payload.get("links") if isinstance(payload.get("links"), int) else None
     return DocIndexOutcome(
         run_dir=run_dir,
@@ -435,7 +536,9 @@ def _execute_doc_index(paths: Paths, options: Options) -> DocIndexOutcome:
 
 
 def _execute_anchor_inventory(paths: Paths, options: Options) -> AnchorInventoryOutcome:
-    run_callable = _load_callable(paths.repo_root / ANCHOR_INVENTORY_SCRIPT, ANCHOR_INVENTORY_MODULE, "run")
+    run_callable = _load_callable(
+        paths.repo_root / ANCHOR_INVENTORY_SCRIPT, ANCHOR_INVENTORY_MODULE, "run"
+    )
     argv = [
         "--repo-root",
         str(paths.repo_root),
@@ -460,8 +563,16 @@ def _execute_anchor_inventory(paths: Paths, options: Options) -> AnchorInventory
         for name, value in artifacts_payload.items():
             candidate = Path(value)
             artifacts[name] = candidate
-    total_slugs = payload.get("total_slugs") if isinstance(payload.get("total_slugs"), int) else None
-    duplicates = payload.get("duplicates") if isinstance(payload.get("duplicates"), int) else None
+    total_slugs = (
+        payload.get("total_slugs")
+        if isinstance(payload.get("total_slugs"), int)
+        else None
+    )
+    duplicates = (
+        payload.get("duplicates")
+        if isinstance(payload.get("duplicates"), int)
+        else None
+    )
     return AnchorInventoryOutcome(
         run_dir=run_dir,
         slug=payload.get("slug") if isinstance(payload.get("slug"), str) else None,
@@ -471,8 +582,12 @@ def _execute_anchor_inventory(paths: Paths, options: Options) -> AnchorInventory
     )
 
 
-def _execute_anchor_validation(paths: Paths, options: Options) -> AnchorValidationOutcome:
-    run_callable = _load_callable(paths.repo_root / ANCHOR_VALIDATION_SCRIPT, ANCHOR_VALIDATION_MODULE, "main")
+def _execute_anchor_validation(
+    paths: Paths, options: Options
+) -> AnchorValidationOutcome:
+    run_callable = _load_callable(
+        paths.repo_root / ANCHOR_VALIDATION_SCRIPT, ANCHOR_VALIDATION_MODULE, "main"
+    )
     argv = [
         "--repo-root",
         str(paths.repo_root),
@@ -505,11 +620,15 @@ def _execute_anchor_validation(paths: Paths, options: Options) -> AnchorValidati
             issue_count = int(issue_count)
         except ValueError:  # pragma: no cover - defensive
             issue_count = None
-    return AnchorValidationOutcome(run_dir=run_dir, status=status, issue_count=issue_count, report_path=report_path)
+    return AnchorValidationOutcome(
+        run_dir=run_dir, status=status, issue_count=issue_count, report_path=report_path
+    )
 
 
 def _execute_docs_integrity(paths: Paths, options: Options) -> DocsIntegrityOutcome:
-    run_callable = _load_callable(paths.repo_root / DOCS_INTEGRITY_SCRIPT, DOCS_INTEGRITY_MODULE, "run")
+    run_callable = _load_callable(
+        paths.repo_root / DOCS_INTEGRITY_SCRIPT, DOCS_INTEGRITY_MODULE, "run"
+    )
     argv = [
         "--repo-root",
         str(paths.repo_root),
@@ -528,13 +647,24 @@ def _execute_docs_integrity(paths: Paths, options: Options) -> DocsIntegrityOutc
     if run_dir and not run_dir.exists():
         run_dir = None
     summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
-    mismatched_blocks = summary.get("mismatched_blocks") if isinstance(summary.get("mismatched_blocks"), int) else None
+    mismatched_blocks = (
+        summary.get("mismatched_blocks")
+        if isinstance(summary.get("mismatched_blocks"), int)
+        else None
+    )
     status = payload.get("status") if isinstance(payload.get("status"), str) else None
-    return DocsIntegrityOutcome(run_dir=run_dir, status=status, mismatched_blocks=mismatched_blocks, payload=payload)
+    return DocsIntegrityOutcome(
+        run_dir=run_dir,
+        status=status,
+        mismatched_blocks=mismatched_blocks,
+        payload=payload,
+    )
 
 
 def _execute_metrics_stub(paths: Paths, options: Options) -> MetricsStubOutcome:
-    run_callable = _load_callable(paths.repo_root / METRICS_STUB_SCRIPT, METRICS_STUB_MODULE, "run")
+    run_callable = _load_callable(
+        paths.repo_root / METRICS_STUB_SCRIPT, METRICS_STUB_MODULE, "run"
+    )
     argv = [
         "--repo-root",
         str(paths.repo_root),
@@ -553,9 +683,15 @@ def _execute_metrics_stub(paths: Paths, options: Options) -> MetricsStubOutcome:
     if run_dir and not run_dir.exists():
         run_dir = None
     summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
-    missing = summary.get("missing_count") if isinstance(summary.get("missing_count"), int) else None
+    missing = (
+        summary.get("missing_count")
+        if isinstance(summary.get("missing_count"), int)
+        else None
+    )
     status = payload.get("status") if isinstance(payload.get("status"), str) else None
-    return MetricsStubOutcome(run_dir=run_dir, status=status, missing_count=missing, payload=payload)
+    return MetricsStubOutcome(
+        run_dir=run_dir, status=status, missing_count=missing, payload=payload
+    )
 
 
 def _execute_churn(paths: Paths, options: Options) -> ChurnOutcome:
@@ -582,12 +718,18 @@ def _execute_churn(paths: Paths, options: Options) -> ChurnOutcome:
         for name, value in artifacts_payload.items():
             candidate = Path(value)
             artifacts[name] = candidate
-    summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else None
-    return ChurnOutcome(run_dir=run_dir, summary=summary, artifacts=_filter_artifacts(artifacts))
+    summary = (
+        payload.get("summary") if isinstance(payload.get("summary"), dict) else None
+    )
+    return ChurnOutcome(
+        run_dir=run_dir, summary=summary, artifacts=_filter_artifacts(artifacts)
+    )
 
 
 def _execute_undocumented(paths: Paths, options: Options) -> UndocumentedOutcome:
-    run_callable = _load_callable(paths.repo_root / UNDOCUMENTED_SCRIPT, UNDOCUMENTED_MODULE, "run")
+    run_callable = _load_callable(
+        paths.repo_root / UNDOCUMENTED_SCRIPT, UNDOCUMENTED_MODULE, "run"
+    )
     argv = [
         "--repo-root",
         str(paths.repo_root),
@@ -601,7 +743,9 @@ def _execute_undocumented(paths: Paths, options: Options) -> UndocumentedOutcome
     ]
     payload = run_callable(argv)
     if not isinstance(payload, dict):
-        raise RuntimeError("generate_undocumented_logic_report returned unexpected payload")
+        raise RuntimeError(
+            "generate_undocumented_logic_report returned unexpected payload"
+        )
     run_dir = Path(payload.get("run_dir", "")) if payload.get("run_dir") else None
     if run_dir and not run_dir.exists():
         run_dir = None
@@ -611,8 +755,12 @@ def _execute_undocumented(paths: Paths, options: Options) -> UndocumentedOutcome
         for name, value in artifacts_payload.items():
             candidate = Path(value)
             artifacts[name] = candidate
-    summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else None
-    return UndocumentedOutcome(run_dir=run_dir, summary=summary, artifacts=_filter_artifacts(artifacts))
+    summary = (
+        payload.get("summary") if isinstance(payload.get("summary"), dict) else None
+    )
+    return UndocumentedOutcome(
+        run_dir=run_dir, summary=summary, artifacts=_filter_artifacts(artifacts)
+    )
 
 
 def _latest_pointer(paths: Paths, *, name: str) -> Path:
@@ -636,11 +784,11 @@ def _latest_metrics_stub(paths: Paths) -> Path:
 
 
 def _latest_churn(paths: Paths) -> Path:
-    return paths.churn_output_dir / "latest_report.json"
+    return paths.churn_output_dir / "healthview" / "code_doc_churn"
 
 
 def _latest_undocumented(paths: Paths) -> Path:
-    return paths.undocumented_output_dir / "latest_report.json"
+    return paths.undocumented_output_dir / "healthview" / "undocumented_logic"
 
 
 def _latest_placeholder(paths: Paths) -> Path:
@@ -652,7 +800,9 @@ def _latest_monkey_patch(paths: Paths) -> Path:
 
 
 def _execute_aggregator(paths: Paths, options: Options) -> AggregatorOutcome:
-    run_callable = _load_callable(paths.repo_root / AGGREGATOR_SCRIPT, AGGREGATOR_MODULE, "run")
+    run_callable = _load_callable(
+        paths.repo_root / AGGREGATOR_SCRIPT, AGGREGATOR_MODULE, "run"
+    )
     argv: list[str] = [
         "--repo-root",
         str(paths.repo_root),
@@ -678,34 +828,48 @@ def _execute_aggregator(paths: Paths, options: Options) -> AggregatorOutcome:
     if options.skip_hygiene_signals:
         argv.append("--skip-hygiene")
     else:
-        argv.extend([
-            "--placeholder-report",
-            str(_latest_placeholder(paths)),
-            "--monkey-patch-report",
-            str(_latest_monkey_patch(paths)),
-        ])
+        argv.extend(
+            [
+                "--placeholder-report",
+                str(_latest_placeholder(paths)),
+                "--monkey-patch-report",
+                str(_latest_monkey_patch(paths)),
+            ]
+        )
     payload = run_callable(argv)
     if not isinstance(payload, dict):
         raise RuntimeError("aggregate_docs_health_signals returned unexpected payload")
     run_dir = Path(payload.get("run_dir", "")) if payload.get("run_dir") else None
     if run_dir and not run_dir.exists():
         run_dir = None
-    report_json = Path(payload.get("report_json", "")) if payload.get("report_json") else None
+    report_json = (
+        Path(payload.get("report_json", "")) if payload.get("report_json") else None
+    )
     if report_json and not report_json.exists():
         report_json = None
     report_md = Path(payload.get("report_md", "")) if payload.get("report_md") else None
     if report_md and not report_md.exists():
         report_md = None
-    signals_tsv = Path(payload.get("signals_tsv", "")) if payload.get("signals_tsv") else None
+    signals_tsv = (
+        Path(payload.get("signals_tsv", "")) if payload.get("signals_tsv") else None
+    )
     if signals_tsv and not signals_tsv.exists():
         signals_tsv = None
-    signals_csv = Path(payload.get("signals_csv", "")) if payload.get("signals_csv") else None
+    signals_csv = (
+        Path(payload.get("signals_csv", "")) if payload.get("signals_csv") else None
+    )
     if signals_csv and not signals_csv.exists():
         signals_csv = None
-    bundle_summary = Path(payload.get("bundle_summary", "")) if payload.get("bundle_summary") else None
+    bundle_summary = (
+        Path(payload.get("bundle_summary", ""))
+        if payload.get("bundle_summary")
+        else None
+    )
     if bundle_summary and not bundle_summary.exists():
         bundle_summary = None
-    summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else None
+    summary = (
+        payload.get("summary") if isinstance(payload.get("summary"), dict) else None
+    )
     return AggregatorOutcome(
         run_dir=run_dir,
         report_json=report_json,
@@ -718,15 +882,31 @@ def _execute_aggregator(paths: Paths, options: Options) -> AggregatorOutcome:
 
 
 def _register_catalog(registry: CatalogRegistry) -> None:
-    registry.register(script_path=str(DOC_INDEX_SCRIPT), topic=TOPIC_SLUG, role="producer")
-    registry.register(script_path=str(ANCHOR_INVENTORY_SCRIPT), topic=TOPIC_SLUG, role="producer")
-    registry.register(script_path=str(ANCHOR_VALIDATION_SCRIPT), topic=TOPIC_SLUG, role="producer")
-    registry.register(script_path=str(DOCS_INTEGRITY_SCRIPT), topic=TOPIC_SLUG, role="producer")
-    registry.register(script_path=str(METRICS_STUB_SCRIPT), topic=TOPIC_SLUG, role="producer")
+    registry.register(
+        script_path=str(DOC_INDEX_SCRIPT), topic=TOPIC_SLUG, role="producer"
+    )
+    registry.register(
+        script_path=str(ANCHOR_INVENTORY_SCRIPT), topic=TOPIC_SLUG, role="producer"
+    )
+    registry.register(
+        script_path=str(ANCHOR_VALIDATION_SCRIPT), topic=TOPIC_SLUG, role="producer"
+    )
+    registry.register(
+        script_path=str(DOCS_INTEGRITY_SCRIPT), topic=TOPIC_SLUG, role="producer"
+    )
+    registry.register(
+        script_path=str(METRICS_STUB_SCRIPT), topic=TOPIC_SLUG, role="producer"
+    )
     registry.register(script_path=str(CHURN_SCRIPT), topic=TOPIC_SLUG, role="producer")
-    registry.register(script_path=str(UNDOCUMENTED_SCRIPT), topic=TOPIC_SLUG, role="producer")
-    registry.register(script_path=str(AGGREGATOR_SCRIPT), topic=TOPIC_SLUG, role="aggregator")
-    registry.register(script_path=str(ORCHESTRATOR_SCRIPT), topic=TOPIC_SLUG, role="orchestrator")
+    registry.register(
+        script_path=str(UNDOCUMENTED_SCRIPT), topic=TOPIC_SLUG, role="producer"
+    )
+    registry.register(
+        script_path=str(AGGREGATOR_SCRIPT), topic=TOPIC_SLUG, role="aggregator"
+    )
+    registry.register(
+        script_path=str(ORCHESTRATOR_SCRIPT), topic=TOPIC_SLUG, role="orchestrator"
+    )
 
 
 def _summarize_steps(steps: Sequence[Any]) -> str:
@@ -765,11 +945,14 @@ def run(argv: Sequence[str] | None = None) -> int:
         except Exception as exc:  # pragma: no cover - defensive
             return step_failed(detail=str(exc))
         doc_index_holder["value"] = outcome
-        context.add_metadata("doc_index", {
-            "documents": outcome.documents,
-            "headings": outcome.headings,
-            "links": outcome.links,
-        })
+        context.add_metadata(
+            "doc_index",
+            {
+                "documents": outcome.documents,
+                "headings": outcome.headings,
+                "links": outcome.links,
+            },
+        )
         detail_bits: list[str] = []
         if outcome.documents is not None:
             detail_bits.append(f"docs={outcome.documents}")
@@ -790,10 +973,13 @@ def run(argv: Sequence[str] | None = None) -> int:
         except Exception as exc:  # pragma: no cover - defensive
             return step_failed(detail=str(exc))
         anchor_inventory_holder["value"] = outcome
-        context.add_metadata("anchor_inventory", {
-            "total_slugs": outcome.total_slugs,
-            "duplicates": outcome.duplicates,
-        })
+        context.add_metadata(
+            "anchor_inventory",
+            {
+                "total_slugs": outcome.total_slugs,
+                "duplicates": outcome.duplicates,
+            },
+        )
         detail_bits: list[str] = []
         if outcome.total_slugs is not None:
             detail_bits.append(f"slugs={outcome.total_slugs}")
@@ -814,10 +1000,13 @@ def run(argv: Sequence[str] | None = None) -> int:
         except Exception as exc:  # pragma: no cover - defensive
             return step_failed(detail=str(exc))
         anchor_validation_holder["value"] = outcome
-        context.add_metadata("anchor_validation", {
-            "status": outcome.status,
-            "issue_count": outcome.issue_count,
-        })
+        context.add_metadata(
+            "anchor_validation",
+            {
+                "status": outcome.status,
+                "issue_count": outcome.issue_count,
+            },
+        )
         detail = f"status={outcome.status or 'unknown'}"
         if outcome.issue_count is not None:
             detail += f", issues={outcome.issue_count}"
@@ -877,7 +1066,9 @@ def run(argv: Sequence[str] | None = None) -> int:
         context.add_metadata("churn", outcome.summary or {})
         summary = outcome.summary or {}
         missing = summary.get("modules_without_doc_updates")
-        detail = f"missing_docs={missing}" if isinstance(missing, int) else "churn completed"
+        detail = (
+            f"missing_docs={missing}" if isinstance(missing, int) else "churn completed"
+        )
         payload = {
             "run_dir": _relativize(outcome.run_dir, paths.repo_root),
             "summary": summary,
@@ -895,7 +1086,11 @@ def run(argv: Sequence[str] | None = None) -> int:
         context.add_metadata("undocumented", outcome.summary or {})
         summary = outcome.summary or {}
         findings = summary.get("modules_with_findings")
-        detail = f"modules_with_findings={findings}" if isinstance(findings, int) else "undocumented scan completed"
+        detail = (
+            f"modules_with_findings={findings}"
+            if isinstance(findings, int)
+            else "undocumented scan completed"
+        )
         payload = {
             "run_dir": _relativize(outcome.run_dir, paths.repo_root),
             "summary": summary,
@@ -951,50 +1146,78 @@ def run(argv: Sequence[str] | None = None) -> int:
     aggregator_outcome = aggregator_holder.get("value")
 
     run_slug = options.run_timestamp.strftime("%Y%m%d-%H%M")
-    telemetry = build_pipeline_telemetry(result, viewer=VIEWER_SLUG, topic=HEALTHVIEW_TOPIC, run_slug=run_slug)
+    telemetry = build_pipeline_telemetry(
+        result, viewer=VIEWER_SLUG, topic=HEALTHVIEW_TOPIC, run_slug=run_slug
+    )
     completed_at = datetime.now(timezone.utc)
     telemetry_payload = telemetry.as_dict()
 
     artifacts_section: dict[str, str | None] = {
-        "doc_index_run": _relativize(doc_index_outcome.run_dir if doc_index_outcome else None, paths.repo_root),
+        "doc_index_run": _relativize(
+            doc_index_outcome.run_dir if doc_index_outcome else None, paths.repo_root
+        ),
         "doc_index_report": _relativize(
-            doc_index_outcome.artifacts.get("telemetry.json") if doc_index_outcome else None, paths.repo_root
+            doc_index_outcome.artifacts.get("telemetry.json")
+            if doc_index_outcome
+            else None,
+            paths.repo_root,
         ),
         "anchor_inventory_run": _relativize(
-            anchor_inventory_outcome.run_dir if anchor_inventory_outcome else None, paths.repo_root
+            anchor_inventory_outcome.run_dir if anchor_inventory_outcome else None,
+            paths.repo_root,
         ),
         "anchor_inventory_report": _relativize(
-            anchor_inventory_outcome.artifacts.get("telemetry.json") if anchor_inventory_outcome else None,
+            anchor_inventory_outcome.artifacts.get("telemetry.json")
+            if anchor_inventory_outcome
+            else None,
             paths.repo_root,
         ),
         "anchor_validation_report": _relativize(
-            anchor_validation_outcome.report_path if anchor_validation_outcome else None, paths.repo_root
+            anchor_validation_outcome.report_path
+            if anchor_validation_outcome
+            else None,
+            paths.repo_root,
         ),
         "docs_integrity_run": _relativize(
-            docs_integrity_outcome.run_dir if docs_integrity_outcome else None, paths.repo_root
+            docs_integrity_outcome.run_dir if docs_integrity_outcome else None,
+            paths.repo_root,
         ),
         "metrics_stub_run": _relativize(
-            metrics_stub_outcome.run_dir if metrics_stub_outcome else None, paths.repo_root
+            metrics_stub_outcome.run_dir if metrics_stub_outcome else None,
+            paths.repo_root,
         ),
         "churn_report": _relativize(
-            churn_outcome.artifacts.get("telemetry.json") if churn_outcome else None, paths.repo_root
+            churn_outcome.artifacts.get("telemetry.json") if churn_outcome else None,
+            paths.repo_root,
         ),
         "undocumented_report": _relativize(
-            undocumented_outcome.artifacts.get("report.json") if undocumented_outcome else None, paths.repo_root
+            undocumented_outcome.artifacts.get("report.json")
+            if undocumented_outcome
+            else None,
+            paths.repo_root,
         ),
-        "aggregator_run": _relativize(aggregator_outcome.run_dir if aggregator_outcome else None, paths.repo_root),
+        "aggregator_run": _relativize(
+            aggregator_outcome.run_dir if aggregator_outcome else None, paths.repo_root
+        ),
         "aggregator_report_json": _relativize(
-            aggregator_outcome.report_json if aggregator_outcome else None, paths.repo_root
+            aggregator_outcome.report_json if aggregator_outcome else None,
+            paths.repo_root,
         ),
-        "aggregator_report_md": _relativize(aggregator_outcome.report_md if aggregator_outcome else None, paths.repo_root),
+        "aggregator_report_md": _relativize(
+            aggregator_outcome.report_md if aggregator_outcome else None,
+            paths.repo_root,
+        ),
         "aggregator_signals_tsv": _relativize(
-            aggregator_outcome.signals_tsv if aggregator_outcome else None, paths.repo_root
+            aggregator_outcome.signals_tsv if aggregator_outcome else None,
+            paths.repo_root,
         ),
         "aggregator_signals_csv": _relativize(
-            aggregator_outcome.signals_csv if aggregator_outcome else None, paths.repo_root
+            aggregator_outcome.signals_csv if aggregator_outcome else None,
+            paths.repo_root,
         ),
         "aggregator_bundle_summary": _relativize(
-            aggregator_outcome.bundle_summary if aggregator_outcome else None, paths.repo_root
+            aggregator_outcome.bundle_summary if aggregator_outcome else None,
+            paths.repo_root,
         ),
     }
 
@@ -1005,19 +1228,39 @@ def run(argv: Sequence[str] | None = None) -> int:
         "run_slug": run_slug,
         "generated_at": completed_at.isoformat(),
         "telemetry": telemetry_payload,
-        "summary": aggregator_outcome.summary if aggregator_outcome and aggregator_outcome.summary else {},
+        "summary": aggregator_outcome.summary
+        if aggregator_outcome and aggregator_outcome.summary
+        else {},
         "artifacts": artifacts_section,
         "inputs": {
-            "doc_index_output_dir": _relativize(paths.doc_index_output_dir, paths.repo_root),
-            "anchor_inventory_output_dir": _relativize(paths.anchor_inventory_output_dir, paths.repo_root),
-            "anchor_validation_output_dir": _relativize(paths.anchor_validation_output_dir, paths.repo_root),
-            "docs_integrity_output_dir": _relativize(paths.docs_integrity_output_dir, paths.repo_root),
-            "metrics_stub_output_dir": _relativize(paths.metrics_stub_output_dir, paths.repo_root),
+            "doc_index_output_dir": _relativize(
+                paths.doc_index_output_dir, paths.repo_root
+            ),
+            "anchor_inventory_output_dir": _relativize(
+                paths.anchor_inventory_output_dir, paths.repo_root
+            ),
+            "anchor_validation_output_dir": _relativize(
+                paths.anchor_validation_output_dir, paths.repo_root
+            ),
+            "docs_integrity_output_dir": _relativize(
+                paths.docs_integrity_output_dir, paths.repo_root
+            ),
+            "metrics_stub_output_dir": _relativize(
+                paths.metrics_stub_output_dir, paths.repo_root
+            ),
             "churn_output_dir": _relativize(paths.churn_output_dir, paths.repo_root),
-            "undocumented_output_dir": _relativize(paths.undocumented_output_dir, paths.repo_root),
-            "placeholder_output_dir": _relativize(paths.placeholder_output_dir, paths.repo_root),
-            "monkey_patch_output_dir": _relativize(paths.monkey_patch_output_dir, paths.repo_root),
-            "aggregator_output_dir": _relativize(paths.aggregator_output_dir, paths.repo_root),
+            "undocumented_output_dir": _relativize(
+                paths.undocumented_output_dir, paths.repo_root
+            ),
+            "placeholder_output_dir": _relativize(
+                paths.placeholder_output_dir, paths.repo_root
+            ),
+            "monkey_patch_output_dir": _relativize(
+                paths.monkey_patch_output_dir, paths.repo_root
+            ),
+            "aggregator_output_dir": _relativize(
+                paths.aggregator_output_dir, paths.repo_root
+            ),
             "skip_doc_index": options.skip_doc_index,
             "skip_anchor_inventory": options.skip_anchor_inventory,
             "skip_anchor_validation": options.skip_anchor_validation,
@@ -1035,8 +1278,12 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     artifacts = [
         ReportArtifact(filename="manifest.json", kind="json", content=lambda: manifest),
-        ReportArtifact(filename="summary.md", kind="text", content=lambda: summary_markdown),
-        ReportArtifact(filename="telemetry.json", kind="json", content=lambda: telemetry_payload),
+        ReportArtifact(
+            filename="summary.md", kind="text", content=lambda: summary_markdown
+        ),
+        ReportArtifact(
+            filename="telemetry.json", kind="json", content=lambda: telemetry_payload
+        ),
     ]
     result_artifacts = write_report_artifacts(
         stem=HEALTHVIEW_TOPIC,
@@ -1055,10 +1302,14 @@ def run(argv: Sequence[str] | None = None) -> int:
     manifest["metrics"] = dict(metrics_section)
 
     manifest_path = result_artifacts.artifacts["manifest.json"]
-    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    manifest_path.write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
 
     telemetry_path = result_artifacts.artifacts["telemetry.json"]
-    telemetry_path.write_text(json.dumps(telemetry_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    telemetry_path.write_text(
+        json.dumps(telemetry_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
 
     try:
         enforce_report_naming(
@@ -1066,7 +1317,12 @@ def run(argv: Sequence[str] | None = None) -> int:
             run_dir=result_artifacts.run_dir,
             viewer=VIEWER_SLUG,
             topic=HEALTHVIEW_TOPIC,
-            artifact_roles=("manifest.json", "summary.md", "summary.json", "telemetry.json"),
+            artifact_roles=(
+                "manifest.json",
+                "summary.md",
+                "summary.json",
+                "telemetry.json",
+            ),
         )
     except GuardrailViolationError as exc:
         LOGGER.error("Report naming audit failed: %s", exc)

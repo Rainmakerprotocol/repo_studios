@@ -1,0 +1,12 @@
+[run]
+# Limit coverage to the migrated modules so Phase 3 gates are meaningful.
+# pytest-cov's --cov=<file.py> does not behave reliably on Windows; use coverage directly
+# and restrict what is measured via include patterns.
+include =
+    */.repo_studios/scripts/producers/render_inventory_views.py
+    */.repo_studios/scripts/producers/check_inventory_health.py
+
+[report]
+show_missing = True
+skip_covered = True
+precision = 0

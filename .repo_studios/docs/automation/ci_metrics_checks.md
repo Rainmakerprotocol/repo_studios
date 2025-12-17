@@ -13,7 +13,7 @@ This guide describes the proposed CI automation that consumes `.repo_studios/rep
 ## Proposed Pipeline Steps
 
 1. **Generate Reports**
-   - Run `python3 .repo_studios/scripts/render_inventory_views.py` to refresh the latest artifacts.
+   - Run `make -C .repo_studios studio-render-views` (or `python .repo_studios/scripts/producers/render_inventory_views.py`) to refresh the inventory overview.
    - Cache the `.repo_studios/reports/` directory for downstream jobs.
 
 2. **Validate Inventory**
@@ -21,7 +21,7 @@ This guide describes the proposed CI automation that consumes `.repo_studios/rep
    - Treat any path-existence error or schema violation as a hard failure.
 
 3. **Health Assertions**
-   - Parse `.repo_studios/reports/producer_reports/render_inventory_views/latest_summary.json` and fail if:
+   - Parse the latest inventory overview telemetry under `.repo_studios/reports/producer_reports/healthview/inventory_overview/` and fail if:
      - `by_status.unknown` > 0.
      - `by_asset_kind.document` drops below a configured floor (default: 20).
      - Any consumer count unexpectedly hits zero when previously tracked (configure allowlist).
@@ -36,8 +36,8 @@ This guide describes the proposed CI automation that consumes `.repo_studios/rep
 
 ## Implementation Notes
 
-- Add a lightweight Python helper (`.repo_studios/scripts/check_inventory_health.py`) to evaluate thresholds and emit exit codes for CI.
-- Store baseline thresholds under `.repo_studios/config/ci_inventory_thresholds.yaml` so adjustments do not require code edits.
+- Add a lightweight Python helper (`.repo_studios/scripts/producers/check_inventory_health.py`) to evaluate thresholds and emit exit codes for CI.
+- Store baseline thresholds under `.repo_studios/config/ci_inventory_thresholds.json` so adjustments do not require code edits.
 - When new asset categories are introduced, update both the baseline file and thresholds.
 
 ## Next Actions

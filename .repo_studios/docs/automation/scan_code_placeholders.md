@@ -1,3 +1,23 @@
+---
+title: scan_code_placeholders.py
+audience:
+  - coding_agent
+  - human_developer
+owners:
+  - repo_studios_team@rainmakerprotocol.dev
+status: approved
+version: 1.2.0
+updated: 2025-12-17
+tags:
+  - automation
+  - producers
+  - placeholders
+related_files:
+  - ../../scripts/producers/scan_code_placeholders.py
+  - ../../tests/tests_producers/test_scan_code_placeholders.py
+  - ../../command_center/scripts/libraries/database_integration.py
+---
+
 # scan_code_placeholders.py
 
 **Last updated:** 2025-11-23
@@ -24,33 +44,28 @@ From `.repo_studios/`, run `make studio-scan-code-placeholders` to execute the p
 
 - `--repo-root`: repository root used to resolve relative paths (defaults to three levels up from the script).
 - `--root`: directory to scan. Accepts relative paths (resolved against `--repo-root`) or absolute paths. Defaults to the repo root.
-- `--output-dir`: override for the artifact directory (defaults to `.repo_studios/reports/producer_reports/code_placeholder_scans`).
+- `--output-dir`: override for the *base* artifact directory (defaults to `.repo_studios/reports/producer_reports`).
 - `--include-ext`: list of file extensions to include. Defaults to `.py`, `.md`, `.txt`, `.js`, `.ts`, `.yaml`, `.yml`, `.json`.
 - `--patterns`: tokens to detect. Defaults to `TODO`, `FIXME`, `NOTE`, `XXX`, `OPTIMIZE`, `REVIEW`.
 - `--allowlist-file`: optional file containing `<path>:<line>` entries (paths relative to repo root) that should be ignored.
 - `--exclude-prefix`: directory prefixes to skip. Accepts multiple values; use `*/segment/` to skip any path containing `segment` as a directory. Defaults to `.venv/`, `node_modules/`, and any `site-packages/` path when scanning the repo root. Pass `--exclude-prefix` with no values to disable defaults.
 - `--artifacts-to-keep`: number of historical runs to retain (default `5`).
+- `--timestamp`: ISO8601 timestamp used to seed the run directory slug.
 - `--log-level`: standard Python logging level (default `INFO`).
 
 The script auto-creates output directories and normalizes extensions/patterns for case-insensitive matching.
 
 ## Outputs
 
-Each run creates `.repo_studios/reports/producer_reports/code_placeholder_scans/placeholder_scan-<timestamp>/` with:
+Each run creates a canonical bundle under:
 
-- `report.json`: summary payload with schema version, timestamp, patterns, counts by pattern/extension, allowlist stats, and total matches.
-- `report.md`: human-readable summary and sample findings (top 20 entries).
-- `log.txt`: key-value digest for CI consumption.
-- `matches.json`: full list of findings (path, line, pattern, snippet).
-- `matches.tsv`: tab-separated export (only written when matches exist).
+`.repo_studios/reports/producer_reports/healthview/code_placeholders/<YYYYMMDD-HHMM>/`
 
-The producer also refreshes `.repo_studios/reports/producer_reports/code_placeholder_scans/latest/` with copies of the most recent artifacts:
+The bundle contains exactly three artifacts:
 
-- `latest_report.json`
-- `latest_report.md`
-- `latest_log.txt`
-- `latest_matches.json`
-- `latest_matches.tsv` (when applicable)
+- `manifest.json`: full payload + scan settings + a sampled list of matches (truncated to a bounded limit).
+- `summary.md`: human-readable report (totals + a small findings sample).
+- `telemetry.json`: structured metrics and a copy of the summary payload for downstream automation.
 
 Historical runs are pruned to the configured retention window after each execution.
 

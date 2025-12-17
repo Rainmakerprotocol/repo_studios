@@ -20,10 +20,14 @@ if str(SCRIPTS_ROOT) not in sys.path:  # pragma: no cover - import path bootstra
 
 from utilities.anchor_inventory_loader import load_anchor_inventory  # noqa: E402
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/aggregator_reports/docs_health_signals")
-DEFAULT_CHURN_REPORT = Path(".repo_studios/reports/producer_reports/code_doc_churn_reports/latest_report.json")
+DEFAULT_OUTPUT_DIR = Path(
+    ".repo_studios/reports/aggregator_reports/docs_health_signals"
+)
+DEFAULT_CHURN_REPORT = Path(
+    ".repo_studios/reports/producer_reports/healthview/code_doc_churn"
+)
 DEFAULT_UNDOCUMENTED_REPORT = Path(
-    ".repo_studios/reports/producer_reports/undocumented_logic_reports/latest_report.json"
+    ".repo_studios/reports/producer_reports/healthview/undocumented_logic"
 )
 DEFAULT_ANCHOR_INVENTORY = Path(
     ".repo_studios/reports/producer_reports/healthview/anchor_inventory"
@@ -47,7 +51,9 @@ DEFAULT_ARTIFACTS_TO_KEEP = 5
 RUN_STEM = "docs_health_signals"
 SCHEMA_VERSION = 1
 
-LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
+LIBRARIES_ROOT = (
+    Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
+)
 
 try:  # pragma: no cover - prefer import when packaged
     from libraries import (
@@ -65,7 +71,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
 
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import (  # type: ignore
+    from libraries import (
         KeepSpec,
         OptionsConfig,
         PathSpec,
@@ -100,15 +106,44 @@ class Options:
 PATH_CONFIG = PathsConfig(
     dataclass_type=Paths,
     path_specs={
-        "output_dir": PathSpec(field="output_dir", default=DEFAULT_OUTPUT_DIR, ensure_dir=True, within_repo=True),
-        "churn_report": PathSpec(field="churn_report", default=DEFAULT_CHURN_REPORT, within_repo=True),
-        "undocumented_report": PathSpec(field="undocumented_report", default=DEFAULT_UNDOCUMENTED_REPORT, within_repo=True),
-        "anchor_inventory": PathSpec(field="anchor_inventory", default=DEFAULT_ANCHOR_INVENTORY, within_repo=True),
-        "anchor_validation": PathSpec(field="anchor_validation", default=DEFAULT_ANCHOR_VALIDATION, within_repo=True),
-        "docs_integrity": PathSpec(field="docs_integrity", default=DEFAULT_DOCS_INTEGRITY, within_repo=True),
-        "metrics_stub": PathSpec(field="metrics_stub", default=DEFAULT_METRICS_STUB, within_repo=True),
-        "placeholder_report": PathSpec(field="placeholder_report", default=DEFAULT_PLACEHOLDER_REPORT, within_repo=True),
-        "monkey_patch_report": PathSpec(field="monkey_patch_report", default=DEFAULT_MONKEY_PATCH_REPORT, within_repo=True),
+        "output_dir": PathSpec(
+            field="output_dir",
+            default=DEFAULT_OUTPUT_DIR,
+            ensure_dir=True,
+            within_repo=True,
+        ),
+        "churn_report": PathSpec(
+            field="churn_report", default=DEFAULT_CHURN_REPORT, within_repo=True
+        ),
+        "undocumented_report": PathSpec(
+            field="undocumented_report",
+            default=DEFAULT_UNDOCUMENTED_REPORT,
+            within_repo=True,
+        ),
+        "anchor_inventory": PathSpec(
+            field="anchor_inventory", default=DEFAULT_ANCHOR_INVENTORY, within_repo=True
+        ),
+        "anchor_validation": PathSpec(
+            field="anchor_validation",
+            default=DEFAULT_ANCHOR_VALIDATION,
+            within_repo=True,
+        ),
+        "docs_integrity": PathSpec(
+            field="docs_integrity", default=DEFAULT_DOCS_INTEGRITY, within_repo=True
+        ),
+        "metrics_stub": PathSpec(
+            field="metrics_stub", default=DEFAULT_METRICS_STUB, within_repo=True
+        ),
+        "placeholder_report": PathSpec(
+            field="placeholder_report",
+            default=DEFAULT_PLACEHOLDER_REPORT,
+            within_repo=True,
+        ),
+        "monkey_patch_report": PathSpec(
+            field="monkey_patch_report",
+            default=DEFAULT_MONKEY_PATCH_REPORT,
+            within_repo=True,
+        ),
     },
     repo_root_depth=4,
 )
@@ -135,9 +170,23 @@ class SignalResult:
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__ or "")
     parser.add_argument("--repo-root", help="Repository root override")
-    parser.add_argument("--output-dir", help="Output directory for aggregator artifacts")
-    parser.add_argument("--churn-report", help="Path to code/doc churn report JSON")
-    parser.add_argument("--undocumented-report", help="Path to undocumented logic report JSON")
+    parser.add_argument(
+        "--output-dir", help="Output directory for aggregator artifacts"
+    )
+    parser.add_argument(
+        "--churn-report",
+        help=(
+            "Path to churn input (canonical topic dir, specific bundle dir containing telemetry.json, "
+            "or legacy report.json)"
+        ),
+    )
+    parser.add_argument(
+        "--undocumented-report",
+        help=(
+            "Path to undocumented logic input (canonical topic dir, specific bundle dir containing telemetry.json, "
+            "or legacy report.json)"
+        ),
+    )
     parser.add_argument(
         "--anchor-inventory",
         help=(
@@ -145,18 +194,28 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
             "or legacy report.json)"
         ),
     )
-    parser.add_argument("--anchor-validation", help="Path to markdown anchor validation report JSON")
+    parser.add_argument(
+        "--anchor-validation", help="Path to markdown anchor validation report JSON"
+    )
     parser.add_argument("--docs-integrity", help="Path to docs integrity report JSON")
-    parser.add_argument("--metrics-stub", help="Path to metrics anchor stub validation report JSON")
-    parser.add_argument("--placeholder-report", help="Path to code placeholder scan report JSON")
-    parser.add_argument("--monkey-patch-report", help="Path to monkey patch scan report JSON")
+    parser.add_argument(
+        "--metrics-stub", help="Path to metrics anchor stub validation report JSON"
+    )
+    parser.add_argument(
+        "--placeholder-report", help="Path to code placeholder scan report JSON"
+    )
+    parser.add_argument(
+        "--monkey-patch-report", help="Path to monkey patch scan report JSON"
+    )
     parser.add_argument(
         "--artifacts-to-keep",
         type=int,
         default=DEFAULT_ARTIFACTS_TO_KEEP,
         help="Retention count for timestamped runs",
     )
-    parser.add_argument("--skip-hygiene", action="store_true", help="Skip hygiene signal blending")
+    parser.add_argument(
+        "--skip-hygiene", action="store_true", help="Skip hygiene signal blending"
+    )
     parser.add_argument(
         "--log-level",
         default="INFO",
@@ -167,21 +226,58 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def _configure_logging(level: str) -> None:
-    logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
+    logging.basicConfig(
+        level=getattr(logging, level.upper(), logging.INFO),
+        format="%(levelname)s %(message)s",
+    )
 
 
-def _load_json(path: Path, label: str, logger: logging.Logger) -> dict[str, Any] | None:
+def _resolve_latest_json_input(
+    path: Path, label: str, logger: logging.Logger
+) -> Path | None:
+    if path.is_file():
+        return path
     if not path.exists():
         logger.warning("%s path missing: %s", label, path)
         return None
+    if not path.is_dir():
+        logger.warning("%s path is not a file or directory: %s", label, path)
+        return None
+
+    bundle_telemetry = path / "telemetry.json"
+    if bundle_telemetry.exists():
+        return bundle_telemetry
+
+    candidate_dirs: list[Path] = []
+    for child in path.iterdir():
+        if not child.is_dir():
+            continue
+        if (child / "telemetry.json").exists():
+            candidate_dirs.append(child)
+
+    if not candidate_dirs:
+        logger.warning("%s contains no telemetry.json bundles: %s", label, path)
+        return None
+
+    latest = max(candidate_dirs, key=lambda p: p.name)
+    return latest / "telemetry.json"
+
+
+def _load_json(path: Path, label: str, logger: logging.Logger) -> dict[str, Any] | None:
+    resolved = _resolve_latest_json_input(path, label, logger)
+    if resolved is None:
+        return None
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(resolved.read_text(encoding="utf-8"))
     except Exception as exc:  # pragma: no cover - defensive
-        logger.warning("Failed to parse %s: %s", path, exc)
+        logger.warning("Failed to parse %s: %s", resolved, exc)
         return None
     if not isinstance(data, dict):
-        logger.warning("%s must be a JSON object: %s", label, path)
+        logger.warning("%s must be a JSON object: %s", label, resolved)
         return None
+    payload = data.get("payload")
+    if isinstance(payload, dict):
+        return payload
     return data
 
 
@@ -230,7 +326,9 @@ def _format_score(score: float | None) -> str:
     return "n/a" if score is None else f"{score:.2f}"
 
 
-def _compute_freshness(churn: dict[str, Any] | None) -> tuple[float | None, dict[str, Any], list[dict[str, Any]], list[str]]:
+def _compute_freshness(
+    churn: dict[str, Any] | None,
+) -> tuple[float | None, dict[str, Any], list[dict[str, Any]], list[str]]:
     if not churn:
         return None, {}, [], ["Churn report unavailable."]
     summary = churn.get("summary") or {}
@@ -252,7 +350,11 @@ def _compute_freshness(churn: dict[str, Any] | None) -> tuple[float | None, dict
             {
                 "module": module_name,
                 "code_paths": list(entry.get("code_paths") or []),
-                "doc_candidates": [candidate.get("path") for candidate in entry.get("doc_candidates", []) if isinstance(candidate, dict)],
+                "doc_candidates": [
+                    candidate.get("path")
+                    for candidate in entry.get("doc_candidates", [])
+                    if isinstance(candidate, dict)
+                ],
                 "last_commit_utc": entry.get("last_commit_utc"),
             }
         )
@@ -264,7 +366,9 @@ def _compute_freshness(churn: dict[str, Any] | None) -> tuple[float | None, dict
     return _clamp(score), metrics, findings, notes
 
 
-def _compute_coverage(report: dict[str, Any] | None) -> tuple[float | None, dict[str, Any], list[dict[str, Any]], list[str]]:
+def _compute_coverage(
+    report: dict[str, Any] | None,
+) -> tuple[float | None, dict[str, Any], list[dict[str, Any]], list[str]]:
     if not report:
         return None, {}, [], ["Undocumented logic report unavailable."]
     summary = report.get("summary") or {}
@@ -292,7 +396,11 @@ def _compute_coverage(report: dict[str, Any] | None) -> tuple[float | None, dict
                 "module_path": module.get("module_path"),
                 "missing_entities": len(module.get("findings") or []),
                 "coverage_percent": module.get("coverage_percent"),
-                "doc_candidates": [candidate.get("path") for candidate in module.get("doc_candidates", []) if isinstance(candidate, dict)],
+                "doc_candidates": [
+                    candidate.get("path")
+                    for candidate in module.get("doc_candidates", [])
+                    if isinstance(candidate, dict)
+                ],
             }
         )
     notes: list[str] = []
@@ -312,7 +420,9 @@ def _compute_structure(
     total_docs = int((summary or {}).get("total_documents") or 0)
     missing_h1 = int((summary or {}).get("documents_missing_h1") or 0)
     missing_h2 = int((summary or {}).get("documents_missing_h2") or 0)
-    duplicates_docs = int((summary or {}).get("documents_with_cross_file_duplicates") or 0)
+    duplicates_docs = int(
+        (summary or {}).get("documents_with_cross_file_duplicates") or 0
+    )
     repeated_docs = int((summary or {}).get("documents_with_repeated_anchors") or 0)
     cross_file_duplicates = int((summary or {}).get("cross_file_duplicates") or 0)
     total_slugs = int((summary or {}).get("total_slugs") or 0)
@@ -334,7 +444,9 @@ def _compute_structure(
     findings: list[dict[str, Any]] = []
     for entry in (summary or {}).get("top_document_roots", [])[:5]:
         if isinstance(entry, dict):
-            findings.append({"root": entry.get("root"), "documents": entry.get("count")})
+            findings.append(
+                {"root": entry.get("root"), "documents": entry.get("count")}
+            )
     notes: list[str] = []
     if validation:
         issue_count = int(validation.get("issue_count") or 0)
@@ -378,7 +490,9 @@ def _compute_integrity(
             notes.append(f"Docs integrity found {mismatched} mismatched blocks.")
         if docs_integrity.get("status") not in {None, "ok"}:
             score = max(0.0, score - 10.0)
-            notes.append(f"Integrity status reported as {docs_integrity.get('status')!r}.")
+            notes.append(
+                f"Integrity status reported as {docs_integrity.get('status')!r}."
+            )
     if metrics_stub:
         summary = metrics_stub.get("summary") or {}
         missing = int(summary.get("missing_count") or 0)
@@ -392,8 +506,11 @@ def _compute_integrity(
         if missing:
             score = max(0.0, score - min(30.0, missing * 10.0))
             notes.append(f"Missing {missing} metrics anchor stubs.")
-        if metrics_stub.get("missing"):
-            findings.extend(metrics_stub.get("missing")[:5])
+        missing_entries = metrics_stub.get("missing")
+        if isinstance(missing_entries, list) and missing_entries:
+            for entry in missing_entries[:5]:
+                if isinstance(entry, dict):
+                    findings.append(entry)
     return _clamp(score), metrics, findings, notes
 
 
@@ -414,7 +531,9 @@ def _compute_hygiene(
         score = max(0.0, score - min(40.0, total_matches * 5.0))
         by_pattern = placeholder_report.get("summary", {}).get("by_pattern", {})
         if isinstance(by_pattern, dict) and by_pattern:
-            findings.append({"placeholder_by_pattern": dict(list(by_pattern.items())[:5])})
+            findings.append(
+                {"placeholder_by_pattern": dict(list(by_pattern.items())[:5])}
+            )
         if total_matches:
             notes.append(f"Placeholder scan surfaced {total_matches} matches.")
     if monkey_report:
@@ -424,13 +543,17 @@ def _compute_hygiene(
         score = max(0.0, score - min(40.0, float(total_findings)))
         by_category = monkey_report.get("summary", {}).get("by_category", {})
         if isinstance(by_category, dict) and by_category:
-            findings.append({"monkey_patch_by_category": dict(list(by_category.items())[:5])})
+            findings.append(
+                {"monkey_patch_by_category": dict(list(by_category.items())[:5])}
+            )
         if total_findings:
             notes.append(f"Monkey patch scan reported {total_findings} findings.")
     return _clamp(score), metrics, findings, notes
 
 
-def _flatten_metrics(metrics: dict[str, Any], category: str) -> list[tuple[str, str, str]]:
+def _flatten_metrics(
+    metrics: dict[str, Any], category: str
+) -> list[tuple[str, str, str]]:
     rows: list[tuple[str, str, str]] = []
     for key, value in metrics.items():
         if isinstance(value, (dict, list)):
@@ -441,7 +564,9 @@ def _flatten_metrics(metrics: dict[str, Any], category: str) -> list[tuple[str, 
     return rows
 
 
-def _weighted_score(signals: Iterable[SignalResult], weights: dict[str, float]) -> float | None:
+def _weighted_score(
+    signals: Iterable[SignalResult], weights: dict[str, float]
+) -> float | None:
     total = 0.0
     weight_sum = 0.0
     for signal in signals:
@@ -474,12 +599,16 @@ def _render_markdown(
             "- Status tally: "
             + ", ".join(f"{name}={value}" for name, value in counts.items())
         )
-    lines.append("- Signals scored: " + ", ".join(signal.category for signal in signals))
+    lines.append(
+        "- Signals scored: " + ", ".join(signal.category for signal in signals)
+    )
     lines.append("")
     lines.append("## Signal Details")
     lines.append("")
     for signal in signals:
-        lines.append(f"### {signal.title} — {signal.status.title()} ({_format_score(signal.score)})")
+        lines.append(
+            f"### {signal.title} — {signal.status.title()} ({_format_score(signal.score)})"
+        )
         lines.append("")
         if signal.notes:
             lines.append("Notes:")
@@ -539,18 +668,30 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     options.include_hygiene = not args.skip_hygiene
 
     churn_report = _load_json(paths.churn_report, "churn report", logger)
-    undocumented_report = _load_json(paths.undocumented_report, "undocumented logic report", logger)
-    anchor_inventory, anchor_inventory_path = load_anchor_inventory(paths.anchor_inventory, logger=logger)
+    undocumented_report = _load_json(
+        paths.undocumented_report, "undocumented logic report", logger
+    )
+    anchor_inventory, anchor_inventory_path = load_anchor_inventory(
+        paths.anchor_inventory, logger=logger
+    )
     if anchor_inventory is None:
-        logger.warning("anchor inventory path missing or unreadable: %s", paths.anchor_inventory)
-    anchor_validation = _load_json(paths.anchor_validation, "markdown anchor validation", logger)
+        logger.warning(
+            "anchor inventory path missing or unreadable: %s", paths.anchor_inventory
+        )
+    anchor_validation = _load_json(
+        paths.anchor_validation, "markdown anchor validation", logger
+    )
     docs_integrity = _load_json(paths.docs_integrity, "docs integrity", logger)
     metrics_stub = _load_json(paths.metrics_stub, "metrics anchor stub", logger)
     placeholder_report = None
     monkey_report = None
     if options.include_hygiene:
-        placeholder_report = _load_json(paths.placeholder_report, "placeholder scan", logger)
-        monkey_report = _load_json(paths.monkey_patch_report, "monkey patch scan", logger)
+        placeholder_report = _load_json(
+            paths.placeholder_report, "placeholder scan", logger
+        )
+        monkey_report = _load_json(
+            paths.monkey_patch_report, "monkey patch scan", logger
+        )
 
     _validate_payload(
         churn_report,
@@ -623,7 +764,10 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
             "Structure",
             structure,
             [
-                (str(anchor_inventory_path or paths.anchor_inventory), anchor_inventory),
+                (
+                    str(anchor_inventory_path or paths.anchor_inventory),
+                    anchor_inventory,
+                ),
                 (str(paths.anchor_validation), anchor_validation),
             ],
         ),
@@ -677,7 +821,13 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         )
         signals.append(result)
 
-    weights = {"freshness": 0.35, "coverage": 0.35, "structure": 0.15, "integrity": 0.1, "hygiene": 0.05}
+    weights = {
+        "freshness": 0.35,
+        "coverage": 0.35,
+        "structure": 0.15,
+        "integrity": 0.1,
+        "hygiene": 0.05,
+    }
     overall_score = _weighted_score(signals, weights)
     generated_at = datetime.now(timezone.utc)
 
@@ -720,7 +870,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         "provenance": provenance,
     }
 
-    markdown_payload = _render_markdown(generated_at=generated_at, summary=summary_payload, signals=signals)
+    markdown_payload = _render_markdown(
+        generated_at=generated_at, summary=summary_payload, signals=signals
+    )
     tsv_payload = _render_tsv(signals)
     csv_payload = _render_csv(signals)
     bundle_summary = {
@@ -730,10 +882,30 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     }
 
     artifacts = [
-        ReportArtifact(filename="report.json", pointer="latest_report.json", kind="json", content=report_payload),
-        ReportArtifact(filename="report.md", pointer="latest_report.md", kind="text", content=markdown_payload),
-        ReportArtifact(filename="signals.tsv", pointer="latest_signals.tsv", kind="text", content=tsv_payload),
-        ReportArtifact(filename="signals.csv", pointer="latest_signals.csv", kind="text", content=csv_payload),
+        ReportArtifact(
+            filename="report.json",
+            pointer="latest_report.json",
+            kind="json",
+            content=report_payload,
+        ),
+        ReportArtifact(
+            filename="report.md",
+            pointer="latest_report.md",
+            kind="text",
+            content=markdown_payload,
+        ),
+        ReportArtifact(
+            filename="signals.tsv",
+            pointer="latest_signals.tsv",
+            kind="text",
+            content=tsv_payload,
+        ),
+        ReportArtifact(
+            filename="signals.csv",
+            pointer="latest_signals.csv",
+            kind="text",
+            content=csv_payload,
+        ),
         ReportArtifact(
             filename="bundle_summary.json",
             pointer="latest_bundle_summary.json",
@@ -750,7 +922,13 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         keep=options.artifacts_to_keep,
     )
 
-    logging.info("Docs health overall score: %s", _format_score(summary_payload["overall_score"]))
+    overall_score_value = summary_payload.get("overall_score")
+    overall_score_for_log: float | None
+    if isinstance(overall_score_value, (int, float)):
+        overall_score_for_log = float(overall_score_value)
+    else:
+        overall_score_for_log = None
+    logging.info("Docs health overall score: %s", _format_score(overall_score_for_log))
 
     return {
         "run_dir": str(write_result.run_dir),

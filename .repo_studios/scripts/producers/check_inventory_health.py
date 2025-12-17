@@ -51,7 +51,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback during standalone exe
     from libraries.database_integration import create_storage  # type: ignore
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_SUMMARY_PATH = Path(".repo_studios/reports/producer_reports/render_inventory_views/latest_summary.json")
+DEFAULT_SUMMARY_PATH = Path(".repo_studios/reports/producer_reports/healthview/inventory_overview")
 DEFAULT_BASELINE_PATH = Path(".repo_studios/config/inventory/inventory_summary_baseline.json")
 DEFAULT_THRESHOLDS_PATH = Path("config/ci_inventory_thresholds.json")
 DEFAULT_OUTPUT_PATH = Path(".repo_studios/command_center/reports")
@@ -114,9 +114,51 @@ OPTIONS_CONFIG = OptionsConfig(
 JsonDict = Dict[str, Any]
 
 
+def _latest_inventory_overview_run(topic_dir: Path) -> Path | None:
+    if not topic_dir.exists():
+        return None
+    try:
+        candidates = [node for node in topic_dir.iterdir() if node.is_dir()]
+    except OSError:
+        return None
+
+    def _is_timestamp_dir(path: Path) -> bool:
+        name = path.name
+        if len(name) != 13:
+            return False
+        if name[8] != "-":
+            return False
+        return name[:8].isdigit() and name[9:].isdigit()
+
+    timestamped = [node for node in candidates if _is_timestamp_dir(node)]
+    if not timestamped:
+        return None
+    timestamped.sort(key=lambda node: node.name)
+    return timestamped[-1]
+
+
 def load_json(path: Path) -> JsonDict:
     if not path.exists():
         logging.debug("JSON source missing: %s", path)
+        return {}
+    if path.is_dir():
+        latest_run = _latest_inventory_overview_run(path)
+        if latest_run is None:
+            logging.debug("No timestamped runs found under: %s", path)
+            return {}
+        telemetry_path = latest_run / "telemetry.json"
+        if not telemetry_path.exists():
+            logging.debug("Telemetry missing: %s", telemetry_path)
+            return {}
+        try:
+            telemetry = json.loads(telemetry_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            logging.error("failed to parse JSON from %s: %s", telemetry_path, exc)
+            return {}
+        if isinstance(telemetry, dict) and isinstance(telemetry.get("summary"), dict):
+            return telemetry["summary"]
+        if isinstance(telemetry, dict):
+            return telemetry
         return {}
     try:
         return json.loads(path.read_text(encoding="utf-8"))
@@ -392,7 +434,7 @@ def main(argv: list[str] | None = None) -> int:
     output_dir = paths.output_dir
 
     if not summary_path.exists():
-        logging.error("summary file not found: %s", summary_path)
+        logging.error("summary source not found: %s", summary_path)
         return 2
 
     current = load_json(summary_path)

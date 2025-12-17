@@ -1,0 +1,12 @@
+[run]
+# Limit coverage to the migrated modules so Phase 3 gates are meaningful.
+# pytest-cov's --cov=<file.py> does not behave reliably on Windows; use a directory
+# source and restrict what is reported via include patterns instead.
+include =
+    */.repo_studios/scripts/producers/generate_undocumented_logic_report.py
+    */.repo_studios/scripts/aggregators/aggregate_docs_health_signals.py
+
+[report]
+show_missing = True
+skip_covered = True
+precision = 0

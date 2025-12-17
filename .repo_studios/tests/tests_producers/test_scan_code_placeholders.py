@@ -38,31 +38,25 @@ def test_structured_artifacts(tmp_path: Path) -> None:
             str(repo_root),
             "--root",
             "src",
+            "--timestamp",
+            "2025-01-01T00:00:00+00:00",
             "--artifacts-to-keep",
             "5",
         ]
     )
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "code_placeholder_scans"
-    run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith("placeholder_scan-")]
-    assert len(run_dirs) == 1
-    run_dir = run_dirs[0]
+    topic_dir = (
+        repo_root / ".repo_studios" / "reports" / "producer_reports" / "healthview" / "code_placeholders"
+    )
+    run_dir = topic_dir / "20250101-0000"
+    assert (run_dir / "manifest.json").exists()
+    assert (run_dir / "summary.md").exists()
+    assert (run_dir / "telemetry.json").exists()
 
-    report_path = run_dir / "report.json"
-    matches_path = run_dir / "matches.json"
-    assert report_path.exists()
-    assert matches_path.exists()
-
-    payload = json.loads(report_path.read_text(encoding="utf-8"))
-    assert payload["total_matches"] == 2
-    assert payload["summary"]["by_pattern"] == {"FIXME": 1, "TODO": 1}
-
-    matches = json.loads(matches_path.read_text(encoding="utf-8"))
-    assert {entry["pattern"] for entry in matches} == {"TODO", "FIXME"}
-
-    latest_dir = output_dir / "latest"
-    assert (latest_dir / "latest_report.json").exists()
-    assert (latest_dir / "latest_matches.json").exists()
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    summary = telemetry["summary"]
+    assert summary["total_matches"] == 2
+    assert summary["summary"]["by_pattern"] == {"FIXME": 1, "TODO": 1}
 
 
 def test_pruning_and_allowlist(tmp_path: Path) -> None:
@@ -77,13 +71,16 @@ def test_pruning_and_allowlist(tmp_path: Path) -> None:
     allowlist = repo_root / "allowlist.txt"
     allowlist.write_text("src/sample.py:1\n", encoding="utf-8")
 
-    for _ in range(2):
+    timestamps = ["2025-01-01T00:00:00+00:00", "2025-01-01T00:01:00+00:00"]
+    for timestamp in timestamps:
         mod.run(
             [
                 "--repo-root",
                 str(repo_root),
                 "--root",
                 "src",
+                "--timestamp",
+                timestamp,
                 "--artifacts-to-keep",
                 "1",
                 "--allowlist-file",
@@ -91,13 +88,16 @@ def test_pruning_and_allowlist(tmp_path: Path) -> None:
             ]
         )
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "code_placeholder_scans"
-    run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith("placeholder_scan-")]
+    topic_dir = (
+        repo_root / ".repo_studios" / "reports" / "producer_reports" / "healthview" / "code_placeholders"
+    )
+    run_dirs = [p for p in topic_dir.iterdir() if p.is_dir()]
     assert len(run_dirs) == 1
 
-    payload = json.loads((run_dirs[0] / "report.json").read_text(encoding="utf-8"))
-    assert payload["total_matches"] == 0
-    assert payload["allowlist_size"] == 1
+    telemetry = json.loads((run_dirs[0] / "telemetry.json").read_text(encoding="utf-8"))
+    summary = telemetry["summary"]
+    assert summary["total_matches"] == 0
+    assert summary["allowlist_size"] == 1
 
 
 def test_default_exclusions_skip_virtualenv(tmp_path: Path) -> None:
@@ -118,6 +118,8 @@ def test_default_exclusions_skip_virtualenv(tmp_path: Path) -> None:
             ".",
             "--include-ext",
             ".py",
+            "--timestamp",
+            "2025-01-01T00:00:00+00:00",
         ]
     )
 
@@ -126,12 +128,13 @@ def test_default_exclusions_skip_virtualenv(tmp_path: Path) -> None:
     assert set(payload["exclude_prefixes"]) == {".venv/", "node_modules/"}
     assert payload["exclude_segments"] == ["site-packages"]
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "code_placeholder_scans"
-    run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith("placeholder_scan-")]
-    assert len(run_dirs) == 1
-    matches_path = run_dirs[0] / "matches.json"
-    matches = json.loads(matches_path.read_text(encoding="utf-8"))
-    assert {entry["path"] for entry in matches} == {"real.py"}
+    topic_dir = (
+        repo_root / ".repo_studios" / "reports" / "producer_reports" / "healthview" / "code_placeholders"
+    )
+    run_dir = topic_dir / "20250101-0000"
+    manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
+    sample = manifest.get("matches_sample", [])
+    assert {entry["path"] for entry in sample} == {"real.py"}
 
 
 def test_exclude_prefix_flag_disables_defaults(tmp_path: Path) -> None:
@@ -152,6 +155,8 @@ def test_exclude_prefix_flag_disables_defaults(tmp_path: Path) -> None:
             "--include-ext",
             ".py",
             "--exclude-prefix",
+            "--timestamp",
+            "2025-01-01T00:00:00+00:00",
         ]
     )
 
@@ -178,12 +183,16 @@ def test_ignores_title_case_tokens(tmp_path: Path) -> None:
             "--include-ext",
             ".md",
             ".py",
+            "--timestamp",
+            "2025-01-01T00:00:00+00:00",
         ]
     )
 
     assert payload["total_matches"] == 1
-    matches_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "code_placeholder_scans"
-    run_dirs = [p for p in matches_dir.iterdir() if p.is_dir() and p.name.startswith("placeholder_scan-")]
-    assert len(run_dirs) == 1
-    matches = json.loads((run_dirs[0] / "matches.json").read_text(encoding="utf-8"))
-    assert {entry["path"] for entry in matches} == {"code.py"}
+    topic_dir = (
+        repo_root / ".repo_studios" / "reports" / "producer_reports" / "healthview" / "code_placeholders"
+    )
+    run_dir = topic_dir / "20250101-0000"
+    manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
+    sample = manifest.get("matches_sample", [])
+    assert {entry["path"] for entry in sample} == {"code.py"}

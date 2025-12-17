@@ -26,14 +26,14 @@ endif
 
 .PHONY: studio-render-views
 studio-render-views:
-	$(PYTHON) .repo_studios/scripts/producers/render_inventory_views.py
+	$(PYTHON) scripts/producers/render_inventory_views.py
 
 .PHONY: studio-validate-inventory
 studio-validate-inventory:
-	$(PYTHON) .repo_studios/scripts/producers/validate_inventory.py
+	$(PYTHON) scripts/producers/validate_inventory.py
 
 studio-check-inventory-health: studio-render-views
-	$(PYTHON) .repo_studios/scripts/producers/check_inventory_health.py --repo-root . --output-dir .repo_studios/command_center/reports
+	$(PYTHON) scripts/producers/check_inventory_health.py --repo-root .. --output-dir command_center/reports
 
 .PHONY: studio-validate-markdown-anchors
 studio-validate-markdown-anchors:
@@ -49,7 +49,11 @@ studio-analyze-standards-index-gaps:
 
 .PHONY: studio-scan-code-placeholders
 studio-scan-code-placeholders:
-	$(PYTHON) .repo_studios/scripts/producers/scan_code_placeholders.py --repo-root .
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/producers/scan_code_placeholders.py" \
+		--repo-root . \
+		--output-dir .repo_studios/reports/producer_reports \
+		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-scan-monkey-patches
 studio-scan-monkey-patches:
@@ -214,7 +218,7 @@ studio-generate-code-doc-churn-report:
 
 .PHONY: studio-generate-undocumented-logic-report
 studio-generate-undocumented-logic-report:
-	$(PYTHON) "$(REPO_ROOT)/.repo_studios/scripts/producers/generate_undocumented_logic_report.py" --repo-root "$(REPO_ROOT)" --output-dir "$(REPO_ROOT)/.repo_studios/reports/producer_reports/undocumented_logic_reports" --include-command-center --log-level INFO
+	$(PYTHON) "$(REPO_ROOT)/.repo_studios/scripts/producers/generate_undocumented_logic_report.py" --repo-root "$(REPO_ROOT)" --output-dir "$(REPO_ROOT)/.repo_studios/reports/producer_reports" --include-command-center --log-level INFO
 
 .PHONY: studio-aggregate-docs-health
 studio-aggregate-docs-health:

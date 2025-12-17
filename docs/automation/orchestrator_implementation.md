@@ -399,8 +399,8 @@ roadmap.
     Markdown/JSON Healthview payload; (2) `run_standards_index_cli.py` still writes to
     `.repo_studios/reports/orchestrator_runs/standards_index_cli/`, so the topic runner must mirror
     outputs into the Command Center Healthview slug and likely wrap the query logic behind a
-    callable helper; (3) `check_inventory_health.py` depends on
-    `reports/producer_reports/render_inventory_views/latest_summary.json` plus
+    callable helper; (3) `check_inventory_health.py` depends on the latest inventory overview
+    telemetry under `reports/producer_reports/healthview/inventory_overview/` plus
     `config/ci_inventory_thresholds.json`, so the
     orchestrator needs to schedule `render_inventory_views.py` (or another summary refresh) before
     invoking the health check and expose baseline overrides for CI parity.

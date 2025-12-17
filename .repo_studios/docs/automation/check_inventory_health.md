@@ -41,7 +41,8 @@ Output layout (positional encoding):
 
 Inputs:
 
-- Inventory summary JSON (default): `.repo_studios/reports/producer_reports/render_inventory_views/latest_summary.json`
+- Inventory overview telemetry (default): `.repo_studios/reports/producer_reports/healthview/inventory_overview/`
+  - The health check selects the latest `<YYYYMMDD-HHMM>` run folder and reads `telemetry.json`.
 - Baseline JSON (default): `.repo_studios/config/inventory/inventory_summary_baseline.json`
 - Thresholds JSON (default): `config/ci_inventory_thresholds.json`
 

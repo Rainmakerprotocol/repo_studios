@@ -1,3 +1,16 @@
+---
+title: Script Refactoring Prompt Templates (Working Draft)
+audience: [coding_agent, human_developer]
+owners: [repo_studios_team@rainmakerprotocol.dev]
+status: draft
+version: 0.1.0
+updated: 2025-12-17
+tags: [scripts, refactor, prompts, coverage]
+related_files:
+   - .repo_studios/coverage_configs/phase3_undocumented_logic.coveragerc
+   - .repo_studios/scripts/script_inventory_architecture.md
+---
+
 # Script Refactoring Prompt Templates (Working Draft)
 
 **Purpose:** Multi-prompt workflow for standardizing 77 scripts  
@@ -29,7 +42,7 @@ to align with positional encoding and database integration standards.
 
 Analyze the following script:
 `<SCRIPT_PATH>`
-`generate_undocumented_logic_report.py`
+`scan_monkey_patches.py`
 
 Report the following information:
 
@@ -111,7 +124,7 @@ A structured report covering:
 ```text
 Based on the analysis of:
 `<SCRIPT_PATH>`
-`generate_undocumented_logic_report.py`
+`scan_monkey_patches.py`
 
 Generate a detailed implementation plan to align this script with
 positional encoding and database integration standards.
@@ -318,7 +331,7 @@ A comprehensive implementation plan including:
 ````text
 Execute the implementation plan for:
 `<SCRIPT_PATH>`
-`generate_undocumented_logic_report.py`
+`scan_monkey_patches.py`
 
 Follow the detailed plan from Phase 2.
 
@@ -364,8 +377,18 @@ Follow the detailed plan from Phase 2.
 
 2. **Test Coverage:**
    ```bash
-   pytest --cov=.repo_studios/scripts/<tier>/<script_name>.py --cov-report=term-missing
-   # Expected: Coverage ≥ 80%
+    # Windows note: pytest-cov's --cov=<file.py> is unreliable when the target is
+    # executed via dynamic import (common for scripts under .repo_studios/scripts).
+    # Prefer running coverage directly with a coveragerc that scopes by include=.
+    python -m coverage erase
+    python -m coverage run \
+       --rcfile=.repo_studios/coverage_configs/phase3_undocumented_logic.coveragerc \
+       -m pytest tests/tests_<tier>/test_<script_name>.py -v
+    python -m coverage report \
+       --rcfile=.repo_studios/coverage_configs/phase3_undocumented_logic.coveragerc \
+       --show-missing \
+       --fail-under=80
+    # Expected: Coverage ≥ 80% (for the files listed in the rcfile's include=)
    ```
 
 3. **Type Checking:**

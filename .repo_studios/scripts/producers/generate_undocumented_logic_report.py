@@ -7,11 +7,11 @@ import argparse
 import json
 import logging
 import sys
+import ast
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Sequence
-import ast
 
 SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
 if str(SCRIPTS_ROOT) not in sys.path:  # pragma: no cover - import path bootstrap
@@ -21,13 +21,14 @@ from utilities.anchor_inventory_loader import load_anchor_inventory  # noqa: E40
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_OUTPUT_DIR = Path(
-    ".repo_studios/reports/producer_reports/undocumented_logic_reports"
-)
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
 DEFAULT_ARTIFACTS_TO_KEEP = 5
-RUN_PREFIX = "undocumented_logic"
+VIEWER_SLUG = "healthview"
+TOPIC_SLUG = "undocumented_logic"
 
-LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
+LIBRARIES_ROOT = (
+    Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
+)
 
 try:  # pragma: no cover - import guard when executed via package
     from libraries import (
@@ -35,26 +36,26 @@ try:  # pragma: no cover - import guard when executed via package
         OptionsConfig,
         PathSpec,
         PathsConfig,
-        ReportArtifact,
         build_standard_options,
         build_standard_paths,
-        write_report_artifacts,
     )
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
 except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
     import sys
 
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import (  # type: ignore
+    from libraries import (
         KeepSpec,
         OptionsConfig,
         PathSpec,
         PathsConfig,
-        ReportArtifact,
         build_standard_options,
         build_standard_paths,
-        write_report_artifacts,
     )
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
 
 
 @dataclass(frozen=True)
@@ -82,9 +83,7 @@ PATH_CONFIG = PathsConfig(
         ),
         "doc_index": PathSpec(
             field="doc_index",
-            default=Path(
-                ".repo_studios/reports/producer_reports/healthview/doc_index"
-            ),
+            default=Path(".repo_studios/reports/producer_reports/healthview/doc_index"),
             ensure_dir=False,
             within_repo=True,
         ),
@@ -98,9 +97,7 @@ PATH_CONFIG = PathsConfig(
         ),
         "allowlist": PathSpec(
             field="allowlist",
-            default=Path(
-                ".repo_studios/config/undocumented_logic_allowlist.txt"
-            ),
+            default=Path(".repo_studios/config/undocumented_logic_allowlist.txt"),
             ensure_dir=False,
             within_repo=True,
         ),
@@ -175,7 +172,9 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def _configure_logging(level: str) -> None:
-    logging.basicConfig(level=getattr(logging, level.upper()), format="%(levelname)s %(message)s")
+    logging.basicConfig(
+        level=getattr(logging, level.upper()), format="%(levelname)s %(message)s"
+    )
 
 
 def _read_allowlist(path: Path) -> Allowlist:
@@ -230,7 +229,10 @@ def _module_name(path: Path, repo_root: Path) -> str:
     return ".".join(part for part in relative.parts if part)
 
 
-def _get_docstring(node: ast.AST) -> str | None:
+DocstringNode = ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef
+
+
+def _get_docstring(node: DocstringNode) -> str | None:
     doc = ast.get_docstring(node, clean=False)
     if doc is None:
         return None
@@ -414,7 +416,9 @@ def _doc_candidates_for_module(
     matches.sort(key=lambda item: item[0])
     results: list[dict[str, Any]] = []
     for score, doc in matches[:5]:
-        path_value = _normalize_doc_path(str(doc.get("filename") or doc.get("path") or ""))
+        path_value = _normalize_doc_path(
+            str(doc.get("filename") or doc.get("path") or "")
+        )
         anchors = anchor_lookup.get(path_value, {})
         results.append(
             {
@@ -442,7 +446,9 @@ def _summarize(scans: list[ModuleScan]) -> dict[str, Any]:
         "modules_with_findings": modules_with_findings,
         "entities_scanned": total_entities,
         "entities_missing_docs": findings_count,
-        "docstring_coverage_percent": round(coverage, 2) if coverage is not None else None,
+        "docstring_coverage_percent": round(coverage, 2)
+        if coverage is not None
+        else None,
     }
 
 
@@ -467,7 +473,9 @@ def _build_report(
                 "module_name": scan.module_name,
                 "total_entities": scan.total_entities,
                 "findings": [finding.__dict__ for finding in scan.findings],
-                "coverage_percent": round(coverage, 2) if coverage is not None else None,
+                "coverage_percent": round(coverage, 2)
+                if coverage is not None
+                else None,
                 "doc_candidates": _doc_candidates_for_module(
                     scan.module_path, doc_index, anchor_lookup
                 ),
@@ -481,7 +489,9 @@ def _build_report(
         "summary": summary,
         "modules": modules_payload,
         "doc_index_path": str(doc_index_path) if doc_index_path.exists() else None,
-        "anchor_inventory_path": str(anchor_inventory_path) if anchor_inventory_path.exists() else None,
+        "anchor_inventory_path": str(anchor_inventory_path)
+        if anchor_inventory_path.exists()
+        else None,
         "code_roots": [str(root) for root in code_roots],
     }
 
@@ -491,18 +501,10 @@ def _render_markdown(report: dict[str, Any]) -> str:
     lines = ["# Undocumented Logic Report", ""]
     lines.append("## Summary")
     lines.append("")
-    lines.append(
-        f"- Modules scanned: {summary.get('modules_scanned', 0)}"
-    )
-    lines.append(
-        f"- Modules with findings: {summary.get('modules_with_findings', 0)}"
-    )
-    lines.append(
-        f"- Entities scanned: {summary.get('entities_scanned', 0)}"
-    )
-    lines.append(
-        f"- Entities missing docs: {summary.get('entities_missing_docs', 0)}"
-    )
+    lines.append(f"- Modules scanned: {summary.get('modules_scanned', 0)}")
+    lines.append(f"- Modules with findings: {summary.get('modules_with_findings', 0)}")
+    lines.append(f"- Entities scanned: {summary.get('entities_scanned', 0)}")
+    lines.append(f"- Entities missing docs: {summary.get('entities_missing_docs', 0)}")
     coverage = summary.get("docstring_coverage_percent")
     coverage_str = f"{coverage:.2f}%" if isinstance(coverage, (int, float)) else "n/a"
     lines.append(f"- Docstring coverage: {coverage_str}")
@@ -588,7 +590,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     default_root = paths.repo_root / ".repo_studios" / "scripts"
     code_roots.append(default_root)
     if args.include_command_center:
-        code_roots.append(paths.repo_root / ".repo_studios" / "command_center" / "scripts")
+        code_roots.append(
+            paths.repo_root / ".repo_studios" / "command_center" / "scripts"
+        )
     if args.code_root:
         for raw in args.code_root:
             candidate = Path(raw)
@@ -614,13 +618,16 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         scans.append(scan)
 
     doc_index_raw = _load_json(paths.doc_index)
-    anchor_inventory_raw, anchor_inventory_path = load_anchor_inventory(paths.anchor_inventory, logger=logger)
+    anchor_inventory_raw, anchor_inventory_path = load_anchor_inventory(
+        paths.anchor_inventory, logger=logger
+    )
     if anchor_inventory_raw is None:
         anchor_inventory_raw = {}
     doc_index = _build_doc_lookup(doc_index_raw)
     anchor_lookup = _build_anchor_lookup(anchor_inventory_raw)
 
     generated_ts = datetime.now(timezone.utc)
+    timestamp = generated_ts.strftime("%Y%m%d-%H%M")
     report = _build_report(
         scans=scans,
         doc_index=doc_index,
@@ -632,53 +639,86 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         code_roots=code_roots,
     )
 
-    markdown = _render_markdown(report)
-    tsv = _render_tsv(report.get("modules", [])) + "\n"
-    bundle_summary = json.dumps(_bundle_summary(report), indent=2, sort_keys=True) + "\n"
+    summary = report.get("summary", {})
+    summary_markdown = _render_markdown(report)
+    summary_metrics = _bundle_summary(report)
 
-    artifacts = [
-        ReportArtifact(
-            filename="report.json",
-            pointer="latest_report.json",
-            kind="json",
-            content=report,
-        ),
-        ReportArtifact(
-            filename="report.md",
-            pointer="latest_report.md",
-            kind="text",
-            content=markdown,
-        ),
-        ReportArtifact(
-            filename="undocumented.tsv",
-            pointer="latest_undocumented.tsv",
-            kind="text",
-            content=tsv,
-        ),
-        ReportArtifact(
-            filename="bundle_summary.json",
-            pointer="latest_bundle_summary.json",
-            kind="text",
-            content=bundle_summary,
-        ),
-    ]
+    manifest: dict[str, Any] = {
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": timestamp,
+        "generated_utc": report.get("generated_utc"),
+        "git_sha": None,
+        "status": "ok",
+        "catalog": [
+            {"artifact": "manifest.json", "kind": "json"},
+            {"artifact": "summary.md", "kind": "markdown"},
+            {"artifact": "telemetry.json", "kind": "json"},
+        ],
+        "inputs": {
+            "repo_root": str(paths.repo_root),
+            "doc_index": str(paths.doc_index),
+            "anchor_inventory": str(anchor_inventory_path or paths.anchor_inventory),
+            "allowlist": str(paths.allowlist),
+            "include_command_center": bool(args.include_command_center),
+            "code_roots": [str(root) for root in code_roots],
+            "artifacts_to_keep": options.artifacts_to_keep,
+        },
+        "provenance": {
+            "trigger_type": "manual",
+        },
+        "summary": summary_metrics,
+    }
 
-    write_result = write_report_artifacts(
-        stem=RUN_PREFIX,
-        timestamp=generated_ts,
+    telemetry: dict[str, Any] = {
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": timestamp,
+        "generated_utc": report.get("generated_utc"),
+        "metrics": summary_metrics,
+        "payload": report,
+    }
+
+    storage = create_storage(
         output_dir=paths.output_dir,
-        artifacts=artifacts,
-        keep=options.artifacts_to_keep,
+        viewer_slug=VIEWER_SLUG,
+        topic=TOPIC_SLUG,
+        timestamp=timestamp,
     )
 
-    summary = report.get("summary", {})
+    # DB_INTEGRATION_MARKER: write manifest.json (report_runs)
+    storage.write_manifest(manifest)
+    # DB_INTEGRATION_MARKER: write summary.md (report_summaries)
+    storage.write_summary({"markdown": summary_markdown}, format="markdown")
+    # DB_INTEGRATION_MARKER: write telemetry.json + extracted metrics (test_metrics)
+    storage.write_telemetry(telemetry)
+
+    run_dir = storage.file_storage.bundle_dir
+    topic_dir = run_dir.parent
+    prune_result = prune_run_directories(
+        topic_dir,
+        keep=options.artifacts_to_keep,
+        current_run=run_dir,
+        logger=logger,
+    )
+    logger.debug(
+        "Pruned undocumented logic bundles: kept=%s removed=%s protected=%s failures=%s",
+        len(prune_result.kept),
+        len(prune_result.removed),
+        len(prune_result.protected),
+        len(prune_result.failures),
+    )
     logging.info(
         "Modules with undocumented logic: %s", summary.get("modules_with_findings", 0)
     )
 
     return {
-        "run_dir": str(write_result.run_dir),
-        "artifacts": {name: str(path) for name, path in write_result.artifacts.items()},
+        "run_dir": str(run_dir),
+        "artifacts": {
+            "manifest.json": str(run_dir / "manifest.json"),
+            "summary.md": str(run_dir / "summary.md"),
+            "telemetry.json": str(run_dir / "telemetry.json"),
+        },
         "summary": summary,
     }
 

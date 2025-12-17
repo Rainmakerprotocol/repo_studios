@@ -2,7 +2,7 @@
 
 Last updated: 2025-12-10
 
-The `render_inventory_views.py` pipeline now emits machine-readable snapshots of the Repo Studios inventory into `.repo_studios/reports/producer_reports/render_inventory_views/` alongside `latest_*.json|yaml` pointers. Healthview mirrors consume the same payloads, so producer reports are the canonical source for downstream automation.
+The `render_inventory_views.py` pipeline emits a canonical inventory overview bundle under `.repo_studios/reports/producer_reports/healthview/inventory_overview/<YYYYMMDD-HHMM>/`. Downstream automation (including inventory health checks) consumes the latest run in that directory.
 
 ## Running the Renderer
 
@@ -16,18 +16,14 @@ The command regenerates all reports and refreshes the compatibility stubs in `in
 
 ## Report Layout
 
-- `reports/producer_reports/render_inventory_views/latest_docs_overview.yaml`
-  - Contains documents (`asset_kind == "document"`) with `id`, `name`, `path`, `maturity`, `status`, `consumers`, `tags`, and `artifact_type`.
-- `reports/producer_reports/render_inventory_views/latest_scripts_overview.yaml`
-  - Lists script assets including their `roles`, `related_assets`, and filesystem `path` for orchestration hooks.
-- `reports/producer_reports/render_inventory_views/latest_tests_overview.yaml`
-  - Enumerates test orchestration entries with `related_assets` and `artifact_type` for coverage dashboards.
-- `reports/producer_reports/render_inventory_views/latest_summary.json`
-  - Aggregated totals by asset kind, maturity, status, consumer, plus derived metrics such as `status_by_asset_kind`, `maturity_by_asset_kind`, and ranked `top_tags`.
-- `reports/producer_reports/render_inventory_views/latest_dashboard.json`
-  - Metrics snapshot intended for future dashboards or health summaries (no UI is bundled with this starter repo).
 
-Each run produces timestamped directories (for example `render_inventory_views-YYYYMMDD_HHMMSS`) plus refreshed `latest_*` pointers in the producer reports folder so historical archives remain accessible without changing downstream integration points.
+The canonical bundle contains exactly:
+
+- `reports/producer_reports/healthview/inventory_overview/<YYYYMMDD-HHMM>/manifest.json`
+- `reports/producer_reports/healthview/inventory_overview/<YYYYMMDD-HHMM>/summary.md`
+- `reports/producer_reports/healthview/inventory_overview/<YYYYMMDD-HHMM>/telemetry.json`
+
+The `inventory_schema/views/` files are compatibility stubs that redirect readers to the producer report topic directory.
 
 ## CI Consumption Patterns
 
@@ -42,4 +38,4 @@ Each run produces timestamped directories (for example `render_inventory_views-Y
 5. **Dashboard Feeds**
    - Supply `dashboard.json` to visualization tooling to track maturity progress, role coverage, or artifact growth over time.
 
-Downstream consumers should treat the `latest/` directory as ephemeral: always read the current artifacts at runtime rather than caching paths with timestamps.
+Downstream consumers should treat the topic directory as the stable entry point and select the newest run folder at runtime.

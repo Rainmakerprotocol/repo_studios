@@ -132,7 +132,7 @@ def test_detects_missing_docstrings(tmp_path):
             "--repo-root",
             str(repo),
             "--output-dir",
-            str(repo / ".repo_studios" / "reports" / "producer_reports" / "undocumented_logic_reports"),
+            str(repo / ".repo_studios" / "reports" / "producer_reports"),
         ]
     )
 
@@ -141,8 +141,9 @@ def test_detects_missing_docstrings(tmp_path):
     assert summary["entities_missing_docs"] == 3
     assert summary["docstring_coverage_percent"] == 50.0
 
-    report_path = Path(result["artifacts"]["report.json"])
-    payload = json.loads(report_path.read_text(encoding="utf-8"))
+    telemetry_path = Path(result["artifacts"]["telemetry.json"])
+    telemetry = json.loads(telemetry_path.read_text(encoding="utf-8"))
+    payload = telemetry["payload"]
     modules = payload["modules"]
     assert modules
     module_entry = modules[0]
@@ -177,7 +178,7 @@ def test_allowlist_skips_module(tmp_path):
             "--allowlist",
             str(allowlist_path),
             "--output-dir",
-            str(repo / ".repo_studios" / "reports" / "producer_reports" / "undocumented_logic_reports"),
+            str(repo / ".repo_studios" / "reports" / "producer_reports"),
         ]
     )
 
@@ -200,13 +201,13 @@ def test_handles_missing_metadata(tmp_path):
             "--repo-root",
             str(repo),
             "--output-dir",
-            str(repo / ".repo_studios" / "reports" / "producer_reports" / "undocumented_logic_reports"),
+            str(repo / ".repo_studios" / "reports" / "producer_reports"),
         ]
     )
 
     summary = result["summary"]
     assert summary["modules_with_findings"] == 1
-    report_path = Path(result["artifacts"]["report.json"])
-    payload = json.loads(report_path.read_text(encoding="utf-8"))
-    module_entry = payload["modules"][0]
+    telemetry_path = Path(result["artifacts"]["telemetry.json"])
+    telemetry = json.loads(telemetry_path.read_text(encoding="utf-8"))
+    module_entry = telemetry["payload"]["modules"][0]
     assert module_entry["doc_candidates"] == []

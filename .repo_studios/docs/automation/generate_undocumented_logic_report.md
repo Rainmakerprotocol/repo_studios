@@ -1,69 +1,90 @@
+---
+title: Undocumented Logic Producer
+audience:
+  - coding_agent
+  - human_developer
+owners:
+  - repo_studios_team@rainmakerprotocol.dev
+status: active
+version: 1.0.0
+updated: 2025-12-17
+tags:
+  - producers
+  - docs-health
+  - healthview
+related_files:
+  - ../../scripts/producers/generate_undocumented_logic_report.py
+  - ../../scripts/aggregators/aggregate_docs_health_signals.py
+  - ../../command_center/scripts/orchestrators/run_docs_health_overview.py
+  - ../../tests/tests_producers/test_generate_undocumented_logic_report.py
+---
+
 # generate_undocumented_logic_report
 
-## Purpose
+## Goals
 
-`generate_undocumented_logic_report.py` scans the repo automation scripts for
-public functions, classes, and methods that lack docstrings. The report helps
-identify code paths that should have documentation anchors or docstring coverage
-before they feed downstream aggregators.
+`generate_undocumented_logic_report.py` scans automation scripts for public
+functions, classes, and methods that lack docstrings. The output feeds the Docs
+Health workflow by highlighting missing documentation coverage in code.
 
-## Inputs
+## System Context
 
-- Repository root (`--repo-root`, defaults to auto-detected root)
-- Output directory (`--output-dir`, defaults to
-  `.repo_studios/reports/producer_reports/undocumented_logic_reports`)
-- Documentation index JSON (`--doc-index`, defaults to
-  `.repo_studios/reports/producer_reports/doc_index/latest_doc_index.json`)
-- Anchor inventory JSON (`--anchor-inventory`, defaults to
-  `.repo_studios/reports/producer_reports/healthview/anchor_inventory/`)
-- Optional allowlist file (`--allowlist`) with module or module::qualified-name
-  entries to skip
-- Optional additional code roots (`--code-root` can be provided multiple times)
-- Optional flag to include `.repo_studios/command_center/scripts`
-  (`--include-command-center`)
-- Retention cap (`--artifacts-to-keep`, default 5)
-- Standard logging flag (`--log-level`)
+This producer writes canonical Healthview bundles under the Repo Studios
+producer report root.
 
-## Outputs
+## Agent Instructions
 
-Each run emits a timestamped directory named
-`undocumented_logic-YYYYMMDD_HHMMSS` containing:
+* Preserve the canonical bundle contract: `manifest.json`, `summary.md`,
+  `telemetry.json` only.
+* Do not add `latest_*` pointer files.
+* Use the shared storage factory + pruning helpers.
 
-- `report.json` – structured payload listing modules, findings, and enrichment
-  metadata
-- `report.md` – human-readable summary sorted by severity
-- `undocumented.tsv` – tabular output for spreadsheets
-- `bundle_summary.json` – compact summary for orchestrators
+## Human Notes
 
-Latest-pointer files (`latest_report.json`, `latest_report.md`,
-`latest_undocumented.tsv`, `latest_bundle_summary.json`) live alongside the
-timestamped runs. The producer enforces retention according to
-`--artifacts-to-keep`.
+### Inputs
 
-## Usage
+* Repository root (`--repo-root`, defaults to auto-detected root)
+* Output directory (`--output-dir`, defaults to `.repo_studios/reports/producer_reports`)
+* Documentation index (`--doc-index`, defaults to `.repo_studios/reports/producer_reports/healthview/doc_index/`)
+* Anchor inventory (`--anchor-inventory`, defaults to `.repo_studios/reports/producer_reports/healthview/anchor_inventory/`)
+* Optional allowlist file (`--allowlist`) with `module` or `module::qualified-name` entries to skip
+* Optional additional code roots (`--code-root` can be provided multiple times)
+* Optional flag to include `.repo_studios/command_center/scripts` (`--include-command-center`)
+* Retention cap (`--artifacts-to-keep`, default 5)
+* Standard logging flag (`--log-level`)
+
+### Outputs
+
+Each run emits a canonical bundle directory:
+
+* `.repo_studios/reports/producer_reports/healthview/undocumented_logic/YYYYMMDD-HHMM/`
+  * `manifest.json` — inputs + summary metrics
+  * `summary.md` — human-readable summary
+  * `telemetry.json` — metrics + full payload in `payload`
+
+The producer prunes old run directories according to `--artifacts-to-keep`.
+
+## Reference Prompts
+
+Run the producer directly:
 
 ```pwsh
 $env:PYTHONPATH = ".repo_studios"
-.\.venv\Scripts\python.exe -u \
+\.\.venv\Scripts\python.exe -u \
   .repo_studios\scripts\producers\generate_undocumented_logic_report.py \
   --repo-root . \
   --include-command-center \
-  --output-dir .repo_studios/reports/producer_reports/undocumented_logic_reports
+  --output-dir .repo_studios/reports/producer_reports
 ```
 
-Add `--code-root <path>` to scan extra directories (for example legacy modules),
-or `--allowlist <file>` to suppress known exceptions while remediation is in
-progress.
-
-## Testing
-
-Unit coverage lives in
-`.repo_studios/tests/tests_producers/test_generate_undocumented_logic_report.py`.
-The suite exercises detection, allowlist handling, and missing metadata flows.
-Run the focused tests with:
+Focused test run:
 
 ```pwsh
 $env:PYTHONPATH = ".repo_studios"
-.\.venv\Scripts\python.exe -m pytest \
+\.\.venv\Scripts\python.exe -m pytest \
   .repo_studios/tests/tests_producers/test_generate_undocumented_logic_report.py
 ```
+
+## Update Log
+
+* 2025-12-17 — Migrated to canonical Healthview bundle layout (manifest/summary/telemetry) and removed legacy `latest_*` pointers.
