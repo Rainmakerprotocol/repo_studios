@@ -54,6 +54,21 @@ def _write_json(path: Path, payload: dict) -> None:
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
+def _write_doc_index_telemetry(repo_root: Path, payload: dict, *, timestamp: str = "20250101-0000") -> None:
+    telemetry = {"payload": payload}
+    telemetry_path = (
+        repo_root
+        / ".repo_studios"
+        / "reports"
+        / "producer_reports"
+        / "healthview"
+        / "doc_index"
+        / timestamp
+        / "telemetry.json"
+    )
+    _write_json(telemetry_path, telemetry)
+
+
 def _minimal_doc_index(doc_paths: list[str]) -> dict:
     documents = []
     for doc_path in doc_paths:
@@ -102,7 +117,7 @@ def test_churn_detects_missing_doc_updates(tmp_path):
     _commit(repo, "update widget")
 
     doc_index_payload = _minimal_doc_index(["docs/src.md"])
-    _write_json(repo / ".repo_studios" / "reports" / "producer_reports" / "doc_index" / "latest_doc_index.json", doc_index_payload)
+    _write_doc_index_telemetry(repo, doc_index_payload)
 
     cwd = os.getcwd()
     os.chdir(repo)
@@ -114,7 +129,7 @@ def test_churn_detects_missing_doc_updates(tmp_path):
                 "--git-window",
                 "30 days",
                 "--output-dir",
-                str(repo / ".repo_studios" / "reports" / "producer_reports" / "code_doc_churn_reports"),
+                str(repo / ".repo_studios" / "reports" / "producer_reports"),
             ]
         )
     finally:
@@ -122,8 +137,9 @@ def test_churn_detects_missing_doc_updates(tmp_path):
 
     summary = result["summary"]
     assert summary["modules_without_doc_updates"] == 1
-    report_path = Path(result["artifacts"]["report.json"])
-    payload = json.loads(report_path.read_text(encoding="utf-8"))
+    telemetry_path = Path(result["artifacts"]["telemetry.json"])
+    telemetry = json.loads(telemetry_path.read_text(encoding="utf-8"))
+    payload = telemetry["payload"]
     modules = payload["modules_missing_docs"]
     assert any(module_entry["module"] == "src" for module_entry in modules)
 
@@ -145,7 +161,7 @@ def test_churn_skips_when_docs_updated(tmp_path):
     _commit(repo, "update core with docs")
 
     doc_index_payload = _minimal_doc_index(["docs/lib.md"])
-    _write_json(repo / ".repo_studios" / "reports" / "producer_reports" / "doc_index" / "latest_doc_index.json", doc_index_payload)
+    _write_doc_index_telemetry(repo, doc_index_payload)
 
     cwd = os.getcwd()
     os.chdir(repo)
@@ -157,7 +173,7 @@ def test_churn_skips_when_docs_updated(tmp_path):
                 "--git-window",
                 "30 days",
                 "--output-dir",
-                str(repo / ".repo_studios" / "reports" / "producer_reports" / "code_doc_churn_reports"),
+                str(repo / ".repo_studios" / "reports" / "producer_reports"),
             ]
         )
     finally:
@@ -195,7 +211,7 @@ def test_churn_honors_allowlist(tmp_path):
                 "--git-window",
                 "30 days",
                 "--output-dir",
-                str(repo / ".repo_studios" / "reports" / "producer_reports" / "code_doc_churn_reports"),
+                str(repo / ".repo_studios" / "reports" / "producer_reports"),
                 "--allowlist",
                 str(allowlist_path),
             ]

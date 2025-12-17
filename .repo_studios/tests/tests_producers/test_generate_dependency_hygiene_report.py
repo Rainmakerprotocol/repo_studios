@@ -47,7 +47,7 @@ dependencies = [
         + "\n",
     )
 
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "dependency_hygiene_reports"
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports"
 
     exit_code = mod.main(
         [
@@ -65,10 +65,15 @@ dependencies = [
     )
 
     assert exit_code == 0
-    run_dir = output_dir / f"{mod.RUN_PREFIX}-20240101_000000"
+    run_dir = output_dir / "healthview" / "dependency_hygiene" / "20240101-0000"
     assert run_dir.is_dir()
 
-    report = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
+    manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["viewer_slug"] == "healthview"
+    assert manifest["topic"] == "dependency_hygiene"
+
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    report = telemetry["payload"]
     assert report["summary"]["status"] == "passed"
     assert report["summary"]["issue_count"] == 0
     assert report["summary"]["requirements_scanned"] == 2
@@ -78,16 +83,9 @@ dependencies = [
         "requirements.txt",
     ]
 
-    markdown = (run_dir / "report.md").read_text(encoding="utf-8")
+    markdown = (run_dir / "summary.md").read_text(encoding="utf-8")
     assert "# Dependency Hygiene Report" in markdown
     assert "- (none)" in markdown
-
-    log_text = (run_dir / "log.txt").read_text(encoding="utf-8")
-    assert "status=passed" in log_text
-
-    assert (output_dir / "latest_report.json").is_file()
-    assert (output_dir / "latest_report.md").is_file()
-    assert (output_dir / "latest_report.log").is_file()
 
 
 def test_threshold_breach_and_pruning(tmp_path):
@@ -95,17 +93,17 @@ def test_threshold_breach_and_pruning(tmp_path):
     root = tmp_path / "project"
     root.mkdir()
 
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "dependency_hygiene_reports"
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "healthview" / "dependency_hygiene"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     stale_names = [
-        f"{mod.RUN_PREFIX}-20240101_000000",
-        f"{mod.RUN_PREFIX}-20240115_000000",
+        "20240101-0000",
+        "20240115-0000",
     ]
     for name in stale_names:
         stale_dir = output_dir / name
         stale_dir.mkdir()
-        (stale_dir / "report.json").write_text("{}\n", encoding="utf-8")
+        (stale_dir / "manifest.json").write_text("{}\n", encoding="utf-8")
 
     _write(
         root / "requirements" / "extra.txt",
@@ -131,7 +129,7 @@ fastapi = "0.110"
             "--repo-root",
             str(root),
             "--output-dir",
-            str(output_dir),
+            str(root / ".repo_studios" / "reports" / "producer_reports"),
             "--timestamp",
             "2024-02-03T00:00:00+00:00",
             "--artifacts-to-keep",
@@ -142,21 +140,19 @@ fastapi = "0.110"
     )
 
     assert exit_code == 1
-    run_dir = output_dir / f"{mod.RUN_PREFIX}-20240203_000000"
+    run_dir = output_dir / "20240203-0000"
     assert run_dir.is_dir()
 
-    report = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    report = telemetry["payload"]
     assert report["summary"]["status"] == "failed"
     assert report["summary"]["issue_count"] >= 1
     kinds = {issue["kind"] for issue in report["issues"]}
     assert "duplicate" in kinds
     assert "unpinned" in kinds
 
-    run_dirs = {path.name for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)}
+    run_dirs = {path.name for path in output_dir.iterdir() if path.is_dir()}
     assert run_dirs == {
-        f"{mod.RUN_PREFIX}-20240115_000000",
-        f"{mod.RUN_PREFIX}-20240203_000000",
+        "20240115-0000",
+        "20240203-0000",
     }
-
-    log_text = (output_dir / "latest_report.log").read_text(encoding="utf-8")
-    assert "failure_reason=dependency hygiene issues detected" in log_text

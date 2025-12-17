@@ -25,6 +25,20 @@ def _write_json(path: Path, payload: dict) -> None:
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
+def _write_doc_index_telemetry(repo_root: Path, payload: dict, *, timestamp: str = "20250101-0000") -> None:
+    telemetry_path = (
+        repo_root
+        / ".repo_studios"
+        / "reports"
+        / "producer_reports"
+        / "healthview"
+        / "doc_index"
+        / timestamp
+        / "telemetry.json"
+    )
+    _write_json(telemetry_path, {"payload": payload})
+
+
 def _minimal_doc_index(doc_path: str) -> dict:
     return {
         "schema_version": 1,
@@ -91,10 +105,7 @@ def test_detects_missing_docstrings(tmp_path):
     )
 
     doc_path = ".repo_studios/docs/automation/sample.md"
-    _write_json(
-        repo / ".repo_studios" / "reports" / "producer_reports" / "doc_index" / "latest_doc_index.json",
-        _minimal_doc_index(doc_path),
-    )
+    _write_doc_index_telemetry(repo, _minimal_doc_index(doc_path))
     _write_json(
         repo
         / ".repo_studios"

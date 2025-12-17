@@ -309,21 +309,21 @@ def _load_dep_summary(root: Path, ts: str) -> tuple[str, Path | None]:
 
 
 def _load_import_graph(root: Path, ts: str) -> tuple[list[str], list[str], list[str], Path | None]:
-    ig_base = root / ".repo_studios" / "reports" / "producer_reports" / "import_graph_reports"
+    ig_base = root / ".repo_studios" / "reports" / "producer_reports" / "healthview" / "import_graph"
     ig_dir = _prefer_ts(ig_base, ts)
-    ig_report = _read_text(ig_dir / "report.md") if ig_dir else ""
-    fan_in = _extract_markdown_list(
-        ig_report,
-        "### Top fan-in (modules most depended on)",
+    ig_report = _read_text(ig_dir / "summary.md") if ig_dir else ""
+
+    fan_in = (
+        _extract_markdown_list(ig_report, "### Top fan-in (modules most depended on)")
+        or _extract_markdown_list(ig_report, "## Top Fan-In")
     )
-    fan_out = _extract_markdown_list(
-        ig_report,
-        "### Top fan-out (modules with many dependencies)",
+    fan_out = (
+        _extract_markdown_list(ig_report, "### Top fan-out (modules with many dependencies)")
+        or _extract_markdown_list(ig_report, "## Top Fan-Out")
     )
-    cycles = _extract_markdown_list(
-        ig_report,
-        "### Cycles (first 10)",
-        limit=10,
+    cycles = (
+        _extract_markdown_list(ig_report, "### Cycles (first 10)", limit=10)
+        or _extract_markdown_list(ig_report, "## Cycles", limit=10)
     )
     if not cycles:
         cycles = ["None detected"]
@@ -613,10 +613,10 @@ def _compose_import_graph_section(
     _append_section_header(lines, 3, "Cycles (first 10)")
     _append_list(lines, cycles or ["None detected"])
     if ig_dir:
-        _append_paragraph(
-            lines,
-            f"[Full report](/.repo_studios/reports/producer_reports/import_graph_reports/{ig_dir.name}/report.md)",
-        )
+            _append_paragraph(
+                lines,
+                f"[Full report](/.repo_studios/reports/producer_reports/healthview/import_graph/{ig_dir.name}/summary.md)",
+            )
 
 
 def _compose_test_health_section(lines: list[str], summary_items: list[str], th_dir: Path | None) -> None:
@@ -753,7 +753,7 @@ def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
     artifact_paths = {
         "monkey_patch_trend": _normalize_relative(trend_path, repo_root),
         "dependency_report": _normalize_relative(dep_dir / "report.md" if dep_dir else None, repo_root),
-        "import_graph_report": _normalize_relative(ig_dir / "report.md" if ig_dir else None, repo_root),
+        "import_graph_report": _normalize_relative(ig_dir / "summary.md" if ig_dir else None, repo_root),
         "test_log_health_report": _normalize_relative(th_dir / "report.md" if th_dir else None, repo_root),
         "churn_complexity_heatmap": _normalize_relative(cc_dir / "heatmap.md" if cc_dir else None, repo_root),
         "fault_trends": _normalize_relative(fault_trends_path if fault_trends_path.exists() else None, repo_root),

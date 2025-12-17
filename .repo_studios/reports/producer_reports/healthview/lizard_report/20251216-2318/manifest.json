@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "healthview",
+  "topic": "lizard_report",
+  "run_timestamp": "20251216-2318",
+  "git_sha": null,
+  "status": "ok",
+  "catalog": [
+    {
+      "artifact": "manifest.json",
+      "kind": "json"
+    },
+    {
+      "artifact": "summary.md",
+      "kind": "markdown"
+    },
+    {
+      "artifact": "telemetry.json",
+      "kind": "json"
+    }
+  ],
+  "inputs": {
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "run_timestamp": "20251216-2318",
+    "max_ccn": 15,
+    "max_length": 80,
+    "targets_requested": [
+      "agents",
+      "api",
+      "scripts"
+    ],
+    "targets_resolved": [],
+    "extra_args": [],
+    "artifacts_to_keep": 10
+  },
+  "provenance": {
+    "trigger_type": "manual"
+  },
+  "summary": {
+    "status": "no_targets",
+    "issue_count": 0,
+    "files_scanned": 0
+  }
+}

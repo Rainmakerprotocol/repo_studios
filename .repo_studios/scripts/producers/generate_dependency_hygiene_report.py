@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Dependency hygiene scanner with structured artifacts and pruning support.
 
+This producer reports risky dependency specifications (unpinned constraints, VCS refs,
+editable installs, local paths, and duplicates) across the repo's dependency manifests.
+
 Artifacts (default):
-    - `.repo_studios/reports/producer_reports/dependency_hygiene_reports/`
-        - `dependency_hygiene-<timestamp>/report.json`
-        - `dependency_hygiene-<timestamp>/report.md`
-        - `dependency_hygiene-<timestamp>/log.txt`
-        - `latest_report.(json|md|log)` copies for quick access
+    - `.repo_studios/reports/producer_reports/healthview/dependency_hygiene/<YYYYMMDD-HHMM>/`
+        - `manifest.json`
+        - `summary.md`
+        - `telemetry.json`
 
 Exit codes:
     0 success (no hygiene issues detected)
@@ -36,14 +38,17 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 try:
-    from libraries import ReportArtifact, write_report_artifacts
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
 except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import ReportArtifact, write_report_artifacts
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/dependency_hygiene_reports")
-RUN_PREFIX = "dependency_hygiene"
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
+VIEWER_SLUG = "healthview"
+TOPIC = "dependency_hygiene"
 DEFAULT_ARTIFACTS_TO_KEEP = 5
 DEFAULT_REQ_PATTERNS: tuple[str, ...] = (
     "requirements.txt",
@@ -260,6 +265,30 @@ def configure_logging(level: str) -> None:
     logging.basicConfig(level=numeric_level, format="%(levelname)s: %(message)s")
 
 
+def _build_manifest(*, report: dict[str, Any], repo_root: Path, inputs: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "schema_version": 1,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC,
+        "run_timestamp": report.get("generated_utc"),
+        "git_sha": None,
+        "status": "ok" if report.get("summary", {}).get("status") == "passed" else "failed",
+        "catalog": [
+            {"artifact": "manifest.json", "kind": "json"},
+            {"artifact": "summary.md", "kind": "markdown"},
+            {"artifact": "telemetry.json", "kind": "json"},
+        ],
+        "inputs": {
+            "repo_root": str(repo_root),
+            **inputs,
+        },
+        "provenance": {
+            "trigger_type": "manual",
+        },
+        "summary": report.get("summary", {}),
+    }
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Generate dependency hygiene report (offline)")
     parser.add_argument(
@@ -270,7 +299,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument(
         "--output-dir",
         default=str(DEFAULT_OUTPUT_DIR),
-        help="Directory for generated reports",
+        help="Base directory for generated report bundles (e.g., .repo_studios/reports/producer_reports)",
     )
     parser.add_argument(
         "--requirements-pattern",
@@ -326,33 +355,62 @@ def main(argv: Sequence[str] | None = None) -> int:
         patterns=patterns,
     )
 
-    result = write_report_artifacts(
-        stem=RUN_PREFIX,
-        timestamp=generated_ts,
+    timestamp = generated_ts.strftime("%Y%m%d-%H%M")
+    inputs = {
+        "requirements_patterns": list(patterns),
+        "skip_pyproject": bool(args.skip_pyproject),
+        "artifacts_to_keep": args.artifacts_to_keep,
+    }
+
+    manifest = _build_manifest(report=report, repo_root=repo_root, inputs=inputs)
+    telemetry: dict[str, Any] = {
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC,
+        "run_timestamp": timestamp,
+        "generated_utc": report.get("generated_utc"),
+        "metrics": {
+            "status": report.get("summary", {}).get("status"),
+            "issue_count": report.get("summary", {}).get("issue_count"),
+            "requirements_scanned": report.get("summary", {}).get("requirements_scanned"),
+            "pyproject_scanned": report.get("summary", {}).get("pyproject_scanned"),
+            "issue_counts": report.get("issue_counts", []),
+        },
+        "payload": report,
+    }
+
+    storage = create_storage(
         output_dir=output_dir,
-        keep=args.artifacts_to_keep,
-        artifacts=[
-            ReportArtifact(
-                filename="report.json",
-                kind="json",
-                content=report,
-                pointer="latest_report.json",
-            ),
-            ReportArtifact(
-                filename="report.md",
-                kind="text",
-                content=write_markdown(report),
-                pointer="latest_report.md",
-            ),
-            ReportArtifact(
-                filename="log.txt",
-                kind="text",
-                content=write_log(report),
-                pointer="latest_report.log",
-            ),
-        ],
+        viewer_slug=VIEWER_SLUG,
+        topic=TOPIC,
+        timestamp=timestamp,
     )
-    logging.info("Dependency hygiene report written to %s", result.run_dir)
+
+    markdown = write_markdown(report)
+
+    # DB_INTEGRATION_MARKER: write manifest.json (report_runs)
+    storage.write_manifest(manifest)
+    # DB_INTEGRATION_MARKER: write summary.md (report_summaries)
+    storage.write_summary({"markdown": markdown}, format="markdown")
+    # DB_INTEGRATION_MARKER: write telemetry.json + extracted metrics (test_metrics)
+    storage.write_telemetry(telemetry)
+
+    run_dir = storage.file_storage.bundle_dir
+    topic_dir = run_dir.parent
+    prune_result = prune_run_directories(
+        topic_dir,
+        keep=args.artifacts_to_keep,
+        current_run=run_dir,
+        logger=logging.getLogger(__name__),
+    )
+    logging.debug(
+        "Pruned dependency hygiene bundles: kept=%s removed=%s protected=%s failures=%s",
+        len(prune_result.kept),
+        len(prune_result.removed),
+        len(prune_result.protected),
+        len(prune_result.failures),
+    )
+
+    logging.info("Dependency hygiene report written to %s", run_dir)
 
     return 1 if issues else 0
 

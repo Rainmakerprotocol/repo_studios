@@ -63,6 +63,22 @@ studio-seed-standards-prompts:
 studio-validate-import-boundaries:
 	$(PYTHON) .repo_studios/scripts/producers/validate_import_boundaries.py --repo-root .
 
+.PHONY: studio-generate-import-graph
+studio-generate-import-graph:
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/producers/generate_import_graph_report.py" \
+		--repo-root . \
+		--output-dir .repo_studios/reports/producer_reports \
+		--log-level "$(LOG_LEVEL)"
+
+.PHONY: studio-generate-lizard-report
+studio-generate-lizard-report:
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/producers/generate_lizard_report.py" \
+		--repo-root . \
+		--output-dir .repo_studios/reports/producer_reports \
+		--log-level "$(LOG_LEVEL)"
+
 .PHONY: studio-validate-metrics-anchor-stubs
 studio-validate-metrics-anchor-stubs:
 	$(PYTHON) .repo_studios/scripts/producers/validate_metrics_anchor_stubs.py --repo-root .
@@ -162,11 +178,15 @@ studio-diff-standards-index:
 
 .PHONY: studio-generate-dependency-hygiene
 studio-generate-dependency-hygiene:
-	$(PYTHON) .repo_studios/scripts/producers/generate_dependency_hygiene_report.py --repo-root . --output-dir .repo_studios/reports/producer_reports/dependency_hygiene_reports --log-level INFO
+	$(PYTHON) .repo_studios/scripts/producers/generate_dependency_hygiene_report.py --repo-root . --output-dir .repo_studios/reports/producer_reports --log-level INFO
+
+.PHONY: studio-generate-doc-index
+studio-generate-doc-index:
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/generate_doc_index.py" --repo-root "$(REPO_ROOT)" --output-dir ".repo_studios/reports/producer_reports" --artifacts-to-keep 1 --log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-code-doc-churn-report
 studio-generate-code-doc-churn-report:
-	$(PYTHON) .repo_studios/scripts/producers/generate_code_doc_churn_report.py --repo-root . --output-dir .repo_studios/reports/producer_reports/code_doc_churn_reports --git-window "30 days" --artifacts-to-keep 5 --log-level INFO
+	$(PYTHON) .repo_studios/scripts/producers/generate_code_doc_churn_report.py --repo-root . --output-dir .repo_studios/reports/producer_reports --git-window "30 days" --artifacts-to-keep 5 --log-level INFO
 
 .PHONY: studio-generate-undocumented-logic-report
 studio-generate-undocumented-logic-report:

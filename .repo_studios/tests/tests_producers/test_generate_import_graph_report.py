@@ -27,7 +27,7 @@ def test_report_with_no_targets(tmp_path: Path) -> None:
     root = tmp_path / "workspace"
     root.mkdir()
 
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "import_graph_reports"
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports"
     argv = [
         "--repo-root",
         str(root),
@@ -44,23 +44,23 @@ def test_report_with_no_targets(tmp_path: Path) -> None:
     exit_code = mod.main(argv)
     assert exit_code == 0
 
-    run_dir = output_dir / "import_graph-20240101_000000"
+    run_dir = output_dir / "healthview" / "import_graph" / "20240101-0000"
     assert run_dir.is_dir()
 
-    report_path = run_dir / "report.json"
-    data = json.loads(report_path.read_text(encoding="utf-8"))
-    assert data["summary"]["status"] == "no_targets"
-    assert data["summary"]["module_count"] == 0
-    assert data["summary"]["edge_count"] == 0
-    assert data["summary"]["cycle_count"] == 0
-    assert data["owned_packages_resolved"] == []
+    assert (run_dir / "manifest.json").is_file()
+    assert (run_dir / "summary.md").is_file()
+    assert (run_dir / "telemetry.json").is_file()
 
-    latest_graph = output_dir / "latest_graph.json"
-    assert latest_graph.is_file()
-    assert json.loads(latest_graph.read_text(encoding="utf-8")) == {}
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    report = telemetry["payload"]
+    assert report["summary"]["status"] == "no_targets"
+    assert report["summary"]["module_count"] == 0
+    assert report["summary"]["edge_count"] == 0
+    assert report["summary"]["cycle_count"] == 0
+    assert report["owned_packages_resolved"] == []
+    assert report["graph"] == {}
 
-    log_text = (run_dir / "log.txt").read_text(encoding="utf-8")
-    assert "status=no_targets" in log_text
+    assert not any(path.name.startswith("latest_") for path in output_dir.rglob("latest_*"))
 
 
 def test_cycle_detection_and_pruning(tmp_path: Path) -> None:
@@ -73,15 +73,16 @@ def test_cycle_detection_and_pruning(tmp_path: Path) -> None:
     _write(root / "api" / "__init__.py", "")
     _write(root / "api" / "bar.py", "import agents\n")
 
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "import_graph_reports"
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports"
+    topic_dir = output_dir / "healthview" / "import_graph"
+    topic_dir.mkdir(parents=True, exist_ok=True)
 
-    stale_one = output_dir / "import_graph-20240101_000000"
+    stale_one = topic_dir / "20240101-0000"
     stale_one.mkdir()
-    (stale_one / "report.json").write_text("{}\n", encoding="utf-8")
-    stale_two = output_dir / "import_graph-20240102_000000"
+    (stale_one / "telemetry.json").write_text("{}\n", encoding="utf-8")
+    stale_two = topic_dir / "20240102-0000"
     stale_two.mkdir()
-    (stale_two / "report.json").write_text("{}\n", encoding="utf-8")
+    (stale_two / "telemetry.json").write_text("{}\n", encoding="utf-8")
 
     argv = [
         "--repo-root",
@@ -102,29 +103,23 @@ def test_cycle_detection_and_pruning(tmp_path: Path) -> None:
     exit_code = mod.main(argv)
     assert exit_code == 0
 
-    run_dir = output_dir / "import_graph-20240203_000000"
+    run_dir = topic_dir / "20240203-0000"
     assert run_dir.is_dir()
 
-    report_path = run_dir / "report.json"
-    data = json.loads(report_path.read_text(encoding="utf-8"))
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    data = telemetry["payload"]
     assert data["summary"]["status"] == "ok"
     assert data["summary"]["cycle_count"] >= 1
     cycles = {tuple(cycle) for cycle in data["cycles"]}
     assert ("agents", "api", "agents") in cycles
 
-    graph_payload = json.loads((run_dir / "graph.json").read_text(encoding="utf-8"))
+    graph_payload = data["graph"]
     assert graph_payload == {"agents": ["api"], "api": ["agents"]}
 
-    latest_graph = json.loads((output_dir / "latest_graph.json").read_text(encoding="utf-8"))
-    assert latest_graph == graph_payload
-
     remaining_dirs = {
-        path.name for path in output_dir.iterdir() if path.is_dir() and path.name.startswith("import_graph-")
+        path.name for path in topic_dir.iterdir() if path.is_dir()
     }
     assert remaining_dirs == {
-        "import_graph-20240102_000000",
-        "import_graph-20240203_000000",
+        "20240102-0000",
+        "20240203-0000",
     }
-
-    log_text = (run_dir / "log.txt").read_text(encoding="utf-8")
-    assert "cycle_count=1" in log_text

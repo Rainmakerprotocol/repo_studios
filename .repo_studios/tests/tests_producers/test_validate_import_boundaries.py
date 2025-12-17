@@ -18,11 +18,11 @@ def _load_module():
 
 
 def _write_graph(repo_root: Path, name: str, payload: dict[str, list[str]]) -> Path:
-    graph_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "import_graph_reports" / name
+    graph_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "healthview" / "import_graph" / name
     graph_dir.mkdir(parents=True, exist_ok=True)
-    graph_path = graph_dir / "graph.json"
-    graph_path.write_text(json.dumps(payload), encoding="utf-8")
-    return graph_path
+    telemetry_path = graph_dir / "telemetry.json"
+    telemetry_path.write_text(json.dumps({"payload": {"graph": payload}}), encoding="utf-8")
+    return telemetry_path
 
 
 def _set_fixed_datetime(monkeypatch, module, value):

@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Sequence
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/code_doc_churn_reports")
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
 RUN_PREFIX = "code_doc_churn"
 DEFAULT_ARTIFACTS_TO_KEEP = 5
 DEFAULT_GIT_WINDOW = "14 days"
@@ -50,11 +50,11 @@ try:  # pragma: no cover - import guard for standalone execution
         OptionsConfig,
         PathSpec,
         PathsConfig,
-        ReportArtifact,
         build_standard_options,
         build_standard_paths,
-        write_report_artifacts,
     )
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
 except ModuleNotFoundError:  # pragma: no cover - fallback when script is run directly
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
@@ -63,11 +63,11 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when script is run di
         OptionsConfig,
         PathSpec,
         PathsConfig,
-        ReportArtifact,
         build_standard_options,
         build_standard_paths,
-        write_report_artifacts,
     )
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
 
 
 @dataclass(frozen=True)
@@ -93,7 +93,7 @@ PATH_SPECS: dict[str, PathSpec] = {
     ),
     "doc_index": PathSpec(
         field="doc_index",
-        default=Path(".repo_studios/reports/producer_reports/doc_index/latest_doc_index.json"),
+        default=Path(".repo_studios/reports/producer_reports/healthview/doc_index"),
         ensure_dir=False,
         within_repo=True,
     ),
@@ -297,14 +297,40 @@ def _parse_datetime(raw: str) -> datetime | None:
         return None
 
 
+def _latest_run_dir(topic_dir: Path) -> Path | None:
+    if not topic_dir.exists() or not topic_dir.is_dir():
+        return None
+    runs = [node for node in topic_dir.iterdir() if node.is_dir()]
+    if not runs:
+        return None
+    runs.sort(key=lambda node: (node.name, node.stat().st_mtime), reverse=True)
+    return runs[0]
+
+
 def _load_doc_index(path: Path) -> dict[str, list[dict[str, Any]]]:
     if not path.exists():
         return {}
+
+    candidate = path
+    if candidate.is_dir():
+        latest = _latest_run_dir(candidate)
+        if latest is None:
+            return {}
+        telemetry_path = latest / "telemetry.json"
+        if telemetry_path.exists():
+            candidate = telemetry_path
+        else:
+            return {}
+
     try:
-        payload = json.loads(path.read_text(encoding="utf-8"))
+        payload = json.loads(candidate.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
         return {}
-    documents = payload.get("documents", [])
+
+    if isinstance(payload, dict) and "payload" in payload:
+        payload = payload.get("payload", {})
+
+    documents = payload.get("documents", []) if isinstance(payload, dict) else []
     grouped: dict[str, list[dict[str, Any]]] = {}
     for doc in documents:
         filename = doc.get("filename") or doc.get("path")
@@ -545,43 +571,80 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         anchor_inventory_path=paths.anchor_inventory,
     )
 
+    viewer_slug = "healthview"
+    topic = RUN_PREFIX
+    timestamp = generated_ts.strftime("%Y%m%d-%H%M")
+
     markdown = render_markdown(report)
-    tsv = render_tsv(report.get("modules_missing_docs", [])) + "\n"
-    bundle_summary = json.dumps(_bundle_summary(report), indent=2, sort_keys=True) + "\n"
+    summary_metrics = _bundle_summary(report)
 
-    artifacts = [
-        ReportArtifact(
-            filename="report.json",
-            pointer="latest_report.json",
-            kind="json",
-            content=report,
-        ),
-        ReportArtifact(
-            filename="report.md",
-            pointer="latest_report.md",
-            kind="text",
-            content=markdown,
-        ),
-        ReportArtifact(
-            filename="churn.tsv",
-            pointer="latest_churn.tsv",
-            kind="text",
-            content=tsv,
-        ),
-        ReportArtifact(
-            filename="bundle_summary.json",
-            pointer="latest_bundle_summary.json",
-            kind="text",
-            content=bundle_summary,
-        ),
-    ]
+    manifest: dict[str, Any] = {
+        "viewer_slug": viewer_slug,
+        "topic": topic,
+        "run_timestamp": timestamp,
+        "generated_utc": report.get("generated_utc"),
+        "git_sha": report.get("git", {}).get("head_commit"),
+        "status": "ok",
+        "catalog": [
+            {"artifact": "manifest.json", "kind": "json"},
+            {"artifact": "summary.md", "kind": "markdown"},
+            {"artifact": "telemetry.json", "kind": "json"},
+        ],
+        "inputs": {
+            "repo_root": str(paths.repo_root),
+            "git_window": args.git_window,
+            "git_until": args.git_until,
+            "doc_index": str(paths.doc_index),
+            "anchor_inventory": str(paths.anchor_inventory),
+            "allowlist": str(paths.allowlist),
+            "artifacts_to_keep": options.artifacts_to_keep,
+        },
+        "provenance": {
+            "trigger_type": "manual",
+        },
+        "summary": summary_metrics,
+    }
 
-    write_result = write_report_artifacts(
-        stem=RUN_PREFIX,
-        timestamp=generated_ts,
+    telemetry: dict[str, Any] = {
+        "viewer_slug": viewer_slug,
+        "topic": topic,
+        "run_timestamp": timestamp,
+        "generated_utc": report.get("generated_utc"),
+        "metrics": {
+            **summary_metrics,
+            "allowlisted_modules": len(report.get("summary", {}).get("allowlisted_modules", [])),
+        },
+        "payload": report,
+    }
+
+    storage = create_storage(
         output_dir=paths.output_dir,
-        artifacts=artifacts,
+        viewer_slug=viewer_slug,
+        topic=topic,
+        timestamp=timestamp,
+    )
+
+    # DB_INTEGRATION_MARKER: write manifest.json (report_runs)
+    storage.write_manifest(manifest)
+    # DB_INTEGRATION_MARKER: write summary.md (report_summaries)
+    storage.write_summary({"markdown": markdown}, format="markdown")
+    # DB_INTEGRATION_MARKER: write telemetry.json + extracted metrics (test_metrics)
+    storage.write_telemetry(telemetry)
+
+    run_dir = storage.file_storage.bundle_dir
+    topic_dir = run_dir.parent
+    prune_result = prune_run_directories(
+        topic_dir,
         keep=options.artifacts_to_keep,
+        current_run=run_dir,
+        logger=logger,
+    )
+    logger.debug(
+        "Pruned churn bundles: kept=%s removed=%s protected=%s failures=%s",
+        len(prune_result.kept),
+        len(prune_result.removed),
+        len(prune_result.protected),
+        len(prune_result.failures),
     )
 
     logger.info(
@@ -589,8 +652,12 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     )
 
     return {
-        "run_dir": str(write_result.run_dir),
-        "artifacts": {name: str(path) for name, path in write_result.artifacts.items()},
+        "run_dir": str(run_dir),
+        "artifacts": {
+            "manifest.json": str(run_dir / "manifest.json"),
+            "summary.md": str(run_dir / "summary.md"),
+            "telemetry.json": str(run_dir / "telemetry.json"),
+        },
         "summary": report["summary"],
     }
 

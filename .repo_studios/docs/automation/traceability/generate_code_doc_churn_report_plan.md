@@ -1,3 +1,22 @@
+---
+title: generate_code_doc_churn_report Planning Notes
+audience:
+  - coding_agent
+  - human_developer
+owners:
+  - repo_studios_team@rainmakerprotocol.dev
+status: active
+version: 1.1.0
+updated: 2025-12-16
+tags:
+  - producer
+  - planning
+  - docs-health
+related_files:
+  - ../../../scripts/producers/generate_code_doc_churn_report.py
+  - ../generate_code_doc_churn_report.md
+---
+
 # generate_code_doc_churn_report Planning Notes
 
 ## Objective
@@ -44,12 +63,13 @@ python -m .repo_studios.scripts.producers.generate_code_doc_churn_report \
 
 ## Artifact Plan
 
-- Timestamped directory `code_doc_churn-YYYY-MM-DD_HHMM/` containing:
-  - `report.json`: structured payload with git stats, flagged files, doc matches, suggested owners.
-  - `report.md`: prioritized Markdown brief (top churn-without-doc directories, affected owners).
-  - `churn.tsv`: tabular view for quick spreadsheet import.
-  - `bundle_summary.json`: counts for orchestration health checks.
-- Latest pointers: `latest_report.json`, `latest_report.md`, `latest_churn.tsv`, `latest_bundle_summary.json`.
+- Canonical positional bundle under:
+  `.repo_studios/reports/producer_reports/healthview/code_doc_churn/YYYYMMDD-HHMM/`
+  containing:
+  - `manifest.json`: run metadata, provenance, and headline counts
+  - `summary.md`: human-readable digest for editors
+  - `telemetry.json`: metrics for DB ingestion plus full legacy payload for agents
+- No mutable `latest_*` pointers.
 - Retention default: 5 runs, configurable via `--artifacts-to-keep`.
 
 ## Detection Heuristics

@@ -52,7 +52,7 @@ def test_structured_artifacts_success(monkeypatch: pytest.MonkeyPatch, tmp_path:
 
     monkeypatch.setattr(mod.subprocess, "run", fake_run)
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "lizard_reports"
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports"
 
     exit_code = mod.main(
         [
@@ -72,16 +72,23 @@ def test_structured_artifacts_success(monkeypatch: pytest.MonkeyPatch, tmp_path:
     )
 
     assert exit_code == 0
-    run_dir = output_dir / f"{mod.RUN_PREFIX}-20240101_000000"
+    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC / "20240101-0000"
     assert run_dir.is_dir()
 
-    report = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
-    assert report["schema_version"] == 1
-    assert report["status"] == "issues"
-    assert report["issue_count"] == 1
-    assert report["files_scanned"] == 1
-    assert report["generated_utc"].startswith("2024-01-01T00:00:00")
-    offenders = report["offenders"]
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    assert telemetry["schema_version"] == 1
+    assert telemetry["metrics"]["status"] == "issues"
+    assert telemetry["metrics"]["issue_count"] == 1
+    assert telemetry["metrics"]["files_scanned"] == 1
+    assert telemetry["generated_utc"].startswith("2024-01-01T00:00:00")
+
+    payload_out = telemetry["payload"]
+    assert payload_out["schema_version"] == 1
+    assert payload_out["status"] == "issues"
+    assert payload_out["issue_count"] == 1
+    assert payload_out["files_scanned"] == 1
+    assert payload_out["generated_utc"].startswith("2024-01-01T00:00:00")
+    offenders = payload_out["offenders"]
     assert len(offenders) == 1
     offender = offenders[0]
     assert offender["path"] == str(target_dir / "module.py")
@@ -92,27 +99,20 @@ def test_structured_artifacts_success(monkeypatch: pytest.MonkeyPatch, tmp_path:
     assert offender["ccn_over_limit"] >= 0
     assert offender["length_over_limit"] >= 0
 
-    markdown = (run_dir / "report.md").read_text(encoding="utf-8")
+    markdown = (run_dir / "summary.md").read_text(encoding="utf-8")
     assert "# Lizard Complexity Report" in markdown
     assert "complex_fn" in markdown
 
-    log_text = (run_dir / "log.txt").read_text(encoding="utf-8")
+    log_text = payload_out["log_text"]
     assert "status=issues" in log_text
     assert "complex_fn" in log_text
     assert "delta_ccn" in log_text
 
-    raw_json = json.loads((run_dir / "raw.json").read_text(encoding="utf-8"))
-    assert raw_json == payload
-
-    raw_txt = (run_dir / "raw.txt").read_text(encoding="utf-8")
+    raw_txt = payload_out["raw"]["text"]
     assert "complex_fn" in raw_txt
     assert "[stderr]" not in raw_txt
 
-    assert (output_dir / "latest_report.json").is_file()
-    assert (output_dir / "latest_report.md").is_file()
-    assert (output_dir / "latest_report.log").is_file()
-    assert (output_dir / "latest_raw.json").is_file()
-    assert (output_dir / "latest_raw.txt").is_file()
+    assert not any(path.name.startswith("latest_") for path in output_dir.rglob("*") if path.is_file())
 
 
 def test_no_targets_and_pruning(tmp_path: Path):
@@ -121,16 +121,19 @@ def test_no_targets_and_pruning(tmp_path: Path):
     repo_root = tmp_path / "workspace"
     repo_root.mkdir()
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "lizard_reports"
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports"
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    topic_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC
+    topic_dir.mkdir(parents=True, exist_ok=True)
+
     stale_dirs = [
-        output_dir / f"{mod.RUN_PREFIX}-20240101_000000",
-        output_dir / f"{mod.RUN_PREFIX}-20240115_000000",
+        topic_dir / "20240101-0000",
+        topic_dir / "20240115-0000",
     ]
     for path in stale_dirs:
         path.mkdir(parents=True, exist_ok=True)
-        (path / "report.json").write_text("{}\n", encoding="utf-8")
+        (path / "telemetry.json").write_text("{}\n", encoding="utf-8")
 
     exit_code = mod.main(
         [
@@ -148,26 +151,75 @@ def test_no_targets_and_pruning(tmp_path: Path):
     )
 
     assert exit_code == 0
-    run_dir = output_dir / f"{mod.RUN_PREFIX}-20240203_000000"
+    run_dir = topic_dir / "20240203-0000"
     assert run_dir.is_dir()
 
-    report = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    report = telemetry["payload"]
     assert report["status"] == "no_targets"
     assert report["issue_count"] == 0
     assert "No targets resolved" in report["notes"]
 
-    log_text = (output_dir / "latest_report.log").read_text(encoding="utf-8")
+    log_text = report["log_text"]
     assert "status=no_targets" in log_text
 
-    raw_txt = (run_dir / "raw.txt").read_text(encoding="utf-8")
+    raw_txt = report["raw"]["text"]
     assert raw_txt == ""
-    assert not (run_dir / "raw.json").exists()
-    assert not (output_dir / "latest_raw.json").exists()
 
     remaining = sorted(
-        path.name for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)
+        path.name for path in topic_dir.iterdir() if path.is_dir()
     )
     assert remaining == [
-        f"{mod.RUN_PREFIX}-20240115_000000",
-        f"{mod.RUN_PREFIX}-20240203_000000",
+        "20240115-0000",
+        "20240203-0000",
     ]
+
+
+def test_rejects_newline_arguments(tmp_path: Path):
+    mod = _load_module()
+
+    offender = mod.Offender(
+        path="demo.py",
+        name="fn",
+        cyclomatic_complexity=20,
+        length=200,
+        start_line=10,
+        end_line=20,
+    )
+    payload = offender.to_payload(max_ccn=15, max_length=80, rank=1)
+    assert payload["start_line"] == 10
+    assert payload["end_line"] == 20
+
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    (repo_root / "src").mkdir()
+
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports"
+
+    exit_code = mod.main(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--output-dir",
+            str(output_dir),
+            "--timestamp",
+            "2024-03-03T00:00:00+00:00",
+            "--targets",
+            "src",
+            "--extra-args",
+            "bad\narg",
+            "--log-level",
+            "ERROR",
+        ]
+    )
+
+    assert exit_code == 0
+    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC / "20240303-0000"
+    assert run_dir.is_dir()
+
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    assert telemetry["metrics"]["status"] == "error"
+    assert "Unsafe command argument" in telemetry["payload"]["notes"]
+
+    manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["status"] == "failed"

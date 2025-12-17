@@ -26,8 +26,9 @@ HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 LINK_RE = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 CODE_FENCE_RE = re.compile(r"^(```|~~~)")
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/doc_index")
-RUN_PREFIX = "doc_index"
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
+VIEWER_SLUG = "healthview"
+TOPIC_SLUG = "doc_index"
 DEFAULT_ARTIFACTS_TO_KEEP = 1
 
 EXCLUDED_DIR_NAMES = {
@@ -62,7 +63,8 @@ try:  # pragma: no cover - import guard for standalone execution
     build_standard_options,
     build_standard_paths,
   )
-  from libraries.artifacts import ReportArtifact, write_report_artifacts  # type: ignore import
+  from libraries.database_integration import create_storage
+  from libraries.prune_logs import prune_run_directories
 except ModuleNotFoundError:  # pragma: no cover - fallback when script is run directly
   import sys
 
@@ -76,7 +78,8 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when script is run di
     build_standard_options,
     build_standard_paths,
   )
-  from libraries.artifacts import ReportArtifact, write_report_artifacts  # type: ignore import
+  from libraries.database_integration import create_storage
+  from libraries.prune_logs import prune_run_directories
 
 
 @dataclass(frozen=True)
@@ -128,7 +131,7 @@ PATH_SPECS: dict[str, PathSpec] = {
   "output_dir": PathSpec(
     field="output_dir",
     default=DEFAULT_OUTPUT_DIR,
-    ensure_dir=False,
+    ensure_dir=True,
     within_repo=False,
   ),
 }
@@ -467,8 +470,9 @@ def build_payload(
     "documents": doc_dicts,
     "outputs": {
       "files": {
-        "bundle": "doc_index_bundle.md",
-        "json": "doc_index.json",
+        "manifest": "manifest.json",
+        "summary": "summary.md",
+        "telemetry": "telemetry.json",
         "csv": "doc_index.csv",
       }
     },
@@ -703,7 +707,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     "--output-dir",
     type=Path,
     default=DEFAULT_OUTPUT_DIR,
-    help="Directory for documentation index artifacts",
+    help="Base reports directory for positional bundles",
   )
   parser.add_argument("--artifacts-to-keep", type=int, default=DEFAULT_ARTIFACTS_TO_KEEP)
   parser.add_argument("--timestamp", help="Override run timestamp (ISO 8601)")
@@ -754,34 +758,86 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
   csv_text = build_csv(records)
   bundle_text = render_bundle(payload=payload, json_text=json_text, yaml_text=yaml_text, csv_text=csv_text)
 
-  artifacts = [
-    ReportArtifact(
-      filename="doc_index.json",
-      pointer="latest_doc_index.json",
-      kind="json",
-      content=payload,
-      sort_keys=False,
-    ),
-    ReportArtifact(
-      filename="doc_index_bundle.md",
-      pointer="latest_doc_index_bundle.md",
-      kind="text",
-      content=bundle_text,
-    ),
-    ReportArtifact(
-      filename="doc_index.csv",
-      pointer="latest_doc_index.csv",
-      kind="text",
-      content=csv_text,
-    ),
-  ]
+  timestamp_slug = generated_ts.strftime("%Y%m%d-%H%M")
 
-  result = write_report_artifacts(
-    stem=RUN_PREFIX,
-    timestamp=generated_ts,
+  manifest = {
+    "schema_version": 1,
+    "viewer_slug": VIEWER_SLUG,
+    "topic": TOPIC_SLUG,
+    "run_timestamp": timestamp_slug,
+    "generated_utc": generated_ts.isoformat(),
+    "status": "ok",
+    "catalog": ["scripts.docs.generate_doc_index"],
+    "inputs": {
+      "repo_root": str(repo_root),
+      "output_dir": str(paths.output_dir),
+      "artifacts_to_keep": options.artifacts_to_keep,
+      "db_target": args.db_target,
+      "excluded_names": sorted(EXCLUDED_DIR_NAMES),
+      "excluded_prefixes": ["/".join(prefix) for prefix in EXCLUDED_PATH_PREFIXES],
+      "description_width": GENERIC_DESCRIPTION_WIDTH,
+    },
+    "artifacts": [
+      {"name": "manifest.json", "role": "manifest"},
+      {"name": "summary.md", "role": "summary"},
+      {"name": "telemetry.json", "role": "telemetry"},
+      {"name": "doc_index.csv", "role": "csv"},
+    ],
+  }
+
+  summary = payload.get("summary", {})
+  metrics_block = payload.get("metrics", {})
+  telemetry = {
+    "schema_version": 1,
+    "viewer_slug": VIEWER_SLUG,
+    "topic": TOPIC_SLUG,
+    "run_timestamp": timestamp_slug,
+    "generated_utc": payload.get("generated_utc"),
+    "status": "ok",
+    "metrics": {
+      "total_documents": summary.get("total_documents"),
+      "total_headings": summary.get("total_headings"),
+      "total_links": summary.get("total_links"),
+      "duplicate_slug_count": metrics_block.get("duplicate_slug_count"),
+      "documents_missing_description_count": metrics_block.get("documents_missing_description_count"),
+      "placeholder_documents_count": metrics_block.get("placeholder_documents_count"),
+      "link_density": metrics_block.get("link_density"),
+    },
+    "payload": payload,
+  }
+
+  storage = create_storage(
     output_dir=paths.output_dir,
-    artifacts=artifacts,
+    viewer_slug=VIEWER_SLUG,
+    topic=TOPIC_SLUG,
+    timestamp=timestamp_slug,
+  )
+
+  # DB_INTEGRATION_MARKER: write manifest.json (report_runs)
+  storage.write_manifest(manifest)
+  # DB_INTEGRATION_MARKER: write summary.md (report_summaries)
+  storage.write_summary({"markdown": bundle_text}, format="markdown")
+  # DB_INTEGRATION_MARKER: write telemetry.json + extracted metrics (test_metrics)
+  storage.write_telemetry(telemetry)
+
+  # Human-facing artifact: doc_index.csv (no DB integration required).
+  csv_path = storage.file_storage.bundle_dir / "doc_index.csv"
+  csv_path.write_text(csv_text.rstrip("\n") + "\n", encoding="utf-8")
+
+  run_dir = storage.file_storage.bundle_dir
+  topic_dir = run_dir.parent
+  prune_result = prune_run_directories(
+    topic_dir,
     keep=options.artifacts_to_keep,
+    current_run=run_dir,
+    logger=logger,
+  )
+  logger.debug(
+    "Pruned doc index bundles: kept=%s removed=%s protected=%s failures=%s",
+    len(prune_result.kept),
+    len(prune_result.removed),
+    len(prune_result.protected),
+    len(prune_result.failures),
   )
 
   if database_placeholder is not None:
@@ -796,9 +852,13 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
   )
 
   return {
-    "run_dir": str(result.run_dir),
-    "slug": result.slug,
-    "artifacts": {name: str(path) for name, path in result.artifacts.items()},
+    "run_dir": str(run_dir),
+    "slug": timestamp_slug,
+    "artifacts": {
+      "manifest.json": str(run_dir / "manifest.json"),
+      "summary.md": str(run_dir / "summary.md"),
+      "telemetry.json": str(run_dir / "telemetry.json"),
+    },
     "documents": summary["total_documents"],
     "headings": summary["total_headings"],
     "links": summary["total_links"],

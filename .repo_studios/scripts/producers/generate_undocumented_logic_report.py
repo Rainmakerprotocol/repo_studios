@@ -83,7 +83,7 @@ PATH_CONFIG = PathsConfig(
         "doc_index": PathSpec(
             field="doc_index",
             default=Path(
-                ".repo_studios/reports/producer_reports/doc_index/latest_doc_index.json"
+                ".repo_studios/reports/producer_reports/healthview/doc_index"
             ),
             ensure_dir=False,
             within_repo=True,
@@ -317,14 +317,39 @@ def _scan_ast(path: Path, repo_root: Path, allowlist: Allowlist) -> ModuleScan |
     )
 
 
+def _latest_run_dir(topic_dir: Path) -> Path | None:
+    if not topic_dir.exists() or not topic_dir.is_dir():
+        return None
+    runs = [node for node in topic_dir.iterdir() if node.is_dir()]
+    if not runs:
+        return None
+    runs.sort(key=lambda node: (node.name, node.stat().st_mtime), reverse=True)
+    return runs[0]
+
+
 def _load_json(path: Path) -> Any | None:
     if not path.exists():
         return None
+
+    candidate = path
+    if candidate.is_dir():
+        latest = _latest_run_dir(candidate)
+        if latest is None:
+            return None
+        telemetry_path = latest / "telemetry.json"
+        if not telemetry_path.exists():
+            return None
+        candidate = telemetry_path
+
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(candidate.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
-        logging.warning("Failed to parse JSON from %s: %s", path, exc)
+        logging.warning("Failed to parse JSON from %s: %s", candidate, exc)
         return None
+
+    if isinstance(data, dict) and "payload" in data:
+        return data.get("payload")
+    return data
 
 
 def _build_doc_lookup(doc_index: Any) -> list[dict[str, Any]]:

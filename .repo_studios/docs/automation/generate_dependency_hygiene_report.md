@@ -1,17 +1,38 @@
-# generate_dependency_hygiene_report.py
+---
+title: generate_dependency_hygiene_report.py
+audience:
+  - coding_agent
+  - human_developer
+owners:
+  - repo_studios_team@rainmakerprotocol.dev
+status: active
+version: 1.1.0
+updated: 2025-12-16
+tags:
+  - automation
+  - healthview
+  - dependency-hygiene
+related_files:
+  - ../../scripts/producers/generate_dependency_hygiene_report.py
+  - ../../tests/tests_producers/test_generate_dependency_hygiene_report.py
+  - ../../command_center/docs/db_integrations/dependency_hygiene.md
+---
 
-**Last updated:** 2025-10-22
+# generate_dependency_hygiene_report.py
 
 ## Purpose
 
-`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally `pyproject.toml`) into JSON/Markdown/log outputs with pruning and latest pointers.
+`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally `pyproject.toml`) into a canonical 3-artifact bundle (`manifest.json`, `summary.md`, `telemetry.json`) with retention pruning.
+
+This script is now aligned with the canonical producer bundle contract: each run writes a single
+positional-encoded folder containing `manifest.json`, `summary.md`, and `telemetry.json`.
 
 ## Invocation
 
 ```bash
 python .repo_studios/scripts/producers/generate_dependency_hygiene_report.py \
   --repo-root . \
-  --output-dir .repo_studios/reports/producer_reports/dependency_hygiene_reports \
+  --output-dir .repo_studios/reports/producer_reports \
   --requirements-pattern requirements.txt \
   --requirements-pattern requirements/*.txt \
   --artifacts-to-keep 10
@@ -20,7 +41,7 @@ python .repo_studios/scripts/producers/generate_dependency_hygiene_report.py \
 ### Key arguments
 
 - `--repo-root` (default `.`): repository root used to resolve requirement file globs.
-- `--output-dir` (default `.repo_studios/reports/producer_reports/dependency_hygiene_reports`): destination for timestamped runs and `latest_*` aliases.
+- `--output-dir` (default `.repo_studios/reports/producer_reports`): base reports directory for positional bundles.
 - `--requirements-pattern` (repeatable): glob(s) appended to the default trio `("requirements.txt", "requirements-dev.txt", "requirements/*.txt")` when provided.
 - `--skip-pyproject`: omit `pyproject.toml` scanning (enabled by default when the file is present and `tomllib` is available).
 - `--artifacts-to-keep` (default `10`): retention window applied after each run.
@@ -31,22 +52,18 @@ Exit codes: `0` when no hygiene issues are detected, `1` when any issue is recor
 
 ## Outputs
 
-Each execution produces `.repo_studios/reports/producer_reports/dependency_hygiene_reports/dependency_hygiene-<timestamp>/` containing:
+Each execution produces a positional-encoded bundle at:
 
-- `report.json`: canonical payload with fields
-  - `schema_version`: currently `1`.
-  - `generated_utc`: ISO timestamp of execution.
-  - `repo_root`: absolute root scanned.
-  - `summary`: `{status, issue_count, requirements_scanned, pyproject_scanned}`.
-  - `issue_counts`: list of `{kind, count}` sorted by prevalence.
-  - `requirements_patterns`: patterns evaluated.
-  - `requirements_files`: resolved requirement file paths (repo-relative when possible).
-  - `pyproject_path`: repo-relative path when `pyproject.toml` was scanned else `null`.
-  - `issues`: list of `{kind, file, line, spec}` entries.
-- `report.md`: human-readable summary with sections for summary metrics, issue counts, and a bullet list of offending specs.
-- `log.txt`: key/value digest for automation (`status`, counts, and enumerated issues).
+`.repo_studios/reports/producer_reports/healthview/dependency_hygiene/<YYYYMMDD-HHMM>/`
 
-`latest_report.json`, `latest_report.md`, and `latest_report.log` at the output root mirror the most recent run. Historical directories are pruned to the configured retention (minimum 1) after each execution.
+The run folder contains exactly:
+
+- `manifest.json`: pipeline metadata (viewer/topic/timestamp, inputs, catalog).
+- `summary.md`: human-readable digest of findings.
+- `telemetry.json`: extracted metrics plus the full legacy payload under `payload`.
+
+Historical run folders are pruned to the configured retention (minimum 1) after each execution.
+No `latest_*` pointers are created.
 
 ## Status semantics
 

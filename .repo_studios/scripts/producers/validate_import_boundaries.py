@@ -14,7 +14,7 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any
 
-DEFAULT_RELATIVE_GRAPH_DIR = Path(".repo_studios/reports/producer_reports/import_graph_reports")
+DEFAULT_RELATIVE_GRAPH_DIR = Path(".repo_studios/reports/producer_reports/healthview/import_graph")
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/import_boundary_reports")
 DEFAULT_ALLOWLIST = Path(".repo_studios/scripts/producers/import_rules_allowlist.json")
 RUN_PREFIX = "import_boundary_check"
@@ -105,7 +105,11 @@ def parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser.add_argument("--repo-root", help="Repository root (defaults to project root)")
     parser.add_argument(
         "--graph-path",
-        help="Override path to import graph JSON; defaults to latest run under import_graph_reports",
+        help=(
+            "Override path to import graph payload. Accepts either a legacy graph.json file, "
+            "or a positional bundle telemetry.json from healthview/import_graph. "
+            "Defaults to latest run under healthview/import_graph."
+        ),
     )
     parser.add_argument(
         "--output-dir",
@@ -149,7 +153,10 @@ def build_paths(args: argparse.Namespace) -> Paths:
             graph_candidate = (repo_root / graph_candidate).resolve()
         else:
             graph_candidate = graph_candidate.resolve()
-        graph_dir = graph_candidate.parent
+        if graph_candidate.is_dir():
+            graph_dir = graph_candidate
+        else:
+            graph_dir = graph_candidate.parent
     return replace(paths, graph_dir=graph_dir)
 
 
@@ -171,17 +178,40 @@ def _latest_graph_json(graph_dir: Path) -> Path | None:
     if not dirs:
         return None
     latest = sorted(dirs)[-1]
-    candidate = latest / "graph.json"
-    return candidate if candidate.exists() else None
+    telemetry = latest / "telemetry.json"
+    legacy_graph = latest / "graph.json"
+    if telemetry.exists():
+        return telemetry
+    if legacy_graph.exists():
+        return legacy_graph
+    return None
 
 
 def _load_graph(path: Path | None) -> dict[str, list[str]]:
     if not path or not path.exists():
         return {}
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(path.read_text(encoding="utf-8"))
     except Exception:
         return {}
+    if not isinstance(data, dict):
+        return {}
+    if path.name == "telemetry.json":
+        payload = data.get("payload")
+        if isinstance(payload, dict):
+            graph = payload.get("graph")
+            if isinstance(graph, dict):
+                return {
+                    str(k): [str(v) for v in vals] if isinstance(vals, list) else []
+                    for k, vals in graph.items()
+                    if isinstance(k, str)
+                }
+        return {}
+    return {
+        str(k): [str(v) for v in vals] if isinstance(vals, list) else []
+        for k, vals in data.items()
+        if isinstance(k, str)
+    }
 
 
 def _load_allowlist(path: Path) -> dict[str, Any]:

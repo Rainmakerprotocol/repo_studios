@@ -54,7 +54,7 @@ Refer to [Guide](../../docs/guide.md).
 
     (repo_root / ".venv" / "ignore.md").write_text("# Ignore\n", encoding="utf-8")
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "doc_index"
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports"
 
     exit_code = mod.main(
         [
@@ -74,10 +74,19 @@ Refer to [Guide](../../docs/guide.md).
     )
 
     assert exit_code == 0
-    run_dir = output_dir / f"{mod.RUN_PREFIX}-20240102_000000"
+    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240102-0000"
     assert run_dir.is_dir()
 
-    payload = json.loads((run_dir / "doc_index.json").read_text(encoding="utf-8"))
+    csv_path = run_dir / "doc_index.csv"
+    assert csv_path.exists()
+
+    manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["viewer_slug"] == mod.VIEWER_SLUG
+    assert manifest["topic"] == mod.TOPIC_SLUG
+    assert manifest["run_timestamp"] == "20240102-0000"
+
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    payload = telemetry["payload"]
 
     summary = payload["summary"]
     assert summary["total_documents"] == 2
@@ -102,9 +111,9 @@ Refer to [Guide](../../docs/guide.md).
 
     outputs = payload["outputs"]
     files_output = outputs["files"]
-    assert files_output["bundle"] == "doc_index_bundle.md"
-    assert files_output["json"] == "doc_index.json"
-    assert files_output["csv"] == "doc_index.csv"
+    assert files_output["manifest"] == "manifest.json"
+    assert files_output["summary"] == "summary.md"
+    assert files_output["telemetry"] == "telemetry.json"
 
     database = outputs["database"]
     assert database["target"] == "placeholder://inventory"
@@ -119,7 +128,7 @@ Refer to [Guide](../../docs/guide.md).
     assert advisories["documents_missing_description"] == []
     assert advisories["duplicate_slugs"] == {}
 
-    bundle_text = (run_dir / "doc_index_bundle.md").read_text(encoding="utf-8")
+    bundle_text = (run_dir / "summary.md").read_text(encoding="utf-8")
     assert "# Documentation Index Bundle" in bundle_text
     assert "```json" in bundle_text
     assert "```yaml" in bundle_text
@@ -151,9 +160,12 @@ Refer to [Guide](../../docs/guide.md).
     assert guide_row[link_index] == "../.repo_studios/docs/internal.md"
     assert guide_row[placeholder_index] == "no"
 
-    assert (output_dir / "latest_doc_index.json").is_file()
-    assert (output_dir / "latest_doc_index_bundle.md").is_file()
-    assert (output_dir / "latest_doc_index.csv").is_file()
+    disk_rows = list(csv.reader(io.StringIO(csv_path.read_text(encoding="utf-8"))))
+    assert disk_rows[0] == csv_rows[0]
+
+    assert not (output_dir / "latest_doc_index.json").exists()
+    assert not (output_dir / "latest_doc_index_bundle.md").exists()
+    assert not (output_dir / "latest_doc_index.csv").exists()
 
 
 def test_doc_index_retention_keeps_single_run(tmp_path):
@@ -195,7 +207,7 @@ def test_doc_index_retention_keeps_single_run(tmp_path):
         ]
     )
 
-    run_dirs = [node.name for node in output_dir.iterdir() if node.is_dir()]
-    assert run_dirs == [f"{mod.RUN_PREFIX}-20240102_000000"]
-    assert (output_dir / "latest_doc_index.json").is_file()
-    assert (output_dir / "latest_doc_index_bundle.md").is_file()
+    topic_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG
+    run_dirs = sorted(node.name for node in topic_dir.iterdir() if node.is_dir())
+    assert run_dirs == ["20240102-0000"]
+    assert not (output_dir / "latest_doc_index.json").exists()

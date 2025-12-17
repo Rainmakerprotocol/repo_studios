@@ -2,8 +2,8 @@
 
 **DB_INTEGRATION_MARKER scan results**
 
-**Total scripts scanned:** 77
-**Scripts with markers:** 7
+**Total scripts scanned:** 78
+**Scripts with markers:** 10
 
 ## Producer Scripts
 
@@ -46,6 +46,30 @@
    - Storage init: ✓
    - Write calls: ✓
    - First marker (L248): Persist manifest bundle (report_runs + report_artifacts)
+
+[x] **diff_standards_index.py**
+   - Path: `.repo_studios\scripts\producers\diff_standards_index.py`
+   - Markers: 3
+   - Import: ✓
+   - Storage init: ✓
+   - Write calls: ✓
+   - First marker (L446): standards index diff manifest write
+
+[x] **generate_anchor_inventory.py**
+   - Path: `.repo_studios\scripts\producers\generate_anchor_inventory.py`
+   - Markers: 3
+   - Import: ✓
+   - Storage init: ✓
+   - Write calls: ✓
+   - First marker (L718): anchor inventory manifest write
+
+[x] **generate_code_doc_churn_report.py**
+   - Path: `.repo_studios\scripts\producers\generate_code_doc_churn_report.py`
+   - Markers: 3
+   - Import: ✓
+   - Storage init: ✓
+   - Write calls: ✓
+   - First marker (L603): write manifest.json (report_runs)
 
 ## Utility Scripts
 

@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
-"""Lizard Complexity Report Generator.
+"""Lizard Complexity Report generator with positional bundle artifacts.
 
-Runs `python -m lizard` with repo conventions and emits timestamped artifacts under
-`.repo_studios/reports/producer_reports/lizard_reports/<timestamp>/`:
+Artifacts (default):
+    - `.repo_studios/reports/producer_reports/healthview/lizard_report/<YYYYMMDD-HHMM>/`
+        - `manifest.json`
+        - `summary.md`
+        - `telemetry.json`
 
-- `report.json`: machine-readable summary (status, counts, offending functions)
-- `report.md`: human summary with top offenders and reproduction hints
-- `raw.json`: full JSON output from Lizard when available
-- `raw.txt`: stdout/stderr when invocation fails
-- `log.txt`: structured key/value summary for automation
-
-The script is tolerant: it always exits 0, encoding failures in the JSON summary.
+The script is tolerant: it always exits 0, encoding failures in the telemetry payload.
 """
 
 from __future__ import annotations
@@ -30,8 +27,9 @@ from pathlib import Path
 from typing import Any, Iterable, Sequence
 
 DEFAULT_TARGETS = ("agents", "api", "scripts")
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/lizard_reports")
-RUN_PREFIX = "lizard"
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
+VIEWER_SLUG = "healthview"
+TOPIC = "lizard_report"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 DEFAULT_LIZARD_EXTRA_ARGS = ("-Ejson", "-i", "-1")
 VENDOR_DIR = Path(__file__).resolve().parents[2] / "vendor"
@@ -41,11 +39,13 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 try:
-    from libraries import ReportArtifact, write_report_artifacts
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
 except ModuleNotFoundError:  # pragma: no cover - fallback for direct script execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import ReportArtifact, write_report_artifacts
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
 
 LIZARD_JSON_EXTENSION_SOURCE = '''"""JSON output extension for lizard (auto-installed)."""
 
@@ -146,7 +146,13 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def _timestamp_slug(moment: datetime) -> str:
-    return moment.astimezone(timezone.utc).strftime("%Y%m%d_%H%M%S")
+    return moment.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
+
+
+def _truncate_text(text: str, limit: int) -> tuple[str, bool]:
+    if limit <= 0 or len(text) <= limit:
+        return text, False
+    return text[:limit] + "\n... (truncated)\n", True
 
 
 def _ensure_lizard_json_extension() -> None:
@@ -156,7 +162,12 @@ def _ensure_lizard_json_extension() -> None:
         logging.warning("lizard_ext package not found; JSON extension unavailable")
         return
 
-    module_path = Path(lizard_ext.__file__).parent / "lizardjson.py"
+    module_file = getattr(lizard_ext, "__file__", None)
+    if not module_file:
+        logging.warning("lizard_ext module path unavailable; JSON extension unavailable")
+        return
+
+    module_path = Path(module_file).parent / "lizardjson.py"
     if module_path.exists():
         return
 
@@ -386,7 +397,7 @@ def _render_markdown(
         if remaining > 0:
             lines.extend(
                 [
-                    f"Additional offenders not shown: {remaining} (see `report.json` for full list).",
+                    f"Additional offenders not shown: {remaining} (see `telemetry.json` for full list).",
                     "",
                 ]
             )
@@ -484,7 +495,7 @@ def _compose_report(
     display = command_display if command_display is not None else (shlex.join(command_list) if command_list else "")
     return {
         "schema_version": 1,
-        "timestamp": slug,
+        "run_timestamp": slug,
         "generated_utc": generated_at.isoformat(),
         "max_ccn": max_ccn,
         "max_length": max_length,
@@ -496,6 +507,36 @@ def _compose_report(
         "files_scanned": 0,
         "offenders": [],
         "notes": None,
+    }
+
+
+def _build_manifest(*, report: dict[str, Any], repo_root: Path, inputs: dict[str, Any]) -> dict[str, Any]:
+    status = report.get("status")
+    summary = {
+        "status": status,
+        "issue_count": report.get("issue_count", 0),
+        "files_scanned": report.get("files_scanned", 0),
+    }
+    return {
+        "schema_version": 1,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC,
+        "run_timestamp": inputs.get("run_timestamp"),
+        "git_sha": None,
+        "status": "ok" if status in {"ok", "issues", "no_targets"} else "failed",
+        "catalog": [
+            {"artifact": "manifest.json", "kind": "json"},
+            {"artifact": "summary.md", "kind": "markdown"},
+            {"artifact": "telemetry.json", "kind": "json"},
+        ],
+        "inputs": {
+            "repo_root": str(repo_root),
+            **inputs,
+        },
+        "provenance": {
+            "trigger_type": "manual",
+        },
+        "summary": summary,
     }
 
 
@@ -577,8 +618,15 @@ def main(argv: Sequence[str] | None = None) -> int:
     if not output_dir.is_absolute():
         output_dir = (repo_root / output_dir).resolve()
 
+    if output_dir.name == "lizard_reports":
+        logging.warning(
+            "Legacy --output-dir points at lizard_reports; treating %s as base output directory",
+            output_dir.parent,
+        )
+        output_dir = output_dir.parent
+
     generated_at = _parse_timestamp(args.timestamp)
-    slug = _timestamp_slug(generated_at)
+    run_timestamp = _timestamp_slug(generated_at)
 
     target_override: Sequence[str] | None = None
     if args.targets:
@@ -597,7 +645,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if not targets:
         payload = _compose_report(
-            slug=slug,
+            slug=run_timestamp,
             generated_at=generated_at,
             max_ccn=args.max_ccn,
             max_length=args.max_length,
@@ -614,7 +662,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         except ValueError as exc:
             logging.error("Unsafe lizard arguments rejected: %s", exc)
             payload = _compose_report(
-                slug=slug,
+                slug=run_timestamp,
                 generated_at=generated_at,
                 max_ccn=args.max_ccn,
                 max_length=args.max_length,
@@ -626,7 +674,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             payload["notes"] = f"Unsafe command argument detected: {exc}"
         else:
             payload = _compose_report(
-                slug=slug,
+                slug=run_timestamp,
                 generated_at=generated_at,
                 max_ccn=args.max_ccn,
                 max_length=args.max_length,
@@ -664,10 +712,10 @@ def main(argv: Sequence[str] | None = None) -> int:
                         offenders_ranked = _rank_offenders(collected, args.max_ccn, args.max_length)
                         payload["files_scanned"] = len(modules)
                         if payload.get("status") != "error":
-                            payload["status"] = "issues" if offenders_ranked else "passed"
+                            payload["status"] = "issues" if offenders_ranked else "ok"
                         raw_json_content = data
                 else:
-                    payload["status"] = "passed"
+                    payload["status"] = "ok"
                     payload["files_scanned"] = 0
                     raw_json_content = []
 
@@ -685,64 +733,94 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     top_offenders = offenders_ranked[:10]
 
-    artifacts = [
-        ReportArtifact(
-            filename="report.json",
-            kind="json",
-            content=payload,
-            pointer="latest_report.json",
-        ),
-        ReportArtifact(
-            filename="report.md",
-            kind="text",
-            content=_render_markdown(
-                payload,
-                top_offenders,
-                top_limit=10,
-                max_ccn=args.max_ccn,
-                max_length=args.max_length,
-            ),
-            pointer="latest_report.md",
-        ),
-        ReportArtifact(
-            filename="log.txt",
-            kind="text",
-            content=_render_log(
-                payload,
-                top_offenders,
-                max_ccn=args.max_ccn,
-                max_length=args.max_length,
-                top_limit=10,
-            ),
-            pointer="latest_report.log",
-        ),
-        ReportArtifact(
-            filename="raw.txt",
-            kind="text",
-            content=raw_text,
-            pointer="latest_raw.txt",
-        ),
-    ]
-
-    if raw_json_content is not None:
-        artifacts.append(
-            ReportArtifact(
-                filename="raw.json",
-                kind="json",
-                content=raw_json_content,
-                pointer="latest_raw.json",
-                sort_keys=False,
-            )
-        )
-
-    result = write_report_artifacts(
-        stem=RUN_PREFIX,
-        timestamp=generated_at,
-        output_dir=output_dir,
-        artifacts=artifacts,
-        keep=max(args.artifacts_to_keep, 1),
+    log_text = _render_log(
+        payload,
+        top_offenders,
+        max_ccn=args.max_ccn,
+        max_length=args.max_length,
+        top_limit=10,
     )
-    logging.info("Lizard report written to %s", result.run_dir)
+
+    raw_text_truncated, raw_text_was_truncated = _truncate_text(raw_text, 200_000)
+    raw_json_summary: dict[str, Any] | None = None
+    if raw_json_content is not None:
+        if isinstance(raw_json_content, list):
+            raw_json_summary = {
+                "type": "list",
+                "entry_count": len(raw_json_content),
+                "sample": raw_json_content[:5],
+            }
+        else:
+            raw_json_summary = {
+                "type": type(raw_json_content).__name__,
+                "sample": raw_json_content,
+            }
+
+    report_payload: dict[str, Any] = {
+        **payload,
+        "raw": {
+            "text": raw_text_truncated,
+            "text_truncated": raw_text_was_truncated,
+            "json_summary": raw_json_summary,
+        },
+        "log_text": log_text,
+    }
+
+    run_inputs: dict[str, Any] = {
+        "run_timestamp": run_timestamp,
+        "max_ccn": args.max_ccn,
+        "max_length": args.max_length,
+        "targets_requested": requested_display,
+        "targets_resolved": targets,
+        "extra_args": list(args.extra_args),
+        "artifacts_to_keep": max(args.artifacts_to_keep, 1),
+    }
+
+    markdown = _render_markdown(
+        payload,
+        top_offenders,
+        top_limit=10,
+        max_ccn=args.max_ccn,
+        max_length=args.max_length,
+    )
+
+    telemetry = {
+        "schema_version": 1,
+        "generated_utc": generated_at.isoformat(),
+        "metrics": {
+            "status": payload.get("status"),
+            "issue_count": payload.get("issue_count", 0),
+            "files_scanned": payload.get("files_scanned", 0),
+            "targets_count": len(targets),
+            "max_ccn": args.max_ccn,
+            "max_length": args.max_length,
+        },
+        "payload": report_payload,
+    }
+
+    storage = create_storage(
+        output_dir,
+        VIEWER_SLUG,
+        TOPIC,
+        timestamp=run_timestamp,
+    )
+    bundle_dir = storage.file_storage.bundle_dir
+    manifest = _build_manifest(report=payload, repo_root=repo_root, inputs=run_inputs)
+
+    # DB_INTEGRATION_MARKER: write manifest.json (report_runs)
+    storage.write_manifest(manifest)
+    # DB_INTEGRATION_MARKER: write summary.md (report_summaries)
+    storage.write_summary({"markdown": markdown}, format="markdown")
+    # DB_INTEGRATION_MARKER: write telemetry.json + extracted metrics (test_metrics)
+    storage.write_telemetry(telemetry)
+
+    prune_run_directories(
+        output_dir / VIEWER_SLUG / TOPIC,
+        keep=max(args.artifacts_to_keep, 1),
+        current_run=bundle_dir,
+        logger=logging.getLogger(__name__),
+    )
+    logging.info("Lizard report written to %s", bundle_dir)
 
     return 0
 

@@ -68,12 +68,12 @@ AGGREGATOR_SCRIPT = Path(".repo_studios/scripts/aggregators/aggregate_docs_healt
 AGGREGATOR_MODULE = "scripts.aggregators.aggregate_docs_health_signals"
 ORCHESTRATOR_SCRIPT = Path(".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py")
 
-DEFAULT_DOC_INDEX_OUTPUT = Path(".repo_studios/reports/producer_reports/doc_index")
+DEFAULT_DOC_INDEX_OUTPUT = Path(".repo_studios/reports/producer_reports")
 DEFAULT_ANCHOR_INVENTORY_OUTPUT = Path(".repo_studios/reports/producer_reports")
 DEFAULT_ANCHOR_VALIDATION_OUTPUT = Path(".repo_studios/reports/producer_reports/markdown_anchor_validation_reports")
 DEFAULT_DOCS_INTEGRITY_OUTPUT = Path(".repo_studios/reports/producer_reports/docs_integrity_reports")
 DEFAULT_METRICS_STUB_OUTPUT = Path(".repo_studios/reports/producer_reports/metrics_anchor_stub_reports")
-DEFAULT_CHURN_OUTPUT = Path(".repo_studios/reports/producer_reports/code_doc_churn_reports")
+DEFAULT_CHURN_OUTPUT = Path(".repo_studios/reports/producer_reports")
 DEFAULT_UNDOCUMENTED_OUTPUT = Path(".repo_studios/reports/producer_reports/undocumented_logic_reports")
 DEFAULT_PLACEHOLDER_OUTPUT = Path(".repo_studios/reports/producer_reports/code_placeholder_scans")
 DEFAULT_MONKEY_PATCH_OUTPUT = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
@@ -954,7 +954,7 @@ def run(argv: Sequence[str] | None = None) -> int:
     artifacts_section: dict[str, str | None] = {
         "doc_index_run": _relativize(doc_index_outcome.run_dir if doc_index_outcome else None, paths.repo_root),
         "doc_index_report": _relativize(
-            doc_index_outcome.artifacts.get("doc_index.json") if doc_index_outcome else None, paths.repo_root
+            doc_index_outcome.artifacts.get("telemetry.json") if doc_index_outcome else None, paths.repo_root
         ),
         "anchor_inventory_run": _relativize(
             anchor_inventory_outcome.run_dir if anchor_inventory_outcome else None, paths.repo_root
@@ -973,7 +973,7 @@ def run(argv: Sequence[str] | None = None) -> int:
             metrics_stub_outcome.run_dir if metrics_stub_outcome else None, paths.repo_root
         ),
         "churn_report": _relativize(
-            churn_outcome.artifacts.get("report.json") if churn_outcome else None, paths.repo_root
+            churn_outcome.artifacts.get("telemetry.json") if churn_outcome else None, paths.repo_root
         ),
         "undocumented_report": _relativize(
             undocumented_outcome.artifacts.get("report.json") if undocumented_outcome else None, paths.repo_root

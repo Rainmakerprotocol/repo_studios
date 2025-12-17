@@ -61,8 +61,8 @@ PLACEHOLDER_MODULE = "scripts.producers.scan_code_placeholders"
 TYPECHECK_MODULE = "scripts.producers.generate_typecheck_report"
 REFRESH_BASELINES_MODULE = "scripts.utilities.refresh_mypy_baselines"
 
-DEFAULT_DEPENDENCY_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/dependency_hygiene_reports")
-DEFAULT_IMPORT_GRAPH_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/import_graph_reports")
+DEFAULT_DEPENDENCY_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
+DEFAULT_IMPORT_GRAPH_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
 DEFAULT_PLACEHOLDER_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/code_placeholder_scans")
 DEFAULT_PLACEHOLDER_ALLOWLIST = Path(".repo_studios/config/placeholder_allowlist.txt")
 DEFAULT_BATCH_CLEANUP_OUTPUT_BASE = Path(
@@ -450,13 +450,16 @@ def _dependency_report(paths: Paths, options: Options) -> DependencyOutcome:
         argv.append("--skip-pyproject")
     argv.extend(["--timestamp", options.run_timestamp.isoformat()])
     exit_code = _invoke_main(main_callable, argv)
-    latest_report = paths.dependency_output_dir / "latest_report.json"
-    payload = _read_json(latest_report)
-    generated = payload.get("generated_utc") if isinstance(payload, dict) else None
-    run_dir = _iso_to_run_dir(DEPENDENCY_RUN_PREFIX, paths.dependency_output_dir, generated)
-    report_json = run_dir / "report.json" if run_dir and (run_dir / "report.json").exists() else None
-    report_md = run_dir / "report.md" if run_dir and (run_dir / "report.md").exists() else None
-    log_path = run_dir / "log.txt" if run_dir and (run_dir / "log.txt").exists() else None
+    timestamp = options.run_timestamp.strftime("%Y%m%d-%H%M")
+    run_dir = (
+        paths.dependency_output_dir / VIEWER_SLUG / "dependency_hygiene" / timestamp
+    ).resolve()
+    telemetry_path = run_dir / "telemetry.json" if run_dir.exists() else None
+    telemetry = _read_json(telemetry_path) if telemetry_path else None
+    payload = telemetry.get("payload") if isinstance(telemetry, dict) else None
+    report_json = run_dir / "telemetry.json" if run_dir.exists() else None
+    report_md = run_dir / "summary.md" if run_dir.exists() else None
+    log_path = None
     return DependencyOutcome(
         run_dir=run_dir,
         report_json=report_json,
@@ -485,13 +488,18 @@ def _import_graph_report(paths: Paths, options: Options) -> ImportGraphOutcome:
     if options.import_owned:
         argv.extend(["--owned", *options.import_owned])
     _invoke_main(main_callable, argv)
-    latest_report = paths.import_graph_output_dir / "latest_report.json"
-    payload = _read_json(latest_report)
-    generated = payload.get("generated_utc") if isinstance(payload, dict) else None
-    run_dir = _iso_to_run_dir(IMPORT_GRAPH_RUN_PREFIX, paths.import_graph_output_dir, generated)
-    report_json = run_dir / "report.json" if run_dir and (run_dir / "report.json").exists() else None
-    graph_path = run_dir / "graph.json" if run_dir and (run_dir / "graph.json").exists() else None
-    log_path = run_dir / "log.txt" if run_dir and (run_dir / "log.txt").exists() else None
+    timestamp = options.run_timestamp.strftime("%Y%m%d-%H%M")
+    run_dir = (paths.import_graph_output_dir / VIEWER_SLUG / "import_graph" / timestamp).resolve()
+    telemetry_path = run_dir / "telemetry.json" if run_dir.exists() else None
+    telemetry = _read_json(telemetry_path) if telemetry_path else None
+    payload = telemetry.get("payload") if isinstance(telemetry, dict) else None
+    report_json = run_dir / "telemetry.json" if run_dir.exists() else None
+    graph_path = None
+    if isinstance(payload, dict):
+        graph = payload.get("graph")
+        if isinstance(graph, dict):
+            graph_path = telemetry_path
+    log_path = None
     return ImportGraphOutcome(
         run_dir=run_dir,
         report_json=report_json,
@@ -1108,3 +1116,7 @@ def run(argv: Sequence[str] | None = None) -> int:
 
 def main(argv: Sequence[str] | None = None) -> None:
     raise SystemExit(run(argv))
+
+
+if __name__ == "__main__":
+    main()

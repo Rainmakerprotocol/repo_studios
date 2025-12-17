@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
-"""Import Graph Report generator with structured artifacts and pruning support."""
+"""Import Graph Report generator with positional bundle artifacts.
+
+Artifacts (default):
+    - `.repo_studios/reports/producer_reports/healthview/import_graph/<YYYYMMDD-HHMM>/`
+        - `manifest.json`
+        - `summary.md`
+        - `telemetry.json`
+"""
 
 from __future__ import annotations
 
 import argparse
-import json
 import logging
 import re
 import sys
@@ -14,8 +20,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/import_graph_reports")
-RUN_PREFIX = "import_graph"
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
+VIEWER_SLUG = "healthview"
+TOPIC = "import_graph"
 DEFAULT_ARTIFACTS_TO_KEEP = 5
 OWNED_DEFAULT = {
     ".repo_studios",
@@ -26,11 +33,13 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 try:
-    from libraries import ReportArtifact, WriteReportArtifactsResult, write_report_artifacts
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
 except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import ReportArtifact, WriteReportArtifactsResult, write_report_artifacts
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
 
 
 IMPORT_RE = re.compile(r"^(?:from\s+([\w\.]+)\s+import\s+|import\s+([\w\.]+))")
@@ -218,6 +227,32 @@ def build_report(
     }
 
 
+def _build_manifest(*, report: dict[str, Any], repo_root: Path, inputs: dict[str, Any]) -> dict[str, Any]:
+    summary = report.get("summary", {})
+    status = summary.get("status") if isinstance(summary, dict) else None
+    return {
+        "schema_version": 1,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC,
+        "run_timestamp": inputs.get("run_timestamp"),
+        "git_sha": None,
+        "status": "ok" if status in {"ok", "no_targets"} else "failed",
+        "catalog": [
+            {"artifact": "manifest.json", "kind": "json"},
+            {"artifact": "summary.md", "kind": "markdown"},
+            {"artifact": "telemetry.json", "kind": "json"},
+        ],
+        "inputs": {
+            "repo_root": str(repo_root),
+            **inputs,
+        },
+        "provenance": {
+            "trigger_type": "manual",
+        },
+        "summary": summary,
+    }
+
+
 def write_markdown(report: dict[str, Any]) -> str:
     summary = report["summary"]
     owned_requested = report.get("owned_packages_requested", [])
@@ -241,102 +276,25 @@ def write_markdown(report: dict[str, Any]) -> str:
     ]
     isolated = report.get("isolated_modules", [])
     lines.append(f"- isolated modules: {', '.join(isolated) if isolated else '(none)'}")
-    lines.extend(["", "## Top Fan-In", ""])
+    lines.extend(["", "### Top fan-in (modules most depended on)", ""])
     if report.get("top_fan_in"):
         for entry in report["top_fan_in"]:
             lines.append(f"- {entry['module']}: {entry['count']}")
     else:
         lines.append("- (none)")
-    lines.extend(["", "## Top Fan-Out", ""])
+    lines.extend(["", "### Top fan-out (modules with many dependencies)", ""])
     if report.get("top_fan_out"):
         for entry in report["top_fan_out"]:
             lines.append(f"- {entry['module']}: {entry['count']}")
     else:
         lines.append("- (none)")
-    lines.extend(["", "## Cycles", ""])
+    lines.extend(["", "### Cycles (first 10)", ""])
     if report.get("cycles"):
-        for cycle in report["cycles"]:
+        for cycle in report["cycles"][:10]:
             lines.append(f"- {' -> '.join(cycle)}")
     else:
         lines.append("- (none)")
-    graph_path = report.get("graph_path")
-    if graph_path:
-        lines.extend(["", f"Graph JSON: `{graph_path}`"])
     return "\n".join(lines) + "\n"
-
-
-def write_log(report: dict[str, Any]) -> str:
-    lines = [
-        f"status={report['summary']['status']}",
-        f"module_count={report['summary']['module_count']}",
-        f"edge_count={report['summary']['edge_count']}",
-        f"cycle_count={report['summary']['cycle_count']}",
-    ]
-    for entry in report.get("top_fan_in", []):
-        lines.append(f"top_fan_in[{entry['module']}]={entry['count']}")
-    for entry in report.get("top_fan_out", []):
-        lines.append(f"top_fan_out[{entry['module']}]={entry['count']}")
-    if report.get("cycles"):
-        for cycle in report["cycles"]:
-            lines.append(f"cycle={'->'.join(cycle)}")
-    if report.get("isolated_modules"):
-        lines.append("isolated_modules=" + ",".join(report["isolated_modules"]))
-    missing = report.get("missing_owned_packages")
-    if missing:
-        lines.append("missing_owned_packages=" + ",".join(missing))
-    return "\n".join(lines) + "\n"
-
-
-def write_import_graph_artifacts(
-    *,
-    report: dict[str, Any],
-    output_dir: Path,
-    timestamp: datetime,
-    keep: int,
-) -> WriteReportArtifactsResult:
-    serialized_graph = report["graph"]
-
-    def _write_graph(run_dir: Path) -> Path:
-        path = run_dir / "graph.json"
-        path.write_text(
-            json.dumps(serialized_graph, indent=2, sort_keys=True) + "\n",
-            encoding="utf-8",
-        )
-        report["graph_path"] = str(path)
-        report["run_directory"] = str(run_dir)
-        return path
-
-    return write_report_artifacts(
-        stem=RUN_PREFIX,
-        timestamp=timestamp,
-        output_dir=output_dir,
-        keep=keep,
-        artifacts=[
-            ReportArtifact(
-                filename="graph.json",
-                pointer="latest_graph.json",
-                writer=_write_graph,
-            ),
-            ReportArtifact(
-                filename="report.json",
-                kind="json",
-                content=lambda: dict(report),
-                pointer="latest_report.json",
-            ),
-            ReportArtifact(
-                filename="report.md",
-                kind="text",
-                content=lambda: write_markdown(report),
-                pointer="latest_report.md",
-            ),
-            ReportArtifact(
-                filename="log.txt",
-                kind="text",
-                content=lambda: write_log(report),
-                pointer="latest_report.log",
-            ),
-        ],
-    )
 
 
 def configure_logging(level: str) -> None:
@@ -350,7 +308,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument(
         "--output-dir",
         default=str(DEFAULT_OUTPUT_DIR),
-        help="Directory to write structured artifacts",
+        help="Base directory for generated report bundles (e.g., .repo_studios/reports/producer_reports)",
     )
     parser.add_argument(
         "--owned",
@@ -386,6 +344,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     owned.add(".repo_studios")
 
     generated_ts = _parse_timestamp(args.timestamp)
+    timestamp = generated_ts.strftime("%Y%m%d-%H%M")
     graph = build_graph(repo_root, owned)
     fan_in, fan_out = fan_metrics(graph)
     cycles = find_cycles(graph)
@@ -400,13 +359,54 @@ def main(argv: Sequence[str] | None = None) -> int:
         generated_ts=generated_ts,
     )
 
-    result = write_import_graph_artifacts(
-        report=report,
+    inputs = {
+        "run_timestamp": timestamp,
+        "owned_packages_requested": sorted(owned),
+        "artifacts_to_keep": args.artifacts_to_keep,
+    }
+
+    manifest = _build_manifest(report=report, repo_root=repo_root, inputs=inputs)
+    telemetry: dict[str, Any] = {
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC,
+        "run_timestamp": timestamp,
+        "generated_utc": report.get("generated_utc"),
+        "metrics": {
+            "status": report.get("summary", {}).get("status"),
+            "module_count": report.get("summary", {}).get("module_count"),
+            "edge_count": report.get("summary", {}).get("edge_count"),
+            "cycle_count": report.get("summary", {}).get("cycle_count"),
+            "owned_packages_requested": report.get("owned_packages_requested", []),
+            "owned_packages_resolved": report.get("owned_packages_resolved", []),
+        },
+        "payload": report,
+    }
+
+    storage = create_storage(
         output_dir=output_dir,
-        timestamp=generated_ts,
-        keep=args.artifacts_to_keep,
+        viewer_slug=VIEWER_SLUG,
+        topic=TOPIC,
+        timestamp=timestamp,
     )
-    logging.info("Import graph report written to %s", result.run_dir)
+
+    markdown = write_markdown(report)
+
+    # DB_INTEGRATION_MARKER: write manifest.json (report_runs)
+    storage.write_manifest(manifest)
+    # DB_INTEGRATION_MARKER: write summary.md (report_summaries)
+    storage.write_summary({"markdown": markdown}, format="markdown")
+    # DB_INTEGRATION_MARKER: write telemetry.json + extracted metrics (test_metrics)
+    storage.write_telemetry(telemetry)
+
+    run_dir = storage.file_storage.bundle_dir
+    topic_dir = run_dir.parent
+    prune_run_directories(
+        topic_dir,
+        keep=args.artifacts_to_keep,
+        current_run=run_dir,
+        logger=logging.getLogger(__name__),
+    )
+    logging.info("Import graph report written to %s", run_dir)
     return 0
 
 

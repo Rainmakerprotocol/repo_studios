@@ -1,3 +1,23 @@
+---
+title: generate_code_doc_churn_report
+audience:
+  - coding_agent
+  - human_developer
+owners:
+  - repo_studios_team@rainmakerprotocol.dev
+status: active
+version: 1.1.0
+updated: 2025-12-16
+tags:
+  - producer
+  - docs-health
+  - telemetry
+related_files:
+  - ../../scripts/producers/generate_code_doc_churn_report.py
+  - ../../tests/tests_producers/test_generate_code_doc_churn_report.py
+  - ../../Makefile
+---
+
 # generate_code_doc_churn_report
 
 ## Purpose
@@ -25,20 +45,17 @@ results directly.
 
 ## Outputs
 
-Each run emits a timestamped directory named `code_doc_churn-YYYYMMDD_HHMMSS`
-containing:
+Each run emits a canonical positional bundle under:
 
-- `report.json` – structured payload with git metadata, flagged modules, and
-  candidate documentation references
-- `report.md` – human-readable summary. The `Modules With Doc Updates` section
-  is wrapped in a `markdownlint-disable/enable MD013` block because long sample
-  doc paths cannot be line-wrapped without reducing readability
-- `churn.tsv` – tabular view of flagged modules
-- `bundle_summary.json` – compact metrics summary for orchestrators
+`.repo_studios/reports/producer_reports/healthview/code_doc_churn/YYYYMMDD-HHMM/`
 
-Latest-pointer files (`latest_report.json`, `latest_report.md`,
-`latest_churn.tsv`, `latest_bundle_summary.json`) live alongside the timestamped
-runs.
+The bundle contains exactly:
+
+- `manifest.json` – run metadata, inputs, provenance, and headline counts
+- `summary.md` – human-readable digest of missing-doc modules
+- `telemetry.json` – structured metrics for DB ingestion plus the full legacy payload
+
+The producer does not write any `latest_*` pointer files.
 
 ## Usage
 
@@ -48,7 +65,7 @@ $env:PYTHONPATH = ".repo_studios"
   .repo_studios\scripts\producers\generate_code_doc_churn_report.py \
   --repo-root . \
   --git-window "30 days" \
-  --output-dir .repo_studios/reports/producer_reports/code_doc_churn_reports
+  --output-dir .repo_studios/reports/producer_reports
 ```
 
 Or invoke the Make target (mirrors the 30-day window and retention defaults):
