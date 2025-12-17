@@ -30,7 +30,7 @@ LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "comman
 PACKAGE_ROOT = Path(__file__).resolve().parents[2]
 
 try:
-    from command_center.scripts.libraries import (
+    from libraries import (
         KeepSpec,
         PathSpec,
         OptionsConfig,
@@ -40,9 +40,9 @@ try:
         prune_run_directories,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
-    if str(PACKAGE_ROOT) not in sys.path:
-        sys.path.insert(0, str(PACKAGE_ROOT))
-    from command_center.scripts.libraries import (
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import (
         KeepSpec,
         PathSpec,
         OptionsConfig,

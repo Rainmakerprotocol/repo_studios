@@ -1,16 +1,17 @@
 {
   "viewer_slug": "healthview",
   "topic": "typecheck_report",
-  "run_timestamp": "20251217-1347",
-  "generated_utc": "2025-12-17T13:47:49.849314+00:00",
+  "run_timestamp": "20251217-1546",
+  "generated_utc": "2025-12-17T15:46:49.709445+00:00",
   "metrics": {
-    "status": "ok",
-    "error_count": 0,
-    "files_with_issues": 0,
+    "status": "error",
+    "error_count": 488,
+    "files_with_issues": 89,
+    "files_checked": 250,
     "paths_checked": 1,
     "strict": false,
     "fast_mode": false,
-    "return_code": 0
+    "return_code": 2
   },
   "payload": {
     "mypy_version": "mypy 1.11.1 (compiled: no)",
@@ -21,7 +22,7 @@
       "--show-error-codes",
       "--no-color-output",
       "--hide-error-context",
-      ".repo_studios/scripts/producers/generate_typecheck_report.py"
+      "<all python files (batched)>"
     ]
   }
 }

@@ -13,8 +13,35 @@ from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Sequence
+import sys
 
 import yaml
+
+try:  # pragma: no cover - prefer import when packaged
+    from libraries import (
+        KeepSpec,
+        OptionsConfig,
+        PathSpec,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
+    )
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
+except ModuleNotFoundError:  # pragma: no cover - fallback when running in isolation
+    LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import (
+        KeepSpec,
+        OptionsConfig,
+        PathSpec,
+        PathsConfig,
+        build_standard_options,
+        build_standard_paths,
+    )
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
 VIEWER_SLUG = "commandview"
@@ -35,42 +62,6 @@ IMP_VERBS = re.compile(
 )
 STRIP_PREFIX = re.compile(r"^[-*]\s*|^\d+\.\s*")
 WORD_EXTRACTOR = re.compile(r"[a-zA-Z]{4,}")
-
-PACKAGE_ROOT = Path(__file__).resolve().parents[3]
-
-try:  # pragma: no cover - prefer import when packaged
-    from command_center.scripts.libraries import (
-        KeepSpec,
-        OptionsConfig,
-        PathSpec,
-        PathsConfig,
-        build_standard_options,
-        build_standard_paths,
-    )
-except ModuleNotFoundError:  # pragma: no cover - fallback when running in isolation
-    import sys
-
-    if str(PACKAGE_ROOT) not in sys.path:
-        sys.path.insert(0, str(PACKAGE_ROOT))
-    from command_center.scripts.libraries import (
-        KeepSpec,
-        OptionsConfig,
-        PathSpec,
-        PathsConfig,
-        build_standard_options,
-        build_standard_paths,
-    )
-
-try:  # pragma: no cover - prefer import when packaged
-    from command_center.scripts.libraries.database_integration import create_storage
-    from command_center.scripts.libraries.prune_logs import prune_run_directories
-except ModuleNotFoundError:  # pragma: no cover - fallback when running in isolation
-    import sys
-
-    if str(PACKAGE_ROOT) not in sys.path:
-        sys.path.insert(0, str(PACKAGE_ROOT))
-    from command_center.scripts.libraries.database_integration import create_storage
-    from command_center.scripts.libraries.prune_logs import prune_run_directories
 
 
 @dataclass(frozen=True)

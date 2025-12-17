@@ -20,7 +20,7 @@ else:  # pragma: no cover - executed when import succeeds
     YAML_IMPORT_ERROR = None
     yaml = yaml_module
 
-from command_center.scripts.libraries import (
+from libraries import (
     KeepSpec,
     OptionsConfig,
     PathSpec,

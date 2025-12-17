@@ -44,7 +44,7 @@ for candidate in (SCRIPTS_ROOT, UTILITIES_ROOT):
     if candidate_str not in sys.path:
         sys.path.insert(0, candidate_str)
 
-from command_center.scripts.libraries import (  # noqa: E402
+from libraries import (  # noqa: E402
     build_test_log_report,
     prune_run_directories,
     render_markdown,

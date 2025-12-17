@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from command_center.scripts.libraries import (
+from libraries import (
     TopicContext,
     TopicStep,
     build_pipeline_telemetry,

@@ -22,7 +22,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Sequence
 
-from command_center.scripts.libraries import (
+LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
+if str(LIBRARIES_ROOT) not in sys.path:
+    sys.path.insert(0, str(LIBRARIES_ROOT))
+
+from libraries import (
     CatalogRegistry,
     KeepSpec,
     OptionsConfig,

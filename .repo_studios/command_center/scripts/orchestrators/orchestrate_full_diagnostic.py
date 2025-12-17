@@ -7,12 +7,17 @@ import argparse
 import importlib
 import json
 import logging
+import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable, Sequence
 
-from command_center.scripts.libraries import (
+LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
+if str(LIBRARIES_ROOT) not in sys.path:
+    sys.path.insert(0, str(LIBRARIES_ROOT))
+
+from libraries import (
     KeepSpec,
     OptionsConfig,
     PathSpec,

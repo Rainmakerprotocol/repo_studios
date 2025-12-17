@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from command_center.scripts.libraries import prune_run_directories
+from libraries import prune_run_directories
 
 
 def _make_run(base_dir: Path, name: str) -> Path:

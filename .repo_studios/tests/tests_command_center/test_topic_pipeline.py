@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 
-from command_center.scripts.libraries import (
+from libraries import (
     SkipTopicStep,
     TopicContext,
     TopicStep,

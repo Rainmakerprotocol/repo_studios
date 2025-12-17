@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from command_center.scripts.libraries import CatalogEntry, CatalogRegistry
+from libraries import CatalogEntry, CatalogRegistry
 
 
 def test_catalog_registry_register_and_lookup() -> None:

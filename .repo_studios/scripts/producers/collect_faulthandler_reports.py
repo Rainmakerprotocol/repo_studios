@@ -29,7 +29,7 @@ for candidate in (SCRIPTS_ROOT, REPO_LIB_ROOT):
     if candidate_str not in sys.path:
         sys.path.insert(0, candidate_str)
 
-from command_center.scripts.libraries.cli import (  # noqa: E402
+from libraries.cli import (  # noqa: E402
     KeepSpec,
     OptionsConfig,
     PathSpec,
@@ -37,8 +37,8 @@ from command_center.scripts.libraries.cli import (  # noqa: E402
     build_standard_options,
     build_standard_paths,
 )
-from command_center.scripts.libraries.database_integration import create_storage  # noqa: E402
-from command_center.scripts.libraries.prune_logs import prune_run_directories  # noqa: E402
+from libraries.database_integration import create_storage  # noqa: E402
+from libraries.prune_logs import prune_run_directories  # noqa: E402
 from utilities.fault_run_analysis import (  # noqa: E402
     FaultAnalysisResult,
     build_fault_report,

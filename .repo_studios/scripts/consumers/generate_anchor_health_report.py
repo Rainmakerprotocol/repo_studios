@@ -227,7 +227,7 @@ libraries_root_str = str(LIBRARIES_ROOT)
 if libraries_root_str and libraries_root_str not in sys.path:
     sys.path.insert(0, libraries_root_str)
 
-from command_center.scripts.libraries import prune_run_directories  # noqa: E402
+from libraries import prune_run_directories  # noqa: E402
 
 
 def _run_dir(ts: datetime, base: Path = OUTPUT_DIR) -> Path:

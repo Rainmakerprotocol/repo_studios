@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from command_center.scripts.libraries import artifacts
+from libraries import artifacts
 
 
 def test_copy_latest_artifact_falls_back_to_copy(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

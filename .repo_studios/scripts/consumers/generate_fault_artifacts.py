@@ -33,10 +33,13 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Sequence, cast
 
-from command_center.scripts.libraries.artifacts import copy_latest_artifact  # noqa: E402
-from command_center.scripts.libraries import prune_run_directories  # noqa: E402
-
 REPO_ROOT = Path(__file__).resolve().parents[4]
+COMMAND_CENTER_SCRIPTS_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
+if str(COMMAND_CENTER_SCRIPTS_ROOT) not in sys.path:
+    sys.path.insert(0, str(COMMAND_CENTER_SCRIPTS_ROOT))
+
+from libraries.artifacts import copy_latest_artifact  # noqa: E402
+from libraries import prune_run_directories  # noqa: E402
 RAWVIEW_RUNS_BASE = REPO_ROOT / ".repo_studios/command_center/reports/rawview/fault_diagnostics_runs"
 LEGACY_RUNS_BASE = REPO_ROOT / ".repo_studios/faulthandler"
 CONSUMER_BASE = REPO_ROOT / ".repo_studios/reports/consumer_reports/fault_artifacts"

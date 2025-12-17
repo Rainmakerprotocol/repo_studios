@@ -6,22 +6,39 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Mapping
 
-from command_center.scripts.libraries import (
-    KeepSpec,
-    OptionsConfig,
-    PathSpec,
-    PathsConfig,
-    ReportArtifact,
-    WriteReportArtifactsResult,
-    build_standard_options,
-    build_standard_paths,
-    write_report_artifacts,
-)
+try:  # pragma: no cover - prefer import when packaged
+    from libraries import (
+        KeepSpec,
+        OptionsConfig,
+        PathSpec,
+        PathsConfig,
+        ReportArtifact,
+        WriteReportArtifactsResult,
+        build_standard_options,
+        build_standard_paths,
+        write_report_artifacts,
+    )
+except ModuleNotFoundError:  # pragma: no cover - fallback when running in isolation
+    LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import (
+        KeepSpec,
+        OptionsConfig,
+        PathSpec,
+        PathsConfig,
+        ReportArtifact,
+        WriteReportArtifactsResult,
+        build_standard_options,
+        build_standard_paths,
+        write_report_artifacts,
+    )
 
 DEFAULT_CONSUMER_OUTPUT_DIR = Path(".repo_studios/reports/consumer_reports/monkey_patch_risk")
 DEFAULT_PRODUCER_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")

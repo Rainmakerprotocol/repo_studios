@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from command_center.scripts.libraries.test_log_analysis import (
+from libraries.test_log_analysis import (
     TestHealth,
     TestLogAnalysisResult,
     build_test_log_report,

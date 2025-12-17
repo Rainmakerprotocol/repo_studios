@@ -1,12 +1,17 @@
 from __future__ import annotations
 
 import json
+import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Tuple
 
-from command_center.scripts.libraries.build_commandview_selector import (
+LIBRARIES_ROOT = Path(__file__).resolve().parents[1] / "scripts"
+if str(LIBRARIES_ROOT) not in sys.path:  # pragma: no cover - import path bootstrap
+    sys.path.insert(0, str(LIBRARIES_ROOT))
+
+from libraries.build_commandview_selector import (
     SelectorRecord,
     build_commandview_selector,
 )

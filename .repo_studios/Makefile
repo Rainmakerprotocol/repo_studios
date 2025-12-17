@@ -84,6 +84,7 @@ studio-generate-typecheck-report:
 	cd "$(CURDIR)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		"scripts/producers/generate_typecheck_report.py" \
 		--repo-root .. \
+		--all \
 		--output-dir .repo_studios/reports/producer_reports \
 		--artifacts-to-keep 10 \
 		--log-level "$(LOG_LEVEL)"

@@ -55,7 +55,7 @@ from utilities.monkey_patch_risk import (  # noqa: E402
     FindingSignals,
     classify_monkey_patch as classify_monkey_patch_from_signals,
 )
-from command_center.scripts.libraries import prune_run_directories  # noqa: E402
+from libraries import prune_run_directories  # noqa: E402
 
 DEFAULT_STRUCTURED_ROOT = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
 LEGACY_ROOT = Path(".repo_studios/monkey_patch")

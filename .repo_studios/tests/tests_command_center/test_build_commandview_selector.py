@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from command_center.scripts.libraries import (
+from libraries import (
     build_commandview_selector,
     build_commandview_selector_payload,
     dump_commandview_selector,

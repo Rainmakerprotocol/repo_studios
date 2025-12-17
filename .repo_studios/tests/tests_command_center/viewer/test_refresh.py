@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from command_center.scripts.libraries.build_commandview_selector import SelectorRecord
+from libraries.build_commandview_selector import SelectorRecord
 from command_center.viewer import refresh as viewer_refresh
 
 

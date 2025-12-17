@@ -76,6 +76,7 @@ class BuildStats:
     status: str
     error_count: int
     files_with_issues: int
+    files_checked: int
     paths_checked: list[str]
     invocation: list[str]
     mypy_version: str
@@ -219,6 +220,81 @@ def _parse_summary(stdout: str) -> tuple[int, int, bool]:
     return total_errors, files_with_issues, False
 
 
+def _parse_checked_files(stdout: str) -> int | None:
+    ok_match = re.search(r"^Success: no issues found in (\d+) source files?", stdout, flags=re.M)
+    if ok_match:
+        try:
+            return int(ok_match.group(1))
+        except Exception:  # pragma: no cover - defensive
+            return None
+    checked_match = re.search(r"\(checked (\d+) source files?\)", stdout)
+    if checked_match:
+        try:
+            return int(checked_match.group(1))
+        except Exception:  # pragma: no cover - defensive
+            return None
+    return None
+
+
+def _should_exclude_relpath(relpath: Path) -> bool:
+    parts = relpath.parts
+    if not parts:
+        return False
+    first = parts[0]
+    if first in {"legacy", ".venv"}:
+        return True
+    if first.startswith("tmp_"):
+        return True
+    if parts[0] == ".repo_studios" and len(parts) >= 2 and parts[1] == "reports":
+        return True
+    if relpath.name.startswith("tmp_"):
+        return True
+    return False
+
+
+def _discover_all_python_files(repo_root: Path) -> list[str]:
+    files: list[str] = []
+    for candidate in repo_root.rglob("*.py"):
+        try:
+            rel = candidate.relative_to(repo_root)
+        except Exception:  # pragma: no cover - defensive
+            continue
+        if _should_exclude_relpath(rel):
+            continue
+        files.append(rel.as_posix())
+    files.sort()
+    return files
+
+
+def _chunk_list(items: list[str], chunk_size: int) -> list[list[str]]:
+    if chunk_size <= 0:
+        return [items]
+    return [items[i : i + chunk_size] for i in range(0, len(items), chunk_size)]
+
+
+def _partition_all_targets(all_files: list[str]) -> list[tuple[str, list[str]]]:
+    repo_files: list[str] = []
+    studio_files: list[str] = []
+    command_center_files: list[str] = []
+
+    for path in all_files:
+        if path.startswith(".repo_studios/command_center/"):
+            command_center_files.append(path)
+        elif path.startswith(".repo_studios/"):
+            studio_files.append(path)
+        else:
+            repo_files.append(path)
+
+    partitions: list[tuple[str, list[str]]] = []
+    if repo_files:
+        partitions.append(("repo", repo_files))
+    if studio_files:
+        partitions.append(("repo_studios", studio_files))
+    if command_center_files:
+        partitions.append(("command_center", command_center_files))
+    return partitions
+
+
 def _parse_samples(stdout: str, limit: int = 50) -> list[ErrorSample]:
     pattern = re.compile(r"^(?P<path>[^:\n]+):(?P<line>\d+):(?:\d+:)?\s+error: (?P<msg>.*?)(?: \[(?P<code>[^\]]+)\])?$")
     samples: list[ErrorSample] = []
@@ -261,12 +337,16 @@ def _compose_payload(
     bundle_dir: Path,
     status: str,
     stats: BuildStats,
+    files_checked_by_partition: dict[str, int] | None = None,
 ) -> dict[str, Any]:
     summary = {
         "error_count": stats.error_count,
         "files_with_issues": stats.files_with_issues,
+        "files_checked": stats.files_checked,
         "paths_checked": stats.paths_checked,
     }
+    if files_checked_by_partition:
+        summary["files_checked_by_partition"] = dict(files_checked_by_partition)
     samples = [
         {
             "path": sample.path,
@@ -308,6 +388,16 @@ def _render_markdown(payload: dict[str, Any]) -> str:
     lines.append("|---|---:|\n")
     lines.append(f"| error_count | {summary.get('error_count', 0)} |\n")
     lines.append(f"| files_with_issues | {summary.get('files_with_issues', 0)} |\n")
+    lines.append(f"| files_checked | {summary.get('files_checked', 0)} |\n")
+    partition_checked = summary.get("files_checked_by_partition")
+    if isinstance(partition_checked, dict) and partition_checked:
+        for label in sorted(partition_checked):
+            try:
+                value = int(partition_checked.get(label, 0) or 0)
+            except Exception:
+                value = 0
+            safe_label = str(label).replace("-", "_")
+            lines.append(f"| files_checked_{safe_label} | {value} |\n")
     lines.append(f"| paths_checked | {len(summary.get('paths_checked', []))} |\n")
     lines.append("\n## Sample Errors\n\n")
     samples = payload.get("error_samples", [])
@@ -330,6 +420,16 @@ def _render_markdown(payload: dict[str, Any]) -> str:
 
 def _render_log(payload: dict[str, Any]) -> str:
     summary = payload.get("summary", {})
+    partition_checked = summary.get("files_checked_by_partition")
+    extra_lines: list[str] = []
+    if isinstance(partition_checked, dict) and partition_checked:
+        for label in sorted(partition_checked):
+            safe_label = str(label).replace("-", "_")
+            try:
+                value = int(partition_checked.get(label, 0) or 0)
+            except Exception:
+                value = 0
+            extra_lines.append(f"files_checked_{safe_label}={value}")
     return (
         "\n".join(
             [
@@ -337,6 +437,8 @@ def _render_log(payload: dict[str, Any]) -> str:
                 f"run_timestamp={payload.get('run_timestamp', '')}",
                 f"error_count={summary.get('error_count', 0)}",
                 f"files_with_issues={summary.get('files_with_issues', 0)}",
+                f"files_checked={summary.get('files_checked', 0)}",
+                *extra_lines,
                 f"paths_checked={len(summary.get('paths_checked', []))}",
                 f"mypy_version={payload.get('mypy_version', 'unknown')}",
             ]
@@ -375,6 +477,15 @@ def _build_telemetry(
     return_code: int,
 ) -> dict[str, Any]:
     summary = payload.get("summary", {})
+    files_checked_by_partition = summary.get("files_checked_by_partition")
+    extra_metrics: dict[str, int] = {}
+    if isinstance(files_checked_by_partition, dict) and files_checked_by_partition:
+        for label, value in files_checked_by_partition.items():
+            safe_label = str(label).replace("-", "_")
+            try:
+                extra_metrics[f"files_checked_{safe_label}"] = int(value or 0)
+            except Exception:
+                extra_metrics[f"files_checked_{safe_label}"] = 0
     return {
         "viewer_slug": payload.get("viewer_slug"),
         "topic": payload.get("topic"),
@@ -384,6 +495,8 @@ def _build_telemetry(
             "status": payload.get("status"),
             "error_count": int(summary.get("error_count", 0) or 0),
             "files_with_issues": int(summary.get("files_with_issues", 0) or 0),
+            "files_checked": int(summary.get("files_checked", 0) or 0),
+            **extra_metrics,
             "paths_checked": len(summary.get("paths_checked", []) or []),
             "strict": bool(strict),
             "fast_mode": bool(fast),
@@ -406,6 +519,16 @@ def build_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument("--repo-root", help="Repository root used to resolve paths")
+    parser.add_argument(
+        "--all",
+        action="store_true",
+        help="Typecheck all discovered Python files in the repository (batched)",
+    )
+    parser.add_argument(
+        "--targets",
+        nargs="*",
+        help="Explicit mypy targets (overrides TYPECHECK_TARGETS and pyproject defaults)",
+    )
     parser.add_argument(
         "--output-dir",
         default=str(DEFAULT_OUTPUT_DIR),
@@ -492,39 +615,123 @@ def main(argv: list[str] | None = None) -> int:
     run_slug = _format_slug(generated_at)
     topic_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG
 
-    targets = _discover_targets(repo_root)
-    targets = _normalise_targets(targets)
+    explicit_targets: list[str] | None = None
+    all_mode = bool(getattr(args, "all", False))
+    if all_mode:
+        explicit_targets = ["."]
+    else:
+        raw_targets = getattr(args, "targets", None)
+        if isinstance(raw_targets, list):
+            explicit_targets = [str(entry) for entry in raw_targets]
+
+    if explicit_targets is not None:
+        targets = _normalise_targets(explicit_targets)
+    else:
+        targets = _discover_targets(repo_root)
+        targets = _normalise_targets(targets)
     strict = _env_bool("TYPECHECK_STRICT")
     fast = _env_bool("HEALTH_TYPECHECK_FAST")
-    override_present = bool(os.getenv("TYPECHECK_TARGETS", "").strip())
+    override_present = explicit_targets is not None or bool(os.getenv("TYPECHECK_TARGETS", "").strip())
     if fast and not override_present:
         targets = _filter_fast_targets(repo_root, targets)
     targets = _normalise_targets(list(dict.fromkeys(targets)))
 
     mypy_version = _get_mypy_version(repo_root)
     invocation = _build_invocation(strict, targets)
+    if all_mode:
+        base = _build_invocation(strict, [])
+        invocation = base + ["<all python files (batched)>"]
 
     skipped_note = ""
     stdout_combined = ""
     return_code = 0
     total_errors = 0
     files_with_issues = 0
+    files_checked = 0
+    files_checked_by_partition: dict[str, int] = {}
     success_flag = True
     samples: list[ErrorSample] = []
     status = "skipped"
 
     if targets:
-        stdout_combined, return_code = _run_mypy(repo_root, invocation)
-        missing_target = "Missing target module" in stdout_combined
-        if return_code != 0 and missing_target:
-            skipped_note = "mypy reported missing target module; treating run as skipped."
+        if all_mode:
+            all_files = _discover_all_python_files(repo_root)
+            if not all_files:
+                stdout_combined = "No Python files discovered for --all; skipping mypy execution.\n"
+                skipped_note = "No Python files discovered for --all; skipping mypy execution."
+                status = "skipped"
+            else:
+                aggregated_output: list[str] = []
+                aggregated_samples: list[ErrorSample] = []
+                aggregated_return_code = 0
+                aggregated_success = True
+                aggregated_errors = 0
+                aggregated_files_with_issues = 0
+                aggregated_files_checked = 0
+
+                partitions = _partition_all_targets(all_files)
+                chunk_size = 100
+                for label, partition_files in partitions:
+                    partition_checked = 0
+                    chunks = _chunk_list(partition_files, chunk_size)
+                    for index, batch in enumerate(chunks, start=1):
+                        batch_invocation = _build_invocation(strict, batch)
+                        batch_stdout, batch_rc = _run_mypy(repo_root, batch_invocation)
+                        aggregated_return_code = max(aggregated_return_code, batch_rc)
+
+                        aggregated_output.append(
+                            f"--- {label} batch {index}/{len(chunks)} ({len(batch)} files) ---"
+                        )
+                        aggregated_output.append(batch_stdout.rstrip())
+
+                        batch_errors, batch_files, batch_success = _parse_summary(batch_stdout)
+                        batch_checked = _parse_checked_files(batch_stdout)
+                        if batch_checked is not None:
+                            aggregated_files_checked += batch_checked
+                            partition_checked += batch_checked
+                        else:
+                            aggregated_files_checked += len(batch)
+                            partition_checked += len(batch)
+
+                        batch_samples = _parse_samples(batch_stdout)
+                        if not batch_success and batch_errors == 0:
+                            batch_errors = len(batch_samples)
+                            batch_files = len({sample.path for sample in batch_samples})
+
+                        aggregated_errors += batch_errors
+                        aggregated_files_with_issues += batch_files
+                        aggregated_samples.extend(batch_samples)
+
+                        aggregated_success = aggregated_success and batch_success and batch_rc == 0
+
+                    files_checked_by_partition[label] = partition_checked
+
+                stdout_combined = "\n\n".join(aggregated_output) + "\n"
+                if len(stdout_combined) > 200_000:
+                    stdout_combined = stdout_combined[:200_000] + "\n[TRUNCATED] Raw output exceeded 200k chars.\n"
+
+                return_code = aggregated_return_code
+                success_flag = aggregated_success
+                total_errors = aggregated_errors
+                files_with_issues = aggregated_files_with_issues
+                files_checked = aggregated_files_checked
+                samples = aggregated_samples[:50]
+                status = _compute_status(success_flag, total_errors, files_with_issues, return_code)
         else:
-            total_errors, files_with_issues, success_flag = _parse_summary(stdout_combined)
-            samples = _parse_samples(stdout_combined)
-            if not success_flag and total_errors == 0:
-                total_errors = len(samples)
-                files_with_issues = len({sample.path for sample in samples})
-            status = _compute_status(success_flag, total_errors, files_with_issues, return_code)
+            stdout_combined, return_code = _run_mypy(repo_root, invocation)
+            missing_target = "Missing target module" in stdout_combined
+            if return_code != 0 and missing_target:
+                skipped_note = "mypy reported missing target module; treating run as skipped."
+            else:
+                total_errors, files_with_issues, success_flag = _parse_summary(stdout_combined)
+                checked = _parse_checked_files(stdout_combined)
+                if checked is not None:
+                    files_checked = checked
+                samples = _parse_samples(stdout_combined)
+                if not success_flag and total_errors == 0:
+                    total_errors = len(samples)
+                    files_with_issues = len({sample.path for sample in samples})
+                status = _compute_status(success_flag, total_errors, files_with_issues, return_code)
     else:
         stdout_combined = "No typecheck targets discovered; skipping mypy execution.\n"
         skipped_note = "No typecheck targets discovered; skipping mypy execution."
@@ -533,6 +740,7 @@ def main(argv: list[str] | None = None) -> int:
         status=status,
         error_count=total_errors,
         files_with_issues=files_with_issues,
+        files_checked=files_checked,
         paths_checked=targets,
         invocation=invocation,
         mypy_version=mypy_version,
@@ -551,6 +759,7 @@ def main(argv: list[str] | None = None) -> int:
         bundle_dir=bundle_dir,
         status=status,
         stats=stats,
+        files_checked_by_partition=(files_checked_by_partition or None),
     )
     if skipped_note:
         payload["notes"] = skipped_note

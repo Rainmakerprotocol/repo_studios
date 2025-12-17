@@ -34,7 +34,8 @@ RISK_LEVELS: tuple[str, ...] = ("HIGH", "MODERATE", "SAFE")
 
 SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
 UTILITIES_ROOT = Path(__file__).resolve().parents[2]
-for candidate in (SCRIPTS_ROOT, UTILITIES_ROOT):
+COMMAND_CENTER_SCRIPTS_ROOT = UTILITIES_ROOT / "command_center" / "scripts"
+for candidate in (SCRIPTS_ROOT, UTILITIES_ROOT, COMMAND_CENTER_SCRIPTS_ROOT):
     candidate_str = str(candidate)
     if candidate_str not in sys.path:
         sys.path.insert(0, candidate_str)
@@ -43,7 +44,7 @@ from utilities.monkey_patch_risk import (  # noqa: E402
     FindingSignals,
     classify_monkey_patch,
 )
-from command_center.scripts.libraries import prune_run_directories  # noqa: E402
+from libraries import prune_run_directories  # noqa: E402
 
 
 @dataclass(frozen=True)

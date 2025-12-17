@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from command_center.scripts.libraries import SummarizerError, load_summarizer, run_summarizer
+from libraries import SummarizerError, load_summarizer, run_summarizer
 
 
 def _write_summarizer(tmp_path: Path, exit_code: int) -> Path:

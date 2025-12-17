@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from command_center.scripts.libraries import (
+from libraries import (
     build_test_log_report,
     select_junit_artifact,
 )

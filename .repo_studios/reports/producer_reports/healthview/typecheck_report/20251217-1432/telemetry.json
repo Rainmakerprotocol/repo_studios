@@ -1,0 +1,28 @@
+{
+  "viewer_slug": "healthview",
+  "topic": "typecheck_report",
+  "run_timestamp": "20251217-1432",
+  "generated_utc": "2025-12-17T14:32:45.286559+00:00",
+  "metrics": {
+    "status": "error",
+    "error_count": 62,
+    "files_with_issues": 22,
+    "files_checked": 50,
+    "paths_checked": 1,
+    "strict": false,
+    "fast_mode": false,
+    "return_code": 2
+  },
+  "payload": {
+    "mypy_version": "mypy 1.11.1 (compiled: no)",
+    "invocation": [
+      "C:\\Python313\\python.exe",
+      "-m",
+      "mypy",
+      "--show-error-codes",
+      "--no-color-output",
+      "--hide-error-context",
+      "<all python files (batched)>"
+    ]
+  }
+}
