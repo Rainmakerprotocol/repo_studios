@@ -42,7 +42,7 @@ to align with positional encoding and database integration standards.
 
 Analyze the following script:
 `<SCRIPT_PATH>`
-`seed_standards_prompts.py`
+`validate_docs_integrity.py`
 
 Report the following information:
 
@@ -124,7 +124,7 @@ A structured report covering:
 ```text
 Based on the analysis of:
 `<SCRIPT_PATH>`
-`scan_monkey_patches.py`
+`extract_standards_rules.py`
 
 Generate a detailed implementation plan to align this script with
 positional encoding and database integration standards.
@@ -331,7 +331,7 @@ A comprehensive implementation plan including:
 ````text
 Execute the implementation plan for:
 `<SCRIPT_PATH>`
-`scan_monkey_patches.py`
+`validate_docs_integrity.py`
 
 Follow the detailed plan from Phase 2.
 

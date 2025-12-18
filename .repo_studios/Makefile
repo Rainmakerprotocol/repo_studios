@@ -37,7 +37,7 @@ studio-check-inventory-health: studio-render-views
 
 .PHONY: studio-validate-markdown-anchors
 studio-validate-markdown-anchors:
-	$(PYTHON) .repo_studios/scripts/producers/validate_markdown_anchors.py --root . --output-dir .repo_studios/reports/producer_reports/markdown_anchor_validation_reports
+	$(PYTHON) scripts/producers/validate_markdown_anchors.py --repo-root .. --root . --output-dir .repo_studios/reports/producer_reports --log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-anchor-inventory
 studio-generate-anchor-inventory:
@@ -65,11 +65,19 @@ studio-scan-monkey-patches:
 
 .PHONY: studio-seed-standards-prompts
 studio-seed-standards-prompts:
-	$(PYTHON) .repo_studios/scripts/producers/seed_standards_prompts.py --repo-root .
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/producers/seed_standards_prompts.py" \
+		--repo-root . \
+		--output-dir .repo_studios/reports/producer_reports \
+		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-validate-import-boundaries
 studio-validate-import-boundaries:
-	$(PYTHON) .repo_studios/scripts/producers/validate_import_boundaries.py --repo-root .
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/producers/validate_import_boundaries.py" \
+		--repo-root . \
+		--output-dir .repo_studios/reports/producer_reports \
+		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-import-graph
 studio-generate-import-graph:
@@ -102,7 +110,12 @@ typecheck: studio-generate-typecheck-report
 
 .PHONY: studio-validate-metrics-anchor-stubs
 studio-validate-metrics-anchor-stubs:
-	$(PYTHON) .repo_studios/scripts/producers/validate_metrics_anchor_stubs.py --repo-root .
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py" \
+		--repo-root "$(REPO_ROOT)" \
+		--output-dir ".repo_studios/reports/producer_reports" \
+		--artifacts-to-keep 10 \
+		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-analyze-test-hardening
 studio-analyze-test-hardening:
@@ -110,7 +123,11 @@ studio-analyze-test-hardening:
 
 .PHONY: studio-verify-docs-integrity
 studio-verify-docs-integrity:
-	$(PYTHON) .repo_studios/scripts/producers/verify_docs_integrity.py --repo-root . --output-dir .repo_studios/reports/producer_reports/docs_integrity_reports
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/producers/verify_docs_integrity.py" \
+		--repo-root "$(REPO_ROOT)" \
+		--output-dir ".repo_studios/reports/producer_reports" \
+		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-collect-faulthandler-reports
 studio-collect-faulthandler-reports:

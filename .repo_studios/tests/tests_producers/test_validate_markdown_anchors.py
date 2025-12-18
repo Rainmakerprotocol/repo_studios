@@ -24,7 +24,7 @@ def test_reports_written_with_issues(tmp_path):
         "# Title\n\nMissing anchor [bad](#missing)\n",
         encoding="utf-8",
     )
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "markdown_anchor_validation_reports"
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports"
 
     exit_code = mod.main(
         [
@@ -44,16 +44,23 @@ def test_reports_written_with_issues(tmp_path):
     )
 
     assert exit_code == 1
-    run_dir = output_dir / f"{mod.RUN_PREFIX}-20240101_000000"
+    run_dir = output_dir / "healthview" / "markdown_anchor_validation" / "20240101-0000"
     assert run_dir.is_dir()
 
-    data = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
-    assert data["issue_count"] == 1
-    assert data["issues"]
-    assert data["issues"][0]["file"] == "docs/sample.md"
-    assert (run_dir / "report.md").is_file()
-    assert (output_dir / "latest_report.json").is_file()
-    assert (output_dir / "latest_report.md").is_file()
+    manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["viewer_slug"] == "healthview"
+    assert manifest["topic"] == "markdown_anchor_validation"
+    assert manifest["run_timestamp"] == "20240101-0000"
+
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    assert telemetry["metrics"]["issue_count"] == 1
+    assert telemetry["payload"]["report"]["issues"]
+    assert telemetry["payload"]["report"]["issues"][0]["file"] == "docs/sample.md"
+    assert (run_dir / "summary.md").is_file()
+
+    topic_dir = output_dir / "healthview" / "markdown_anchor_validation"
+    assert not (topic_dir / "latest_report.json").exists()
+    assert not (topic_dir / "latest_report.md").exists()
 
 
 def test_pruning_keeps_newest_run(tmp_path):
@@ -62,16 +69,17 @@ def test_pruning_keeps_newest_run(tmp_path):
     docs = root / "docs"
     docs.mkdir(parents=True)
     (docs / "good.md").write_text("# Title\n\n[Self](#title)\n", encoding="utf-8")
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "markdown_anchor_validation_reports"
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir = root / ".repo_studios" / "reports" / "producer_reports"
+    topic_dir = output_dir / "healthview" / "markdown_anchor_validation"
+    topic_dir.mkdir(parents=True, exist_ok=True)
 
     stale_names = [
-        f"{mod.RUN_PREFIX}-20230101_000000",
-        f"{mod.RUN_PREFIX}-20230201_000000",
-        f"{mod.RUN_PREFIX}-20230301_000000",
+        "20230101-0000",
+        "20230201-0000",
+        "20230301-0000",
     ]
     for name in stale_names:
-        (output_dir / name).mkdir()
+        (topic_dir / name).mkdir()
 
     exit_code = mod.main(
         [
@@ -91,8 +99,8 @@ def test_pruning_keeps_newest_run(tmp_path):
     )
 
     assert exit_code == 0
-    expected_latest = {f"{mod.RUN_PREFIX}-20230301_000000", f"{mod.RUN_PREFIX}-20240203_000000"}
-    run_dirs = {path.name for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(mod.RUN_PREFIX)}
+    expected_latest = {"20230301-0000", "20240203-0000"}
+    run_dirs = {path.name for path in topic_dir.iterdir() if path.is_dir()}
     assert run_dirs == expected_latest
-    assert (output_dir / "latest_report.json").is_file()
-    assert (output_dir / "latest_report.md").is_file()
+    assert not (topic_dir / "latest_report.json").exists()
+    assert not (topic_dir / "latest_report.md").exists()

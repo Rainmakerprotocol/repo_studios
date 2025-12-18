@@ -1,5 +1,21 @@
 #!/usr/bin/env python3
-"""Structured legacy anchor stub validator with pruning-aware artifacts."""
+"""Metrics Anchor Stub Validation (canonical producer bundle).
+
+Scans repository markdown for links to `metrics_orchestrator.md#<anchor>` and validates
+that each referenced anchor has a corresponding legacy stub heading under the
+"Legacy Anchor Compatibility" section of the legacy doc (defaults to
+`docs/api/metrics_orchestrator.md`).
+
+Artifacts:
+        * Canonical bundle artifacts under
+            `.repo_studios/reports/producer_reports/healthview/metrics_anchor_stub_validation/<YYYYMMDD-HHMM>/`
+        * Files: `manifest.json`, `summary.md`, `telemetry.json`
+        * Timestamped run folders with automatic pruning (keep last N by default)
+
+Exit codes:
+        0 - success, no missing legacy stubs
+        1 - missing anchors detected (artifacts still emitted)
+"""
 
 from __future__ import annotations
 
@@ -12,17 +28,19 @@ import sys
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, cast
 
 RE_MD_LINK = re.compile(r"metrics_orchestrator\.md#([a-zA-Z0-9\-._]+)")
 RE_HEADING = re.compile(r"^(#{2,6})\s+(.*)$")
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/metrics_anchor_stub_reports")
+REPORTS_ROOT = Path(".repo_studios/reports/producer_reports")
+DEFAULT_OUTPUT_DIR = REPORTS_ROOT
 DEFAULT_LEGACY_FILE = Path("docs/api/metrics_orchestrator.md")
 DEFAULT_ALLOWLIST_PATH = Path(".repo_studios/scripts/producers/metrics_anchor_allowlist.json")
-RUN_PREFIX = "metrics_anchor_stub_check"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 SCHEMA_VERSION = 1
+VIEWER_SLUG = "healthview"
+TOPIC_SLUG = "metrics_anchor_stub_validation"
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
@@ -39,7 +57,7 @@ try:
 except ModuleNotFoundError:  # pragma: no cover - fallback for script execution without package path
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import (  # type: ignore
+    from libraries import (
         KeepSpec,
         PathSpec,
         OptionsConfig,
@@ -48,6 +66,13 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for script execution 
         build_standard_paths,
         prune_run_directories,
     )
+
+try:
+    from libraries.database_integration import create_storage
+except ModuleNotFoundError:  # pragma: no cover - fallback for script execution without package path
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries.database_integration import create_storage
 
 
 @dataclass(frozen=True)
@@ -123,11 +148,15 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
-    return build_standard_options(args, OPTIONS_CONFIG)
+    return cast(Options, build_standard_options(args, OPTIONS_CONFIG))
+
+
+def _format_run_timestamp(timestamp: dt.datetime) -> str:
+    return timestamp.astimezone(dt.timezone.utc).strftime("%Y%m%d-%H%M")
 
 
 def _normalize_anchor(text: str) -> str:
@@ -212,10 +241,12 @@ def summarize_missing(
     return missing, allowlisted_count
 
 
-def compose_payload(
+def build_report(
     *,
-    paths: Paths,
-    options: Options,
+    repo_root: Path,
+    legacy_file: Path,
+    allowlist_path: Path,
+    artifacts_to_keep: int,
     referenced: dict[str, list[str]],
     legacy: set[str],
     allowlist: set[str],
@@ -224,7 +255,6 @@ def compose_payload(
     markdown_count: int,
     timestamp: dt.datetime,
 ) -> dict[str, Any]:
-    run_id = f"{RUN_PREFIX}-{timestamp.strftime('%Y%m%d_%H%M%S')}"
     summary = {
         "files_checked": markdown_count,
         "anchors_referenced": len(referenced),
@@ -232,17 +262,15 @@ def compose_payload(
         "missing_count": len(missing),
         "allowlisted_count": allowlisted_count,
     }
-    status = "ok" if summary["missing_count"] == 0 else "missing-anchors"
+    status = "ok" if summary["missing_count"] == 0 else "fail"
     return {
         "schema_version": SCHEMA_VERSION,
+        "generated_utc": timestamp.astimezone(dt.timezone.utc).isoformat(),
         "status": status,
-        "timestamp": timestamp.isoformat(),
-        "run_id": run_id,
-        "repo_root": str(paths.repo_root),
-        "output_dir": str(paths.output_dir),
-        "legacy_file": str(paths.legacy_file),
-        "allowlist_path": str(paths.allowlist_path) if paths.allowlist_path.exists() else None,
-        "options": {"artifacts_to_keep": options.artifacts_to_keep},
+        "repo_root": str(repo_root),
+        "legacy_file": str(legacy_file),
+        "allowlist_path": str(allowlist_path) if allowlist_path.exists() else None,
+        "options": {"artifacts_to_keep": artifacts_to_keep},
         "summary": summary,
         "missing": missing,
         "referenced_anchors": sorted(referenced.keys()),
@@ -251,21 +279,67 @@ def compose_payload(
     }
 
 
-def render_markdown_report(payload: dict[str, Any]) -> str:
-    summary = payload.get("summary", {})
-    lines = [
-        "# Metrics Anchor Stub Report\n\n",
-        f"- Status: `{payload.get('status', 'unknown')}`\n",
-        f"- Timestamp: `{payload.get('timestamp', '')}`\n",
-        f"- Repo Root: `{payload.get('repo_root', '')}`\n",
-        f"- Legacy File: `{payload.get('legacy_file', '')}`\n",
-        f"- Allowlist: `{payload.get('allowlist_path') or 'none'}`\n",
+def compose_manifest(*, report: dict[str, Any], run_timestamp: str, inputs: dict[str, Any]) -> dict[str, Any]:
+    summary = report.get("summary", {})
+    return {
+        "schema_version": 1,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": run_timestamp,
+        "generated_utc": report.get("generated_utc"),
+        "status": report.get("status", "ok"),
+        "inputs": inputs,
+        "summary": {
+            "files_checked": summary.get("files_checked", 0),
+            "anchors_referenced": summary.get("anchors_referenced", 0),
+            "legacy_stub_count": summary.get("legacy_stub_count", 0),
+            "missing_count": summary.get("missing_count", 0),
+            "allowlisted_count": summary.get("allowlisted_count", 0),
+        },
+        "catalog": ["scripts.utilities.validate_metrics_anchor_stubs"],
+        "provenance": {
+            "requested_by": "cli",
+            "trigger_type": "manual",
+        },
+    }
+
+
+def compose_telemetry(*, report: dict[str, Any]) -> dict[str, Any]:
+    summary = report.get("summary", {})
+    return {
+        "schema_version": 1,
+        "generated_utc": report.get("generated_utc"),
+        "status": report.get("status", "ok"),
+        "metrics": {
+            "files_checked": summary.get("files_checked", 0),
+            "anchors_referenced": summary.get("anchors_referenced", 0),
+            "legacy_stub_count": summary.get("legacy_stub_count", 0),
+            "missing_count": summary.get("missing_count", 0),
+            "allowlisted_count": summary.get("allowlisted_count", 0),
+        },
+        "payload": {
+            "report": report,
+        },
+    }
+
+
+def render_summary_markdown(*, report: dict[str, Any], run_timestamp: str) -> str:
+    summary = report.get("summary", {})
+    status = report.get("status", "ok")
+    lines: list[str] = [
+        "# Metrics Anchor Stub Validation\n\n",
+        f"- Status: `{status}`\n",
+        f"- Run Timestamp (UTC): `{run_timestamp}`\n",
+        f"- Legacy File: `{report.get('legacy_file', '')}`\n",
+        f"- Allowlist: `{report.get('allowlist_path') or 'none'}`\n",
+        f"- Files Checked: {summary.get('files_checked', 0)}\n",
         f"- Anchors Referenced: {summary.get('anchors_referenced', 0)}\n",
+        f"- Legacy Stub Count: {summary.get('legacy_stub_count', 0)}\n",
         f"- Missing Anchors: {summary.get('missing_count', 0)}\n",
         f"- Allowlisted Anchors: {summary.get('allowlisted_count', 0)}\n",
     ]
 
-    missing = payload.get("missing", [])
+    missing = report.get("missing", [])
     if missing:
         lines.append("\n## Missing Anchors\n\n")
         lines.append("| Anchor | Referenced In |\n| --- | --- |")
@@ -275,58 +349,11 @@ def render_markdown_report(payload: dict[str, Any]) -> str:
 
     lines.append(
         "\n\n## Next Steps\n\n"
-        "- [ ] Add legacy stub entries for anchors listed above or document intentional drift.\n"
-        "- [ ] Update the allowlist JSON with justification if exceptions are required.\n"
-        "- [ ] Re-run `validate_metrics_anchor_stubs.py` to confirm a clean state.\n"
+        "- [ ] Add legacy stub entries for missing anchors listed above, or document intentional drift.\n"
+        "- [ ] If exceptions are required, update the allowlist JSON with justification.\n"
+        "- [ ] Re-run this producer to confirm a clean state.\n"
     )
     return "".join(lines)
-
-
-def render_log(payload: dict[str, Any]) -> str:
-    summary = payload.get("summary", {})
-    entries = [
-        f"status={payload.get('status', 'unknown')}",
-        f"timestamp={payload.get('timestamp', '')}",
-        f"anchors_referenced={summary.get('anchors_referenced', 0)}",
-        f"missing_count={summary.get('missing_count', 0)}",
-        f"allowlisted_count={summary.get('allowlisted_count', 0)}",
-    ]
-    entries.append(f"legacy_file={payload.get('legacy_file', '')}")
-    if payload.get("allowlist_path"):
-        entries.append(f"allowlist_path={payload['allowlist_path']}")
-    return "\n".join(entries) + "\n"
-
-
-def write_artifacts(
-    run_dir: Path,
-    output_dir: Path,
-    payload: dict[str, Any],
-    *,
-    logger: logging.Logger | None,
-) -> None:
-    run_dir.mkdir(parents=True, exist_ok=True)
-    if logger:
-        logger.debug("Writing metrics anchor artifacts to %s", run_dir)
-    (run_dir / "report.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    (run_dir / "report.md").write_text(render_markdown_report(payload), encoding="utf-8")
-    (run_dir / "log.txt").write_text(render_log(payload), encoding="utf-8")
-    (run_dir / "missing.json").write_text(
-        json.dumps(payload.get("missing", []), indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
-
-    latest_dir = output_dir / "latest"
-    latest_dir.mkdir(parents=True, exist_ok=True)
-    mapping = {
-        "report.json": latest_dir / "latest_report.json",
-        "report.md": latest_dir / "latest_report.md",
-        "log.txt": latest_dir / "latest_log.txt",
-        "missing.json": latest_dir / "latest_missing.json",
-    }
-    for source, target in mapping.items():
-        src_path = run_dir / source
-        if src_path.exists():
-            target.write_bytes(src_path.read_bytes())
 
 
 def prune_history(
@@ -339,7 +366,6 @@ def prune_history(
     result = prune_run_directories(
         base_dir,
         keep=max(keep, 1),
-        stem_prefix=RUN_PREFIX,
         current_run=current_run,
         logger=logger,
     )
@@ -365,9 +391,13 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
     missing, allowlisted_count = summarize_missing(referenced, legacy, allowlist)
 
     timestamp = dt.datetime.now(dt.timezone.utc)
-    payload = compose_payload(
-        paths=paths,
-        options=options,
+    run_timestamp = _format_run_timestamp(timestamp)
+
+    report = build_report(
+        repo_root=paths.repo_root,
+        legacy_file=paths.legacy_file,
+        allowlist_path=paths.allowlist_path,
+        artifacts_to_keep=options.artifacts_to_keep,
         referenced=referenced,
         legacy=legacy,
         allowlist=allowlist,
@@ -377,10 +407,29 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
         timestamp=timestamp,
     )
 
-    run_dir = paths.output_dir / payload["run_id"]
-    write_artifacts(run_dir, paths.output_dir, payload, logger=logger)
+    inputs: dict[str, Any] = {
+        "repo_root": str(paths.repo_root),
+        "legacy_file": str(paths.legacy_file),
+        "allowlist_path": str(paths.allowlist_path) if paths.allowlist_path.exists() else None,
+        "artifacts_to_keep": options.artifacts_to_keep,
+    }
+    manifest = compose_manifest(report=report, run_timestamp=run_timestamp, inputs=inputs)
+    telemetry = compose_telemetry(report=report)
+    summary_md = render_summary_markdown(report=report, run_timestamp=run_timestamp)
+
+    output_dir = paths.output_dir
+    storage = create_storage(output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=run_timestamp)
+
+    # DB_INTEGRATION_MARKER: metrics anchor stub validation manifest
+    storage.write_manifest(manifest)
+    # DB_INTEGRATION_MARKER: metrics anchor stub validation summary markdown
+    storage.write_summary({"markdown": summary_md}, format="markdown")
+    # DB_INTEGRATION_MARKER: metrics anchor stub validation telemetry
+    storage.write_telemetry(telemetry)
+
+    run_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG / run_timestamp
     removed = prune_history(
-        paths.output_dir,
+        run_dir.parent,
         options.artifacts_to_keep,
         current_run=run_dir,
         logger=logger,
@@ -388,17 +437,25 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
     if removed:
         logger.debug("Pruned metrics anchor runs: %s", ", ".join(sorted(path.name for path in removed)))
 
-    if payload["summary"]["missing_count"] == 0:
+    if report["summary"]["missing_count"] == 0:
         logger.info("[metrics-anchor-stubs] OK — no missing anchors detected")
     else:
         logger.error(
             "[metrics-anchor-stubs] Missing anchors detected (%s)",
-            payload["summary"]["missing_count"],
+            report["summary"]["missing_count"],
         )
-        for entry in payload["missing"]:
+        for entry in report["missing"]:
             logger.error("  - %s: %s", entry.get("anchor"), ", ".join(entry.get("files", [])))
 
-    return payload
+    return {
+        "status": report.get("status", "ok"),
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": run_timestamp,
+        "output_dir": str(output_dir),
+        "summary": report.get("summary", {}),
+        "missing": report.get("missing", []),
+    }
 
 
 def main(argv: list[str] | None = None) -> int:

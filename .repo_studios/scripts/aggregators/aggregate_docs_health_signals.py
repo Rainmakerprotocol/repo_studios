@@ -33,13 +33,13 @@ DEFAULT_ANCHOR_INVENTORY = Path(
     ".repo_studios/reports/producer_reports/healthview/anchor_inventory"
 )
 DEFAULT_ANCHOR_VALIDATION = Path(
-    ".repo_studios/reports/producer_reports/markdown_anchor_validation_reports/latest_report.json"
+    ".repo_studios/reports/producer_reports/healthview/markdown_anchor_validation"
 )
 DEFAULT_DOCS_INTEGRITY = Path(
-    ".repo_studios/reports/producer_reports/docs_integrity_reports/latest/latest_report.json"
+    ".repo_studios/reports/producer_reports/healthview/docs_integrity_validation"
 )
 DEFAULT_METRICS_STUB = Path(
-    ".repo_studios/reports/producer_reports/metrics_anchor_stub_reports/latest/latest_report.json"
+    ".repo_studios/reports/producer_reports/healthview/metrics_anchor_stub_validation"
 )
 DEFAULT_PLACEHOLDER_REPORT = Path(
     ".repo_studios/reports/producer_reports/code_placeholder_scans/latest/latest_report.json"
@@ -277,6 +277,9 @@ def _load_json(path: Path, label: str, logger: logging.Logger) -> dict[str, Any]
         return None
     payload = data.get("payload")
     if isinstance(payload, dict):
+        nested_report = payload.get("report")
+        if isinstance(nested_report, dict):
+            return nested_report
         return payload
     return data
 

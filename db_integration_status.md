@@ -3,7 +3,7 @@
 **DB_INTEGRATION_MARKER scan results**
 
 **Total scripts scanned:** 78
-**Scripts with markers:** 19
+**Scripts with markers:** 24
 
 ## Producer Scripts
 
@@ -142,6 +142,46 @@
    - Storage init: ✓
    - Write calls: ✓
    - First marker (L504): write manifest
+
+[x] **scan_code_placeholders.py**
+   - Path: `.repo_studios\scripts\producers\scan_code_placeholders.py`
+   - Markers: 3
+   - Import: ✓
+   - Storage init: ✓
+   - Write calls: ✓
+   - First marker (L540): placeholder scan manifest write
+
+[x] **scan_monkey_patches.py**
+   - Path: `.repo_studios\scripts\producers\scan_monkey_patches.py`
+   - Markers: 3
+   - Import: ✓
+   - Storage init: ✓
+   - Write calls: ✓
+   - First marker (L1046): Persist manifest bundle (report_runs + report_artifacts)
+
+[x] **validate_markdown_anchors.py**
+   - Path: `.repo_studios\scripts\producers\validate_markdown_anchors.py`
+   - Markers: 3
+   - Import: ✓
+   - Storage init: ✓
+   - Write calls: ✓
+   - First marker (L437): markdown anchor validation manifest
+
+[x] **validate_metrics_anchor_stubs.py**
+   - Path: `.repo_studios\scripts\producers\validate_metrics_anchor_stubs.py`
+   - Markers: 3
+   - Import: ✓
+   - Storage init: ✓
+   - Write calls: ✓
+   - First marker (L423): metrics anchor stub validation manifest
+
+[x] **verify_docs_integrity.py**
+   - Path: `.repo_studios\scripts\producers\verify_docs_integrity.py`
+   - Markers: 3
+   - Import: ✓
+   - Storage init: ✓
+   - Write calls: ✓
+   - First marker (L648): docs integrity manifest
 
 ## Utility Scripts
 

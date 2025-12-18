@@ -1,3 +1,17 @@
+---
+title: verify_docs_integrity Producer
+audience: [Copilot, Agents, Developer]
+owners: [repo_studios_team@rainmakerprotocol.dev]
+status: active
+version: 1.1.0
+updated: 2025-12-18
+tags: [automation, producer, docs-integrity, healthview]
+related_files:
+  - .repo_studios/scripts/producers/verify_docs_integrity.py
+  - .repo_studios/tests/tests_producers/test_verify_docs_integrity.py
+  - .repo_studios/command_center/docs/db_integrations/db_integration_docs_integrity_validation.md
+---
+
 # verify_docs_integrity
 
 ## Overview
@@ -13,7 +27,7 @@ python .repo_studios/scripts/producers/verify_docs_integrity.py --repo-root .
 # dry-run with explicit artifact destination
 python .repo_studios/scripts/producers/verify_docs_integrity.py \
   --repo-root . \
-  --output-dir .repo_studios/reports/producer_reports/docs_integrity_reports \
+  --output-dir .repo_studios/reports/producer_reports \
   --log-level DEBUG
 
 # autofix mismatched hashes and skip table regeneration
@@ -31,14 +45,18 @@ make studio-verify-docs-integrity
 
 ## Artifacts
 
-Each run writes a timestamped directory under `.repo_studios/reports/producer_reports/docs_integrity_reports/`:
+Each run writes a positional-encoded bundle under:
 
-- `report.json` – structured payload containing summary counts, status, and mismatch inventory.
-- `report.md` – human-readable summary with pending mismatches, missing documents, and next steps.
-- `log.txt` – key metrics in machine-friendly key=value format.
-- `mismatches.json` – raw list of mismatched blocks (empty when the run is clean).
+`.repo_studios/reports/producer_reports/healthview/docs_integrity_validation/<YYYYMMDD-HHMM>/`
 
-Latest copies are mirrored to `.repo_studios/reports/producer_reports/docs_integrity_reports/latest/` for quick access. History is pruned to the most recent 10 runs by default (configurable via `--artifacts-to-keep`).
+The run directory contains exactly three artifacts:
+
+- `manifest.json` – run metadata, catalog identifiers, inputs, and high-level summary counts.
+- `summary.md` – human-readable digest of mismatches and remediation guidance.
+- `telemetry.json` – compact metrics plus a `payload` containing the full report for agent drill-down.
+
+No `latest_*` pointers are written. History is pruned to the most recent N runs (default 10, configurable via
+`--artifacts-to-keep`).
 
 ## Exit semantics
 

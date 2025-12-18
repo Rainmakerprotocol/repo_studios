@@ -1,6 +1,20 @@
-# validate_markdown_anchors.py
+---
+title: validate_markdown_anchors.py
+audience: [Copilot, Agents, Developer]
+owners: [repo_studios_team@rainmakerprotocol.dev]
+status: active
+version: 1.1.0
+updated: 2025-12-18
+tags: [automation, markdown, anchors, links, producer, healthview]
+related_files:
+  - .repo_studios/scripts/producers/validate_markdown_anchors.py
+  - .repo_studios/tests/tests_producers/test_validate_markdown_anchors.py
+  - .repo_studios/Makefile
+  - .repo_studios/command_center/scripts/libraries/database_integration.py
+  - REPORT_NAMING_STANDARDS.md
+---
 
-**Last updated:** 2025-11-23
+# validate_markdown_anchors.py
 
 ## Purpose
 
@@ -15,7 +29,7 @@ broken-link regressions quickly while preserving timestamped history.
 python .repo_studios/scripts/producers/validate_markdown_anchors.py \
   --root . \
   --glob docs/**/*.md \
-  --output-dir .repo_studios/reports/producer_reports/markdown_anchor_validation_reports \
+  --output-dir .repo_studios/reports/producer_reports \
   --artifacts-to-keep 10
 ```
 
@@ -24,27 +38,28 @@ Key options:
 - `--repo-root` (inferred): establishes the base path for relative link validation.
 - `--root` (default `.`): directory whose Markdown files should be scanned.
 - `--glob`: repeatable glob patterns (defaults to `README.md`, `docs/agents/config_quickstart.md`, `docs/agents/step5_agent_config_system.md`).
-- `--output-dir` (default `.repo_studios/reports/producer_reports/markdown_anchor_validation_reports`):
-  destination for run folders and `latest_*` pointers.
+- `--output-dir` (default `.repo_studios/reports/producer_reports`): destination for positional bundles.
 - `--artifacts-to-keep` (default `10`): retention window applied after each run.
 - `--timestamp`: optional ISO-8601 override for deterministic run folder naming (used in tests).
 - `--log-level`: logging verbosity (`INFO` default).
 
 ## Outputs
 
-Each execution produces
-`.repo_studios/reports/producer_reports/markdown_anchor_validation_reports/markdown_anchor_validation-<timestamp>/`
-containing:
+Each execution produces a canonical bundle under:
 
-- `report.json`: schema version 1 payload capturing the scan root, patterns, issue list, and files examined.
-- `report.md`: human-readable summary listing any missing anchors or files.
+`.repo_studios/reports/producer_reports/healthview/markdown_anchor_validation/<YYYYMMDD-HHMM>/`
 
-The script also refreshes `latest_report.json` and `latest_report.md` pointers to the newest run and
-prunes older folders to the configured retention window.
+Containing exactly:
+
+- `manifest.json`: run metadata (viewer/topic/timestamp), catalog provenance, and a compact summary.
+- `summary.md`: human-readable digest of findings.
+- `telemetry.json`: extracted metrics plus the full issue payload retained under `payload.report`.
+
+`latest_*` pointers are not written.
 
 ## Status semantics
 
-`report.json` includes `status` and `issue_count` fields:
+`telemetry.json` retains the legacy issue list and includes `status` and `metrics.issue_count`:
 
 - `ok`: all scanned links resolved successfully; exit status `0`.
 - `fail`: at least one missing file or anchor was found; exit status `1`.
@@ -68,3 +83,8 @@ pytest .repo_studios/tests/tests_producers/test_validate_markdown_anchors.py
 - Supply additional `--glob` values when auditing new documentation areas; repeats are deduplicated.
 - For CI gating, combine this producer with Make target `studio-validate-markdown-anchors` so new
   documentation merges fail fast when anchors drift.
+
+## Update Log
+
+- 2025-12-18: Migrated to canonical positional bundle outputs (manifest/summary/telemetry), removed `latest_*` pointers,
+  switched pruning to shared helper, and added DB dual-write markers.

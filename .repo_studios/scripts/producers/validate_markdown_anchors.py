@@ -22,9 +22,10 @@ Usage:
 Defaults choose a curated file set (README + docs/agents/*quickstart* + step5 plan).
 
 Artifacts:
-    * JSON + markdown reports under `.repo_studios/reports/producer_reports/markdown_anchor_validation_reports/`
-    * `latest_report.(json|md)` pointers for downstream agents
-    * Timestamped run folders with automatic pruning (keep last 10 by default)
+        * Canonical bundle artifacts under
+            `.repo_studios/reports/producer_reports/healthview/markdown_anchor_validation/<YYYYMMDD-HHMM>/`
+        * Files: `manifest.json`, `summary.md`, `telemetry.json`
+        * Timestamped run folders with automatic pruning (keep last 10 by default)
 """
 
 from __future__ import annotations
@@ -33,41 +34,51 @@ import argparse
 import json
 import logging
 import re
-import shutil
 import sys
 from collections.abc import Iterable
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import NamedTuple
+from typing import NamedTuple, cast
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
 try:
-    from libraries import (  # type: ignore
+    from libraries import (
         KeepSpec,
         PathSpec,
         OptionsConfig,
         PathsConfig,
         build_standard_options,
         build_standard_paths,
+        prune_run_directories,
     )
 except ModuleNotFoundError:  # pragma: no cover - fallback during standalone execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import (  # type: ignore
+    from libraries import (
         KeepSpec,
         PathSpec,
         OptionsConfig,
         PathsConfig,
         build_standard_options,
         build_standard_paths,
+        prune_run_directories,
     )
+
+try:
+    from libraries.database_integration import create_storage
+except ModuleNotFoundError:  # pragma: no cover - fallback during standalone execution
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries.database_integration import create_storage
 
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")  # capture link target
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/markdown_anchor_validation_reports")
-RUN_PREFIX = "markdown_anchor_validation"
+REPORTS_ROOT = Path(".repo_studios/reports/producer_reports")
+DEFAULT_OUTPUT_DIR = REPORTS_ROOT
+VIEWER_SLUG = "healthview"
+TOPIC_SLUG = "markdown_anchor_validation"
 DEFAULT_PATTERNS = [
     "README.md",
     "docs/agents/config_quickstart.md",
@@ -100,7 +111,7 @@ PATH_SPECS: dict[str, PathSpec] = {
     "scan_root": PathSpec(field="root", default=Path("."), within_repo=False),
     "output_dir": PathSpec(
         field="output_dir",
-        default=DEFAULT_OUTPUT_DIR,
+        default=REPORTS_ROOT,
         ensure_dir=True,
         within_repo=False,
     ),
@@ -132,7 +143,7 @@ def _relativize(path: Path, root: Path) -> str:
 def build_report(
     *,
     root: Path,
-    patterns: list[str],
+    patterns: Iterable[str],
     issues: list[Issue],
     scanned_files: list[Path],
     ts: datetime,
@@ -152,22 +163,78 @@ def build_report(
         "generated_utc": ts.isoformat(),
         "status": "fail" if issue_payload else "ok",
         "root": str(root),
-        "patterns": patterns,
+        "patterns": list(patterns),
         "issue_count": len(issue_payload),
         "issues": issue_payload,
         "scanned_files": sorted(_relativize(path, root) for path in scanned_files),
     }
 
 
-def write_artifacts(report: dict, output_dir: Path) -> Path:
-    output_dir.mkdir(parents=True, exist_ok=True)
-    ts = datetime.fromisoformat(report["generated_utc"])
-    run_dir = output_dir / f"{RUN_PREFIX}-{ts.strftime('%Y%m%d_%H%M%S')}"
-    run_dir.mkdir(parents=True, exist_ok=True)
+def _format_run_slug(ts: datetime) -> str:
+    return ts.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
 
-    json_path = run_dir / "report.json"
-    json_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
+def _parse_timestamp(raw: str | None) -> datetime:
+    if raw is None:
+        return datetime.now(timezone.utc)
+
+    if re.fullmatch(r"\d{8}-\d{4}", raw):
+        return datetime.strptime(raw, "%Y%m%d-%H%M").replace(tzinfo=timezone.utc)
+
+    try:
+        parsed = datetime.fromisoformat(raw)
+    except ValueError as exc:  # pragma: no cover - argparse already guards tests
+        raise SystemExit(f"Invalid --timestamp value: {exc}")
+
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def compose_manifest(*, report: dict, run_timestamp: str, inputs: dict) -> dict:
+    status = report.get("status", "ok")
+    return {
+        "schema_version": 1,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": run_timestamp,
+        "generated_utc": report.get("generated_utc"),
+        "status": "fail" if status == "fail" else "ok",
+        "inputs": inputs,
+        "summary": {
+            "files_scanned": len(report.get("scanned_files", [])),
+            "issue_count": report.get("issue_count", 0),
+        },
+        "catalog": ["scripts.utilities.check_markdown_anchors"],
+        "provenance": {
+            "requested_by": "cli",
+            "trigger_type": "manual",
+        },
+    }
+
+
+def compose_telemetry(*, report: dict, links_checked: int) -> dict:
+    issues = report.get("issues", [])
+    missing_file_count = sum(1 for issue in issues if issue.get("kind") == "file")
+    missing_anchor_count = sum(1 for issue in issues if issue.get("kind") == "anchor")
+    return {
+        "schema_version": 1,
+        "generated_utc": report.get("generated_utc"),
+        "status": report.get("status"),
+        "metrics": {
+            "files_scanned": len(report.get("scanned_files", [])),
+            "links_checked": links_checked,
+            "issue_count": report.get("issue_count", 0),
+            "missing_file_count": missing_file_count,
+            "missing_anchor_count": missing_anchor_count,
+        },
+        "payload": {
+            "report": report,
+        },
+    }
+
+
+def render_summary_markdown(*, report: dict) -> str:
     lines = [
         "# Markdown Anchor Validation Report",
         "",
@@ -187,35 +254,7 @@ def write_artifacts(report: dict, output_dir: Path) -> Path:
     else:
         lines.append("")
         lines.append("All checks passed without anchor or link errors.")
-    (run_dir / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
-
-    latest_json = output_dir / "latest_report.json"
-    latest_md = output_dir / "latest_report.md"
-    for source, dest in [
-        (json_path, latest_json),
-        (run_dir / "report.md", latest_md),
-    ]:
-        try:
-            if dest.exists():
-                dest.unlink()
-            dest.hardlink_to(source)
-        except Exception:  # pragma: no cover - fallback copy path
-            dest.write_bytes(source.read_bytes())
-
-    return run_dir
-
-
-def prune_old_runs(output_dir: Path, *, keep: int) -> list[Path]:
-    keep = max(keep, 1)
-    if not output_dir.exists():
-        return []
-    candidates = [path for path in output_dir.iterdir() if path.is_dir() and path.name.startswith(f"{RUN_PREFIX}-")]
-    candidates.sort(key=lambda path: path.name, reverse=True)
-    removed: list[Path] = []
-    for stale in candidates[keep:]:
-        shutil.rmtree(stale, ignore_errors=True)
-        removed.append(stale)
-    return removed
+    return "\n".join(lines) + "\n"
 
 
 def slugify(raw: str) -> str:
@@ -254,10 +293,12 @@ def parse_links(text: str) -> Iterable[tuple[int, str]]:
             yield idx, m.group(1)
 
 
-def check_file(path: Path, root: Path, anchors_cache: dict[Path, set[str]]) -> list[Issue]:
+def check_file(path: Path, root: Path, anchors_cache: dict[Path, set[str]]) -> tuple[list[Issue], int]:
     issues: list[Issue] = []
     text = path.read_text(encoding="utf-8", errors="replace")
+    links_checked = 0
     for line_no, target in parse_links(text):
+        links_checked += 1
         if target.startswith(("http://", "https://", "mailto:")):
             continue  # external
         if target.startswith("#"):
@@ -302,20 +343,11 @@ def check_file(path: Path, root: Path, anchors_cache: dict[Path, set[str]]) -> l
                         f"Missing anchor slug '{slug}' in target file",
                     )
                 )
-    return issues
-
-
-def _parse_timestamp(raw: str | None) -> datetime:
-    if raw is None:
-        return datetime.now(timezone.utc)
-    try:
-        return datetime.fromisoformat(raw)
-    except ValueError as exc:  # pragma: no cover - argparse already guards tests
-        raise SystemExit(f"Invalid --timestamp value: {exc}")
+    return issues, links_checked
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
@@ -366,18 +398,23 @@ def main(argv: list[str] | None = None) -> int:
     options = build_options(args)
 
     logging.basicConfig(level=getattr(logging, options.log_level.upper()), format="%(levelname)s %(message)s")
+    logger = logging.getLogger(__name__)
 
     root = paths.scan_root
     output_dir = paths.output_dir
     patterns = options.patterns
     ts = _parse_timestamp(options.timestamp)
+    run_timestamp = _format_run_slug(ts)
 
     anchors_cache: dict[Path, set[str]] = {}
     all_issues: list[Issue] = []
     scanned_files: list[Path] = []
+    links_checked_total = 0
     for md_file in iter_files(patterns, root):
         scanned_files.append(md_file)
-        all_issues.extend(check_file(md_file, root, anchors_cache))
+        issues, links_checked = check_file(md_file, root, anchors_cache)
+        all_issues.extend(issues)
+        links_checked_total += links_checked
 
     report = build_report(
         root=root,
@@ -386,10 +423,33 @@ def main(argv: list[str] | None = None) -> int:
         scanned_files=scanned_files,
         ts=ts,
     )
-    run_dir = write_artifacts(report, output_dir)
-    pruned = prune_old_runs(output_dir, keep=options.artifacts_to_keep)
-    if pruned:
-        logging.info("Pruned %d old report folder(s)", len(pruned))
+    storage = create_storage(output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=run_timestamp)
+
+    inputs = {
+        "root": str(root),
+        "patterns": list(patterns),
+        "artifacts_to_keep": options.artifacts_to_keep,
+    }
+    manifest = compose_manifest(report=report, run_timestamp=run_timestamp, inputs=inputs)
+    telemetry = compose_telemetry(report=report, links_checked=links_checked_total)
+    summary_md = render_summary_markdown(report=report)
+
+    # DB_INTEGRATION_MARKER: markdown anchor validation manifest
+    storage.write_manifest(manifest)
+    # DB_INTEGRATION_MARKER: markdown anchor validation summary markdown
+    storage.write_summary({"markdown": summary_md}, format="markdown")
+    # DB_INTEGRATION_MARKER: markdown anchor validation telemetry
+    storage.write_telemetry(telemetry)
+
+    run_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG / run_timestamp
+    prune_result = prune_run_directories(
+        run_dir.parent,
+        keep=options.artifacts_to_keep,
+        current_run=run_dir,
+        logger=logger,
+    )
+    if prune_result.removed:
+        logger.info("Pruned %d old report folder(s)", len(prune_result.removed))
 
     if all_issues:
         logging.error("Markdown anchor/link issues detected (%d)", len(all_issues))

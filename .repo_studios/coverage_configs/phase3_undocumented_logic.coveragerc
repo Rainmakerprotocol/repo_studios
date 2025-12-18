@@ -4,6 +4,12 @@
 # source and restrict what is reported via include patterns instead.
 include =
     */.repo_studios/scripts/producers/generate_undocumented_logic_report.py
+    */.repo_studios/scripts/producers/seed_standards_prompts.py
+    */.repo_studios/scripts/producers/validate_import_boundaries.py
+    */.repo_studios/scripts/producers/validate_inventory.py
+    */.repo_studios/scripts/producers/validate_markdown_anchors.py
+    */.repo_studios/scripts/producers/validate_metrics_anchor_stubs.py
+    */.repo_studios/scripts/producers/verify_docs_integrity.py
     */.repo_studios/scripts/aggregators/aggregate_docs_health_signals.py
 
 [report]

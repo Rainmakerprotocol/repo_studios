@@ -1,4 +1,22 @@
-"""Structured documentation integrity verifier with pruning-aware artifacts."""
+"""Documentation integrity verifier (canonical producer bundle).
+
+Validates governed documentation JSON blocks to ensure each fenced payload exposes a
+stable `content_hash`. Optionally updates mismatched blocks in place (`--update`) and
+regenerates the navigation table in `docs/standards/docs_index.md`.
+
+Artifacts:
+    * Canonical bundle artifacts under
+        `.repo_studios/reports/producer_reports/healthview/docs_integrity_validation/<YYYYMMDD-HHMM>/`
+    * Files: `manifest.json`, `summary.md`, `telemetry.json`
+    * Timestamped run folders with automatic pruning (keep last N by default)
+
+Exit codes:
+    0 - clean or updated (when `--update` supplied)
+    1 - mismatches detected (without `--update`) OR missing inputs/errors
+
+`--exit-codes-hash` preserves the legacy behavior of printing the hash of
+`docs/standards/exit_code_stability_policy.md` and exits without writing artifacts.
+"""
 
 from __future__ import annotations
 
@@ -12,7 +30,7 @@ import sys
 from collections.abc import Sequence
 from dataclasses import dataclass, field, replace
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 EXIT_CODE_DOC = Path("docs/standards/exit_code_stability_policy.md")
 JSON_BLOCK_PATTERN = re.compile(r"```jsonc?\n(.*?)```", re.DOTALL)
@@ -20,9 +38,11 @@ HASH_KEYS_ORDER = ["code", "symbol", "class", "stable"]
 INDEX_TABLE_BEGIN = "<!-- BEGIN:DOCS_INDEX_TABLE -->"
 INDEX_TABLE_END = "<!-- END:DOCS_INDEX_TABLE -->"
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/docs_integrity_reports")
-DEFAULT_INDEX_PATH = Path("docs/standards/docs_index.md")
-RUN_PREFIX = "docs_integrity"
+DEFAULT_INDEX_PATH = Path(".repo_studios/docs/standards/docs_index.md")
+REPORTS_ROOT = Path(".repo_studios/reports/producer_reports")
+DEFAULT_OUTPUT_DIR = REPORTS_ROOT
+VIEWER_SLUG = "healthview"
+TOPIC_SLUG = "docs_integrity_validation"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 SCHEMA_VERSION = 1
 
@@ -41,7 +61,7 @@ try:
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import (  # type: ignore
+    from libraries import (
         KeepSpec,
         PathSpec,
         OptionsConfig,
@@ -50,6 +70,13 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
         build_standard_paths,
         prune_run_directories,
     )
+
+try:
+    from libraries.database_integration import create_storage
+except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries.database_integration import create_storage
 
 
 @dataclass
@@ -173,12 +200,16 @@ def configure_logging(level: str) -> None:
     logging.basicConfig(level=getattr(logging, level.upper()), format="%(levelname)s %(message)s")
 
 
+def _format_run_timestamp(timestamp: dt.datetime) -> str:
+    return timestamp.astimezone(dt.timezone.utc).strftime("%Y%m%d-%H%M")
+
+
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
-    base_options = build_standard_options(args, OPTIONS_CONFIG)
+    base_options = cast(Options, build_standard_options(args, OPTIONS_CONFIG))
     return replace(
         base_options,
         update=bool(args.update),
@@ -468,102 +499,81 @@ def compose_payload(
     return payload
 
 
-def render_markdown_report(payload: dict[str, Any]) -> str:
-    summary = payload.get("summary", {})
+def compose_manifest(*, report: dict[str, Any], run_timestamp: str, inputs: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": run_timestamp,
+        "generated_utc": report.get("timestamp"),
+        "git_sha": None,
+        "status": report.get("status", "unknown"),
+        "catalog": [
+            {"artifact": "manifest.json", "kind": "json"},
+            {"artifact": "summary.md", "kind": "markdown"},
+            {"artifact": "telemetry.json", "kind": "json"},
+        ],
+        "inputs": inputs,
+        "provenance": {
+            "requested_by": "cli",
+            "trigger_type": "manual",
+        },
+        "summary": report.get("summary") or {},
+    }
+
+
+def compose_telemetry(*, report: dict[str, Any], run_timestamp: str) -> dict[str, Any]:
+    summary = report.get("summary", {}) if isinstance(report.get("summary"), dict) else {}
+    return {
+        "schema_version": 1,
+        "viewer_slug": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": run_timestamp,
+        "generated_utc": report.get("timestamp"),
+        "status": report.get("status", "unknown"),
+        "metrics": {
+            "documents_processed": summary.get("documents_processed", 0),
+            "json_blocks_checked": summary.get("json_blocks_checked", 0),
+            "mismatched_blocks": summary.get("mismatched_blocks", 0),
+            "documents_updated": summary.get("documents_updated", 0),
+            "index_blocks_checked": summary.get("index_blocks_checked", 0),
+            "table_regenerated": bool(summary.get("table_regenerated", False)),
+            "missing_documents_count": len(report.get("missing_documents", []) or []),
+            "errors_count": len(report.get("errors", []) or []),
+        },
+        "payload": report,
+    }
+
+
+def render_summary_markdown(*, report: dict[str, Any], run_timestamp: str) -> str:
+    summary = report.get("summary", {})
     lines = [
         "# Documentation Integrity Report\n\n",
-        f"- Status: **{payload.get('status', 'unknown')}**\n",
-        f"- Timestamp: {payload.get('timestamp', '')}\n",
+        f"- Status: `{report.get('status', 'unknown')}`\n",
+        f"- Run Timestamp (UTC): `{run_timestamp}`\n",
         f"- Documents processed: {summary.get('documents_processed', 0)}\n",
         f"- JSON blocks checked: {summary.get('json_blocks_checked', 0)}\n",
         f"- Blocks updated: {summary.get('documents_updated', 0)}\n",
     ]
     if summary.get("table_regenerated"):
         lines.append("- Navigation table regenerated.\n")
-    if payload.get("missing_documents"):
+    if report.get("missing_documents"):
         lines.append("\n## Missing Documents\n\n")
-        for item in payload["missing_documents"]:
+        for item in report["missing_documents"]:
             lines.append(f"- {item}\n")
-    if payload.get("errors"):
+    if report.get("errors"):
         lines.append("\n## Errors\n\n")
-        for err in payload["errors"]:
+        for err in report["errors"]:
             lines.append(f"- {err}\n")
-    if payload.get("status") == "mismatches":
+    if report.get("status") == "mismatches":
         lines.append("\n## Pending Mismatches\n\n")
         lines.append("| File | Block | Computed Hash |\n")
         lines.append("|------|-------|---------------|\n")
-        for item in payload.get("mismatches", []):
+        for item in report.get("mismatches", []):
             lines.append(f"| `{item['path']}` | {item['block_index']} | `{item['computed_hash']}` |\n")
-    if payload.get("status") == "updated":
+    if report.get("status") == "updated":
         lines.append("\nAll mismatched blocks were updated because `--update` was supplied.")
     return "".join(lines)
-
-
-def render_log(payload: dict[str, Any]) -> str:
-    summary = payload.get("summary", {})
-    entries = [
-        f"status={payload.get('status', 'unknown')}",
-        f"exit_code={payload.get('exit_code', '')}",
-        f"timestamp={payload.get('timestamp', '')}",
-        f"documents_processed={summary.get('documents_processed', 0)}",
-        f"json_blocks_checked={summary.get('json_blocks_checked', 0)}",
-        f"documents_updated={summary.get('documents_updated', 0)}",
-        f"table_regenerated={summary.get('table_regenerated', False)}",
-    ]
-    if payload.get("missing_documents"):
-        entries.append("missing_documents=" + ",".join(str(item) for item in payload["missing_documents"]))
-    if payload.get("errors"):
-        entries.append("errors=" + ";".join(str(err) for err in payload["errors"]))
-    return "\n".join(entries) + "\n"
-
-
-def write_artifacts(
-    run_dir: Path,
-    output_dir: Path,
-    payload: dict[str, Any],
-    *,
-    logger: logging.Logger | None,
-) -> None:
-    run_dir.mkdir(parents=True, exist_ok=True)
-    if logger:
-        logger.debug("Writing docs integrity artifacts to %s", run_dir)
-    (run_dir / "report.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    (run_dir / "report.md").write_text(render_markdown_report(payload), encoding="utf-8")
-    (run_dir / "log.txt").write_text(render_log(payload), encoding="utf-8")
-    (run_dir / "mismatches.json").write_text(
-        json.dumps(payload.get("mismatches", []), indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
-
-    latest_dir = output_dir / "latest"
-    latest_dir.mkdir(parents=True, exist_ok=True)
-    mapping = {
-        "report.json": latest_dir / "latest_report.json",
-        "report.md": latest_dir / "latest_report.md",
-        "log.txt": latest_dir / "latest_log.txt",
-        "mismatches.json": latest_dir / "latest_mismatches.json",
-    }
-    for source, target in mapping.items():
-        src_path = run_dir / source
-        if src_path.exists():
-            target.write_bytes(src_path.read_bytes())
-
-
-def prune_history(
-    base_dir: Path,
-    keep: int,
-    *,
-    current_run: Path | None,
-    logger: logging.Logger | None,
-) -> list[Path]:
-    result = prune_run_directories(
-        base_dir,
-        keep=max(keep, 1),
-        stem_prefix=RUN_PREFIX,
-        current_run=current_run,
-        logger=logger,
-    )
-    return result.removed
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
@@ -595,6 +605,15 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
     paths = build_paths(args)
     options = build_options(args)
+
+    if paths.output_dir.name == "docs_integrity_reports":
+        logger.warning(
+            "Deprecated output dir detected (%s). Use %s as the reports root.",
+            paths.output_dir,
+            REPORTS_ROOT,
+        )
+        paths = replace(paths, output_dir=paths.output_dir.parent)
+
     paths.output_dir.mkdir(parents=True, exist_ok=True)
 
     logger.info("Repo root: %s", paths.repo_root)
@@ -602,23 +621,69 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     logger.info("Output directory: %s", paths.output_dir)
 
     timestamp = dt.datetime.now(dt.timezone.utc)
-    run_id = f"{RUN_PREFIX}_{timestamp.strftime('%Y%m%dT%H%M%SZ')}"
+    run_timestamp = _format_run_timestamp(timestamp)
 
     outcome = verify_all(paths, options)
-    payload = compose_payload(paths, options, outcome, run_id, timestamp)
+    report = compose_payload(paths, options, outcome, run_timestamp, timestamp)
 
-    run_dir = paths.output_dir / run_id
-    write_artifacts(run_dir, paths.output_dir, payload, logger=logger)
-    removed = prune_history(
-        paths.output_dir,
-        options.artifacts_to_keep,
+    inputs: dict[str, Any] = {
+        "repo_root": str(paths.repo_root),
+        "index_path": _relativize(paths.index_path, paths.repo_root),
+        "update": options.update,
+        "regen_table": options.regen_table,
+        "artifacts_to_keep": options.artifacts_to_keep,
+        "log_level": options.log_level,
+    }
+    manifest = compose_manifest(report=report, run_timestamp=run_timestamp, inputs=inputs)
+    telemetry = compose_telemetry(report=report, run_timestamp=run_timestamp)
+    summary_md = render_summary_markdown(report=report, run_timestamp=run_timestamp)
+
+    storage = create_storage(
+        output_dir=paths.output_dir,
+        viewer_slug=VIEWER_SLUG,
+        topic=TOPIC_SLUG,
+        timestamp=run_timestamp,
+    )
+
+    # DB_INTEGRATION_MARKER: docs integrity manifest
+    storage.write_manifest(manifest)
+    # DB_INTEGRATION_MARKER: docs integrity summary markdown
+    storage.write_summary({"markdown": summary_md}, format="markdown")
+    # DB_INTEGRATION_MARKER: docs integrity telemetry
+    storage.write_telemetry(telemetry)
+
+    run_dir = storage.file_storage.bundle_dir
+    topic_dir = run_dir.parent
+    prune_result = prune_run_directories(
+        topic_dir,
+        keep=max(options.artifacts_to_keep, 1),
         current_run=run_dir,
         logger=logger,
     )
-    if removed:
-        logger.debug("Pruned docs integrity runs: %s", ", ".join(sorted(path.name for path in removed)))
+    if prune_result.removed:
+        logger.debug(
+            "Pruned docs integrity bundles: kept=%s removed=%s protected=%s failures=%s",
+            len(prune_result.kept),
+            len(prune_result.removed),
+            len(prune_result.protected),
+            len(prune_result.failures),
+        )
 
-    return payload
+    result = dict(report)
+    result.update(
+        {
+            "viewer_slug": VIEWER_SLUG,
+            "topic": TOPIC_SLUG,
+            "run_timestamp": run_timestamp,
+            "run_dir": str(run_dir),
+            "artifacts": {
+                "manifest.json": str(run_dir / "manifest.json"),
+                "summary.md": str(run_dir / "summary.md"),
+                "telemetry.json": str(run_dir / "telemetry.json"),
+            },
+        }
+    )
+    return result
 
 
 def main(argv: Sequence[str] | None = None) -> int:

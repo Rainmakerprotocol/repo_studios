@@ -82,18 +82,17 @@ def test_structured_artifacts_without_missing(tmp_path, monkeypatch):
     assert payload["summary"]["anchors_referenced"] == 1
 
     output_dir = Path(payload["output_dir"])
-    run_dir = output_dir / payload["run_id"]
-    assert (run_dir / "report.json").exists()
-    assert (run_dir / "report.md").exists()
-    assert (run_dir / "log.txt").exists()
-    assert (run_dir / "missing.json").exists()
+    assert payload["viewer_slug"] == "healthview"
+    assert payload["topic"] == "metrics_anchor_stub_validation"
+    assert payload["run_timestamp"] == "20250101-1200"
 
-    latest_dir = output_dir / "latest"
-    assert (latest_dir / "latest_report.json").exists()
-    assert (latest_dir / "latest_missing.json").exists()
+    run_dir = output_dir / payload["viewer_slug"] / payload["topic"] / payload["run_timestamp"]
+    assert (run_dir / "manifest.json").exists()
+    assert (run_dir / "summary.md").exists()
+    assert (run_dir / "telemetry.json").exists()
 
-    report_data = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
-    assert report_data["summary"]["files_checked"] >= 1
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    assert telemetry["payload"]["report"]["summary"]["files_checked"] >= 1
 
 
 def test_detects_missing_and_honors_allowlist(tmp_path, monkeypatch):
@@ -127,7 +126,7 @@ def test_detects_missing_and_honors_allowlist(tmp_path, monkeypatch):
         ]
     )
 
-    assert payload_first["status"] == "missing-anchors"
+    assert payload_first["status"] == "fail"
     assert payload_first["summary"]["missing_count"] == 1
     assert payload_first["missing"][0]["anchor"] == "missing-anchor"
 
@@ -138,7 +137,7 @@ def test_detects_missing_and_honors_allowlist(tmp_path, monkeypatch):
     _set_fixed_datetime(
         monkeypatch,
         mod,
-        mod.dt.datetime(2025, 1, 1, 12, 0, 1, tzinfo=mod.dt.timezone.utc),
+        mod.dt.datetime(2025, 1, 1, 12, 1, 0, tzinfo=mod.dt.timezone.utc),
     )
 
     payload_second = mod.run(
@@ -157,6 +156,7 @@ def test_detects_missing_and_honors_allowlist(tmp_path, monkeypatch):
     assert payload_second["summary"]["allowlisted_count"] == 1
 
     output_dir = Path(payload_second["output_dir"])
-    run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith(mod.RUN_PREFIX)]
+    topic_dir = output_dir / payload_second["viewer_slug"] / payload_second["topic"]
+    run_dirs = [p for p in topic_dir.iterdir() if p.is_dir()]
     assert len(run_dirs) == 1
-    assert run_dirs[0].name == payload_second["run_id"]
+    assert run_dirs[0].name == payload_second["run_timestamp"]

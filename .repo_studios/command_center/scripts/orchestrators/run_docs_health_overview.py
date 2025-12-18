@@ -19,7 +19,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, Sequence
+from typing import Any, Callable, Sequence, cast
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
 if str(LIBRARIES_ROOT) not in sys.path:
@@ -86,15 +86,9 @@ ORCHESTRATOR_SCRIPT = Path(
 
 DEFAULT_DOC_INDEX_OUTPUT = Path(".repo_studios/reports/producer_reports")
 DEFAULT_ANCHOR_INVENTORY_OUTPUT = Path(".repo_studios/reports/producer_reports")
-DEFAULT_ANCHOR_VALIDATION_OUTPUT = Path(
-    ".repo_studios/reports/producer_reports/markdown_anchor_validation_reports"
-)
-DEFAULT_DOCS_INTEGRITY_OUTPUT = Path(
-    ".repo_studios/reports/producer_reports/docs_integrity_reports"
-)
-DEFAULT_METRICS_STUB_OUTPUT = Path(
-    ".repo_studios/reports/producer_reports/metrics_anchor_stub_reports"
-)
+DEFAULT_ANCHOR_VALIDATION_OUTPUT = Path(".repo_studios/reports/producer_reports")
+DEFAULT_DOCS_INTEGRITY_OUTPUT = Path(".repo_studios/reports/producer_reports")
+DEFAULT_METRICS_STUB_OUTPUT = Path(".repo_studios/reports/producer_reports")
 DEFAULT_CHURN_OUTPUT = Path(".repo_studios/reports/producer_reports")
 DEFAULT_UNDOCUMENTED_OUTPUT = Path(".repo_studios/reports/producer_reports")
 DEFAULT_PLACEHOLDER_OUTPUT = Path(
@@ -108,7 +102,9 @@ DEFAULT_AGGREGATOR_OUTPUT = Path(
 )
 DEFAULT_HEALTHVIEW_ROOT = Path(".repo_studios/command_center/reports")
 
-ANCHOR_VALIDATION_PREFIX = "markdown_anchor_validation"
+ANCHOR_VALIDATION_TOPIC = "markdown_anchor_validation"
+DOCS_INTEGRITY_TOPIC = "docs_integrity_validation"
+METRICS_STUB_TOPIC = "metrics_anchor_stub_validation"
 
 
 @dataclass(frozen=True)
@@ -410,7 +406,7 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
@@ -448,7 +444,7 @@ def configure_logging(level: str) -> None:
 
 def _load_callable(
     script_path: Path, module_name: str, attribute: str
-) -> Callable[[Sequence[str] | None], Any]:
+) -> Callable[[Sequence[str] | None], object]:
     script_abs = script_path.resolve()
     if module_name in sys.modules:
         module = sys.modules[module_name]
@@ -458,11 +454,11 @@ def _load_callable(
             raise ImportError(f"Unable to load module from {script_abs}")
         module = importlib.util.module_from_spec(spec)
         sys.modules[module_name] = module
-        spec.loader.exec_module(module)  # type: ignore[misc]
+        spec.loader.exec_module(module)
     func = getattr(module, attribute, None)
     if not callable(func):
         raise AttributeError(f"Module {module_name} missing callable {attribute}()")
-    return func
+    return cast(Callable[[Sequence[str] | None], object], func)
 
 
 def _relativize(path: Path | None, repo_root: Path) -> str | None:
@@ -602,26 +598,56 @@ def _execute_anchor_validation(
         "--log-level",
         options.log_level,
     ]
-    exit_code = int(run_callable(argv))
+    exit_code_result = run_callable(argv)
+    if isinstance(exit_code_result, int):
+        exit_code = exit_code_result
+    elif isinstance(exit_code_result, str):
+        try:
+            exit_code = int(exit_code_result)
+        except ValueError as exc:  # pragma: no cover - defensive
+            raise RuntimeError(
+                "validate_markdown_anchors returned non-integer exit code"
+            ) from exc
+    else:
+        raise RuntimeError("validate_markdown_anchors returned invalid exit code")
     if exit_code != 0:
         raise RuntimeError(f"validate_markdown_anchors exited with {exit_code}")
-    slug = options.run_timestamp.astimezone(timezone.utc).strftime("%Y%m%d_%H%M%S")
-    run_dir = paths.anchor_validation_output_dir / f"{ANCHOR_VALIDATION_PREFIX}-{slug}"
-    if not run_dir.exists():
-        run_dir = None
-    report_path = run_dir / "report.json" if run_dir is not None else None
-    if report_path and not report_path.exists():
-        report_path = None
-    payload = _read_json(report_path) if report_path else None
-    status = payload.get("status") if isinstance(payload, dict) else None
-    issue_count = payload.get("issue_count") if isinstance(payload, dict) else None
+    run_timestamp = options.run_timestamp.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
+    run_dir_candidate = (
+        paths.anchor_validation_output_dir
+        / "healthview"
+        / ANCHOR_VALIDATION_TOPIC
+        / run_timestamp
+    )
+    run_dir: Path | None = run_dir_candidate if run_dir_candidate.exists() else None
+
+    telemetry_path: Path | None = (
+        (run_dir / "telemetry.json") if run_dir is not None else None
+    )
+    if telemetry_path and not telemetry_path.exists():
+        telemetry_path = None
+    telemetry = _read_json(telemetry_path) if telemetry_path else None
+
+    report_payload: dict[str, Any] | None = None
+    if isinstance(telemetry, dict):
+        payload = telemetry.get("payload")
+        if isinstance(payload, dict) and isinstance(payload.get("report"), dict):
+            report_payload = payload["report"]
+
+    status = report_payload.get("status") if isinstance(report_payload, dict) else None
+    issue_count = (
+        report_payload.get("issue_count") if isinstance(report_payload, dict) else None
+    )
     if isinstance(issue_count, str):
         try:
             issue_count = int(issue_count)
         except ValueError:  # pragma: no cover - defensive
             issue_count = None
     return AnchorValidationOutcome(
-        run_dir=run_dir, status=status, issue_count=issue_count, report_path=report_path
+        run_dir=run_dir,
+        status=status,
+        issue_count=issue_count,
+        report_path=telemetry_path,
     )
 
 
@@ -642,22 +668,29 @@ def _execute_docs_integrity(paths: Paths, options: Options) -> DocsIntegrityOutc
     payload = run_callable(argv)
     if not isinstance(payload, dict):
         raise RuntimeError("verify_docs_integrity returned unexpected payload")
-    run_id = payload.get("run_id") if isinstance(payload.get("run_id"), str) else None
-    run_dir = paths.docs_integrity_output_dir / run_id if run_id else None
+    payload_dict = cast(dict[str, Any], payload)
+    run_dir = (
+        Path(payload_dict.get("run_dir", "")) if payload_dict.get("run_dir") else None
+    )
     if run_dir and not run_dir.exists():
         run_dir = None
-    summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
+    summary_payload = payload_dict.get("summary")
+    summary: dict[str, Any] = (
+        cast(dict[str, Any], summary_payload) if isinstance(summary_payload, dict) else {}
+    )
     mismatched_blocks = (
         summary.get("mismatched_blocks")
         if isinstance(summary.get("mismatched_blocks"), int)
         else None
     )
-    status = payload.get("status") if isinstance(payload.get("status"), str) else None
+    status = (
+        payload_dict.get("status") if isinstance(payload_dict.get("status"), str) else None
+    )
     return DocsIntegrityOutcome(
         run_dir=run_dir,
         status=status,
         mismatched_blocks=mismatched_blocks,
-        payload=payload,
+        payload=payload_dict,
     )
 
 
@@ -678,19 +711,26 @@ def _execute_metrics_stub(paths: Paths, options: Options) -> MetricsStubOutcome:
     payload = run_callable(argv)
     if not isinstance(payload, dict):
         raise RuntimeError("validate_metrics_anchor_stubs returned unexpected payload")
-    run_id = payload.get("run_id") if isinstance(payload.get("run_id"), str) else None
-    run_dir = paths.metrics_stub_output_dir / run_id if run_id else None
+    payload_dict = cast(dict[str, Any], payload)
+    run_dir = (
+        Path(payload_dict.get("run_dir", "")) if payload_dict.get("run_dir") else None
+    )
     if run_dir and not run_dir.exists():
         run_dir = None
-    summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
+    summary_payload = payload_dict.get("summary")
+    summary: dict[str, Any] = (
+        cast(dict[str, Any], summary_payload) if isinstance(summary_payload, dict) else {}
+    )
     missing = (
         summary.get("missing_count")
         if isinstance(summary.get("missing_count"), int)
         else None
     )
-    status = payload.get("status") if isinstance(payload.get("status"), str) else None
+    status = (
+        payload_dict.get("status") if isinstance(payload_dict.get("status"), str) else None
+    )
     return MetricsStubOutcome(
-        run_dir=run_dir, status=status, missing_count=missing, payload=payload
+        run_dir=run_dir, status=status, missing_count=missing, payload=payload_dict
     )
 
 
@@ -709,17 +749,22 @@ def _execute_churn(paths: Paths, options: Options) -> ChurnOutcome:
     payload = run_callable(argv)
     if not isinstance(payload, dict):
         raise RuntimeError("generate_code_doc_churn_report returned unexpected payload")
-    run_dir = Path(payload.get("run_dir", "")) if payload.get("run_dir") else None
+    payload_dict = cast(dict[str, Any], payload)
+    run_dir = (
+        Path(payload_dict.get("run_dir", "")) if payload_dict.get("run_dir") else None
+    )
     if run_dir and not run_dir.exists():
         run_dir = None
-    artifacts_payload = payload.get("artifacts")
+    artifacts_payload = payload_dict.get("artifacts")
     artifacts: dict[str, Path] = {}
     if isinstance(artifacts_payload, dict):
         for name, value in artifacts_payload.items():
             candidate = Path(value)
             artifacts[name] = candidate
     summary = (
-        payload.get("summary") if isinstance(payload.get("summary"), dict) else None
+        payload_dict.get("summary")
+        if isinstance(payload_dict.get("summary"), dict)
+        else None
     )
     return ChurnOutcome(
         run_dir=run_dir, summary=summary, artifacts=_filter_artifacts(artifacts)
@@ -746,17 +791,22 @@ def _execute_undocumented(paths: Paths, options: Options) -> UndocumentedOutcome
         raise RuntimeError(
             "generate_undocumented_logic_report returned unexpected payload"
         )
-    run_dir = Path(payload.get("run_dir", "")) if payload.get("run_dir") else None
+    payload_dict = cast(dict[str, Any], payload)
+    run_dir = (
+        Path(payload_dict.get("run_dir", "")) if payload_dict.get("run_dir") else None
+    )
     if run_dir and not run_dir.exists():
         run_dir = None
-    artifacts_payload = payload.get("artifacts")
+    artifacts_payload = payload_dict.get("artifacts")
     artifacts: dict[str, Path] = {}
     if isinstance(artifacts_payload, dict):
         for name, value in artifacts_payload.items():
             candidate = Path(value)
             artifacts[name] = candidate
     summary = (
-        payload.get("summary") if isinstance(payload.get("summary"), dict) else None
+        payload_dict.get("summary")
+        if isinstance(payload_dict.get("summary"), dict)
+        else None
     )
     return UndocumentedOutcome(
         run_dir=run_dir, summary=summary, artifacts=_filter_artifacts(artifacts)
@@ -772,15 +822,15 @@ def _latest_anchor_inventory(paths: Paths) -> Path:
 
 
 def _latest_anchor_validation(paths: Paths) -> Path:
-    return paths.anchor_validation_output_dir / "latest_report.json"
+    return paths.anchor_validation_output_dir / "healthview" / ANCHOR_VALIDATION_TOPIC
 
 
 def _latest_docs_integrity(paths: Paths) -> Path:
-    return paths.docs_integrity_output_dir / "latest" / "latest_report.json"
+    return paths.docs_integrity_output_dir / "healthview" / DOCS_INTEGRITY_TOPIC
 
 
 def _latest_metrics_stub(paths: Paths) -> Path:
-    return paths.metrics_stub_output_dir / "latest" / "latest_report.json"
+    return paths.metrics_stub_output_dir / "healthview" / METRICS_STUB_TOPIC
 
 
 def _latest_churn(paths: Paths) -> Path:

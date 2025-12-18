@@ -126,20 +126,33 @@ def test_clean_run_generates_artifacts(tmp_path, monkeypatch):
     assert payload["summary"]["json_blocks_checked"] == 2
     assert payload["summary"]["mismatched_blocks"] == 0
 
-    output_dir = Path(payload["output_dir"])
-    run_dir = output_dir / payload["run_id"]
-    assert (run_dir / "report.json").exists()
-    assert (run_dir / "report.md").exists()
-    assert (run_dir / "log.txt").exists()
-    assert (run_dir / "mismatches.json").exists()
+    output_root = repo_root / "artifacts"
+    expected_run_timestamp = "20250101-1200"
+    expected_run_dir = (
+        output_root / "healthview" / "docs_integrity_validation" / expected_run_timestamp
+    )
 
-    latest_dir = output_dir / "latest"
-    assert (latest_dir / "latest_report.json").exists()
-    assert (latest_dir / "latest_mismatches.json").exists()
+    assert payload["run_timestamp"] == expected_run_timestamp
+    assert Path(payload["run_dir"]) == expected_run_dir
 
-    report_data = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
-    assert report_data["status"] == "ok"
-    assert report_data["summary"]["documents_processed"] == 1
+    assert (expected_run_dir / "manifest.json").exists()
+    assert (expected_run_dir / "summary.md").exists()
+    assert (expected_run_dir / "telemetry.json").exists()
+    assert not (expected_run_dir / "report.json").exists()
+    assert not (output_root / "latest").exists()
+
+    manifest = json.loads(
+        (expected_run_dir / "manifest.json").read_text(encoding="utf-8")
+    )
+    assert manifest["viewer_slug"] == "healthview"
+    assert manifest["topic"] == "docs_integrity_validation"
+    assert manifest["run_timestamp"] == expected_run_timestamp
+
+    telemetry = json.loads(
+        (expected_run_dir / "telemetry.json").read_text(encoding="utf-8")
+    )
+    assert telemetry["status"] == "ok"
+    assert telemetry["metrics"]["documents_processed"] == 1
 
 
 def test_detects_mismatches_and_updates(tmp_path, monkeypatch):
@@ -222,7 +235,7 @@ def test_detects_mismatches_and_updates(tmp_path, monkeypatch):
     _set_fixed_datetime(
         monkeypatch,
         mod,
-        mod.dt.datetime(2025, 1, 1, 12, 0, 1, tzinfo=mod.dt.timezone.utc),
+        mod.dt.datetime(2025, 1, 1, 12, 1, 0, tzinfo=mod.dt.timezone.utc),
     )
 
     second_payload = mod.run(
@@ -239,6 +252,12 @@ def test_detects_mismatches_and_updates(tmp_path, monkeypatch):
 
     assert second_payload["status"] == "updated"
     assert second_payload["exit_code"] == 0
+
+    _set_fixed_datetime(
+        monkeypatch,
+        mod,
+        mod.dt.datetime(2025, 1, 1, 12, 2, 0, tzinfo=mod.dt.timezone.utc),
+    )
 
     final_payload = mod.run(
         [

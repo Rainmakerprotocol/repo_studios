@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2025-12-18T16:02:09.680240+00:00",
+  "status": "ok",
+  "metrics": {
+    "files_scanned": 1,
+    "links_checked": 0,
+    "issue_count": 0,
+    "missing_file_count": 0,
+    "missing_anchor_count": 0
+  },
+  "payload": {
+    "report": {
+      "schema_version": 1,
+      "generated_utc": "2025-12-18T16:02:09.680240+00:00",
+      "status": "ok",
+      "root": "C:\\Users\\genet\\repo_studios",
+      "patterns": [
+        "README.md",
+        "docs/agents/config_quickstart.md",
+        "docs/agents/step5_agent_config_system.md"
+      ],
+      "issue_count": 0,
+      "issues": [],
+      "scanned_files": [
+        "README.md"
+      ]
+    }
+  }
+}
