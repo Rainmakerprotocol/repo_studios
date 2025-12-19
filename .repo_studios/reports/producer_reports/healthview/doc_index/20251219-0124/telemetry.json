@@ -2,38 +2,42 @@
   "schema_version": 1,
   "viewer_slug": "healthview",
   "topic": "doc_index",
-  "run_timestamp": "20251216-2106",
-  "generated_utc": "2025-12-16T21:06:55.879443+00:00",
+  "run_timestamp": "20251219-0124",
+  "generated_utc": "2025-12-19T01:24:01.437167+00:00",
   "status": "ok",
   "metrics": {
-    "total_documents": 268,
-    "total_headings": 1877,
-    "total_links": 93,
+    "total_documents": 280,
+    "total_headings": 1967,
+    "total_links": 90,
     "duplicate_slug_count": 6,
-    "documents_missing_description_count": 33,
-    "placeholder_documents_count": 55,
-    "link_density": 0.34701492537313433
+    "documents_missing_description_count": 36,
+    "placeholder_documents_count": 57,
+    "link_density": 0.32142857142857145
   },
   "payload": {
     "schema_version": 1,
-    "generated_utc": "2025-12-16T21:06:55.879443+00:00",
+    "generated_utc": "2025-12-19T01:24:01.437167+00:00",
     "repo_root": "C:\\Users\\genet\\repo_studios",
     "summary": {
-      "total_documents": 268,
-      "total_h1": 269,
-      "total_h2": 1608,
-      "total_headings": 1877,
-      "total_links": 93
+      "total_documents": 280,
+      "total_h1": 283,
+      "total_h2": 1684,
+      "total_headings": 1967,
+      "total_links": 90
     },
     "metrics": {
       "documents_per_directory": [
         {
           "directory": ".repo_studios/docs/automation",
-          "count": 43
+          "count": 44
         },
         {
           "directory": ".repo_studios/command_center/docs/mermaid/view_specs",
           "count": 28
+        },
+        {
+          "directory": ".repo_studios/command_center/docs/db_integrations",
+          "count": 20
         },
         {
           "directory": ".repo_studios/command_center/docs",
@@ -46,10 +50,6 @@
         {
           "directory": ".repo_studios/command_center/docs/phase_7",
           "count": 10
-        },
-        {
-          "directory": ".repo_studios/command_center/docs/db_integrations",
-          "count": 9
         },
         {
           "directory": "docs/standards/global",
@@ -108,19 +108,22 @@
           "count": 4
         }
       ],
-      "documents_missing_description_count": 33,
-      "documents_without_h1_count": 15,
-      "documents_without_h2_count": 18,
-      "placeholder_documents_count": 55,
+      "documents_missing_description_count": 36,
+      "documents_without_h1_count": 16,
+      "documents_without_h2_count": 17,
+      "placeholder_documents_count": 57,
       "duplicate_slug_count": 6,
-      "documents_outside_docs_tree_count": 151,
-      "link_density": 0.34701492537313433
+      "documents_outside_docs_tree_count": 159,
+      "link_density": 0.32142857142857145
     },
     "advisories": {
       "documents_missing_description": [
         ".copilot_todo.md",
         ".github/copilot-instructions.md",
         ".repo_studios/agent_notes/meta/phase1_foundation_review_2025-10-18_0138.md",
+        ".repo_studios/command_center/docs/db_integrations/code_placeholders.md",
+        ".repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md",
+        ".repo_studios/command_center/docs/db_integrations/db_integration_monkey_patches.md",
         ".repo_studios/command_center/docs/decision_log.md",
         ".repo_studios/command_center/docs/mermaid/decision_log.md",
         ".repo_studios/command_center/docs/mermaid/view_specs/callback_registration_map.md",
@@ -139,10 +142,7 @@
         ".repo_studios/docs/standards/global/std-global-javascript-engineering.md",
         ".repo_studios/docs/standards/global/std-global-markdown-authoring.md",
         ".repo_studios/docs/standards/global/std-global-mission-parameters.md",
-        ".repo_studios/docs/templates/script_inventory.md",
-        ".repo_studios/monkey_patch/20251201_115542/report.md",
-        ".repo_studios/monkey_patch/20251207_023935/report.md",
-        ".repo_studios/monkey_patch/20251207_133529/report.md"
+        ".repo_studios/docs/templates/script_inventory.md"
       ],
       "documents_without_h1": [
         ".repo_studios/command_center/docs/mermaid/view_specs/callback_registration_map.md",
@@ -159,7 +159,8 @@
         ".repo_studios/docs/standards/global/std-global-markdown-authoring.md",
         ".repo_studios/docs/standards/global/std-global-mission-parameters.md",
         "docs/standards/global/std-global-markdown-authoring.md",
-        "docs/templates/meta_prompts.md"
+        "docs/templates/meta_prompts.md",
+        "docs/templates/meta_prompts2.md"
       ],
       "documents_without_h2": [
         ".copilot_todo.md",
@@ -176,7 +177,6 @@
         ".repo_studios/docs/templates/script_inventory.md",
         ".repo_studios/docs/templates/structural_checklist_template.md",
         ".repo_studios/inventory_schema/views/README.md",
-        ".repo_studios/scripts/scripts_index/scripts_duplicate_summary-20251130-0333.md",
         "README.md",
         "command_center_script_verification_temp.md",
         "docs/standards/global/std-docs-integrity-handbook.md"
@@ -188,6 +188,7 @@
         ".repo_studios/command_center/command_center_architecture.md",
         ".repo_studios/command_center/docs/code_library/code_library_status.md",
         ".repo_studios/command_center/docs/db_integration_test_execution_telemetry.md",
+        ".repo_studios/command_center/docs/db_integrations/code_placeholders.md",
         ".repo_studios/command_center/docs/decision_log.md",
         ".repo_studios/command_center/docs/duplicate_target_mappings.md",
         ".repo_studios/command_center/docs/library_integration_checklist.md",
@@ -205,8 +206,7 @@
         ".repo_studios/command_center/docs/phase_7/PLACEHOLDER_DEBT_PLAN.md",
         ".repo_studios/command_center/docs/phase_7/REPORTING_INTERFACE_PLAN.md",
         ".repo_studios/command_center/docs/phase_7/placeholder_scan_blocking_transition_brief.md",
-        ".repo_studios/command_center/docs/run_log_template.md",
-        ".repo_studios/command_center/scripts/orchestrators/README.md"
+        ".repo_studios/command_center/docs/run_log_template.md"
       ],
       "documents_outside_docs_tree": [
         ".copilot_todo.md",
@@ -232,8 +232,8 @@
         ".repo_studios/command_center/docs/db_integration_quickstart.md",
         ".repo_studios/command_center/docs/db_integration_template.md",
         ".repo_studios/command_center/docs/db_integration_test_execution_telemetry.md",
-        ".repo_studios/command_center/docs/db_integrations/db_integration_analyze_standards_index_gaps.md",
-        ".repo_studios/command_center/docs/db_integrations/db_integration_analyze_test_hardening.md"
+        ".repo_studios/command_center/docs/db_integrations/code_placeholders.md",
+        ".repo_studios/command_center/docs/db_integrations/db_integration_analyze_standards_index_gaps.md"
       ],
       "duplicate_slugs": {
         "library-integration-alignment-plan": [
@@ -241,16 +241,10 @@
           ".repo_studios/command_center/docs/library_integration_checklist.md"
         ],
         "duplicate-scan-summary": [
-          ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md",
           ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md",
           ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md",
-          ".repo_studios/scripts/aggregators/aggregators_index/aggregators_duplicate_summary-2025-10-28-0942.md",
-          ".repo_studios/scripts/consumers/consumers_index/consumers_duplicate_summary-2025-10-28-0934.md",
-          ".repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md",
-          ".repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md",
-          ".repo_studios/scripts/scripts_index/scripts_duplicate_summary-2025-10-27.md",
-          ".repo_studios/scripts/summarizers/summarizers_index/summarizers_duplicate_summary-2025-11-04-2010.md",
-          ".repo_studios/scripts/utilities/utilities_index/utilities_duplicate_summary-2025-10-28-1344.md"
+          ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251217-2039.md",
+          ".repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md"
         ],
         "std-global-markdown-authoring": [
           ".repo_studios/docs/standards/global/std-global-markdown-authoring.md",
@@ -270,7 +264,8 @@
         ],
         "database-integration-status": [
           "db_integration_status.md",
-          "tmp_cli_probe/db_integration_status.md"
+          "tmp_cli_probe/db_integration_status.md",
+          "tmp_cli_probe/db_markers.md"
         ]
       }
     },
@@ -1336,8 +1331,8 @@
         ],
         "links": [],
         "description": "Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical\u2026",
-        "size_bytes": 14886,
-        "modified_utc": "2025-11-28T14:18:05.271026+00:00",
+        "size_bytes": 14925,
+        "modified_utc": "2025-12-17T01:38:22.486199+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -1659,8 +1654,8 @@
         ],
         "links": [],
         "description": "Summarize the current state of Repo Studios\u2019 duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This\u2026",
-        "size_bytes": 14122,
-        "modified_utc": "2025-12-01T01:01:45.347271+00:00",
+        "size_bytes": 14181,
+        "modified_utc": "2025-12-17T01:38:22.486199+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -2154,6 +2149,94 @@
         "owners": [],
         "status": null,
         "frontmatter": null,
+        "contains_placeholder": true
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/code_placeholders.md",
+        "slug": "db-integration-codeplaceholders",
+        "h1_headings": [
+          {
+            "title": "DB Integration \u2014 code_placeholders",
+            "slug": "db-integration-codeplaceholders",
+            "line": 22
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 24,
+            "parent_title": "DB Integration \u2014 code_placeholders",
+            "parent_slug": "db-integration-codeplaceholders"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 29,
+            "parent_title": "DB Integration \u2014 code_placeholders",
+            "parent_slug": "db-integration-codeplaceholders"
+          },
+          {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 35,
+            "parent_title": "DB Integration \u2014 code_placeholders",
+            "parent_slug": "db-integration-codeplaceholders"
+          },
+          {
+            "title": "Human Notes",
+            "slug": "human-notes",
+            "line": 67,
+            "parent_title": "DB Integration \u2014 code_placeholders",
+            "parent_slug": "db-integration-codeplaceholders"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 72,
+            "parent_title": "DB Integration \u2014 code_placeholders",
+            "parent_slug": "db-integration-codeplaceholders"
+          }
+        ],
+        "links": [],
+        "description": null,
+        "size_bytes": 2808,
+        "modified_utc": "2025-12-17T19:43:51.315571+00:00",
+        "tags": [
+          "db",
+          "integration",
+          "producers",
+          "placeholders"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "approved",
+        "frontmatter": {
+          "title": "DB Integration \u2014 code_placeholders",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "approved",
+          "version": "1.0.0",
+          "updated": "2025-12-17",
+          "tags": [
+            "db",
+            "integration",
+            "producers",
+            "placeholders"
+          ],
+          "related_files": [
+            "../../scripts/libraries/database_integration.py",
+            "../../../scripts/producers/scan_code_placeholders.py",
+            "../../../docs/automation/scan_code_placeholders.md"
+          ]
+        },
         "contains_placeholder": true
       },
       {
@@ -2969,7 +3052,7 @@
         "links": [],
         "description": "Define the database-facing contract for the Doc Index producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",
         "size_bytes": 2594,
-        "modified_utc": "2025-12-16T20:32:12.303952+00:00",
+        "modified_utc": "2025-12-16T21:14:26.601426+00:00",
         "tags": [
           "db-integration",
           "healthview",
@@ -3006,6 +3089,898 @@
           "related_files": [
             ".repo_studios/scripts/producers/generate_doc_index.py",
             ".repo_studios/docs/automation/generate_doc_index.md",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py",
+            "REPORT_NAMING_STANDARDS.md"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_docs_integrity_validation.md",
+        "slug": "db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation",
+        "h1_headings": [
+          {
+            "title": "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)",
+            "slug": "db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation",
+            "line": 18
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 20,
+            "parent_title": "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)",
+            "parent_slug": "db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 25,
+            "parent_title": "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)",
+            "parent_slug": "db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation"
+          },
+          {
+            "title": "Write Sites",
+            "slug": "write-sites",
+            "line": 32,
+            "parent_title": "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)",
+            "parent_slug": "db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation"
+          },
+          {
+            "title": "Schema Mapping",
+            "slug": "schema-mapping",
+            "line": 42,
+            "parent_title": "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)",
+            "parent_slug": "db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation"
+          },
+          {
+            "title": "Compatibility Notes",
+            "slug": "compatibility-notes",
+            "line": 68,
+            "parent_title": "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)",
+            "parent_slug": "db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 74,
+            "parent_title": "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)",
+            "parent_slug": "db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation"
+          }
+        ],
+        "links": [],
+        "description": "Define the database-facing contract for the docs integrity validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",
+        "size_bytes": 2890,
+        "modified_utc": "2025-12-18T17:36:18.987162+00:00",
+        "tags": [
+          "db-integration",
+          "healthview",
+          "docs-integrity",
+          "producer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "frontmatter": {
+          "title": "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "role": [
+            "Operational-Doc",
+            "DB-Integration"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "active",
+          "version": "1.0.0",
+          "updated": "2025-12-18",
+          "tags": [
+            "db-integration",
+            "healthview",
+            "docs-integrity",
+            "producer"
+          ],
+          "related_files": [
+            ".repo_studios/scripts/producers/verify_docs_integrity.py",
+            ".repo_studios/docs/automation/verify_docs_integrity.md",
+            ".repo_studios/tests/tests_producers/test_verify_docs_integrity.py",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py",
+            "REPORT_NAMING_STANDARDS.md"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_generate_standards_index.md",
+        "slug": "db-integration-generatestandardsindex",
+        "h1_headings": [
+          {
+            "title": "DB Integration \u2014 generate_standards_index",
+            "slug": "db-integration-generatestandardsindex",
+            "line": 24
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 28,
+            "parent_title": "DB Integration \u2014 generate_standards_index",
+            "parent_slug": "db-integration-generatestandardsindex"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 33,
+            "parent_title": "DB Integration \u2014 generate_standards_index",
+            "parent_slug": "db-integration-generatestandardsindex"
+          },
+          {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 48,
+            "parent_title": "DB Integration \u2014 generate_standards_index",
+            "parent_slug": "db-integration-generatestandardsindex"
+          },
+          {
+            "title": "Human Notes",
+            "slug": "human-notes",
+            "line": 54,
+            "parent_title": "DB Integration \u2014 generate_standards_index",
+            "parent_slug": "db-integration-generatestandardsindex"
+          },
+          {
+            "title": "Reference Prompts",
+            "slug": "reference-prompts",
+            "line": 101,
+            "parent_title": "DB Integration \u2014 generate_standards_index",
+            "parent_slug": "db-integration-generatestandardsindex"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 106,
+            "parent_title": "DB Integration \u2014 generate_standards_index",
+            "parent_slug": "db-integration-generatestandardsindex"
+          }
+        ],
+        "links": [],
+        "description": "See `.github/instructions/markdown.instructions.md` for repo-wide rules.",
+        "size_bytes": 3262,
+        "modified_utc": "2025-12-17T11:36:36.071252+00:00",
+        "tags": [
+          "database",
+          "integration",
+          "standards",
+          "producer"
+        ],
+        "owners": [
+          "Repo Studios"
+        ],
+        "status": "draft",
+        "frontmatter": {
+          "title": "DB Integration \u2014 Standards Index Producer",
+          "audience": [
+            "Agents",
+            "Developers"
+          ],
+          "role": [
+            "Automation"
+          ],
+          "owners": [
+            "Repo Studios"
+          ],
+          "status": "draft",
+          "version": 1,
+          "updated_at": "2025-12-17",
+          "tags": [
+            "database",
+            "integration",
+            "standards",
+            "producer"
+          ],
+          "related_files": [
+            ".repo_studios/scripts/producers/generate_standards_index.py",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py",
+            ".repo_studios/command_center/scripts/utilities/list_db_markers.py"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md",
+        "slug": "db-integration-generatetestcoverageinventorypy",
+        "h1_headings": [
+          {
+            "title": "DB Integration \u2014 generate_test_coverage_inventory.py",
+            "slug": "db-integration-generatetestcoverageinventorypy",
+            "line": 16
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 18,
+            "parent_title": "DB Integration \u2014 generate_test_coverage_inventory.py",
+            "parent_slug": "db-integration-generatetestcoverageinventorypy"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 23,
+            "parent_title": "DB Integration \u2014 generate_test_coverage_inventory.py",
+            "parent_slug": "db-integration-generatetestcoverageinventorypy"
+          },
+          {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 29,
+            "parent_title": "DB Integration \u2014 generate_test_coverage_inventory.py",
+            "parent_slug": "db-integration-generatetestcoverageinventorypy"
+          },
+          {
+            "title": "Table Mapping (Intent)",
+            "slug": "table-mapping-intent",
+            "line": 50,
+            "parent_title": "DB Integration \u2014 generate_test_coverage_inventory.py",
+            "parent_slug": "db-integration-generatetestcoverageinventorypy"
+          },
+          {
+            "title": "Human Notes",
+            "slug": "human-notes",
+            "line": 72,
+            "parent_title": "DB Integration \u2014 generate_test_coverage_inventory.py",
+            "parent_slug": "db-integration-generatetestcoverageinventorypy"
+          },
+          {
+            "title": "Reference Prompts",
+            "slug": "reference-prompts",
+            "line": 77,
+            "parent_title": "DB Integration \u2014 generate_test_coverage_inventory.py",
+            "parent_slug": "db-integration-generatetestcoverageinventorypy"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 82,
+            "parent_title": "DB Integration \u2014 generate_test_coverage_inventory.py",
+            "parent_slug": "db-integration-generatetestcoverageinventorypy"
+          }
+        ],
+        "links": [],
+        "description": null,
+        "size_bytes": 3119,
+        "modified_utc": "2025-12-17T12:10:20.071203+00:00",
+        "tags": [
+          "db-integration",
+          "producer",
+          "healthview",
+          "test-coverage"
+        ],
+        "owners": [
+          "repo_studios_ai"
+        ],
+        "status": "draft",
+        "frontmatter": {
+          "title": "DB Integration \u2014 generate_test_coverage_inventory.py",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "role": [
+            "DBIntegrationDoc"
+          ],
+          "owners": [
+            "repo_studios_ai"
+          ],
+          "status": "draft",
+          "version": 1,
+          "updated_at": "2025-12-17",
+          "tags": [
+            "db-integration",
+            "producer",
+            "healthview",
+            "test-coverage"
+          ],
+          "related_files": [
+            ".repo_studios/scripts/producers/generate_test_coverage_inventory.py",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py",
+            ".repo_studios/command_center/scripts/utilities/list_db_markers.py"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_import_graph.md",
+        "slug": "db-integration-import-graph-healthviewimportgraph",
+        "h1_headings": [
+          {
+            "title": "DB Integration \u2014 Import Graph (healthview/import_graph)",
+            "slug": "db-integration-import-graph-healthviewimportgraph",
+            "line": 18
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 20,
+            "parent_title": "DB Integration \u2014 Import Graph (healthview/import_graph)",
+            "parent_slug": "db-integration-import-graph-healthviewimportgraph"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 25,
+            "parent_title": "DB Integration \u2014 Import Graph (healthview/import_graph)",
+            "parent_slug": "db-integration-import-graph-healthviewimportgraph"
+          },
+          {
+            "title": "Write Sites",
+            "slug": "write-sites",
+            "line": 32,
+            "parent_title": "DB Integration \u2014 Import Graph (healthview/import_graph)",
+            "parent_slug": "db-integration-import-graph-healthviewimportgraph"
+          },
+          {
+            "title": "Schema Mapping",
+            "slug": "schema-mapping",
+            "line": 42,
+            "parent_title": "DB Integration \u2014 Import Graph (healthview/import_graph)",
+            "parent_slug": "db-integration-import-graph-healthviewimportgraph"
+          },
+          {
+            "title": "Compatibility Notes",
+            "slug": "compatibility-notes",
+            "line": 66,
+            "parent_title": "DB Integration \u2014 Import Graph (healthview/import_graph)",
+            "parent_slug": "db-integration-import-graph-healthviewimportgraph"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 72,
+            "parent_title": "DB Integration \u2014 Import Graph (healthview/import_graph)",
+            "parent_slug": "db-integration-import-graph-healthviewimportgraph"
+          }
+        ],
+        "links": [],
+        "description": "Define the database-facing contract for the Import Graph producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",
+        "size_bytes": 2710,
+        "modified_utc": "2025-12-16T22:07:37.971519+00:00",
+        "tags": [
+          "db-integration",
+          "healthview",
+          "import-graph",
+          "producer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "frontmatter": {
+          "title": "DB Integration \u2014 Import Graph (healthview/import_graph)",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "role": [
+            "Operational-Doc",
+            "DB-Integration"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "active",
+          "version": "1.0.0",
+          "updated": "2025-12-16",
+          "tags": [
+            "db-integration",
+            "healthview",
+            "import-graph",
+            "producer"
+          ],
+          "related_files": [
+            ".repo_studios/scripts/producers/generate_import_graph_report.py",
+            ".repo_studios/docs/automation/generate_import_graph_report.md",
+            ".repo_studios/scripts/producers/validate_import_boundaries.py",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py",
+            "REPORT_NAMING_STANDARDS.md"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_lizard_report.md",
+        "slug": "db-integration-notes-lizard-report",
+        "h1_headings": [
+          {
+            "title": "DB Integration Notes \u2014 Lizard Report",
+            "slug": "db-integration-notes-lizard-report",
+            "line": 20
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 22,
+            "parent_title": "DB Integration Notes \u2014 Lizard Report",
+            "parent_slug": "db-integration-notes-lizard-report"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 27,
+            "parent_title": "DB Integration Notes \u2014 Lizard Report",
+            "parent_slug": "db-integration-notes-lizard-report"
+          },
+          {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 38,
+            "parent_title": "DB Integration Notes \u2014 Lizard Report",
+            "parent_slug": "db-integration-notes-lizard-report"
+          },
+          {
+            "title": "Write Sites",
+            "slug": "write-sites",
+            "line": 43,
+            "parent_title": "DB Integration Notes \u2014 Lizard Report",
+            "parent_slug": "db-integration-notes-lizard-report"
+          },
+          {
+            "title": "Human Notes",
+            "slug": "human-notes",
+            "line": 51,
+            "parent_title": "DB Integration Notes \u2014 Lizard Report",
+            "parent_slug": "db-integration-notes-lizard-report"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 56,
+            "parent_title": "DB Integration Notes \u2014 Lizard Report",
+            "parent_slug": "db-integration-notes-lizard-report"
+          }
+        ],
+        "links": [],
+        "description": "The lizard producer writes its positional bundle under:",
+        "size_bytes": 1899,
+        "modified_utc": "2025-12-17T00:02:21.821596+00:00",
+        "tags": [
+          "db-integration",
+          "healthview",
+          "lizard"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "frontmatter": {
+          "title": "DB Integration Notes \u2014 Lizard Report",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "active",
+          "version": "1.0.0",
+          "updated": "2025-12-16",
+          "tags": [
+            "db-integration",
+            "healthview",
+            "lizard"
+          ],
+          "related_files": [
+            "../../scripts/producers/generate_lizard_report.py",
+            "../../command_center/scripts/libraries/database_integration.py"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_markdown_anchor_validation.md",
+        "slug": "db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation",
+        "h1_headings": [
+          {
+            "title": "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)",
+            "slug": "db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation",
+            "line": 18
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 20,
+            "parent_title": "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)",
+            "parent_slug": "db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 25,
+            "parent_title": "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)",
+            "parent_slug": "db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation"
+          },
+          {
+            "title": "Write Sites",
+            "slug": "write-sites",
+            "line": 32,
+            "parent_title": "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)",
+            "parent_slug": "db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation"
+          },
+          {
+            "title": "Schema Mapping",
+            "slug": "schema-mapping",
+            "line": 42,
+            "parent_title": "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)",
+            "parent_slug": "db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation"
+          },
+          {
+            "title": "Compatibility Notes",
+            "slug": "compatibility-notes",
+            "line": 67,
+            "parent_title": "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)",
+            "parent_slug": "db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 73,
+            "parent_title": "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)",
+            "parent_slug": "db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation"
+          }
+        ],
+        "links": [],
+        "description": "Define the database-facing contract for the markdown anchor validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",
+        "size_bytes": 2861,
+        "modified_utc": "2025-12-18T12:37:54.373653+00:00",
+        "tags": [
+          "db-integration",
+          "healthview",
+          "markdown-anchor-validation",
+          "producer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "frontmatter": {
+          "title": "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "role": [
+            "Operational-Doc",
+            "DB-Integration"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "active",
+          "version": "1.0.0",
+          "updated": "2025-12-18",
+          "tags": [
+            "db-integration",
+            "healthview",
+            "markdown-anchor-validation",
+            "producer"
+          ],
+          "related_files": [
+            ".repo_studios/scripts/producers/validate_markdown_anchors.py",
+            ".repo_studios/docs/automation/validate_markdown_anchors.md",
+            ".repo_studios/tests/tests_producers/test_validate_markdown_anchors.py",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py",
+            "REPORT_NAMING_STANDARDS.md"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_metrics_anchor_stub_validation.md",
+        "slug": "db-integration-mapping-metrics-anchor-stub-validation",
+        "h1_headings": [
+          {
+            "title": "DB Integration Mapping \u2014 Metrics Anchor Stub Validation",
+            "slug": "db-integration-mapping-metrics-anchor-stub-validation",
+            "line": 15
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 17,
+            "parent_title": "DB Integration Mapping \u2014 Metrics Anchor Stub Validation",
+            "parent_slug": "db-integration-mapping-metrics-anchor-stub-validation"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 22,
+            "parent_title": "DB Integration Mapping \u2014 Metrics Anchor Stub Validation",
+            "parent_slug": "db-integration-mapping-metrics-anchor-stub-validation"
+          },
+          {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 34,
+            "parent_title": "DB Integration Mapping \u2014 Metrics Anchor Stub Validation",
+            "parent_slug": "db-integration-mapping-metrics-anchor-stub-validation"
+          },
+          {
+            "title": "Write Mapping",
+            "slug": "write-mapping",
+            "line": 40,
+            "parent_title": "DB Integration Mapping \u2014 Metrics Anchor Stub Validation",
+            "parent_slug": "db-integration-mapping-metrics-anchor-stub-validation"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 60,
+            "parent_title": "DB Integration Mapping \u2014 Metrics Anchor Stub Validation",
+            "parent_slug": "db-integration-mapping-metrics-anchor-stub-validation"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 65,
+            "parent_title": "DB Integration Mapping \u2014 Metrics Anchor Stub Validation",
+            "parent_slug": "db-integration-mapping-metrics-anchor-stub-validation"
+          }
+        ],
+        "links": [],
+        "description": "The producer emits canonical positional bundles under:",
+        "size_bytes": 2082,
+        "modified_utc": "2025-12-18T16:04:05.596021+00:00",
+        "tags": [
+          "db-integration",
+          "producer",
+          "healthview",
+          "metrics",
+          "anchors"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "frontmatter": {
+          "title": "DB Integration Mapping \u2014 Metrics Anchor Stub Validation",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "active",
+          "version": "1.0.0",
+          "updated": "2025-12-18",
+          "tags": [
+            "db-integration",
+            "producer",
+            "healthview",
+            "metrics",
+            "anchors"
+          ],
+          "related_files": [
+            ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py",
+            "REPORT_NAMING_STANDARDS.md"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_monkey_patches.md",
+        "slug": "db-integration-monkeypatches",
+        "h1_headings": [
+          {
+            "title": "DB Integration \u2014 monkey_patches",
+            "slug": "db-integration-monkeypatches",
+            "line": 23
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 25,
+            "parent_title": "DB Integration \u2014 monkey_patches",
+            "parent_slug": "db-integration-monkeypatches"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 30,
+            "parent_title": "DB Integration \u2014 monkey_patches",
+            "parent_slug": "db-integration-monkeypatches"
+          },
+          {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 36,
+            "parent_title": "DB Integration \u2014 monkey_patches",
+            "parent_slug": "db-integration-monkeypatches"
+          },
+          {
+            "title": "Human Notes",
+            "slug": "human-notes",
+            "line": 68,
+            "parent_title": "DB Integration \u2014 monkey_patches",
+            "parent_slug": "db-integration-monkeypatches"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 74,
+            "parent_title": "DB Integration \u2014 monkey_patches",
+            "parent_slug": "db-integration-monkeypatches"
+          }
+        ],
+        "links": [],
+        "description": null,
+        "size_bytes": 2929,
+        "modified_utc": "2025-12-17T23:50:14.347407+00:00",
+        "tags": [
+          "db",
+          "integration",
+          "producers",
+          "healthview",
+          "monkey_patches"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "approved",
+        "frontmatter": {
+          "title": "DB Integration \u2014 monkey_patches",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "approved",
+          "version": "1.0.0",
+          "updated": "2025-12-17",
+          "tags": [
+            "db",
+            "integration",
+            "producers",
+            "healthview",
+            "monkey_patches"
+          ],
+          "related_files": [
+            "../../scripts/libraries/database_integration.py",
+            "../../../scripts/producers/scan_monkey_patches.py",
+            "../../../docs/automation/scan_monkey_patches.md"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_render_inventory_views.md",
+        "slug": "db-integration-inventory-overview-healthviewinventoryoverview",
+        "h1_headings": [
+          {
+            "title": "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)",
+            "slug": "db-integration-inventory-overview-healthviewinventoryoverview",
+            "line": 18
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 20,
+            "parent_title": "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)",
+            "parent_slug": "db-integration-inventory-overview-healthviewinventoryoverview"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 25,
+            "parent_title": "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)",
+            "parent_slug": "db-integration-inventory-overview-healthviewinventoryoverview"
+          },
+          {
+            "title": "Write Sites",
+            "slug": "write-sites",
+            "line": 32,
+            "parent_title": "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)",
+            "parent_slug": "db-integration-inventory-overview-healthviewinventoryoverview"
+          },
+          {
+            "title": "Schema Mapping",
+            "slug": "schema-mapping",
+            "line": 42,
+            "parent_title": "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)",
+            "parent_slug": "db-integration-inventory-overview-healthviewinventoryoverview"
+          },
+          {
+            "title": "Compatibility Notes",
+            "slug": "compatibility-notes",
+            "line": 70,
+            "parent_title": "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)",
+            "parent_slug": "db-integration-inventory-overview-healthviewinventoryoverview"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 78,
+            "parent_title": "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)",
+            "parent_slug": "db-integration-inventory-overview-healthviewinventoryoverview"
+          }
+        ],
+        "links": [],
+        "description": "Define the database-facing contract for the Inventory Overview producer so dual-write storage can persist run metadata, summary markdown, and telemetry payloads in a stable schema.",
+        "size_bytes": 3050,
+        "modified_utc": "2025-12-17T18:23:40.621821+00:00",
+        "tags": [
+          "db-integration",
+          "healthview",
+          "inventory",
+          "producer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "frontmatter": {
+          "title": "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "role": [
+            "Operational-Doc",
+            "DB-Integration"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "active",
+          "version": "1.0.0",
+          "updated": "2025-12-17",
+          "tags": [
+            "db-integration",
+            "healthview",
+            "inventory",
+            "producer"
+          ],
+          "related_files": [
+            ".repo_studios/scripts/producers/render_inventory_views.py",
+            ".repo_studios/docs/automation/render_inventory_views.md",
+            ".repo_studios/scripts/producers/check_inventory_health.py",
             ".repo_studios/command_center/scripts/libraries/database_integration.py",
             "REPORT_NAMING_STANDARDS.md"
           ]
@@ -3107,6 +4082,101 @@
             "../../scripts/libraries/database_integration.py",
             "../../../scripts/producers/collect_test_log_reports.py",
             "../../../tests/tests_producers/test_collect_test_log_reports.py"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_undocumented_logic.md",
+        "slug": "undocumented-logic-db-integration",
+        "h1_headings": [
+          {
+            "title": "Undocumented Logic \u2014 DB Integration",
+            "slug": "undocumented-logic-db-integration",
+            "line": 22
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 24,
+            "parent_title": "Undocumented Logic \u2014 DB Integration",
+            "parent_slug": "undocumented-logic-db-integration"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 30,
+            "parent_title": "Undocumented Logic \u2014 DB Integration",
+            "parent_slug": "undocumented-logic-db-integration"
+          },
+          {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 38,
+            "parent_title": "Undocumented Logic \u2014 DB Integration",
+            "parent_slug": "undocumented-logic-db-integration"
+          },
+          {
+            "title": "Human Notes",
+            "slug": "human-notes",
+            "line": 43,
+            "parent_title": "Undocumented Logic \u2014 DB Integration",
+            "parent_slug": "undocumented-logic-db-integration"
+          },
+          {
+            "title": "Reference Prompts",
+            "slug": "reference-prompts",
+            "line": 76,
+            "parent_title": "Undocumented Logic \u2014 DB Integration",
+            "parent_slug": "undocumented-logic-db-integration"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 86,
+            "parent_title": "Undocumented Logic \u2014 DB Integration",
+            "parent_slug": "undocumented-logic-db-integration"
+          }
+        ],
+        "links": [],
+        "description": "abstraction.",
+        "size_bytes": 2596,
+        "modified_utc": "2025-12-17T17:03:35.225241+00:00",
+        "tags": [
+          "db-integration",
+          "healthview",
+          "producer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "frontmatter": {
+          "title": "Undocumented Logic \u2014 DB Integration",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "role": [
+            "Operational-Doc"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "active",
+          "version": "1.0.0",
+          "updated": "2025-12-17",
+          "tags": [
+            "db-integration",
+            "healthview",
+            "producer"
+          ],
+          "related_files": [
+            "../../scripts/libraries/database_integration.py",
+            "../../../scripts/producers/generate_undocumented_logic_report.py"
           ]
         },
         "contains_placeholder": false
@@ -3728,8 +4798,8 @@
         ],
         "links": [],
         "description": "This note packages the key resources operators need when executing Phase 3 manual extractions. Share this document with anyone running the checklist so they align with the latest tooling and report outputs.",
-        "size_bytes": 3069,
-        "modified_utc": "2025-11-08T23:02:50.721156+00:00",
+        "size_bytes": 3150,
+        "modified_utc": "2025-12-17T01:38:22.486199+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -5816,8 +6886,8 @@
         ],
         "links": [],
         "description": "Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.",
-        "size_bytes": 5193,
-        "modified_utc": "2025-11-04T14:45:22.715420+00:00",
+        "size_bytes": 5207,
+        "modified_utc": "2025-12-17T01:38:22.486199+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -7836,57 +8906,6 @@
       },
       {
         "folder": ".repo_studios/command_center/scripts/scripts_index",
-        "filename": ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md",
-        "slug": "duplicate-scan-summary",
-        "h1_headings": [
-          {
-            "title": "Duplicate Scan Summary",
-            "slug": "duplicate-scan-summary",
-            "line": 1
-          }
-        ],
-        "h2_headings": [
-          {
-            "title": "Overview",
-            "slug": "overview",
-            "line": 3,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Inputs",
-            "slug": "inputs",
-            "line": 13,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Top Duplicate Offenders",
-            "slug": "top-duplicate-offenders",
-            "line": 18,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Next Steps",
-            "slug": "next-steps",
-            "line": 100,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          }
-        ],
-        "links": [],
-        "description": "1. `configure_logging` \u2014 12 duplicate(s)",
-        "size_bytes": 7229,
-        "modified_utc": "2025-12-15T18:05:31.172310+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
-        "contains_placeholder": false
-      },
-      {
-        "folder": ".repo_studios/command_center/scripts/scripts_index",
         "filename": ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md",
         "slug": "duplicate-scan-summary",
         "h1_headings": [
@@ -7929,7 +8948,7 @@
         "links": [],
         "description": "1. `configure_logging` \u2014 12 duplicate(s)",
         "size_bytes": 7198,
-        "modified_utc": "2025-12-15T18:05:31.173309+00:00",
+        "modified_utc": "2025-12-18T12:22:43.714946+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -7981,6 +9000,57 @@
         "description": "1. `configure_logging` \u2014 12 duplicate(s)",
         "size_bytes": 7198,
         "modified_utc": "2025-12-15T18:05:31.173309+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/scripts/scripts_index",
+        "filename": ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251217-2039.md",
+        "slug": "duplicate-scan-summary",
+        "h1_headings": [
+          {
+            "title": "Duplicate Scan Summary",
+            "slug": "duplicate-scan-summary",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Overview",
+            "slug": "overview",
+            "line": 3,
+            "parent_title": "Duplicate Scan Summary",
+            "parent_slug": "duplicate-scan-summary"
+          },
+          {
+            "title": "Inputs",
+            "slug": "inputs",
+            "line": 13,
+            "parent_title": "Duplicate Scan Summary",
+            "parent_slug": "duplicate-scan-summary"
+          },
+          {
+            "title": "Top Duplicate Offenders",
+            "slug": "top-duplicate-offenders",
+            "line": 18,
+            "parent_title": "Duplicate Scan Summary",
+            "parent_slug": "duplicate-scan-summary"
+          },
+          {
+            "title": "Next Steps",
+            "slug": "next-steps",
+            "line": 174,
+            "parent_title": "Duplicate Scan Summary",
+            "parent_slug": "duplicate-scan-summary"
+          }
+        ],
+        "links": [],
+        "description": "1. `_parse_timestamp` \u2014 27 duplicate(s)",
+        "size_bytes": 16000,
+        "modified_utc": "2025-12-17T20:39:39.920788+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -8878,36 +9948,36 @@
           {
             "title": "Agent Instructions",
             "slug": "agent-instructions",
-            "line": 54,
+            "line": 55,
             "parent_title": "Automation \u2014 check_inventory_health",
             "parent_slug": "automation-checkinventoryhealth"
           },
           {
             "title": "Human Notes",
             "slug": "human-notes",
-            "line": 77,
+            "line": 78,
             "parent_title": "Automation \u2014 check_inventory_health",
             "parent_slug": "automation-checkinventoryhealth"
           },
           {
             "title": "Reference Prompts",
             "slug": "reference-prompts",
-            "line": 95,
+            "line": 96,
             "parent_title": "Automation \u2014 check_inventory_health",
             "parent_slug": "automation-checkinventoryhealth"
           },
           {
             "title": "Update Log",
             "slug": "update-log",
-            "line": 100,
+            "line": 101,
             "parent_title": "Automation \u2014 check_inventory_health",
             "parent_slug": "automation-checkinventoryhealth"
           }
         ],
         "links": [],
         "description": "See `.github/instructions/markdown.instructions.md` for repo-wide Markdown rules (last reviewed 2025-12-15).",
-        "size_bytes": 3372,
-        "modified_utc": "2025-12-15T20:58:09.903934+00:00",
+        "size_bytes": 3464,
+        "modified_utc": "2025-12-17T18:23:40.605108+00:00",
         "tags": [
           "automation",
           "healthview",
@@ -8997,8 +10067,8 @@
         ],
         "links": [],
         "description": "Last updated: 2025-10-18",
-        "size_bytes": 2419,
-        "modified_utc": "2025-12-11T10:50:58.485331+00:00",
+        "size_bytes": 2523,
+        "modified_utc": "2025-12-17T18:23:40.625822+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -9992,7 +11062,7 @@
         "links": [],
         "description": "`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally\u2026",
         "size_bytes": 3903,
-        "modified_utc": "2025-12-16T20:10:31.378690+00:00",
+        "modified_utc": "2025-12-16T21:14:26.596424+00:00",
         "tags": [
           "automation",
           "healthview",
@@ -10099,7 +11169,7 @@
         "links": [],
         "description": "`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",
         "size_bytes": 3469,
-        "modified_utc": "2025-12-16T21:06:34.408259+00:00",
+        "modified_utc": "2025-12-16T21:14:26.601426+00:00",
         "tags": [
           "docs",
           "producer",
@@ -10144,67 +11214,189 @@
       },
       {
         "folder": ".repo_studios/docs/automation",
-        "filename": ".repo_studios/docs/automation/generate_lizard_report.md",
-        "slug": "generatelizardreportpy",
+        "filename": ".repo_studios/docs/automation/generate_import_graph_report.md",
+        "slug": "generateimportgraphreportpy",
         "h1_headings": [
           {
-            "title": "generate_lizard_report.py",
-            "slug": "generatelizardreportpy",
-            "line": 1
+            "title": "generate_import_graph_report.py",
+            "slug": "generateimportgraphreportpy",
+            "line": 22
           }
         ],
         "h2_headings": [
           {
             "title": "Purpose",
             "slug": "purpose",
-            "line": 5,
+            "line": 24,
+            "parent_title": "generate_import_graph_report.py",
+            "parent_slug": "generateimportgraphreportpy"
+          },
+          {
+            "title": "Invocation",
+            "slug": "invocation",
+            "line": 37,
+            "parent_title": "generate_import_graph_report.py",
+            "parent_slug": "generateimportgraphreportpy"
+          },
+          {
+            "title": "Outputs",
+            "slug": "outputs",
+            "line": 60,
+            "parent_title": "generate_import_graph_report.py",
+            "parent_slug": "generateimportgraphreportpy"
+          },
+          {
+            "title": "Consumer notes",
+            "slug": "consumer-notes",
+            "line": 75,
+            "parent_title": "generate_import_graph_report.py",
+            "parent_slug": "generateimportgraphreportpy"
+          },
+          {
+            "title": "Testing",
+            "slug": "testing",
+            "line": 82,
+            "parent_title": "generate_import_graph_report.py",
+            "parent_slug": "generateimportgraphreportpy"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 87,
+            "parent_title": "generate_import_graph_report.py",
+            "parent_slug": "generateimportgraphreportpy"
+          }
+        ],
+        "links": [],
+        "description": "`generate_import_graph_report.py` scans owned Python packages inside the repository and emits an adjacency graph of import relationships. The report highlights:",
+        "size_bytes": 3320,
+        "modified_utc": "2025-12-16T22:07:37.971519+00:00",
+        "tags": [
+          "automation",
+          "healthview",
+          "import-graph"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "frontmatter": {
+          "title": "generate_import_graph_report.py",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "active",
+          "version": "2.0.0",
+          "updated": "2025-12-16",
+          "tags": [
+            "automation",
+            "healthview",
+            "import-graph"
+          ],
+          "related_files": [
+            "../../scripts/producers/generate_import_graph_report.py",
+            "../../tests/tests_producers/test_generate_import_graph_report.py",
+            "../../command_center/docs/db_integrations/db_integration_import_graph.md",
+            "../../scripts/producers/validate_import_boundaries.py"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/docs/automation",
+        "filename": ".repo_studios/docs/automation/generate_lizard_report.md",
+        "slug": "generatelizardreportpy",
+        "h1_headings": [
+          {
+            "title": "generate_lizard_report.py",
+            "slug": "generatelizardreportpy",
+            "line": 21
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 23,
+            "parent_title": "generate_lizard_report.py",
+            "parent_slug": "generatelizardreportpy"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 29,
+            "parent_title": "generate_lizard_report.py",
+            "parent_slug": "generatelizardreportpy"
+          },
+          {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 40,
             "parent_title": "generate_lizard_report.py",
             "parent_slug": "generatelizardreportpy"
           },
           {
             "title": "Invocation",
             "slug": "invocation",
-            "line": 9,
+            "line": 46,
             "parent_title": "generate_lizard_report.py",
             "parent_slug": "generatelizardreportpy"
           },
           {
-            "title": "Outputs",
-            "slug": "outputs",
-            "line": 37,
-            "parent_title": "generate_lizard_report.py",
-            "parent_slug": "generatelizardreportpy"
-          },
-          {
-            "title": "Status semantics",
-            "slug": "status-semantics",
-            "line": 63,
-            "parent_title": "generate_lizard_report.py",
-            "parent_slug": "generatelizardreportpy"
-          },
-          {
-            "title": "Testing",
-            "slug": "testing",
-            "line": 70,
-            "parent_title": "generate_lizard_report.py",
-            "parent_slug": "generatelizardreportpy"
-          },
-          {
-            "title": "Operational notes",
-            "slug": "operational-notes",
+            "title": "Human Notes",
+            "slug": "human-notes",
             "line": 75,
+            "parent_title": "generate_lizard_report.py",
+            "parent_slug": "generatelizardreportpy"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 81,
             "parent_title": "generate_lizard_report.py",
             "parent_slug": "generatelizardreportpy"
           }
         ],
         "links": [],
-        "description": "`generate_lizard_report.py` runs `python -m lizard` across the owned source tree, captures the JSON output, and emits structured artifacts so downstream agents can track cyclomatic complexity hotspots and long functions. It is designed to\u2026",
-        "size_bytes": 4795,
-        "modified_utc": "2025-10-22T21:38:16.995302+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
+        "description": "This producer runs `python -m lizard` against selected targets inside the repo and writes a canonical 3-artifact bundle.",
+        "size_bytes": 3451,
+        "modified_utc": "2025-12-17T01:38:22.483200+00:00",
+        "tags": [
+          "producer",
+          "healthview",
+          "complexity"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "frontmatter": {
+          "title": "Lizard Complexity Report Producer",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "active",
+          "version": "2.0.0",
+          "updated": "2025-12-16",
+          "tags": [
+            "producer",
+            "healthview",
+            "complexity"
+          ],
+          "related_files": [
+            "../../scripts/producers/generate_lizard_report.py",
+            "../../tests/tests_producers/test_generate_lizard_report.py",
+            "../../Makefile"
+          ]
+        },
         "contains_placeholder": false
       },
       {
@@ -10280,61 +11472,104 @@
           {
             "title": "generate_test_coverage_inventory.py",
             "slug": "generatetestcoverageinventorypy",
-            "line": 1
+            "line": 16
           }
         ],
         "h2_headings": [
           {
             "title": "Purpose",
             "slug": "purpose",
-            "line": 5,
+            "line": 20,
             "parent_title": "generate_test_coverage_inventory.py",
             "parent_slug": "generatetestcoverageinventorypy"
           },
           {
             "title": "Invocation",
             "slug": "invocation",
-            "line": 9,
+            "line": 26,
             "parent_title": "generate_test_coverage_inventory.py",
             "parent_slug": "generatetestcoverageinventorypy"
           },
           {
             "title": "Outputs",
             "slug": "outputs",
-            "line": 37,
+            "line": 54,
             "parent_title": "generate_test_coverage_inventory.py",
             "parent_slug": "generatetestcoverageinventorypy"
           },
           {
             "title": "Status semantics",
             "slug": "status-semantics",
-            "line": 51,
+            "line": 64,
             "parent_title": "generate_test_coverage_inventory.py",
             "parent_slug": "generatetestcoverageinventorypy"
           },
           {
             "title": "Testing",
             "slug": "testing",
-            "line": 59,
+            "line": 72,
             "parent_title": "generate_test_coverage_inventory.py",
             "parent_slug": "generatetestcoverageinventorypy"
           },
           {
             "title": "Operational notes",
             "slug": "operational-notes",
-            "line": 64,
+            "line": 77,
+            "parent_title": "generate_test_coverage_inventory.py",
+            "parent_slug": "generatetestcoverageinventorypy"
+          },
+          {
+            "title": "References",
+            "slug": "references",
+            "line": 85,
             "parent_title": "generate_test_coverage_inventory.py",
             "parent_slug": "generatetestcoverageinventorypy"
           }
         ],
-        "links": [],
-        "description": "`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered. The producer emits JSON, Markdown, CSV,\u2026",
-        "size_bytes": 4223,
-        "modified_utc": "2025-11-23T12:12:27.820382+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
+        "links": [
+          "../../.github/instructions/markdown.instructions.md"
+        ],
+        "description": "`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered.",
+        "size_bytes": 4485,
+        "modified_utc": "2025-12-17T12:55:53.914422+00:00",
+        "tags": [
+          "automation",
+          "producer",
+          "healthview",
+          "test-coverage"
+        ],
+        "owners": [
+          "repo_studios_ai"
+        ],
+        "status": "active",
+        "frontmatter": {
+          "title": "generate_test_coverage_inventory.py",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "role": [
+            "AutomationDoc"
+          ],
+          "owners": [
+            "repo_studios_ai"
+          ],
+          "status": "active",
+          "version": 2,
+          "updated_at": "2025-12-17",
+          "tags": [
+            "automation",
+            "producer",
+            "healthview",
+            "test-coverage"
+          ],
+          "related_files": [
+            ".repo_studios/scripts/producers/generate_test_coverage_inventory.py",
+            ".repo_studios/tests/tests_producers/test_generate_test_coverage_inventory.py",
+            ".repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md"
+          ]
+        },
         "contains_placeholder": false
       },
       {
@@ -10454,40 +11689,93 @@
           {
             "title": "Typecheck Report Producer",
             "slug": "typecheck-report-producer",
-            "line": 1
+            "line": 16
           }
         ],
         "h2_headings": [
           {
-            "title": "Invocation",
-            "slug": "invocation",
-            "line": 5,
+            "title": "Goals",
+            "slug": "goals",
+            "line": 20,
             "parent_title": "Typecheck Report Producer",
             "parent_slug": "typecheck-report-producer"
           },
           {
-            "title": "Outputs",
-            "slug": "outputs",
+            "title": "System Context",
+            "slug": "system-context",
             "line": 26,
+            "parent_title": "Typecheck Report Producer",
+            "parent_slug": "typecheck-report-producer"
+          },
+          {
+            "title": "Invocation",
+            "slug": "invocation",
+            "line": 35,
+            "parent_title": "Typecheck Report Producer",
+            "parent_slug": "typecheck-report-producer"
+          },
+          {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 78,
             "parent_title": "Typecheck Report Producer",
             "parent_slug": "typecheck-report-producer"
           },
           {
             "title": "Testing",
             "slug": "testing",
-            "line": 47,
+            "line": 84,
+            "parent_title": "Typecheck Report Producer",
+            "parent_slug": "typecheck-report-producer"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 90,
             "parent_title": "Typecheck Report Producer",
             "parent_slug": "typecheck-report-producer"
           }
         ],
         "links": [],
-        "description": "The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and captures a structured set of artifacts for observability.",
-        "size_bytes": 1895,
-        "modified_utc": "2025-10-23T02:03:40.458715+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
+        "description": "The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and emits a canonical 3-artifact bundle for observability.",
+        "size_bytes": 2869,
+        "modified_utc": "2025-12-17T16:29:02.339003+00:00",
+        "tags": [
+          "producer",
+          "healthview",
+          "typecheck"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "frontmatter": {
+          "title": "Typecheck Report Producer",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "role": [
+            "AutomationDoc"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "active",
+          "version": "2.1.0",
+          "updated_at": "2025-12-17",
+          "tags": [
+            "producer",
+            "healthview",
+            "typecheck"
+          ],
+          "related_files": [
+            ".repo_studios/scripts/producers/generate_typecheck_report.py",
+            ".repo_studios/tests/tests_producers/test_generate_typecheck_report.py",
+            ".repo_studios/Makefile"
+          ]
+        },
         "contains_placeholder": false
       },
       {
@@ -10498,54 +11786,90 @@
           {
             "title": "generate_undocumented_logic_report",
             "slug": "generateundocumentedlogicreport",
-            "line": 1
+            "line": 22
           }
         ],
         "h2_headings": [
           {
-            "title": "Purpose",
-            "slug": "purpose",
-            "line": 3,
+            "title": "Goals",
+            "slug": "goals",
+            "line": 24,
             "parent_title": "generate_undocumented_logic_report",
             "parent_slug": "generateundocumentedlogicreport"
           },
           {
-            "title": "Inputs",
-            "slug": "inputs",
-            "line": 10,
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 30,
             "parent_title": "generate_undocumented_logic_report",
             "parent_slug": "generateundocumentedlogicreport"
           },
           {
-            "title": "Outputs",
-            "slug": "outputs",
-            "line": 27,
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 35,
             "parent_title": "generate_undocumented_logic_report",
             "parent_slug": "generateundocumentedlogicreport"
           },
           {
-            "title": "Usage",
-            "slug": "usage",
-            "line": 43,
+            "title": "Human Notes",
+            "slug": "human-notes",
+            "line": 42,
             "parent_title": "generate_undocumented_logic_report",
             "parent_slug": "generateundocumentedlogicreport"
           },
           {
-            "title": "Testing",
-            "slug": "testing",
-            "line": 58,
+            "title": "Reference Prompts",
+            "slug": "reference-prompts",
+            "line": 67,
+            "parent_title": "generate_undocumented_logic_report",
+            "parent_slug": "generateundocumentedlogicreport"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 88,
             "parent_title": "generate_undocumented_logic_report",
             "parent_slug": "generateundocumentedlogicreport"
           }
         ],
         "links": [],
-        "description": "`generate_undocumented_logic_report.py` scans the repo automation scripts for public functions, classes, and methods that lack docstrings. The report helps identify code paths that should have documentation anchors or docstring coverage\u2026",
-        "size_bytes": 2681,
-        "modified_utc": "2025-12-16T16:16:30.904227+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
+        "description": "`generate_undocumented_logic_report.py` scans automation scripts for public functions, classes, and methods that lack docstrings. The output feeds the Docs Health workflow by highlighting missing documentation coverage in code.",
+        "size_bytes": 3042,
+        "modified_utc": "2025-12-17T17:03:35.225241+00:00",
+        "tags": [
+          "producers",
+          "docs-health",
+          "healthview"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "frontmatter": {
+          "title": "Undocumented Logic Producer",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "active",
+          "version": "1.0.0",
+          "updated": "2025-12-17",
+          "tags": [
+            "producers",
+            "docs-health",
+            "healthview"
+          ],
+          "related_files": [
+            "../../scripts/producers/generate_undocumented_logic_report.py",
+            "../../scripts/aggregators/aggregate_docs_health_signals.py",
+            "../../command_center/scripts/orchestrators/run_docs_health_overview.py",
+            "../../tests/tests_producers/test_generate_undocumented_logic_report.py"
+          ]
+        },
         "contains_placeholder": false
       },
       {
@@ -10809,40 +12133,74 @@
           {
             "title": "Render Inventory Views Producer",
             "slug": "render-inventory-views-producer",
-            "line": 1
+            "line": 18
           }
         ],
         "h2_headings": [
           {
             "title": "Invocation",
             "slug": "invocation",
-            "line": 5,
+            "line": 22,
             "parent_title": "Render Inventory Views Producer",
             "parent_slug": "render-inventory-views-producer"
           },
           {
             "title": "Outputs",
             "slug": "outputs",
-            "line": 21,
+            "line": 38,
             "parent_title": "Render Inventory Views Producer",
             "parent_slug": "render-inventory-views-producer"
           },
           {
             "title": "Testing",
             "slug": "testing",
-            "line": 45,
+            "line": 58,
             "parent_title": "Render Inventory Views Producer",
             "parent_slug": "render-inventory-views-producer"
           }
         ],
         "links": [],
         "description": "The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation.",
-        "size_bytes": 2019,
-        "modified_utc": "2025-10-23T09:50:23.539274+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
+        "size_bytes": 2684,
+        "modified_utc": "2025-12-17T18:23:40.617822+00:00",
+        "tags": [
+          "inventory",
+          "producer",
+          "healthview"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "frontmatter": {
+          "title": "Render Inventory Views Producer",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "role": [
+            "Operational-Doc"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "active",
+          "version": "1.0.0",
+          "updated": "2025-12-17",
+          "tags": [
+            "inventory",
+            "producer",
+            "healthview"
+          ],
+          "related_files": [
+            ".repo_studios/scripts/producers/render_inventory_views.py",
+            ".repo_studios/tests/tests_producers/test_render_inventory_views.py",
+            ".repo_studios/scripts/producers/check_inventory_health.py",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py",
+            "REPORT_NAMING_STANDARDS.md"
+          ]
+        },
         "contains_placeholder": false
       },
       {
@@ -11027,68 +12385,96 @@
           {
             "title": "scan_code_placeholders.py",
             "slug": "scancodeplaceholderspy",
-            "line": 1
+            "line": 21
           }
         ],
         "h2_headings": [
           {
             "title": "Purpose",
             "slug": "purpose",
-            "line": 5,
+            "line": 25,
             "parent_title": "scan_code_placeholders.py",
             "parent_slug": "scancodeplaceholderspy"
           },
           {
             "title": "Invocation",
             "slug": "invocation",
-            "line": 9,
+            "line": 29,
             "parent_title": "scan_code_placeholders.py",
             "parent_slug": "scancodeplaceholderspy"
           },
           {
             "title": "Outputs",
             "slug": "outputs",
-            "line": 37,
+            "line": 58,
             "parent_title": "scan_code_placeholders.py",
             "parent_slug": "scancodeplaceholderspy"
           },
           {
             "title": "Diagnostics",
             "slug": "diagnostics",
-            "line": 57,
+            "line": 72,
             "parent_title": "scan_code_placeholders.py",
             "parent_slug": "scancodeplaceholderspy"
           },
           {
             "title": "Allowlist format",
             "slug": "allowlist-format",
-            "line": 65,
+            "line": 80,
             "parent_title": "scan_code_placeholders.py",
             "parent_slug": "scancodeplaceholderspy"
           },
           {
             "title": "Testing",
             "slug": "testing",
-            "line": 77,
+            "line": 92,
             "parent_title": "scan_code_placeholders.py",
             "parent_slug": "scancodeplaceholderspy"
           },
           {
             "title": "Operational notes",
             "slug": "operational-notes",
-            "line": 83,
+            "line": 98,
             "parent_title": "scan_code_placeholders.py",
             "parent_slug": "scancodeplaceholderspy"
           }
         ],
         "links": [],
         "description": "`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved\u2026",
-        "size_bytes": 6420,
-        "modified_utc": "2025-11-25T00:22:28.965573+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
+        "size_bytes": 6594,
+        "modified_utc": "2025-12-17T19:43:51.315571+00:00",
+        "tags": [
+          "automation",
+          "producers",
+          "placeholders"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "approved",
+        "frontmatter": {
+          "title": "scan_code_placeholders.py",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "approved",
+          "version": "1.2.0",
+          "updated": "2025-12-17",
+          "tags": [
+            "automation",
+            "producers",
+            "placeholders"
+          ],
+          "related_files": [
+            "../../scripts/producers/scan_code_placeholders.py",
+            "../../tests/tests_producers/test_scan_code_placeholders.py",
+            "../../command_center/scripts/libraries/database_integration.py"
+          ]
+        },
         "contains_placeholder": true
       },
       {
@@ -11099,61 +12485,101 @@
           {
             "title": "scan_monkey_patches.py",
             "slug": "scanmonkeypatchespy",
-            "line": 1
+            "line": 24
           }
         ],
         "h2_headings": [
           {
             "title": "Purpose",
             "slug": "purpose",
-            "line": 5,
+            "line": 26,
             "parent_title": "scan_monkey_patches.py",
             "parent_slug": "scanmonkeypatchespy"
           },
           {
             "title": "Invocation",
             "slug": "invocation",
-            "line": 9,
+            "line": 32,
             "parent_title": "scan_monkey_patches.py",
             "parent_slug": "scanmonkeypatchespy"
           },
           {
             "title": "Outputs",
             "slug": "outputs",
-            "line": 39,
+            "line": 63,
             "parent_title": "scan_monkey_patches.py",
             "parent_slug": "scanmonkeypatchespy"
           },
           {
             "title": "Diagnostics",
             "slug": "diagnostics",
-            "line": 69,
+            "line": 82,
             "parent_title": "scan_monkey_patches.py",
             "parent_slug": "scanmonkeypatchespy"
           },
           {
             "title": "Testing",
             "slug": "testing",
-            "line": 77,
+            "line": 90,
             "parent_title": "scan_monkey_patches.py",
             "parent_slug": "scanmonkeypatchespy"
           },
           {
             "title": "Operational notes",
             "slug": "operational-notes",
-            "line": 83,
+            "line": 96,
+            "parent_title": "scan_monkey_patches.py",
+            "parent_slug": "scanmonkeypatchespy"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 104,
             "parent_title": "scan_monkey_patches.py",
             "parent_slug": "scanmonkeypatchespy"
           }
         ],
         "links": [],
         "description": "`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and\u2026",
-        "size_bytes": 5224,
-        "modified_utc": "2025-11-23T22:11:45.717043+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
+        "size_bytes": 5247,
+        "modified_utc": "2025-12-17T23:50:14.347407+00:00",
+        "tags": [
+          "producers",
+          "healthview",
+          "monkey_patches",
+          "pruning",
+          "db"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "approved",
+        "frontmatter": {
+          "title": "scan_monkey_patches \u2014 Monkey Patch Inventory Producer",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "approved",
+          "version": "2.0.0",
+          "updated": "2025-12-17",
+          "tags": [
+            "producers",
+            "healthview",
+            "monkey_patches",
+            "pruning",
+            "db"
+          ],
+          "related_files": [
+            "../../scripts/producers/scan_monkey_patches.py",
+            "../../tests/tests_producers/test_scan_monkey_patches.py",
+            "../../command_center/scripts/libraries/database_integration.py",
+            "../../command_center/docs/db_integrations/db_integration_monkey_patches.md"
+          ]
+        },
         "contains_placeholder": false
       },
       {
@@ -11214,7 +12640,7 @@
         "links": [],
         "description": "`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can\u2026",
         "size_bytes": 3787,
-        "modified_utc": "2025-11-27T17:20:15.674439+00:00",
+        "modified_utc": "2025-12-18T12:22:43.715945+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -12246,7 +13672,7 @@
         "links": [],
         "description": "`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level\u2026",
         "size_bytes": 3680,
-        "modified_utc": "2025-10-23T20:46:06.804068+00:00",
+        "modified_utc": "2025-12-18T12:22:43.716946+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -12290,7 +13716,7 @@
         "links": [],
         "description": "The `validate_inventory.py` producer walks the inventory catalog, enforces schema conventions, and writes structured validation bundles for downstream tooling.",
         "size_bytes": 1882,
-        "modified_utc": "2025-10-23T11:18:26.650942+00:00",
+        "modified_utc": "2025-12-18T12:22:43.717946+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -12305,61 +13731,105 @@
           {
             "title": "validate_markdown_anchors.py",
             "slug": "validatemarkdownanchorspy",
-            "line": 1
+            "line": 17
           }
         ],
         "h2_headings": [
           {
             "title": "Purpose",
             "slug": "purpose",
-            "line": 5,
+            "line": 19,
             "parent_title": "validate_markdown_anchors.py",
             "parent_slug": "validatemarkdownanchorspy"
           },
           {
             "title": "Invocation",
             "slug": "invocation",
-            "line": 12,
+            "line": 26,
             "parent_title": "validate_markdown_anchors.py",
             "parent_slug": "validatemarkdownanchorspy"
           },
           {
             "title": "Outputs",
             "slug": "outputs",
-            "line": 33,
+            "line": 46,
             "parent_title": "validate_markdown_anchors.py",
             "parent_slug": "validatemarkdownanchorspy"
           },
           {
             "title": "Status semantics",
             "slug": "status-semantics",
-            "line": 45,
+            "line": 60,
             "parent_title": "validate_markdown_anchors.py",
             "parent_slug": "validatemarkdownanchorspy"
           },
           {
             "title": "Testing",
             "slug": "testing",
-            "line": 55,
+            "line": 70,
             "parent_title": "validate_markdown_anchors.py",
             "parent_slug": "validatemarkdownanchorspy"
           },
           {
             "title": "Operational notes",
             "slug": "operational-notes",
-            "line": 63,
+            "line": 78,
+            "parent_title": "validate_markdown_anchors.py",
+            "parent_slug": "validatemarkdownanchorspy"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 87,
             "parent_title": "validate_markdown_anchors.py",
             "parent_slug": "validatemarkdownanchorspy"
           }
         ],
         "links": [],
         "description": "`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and\u2026",
-        "size_bytes": 3062,
-        "modified_utc": "2025-11-25T19:39:48.109027+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
+        "size_bytes": 3707,
+        "modified_utc": "2025-12-18T12:37:54.373653+00:00",
+        "tags": [
+          "automation",
+          "markdown",
+          "anchors",
+          "links",
+          "producer",
+          "healthview"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "frontmatter": {
+          "title": "validate_markdown_anchors.py",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "active",
+          "version": "1.1.0",
+          "updated": "2025-12-18",
+          "tags": [
+            "automation",
+            "markdown",
+            "anchors",
+            "links",
+            "producer",
+            "healthview"
+          ],
+          "related_files": [
+            ".repo_studios/scripts/producers/validate_markdown_anchors.py",
+            ".repo_studios/tests/tests_producers/test_validate_markdown_anchors.py",
+            ".repo_studios/Makefile",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py",
+            "REPORT_NAMING_STANDARDS.md"
+          ]
+        },
         "contains_placeholder": false
       },
       {
@@ -12370,61 +13840,98 @@
           {
             "title": "validate_metrics_anchor_stubs.py",
             "slug": "validatemetricsanchorstubspy",
-            "line": 1
+            "line": 17
           }
         ],
         "h2_headings": [
           {
             "title": "Purpose",
             "slug": "purpose",
-            "line": 5,
+            "line": 19,
             "parent_title": "validate_metrics_anchor_stubs.py",
             "parent_slug": "validatemetricsanchorstubspy"
           },
           {
             "title": "Invocation",
             "slug": "invocation",
-            "line": 12,
+            "line": 28,
             "parent_title": "validate_metrics_anchor_stubs.py",
             "parent_slug": "validatemetricsanchorstubspy"
           },
           {
             "title": "Outputs",
             "slug": "outputs",
-            "line": 36,
+            "line": 53,
             "parent_title": "validate_metrics_anchor_stubs.py",
             "parent_slug": "validatemetricsanchorstubspy"
           },
           {
             "title": "Diagnostics",
             "slug": "diagnostics",
-            "line": 56,
+            "line": 70,
             "parent_title": "validate_metrics_anchor_stubs.py",
             "parent_slug": "validatemetricsanchorstubspy"
           },
           {
             "title": "Testing",
             "slug": "testing",
-            "line": 64,
+            "line": 78,
             "parent_title": "validate_metrics_anchor_stubs.py",
             "parent_slug": "validatemetricsanchorstubspy"
           },
           {
             "title": "Operational notes",
             "slug": "operational-notes",
-            "line": 71,
+            "line": 85,
             "parent_title": "validate_metrics_anchor_stubs.py",
             "parent_slug": "validatemetricsanchorstubspy"
           }
         ],
         "links": [],
-        "description": "`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry. The refactor emits structured artifacts\u2026",
-        "size_bytes": 3140,
-        "modified_utc": "2025-10-23T23:24:42.780107+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
+        "description": "`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry under the \"Legacy Anchor Compatibility\" section.",
+        "size_bytes": 3681,
+        "modified_utc": "2025-12-18T16:04:05.596021+00:00",
+        "tags": [
+          "automation",
+          "markdown",
+          "anchors",
+          "metrics",
+          "producer",
+          "healthview"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "frontmatter": {
+          "title": "validate_metrics_anchor_stubs.py",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "active",
+          "version": "1.1.0",
+          "updated": "2025-12-18",
+          "tags": [
+            "automation",
+            "markdown",
+            "anchors",
+            "metrics",
+            "producer",
+            "healthview"
+          ],
+          "related_files": [
+            ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py",
+            ".repo_studios/tests/tests_producers/test_validate_metrics_anchor_stubs.py",
+            ".repo_studios/Makefile",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py",
+            "REPORT_NAMING_STANDARDS.md"
+          ]
+        },
         "contains_placeholder": false
       },
       {
@@ -12435,54 +13942,85 @@
           {
             "title": "verify_docs_integrity",
             "slug": "verifydocsintegrity",
-            "line": 1
+            "line": 15
           }
         ],
         "h2_headings": [
           {
             "title": "Overview",
             "slug": "overview",
-            "line": 3,
+            "line": 17,
             "parent_title": "verify_docs_integrity",
             "parent_slug": "verifydocsintegrity"
           },
           {
             "title": "Invocation",
             "slug": "invocation",
-            "line": 7,
+            "line": 21,
             "parent_title": "verify_docs_integrity",
             "parent_slug": "verifydocsintegrity"
           },
           {
             "title": "Artifacts",
             "slug": "artifacts",
-            "line": 32,
+            "line": 46,
             "parent_title": "verify_docs_integrity",
             "parent_slug": "verifydocsintegrity"
           },
           {
             "title": "Exit semantics",
             "slug": "exit-semantics",
-            "line": 43,
+            "line": 61,
             "parent_title": "verify_docs_integrity",
             "parent_slug": "verifydocsintegrity"
           },
           {
             "title": "Integration Notes",
             "slug": "integration-notes",
-            "line": 54,
+            "line": 72,
             "parent_title": "verify_docs_integrity",
             "parent_slug": "verifydocsintegrity"
           }
         ],
         "links": [],
         "description": "`verify_docs_integrity.py` audits governed documentation JSON blocks to ensure each fenced payload exposes a stable `content_hash`. The script also refreshes the navigation table contained in `docs/standards/docs_index.md` unless `--no-\u2026",
-        "size_bytes": 2945,
-        "modified_utc": "2025-11-04T14:45:22.664536+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
+        "size_bytes": 3363,
+        "modified_utc": "2025-12-18T17:36:18.986162+00:00",
+        "tags": [
+          "automation",
+          "producer",
+          "docs-integrity",
+          "healthview"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "frontmatter": {
+          "title": "verify_docs_integrity Producer",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "active",
+          "version": "1.1.0",
+          "updated": "2025-12-18",
+          "tags": [
+            "automation",
+            "producer",
+            "docs-integrity",
+            "healthview"
+          ],
+          "related_files": [
+            ".repo_studios/scripts/producers/verify_docs_integrity.py",
+            ".repo_studios/tests/tests_producers/test_verify_docs_integrity.py",
+            ".repo_studios/command_center/docs/db_integrations/db_integration_docs_integrity_validation.md"
+          ]
+        },
         "contains_placeholder": false
       },
       {
@@ -12528,8 +14066,8 @@
         ],
         "links": [],
         "description": "Last updated: 2025-10-17",
-        "size_bytes": 2719,
-        "modified_utc": "2025-12-11T10:50:58.485331+00:00",
+        "size_bytes": 2756,
+        "modified_utc": "2025-12-17T18:23:40.625822+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -12683,15 +14221,15 @@
           {
             "title": "CI Consumption Patterns",
             "slug": "ci-consumption-patterns",
-            "line": 32,
+            "line": 28,
             "parent_title": "Inventory Reports Overview",
             "parent_slug": "inventory-reports-overview"
           }
         ],
         "links": [],
         "description": "Last updated: 2025-12-10",
-        "size_bytes": 2875,
-        "modified_utc": "2025-12-11T01:51:15.211609+00:00",
+        "size_bytes": 1924,
+        "modified_utc": "2025-12-17T18:23:40.625822+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -13076,182 +14614,392 @@
       },
       {
         "folder": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline",
-        "filename": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
-        "slug": "healthview-orchestration-pipeline",
+        "filename": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md",
+        "slug": "healthview-hop-alignment-superseded",
         "h1_headings": [
           {
-            "title": "HealthView Orchestration Pipeline",
-            "slug": "healthview-orchestration-pipeline",
-            "line": 1
+            "title": "HealthView HOP Alignment (Superseded)",
+            "slug": "healthview-hop-alignment-superseded",
+            "line": 27
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 36,
+            "parent_title": "HealthView HOP Alignment (Superseded)",
+            "parent_slug": "healthview-hop-alignment-superseded"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 40,
+            "parent_title": "HealthView HOP Alignment (Superseded)",
+            "parent_slug": "healthview-hop-alignment-superseded"
+          },
+          {
+            "title": "Decisions (Summary)",
+            "slug": "decisions-summary",
+            "line": 46,
+            "parent_title": "HealthView HOP Alignment (Superseded)",
+            "parent_slug": "healthview-hop-alignment-superseded"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 57,
+            "parent_title": "HealthView HOP Alignment (Superseded)",
+            "parent_slug": "healthview-hop-alignment-superseded"
+          }
+        ],
+        "links": [
+          "hop_implementation.md",
+          "tier1_healthview_orchestration_pipeline.md"
+        ],
+        "description": "This document is **superseded** by:",
+        "size_bytes": 2244,
+        "modified_utc": "2025-12-18T22:42:18.576135+00:00",
+        "tags": [
+          "pipeline",
+          "healthview",
+          "hop",
+          "alignment"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "superseded",
+        "frontmatter": {
+          "title": "HealthView HOP Alignment (Superseded)",
+          "tier": "tier-2",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "role": [
+            "historical-notes"
+          ],
+          "status": "superseded",
+          "version": "0.1.0",
+          "updated_at": "2025-12-18",
+          "tags": [
+            "pipeline",
+            "healthview",
+            "hop",
+            "alignment"
+          ],
+          "related_files": [
+            ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md",
+            ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+            ".github/instructions/markdown.instructions.md",
+            ".github/instructions/pipeline_doc_tiers.instructions.md"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline",
+        "filename": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md",
+        "slug": "healthview-hop-implementation-plan",
+        "h1_headings": [
+          {
+            "title": "HealthView HOP Implementation Plan",
+            "slug": "healthview-hop-implementation-plan",
+            "line": 31
           }
         ],
         "h2_headings": [
           {
             "title": "0. Instruction Block for Editors & AI Assistants",
             "slug": "0-instruction-block-for-editors-ai-assistants",
-            "line": 7,
+            "line": 42,
+            "parent_title": "HealthView HOP Implementation Plan",
+            "parent_slug": "healthview-hop-implementation-plan"
+          },
+          {
+            "title": "1. Goals & Success Criteria",
+            "slug": "1-goals-success-criteria",
+            "line": 61,
+            "parent_title": "HealthView HOP Implementation Plan",
+            "parent_slug": "healthview-hop-implementation-plan"
+          },
+          {
+            "title": "2. System Context",
+            "slug": "2-system-context",
+            "line": 80,
+            "parent_title": "HealthView HOP Implementation Plan",
+            "parent_slug": "healthview-hop-implementation-plan"
+          },
+          {
+            "title": "3. Stage Narratives (Workstreams)",
+            "slug": "3-stage-narratives-workstreams",
+            "line": 137,
+            "parent_title": "HealthView HOP Implementation Plan",
+            "parent_slug": "healthview-hop-implementation-plan"
+          },
+          {
+            "title": "4. Signals & Telemetry",
+            "slug": "4-signals-telemetry",
+            "line": 211,
+            "parent_title": "HealthView HOP Implementation Plan",
+            "parent_slug": "healthview-hop-implementation-plan"
+          },
+          {
+            "title": "5. Dependencies & Stop-Gates",
+            "slug": "5-dependencies-stop-gates",
+            "line": 223,
+            "parent_title": "HealthView HOP Implementation Plan",
+            "parent_slug": "healthview-hop-implementation-plan"
+          },
+          {
+            "title": "6. Instruction Block (Required by Tier Rules)",
+            "slug": "6-instruction-block-required-by-tier-rules",
+            "line": 237,
+            "parent_title": "HealthView HOP Implementation Plan",
+            "parent_slug": "healthview-hop-implementation-plan"
+          },
+          {
+            "title": "7. Agent Automation Block",
+            "slug": "7-agent-automation-block",
+            "line": 251,
+            "parent_title": "HealthView HOP Implementation Plan",
+            "parent_slug": "healthview-hop-implementation-plan"
+          },
+          {
+            "title": "8. Update Log",
+            "slug": "8-update-log",
+            "line": 281,
+            "parent_title": "HealthView HOP Implementation Plan",
+            "parent_slug": "healthview-hop-implementation-plan"
+          }
+        ],
+        "links": [],
+        "description": "`tier1_healthview_orchestration_pipeline.md`.",
+        "size_bytes": 13497,
+        "modified_utc": "2025-12-19T00:55:23.111707+00:00",
+        "tags": [
+          "pipeline",
+          "healthview",
+          "hop",
+          "implementation",
+          "refactor"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "draft",
+        "frontmatter": {
+          "title": "HealthView HOP Implementation Plan",
+          "tier": "tier-2",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "role": [
+            "implementation-plan"
+          ],
+          "status": "draft",
+          "version": "0.1.0",
+          "updated_at": "2025-12-18",
+          "tags": [
+            "pipeline",
+            "healthview",
+            "hop",
+            "implementation",
+            "refactor"
+          ],
+          "related_files": [
+            ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+            ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md",
+            ".repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_template.md",
+            ".github/instructions/markdown.instructions.md",
+            ".github/instructions/pipeline_doc_tiers.instructions.md",
+            ".github/instructions/tier_doc_operating_model.instructions.md",
+            "REPORT_NAMING_STANDARDS.md"
+          ]
+        },
+        "contains_placeholder": true
+      },
+      {
+        "folder": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline",
+        "filename": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+        "slug": "healthview-orchestration-pipeline",
+        "h1_headings": [
+          {
+            "title": "HealthView Orchestration Pipeline",
+            "slug": "healthview-orchestration-pipeline",
+            "line": 28
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "0. Instruction Block for Editors & AI Assistants",
+            "slug": "0-instruction-block-for-editors-ai-assistants",
+            "line": 36,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "1. 5W1H \u2013 Purpose & Context",
             "slug": "1-5w1h-purpose-context",
-            "line": 27,
+            "line": 65,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "2. Document Metadata",
             "slug": "2-document-metadata",
-            "line": 125,
+            "line": 180,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "3. Global Pipeline Overview",
             "slug": "3-global-pipeline-overview",
-            "line": 148,
+            "line": 203,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "3.3 How to Read This Document",
             "slug": "33-how-to-read-this-document",
-            "line": 166,
+            "line": 241,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "3.4 HealthView Report Bundle Spine (Shared Backbone)",
             "slug": "34-healthview-report-bundle-spine-shared-backbone",
-            "line": 177,
+            "line": 252,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "3.5 HealthView Orchestration Envelope (Shared Payload)",
             "slug": "35-healthview-orchestration-envelope-shared-payload",
-            "line": 206,
+            "line": 296,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "3.6 Orchestrator Lifecycle, Fallback Modes, and Global Controls",
             "slug": "36-orchestrator-lifecycle-fallback-modes-and-global-controls",
-            "line": 248,
+            "line": 346,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "3.7 HealthView Assumptions & Guarantees",
             "slug": "37-healthview-assumptions-guarantees",
-            "line": 279,
+            "line": 383,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "4. Stage 1 \u2013 Testing Perspectives",
             "slug": "4-stage-1-testing-perspectives",
-            "line": 305,
+            "line": 418,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "5. Stage 2 \u2013 Documentation Quality",
             "slug": "5-stage-2-documentation-quality",
-            "line": 383,
+            "line": 507,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "6. Stage 3 \u2013 Runtime Reliability",
             "slug": "6-stage-3-runtime-reliability",
-            "line": 470,
+            "line": 601,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "7. Stage 4 \u2013 Dependency Management",
             "slug": "7-stage-4-dependency-management",
-            "line": 537,
+            "line": 668,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "8. Stage 5 \u2013 Technical Debt Oversight",
             "slug": "8-stage-5-technical-debt-oversight",
-            "line": 618,
+            "line": 749,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "9. Stage 6 \u2013 Process Governance",
             "slug": "9-stage-6-process-governance",
-            "line": 697,
+            "line": 828,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "10. Stage 7 \u2013 Running the Complete Suite",
             "slug": "10-stage-7-running-the-complete-suite",
-            "line": 810,
+            "line": 941,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "11. Snapshot & Stage Matrix",
             "slug": "11-snapshot-stage-matrix",
-            "line": 892,
+            "line": 1023,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "12. Contradiction Registry",
             "slug": "12-contradiction-registry",
-            "line": 942,
+            "line": 1076,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "13. Tier-2 Document Index",
             "slug": "13-tier-2-document-index",
-            "line": 950,
+            "line": 1087,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "14. Working / Future Notes",
             "slug": "14-working-future-notes",
-            "line": 985,
+            "line": 1124,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "15. Update Log & Evidence Tracking",
             "slug": "15-update-log-evidence-tracking",
-            "line": 1008,
+            "line": 1154,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           }
         ],
         "links": [
-          "../../../REPORT_NAMING_STANDARDS.md",
-          "../../../command_center/scripts/libraries/cli.py",
-          "../../../command_center/scripts/orchestrators/",
-          "../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py",
-          "../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py",
-          "../../../command_center/scripts/orchestators/scan_duplicates.py",
-          "../../../command_center/scripts/README.md",
+          "../../../../REPORT_NAMING_STANDARDS.md",
+          "hop_implementation.md",
+          "../../../scripts/README.md",
           "../../../Makefile",
           "../../../tests/tests_command_center/",
-          "../../tier3_index/",
+          "../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py",
           "../../../scripts/producers/collect_test_log_reports.py",
           "../../../scripts/producers/generate_test_coverage_inventory.py",
           "../../../scripts/producers/analyze_test_hardening.py",
           "../../../scripts/consumers/generate_test_log_health_report.py",
           "../../../scripts/aggregators/generate_churn_complexity_heatmap.py",
           "../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py",
-          "../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py",
           "../../../command_center/scripts/orchestrators/run_docs_health_overview.py",
           "../../../scripts/producers/generate_doc_index.py",
           "../../../scripts/producers/generate_anchor_inventory.py",
@@ -13262,9 +15010,9 @@
           "../../../scripts/producers/generate_undocumented_logic_report.py",
           "../../../scripts/aggregators/aggregate_docs_health_signals.py",
           "../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py",
-          "../../../command_center/scripts/producers/collect_faulthandler_reports.py",
-          "../../../command_center/scripts/consumers/generate_fault_artifacts.py",
-          "../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py",
+          "../../../scripts/producers/collect_faulthandler_reports.py",
+          "../../../scripts/consumers/generate_fault_artifacts.py",
+          "../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py",
           "../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py",
           "../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py",
           "../../../command_center/scripts/orchestrators/run_standards_integrity.py",
@@ -13274,12 +15022,11 @@
           "../../../scripts/producers/seed_standards_prompts.py",
           "../../../scripts/summarizers/summarize_standards.py",
           "../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py",
+          "../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py",
           "../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py",
-          "../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py",
+          "../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py",
           "../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py",
           "../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py",
-          "../../../scripts/README.md",
-          "../../../../REPORT_NAMING_STANDARDS.md",
           "../../standards/global/std-global-python-engineering.md",
           "../../standards/global/std-global-markdown-authoring.md",
           "../../../../.github/instructions/markdown.instructions.md",
@@ -13288,13 +15035,50 @@
           "../../../tests/tests_consumers/",
           "../../../tests/tests_aggregators/"
         ],
-        "description": "HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer \u2192\u2026",
-        "size_bytes": 75286,
-        "modified_utc": "2025-12-16T16:16:30.917237+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
+        "description": "stage content so evidence capture is ready from the first edit.",
+        "size_bytes": 79580,
+        "modified_utc": "2025-12-19T01:23:27.973052+00:00",
+        "tags": [
+          "pipeline",
+          "healthview",
+          "hop",
+          "orchestration"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "in-progress",
+        "frontmatter": {
+          "title": "HealthView Orchestration Pipeline",
+          "tier": "tier-1",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "role": [
+            "pipeline-spine"
+          ],
+          "status": "in-progress",
+          "version": "0.3.1",
+          "updated_at": "2025-12-18",
+          "tags": [
+            "pipeline",
+            "healthview",
+            "hop",
+            "orchestration"
+          ],
+          "related_files": [
+            ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md",
+            "REPORT_NAMING_STANDARDS.md",
+            ".repo_studios/command_center/scripts/libraries/cli.py",
+            ".repo_studios/command_center/scripts/orchestrators/",
+            ".github/instructions/markdown.instructions.md",
+            ".github/instructions/pipeline_doc_tiers.instructions.md"
+          ]
+        },
         "contains_placeholder": true
       },
       {
@@ -14651,8 +16435,8 @@
         "h2_headings": [],
         "links": [],
         "description": "This document is refreshed automatically by `run_batch_cleanup.py`. Edits outside the tree block are preserved, but avoid modifying the block between the markers.",
-        "size_bytes": 8367,
-        "modified_utc": "2025-12-16T16:16:30.911230+00:00",
+        "size_bytes": 8379,
+        "modified_utc": "2025-12-17T01:38:22.483200+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -16814,114 +18598,158 @@
           {
             "title": "Script Refactoring Prompt Templates (Working Draft)",
             "slug": "script-refactoring-prompt-templates-working-draft",
-            "line": 1
+            "line": 14
           },
           {
             "title": "Expected: All tests GREEN",
             "slug": "expected-all-tests-green",
-            "line": 362
+            "line": 390
           },
           {
-            "title": "Expected: Coverage \u2265 80%",
-            "slug": "expected-coverage-80",
-            "line": 368
+            "title": "Windows note: pytest-cov's --cov=<file.py> is unreliable when the target is",
+            "slug": "windows-note-pytest-covs-covfilepy-is-unreliable-when-the-target-is",
+            "line": 395
+          },
+          {
+            "title": "executed via dynamic import (common for scripts under .repo_studios/scripts).",
+            "slug": "executed-via-dynamic-import-common-for-scripts-under-repostudiosscripts",
+            "line": 396
+          },
+          {
+            "title": "Prefer running coverage directly with a coveragerc that scopes by include=.",
+            "slug": "prefer-running-coverage-directly-with-a-coveragerc-that-scopes-by-include",
+            "line": 397
+          },
+          {
+            "title": "Expected: Coverage \u2265 80% (for the files listed in the rcfile's include=)",
+            "slug": "expected-coverage-80-for-the-files-listed-in-the-rcfiles-include",
+            "line": 406
           },
           {
             "title": "Expected: No errors",
             "slug": "expected-no-errors",
-            "line": 374
+            "line": 412
           },
           {
             "title": "Expected: Exit code 0",
             "slug": "expected-exit-code-0",
-            "line": 380
+            "line": 418
           },
           {
             "title": "Example:",
             "slug": "example",
-            "line": 386
+            "line": 424
           },
           {
             "title": "make -C .repo_studios studio-collect-test-log-reports",
             "slug": "make-c-repostudios-studio-collect-test-log-reports",
-            "line": 387
+            "line": 425
           },
           {
             "title": "make -C .repo_studios studio-collect-faulthandler-reports",
             "slug": "make-c-repostudios-studio-collect-faulthandler-reports",
-            "line": 388
+            "line": 426
           },
           {
             "title": "Expected: Exit code 0",
             "slug": "expected-exit-code-0",
-            "line": 389
+            "line": 427
           },
           {
             "title": "Expected: Artifacts written under <reports_root>/<viewer>/<topic>/<YYYYMMDD-HHMM>/",
             "slug": "expected-artifacts-written-under-reportsrootviewertopicyyyymmdd-hhmm",
-            "line": 390
+            "line": 428
           },
           {
             "title": "Expected: At least 1 marker found",
             "slug": "expected-at-least-1-marker-found",
-            "line": 414
+            "line": 452
           },
           {
             "title": "Expected: Storage initialization found",
             "slug": "expected-storage-initialization-found",
-            "line": 417
+            "line": 455
           },
           {
             "title": "Expected: This script appears in output with marker count > 0",
             "slug": "expected-this-script-appears-in-output-with-marker-count-0",
-            "line": 429
+            "line": 467
           }
         ],
         "h2_headings": [
           {
             "title": "Workflow Overview",
             "slug": "workflow-overview",
-            "line": 9,
+            "line": 22,
             "parent_title": "Script Refactoring Prompt Templates (Working Draft)",
             "parent_slug": "script-refactoring-prompt-templates-working-draft"
           },
           {
             "title": "Phase 1: Script Analysis Prompt",
             "slug": "phase-1-script-analysis-prompt",
-            "line": 19,
+            "line": 32,
             "parent_title": "Script Refactoring Prompt Templates (Working Draft)",
             "parent_slug": "script-refactoring-prompt-templates-working-draft"
           },
           {
             "title": "Phase 2: Implementation Plan",
             "slug": "phase-2-implementation-plan",
-            "line": 107,
+            "line": 126,
             "parent_title": "Script Refactoring Prompt Templates (Working Draft)",
             "parent_slug": "script-refactoring-prompt-templates-working-draft"
           },
           {
             "title": "Phase 3: Implementation Execution Prompt",
             "slug": "phase-3-implementation-execution-prompt",
-            "line": 312,
+            "line": 336,
             "parent_title": "Script Refactoring Prompt Templates (Working Draft)",
             "parent_slug": "script-refactoring-prompt-templates-working-draft"
           },
           {
             "title": "Notes Section",
             "slug": "notes-section",
-            "line": 483,
+            "line": 520,
             "parent_title": "Expected: This script appears in output with marker count > 0",
             "parent_slug": "expected-this-script-appears-in-output-with-marker-count-0"
           }
         ],
         "links": [],
         "description": "A structured report covering:",
-        "size_bytes": 17206,
-        "modified_utc": "2025-12-16T20:43:59.625485+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
+        "size_bytes": 19142,
+        "modified_utc": "2025-12-18T19:32:41.905765+00:00",
+        "tags": [
+          "scripts",
+          "refactor",
+          "prompts",
+          "coverage"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "draft",
+        "frontmatter": {
+          "title": "Script Refactoring Prompt Templates (Working Draft)",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "draft",
+          "version": "0.1.0",
+          "updated": "2025-12-17",
+          "tags": [
+            "scripts",
+            "refactor",
+            "prompts",
+            "coverage"
+          ],
+          "related_files": [
+            ".repo_studios/coverage_configs/phase3_undocumented_logic.coveragerc",
+            ".repo_studios/scripts/script_inventory_architecture.md"
+          ]
+        },
         "contains_placeholder": false
       },
       {
@@ -16962,108 +18790,6 @@
         "description": "This directory houses the active automation suite for Repo Studios. Scripts are grouped by the role they play in the data and automation pipeline so coding agents can locate the right tool quickly.",
         "size_bytes": 2391,
         "modified_utc": "2025-11-04T09:50:54.154871+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
-        "contains_placeholder": false
-      },
-      {
-        "folder": ".repo_studios/scripts/aggregators/aggregators_index",
-        "filename": ".repo_studios/scripts/aggregators/aggregators_index/aggregators_duplicate_summary-2025-10-28-0942.md",
-        "slug": "duplicate-scan-summary",
-        "h1_headings": [
-          {
-            "title": "Duplicate Scan Summary",
-            "slug": "duplicate-scan-summary",
-            "line": 1
-          }
-        ],
-        "h2_headings": [
-          {
-            "title": "Overview",
-            "slug": "overview",
-            "line": 3,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Inputs",
-            "slug": "inputs",
-            "line": 14,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Top Duplicate Offenders",
-            "slug": "top-duplicate-offenders",
-            "line": 19,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Next Steps",
-            "slug": "next-steps",
-            "line": 22,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          }
-        ],
-        "links": [],
-        "description": null,
-        "size_bytes": 733,
-        "modified_utc": "2025-10-28T09:42:56.137074+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
-        "contains_placeholder": false
-      },
-      {
-        "folder": ".repo_studios/scripts/consumers/consumers_index",
-        "filename": ".repo_studios/scripts/consumers/consumers_index/consumers_duplicate_summary-2025-10-28-0934.md",
-        "slug": "duplicate-scan-summary",
-        "h1_headings": [
-          {
-            "title": "Duplicate Scan Summary",
-            "slug": "duplicate-scan-summary",
-            "line": 1
-          }
-        ],
-        "h2_headings": [
-          {
-            "title": "Overview",
-            "slug": "overview",
-            "line": 3,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Inputs",
-            "slug": "inputs",
-            "line": 13,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Top Duplicate Offenders",
-            "slug": "top-duplicate-offenders",
-            "line": 18,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Next Steps",
-            "slug": "next-steps",
-            "line": 28,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          }
-        ],
-        "links": [],
-        "description": "1. `main` \u2014 2 duplicate(s)",
-        "size_bytes": 1093,
-        "modified_utc": "2025-10-28T09:34:22.504107+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -17208,57 +18934,6 @@
         "contains_placeholder": true
       },
       {
-        "folder": ".repo_studios/scripts/orchestrators/orchestrators_index",
-        "filename": ".repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md",
-        "slug": "duplicate-scan-summary",
-        "h1_headings": [
-          {
-            "title": "Duplicate Scan Summary",
-            "slug": "duplicate-scan-summary",
-            "line": 1
-          }
-        ],
-        "h2_headings": [
-          {
-            "title": "Overview",
-            "slug": "overview",
-            "line": 3,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Inputs",
-            "slug": "inputs",
-            "line": 13,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Top Duplicate Offenders",
-            "slug": "top-duplicate-offenders",
-            "line": 18,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Next Steps",
-            "slug": "next-steps",
-            "line": 28,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          }
-        ],
-        "links": [],
-        "description": "1. `cmd_list` \u2014 2 duplicate(s)",
-        "size_bytes": 1191,
-        "modified_utc": "2025-10-28T09:55:41.218181+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
-        "contains_placeholder": false
-      },
-      {
         "folder": ".repo_studios/scripts/producers/producers_index",
         "filename": ".repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md",
         "slug": "duplicate-scan-summary",
@@ -17317,279 +18992,104 @@
           {
             "title": "Script Inventory Architecture",
             "slug": "script-inventory-architecture",
-            "line": 1
+            "line": 15
           }
         ],
         "h2_headings": [
           {
             "title": "Document Metadata",
             "slug": "document-metadata",
-            "line": 28,
+            "line": 42,
             "parent_title": "Script Inventory Architecture",
             "parent_slug": "script-inventory-architecture"
           },
           {
             "title": "How to Use This Template",
             "slug": "how-to-use-this-template",
-            "line": 58,
+            "line": 72,
             "parent_title": "Script Inventory Architecture",
             "parent_slug": "script-inventory-architecture"
           },
           {
             "title": "1. Script Producers",
             "slug": "1-script-producers",
-            "line": 110,
+            "line": 124,
             "parent_title": "Script Inventory Architecture",
             "parent_slug": "script-inventory-architecture"
           },
           {
             "title": "2. Script Consumers",
             "slug": "2-script-consumers",
-            "line": 199,
+            "line": 214,
             "parent_title": "Script Inventory Architecture",
             "parent_slug": "script-inventory-architecture"
           },
           {
             "title": "3. Script Aggregators",
             "slug": "3-script-aggregators",
-            "line": 228,
+            "line": 243,
             "parent_title": "Script Inventory Architecture",
             "parent_slug": "script-inventory-architecture"
           },
           {
             "title": "4. Script Orchestrators",
             "slug": "4-script-orchestrators",
-            "line": 259,
+            "line": 274,
             "parent_title": "Script Inventory Architecture",
             "parent_slug": "script-inventory-architecture"
           },
           {
             "title": "5. Script Summarizers",
             "slug": "5-script-summarizers",
-            "line": 287,
+            "line": 302,
             "parent_title": "Script Inventory Architecture",
             "parent_slug": "script-inventory-architecture"
           },
           {
             "title": "6. Script Utilities",
             "slug": "6-script-utilities",
-            "line": 303,
+            "line": 318,
             "parent_title": "Script Inventory Architecture",
             "parent_slug": "script-inventory-architecture"
           },
           {
             "title": "7. Script Undefined / Triage",
             "slug": "7-script-undefined-triage",
-            "line": 328,
+            "line": 343,
             "parent_title": "Script Inventory Architecture",
             "parent_slug": "script-inventory-architecture"
           },
           {
             "title": "Cross-Cutting Follow-Ups",
             "slug": "cross-cutting-follow-ups",
-            "line": 343,
+            "line": 358,
             "parent_title": "Script Inventory Architecture",
             "parent_slug": "script-inventory-architecture"
           },
           {
             "title": "Open Questions",
             "slug": "open-questions",
-            "line": 348,
+            "line": 363,
             "parent_title": "Script Inventory Architecture",
             "parent_slug": "script-inventory-architecture"
           },
           {
             "title": "Appendix: YAML Mapping Placeholder",
             "slug": "appendix-yaml-mapping-placeholder",
-            "line": 352,
+            "line": 367,
             "parent_title": "Script Inventory Architecture",
             "parent_slug": "script-inventory-architecture"
           }
         ],
         "links": [],
         "description": "Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent\u2026",
-        "size_bytes": 73172,
-        "modified_utc": "2025-12-16T20:31:08.019233+00:00",
+        "size_bytes": 80780,
+        "modified_utc": "2025-12-18T17:36:18.977162+00:00",
         "tags": [],
         "owners": [],
         "status": null,
         "frontmatter": null,
         "contains_placeholder": true
-      },
-      {
-        "folder": ".repo_studios/scripts/scripts_index",
-        "filename": ".repo_studios/scripts/scripts_index/scripts_duplicate_summary-2025-10-27.md",
-        "slug": "duplicate-scan-summary",
-        "h1_headings": [
-          {
-            "title": "Duplicate Scan Summary",
-            "slug": "duplicate-scan-summary",
-            "line": 1
-          }
-        ],
-        "h2_headings": [
-          {
-            "title": "Overview",
-            "slug": "overview",
-            "line": 3,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Inputs",
-            "slug": "inputs",
-            "line": 13,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Top Duplicate Offenders",
-            "slug": "top-duplicate-offenders",
-            "line": 18,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Next Steps",
-            "slug": "next-steps",
-            "line": 164,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          }
-        ],
-        "links": [],
-        "description": "1. `prune_old_runs` \u2014 20 duplicate(s)",
-        "size_bytes": 14434,
-        "modified_utc": "2025-10-27T12:08:34.090771+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
-        "contains_placeholder": true
-      },
-      {
-        "folder": ".repo_studios/scripts/scripts_index",
-        "filename": ".repo_studios/scripts/scripts_index/scripts_duplicate_summary-20251130-0333.md",
-        "slug": "summary",
-        "h1_headings": [
-          {
-            "title": "Summary",
-            "slug": "summary",
-            "line": 1
-          }
-        ],
-        "h2_headings": [],
-        "links": [],
-        "description": null,
-        "size_bytes": 11,
-        "modified_utc": "2025-11-30T03:33:07.215521+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
-        "contains_placeholder": false
-      },
-      {
-        "folder": ".repo_studios/scripts/summarizers/summarizers_index",
-        "filename": ".repo_studios/scripts/summarizers/summarizers_index/summarizers_duplicate_summary-2025-11-04-2010.md",
-        "slug": "duplicate-scan-summary",
-        "h1_headings": [
-          {
-            "title": "Duplicate Scan Summary",
-            "slug": "duplicate-scan-summary",
-            "line": 1
-          }
-        ],
-        "h2_headings": [
-          {
-            "title": "Overview",
-            "slug": "overview",
-            "line": 3,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Inputs",
-            "slug": "inputs",
-            "line": 13,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Top Duplicate Offenders",
-            "slug": "top-duplicate-offenders",
-            "line": 18,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Next Steps",
-            "slug": "next-steps",
-            "line": 24,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          }
-        ],
-        "links": [],
-        "description": "1. `append_table` \u2014 2 duplicate(s)",
-        "size_bytes": 982,
-        "modified_utc": "2025-11-04T20:10:52.055388+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
-        "contains_placeholder": false
-      },
-      {
-        "folder": ".repo_studios/scripts/utilities/utilities_index",
-        "filename": ".repo_studios/scripts/utilities/utilities_index/utilities_duplicate_summary-2025-10-28-1344.md",
-        "slug": "duplicate-scan-summary",
-        "h1_headings": [
-          {
-            "title": "Duplicate Scan Summary",
-            "slug": "duplicate-scan-summary",
-            "line": 1
-          }
-        ],
-        "h2_headings": [
-          {
-            "title": "Overview",
-            "slug": "overview",
-            "line": 3,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Inputs",
-            "slug": "inputs",
-            "line": 14,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Top Duplicate Offenders",
-            "slug": "top-duplicate-offenders",
-            "line": 19,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          },
-          {
-            "title": "Next Steps",
-            "slug": "next-steps",
-            "line": 22,
-            "parent_title": "Duplicate Scan Summary",
-            "parent_slug": "duplicate-scan-summary"
-          }
-        ],
-        "links": [],
-        "description": null,
-        "size_bytes": 724,
-        "modified_utc": "2025-10-28T13:44:35.047795+00:00",
-        "tags": [],
-        "owners": [],
-        "status": null,
-        "frontmatter": null,
-        "contains_placeholder": false
       },
       {
         "folder": ".repo_studios/tmp_manual/automation_dry_run_9f5c157dea2e4b4fbd98dc969cbe2a41/reports/commandview/automation_runs/20251102-1930",
@@ -17802,6 +19302,50 @@
         "contains_placeholder": true
       },
       {
+        "folder": "command_center/reports/healthview/inventory_health/20251217-1810",
+        "filename": "command_center/reports/healthview/inventory_health/20251217-1810/summary.md",
+        "slug": "inventory-health-report",
+        "h1_headings": [
+          {
+            "title": "Inventory Health Report",
+            "slug": "inventory-health-report",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Outcome",
+            "slug": "outcome",
+            "line": 8,
+            "parent_title": "Inventory Health Report",
+            "parent_slug": "inventory-health-report"
+          },
+          {
+            "title": "Deltas",
+            "slug": "deltas",
+            "line": 14,
+            "parent_title": "Inventory Health Report",
+            "parent_slug": "inventory-health-report"
+          },
+          {
+            "title": "Issues",
+            "slug": "issues",
+            "line": 18,
+            "parent_title": "Inventory Health Report",
+            "parent_slug": "inventory-health-report"
+          }
+        ],
+        "links": [],
+        "description": "Generated (UTC): 2025-12-17T18:10:12.442069+00:00 Summary Path: C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\healthview\\inventory_overview Baseline Path:\u2026",
+        "size_bytes": 500,
+        "modified_utc": "2025-12-17T18:10:12.443661+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
         "folder": ".",
         "filename": "command_center_script_verification_temp.md",
         "slug": "command-center-script-verification-temporary",
@@ -17845,27 +19389,27 @@
           {
             "title": "Utility Scripts",
             "slug": "utility-scripts",
-            "line": 74,
+            "line": 186,
             "parent_title": "Database Integration Status",
             "parent_slug": "database-integration-status"
           },
           {
             "title": "Integration Checklist",
             "slug": "integration-checklist",
-            "line": 92,
+            "line": 204,
             "parent_title": "Database Integration Status",
             "parent_slug": "database-integration-status"
           }
         ],
         "links": [],
         "description": "[x] **analyze_standards_index_gaps.py**",
-        "size_bytes": 2957,
-        "modified_utc": "2025-12-16T19:03:20.932630+00:00",
+        "size_bytes": 6594,
+        "modified_utc": "2025-12-18T17:32:56.481003+00:00",
         "tags": [],
         "owners": [],
         "status": null,
         "frontmatter": null,
-        "contains_placeholder": false
+        "contains_placeholder": true
       },
       {
         "folder": "docs/automation/examples",
@@ -18054,8 +19598,8 @@
         ],
         "links": [],
         "description": "This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",
-        "size_bytes": 97899,
-        "modified_utc": "2025-12-11T10:50:58.485331+00:00",
+        "size_bytes": 97933,
+        "modified_utc": "2025-12-17T18:23:40.625822+00:00",
         "tags": [
           "automation",
           "orchestrators",
@@ -19160,6 +20704,22 @@
       },
       {
         "folder": "docs/templates",
+        "filename": "docs/templates/meta_prompts2.md",
+        "slug": "metaprompts2",
+        "h1_headings": [],
+        "h2_headings": [],
+        "links": [],
+        "description": null,
+        "size_bytes": 7728,
+        "modified_utc": "2025-12-18T22:53:45.479854+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": "docs/templates",
         "filename": "docs/templates/test_execution_telemetry_summary_template.md",
         "slug": "test-execution-telemetry-summary-template",
         "h1_headings": [
@@ -19330,6 +20890,117 @@
         "description": "[x] **analyze_standards_index_gaps.py**",
         "size_bytes": 1903,
         "modified_utc": "2025-12-15T22:58:29.416925+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": "tmp_cli_probe",
+        "filename": "tmp_cli_probe/db_markers.md",
+        "slug": "database-integration-status",
+        "h1_headings": [
+          {
+            "title": "Database Integration Status",
+            "slug": "database-integration-status",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Producer Scripts",
+            "slug": "producer-scripts",
+            "line": 8,
+            "parent_title": "Database Integration Status",
+            "parent_slug": "database-integration-status"
+          },
+          {
+            "title": "Utility Scripts",
+            "slug": "utility-scripts",
+            "line": 130,
+            "parent_title": "Database Integration Status",
+            "parent_slug": "database-integration-status"
+          },
+          {
+            "title": "Integration Checklist",
+            "slug": "integration-checklist",
+            "line": 148,
+            "parent_title": "Database Integration Status",
+            "parent_slug": "database-integration-status"
+          }
+        ],
+        "links": [],
+        "description": "[x] **analyze_standards_index_gaps.py**",
+        "size_bytes": 4793,
+        "modified_utc": "2025-12-17T13:48:32.384409+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": "tmp_cli_probe/producer_reports/healthview/test_coverage_inventory/20251217-1200",
+        "filename": "tmp_cli_probe/producer_reports/healthview/test_coverage_inventory/20251217-1200/summary.md",
+        "slug": "test-coverage-inventory",
+        "h1_headings": [
+          {
+            "title": "Test Coverage Inventory",
+            "slug": "test-coverage-inventory",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Files by Coverage",
+            "slug": "files-by-coverage",
+            "line": 12,
+            "parent_title": "Test Coverage Inventory",
+            "parent_slug": "test-coverage-inventory"
+          }
+        ],
+        "links": [],
+        "description": null,
+        "size_bytes": 956,
+        "modified_utc": "2025-12-17T11:53:32.782624+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": "tmp_cli_probe/producer_reports/rawview/standards_index/20251217-1031",
+        "filename": "tmp_cli_probe/producer_reports/rawview/standards_index/20251217-1031/summary.md",
+        "slug": "standards-index-build-report",
+        "h1_headings": [
+          {
+            "title": "Standards Index Build Report",
+            "slug": "standards-index-build-report",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Summary",
+            "slug": "summary",
+            "line": 10,
+            "parent_title": "Standards Index Build Report",
+            "parent_slug": "standards-index-build-report"
+          },
+          {
+            "title": "Extraction",
+            "slug": "extraction",
+            "line": 20,
+            "parent_title": "Standards Index Build Report",
+            "parent_slug": "standards-index-build-report"
+          }
+        ],
+        "links": [],
+        "description": null,
+        "size_bytes": 626,
+        "modified_utc": "2025-12-17T11:25:04.039240+00:00",
         "tags": [],
         "owners": [],
         "status": null,

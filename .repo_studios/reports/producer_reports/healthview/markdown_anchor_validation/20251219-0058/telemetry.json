@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2025-12-19T00:58:44.901053+00:00",
+  "status": "fail",
+  "metrics": {
+    "files_scanned": 3,
+    "links_checked": 84,
+    "issue_count": 3,
+    "missing_file_count": 3,
+    "missing_anchor_count": 0
+  },
+  "payload": {
+    "report": {
+      "schema_version": 1,
+      "generated_utc": "2025-12-19T00:58:44.901053+00:00",
+      "status": "fail",
+      "root": "C:\\Users\\genet\\repo_studios",
+      "patterns": [
+        ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/*.md"
+      ],
+      "issue_count": 3,
+      "issues": [
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 604,
+          "kind": "file",
+          "target": "../../../command_center/scripts/producers/collect_faulthandler_reports.py",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 605,
+          "kind": "file",
+          "target": "../../../command_center/scripts/consumers/generate_fault_artifacts.py",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 606,
+          "kind": "file",
+          "target": "../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py",
+          "message": "Target file does not exist"
+        }
+      ],
+      "scanned_files": [
+        ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md",
+        ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md",
+        ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md"
+      ]
+    }
+  }
+}

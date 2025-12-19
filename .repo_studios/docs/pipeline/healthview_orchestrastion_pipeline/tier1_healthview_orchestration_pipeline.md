@@ -1,26 +1,64 @@
+---
+title: HealthView Orchestration Pipeline
+tier: tier-1
+audience:
+  - coding_agent
+  - human_developer
+owners:
+  - repo_studios_team@rainmakerprotocol.dev
+role:
+  - pipeline-spine
+status: in-progress
+version: 0.3.1
+updated_at: 2025-12-18
+tags:
+  - pipeline
+  - healthview
+  - hop
+  - orchestration
+related_files:
+  - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md
+  - REPORT_NAMING_STANDARDS.md
+  - .repo_studios/command_center/scripts/libraries/cli.py
+  - .repo_studios/command_center/scripts/orchestrators/
+  - .github/instructions/markdown.instructions.md
+  - .github/instructions/pipeline_doc_tiers.instructions.md
+---
+
 # HealthView Orchestration Pipeline
 
-> **Purpose:** This document maps the HealthView measurement pipeline from BEGIN → END, describing how repository health is continuously monitored through staged orchestration of measurement scripts that track testing, documentation, dependencies, faults, technical debt, and process governance.
+> **Purpose:** This document maps the HealthView measurement pipeline from BEGIN → END, describing
+> how repository health is continuously monitored through staged orchestration of measurement
+> scripts that track testing, documentation, dependencies, faults, technical debt, and process governance.
 
 ---
 
 ## 0. Instruction Block for Editors & AI Assistants
 
-* This document is **Tier-1**: it describes **system-level behavior**, not code internals.
-* All statements must be **backed by repo evidence** (code, tests, ADRs, design docs).
-* Structure (H2s/H3s) should be preserved; add/remove major sections deliberately, then renumber **all** top-level headings (Stages, Snapshot, Contradiction Registry, etc.) so numbering stays contiguous.
-* During Phase 0 seeding, create the blank **Update Log & Evidence Tracking** table before drafting stage content so evidence capture is ready from the first edit.
-* Use the Working Notes section only as temporary scratch space; move resolved items into the Update Log once evidence (doc-index timestamp + regression suites) is recorded.
-* When hardening, follow the **Pass A / Pass B / Pass C** evidence cycle per stage, as described in the how-to guide, and log each doc-index run/regression suite in **Section 13. Update Log & Evidence Tracking**.
-* Before calling any Tier-1 edit complete, refresh the doc-index (via the `doc-index` make target or platform-equivalent command), execute the validating regression suites, and only then log the evidence in **Section 13. Update Log & Evidence Tracking**; that section is mandatory and should never be skipped.
-* Editors must follow `.github/instructions/markdown.instructions.md` and `.github/instructions/pipeline_doc_tiers.instructions.md`.
+- This document is **Tier-1**: it describes **system-level behavior**, not code internals.
+- All statements must be **backed by repo evidence** (code, tests, ADRs, design docs).
+- Structure (H2s/H3s) should be preserved; add/remove major sections deliberately, then renumber
+  **all** top-level headings (Stages, Snapshot, Contradiction Registry, etc.) so numbering stays contiguous.
+- During Phase 0 seeding, create the blank **Update Log & Evidence Tracking** table before drafting
+  stage content so evidence capture is ready from the first edit.
+- Use the Working Notes section only as temporary scratch space; move resolved items into the Update
+  Log once evidence (doc-index timestamp + regression suites) is recorded.
+- When hardening, follow the **Pass A / Pass B / Pass C** evidence cycle per stage, as described in
+  the how-to guide, and log each doc-index run/regression suite in
+  **Section 13. Update Log & Evidence Tracking**.
+- Before calling any Tier-1 edit complete, refresh the doc-index (via the `doc-index` make target or
+  platform-equivalent command), execute the validating regression suites, and only then log the
+  evidence in **Section 13. Update Log & Evidence Tracking**; that section is mandatory and should
+  never be skipped.
+- Editors must follow `.github/instructions/markdown.instructions.md` and `.github/instructions/pipeline_doc_tiers.instructions.md`.
 
 **Pipeline-Specific Notes:**
 
-* HealthView orchestrators measure **externally observable repository health signals** (test results, typecheck status, documentation coverage, fault reports, standards compliance).
-* Each Stage NN class represents a **maturity domain** (Testing, Docs, Dependencies, etc.).
-* Each Stage NN.N orchestrator can be run independently or via the meta-orchestrator.
-* Gaps are tracked as "Planned Expansions" within appropriate stage classes.
+- HealthView orchestrators measure **externally observable repository health signals**
+  (test results, typecheck status, documentation coverage, fault reports, standards compliance).
+- Each Stage NN class represents a **maturity domain** (Testing, Docs, Dependencies, etc.).
+- Each Stage NN.N orchestrator can be run independently or via the meta-orchestrator.
+- Gaps are tracked as "Planned Expansions" within appropriate stage classes.
 
 ---
 
@@ -30,80 +68,95 @@
 
 **Primary stakeholders:**
 
-* Development teams maintaining Repo Studios codebase
-* AI agents (Copilot, coding assistants) querying repo health status
-* DevOps/SRE teams monitoring CI/CD pipeline health
+- Development teams maintaining Repo Studios codebase
+- AI agents (Copilot, coding assistants) querying repo health status
+- DevOps/SRE teams monitoring CI/CD pipeline health
 
 **Secondary stakeholders:**
 
-* Code reviewers assessing PR quality impact
-* Project managers tracking technical debt accumulation
-* New contributors understanding codebase maturity
+- Code reviewers assessing PR quality impact
+- Project managers tracking technical debt accumulation
+- New contributors understanding codebase maturity
 
 ### 1.2 What
 
 **High-level function:**  
-HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer → consumer → aggregator scripts that collect metrics, analyze trends, and publish timestamped reports.
+HealthView orchestrates automated measurement of repository health across six maturity domains
+(Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process
+Governance). Each orchestrator chains producer → consumer → aggregator scripts that collect metrics,
+analyze trends, and publish timestamped reports.
 
 **Inputs:**
 
-* Repository source code (`.py`, `.md`, `.yaml` files)
-* Test execution logs and coverage data
-* Git history and churn metrics
-* Dependency manifests and import graphs
-* Configuration files and baselines
+- Repository source code (`.py`, `.md`, `.yaml` files)
+- Test execution logs and coverage data
+- Git history and churn metrics
+- Dependency manifests and import graphs
+- Configuration files and baselines
 
 **Outputs:**
 
-* Timestamped health reports in `.repo_studios/command_center/reports/healthview/<topic>/<YYYY-MM-DD>/`
-* Manifest JSON describing orchestrator run metadata
-* Summary markdown digests for human consumption
-* Telemetry JSON for trend analysis and alerting
+- **Current (repo evidence today):** timestamped HealthView bundles are published under
+  `.repo_studios/command_center/reports/healthview/<topic>/<timestamp>/`.
+- **Target contract (HOP hardening):** the canonical HealthView output root becomes
+  `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
+- **Bundle invariants:** each HealthView run produces exactly three artifacts:
+  `manifest.json`, `summary.md`, `telemetry.json`.
+- **No mutable pointers:** HealthView bundles must be discoverable by timestamped directories;
+  HealthView does not create `latest_*` / `current_*` aliases.
+- **Retention default (HOP target):** history mode with `keep=5` unless explicitly justified.
+- **DB dual-write (HOP target):** when `REPO_STUDIOS_DB_ENABLED` is enabled, orchestrators may
+  best-effort persist bundle metadata to a DB; failures must log at `WARNING` and must not block
+  filesystem artifact writing.
 
 ### 1.3 Why
 
 **Problem solved:**  
-Without continuous health measurement, technical debt accumulates silently, documentation coverage degrades invisibly, and runtime reliability issues surface only during incidents. HealthView provides **proactive visibility** into repo health trends before they become critical.
+Without continuous health measurement, technical debt accumulates silently, documentation coverage
+degrades invisibly, and runtime reliability issues surface only during incidents. HealthView
+provides **proactive visibility** into repo health trends before they become critical.
 
 **Guarantees provided:**
 
-* Every orchestrator run produces timestamped, reproducible artifacts
-* Health signals are measured consistently across CI/CD cycles
-* Trend data enables early intervention before metrics degrade critically
-* Gaps between ideal and actual health are surfaced systematically
+- Every orchestrator run produces timestamped, reproducible artifacts
+- Health signals are measured consistently across CI/CD cycles
+- Trend data enables early intervention before metrics degrade critically
+- Gaps between ideal and actual health are surfaced systematically
 
 ### 1.4 Where
 
 **Architecture position:**  
-HealthView sits in the **automation tier** of Repo Studios, operating as a standalone pipeline that reads from the codebase and writes to the reports directory. It does not modify source code or block CI/CD workflows.
+HealthView sits in the **automation tier** of Repo Studios, operating as a standalone pipeline that
+reads from the codebase and writes to the reports directory. It does not modify source code or block
+CI/CD workflows.
 
 **Upstream systems:**
 
-* Git repository (source of truth for code, docs, history)
-* Test runners (pytest, coverage tools)
-* Static analysis tools (mypy, lizard, custom scanners)
+- Git repository (source of truth for code, docs, history)
+- Test runners (pytest, coverage tools)
+- Static analysis tools (mypy, lizard, custom scanners)
 
 **Downstream dependencies:**
 
-* Dashboard UIs consuming health reports (future)
-* Alerting systems monitoring metric thresholds (future)
-* Developer CLIs querying latest health status (current: ad-hoc manual inspection)
+- Dashboard UIs consuming health reports (future)
+- Alerting systems monitoring metric thresholds (future)
+- Developer CLIs querying latest health status (current: ad-hoc manual inspection)
 
 ### 1.5 When
 
 **Invocation triggers:**
 
-* **Manual:** Developer runs orchestrator via CLI or make target
-* **CI/CD:** GitHub Actions workflow executes after main branch merge (future: automated)
-* **Scheduled:** Nightly cron job refreshes baseline metrics (future: not yet implemented)
-* **On-demand:** AI agent requests health snapshot during code review (future: integration pending)
+- **Manual:** Developer runs orchestrator via CLI or make target
+- **CI/CD:** GitHub Actions workflow executes after main branch merge (future: automated)
+- **Scheduled:** Nightly cron job refreshes baseline metrics (future: not yet implemented)
+- **On-demand:** AI agent requests health snapshot during code review (future: integration pending)
 
 **State transitions:**
 
-* **Idle:** No orchestrator running, reports directory stable
-* **Active:** Orchestrator executing, temporary artifacts being written
-* **Complete:** All scripts finished, timestamped bundle published
-* **Failed:** Script returned non-zero exit code, partial artifacts may exist
+- **Idle:** No orchestrator running, reports directory stable
+- **Active:** Orchestrator executing, temporary artifacts being written
+- **Complete:** All scripts finished, timestamped bundle published
+- **Failed:** Script returned non-zero exit code, partial artifacts may exist
 
 ### 1.6 How
 
@@ -115,33 +168,35 @@ HealthView sits in the **automation tier** of Repo Studios, operating as a stand
 4. Each script writes intermediate artifacts (JSON, markdown) to topic-specific directory
 5. Final aggregator/summarizer produces bundle (manifest + summary + telemetry)
 6. Orchestrator prunes stale artifacts, keeping only N most recent timestamped bundles
+  (HOP target default: `keep=5`)
 7. Exit code signals success/failure; logs capture execution telemetry
 
 **Stage organization:**  
-Six maturity domain classes (Stage 1–6), each containing one or more orchestrators. Meta-orchestrator chains all Stage NN.1 orchestrators for full-suite diagnostics.
+Six maturity domain classes (Stage 1–6), each containing one or more orchestrators.
+Meta-orchestrator chains all Stage NN.1 orchestrators for full-suite diagnostics.
 
 ---
 
 ## 2. Document Metadata
 
-* **Version:** `v0.3.0`  
-* **Last Updated:** `2025-12-12`  
-* **Owner / Steward:** `Repo Studios Core Team`  
-* **Overall Status:** `In Progress – Phase 2 Pass B complete (all 7 stages code-verified), awaiting Pass C polish`
+- **Version:** `v0.3.1`  
+- **Last Updated:** `2025-12-18`  
+- **Owner / Steward:** `Repo Studios Core Team`  
+- **Overall Status:** `In Progress – Phase 2 Pass B complete (all 7 stages code-verified), awaiting Pass C polish`
 
 **Hardening Progress:**
 
-* **Phase 0 (Seeding):** Complete – BEGIN → END skeleton with all stages
-* **Phase 1 (Structure & Global Concepts):** Complete – Spine, Envelope, Global Controls, Stage Matrix
-* **Phase 2 (Stage-by-Stage Hardening):** Pass B complete (100%)
-  * Stage 1 (Test Execution Telemetry): Pass B complete, Pass C pending
-  * Stage 2 (Docs Health Overview): Pass B complete, Pass C pending
-  * Stage 3 (Fault Diagnostics Overview): Pass B complete, Pass C pending
-  * Stage 4 (Dependency & Import Hygiene): Pass B complete, Pass C pending
-  * Stage 5 (Monkey Patch Oversight): Pass B complete, Pass C pending
-  * Stage 6 (Standards Integrity): Pass B complete, Pass C pending
-  * Stage 7 (Meta-Orchestrator): Pass B complete, Pass C pending
-* **Phase 3 (Consolidation & Freeze):** Not started
+- **Phase 0 (Seeding):** Complete – BEGIN → END skeleton with all stages
+- **Phase 1 (Structure & Global Concepts):** Complete – Spine, Envelope, Global Controls, Stage Matrix
+- **Phase 2 (Stage-by-Stage Hardening):** Pass B complete (100%)
+  - Stage 1 (Test Execution Telemetry): Pass B complete, Pass C pending
+  - Stage 2 (Docs Health Overview): Pass B complete, Pass C pending
+  - Stage 3 (Fault Diagnostics Overview): Pass B complete, Pass C pending
+  - Stage 4 (Dependency & Import Hygiene): Pass B complete, Pass C pending
+  - Stage 5 (Monkey Patch Oversight): Pass B complete, Pass C pending
+  - Stage 6 (Standards Integrity): Pass B complete, Pass C pending
+  - Stage 7 (Meta-Orchestrator): Pass B complete, Pass C pending
+- **Phase 3 (Consolidation & Freeze):** Not started
 
 ---
 
@@ -149,7 +204,27 @@ Six maturity domain classes (Stage 1–6), each containing one or more orchestra
 
 ### 3.1 Narrative Summary
 
-The HealthView Orchestration Pipeline measures repository health by executing staged orchestrators across six maturity domains: Testing Perspectives (test coverage, hardening), Documentation Quality (integrity, churn), Runtime Reliability (fault diagnostics), Dependency Management (import hygiene, typecheck), Technical Debt Oversight (monkey patches, anti-patterns), and Process Governance (standards compliance). Each orchestrator chains producer scripts (raw data collection), consumer scripts (single-hop analysis), and aggregator scripts (multi-source blending) into timestamped report bundles. A meta-orchestrator can execute all domain orchestrators sequentially for full-suite diagnostics. Outputs are published to `.repo_studios/command_center/reports/healthview/<topic>/<YYYY-MM-DD>/` with history pruning. The pipeline is invoked manually via CLI/make targets; future work includes CI/CD integration and automated alerting.
+The HealthView Orchestration Pipeline measures repository health by executing staged orchestrators
+across six maturity domains: Testing Perspectives (test coverage, hardening), Documentation Quality
+(integrity, churn), Runtime Reliability (fault diagnostics), Dependency Management (import hygiene,
+typecheck), Technical Debt Oversight (monkey patches, anti-patterns), and Process Governance
+(standards compliance). Each orchestrator chains producer scripts (raw data collection), consumer
+scripts (single-hop analysis), and aggregator scripts (multi-source blending) into timestamped
+report bundles. A meta-orchestrator can execute all domain orchestrators sequentially for
+full-suite diagnostics.
+
+**Outputs & discovery semantics:**
+
+- **Current (repo evidence today):** bundles are written under
+  `.repo_studios/command_center/reports/healthview/<topic>/<timestamp>/`.
+- **Target (HOP contract):** migrate to
+  `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
+- **Discovery invariant:** HealthView bundles must be discoverable by scanning timestamped
+  directories; HealthView does not rely on mutable “latest” pointers.
+- **Retention target default:** history mode with `keep=5`.
+
+The pipeline is invoked manually via CLI/make targets; future work includes CI/CD integration and
+automated alerting.
 
 ### 3.2 High-Level Stage List
 
@@ -165,41 +240,56 @@ The HealthView Orchestration Pipeline measures repository health by executing st
 
 ## 3.3 How to Read This Document
 
-* Start with **Sections 1–3** for context and the global map.
-* Read **Stages 1–6** in maturity order to understand each health domain's orchestrators.
-* Use **Stage 7** to understand how the meta-orchestrator chains all domains.
-* Consult the **Snapshot and Stage Matrix (Section 8)** for a quick status overview.
-* Check the **Contradiction Registry (Section 9)** for known inconsistencies.
-* Reference the **Tier-2 Document Index (Section 10)** for implementation details.
+- Start with **Sections 1–3** for context and the global map.
+- Read **Stages 1–6** in maturity order to understand each health domain's orchestrators.
+- Use **Stage 7** to understand how the meta-orchestrator chains all domains.
+- Consult the **Snapshot and Stage Matrix (Section 8)** for a quick status overview.
+- Check the **Contradiction Registry (Section 12)** for known inconsistencies.
+- Reference the **Tier-2 Document Index (Section 10)** for implementation details.
 
 ---
 
 ## 3.4 HealthView Report Bundle Spine (Shared Backbone)
 
 **What it is:**  
-Every HealthView orchestrator produces a standardized **report bundle** structure consisting of three files: `manifest.json` (metadata), `summary.md` (human-readable digest), and `telemetry.json` (metrics time series). This shared backbone ensures consistent artifact discovery, retention policies, and downstream consumption patterns across all health domains.
+Every HealthView orchestrator produces a standardized **report bundle** structure consisting of
+three files: `manifest.json` (metadata), `summary.md` (human-readable digest), and `telemetry.json`
+(metrics time series). This shared backbone ensures consistent artifact discovery, retention
+policies, and downstream consumption patterns across all health domains.
 
 **Components participating:**
 
-* All orchestrators in Stages 1–6
-* Shared utilities in `.repo_studios/command_center/scripts/libraries/cli.py` (bundle writing, pruning)
-* Report naming standards enforced by `REPORT_NAMING_STANDARDS.md`
+- All orchestrators in Stages 1–6
+- Shared utilities in `.repo_studios/command_center/scripts/libraries/cli.py` (bundle writing, pruning)
+- Report naming standards enforced by `REPORT_NAMING_STANDARDS.md`
 
 **Lifecycle guarantees:**
 
-* Every orchestrator run produces exactly one timestamped bundle
-* Bundles follow `<topic>/<YYYY-MM-DD>/` directory structure
-* History pruning retains only N most recent bundles (default: 7 days)
-* Missing artifacts signal orchestrator failure; partial bundles are cleaned up
+- Every orchestrator run produces exactly one timestamped bundle with three artifacts:
+  `manifest.json`, `summary.md`, `telemetry.json`
+- **Current (repo evidence today):** bundles live at
+  `.repo_studios/command_center/reports/healthview/<topic>/<timestamp>/`
+- **Target (HOP contract):** bundles live at
+  `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`
+- **Discovery invariant:** bundles are discovered by scanning timestamped directories; HealthView
+  does not create `latest_*` / `current_*` pointer files.
+- **Retention target default:** history mode with `keep=5` (until code migration lands, scripts may
+  continue to expose legacy per-topic keep knobs).
+- Missing artifacts signal orchestrator failure; partial bundles are cleaned up
 
 **Why downstream stages assume this:**  
-Aggregators and meta-orchestrators can discover latest reports by scanning directory timestamps without requiring mutable "latest" pointers. Trend analysis tools can compare bundles across time by iterating timestamp-sorted directories.
+Aggregators and meta-orchestrators can discover latest reports by scanning directory timestamps
+without requiring mutable "latest" pointers. Trend analysis tools can compare bundles across time
+by iterating timestamp-sorted directories.
 
 **Evidence:**
 
-* [REPORT_NAMING_STANDARDS.md](../../../REPORT_NAMING_STANDARDS.md)
-* [.repo_studios/command_center/scripts/libraries/cli.py](../../../command_center/scripts/libraries/cli.py) (bundle writing functions)
-* [.repo_studios/command_center/scripts/orchestrators/](../../../command_center/scripts/orchestrators/) (all orchestrators follow pattern)
+- [REPORT_NAMING_STANDARDS.md](../../../../REPORT_NAMING_STANDARDS.md)
+- [HOP Implementation Plan](hop_implementation.md)
+- [.repo_studios/command_center/scripts/libraries/cli.py]
+  (../../../command_center/scripts/libraries/cli.py) (bundle writing functions)
+- [.repo_studios/command_center/scripts/orchestrators/]
+  (../../../command_center/scripts/orchestrators/) (all orchestrators follow pattern)
 
 ---
 
@@ -208,40 +298,48 @@ Aggregators and meta-orchestrators can discover latest reports by scanning direc
 **What it contains:**  
 Each orchestrator run propagates an **execution envelope** tracking:
 
-* Orchestrator name and topic slug
-* Timestamp (ISO 8601)
-* Repo root path
-* Invoked scripts (ordered list with paths)
-* Exit codes per script
-* Log level configuration
-* Output artifact paths
-* Success/failure status
+- Orchestrator name and topic slug
+- Timestamp (ISO 8601)
+- Repo root path
+- Invoked scripts (ordered list with paths)
+- Exit codes per script
+- Log level configuration
+- Output artifact paths
+- Success/failure status
 
 **Where created:**  
-Envelope is initialized at orchestrator entry point (e.g., `run_test_execution_telemetry.py`'s `main()` function) and written to `manifest.json` upon completion.
+Envelope is initialized at orchestrator entry point (e.g., `run_test_execution_telemetry.py`'s
+`main()` function) and written to `manifest.json` upon completion.
 
 **How enriched:**  
-As each script executes, the orchestrator appends its exit code and artifact paths to the envelope. Final aggregator/summarizer adds analysis metadata (e.g., metrics computed, trends detected).
+As each script executes, the orchestrator appends its exit code and artifact paths to the envelope.
+Final aggregator/summarizer adds analysis metadata (e.g., metrics computed, trends detected).
 
 **How surfaced:**  
-The meta-orchestrator (`orchestrate_full_diagnostic.py`) collects envelopes from all Stage NN.1 orchestrators and produces a **composite envelope** showing full-suite status.
+The meta-orchestrator (`orchestrate_full_diagnostic.py`) collects envelopes from all Stage NN.1
+orchestrators and produces a **composite envelope** showing full-suite status.
 
 **Evidence:**
 
-* [.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py](../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py) (lines 20–80: envelope initialization)
-* [.repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py](../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py) (composite envelope logic)
+- [.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py]
+  (../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py)
+  (lines 20–80: envelope initialization)
+- [.repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py]
+  (../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py)
+  (composite envelope logic)
 
 **Envelope fields (manifest.json schema):**
 
-* `orchestrator_name` (string)
-* `topic_slug` (string, e.g., "test_execution_telemetry")
-* `timestamp` (ISO 8601 string)
-* `repo_root` (absolute path)
-* `scripts_invoked` (array of objects: `{name, path, exit_code, artifacts}`)
-* `log_level` (string: DEBUG, INFO, WARNING, ERROR)
-* `output_directory` (absolute path to bundle)
-* `status` (string: "success" | "partial_failure" | "complete_failure")
-* `duration_seconds` (float)
+- `orchestrator_name` (string)
+- `topic_slug` (string, e.g., "test_execution_telemetry")
+- `timestamp` (ISO 8601 string)
+- `repo_root` (absolute path)
+- `scripts_invoked` (array of objects: `{name, path, exit_code, artifacts}`)
+- `log_level` (string: DEBUG, INFO, WARNING, ERROR)
+- `output_directory` (absolute path to bundle; current vs target roots are tracked in the
+  Contradiction Registry until migration is complete)
+- `status` (string: "success" | "partial_failure" | "complete_failure")
+- `duration_seconds` (float)
 
 ---
 
@@ -250,29 +348,35 @@ The meta-orchestrator (`orchestrate_full_diagnostic.py`) collects envelopes from
 **Session lifecycle:**
 
 1. **Start:** Orchestrator parses CLI args, validates repo root, initializes logging
-2. **Execute:** Scripts run sequentially; each script failure is logged but does not always abort pipeline (configurable)
+2. **Execute:** Scripts run sequentially; each script failure is logged but does not always abort
+  pipeline (configurable)
 3. **Aggregate:** Final script synthesizes outputs from earlier scripts
 4. **Publish:** Bundle written to timestamped directory, history pruned
 5. **End:** Orchestrator exits with aggregated status code (0 = success, non-zero = failure)
 
 **Fallback modes:**
 
-* **Continue-on-error:** If a non-critical script fails, orchestrator logs warning and proceeds (used for utilities)
-* **Abort-on-failure:** If a producer script fails, orchestrator aborts immediately (used for data collection steps)
-* **Partial-bundle mode:** Orchestrator writes partial manifest noting which scripts completed before failure
+- **Continue-on-error:** If a non-critical script fails, orchestrator logs warning and proceeds
+  (used for utilities)
+- **Abort-on-failure:** If a producer script fails, orchestrator aborts immediately (used for data
+  collection steps)
+- **Partial-bundle mode:** Orchestrator writes partial manifest noting which scripts completed
+  before failure
 
 **Global controls (environment variables & CLI flags):**
 
-* `--log-level` / `LOG_LEVEL` – Controls logging verbosity (DEBUG, INFO, WARNING, ERROR)
-* `--repo-root` / `REPO_ROOT` – Overrides repository root path detection
-* `--skip-upstream` – Skips producer scripts, reusing existing artifacts (for debugging aggregators)
-* `--dry-run` – Validates environment and script paths without executing (future: not yet implemented)
-* `PYTHON` – Specifies Python interpreter path (for virtual env coordination)
+- `--log-level` / `LOG_LEVEL` – Controls logging verbosity (DEBUG, INFO, WARNING, ERROR)
+- `--repo-root` / `REPO_ROOT` – Overrides repository root path detection
+- `--skip-upstream` – Skips producer scripts, reusing existing artifacts (for debugging aggregators)
+- `--dry-run` – Validates environment and script paths without executing (future: not yet implemented)
+- `PYTHON` – Specifies Python interpreter path (for virtual env coordination)
 
 **Evidence:**
 
-* [.repo_studios/command_center/scripts/libraries/cli.py](../../../command_center/scripts/libraries/cli.py) (`build_standard_options` function)
-* [.repo_studios/command_center/scripts/orchestrators/scan_duplicates.py](../../../command_center/scripts/orchestators/scan_duplicates.py) (lines 15–30: `--skip-upstream` logic)
+- [.repo_studios/command_center/scripts/libraries/cli.py]
+  (../../../command_center/scripts/libraries/cli.py) (`build_standard_options` function)
+- [.repo_studios/command_center/scripts/aggregators/scan_duplicates.py]
+  (../../../command_center/scripts/aggregators/scan_duplicates.py) (supports `--skip-upstream`)
 
 ---
 
@@ -280,36 +384,51 @@ The meta-orchestrator (`orchestrate_full_diagnostic.py`) collects envelopes from
 
 **Guarantees:**
 
-* Every orchestrator run produces a timestamped bundle (manifest + summary + telemetry) in `.repo_studios/command_center/reports/healthview/<topic>/<YYYY-MM-DD>/`
-* History pruning retains only N most recent bundles per topic (default: 7, configurable via `--retention-days`)
-* Exit code 0 = success, non-zero = failure (script-level failures propagate to orchestrator level)
-* All artifacts follow [REPORT_NAMING_STANDARDS.md](../../../REPORT_NAMING_STANDARDS.md) (viewer/topic/timestamp/artifact)
-* Scripts invoked via dynamic imports (`run(argv)` helpers), not subprocess spawning (except where noted)
+- Every orchestrator run produces exactly three artifacts: `manifest.json`, `summary.md`, `telemetry.json`.
+- **Current (repo evidence today):** bundles are written under
+  `.repo_studios/command_center/reports/healthview/<topic>/<timestamp>/`.
+- **Target (HOP contract):** bundles are written under
+  `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
+- **Discovery invariant:** bundles are discovered by timestamped directories; HealthView does not
+  create mutable pointer files (`latest_*`, `current_*`).
+- **Retention target default:** `keep=5` for HealthView bundles (legacy scripts may still expose
+  topic-specific keep knobs until migration is complete).
+- Exit code 0 = success, non-zero = failure (script-level failures propagate to orchestrator level)
+- All artifacts follow [REPORT_NAMING_STANDARDS.md](../../../../REPORT_NAMING_STANDARDS.md) (viewer/topic/timestamp/artifact)
+- Scripts invoked via dynamic imports (`run(argv)` helpers), not subprocess spawning (except where noted)
 
 **Assumptions:**
 
-* Python 3.10+ environment with dependencies installed (`.venv` or conda env)
-* Repository root is a valid Git working directory with `.repo_studios/` structure
-* Upstream scripts honor CLI contracts (`--repo-root`, `--log-level`, `--output`)
-* Filesystem write permissions to `.repo_studios/command_center/reports/`
-* Git history available for churn/trend analysis (shallow clones may degrade metrics)
+- Python 3.10+ environment with dependencies installed (`.venv` or conda env)
+- Repository root is a valid Git working directory with `.repo_studios/` structure
+- Upstream scripts honor CLI contracts (`--repo-root`, `--log-level`, `--output`)
+- Filesystem write permissions to the active HealthView output root
+  (`.repo_studios/command_center/reports/` today; `.repo_studios/reports/` after HOP migration)
+- Git history available for churn/trend analysis (shallow clones may degrade metrics)
 
 **Evidence:**
 
-* [.repo_studios/command_center/scripts/README.md](../../../command_center/scripts/README.md) (tier responsibilities)
-* [.repo_studios/Makefile](../../../Makefile) (make targets invoking orchestrators)
-* [pytest tests/tests_command_center/](../../../tests/tests_command_center/) (orchestrator integration tests)
+- [.repo_studios/scripts/README.md](../../../scripts/README.md) (tier responsibilities)
+- [.repo_studios/Makefile](../../../Makefile) (make targets invoking orchestrators)
+- [pytest tests/tests_command_center/](../../../tests/tests_command_center/) (orchestrator
+  integration tests)
 
 ---
 
 ## 4. Stage 1 – Testing Perspectives
 
-> **Purpose:** Measure test suite health through coverage analysis, log parsing, hardening metrics, and churn-complexity heatmaps to ensure testing keeps pace with codebase growth.
+> **Purpose:** Measure test suite health through coverage analysis, log parsing, hardening metrics,
+> and churn-complexity heatmaps to ensure testing keeps pace with codebase growth.
 
 ### 4.1 Stage 1.1: Test Execution Telemetry
 
 **Overview:**  
-The Test Execution Telemetry orchestrator chains six scripts in producer → consumer → aggregator → summarizer pipeline: (1) collect test logs from pytest runs, (2) generate coverage inventory from coverage.xml, (3) analyze test hardening (slow/flaky tests), (4) generate health report synthesizing log trends, (5) produce churn-complexity heatmap overlaying code churn + cyclomatic complexity + test coverage, and (6) summarize all signals into final HealthView bundle. Expect 5-6 minute runtime when churn analysis is enabled; pipeline stops on first hard failure.
+The Test Execution Telemetry orchestrator chains six scripts in producer → consumer → aggregator →
+summarizer pipeline: (1) collect test logs from pytest runs, (2) generate coverage inventory from
+coverage.xml, (3) analyze test hardening (slow/flaky tests), (4) generate health report synthesizing
+log trends, (5) produce churn-complexity heatmap overlaying code churn + cyclomatic complexity +
+test coverage, and (6) summarize all signals into final HealthView bundle. Expect 5-6 minute runtime
+when churn analysis is enabled; pipeline stops on first hard failure.
 
 **Orchestrator:**  
 [.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py](../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py)
@@ -318,76 +437,89 @@ The Test Execution Telemetry orchestrator chains six scripts in producer → con
 
 | Script | Category | Purpose | Tier-3 YAML |
 |--------|----------|---------|-------------|
-| `collect_test_log_reports.py` | Producer | Parse pytest logs/JUnit XML, extract test counts, failures, durations, warnings | [TBD](../../tier3_index/) |
-| `generate_test_coverage_inventory.py` | Producer | Parse coverage.xml, compute line/branch coverage percentages, status flags | [TBD](../../tier3_index/) |
-| `analyze_test_hardening.py` | Producer | Identify slow tests, compute reliability metrics, flag hardening opportunities | [TBD](../../tier3_index/) |
-| `generate_test_log_health_report.py` | Consumer | Synthesize test logs into pass/fail trends, warnings summary, regression detection | [TBD](../../tier3_index/) |
-| `generate_churn_complexity_heatmap.py` | Aggregator | Overlay code churn + cyclomatic complexity + test coverage into risk heatmap | [TBD](../../tier3_index/) |
-| `summarize_test_execution_telemetry.py` | Summarizer | Aggregate all signals into final HealthView bundle with telemetry.json | [TBD](../../tier3_index/) |
+| `collect_test_log_reports.py` | Producer | Parse pytest logs/JUnit XML, extract test counts, failures, durations, warnings | TBD |
+| `generate_test_coverage_inventory.py` | Producer | Parse coverage.xml, compute line/branch coverage percentages, status flags | TBD |
+| `analyze_test_hardening.py` | Producer | Identify slow tests, compute reliability metrics, flag hardening opportunities | TBD |
+| `generate_test_log_health_report.py` | Consumer | Synthesize test logs into pass/fail trends, warnings summary, regression detection | TBD |
+| `generate_churn_complexity_heatmap.py` | Aggregator | Overlay code churn + cyclomatic complexity + test coverage into risk heatmap | TBD |
+| `summarize_test_execution_telemetry.py` | Summarizer | Aggregate all signals into final HealthView bundle with telemetry.json | TBD |
 
 **Inputs:**
 
-* Pytest log files and JUnit XML from `.repo_studios/command_center/reports/rawview/test_execution_runs/<timestamp>/`
-* `coverage.xml` from `.repo_studios/tests/fixtures/test_run_coverage/coverage.xml`
-* Git history for churn analysis (via git log)
-* Optional: Lizard complexity metrics source (JSON file, fallback to churn-only if missing)
+- Pytest log files and JUnit XML from `.repo_studios/command_center/reports/rawview/test_execution_runs/<timestamp>/`
+- `coverage.xml` from `.repo_studios/tests/fixtures/test_run_coverage/coverage.xml`
+- Git history for churn analysis (via git log)
+- Optional: Lizard complexity metrics source (JSON file, fallback to churn-only if missing)
 
 **Outputs:**
 
-* **Healthview bundle:** `.repo_studios/command_center/reports/healthview/test_execution_telemetry/<YYYY-MM-DD>/`
-  * `manifest.json` (orchestrator execution metadata)
-  * `summary.md` (human-readable digest)
-  * `telemetry.json` (time-series metrics)
-* **Intermediate artifacts** (retained per --artifacts-to-keep, default 3-10 depending on script):
-  * Test log reports: `.repo_studios/reports/producer_reports/test_log_reports/test_log_reports-<timestamp>/`
-  * Coverage inventory: `.repo_studios/reports/producer_reports/test_coverage_reports/test_coverage-<timestamp>/`
-  * Hardening analysis: `.repo_studios/reports/producer_reports/test_hardening_reports/test_hardening-<timestamp>/`
-  * Health report: `.repo_studios/reports/consumer_reports/test_log_health_reports/test_log_health-<timestamp>/`
-  * Churn heatmap: `.repo_studios/reports/aggregator_reports/churn_complexity_heatmap/churn_complexity_heatmap-<timestamp>/`
-
+- **Healthview bundle:** `.repo_studios/command_center/reports/healthview/test_execution_telemetry/<YYYY-MM-DD>/`
+  - `manifest.json` (orchestrator execution metadata)
+  - `summary.md` (human-readable digest)
+  - `telemetry.json` (time-series metrics)
+- **Intermediate artifacts** (retained per --artifacts-to-keep, default 3-10 depending on script):
+  - Test log reports: `.repo_studios/reports/producer_reports/test_log_reports/test_log_reports-<timestamp>/`
+  - Coverage inventory: `.repo_studios/reports/producer_reports/test_coverage_reports/test_coverage-<timestamp>/`
+  - Hardening analysis: `.repo_studios/reports/producer_reports/test_hardening_reports/test_hardening-<timestamp>/`
+  - Health report: `.repo_studios/reports/consumer_reports/test_log_health_reports/test_log_health-<timestamp>/`
+  - Churn heatmap: `.repo_studios/reports/aggregator_reports/churn_complexity_heatmap/churn_complexity_heatmap-<timestamp>/`
 **Status:** `Operational – Partial hardening complete`
 
 **Execution Details:**
 
-* Scripts invoked via dynamic imports using `run(argv)` helpers (not subprocess spawning)
-* Exit code propagation: first non-zero exit stops pipeline, no partial bundles published
-* Artifact retention configurable per script: `--collector-artifacts-to-keep=10`, `--coverage-artifacts-to-keep=10`, `--hardening-artifacts-to-keep=10`, `--heatmap-artifacts-to-keep=10`, `--health-artifacts-to-keep=5`, `--artifacts-to-keep=3` (HealthView bundle)
-* Timestamp override supported via `--timestamp` (ISO 8601 format)
-* Heatmap window configurable via `--heatmap-window=500` (git log depth)
+- Scripts invoked via dynamic imports using `run(argv)` helpers (not subprocess spawning)
+- Exit code propagation: first non-zero exit stops pipeline, no partial bundles published
+- Artifact retention configurable per script: `--collector-artifacts-to-keep=10`, `--coverage-artifacts-to-keep=10`, `--hardening-artifacts-to-keep=10`, `--heatmap-artifacts-to-keep=10`, `--health-artifacts-to-keep=5`, `--artifacts-to-keep=3` (HealthView bundle)
+- Timestamp override supported via `--timestamp` (ISO 8601 format)
+- Heatmap window configurable via `--heatmap-window=500` (git log depth)
 
 **Planned Expansions:**
 
-* **Stage 1.2: Performance Test Health** – Orchestrator for tracking performance regression tests, benchmarking, profiling (future)
-* **Stage 1.3: Integration Test Coverage** – Orchestrator for end-to-end test suite metrics, external dependency mocking (future)
+- **Stage 1.2: Performance Test Health** – Orchestrator for tracking performance regression tests, benchmarking, profiling (future)
+- **Stage 1.3: Integration Test Coverage** – Orchestrator for end-to-end test suite metrics, external dependency mocking (future)
 
 **Known Gaps:**
 
-* Test hardening analysis computes metrics but detailed flaky test reports not yet wired into health summary
-* Churn-complexity heatmap gracefully degrades to churn-only mode if `--heatmap-metrics-source` not provided or lizard report unavailable
-* Warnings and slow test counts collected but threshold-based alerting not yet implemented
+- Test hardening analysis computes metrics but detailed flaky test reports not yet wired into
+  health summary
+- Churn-complexity heatmap gracefully degrades to churn-only mode if `--heatmap-metrics-source` not
+  provided or lizard report unavailable
+- Warnings and slow test counts collected but threshold-based alerting not yet implemented
 
 **Evidence Links:**
 
-* **Orchestrator:** [run_test_execution_telemetry.py](../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py) (lines 1-670: pipeline coordination, dynamic imports, artifact retention)
-* **Producer scripts:**
-  * [collect_test_log_reports.py](../../../scripts/producers/collect_test_log_reports.py)
-  * [generate_test_coverage_inventory.py](../../../scripts/producers/generate_test_coverage_inventory.py)
-  * [analyze_test_hardening.py](../../../scripts/producers/analyze_test_hardening.py)
-* **Consumer script:** [generate_test_log_health_report.py](../../../scripts/consumers/generate_test_log_health_report.py)
-* **Aggregator script:** [generate_churn_complexity_heatmap.py](../../../scripts/aggregators/generate_churn_complexity_heatmap.py)
-* **Summarizer script:** [summarize_test_execution_telemetry.py](../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py)
-* **Tests:** [test_run_test_execution_telemetry.py](../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py) (orchestrator integration tests with mocked script execution)
+- **Orchestrator:** [run_test_execution_telemetry.py]
+  (../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py)
+  (lines 1-670: pipeline coordination, dynamic imports, artifact retention)
+- **Producer scripts:**
+  - [collect_test_log_reports.py](../../../scripts/producers/collect_test_log_reports.py)
+  - [generate_test_coverage_inventory.py](../../../scripts/producers/generate_test_coverage_inventory.py)
+  - [analyze_test_hardening.py](../../../scripts/producers/analyze_test_hardening.py)
+- **Consumer script:** [generate_test_log_health_report.py](../../../scripts/consumers/generate_test_log_health_report.py)
+- **Aggregator script:** [generate_churn_complexity_heatmap.py](../../../scripts/aggregators/generate_churn_complexity_heatmap.py)
+- **Summarizer script:** [summarize_test_execution_telemetry.py](../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py)
+- **Tests:** [test_run_test_execution_telemetry.py]
+  (../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py)
+  (orchestrator integration tests with mocked script execution)
 
 ---
 
 ## 5. Stage 2 – Documentation Quality
 
-> **Purpose:** Monitor documentation coverage, integrity, anchor validity, and churn to prevent documentation debt from accumulating silently.
+> **Purpose:** Monitor documentation coverage, integrity, anchor validity, and churn to prevent
+> documentation debt from accumulating silently.
 
 ### 5.1 Stage 2.1: Docs Health Overview
 
 **Overview:**  
-The Docs Health Overview orchestrator chains eight scripts in producer → aggregator pipeline: (1) generate doc index scanning markdown files for headings/links, (2) build anchor inventory extracting markdown anchor IDs, (3) validate markdown anchors checking for broken links, (4) verify docs integrity against standards (single H1, wrapped lines), (5) validate metrics anchor stubs ensuring metric definitions have anchors, (6) generate code-doc churn report comparing code vs. doc file churn, (7) generate undocumented logic report identifying functions lacking docstrings, and (8) aggregate all signals into final HealthView bundle. Expect 6-8 minute runtime depending on anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/anchor/analysis chain.
+The Docs Health Overview orchestrator chains eight scripts in producer → aggregator pipeline: (1)
+generate doc index scanning markdown files for headings/links, (2) build anchor inventory
+extracting markdown anchor IDs, (3) validate markdown anchors checking for broken links, (4) verify
+docs integrity against standards (single H1, wrapped lines), (5) validate metrics anchor stubs
+ensuring metric definitions have anchors, (6) generate code-doc churn report comparing code vs. doc
+file churn, (7) generate undocumented logic report identifying functions lacking docstrings, and
+(8) aggregate all signals into final HealthView bundle. Expect 6-8 minute runtime depending on
+anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/anchor/analysis chain.
 
 **Orchestrator:**  
 [.repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py](../../../command_center/scripts/orchestrators/run_docs_health_overview.py)
@@ -396,74 +528,73 @@ The Docs Health Overview orchestrator chains eight scripts in producer → aggre
 
 | Script | Category | Purpose | Tier-3 YAML |
 |--------|----------|---------|-------------|
-| `generate_doc_index.py` | Producer | Scan repository for markdown files, extract headings, build document inventory | [TBD](../../tier3_index/) |
-| `generate_anchor_inventory.py` | Producer | Extract markdown anchor IDs, build cross-reference map with duplicates flagged | [TBD](../../tier3_index/) |
-| `validate_markdown_anchors.py` | Producer | Check for broken internal links, orphaned anchors, cross-file reference errors | [TBD](../../tier3_index/) |
-| `verify_docs_integrity.py` | Producer | Validate doc structure against standards (single H1, line wrapping, formatting) | [TBD](../../tier3_index/) |
-| `validate_metrics_anchor_stubs.py` | Producer | Ensure metric definitions have corresponding anchor points for linking | [TBD](../../tier3_index/) |
-| `generate_code_doc_churn_report.py` | Producer | Compare code file churn vs. doc file churn, identify staleness risk areas | [TBD](../../tier3_index/) |
-| `generate_undocumented_logic_report.py` | Producer | Identify functions/classes lacking docstrings or external doc references | [TBD](../../tier3_index/) |
-| `aggregate_docs_health_signals.py` | Aggregator | Synthesize all doc metrics into single health score, trend report, signal matrix | [TBD](../../tier3_index/) |
+| `generate_doc_index.py` | Producer | Scan repository for markdown files, extract headings, build document inventory | TBD |
+| `generate_anchor_inventory.py` | Producer | Extract markdown anchor IDs, build cross-reference map with duplicates flagged | TBD |
+| `validate_markdown_anchors.py` | Producer | Check for broken internal links, orphaned anchors, cross-file reference errors | TBD |
+| `verify_docs_integrity.py` | Producer | Validate doc structure against standards (single H1, line wrapping, formatting) | TBD |
+| `validate_metrics_anchor_stubs.py` | Producer | Ensure metric definitions have corresponding anchor points for linking | TBD |
+| `generate_code_doc_churn_report.py` | Producer | Compare code file churn vs. doc file churn, identify staleness risk areas | TBD |
+| `generate_undocumented_logic_report.py` | Producer | Identify functions/classes lacking docstrings or external doc references | TBD |
+| `aggregate_docs_health_signals.py` | Aggregator | Synthesize all doc metrics into single health score, trend report, signal matrix | TBD |
 
 **Inputs:**
 
-* Markdown files across repository (recursively scanned)
-* Python source files (for docstring analysis)
-* Git history for churn metrics (via git log)
-* Standards definitions from `docs/standards/` (for integrity validation)
-* Previous doc index and anchor inventory (for diff comparison)
-
+- Markdown files across repository (recursively scanned)
+- Python source files (for docstring analysis)
+- Git history for churn metrics (via git log)
+- Standards definitions from `docs/standards/` (for integrity validation)
+- Previous doc index and anchor inventory (for diff comparison)
 **Outputs:**
 
-* **Healthview bundle:** `.repo_studios/command_center/reports/healthview/docs_health/<YYYY-MM-DD>/`
-  * `manifest.json` (orchestrator execution metadata)
-  * `summary.md` (human-readable digest)
-  * `telemetry.json` (time-series metrics)
-* **Intermediate artifacts** (retained per --artifacts-to-keep, default 1-5 depending on script):
-  * Doc index: `.repo_studios/reports/producer_reports/doc_index/doc_index-<timestamp>/`
-  * Anchor inventory: `.repo_studios/reports/producer_reports/healthview/anchor_inventory/<YYYYMMDD-HHMM>/`
-  * Anchor validation: `.repo_studios/reports/producer_reports/markdown_anchor_validation_reports/markdown_anchor_validation-<timestamp>/`
-  * Docs integrity: `.repo_studios/reports/producer_reports/docs_integrity_reports/docs_integrity-<timestamp>/`
-  * Metrics stubs: `.repo_studios/reports/producer_reports/metrics_anchor_stub_reports/metrics_anchor_stub-<timestamp>/`
-  * Churn report: `.repo_studios/reports/producer_reports/code_doc_churn_reports/code_doc_churn-<timestamp>/`
-  * Undocumented logic: `.repo_studios/reports/producer_reports/undocumented_logic_reports/undocumented_logic-<timestamp>/`
-  * Aggregated signals: `.repo_studios/reports/aggregator_reports/docs_health_signals/docs_health_signals-<timestamp>/`
+- **Healthview bundle:** `.repo_studios/command_center/reports/healthview/docs_health/<YYYY-MM-DD>/`
+  - `manifest.json` (orchestrator execution metadata)
+  - `summary.md` (human-readable digest)
+  - `telemetry.json` (time-series metrics)
+- **Intermediate artifacts** (retained per --artifacts-to-keep, default 1-5 depending on script):
+  - Doc index: `.repo_studios/reports/producer_reports/doc_index/doc_index-<timestamp>/`
+  - Anchor inventory: `.repo_studios/reports/producer_reports/healthview/anchor_inventory/<YYYYMMDD-HHMM>/`
+  - Anchor validation: `.repo_studios/reports/producer_reports/markdown_anchor_validation_reports/markdown_anchor_validation-<timestamp>/`
+  - Docs integrity: `.repo_studios/reports/producer_reports/docs_integrity_reports/docs_integrity-<timestamp>/`
+  - Metrics stubs: `.repo_studios/reports/producer_reports/metrics_anchor_stub_reports/metrics_anchor_stub-<timestamp>/`
+  - Churn report: `.repo_studios/reports/producer_reports/code_doc_churn_reports/code_doc_churn-<timestamp>/`
+  - Undocumented logic: `.repo_studios/reports/producer_reports/undocumented_logic_reports/undocumented_logic-<timestamp>/`
+  - Aggregated signals: `.repo_studios/reports/aggregator_reports/docs_health_signals/docs_health_signals-<timestamp>/`
 
 **Status:** `Operational – Partial hardening complete`
 
 **Execution Details:**
 
-* Scripts invoked via dynamic imports using `run(argv)` helpers loaded via `_load_callable()` (not subprocess spawning)
-* Shared timestamp propagated to all scripts via `--timestamp` (ISO 8601 format)
-* Optional script skipping supported via CLI flags: `--skip-doc-index`, `--skip-anchor-inventory`, `--skip-anchor-validation`, `--skip-docs-integrity`, `--skip-metrics-stub`, `--skip-churn`, `--skip-undocumented`, `--skip-aggregator`, `--skip-hygiene-signals`
-* Artifact retention configurable per script: `--doc-index-artifacts-to-keep=1`, `--anchor-inventory-artifacts-to-keep=5`, `--anchor-validation-artifacts-to-keep=5`, `--docs-integrity-artifacts-to-keep=5`, `--metrics-stub-artifacts-to-keep=5`, `--churn-artifacts-to-keep=5`, `--undocumented-artifacts-to-keep=5`, `--aggregator-artifacts-to-keep=5`, `--artifacts-to-keep=5` (HealthView bundle, default)
-* Report naming enforced via `enforce_report_naming()` guardrail (raises `GuardrailViolationError` if violated)
-* Doc index retention typically 1 (mutable pointer pattern) vs. other producers at 5 (trend analysis)
+- Scripts invoked via dynamic imports using `run(argv)` helpers loaded via `_load_callable()` (not subprocess spawning)
+- Shared timestamp propagated to all scripts via `--timestamp` (ISO 8601 format)
+- Optional script skipping supported via CLI flags: `--skip-doc-index`, `--skip-anchor-inventory`, `--skip-anchor-validation`, `--skip-docs-integrity`, `--skip-metrics-stub`, `--skip-churn`, `--skip-undocumented`, `--skip-aggregator`, `--skip-hygiene-signals`
+- Artifact retention configurable per script: `--doc-index-artifacts-to-keep=1`, `--anchor-inventory-artifacts-to-keep=5`, `--anchor-validation-artifacts-to-keep=5`, `--docs-integrity-artifacts-to-keep=5`, `--metrics-stub-artifacts-to-keep=5`, `--churn-artifacts-to-keep=5`, `--undocumented-artifacts-to-keep=5`, `--aggregator-artifacts-to-keep=5`, `--artifacts-to-keep=5` (HealthView bundle, default)
+- Report naming enforced via `enforce_report_naming()` guardrail (raises `GuardrailViolationError` if violated)
+- Doc index retention typically 1 (mutable pointer pattern) vs. other producers at 5 (trend analysis)
 
 **Planned Expansions:**
 
-* **Stage 2.2: Anchor Health Report** – Integrate `generate_anchor_health_report.py` for deeper cross-reference validation and link health scoring (gap identified in coverage analysis)
+- **Stage 2.2: Anchor Health Report** – Integrate `generate_anchor_health_report.py` for deeper cross-reference validation and link health scoring (gap identified in coverage analysis)
 
 **Known Gaps:**
 
-* Undocumented logic report covers Python only; JavaScript/TypeScript support pending
-* Doc-code staleness heuristic uses simple churn ratio; needs adjustment based on module criticality weighting
-* Metrics stub validation is basic regex matching; does not verify anchor target validity
-* No automated remediation suggestions (e.g., "add docstring here") – reports are diagnostic only
+- Undocumented logic report covers Python only; JavaScript/TypeScript support pending
+- Doc-code staleness heuristic uses simple churn ratio; needs adjustment based on module criticality weighting
+- Metrics stub validation is basic regex matching; does not verify anchor target validity
+- No automated remediation suggestions (e.g., "add docstring here") – reports are diagnostic only
 
 **Evidence Links:**
 
-* **Orchestrator:** [run_docs_health_overview.py](../../../command_center/scripts/orchestrators/run_docs_health_overview.py) (lines 1-1095: pipeline coordination, 8 script execution functions, skip flags, shared timestamp, report naming guardrails)
-* **Producer scripts:**
-  * [generate_doc_index.py](../../../scripts/producers/generate_doc_index.py) (lines 394-432: `_execute_doc_index` invocation)
-  * [generate_anchor_inventory.py](../../../scripts/producers/generate_anchor_inventory.py) (lines 433-469: `_execute_anchor_inventory` invocation)
-  * [validate_markdown_anchors.py](../../../scripts/producers/validate_markdown_anchors.py) (lines 470-506: `_execute_anchor_validation` invocation)
-  * [verify_docs_integrity.py](../../../scripts/producers/verify_docs_integrity.py) (lines 507-531: `_execute_docs_integrity` invocation)
-  * [validate_metrics_anchor_stubs.py](../../../scripts/producers/validate_metrics_anchor_stubs.py) (lines 532-556: `_execute_metrics_stub` invocation)
-  * [generate_code_doc_churn_report.py](../../../scripts/producers/generate_code_doc_churn_report.py) (lines 557-584: `_execute_churn` invocation)
-  * [generate_undocumented_logic_report.py](../../../scripts/producers/generate_undocumented_logic_report.py) (lines 585-649: `_execute_undocumented` invocation)
-* **Aggregator script:** [aggregate_docs_health_signals.py](../../../scripts/aggregators/aggregate_docs_health_signals.py) (lines 650-710: `_execute_aggregator` invocation)
-* **Tests:** No dedicated orchestrator tests found (marked "tests TBD" in Stage Matrix)
+- **Orchestrator:** [run_docs_health_overview.py](../../../command_center/scripts/orchestrators/run_docs_health_overview.py) (lines 1-1095: pipeline coordination, 8 script execution functions, skip flags, shared timestamp, report naming guardrails)
+- **Producer scripts:**
+  - [generate_doc_index.py](../../../scripts/producers/generate_doc_index.py) (lines 394-432: `_execute_doc_index` invocation)
+  - [generate_anchor_inventory.py](../../../scripts/producers/generate_anchor_inventory.py) (lines 433-469: `_execute_anchor_inventory` invocation)
+  - [validate_markdown_anchors.py](../../../scripts/producers/validate_markdown_anchors.py) (lines 470-506: `_execute_anchor_validation` invocation)
+  - [verify_docs_integrity.py](../../../scripts/producers/verify_docs_integrity.py) (lines 507-531: `_execute_docs_integrity` invocation)
+  - [validate_metrics_anchor_stubs.py](../../../scripts/producers/validate_metrics_anchor_stubs.py) (lines 532-556: `_execute_metrics_stub` invocation)
+  - [generate_code_doc_churn_report.py](../../../scripts/producers/generate_code_doc_churn_report.py) (lines 557-584: `_execute_churn` invocation)
+  - [generate_undocumented_logic_report.py](../../../scripts/producers/generate_undocumented_logic_report.py) (lines 585-649: `_execute_undocumented` invocation)
+- **Aggregator script:** [aggregate_docs_health_signals.py](../../../scripts/aggregators/aggregate_docs_health_signals.py) (lines 650-710: `_execute_aggregator` invocation)
+- **Tests:** No dedicated orchestrator tests found (marked "tests TBD" in Stage Matrix)
 
 ---
 
@@ -483,54 +614,54 @@ The Fault Diagnostics Overview orchestrator chains a 3-script pipeline (producer
 
 | Script | Category | Purpose | Tier-3 YAML |
 |--------|----------|---------|-------------|
-| `collect_faulthandler_reports.py` | Producer | Scan `.repo_studios/runs` directories for crash reports, parse tracebacks, categorize faults | [TBD](../../tier3_index/) |
-| `generate_fault_artifacts.py` | Consumer | Process producer output into structured artifacts (CSV, JSON, SUMMARY.md) | [TBD](../../tier3_index/) |
-| `summarize_fault_diagnostics_overview.py` | Summarizer | Generate HealthView overview bundle with cross-run comparisons | [TBD](../../tier3_index/) |
+| `collect_faulthandler_reports.py` | Producer | Scan `.repo_studios/runs` directories for crash reports, parse tracebacks, categorize faults | TBD |
+| `generate_fault_artifacts.py` | Consumer | Process producer output into structured artifacts (CSV, JSON, SUMMARY.md) | TBD |
+| `summarize_fault_diagnostics_overview.py` | Summarizer | Generate HealthView overview bundle with cross-run comparisons | TBD |
 
 **Inputs:**
 
-* `.repo_studios/runs/` (runtime directories with crash dumps)
-* Optional `--run-dir` (explicit run directory, line 210)
-* Optional `--reuse-report` (path to existing producer report, line 211)
-* Optional `--producer-top-frames` (override frame depth for producer, line 212)
+- `.repo_studios/runs/` (runtime directories with crash dumps)
+- Optional `--run-dir` (explicit run directory, line 210)
+- Optional `--reuse-report` (path to existing producer report, line 211)
+- Optional `--producer-top-frames` (override frame depth for producer, line 212)
 
 **Outputs:**
 
-* Producer: `.repo_studios/command_center/<topic>_report_collection/` + `.repo_studios/<topic>_report_collection/` (CommandView mirror, lines 58-59)
-* Consumer HealthView: `.repo_studios/command_center/reports/<topic>_artifact_gen/` (line 60)
-* Consumer CommandView: `.repo_studios/reports/<topic>_artifact_gen/` (backward compatibility, line 61)
-* Summarizer: `.repo_studios/command_center/reports/<topic>_overview/` (line 62)
-* HealthView bundle: `.repo_studios/command_center/viewers/HealthView/<topic>_faultdiag/` (manifest + summary + telemetry, lines 63-64, 589-598)
+- Producer: `.repo_studios/command_center/<topic>_report_collection/` + `.repo_studios/<topic>_report_collection/` (CommandView mirror, lines 58-59)
+- Consumer HealthView: `.repo_studios/command_center/reports/<topic>_artifact_gen/` (line 60)
+- Consumer CommandView: `.repo_studios/reports/<topic>_artifact_gen/` (backward compatibility, line 61)
+- Summarizer: `.repo_studios/command_center/reports/<topic>_overview/` (line 62)
+- HealthView bundle: `.repo_studios/command_center/viewers/HealthView/<topic>_faultdiag/` (manifest + summary + telemetry, lines 63-64, 589-598)
 
 **Execution Notes:**
 
-* Dynamic imports via `_load_callable()` for producer, consumer, and summarizer scripts (lines 218-235)
-* Supports 3 skip flags: `--skip-producer`, `--skip-consumer`, `--skip-summarizer` (lines 206-208)
-* Can reuse existing producer reports via `--reuse-report` flag (lines 211, 343-344)
-* Can override producer frame depth via `--producer-top-frames` (lines 212, 293-294)
-* Artifact retention defaults: HealthView bundle=3, producer/consumer/summarizer=5 (lines 195-201)
-* Fail-fast: Aborts on summarizer failure, continues if producer/consumer skipped (lines 512-518)
-* Writes orchestrator telemetry to HealthView bundle with metrics (file count, total bytes, timestamps, lines 534-543)
-* Backward compatibility: Continues to write artifacts to CommandView locations so older scripts don't break (lines 58-61)
-* Execution functions: `_execute_producer()` (lines 272-312), `_execute_consumer()` (lines 315-371), `_execute_summarizer()` (lines 374-423)
-* Script registration via `CatalogRegistry` for downstream discovery (lines 427-431)
+- Dynamic imports via `_load_callable()` for producer, consumer, and summarizer scripts (lines 218-235)
+- Supports 3 skip flags: `--skip-producer`, `--skip-consumer`, `--skip-summarizer` (lines 206-208)
+- Can reuse existing producer reports via `--reuse-report` flag (lines 211, 343-344)
+- Can override producer frame depth via `--producer-top-frames` (lines 212, 293-294)
+- Artifact retention defaults: HealthView bundle=3, producer/consumer/summarizer=5 (lines 195-201)
+- Fail-fast: Aborts on summarizer failure, continues if producer/consumer skipped (lines 512-518)
+- Writes orchestrator telemetry to HealthView bundle with metrics (file count, total bytes, timestamps, lines 534-543)
+- Backward compatibility: Continues to write artifacts to CommandView locations so older scripts don't break (lines 58-61)
+- Execution functions: `_execute_producer()` (lines 272-312), `_execute_consumer()` (lines 315-371), `_execute_summarizer()` (lines 374-423)
+- Script registration via `CatalogRegistry` for downstream discovery (lines 427-431)
 
 **Status:** `Operational (partial hardening)` – Script count corrected from 2 to 3, runtime verified at 3-5 minutes, dual output locations documented, special reuse/override flags confirmed
 
 **Planned Expansions:**
 
-* **Stage 3.2: Fault Runtime Utilities** – Integrate `configure_faulthandler_runtime.py`, `dump_faulthandler_snapshot.py`, `fault_run_analysis.py` (gap identified in coverage analysis)
+- **Stage 3.2: Fault Runtime Utilities** – Integrate `configure_faulthandler_runtime.py`, `dump_faulthandler_snapshot.py`, `fault_run_analysis.py` (gap identified in coverage analysis)
 
 **Known Gaps:**
 
-* Faulthandler collection requires explicit environment variable configuration; not all CI/CD runs enable it
-* Crash dump parsing is basic; does not yet extract full stack frames or thread states
+- Faulthandler collection requires explicit environment variable configuration; not all CI/CD runs enable it
+- Crash dump parsing is basic; does not yet extract full stack frames or thread states
 
 **Evidence Links:**
 
-* [.repo_studios/command_center/scripts/producers/collect_faulthandler_reports.py](../../../command_center/scripts/producers/collect_faulthandler_reports.py)
-* [.repo_studios/command_center/scripts/consumers/generate_fault_artifacts.py](../../../command_center/scripts/consumers/generate_fault_artifacts.py)
-* [tests/tests_command_center/test_run_fault_diagnostics_overview.py](../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py)
+- [.repo_studios/scripts/producers/collect_faulthandler_reports.py](../../../scripts/producers/collect_faulthandler_reports.py)
+- [.repo_studios/scripts/consumers/generate_fault_artifacts.py](../../../scripts/consumers/generate_fault_artifacts.py)
+- [.repo_studios/tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py](../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py)
 
 ---
 
@@ -550,59 +681,59 @@ The Dependency & Import Hygiene orchestrator chains a 5-script pipeline (4 produ
 
 | Script | Category | Purpose | Tier-3 YAML |
 |--------|----------|---------|-------------|
-| `generate_dependency_hygiene_report.py` | Producer | Analyze `requirements.txt`/`pyproject.toml`, detect unused dependencies, version conflicts | [TBD](../../tier3_index/) |
-| `generate_import_graph_report.py` | Producer (optional) | Build import graph, detect cycles, compute coupling metrics | [TBD](../../tier3_index/) |
-| `scan_code_placeholders.py` | Producer | Extract TODO/FIXME/HACK comments from code, track technical debt markers | [TBD](../../tier3_index/) |
-| `generate_typecheck_report.py` | Producer (optional) | Run mypy, collect type errors, categorize by severity | [TBD](../../tier3_index/) |
-| `refresh_mypy_baselines.py` | Utility (optional) | Update mypy baseline files after type errors are resolved | [TBD](../../tier3_index/) |
+| `generate_dependency_hygiene_report.py` | Producer | Analyze `requirements.txt`/`pyproject.toml`, detect unused dependencies, version conflicts | TBD |
+| `generate_import_graph_report.py` | Producer (optional) | Build import graph, detect cycles, compute coupling metrics | TBD |
+| `scan_code_placeholders.py` | Producer | Extract TODO/FIXME/HACK comments from code, track technical debt markers | TBD |
+| `generate_typecheck_report.py` | Producer (optional) | Run mypy, collect type errors, categorize by severity | TBD |
+| `refresh_mypy_baselines.py` | Utility (optional) | Update mypy baseline files after type errors are resolved | TBD |
 
 **Inputs:**
 
-* `requirements.txt`, `pyproject.toml` (dependency manifests)
-* Python source files (import statements, type hints, placeholder comments)
-* Mypy configuration (`mypy.ini`)
-* Existing mypy baseline files (if present)
-* Placeholder allowlist (`.repo_studios/config/placeholder_allowlist.txt`, line 69)
-* Optional: `--dependency-requirements-pattern` (glob patterns for dependency files, lines 256-260)
-* Optional: `--import-owned` (owned package prefixes for import graph, lines 263-267)
-* Optional: `--placeholder-include-ext`, `--placeholder-pattern`, `--placeholder-exclude-prefix` (lines 268-281)
+- `requirements.txt`, `pyproject.toml` (dependency manifests)
+- Python source files (import statements, type hints, placeholder comments)
+- Mypy configuration (`mypy.ini`)
+- Existing mypy baseline files (if present)
+- Placeholder allowlist (`.repo_studios/config/placeholder_allowlist.txt`, line 69)
+- Optional: `--dependency-requirements-pattern` (glob patterns for dependency files, lines 256-260)
+- Optional: `--import-owned` (owned package prefixes for import graph, lines 263-267)
+- Optional: `--placeholder-include-ext`, `--placeholder-pattern`, `--placeholder-exclude-prefix` (lines 268-281)
 
 **Outputs:**
 
-* Dependency: `.repo_studios/reports/producer_reports/dependency_hygiene_reports/` (lines 65)
-* Import Graph: `.repo_studios/reports/producer_reports/import_graph_reports/` (lines 66)
-* Placeholder: `.repo_studios/reports/producer_reports/code_placeholder_scans/` (lines 67)
-* Batch Cleanup: `.repo_studios/command_center/reports/rawview/dependency_import_hygiene_cleanup/` (lines 70-72, dry-run plan only)
-* Typecheck: `.repo_studios/reports/producer_reports/typecheck_reports/` (lines 73)
-* Mypy Baselines: `.repo_studios/command_center/reports/rawview/mypy_baselines/` (lines 74)
-* HealthView bundle: `.repo_studios/command_center/reports/healthview/dependency_import_hygiene/<timestamp>/` (manifest + summary + telemetry, lines 1082-1091)
+- Dependency: `.repo_studios/reports/producer_reports/dependency_hygiene_reports/` (lines 65)
+- Import Graph: `.repo_studios/reports/producer_reports/import_graph_reports/` (lines 66)
+- Placeholder: `.repo_studios/reports/producer_reports/code_placeholder_scans/` (lines 67)
+- Batch Cleanup: `.repo_studios/command_center/reports/rawview/dependency_import_hygiene_cleanup/` (lines 70-72, dry-run plan only)
+- Typecheck: `.repo_studios/reports/producer_reports/typecheck_reports/` (lines 73)
+- Mypy Baselines: `.repo_studios/command_center/reports/rawview/mypy_baselines/` (lines 74)
+- HealthView bundle: `.repo_studios/command_center/reports/healthview/dependency_import_hygiene/<timestamp>/` (manifest + summary + telemetry, lines 1082-1091)
 
 **Execution Notes:**
 
-* Dynamic imports via `_load_callable()` for all 5 scripts (lines 365-376)
-* Supports 6 skip flags: `--skip-import-graph` (lines 282-283), `--skip-typecheck` (lines 284), `--trigger-batch-cleanup` (lines 285-289, opt-in), `--refresh-mypy-baselines` (lines 290-294, opt-in), dependency patterns via `--dependency-requirements-pattern` (lines 256-260), `--dependency-skip-pyproject` (lines 261-262)
-* Artifact retention defaults: HealthView bundle=3, dependency=10, import-graph=10, placeholder=5, cleanup=5, typecheck=10, baselines=5 (lines 247-253)
-* Fail-tolerant pipeline: `stop_on_failure=False` (line 1005) – continues through failures except for cleanup step (line 1003)
-* Batch cleanup dry-run: Generates structured plan without executing commands (lines 639-711, legacy shim retired)
-* Mypy baseline refresh: Optional post-typecheck step (lines 765-793)
-* Execution functions: `_dependency_report()` (lines 437-468), `_import_graph_report()` (lines 471-500), `_placeholder_scan()` (lines 503-543), `_batch_cleanup()` (lines 639-711), `_typecheck_report()` (lines 714-742), `_refresh_baselines()` (lines 765-793)
-* Script registration via `CatalogRegistry` for downstream discovery (lines 796-803)
-* Pipeline steps: dependency (mandatory), import_graph (optional), placeholders (mandatory), cleanup (opt-in), typecheck (optional), refresh_baselines (opt-in) – lines 999-1006
+- Dynamic imports via `_load_callable()` for all 5 scripts (lines 365-376)
+- Supports 6 skip flags: `--skip-import-graph` (lines 282-283), `--skip-typecheck` (lines 284), `--trigger-batch-cleanup` (lines 285-289, opt-in), `--refresh-mypy-baselines` (lines 290-294, opt-in), dependency patterns via `--dependency-requirements-pattern` (lines 256-260), `--dependency-skip-pyproject` (lines 261-262)
+- Artifact retention defaults: HealthView bundle=3, dependency=10, import-graph=10, placeholder=5, cleanup=5, typecheck=10, baselines=5 (lines 247-253)
+- Fail-tolerant pipeline: `stop_on_failure=False` (line 1005) – continues through failures except for cleanup step (line 1003)
+- Batch cleanup dry-run: Generates structured plan without executing commands (lines 639-711, legacy shim retired)
+- Mypy baseline refresh: Optional post-typecheck step (lines 765-793)
+- Execution functions: `_dependency_report()` (lines 437-468), `_import_graph_report()` (lines 471-500), `_placeholder_scan()` (lines 503-543), `_batch_cleanup()` (lines 639-711), `_typecheck_report()` (lines 714-742), `_refresh_baselines()` (lines 765-793)
+- Script registration via `CatalogRegistry` for downstream discovery (lines 796-803)
+- Pipeline steps: dependency (mandatory), import_graph (optional), placeholders (mandatory), cleanup (opt-in), typecheck (optional), refresh_baselines (opt-in) – lines 999-1006
 
 **Status:** `Operational (partial hardening)` – 5-script pipeline verified, 7-11 min runtime confirmed, 6 skip flags documented, batch cleanup dry-run capability validated, fail-tolerant execution confirmed
 
 **Planned Expansions:**
 
-* **Stage 4.2: Import Boundary Validation** – Integrate `validate_import_boundaries.py` to enforce architectural layer boundaries (gap identified in coverage analysis)
+- **Stage 4.2: Import Boundary Validation** – Integrate `validate_import_boundaries.py` to enforce architectural layer boundaries (gap identified in coverage analysis)
 
 **Known Gaps:**
 
-* Dependency hygiene report does not yet detect transitive dependency conflicts
-* Import graph report covers Python only; JavaScript module graph pending
+- Dependency hygiene report does not yet detect transitive dependency conflicts
+- Import graph report covers Python only; JavaScript module graph pending
 
 **Evidence:**
 
-* Code: `.repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py` (lines 1-1111)
+- Code: `.repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py` (lines 1-1111)
   - Script constants: Lines 51-61 (5 script paths, 5 module names)
   - Default paths: Lines 63-75 (8 output directories)
   - Option parsing: Lines 318-352 (`build_options()`)
@@ -611,7 +742,7 @@ The Dependency & Import Hygiene orchestrator chains a 5-script pipeline (4 produ
   - Pipeline definition: Lines 999-1006 (6-step pipeline with fail-tolerant behavior)
   - Telemetry/manifest: Lines 1033-1072 (telemetry payload, artifacts section, manifest assembly)
   - Report bundle write: Lines 1082-1091 (3 artifacts, HealthView retention)
-* Tests: `.repo_studios/tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py`
+- Tests: `.repo_studios/tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py`
 
 ---
 
@@ -631,57 +762,57 @@ The Monkey Patch Oversight orchestrator chains a 4-script pipeline (producer →
 
 | Script | Category | Purpose | Tier-3 YAML |
 |--------|----------|---------|-------------|
-| `scan_monkey_patches.py` | Producer | Detect monkey patches via AST analysis, extract patch locations with Git enrichment | [TBD](../../tier3_index/) |
-| `classify_monkey_patches.py` | Consumer | Categorize patches (test fixture, workaround, production risk) into risk bundles | [TBD](../../tier3_index/) |
-| `analyze_monkey_patch_trends.py` | Aggregator | Track patch count over time across multiple runs, identify growth patterns | [TBD](../../tier3_index/) |
-| `summarize_monkey_patch_overview.py` | Summarizer | Generate HealthView overview bundle with cross-run comparisons | [TBD](../../tier3_index/) |
-| `monkey_patch_risk.py` | Utility | Compute risk score per patch based on scope, target, frequency (registered for catalog) | [TBD](../../tier3_index/) |
+| `scan_monkey_patches.py` | Producer | Detect monkey patches via AST analysis, extract patch locations with Git enrichment | TBD |
+| `classify_monkey_patches.py` | Consumer | Categorize patches (test fixture, workaround, production risk) into risk bundles | TBD |
+| `analyze_monkey_patch_trends.py` | Aggregator | Track patch count over time across multiple runs, identify growth patterns | TBD |
+| `summarize_monkey_patch_overview.py` | Summarizer | Generate HealthView overview bundle with cross-run comparisons | TBD |
+| `monkey_patch_risk.py` | Utility | Compute risk score per patch based on scope, target, frequency (registered for catalog) | TBD |
 
 **Inputs:**
 
-* Python source files (AST parsing for monkey patch detection)
-* Git history (patch introduction dates, optional via `--producer-with-git`, line 224)
-* Test vs. production code boundaries (via `--producer-project-packages`, lines 221-223)
-* Optional: `--producer-context-lines` (context lines around patches, line 218)
-* Optional: `--producer-strict` (strict mode for producer, line 225)
-* Optional: `--producer-exclude-dirs`, `--producer-exclude-globs` (exclusion patterns, lines 226-227)
-* Optional: `--duplicate-matrix` (duplicate matrix path for summarizer, line 228)
+- Python source files (AST parsing for monkey patch detection)
+- Git history (patch introduction dates, optional via `--producer-with-git`, line 224)
+- Test vs. production code boundaries (via `--producer-project-packages`, lines 221-223)
+- Optional: `--producer-context-lines` (context lines around patches, line 218)
+- Optional: `--producer-strict` (strict mode for producer, line 225)
+- Optional: `--producer-exclude-dirs`, `--producer-exclude-globs` (exclusion patterns, lines 226-227)
+- Optional: `--duplicate-matrix` (duplicate matrix path for summarizer, line 228)
 
 **Outputs:**
 
-* Producer: `.repo_studios/reports/producer_reports/monkey_patch_scans/` (line 63)
-* Consumer: `.repo_studios/reports/consumer_reports/monkey_patch_risk/` (line 64)
-* Aggregator: `.repo_studios/reports/aggregator_reports/monkey_patch_trends/` (line 65)
-* Summarizer: `.repo_studios/reports/summarizer_reports/monkey_patch_overview/` (line 66)
-* HealthView bundle: `.repo_studios/command_center/reports/healthview/monkey_patch_oversight/<timestamp>/` (manifest + summary + telemetry, lines 707-716)
+- Producer: `.repo_studios/reports/producer_reports/monkey_patch_scans/` (line 63)
+- Consumer: `.repo_studios/reports/consumer_reports/monkey_patch_risk/` (line 64)
+- Aggregator: `.repo_studios/reports/aggregator_reports/monkey_patch_trends/` (line 65)
+- Summarizer: `.repo_studios/reports/summarizer_reports/monkey_patch_overview/` (line 66)
+- HealthView bundle: `.repo_studios/command_center/reports/healthview/monkey_patch_oversight/<timestamp>/` (manifest + summary + telemetry, lines 707-716)
 
 **Execution Notes:**
 
-* Dynamic imports via `_load_callable()` for all 4 pipeline scripts (lines 288-298)
-* Supports 4 skip flags: `--skip-producer`, `--skip-consumer`, `--skip-aggregator`, `--skip-summarizer` (lines 229-232)
-* Artifact retention defaults: HealthView bundle=3, producer=10, consumer=10, aggregator=10, summarizer=5 (lines 208-212)
-* Trend analysis: Configurable history window via `--trend-max-runs` (default=20, lines 217)
-* Git enrichment: Optional producer flag `--producer-with-git` enables Git history analysis (lines 224, 327)
-* Producer configurability: Context lines (default=2), strict mode, project packages, exclude patterns (lines 218-227, 317-337)
-* Fail-fast: Aborts on summarizer failure (line 665), continues if producer/consumer/aggregator skipped
-* Execution functions: `_execute_producer()` (lines 303-361), `_execute_consumer()` (lines 364-400), `_execute_aggregator()` (lines 403-449), `_execute_summarizer()` (lines 452-515)
-* Script registration via `CatalogRegistry` for downstream discovery, includes utility script (lines 518-524)
-* Pipeline steps: producer, consumer, aggregator, summarizer (4-step sequential with fail-fast on summarizer, lines 658-665)
+- Dynamic imports via `_load_callable()` for all 4 pipeline scripts (lines 288-298)
+- Supports 4 skip flags: `--skip-producer`, `--skip-consumer`, `--skip-aggregator`, `--skip-summarizer` (lines 229-232)
+- Artifact retention defaults: HealthView bundle=3, producer=10, consumer=10, aggregator=10, summarizer=5 (lines 208-212)
+- Trend analysis: Configurable history window via `--trend-max-runs` (default=20, lines 217)
+- Git enrichment: Optional producer flag `--producer-with-git` enables Git history analysis (lines 224, 327)
+- Producer configurability: Context lines (default=2), strict mode, project packages, exclude patterns (lines 218-227, 317-337)
+- Fail-fast: Aborts on summarizer failure (line 665), continues if producer/consumer/aggregator skipped
+- Execution functions: `_execute_producer()` (lines 303-361), `_execute_consumer()` (lines 364-400), `_execute_aggregator()` (lines 403-449), `_execute_summarizer()` (lines 452-515)
+- Script registration via `CatalogRegistry` for downstream discovery, includes utility script (lines 518-524)
+- Pipeline steps: producer, consumer, aggregator, summarizer (4-step sequential with fail-fast on summarizer, lines 658-665)
 
 **Status:** `Operational (partial hardening)` – 4-script pipeline verified, 4-7 min runtime confirmed, 4 skip flags documented, Git enrichment capability validated, trend analysis with configurable history window confirmed
 
 **Planned Expansions:**
 
-* TBD (no immediate gaps identified)
+- TBD (no immediate gaps identified)
 
 **Known Gaps:**
 
-* Classification logic uses heuristics; may misclassify legitimate test fixtures as production risks
-* Risk scoring does not yet account for patch stability (whether it causes test flakiness)
+- Classification logic uses heuristics; may misclassify legitimate test fixtures as production risks
+- Risk scoring does not yet account for patch stability (whether it causes test flakiness)
 
 **Evidence:**
 
-* Code: `.repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py` (lines 1-735)
+- Code: `.repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py` (lines 1-735)
   - Script constants: Lines 48-60 (6 script paths including utility and summarizer)
   - Default paths: Lines 63-68 (6 output directories)
   - Option parsing: Lines 254-279 (`build_options()`)
@@ -690,7 +821,7 @@ The Monkey Patch Oversight orchestrator chains a 4-script pipeline (producer →
   - Pipeline definition: Lines 658-665 (4-step pipeline with fail-fast on summarizer)
   - Telemetry/manifest: Lines 670-691 (telemetry payload, artifacts section, manifest assembly)
   - Report bundle write: Lines 707-716 (3 artifacts, HealthView retention)
-* Tests: `.repo_studios/tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py`
+- Tests: `.repo_studios/tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py`
 
 ---
 
@@ -710,67 +841,67 @@ The Standards Integrity orchestrator chains five scripts in sequence (index gene
 
 | Script | Category | Purpose | Tier-3 YAML |
 |--------|----------|---------|-------------|
-| `generate_standards_index.py` | Producer | Scan `docs/standards/`, extract rules, build compliance index with integrity hash | [TBD](../../tier3_index/) |
-| `analyze_standards_index_gaps.py` | Producer | Identify standards coverage gaps across markdown sources, build gap report with candidate suggestions | [TBD](../../tier3_index/) |
-| `diff_standards_index.py` | Producer | Compare current vs. baseline index, identify additions/removals/changes, optional fail-on policy | [TBD](../../tier3_index/) |
-| `seed_standards_prompts.py` | Producer | Generate AI agent prompt bundles from standards with configurable formats (text/yaml/json) | [TBD](../../tier3_index/) |
-| `summarize_standards.py` | Summarizer | Synthesize standards metrics, compliance scores, gap analysis | [TBD](../../tier3_index/) |
+| `generate_standards_index.py` | Producer | Scan `docs/standards/`, extract rules, build compliance index with integrity hash | TBD |
+| `analyze_standards_index_gaps.py` | Producer | Identify standards coverage gaps across markdown sources, build gap report with candidate suggestions | TBD |
+| `diff_standards_index.py` | Producer | Compare current vs. baseline index, identify additions/removals/changes, optional fail-on policy | TBD |
+| `seed_standards_prompts.py` | Producer | Generate AI agent prompt bundles from standards with configurable formats (text/yaml/json) | TBD |
+| `summarize_standards.py` | Summarizer | Synthesize standards metrics, compliance scores, gap analysis | TBD |
 
 **Inputs:**
 
-* `--index-output-dir` (line 212): Index artifact directory (default: `.repo_studios/reports/producer_reports/standards_index_reports`)
-* `--index-path` (line 213): Latest index pointer path (default: `.repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml`)
-* `--categories-path` (line 214): Standards categories YAML (default: `.repo_studios/scripts/.repo_studios/standards_categories.yaml`)
-* `--gap-output-dir` (line 215): Gap analysis output directory (default: `.repo_studios/command_center/reports`)
-* `--diff-output-dir` (line 216): Diff artifact directory (default: `.repo_studios/reports/producer_reports/standards_index_diff_reports`)
-* `--diff-old-index` (line 219): Baseline index for diff (optional, skips diff step if not provided, line 638)
-* `--diff-fail-on` (line 220): Fail policy forwarded to diff script (default: `any`)
-* `--prompt-output-dir` (line 217): Prompt seed artifact directory (default: `.repo_studios/reports/producer_reports/standards_prompt_seeds`)
-* `--prompt-include-warn` (line 222): Include warn-severity rules in prompt seed (line 502)
-* `--prompt-formats` (line 223-227): Artifact formats (text/yaml/json, line 504)
-* `--gap-max-show` (line 221): Maximum gap candidates to log per source (default: 8)
-* `--pending-path` (line 218): Pending standards YAML path (default: `.repo_studios/scripts/repo_standards_pending.yaml`)
+- `--index-output-dir` (line 212): Index artifact directory (default: `.repo_studios/reports/producer_reports/standards_index_reports`)
+- `--index-path` (line 213): Latest index pointer path (default: `.repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml`)
+- `--categories-path` (line 214): Standards categories YAML (default: `.repo_studios/scripts/.repo_studios/standards_categories.yaml`)
+- `--gap-output-dir` (line 215): Gap analysis output directory (default: `.repo_studios/command_center/reports`)
+- `--diff-output-dir` (line 216): Diff artifact directory (default: `.repo_studios/reports/producer_reports/standards_index_diff_reports`)
+- `--diff-old-index` (line 219): Baseline index for diff (optional, skips diff step if not provided, line 638)
+- `--diff-fail-on` (line 220): Fail policy forwarded to diff script (default: `any`)
+- `--prompt-output-dir` (line 217): Prompt seed artifact directory (default: `.repo_studios/reports/producer_reports/standards_prompt_seeds`)
+- `--prompt-include-warn` (line 222): Include warn-severity rules in prompt seed (line 502)
+- `--prompt-formats` (line 223-227): Artifact formats (text/yaml/json, line 504)
+- `--gap-max-show` (line 221): Maximum gap candidates to log per source (default: 8)
+- `--pending-path` (line 218): Pending standards YAML path (default: `.repo_studios/scripts/repo_standards_pending.yaml`)
 
 **Outputs:**
 
-* `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYmmdd-HHmm>/manifest.json` (lines 763-794)
-* `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYmmdd-HHmm>/summary.md` (lines 796-801)
-* `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYmmdd-HHmm>/telemetry.json` (lines 796-801)
-* Index artifacts: `.repo_studios/reports/producer_reports/standards_index_reports/standards_index-<timestamp>/` (lines 63-64)
-* Gap artifacts: `.repo_studios/command_center/reports/standards_index_gaps/<slug>/` (lines 65-66)
-* Diff artifacts: `.repo_studios/reports/producer_reports/standards_index_diff_reports/standards_index_diff-<timestamp>/` (lines 67-68)
-* Prompt artifacts: `.repo_studios/reports/producer_reports/standards_prompt_seeds/<run_id>/` (lines 69-70)
+- `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYmmdd-HHmm>/manifest.json` (lines 763-794)
+- `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYmmdd-HHmm>/summary.md` (lines 796-801)
+- `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYmmdd-HHmm>/telemetry.json` (lines 796-801)
+- Index artifacts: `.repo_studios/reports/producer_reports/standards_index_reports/standards_index-<timestamp>/` (lines 63-64)
+- Gap artifacts: `.repo_studios/command_center/reports/standards_index_gaps/<slug>/` (lines 65-66)
+- Diff artifacts: `.repo_studios/reports/producer_reports/standards_index_diff_reports/standards_index_diff-<timestamp>/` (lines 67-68)
+- Prompt artifacts: `.repo_studios/reports/producer_reports/standards_prompt_seeds/<run_id>/` (lines 69-70)
 
 **Execution Notes:**
 
-* **Dynamic imports:** Lines 286-296 (`_load_callable()`) – orchestrator loads each script's `run()` or `main()` helper via importlib, matching the library-integration pattern
-* **Pipeline structure:** Lines 730-736 (5-step pipeline: index → gap → diff → prompts → summary)
-* **Conditional diff:** Line 638 (`step_skipped()`) – diff step skipped if `--diff-old-index` not provided, no error raised
-* **Fail-fast on summary:** Line 736 (`continue_on_failure=False`) – pipeline aborts if summarizer fails
-* **Execution functions:** Lines 332-361 (`_execute_index()`), 364-413 (`_execute_gap()`), 416-467 (`_execute_diff()`), 470-512 (`_execute_prompts()`), 515-522 (`_execute_summary()`)
-* **Artifact retention:** HealthView topic=3 (line 259), index=5 (line 250), gap=5 (line 254), diff=10 (line 255), prompt=5 (line 256)
-* **Script registration:** Lines 525-531 (registers 6 scripts: orchestrator + 5 delegated scripts)
-* **Telemetry assembly:** Lines 739-768 (builds pipeline telemetry, relativizes artifact paths, populates manifest)
-* **Report naming audit:** Lines 803-811 (enforces viewer/topic/timestamp/artifact naming standards)
-* **Timestamp handling:** Lines 257-268 (`_parse_timestamp()`) – accepts ISO8601 via `--timestamp` or defaults to UTC now
-* **Path resolution:** Lines 270-278 (`_resolve_optional_path()`) – handles absolute/relative/repo-relative paths for optional diff baseline
-* **Prompt configurability:** Lines 495-506 (formats deduplication, include-warn flag, artifact format selection)
+- **Dynamic imports:** Lines 286-296 (`_load_callable()`) – orchestrator loads each script's `run()` or `main()` helper via importlib, matching the library-integration pattern
+- **Pipeline structure:** Lines 730-736 (5-step pipeline: index → gap → diff → prompts → summary)
+- **Conditional diff:** Line 638 (`step_skipped()`) – diff step skipped if `--diff-old-index` not provided, no error raised
+- **Fail-fast on summary:** Line 736 (`continue_on_failure=False`) – pipeline aborts if summarizer fails
+- **Execution functions:** Lines 332-361 (`_execute_index()`), 364-413 (`_execute_gap()`), 416-467 (`_execute_diff()`), 470-512 (`_execute_prompts()`), 515-522 (`_execute_summary()`)
+- **Artifact retention:** HealthView topic=3 (line 259), index=5 (line 250), gap=5 (line 254), diff=10 (line 255), prompt=5 (line 256)
+- **Script registration:** Lines 525-531 (registers 6 scripts: orchestrator + 5 delegated scripts)
+- **Telemetry assembly:** Lines 739-768 (builds pipeline telemetry, relativizes artifact paths, populates manifest)
+- **Report naming audit:** Lines 803-811 (enforces viewer/topic/timestamp/artifact naming standards)
+- **Timestamp handling:** Lines 257-268 (`_parse_timestamp()`) – accepts ISO8601 via `--timestamp` or defaults to UTC now
+- **Path resolution:** Lines 270-278 (`_resolve_optional_path()`) – handles absolute/relative/repo-relative paths for optional diff baseline
+- **Prompt configurability:** Lines 495-506 (formats deduplication, include-warn flag, artifact format selection)
 
 **Status:** `Operational (partial hardening)` – 5-script pipeline verified, 5-8 min runtime confirmed, conditional diff skip logic validated, retention defaults documented
 
 **Planned Expansions:**
 
-* **Stage 6.2: Standards Rules Extraction** – Integrate `extract_standards_rules.py` for deeper compliance validation (gap identified in coverage analysis; `analyze_standards_index_gaps.py` now confirmed as part of Stage 6.1 pipeline)
+- **Stage 6.2: Standards Rules Extraction** – Integrate `extract_standards_rules.py` for deeper compliance validation (gap identified in coverage analysis; `analyze_standards_index_gaps.py` now confirmed as part of Stage 6.1 pipeline)
 
 **Known Gaps:**
 
-* Diff step is optional and skipped silently if baseline not provided; may surprise users expecting diffs
-* Prompt formats default to None if not specified; unclear whether all formats should be generated by default
-* Gap analysis logging capped at `--gap-max-show` candidates; complete gap list requires reading artifacts
+- Diff step is optional and skipped silently if baseline not provided; may surprise users expecting diffs
+- Prompt formats default to None if not specified; unclear whether all formats should be generated by default
+- Gap analysis logging capped at `--gap-max-show` candidates; complete gap list requires reading artifacts
 
 **Evidence:**
 
-* Code: `.repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py` (lines 1-817)
+- Code: `.repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py` (lines 1-817)
   - Runtime note: Lines 1-11 (docstring: "Runtime typically lands between five and eight minutes, with diff scopes and prompt generation driving the upper bound")
   - Script constants: Lines 56-60 (5 script paths), 62-70 (5 module names)
   - Default paths: Lines 72-80 (8 path constants including index, gap, diff, prompt, pending, healthview root)
@@ -794,16 +925,16 @@ The Standards Integrity orchestrator chains five scripts in sequence (index gene
   - Telemetry assembly: Lines 739-768 (relativized paths, artifact tracking)
   - Report artifacts: Lines 796-801 (3 artifacts: manifest.json, summary.md, telemetry.json)
   - Report naming audit: Lines 803-811 (enforces viewer/topic/timestamp/artifact standards)
-* Tests: `.repo_studios/tests/tests_command_center/standards_integrity/test_run_standards_integrity.py`
+- Tests: `.repo_studios/tests/tests_command_center/standards_integrity/test_run_standards_integrity.py`
 
 **Evidence Links:**
 
-* [.repo_studios/scripts/producers/generate_standards_index.py](../../../scripts/producers/generate_standards_index.py)
-* [.repo_studios/command_center/scripts/producers/analyze_standards_index_gaps.py](../../../command_center/scripts/producers/analyze_standards_index_gaps.py)
-* [.repo_studios/scripts/producers/diff_standards_index.py](../../../scripts/producers/diff_standards_index.py)
-* [.repo_studios/scripts/producers/seed_standards_prompts.py](../../../scripts/producers/seed_standards_prompts.py)
-* [.repo_studios/scripts/summarizers/summarize_standards.py](../../../scripts/summarizers/summarize_standards.py)
-* [.repo_studios/tests/tests_command_center/standards_integrity/test_run_standards_integrity.py](../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py)
+- [.repo_studios/scripts/producers/generate_standards_index.py](../../../scripts/producers/generate_standards_index.py)
+- [.repo_studios/command_center/scripts/producers/analyze_standards_index_gaps.py](../../../command_center/scripts/producers/analyze_standards_index_gaps.py)
+- [.repo_studios/scripts/producers/diff_standards_index.py](../../../scripts/producers/diff_standards_index.py)
+- [.repo_studios/scripts/producers/seed_standards_prompts.py](../../../scripts/producers/seed_standards_prompts.py)
+- [.repo_studios/scripts/summarizers/summarize_standards.py](../../../scripts/summarizers/summarize_standards.py)
+- [.repo_studios/tests/tests_command_center/standards_integrity/test_run_standards_integrity.py](../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py)
 
 ---
 
@@ -853,39 +984,39 @@ The `orchestrate_full_diagnostic.py` meta-orchestrator chains all six Stage NN.1
 
 **Inputs:**
 
-* Repository root path (auto-detected or via `--repo-root`)
-* Shared log level configuration (default: INFO)
-* Optional timestamp override (ISO 8601 format)
+- Repository root path (auto-detected or via `--repo-root`)
+- Shared log level configuration (default: INFO)
+- Optional timestamp override (ISO 8601 format)
 
 **Outputs:**
 
-* **Meta-level HealthView bundle:** `.repo_studios/command_center/reports/healthview/full_diagnostic/<YYYY-MM-DD>/`
-  * `manifest.json` (composite envelope listing all 6 topics with exit codes)
-  * `summary.md` (human-readable digest of full-suite health)
-  * `telemetry.json` (cross-domain metrics for trend analysis)
-* **Indirect outputs:** Each Stage NN.1 orchestrator writes its own HealthView bundle during execution
+- **Meta-level HealthView bundle:** `.repo_studios/command_center/reports/healthview/full_diagnostic/<YYYY-MM-DD>/`
+  - `manifest.json` (composite envelope listing all 6 topics with exit codes)
+  - `summary.md` (human-readable digest of full-suite health)
+  - `telemetry.json` (cross-domain metrics for trend analysis)
+- **Indirect outputs:** Each Stage NN.1 orchestrator writes its own HealthView bundle during execution
 
 **Status:** `Operational – Partial hardening complete`
 
 **Execution Details:**
 
-* Sequential execution only (no parallelism); average full-suite runtime ~20-30 minutes depending on repo size
-* First orchestrator failure aborts remaining topics (fail-fast strategy)
-* Each topic orchestrator inherits shared `--log-level` for consistent logging verbosity
-* Dynamic imports use `importlib.import_module()`, not subprocess spawning
-* Artifact retention configurable via `--artifacts-to-keep=3` (meta-level bundle retention)
+- Sequential execution only (no parallelism); average full-suite runtime ~20-30 minutes depending on repo size
+- First orchestrator failure aborts remaining topics (fail-fast strategy)
+- Each topic orchestrator inherits shared `--log-level` for consistent logging verbosity
+- Dynamic imports use `importlib.import_module()`, not subprocess spawning
+- Artifact retention configurable via `--artifacts-to-keep=3` (meta-level bundle retention)
 
 **Known Gaps:**
 
-* Sequential execution causes slow full-suite runs; parallel orchestrator execution not yet implemented
-* Composite envelope does not yet compute aggregate health score (weighted average across domains)
-* No progress bar or estimated time remaining during long-running diagnostics
-* Partial failure mode does not skip downstream topics; may want configurable "continue on error" strategy
+- Sequential execution causes slow full-suite runs; parallel orchestrator execution not yet implemented
+- Composite envelope does not yet compute aggregate health score (weighted average across domains)
+- No progress bar or estimated time remaining during long-running diagnostics
+- Partial failure mode does not skip downstream topics; may want configurable "continue on error" strategy
 
 **Evidence Links:**
 
-* **Orchestrator:** [orchestrate_full_diagnostic.py](../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py) (lines 1-554: dynamic imports, sequential execution, composite manifest)
-* **Tests:** [test_orchestrate_full_diagnostic.py](../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py) (integration tests with mocked topic orchestrators)
+- **Orchestrator:** [orchestrate_full_diagnostic.py](../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py) (lines 1-554: dynamic imports, sequential execution, composite manifest)
+- **Tests:** [test_orchestrate_full_diagnostic.py](../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py) (integration tests with mocked topic orchestrators)
 
 ---
 
@@ -909,7 +1040,10 @@ All six maturity domain orchestrators (Stages 1–6) are **operational** and pro
 
 **Meta-orchestrator (Stage 7)** chains all six Stage NN.1 orchestrators sequentially via dynamic imports. Tests exist for Stage 1, Stage 5, and Stage 7; other orchestrators lack dedicated test coverage (marked "tests TBD" in matrix).
 
-**No critical contradictions detected.** All gaps have logical explanations:
+**No critical stage-chain contradictions detected.** Structural contract mismatches
+(output roots, retention defaults, timestamp shapes) are tracked in **Section 12**.
+
+All gaps have logical explanations:
 - 5 scripts (easy integrations): related to existing orchestrators but not yet wired
 - 2 scripts (questionable): purpose unclear, may be CommandView-specific
 - 1 script (legacy): `summarize_health_suite.py` replaced by per-topic summarizers
@@ -917,13 +1051,13 @@ All six maturity domain orchestrators (Stages 1–6) are **operational** and pro
 
 **High-Level Risks:**
 
-* Orchestrators lack CI/CD integration; currently manual-only execution (invoke via CLI or make target)
-* No automated alerting when health metrics degrade below thresholds (metrics collected but not monitored)
-* Tier-2 roster docs not yet created (blocking per-orchestrator deep dives)
-* Tier-3 YAML docs not yet created (blocking AI agent tool integration)
-* Gap scripts not yet integrated (5 easy integrations identified, awaiting code updates)
-* Sequential meta-orchestrator execution causes 20-30 min full-suite runtimes (parallel mode pending)
-* Test coverage incomplete: only 3 of 7 orchestrators have dedicated integration tests
+- Orchestrators lack CI/CD integration; currently manual-only execution (invoke via CLI or make target)
+- No automated alerting when health metrics degrade below thresholds (metrics collected but not monitored)
+- Tier-2 roster docs not yet created (blocking per-orchestrator deep dives)
+- Tier-3 YAML docs not yet created (blocking AI agent tool integration)
+- Gap scripts not yet integrated (5 easy integrations identified, awaiting code updates)
+- Sequential meta-orchestrator execution causes 20-30 min full-suite runtimes (parallel mode pending)
+- Test coverage incomplete: only 3 of 7 orchestrators have dedicated integration tests
 
 ### 11.2 Stage Matrix
 
@@ -943,7 +1077,10 @@ All six maturity domain orchestrators (Stages 1–6) are **operational** and pro
 
 | ID | Description | Sections Affected | Reality Source | Next Step |
 |----|-------------|-------------------|----------------|----------|
-| CR-001 | No contradictions identified yet | – | – | Populate during hardening passes |
+| CR-001 | Tier-1 “current output root” references `.repo_studios/command_center/reports/healthview/...` while HOP target contract requires `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`. | 1.2, 3.1, 3.4, stage I/O bullets | `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md` (locked decision), `REPORT_NAMING_STANDARDS.md`, current orchestrator outputs | Keep Tier-1 explicit about “current vs target” until code migration lands; update Stage 1.1 Tier-2 vertical with per-script “current vs target” output tables. |
+| CR-002 | Retention default is inconsistent: Tier-1 references “7 days” and multiple per-script keep knobs; HOP target default is `keep=5` for HealthView bundles. | 1.6, 3.4, stage retention bullets | HOP locked decision; current orchestrator CLI flags | Declare `keep=5` as the HealthView bundle default for the HOP target contract; track per-script current defaults in Tier-2 vertical docs. |
+| CR-003 | DB dual-write semantics are part of the HOP target contract but are not described (or evidenced) as implemented in the Tier-1 spine. | 1.2, 1.6, global controls | HOP locked decision | Add Tier-1 “target contract” language (done) and treat DB as a stop-gate until code work adds best-effort DB persistence + `DB_INTEGRATION_MARKER:` callsites. |
+| CR-004 | Timestamp directory shape varies across stages (`<YYYY-MM-DD>`, `<YYYYmmdd-HHmm>`, `<timestamp>`), which makes discovery ambiguous. | 1.2, stage output bullets | Stage tables and output examples in this Tier-1 doc | Standardize Tier-1 narrative to use `<timestamp>` consistently; push exact formatting requirements into Tier-2 verticals and Tier-3 artifacts doc. |
 
 ---
 
@@ -951,34 +1088,36 @@ All six maturity domain orchestrators (Stages 1–6) are **operational** and pro
 
 **Tier-2 (Roster) Documents (per-orchestrator BEGIN → END):**
 
-* [TBD] `tier2_roster/test_execution_telemetry_roster.md` – Stage 1.1 deep dive
-* [TBD] `tier2_roster/docs_health_overview_roster.md` – Stage 2.1 deep dive
-* [TBD] `tier2_roster/fault_diagnostics_overview_roster.md` – Stage 3.1 deep dive
-* [TBD] `tier2_roster/dependency_import_hygiene_roster.md` – Stage 4.1 deep dive
-* [TBD] `tier2_roster/monkey_patch_oversight_roster.md` – Stage 5.1 deep dive
-* [TBD] `tier2_roster/standards_integrity_roster.md` – Stage 6.1 deep dive
-* [TBD] `tier2_roster/full_diagnostic_suite_roster.md` – Stage 7 (meta-orchestrator) deep dive
+- [TBD] `tier2_roster/test_execution_telemetry_roster.md` – Stage 1.1 deep dive
+- [TBD] `tier2_roster/docs_health_overview_roster.md` – Stage 2.1 deep dive
+- [TBD] `tier2_roster/fault_diagnostics_overview_roster.md` – Stage 3.1 deep dive
+- [TBD] `tier2_roster/dependency_import_hygiene_roster.md` – Stage 4.1 deep dive
+- [TBD] `tier2_roster/monkey_patch_oversight_roster.md` – Stage 5.1 deep dive
+- [TBD] `tier2_roster/standards_integrity_roster.md` – Stage 6.1 deep dive
+- [TBD] `tier2_roster/full_diagnostic_suite_roster.md` – Stage 7 (meta-orchestrator) deep dive
 
 **Tier-3 (YAML) Documents (per-script agent tools):**
 
-* [TBD] 28 YAML files for orchestrated scripts (see Stage NN.1 tables above)
-* [TBD] 12 YAML files for gap scripts (as they are integrated)
+- [TBD] 28 YAML files for orchestrated scripts (see Stage NN.1 tables above)
+- [TBD] 12 YAML files for gap scripts (as they are integrated)
 
 **Related Architecture Documents:**
 
-* [.repo_studios/scripts/README.md](../../../scripts/README.md) – Script tier responsibilities (producers, consumers, aggregators, orchestrators, summarizers)
-* [REPORT_NAMING_STANDARDS.md](../../../../REPORT_NAMING_STANDARDS.md) – Bundle structure conventions (viewer/topic/timestamp/artifact layout)
-* [docs/standards/global/std-global-python-engineering.md](../../standards/global/std-global-python-engineering.md) – Python engineering standards
-* [docs/standards/global/std-global-markdown-authoring.md](../../standards/global/std-global-markdown-authoring.md) – Markdown authoring conventions
-* [.github/instructions/markdown.instructions.md](../../../../.github/instructions/markdown.instructions.md) – Markdown editing instructions for agents
-* [.github/instructions/pipeline_doc_tiers.instructions.md](../../../../.github/instructions/pipeline_doc_tiers.instructions.md) – Tier-1/2/3 documentation requirements
+- [.repo_studios/scripts/README.md](../../../scripts/README.md) – Script tier responsibilities
+  (producers, consumers, aggregators, orchestrators, summarizers)
+- [REPORT_NAMING_STANDARDS.md](../../../../REPORT_NAMING_STANDARDS.md) – Bundle structure
+  conventions (viewer/topic/timestamp/artifact layout)
+- [docs/standards/global/std-global-python-engineering.md](../../standards/global/std-global-python-engineering.md) – Python engineering standards
+- [docs/standards/global/std-global-markdown-authoring.md](../../standards/global/std-global-markdown-authoring.md) – Markdown authoring conventions
+- [.github/instructions/markdown.instructions.md](../../../../.github/instructions/markdown.instructions.md) – Markdown editing instructions for agents
+- [.github/instructions/pipeline_doc_tiers.instructions.md](../../../../.github/instructions/pipeline_doc_tiers.instructions.md) – Tier-1/2/3 documentation requirements
 
 **Validation Suites:**
 
-* [tests/tests_command_center/](../../../tests/tests_command_center/) – Orchestrator integration tests
-* [tests/tests_producers/](../../../tests/tests_producers/) – Producer script tests
-* [tests/tests_consumers/](../../../tests/tests_consumers/) – Consumer script tests
-* [tests/tests_aggregators/](../../../tests/tests_aggregators/) – Aggregator script tests
+- [tests/tests_command_center/](../../../tests/tests_command_center/) – Orchestrator integration tests
+- [tests/tests_producers/](../../../tests/tests_producers/) – Producer script tests
+- [tests/tests_consumers/](../../../tests/tests_consumers/) – Consumer script tests
+- [tests/tests_aggregators/](../../../tests/tests_aggregators/) – Aggregator script tests
 
 ---
 
@@ -986,22 +1125,29 @@ All six maturity domain orchestrators (Stages 1–6) are **operational** and pro
 
 **Future enhancements (not yet scheduled):**
 
-* When CI/CD integration lands, update Stage 7 meta-orchestrator section with GitHub Actions workflow details
-* When automated alerting is implemented, revise Section 3.6 (Global Controls) to include alert threshold flags
-* When parallel orchestrator execution is added, update Stage 7 with concurrency model
-* When dashboard UI is built, add "Downstream Dependencies" bullet to Section 1.4 (Where)
-* When performance test orchestrator (Stage 1.2) is implemented, update Stage 1 overview and matrix row
-* When import boundary validation (Stage 4.2) is implemented, update Stage 4 Planned Expansions and matrix
+- When CI/CD integration lands, update Stage 7 meta-orchestrator section with GitHub Actions
+  workflow details
+- When automated alerting is implemented, revise Section 3.6 (Global Controls) to include alert
+  threshold flags
+- When parallel orchestrator execution is added, update Stage 7 with concurrency model
+- When dashboard UI is built, add "Downstream Dependencies" bullet to Section 1.4 (Where)
+- When performance test orchestrator (Stage 1.2) is implemented, update Stage 1 overview and
+  matrix row
+- When import boundary validation (Stage 4.2) is implemented, update Stage 4 Planned Expansions
+  and matrix
 
 **Gap integration tracking:**
 
-* Stage 2.2: `generate_anchor_health_report.py` → needs orchestrator wrapper
-* Stage 3.2: `configure_faulthandler_runtime.py`, `dump_faulthandler_snapshot.py`, `fault_run_analysis.py` → needs orchestrator wrapper
-* Stage 4.2: `validate_import_boundaries.py` → needs orchestrator wrapper
-* Stage 6.2: `analyze_standards_index_gaps.py`, `extract_standards_rules.py` → needs orchestrator wrapper
-* Questionable scripts: `check_inventory_health.py`, `validate_inventory.py` → clarify purpose, then assign to stage or mark out-of-scope
-* Legacy script: `summarize_health_suite.py` → confirm deprecated, retire from inventory
-* Out-of-scope: `render_inventory_views.py` (CommandView-specific), `generate_lizard_report.py` (potential Stage 8: Engineering Complexity Watch)
+- Stage 2.2: `generate_anchor_health_report.py` → needs orchestrator wrapper
+- Stage 3.2: `configure_faulthandler_runtime.py`, `dump_faulthandler_snapshot.py`,
+  `fault_run_analysis.py` → needs orchestrator wrapper
+- Stage 4.2: `validate_import_boundaries.py` → needs orchestrator wrapper
+- Stage 6.2: `analyze_standards_index_gaps.py`, `extract_standards_rules.py` → needs orchestrator wrapper
+- Questionable scripts: `check_inventory_health.py`, `validate_inventory.py` → clarify purpose,
+  then assign to stage or mark out-of-scope
+- Legacy script: `summarize_health_suite.py` → confirm deprecated, retire from inventory
+- Out-of-scope: `render_inventory_views.py` (CommandView-specific), `generate_lizard_report.py`
+  (potential Stage 8: Engineering Complexity Watch)
 
 ---
 
@@ -1009,6 +1155,8 @@ All six maturity domain orchestrators (Stages 1–6) are **operational** and pro
 
 | Date | Author / Steward | Change | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
+| 2025-12-19 | GitHub Copilot | Replaced non-existent Tier-3 placeholder links with plain `TBD` text and corrected Fault Diagnostics evidence links to point at the actual `.repo_studios/scripts/...` + `.repo_studios/tests/...` locations; reran targeted anchor validation for the HealthView pipeline docs. | 20251219-0124 | markdown anchor validation (bundle 20251219-0123) |
+| 2025-12-18 | GitHub Copilot | Hardened Tier-1 Sections 1–3 to explicitly separate current vs HOP target contract (output roots/discovery, bundle invariants, retention keep=5, DB best-effort dual-write) and populated Contradiction Registry entries. | 20251218-2328 | Doc-index producer; markdown anchor validation (bundle 20251218-2337) |
 | 2025-12-12 | Repo Studios Core Team | Initial tier-1 skeleton generated from template (Phase 0 complete) | N/A (draft) | N/A |
 | 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 1 (Test Execution Telemetry) \u2013 updated script count to 6 (added summarizer), verified 5-6 min runtime, artifact retention defaults, dynamic imports, actual input/output paths from orchestrator code inspection | N/A (no doc-index yet) | Verified via code inspection: [run_test_execution_telemetry.py](../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py) lines 1-670, [test_run_test_execution_telemetry.py](../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py) lines 1-362 |
 | 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 7 (Meta-Orchestrator) \u2013 verified sequential execution via dynamic imports, 6-topic chain, fail-fast strategy, composite manifest generation, 20-30 min runtime expectations | N/A (no doc-index yet) | Verified via code inspection: [orchestrate_full_diagnostic.py](../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py) lines 1-554, TOPIC_DEFINITIONS tuple with 6 entries |

@@ -1,9 +1,9 @@
 ---
 schema_version: 1
-generated_utc: 2025-12-16T21:06:55.879443+00:00
-total_documents: 268
-total_headings: 1877
-total_links: 93
+generated_utc: 2025-12-19T01:24:01.437167+00:00
+total_documents: 280
+total_headings: 1967
+total_links: 90
 ---
 
 <!-- markdownlint-disable MD013 -->
@@ -16,28 +16,28 @@ total_links: 93
 
 ## Summary
 
-- documents: 268
-- h1 headings: 269
-- h2 headings: 1608
-- links: 93
+- documents: 280
+- h1 headings: 283
+- h2 headings: 1684
+- links: 90
 
 ## Metrics
 
-- link density: 0.347
+- link density: 0.321
 - duplicate slug groups: 6
-- placeholder documents: 55
-- documents outside docs tree: 151
-- top directories: .repo_studios/docs/automation (43), .repo_studios/command_center/docs/mermaid/view_specs (28), .repo_studios/command_center/docs (17), .repo_studios/docs/standards/global (11), .repo_studios/command_center/docs/phase_7 (10)
+- placeholder documents: 57
+- documents outside docs tree: 159
+- top directories: .repo_studios/docs/automation (44), .repo_studios/command_center/docs/mermaid/view_specs (28), .repo_studios/command_center/docs/db_integrations (20), .repo_studios/command_center/docs (17), .repo_studios/docs/standards/global (11)
 - see JSON section for full metric payload.
 
 ## Advisories
 
-- documents missing description: .copilot_todo.md, .github/copilot-instructions.md, .repo_studios/agent_notes/meta/phase1_foundation_review_2025-10-18_0138.md, .repo_studios/command_center/docs/decision_log.md, .repo_studios/command_center/docs/mermaid/decision_log.md, …
+- documents missing description: .copilot_todo.md, .github/copilot-instructions.md, .repo_studios/agent_notes/meta/phase1_foundation_review_2025-10-18_0138.md, .repo_studios/command_center/docs/db_integrations/code_placeholders.md, .repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md, …
 - documents without h1: .repo_studios/command_center/docs/mermaid/view_specs/callback_registration_map.md, .repo_studios/command_center/docs/mermaid/view_specs/cyclomatic_complexity_map.md, .repo_studios/command_center/docs/mermaid/view_specs/dynamic_code_watchlist.md, .repo_studios/command_center/docs/mermaid/view_specs/entrypoint_trace_diagram.md, .repo_studios/command_center/docs/mermaid/view_specs/external_vs_internal_dependency_map.md, …
 - documents without h2: .copilot_todo.md, .repo_studios/command_center/docs/decision_log.md, .repo_studios/command_center/docs/mermaid/view_specs/cross_module_function_references.md, .repo_studios/command_center/docs/mermaid/view_specs/module_dependency_graph.md, .repo_studios/command_center/docs/phase_4/dry_run_samples/README.md, …
 - placeholder documents: .github/instructions/pipeline_doc_tiers.instructions.md, .github/instructions/tier_doc_operating_model.instructions.md, .repo_studios/command_center/checklists/2025-10-24.md, .repo_studios/command_center/command_center_architecture.md, .repo_studios/command_center/docs/code_library/code_library_status.md, …
 - documents outside docs tree: .copilot_todo.md, .github/architect.chatmode.md, .github/ask.chatmode.md, .github/code.chatmode.md, .github/copilot-instructions.md, …
-- duplicate slugs: 6 groups; examples: library-integration-alignment-plan (2 files); duplicate-scan-summary (10 files); std-global-markdown-authoring (2 files)
+- duplicate slugs: 6 groups; examples: library-integration-alignment-plan (2 files); duplicate-scan-summary (4 files); std-global-markdown-authoring (2 files)
 - see JSON section for full advisory payload.
 
 ## JSON
@@ -49,6 +49,9 @@ total_links: 93
       ".copilot_todo.md",
       ".github/copilot-instructions.md",
       ".repo_studios/agent_notes/meta/phase1_foundation_review_2025-10-18_0138.md",
+      ".repo_studios/command_center/docs/db_integrations/code_placeholders.md",
+      ".repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md",
+      ".repo_studios/command_center/docs/db_integrations/db_integration_monkey_patches.md",
       ".repo_studios/command_center/docs/decision_log.md",
       ".repo_studios/command_center/docs/mermaid/decision_log.md",
       ".repo_studios/command_center/docs/mermaid/view_specs/callback_registration_map.md",
@@ -67,10 +70,7 @@ total_links: 93
       ".repo_studios/docs/standards/global/std-global-javascript-engineering.md",
       ".repo_studios/docs/standards/global/std-global-markdown-authoring.md",
       ".repo_studios/docs/standards/global/std-global-mission-parameters.md",
-      ".repo_studios/docs/templates/script_inventory.md",
-      ".repo_studios/monkey_patch/20251201_115542/report.md",
-      ".repo_studios/monkey_patch/20251207_023935/report.md",
-      ".repo_studios/monkey_patch/20251207_133529/report.md"
+      ".repo_studios/docs/templates/script_inventory.md"
     ],
     "documents_outside_docs_tree": [
       ".copilot_todo.md",
@@ -96,8 +96,8 @@ total_links: 93
       ".repo_studios/command_center/docs/db_integration_quickstart.md",
       ".repo_studios/command_center/docs/db_integration_template.md",
       ".repo_studios/command_center/docs/db_integration_test_execution_telemetry.md",
-      ".repo_studios/command_center/docs/db_integrations/db_integration_analyze_standards_index_gaps.md",
-      ".repo_studios/command_center/docs/db_integrations/db_integration_analyze_test_hardening.md"
+      ".repo_studios/command_center/docs/db_integrations/code_placeholders.md",
+      ".repo_studios/command_center/docs/db_integrations/db_integration_analyze_standards_index_gaps.md"
     ],
     "documents_without_h1": [
       ".repo_studios/command_center/docs/mermaid/view_specs/callback_registration_map.md",
@@ -114,7 +114,8 @@ total_links: 93
       ".repo_studios/docs/standards/global/std-global-markdown-authoring.md",
       ".repo_studios/docs/standards/global/std-global-mission-parameters.md",
       "docs/standards/global/std-global-markdown-authoring.md",
-      "docs/templates/meta_prompts.md"
+      "docs/templates/meta_prompts.md",
+      "docs/templates/meta_prompts2.md"
     ],
     "documents_without_h2": [
       ".copilot_todo.md",
@@ -131,7 +132,6 @@ total_links: 93
       ".repo_studios/docs/templates/script_inventory.md",
       ".repo_studios/docs/templates/structural_checklist_template.md",
       ".repo_studios/inventory_schema/views/README.md",
-      ".repo_studios/scripts/scripts_index/scripts_duplicate_summary-20251130-0333.md",
       "README.md",
       "command_center_script_verification_temp.md",
       "docs/standards/global/std-docs-integrity-handbook.md"
@@ -139,19 +139,14 @@ total_links: 93
     "duplicate_slugs": {
       "database-integration-status": [
         "db_integration_status.md",
-        "tmp_cli_probe/db_integration_status.md"
+        "tmp_cli_probe/db_integration_status.md",
+        "tmp_cli_probe/db_markers.md"
       ],
       "duplicate-scan-summary": [
-        ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md",
         ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md",
         ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md",
-        ".repo_studios/scripts/aggregators/aggregators_index/aggregators_duplicate_summary-2025-10-28-0942.md",
-        ".repo_studios/scripts/consumers/consumers_index/consumers_duplicate_summary-2025-10-28-0934.md",
-        ".repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md",
-        ".repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md",
-        ".repo_studios/scripts/scripts_index/scripts_duplicate_summary-2025-10-27.md",
-        ".repo_studios/scripts/summarizers/summarizers_index/summarizers_duplicate_summary-2025-11-04-2010.md",
-        ".repo_studios/scripts/utilities/utilities_index/utilities_duplicate_summary-2025-10-28-1344.md"
+        ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251217-2039.md",
+        ".repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md"
       ],
       "library-integration-alignment-plan": [
         ".repo_studios/command_center/checklists/2025-10-24.md",
@@ -181,6 +176,7 @@ total_links: 93
       ".repo_studios/command_center/command_center_architecture.md",
       ".repo_studios/command_center/docs/code_library/code_library_status.md",
       ".repo_studios/command_center/docs/db_integration_test_execution_telemetry.md",
+      ".repo_studios/command_center/docs/db_integrations/code_placeholders.md",
       ".repo_studios/command_center/docs/decision_log.md",
       ".repo_studios/command_center/docs/duplicate_target_mappings.md",
       ".repo_studios/command_center/docs/library_integration_checklist.md",
@@ -198,8 +194,7 @@ total_links: 93
       ".repo_studios/command_center/docs/phase_7/PLACEHOLDER_DEBT_PLAN.md",
       ".repo_studios/command_center/docs/phase_7/REPORTING_INTERFACE_PLAN.md",
       ".repo_studios/command_center/docs/phase_7/placeholder_scan_blocking_transition_brief.md",
-      ".repo_studios/command_center/docs/run_log_template.md",
-      ".repo_studios/command_center/scripts/orchestrators/README.md"
+      ".repo_studios/command_center/docs/run_log_template.md"
     ]
   },
   "documents": [
@@ -1265,9 +1260,9 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-28T14:18:05.271026+00:00",
+      "modified_utc": "2025-12-17T01:38:22.486199+00:00",
       "owners": [],
-      "size_bytes": 14886,
+      "size_bytes": 14925,
       "slug": "library-integration-protocol",
       "status": null,
       "tags": []
@@ -1588,9 +1583,9 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-12-01T01:01:45.347271+00:00",
+      "modified_utc": "2025-12-17T01:38:22.486199+00:00",
       "owners": [],
-      "size_bytes": 14122,
+      "size_bytes": 14181,
       "slug": "code-library-integration-status-2025-11-23",
       "status": null,
       "tags": []
@@ -2083,6 +2078,94 @@ total_links: 93
       "slug": "database-integration-documentation",
       "status": null,
       "tags": []
+    },
+    {
+      "contains_placeholder": true,
+      "description": null,
+      "filename": ".repo_studios/command_center/docs/db_integrations/code_placeholders.md",
+      "folder": ".repo_studios/command_center/docs/db_integrations",
+      "frontmatter": {
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          "../../scripts/libraries/database_integration.py",
+          "../../../scripts/producers/scan_code_placeholders.py",
+          "../../../docs/automation/scan_code_placeholders.md"
+        ],
+        "status": "approved",
+        "tags": [
+          "db",
+          "integration",
+          "producers",
+          "placeholders"
+        ],
+        "title": "DB Integration \u2014 code_placeholders",
+        "updated": "2025-12-17",
+        "version": "1.0.0"
+      },
+      "h1_headings": [
+        {
+          "line": 22,
+          "slug": "db-integration-codeplaceholders",
+          "title": "DB Integration \u2014 code_placeholders"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 24,
+          "parent_slug": "db-integration-codeplaceholders",
+          "parent_title": "DB Integration \u2014 code_placeholders",
+          "slug": "goals",
+          "title": "Goals"
+        },
+        {
+          "line": 29,
+          "parent_slug": "db-integration-codeplaceholders",
+          "parent_title": "DB Integration \u2014 code_placeholders",
+          "slug": "system-context",
+          "title": "System Context"
+        },
+        {
+          "line": 35,
+          "parent_slug": "db-integration-codeplaceholders",
+          "parent_title": "DB Integration \u2014 code_placeholders",
+          "slug": "agent-instructions",
+          "title": "Agent Instructions"
+        },
+        {
+          "line": 67,
+          "parent_slug": "db-integration-codeplaceholders",
+          "parent_title": "DB Integration \u2014 code_placeholders",
+          "slug": "human-notes",
+          "title": "Human Notes"
+        },
+        {
+          "line": 72,
+          "parent_slug": "db-integration-codeplaceholders",
+          "parent_title": "DB Integration \u2014 code_placeholders",
+          "slug": "update-log",
+          "title": "Update Log"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-17T19:43:51.315571+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 2808,
+      "slug": "db-integration-codeplaceholders",
+      "status": "approved",
+      "tags": [
+        "db",
+        "integration",
+        "producers",
+        "placeholders"
+      ]
     },
     {
       "contains_placeholder": false,
@@ -2926,7 +3009,7 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-12-16T20:32:12.303952+00:00",
+      "modified_utc": "2025-12-16T21:14:26.601426+00:00",
       "owners": [
         "repo_studios_team@rainmakerprotocol.dev"
       ],
@@ -2937,6 +3020,898 @@ total_links: 93
         "db-integration",
         "healthview",
         "doc-index",
+        "producer"
+      ]
+    },
+    {
+      "contains_placeholder": false,
+      "description": "Define the database-facing contract for the docs integrity validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",
+      "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_docs_integrity_validation.md",
+      "folder": ".repo_studios/command_center/docs/db_integrations",
+      "frontmatter": {
+        "audience": [
+          "Copilot",
+          "Agents",
+          "Developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          ".repo_studios/scripts/producers/verify_docs_integrity.py",
+          ".repo_studios/docs/automation/verify_docs_integrity.md",
+          ".repo_studios/tests/tests_producers/test_verify_docs_integrity.py",
+          ".repo_studios/command_center/scripts/libraries/database_integration.py",
+          "REPORT_NAMING_STANDARDS.md"
+        ],
+        "role": [
+          "Operational-Doc",
+          "DB-Integration"
+        ],
+        "status": "active",
+        "tags": [
+          "db-integration",
+          "healthview",
+          "docs-integrity",
+          "producer"
+        ],
+        "title": "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)",
+        "updated": "2025-12-18",
+        "version": "1.0.0"
+      },
+      "h1_headings": [
+        {
+          "line": 18,
+          "slug": "db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation",
+          "title": "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 20,
+          "parent_slug": "db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation",
+          "parent_title": "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)",
+          "slug": "goals",
+          "title": "Goals"
+        },
+        {
+          "line": 25,
+          "parent_slug": "db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation",
+          "parent_title": "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)",
+          "slug": "system-context",
+          "title": "System Context"
+        },
+        {
+          "line": 32,
+          "parent_slug": "db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation",
+          "parent_title": "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)",
+          "slug": "write-sites",
+          "title": "Write Sites"
+        },
+        {
+          "line": 42,
+          "parent_slug": "db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation",
+          "parent_title": "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)",
+          "slug": "schema-mapping",
+          "title": "Schema Mapping"
+        },
+        {
+          "line": 68,
+          "parent_slug": "db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation",
+          "parent_title": "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)",
+          "slug": "compatibility-notes",
+          "title": "Compatibility Notes"
+        },
+        {
+          "line": 74,
+          "parent_slug": "db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation",
+          "parent_title": "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)",
+          "slug": "update-log",
+          "title": "Update Log"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-18T17:36:18.987162+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 2890,
+      "slug": "db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation",
+      "status": "active",
+      "tags": [
+        "db-integration",
+        "healthview",
+        "docs-integrity",
+        "producer"
+      ]
+    },
+    {
+      "contains_placeholder": false,
+      "description": "See `.github/instructions/markdown.instructions.md` for repo-wide rules.",
+      "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_generate_standards_index.md",
+      "folder": ".repo_studios/command_center/docs/db_integrations",
+      "frontmatter": {
+        "audience": [
+          "Agents",
+          "Developers"
+        ],
+        "owners": [
+          "Repo Studios"
+        ],
+        "related_files": [
+          ".repo_studios/scripts/producers/generate_standards_index.py",
+          ".repo_studios/command_center/scripts/libraries/database_integration.py",
+          ".repo_studios/command_center/scripts/utilities/list_db_markers.py"
+        ],
+        "role": [
+          "Automation"
+        ],
+        "status": "draft",
+        "tags": [
+          "database",
+          "integration",
+          "standards",
+          "producer"
+        ],
+        "title": "DB Integration \u2014 Standards Index Producer",
+        "updated_at": "2025-12-17",
+        "version": 1
+      },
+      "h1_headings": [
+        {
+          "line": 24,
+          "slug": "db-integration-generatestandardsindex",
+          "title": "DB Integration \u2014 generate_standards_index"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 28,
+          "parent_slug": "db-integration-generatestandardsindex",
+          "parent_title": "DB Integration \u2014 generate_standards_index",
+          "slug": "goals",
+          "title": "Goals"
+        },
+        {
+          "line": 33,
+          "parent_slug": "db-integration-generatestandardsindex",
+          "parent_title": "DB Integration \u2014 generate_standards_index",
+          "slug": "system-context",
+          "title": "System Context"
+        },
+        {
+          "line": 48,
+          "parent_slug": "db-integration-generatestandardsindex",
+          "parent_title": "DB Integration \u2014 generate_standards_index",
+          "slug": "agent-instructions",
+          "title": "Agent Instructions"
+        },
+        {
+          "line": 54,
+          "parent_slug": "db-integration-generatestandardsindex",
+          "parent_title": "DB Integration \u2014 generate_standards_index",
+          "slug": "human-notes",
+          "title": "Human Notes"
+        },
+        {
+          "line": 101,
+          "parent_slug": "db-integration-generatestandardsindex",
+          "parent_title": "DB Integration \u2014 generate_standards_index",
+          "slug": "reference-prompts",
+          "title": "Reference Prompts"
+        },
+        {
+          "line": 106,
+          "parent_slug": "db-integration-generatestandardsindex",
+          "parent_title": "DB Integration \u2014 generate_standards_index",
+          "slug": "update-log",
+          "title": "Update Log"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-17T11:36:36.071252+00:00",
+      "owners": [
+        "Repo Studios"
+      ],
+      "size_bytes": 3262,
+      "slug": "db-integration-generatestandardsindex",
+      "status": "draft",
+      "tags": [
+        "database",
+        "integration",
+        "standards",
+        "producer"
+      ]
+    },
+    {
+      "contains_placeholder": false,
+      "description": null,
+      "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md",
+      "folder": ".repo_studios/command_center/docs/db_integrations",
+      "frontmatter": {
+        "audience": [
+          "Copilot",
+          "Agents",
+          "Developer"
+        ],
+        "owners": [
+          "repo_studios_ai"
+        ],
+        "related_files": [
+          ".repo_studios/scripts/producers/generate_test_coverage_inventory.py",
+          ".repo_studios/command_center/scripts/libraries/database_integration.py",
+          ".repo_studios/command_center/scripts/utilities/list_db_markers.py"
+        ],
+        "role": [
+          "DBIntegrationDoc"
+        ],
+        "status": "draft",
+        "tags": [
+          "db-integration",
+          "producer",
+          "healthview",
+          "test-coverage"
+        ],
+        "title": "DB Integration \u2014 generate_test_coverage_inventory.py",
+        "updated_at": "2025-12-17",
+        "version": 1
+      },
+      "h1_headings": [
+        {
+          "line": 16,
+          "slug": "db-integration-generatetestcoverageinventorypy",
+          "title": "DB Integration \u2014 generate_test_coverage_inventory.py"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 18,
+          "parent_slug": "db-integration-generatetestcoverageinventorypy",
+          "parent_title": "DB Integration \u2014 generate_test_coverage_inventory.py",
+          "slug": "goals",
+          "title": "Goals"
+        },
+        {
+          "line": 23,
+          "parent_slug": "db-integration-generatetestcoverageinventorypy",
+          "parent_title": "DB Integration \u2014 generate_test_coverage_inventory.py",
+          "slug": "system-context",
+          "title": "System Context"
+        },
+        {
+          "line": 29,
+          "parent_slug": "db-integration-generatetestcoverageinventorypy",
+          "parent_title": "DB Integration \u2014 generate_test_coverage_inventory.py",
+          "slug": "agent-instructions",
+          "title": "Agent Instructions"
+        },
+        {
+          "line": 50,
+          "parent_slug": "db-integration-generatetestcoverageinventorypy",
+          "parent_title": "DB Integration \u2014 generate_test_coverage_inventory.py",
+          "slug": "table-mapping-intent",
+          "title": "Table Mapping (Intent)"
+        },
+        {
+          "line": 72,
+          "parent_slug": "db-integration-generatetestcoverageinventorypy",
+          "parent_title": "DB Integration \u2014 generate_test_coverage_inventory.py",
+          "slug": "human-notes",
+          "title": "Human Notes"
+        },
+        {
+          "line": 77,
+          "parent_slug": "db-integration-generatetestcoverageinventorypy",
+          "parent_title": "DB Integration \u2014 generate_test_coverage_inventory.py",
+          "slug": "reference-prompts",
+          "title": "Reference Prompts"
+        },
+        {
+          "line": 82,
+          "parent_slug": "db-integration-generatetestcoverageinventorypy",
+          "parent_title": "DB Integration \u2014 generate_test_coverage_inventory.py",
+          "slug": "update-log",
+          "title": "Update Log"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-17T12:10:20.071203+00:00",
+      "owners": [
+        "repo_studios_ai"
+      ],
+      "size_bytes": 3119,
+      "slug": "db-integration-generatetestcoverageinventorypy",
+      "status": "draft",
+      "tags": [
+        "db-integration",
+        "producer",
+        "healthview",
+        "test-coverage"
+      ]
+    },
+    {
+      "contains_placeholder": false,
+      "description": "Define the database-facing contract for the Import Graph producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",
+      "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_import_graph.md",
+      "folder": ".repo_studios/command_center/docs/db_integrations",
+      "frontmatter": {
+        "audience": [
+          "Copilot",
+          "Agents",
+          "Developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          ".repo_studios/scripts/producers/generate_import_graph_report.py",
+          ".repo_studios/docs/automation/generate_import_graph_report.md",
+          ".repo_studios/scripts/producers/validate_import_boundaries.py",
+          ".repo_studios/command_center/scripts/libraries/database_integration.py",
+          "REPORT_NAMING_STANDARDS.md"
+        ],
+        "role": [
+          "Operational-Doc",
+          "DB-Integration"
+        ],
+        "status": "active",
+        "tags": [
+          "db-integration",
+          "healthview",
+          "import-graph",
+          "producer"
+        ],
+        "title": "DB Integration \u2014 Import Graph (healthview/import_graph)",
+        "updated": "2025-12-16",
+        "version": "1.0.0"
+      },
+      "h1_headings": [
+        {
+          "line": 18,
+          "slug": "db-integration-import-graph-healthviewimportgraph",
+          "title": "DB Integration \u2014 Import Graph (healthview/import_graph)"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 20,
+          "parent_slug": "db-integration-import-graph-healthviewimportgraph",
+          "parent_title": "DB Integration \u2014 Import Graph (healthview/import_graph)",
+          "slug": "goals",
+          "title": "Goals"
+        },
+        {
+          "line": 25,
+          "parent_slug": "db-integration-import-graph-healthviewimportgraph",
+          "parent_title": "DB Integration \u2014 Import Graph (healthview/import_graph)",
+          "slug": "system-context",
+          "title": "System Context"
+        },
+        {
+          "line": 32,
+          "parent_slug": "db-integration-import-graph-healthviewimportgraph",
+          "parent_title": "DB Integration \u2014 Import Graph (healthview/import_graph)",
+          "slug": "write-sites",
+          "title": "Write Sites"
+        },
+        {
+          "line": 42,
+          "parent_slug": "db-integration-import-graph-healthviewimportgraph",
+          "parent_title": "DB Integration \u2014 Import Graph (healthview/import_graph)",
+          "slug": "schema-mapping",
+          "title": "Schema Mapping"
+        },
+        {
+          "line": 66,
+          "parent_slug": "db-integration-import-graph-healthviewimportgraph",
+          "parent_title": "DB Integration \u2014 Import Graph (healthview/import_graph)",
+          "slug": "compatibility-notes",
+          "title": "Compatibility Notes"
+        },
+        {
+          "line": 72,
+          "parent_slug": "db-integration-import-graph-healthviewimportgraph",
+          "parent_title": "DB Integration \u2014 Import Graph (healthview/import_graph)",
+          "slug": "update-log",
+          "title": "Update Log"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-16T22:07:37.971519+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 2710,
+      "slug": "db-integration-import-graph-healthviewimportgraph",
+      "status": "active",
+      "tags": [
+        "db-integration",
+        "healthview",
+        "import-graph",
+        "producer"
+      ]
+    },
+    {
+      "contains_placeholder": false,
+      "description": "The lizard producer writes its positional bundle under:",
+      "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_lizard_report.md",
+      "folder": ".repo_studios/command_center/docs/db_integrations",
+      "frontmatter": {
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          "../../scripts/producers/generate_lizard_report.py",
+          "../../command_center/scripts/libraries/database_integration.py"
+        ],
+        "status": "active",
+        "tags": [
+          "db-integration",
+          "healthview",
+          "lizard"
+        ],
+        "title": "DB Integration Notes \u2014 Lizard Report",
+        "updated": "2025-12-16",
+        "version": "1.0.0"
+      },
+      "h1_headings": [
+        {
+          "line": 20,
+          "slug": "db-integration-notes-lizard-report",
+          "title": "DB Integration Notes \u2014 Lizard Report"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 22,
+          "parent_slug": "db-integration-notes-lizard-report",
+          "parent_title": "DB Integration Notes \u2014 Lizard Report",
+          "slug": "goals",
+          "title": "Goals"
+        },
+        {
+          "line": 27,
+          "parent_slug": "db-integration-notes-lizard-report",
+          "parent_title": "DB Integration Notes \u2014 Lizard Report",
+          "slug": "system-context",
+          "title": "System Context"
+        },
+        {
+          "line": 38,
+          "parent_slug": "db-integration-notes-lizard-report",
+          "parent_title": "DB Integration Notes \u2014 Lizard Report",
+          "slug": "agent-instructions",
+          "title": "Agent Instructions"
+        },
+        {
+          "line": 43,
+          "parent_slug": "db-integration-notes-lizard-report",
+          "parent_title": "DB Integration Notes \u2014 Lizard Report",
+          "slug": "write-sites",
+          "title": "Write Sites"
+        },
+        {
+          "line": 51,
+          "parent_slug": "db-integration-notes-lizard-report",
+          "parent_title": "DB Integration Notes \u2014 Lizard Report",
+          "slug": "human-notes",
+          "title": "Human Notes"
+        },
+        {
+          "line": 56,
+          "parent_slug": "db-integration-notes-lizard-report",
+          "parent_title": "DB Integration Notes \u2014 Lizard Report",
+          "slug": "update-log",
+          "title": "Update Log"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-17T00:02:21.821596+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 1899,
+      "slug": "db-integration-notes-lizard-report",
+      "status": "active",
+      "tags": [
+        "db-integration",
+        "healthview",
+        "lizard"
+      ]
+    },
+    {
+      "contains_placeholder": false,
+      "description": "Define the database-facing contract for the markdown anchor validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",
+      "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_markdown_anchor_validation.md",
+      "folder": ".repo_studios/command_center/docs/db_integrations",
+      "frontmatter": {
+        "audience": [
+          "Copilot",
+          "Agents",
+          "Developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          ".repo_studios/scripts/producers/validate_markdown_anchors.py",
+          ".repo_studios/docs/automation/validate_markdown_anchors.md",
+          ".repo_studios/tests/tests_producers/test_validate_markdown_anchors.py",
+          ".repo_studios/command_center/scripts/libraries/database_integration.py",
+          "REPORT_NAMING_STANDARDS.md"
+        ],
+        "role": [
+          "Operational-Doc",
+          "DB-Integration"
+        ],
+        "status": "active",
+        "tags": [
+          "db-integration",
+          "healthview",
+          "markdown-anchor-validation",
+          "producer"
+        ],
+        "title": "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)",
+        "updated": "2025-12-18",
+        "version": "1.0.0"
+      },
+      "h1_headings": [
+        {
+          "line": 18,
+          "slug": "db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation",
+          "title": "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 20,
+          "parent_slug": "db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation",
+          "parent_title": "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)",
+          "slug": "goals",
+          "title": "Goals"
+        },
+        {
+          "line": 25,
+          "parent_slug": "db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation",
+          "parent_title": "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)",
+          "slug": "system-context",
+          "title": "System Context"
+        },
+        {
+          "line": 32,
+          "parent_slug": "db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation",
+          "parent_title": "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)",
+          "slug": "write-sites",
+          "title": "Write Sites"
+        },
+        {
+          "line": 42,
+          "parent_slug": "db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation",
+          "parent_title": "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)",
+          "slug": "schema-mapping",
+          "title": "Schema Mapping"
+        },
+        {
+          "line": 67,
+          "parent_slug": "db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation",
+          "parent_title": "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)",
+          "slug": "compatibility-notes",
+          "title": "Compatibility Notes"
+        },
+        {
+          "line": 73,
+          "parent_slug": "db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation",
+          "parent_title": "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)",
+          "slug": "update-log",
+          "title": "Update Log"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-18T12:37:54.373653+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 2861,
+      "slug": "db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation",
+      "status": "active",
+      "tags": [
+        "db-integration",
+        "healthview",
+        "markdown-anchor-validation",
+        "producer"
+      ]
+    },
+    {
+      "contains_placeholder": false,
+      "description": "The producer emits canonical positional bundles under:",
+      "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_metrics_anchor_stub_validation.md",
+      "folder": ".repo_studios/command_center/docs/db_integrations",
+      "frontmatter": {
+        "audience": [
+          "Copilot",
+          "Agents",
+          "Developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py",
+          ".repo_studios/command_center/scripts/libraries/database_integration.py",
+          "REPORT_NAMING_STANDARDS.md"
+        ],
+        "status": "active",
+        "tags": [
+          "db-integration",
+          "producer",
+          "healthview",
+          "metrics",
+          "anchors"
+        ],
+        "title": "DB Integration Mapping \u2014 Metrics Anchor Stub Validation",
+        "updated": "2025-12-18",
+        "version": "1.0.0"
+      },
+      "h1_headings": [
+        {
+          "line": 15,
+          "slug": "db-integration-mapping-metrics-anchor-stub-validation",
+          "title": "DB Integration Mapping \u2014 Metrics Anchor Stub Validation"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 17,
+          "parent_slug": "db-integration-mapping-metrics-anchor-stub-validation",
+          "parent_title": "DB Integration Mapping \u2014 Metrics Anchor Stub Validation",
+          "slug": "goals",
+          "title": "Goals"
+        },
+        {
+          "line": 22,
+          "parent_slug": "db-integration-mapping-metrics-anchor-stub-validation",
+          "parent_title": "DB Integration Mapping \u2014 Metrics Anchor Stub Validation",
+          "slug": "system-context",
+          "title": "System Context"
+        },
+        {
+          "line": 34,
+          "parent_slug": "db-integration-mapping-metrics-anchor-stub-validation",
+          "parent_title": "DB Integration Mapping \u2014 Metrics Anchor Stub Validation",
+          "slug": "agent-instructions",
+          "title": "Agent Instructions"
+        },
+        {
+          "line": 40,
+          "parent_slug": "db-integration-mapping-metrics-anchor-stub-validation",
+          "parent_title": "DB Integration Mapping \u2014 Metrics Anchor Stub Validation",
+          "slug": "write-mapping",
+          "title": "Write Mapping"
+        },
+        {
+          "line": 60,
+          "parent_slug": "db-integration-mapping-metrics-anchor-stub-validation",
+          "parent_title": "DB Integration Mapping \u2014 Metrics Anchor Stub Validation",
+          "slug": "notes",
+          "title": "Notes"
+        },
+        {
+          "line": 65,
+          "parent_slug": "db-integration-mapping-metrics-anchor-stub-validation",
+          "parent_title": "DB Integration Mapping \u2014 Metrics Anchor Stub Validation",
+          "slug": "update-log",
+          "title": "Update Log"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-18T16:04:05.596021+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 2082,
+      "slug": "db-integration-mapping-metrics-anchor-stub-validation",
+      "status": "active",
+      "tags": [
+        "db-integration",
+        "producer",
+        "healthview",
+        "metrics",
+        "anchors"
+      ]
+    },
+    {
+      "contains_placeholder": false,
+      "description": null,
+      "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_monkey_patches.md",
+      "folder": ".repo_studios/command_center/docs/db_integrations",
+      "frontmatter": {
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          "../../scripts/libraries/database_integration.py",
+          "../../../scripts/producers/scan_monkey_patches.py",
+          "../../../docs/automation/scan_monkey_patches.md"
+        ],
+        "status": "approved",
+        "tags": [
+          "db",
+          "integration",
+          "producers",
+          "healthview",
+          "monkey_patches"
+        ],
+        "title": "DB Integration \u2014 monkey_patches",
+        "updated": "2025-12-17",
+        "version": "1.0.0"
+      },
+      "h1_headings": [
+        {
+          "line": 23,
+          "slug": "db-integration-monkeypatches",
+          "title": "DB Integration \u2014 monkey_patches"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 25,
+          "parent_slug": "db-integration-monkeypatches",
+          "parent_title": "DB Integration \u2014 monkey_patches",
+          "slug": "goals",
+          "title": "Goals"
+        },
+        {
+          "line": 30,
+          "parent_slug": "db-integration-monkeypatches",
+          "parent_title": "DB Integration \u2014 monkey_patches",
+          "slug": "system-context",
+          "title": "System Context"
+        },
+        {
+          "line": 36,
+          "parent_slug": "db-integration-monkeypatches",
+          "parent_title": "DB Integration \u2014 monkey_patches",
+          "slug": "agent-instructions",
+          "title": "Agent Instructions"
+        },
+        {
+          "line": 68,
+          "parent_slug": "db-integration-monkeypatches",
+          "parent_title": "DB Integration \u2014 monkey_patches",
+          "slug": "human-notes",
+          "title": "Human Notes"
+        },
+        {
+          "line": 74,
+          "parent_slug": "db-integration-monkeypatches",
+          "parent_title": "DB Integration \u2014 monkey_patches",
+          "slug": "update-log",
+          "title": "Update Log"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-17T23:50:14.347407+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 2929,
+      "slug": "db-integration-monkeypatches",
+      "status": "approved",
+      "tags": [
+        "db",
+        "integration",
+        "producers",
+        "healthview",
+        "monkey_patches"
+      ]
+    },
+    {
+      "contains_placeholder": false,
+      "description": "Define the database-facing contract for the Inventory Overview producer so dual-write storage can persist run metadata, summary markdown, and telemetry payloads in a stable schema.",
+      "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_render_inventory_views.md",
+      "folder": ".repo_studios/command_center/docs/db_integrations",
+      "frontmatter": {
+        "audience": [
+          "Copilot",
+          "Agents",
+          "Developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          ".repo_studios/scripts/producers/render_inventory_views.py",
+          ".repo_studios/docs/automation/render_inventory_views.md",
+          ".repo_studios/scripts/producers/check_inventory_health.py",
+          ".repo_studios/command_center/scripts/libraries/database_integration.py",
+          "REPORT_NAMING_STANDARDS.md"
+        ],
+        "role": [
+          "Operational-Doc",
+          "DB-Integration"
+        ],
+        "status": "active",
+        "tags": [
+          "db-integration",
+          "healthview",
+          "inventory",
+          "producer"
+        ],
+        "title": "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)",
+        "updated": "2025-12-17",
+        "version": "1.0.0"
+      },
+      "h1_headings": [
+        {
+          "line": 18,
+          "slug": "db-integration-inventory-overview-healthviewinventoryoverview",
+          "title": "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 20,
+          "parent_slug": "db-integration-inventory-overview-healthviewinventoryoverview",
+          "parent_title": "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)",
+          "slug": "goals",
+          "title": "Goals"
+        },
+        {
+          "line": 25,
+          "parent_slug": "db-integration-inventory-overview-healthviewinventoryoverview",
+          "parent_title": "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)",
+          "slug": "system-context",
+          "title": "System Context"
+        },
+        {
+          "line": 32,
+          "parent_slug": "db-integration-inventory-overview-healthviewinventoryoverview",
+          "parent_title": "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)",
+          "slug": "write-sites",
+          "title": "Write Sites"
+        },
+        {
+          "line": 42,
+          "parent_slug": "db-integration-inventory-overview-healthviewinventoryoverview",
+          "parent_title": "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)",
+          "slug": "schema-mapping",
+          "title": "Schema Mapping"
+        },
+        {
+          "line": 70,
+          "parent_slug": "db-integration-inventory-overview-healthviewinventoryoverview",
+          "parent_title": "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)",
+          "slug": "compatibility-notes",
+          "title": "Compatibility Notes"
+        },
+        {
+          "line": 78,
+          "parent_slug": "db-integration-inventory-overview-healthviewinventoryoverview",
+          "parent_title": "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)",
+          "slug": "update-log",
+          "title": "Update Log"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-17T18:23:40.621821+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 3050,
+      "slug": "db-integration-inventory-overview-healthviewinventoryoverview",
+      "status": "active",
+      "tags": [
+        "db-integration",
+        "healthview",
+        "inventory",
         "producer"
       ]
     },
@@ -3037,6 +4012,101 @@ total_links: 93
         "integration",
         "rawview",
         "pytest"
+      ]
+    },
+    {
+      "contains_placeholder": false,
+      "description": "abstraction.",
+      "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_undocumented_logic.md",
+      "folder": ".repo_studios/command_center/docs/db_integrations",
+      "frontmatter": {
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          "../../scripts/libraries/database_integration.py",
+          "../../../scripts/producers/generate_undocumented_logic_report.py"
+        ],
+        "role": [
+          "Operational-Doc"
+        ],
+        "status": "active",
+        "tags": [
+          "db-integration",
+          "healthview",
+          "producer"
+        ],
+        "title": "Undocumented Logic \u2014 DB Integration",
+        "updated": "2025-12-17",
+        "version": "1.0.0"
+      },
+      "h1_headings": [
+        {
+          "line": 22,
+          "slug": "undocumented-logic-db-integration",
+          "title": "Undocumented Logic \u2014 DB Integration"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 24,
+          "parent_slug": "undocumented-logic-db-integration",
+          "parent_title": "Undocumented Logic \u2014 DB Integration",
+          "slug": "goals",
+          "title": "Goals"
+        },
+        {
+          "line": 30,
+          "parent_slug": "undocumented-logic-db-integration",
+          "parent_title": "Undocumented Logic \u2014 DB Integration",
+          "slug": "system-context",
+          "title": "System Context"
+        },
+        {
+          "line": 38,
+          "parent_slug": "undocumented-logic-db-integration",
+          "parent_title": "Undocumented Logic \u2014 DB Integration",
+          "slug": "agent-instructions",
+          "title": "Agent Instructions"
+        },
+        {
+          "line": 43,
+          "parent_slug": "undocumented-logic-db-integration",
+          "parent_title": "Undocumented Logic \u2014 DB Integration",
+          "slug": "human-notes",
+          "title": "Human Notes"
+        },
+        {
+          "line": 76,
+          "parent_slug": "undocumented-logic-db-integration",
+          "parent_title": "Undocumented Logic \u2014 DB Integration",
+          "slug": "reference-prompts",
+          "title": "Reference Prompts"
+        },
+        {
+          "line": 86,
+          "parent_slug": "undocumented-logic-db-integration",
+          "parent_title": "Undocumented Logic \u2014 DB Integration",
+          "slug": "update-log",
+          "title": "Update Log"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-17T17:03:35.225241+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 2596,
+      "slug": "undocumented-logic-db-integration",
+      "status": "active",
+      "tags": [
+        "db-integration",
+        "healthview",
+        "producer"
       ]
     },
     {
@@ -3657,9 +4727,9 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-08T23:02:50.721156+00:00",
+      "modified_utc": "2025-12-17T01:38:22.486199+00:00",
       "owners": [],
-      "size_bytes": 3069,
+      "size_bytes": 3150,
       "slug": "manual-extraction-operator-brief",
       "status": null,
       "tags": []
@@ -5745,9 +6815,9 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-04T14:45:22.715420+00:00",
+      "modified_utc": "2025-12-17T01:38:22.486199+00:00",
       "owners": [],
-      "size_bytes": 5193,
+      "size_bytes": 5207,
       "slug": "weighted-progress-briefing-template",
       "status": null,
       "tags": []
@@ -7765,57 +8835,6 @@ total_links: 93
     {
       "contains_placeholder": false,
       "description": "1. `configure_logging` \u2014 12 duplicate(s)",
-      "filename": ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md",
-      "folder": ".repo_studios/command_center/scripts/scripts_index",
-      "frontmatter": null,
-      "h1_headings": [
-        {
-          "line": 1,
-          "slug": "duplicate-scan-summary",
-          "title": "Duplicate Scan Summary"
-        }
-      ],
-      "h2_headings": [
-        {
-          "line": 3,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "overview",
-          "title": "Overview"
-        },
-        {
-          "line": 13,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "inputs",
-          "title": "Inputs"
-        },
-        {
-          "line": 18,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "top-duplicate-offenders",
-          "title": "Top Duplicate Offenders"
-        },
-        {
-          "line": 100,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "next-steps",
-          "title": "Next Steps"
-        }
-      ],
-      "links": [],
-      "modified_utc": "2025-12-15T18:05:31.172310+00:00",
-      "owners": [],
-      "size_bytes": 7229,
-      "slug": "duplicate-scan-summary",
-      "status": null,
-      "tags": []
-    },
-    {
-      "contains_placeholder": false,
-      "description": "1. `configure_logging` \u2014 12 duplicate(s)",
       "filename": ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md",
       "folder": ".repo_studios/command_center/scripts/scripts_index",
       "frontmatter": null,
@@ -7857,7 +8876,7 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-12-15T18:05:31.173309+00:00",
+      "modified_utc": "2025-12-18T12:22:43.714946+00:00",
       "owners": [],
       "size_bytes": 7198,
       "slug": "duplicate-scan-summary",
@@ -7911,6 +8930,57 @@ total_links: 93
       "modified_utc": "2025-12-15T18:05:31.173309+00:00",
       "owners": [],
       "size_bytes": 7198,
+      "slug": "duplicate-scan-summary",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
+      "description": "1. `_parse_timestamp` \u2014 27 duplicate(s)",
+      "filename": ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251217-2039.md",
+      "folder": ".repo_studios/command_center/scripts/scripts_index",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "duplicate-scan-summary",
+          "title": "Duplicate Scan Summary"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 3,
+          "parent_slug": "duplicate-scan-summary",
+          "parent_title": "Duplicate Scan Summary",
+          "slug": "overview",
+          "title": "Overview"
+        },
+        {
+          "line": 13,
+          "parent_slug": "duplicate-scan-summary",
+          "parent_title": "Duplicate Scan Summary",
+          "slug": "inputs",
+          "title": "Inputs"
+        },
+        {
+          "line": 18,
+          "parent_slug": "duplicate-scan-summary",
+          "parent_title": "Duplicate Scan Summary",
+          "slug": "top-duplicate-offenders",
+          "title": "Top Duplicate Offenders"
+        },
+        {
+          "line": 174,
+          "parent_slug": "duplicate-scan-summary",
+          "parent_title": "Duplicate Scan Summary",
+          "slug": "next-steps",
+          "title": "Next Steps"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-17T20:39:39.920788+00:00",
+      "owners": [],
+      "size_bytes": 16000,
       "slug": "duplicate-scan-summary",
       "status": null,
       "tags": []
@@ -8837,28 +9907,28 @@ total_links: 93
           "title": "System Context"
         },
         {
-          "line": 54,
+          "line": 55,
           "parent_slug": "automation-checkinventoryhealth",
           "parent_title": "Automation \u2014 check_inventory_health",
           "slug": "agent-instructions",
           "title": "Agent Instructions"
         },
         {
-          "line": 77,
+          "line": 78,
           "parent_slug": "automation-checkinventoryhealth",
           "parent_title": "Automation \u2014 check_inventory_health",
           "slug": "human-notes",
           "title": "Human Notes"
         },
         {
-          "line": 95,
+          "line": 96,
           "parent_slug": "automation-checkinventoryhealth",
           "parent_title": "Automation \u2014 check_inventory_health",
           "slug": "reference-prompts",
           "title": "Reference Prompts"
         },
         {
-          "line": 100,
+          "line": 101,
           "parent_slug": "automation-checkinventoryhealth",
           "parent_title": "Automation \u2014 check_inventory_health",
           "slug": "update-log",
@@ -8866,11 +9936,11 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-12-15T20:58:09.903934+00:00",
+      "modified_utc": "2025-12-17T18:23:40.605108+00:00",
       "owners": [
         "repo_studios"
       ],
-      "size_bytes": 3372,
+      "size_bytes": 3464,
       "slug": "automation-checkinventoryhealth",
       "status": "active",
       "tags": [
@@ -8926,9 +9996,9 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-12-11T10:50:58.485331+00:00",
+      "modified_utc": "2025-12-17T18:23:40.625822+00:00",
       "owners": [],
-      "size_bytes": 2419,
+      "size_bytes": 2523,
       "slug": "ci-metrics-checks-for-inventory-reports",
       "status": null,
       "tags": []
@@ -9942,7 +11012,7 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-12-16T20:10:31.378690+00:00",
+      "modified_utc": "2025-12-16T21:14:26.596424+00:00",
       "owners": [
         "repo_studios_team@rainmakerprotocol.dev"
       ],
@@ -10056,7 +11126,7 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-12-16T21:06:34.408259+00:00",
+      "modified_utc": "2025-12-16T21:14:26.601426+00:00",
       "owners": [
         "repo_studios_team@rainmakerprotocol.dev"
       ],
@@ -10072,68 +11142,190 @@ total_links: 93
     },
     {
       "contains_placeholder": false,
-      "description": "`generate_lizard_report.py` runs `python -m lizard` across the owned source tree, captures the JSON output, and emits structured artifacts so downstream agents can track cyclomatic complexity hotspots and long functions. It is designed to\u2026",
-      "filename": ".repo_studios/docs/automation/generate_lizard_report.md",
+      "description": "`generate_import_graph_report.py` scans owned Python packages inside the repository and emits an adjacency graph of import relationships. The report highlights:",
+      "filename": ".repo_studios/docs/automation/generate_import_graph_report.md",
       "folder": ".repo_studios/docs/automation",
-      "frontmatter": null,
+      "frontmatter": {
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          "../../scripts/producers/generate_import_graph_report.py",
+          "../../tests/tests_producers/test_generate_import_graph_report.py",
+          "../../command_center/docs/db_integrations/db_integration_import_graph.md",
+          "../../scripts/producers/validate_import_boundaries.py"
+        ],
+        "status": "active",
+        "tags": [
+          "automation",
+          "healthview",
+          "import-graph"
+        ],
+        "title": "generate_import_graph_report.py",
+        "updated": "2025-12-16",
+        "version": "2.0.0"
+      },
       "h1_headings": [
         {
-          "line": 1,
+          "line": 22,
+          "slug": "generateimportgraphreportpy",
+          "title": "generate_import_graph_report.py"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 24,
+          "parent_slug": "generateimportgraphreportpy",
+          "parent_title": "generate_import_graph_report.py",
+          "slug": "purpose",
+          "title": "Purpose"
+        },
+        {
+          "line": 37,
+          "parent_slug": "generateimportgraphreportpy",
+          "parent_title": "generate_import_graph_report.py",
+          "slug": "invocation",
+          "title": "Invocation"
+        },
+        {
+          "line": 60,
+          "parent_slug": "generateimportgraphreportpy",
+          "parent_title": "generate_import_graph_report.py",
+          "slug": "outputs",
+          "title": "Outputs"
+        },
+        {
+          "line": 75,
+          "parent_slug": "generateimportgraphreportpy",
+          "parent_title": "generate_import_graph_report.py",
+          "slug": "consumer-notes",
+          "title": "Consumer notes"
+        },
+        {
+          "line": 82,
+          "parent_slug": "generateimportgraphreportpy",
+          "parent_title": "generate_import_graph_report.py",
+          "slug": "testing",
+          "title": "Testing"
+        },
+        {
+          "line": 87,
+          "parent_slug": "generateimportgraphreportpy",
+          "parent_title": "generate_import_graph_report.py",
+          "slug": "update-log",
+          "title": "Update Log"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-16T22:07:37.971519+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 3320,
+      "slug": "generateimportgraphreportpy",
+      "status": "active",
+      "tags": [
+        "automation",
+        "healthview",
+        "import-graph"
+      ]
+    },
+    {
+      "contains_placeholder": false,
+      "description": "This producer runs `python -m lizard` against selected targets inside the repo and writes a canonical 3-artifact bundle.",
+      "filename": ".repo_studios/docs/automation/generate_lizard_report.md",
+      "folder": ".repo_studios/docs/automation",
+      "frontmatter": {
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          "../../scripts/producers/generate_lizard_report.py",
+          "../../tests/tests_producers/test_generate_lizard_report.py",
+          "../../Makefile"
+        ],
+        "status": "active",
+        "tags": [
+          "producer",
+          "healthview",
+          "complexity"
+        ],
+        "title": "Lizard Complexity Report Producer",
+        "updated": "2025-12-16",
+        "version": "2.0.0"
+      },
+      "h1_headings": [
+        {
+          "line": 21,
           "slug": "generatelizardreportpy",
           "title": "generate_lizard_report.py"
         }
       ],
       "h2_headings": [
         {
-          "line": 5,
+          "line": 23,
           "parent_slug": "generatelizardreportpy",
           "parent_title": "generate_lizard_report.py",
-          "slug": "purpose",
-          "title": "Purpose"
+          "slug": "goals",
+          "title": "Goals"
         },
         {
-          "line": 9,
+          "line": 29,
+          "parent_slug": "generatelizardreportpy",
+          "parent_title": "generate_lizard_report.py",
+          "slug": "system-context",
+          "title": "System Context"
+        },
+        {
+          "line": 40,
+          "parent_slug": "generatelizardreportpy",
+          "parent_title": "generate_lizard_report.py",
+          "slug": "agent-instructions",
+          "title": "Agent Instructions"
+        },
+        {
+          "line": 46,
           "parent_slug": "generatelizardreportpy",
           "parent_title": "generate_lizard_report.py",
           "slug": "invocation",
           "title": "Invocation"
         },
         {
-          "line": 37,
-          "parent_slug": "generatelizardreportpy",
-          "parent_title": "generate_lizard_report.py",
-          "slug": "outputs",
-          "title": "Outputs"
-        },
-        {
-          "line": 63,
-          "parent_slug": "generatelizardreportpy",
-          "parent_title": "generate_lizard_report.py",
-          "slug": "status-semantics",
-          "title": "Status semantics"
-        },
-        {
-          "line": 70,
-          "parent_slug": "generatelizardreportpy",
-          "parent_title": "generate_lizard_report.py",
-          "slug": "testing",
-          "title": "Testing"
-        },
-        {
           "line": 75,
           "parent_slug": "generatelizardreportpy",
           "parent_title": "generate_lizard_report.py",
-          "slug": "operational-notes",
-          "title": "Operational notes"
+          "slug": "human-notes",
+          "title": "Human Notes"
+        },
+        {
+          "line": 81,
+          "parent_slug": "generatelizardreportpy",
+          "parent_title": "generate_lizard_report.py",
+          "slug": "update-log",
+          "title": "Update Log"
         }
       ],
       "links": [],
-      "modified_utc": "2025-10-22T21:38:16.995302+00:00",
-      "owners": [],
-      "size_bytes": 4795,
+      "modified_utc": "2025-12-17T01:38:22.483200+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 3451,
       "slug": "generatelizardreportpy",
-      "status": null,
-      "tags": []
+      "status": "active",
+      "tags": [
+        "producer",
+        "healthview",
+        "complexity"
+      ]
     },
     {
       "contains_placeholder": false,
@@ -10202,68 +11394,111 @@ total_links: 93
     },
     {
       "contains_placeholder": false,
-      "description": "`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered. The producer emits JSON, Markdown, CSV,\u2026",
+      "description": "`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered.",
       "filename": ".repo_studios/docs/automation/generate_test_coverage_inventory.md",
       "folder": ".repo_studios/docs/automation",
-      "frontmatter": null,
+      "frontmatter": {
+        "audience": [
+          "Copilot",
+          "Agents",
+          "Developer"
+        ],
+        "owners": [
+          "repo_studios_ai"
+        ],
+        "related_files": [
+          ".repo_studios/scripts/producers/generate_test_coverage_inventory.py",
+          ".repo_studios/tests/tests_producers/test_generate_test_coverage_inventory.py",
+          ".repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md"
+        ],
+        "role": [
+          "AutomationDoc"
+        ],
+        "status": "active",
+        "tags": [
+          "automation",
+          "producer",
+          "healthview",
+          "test-coverage"
+        ],
+        "title": "generate_test_coverage_inventory.py",
+        "updated_at": "2025-12-17",
+        "version": 2
+      },
       "h1_headings": [
         {
-          "line": 1,
+          "line": 16,
           "slug": "generatetestcoverageinventorypy",
           "title": "generate_test_coverage_inventory.py"
         }
       ],
       "h2_headings": [
         {
-          "line": 5,
+          "line": 20,
           "parent_slug": "generatetestcoverageinventorypy",
           "parent_title": "generate_test_coverage_inventory.py",
           "slug": "purpose",
           "title": "Purpose"
         },
         {
-          "line": 9,
+          "line": 26,
           "parent_slug": "generatetestcoverageinventorypy",
           "parent_title": "generate_test_coverage_inventory.py",
           "slug": "invocation",
           "title": "Invocation"
         },
         {
-          "line": 37,
+          "line": 54,
           "parent_slug": "generatetestcoverageinventorypy",
           "parent_title": "generate_test_coverage_inventory.py",
           "slug": "outputs",
           "title": "Outputs"
         },
         {
-          "line": 51,
+          "line": 64,
           "parent_slug": "generatetestcoverageinventorypy",
           "parent_title": "generate_test_coverage_inventory.py",
           "slug": "status-semantics",
           "title": "Status semantics"
         },
         {
-          "line": 59,
+          "line": 72,
           "parent_slug": "generatetestcoverageinventorypy",
           "parent_title": "generate_test_coverage_inventory.py",
           "slug": "testing",
           "title": "Testing"
         },
         {
-          "line": 64,
+          "line": 77,
           "parent_slug": "generatetestcoverageinventorypy",
           "parent_title": "generate_test_coverage_inventory.py",
           "slug": "operational-notes",
           "title": "Operational notes"
+        },
+        {
+          "line": 85,
+          "parent_slug": "generatetestcoverageinventorypy",
+          "parent_title": "generate_test_coverage_inventory.py",
+          "slug": "references",
+          "title": "References"
         }
       ],
-      "links": [],
-      "modified_utc": "2025-11-23T12:12:27.820382+00:00",
-      "owners": [],
-      "size_bytes": 4223,
+      "links": [
+        "../../.github/instructions/markdown.instructions.md"
+      ],
+      "modified_utc": "2025-12-17T12:55:53.914422+00:00",
+      "owners": [
+        "repo_studios_ai"
+      ],
+      "size_bytes": 4485,
       "slug": "generatetestcoverageinventorypy",
-      "status": null,
-      "tags": []
+      "status": "active",
+      "tags": [
+        "automation",
+        "producer",
+        "healthview",
+        "test-coverage"
+      ]
     },
     {
       "contains_placeholder": false,
@@ -10376,105 +11611,194 @@ total_links: 93
     },
     {
       "contains_placeholder": false,
-      "description": "The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and captures a structured set of artifacts for observability.",
+      "description": "The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and emits a canonical 3-artifact bundle for observability.",
       "filename": ".repo_studios/docs/automation/generate_typecheck_report.md",
       "folder": ".repo_studios/docs/automation",
-      "frontmatter": null,
+      "frontmatter": {
+        "audience": [
+          "Copilot",
+          "Agents",
+          "Developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          ".repo_studios/scripts/producers/generate_typecheck_report.py",
+          ".repo_studios/tests/tests_producers/test_generate_typecheck_report.py",
+          ".repo_studios/Makefile"
+        ],
+        "role": [
+          "AutomationDoc"
+        ],
+        "status": "active",
+        "tags": [
+          "producer",
+          "healthview",
+          "typecheck"
+        ],
+        "title": "Typecheck Report Producer",
+        "updated_at": "2025-12-17",
+        "version": "2.1.0"
+      },
       "h1_headings": [
         {
-          "line": 1,
+          "line": 16,
           "slug": "typecheck-report-producer",
           "title": "Typecheck Report Producer"
         }
       ],
       "h2_headings": [
         {
-          "line": 5,
+          "line": 20,
+          "parent_slug": "typecheck-report-producer",
+          "parent_title": "Typecheck Report Producer",
+          "slug": "goals",
+          "title": "Goals"
+        },
+        {
+          "line": 26,
+          "parent_slug": "typecheck-report-producer",
+          "parent_title": "Typecheck Report Producer",
+          "slug": "system-context",
+          "title": "System Context"
+        },
+        {
+          "line": 35,
           "parent_slug": "typecheck-report-producer",
           "parent_title": "Typecheck Report Producer",
           "slug": "invocation",
           "title": "Invocation"
         },
         {
-          "line": 26,
+          "line": 78,
           "parent_slug": "typecheck-report-producer",
           "parent_title": "Typecheck Report Producer",
-          "slug": "outputs",
-          "title": "Outputs"
+          "slug": "agent-instructions",
+          "title": "Agent Instructions"
         },
         {
-          "line": 47,
+          "line": 84,
           "parent_slug": "typecheck-report-producer",
           "parent_title": "Typecheck Report Producer",
           "slug": "testing",
           "title": "Testing"
+        },
+        {
+          "line": 90,
+          "parent_slug": "typecheck-report-producer",
+          "parent_title": "Typecheck Report Producer",
+          "slug": "update-log",
+          "title": "Update Log"
         }
       ],
       "links": [],
-      "modified_utc": "2025-10-23T02:03:40.458715+00:00",
-      "owners": [],
-      "size_bytes": 1895,
+      "modified_utc": "2025-12-17T16:29:02.339003+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 2869,
       "slug": "typecheck-report-producer",
-      "status": null,
-      "tags": []
+      "status": "active",
+      "tags": [
+        "producer",
+        "healthview",
+        "typecheck"
+      ]
     },
     {
       "contains_placeholder": false,
-      "description": "`generate_undocumented_logic_report.py` scans the repo automation scripts for public functions, classes, and methods that lack docstrings. The report helps identify code paths that should have documentation anchors or docstring coverage\u2026",
+      "description": "`generate_undocumented_logic_report.py` scans automation scripts for public functions, classes, and methods that lack docstrings. The output feeds the Docs Health workflow by highlighting missing documentation coverage in code.",
       "filename": ".repo_studios/docs/automation/generate_undocumented_logic_report.md",
       "folder": ".repo_studios/docs/automation",
-      "frontmatter": null,
+      "frontmatter": {
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          "../../scripts/producers/generate_undocumented_logic_report.py",
+          "../../scripts/aggregators/aggregate_docs_health_signals.py",
+          "../../command_center/scripts/orchestrators/run_docs_health_overview.py",
+          "../../tests/tests_producers/test_generate_undocumented_logic_report.py"
+        ],
+        "status": "active",
+        "tags": [
+          "producers",
+          "docs-health",
+          "healthview"
+        ],
+        "title": "Undocumented Logic Producer",
+        "updated": "2025-12-17",
+        "version": "1.0.0"
+      },
       "h1_headings": [
         {
-          "line": 1,
+          "line": 22,
           "slug": "generateundocumentedlogicreport",
           "title": "generate_undocumented_logic_report"
         }
       ],
       "h2_headings": [
         {
-          "line": 3,
+          "line": 24,
           "parent_slug": "generateundocumentedlogicreport",
           "parent_title": "generate_undocumented_logic_report",
-          "slug": "purpose",
-          "title": "Purpose"
+          "slug": "goals",
+          "title": "Goals"
         },
         {
-          "line": 10,
+          "line": 30,
           "parent_slug": "generateundocumentedlogicreport",
           "parent_title": "generate_undocumented_logic_report",
-          "slug": "inputs",
-          "title": "Inputs"
+          "slug": "system-context",
+          "title": "System Context"
         },
         {
-          "line": 27,
+          "line": 35,
           "parent_slug": "generateundocumentedlogicreport",
           "parent_title": "generate_undocumented_logic_report",
-          "slug": "outputs",
-          "title": "Outputs"
+          "slug": "agent-instructions",
+          "title": "Agent Instructions"
         },
         {
-          "line": 43,
+          "line": 42,
           "parent_slug": "generateundocumentedlogicreport",
           "parent_title": "generate_undocumented_logic_report",
-          "slug": "usage",
-          "title": "Usage"
+          "slug": "human-notes",
+          "title": "Human Notes"
         },
         {
-          "line": 58,
+          "line": 67,
           "parent_slug": "generateundocumentedlogicreport",
           "parent_title": "generate_undocumented_logic_report",
-          "slug": "testing",
-          "title": "Testing"
+          "slug": "reference-prompts",
+          "title": "Reference Prompts"
+        },
+        {
+          "line": 88,
+          "parent_slug": "generateundocumentedlogicreport",
+          "parent_title": "generate_undocumented_logic_report",
+          "slug": "update-log",
+          "title": "Update Log"
         }
       ],
       "links": [],
-      "modified_utc": "2025-12-16T16:16:30.904227+00:00",
-      "owners": [],
-      "size_bytes": 2681,
+      "modified_utc": "2025-12-17T17:03:35.225241+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 3042,
       "slug": "generateundocumentedlogicreport",
-      "status": null,
-      "tags": []
+      "status": "active",
+      "tags": [
+        "producers",
+        "docs-health",
+        "healthview"
+      ]
     },
     {
       "contains_placeholder": false,
@@ -10734,31 +12058,59 @@ total_links: 93
       "description": "The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation.",
       "filename": ".repo_studios/docs/automation/render_inventory_views.md",
       "folder": ".repo_studios/docs/automation",
-      "frontmatter": null,
+      "frontmatter": {
+        "audience": [
+          "Copilot",
+          "Agents",
+          "Developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          ".repo_studios/scripts/producers/render_inventory_views.py",
+          ".repo_studios/tests/tests_producers/test_render_inventory_views.py",
+          ".repo_studios/scripts/producers/check_inventory_health.py",
+          ".repo_studios/command_center/scripts/libraries/database_integration.py",
+          "REPORT_NAMING_STANDARDS.md"
+        ],
+        "role": [
+          "Operational-Doc"
+        ],
+        "status": "active",
+        "tags": [
+          "inventory",
+          "producer",
+          "healthview"
+        ],
+        "title": "Render Inventory Views Producer",
+        "updated": "2025-12-17",
+        "version": "1.0.0"
+      },
       "h1_headings": [
         {
-          "line": 1,
+          "line": 18,
           "slug": "render-inventory-views-producer",
           "title": "Render Inventory Views Producer"
         }
       ],
       "h2_headings": [
         {
-          "line": 5,
+          "line": 22,
           "parent_slug": "render-inventory-views-producer",
           "parent_title": "Render Inventory Views Producer",
           "slug": "invocation",
           "title": "Invocation"
         },
         {
-          "line": 21,
+          "line": 38,
           "parent_slug": "render-inventory-views-producer",
           "parent_title": "Render Inventory Views Producer",
           "slug": "outputs",
           "title": "Outputs"
         },
         {
-          "line": 45,
+          "line": 58,
           "parent_slug": "render-inventory-views-producer",
           "parent_title": "Render Inventory Views Producer",
           "slug": "testing",
@@ -10766,12 +12118,18 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-10-23T09:50:23.539274+00:00",
-      "owners": [],
-      "size_bytes": 2019,
+      "modified_utc": "2025-12-17T18:23:40.617822+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 2684,
       "slug": "render-inventory-views-producer",
-      "status": null,
-      "tags": []
+      "status": "active",
+      "tags": [
+        "inventory",
+        "producer",
+        "healthview"
+      ]
     },
     {
       "contains_placeholder": false,
@@ -10952,59 +12310,81 @@ total_links: 93
       "description": "`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved\u2026",
       "filename": ".repo_studios/docs/automation/scan_code_placeholders.md",
       "folder": ".repo_studios/docs/automation",
-      "frontmatter": null,
+      "frontmatter": {
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          "../../scripts/producers/scan_code_placeholders.py",
+          "../../tests/tests_producers/test_scan_code_placeholders.py",
+          "../../command_center/scripts/libraries/database_integration.py"
+        ],
+        "status": "approved",
+        "tags": [
+          "automation",
+          "producers",
+          "placeholders"
+        ],
+        "title": "scan_code_placeholders.py",
+        "updated": "2025-12-17",
+        "version": "1.2.0"
+      },
       "h1_headings": [
         {
-          "line": 1,
+          "line": 21,
           "slug": "scancodeplaceholderspy",
           "title": "scan_code_placeholders.py"
         }
       ],
       "h2_headings": [
         {
-          "line": 5,
+          "line": 25,
           "parent_slug": "scancodeplaceholderspy",
           "parent_title": "scan_code_placeholders.py",
           "slug": "purpose",
           "title": "Purpose"
         },
         {
-          "line": 9,
+          "line": 29,
           "parent_slug": "scancodeplaceholderspy",
           "parent_title": "scan_code_placeholders.py",
           "slug": "invocation",
           "title": "Invocation"
         },
         {
-          "line": 37,
+          "line": 58,
           "parent_slug": "scancodeplaceholderspy",
           "parent_title": "scan_code_placeholders.py",
           "slug": "outputs",
           "title": "Outputs"
         },
         {
-          "line": 57,
+          "line": 72,
           "parent_slug": "scancodeplaceholderspy",
           "parent_title": "scan_code_placeholders.py",
           "slug": "diagnostics",
           "title": "Diagnostics"
         },
         {
-          "line": 65,
+          "line": 80,
           "parent_slug": "scancodeplaceholderspy",
           "parent_title": "scan_code_placeholders.py",
           "slug": "allowlist-format",
           "title": "Allowlist format"
         },
         {
-          "line": 77,
+          "line": 92,
           "parent_slug": "scancodeplaceholderspy",
           "parent_title": "scan_code_placeholders.py",
           "slug": "testing",
           "title": "Testing"
         },
         {
-          "line": 83,
+          "line": 98,
           "parent_slug": "scancodeplaceholderspy",
           "parent_title": "scan_code_placeholders.py",
           "slug": "operational-notes",
@@ -11012,77 +12392,123 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-25T00:22:28.965573+00:00",
-      "owners": [],
-      "size_bytes": 6420,
+      "modified_utc": "2025-12-17T19:43:51.315571+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 6594,
       "slug": "scancodeplaceholderspy",
-      "status": null,
-      "tags": []
+      "status": "approved",
+      "tags": [
+        "automation",
+        "producers",
+        "placeholders"
+      ]
     },
     {
       "contains_placeholder": false,
       "description": "`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and\u2026",
       "filename": ".repo_studios/docs/automation/scan_monkey_patches.md",
       "folder": ".repo_studios/docs/automation",
-      "frontmatter": null,
+      "frontmatter": {
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          "../../scripts/producers/scan_monkey_patches.py",
+          "../../tests/tests_producers/test_scan_monkey_patches.py",
+          "../../command_center/scripts/libraries/database_integration.py",
+          "../../command_center/docs/db_integrations/db_integration_monkey_patches.md"
+        ],
+        "status": "approved",
+        "tags": [
+          "producers",
+          "healthview",
+          "monkey_patches",
+          "pruning",
+          "db"
+        ],
+        "title": "scan_monkey_patches \u2014 Monkey Patch Inventory Producer",
+        "updated": "2025-12-17",
+        "version": "2.0.0"
+      },
       "h1_headings": [
         {
-          "line": 1,
+          "line": 24,
           "slug": "scanmonkeypatchespy",
           "title": "scan_monkey_patches.py"
         }
       ],
       "h2_headings": [
         {
-          "line": 5,
+          "line": 26,
           "parent_slug": "scanmonkeypatchespy",
           "parent_title": "scan_monkey_patches.py",
           "slug": "purpose",
           "title": "Purpose"
         },
         {
-          "line": 9,
+          "line": 32,
           "parent_slug": "scanmonkeypatchespy",
           "parent_title": "scan_monkey_patches.py",
           "slug": "invocation",
           "title": "Invocation"
         },
         {
-          "line": 39,
+          "line": 63,
           "parent_slug": "scanmonkeypatchespy",
           "parent_title": "scan_monkey_patches.py",
           "slug": "outputs",
           "title": "Outputs"
         },
         {
-          "line": 69,
+          "line": 82,
           "parent_slug": "scanmonkeypatchespy",
           "parent_title": "scan_monkey_patches.py",
           "slug": "diagnostics",
           "title": "Diagnostics"
         },
         {
-          "line": 77,
+          "line": 90,
           "parent_slug": "scanmonkeypatchespy",
           "parent_title": "scan_monkey_patches.py",
           "slug": "testing",
           "title": "Testing"
         },
         {
-          "line": 83,
+          "line": 96,
           "parent_slug": "scanmonkeypatchespy",
           "parent_title": "scan_monkey_patches.py",
           "slug": "operational-notes",
           "title": "Operational notes"
+        },
+        {
+          "line": 104,
+          "parent_slug": "scanmonkeypatchespy",
+          "parent_title": "scan_monkey_patches.py",
+          "slug": "update-log",
+          "title": "Update Log"
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-23T22:11:45.717043+00:00",
-      "owners": [],
-      "size_bytes": 5224,
+      "modified_utc": "2025-12-17T23:50:14.347407+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 5247,
       "slug": "scanmonkeypatchespy",
-      "status": null,
-      "tags": []
+      "status": "approved",
+      "tags": [
+        "producers",
+        "healthview",
+        "monkey_patches",
+        "pruning",
+        "db"
+      ]
     },
     {
       "contains_placeholder": false,
@@ -11142,7 +12568,7 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-27T17:20:15.674439+00:00",
+      "modified_utc": "2025-12-18T12:22:43.715945+00:00",
       "owners": [],
       "size_bytes": 3787,
       "slug": "seedstandardspromptspy",
@@ -12174,7 +13600,7 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-10-23T20:46:06.804068+00:00",
+      "modified_utc": "2025-12-18T12:22:43.716946+00:00",
       "owners": [],
       "size_bytes": 3680,
       "slug": "validateimportboundariespy",
@@ -12218,7 +13644,7 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-10-23T11:18:26.650942+00:00",
+      "modified_utc": "2025-12-18T12:22:43.717946+00:00",
       "owners": [],
       "size_bytes": 1882,
       "slug": "validate-inventory-producer",
@@ -12230,117 +13656,189 @@ total_links: 93
       "description": "`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and\u2026",
       "filename": ".repo_studios/docs/automation/validate_markdown_anchors.md",
       "folder": ".repo_studios/docs/automation",
-      "frontmatter": null,
+      "frontmatter": {
+        "audience": [
+          "Copilot",
+          "Agents",
+          "Developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          ".repo_studios/scripts/producers/validate_markdown_anchors.py",
+          ".repo_studios/tests/tests_producers/test_validate_markdown_anchors.py",
+          ".repo_studios/Makefile",
+          ".repo_studios/command_center/scripts/libraries/database_integration.py",
+          "REPORT_NAMING_STANDARDS.md"
+        ],
+        "status": "active",
+        "tags": [
+          "automation",
+          "markdown",
+          "anchors",
+          "links",
+          "producer",
+          "healthview"
+        ],
+        "title": "validate_markdown_anchors.py",
+        "updated": "2025-12-18",
+        "version": "1.1.0"
+      },
       "h1_headings": [
         {
-          "line": 1,
+          "line": 17,
           "slug": "validatemarkdownanchorspy",
           "title": "validate_markdown_anchors.py"
         }
       ],
       "h2_headings": [
         {
-          "line": 5,
+          "line": 19,
           "parent_slug": "validatemarkdownanchorspy",
           "parent_title": "validate_markdown_anchors.py",
           "slug": "purpose",
           "title": "Purpose"
         },
         {
-          "line": 12,
+          "line": 26,
           "parent_slug": "validatemarkdownanchorspy",
           "parent_title": "validate_markdown_anchors.py",
           "slug": "invocation",
           "title": "Invocation"
         },
         {
-          "line": 33,
+          "line": 46,
           "parent_slug": "validatemarkdownanchorspy",
           "parent_title": "validate_markdown_anchors.py",
           "slug": "outputs",
           "title": "Outputs"
         },
         {
-          "line": 45,
+          "line": 60,
           "parent_slug": "validatemarkdownanchorspy",
           "parent_title": "validate_markdown_anchors.py",
           "slug": "status-semantics",
           "title": "Status semantics"
         },
         {
-          "line": 55,
+          "line": 70,
           "parent_slug": "validatemarkdownanchorspy",
           "parent_title": "validate_markdown_anchors.py",
           "slug": "testing",
           "title": "Testing"
         },
         {
-          "line": 63,
+          "line": 78,
           "parent_slug": "validatemarkdownanchorspy",
           "parent_title": "validate_markdown_anchors.py",
           "slug": "operational-notes",
           "title": "Operational notes"
+        },
+        {
+          "line": 87,
+          "parent_slug": "validatemarkdownanchorspy",
+          "parent_title": "validate_markdown_anchors.py",
+          "slug": "update-log",
+          "title": "Update Log"
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-25T19:39:48.109027+00:00",
-      "owners": [],
-      "size_bytes": 3062,
+      "modified_utc": "2025-12-18T12:37:54.373653+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 3707,
       "slug": "validatemarkdownanchorspy",
-      "status": null,
-      "tags": []
+      "status": "active",
+      "tags": [
+        "automation",
+        "markdown",
+        "anchors",
+        "links",
+        "producer",
+        "healthview"
+      ]
     },
     {
       "contains_placeholder": false,
-      "description": "`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry. The refactor emits structured artifacts\u2026",
+      "description": "`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry under the \"Legacy Anchor Compatibility\" section.",
       "filename": ".repo_studios/docs/automation/validate_metrics_anchor_stubs.md",
       "folder": ".repo_studios/docs/automation",
-      "frontmatter": null,
+      "frontmatter": {
+        "audience": [
+          "Copilot",
+          "Agents",
+          "Developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py",
+          ".repo_studios/tests/tests_producers/test_validate_metrics_anchor_stubs.py",
+          ".repo_studios/Makefile",
+          ".repo_studios/command_center/scripts/libraries/database_integration.py",
+          "REPORT_NAMING_STANDARDS.md"
+        ],
+        "status": "active",
+        "tags": [
+          "automation",
+          "markdown",
+          "anchors",
+          "metrics",
+          "producer",
+          "healthview"
+        ],
+        "title": "validate_metrics_anchor_stubs.py",
+        "updated": "2025-12-18",
+        "version": "1.1.0"
+      },
       "h1_headings": [
         {
-          "line": 1,
+          "line": 17,
           "slug": "validatemetricsanchorstubspy",
           "title": "validate_metrics_anchor_stubs.py"
         }
       ],
       "h2_headings": [
         {
-          "line": 5,
+          "line": 19,
           "parent_slug": "validatemetricsanchorstubspy",
           "parent_title": "validate_metrics_anchor_stubs.py",
           "slug": "purpose",
           "title": "Purpose"
         },
         {
-          "line": 12,
+          "line": 28,
           "parent_slug": "validatemetricsanchorstubspy",
           "parent_title": "validate_metrics_anchor_stubs.py",
           "slug": "invocation",
           "title": "Invocation"
         },
         {
-          "line": 36,
+          "line": 53,
           "parent_slug": "validatemetricsanchorstubspy",
           "parent_title": "validate_metrics_anchor_stubs.py",
           "slug": "outputs",
           "title": "Outputs"
         },
         {
-          "line": 56,
+          "line": 70,
           "parent_slug": "validatemetricsanchorstubspy",
           "parent_title": "validate_metrics_anchor_stubs.py",
           "slug": "diagnostics",
           "title": "Diagnostics"
         },
         {
-          "line": 64,
+          "line": 78,
           "parent_slug": "validatemetricsanchorstubspy",
           "parent_title": "validate_metrics_anchor_stubs.py",
           "slug": "testing",
           "title": "Testing"
         },
         {
-          "line": 71,
+          "line": 85,
           "parent_slug": "validatemetricsanchorstubspy",
           "parent_title": "validate_metrics_anchor_stubs.py",
           "slug": "operational-notes",
@@ -12348,57 +13846,90 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-10-23T23:24:42.780107+00:00",
-      "owners": [],
-      "size_bytes": 3140,
+      "modified_utc": "2025-12-18T16:04:05.596021+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 3681,
       "slug": "validatemetricsanchorstubspy",
-      "status": null,
-      "tags": []
+      "status": "active",
+      "tags": [
+        "automation",
+        "markdown",
+        "anchors",
+        "metrics",
+        "producer",
+        "healthview"
+      ]
     },
     {
       "contains_placeholder": false,
       "description": "`verify_docs_integrity.py` audits governed documentation JSON blocks to ensure each fenced payload exposes a stable `content_hash`. The script also refreshes the navigation table contained in `docs/standards/docs_index.md` unless `--no-\u2026",
       "filename": ".repo_studios/docs/automation/verify_docs_integrity.md",
       "folder": ".repo_studios/docs/automation",
-      "frontmatter": null,
+      "frontmatter": {
+        "audience": [
+          "Copilot",
+          "Agents",
+          "Developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          ".repo_studios/scripts/producers/verify_docs_integrity.py",
+          ".repo_studios/tests/tests_producers/test_verify_docs_integrity.py",
+          ".repo_studios/command_center/docs/db_integrations/db_integration_docs_integrity_validation.md"
+        ],
+        "status": "active",
+        "tags": [
+          "automation",
+          "producer",
+          "docs-integrity",
+          "healthview"
+        ],
+        "title": "verify_docs_integrity Producer",
+        "updated": "2025-12-18",
+        "version": "1.1.0"
+      },
       "h1_headings": [
         {
-          "line": 1,
+          "line": 15,
           "slug": "verifydocsintegrity",
           "title": "verify_docs_integrity"
         }
       ],
       "h2_headings": [
         {
-          "line": 3,
+          "line": 17,
           "parent_slug": "verifydocsintegrity",
           "parent_title": "verify_docs_integrity",
           "slug": "overview",
           "title": "Overview"
         },
         {
-          "line": 7,
+          "line": 21,
           "parent_slug": "verifydocsintegrity",
           "parent_title": "verify_docs_integrity",
           "slug": "invocation",
           "title": "Invocation"
         },
         {
-          "line": 32,
+          "line": 46,
           "parent_slug": "verifydocsintegrity",
           "parent_title": "verify_docs_integrity",
           "slug": "artifacts",
           "title": "Artifacts"
         },
         {
-          "line": 43,
+          "line": 61,
           "parent_slug": "verifydocsintegrity",
           "parent_title": "verify_docs_integrity",
           "slug": "exit-semantics",
           "title": "Exit semantics"
         },
         {
-          "line": 54,
+          "line": 72,
           "parent_slug": "verifydocsintegrity",
           "parent_title": "verify_docs_integrity",
           "slug": "integration-notes",
@@ -12406,12 +13937,19 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-11-04T14:45:22.664536+00:00",
-      "owners": [],
-      "size_bytes": 2945,
+      "modified_utc": "2025-12-18T17:36:18.986162+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 3363,
       "slug": "verifydocsintegrity",
-      "status": null,
-      "tags": []
+      "status": "active",
+      "tags": [
+        "automation",
+        "producer",
+        "docs-integrity",
+        "healthview"
+      ]
     },
     {
       "contains_placeholder": false,
@@ -12457,9 +13995,9 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-12-11T10:50:58.485331+00:00",
+      "modified_utc": "2025-12-17T18:23:40.625822+00:00",
       "owners": [],
-      "size_bytes": 2719,
+      "size_bytes": 2756,
       "slug": "directory-layout-reference",
       "status": null,
       "tags": []
@@ -12611,7 +14149,7 @@ total_links: 93
           "title": "Report Layout"
         },
         {
-          "line": 32,
+          "line": 28,
           "parent_slug": "inventory-reports-overview",
           "parent_title": "Inventory Reports Overview",
           "slug": "ci-consumption-patterns",
@@ -12619,9 +14157,9 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-12-11T01:51:15.211609+00:00",
+      "modified_utc": "2025-12-17T18:23:40.625822+00:00",
       "owners": [],
-      "size_bytes": 2875,
+      "size_bytes": 1924,
       "slug": "inventory-reports-overview",
       "status": null,
       "tags": []
@@ -13003,161 +14541,406 @@ total_links: 93
       ]
     },
     {
-      "contains_placeholder": true,
-      "description": "HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer \u2192\u2026",
-      "filename": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+      "contains_placeholder": false,
+      "description": "This document is **superseded** by:",
+      "filename": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md",
       "folder": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline",
-      "frontmatter": null,
+      "frontmatter": {
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md",
+          ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          ".github/instructions/markdown.instructions.md",
+          ".github/instructions/pipeline_doc_tiers.instructions.md"
+        ],
+        "role": [
+          "historical-notes"
+        ],
+        "status": "superseded",
+        "tags": [
+          "pipeline",
+          "healthview",
+          "hop",
+          "alignment"
+        ],
+        "tier": "tier-2",
+        "title": "HealthView HOP Alignment (Superseded)",
+        "updated_at": "2025-12-18",
+        "version": "0.1.0"
+      },
       "h1_headings": [
         {
-          "line": 1,
+          "line": 27,
+          "slug": "healthview-hop-alignment-superseded",
+          "title": "HealthView HOP Alignment (Superseded)"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 36,
+          "parent_slug": "healthview-hop-alignment-superseded",
+          "parent_title": "HealthView HOP Alignment (Superseded)",
+          "slug": "goals",
+          "title": "Goals"
+        },
+        {
+          "line": 40,
+          "parent_slug": "healthview-hop-alignment-superseded",
+          "parent_title": "HealthView HOP Alignment (Superseded)",
+          "slug": "system-context",
+          "title": "System Context"
+        },
+        {
+          "line": 46,
+          "parent_slug": "healthview-hop-alignment-superseded",
+          "parent_title": "HealthView HOP Alignment (Superseded)",
+          "slug": "decisions-summary",
+          "title": "Decisions (Summary)"
+        },
+        {
+          "line": 57,
+          "parent_slug": "healthview-hop-alignment-superseded",
+          "parent_title": "HealthView HOP Alignment (Superseded)",
+          "slug": "update-log",
+          "title": "Update Log"
+        }
+      ],
+      "links": [
+        "hop_implementation.md",
+        "tier1_healthview_orchestration_pipeline.md"
+      ],
+      "modified_utc": "2025-12-18T22:42:18.576135+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 2244,
+      "slug": "healthview-hop-alignment-superseded",
+      "status": "superseded",
+      "tags": [
+        "pipeline",
+        "healthview",
+        "hop",
+        "alignment"
+      ]
+    },
+    {
+      "contains_placeholder": true,
+      "description": "`tier1_healthview_orchestration_pipeline.md`.",
+      "filename": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md",
+      "folder": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline",
+      "frontmatter": {
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md",
+          ".repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_template.md",
+          ".github/instructions/markdown.instructions.md",
+          ".github/instructions/pipeline_doc_tiers.instructions.md",
+          ".github/instructions/tier_doc_operating_model.instructions.md",
+          "REPORT_NAMING_STANDARDS.md"
+        ],
+        "role": [
+          "implementation-plan"
+        ],
+        "status": "draft",
+        "tags": [
+          "pipeline",
+          "healthview",
+          "hop",
+          "implementation",
+          "refactor"
+        ],
+        "tier": "tier-2",
+        "title": "HealthView HOP Implementation Plan",
+        "updated_at": "2025-12-18",
+        "version": "0.1.0"
+      },
+      "h1_headings": [
+        {
+          "line": 31,
+          "slug": "healthview-hop-implementation-plan",
+          "title": "HealthView HOP Implementation Plan"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 42,
+          "parent_slug": "healthview-hop-implementation-plan",
+          "parent_title": "HealthView HOP Implementation Plan",
+          "slug": "0-instruction-block-for-editors-ai-assistants",
+          "title": "0. Instruction Block for Editors & AI Assistants"
+        },
+        {
+          "line": 61,
+          "parent_slug": "healthview-hop-implementation-plan",
+          "parent_title": "HealthView HOP Implementation Plan",
+          "slug": "1-goals-success-criteria",
+          "title": "1. Goals & Success Criteria"
+        },
+        {
+          "line": 80,
+          "parent_slug": "healthview-hop-implementation-plan",
+          "parent_title": "HealthView HOP Implementation Plan",
+          "slug": "2-system-context",
+          "title": "2. System Context"
+        },
+        {
+          "line": 137,
+          "parent_slug": "healthview-hop-implementation-plan",
+          "parent_title": "HealthView HOP Implementation Plan",
+          "slug": "3-stage-narratives-workstreams",
+          "title": "3. Stage Narratives (Workstreams)"
+        },
+        {
+          "line": 211,
+          "parent_slug": "healthview-hop-implementation-plan",
+          "parent_title": "HealthView HOP Implementation Plan",
+          "slug": "4-signals-telemetry",
+          "title": "4. Signals & Telemetry"
+        },
+        {
+          "line": 223,
+          "parent_slug": "healthview-hop-implementation-plan",
+          "parent_title": "HealthView HOP Implementation Plan",
+          "slug": "5-dependencies-stop-gates",
+          "title": "5. Dependencies & Stop-Gates"
+        },
+        {
+          "line": 237,
+          "parent_slug": "healthview-hop-implementation-plan",
+          "parent_title": "HealthView HOP Implementation Plan",
+          "slug": "6-instruction-block-required-by-tier-rules",
+          "title": "6. Instruction Block (Required by Tier Rules)"
+        },
+        {
+          "line": 251,
+          "parent_slug": "healthview-hop-implementation-plan",
+          "parent_title": "HealthView HOP Implementation Plan",
+          "slug": "7-agent-automation-block",
+          "title": "7. Agent Automation Block"
+        },
+        {
+          "line": 281,
+          "parent_slug": "healthview-hop-implementation-plan",
+          "parent_title": "HealthView HOP Implementation Plan",
+          "slug": "8-update-log",
+          "title": "8. Update Log"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-19T00:55:23.111707+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 13497,
+      "slug": "healthview-hop-implementation-plan",
+      "status": "draft",
+      "tags": [
+        "pipeline",
+        "healthview",
+        "hop",
+        "implementation",
+        "refactor"
+      ]
+    },
+    {
+      "contains_placeholder": true,
+      "description": "stage content so evidence capture is ready from the first edit.",
+      "filename": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+      "folder": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline",
+      "frontmatter": {
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md",
+          "REPORT_NAMING_STANDARDS.md",
+          ".repo_studios/command_center/scripts/libraries/cli.py",
+          ".repo_studios/command_center/scripts/orchestrators/",
+          ".github/instructions/markdown.instructions.md",
+          ".github/instructions/pipeline_doc_tiers.instructions.md"
+        ],
+        "role": [
+          "pipeline-spine"
+        ],
+        "status": "in-progress",
+        "tags": [
+          "pipeline",
+          "healthview",
+          "hop",
+          "orchestration"
+        ],
+        "tier": "tier-1",
+        "title": "HealthView Orchestration Pipeline",
+        "updated_at": "2025-12-18",
+        "version": "0.3.1"
+      },
+      "h1_headings": [
+        {
+          "line": 28,
           "slug": "healthview-orchestration-pipeline",
           "title": "HealthView Orchestration Pipeline"
         }
       ],
       "h2_headings": [
         {
-          "line": 7,
+          "line": 36,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "0-instruction-block-for-editors-ai-assistants",
           "title": "0. Instruction Block for Editors & AI Assistants"
         },
         {
-          "line": 27,
+          "line": 65,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "1-5w1h-purpose-context",
           "title": "1. 5W1H \u2013 Purpose & Context"
         },
         {
-          "line": 125,
+          "line": 180,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "2-document-metadata",
           "title": "2. Document Metadata"
         },
         {
-          "line": 148,
+          "line": 203,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "3-global-pipeline-overview",
           "title": "3. Global Pipeline Overview"
         },
         {
-          "line": 166,
+          "line": 241,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "33-how-to-read-this-document",
           "title": "3.3 How to Read This Document"
         },
         {
-          "line": 177,
+          "line": 252,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "34-healthview-report-bundle-spine-shared-backbone",
           "title": "3.4 HealthView Report Bundle Spine (Shared Backbone)"
         },
         {
-          "line": 206,
+          "line": 296,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "35-healthview-orchestration-envelope-shared-payload",
           "title": "3.5 HealthView Orchestration Envelope (Shared Payload)"
         },
         {
-          "line": 248,
+          "line": 346,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "36-orchestrator-lifecycle-fallback-modes-and-global-controls",
           "title": "3.6 Orchestrator Lifecycle, Fallback Modes, and Global Controls"
         },
         {
-          "line": 279,
+          "line": 383,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "37-healthview-assumptions-guarantees",
           "title": "3.7 HealthView Assumptions & Guarantees"
         },
         {
-          "line": 305,
+          "line": 418,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "4-stage-1-testing-perspectives",
           "title": "4. Stage 1 \u2013 Testing Perspectives"
         },
         {
-          "line": 383,
+          "line": 507,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "5-stage-2-documentation-quality",
           "title": "5. Stage 2 \u2013 Documentation Quality"
         },
         {
-          "line": 470,
+          "line": 601,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "6-stage-3-runtime-reliability",
           "title": "6. Stage 3 \u2013 Runtime Reliability"
         },
         {
-          "line": 537,
+          "line": 668,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "7-stage-4-dependency-management",
           "title": "7. Stage 4 \u2013 Dependency Management"
         },
         {
-          "line": 618,
+          "line": 749,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "8-stage-5-technical-debt-oversight",
           "title": "8. Stage 5 \u2013 Technical Debt Oversight"
         },
         {
-          "line": 697,
+          "line": 828,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "9-stage-6-process-governance",
           "title": "9. Stage 6 \u2013 Process Governance"
         },
         {
-          "line": 810,
+          "line": 941,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "10-stage-7-running-the-complete-suite",
           "title": "10. Stage 7 \u2013 Running the Complete Suite"
         },
         {
-          "line": 892,
+          "line": 1023,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "11-snapshot-stage-matrix",
           "title": "11. Snapshot & Stage Matrix"
         },
         {
-          "line": 942,
+          "line": 1076,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "12-contradiction-registry",
           "title": "12. Contradiction Registry"
         },
         {
-          "line": 950,
+          "line": 1087,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "13-tier-2-document-index",
           "title": "13. Tier-2 Document Index"
         },
         {
-          "line": 985,
+          "line": 1124,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "14-working-future-notes",
           "title": "14. Working / Future Notes"
         },
         {
-          "line": 1008,
+          "line": 1154,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "15-update-log-evidence-tracking",
@@ -13165,23 +14948,18 @@ total_links: 93
         }
       ],
       "links": [
-        "../../../REPORT_NAMING_STANDARDS.md",
-        "../../../command_center/scripts/libraries/cli.py",
-        "../../../command_center/scripts/orchestrators/",
-        "../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py",
-        "../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py",
-        "../../../command_center/scripts/orchestators/scan_duplicates.py",
-        "../../../command_center/scripts/README.md",
+        "../../../../REPORT_NAMING_STANDARDS.md",
+        "hop_implementation.md",
+        "../../../scripts/README.md",
         "../../../Makefile",
         "../../../tests/tests_command_center/",
-        "../../tier3_index/",
+        "../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py",
         "../../../scripts/producers/collect_test_log_reports.py",
         "../../../scripts/producers/generate_test_coverage_inventory.py",
         "../../../scripts/producers/analyze_test_hardening.py",
         "../../../scripts/consumers/generate_test_log_health_report.py",
         "../../../scripts/aggregators/generate_churn_complexity_heatmap.py",
         "../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py",
-        "../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py",
         "../../../command_center/scripts/orchestrators/run_docs_health_overview.py",
         "../../../scripts/producers/generate_doc_index.py",
         "../../../scripts/producers/generate_anchor_inventory.py",
@@ -13192,9 +14970,9 @@ total_links: 93
         "../../../scripts/producers/generate_undocumented_logic_report.py",
         "../../../scripts/aggregators/aggregate_docs_health_signals.py",
         "../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py",
-        "../../../command_center/scripts/producers/collect_faulthandler_reports.py",
-        "../../../command_center/scripts/consumers/generate_fault_artifacts.py",
-        "../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py",
+        "../../../scripts/producers/collect_faulthandler_reports.py",
+        "../../../scripts/consumers/generate_fault_artifacts.py",
+        "../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py",
         "../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py",
         "../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py",
         "../../../command_center/scripts/orchestrators/run_standards_integrity.py",
@@ -13204,12 +14982,11 @@ total_links: 93
         "../../../scripts/producers/seed_standards_prompts.py",
         "../../../scripts/summarizers/summarize_standards.py",
         "../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py",
+        "../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py",
         "../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py",
-        "../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py",
+        "../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py",
         "../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py",
         "../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py",
-        "../../../scripts/README.md",
-        "../../../../REPORT_NAMING_STANDARDS.md",
         "../../standards/global/std-global-python-engineering.md",
         "../../standards/global/std-global-markdown-authoring.md",
         "../../../../.github/instructions/markdown.instructions.md",
@@ -13218,12 +14995,19 @@ total_links: 93
         "../../../tests/tests_consumers/",
         "../../../tests/tests_aggregators/"
       ],
-      "modified_utc": "2025-12-16T16:16:30.917237+00:00",
-      "owners": [],
-      "size_bytes": 75286,
+      "modified_utc": "2025-12-19T01:23:27.973052+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 79580,
       "slug": "healthview-orchestration-pipeline",
-      "status": null,
-      "tags": []
+      "status": "in-progress",
+      "tags": [
+        "pipeline",
+        "healthview",
+        "hop",
+        "orchestration"
+      ]
     },
     {
       "contains_placeholder": false,
@@ -14580,9 +16364,9 @@ total_links: 93
       ],
       "h2_headings": [],
       "links": [],
-      "modified_utc": "2025-12-16T16:16:30.911230+00:00",
+      "modified_utc": "2025-12-17T01:38:22.483200+00:00",
       "owners": [],
-      "size_bytes": 8367,
+      "size_bytes": 8379,
       "slug": "project-tree-overview",
       "status": null,
       "tags": []
@@ -16739,105 +18523,142 @@ total_links: 93
       "description": "A structured report covering:",
       "filename": ".repo_studios/script_refactoring_prompt_templates.md",
       "folder": ".repo_studios",
-      "frontmatter": null,
+      "frontmatter": {
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          ".repo_studios/coverage_configs/phase3_undocumented_logic.coveragerc",
+          ".repo_studios/scripts/script_inventory_architecture.md"
+        ],
+        "status": "draft",
+        "tags": [
+          "scripts",
+          "refactor",
+          "prompts",
+          "coverage"
+        ],
+        "title": "Script Refactoring Prompt Templates (Working Draft)",
+        "updated": "2025-12-17",
+        "version": "0.1.0"
+      },
       "h1_headings": [
         {
-          "line": 1,
+          "line": 14,
           "slug": "script-refactoring-prompt-templates-working-draft",
           "title": "Script Refactoring Prompt Templates (Working Draft)"
         },
         {
-          "line": 362,
+          "line": 390,
           "slug": "expected-all-tests-green",
           "title": "Expected: All tests GREEN"
         },
         {
-          "line": 368,
-          "slug": "expected-coverage-80",
-          "title": "Expected: Coverage \u2265 80%"
+          "line": 395,
+          "slug": "windows-note-pytest-covs-covfilepy-is-unreliable-when-the-target-is",
+          "title": "Windows note: pytest-cov's --cov=<file.py> is unreliable when the target is"
         },
         {
-          "line": 374,
+          "line": 396,
+          "slug": "executed-via-dynamic-import-common-for-scripts-under-repostudiosscripts",
+          "title": "executed via dynamic import (common for scripts under .repo_studios/scripts)."
+        },
+        {
+          "line": 397,
+          "slug": "prefer-running-coverage-directly-with-a-coveragerc-that-scopes-by-include",
+          "title": "Prefer running coverage directly with a coveragerc that scopes by include=."
+        },
+        {
+          "line": 406,
+          "slug": "expected-coverage-80-for-the-files-listed-in-the-rcfiles-include",
+          "title": "Expected: Coverage \u2265 80% (for the files listed in the rcfile's include=)"
+        },
+        {
+          "line": 412,
           "slug": "expected-no-errors",
           "title": "Expected: No errors"
         },
         {
-          "line": 380,
+          "line": 418,
           "slug": "expected-exit-code-0",
           "title": "Expected: Exit code 0"
         },
         {
-          "line": 386,
+          "line": 424,
           "slug": "example",
           "title": "Example:"
         },
         {
-          "line": 387,
+          "line": 425,
           "slug": "make-c-repostudios-studio-collect-test-log-reports",
           "title": "make -C .repo_studios studio-collect-test-log-reports"
         },
         {
-          "line": 388,
+          "line": 426,
           "slug": "make-c-repostudios-studio-collect-faulthandler-reports",
           "title": "make -C .repo_studios studio-collect-faulthandler-reports"
         },
         {
-          "line": 389,
+          "line": 427,
           "slug": "expected-exit-code-0",
           "title": "Expected: Exit code 0"
         },
         {
-          "line": 390,
+          "line": 428,
           "slug": "expected-artifacts-written-under-reportsrootviewertopicyyyymmdd-hhmm",
           "title": "Expected: Artifacts written under <reports_root>/<viewer>/<topic>/<YYYYMMDD-HHMM>/"
         },
         {
-          "line": 414,
+          "line": 452,
           "slug": "expected-at-least-1-marker-found",
           "title": "Expected: At least 1 marker found"
         },
         {
-          "line": 417,
+          "line": 455,
           "slug": "expected-storage-initialization-found",
           "title": "Expected: Storage initialization found"
         },
         {
-          "line": 429,
+          "line": 467,
           "slug": "expected-this-script-appears-in-output-with-marker-count-0",
           "title": "Expected: This script appears in output with marker count > 0"
         }
       ],
       "h2_headings": [
         {
-          "line": 9,
+          "line": 22,
           "parent_slug": "script-refactoring-prompt-templates-working-draft",
           "parent_title": "Script Refactoring Prompt Templates (Working Draft)",
           "slug": "workflow-overview",
           "title": "Workflow Overview"
         },
         {
-          "line": 19,
+          "line": 32,
           "parent_slug": "script-refactoring-prompt-templates-working-draft",
           "parent_title": "Script Refactoring Prompt Templates (Working Draft)",
           "slug": "phase-1-script-analysis-prompt",
           "title": "Phase 1: Script Analysis Prompt"
         },
         {
-          "line": 107,
+          "line": 126,
           "parent_slug": "script-refactoring-prompt-templates-working-draft",
           "parent_title": "Script Refactoring Prompt Templates (Working Draft)",
           "slug": "phase-2-implementation-plan",
           "title": "Phase 2: Implementation Plan"
         },
         {
-          "line": 312,
+          "line": 336,
           "parent_slug": "script-refactoring-prompt-templates-working-draft",
           "parent_title": "Script Refactoring Prompt Templates (Working Draft)",
           "slug": "phase-3-implementation-execution-prompt",
           "title": "Phase 3: Implementation Execution Prompt"
         },
         {
-          "line": 483,
+          "line": 520,
           "parent_slug": "expected-this-script-appears-in-output-with-marker-count-0",
           "parent_title": "Expected: This script appears in output with marker count > 0",
           "slug": "notes-section",
@@ -16845,12 +18666,19 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-12-16T20:43:59.625485+00:00",
-      "owners": [],
-      "size_bytes": 17206,
+      "modified_utc": "2025-12-18T19:32:41.905765+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 19142,
       "slug": "script-refactoring-prompt-templates-working-draft",
-      "status": null,
-      "tags": []
+      "status": "draft",
+      "tags": [
+        "scripts",
+        "refactor",
+        "prompts",
+        "coverage"
+      ]
     },
     {
       "contains_placeholder": false,
@@ -16893,108 +18721,6 @@ total_links: 93
       "owners": [],
       "size_bytes": 2391,
       "slug": "repo-studios-script-layout",
-      "status": null,
-      "tags": []
-    },
-    {
-      "contains_placeholder": false,
-      "description": null,
-      "filename": ".repo_studios/scripts/aggregators/aggregators_index/aggregators_duplicate_summary-2025-10-28-0942.md",
-      "folder": ".repo_studios/scripts/aggregators/aggregators_index",
-      "frontmatter": null,
-      "h1_headings": [
-        {
-          "line": 1,
-          "slug": "duplicate-scan-summary",
-          "title": "Duplicate Scan Summary"
-        }
-      ],
-      "h2_headings": [
-        {
-          "line": 3,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "overview",
-          "title": "Overview"
-        },
-        {
-          "line": 14,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "inputs",
-          "title": "Inputs"
-        },
-        {
-          "line": 19,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "top-duplicate-offenders",
-          "title": "Top Duplicate Offenders"
-        },
-        {
-          "line": 22,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "next-steps",
-          "title": "Next Steps"
-        }
-      ],
-      "links": [],
-      "modified_utc": "2025-10-28T09:42:56.137074+00:00",
-      "owners": [],
-      "size_bytes": 733,
-      "slug": "duplicate-scan-summary",
-      "status": null,
-      "tags": []
-    },
-    {
-      "contains_placeholder": false,
-      "description": "1. `main` \u2014 2 duplicate(s)",
-      "filename": ".repo_studios/scripts/consumers/consumers_index/consumers_duplicate_summary-2025-10-28-0934.md",
-      "folder": ".repo_studios/scripts/consumers/consumers_index",
-      "frontmatter": null,
-      "h1_headings": [
-        {
-          "line": 1,
-          "slug": "duplicate-scan-summary",
-          "title": "Duplicate Scan Summary"
-        }
-      ],
-      "h2_headings": [
-        {
-          "line": 3,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "overview",
-          "title": "Overview"
-        },
-        {
-          "line": 13,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "inputs",
-          "title": "Inputs"
-        },
-        {
-          "line": 18,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "top-duplicate-offenders",
-          "title": "Top Duplicate Offenders"
-        },
-        {
-          "line": 28,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "next-steps",
-          "title": "Next Steps"
-        }
-      ],
-      "links": [],
-      "modified_utc": "2025-10-28T09:34:22.504107+00:00",
-      "owners": [],
-      "size_bytes": 1093,
-      "slug": "duplicate-scan-summary",
       "status": null,
       "tags": []
     },
@@ -17136,57 +18862,6 @@ total_links: 93
       "tags": []
     },
     {
-      "contains_placeholder": false,
-      "description": "1. `cmd_list` \u2014 2 duplicate(s)",
-      "filename": ".repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md",
-      "folder": ".repo_studios/scripts/orchestrators/orchestrators_index",
-      "frontmatter": null,
-      "h1_headings": [
-        {
-          "line": 1,
-          "slug": "duplicate-scan-summary",
-          "title": "Duplicate Scan Summary"
-        }
-      ],
-      "h2_headings": [
-        {
-          "line": 3,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "overview",
-          "title": "Overview"
-        },
-        {
-          "line": 13,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "inputs",
-          "title": "Inputs"
-        },
-        {
-          "line": 18,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "top-duplicate-offenders",
-          "title": "Top Duplicate Offenders"
-        },
-        {
-          "line": 28,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "next-steps",
-          "title": "Next Steps"
-        }
-      ],
-      "links": [],
-      "modified_utc": "2025-10-28T09:55:41.218181+00:00",
-      "owners": [],
-      "size_bytes": 1191,
-      "slug": "duplicate-scan-summary",
-      "status": null,
-      "tags": []
-    },
-    {
       "contains_placeholder": true,
       "description": "1. `configure_logging` \u2014 19 duplicate(s)",
       "filename": ".repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md",
@@ -17245,91 +18920,91 @@ total_links: 93
       "frontmatter": null,
       "h1_headings": [
         {
-          "line": 1,
+          "line": 15,
           "slug": "script-inventory-architecture",
           "title": "Script Inventory Architecture"
         }
       ],
       "h2_headings": [
         {
-          "line": 28,
+          "line": 42,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "document-metadata",
           "title": "Document Metadata"
         },
         {
-          "line": 58,
+          "line": 72,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "how-to-use-this-template",
           "title": "How to Use This Template"
         },
         {
-          "line": 110,
+          "line": 124,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "1-script-producers",
           "title": "1. Script Producers"
         },
         {
-          "line": 199,
+          "line": 214,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "2-script-consumers",
           "title": "2. Script Consumers"
         },
         {
-          "line": 228,
+          "line": 243,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "3-script-aggregators",
           "title": "3. Script Aggregators"
         },
         {
-          "line": 259,
+          "line": 274,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "4-script-orchestrators",
           "title": "4. Script Orchestrators"
         },
         {
-          "line": 287,
+          "line": 302,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "5-script-summarizers",
           "title": "5. Script Summarizers"
         },
         {
-          "line": 303,
+          "line": 318,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "6-script-utilities",
           "title": "6. Script Utilities"
         },
         {
-          "line": 328,
+          "line": 343,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "7-script-undefined-triage",
           "title": "7. Script Undefined / Triage"
         },
         {
-          "line": 343,
+          "line": 358,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "cross-cutting-follow-ups",
           "title": "Cross-Cutting Follow-Ups"
         },
         {
-          "line": 348,
+          "line": 363,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "open-questions",
           "title": "Open Questions"
         },
         {
-          "line": 352,
+          "line": 367,
           "parent_slug": "script-inventory-architecture",
           "parent_title": "Script Inventory Architecture",
           "slug": "appendix-yaml-mapping-placeholder",
@@ -17337,185 +19012,10 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-12-16T20:31:08.019233+00:00",
+      "modified_utc": "2025-12-18T17:36:18.977162+00:00",
       "owners": [],
-      "size_bytes": 73172,
+      "size_bytes": 80780,
       "slug": "script-inventory-architecture",
-      "status": null,
-      "tags": []
-    },
-    {
-      "contains_placeholder": true,
-      "description": "1. `prune_old_runs` \u2014 20 duplicate(s)",
-      "filename": ".repo_studios/scripts/scripts_index/scripts_duplicate_summary-2025-10-27.md",
-      "folder": ".repo_studios/scripts/scripts_index",
-      "frontmatter": null,
-      "h1_headings": [
-        {
-          "line": 1,
-          "slug": "duplicate-scan-summary",
-          "title": "Duplicate Scan Summary"
-        }
-      ],
-      "h2_headings": [
-        {
-          "line": 3,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "overview",
-          "title": "Overview"
-        },
-        {
-          "line": 13,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "inputs",
-          "title": "Inputs"
-        },
-        {
-          "line": 18,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "top-duplicate-offenders",
-          "title": "Top Duplicate Offenders"
-        },
-        {
-          "line": 164,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "next-steps",
-          "title": "Next Steps"
-        }
-      ],
-      "links": [],
-      "modified_utc": "2025-10-27T12:08:34.090771+00:00",
-      "owners": [],
-      "size_bytes": 14434,
-      "slug": "duplicate-scan-summary",
-      "status": null,
-      "tags": []
-    },
-    {
-      "contains_placeholder": false,
-      "description": null,
-      "filename": ".repo_studios/scripts/scripts_index/scripts_duplicate_summary-20251130-0333.md",
-      "folder": ".repo_studios/scripts/scripts_index",
-      "frontmatter": null,
-      "h1_headings": [
-        {
-          "line": 1,
-          "slug": "summary",
-          "title": "Summary"
-        }
-      ],
-      "h2_headings": [],
-      "links": [],
-      "modified_utc": "2025-11-30T03:33:07.215521+00:00",
-      "owners": [],
-      "size_bytes": 11,
-      "slug": "summary",
-      "status": null,
-      "tags": []
-    },
-    {
-      "contains_placeholder": false,
-      "description": "1. `append_table` \u2014 2 duplicate(s)",
-      "filename": ".repo_studios/scripts/summarizers/summarizers_index/summarizers_duplicate_summary-2025-11-04-2010.md",
-      "folder": ".repo_studios/scripts/summarizers/summarizers_index",
-      "frontmatter": null,
-      "h1_headings": [
-        {
-          "line": 1,
-          "slug": "duplicate-scan-summary",
-          "title": "Duplicate Scan Summary"
-        }
-      ],
-      "h2_headings": [
-        {
-          "line": 3,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "overview",
-          "title": "Overview"
-        },
-        {
-          "line": 13,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "inputs",
-          "title": "Inputs"
-        },
-        {
-          "line": 18,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "top-duplicate-offenders",
-          "title": "Top Duplicate Offenders"
-        },
-        {
-          "line": 24,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "next-steps",
-          "title": "Next Steps"
-        }
-      ],
-      "links": [],
-      "modified_utc": "2025-11-04T20:10:52.055388+00:00",
-      "owners": [],
-      "size_bytes": 982,
-      "slug": "duplicate-scan-summary",
-      "status": null,
-      "tags": []
-    },
-    {
-      "contains_placeholder": false,
-      "description": null,
-      "filename": ".repo_studios/scripts/utilities/utilities_index/utilities_duplicate_summary-2025-10-28-1344.md",
-      "folder": ".repo_studios/scripts/utilities/utilities_index",
-      "frontmatter": null,
-      "h1_headings": [
-        {
-          "line": 1,
-          "slug": "duplicate-scan-summary",
-          "title": "Duplicate Scan Summary"
-        }
-      ],
-      "h2_headings": [
-        {
-          "line": 3,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "overview",
-          "title": "Overview"
-        },
-        {
-          "line": 14,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "inputs",
-          "title": "Inputs"
-        },
-        {
-          "line": 19,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "top-duplicate-offenders",
-          "title": "Top Duplicate Offenders"
-        },
-        {
-          "line": 22,
-          "parent_slug": "duplicate-scan-summary",
-          "parent_title": "Duplicate Scan Summary",
-          "slug": "next-steps",
-          "title": "Next Steps"
-        }
-      ],
-      "links": [],
-      "modified_utc": "2025-10-28T13:44:35.047795+00:00",
-      "owners": [],
-      "size_bytes": 724,
-      "slug": "duplicate-scan-summary",
       "status": null,
       "tags": []
     },
@@ -17731,6 +19231,50 @@ total_links: 93
     },
     {
       "contains_placeholder": false,
+      "description": "Generated (UTC): 2025-12-17T18:10:12.442069+00:00 Summary Path: C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\healthview\\inventory_overview Baseline Path:\u2026",
+      "filename": "command_center/reports/healthview/inventory_health/20251217-1810/summary.md",
+      "folder": "command_center/reports/healthview/inventory_health/20251217-1810",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "inventory-health-report",
+          "title": "Inventory Health Report"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 8,
+          "parent_slug": "inventory-health-report",
+          "parent_title": "Inventory Health Report",
+          "slug": "outcome",
+          "title": "Outcome"
+        },
+        {
+          "line": 14,
+          "parent_slug": "inventory-health-report",
+          "parent_title": "Inventory Health Report",
+          "slug": "deltas",
+          "title": "Deltas"
+        },
+        {
+          "line": 18,
+          "parent_slug": "inventory-health-report",
+          "parent_title": "Inventory Health Report",
+          "slug": "issues",
+          "title": "Issues"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-17T18:10:12.443661+00:00",
+      "owners": [],
+      "size_bytes": 500,
+      "slug": "inventory-health-report",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
       "description": "This file tracks command center script executions requested on 2025-11-04.",
       "filename": "command_center_script_verification_temp.md",
       "folder": ".",
@@ -17752,7 +19296,7 @@ total_links: 93
       "tags": []
     },
     {
-      "contains_placeholder": false,
+      "contains_placeholder": true,
       "description": "[x] **analyze_standards_index_gaps.py**",
       "filename": "db_integration_status.md",
       "folder": ".",
@@ -17773,14 +19317,14 @@ total_links: 93
           "title": "Producer Scripts"
         },
         {
-          "line": 74,
+          "line": 186,
           "parent_slug": "database-integration-status",
           "parent_title": "Database Integration Status",
           "slug": "utility-scripts",
           "title": "Utility Scripts"
         },
         {
-          "line": 92,
+          "line": 204,
           "parent_slug": "database-integration-status",
           "parent_title": "Database Integration Status",
           "slug": "integration-checklist",
@@ -17788,9 +19332,9 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-12-16T19:03:20.932630+00:00",
+      "modified_utc": "2025-12-18T17:32:56.481003+00:00",
       "owners": [],
-      "size_bytes": 2957,
+      "size_bytes": 6594,
       "slug": "database-integration-status",
       "status": null,
       "tags": []
@@ -17994,11 +19538,11 @@ total_links: 93
         }
       ],
       "links": [],
-      "modified_utc": "2025-12-11T10:50:58.485331+00:00",
+      "modified_utc": "2025-12-17T18:23:40.625822+00:00",
       "owners": [
         "repo_studios_ai"
       ],
-      "size_bytes": 97899,
+      "size_bytes": 97933,
       "slug": "orchestrator-implementation-plan",
       "status": "draft",
       "tags": [
@@ -19087,6 +20631,22 @@ total_links: 93
       "tags": []
     },
     {
+      "contains_placeholder": false,
+      "description": null,
+      "filename": "docs/templates/meta_prompts2.md",
+      "folder": "docs/templates",
+      "frontmatter": null,
+      "h1_headings": [],
+      "h2_headings": [],
+      "links": [],
+      "modified_utc": "2025-12-18T22:53:45.479854+00:00",
+      "owners": [],
+      "size_bytes": 7728,
+      "slug": "metaprompts2",
+      "status": null,
+      "tags": []
+    },
+    {
       "contains_placeholder": true,
       "description": "Use this template when authoring Healthview Markdown summaries for Test Execution Telemetry runs. Replace bracketed placeholders with the values emitted by the orchestrator (`run_test_execution_telemetry.py`) and remove any sections that\u2026",
       "filename": "docs/templates/test_execution_telemetry_summary_template.md",
@@ -19266,6 +20826,117 @@ total_links: 93
     },
     {
       "contains_placeholder": false,
+      "description": "[x] **analyze_standards_index_gaps.py**",
+      "filename": "tmp_cli_probe/db_markers.md",
+      "folder": "tmp_cli_probe",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "database-integration-status",
+          "title": "Database Integration Status"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 8,
+          "parent_slug": "database-integration-status",
+          "parent_title": "Database Integration Status",
+          "slug": "producer-scripts",
+          "title": "Producer Scripts"
+        },
+        {
+          "line": 130,
+          "parent_slug": "database-integration-status",
+          "parent_title": "Database Integration Status",
+          "slug": "utility-scripts",
+          "title": "Utility Scripts"
+        },
+        {
+          "line": 148,
+          "parent_slug": "database-integration-status",
+          "parent_title": "Database Integration Status",
+          "slug": "integration-checklist",
+          "title": "Integration Checklist"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-17T13:48:32.384409+00:00",
+      "owners": [],
+      "size_bytes": 4793,
+      "slug": "database-integration-status",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
+      "description": null,
+      "filename": "tmp_cli_probe/producer_reports/healthview/test_coverage_inventory/20251217-1200/summary.md",
+      "folder": "tmp_cli_probe/producer_reports/healthview/test_coverage_inventory/20251217-1200",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "test-coverage-inventory",
+          "title": "Test Coverage Inventory"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 12,
+          "parent_slug": "test-coverage-inventory",
+          "parent_title": "Test Coverage Inventory",
+          "slug": "files-by-coverage",
+          "title": "Files by Coverage"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-17T11:53:32.782624+00:00",
+      "owners": [],
+      "size_bytes": 956,
+      "slug": "test-coverage-inventory",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
+      "description": null,
+      "filename": "tmp_cli_probe/producer_reports/rawview/standards_index/20251217-1031/summary.md",
+      "folder": "tmp_cli_probe/producer_reports/rawview/standards_index/20251217-1031",
+      "frontmatter": null,
+      "h1_headings": [
+        {
+          "line": 1,
+          "slug": "standards-index-build-report",
+          "title": "Standards Index Build Report"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 10,
+          "parent_slug": "standards-index-build-report",
+          "parent_title": "Standards Index Build Report",
+          "slug": "summary",
+          "title": "Summary"
+        },
+        {
+          "line": 20,
+          "parent_slug": "standards-index-build-report",
+          "parent_title": "Standards Index Build Report",
+          "slug": "extraction",
+          "title": "Extraction"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-17T11:25:04.039240+00:00",
+      "owners": [],
+      "size_bytes": 626,
+      "slug": "standards-index-build-report",
+      "status": null,
+      "tags": []
+    },
+    {
+      "contains_placeholder": false,
       "description": "Generated (UTC): 2024-03-01T00:00:00+00:00 Repo Root: C:\\Users\\genet\\repo_studios",
       "filename": "tmp_cli_probe/smoke_dependency_hygiene_reports/healthview/dependency_hygiene/20240301-0000/summary.md",
       "folder": "tmp_cli_probe/smoke_dependency_hygiene_reports/healthview/dependency_hygiene/20240301-0000",
@@ -19309,18 +20980,22 @@ total_links: 93
       "tags": []
     }
   ],
-  "generated_utc": "2025-12-16T21:06:55.879443+00:00",
+  "generated_utc": "2025-12-19T01:24:01.437167+00:00",
   "metrics": {
-    "documents_missing_description_count": 33,
-    "documents_outside_docs_tree_count": 151,
+    "documents_missing_description_count": 36,
+    "documents_outside_docs_tree_count": 159,
     "documents_per_directory": [
       {
-        "count": 43,
+        "count": 44,
         "directory": ".repo_studios/docs/automation"
       },
       {
         "count": 28,
         "directory": ".repo_studios/command_center/docs/mermaid/view_specs"
+      },
+      {
+        "count": 20,
+        "directory": ".repo_studios/command_center/docs/db_integrations"
       },
       {
         "count": 17,
@@ -19333,10 +21008,6 @@ total_links: 93
       {
         "count": 10,
         "directory": ".repo_studios/command_center/docs/phase_7"
-      },
-      {
-        "count": 9,
-        "directory": ".repo_studios/command_center/docs/db_integrations"
       },
       {
         "count": 9,
@@ -19395,11 +21066,11 @@ total_links: 93
         "directory": ".repo_studios/scripts"
       }
     ],
-    "documents_without_h1_count": 15,
-    "documents_without_h2_count": 18,
+    "documents_without_h1_count": 16,
+    "documents_without_h2_count": 17,
     "duplicate_slug_count": 6,
-    "link_density": 0.34701492537313433,
-    "placeholder_documents_count": 55
+    "link_density": 0.32142857142857145,
+    "placeholder_documents_count": 57
   },
   "outputs": {
     "files": {
@@ -19431,11 +21102,11 @@ total_links: 93
   },
   "schema_version": 1,
   "summary": {
-    "total_documents": 268,
-    "total_h1": 269,
-    "total_h2": 1608,
-    "total_headings": 1877,
-    "total_links": 93
+    "total_documents": 280,
+    "total_h1": 283,
+    "total_h2": 1684,
+    "total_headings": 1967,
+    "total_links": 90
   }
 }
 ```
@@ -19444,28 +21115,28 @@ total_links: 93
 
 ```yaml
 schema_version: 1
-generated_utc: '2025-12-16T21:06:55.879443+00:00'
+generated_utc: '2025-12-19T01:24:01.437167+00:00'
 repo_root: C:\Users\genet\repo_studios
 summary:
-  total_documents: 268
-  total_h1: 269
-  total_h2: 1608
-  total_headings: 1877
-  total_links: 93
+  total_documents: 280
+  total_h1: 283
+  total_h2: 1684
+  total_headings: 1967
+  total_links: 90
 metrics:
   documents_per_directory:
   - directory: .repo_studios/docs/automation
-    count: 43
+    count: 44
   - directory: .repo_studios/command_center/docs/mermaid/view_specs
     count: 28
+  - directory: .repo_studios/command_center/docs/db_integrations
+    count: 20
   - directory: .repo_studios/command_center/docs
     count: 17
   - directory: .repo_studios/docs/standards/global
     count: 11
   - directory: .repo_studios/command_center/docs/phase_7
     count: 10
-  - directory: .repo_studios/command_center/docs/db_integrations
-    count: 9
   - directory: docs/standards/global
     count: 9
   - directory: .repo_studios/docs
@@ -19494,18 +21165,21 @@ metrics:
     count: 4
   - directory: .repo_studios/scripts
     count: 4
-  documents_missing_description_count: 33
-  documents_without_h1_count: 15
-  documents_without_h2_count: 18
-  placeholder_documents_count: 55
+  documents_missing_description_count: 36
+  documents_without_h1_count: 16
+  documents_without_h2_count: 17
+  placeholder_documents_count: 57
   duplicate_slug_count: 6
-  documents_outside_docs_tree_count: 151
-  link_density: 0.34701492537313433
+  documents_outside_docs_tree_count: 159
+  link_density: 0.32142857142857145
 advisories:
   documents_missing_description:
   - .copilot_todo.md
   - .github/copilot-instructions.md
   - .repo_studios/agent_notes/meta/phase1_foundation_review_2025-10-18_0138.md
+  - .repo_studios/command_center/docs/db_integrations/code_placeholders.md
+  - .repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md
+  - .repo_studios/command_center/docs/db_integrations/db_integration_monkey_patches.md
   - .repo_studios/command_center/docs/decision_log.md
   - .repo_studios/command_center/docs/mermaid/decision_log.md
   - .repo_studios/command_center/docs/mermaid/view_specs/callback_registration_map.md
@@ -19525,9 +21199,6 @@ advisories:
   - .repo_studios/docs/standards/global/std-global-markdown-authoring.md
   - .repo_studios/docs/standards/global/std-global-mission-parameters.md
   - .repo_studios/docs/templates/script_inventory.md
-  - .repo_studios/monkey_patch/20251201_115542/report.md
-  - .repo_studios/monkey_patch/20251207_023935/report.md
-  - .repo_studios/monkey_patch/20251207_133529/report.md
   documents_without_h1:
   - .repo_studios/command_center/docs/mermaid/view_specs/callback_registration_map.md
   - .repo_studios/command_center/docs/mermaid/view_specs/cyclomatic_complexity_map.md
@@ -19544,6 +21215,7 @@ advisories:
   - .repo_studios/docs/standards/global/std-global-mission-parameters.md
   - docs/standards/global/std-global-markdown-authoring.md
   - docs/templates/meta_prompts.md
+  - docs/templates/meta_prompts2.md
   documents_without_h2:
   - .copilot_todo.md
   - .repo_studios/command_center/docs/decision_log.md
@@ -19559,7 +21231,6 @@ advisories:
   - .repo_studios/docs/templates/script_inventory.md
   - .repo_studios/docs/templates/structural_checklist_template.md
   - .repo_studios/inventory_schema/views/README.md
-  - .repo_studios/scripts/scripts_index/scripts_duplicate_summary-20251130-0333.md
   - README.md
   - command_center_script_verification_temp.md
   - docs/standards/global/std-docs-integrity-handbook.md
@@ -19570,6 +21241,7 @@ advisories:
   - .repo_studios/command_center/command_center_architecture.md
   - .repo_studios/command_center/docs/code_library/code_library_status.md
   - .repo_studios/command_center/docs/db_integration_test_execution_telemetry.md
+  - .repo_studios/command_center/docs/db_integrations/code_placeholders.md
   - .repo_studios/command_center/docs/decision_log.md
   - .repo_studios/command_center/docs/duplicate_target_mappings.md
   - .repo_studios/command_center/docs/library_integration_checklist.md
@@ -19588,7 +21260,6 @@ advisories:
   - .repo_studios/command_center/docs/phase_7/REPORTING_INTERFACE_PLAN.md
   - .repo_studios/command_center/docs/phase_7/placeholder_scan_blocking_transition_brief.md
   - .repo_studios/command_center/docs/run_log_template.md
-  - .repo_studios/command_center/scripts/orchestrators/README.md
   documents_outside_docs_tree:
   - .copilot_todo.md
   - .github/architect.chatmode.md
@@ -19613,23 +21284,17 @@ advisories:
   - .repo_studios/command_center/docs/db_integration_quickstart.md
   - .repo_studios/command_center/docs/db_integration_template.md
   - .repo_studios/command_center/docs/db_integration_test_execution_telemetry.md
+  - .repo_studios/command_center/docs/db_integrations/code_placeholders.md
   - .repo_studios/command_center/docs/db_integrations/db_integration_analyze_standards_index_gaps.md
-  - .repo_studios/command_center/docs/db_integrations/db_integration_analyze_test_hardening.md
   duplicate_slugs:
     library-integration-alignment-plan:
     - .repo_studios/command_center/checklists/2025-10-24.md
     - .repo_studios/command_center/docs/library_integration_checklist.md
     duplicate-scan-summary:
-    - .repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md
     - .repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md
     - .repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md
-    - .repo_studios/scripts/aggregators/aggregators_index/aggregators_duplicate_summary-2025-10-28-0942.md
-    - .repo_studios/scripts/consumers/consumers_index/consumers_duplicate_summary-2025-10-28-0934.md
-    - .repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md
+    - .repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251217-2039.md
     - .repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md
-    - .repo_studios/scripts/scripts_index/scripts_duplicate_summary-2025-10-27.md
-    - .repo_studios/scripts/summarizers/summarizers_index/summarizers_duplicate_summary-2025-11-04-2010.md
-    - .repo_studios/scripts/utilities/utilities_index/utilities_duplicate_summary-2025-10-28-1344.md
     std-global-markdown-authoring:
     - .repo_studios/docs/standards/global/std-global-markdown-authoring.md
     - docs/standards/global/std-global-markdown-authoring.md
@@ -19646,6 +21311,7 @@ advisories:
     database-integration-status:
     - db_integration_status.md
     - tmp_cli_probe/db_integration_status.md
+    - tmp_cli_probe/db_markers.md
 documents:
 - folder: .
   filename: .copilot_todo.md
@@ -20470,8 +22136,8 @@ documents:
   description: "Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/`\
     \ so producers, summarisers, and orchestrators share the same implementation.\
     \ This folder is a **staging area** until the canonical\u2026"
-  size_bytes: 14886
-  modified_utc: '2025-11-28T14:18:05.271026+00:00'
+  size_bytes: 14925
+  modified_utc: '2025-12-17T01:38:22.486199+00:00'
   tags: []
   owners: []
   status: null
@@ -20709,8 +22375,8 @@ documents:
     \ and shared-library initiative so future contributors can quickly understand\
     \ the existing tooling, documentation, and open work streams before resuming development.\
     \ This\u2026"
-  size_bytes: 14122
-  modified_utc: '2025-12-01T01:01:45.347271+00:00'
+  size_bytes: 14181
+  modified_utc: '2025-12-17T01:38:22.486199+00:00'
   tags: []
   owners: []
   status: null
@@ -21079,6 +22745,71 @@ documents:
   owners: []
   status: null
   frontmatter: null
+  contains_placeholder: true
+- folder: .repo_studios/command_center/docs/db_integrations
+  filename: .repo_studios/command_center/docs/db_integrations/code_placeholders.md
+  slug: db-integration-codeplaceholders
+  h1_headings:
+  - title: "DB Integration \u2014 code_placeholders"
+    slug: db-integration-codeplaceholders
+    line: 22
+  h2_headings:
+  - title: Goals
+    slug: goals
+    line: 24
+    parent_title: "DB Integration \u2014 code_placeholders"
+    parent_slug: db-integration-codeplaceholders
+  - title: System Context
+    slug: system-context
+    line: 29
+    parent_title: "DB Integration \u2014 code_placeholders"
+    parent_slug: db-integration-codeplaceholders
+  - title: Agent Instructions
+    slug: agent-instructions
+    line: 35
+    parent_title: "DB Integration \u2014 code_placeholders"
+    parent_slug: db-integration-codeplaceholders
+  - title: Human Notes
+    slug: human-notes
+    line: 67
+    parent_title: "DB Integration \u2014 code_placeholders"
+    parent_slug: db-integration-codeplaceholders
+  - title: Update Log
+    slug: update-log
+    line: 72
+    parent_title: "DB Integration \u2014 code_placeholders"
+    parent_slug: db-integration-codeplaceholders
+  links: []
+  description: null
+  size_bytes: 2808
+  modified_utc: '2025-12-17T19:43:51.315571+00:00'
+  tags:
+  - db
+  - integration
+  - producers
+  - placeholders
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: approved
+  frontmatter:
+    title: "DB Integration \u2014 code_placeholders"
+    audience:
+    - coding_agent
+    - human_developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: approved
+    version: 1.0.0
+    updated: '2025-12-17'
+    tags:
+    - db
+    - integration
+    - producers
+    - placeholders
+    related_files:
+    - ../../scripts/libraries/database_integration.py
+    - ../../../scripts/producers/scan_code_placeholders.py
+    - ../../../docs/automation/scan_code_placeholders.md
   contains_placeholder: true
 - folder: .repo_studios/command_center/docs/db_integrations
   filename: .repo_studios/command_center/docs/db_integrations/db_integration_analyze_standards_index_gaps.md
@@ -21685,7 +23416,7 @@ documents:
     storage can persist the run metadata, summary markdown, and telemetry payload
     in a stable schema.
   size_bytes: 2594
-  modified_utc: '2025-12-16T20:32:12.303952+00:00'
+  modified_utc: '2025-12-16T21:14:26.601426+00:00'
   tags:
   - db-integration
   - healthview
@@ -21716,6 +23447,675 @@ documents:
     related_files:
     - .repo_studios/scripts/producers/generate_doc_index.py
     - .repo_studios/docs/automation/generate_doc_index.md
+    - .repo_studios/command_center/scripts/libraries/database_integration.py
+    - REPORT_NAMING_STANDARDS.md
+  contains_placeholder: false
+- folder: .repo_studios/command_center/docs/db_integrations
+  filename: .repo_studios/command_center/docs/db_integrations/db_integration_docs_integrity_validation.md
+  slug: db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation
+  h1_headings:
+  - title: "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)"
+    slug: db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation
+    line: 18
+  h2_headings:
+  - title: Goals
+    slug: goals
+    line: 20
+    parent_title: "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)"
+    parent_slug: db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation
+  - title: System Context
+    slug: system-context
+    line: 25
+    parent_title: "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)"
+    parent_slug: db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation
+  - title: Write Sites
+    slug: write-sites
+    line: 32
+    parent_title: "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)"
+    parent_slug: db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation
+  - title: Schema Mapping
+    slug: schema-mapping
+    line: 42
+    parent_title: "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)"
+    parent_slug: db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation
+  - title: Compatibility Notes
+    slug: compatibility-notes
+    line: 68
+    parent_title: "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)"
+    parent_slug: db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation
+  - title: Update Log
+    slug: update-log
+    line: 74
+    parent_title: "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)"
+    parent_slug: db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation
+  links: []
+  description: Define the database-facing contract for the docs integrity validation
+    producer so dual-write storage can persist run metadata, summary markdown, and
+    telemetry metrics.
+  size_bytes: 2890
+  modified_utc: '2025-12-18T17:36:18.987162+00:00'
+  tags:
+  - db-integration
+  - healthview
+  - docs-integrity
+  - producer
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: active
+  frontmatter:
+    title: "DB Integration \u2014 Docs Integrity Validation (healthview/docs_integrity_validation)"
+    audience:
+    - Copilot
+    - Agents
+    - Developer
+    role:
+    - Operational-Doc
+    - DB-Integration
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: active
+    version: 1.0.0
+    updated: '2025-12-18'
+    tags:
+    - db-integration
+    - healthview
+    - docs-integrity
+    - producer
+    related_files:
+    - .repo_studios/scripts/producers/verify_docs_integrity.py
+    - .repo_studios/docs/automation/verify_docs_integrity.md
+    - .repo_studios/tests/tests_producers/test_verify_docs_integrity.py
+    - .repo_studios/command_center/scripts/libraries/database_integration.py
+    - REPORT_NAMING_STANDARDS.md
+  contains_placeholder: false
+- folder: .repo_studios/command_center/docs/db_integrations
+  filename: .repo_studios/command_center/docs/db_integrations/db_integration_generate_standards_index.md
+  slug: db-integration-generatestandardsindex
+  h1_headings:
+  - title: "DB Integration \u2014 generate_standards_index"
+    slug: db-integration-generatestandardsindex
+    line: 24
+  h2_headings:
+  - title: Goals
+    slug: goals
+    line: 28
+    parent_title: "DB Integration \u2014 generate_standards_index"
+    parent_slug: db-integration-generatestandardsindex
+  - title: System Context
+    slug: system-context
+    line: 33
+    parent_title: "DB Integration \u2014 generate_standards_index"
+    parent_slug: db-integration-generatestandardsindex
+  - title: Agent Instructions
+    slug: agent-instructions
+    line: 48
+    parent_title: "DB Integration \u2014 generate_standards_index"
+    parent_slug: db-integration-generatestandardsindex
+  - title: Human Notes
+    slug: human-notes
+    line: 54
+    parent_title: "DB Integration \u2014 generate_standards_index"
+    parent_slug: db-integration-generatestandardsindex
+  - title: Reference Prompts
+    slug: reference-prompts
+    line: 101
+    parent_title: "DB Integration \u2014 generate_standards_index"
+    parent_slug: db-integration-generatestandardsindex
+  - title: Update Log
+    slug: update-log
+    line: 106
+    parent_title: "DB Integration \u2014 generate_standards_index"
+    parent_slug: db-integration-generatestandardsindex
+  links: []
+  description: See `.github/instructions/markdown.instructions.md` for repo-wide rules.
+  size_bytes: 3262
+  modified_utc: '2025-12-17T11:36:36.071252+00:00'
+  tags:
+  - database
+  - integration
+  - standards
+  - producer
+  owners:
+  - Repo Studios
+  status: draft
+  frontmatter:
+    title: "DB Integration \u2014 Standards Index Producer"
+    audience:
+    - Agents
+    - Developers
+    role:
+    - Automation
+    owners:
+    - Repo Studios
+    status: draft
+    version: 1
+    updated_at: '2025-12-17'
+    tags:
+    - database
+    - integration
+    - standards
+    - producer
+    related_files:
+    - .repo_studios/scripts/producers/generate_standards_index.py
+    - .repo_studios/command_center/scripts/libraries/database_integration.py
+    - .repo_studios/command_center/scripts/utilities/list_db_markers.py
+  contains_placeholder: false
+- folder: .repo_studios/command_center/docs/db_integrations
+  filename: .repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md
+  slug: db-integration-generatetestcoverageinventorypy
+  h1_headings:
+  - title: "DB Integration \u2014 generate_test_coverage_inventory.py"
+    slug: db-integration-generatetestcoverageinventorypy
+    line: 16
+  h2_headings:
+  - title: Goals
+    slug: goals
+    line: 18
+    parent_title: "DB Integration \u2014 generate_test_coverage_inventory.py"
+    parent_slug: db-integration-generatetestcoverageinventorypy
+  - title: System Context
+    slug: system-context
+    line: 23
+    parent_title: "DB Integration \u2014 generate_test_coverage_inventory.py"
+    parent_slug: db-integration-generatetestcoverageinventorypy
+  - title: Agent Instructions
+    slug: agent-instructions
+    line: 29
+    parent_title: "DB Integration \u2014 generate_test_coverage_inventory.py"
+    parent_slug: db-integration-generatetestcoverageinventorypy
+  - title: Table Mapping (Intent)
+    slug: table-mapping-intent
+    line: 50
+    parent_title: "DB Integration \u2014 generate_test_coverage_inventory.py"
+    parent_slug: db-integration-generatetestcoverageinventorypy
+  - title: Human Notes
+    slug: human-notes
+    line: 72
+    parent_title: "DB Integration \u2014 generate_test_coverage_inventory.py"
+    parent_slug: db-integration-generatetestcoverageinventorypy
+  - title: Reference Prompts
+    slug: reference-prompts
+    line: 77
+    parent_title: "DB Integration \u2014 generate_test_coverage_inventory.py"
+    parent_slug: db-integration-generatetestcoverageinventorypy
+  - title: Update Log
+    slug: update-log
+    line: 82
+    parent_title: "DB Integration \u2014 generate_test_coverage_inventory.py"
+    parent_slug: db-integration-generatetestcoverageinventorypy
+  links: []
+  description: null
+  size_bytes: 3119
+  modified_utc: '2025-12-17T12:10:20.071203+00:00'
+  tags:
+  - db-integration
+  - producer
+  - healthview
+  - test-coverage
+  owners:
+  - repo_studios_ai
+  status: draft
+  frontmatter:
+    title: "DB Integration \u2014 generate_test_coverage_inventory.py"
+    audience:
+    - Copilot
+    - Agents
+    - Developer
+    role:
+    - DBIntegrationDoc
+    owners:
+    - repo_studios_ai
+    status: draft
+    version: 1
+    updated_at: '2025-12-17'
+    tags:
+    - db-integration
+    - producer
+    - healthview
+    - test-coverage
+    related_files:
+    - .repo_studios/scripts/producers/generate_test_coverage_inventory.py
+    - .repo_studios/command_center/scripts/libraries/database_integration.py
+    - .repo_studios/command_center/scripts/utilities/list_db_markers.py
+  contains_placeholder: false
+- folder: .repo_studios/command_center/docs/db_integrations
+  filename: .repo_studios/command_center/docs/db_integrations/db_integration_import_graph.md
+  slug: db-integration-import-graph-healthviewimportgraph
+  h1_headings:
+  - title: "DB Integration \u2014 Import Graph (healthview/import_graph)"
+    slug: db-integration-import-graph-healthviewimportgraph
+    line: 18
+  h2_headings:
+  - title: Goals
+    slug: goals
+    line: 20
+    parent_title: "DB Integration \u2014 Import Graph (healthview/import_graph)"
+    parent_slug: db-integration-import-graph-healthviewimportgraph
+  - title: System Context
+    slug: system-context
+    line: 25
+    parent_title: "DB Integration \u2014 Import Graph (healthview/import_graph)"
+    parent_slug: db-integration-import-graph-healthviewimportgraph
+  - title: Write Sites
+    slug: write-sites
+    line: 32
+    parent_title: "DB Integration \u2014 Import Graph (healthview/import_graph)"
+    parent_slug: db-integration-import-graph-healthviewimportgraph
+  - title: Schema Mapping
+    slug: schema-mapping
+    line: 42
+    parent_title: "DB Integration \u2014 Import Graph (healthview/import_graph)"
+    parent_slug: db-integration-import-graph-healthviewimportgraph
+  - title: Compatibility Notes
+    slug: compatibility-notes
+    line: 66
+    parent_title: "DB Integration \u2014 Import Graph (healthview/import_graph)"
+    parent_slug: db-integration-import-graph-healthviewimportgraph
+  - title: Update Log
+    slug: update-log
+    line: 72
+    parent_title: "DB Integration \u2014 Import Graph (healthview/import_graph)"
+    parent_slug: db-integration-import-graph-healthviewimportgraph
+  links: []
+  description: Define the database-facing contract for the Import Graph producer so
+    dual-write storage can persist the run metadata, summary markdown, and telemetry
+    payload in a stable schema.
+  size_bytes: 2710
+  modified_utc: '2025-12-16T22:07:37.971519+00:00'
+  tags:
+  - db-integration
+  - healthview
+  - import-graph
+  - producer
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: active
+  frontmatter:
+    title: "DB Integration \u2014 Import Graph (healthview/import_graph)"
+    audience:
+    - Copilot
+    - Agents
+    - Developer
+    role:
+    - Operational-Doc
+    - DB-Integration
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: active
+    version: 1.0.0
+    updated: '2025-12-16'
+    tags:
+    - db-integration
+    - healthview
+    - import-graph
+    - producer
+    related_files:
+    - .repo_studios/scripts/producers/generate_import_graph_report.py
+    - .repo_studios/docs/automation/generate_import_graph_report.md
+    - .repo_studios/scripts/producers/validate_import_boundaries.py
+    - .repo_studios/command_center/scripts/libraries/database_integration.py
+    - REPORT_NAMING_STANDARDS.md
+  contains_placeholder: false
+- folder: .repo_studios/command_center/docs/db_integrations
+  filename: .repo_studios/command_center/docs/db_integrations/db_integration_lizard_report.md
+  slug: db-integration-notes-lizard-report
+  h1_headings:
+  - title: "DB Integration Notes \u2014 Lizard Report"
+    slug: db-integration-notes-lizard-report
+    line: 20
+  h2_headings:
+  - title: Goals
+    slug: goals
+    line: 22
+    parent_title: "DB Integration Notes \u2014 Lizard Report"
+    parent_slug: db-integration-notes-lizard-report
+  - title: System Context
+    slug: system-context
+    line: 27
+    parent_title: "DB Integration Notes \u2014 Lizard Report"
+    parent_slug: db-integration-notes-lizard-report
+  - title: Agent Instructions
+    slug: agent-instructions
+    line: 38
+    parent_title: "DB Integration Notes \u2014 Lizard Report"
+    parent_slug: db-integration-notes-lizard-report
+  - title: Write Sites
+    slug: write-sites
+    line: 43
+    parent_title: "DB Integration Notes \u2014 Lizard Report"
+    parent_slug: db-integration-notes-lizard-report
+  - title: Human Notes
+    slug: human-notes
+    line: 51
+    parent_title: "DB Integration Notes \u2014 Lizard Report"
+    parent_slug: db-integration-notes-lizard-report
+  - title: Update Log
+    slug: update-log
+    line: 56
+    parent_title: "DB Integration Notes \u2014 Lizard Report"
+    parent_slug: db-integration-notes-lizard-report
+  links: []
+  description: 'The lizard producer writes its positional bundle under:'
+  size_bytes: 1899
+  modified_utc: '2025-12-17T00:02:21.821596+00:00'
+  tags:
+  - db-integration
+  - healthview
+  - lizard
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: active
+  frontmatter:
+    title: "DB Integration Notes \u2014 Lizard Report"
+    audience:
+    - coding_agent
+    - human_developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: active
+    version: 1.0.0
+    updated: '2025-12-16'
+    tags:
+    - db-integration
+    - healthview
+    - lizard
+    related_files:
+    - ../../scripts/producers/generate_lizard_report.py
+    - ../../command_center/scripts/libraries/database_integration.py
+  contains_placeholder: false
+- folder: .repo_studios/command_center/docs/db_integrations
+  filename: .repo_studios/command_center/docs/db_integrations/db_integration_markdown_anchor_validation.md
+  slug: db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation
+  h1_headings:
+  - title: "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)"
+    slug: db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation
+    line: 18
+  h2_headings:
+  - title: Goals
+    slug: goals
+    line: 20
+    parent_title: "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)"
+    parent_slug: db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation
+  - title: System Context
+    slug: system-context
+    line: 25
+    parent_title: "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)"
+    parent_slug: db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation
+  - title: Write Sites
+    slug: write-sites
+    line: 32
+    parent_title: "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)"
+    parent_slug: db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation
+  - title: Schema Mapping
+    slug: schema-mapping
+    line: 42
+    parent_title: "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)"
+    parent_slug: db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation
+  - title: Compatibility Notes
+    slug: compatibility-notes
+    line: 67
+    parent_title: "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)"
+    parent_slug: db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation
+  - title: Update Log
+    slug: update-log
+    line: 73
+    parent_title: "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)"
+    parent_slug: db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation
+  links: []
+  description: Define the database-facing contract for the markdown anchor validation
+    producer so dual-write storage can persist run metadata, summary markdown, and
+    telemetry metrics.
+  size_bytes: 2861
+  modified_utc: '2025-12-18T12:37:54.373653+00:00'
+  tags:
+  - db-integration
+  - healthview
+  - markdown-anchor-validation
+  - producer
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: active
+  frontmatter:
+    title: "DB Integration \u2014 Markdown Anchor Validation (healthview/markdown_anchor_validation)"
+    audience:
+    - Copilot
+    - Agents
+    - Developer
+    role:
+    - Operational-Doc
+    - DB-Integration
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: active
+    version: 1.0.0
+    updated: '2025-12-18'
+    tags:
+    - db-integration
+    - healthview
+    - markdown-anchor-validation
+    - producer
+    related_files:
+    - .repo_studios/scripts/producers/validate_markdown_anchors.py
+    - .repo_studios/docs/automation/validate_markdown_anchors.md
+    - .repo_studios/tests/tests_producers/test_validate_markdown_anchors.py
+    - .repo_studios/command_center/scripts/libraries/database_integration.py
+    - REPORT_NAMING_STANDARDS.md
+  contains_placeholder: false
+- folder: .repo_studios/command_center/docs/db_integrations
+  filename: .repo_studios/command_center/docs/db_integrations/db_integration_metrics_anchor_stub_validation.md
+  slug: db-integration-mapping-metrics-anchor-stub-validation
+  h1_headings:
+  - title: "DB Integration Mapping \u2014 Metrics Anchor Stub Validation"
+    slug: db-integration-mapping-metrics-anchor-stub-validation
+    line: 15
+  h2_headings:
+  - title: Goals
+    slug: goals
+    line: 17
+    parent_title: "DB Integration Mapping \u2014 Metrics Anchor Stub Validation"
+    parent_slug: db-integration-mapping-metrics-anchor-stub-validation
+  - title: System Context
+    slug: system-context
+    line: 22
+    parent_title: "DB Integration Mapping \u2014 Metrics Anchor Stub Validation"
+    parent_slug: db-integration-mapping-metrics-anchor-stub-validation
+  - title: Agent Instructions
+    slug: agent-instructions
+    line: 34
+    parent_title: "DB Integration Mapping \u2014 Metrics Anchor Stub Validation"
+    parent_slug: db-integration-mapping-metrics-anchor-stub-validation
+  - title: Write Mapping
+    slug: write-mapping
+    line: 40
+    parent_title: "DB Integration Mapping \u2014 Metrics Anchor Stub Validation"
+    parent_slug: db-integration-mapping-metrics-anchor-stub-validation
+  - title: Notes
+    slug: notes
+    line: 60
+    parent_title: "DB Integration Mapping \u2014 Metrics Anchor Stub Validation"
+    parent_slug: db-integration-mapping-metrics-anchor-stub-validation
+  - title: Update Log
+    slug: update-log
+    line: 65
+    parent_title: "DB Integration Mapping \u2014 Metrics Anchor Stub Validation"
+    parent_slug: db-integration-mapping-metrics-anchor-stub-validation
+  links: []
+  description: 'The producer emits canonical positional bundles under:'
+  size_bytes: 2082
+  modified_utc: '2025-12-18T16:04:05.596021+00:00'
+  tags:
+  - db-integration
+  - producer
+  - healthview
+  - metrics
+  - anchors
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: active
+  frontmatter:
+    title: "DB Integration Mapping \u2014 Metrics Anchor Stub Validation"
+    audience:
+    - Copilot
+    - Agents
+    - Developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: active
+    version: 1.0.0
+    updated: '2025-12-18'
+    tags:
+    - db-integration
+    - producer
+    - healthview
+    - metrics
+    - anchors
+    related_files:
+    - .repo_studios/scripts/producers/validate_metrics_anchor_stubs.py
+    - .repo_studios/command_center/scripts/libraries/database_integration.py
+    - REPORT_NAMING_STANDARDS.md
+  contains_placeholder: false
+- folder: .repo_studios/command_center/docs/db_integrations
+  filename: .repo_studios/command_center/docs/db_integrations/db_integration_monkey_patches.md
+  slug: db-integration-monkeypatches
+  h1_headings:
+  - title: "DB Integration \u2014 monkey_patches"
+    slug: db-integration-monkeypatches
+    line: 23
+  h2_headings:
+  - title: Goals
+    slug: goals
+    line: 25
+    parent_title: "DB Integration \u2014 monkey_patches"
+    parent_slug: db-integration-monkeypatches
+  - title: System Context
+    slug: system-context
+    line: 30
+    parent_title: "DB Integration \u2014 monkey_patches"
+    parent_slug: db-integration-monkeypatches
+  - title: Agent Instructions
+    slug: agent-instructions
+    line: 36
+    parent_title: "DB Integration \u2014 monkey_patches"
+    parent_slug: db-integration-monkeypatches
+  - title: Human Notes
+    slug: human-notes
+    line: 68
+    parent_title: "DB Integration \u2014 monkey_patches"
+    parent_slug: db-integration-monkeypatches
+  - title: Update Log
+    slug: update-log
+    line: 74
+    parent_title: "DB Integration \u2014 monkey_patches"
+    parent_slug: db-integration-monkeypatches
+  links: []
+  description: null
+  size_bytes: 2929
+  modified_utc: '2025-12-17T23:50:14.347407+00:00'
+  tags:
+  - db
+  - integration
+  - producers
+  - healthview
+  - monkey_patches
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: approved
+  frontmatter:
+    title: "DB Integration \u2014 monkey_patches"
+    audience:
+    - coding_agent
+    - human_developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: approved
+    version: 1.0.0
+    updated: '2025-12-17'
+    tags:
+    - db
+    - integration
+    - producers
+    - healthview
+    - monkey_patches
+    related_files:
+    - ../../scripts/libraries/database_integration.py
+    - ../../../scripts/producers/scan_monkey_patches.py
+    - ../../../docs/automation/scan_monkey_patches.md
+  contains_placeholder: false
+- folder: .repo_studios/command_center/docs/db_integrations
+  filename: .repo_studios/command_center/docs/db_integrations/db_integration_render_inventory_views.md
+  slug: db-integration-inventory-overview-healthviewinventoryoverview
+  h1_headings:
+  - title: "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)"
+    slug: db-integration-inventory-overview-healthviewinventoryoverview
+    line: 18
+  h2_headings:
+  - title: Goals
+    slug: goals
+    line: 20
+    parent_title: "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)"
+    parent_slug: db-integration-inventory-overview-healthviewinventoryoverview
+  - title: System Context
+    slug: system-context
+    line: 25
+    parent_title: "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)"
+    parent_slug: db-integration-inventory-overview-healthviewinventoryoverview
+  - title: Write Sites
+    slug: write-sites
+    line: 32
+    parent_title: "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)"
+    parent_slug: db-integration-inventory-overview-healthviewinventoryoverview
+  - title: Schema Mapping
+    slug: schema-mapping
+    line: 42
+    parent_title: "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)"
+    parent_slug: db-integration-inventory-overview-healthviewinventoryoverview
+  - title: Compatibility Notes
+    slug: compatibility-notes
+    line: 70
+    parent_title: "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)"
+    parent_slug: db-integration-inventory-overview-healthviewinventoryoverview
+  - title: Update Log
+    slug: update-log
+    line: 78
+    parent_title: "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)"
+    parent_slug: db-integration-inventory-overview-healthviewinventoryoverview
+  links: []
+  description: Define the database-facing contract for the Inventory Overview producer
+    so dual-write storage can persist run metadata, summary markdown, and telemetry
+    payloads in a stable schema.
+  size_bytes: 3050
+  modified_utc: '2025-12-17T18:23:40.621821+00:00'
+  tags:
+  - db-integration
+  - healthview
+  - inventory
+  - producer
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: active
+  frontmatter:
+    title: "DB Integration \u2014 Inventory Overview (healthview/inventory_overview)"
+    audience:
+    - Copilot
+    - Agents
+    - Developer
+    role:
+    - Operational-Doc
+    - DB-Integration
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: active
+    version: 1.0.0
+    updated: '2025-12-17'
+    tags:
+    - db-integration
+    - healthview
+    - inventory
+    - producer
+    related_files:
+    - .repo_studios/scripts/producers/render_inventory_views.py
+    - .repo_studios/docs/automation/render_inventory_views.md
+    - .repo_studios/scripts/producers/check_inventory_health.py
     - .repo_studios/command_center/scripts/libraries/database_integration.py
     - REPORT_NAMING_STANDARDS.md
   contains_placeholder: false
@@ -21791,6 +24191,75 @@ documents:
     - ../../scripts/libraries/database_integration.py
     - ../../../scripts/producers/collect_test_log_reports.py
     - ../../../tests/tests_producers/test_collect_test_log_reports.py
+  contains_placeholder: false
+- folder: .repo_studios/command_center/docs/db_integrations
+  filename: .repo_studios/command_center/docs/db_integrations/db_integration_undocumented_logic.md
+  slug: undocumented-logic-db-integration
+  h1_headings:
+  - title: "Undocumented Logic \u2014 DB Integration"
+    slug: undocumented-logic-db-integration
+    line: 22
+  h2_headings:
+  - title: Goals
+    slug: goals
+    line: 24
+    parent_title: "Undocumented Logic \u2014 DB Integration"
+    parent_slug: undocumented-logic-db-integration
+  - title: System Context
+    slug: system-context
+    line: 30
+    parent_title: "Undocumented Logic \u2014 DB Integration"
+    parent_slug: undocumented-logic-db-integration
+  - title: Agent Instructions
+    slug: agent-instructions
+    line: 38
+    parent_title: "Undocumented Logic \u2014 DB Integration"
+    parent_slug: undocumented-logic-db-integration
+  - title: Human Notes
+    slug: human-notes
+    line: 43
+    parent_title: "Undocumented Logic \u2014 DB Integration"
+    parent_slug: undocumented-logic-db-integration
+  - title: Reference Prompts
+    slug: reference-prompts
+    line: 76
+    parent_title: "Undocumented Logic \u2014 DB Integration"
+    parent_slug: undocumented-logic-db-integration
+  - title: Update Log
+    slug: update-log
+    line: 86
+    parent_title: "Undocumented Logic \u2014 DB Integration"
+    parent_slug: undocumented-logic-db-integration
+  links: []
+  description: abstraction.
+  size_bytes: 2596
+  modified_utc: '2025-12-17T17:03:35.225241+00:00'
+  tags:
+  - db-integration
+  - healthview
+  - producer
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: active
+  frontmatter:
+    title: "Undocumented Logic \u2014 DB Integration"
+    audience:
+    - coding_agent
+    - human_developer
+    role:
+    - Operational-Doc
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: active
+    version: 1.0.0
+    updated: '2025-12-17'
+    tags:
+    - db-integration
+    - healthview
+    - producer
+    related_files:
+    - ../../scripts/libraries/database_integration.py
+    - ../../../scripts/producers/generate_undocumented_logic_report.py
   contains_placeholder: false
 - folder: .repo_studios/command_center/docs
   filename: .repo_studios/command_center/docs/decision_log.md
@@ -22257,8 +24726,8 @@ documents:
   description: This note packages the key resources operators need when executing
     Phase 3 manual extractions. Share this document with anyone running the checklist
     so they align with the latest tooling and report outputs.
-  size_bytes: 3069
-  modified_utc: '2025-11-08T23:02:50.721156+00:00'
+  size_bytes: 3150
+  modified_utc: '2025-12-17T01:38:22.486199+00:00'
   tags: []
   owners: []
   status: null
@@ -23845,8 +26314,8 @@ documents:
   description: Use this template when compiling the weekly automation readiness briefing.
     It blends duplicate resolution totals with lizard complexity scores and helper
     adoption stats so stakeholders see meaningful progress at a glance.
-  size_bytes: 5193
-  modified_utc: '2025-11-04T14:45:22.715420+00:00'
+  size_bytes: 5207
+  modified_utc: '2025-12-17T01:38:22.486199+00:00'
   tags: []
   owners: []
   status: null
@@ -25363,43 +27832,6 @@ documents:
   frontmatter: null
   contains_placeholder: false
 - folder: .repo_studios/command_center/scripts/scripts_index
-  filename: .repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md
-  slug: duplicate-scan-summary
-  h1_headings:
-  - title: Duplicate Scan Summary
-    slug: duplicate-scan-summary
-    line: 1
-  h2_headings:
-  - title: Overview
-    slug: overview
-    line: 3
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Inputs
-    slug: inputs
-    line: 13
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Top Duplicate Offenders
-    slug: top-duplicate-offenders
-    line: 18
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Next Steps
-    slug: next-steps
-    line: 100
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  links: []
-  description: "1. `configure_logging` \u2014 12 duplicate(s)"
-  size_bytes: 7229
-  modified_utc: '2025-12-15T18:05:31.172310+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
-  contains_placeholder: false
-- folder: .repo_studios/command_center/scripts/scripts_index
   filename: .repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md
   slug: duplicate-scan-summary
   h1_headings:
@@ -25430,7 +27862,7 @@ documents:
   links: []
   description: "1. `configure_logging` \u2014 12 duplicate(s)"
   size_bytes: 7198
-  modified_utc: '2025-12-15T18:05:31.173309+00:00'
+  modified_utc: '2025-12-18T12:22:43.714946+00:00'
   tags: []
   owners: []
   status: null
@@ -25468,6 +27900,43 @@ documents:
   description: "1. `configure_logging` \u2014 12 duplicate(s)"
   size_bytes: 7198
   modified_utc: '2025-12-15T18:05:31.173309+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: .repo_studios/command_center/scripts/scripts_index
+  filename: .repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251217-2039.md
+  slug: duplicate-scan-summary
+  h1_headings:
+  - title: Duplicate Scan Summary
+    slug: duplicate-scan-summary
+    line: 1
+  h2_headings:
+  - title: Overview
+    slug: overview
+    line: 3
+    parent_title: Duplicate Scan Summary
+    parent_slug: duplicate-scan-summary
+  - title: Inputs
+    slug: inputs
+    line: 13
+    parent_title: Duplicate Scan Summary
+    parent_slug: duplicate-scan-summary
+  - title: Top Duplicate Offenders
+    slug: top-duplicate-offenders
+    line: 18
+    parent_title: Duplicate Scan Summary
+    parent_slug: duplicate-scan-summary
+  - title: Next Steps
+    slug: next-steps
+    line: 174
+    parent_title: Duplicate Scan Summary
+    parent_slug: duplicate-scan-summary
+  links: []
+  description: "1. `_parse_timestamp` \u2014 27 duplicate(s)"
+  size_bytes: 16000
+  modified_utc: '2025-12-17T20:39:39.920788+00:00'
   tags: []
   owners: []
   status: null
@@ -26135,29 +28604,29 @@ documents:
     parent_slug: automation-checkinventoryhealth
   - title: Agent Instructions
     slug: agent-instructions
-    line: 54
+    line: 55
     parent_title: "Automation \u2014 check_inventory_health"
     parent_slug: automation-checkinventoryhealth
   - title: Human Notes
     slug: human-notes
-    line: 77
+    line: 78
     parent_title: "Automation \u2014 check_inventory_health"
     parent_slug: automation-checkinventoryhealth
   - title: Reference Prompts
     slug: reference-prompts
-    line: 95
+    line: 96
     parent_title: "Automation \u2014 check_inventory_health"
     parent_slug: automation-checkinventoryhealth
   - title: Update Log
     slug: update-log
-    line: 100
+    line: 101
     parent_title: "Automation \u2014 check_inventory_health"
     parent_slug: automation-checkinventoryhealth
   links: []
   description: See `.github/instructions/markdown.instructions.md` for repo-wide Markdown
     rules (last reviewed 2025-12-15).
-  size_bytes: 3372
-  modified_utc: '2025-12-15T20:58:09.903934+00:00'
+  size_bytes: 3464
+  modified_utc: '2025-12-17T18:23:40.605108+00:00'
   tags:
   - automation
   - healthview
@@ -26225,8 +28694,8 @@ documents:
     parent_slug: ci-metrics-checks-for-inventory-reports
   links: []
   description: 'Last updated: 2025-10-18'
-  size_bytes: 2419
-  modified_utc: '2025-12-11T10:50:58.485331+00:00'
+  size_bytes: 2523
+  modified_utc: '2025-12-17T18:23:40.625822+00:00'
   tags: []
   owners: []
   status: null
@@ -26977,7 +29446,7 @@ documents:
     \ flags risky specifications, and emits structured artifacts so agents can track\
     \ hygiene regressions. Reports consolidate requirement files (and optionally\u2026"
   size_bytes: 3903
-  modified_utc: '2025-12-16T20:10:31.378690+00:00'
+  modified_utc: '2025-12-16T21:14:26.596424+00:00'
   tags:
   - automation
   - healthview
@@ -27057,7 +29526,7 @@ documents:
     so AI agents and operators can locate content, follow cross-links, and understand
     section structure without rescanning the filesystem.'
   size_bytes: 3469
-  modified_utc: '2025-12-16T21:06:34.408259+00:00'
+  modified_utc: '2025-12-16T21:14:26.601426+00:00'
   tags:
   - docs
   - producer
@@ -27092,54 +29561,144 @@ documents:
     - REPORT_NAMING_STANDARDS.md
   contains_placeholder: true
 - folder: .repo_studios/docs/automation
+  filename: .repo_studios/docs/automation/generate_import_graph_report.md
+  slug: generateimportgraphreportpy
+  h1_headings:
+  - title: generate_import_graph_report.py
+    slug: generateimportgraphreportpy
+    line: 22
+  h2_headings:
+  - title: Purpose
+    slug: purpose
+    line: 24
+    parent_title: generate_import_graph_report.py
+    parent_slug: generateimportgraphreportpy
+  - title: Invocation
+    slug: invocation
+    line: 37
+    parent_title: generate_import_graph_report.py
+    parent_slug: generateimportgraphreportpy
+  - title: Outputs
+    slug: outputs
+    line: 60
+    parent_title: generate_import_graph_report.py
+    parent_slug: generateimportgraphreportpy
+  - title: Consumer notes
+    slug: consumer-notes
+    line: 75
+    parent_title: generate_import_graph_report.py
+    parent_slug: generateimportgraphreportpy
+  - title: Testing
+    slug: testing
+    line: 82
+    parent_title: generate_import_graph_report.py
+    parent_slug: generateimportgraphreportpy
+  - title: Update Log
+    slug: update-log
+    line: 87
+    parent_title: generate_import_graph_report.py
+    parent_slug: generateimportgraphreportpy
+  links: []
+  description: '`generate_import_graph_report.py` scans owned Python packages inside
+    the repository and emits an adjacency graph of import relationships. The report
+    highlights:'
+  size_bytes: 3320
+  modified_utc: '2025-12-16T22:07:37.971519+00:00'
+  tags:
+  - automation
+  - healthview
+  - import-graph
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: active
+  frontmatter:
+    title: generate_import_graph_report.py
+    audience:
+    - coding_agent
+    - human_developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: active
+    version: 2.0.0
+    updated: '2025-12-16'
+    tags:
+    - automation
+    - healthview
+    - import-graph
+    related_files:
+    - ../../scripts/producers/generate_import_graph_report.py
+    - ../../tests/tests_producers/test_generate_import_graph_report.py
+    - ../../command_center/docs/db_integrations/db_integration_import_graph.md
+    - ../../scripts/producers/validate_import_boundaries.py
+  contains_placeholder: false
+- folder: .repo_studios/docs/automation
   filename: .repo_studios/docs/automation/generate_lizard_report.md
   slug: generatelizardreportpy
   h1_headings:
   - title: generate_lizard_report.py
     slug: generatelizardreportpy
-    line: 1
+    line: 21
   h2_headings:
-  - title: Purpose
-    slug: purpose
-    line: 5
+  - title: Goals
+    slug: goals
+    line: 23
+    parent_title: generate_lizard_report.py
+    parent_slug: generatelizardreportpy
+  - title: System Context
+    slug: system-context
+    line: 29
+    parent_title: generate_lizard_report.py
+    parent_slug: generatelizardreportpy
+  - title: Agent Instructions
+    slug: agent-instructions
+    line: 40
     parent_title: generate_lizard_report.py
     parent_slug: generatelizardreportpy
   - title: Invocation
     slug: invocation
-    line: 9
+    line: 46
     parent_title: generate_lizard_report.py
     parent_slug: generatelizardreportpy
-  - title: Outputs
-    slug: outputs
-    line: 37
-    parent_title: generate_lizard_report.py
-    parent_slug: generatelizardreportpy
-  - title: Status semantics
-    slug: status-semantics
-    line: 63
-    parent_title: generate_lizard_report.py
-    parent_slug: generatelizardreportpy
-  - title: Testing
-    slug: testing
-    line: 70
-    parent_title: generate_lizard_report.py
-    parent_slug: generatelizardreportpy
-  - title: Operational notes
-    slug: operational-notes
+  - title: Human Notes
+    slug: human-notes
     line: 75
     parent_title: generate_lizard_report.py
     parent_slug: generatelizardreportpy
+  - title: Update Log
+    slug: update-log
+    line: 81
+    parent_title: generate_lizard_report.py
+    parent_slug: generatelizardreportpy
   links: []
-  description: "`generate_lizard_report.py` runs `python -m lizard` across the owned\
-    \ source tree, captures the JSON output, and emits structured artifacts so downstream\
-    \ agents can track cyclomatic complexity hotspots and long functions. It is designed\
-    \ to\u2026"
-  size_bytes: 4795
-  modified_utc: '2025-10-22T21:38:16.995302+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
+  description: This producer runs `python -m lizard` against selected targets inside
+    the repo and writes a canonical 3-artifact bundle.
+  size_bytes: 3451
+  modified_utc: '2025-12-17T01:38:22.483200+00:00'
+  tags:
+  - producer
+  - healthview
+  - complexity
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: active
+  frontmatter:
+    title: Lizard Complexity Report Producer
+    audience:
+    - coding_agent
+    - human_developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: active
+    version: 2.0.0
+    updated: '2025-12-16'
+    tags:
+    - producer
+    - healthview
+    - complexity
+    related_files:
+    - ../../scripts/producers/generate_lizard_report.py
+    - ../../tests/tests_producers/test_generate_lizard_report.py
+    - ../../Makefile
   contains_placeholder: false
 - folder: .repo_studios/docs/automation
   filename: .repo_studios/docs/automation/generate_standards_index.md
@@ -27197,49 +29756,80 @@ documents:
   h1_headings:
   - title: generate_test_coverage_inventory.py
     slug: generatetestcoverageinventorypy
-    line: 1
+    line: 16
   h2_headings:
   - title: Purpose
     slug: purpose
-    line: 5
+    line: 20
     parent_title: generate_test_coverage_inventory.py
     parent_slug: generatetestcoverageinventorypy
   - title: Invocation
     slug: invocation
-    line: 9
+    line: 26
     parent_title: generate_test_coverage_inventory.py
     parent_slug: generatetestcoverageinventorypy
   - title: Outputs
     slug: outputs
-    line: 37
+    line: 54
     parent_title: generate_test_coverage_inventory.py
     parent_slug: generatetestcoverageinventorypy
   - title: Status semantics
     slug: status-semantics
-    line: 51
+    line: 64
     parent_title: generate_test_coverage_inventory.py
     parent_slug: generatetestcoverageinventorypy
   - title: Testing
     slug: testing
-    line: 59
+    line: 72
     parent_title: generate_test_coverage_inventory.py
     parent_slug: generatetestcoverageinventorypy
   - title: Operational notes
     slug: operational-notes
-    line: 64
+    line: 77
     parent_title: generate_test_coverage_inventory.py
     parent_slug: generatetestcoverageinventorypy
-  links: []
-  description: "`generate_test_coverage_inventory.py` ingests a Coverage.py XML report\
-    \ and produces a per-file inventory showing how many functions exist, how many\
-    \ are exercised by tests, and which remain uncovered. The producer emits JSON,\
-    \ Markdown, CSV,\u2026"
-  size_bytes: 4223
-  modified_utc: '2025-11-23T12:12:27.820382+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
+  - title: References
+    slug: references
+    line: 85
+    parent_title: generate_test_coverage_inventory.py
+    parent_slug: generatetestcoverageinventorypy
+  links:
+  - ../../.github/instructions/markdown.instructions.md
+  description: '`generate_test_coverage_inventory.py` ingests a Coverage.py XML report
+    and produces a per-file inventory showing how many functions exist, how many are
+    exercised by tests, and which remain uncovered.'
+  size_bytes: 4485
+  modified_utc: '2025-12-17T12:55:53.914422+00:00'
+  tags:
+  - automation
+  - producer
+  - healthview
+  - test-coverage
+  owners:
+  - repo_studios_ai
+  status: active
+  frontmatter:
+    title: generate_test_coverage_inventory.py
+    audience:
+    - Copilot
+    - Agents
+    - Developer
+    role:
+    - AutomationDoc
+    owners:
+    - repo_studios_ai
+    status: active
+    version: 2
+    updated_at: '2025-12-17'
+    tags:
+    - automation
+    - producer
+    - healthview
+    - test-coverage
+    related_files:
+    - .repo_studios/scripts/producers/generate_test_coverage_inventory.py
+    - .repo_studios/tests/tests_producers/test_generate_test_coverage_inventory.py
+    - .repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md
   contains_placeholder: false
 - folder: .repo_studios/docs/automation
   filename: .repo_studios/docs/automation/generate_test_log_health_report.md
@@ -27330,32 +29920,71 @@ documents:
   h1_headings:
   - title: Typecheck Report Producer
     slug: typecheck-report-producer
-    line: 1
+    line: 16
   h2_headings:
-  - title: Invocation
-    slug: invocation
-    line: 5
+  - title: Goals
+    slug: goals
+    line: 20
     parent_title: Typecheck Report Producer
     parent_slug: typecheck-report-producer
-  - title: Outputs
-    slug: outputs
+  - title: System Context
+    slug: system-context
     line: 26
+    parent_title: Typecheck Report Producer
+    parent_slug: typecheck-report-producer
+  - title: Invocation
+    slug: invocation
+    line: 35
+    parent_title: Typecheck Report Producer
+    parent_slug: typecheck-report-producer
+  - title: Agent Instructions
+    slug: agent-instructions
+    line: 78
     parent_title: Typecheck Report Producer
     parent_slug: typecheck-report-producer
   - title: Testing
     slug: testing
-    line: 47
+    line: 84
+    parent_title: Typecheck Report Producer
+    parent_slug: typecheck-report-producer
+  - title: Update Log
+    slug: update-log
+    line: 90
     parent_title: Typecheck Report Producer
     parent_slug: typecheck-report-producer
   links: []
   description: The `generate_typecheck_report.py` producer runs `mypy` with the repository
-    defaults and captures a structured set of artifacts for observability.
-  size_bytes: 1895
-  modified_utc: '2025-10-23T02:03:40.458715+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
+    defaults and emits a canonical 3-artifact bundle for observability.
+  size_bytes: 2869
+  modified_utc: '2025-12-17T16:29:02.339003+00:00'
+  tags:
+  - producer
+  - healthview
+  - typecheck
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: active
+  frontmatter:
+    title: Typecheck Report Producer
+    audience:
+    - Copilot
+    - Agents
+    - Developer
+    role:
+    - AutomationDoc
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: active
+    version: 2.1.0
+    updated_at: '2025-12-17'
+    tags:
+    - producer
+    - healthview
+    - typecheck
+    related_files:
+    - .repo_studios/scripts/producers/generate_typecheck_report.py
+    - .repo_studios/tests/tests_producers/test_generate_typecheck_report.py
+    - .repo_studios/Makefile
   contains_placeholder: false
 - folder: .repo_studios/docs/automation
   filename: .repo_studios/docs/automation/generate_undocumented_logic_report.md
@@ -27363,44 +29992,70 @@ documents:
   h1_headings:
   - title: generate_undocumented_logic_report
     slug: generateundocumentedlogicreport
-    line: 1
+    line: 22
   h2_headings:
-  - title: Purpose
-    slug: purpose
-    line: 3
+  - title: Goals
+    slug: goals
+    line: 24
     parent_title: generate_undocumented_logic_report
     parent_slug: generateundocumentedlogicreport
-  - title: Inputs
-    slug: inputs
-    line: 10
+  - title: System Context
+    slug: system-context
+    line: 30
     parent_title: generate_undocumented_logic_report
     parent_slug: generateundocumentedlogicreport
-  - title: Outputs
-    slug: outputs
-    line: 27
+  - title: Agent Instructions
+    slug: agent-instructions
+    line: 35
     parent_title: generate_undocumented_logic_report
     parent_slug: generateundocumentedlogicreport
-  - title: Usage
-    slug: usage
-    line: 43
+  - title: Human Notes
+    slug: human-notes
+    line: 42
     parent_title: generate_undocumented_logic_report
     parent_slug: generateundocumentedlogicreport
-  - title: Testing
-    slug: testing
-    line: 58
+  - title: Reference Prompts
+    slug: reference-prompts
+    line: 67
+    parent_title: generate_undocumented_logic_report
+    parent_slug: generateundocumentedlogicreport
+  - title: Update Log
+    slug: update-log
+    line: 88
     parent_title: generate_undocumented_logic_report
     parent_slug: generateundocumentedlogicreport
   links: []
-  description: "`generate_undocumented_logic_report.py` scans the repo automation\
-    \ scripts for public functions, classes, and methods that lack docstrings. The\
-    \ report helps identify code paths that should have documentation anchors or docstring\
-    \ coverage\u2026"
-  size_bytes: 2681
-  modified_utc: '2025-12-16T16:16:30.904227+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
+  description: '`generate_undocumented_logic_report.py` scans automation scripts for
+    public functions, classes, and methods that lack docstrings. The output feeds
+    the Docs Health workflow by highlighting missing documentation coverage in code.'
+  size_bytes: 3042
+  modified_utc: '2025-12-17T17:03:35.225241+00:00'
+  tags:
+  - producers
+  - docs-health
+  - healthview
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: active
+  frontmatter:
+    title: Undocumented Logic Producer
+    audience:
+    - coding_agent
+    - human_developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: active
+    version: 1.0.0
+    updated: '2025-12-17'
+    tags:
+    - producers
+    - docs-health
+    - healthview
+    related_files:
+    - ../../scripts/producers/generate_undocumented_logic_report.py
+    - ../../scripts/aggregators/aggregate_docs_health_signals.py
+    - ../../command_center/scripts/orchestrators/run_docs_health_overview.py
+    - ../../tests/tests_producers/test_generate_undocumented_logic_report.py
   contains_placeholder: false
 - folder: .repo_studios/docs/automation
   filename: .repo_studios/docs/automation/healthview_onboarding.md
@@ -27600,33 +30255,59 @@ documents:
   h1_headings:
   - title: Render Inventory Views Producer
     slug: render-inventory-views-producer
-    line: 1
+    line: 18
   h2_headings:
   - title: Invocation
     slug: invocation
-    line: 5
+    line: 22
     parent_title: Render Inventory Views Producer
     parent_slug: render-inventory-views-producer
   - title: Outputs
     slug: outputs
-    line: 21
+    line: 38
     parent_title: Render Inventory Views Producer
     parent_slug: render-inventory-views-producer
   - title: Testing
     slug: testing
-    line: 45
+    line: 58
     parent_title: Render Inventory Views Producer
     parent_slug: render-inventory-views-producer
   links: []
   description: The `render_inventory_views.py` producer assembles the inventory YAML
     sources into curated document, script, and test views while exporting them as
     structured artifacts for downstream automation.
-  size_bytes: 2019
-  modified_utc: '2025-10-23T09:50:23.539274+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
+  size_bytes: 2684
+  modified_utc: '2025-12-17T18:23:40.617822+00:00'
+  tags:
+  - inventory
+  - producer
+  - healthview
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: active
+  frontmatter:
+    title: Render Inventory Views Producer
+    audience:
+    - Copilot
+    - Agents
+    - Developer
+    role:
+    - Operational-Doc
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: active
+    version: 1.0.0
+    updated: '2025-12-17'
+    tags:
+    - inventory
+    - producer
+    - healthview
+    related_files:
+    - .repo_studios/scripts/producers/render_inventory_views.py
+    - .repo_studios/tests/tests_producers/test_render_inventory_views.py
+    - .repo_studios/scripts/producers/check_inventory_health.py
+    - .repo_studios/command_center/scripts/libraries/database_integration.py
+    - REPORT_NAMING_STANDARDS.md
   contains_placeholder: false
 - folder: .repo_studios/docs/automation
   filename: .repo_studios/docs/automation/run_fault_pipeline.md
@@ -27766,41 +30447,41 @@ documents:
   h1_headings:
   - title: scan_code_placeholders.py
     slug: scancodeplaceholderspy
-    line: 1
+    line: 21
   h2_headings:
   - title: Purpose
     slug: purpose
-    line: 5
+    line: 25
     parent_title: scan_code_placeholders.py
     parent_slug: scancodeplaceholderspy
   - title: Invocation
     slug: invocation
-    line: 9
+    line: 29
     parent_title: scan_code_placeholders.py
     parent_slug: scancodeplaceholderspy
   - title: Outputs
     slug: outputs
-    line: 37
+    line: 58
     parent_title: scan_code_placeholders.py
     parent_slug: scancodeplaceholderspy
   - title: Diagnostics
     slug: diagnostics
-    line: 57
+    line: 72
     parent_title: scan_code_placeholders.py
     parent_slug: scancodeplaceholderspy
   - title: Allowlist format
     slug: allowlist-format
-    line: 65
+    line: 80
     parent_title: scan_code_placeholders.py
     parent_slug: scancodeplaceholderspy
   - title: Testing
     slug: testing
-    line: 77
+    line: 92
     parent_title: scan_code_placeholders.py
     parent_slug: scancodeplaceholderspy
   - title: Operational notes
     slug: operational-notes
-    line: 83
+    line: 98
     parent_title: scan_code_placeholders.py
     parent_slug: scancodeplaceholderspy
   links: []
@@ -27808,12 +30489,33 @@ documents:
     \ FIXME, and NOTE across the repository. The producer emits structured artifacts\
     \ so agents can track placeholder volume, identify hot files, and gate builds\
     \ on unapproved\u2026"
-  size_bytes: 6420
-  modified_utc: '2025-11-25T00:22:28.965573+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
+  size_bytes: 6594
+  modified_utc: '2025-12-17T19:43:51.315571+00:00'
+  tags:
+  - automation
+  - producers
+  - placeholders
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: approved
+  frontmatter:
+    title: scan_code_placeholders.py
+    audience:
+    - coding_agent
+    - human_developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: approved
+    version: 1.2.0
+    updated: '2025-12-17'
+    tags:
+    - automation
+    - producers
+    - placeholders
+    related_files:
+    - ../../scripts/producers/scan_code_placeholders.py
+    - ../../tests/tests_producers/test_scan_code_placeholders.py
+    - ../../command_center/scripts/libraries/database_integration.py
   contains_placeholder: true
 - folder: .repo_studios/docs/automation
   filename: .repo_studios/docs/automation/scan_monkey_patches.md
@@ -27821,36 +30523,41 @@ documents:
   h1_headings:
   - title: scan_monkey_patches.py
     slug: scanmonkeypatchespy
-    line: 1
+    line: 24
   h2_headings:
   - title: Purpose
     slug: purpose
-    line: 5
+    line: 26
     parent_title: scan_monkey_patches.py
     parent_slug: scanmonkeypatchespy
   - title: Invocation
     slug: invocation
-    line: 9
+    line: 32
     parent_title: scan_monkey_patches.py
     parent_slug: scanmonkeypatchespy
   - title: Outputs
     slug: outputs
-    line: 39
+    line: 63
     parent_title: scan_monkey_patches.py
     parent_slug: scanmonkeypatchespy
   - title: Diagnostics
     slug: diagnostics
-    line: 69
+    line: 82
     parent_title: scan_monkey_patches.py
     parent_slug: scanmonkeypatchespy
   - title: Testing
     slug: testing
-    line: 77
+    line: 90
     parent_title: scan_monkey_patches.py
     parent_slug: scanmonkeypatchespy
   - title: Operational notes
     slug: operational-notes
-    line: 83
+    line: 96
+    parent_title: scan_monkey_patches.py
+    parent_slug: scanmonkeypatchespy
+  - title: Update Log
+    slug: update-log
+    line: 104
     parent_title: scan_monkey_patches.py
     parent_slug: scanmonkeypatchespy
   links: []
@@ -27858,12 +30565,38 @@ documents:
     \ the repository. It identifies attribute reassignments, `sys.modules` rewrites,\
     \ import-time side effects, and other high-risk behaviors so automation can monitor\
     \ drift and\u2026"
-  size_bytes: 5224
-  modified_utc: '2025-11-23T22:11:45.717043+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
+  size_bytes: 5247
+  modified_utc: '2025-12-17T23:50:14.347407+00:00'
+  tags:
+  - producers
+  - healthview
+  - monkey_patches
+  - pruning
+  - db
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: approved
+  frontmatter:
+    title: "scan_monkey_patches \u2014 Monkey Patch Inventory Producer"
+    audience:
+    - coding_agent
+    - human_developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: approved
+    version: 2.0.0
+    updated: '2025-12-17'
+    tags:
+    - producers
+    - healthview
+    - monkey_patches
+    - pruning
+    - db
+    related_files:
+    - ../../scripts/producers/scan_monkey_patches.py
+    - ../../tests/tests_producers/test_scan_monkey_patches.py
+    - ../../command_center/scripts/libraries/database_integration.py
+    - ../../command_center/docs/db_integrations/db_integration_monkey_patches.md
   contains_placeholder: false
 - folder: .repo_studios/docs/automation
   filename: .repo_studios/docs/automation/seed_standards_prompts.md
@@ -27909,7 +30642,7 @@ documents:
     \ rules, groups them by category, and publishes structured bundles so downstream\
     \ agents can\u2026"
   size_bytes: 3787
-  modified_utc: '2025-11-27T17:20:15.674439+00:00'
+  modified_utc: '2025-12-18T12:22:43.715945+00:00'
   tags: []
   owners: []
   status: null
@@ -28687,7 +31420,7 @@ documents:
     \ the `agents` and `api` packages. It blends static source scanning with the latest\
     \ import graph snapshot to highlight disallowed edges, cycles, and file-level\u2026"
   size_bytes: 3680
-  modified_utc: '2025-10-23T20:46:06.804068+00:00'
+  modified_utc: '2025-12-18T12:22:43.716946+00:00'
   tags: []
   owners: []
   status: null
@@ -28720,7 +31453,7 @@ documents:
   description: The `validate_inventory.py` producer walks the inventory catalog, enforces
     schema conventions, and writes structured validation bundles for downstream tooling.
   size_bytes: 1882
-  modified_utc: '2025-10-23T11:18:26.650942+00:00'
+  modified_utc: '2025-12-18T12:22:43.717946+00:00'
   tags: []
   owners: []
   status: null
@@ -28732,36 +31465,41 @@ documents:
   h1_headings:
   - title: validate_markdown_anchors.py
     slug: validatemarkdownanchorspy
-    line: 1
+    line: 17
   h2_headings:
   - title: Purpose
     slug: purpose
-    line: 5
+    line: 19
     parent_title: validate_markdown_anchors.py
     parent_slug: validatemarkdownanchorspy
   - title: Invocation
     slug: invocation
-    line: 12
+    line: 26
     parent_title: validate_markdown_anchors.py
     parent_slug: validatemarkdownanchorspy
   - title: Outputs
     slug: outputs
-    line: 33
+    line: 46
     parent_title: validate_markdown_anchors.py
     parent_slug: validatemarkdownanchorspy
   - title: Status semantics
     slug: status-semantics
-    line: 45
+    line: 60
     parent_title: validate_markdown_anchors.py
     parent_slug: validatemarkdownanchorspy
   - title: Testing
     slug: testing
-    line: 55
+    line: 70
     parent_title: validate_markdown_anchors.py
     parent_slug: validatemarkdownanchorspy
   - title: Operational notes
     slug: operational-notes
-    line: 63
+    line: 78
+    parent_title: validate_markdown_anchors.py
+    parent_slug: validatemarkdownanchorspy
+  - title: Update Log
+    slug: update-log
+    line: 87
     parent_title: validate_markdown_anchors.py
     parent_slug: validatemarkdownanchorspy
   links: []
@@ -28769,12 +31507,42 @@ documents:
     \ anchor references and cross-file links, verifying that every referenced document\
     \ exists and that GitHub-style heading slugs resolve. The producer emits JSON\
     \ and\u2026"
-  size_bytes: 3062
-  modified_utc: '2025-11-25T19:39:48.109027+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
+  size_bytes: 3707
+  modified_utc: '2025-12-18T12:37:54.373653+00:00'
+  tags:
+  - automation
+  - markdown
+  - anchors
+  - links
+  - producer
+  - healthview
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: active
+  frontmatter:
+    title: validate_markdown_anchors.py
+    audience:
+    - Copilot
+    - Agents
+    - Developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: active
+    version: 1.1.0
+    updated: '2025-12-18'
+    tags:
+    - automation
+    - markdown
+    - anchors
+    - links
+    - producer
+    - healthview
+    related_files:
+    - .repo_studios/scripts/producers/validate_markdown_anchors.py
+    - .repo_studios/tests/tests_producers/test_validate_markdown_anchors.py
+    - .repo_studios/Makefile
+    - .repo_studios/command_center/scripts/libraries/database_integration.py
+    - REPORT_NAMING_STANDARDS.md
   contains_placeholder: false
 - folder: .repo_studios/docs/automation
   filename: .repo_studios/docs/automation/validate_metrics_anchor_stubs.md
@@ -28782,48 +31550,78 @@ documents:
   h1_headings:
   - title: validate_metrics_anchor_stubs.py
     slug: validatemetricsanchorstubspy
-    line: 1
+    line: 17
   h2_headings:
   - title: Purpose
     slug: purpose
-    line: 5
+    line: 19
     parent_title: validate_metrics_anchor_stubs.py
     parent_slug: validatemetricsanchorstubspy
   - title: Invocation
     slug: invocation
-    line: 12
+    line: 28
     parent_title: validate_metrics_anchor_stubs.py
     parent_slug: validatemetricsanchorstubspy
   - title: Outputs
     slug: outputs
-    line: 36
+    line: 53
     parent_title: validate_metrics_anchor_stubs.py
     parent_slug: validatemetricsanchorstubspy
   - title: Diagnostics
     slug: diagnostics
-    line: 56
+    line: 70
     parent_title: validate_metrics_anchor_stubs.py
     parent_slug: validatemetricsanchorstubspy
   - title: Testing
     slug: testing
-    line: 64
+    line: 78
     parent_title: validate_metrics_anchor_stubs.py
     parent_slug: validatemetricsanchorstubspy
   - title: Operational notes
     slug: operational-notes
-    line: 71
+    line: 85
     parent_title: validate_metrics_anchor_stubs.py
     parent_slug: validatemetricsanchorstubspy
   links: []
-  description: "`validate_metrics_anchor_stubs.py` scans repository markdown for links\
-    \ into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has\
-    \ a matching legacy stub entry. The refactor emits structured artifacts\u2026"
-  size_bytes: 3140
-  modified_utc: '2025-10-23T23:24:42.780107+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
+  description: '`validate_metrics_anchor_stubs.py` scans repository markdown for links
+    into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has
+    a matching legacy stub entry under the "Legacy Anchor Compatibility" section.'
+  size_bytes: 3681
+  modified_utc: '2025-12-18T16:04:05.596021+00:00'
+  tags:
+  - automation
+  - markdown
+  - anchors
+  - metrics
+  - producer
+  - healthview
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: active
+  frontmatter:
+    title: validate_metrics_anchor_stubs.py
+    audience:
+    - Copilot
+    - Agents
+    - Developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: active
+    version: 1.1.0
+    updated: '2025-12-18'
+    tags:
+    - automation
+    - markdown
+    - anchors
+    - metrics
+    - producer
+    - healthview
+    related_files:
+    - .repo_studios/scripts/producers/validate_metrics_anchor_stubs.py
+    - .repo_studios/tests/tests_producers/test_validate_metrics_anchor_stubs.py
+    - .repo_studios/Makefile
+    - .repo_studios/command_center/scripts/libraries/database_integration.py
+    - REPORT_NAMING_STANDARDS.md
   contains_placeholder: false
 - folder: .repo_studios/docs/automation
   filename: .repo_studios/docs/automation/verify_docs_integrity.md
@@ -28831,31 +31629,31 @@ documents:
   h1_headings:
   - title: verify_docs_integrity
     slug: verifydocsintegrity
-    line: 1
+    line: 15
   h2_headings:
   - title: Overview
     slug: overview
-    line: 3
+    line: 17
     parent_title: verify_docs_integrity
     parent_slug: verifydocsintegrity
   - title: Invocation
     slug: invocation
-    line: 7
+    line: 21
     parent_title: verify_docs_integrity
     parent_slug: verifydocsintegrity
   - title: Artifacts
     slug: artifacts
-    line: 32
+    line: 46
     parent_title: verify_docs_integrity
     parent_slug: verifydocsintegrity
   - title: Exit semantics
     slug: exit-semantics
-    line: 43
+    line: 61
     parent_title: verify_docs_integrity
     parent_slug: verifydocsintegrity
   - title: Integration Notes
     slug: integration-notes
-    line: 54
+    line: 72
     parent_title: verify_docs_integrity
     parent_slug: verifydocsintegrity
   links: []
@@ -28863,12 +31661,36 @@ documents:
     \ to ensure each fenced payload exposes a stable `content_hash`. The script also\
     \ refreshes the navigation table contained in `docs/standards/docs_index.md` unless\
     \ `--no-\u2026"
-  size_bytes: 2945
-  modified_utc: '2025-11-04T14:45:22.664536+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
+  size_bytes: 3363
+  modified_utc: '2025-12-18T17:36:18.986162+00:00'
+  tags:
+  - automation
+  - producer
+  - docs-integrity
+  - healthview
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: active
+  frontmatter:
+    title: verify_docs_integrity Producer
+    audience:
+    - Copilot
+    - Agents
+    - Developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: active
+    version: 1.1.0
+    updated: '2025-12-18'
+    tags:
+    - automation
+    - producer
+    - docs-integrity
+    - healthview
+    related_files:
+    - .repo_studios/scripts/producers/verify_docs_integrity.py
+    - .repo_studios/tests/tests_producers/test_verify_docs_integrity.py
+    - .repo_studios/command_center/docs/db_integrations/db_integration_docs_integrity_validation.md
   contains_placeholder: false
 - folder: .repo_studios/docs
   filename: .repo_studios/docs/directory_layout.md
@@ -28900,8 +31722,8 @@ documents:
     parent_slug: directory-layout-reference
   links: []
   description: 'Last updated: 2025-10-17'
-  size_bytes: 2719
-  modified_utc: '2025-12-11T10:50:58.485331+00:00'
+  size_bytes: 2756
+  modified_utc: '2025-12-17T18:23:40.625822+00:00'
   tags: []
   owners: []
   status: null
@@ -29016,13 +31838,13 @@ documents:
     parent_slug: inventory-reports-overview
   - title: CI Consumption Patterns
     slug: ci-consumption-patterns
-    line: 32
+    line: 28
     parent_title: Inventory Reports Overview
     parent_slug: inventory-reports-overview
   links: []
   description: 'Last updated: 2025-12-10'
-  size_bytes: 2875
-  modified_utc: '2025-12-11T01:51:15.211609+00:00'
+  size_bytes: 1924
+  modified_utc: '2025-12-17T18:23:40.625822+00:00'
   tags: []
   owners: []
   status: null
@@ -29303,136 +32125,291 @@ documents:
     - .repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md
   contains_placeholder: false
 - folder: .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline
+  filename: .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md
+  slug: healthview-hop-alignment-superseded
+  h1_headings:
+  - title: HealthView HOP Alignment (Superseded)
+    slug: healthview-hop-alignment-superseded
+    line: 27
+  h2_headings:
+  - title: Goals
+    slug: goals
+    line: 36
+    parent_title: HealthView HOP Alignment (Superseded)
+    parent_slug: healthview-hop-alignment-superseded
+  - title: System Context
+    slug: system-context
+    line: 40
+    parent_title: HealthView HOP Alignment (Superseded)
+    parent_slug: healthview-hop-alignment-superseded
+  - title: Decisions (Summary)
+    slug: decisions-summary
+    line: 46
+    parent_title: HealthView HOP Alignment (Superseded)
+    parent_slug: healthview-hop-alignment-superseded
+  - title: Update Log
+    slug: update-log
+    line: 57
+    parent_title: HealthView HOP Alignment (Superseded)
+    parent_slug: healthview-hop-alignment-superseded
+  links:
+  - hop_implementation.md
+  - tier1_healthview_orchestration_pipeline.md
+  description: 'This document is **superseded** by:'
+  size_bytes: 2244
+  modified_utc: '2025-12-18T22:42:18.576135+00:00'
+  tags:
+  - pipeline
+  - healthview
+  - hop
+  - alignment
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: superseded
+  frontmatter:
+    title: HealthView HOP Alignment (Superseded)
+    tier: tier-2
+    audience:
+    - coding_agent
+    - human_developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    role:
+    - historical-notes
+    status: superseded
+    version: 0.1.0
+    updated_at: '2025-12-18'
+    tags:
+    - pipeline
+    - healthview
+    - hop
+    - alignment
+    related_files:
+    - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md
+    - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md
+    - .github/instructions/markdown.instructions.md
+    - .github/instructions/pipeline_doc_tiers.instructions.md
+  contains_placeholder: false
+- folder: .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline
+  filename: .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md
+  slug: healthview-hop-implementation-plan
+  h1_headings:
+  - title: HealthView HOP Implementation Plan
+    slug: healthview-hop-implementation-plan
+    line: 31
+  h2_headings:
+  - title: 0. Instruction Block for Editors & AI Assistants
+    slug: 0-instruction-block-for-editors-ai-assistants
+    line: 42
+    parent_title: HealthView HOP Implementation Plan
+    parent_slug: healthview-hop-implementation-plan
+  - title: 1. Goals & Success Criteria
+    slug: 1-goals-success-criteria
+    line: 61
+    parent_title: HealthView HOP Implementation Plan
+    parent_slug: healthview-hop-implementation-plan
+  - title: 2. System Context
+    slug: 2-system-context
+    line: 80
+    parent_title: HealthView HOP Implementation Plan
+    parent_slug: healthview-hop-implementation-plan
+  - title: 3. Stage Narratives (Workstreams)
+    slug: 3-stage-narratives-workstreams
+    line: 137
+    parent_title: HealthView HOP Implementation Plan
+    parent_slug: healthview-hop-implementation-plan
+  - title: 4. Signals & Telemetry
+    slug: 4-signals-telemetry
+    line: 211
+    parent_title: HealthView HOP Implementation Plan
+    parent_slug: healthview-hop-implementation-plan
+  - title: 5. Dependencies & Stop-Gates
+    slug: 5-dependencies-stop-gates
+    line: 223
+    parent_title: HealthView HOP Implementation Plan
+    parent_slug: healthview-hop-implementation-plan
+  - title: 6. Instruction Block (Required by Tier Rules)
+    slug: 6-instruction-block-required-by-tier-rules
+    line: 237
+    parent_title: HealthView HOP Implementation Plan
+    parent_slug: healthview-hop-implementation-plan
+  - title: 7. Agent Automation Block
+    slug: 7-agent-automation-block
+    line: 251
+    parent_title: HealthView HOP Implementation Plan
+    parent_slug: healthview-hop-implementation-plan
+  - title: 8. Update Log
+    slug: 8-update-log
+    line: 281
+    parent_title: HealthView HOP Implementation Plan
+    parent_slug: healthview-hop-implementation-plan
+  links: []
+  description: '`tier1_healthview_orchestration_pipeline.md`.'
+  size_bytes: 13497
+  modified_utc: '2025-12-19T00:55:23.111707+00:00'
+  tags:
+  - pipeline
+  - healthview
+  - hop
+  - implementation
+  - refactor
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: draft
+  frontmatter:
+    title: HealthView HOP Implementation Plan
+    tier: tier-2
+    audience:
+    - coding_agent
+    - human_developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    role:
+    - implementation-plan
+    status: draft
+    version: 0.1.0
+    updated_at: '2025-12-18'
+    tags:
+    - pipeline
+    - healthview
+    - hop
+    - implementation
+    - refactor
+    related_files:
+    - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md
+    - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md
+    - .repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_template.md
+    - .github/instructions/markdown.instructions.md
+    - .github/instructions/pipeline_doc_tiers.instructions.md
+    - .github/instructions/tier_doc_operating_model.instructions.md
+    - REPORT_NAMING_STANDARDS.md
+  contains_placeholder: true
+- folder: .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline
   filename: .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md
   slug: healthview-orchestration-pipeline
   h1_headings:
   - title: HealthView Orchestration Pipeline
     slug: healthview-orchestration-pipeline
-    line: 1
+    line: 28
   h2_headings:
   - title: 0. Instruction Block for Editors & AI Assistants
     slug: 0-instruction-block-for-editors-ai-assistants
-    line: 7
+    line: 36
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: "1. 5W1H \u2013 Purpose & Context"
     slug: 1-5w1h-purpose-context
-    line: 27
+    line: 65
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 2. Document Metadata
     slug: 2-document-metadata
-    line: 125
+    line: 180
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 3. Global Pipeline Overview
     slug: 3-global-pipeline-overview
-    line: 148
+    line: 203
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 3.3 How to Read This Document
     slug: 33-how-to-read-this-document
-    line: 166
+    line: 241
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 3.4 HealthView Report Bundle Spine (Shared Backbone)
     slug: 34-healthview-report-bundle-spine-shared-backbone
-    line: 177
+    line: 252
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 3.5 HealthView Orchestration Envelope (Shared Payload)
     slug: 35-healthview-orchestration-envelope-shared-payload
-    line: 206
+    line: 296
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 3.6 Orchestrator Lifecycle, Fallback Modes, and Global Controls
     slug: 36-orchestrator-lifecycle-fallback-modes-and-global-controls
-    line: 248
+    line: 346
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 3.7 HealthView Assumptions & Guarantees
     slug: 37-healthview-assumptions-guarantees
-    line: 279
+    line: 383
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: "4. Stage 1 \u2013 Testing Perspectives"
     slug: 4-stage-1-testing-perspectives
-    line: 305
+    line: 418
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: "5. Stage 2 \u2013 Documentation Quality"
     slug: 5-stage-2-documentation-quality
-    line: 383
+    line: 507
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: "6. Stage 3 \u2013 Runtime Reliability"
     slug: 6-stage-3-runtime-reliability
-    line: 470
+    line: 601
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: "7. Stage 4 \u2013 Dependency Management"
     slug: 7-stage-4-dependency-management
-    line: 537
+    line: 668
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: "8. Stage 5 \u2013 Technical Debt Oversight"
     slug: 8-stage-5-technical-debt-oversight
-    line: 618
+    line: 749
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: "9. Stage 6 \u2013 Process Governance"
     slug: 9-stage-6-process-governance
-    line: 697
+    line: 828
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: "10. Stage 7 \u2013 Running the Complete Suite"
     slug: 10-stage-7-running-the-complete-suite
-    line: 810
+    line: 941
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 11. Snapshot & Stage Matrix
     slug: 11-snapshot-stage-matrix
-    line: 892
+    line: 1023
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 12. Contradiction Registry
     slug: 12-contradiction-registry
-    line: 942
+    line: 1076
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 13. Tier-2 Document Index
     slug: 13-tier-2-document-index
-    line: 950
+    line: 1087
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 14. Working / Future Notes
     slug: 14-working-future-notes
-    line: 985
+    line: 1124
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 15. Update Log & Evidence Tracking
     slug: 15-update-log-evidence-tracking
-    line: 1008
+    line: 1154
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   links:
-  - ../../../REPORT_NAMING_STANDARDS.md
-  - ../../../command_center/scripts/libraries/cli.py
-  - ../../../command_center/scripts/orchestrators/
-  - ../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py
-  - ../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py
-  - ../../../command_center/scripts/orchestators/scan_duplicates.py
-  - ../../../command_center/scripts/README.md
+  - ../../../../REPORT_NAMING_STANDARDS.md
+  - hop_implementation.md
+  - ../../../scripts/README.md
   - ../../../Makefile
   - ../../../tests/tests_command_center/
-  - ../../tier3_index/
+  - ../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py
   - ../../../scripts/producers/collect_test_log_reports.py
   - ../../../scripts/producers/generate_test_coverage_inventory.py
   - ../../../scripts/producers/analyze_test_hardening.py
   - ../../../scripts/consumers/generate_test_log_health_report.py
   - ../../../scripts/aggregators/generate_churn_complexity_heatmap.py
   - ../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py
-  - ../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py
   - ../../../command_center/scripts/orchestrators/run_docs_health_overview.py
   - ../../../scripts/producers/generate_doc_index.py
   - ../../../scripts/producers/generate_anchor_inventory.py
@@ -29443,9 +32420,9 @@ documents:
   - ../../../scripts/producers/generate_undocumented_logic_report.py
   - ../../../scripts/aggregators/aggregate_docs_health_signals.py
   - ../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py
-  - ../../../command_center/scripts/producers/collect_faulthandler_reports.py
-  - ../../../command_center/scripts/consumers/generate_fault_artifacts.py
-  - ../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py
+  - ../../../scripts/producers/collect_faulthandler_reports.py
+  - ../../../scripts/consumers/generate_fault_artifacts.py
+  - ../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py
   - ../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py
   - ../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py
   - ../../../command_center/scripts/orchestrators/run_standards_integrity.py
@@ -29455,12 +32432,11 @@ documents:
   - ../../../scripts/producers/seed_standards_prompts.py
   - ../../../scripts/summarizers/summarize_standards.py
   - ../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py
+  - ../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py
   - ../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py
-  - ../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py
+  - ../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py
   - ../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py
   - ../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py
-  - ../../../scripts/README.md
-  - ../../../../REPORT_NAMING_STANDARDS.md
   - ../../standards/global/std-global-python-engineering.md
   - ../../standards/global/std-global-markdown-authoring.md
   - ../../../../.github/instructions/markdown.instructions.md
@@ -29468,16 +32444,42 @@ documents:
   - ../../../tests/tests_producers/
   - ../../../tests/tests_consumers/
   - ../../../tests/tests_aggregators/
-  description: "HealthView orchestrates automated measurement of repository health\
-    \ across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency\
-    \ Management, Technical Debt, Process Governance). Each orchestrator chains producer\
-    \ \u2192\u2026"
-  size_bytes: 75286
-  modified_utc: '2025-12-16T16:16:30.917237+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
+  description: stage content so evidence capture is ready from the first edit.
+  size_bytes: 79580
+  modified_utc: '2025-12-19T01:23:27.973052+00:00'
+  tags:
+  - pipeline
+  - healthview
+  - hop
+  - orchestration
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: in-progress
+  frontmatter:
+    title: HealthView Orchestration Pipeline
+    tier: tier-1
+    audience:
+    - coding_agent
+    - human_developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    role:
+    - pipeline-spine
+    status: in-progress
+    version: 0.3.1
+    updated_at: '2025-12-18'
+    tags:
+    - pipeline
+    - healthview
+    - hop
+    - orchestration
+    related_files:
+    - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md
+    - REPORT_NAMING_STANDARDS.md
+    - .repo_studios/command_center/scripts/libraries/cli.py
+    - .repo_studios/command_center/scripts/orchestrators/
+    - .github/instructions/markdown.instructions.md
+    - .github/instructions/pipeline_doc_tiers.instructions.md
   contains_placeholder: true
 - folder: .repo_studios/docs/pipeline
   filename: .repo_studios/docs/pipeline/pipeline_doc_map.md
@@ -30485,8 +33487,8 @@ documents:
   description: This document is refreshed automatically by `run_batch_cleanup.py`.
     Edits outside the tree block are preserved, but avoid modifying the block between
     the markers.
-  size_bytes: 8367
-  modified_utc: '2025-12-16T16:16:30.911230+00:00'
+  size_bytes: 8379
+  modified_utc: '2025-12-17T01:38:22.483200+00:00'
   tags: []
   owners: []
   status: null
@@ -32093,77 +35095,109 @@ documents:
   h1_headings:
   - title: Script Refactoring Prompt Templates (Working Draft)
     slug: script-refactoring-prompt-templates-working-draft
-    line: 1
+    line: 14
   - title: 'Expected: All tests GREEN'
     slug: expected-all-tests-green
-    line: 362
-  - title: "Expected: Coverage \u2265 80%"
-    slug: expected-coverage-80
-    line: 368
+    line: 390
+  - title: 'Windows note: pytest-cov''s --cov=<file.py> is unreliable when the target
+      is'
+    slug: windows-note-pytest-covs-covfilepy-is-unreliable-when-the-target-is
+    line: 395
+  - title: executed via dynamic import (common for scripts under .repo_studios/scripts).
+    slug: executed-via-dynamic-import-common-for-scripts-under-repostudiosscripts
+    line: 396
+  - title: Prefer running coverage directly with a coveragerc that scopes by include=.
+    slug: prefer-running-coverage-directly-with-a-coveragerc-that-scopes-by-include
+    line: 397
+  - title: "Expected: Coverage \u2265 80% (for the files listed in the rcfile's include=)"
+    slug: expected-coverage-80-for-the-files-listed-in-the-rcfiles-include
+    line: 406
   - title: 'Expected: No errors'
     slug: expected-no-errors
-    line: 374
+    line: 412
   - title: 'Expected: Exit code 0'
     slug: expected-exit-code-0
-    line: 380
+    line: 418
   - title: 'Example:'
     slug: example
-    line: 386
+    line: 424
   - title: make -C .repo_studios studio-collect-test-log-reports
     slug: make-c-repostudios-studio-collect-test-log-reports
-    line: 387
+    line: 425
   - title: make -C .repo_studios studio-collect-faulthandler-reports
     slug: make-c-repostudios-studio-collect-faulthandler-reports
-    line: 388
+    line: 426
   - title: 'Expected: Exit code 0'
     slug: expected-exit-code-0
-    line: 389
+    line: 427
   - title: 'Expected: Artifacts written under <reports_root>/<viewer>/<topic>/<YYYYMMDD-HHMM>/'
     slug: expected-artifacts-written-under-reportsrootviewertopicyyyymmdd-hhmm
-    line: 390
+    line: 428
   - title: 'Expected: At least 1 marker found'
     slug: expected-at-least-1-marker-found
-    line: 414
+    line: 452
   - title: 'Expected: Storage initialization found'
     slug: expected-storage-initialization-found
-    line: 417
+    line: 455
   - title: 'Expected: This script appears in output with marker count > 0'
     slug: expected-this-script-appears-in-output-with-marker-count-0
-    line: 429
+    line: 467
   h2_headings:
   - title: Workflow Overview
     slug: workflow-overview
-    line: 9
+    line: 22
     parent_title: Script Refactoring Prompt Templates (Working Draft)
     parent_slug: script-refactoring-prompt-templates-working-draft
   - title: 'Phase 1: Script Analysis Prompt'
     slug: phase-1-script-analysis-prompt
-    line: 19
+    line: 32
     parent_title: Script Refactoring Prompt Templates (Working Draft)
     parent_slug: script-refactoring-prompt-templates-working-draft
   - title: 'Phase 2: Implementation Plan'
     slug: phase-2-implementation-plan
-    line: 107
+    line: 126
     parent_title: Script Refactoring Prompt Templates (Working Draft)
     parent_slug: script-refactoring-prompt-templates-working-draft
   - title: 'Phase 3: Implementation Execution Prompt'
     slug: phase-3-implementation-execution-prompt
-    line: 312
+    line: 336
     parent_title: Script Refactoring Prompt Templates (Working Draft)
     parent_slug: script-refactoring-prompt-templates-working-draft
   - title: Notes Section
     slug: notes-section
-    line: 483
+    line: 520
     parent_title: 'Expected: This script appears in output with marker count > 0'
     parent_slug: expected-this-script-appears-in-output-with-marker-count-0
   links: []
   description: 'A structured report covering:'
-  size_bytes: 17206
-  modified_utc: '2025-12-16T20:43:59.625485+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
+  size_bytes: 19142
+  modified_utc: '2025-12-18T19:32:41.905765+00:00'
+  tags:
+  - scripts
+  - refactor
+  - prompts
+  - coverage
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: draft
+  frontmatter:
+    title: Script Refactoring Prompt Templates (Working Draft)
+    audience:
+    - coding_agent
+    - human_developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    status: draft
+    version: 0.1.0
+    updated: '2025-12-17'
+    tags:
+    - scripts
+    - refactor
+    - prompts
+    - coverage
+    related_files:
+    - .repo_studios/coverage_configs/phase3_undocumented_logic.coveragerc
+    - .repo_studios/scripts/script_inventory_architecture.md
   contains_placeholder: false
 - folder: .repo_studios/scripts
   filename: .repo_studios/scripts/README.md
@@ -32194,80 +35228,6 @@ documents:
     so coding agents can locate the right tool quickly.
   size_bytes: 2391
   modified_utc: '2025-11-04T09:50:54.154871+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
-  contains_placeholder: false
-- folder: .repo_studios/scripts/aggregators/aggregators_index
-  filename: .repo_studios/scripts/aggregators/aggregators_index/aggregators_duplicate_summary-2025-10-28-0942.md
-  slug: duplicate-scan-summary
-  h1_headings:
-  - title: Duplicate Scan Summary
-    slug: duplicate-scan-summary
-    line: 1
-  h2_headings:
-  - title: Overview
-    slug: overview
-    line: 3
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Inputs
-    slug: inputs
-    line: 14
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Top Duplicate Offenders
-    slug: top-duplicate-offenders
-    line: 19
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Next Steps
-    slug: next-steps
-    line: 22
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  links: []
-  description: null
-  size_bytes: 733
-  modified_utc: '2025-10-28T09:42:56.137074+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
-  contains_placeholder: false
-- folder: .repo_studios/scripts/consumers/consumers_index
-  filename: .repo_studios/scripts/consumers/consumers_index/consumers_duplicate_summary-2025-10-28-0934.md
-  slug: duplicate-scan-summary
-  h1_headings:
-  - title: Duplicate Scan Summary
-    slug: duplicate-scan-summary
-    line: 1
-  h2_headings:
-  - title: Overview
-    slug: overview
-    line: 3
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Inputs
-    slug: inputs
-    line: 13
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Top Duplicate Offenders
-    slug: top-duplicate-offenders
-    line: 18
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Next Steps
-    slug: next-steps
-    line: 28
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  links: []
-  description: "1. `main` \u2014 2 duplicate(s)"
-  size_bytes: 1093
-  modified_utc: '2025-10-28T09:34:22.504107+00:00'
   tags: []
   owners: []
   status: null
@@ -32375,43 +35335,6 @@ documents:
   status: null
   frontmatter: null
   contains_placeholder: true
-- folder: .repo_studios/scripts/orchestrators/orchestrators_index
-  filename: .repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md
-  slug: duplicate-scan-summary
-  h1_headings:
-  - title: Duplicate Scan Summary
-    slug: duplicate-scan-summary
-    line: 1
-  h2_headings:
-  - title: Overview
-    slug: overview
-    line: 3
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Inputs
-    slug: inputs
-    line: 13
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Top Duplicate Offenders
-    slug: top-duplicate-offenders
-    line: 18
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Next Steps
-    slug: next-steps
-    line: 28
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  links: []
-  description: "1. `cmd_list` \u2014 2 duplicate(s)"
-  size_bytes: 1191
-  modified_utc: '2025-10-28T09:55:41.218181+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
-  contains_placeholder: false
 - folder: .repo_studios/scripts/producers/producers_index
   filename: .repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md
   slug: duplicate-scan-summary
@@ -32455,66 +35378,66 @@ documents:
   h1_headings:
   - title: Script Inventory Architecture
     slug: script-inventory-architecture
-    line: 1
+    line: 15
   h2_headings:
   - title: Document Metadata
     slug: document-metadata
-    line: 28
+    line: 42
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: How to Use This Template
     slug: how-to-use-this-template
-    line: 58
+    line: 72
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: 1. Script Producers
     slug: 1-script-producers
-    line: 110
+    line: 124
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: 2. Script Consumers
     slug: 2-script-consumers
-    line: 199
+    line: 214
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: 3. Script Aggregators
     slug: 3-script-aggregators
-    line: 228
+    line: 243
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: 4. Script Orchestrators
     slug: 4-script-orchestrators
-    line: 259
+    line: 274
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: 5. Script Summarizers
     slug: 5-script-summarizers
-    line: 287
+    line: 302
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: 6. Script Utilities
     slug: 6-script-utilities
-    line: 303
+    line: 318
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: 7. Script Undefined / Triage
     slug: 7-script-undefined-triage
-    line: 328
+    line: 343
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: Cross-Cutting Follow-Ups
     slug: cross-cutting-follow-ups
-    line: 343
+    line: 358
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: Open Questions
     slug: open-questions
-    line: 348
+    line: 363
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   - title: 'Appendix: YAML Mapping Placeholder'
     slug: appendix-yaml-mapping-placeholder
-    line: 352
+    line: 367
     parent_title: Script Inventory Architecture
     parent_slug: script-inventory-architecture
   links: []
@@ -32522,141 +35445,13 @@ documents:
     \ role so agents can migrate legacy assets, document dependencies, and prepare\
     \ YAML catalog entries. Fill sections as you classify each script. Keep formatting\
     \ consistent\u2026"
-  size_bytes: 73172
-  modified_utc: '2025-12-16T20:31:08.019233+00:00'
+  size_bytes: 80780
+  modified_utc: '2025-12-18T17:36:18.977162+00:00'
   tags: []
   owners: []
   status: null
   frontmatter: null
   contains_placeholder: true
-- folder: .repo_studios/scripts/scripts_index
-  filename: .repo_studios/scripts/scripts_index/scripts_duplicate_summary-2025-10-27.md
-  slug: duplicate-scan-summary
-  h1_headings:
-  - title: Duplicate Scan Summary
-    slug: duplicate-scan-summary
-    line: 1
-  h2_headings:
-  - title: Overview
-    slug: overview
-    line: 3
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Inputs
-    slug: inputs
-    line: 13
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Top Duplicate Offenders
-    slug: top-duplicate-offenders
-    line: 18
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Next Steps
-    slug: next-steps
-    line: 164
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  links: []
-  description: "1. `prune_old_runs` \u2014 20 duplicate(s)"
-  size_bytes: 14434
-  modified_utc: '2025-10-27T12:08:34.090771+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
-  contains_placeholder: true
-- folder: .repo_studios/scripts/scripts_index
-  filename: .repo_studios/scripts/scripts_index/scripts_duplicate_summary-20251130-0333.md
-  slug: summary
-  h1_headings:
-  - title: Summary
-    slug: summary
-    line: 1
-  h2_headings: []
-  links: []
-  description: null
-  size_bytes: 11
-  modified_utc: '2025-11-30T03:33:07.215521+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
-  contains_placeholder: false
-- folder: .repo_studios/scripts/summarizers/summarizers_index
-  filename: .repo_studios/scripts/summarizers/summarizers_index/summarizers_duplicate_summary-2025-11-04-2010.md
-  slug: duplicate-scan-summary
-  h1_headings:
-  - title: Duplicate Scan Summary
-    slug: duplicate-scan-summary
-    line: 1
-  h2_headings:
-  - title: Overview
-    slug: overview
-    line: 3
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Inputs
-    slug: inputs
-    line: 13
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Top Duplicate Offenders
-    slug: top-duplicate-offenders
-    line: 18
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Next Steps
-    slug: next-steps
-    line: 24
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  links: []
-  description: "1. `append_table` \u2014 2 duplicate(s)"
-  size_bytes: 982
-  modified_utc: '2025-11-04T20:10:52.055388+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
-  contains_placeholder: false
-- folder: .repo_studios/scripts/utilities/utilities_index
-  filename: .repo_studios/scripts/utilities/utilities_index/utilities_duplicate_summary-2025-10-28-1344.md
-  slug: duplicate-scan-summary
-  h1_headings:
-  - title: Duplicate Scan Summary
-    slug: duplicate-scan-summary
-    line: 1
-  h2_headings:
-  - title: Overview
-    slug: overview
-    line: 3
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Inputs
-    slug: inputs
-    line: 14
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Top Duplicate Offenders
-    slug: top-duplicate-offenders
-    line: 19
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  - title: Next Steps
-    slug: next-steps
-    line: 22
-    parent_title: Duplicate Scan Summary
-    parent_slug: duplicate-scan-summary
-  links: []
-  description: null
-  size_bytes: 724
-  modified_utc: '2025-10-28T13:44:35.047795+00:00'
-  tags: []
-  owners: []
-  status: null
-  frontmatter: null
-  contains_placeholder: false
 - folder: .repo_studios/tmp_manual/automation_dry_run_9f5c157dea2e4b4fbd98dc969cbe2a41/reports/commandview/automation_runs/20251102-1930
   filename: .repo_studios/tmp_manual/automation_dry_run_9f5c157dea2e4b4fbd98dc969cbe2a41/reports/commandview/automation_runs/20251102-1930/README.md
   slug: automation-dry-run-bundle
@@ -32816,6 +35611,40 @@ documents:
   status: null
   frontmatter: null
   contains_placeholder: true
+- folder: command_center/reports/healthview/inventory_health/20251217-1810
+  filename: command_center/reports/healthview/inventory_health/20251217-1810/summary.md
+  slug: inventory-health-report
+  h1_headings:
+  - title: Inventory Health Report
+    slug: inventory-health-report
+    line: 1
+  h2_headings:
+  - title: Outcome
+    slug: outcome
+    line: 8
+    parent_title: Inventory Health Report
+    parent_slug: inventory-health-report
+  - title: Deltas
+    slug: deltas
+    line: 14
+    parent_title: Inventory Health Report
+    parent_slug: inventory-health-report
+  - title: Issues
+    slug: issues
+    line: 18
+    parent_title: Inventory Health Report
+    parent_slug: inventory-health-report
+  links: []
+  description: "Generated (UTC): 2025-12-17T18:10:12.442069+00:00 Summary Path: C:\\\
+    Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\healthview\\\
+    inventory_overview Baseline Path:\u2026"
+  size_bytes: 500
+  modified_utc: '2025-12-17T18:10:12.443661+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
 - folder: .
   filename: command_center_script_verification_temp.md
   slug: command-center-script-verification-temporary
@@ -32848,23 +35677,23 @@ documents:
     parent_slug: database-integration-status
   - title: Utility Scripts
     slug: utility-scripts
-    line: 74
+    line: 186
     parent_title: Database Integration Status
     parent_slug: database-integration-status
   - title: Integration Checklist
     slug: integration-checklist
-    line: 92
+    line: 204
     parent_title: Database Integration Status
     parent_slug: database-integration-status
   links: []
   description: '[x] **analyze_standards_index_gaps.py**'
-  size_bytes: 2957
-  modified_utc: '2025-12-16T19:03:20.932630+00:00'
+  size_bytes: 6594
+  modified_utc: '2025-12-18T17:32:56.481003+00:00'
   tags: []
   owners: []
   status: null
   frontmatter: null
-  contains_placeholder: false
+  contains_placeholder: true
 - folder: docs/automation/examples
   filename: docs/automation/examples/healthview_manifest_example.md
   slug: healthview-manifest-schema-example
@@ -33003,8 +35832,8 @@ documents:
   description: This plan sequences the work required to deliver topic-oriented orchestrators,
     shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate
     from the RFC to an executable roadmap.
-  size_bytes: 97899
-  modified_utc: '2025-12-11T10:50:58.485331+00:00'
+  size_bytes: 97933
+  modified_utc: '2025-12-17T18:23:40.625822+00:00'
   tags:
   - automation
   - orchestrators
@@ -33839,6 +36668,20 @@ documents:
   frontmatter: null
   contains_placeholder: false
 - folder: docs/templates
+  filename: docs/templates/meta_prompts2.md
+  slug: metaprompts2
+  h1_headings: []
+  h2_headings: []
+  links: []
+  description: null
+  size_bytes: 7728
+  modified_utc: '2025-12-18T22:53:45.479854+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: docs/templates
   filename: docs/templates/test_execution_telemetry_summary_template.md
   slug: test-execution-telemetry-summary-template
   h1_headings:
@@ -33967,6 +36810,87 @@ documents:
   description: '[x] **analyze_standards_index_gaps.py**'
   size_bytes: 1903
   modified_utc: '2025-12-15T22:58:29.416925+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: tmp_cli_probe
+  filename: tmp_cli_probe/db_markers.md
+  slug: database-integration-status
+  h1_headings:
+  - title: Database Integration Status
+    slug: database-integration-status
+    line: 1
+  h2_headings:
+  - title: Producer Scripts
+    slug: producer-scripts
+    line: 8
+    parent_title: Database Integration Status
+    parent_slug: database-integration-status
+  - title: Utility Scripts
+    slug: utility-scripts
+    line: 130
+    parent_title: Database Integration Status
+    parent_slug: database-integration-status
+  - title: Integration Checklist
+    slug: integration-checklist
+    line: 148
+    parent_title: Database Integration Status
+    parent_slug: database-integration-status
+  links: []
+  description: '[x] **analyze_standards_index_gaps.py**'
+  size_bytes: 4793
+  modified_utc: '2025-12-17T13:48:32.384409+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: tmp_cli_probe/producer_reports/healthview/test_coverage_inventory/20251217-1200
+  filename: tmp_cli_probe/producer_reports/healthview/test_coverage_inventory/20251217-1200/summary.md
+  slug: test-coverage-inventory
+  h1_headings:
+  - title: Test Coverage Inventory
+    slug: test-coverage-inventory
+    line: 1
+  h2_headings:
+  - title: Files by Coverage
+    slug: files-by-coverage
+    line: 12
+    parent_title: Test Coverage Inventory
+    parent_slug: test-coverage-inventory
+  links: []
+  description: null
+  size_bytes: 956
+  modified_utc: '2025-12-17T11:53:32.782624+00:00'
+  tags: []
+  owners: []
+  status: null
+  frontmatter: null
+  contains_placeholder: false
+- folder: tmp_cli_probe/producer_reports/rawview/standards_index/20251217-1031
+  filename: tmp_cli_probe/producer_reports/rawview/standards_index/20251217-1031/summary.md
+  slug: standards-index-build-report
+  h1_headings:
+  - title: Standards Index Build Report
+    slug: standards-index-build-report
+    line: 1
+  h2_headings:
+  - title: Summary
+    slug: summary
+    line: 10
+    parent_title: Standards Index Build Report
+    parent_slug: standards-index-build-report
+  - title: Extraction
+    slug: extraction
+    line: 20
+    parent_title: Standards Index Build Report
+    parent_slug: standards-index-build-report
+  links: []
+  description: null
+  size_bytes: 626
+  modified_utc: '2025-12-17T11:25:04.039240+00:00'
   tags: []
   owners: []
   status: null
@@ -34124,15 +37048,15 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios,.repo_studios/alignment_protocol.md,h2,5. Decision Logging,5-decision-logging,alignment-protocol-ai-developer-collaboration,"This document captures the working blueprint for collaborative cycles between the coding agent (GitHub Copilot) and the human developer. It is meant to stay lightweight, evolve over time, and provide repeatable guardrails for future…",4269,2025-10-21T14:59:31.821261+00:00,,,,no,
 .repo_studios,.repo_studios/alignment_protocol.md,h2,6. Extending the Protocol,6-extending-the-protocol,alignment-protocol-ai-developer-collaboration,"This document captures the working blueprint for collaborative cycles between the coding agent (GitHub Copilot) and the human developer. It is meant to stay lightweight, evolve over time, and provide repeatable guardrails for future…",4269,2025-10-21T14:59:31.821261+00:00,,,,no,
 .repo_studios,.repo_studios/alignment_protocol.md,h2,7. Open Items,7-open-items,alignment-protocol-ai-developer-collaboration,"This document captures the working blueprint for collaborative cycles between the coding agent (GitHub Copilot) and the human developer. It is meant to stay lightweight, evolve over time, and provide repeatable guardrails for future…",4269,2025-10-21T14:59:31.821261+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h1,Library Integration Protocol,library-integration-protocol,,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Directory Layout,directory-layout,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Shared Helper Modules,shared-helper-modules,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Artifact Retention Policy,artifact-retention-policy,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Micro-Cycle Blueprint,micro-cycle-blueprint,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Automation Entry Points,automation-entry-points,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Usage Instructions,usage-instructions,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h2,References,references,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
-.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Onboarding Checklist,onboarding-checklist,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14886,2025-11-28T14:18:05.271026+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h1,Library Integration Protocol,library-integration-protocol,,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14925,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Directory Layout,directory-layout,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14925,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Shared Helper Modules,shared-helper-modules,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14925,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Artifact Retention Policy,artifact-retention-policy,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14925,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Micro-Cycle Blueprint,micro-cycle-blueprint,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14925,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Automation Entry Points,automation-entry-points,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14925,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Usage Instructions,usage-instructions,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14925,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h2,References,references,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14925,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center,.repo_studios/command_center/README.md,h2,Onboarding Checklist,onboarding-checklist,library-integration-protocol,"Centralise duplicate-prone helpers in `.repo_studios/command_center/scripts/libraries/` so producers, summarisers, and orchestrators share the same implementation. This folder is a **staging area** until the canonical…",14925,2025-12-17T01:38:22.486199+00:00,,,,no,
 .repo_studios/command_center/checklists,.repo_studios/command_center/checklists/2025-10-24.md,h1,Library Integration Alignment Plan,library-integration-alignment-plan,,"Legend: In discovery = gathering facts, Not started = pending alignment, Deferred = intentionally out of scope for now.",14558,2025-10-27T17:59:50.299412+00:00,,,,yes,
 .repo_studios/command_center/checklists,.repo_studios/command_center/checklists/2025-10-24.md,h2,Phase Overview,phase-overview,library-integration-alignment-plan,"Legend: In discovery = gathering facts, Not started = pending alignment, Deferred = intentionally out of scope for now.",14558,2025-10-27T17:59:50.299412+00:00,,,,yes,
 .repo_studios/command_center/checklists,.repo_studios/command_center/checklists/2025-10-24.md,h2,Phase 1 – Foundation Setup,phase-1-foundation-setup,library-integration-alignment-plan,"Legend: In discovery = gathering facts, Not started = pending alignment, Deferred = intentionally out of scope for now.",14558,2025-10-27T17:59:50.299412+00:00,,,,yes,
@@ -34161,15 +37085,15 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/build_paths_extraction_brief.md,h2,Migration Sequence,migration-sequence,buildpaths-buildoptions-extraction-brief,This brief captures the concrete plan for centralising the duplicated `build_paths` and `build_options` helpers into the shared `libraries` staging package.,4461,2025-10-30T11:23:59.998614+00:00,,,,no,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/build_paths_extraction_brief.md,h2,Documentation & Reporting,documentation-reporting,buildpaths-buildoptions-extraction-brief,This brief captures the concrete plan for centralising the duplicated `build_paths` and `build_options` helpers into the shared `libraries` staging package.,4461,2025-10-30T11:23:59.998614+00:00,,,,no,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/build_paths_extraction_brief.md,h2,Open Questions,open-questions,buildpaths-buildoptions-extraction-brief,This brief captures the concrete plan for centralising the duplicated `build_paths` and `build_options` helpers into the shared `libraries` staging package.,4461,2025-10-30T11:23:59.998614+00:00,,,,no,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h1,Code Library Integration Status — 2025-11-23,code-library-integration-status-2025-11-23,,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Purpose,purpose,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,5W1H Snapshot,5w1h-snapshot,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Current Assets,current-assets,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Progress Recap,progress-recap,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Outstanding Work,outstanding-work,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Key References,key-references,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Suggested Next Actions (for the next contributor),suggested-next-actions-for-the-next-contributor,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
-.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Maintenance Tips,maintenance-tips,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14122,2025-12-01T01:01:45.347271+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h1,Code Library Integration Status — 2025-11-23,code-library-integration-status-2025-11-23,,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14181,2025-12-17T01:38:22.486199+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Purpose,purpose,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14181,2025-12-17T01:38:22.486199+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,5W1H Snapshot,5w1h-snapshot,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14181,2025-12-17T01:38:22.486199+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Current Assets,current-assets,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14181,2025-12-17T01:38:22.486199+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Progress Recap,progress-recap,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14181,2025-12-17T01:38:22.486199+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Outstanding Work,outstanding-work,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14181,2025-12-17T01:38:22.486199+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Key References,key-references,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14181,2025-12-17T01:38:22.486199+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Suggested Next Actions (for the next contributor),suggested-next-actions-for-the-next-contributor,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14181,2025-12-17T01:38:22.486199+00:00,,,,yes,
+.repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/code_library_status.md,h2,Maintenance Tips,maintenance-tips,code-library-integration-status-2025-11-23,"Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This…",14181,2025-12-17T01:38:22.486199+00:00,,,,yes,
 .repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/helper_usage_patterns.md,h1,Command Center Helper Usage Patterns — 2025-11-30,command-center-helper-usage-patterns-2025-11-30,,"Capture how the Phase 2 shared helpers are intended to be wired into topic orchestrators so engineers and agents can reuse them consistently. Each section lists the helper location, dependencies, execution contract, and verification tests.",6829,2025-12-01T00:53:06.675177+00:00,,,,no,
 .repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/helper_usage_patterns.md,h2,Scope,scope,command-center-helper-usage-patterns-2025-11-30,"Capture how the Phase 2 shared helpers are intended to be wired into topic orchestrators so engineers and agents can reuse them consistently. Each section lists the helper location, dependencies, execution contract, and verification tests.",6829,2025-12-01T00:53:06.675177+00:00,,,,no,
 .repo_studios/command_center/docs/code_library,.repo_studios/command_center/docs/code_library/helper_usage_patterns.md,h2,Topic Pipeline Assembly,topic-pipeline-assembly,command-center-helper-usage-patterns-2025-11-30,"Capture how the Phase 2 shared helpers are intended to be wired into topic orchestrators so engineers and agents can reuse them consistently. Each section lists the helper location, dependencies, execution contract, and verification tests.",6829,2025-12-01T00:53:06.675177+00:00,,,,no,
@@ -34228,6 +37152,12 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/db_integration_test_execution_telemetry.md,h2,Migration Checklist,migration-checklist,database-integration-documentation,"Orchestrates the complete test execution telemetry pipeline by coordinating test coverage analysis, test hardening checks, log health reports, and churn-complexity heatmap generation into a unified health snapshot.",16457,2025-12-15T18:05:31.091199+00:00,,,,yes,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/db_integration_test_execution_telemetry.md,h2,Notes & Caveats,notes-caveats,database-integration-documentation,"Orchestrates the complete test execution telemetry pipeline by coordinating test coverage analysis, test hardening checks, log health reports, and churn-complexity heatmap generation into a unified health snapshot.",16457,2025-12-15T18:05:31.091199+00:00,,,,yes,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/db_integration_test_execution_telemetry.md,h2,Contact & Ownership,contact-ownership,database-integration-documentation,"Orchestrates the complete test execution telemetry pipeline by coordinating test coverage analysis, test hardening checks, log health reports, and churn-complexity heatmap generation into a unified health snapshot.",16457,2025-12-15T18:05:31.091199+00:00,,,,yes,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/code_placeholders.md,h1,DB Integration — code_placeholders,db-integration-codeplaceholders,,,2808,2025-12-17T19:43:51.315571+00:00,db;integration;producers;placeholders,repo_studios_team@rainmakerprotocol.dev,approved,yes,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/code_placeholders.md,h2,Goals,goals,db-integration-codeplaceholders,,2808,2025-12-17T19:43:51.315571+00:00,db;integration;producers;placeholders,repo_studios_team@rainmakerprotocol.dev,approved,yes,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/code_placeholders.md,h2,System Context,system-context,db-integration-codeplaceholders,,2808,2025-12-17T19:43:51.315571+00:00,db;integration;producers;placeholders,repo_studios_team@rainmakerprotocol.dev,approved,yes,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/code_placeholders.md,h2,Agent Instructions,agent-instructions,db-integration-codeplaceholders,,2808,2025-12-17T19:43:51.315571+00:00,db;integration;producers;placeholders,repo_studios_team@rainmakerprotocol.dev,approved,yes,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/code_placeholders.md,h2,Human Notes,human-notes,db-integration-codeplaceholders,,2808,2025-12-17T19:43:51.315571+00:00,db;integration;producers;placeholders,repo_studios_team@rainmakerprotocol.dev,approved,yes,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/code_placeholders.md,h2,Update Log,update-log,db-integration-codeplaceholders,,2808,2025-12-17T19:43:51.315571+00:00,db;integration;producers;placeholders,repo_studios_team@rainmakerprotocol.dev,approved,yes,
 .repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_analyze_standards_index_gaps.md,h1,DB Integration — analyze_standards_index_gaps,db-integration-analyzestandardsindexgaps,,The producer includes `DB_INTEGRATION_MARKER` tags immediately above each storage write:,5271,2025-12-15T12:44:08.253089+00:00,db-integration;commandview;standards;telemetry;positional-encoding,command_center,active,no,
 .repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_analyze_standards_index_gaps.md,h2,Goals,goals,db-integration-analyzestandardsindexgaps,The producer includes `DB_INTEGRATION_MARKER` tags immediately above each storage write:,5271,2025-12-15T12:44:08.253089+00:00,db-integration;commandview;standards;telemetry;positional-encoding,command_center,active,no,
 .repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_analyze_standards_index_gaps.md,h2,System Context,system-context,db-integration-analyzestandardsindexgaps,The producer includes `DB_INTEGRATION_MARKER` tags immediately above each storage write:,5271,2025-12-15T12:44:08.253089+00:00,db-integration;commandview;standards;telemetry;positional-encoding,command_center,active,no,
@@ -34285,13 +37215,76 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_diff_standards_index.md,h2,Human Notes,human-notes,db-integration-diffstandardsindex,See `.github/instructions/markdown.instructions.md` for repo-wide rules.,3032,2025-12-16T12:48:04.404541+00:00,database;integration;standards;producer,Repo Studios,draft,no,
 .repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_diff_standards_index.md,h2,Reference Prompts,reference-prompts,db-integration-diffstandardsindex,See `.github/instructions/markdown.instructions.md` for repo-wide rules.,3032,2025-12-16T12:48:04.404541+00:00,database;integration;standards;producer,Repo Studios,draft,no,
 .repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_diff_standards_index.md,h2,Update Log,update-log,db-integration-diffstandardsindex,See `.github/instructions/markdown.instructions.md` for repo-wide rules.,3032,2025-12-16T12:48:04.404541+00:00,database;integration;standards;producer,Repo Studios,draft,no,
-.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_doc_index.md,h1,DB Integration — Doc Index (healthview/doc_index),db-integration-doc-index-healthviewdocindex,,"Define the database-facing contract for the Doc Index producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2594,2025-12-16T20:32:12.303952+00:00,db-integration;healthview;doc-index;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
-.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_doc_index.md,h2,Goals,goals,db-integration-doc-index-healthviewdocindex,"Define the database-facing contract for the Doc Index producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2594,2025-12-16T20:32:12.303952+00:00,db-integration;healthview;doc-index;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
-.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_doc_index.md,h2,System Context,system-context,db-integration-doc-index-healthviewdocindex,"Define the database-facing contract for the Doc Index producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2594,2025-12-16T20:32:12.303952+00:00,db-integration;healthview;doc-index;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
-.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_doc_index.md,h2,Write Sites,write-sites,db-integration-doc-index-healthviewdocindex,"Define the database-facing contract for the Doc Index producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2594,2025-12-16T20:32:12.303952+00:00,db-integration;healthview;doc-index;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
-.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_doc_index.md,h2,Schema Mapping,schema-mapping,db-integration-doc-index-healthviewdocindex,"Define the database-facing contract for the Doc Index producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2594,2025-12-16T20:32:12.303952+00:00,db-integration;healthview;doc-index;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
-.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_doc_index.md,h2,Compatibility Notes,compatibility-notes,db-integration-doc-index-healthviewdocindex,"Define the database-facing contract for the Doc Index producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2594,2025-12-16T20:32:12.303952+00:00,db-integration;healthview;doc-index;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
-.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_doc_index.md,h2,Update Log,update-log,db-integration-doc-index-healthviewdocindex,"Define the database-facing contract for the Doc Index producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2594,2025-12-16T20:32:12.303952+00:00,db-integration;healthview;doc-index;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_doc_index.md,h1,DB Integration — Doc Index (healthview/doc_index),db-integration-doc-index-healthviewdocindex,,"Define the database-facing contract for the Doc Index producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2594,2025-12-16T21:14:26.601426+00:00,db-integration;healthview;doc-index;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_doc_index.md,h2,Goals,goals,db-integration-doc-index-healthviewdocindex,"Define the database-facing contract for the Doc Index producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2594,2025-12-16T21:14:26.601426+00:00,db-integration;healthview;doc-index;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_doc_index.md,h2,System Context,system-context,db-integration-doc-index-healthviewdocindex,"Define the database-facing contract for the Doc Index producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2594,2025-12-16T21:14:26.601426+00:00,db-integration;healthview;doc-index;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_doc_index.md,h2,Write Sites,write-sites,db-integration-doc-index-healthviewdocindex,"Define the database-facing contract for the Doc Index producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2594,2025-12-16T21:14:26.601426+00:00,db-integration;healthview;doc-index;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_doc_index.md,h2,Schema Mapping,schema-mapping,db-integration-doc-index-healthviewdocindex,"Define the database-facing contract for the Doc Index producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2594,2025-12-16T21:14:26.601426+00:00,db-integration;healthview;doc-index;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_doc_index.md,h2,Compatibility Notes,compatibility-notes,db-integration-doc-index-healthviewdocindex,"Define the database-facing contract for the Doc Index producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2594,2025-12-16T21:14:26.601426+00:00,db-integration;healthview;doc-index;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_doc_index.md,h2,Update Log,update-log,db-integration-doc-index-healthviewdocindex,"Define the database-facing contract for the Doc Index producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2594,2025-12-16T21:14:26.601426+00:00,db-integration;healthview;doc-index;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_docs_integrity_validation.md,h1,DB Integration — Docs Integrity Validation (healthview/docs_integrity_validation),db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation,,"Define the database-facing contract for the docs integrity validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",2890,2025-12-18T17:36:18.987162+00:00,db-integration;healthview;docs-integrity;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_docs_integrity_validation.md,h2,Goals,goals,db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation,"Define the database-facing contract for the docs integrity validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",2890,2025-12-18T17:36:18.987162+00:00,db-integration;healthview;docs-integrity;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_docs_integrity_validation.md,h2,System Context,system-context,db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation,"Define the database-facing contract for the docs integrity validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",2890,2025-12-18T17:36:18.987162+00:00,db-integration;healthview;docs-integrity;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_docs_integrity_validation.md,h2,Write Sites,write-sites,db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation,"Define the database-facing contract for the docs integrity validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",2890,2025-12-18T17:36:18.987162+00:00,db-integration;healthview;docs-integrity;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_docs_integrity_validation.md,h2,Schema Mapping,schema-mapping,db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation,"Define the database-facing contract for the docs integrity validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",2890,2025-12-18T17:36:18.987162+00:00,db-integration;healthview;docs-integrity;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_docs_integrity_validation.md,h2,Compatibility Notes,compatibility-notes,db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation,"Define the database-facing contract for the docs integrity validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",2890,2025-12-18T17:36:18.987162+00:00,db-integration;healthview;docs-integrity;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_docs_integrity_validation.md,h2,Update Log,update-log,db-integration-docs-integrity-validation-healthviewdocsintegrityvalidation,"Define the database-facing contract for the docs integrity validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",2890,2025-12-18T17:36:18.987162+00:00,db-integration;healthview;docs-integrity;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_generate_standards_index.md,h1,DB Integration — generate_standards_index,db-integration-generatestandardsindex,,See `.github/instructions/markdown.instructions.md` for repo-wide rules.,3262,2025-12-17T11:36:36.071252+00:00,database;integration;standards;producer,Repo Studios,draft,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_generate_standards_index.md,h2,Goals,goals,db-integration-generatestandardsindex,See `.github/instructions/markdown.instructions.md` for repo-wide rules.,3262,2025-12-17T11:36:36.071252+00:00,database;integration;standards;producer,Repo Studios,draft,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_generate_standards_index.md,h2,System Context,system-context,db-integration-generatestandardsindex,See `.github/instructions/markdown.instructions.md` for repo-wide rules.,3262,2025-12-17T11:36:36.071252+00:00,database;integration;standards;producer,Repo Studios,draft,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_generate_standards_index.md,h2,Agent Instructions,agent-instructions,db-integration-generatestandardsindex,See `.github/instructions/markdown.instructions.md` for repo-wide rules.,3262,2025-12-17T11:36:36.071252+00:00,database;integration;standards;producer,Repo Studios,draft,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_generate_standards_index.md,h2,Human Notes,human-notes,db-integration-generatestandardsindex,See `.github/instructions/markdown.instructions.md` for repo-wide rules.,3262,2025-12-17T11:36:36.071252+00:00,database;integration;standards;producer,Repo Studios,draft,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_generate_standards_index.md,h2,Reference Prompts,reference-prompts,db-integration-generatestandardsindex,See `.github/instructions/markdown.instructions.md` for repo-wide rules.,3262,2025-12-17T11:36:36.071252+00:00,database;integration;standards;producer,Repo Studios,draft,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_generate_standards_index.md,h2,Update Log,update-log,db-integration-generatestandardsindex,See `.github/instructions/markdown.instructions.md` for repo-wide rules.,3262,2025-12-17T11:36:36.071252+00:00,database;integration;standards;producer,Repo Studios,draft,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md,h1,DB Integration — generate_test_coverage_inventory.py,db-integration-generatetestcoverageinventorypy,,,3119,2025-12-17T12:10:20.071203+00:00,db-integration;producer;healthview;test-coverage,repo_studios_ai,draft,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md,h2,Goals,goals,db-integration-generatetestcoverageinventorypy,,3119,2025-12-17T12:10:20.071203+00:00,db-integration;producer;healthview;test-coverage,repo_studios_ai,draft,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md,h2,System Context,system-context,db-integration-generatetestcoverageinventorypy,,3119,2025-12-17T12:10:20.071203+00:00,db-integration;producer;healthview;test-coverage,repo_studios_ai,draft,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md,h2,Agent Instructions,agent-instructions,db-integration-generatetestcoverageinventorypy,,3119,2025-12-17T12:10:20.071203+00:00,db-integration;producer;healthview;test-coverage,repo_studios_ai,draft,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md,h2,Table Mapping (Intent),table-mapping-intent,db-integration-generatetestcoverageinventorypy,,3119,2025-12-17T12:10:20.071203+00:00,db-integration;producer;healthview;test-coverage,repo_studios_ai,draft,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md,h2,Human Notes,human-notes,db-integration-generatetestcoverageinventorypy,,3119,2025-12-17T12:10:20.071203+00:00,db-integration;producer;healthview;test-coverage,repo_studios_ai,draft,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md,h2,Reference Prompts,reference-prompts,db-integration-generatetestcoverageinventorypy,,3119,2025-12-17T12:10:20.071203+00:00,db-integration;producer;healthview;test-coverage,repo_studios_ai,draft,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md,h2,Update Log,update-log,db-integration-generatetestcoverageinventorypy,,3119,2025-12-17T12:10:20.071203+00:00,db-integration;producer;healthview;test-coverage,repo_studios_ai,draft,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_import_graph.md,h1,DB Integration — Import Graph (healthview/import_graph),db-integration-import-graph-healthviewimportgraph,,"Define the database-facing contract for the Import Graph producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2710,2025-12-16T22:07:37.971519+00:00,db-integration;healthview;import-graph;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_import_graph.md,h2,Goals,goals,db-integration-import-graph-healthviewimportgraph,"Define the database-facing contract for the Import Graph producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2710,2025-12-16T22:07:37.971519+00:00,db-integration;healthview;import-graph;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_import_graph.md,h2,System Context,system-context,db-integration-import-graph-healthviewimportgraph,"Define the database-facing contract for the Import Graph producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2710,2025-12-16T22:07:37.971519+00:00,db-integration;healthview;import-graph;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_import_graph.md,h2,Write Sites,write-sites,db-integration-import-graph-healthviewimportgraph,"Define the database-facing contract for the Import Graph producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2710,2025-12-16T22:07:37.971519+00:00,db-integration;healthview;import-graph;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_import_graph.md,h2,Schema Mapping,schema-mapping,db-integration-import-graph-healthviewimportgraph,"Define the database-facing contract for the Import Graph producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2710,2025-12-16T22:07:37.971519+00:00,db-integration;healthview;import-graph;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_import_graph.md,h2,Compatibility Notes,compatibility-notes,db-integration-import-graph-healthviewimportgraph,"Define the database-facing contract for the Import Graph producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2710,2025-12-16T22:07:37.971519+00:00,db-integration;healthview;import-graph;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_import_graph.md,h2,Update Log,update-log,db-integration-import-graph-healthviewimportgraph,"Define the database-facing contract for the Import Graph producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",2710,2025-12-16T22:07:37.971519+00:00,db-integration;healthview;import-graph;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_lizard_report.md,h1,DB Integration Notes — Lizard Report,db-integration-notes-lizard-report,,The lizard producer writes its positional bundle under:,1899,2025-12-17T00:02:21.821596+00:00,db-integration;healthview;lizard,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_lizard_report.md,h2,Goals,goals,db-integration-notes-lizard-report,The lizard producer writes its positional bundle under:,1899,2025-12-17T00:02:21.821596+00:00,db-integration;healthview;lizard,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_lizard_report.md,h2,System Context,system-context,db-integration-notes-lizard-report,The lizard producer writes its positional bundle under:,1899,2025-12-17T00:02:21.821596+00:00,db-integration;healthview;lizard,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_lizard_report.md,h2,Agent Instructions,agent-instructions,db-integration-notes-lizard-report,The lizard producer writes its positional bundle under:,1899,2025-12-17T00:02:21.821596+00:00,db-integration;healthview;lizard,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_lizard_report.md,h2,Write Sites,write-sites,db-integration-notes-lizard-report,The lizard producer writes its positional bundle under:,1899,2025-12-17T00:02:21.821596+00:00,db-integration;healthview;lizard,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_lizard_report.md,h2,Human Notes,human-notes,db-integration-notes-lizard-report,The lizard producer writes its positional bundle under:,1899,2025-12-17T00:02:21.821596+00:00,db-integration;healthview;lizard,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_lizard_report.md,h2,Update Log,update-log,db-integration-notes-lizard-report,The lizard producer writes its positional bundle under:,1899,2025-12-17T00:02:21.821596+00:00,db-integration;healthview;lizard,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_markdown_anchor_validation.md,h1,DB Integration — Markdown Anchor Validation (healthview/markdown_anchor_validation),db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation,,"Define the database-facing contract for the markdown anchor validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",2861,2025-12-18T12:37:54.373653+00:00,db-integration;healthview;markdown-anchor-validation;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_markdown_anchor_validation.md,h2,Goals,goals,db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation,"Define the database-facing contract for the markdown anchor validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",2861,2025-12-18T12:37:54.373653+00:00,db-integration;healthview;markdown-anchor-validation;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_markdown_anchor_validation.md,h2,System Context,system-context,db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation,"Define the database-facing contract for the markdown anchor validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",2861,2025-12-18T12:37:54.373653+00:00,db-integration;healthview;markdown-anchor-validation;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_markdown_anchor_validation.md,h2,Write Sites,write-sites,db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation,"Define the database-facing contract for the markdown anchor validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",2861,2025-12-18T12:37:54.373653+00:00,db-integration;healthview;markdown-anchor-validation;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_markdown_anchor_validation.md,h2,Schema Mapping,schema-mapping,db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation,"Define the database-facing contract for the markdown anchor validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",2861,2025-12-18T12:37:54.373653+00:00,db-integration;healthview;markdown-anchor-validation;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_markdown_anchor_validation.md,h2,Compatibility Notes,compatibility-notes,db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation,"Define the database-facing contract for the markdown anchor validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",2861,2025-12-18T12:37:54.373653+00:00,db-integration;healthview;markdown-anchor-validation;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_markdown_anchor_validation.md,h2,Update Log,update-log,db-integration-markdown-anchor-validation-healthviewmarkdownanchorvalidation,"Define the database-facing contract for the markdown anchor validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",2861,2025-12-18T12:37:54.373653+00:00,db-integration;healthview;markdown-anchor-validation;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_metrics_anchor_stub_validation.md,h1,DB Integration Mapping — Metrics Anchor Stub Validation,db-integration-mapping-metrics-anchor-stub-validation,,The producer emits canonical positional bundles under:,2082,2025-12-18T16:04:05.596021+00:00,db-integration;producer;healthview;metrics;anchors,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_metrics_anchor_stub_validation.md,h2,Goals,goals,db-integration-mapping-metrics-anchor-stub-validation,The producer emits canonical positional bundles under:,2082,2025-12-18T16:04:05.596021+00:00,db-integration;producer;healthview;metrics;anchors,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_metrics_anchor_stub_validation.md,h2,System Context,system-context,db-integration-mapping-metrics-anchor-stub-validation,The producer emits canonical positional bundles under:,2082,2025-12-18T16:04:05.596021+00:00,db-integration;producer;healthview;metrics;anchors,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_metrics_anchor_stub_validation.md,h2,Agent Instructions,agent-instructions,db-integration-mapping-metrics-anchor-stub-validation,The producer emits canonical positional bundles under:,2082,2025-12-18T16:04:05.596021+00:00,db-integration;producer;healthview;metrics;anchors,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_metrics_anchor_stub_validation.md,h2,Write Mapping,write-mapping,db-integration-mapping-metrics-anchor-stub-validation,The producer emits canonical positional bundles under:,2082,2025-12-18T16:04:05.596021+00:00,db-integration;producer;healthview;metrics;anchors,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_metrics_anchor_stub_validation.md,h2,Notes,notes,db-integration-mapping-metrics-anchor-stub-validation,The producer emits canonical positional bundles under:,2082,2025-12-18T16:04:05.596021+00:00,db-integration;producer;healthview;metrics;anchors,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_metrics_anchor_stub_validation.md,h2,Update Log,update-log,db-integration-mapping-metrics-anchor-stub-validation,The producer emits canonical positional bundles under:,2082,2025-12-18T16:04:05.596021+00:00,db-integration;producer;healthview;metrics;anchors,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_monkey_patches.md,h1,DB Integration — monkey_patches,db-integration-monkeypatches,,,2929,2025-12-17T23:50:14.347407+00:00,db;integration;producers;healthview;monkey_patches,repo_studios_team@rainmakerprotocol.dev,approved,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_monkey_patches.md,h2,Goals,goals,db-integration-monkeypatches,,2929,2025-12-17T23:50:14.347407+00:00,db;integration;producers;healthview;monkey_patches,repo_studios_team@rainmakerprotocol.dev,approved,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_monkey_patches.md,h2,System Context,system-context,db-integration-monkeypatches,,2929,2025-12-17T23:50:14.347407+00:00,db;integration;producers;healthview;monkey_patches,repo_studios_team@rainmakerprotocol.dev,approved,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_monkey_patches.md,h2,Agent Instructions,agent-instructions,db-integration-monkeypatches,,2929,2025-12-17T23:50:14.347407+00:00,db;integration;producers;healthview;monkey_patches,repo_studios_team@rainmakerprotocol.dev,approved,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_monkey_patches.md,h2,Human Notes,human-notes,db-integration-monkeypatches,,2929,2025-12-17T23:50:14.347407+00:00,db;integration;producers;healthview;monkey_patches,repo_studios_team@rainmakerprotocol.dev,approved,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_monkey_patches.md,h2,Update Log,update-log,db-integration-monkeypatches,,2929,2025-12-17T23:50:14.347407+00:00,db;integration;producers;healthview;monkey_patches,repo_studios_team@rainmakerprotocol.dev,approved,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_render_inventory_views.md,h1,DB Integration — Inventory Overview (healthview/inventory_overview),db-integration-inventory-overview-healthviewinventoryoverview,,"Define the database-facing contract for the Inventory Overview producer so dual-write storage can persist run metadata, summary markdown, and telemetry payloads in a stable schema.",3050,2025-12-17T18:23:40.621821+00:00,db-integration;healthview;inventory;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_render_inventory_views.md,h2,Goals,goals,db-integration-inventory-overview-healthviewinventoryoverview,"Define the database-facing contract for the Inventory Overview producer so dual-write storage can persist run metadata, summary markdown, and telemetry payloads in a stable schema.",3050,2025-12-17T18:23:40.621821+00:00,db-integration;healthview;inventory;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_render_inventory_views.md,h2,System Context,system-context,db-integration-inventory-overview-healthviewinventoryoverview,"Define the database-facing contract for the Inventory Overview producer so dual-write storage can persist run metadata, summary markdown, and telemetry payloads in a stable schema.",3050,2025-12-17T18:23:40.621821+00:00,db-integration;healthview;inventory;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_render_inventory_views.md,h2,Write Sites,write-sites,db-integration-inventory-overview-healthviewinventoryoverview,"Define the database-facing contract for the Inventory Overview producer so dual-write storage can persist run metadata, summary markdown, and telemetry payloads in a stable schema.",3050,2025-12-17T18:23:40.621821+00:00,db-integration;healthview;inventory;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_render_inventory_views.md,h2,Schema Mapping,schema-mapping,db-integration-inventory-overview-healthviewinventoryoverview,"Define the database-facing contract for the Inventory Overview producer so dual-write storage can persist run metadata, summary markdown, and telemetry payloads in a stable schema.",3050,2025-12-17T18:23:40.621821+00:00,db-integration;healthview;inventory;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_render_inventory_views.md,h2,Compatibility Notes,compatibility-notes,db-integration-inventory-overview-healthviewinventoryoverview,"Define the database-facing contract for the Inventory Overview producer so dual-write storage can persist run metadata, summary markdown, and telemetry payloads in a stable schema.",3050,2025-12-17T18:23:40.621821+00:00,db-integration;healthview;inventory;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_render_inventory_views.md,h2,Update Log,update-log,db-integration-inventory-overview-healthviewinventoryoverview,"Define the database-facing contract for the Inventory Overview producer so dual-write storage can persist run metadata, summary markdown, and telemetry payloads in a stable schema.",3050,2025-12-17T18:23:40.621821+00:00,db-integration;healthview;inventory;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
 .repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_test_log_reports.md,h1,Database Integration Documentation — Test Log Reports,database-integration-documentation-test-log-reports,,Source fields (from `telemetry.json`):,4164,2025-12-16T01:14:17.153692+00:00,db;integration;rawview;pytest,repo_studios_team@rainmakerprotocol.dev,active,no,
 .repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_test_log_reports.md,h2,Goals,goals,database-integration-documentation-test-log-reports,Source fields (from `telemetry.json`):,4164,2025-12-16T01:14:17.153692+00:00,db;integration;rawview;pytest,repo_studios_team@rainmakerprotocol.dev,active,no,
 .repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_test_log_reports.md,h2,System Context,system-context,database-integration-documentation-test-log-reports,Source fields (from `telemetry.json`):,4164,2025-12-16T01:14:17.153692+00:00,db;integration;rawview;pytest,repo_studios_team@rainmakerprotocol.dev,active,no,
@@ -34299,6 +37292,13 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_test_log_reports.md,h2,Database Mapping,database-mapping,database-integration-documentation-test-log-reports,Source fields (from `telemetry.json`):,4164,2025-12-16T01:14:17.153692+00:00,db;integration;rawview;pytest,repo_studios_team@rainmakerprotocol.dev,active,no,
 .repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_test_log_reports.md,h2,Reference Prompts,reference-prompts,database-integration-documentation-test-log-reports,Source fields (from `telemetry.json`):,4164,2025-12-16T01:14:17.153692+00:00,db;integration;rawview;pytest,repo_studios_team@rainmakerprotocol.dev,active,no,
 .repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_test_log_reports.md,h2,Update Log,update-log,database-integration-documentation-test-log-reports,Source fields (from `telemetry.json`):,4164,2025-12-16T01:14:17.153692+00:00,db;integration;rawview;pytest,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_undocumented_logic.md,h1,Undocumented Logic — DB Integration,undocumented-logic-db-integration,,abstraction.,2596,2025-12-17T17:03:35.225241+00:00,db-integration;healthview;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_undocumented_logic.md,h2,Goals,goals,undocumented-logic-db-integration,abstraction.,2596,2025-12-17T17:03:35.225241+00:00,db-integration;healthview;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_undocumented_logic.md,h2,System Context,system-context,undocumented-logic-db-integration,abstraction.,2596,2025-12-17T17:03:35.225241+00:00,db-integration;healthview;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_undocumented_logic.md,h2,Agent Instructions,agent-instructions,undocumented-logic-db-integration,abstraction.,2596,2025-12-17T17:03:35.225241+00:00,db-integration;healthview;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_undocumented_logic.md,h2,Human Notes,human-notes,undocumented-logic-db-integration,abstraction.,2596,2025-12-17T17:03:35.225241+00:00,db-integration;healthview;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_undocumented_logic.md,h2,Reference Prompts,reference-prompts,undocumented-logic-db-integration,abstraction.,2596,2025-12-17T17:03:35.225241+00:00,db-integration;healthview;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/command_center/docs/db_integrations,.repo_studios/command_center/docs/db_integrations/db_integration_undocumented_logic.md,h2,Update Log,update-log,undocumented-logic-db-integration,abstraction.,2596,2025-12-17T17:03:35.225241+00:00,db-integration;healthview;producer,repo_studios_team@rainmakerprotocol.dev,active,no,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/decision_log.md,h1,Decision Log,decision-log,,,23312,2025-12-05T02:36:35.387302+00:00,,,,yes,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/duplicate_detection_schema_alignment.md,h1,Duplicate Detection Schema Alignment – 2025-10-24,duplicate-detection-schema-alignment-2025-10-24,,"Translate `scan_code_duplicates.py` output into the data products Repo Studios already consumes (health-suite summaries, companion analysis exports, and future automation inputs).",4145,2025-10-25T14:24:46.937636+00:00,,,,no,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/duplicate_detection_schema_alignment.md,h2,Goal,goal,duplicate-detection-schema-alignment-2025-10-24,"Translate `scan_code_duplicates.py` output into the data products Repo Studios already consumes (health-suite summaries, companion analysis exports, and future automation inputs).",4145,2025-10-25T14:24:46.937636+00:00,,,,no,
@@ -34359,11 +37359,11 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/manual_extraction_checklist.md,h2,5. Artifact Updates,5-artifact-updates,manual-extraction-checklist-repo-studios-command-center,"Use this checklist whenever you migrate a duplicated helper into `.repo_studios/library/`. It adapts the Phase 3 guide for Repo Studios workflows, Windows shell conventions, and the refreshed orchestrator pipeline (2025-10-28).",4154,2025-10-30T11:20:16.293146+00:00,,,,no,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/manual_extraction_checklist.md,h2,6. Documentation & Run Notes,6-documentation-run-notes,manual-extraction-checklist-repo-studios-command-center,"Use this checklist whenever you migrate a duplicated helper into `.repo_studios/library/`. It adapts the Phase 3 guide for Repo Studios workflows, Windows shell conventions, and the refreshed orchestrator pipeline (2025-10-28).",4154,2025-10-30T11:20:16.293146+00:00,,,,no,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/manual_extraction_checklist.md,h2,7. Wrap-up,7-wrap-up,manual-extraction-checklist-repo-studios-command-center,"Use this checklist whenever you migrate a duplicated helper into `.repo_studios/library/`. It adapts the Phase 3 guide for Repo Studios workflows, Windows shell conventions, and the refreshed orchestrator pipeline (2025-10-28).",4154,2025-10-30T11:20:16.293146+00:00,,,,no,
-.repo_studios/command_center/docs,.repo_studios/command_center/docs/manual_extraction_operator_brief.md,h1,Manual Extraction Operator Brief,manual-extraction-operator-brief,,This note packages the key resources operators need when executing Phase 3 manual extractions. Share this document with anyone running the checklist so they align with the latest tooling and report outputs.,3069,2025-11-08T23:02:50.721156+00:00,,,,no,
-.repo_studios/command_center/docs,.repo_studios/command_center/docs/manual_extraction_operator_brief.md,h2,Required Inputs,required-inputs,manual-extraction-operator-brief,This note packages the key resources operators need when executing Phase 3 manual extractions. Share this document with anyone running the checklist so they align with the latest tooling and report outputs.,3069,2025-11-08T23:02:50.721156+00:00,,,,no,
-.repo_studios/command_center/docs,.repo_studios/command_center/docs/manual_extraction_operator_brief.md,h2,Execution Checklist,execution-checklist,manual-extraction-operator-brief,This note packages the key resources operators need when executing Phase 3 manual extractions. Share this document with anyone running the checklist so they align with the latest tooling and report outputs.,3069,2025-11-08T23:02:50.721156+00:00,,,,no,
-.repo_studios/command_center/docs,.repo_studios/command_center/docs/manual_extraction_operator_brief.md,h2,Quick Reference Commands,quick-reference-commands,manual-extraction-operator-brief,This note packages the key resources operators need when executing Phase 3 manual extractions. Share this document with anyone running the checklist so they align with the latest tooling and report outputs.,3069,2025-11-08T23:02:50.721156+00:00,,,,no,
-.repo_studios/command_center/docs,.repo_studios/command_center/docs/manual_extraction_operator_brief.md,h2,Feedback Loop,feedback-loop,manual-extraction-operator-brief,This note packages the key resources operators need when executing Phase 3 manual extractions. Share this document with anyone running the checklist so they align with the latest tooling and report outputs.,3069,2025-11-08T23:02:50.721156+00:00,,,,no,
+.repo_studios/command_center/docs,.repo_studios/command_center/docs/manual_extraction_operator_brief.md,h1,Manual Extraction Operator Brief,manual-extraction-operator-brief,,This note packages the key resources operators need when executing Phase 3 manual extractions. Share this document with anyone running the checklist so they align with the latest tooling and report outputs.,3150,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center/docs,.repo_studios/command_center/docs/manual_extraction_operator_brief.md,h2,Required Inputs,required-inputs,manual-extraction-operator-brief,This note packages the key resources operators need when executing Phase 3 manual extractions. Share this document with anyone running the checklist so they align with the latest tooling and report outputs.,3150,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center/docs,.repo_studios/command_center/docs/manual_extraction_operator_brief.md,h2,Execution Checklist,execution-checklist,manual-extraction-operator-brief,This note packages the key resources operators need when executing Phase 3 manual extractions. Share this document with anyone running the checklist so they align with the latest tooling and report outputs.,3150,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center/docs,.repo_studios/command_center/docs/manual_extraction_operator_brief.md,h2,Quick Reference Commands,quick-reference-commands,manual-extraction-operator-brief,This note packages the key resources operators need when executing Phase 3 manual extractions. Share this document with anyone running the checklist so they align with the latest tooling and report outputs.,3150,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center/docs,.repo_studios/command_center/docs/manual_extraction_operator_brief.md,h2,Feedback Loop,feedback-loop,manual-extraction-operator-brief,This note packages the key resources operators need when executing Phase 3 manual extractions. Share this document with anyone running the checklist so they align with the latest tooling and report outputs.,3150,2025-12-17T01:38:22.486199+00:00,,,,no,
 .repo_studios/command_center/docs/mermaid,.repo_studios/command_center/docs/mermaid/README.md,h1,Mermaid Viewer Documentation Index,mermaid-viewer-documentation-index,,"Provide a single discovery point for the Command Center Mermaid viewer so contributors, operators, and AI agents can locate the right artifact before diving into implementation details.",2524,2025-11-23T11:14:18.336713+00:00,,,,yes,
 .repo_studios/command_center/docs/mermaid,.repo_studios/command_center/docs/mermaid/README.md,h2,Purpose,purpose,mermaid-viewer-documentation-index,"Provide a single discovery point for the Command Center Mermaid viewer so contributors, operators, and AI agents can locate the right artifact before diving into implementation details.",2524,2025-11-23T11:14:18.336713+00:00,,,,yes,
 .repo_studios/command_center/docs/mermaid,.repo_studios/command_center/docs/mermaid/README.md,h2,5W1H Overview,5w1h-overview,mermaid-viewer-documentation-index,"Provide a single discovery point for the Command Center Mermaid viewer so contributors, operators, and AI agents can locate the right artifact before diving into implementation details.",2524,2025-11-23T11:14:18.336713+00:00,,,,yes,
@@ -34577,15 +37577,15 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/metrics_summary_schema.md,h2,Purpose,purpose,automation-metrics-summary-schema,"Define the JSON payload emitted alongside Phase 4 automation manifests so operators and reporting jobs can reason about impact, runtime, and test coverage in a consistent format.",2261,2025-11-04T14:15:56.479204+00:00,,,,no,
 .repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/metrics_summary_schema.md,h2,Schema Overview,schema-overview,automation-metrics-summary-schema,"Define the JSON payload emitted alongside Phase 4 automation manifests so operators and reporting jobs can reason about impact, runtime, and test coverage in a consistent format.",2261,2025-11-04T14:15:56.479204+00:00,,,,no,
 .repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/metrics_summary_schema.md,h2,Validation Rules,validation-rules,automation-metrics-summary-schema,"Define the JSON payload emitted alongside Phase 4 automation manifests so operators and reporting jobs can reason about impact, runtime, and test coverage in a consistent format.",2261,2025-11-04T14:15:56.479204+00:00,,,,no,
-.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h1,Weighted Progress Briefing Template,weighted-progress-briefing-template,,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5193,2025-11-04T14:45:22.715420+00:00,,,,no,
-.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h2,Summary Snapshot,summary-snapshot,weighted-progress-briefing-template,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5193,2025-11-04T14:45:22.715420+00:00,,,,no,
-.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h2,Weighting Formula,weighting-formula,weighted-progress-briefing-template,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5193,2025-11-04T14:45:22.715420+00:00,,,,no,
-.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h2,Key Metrics,key-metrics,weighted-progress-briefing-template,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5193,2025-11-04T14:45:22.715420+00:00,,,,no,
-.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h2,Artifact Links,artifact-links,weighted-progress-briefing-template,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5193,2025-11-04T14:45:22.715420+00:00,,,,no,
-.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h2,Narrative Highlights,narrative-highlights,weighted-progress-briefing-template,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5193,2025-11-04T14:45:22.715420+00:00,,,,no,
-.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h2,Follow-up Actions,follow-up-actions,weighted-progress-briefing-template,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5193,2025-11-04T14:45:22.715420+00:00,,,,no,
-.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h2,How to Use This Template,how-to-use-this-template,weighted-progress-briefing-template,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5193,2025-11-04T14:45:22.715420+00:00,,,,no,
-.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h2,Data Sources,data-sources,weighted-progress-briefing-template,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5193,2025-11-04T14:45:22.715420+00:00,,,,no,
+.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h1,Weighted Progress Briefing Template,weighted-progress-briefing-template,,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5207,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h2,Summary Snapshot,summary-snapshot,weighted-progress-briefing-template,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5207,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h2,Weighting Formula,weighting-formula,weighted-progress-briefing-template,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5207,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h2,Key Metrics,key-metrics,weighted-progress-briefing-template,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5207,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h2,Artifact Links,artifact-links,weighted-progress-briefing-template,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5207,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h2,Narrative Highlights,narrative-highlights,weighted-progress-briefing-template,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5207,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h2,Follow-up Actions,follow-up-actions,weighted-progress-briefing-template,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5207,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h2,How to Use This Template,how-to-use-this-template,weighted-progress-briefing-template,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5207,2025-12-17T01:38:22.486199+00:00,,,,no,
+.repo_studios/command_center/docs/metrics,.repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md,h2,Data Sources,data-sources,weighted-progress-briefing-template,Use this template when compiling the weekly automation readiness briefing. It blends duplicate resolution totals with lizard complexity scores and helper adoption stats so stakeholders see meaningful progress at a glance.,5207,2025-12-17T01:38:22.486199+00:00,,,,no,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/naming_conventions.md,h1,.repo_studios Library Naming Training Guide,repostudios-library-naming-training-guide,,"This guide trains agents on how to interpret, enforce, and validate naming conventions inside `.repo_studios/library`. Use it as an operational playbook, not just a reference.",12668,2025-11-06T09:44:23.975246+00:00,,,,no,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/naming_conventions.md,h2,1. Mission & Outcomes,1-mission-outcomes,repostudios-library-naming-training-guide,"This guide trains agents on how to interpret, enforce, and validate naming conventions inside `.repo_studios/library`. Use it as an operational playbook, not just a reference.",12668,2025-11-06T09:44:23.975246+00:00,,,,no,
 .repo_studios/command_center/docs,.repo_studios/command_center/docs/naming_conventions.md,h2,2. Core Principles,2-core-principles,repostudios-library-naming-training-guide,"This guide trains agents on how to interpret, enforce, and validate naming conventions inside `.repo_studios/library`. Use it as an operational playbook, not just a reference.",12668,2025-11-06T09:44:23.975246+00:00,,,,no,
@@ -34796,21 +37796,21 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/command_center/scripts/orchestrators,.repo_studios/command_center/scripts/orchestrators/README.md,h2,Monkey Patch Oversight (`run_monkey_patch_oversight.py`),monkey-patch-oversight-runmonkeypatchoversightpy,topic-orchestrators,"This directory contains the Healthview topic orchestrators that now replace the legacy CommandView runners. Each entry coordinates the shared helper stack (`build_topic_pipeline`, catalog registration, retention knobs) and mirrors…",3708,2025-12-02T21:11:59.771284+00:00,,,,yes,
 .repo_studios/command_center/scripts/orchestrators,.repo_studios/command_center/scripts/orchestrators/README.md,h2,Standards Integrity (`run_standards_integrity.py`),standards-integrity-runstandardsintegritypy,topic-orchestrators,"This directory contains the Healthview topic orchestrators that now replace the legacy CommandView runners. Each entry coordinates the shared helper stack (`build_topic_pipeline`, catalog registration, retention knobs) and mirrors…",3708,2025-12-02T21:11:59.771284+00:00,,,,yes,
 .repo_studios/command_center/scripts,.repo_studios/command_center/scripts/script_inventory.md,h1,Command Center Script Inventory,command-center-script-inventory,,,1523,2025-10-25T14:43:05.753999+00:00,,,,no,
-.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,1. `configure_logging` — 12 duplicate(s),7229,2025-12-15T18:05:31.172310+00:00,,,,no,
-.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md,h2,Overview,overview,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7229,2025-12-15T18:05:31.172310+00:00,,,,no,
-.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md,h2,Inputs,inputs,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7229,2025-12-15T18:05:31.172310+00:00,,,,no,
-.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7229,2025-12-15T18:05:31.172310+00:00,,,,no,
-.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-2025-11-27-1757.md,h2,Next Steps,next-steps,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7229,2025-12-15T18:05:31.172310+00:00,,,,no,
-.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,1. `configure_logging` — 12 duplicate(s),7198,2025-12-15T18:05:31.173309+00:00,,,,no,
-.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md,h2,Overview,overview,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-12-15T18:05:31.173309+00:00,,,,no,
-.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md,h2,Inputs,inputs,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-12-15T18:05:31.173309+00:00,,,,no,
-.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-12-15T18:05:31.173309+00:00,,,,no,
-.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md,h2,Next Steps,next-steps,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-12-15T18:05:31.173309+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,1. `configure_logging` — 12 duplicate(s),7198,2025-12-18T12:22:43.714946+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md,h2,Overview,overview,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-12-18T12:22:43.714946+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md,h2,Inputs,inputs,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-12-18T12:22:43.714946+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-12-18T12:22:43.714946+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0456.md,h2,Next Steps,next-steps,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-12-18T12:22:43.714946+00:00,,,,no,
 .repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,1. `configure_logging` — 12 duplicate(s),7198,2025-12-15T18:05:31.173309+00:00,,,,no,
 .repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md,h2,Overview,overview,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-12-15T18:05:31.173309+00:00,,,,no,
 .repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md,h2,Inputs,inputs,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-12-15T18:05:31.173309+00:00,,,,no,
 .repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-12-15T18:05:31.173309+00:00,,,,no,
 .repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251130-0457.md,h2,Next Steps,next-steps,duplicate-scan-summary,1. `configure_logging` — 12 duplicate(s),7198,2025-12-15T18:05:31.173309+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251217-2039.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,1. `_parse_timestamp` — 27 duplicate(s),16000,2025-12-17T20:39:39.920788+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251217-2039.md,h2,Overview,overview,duplicate-scan-summary,1. `_parse_timestamp` — 27 duplicate(s),16000,2025-12-17T20:39:39.920788+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251217-2039.md,h2,Inputs,inputs,duplicate-scan-summary,1. `_parse_timestamp` — 27 duplicate(s),16000,2025-12-17T20:39:39.920788+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251217-2039.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,1. `_parse_timestamp` — 27 duplicate(s),16000,2025-12-17T20:39:39.920788+00:00,,,,no,
+.repo_studios/command_center/scripts/scripts_index,.repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20251217-2039.md,h2,Next Steps,next-steps,duplicate-scan-summary,1. `_parse_timestamp` — 27 duplicate(s),16000,2025-12-17T20:39:39.920788+00:00,,,,no,
 .repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h1,Command Center Viewer,command-center-viewer,,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,9292,2025-11-28T14:18:05.271026+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
 .repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,5W1H Snapshot,5w1h-snapshot,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,9292,2025-11-28T14:18:05.271026+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
 .repo_studios/command_center/viewer,.repo_studios/command_center/viewer/README.md,h2,Features,features,command-center-viewer,A modern VS Code-styled progressive detail viewer for CommandView artifacts.,9292,2025-11-28T14:18:05.271026+00:00,,,,no,http://localhost:8000/.repo_studios/command_center/viewer/ui/;http://localhost:8000/
@@ -34911,18 +37911,18 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation,.repo_studios/docs/automation/analyze_test_hardening.md,h2,Findings and scoring,findings-and-scoring,analyzetesthardeningpy,"`analyze_test_hardening.py` inspects repository test modules for maintainability risks such as missing assertions, vague test names, excessive length, global state usage, and reliance on `time.sleep()`. The producer emits structured…",3190,2025-12-15T20:12:36.447591+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/analyze_test_hardening.md,h2,Testing,testing,analyzetesthardeningpy,"`analyze_test_hardening.py` inspects repository test modules for maintainability risks such as missing assertions, vague test names, excessive length, global state usage, and reliance on `time.sleep()`. The producer emits structured…",3190,2025-12-15T20:12:36.447591+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/analyze_test_hardening.md,h2,Operational notes,operational-notes,analyzetesthardeningpy,"`analyze_test_hardening.py` inspects repository test modules for maintainability risks such as missing assertions, vague test names, excessive length, global state usage, and reliance on `time.sleep()`. The producer emits structured…",3190,2025-12-15T20:12:36.447591+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/check_inventory_health.md,h1,Automation — check_inventory_health,automation-checkinventoryhealth,,See `.github/instructions/markdown.instructions.md` for repo-wide Markdown rules (last reviewed 2025-12-15).,3372,2025-12-15T20:58:09.903934+00:00,automation;healthview;inventory;ci;thresholds;positional-encoding,repo_studios,active,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/check_inventory_health.md,h2,Goals,goals,automation-checkinventoryhealth,See `.github/instructions/markdown.instructions.md` for repo-wide Markdown rules (last reviewed 2025-12-15).,3372,2025-12-15T20:58:09.903934+00:00,automation;healthview;inventory;ci;thresholds;positional-encoding,repo_studios,active,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/check_inventory_health.md,h2,System Context,system-context,automation-checkinventoryhealth,See `.github/instructions/markdown.instructions.md` for repo-wide Markdown rules (last reviewed 2025-12-15).,3372,2025-12-15T20:58:09.903934+00:00,automation;healthview;inventory;ci;thresholds;positional-encoding,repo_studios,active,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/check_inventory_health.md,h2,Agent Instructions,agent-instructions,automation-checkinventoryhealth,See `.github/instructions/markdown.instructions.md` for repo-wide Markdown rules (last reviewed 2025-12-15).,3372,2025-12-15T20:58:09.903934+00:00,automation;healthview;inventory;ci;thresholds;positional-encoding,repo_studios,active,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/check_inventory_health.md,h2,Human Notes,human-notes,automation-checkinventoryhealth,See `.github/instructions/markdown.instructions.md` for repo-wide Markdown rules (last reviewed 2025-12-15).,3372,2025-12-15T20:58:09.903934+00:00,automation;healthview;inventory;ci;thresholds;positional-encoding,repo_studios,active,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/check_inventory_health.md,h2,Reference Prompts,reference-prompts,automation-checkinventoryhealth,See `.github/instructions/markdown.instructions.md` for repo-wide Markdown rules (last reviewed 2025-12-15).,3372,2025-12-15T20:58:09.903934+00:00,automation;healthview;inventory;ci;thresholds;positional-encoding,repo_studios,active,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/check_inventory_health.md,h2,Update Log,update-log,automation-checkinventoryhealth,See `.github/instructions/markdown.instructions.md` for repo-wide Markdown rules (last reviewed 2025-12-15).,3372,2025-12-15T20:58:09.903934+00:00,automation;healthview;inventory;ci;thresholds;positional-encoding,repo_studios,active,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/ci_metrics_checks.md,h1,CI Metrics Checks for Inventory Reports,ci-metrics-checks-for-inventory-reports,,Last updated: 2025-10-18,2419,2025-12-11T10:50:58.485331+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/ci_metrics_checks.md,h2,Goals,goals,ci-metrics-checks-for-inventory-reports,Last updated: 2025-10-18,2419,2025-12-11T10:50:58.485331+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/ci_metrics_checks.md,h2,Proposed Pipeline Steps,proposed-pipeline-steps,ci-metrics-checks-for-inventory-reports,Last updated: 2025-10-18,2419,2025-12-11T10:50:58.485331+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/ci_metrics_checks.md,h2,Implementation Notes,implementation-notes,ci-metrics-checks-for-inventory-reports,Last updated: 2025-10-18,2419,2025-12-11T10:50:58.485331+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/ci_metrics_checks.md,h2,Next Actions,next-actions,ci-metrics-checks-for-inventory-reports,Last updated: 2025-10-18,2419,2025-12-11T10:50:58.485331+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/check_inventory_health.md,h1,Automation — check_inventory_health,automation-checkinventoryhealth,,See `.github/instructions/markdown.instructions.md` for repo-wide Markdown rules (last reviewed 2025-12-15).,3464,2025-12-17T18:23:40.605108+00:00,automation;healthview;inventory;ci;thresholds;positional-encoding,repo_studios,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/check_inventory_health.md,h2,Goals,goals,automation-checkinventoryhealth,See `.github/instructions/markdown.instructions.md` for repo-wide Markdown rules (last reviewed 2025-12-15).,3464,2025-12-17T18:23:40.605108+00:00,automation;healthview;inventory;ci;thresholds;positional-encoding,repo_studios,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/check_inventory_health.md,h2,System Context,system-context,automation-checkinventoryhealth,See `.github/instructions/markdown.instructions.md` for repo-wide Markdown rules (last reviewed 2025-12-15).,3464,2025-12-17T18:23:40.605108+00:00,automation;healthview;inventory;ci;thresholds;positional-encoding,repo_studios,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/check_inventory_health.md,h2,Agent Instructions,agent-instructions,automation-checkinventoryhealth,See `.github/instructions/markdown.instructions.md` for repo-wide Markdown rules (last reviewed 2025-12-15).,3464,2025-12-17T18:23:40.605108+00:00,automation;healthview;inventory;ci;thresholds;positional-encoding,repo_studios,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/check_inventory_health.md,h2,Human Notes,human-notes,automation-checkinventoryhealth,See `.github/instructions/markdown.instructions.md` for repo-wide Markdown rules (last reviewed 2025-12-15).,3464,2025-12-17T18:23:40.605108+00:00,automation;healthview;inventory;ci;thresholds;positional-encoding,repo_studios,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/check_inventory_health.md,h2,Reference Prompts,reference-prompts,automation-checkinventoryhealth,See `.github/instructions/markdown.instructions.md` for repo-wide Markdown rules (last reviewed 2025-12-15).,3464,2025-12-17T18:23:40.605108+00:00,automation;healthview;inventory;ci;thresholds;positional-encoding,repo_studios,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/check_inventory_health.md,h2,Update Log,update-log,automation-checkinventoryhealth,See `.github/instructions/markdown.instructions.md` for repo-wide Markdown rules (last reviewed 2025-12-15).,3464,2025-12-17T18:23:40.605108+00:00,automation;healthview;inventory;ci;thresholds;positional-encoding,repo_studios,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/ci_metrics_checks.md,h1,CI Metrics Checks for Inventory Reports,ci-metrics-checks-for-inventory-reports,,Last updated: 2025-10-18,2523,2025-12-17T18:23:40.625822+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/ci_metrics_checks.md,h2,Goals,goals,ci-metrics-checks-for-inventory-reports,Last updated: 2025-10-18,2523,2025-12-17T18:23:40.625822+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/ci_metrics_checks.md,h2,Proposed Pipeline Steps,proposed-pipeline-steps,ci-metrics-checks-for-inventory-reports,Last updated: 2025-10-18,2523,2025-12-17T18:23:40.625822+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/ci_metrics_checks.md,h2,Implementation Notes,implementation-notes,ci-metrics-checks-for-inventory-reports,Last updated: 2025-10-18,2523,2025-12-17T18:23:40.625822+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/ci_metrics_checks.md,h2,Next Actions,next-actions,ci-metrics-checks-for-inventory-reports,Last updated: 2025-10-18,2523,2025-12-17T18:23:40.625822+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/classify_monkey_patches.md,h1,classify_monkey_patches.py,classifymonkeypatchespy,,`classify_monkey_patches.py` ingests monkey-patch scan artifacts and assigns HIGH/MODERATE/SAFE risk tiers so teams can triage the most dangerous runtime modifications first. The consumer prefers structured bundles from…,3865,2025-11-29T16:10:11.345704+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/classify_monkey_patches.md,h2,Purpose,purpose,classifymonkeypatchespy,`classify_monkey_patches.py` ingests monkey-patch scan artifacts and assigns HIGH/MODERATE/SAFE risk tiers so teams can triage the most dangerous runtime modifications first. The consumer prefers structured bundles from…,3865,2025-11-29T16:10:11.345704+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/classify_monkey_patches.md,h2,Invocation,invocation,classifymonkeypatchespy,`classify_monkey_patches.py` ingests monkey-patch scan artifacts and assigns HIGH/MODERATE/SAFE risk tiers so teams can triage the most dangerous runtime modifications first. The consumer prefers structured bundles from…,3865,2025-11-29T16:10:11.345704+00:00,,,,no,
@@ -35009,29 +38009,36 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_code_doc_churn_report.md,h2,Outputs,outputs,generatecodedocchurnreport,"`generate_code_doc_churn_report.py` scans recent git history to surface modules that accumulated code churn without a matching documentation update. The script produces structured artifacts (JSON, Markdown, TSV, summary) with retention and…",3267,2025-12-16T19:44:14.369023+00:00,producer;docs-health;telemetry,repo_studios_team@rainmakerprotocol.dev,active,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_code_doc_churn_report.md,h2,Usage,usage,generatecodedocchurnreport,"`generate_code_doc_churn_report.py` scans recent git history to surface modules that accumulated code churn without a matching documentation update. The script produces structured artifacts (JSON, Markdown, TSV, summary) with retention and…",3267,2025-12-16T19:44:14.369023+00:00,producer;docs-health;telemetry,repo_studios_team@rainmakerprotocol.dev,active,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_code_doc_churn_report.md,h2,Testing,testing,generatecodedocchurnreport,"`generate_code_doc_churn_report.py` scans recent git history to surface modules that accumulated code churn without a matching documentation update. The script produces structured artifacts (JSON, Markdown, TSV, summary) with retention and…",3267,2025-12-16T19:44:14.369023+00:00,producer;docs-health;telemetry,repo_studios_team@rainmakerprotocol.dev,active,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h1,generate_dependency_hygiene_report.py,generatedependencyhygienereportpy,,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3903,2025-12-16T20:10:31.378690+00:00,automation;healthview;dependency-hygiene,repo_studios_team@rainmakerprotocol.dev,active,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h2,Purpose,purpose,generatedependencyhygienereportpy,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3903,2025-12-16T20:10:31.378690+00:00,automation;healthview;dependency-hygiene,repo_studios_team@rainmakerprotocol.dev,active,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h2,Invocation,invocation,generatedependencyhygienereportpy,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3903,2025-12-16T20:10:31.378690+00:00,automation;healthview;dependency-hygiene,repo_studios_team@rainmakerprotocol.dev,active,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h2,Outputs,outputs,generatedependencyhygienereportpy,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3903,2025-12-16T20:10:31.378690+00:00,automation;healthview;dependency-hygiene,repo_studios_team@rainmakerprotocol.dev,active,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h2,Status semantics,status-semantics,generatedependencyhygienereportpy,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3903,2025-12-16T20:10:31.378690+00:00,automation;healthview;dependency-hygiene,repo_studios_team@rainmakerprotocol.dev,active,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h2,Testing,testing,generatedependencyhygienereportpy,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3903,2025-12-16T20:10:31.378690+00:00,automation;healthview;dependency-hygiene,repo_studios_team@rainmakerprotocol.dev,active,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h2,Operational notes,operational-notes,generatedependencyhygienereportpy,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3903,2025-12-16T20:10:31.378690+00:00,automation;healthview;dependency-hygiene,repo_studios_team@rainmakerprotocol.dev,active,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h1,generate_doc_index.py,generatedocindexpy,,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:06:34.408259+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Goals,goals,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:06:34.408259+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,System Context,system-context,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:06:34.408259+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Output Contract,output-contract,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:06:34.408259+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Data Shape,data-shape,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:06:34.408259+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,CLI Reference,cli-reference,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:06:34.408259+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Implementation Summary,implementation-summary,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:06:34.408259+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Notes for AI Consumers,notes-for-ai-consumers,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:06:34.408259+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Update Log,update-log,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:06:34.408259+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h1,generate_lizard_report.py,generatelizardreportpy,,"`generate_lizard_report.py` runs `python -m lizard` across the owned source tree, captures the JSON output, and emits structured artifacts so downstream agents can track cyclomatic complexity hotspots and long functions. It is designed to…",4795,2025-10-22T21:38:16.995302+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h2,Purpose,purpose,generatelizardreportpy,"`generate_lizard_report.py` runs `python -m lizard` across the owned source tree, captures the JSON output, and emits structured artifacts so downstream agents can track cyclomatic complexity hotspots and long functions. It is designed to…",4795,2025-10-22T21:38:16.995302+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h2,Invocation,invocation,generatelizardreportpy,"`generate_lizard_report.py` runs `python -m lizard` across the owned source tree, captures the JSON output, and emits structured artifacts so downstream agents can track cyclomatic complexity hotspots and long functions. It is designed to…",4795,2025-10-22T21:38:16.995302+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h2,Outputs,outputs,generatelizardreportpy,"`generate_lizard_report.py` runs `python -m lizard` across the owned source tree, captures the JSON output, and emits structured artifacts so downstream agents can track cyclomatic complexity hotspots and long functions. It is designed to…",4795,2025-10-22T21:38:16.995302+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h2,Status semantics,status-semantics,generatelizardreportpy,"`generate_lizard_report.py` runs `python -m lizard` across the owned source tree, captures the JSON output, and emits structured artifacts so downstream agents can track cyclomatic complexity hotspots and long functions. It is designed to…",4795,2025-10-22T21:38:16.995302+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h2,Testing,testing,generatelizardreportpy,"`generate_lizard_report.py` runs `python -m lizard` across the owned source tree, captures the JSON output, and emits structured artifacts so downstream agents can track cyclomatic complexity hotspots and long functions. It is designed to…",4795,2025-10-22T21:38:16.995302+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h2,Operational notes,operational-notes,generatelizardreportpy,"`generate_lizard_report.py` runs `python -m lizard` across the owned source tree, captures the JSON output, and emits structured artifacts so downstream agents can track cyclomatic complexity hotspots and long functions. It is designed to…",4795,2025-10-22T21:38:16.995302+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h1,generate_dependency_hygiene_report.py,generatedependencyhygienereportpy,,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3903,2025-12-16T21:14:26.596424+00:00,automation;healthview;dependency-hygiene,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h2,Purpose,purpose,generatedependencyhygienereportpy,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3903,2025-12-16T21:14:26.596424+00:00,automation;healthview;dependency-hygiene,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h2,Invocation,invocation,generatedependencyhygienereportpy,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3903,2025-12-16T21:14:26.596424+00:00,automation;healthview;dependency-hygiene,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h2,Outputs,outputs,generatedependencyhygienereportpy,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3903,2025-12-16T21:14:26.596424+00:00,automation;healthview;dependency-hygiene,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h2,Status semantics,status-semantics,generatedependencyhygienereportpy,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3903,2025-12-16T21:14:26.596424+00:00,automation;healthview;dependency-hygiene,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h2,Testing,testing,generatedependencyhygienereportpy,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3903,2025-12-16T21:14:26.596424+00:00,automation;healthview;dependency-hygiene,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_dependency_hygiene_report.md,h2,Operational notes,operational-notes,generatedependencyhygienereportpy,"`generate_dependency_hygiene_report.py` scans pinned dependency manifests, flags risky specifications, and emits structured artifacts so agents can track hygiene regressions. Reports consolidate requirement files (and optionally…",3903,2025-12-16T21:14:26.596424+00:00,automation;healthview;dependency-hygiene,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h1,generate_doc_index.py,generatedocindexpy,,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:14:26.601426+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Goals,goals,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:14:26.601426+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,System Context,system-context,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:14:26.601426+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Output Contract,output-contract,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:14:26.601426+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Data Shape,data-shape,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:14:26.601426+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,CLI Reference,cli-reference,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:14:26.601426+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Implementation Summary,implementation-summary,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:14:26.601426+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Notes for AI Consumers,notes-for-ai-consumers,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:14:26.601426+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_doc_index.md,h2,Update Log,update-log,generatedocindexpy,"`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",3469,2025-12-16T21:14:26.601426+00:00,docs;producer;healthview;doc-index,repo_studios_team@rainmakerprotocol.dev,live,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_import_graph_report.md,h1,generate_import_graph_report.py,generateimportgraphreportpy,,`generate_import_graph_report.py` scans owned Python packages inside the repository and emits an adjacency graph of import relationships. The report highlights:,3320,2025-12-16T22:07:37.971519+00:00,automation;healthview;import-graph,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_import_graph_report.md,h2,Purpose,purpose,generateimportgraphreportpy,`generate_import_graph_report.py` scans owned Python packages inside the repository and emits an adjacency graph of import relationships. The report highlights:,3320,2025-12-16T22:07:37.971519+00:00,automation;healthview;import-graph,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_import_graph_report.md,h2,Invocation,invocation,generateimportgraphreportpy,`generate_import_graph_report.py` scans owned Python packages inside the repository and emits an adjacency graph of import relationships. The report highlights:,3320,2025-12-16T22:07:37.971519+00:00,automation;healthview;import-graph,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_import_graph_report.md,h2,Outputs,outputs,generateimportgraphreportpy,`generate_import_graph_report.py` scans owned Python packages inside the repository and emits an adjacency graph of import relationships. The report highlights:,3320,2025-12-16T22:07:37.971519+00:00,automation;healthview;import-graph,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_import_graph_report.md,h2,Consumer notes,consumer-notes,generateimportgraphreportpy,`generate_import_graph_report.py` scans owned Python packages inside the repository and emits an adjacency graph of import relationships. The report highlights:,3320,2025-12-16T22:07:37.971519+00:00,automation;healthview;import-graph,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_import_graph_report.md,h2,Testing,testing,generateimportgraphreportpy,`generate_import_graph_report.py` scans owned Python packages inside the repository and emits an adjacency graph of import relationships. The report highlights:,3320,2025-12-16T22:07:37.971519+00:00,automation;healthview;import-graph,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_import_graph_report.md,h2,Update Log,update-log,generateimportgraphreportpy,`generate_import_graph_report.py` scans owned Python packages inside the repository and emits an adjacency graph of import relationships. The report highlights:,3320,2025-12-16T22:07:37.971519+00:00,automation;healthview;import-graph,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h1,generate_lizard_report.py,generatelizardreportpy,,This producer runs `python -m lizard` against selected targets inside the repo and writes a canonical 3-artifact bundle.,3451,2025-12-17T01:38:22.483200+00:00,producer;healthview;complexity,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h2,Goals,goals,generatelizardreportpy,This producer runs `python -m lizard` against selected targets inside the repo and writes a canonical 3-artifact bundle.,3451,2025-12-17T01:38:22.483200+00:00,producer;healthview;complexity,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h2,System Context,system-context,generatelizardreportpy,This producer runs `python -m lizard` against selected targets inside the repo and writes a canonical 3-artifact bundle.,3451,2025-12-17T01:38:22.483200+00:00,producer;healthview;complexity,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h2,Agent Instructions,agent-instructions,generatelizardreportpy,This producer runs `python -m lizard` against selected targets inside the repo and writes a canonical 3-artifact bundle.,3451,2025-12-17T01:38:22.483200+00:00,producer;healthview;complexity,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h2,Invocation,invocation,generatelizardreportpy,This producer runs `python -m lizard` against selected targets inside the repo and writes a canonical 3-artifact bundle.,3451,2025-12-17T01:38:22.483200+00:00,producer;healthview;complexity,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h2,Human Notes,human-notes,generatelizardreportpy,This producer runs `python -m lizard` against selected targets inside the repo and writes a canonical 3-artifact bundle.,3451,2025-12-17T01:38:22.483200+00:00,producer;healthview;complexity,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_lizard_report.md,h2,Update Log,update-log,generatelizardreportpy,This producer runs `python -m lizard` against selected targets inside the repo and writes a canonical 3-artifact bundle.,3451,2025-12-17T01:38:22.483200+00:00,producer;healthview;complexity,repo_studios_team@rainmakerprotocol.dev,active,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h1,generate_standards_index.py,generatestandardsindexpy,,`generate_standards_index.py` assembles the canonical standards index and refreshes the `latest_index.yaml` pointer by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a…,5212,2025-11-27T17:20:15.673436+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h2,Purpose,purpose,generatestandardsindexpy,`generate_standards_index.py` assembles the canonical standards index and refreshes the `latest_index.yaml` pointer by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a…,5212,2025-11-27T17:20:15.673436+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h2,Invocation,invocation,generatestandardsindexpy,`generate_standards_index.py` assembles the canonical standards index and refreshes the `latest_index.yaml` pointer by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a…,5212,2025-11-27T17:20:15.673436+00:00,,,,no,
@@ -35039,13 +38046,14 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h2,Status semantics,status-semantics,generatestandardsindexpy,`generate_standards_index.py` assembles the canonical standards index and refreshes the `latest_index.yaml` pointer by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a…,5212,2025-11-27T17:20:15.673436+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h2,Testing,testing,generatestandardsindexpy,`generate_standards_index.py` assembles the canonical standards index and refreshes the `latest_index.yaml` pointer by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a…,5212,2025-11-27T17:20:15.673436+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_standards_index.md,h2,Operational notes,operational-notes,generatestandardsindexpy,`generate_standards_index.py` assembles the canonical standards index and refreshes the `latest_index.yaml` pointer by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a…,5212,2025-11-27T17:20:15.673436+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h1,generate_test_coverage_inventory.py,generatetestcoverageinventorypy,,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered. The producer emits JSON, Markdown, CSV,…",4223,2025-11-23T12:12:27.820382+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,Purpose,purpose,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered. The producer emits JSON, Markdown, CSV,…",4223,2025-11-23T12:12:27.820382+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,Invocation,invocation,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered. The producer emits JSON, Markdown, CSV,…",4223,2025-11-23T12:12:27.820382+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,Outputs,outputs,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered. The producer emits JSON, Markdown, CSV,…",4223,2025-11-23T12:12:27.820382+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,Status semantics,status-semantics,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered. The producer emits JSON, Markdown, CSV,…",4223,2025-11-23T12:12:27.820382+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,Testing,testing,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered. The producer emits JSON, Markdown, CSV,…",4223,2025-11-23T12:12:27.820382+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,Operational notes,operational-notes,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered. The producer emits JSON, Markdown, CSV,…",4223,2025-11-23T12:12:27.820382+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h1,generate_test_coverage_inventory.py,generatetestcoverageinventorypy,,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered.",4485,2025-12-17T12:55:53.914422+00:00,automation;producer;healthview;test-coverage,repo_studios_ai,active,no,../../.github/instructions/markdown.instructions.md
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,Purpose,purpose,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered.",4485,2025-12-17T12:55:53.914422+00:00,automation;producer;healthview;test-coverage,repo_studios_ai,active,no,../../.github/instructions/markdown.instructions.md
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,Invocation,invocation,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered.",4485,2025-12-17T12:55:53.914422+00:00,automation;producer;healthview;test-coverage,repo_studios_ai,active,no,../../.github/instructions/markdown.instructions.md
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,Outputs,outputs,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered.",4485,2025-12-17T12:55:53.914422+00:00,automation;producer;healthview;test-coverage,repo_studios_ai,active,no,../../.github/instructions/markdown.instructions.md
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,Status semantics,status-semantics,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered.",4485,2025-12-17T12:55:53.914422+00:00,automation;producer;healthview;test-coverage,repo_studios_ai,active,no,../../.github/instructions/markdown.instructions.md
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,Testing,testing,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered.",4485,2025-12-17T12:55:53.914422+00:00,automation;producer;healthview;test-coverage,repo_studios_ai,active,no,../../.github/instructions/markdown.instructions.md
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,Operational notes,operational-notes,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered.",4485,2025-12-17T12:55:53.914422+00:00,automation;producer;healthview;test-coverage,repo_studios_ai,active,no,../../.github/instructions/markdown.instructions.md
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_coverage_inventory.md,h2,References,references,generatetestcoverageinventorypy,"`generate_test_coverage_inventory.py` ingests a Coverage.py XML report and produces a per-file inventory showing how many functions exist, how many are exercised by tests, and which remain uncovered.",4485,2025-12-17T12:55:53.914422+00:00,automation;producer;healthview;test-coverage,repo_studios_ai,active,no,../../.github/instructions/markdown.instructions.md
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_log_health_report.md,h1,generate_test_log_health_report.py,generatetestloghealthreportpy,,"`generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so operators can track warning spikes, failure patterns, and slow tests without rereading entire logs. The script prefers the positional bundle…",5575,2025-12-16T01:45:26.291587+00:00,consumers;rawview;pytest;reports,repo_studios_team@rainmakerprotocol.dev,active,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_log_health_report.md,h2,Purpose,purpose,generatetestloghealthreportpy,"`generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so operators can track warning spikes, failure patterns, and slow tests without rereading entire logs. The script prefers the positional bundle…",5575,2025-12-16T01:45:26.291587+00:00,consumers;rawview;pytest;reports,repo_studios_team@rainmakerprotocol.dev,active,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_log_health_report.md,h2,Inputs,inputs,generatetestloghealthreportpy,"`generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so operators can track warning spikes, failure patterns, and slow tests without rereading entire logs. The script prefers the positional bundle…",5575,2025-12-16T01:45:26.291587+00:00,consumers;rawview;pytest;reports,repo_studios_team@rainmakerprotocol.dev,active,no,
@@ -35055,16 +38063,20 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_log_health_report.md,h2,Make Target,make-target,generatetestloghealthreportpy,"`generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so operators can track warning spikes, failure patterns, and slow tests without rereading entire logs. The script prefers the positional bundle…",5575,2025-12-16T01:45:26.291587+00:00,consumers;rawview;pytest;reports,repo_studios_team@rainmakerprotocol.dev,active,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_log_health_report.md,h2,Testing,testing,generatetestloghealthreportpy,"`generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so operators can track warning spikes, failure patterns, and slow tests without rereading entire logs. The script prefers the positional bundle…",5575,2025-12-16T01:45:26.291587+00:00,consumers;rawview;pytest;reports,repo_studios_team@rainmakerprotocol.dev,active,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/generate_test_log_health_report.md,h2,Notes,notes,generatetestloghealthreportpy,"`generate_test_log_health_report.py` turns raw pytest output into a structured health bundle so operators can track warning spikes, failure patterns, and slow tests without rereading entire logs. The script prefers the positional bundle…",5575,2025-12-16T01:45:26.291587+00:00,consumers;rawview;pytest;reports,repo_studios_team@rainmakerprotocol.dev,active,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_typecheck_report.md,h1,Typecheck Report Producer,typecheck-report-producer,,The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and captures a structured set of artifacts for observability.,1895,2025-10-23T02:03:40.458715+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_typecheck_report.md,h2,Invocation,invocation,typecheck-report-producer,The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and captures a structured set of artifacts for observability.,1895,2025-10-23T02:03:40.458715+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_typecheck_report.md,h2,Outputs,outputs,typecheck-report-producer,The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and captures a structured set of artifacts for observability.,1895,2025-10-23T02:03:40.458715+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_typecheck_report.md,h2,Testing,testing,typecheck-report-producer,The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and captures a structured set of artifacts for observability.,1895,2025-10-23T02:03:40.458715+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h1,generate_undocumented_logic_report,generateundocumentedlogicreport,,"`generate_undocumented_logic_report.py` scans the repo automation scripts for public functions, classes, and methods that lack docstrings. The report helps identify code paths that should have documentation anchors or docstring coverage…",2681,2025-12-16T16:16:30.904227+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h2,Purpose,purpose,generateundocumentedlogicreport,"`generate_undocumented_logic_report.py` scans the repo automation scripts for public functions, classes, and methods that lack docstrings. The report helps identify code paths that should have documentation anchors or docstring coverage…",2681,2025-12-16T16:16:30.904227+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h2,Inputs,inputs,generateundocumentedlogicreport,"`generate_undocumented_logic_report.py` scans the repo automation scripts for public functions, classes, and methods that lack docstrings. The report helps identify code paths that should have documentation anchors or docstring coverage…",2681,2025-12-16T16:16:30.904227+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h2,Outputs,outputs,generateundocumentedlogicreport,"`generate_undocumented_logic_report.py` scans the repo automation scripts for public functions, classes, and methods that lack docstrings. The report helps identify code paths that should have documentation anchors or docstring coverage…",2681,2025-12-16T16:16:30.904227+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h2,Usage,usage,generateundocumentedlogicreport,"`generate_undocumented_logic_report.py` scans the repo automation scripts for public functions, classes, and methods that lack docstrings. The report helps identify code paths that should have documentation anchors or docstring coverage…",2681,2025-12-16T16:16:30.904227+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h2,Testing,testing,generateundocumentedlogicreport,"`generate_undocumented_logic_report.py` scans the repo automation scripts for public functions, classes, and methods that lack docstrings. The report helps identify code paths that should have documentation anchors or docstring coverage…",2681,2025-12-16T16:16:30.904227+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_typecheck_report.md,h1,Typecheck Report Producer,typecheck-report-producer,,The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and emits a canonical 3-artifact bundle for observability.,2869,2025-12-17T16:29:02.339003+00:00,producer;healthview;typecheck,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_typecheck_report.md,h2,Goals,goals,typecheck-report-producer,The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and emits a canonical 3-artifact bundle for observability.,2869,2025-12-17T16:29:02.339003+00:00,producer;healthview;typecheck,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_typecheck_report.md,h2,System Context,system-context,typecheck-report-producer,The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and emits a canonical 3-artifact bundle for observability.,2869,2025-12-17T16:29:02.339003+00:00,producer;healthview;typecheck,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_typecheck_report.md,h2,Invocation,invocation,typecheck-report-producer,The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and emits a canonical 3-artifact bundle for observability.,2869,2025-12-17T16:29:02.339003+00:00,producer;healthview;typecheck,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_typecheck_report.md,h2,Agent Instructions,agent-instructions,typecheck-report-producer,The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and emits a canonical 3-artifact bundle for observability.,2869,2025-12-17T16:29:02.339003+00:00,producer;healthview;typecheck,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_typecheck_report.md,h2,Testing,testing,typecheck-report-producer,The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and emits a canonical 3-artifact bundle for observability.,2869,2025-12-17T16:29:02.339003+00:00,producer;healthview;typecheck,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_typecheck_report.md,h2,Update Log,update-log,typecheck-report-producer,The `generate_typecheck_report.py` producer runs `mypy` with the repository defaults and emits a canonical 3-artifact bundle for observability.,2869,2025-12-17T16:29:02.339003+00:00,producer;healthview;typecheck,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h1,generate_undocumented_logic_report,generateundocumentedlogicreport,,"`generate_undocumented_logic_report.py` scans automation scripts for public functions, classes, and methods that lack docstrings. The output feeds the Docs Health workflow by highlighting missing documentation coverage in code.",3042,2025-12-17T17:03:35.225241+00:00,producers;docs-health;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h2,Goals,goals,generateundocumentedlogicreport,"`generate_undocumented_logic_report.py` scans automation scripts for public functions, classes, and methods that lack docstrings. The output feeds the Docs Health workflow by highlighting missing documentation coverage in code.",3042,2025-12-17T17:03:35.225241+00:00,producers;docs-health;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h2,System Context,system-context,generateundocumentedlogicreport,"`generate_undocumented_logic_report.py` scans automation scripts for public functions, classes, and methods that lack docstrings. The output feeds the Docs Health workflow by highlighting missing documentation coverage in code.",3042,2025-12-17T17:03:35.225241+00:00,producers;docs-health;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h2,Agent Instructions,agent-instructions,generateundocumentedlogicreport,"`generate_undocumented_logic_report.py` scans automation scripts for public functions, classes, and methods that lack docstrings. The output feeds the Docs Health workflow by highlighting missing documentation coverage in code.",3042,2025-12-17T17:03:35.225241+00:00,producers;docs-health;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h2,Human Notes,human-notes,generateundocumentedlogicreport,"`generate_undocumented_logic_report.py` scans automation scripts for public functions, classes, and methods that lack docstrings. The output feeds the Docs Health workflow by highlighting missing documentation coverage in code.",3042,2025-12-17T17:03:35.225241+00:00,producers;docs-health;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h2,Reference Prompts,reference-prompts,generateundocumentedlogicreport,"`generate_undocumented_logic_report.py` scans automation scripts for public functions, classes, and methods that lack docstrings. The output feeds the Docs Health workflow by highlighting missing documentation coverage in code.",3042,2025-12-17T17:03:35.225241+00:00,producers;docs-health;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/generate_undocumented_logic_report.md,h2,Update Log,update-log,generateundocumentedlogicreport,"`generate_undocumented_logic_report.py` scans automation scripts for public functions, classes, and methods that lack docstrings. The output feeds the Docs Health workflow by highlighting missing documentation coverage in code.",3042,2025-12-17T17:03:35.225241+00:00,producers;docs-health;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/healthview_onboarding.md,h1,Healthview Command Center Onboarding,healthview-command-center-onboarding,,"This guide equips Command Center operators and automation engineers with the steps required to publish, surface, and validate Healthview artifacts alongside existing CommandView data. It summarises the wiring required for selector…",5816,2025-12-05T17:51:51.895465+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/healthview_onboarding.md,h2,Purpose,purpose,healthview-command-center-onboarding,"This guide equips Command Center operators and automation engineers with the steps required to publish, surface, and validate Healthview artifacts alongside existing CommandView data. It summarises the wiring required for selector…",5816,2025-12-05T17:51:51.895465+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/healthview_onboarding.md,h2,Audience and Scope,audience-and-scope,healthview-command-center-onboarding,"This guide equips Command Center operators and automation engineers with the steps required to publish, surface, and validate Healthview artifacts alongside existing CommandView data. It summarises the wiring required for selector…",5816,2025-12-05T17:51:51.895465+00:00,,,,no,
@@ -35092,10 +38104,10 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation,.repo_studios/docs/automation/refresh_mypy_baselines.md,h2,Outputs,outputs,refresh-mypy-baselines,"`refresh_mypy_baselines.py` standardises the stored mypy output snapshots that agents and soft gates consume. It runs mypy for each configured target, writes structured artifacts into…",2009,2025-12-10T21:09:21.441076+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/refresh_mypy_baselines.md,h2,Retention,retention,refresh-mypy-baselines,"`refresh_mypy_baselines.py` standardises the stored mypy output snapshots that agents and soft gates consume. It runs mypy for each configured target, writes structured artifacts into…",2009,2025-12-10T21:09:21.441076+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/refresh_mypy_baselines.md,h2,Validation,validation,refresh-mypy-baselines,"`refresh_mypy_baselines.py` standardises the stored mypy output snapshots that agents and soft gates consume. It runs mypy for each configured target, writes structured artifacts into…",2009,2025-12-10T21:09:21.441076+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/render_inventory_views.md,h1,Render Inventory Views Producer,render-inventory-views-producer,,"The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation.",2019,2025-10-23T09:50:23.539274+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/render_inventory_views.md,h2,Invocation,invocation,render-inventory-views-producer,"The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation.",2019,2025-10-23T09:50:23.539274+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/render_inventory_views.md,h2,Outputs,outputs,render-inventory-views-producer,"The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation.",2019,2025-10-23T09:50:23.539274+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/render_inventory_views.md,h2,Testing,testing,render-inventory-views-producer,"The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation.",2019,2025-10-23T09:50:23.539274+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/render_inventory_views.md,h1,Render Inventory Views Producer,render-inventory-views-producer,,"The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation.",2684,2025-12-17T18:23:40.617822+00:00,inventory;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/render_inventory_views.md,h2,Invocation,invocation,render-inventory-views-producer,"The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation.",2684,2025-12-17T18:23:40.617822+00:00,inventory;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/render_inventory_views.md,h2,Outputs,outputs,render-inventory-views-producer,"The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation.",2684,2025-12-17T18:23:40.617822+00:00,inventory;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/render_inventory_views.md,h2,Testing,testing,render-inventory-views-producer,"The `render_inventory_views.py` producer assembles the inventory YAML sources into curated document, script, and test views while exporting them as structured artifacts for downstream automation.",2684,2025-12-17T18:23:40.617822+00:00,inventory;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/run_fault_pipeline.md,h1,Fault Diagnostics Overview Orchestrator,fault-diagnostics-overview-orchestrator,,"`command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` coordinates the faulthandler producer (`collect_faulthandler_reports.py`), consumer (`generate_fault_artifacts.py`), and the overview summarizer…",4346,2025-12-09T18:00:29.461005+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/run_fault_pipeline.md,h2,Overview,overview,fault-diagnostics-overview-orchestrator,"`command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` coordinates the faulthandler producer (`collect_faulthandler_reports.py`), consumer (`generate_fault_artifacts.py`), and the overview summarizer…",4346,2025-12-09T18:00:29.461005+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/run_fault_pipeline.md,h2,Invocation,invocation,fault-diagnostics-overview-orchestrator,"`command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` coordinates the faulthandler producer (`collect_faulthandler_reports.py`), consumer (`generate_fault_artifacts.py`), and the overview summarizer…",4346,2025-12-09T18:00:29.461005+00:00,,,,no,
@@ -35114,28 +38126,29 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation,.repo_studios/docs/automation/run_standards_index_cli.md,h2,Replacement Workflow,replacement-workflow,runstandardsindexclipy-retired-shim,The legacy CLI wrapper was removed during Phase 8 of the orchestrator rollout. All automation should now invoke `command_center/scripts/orchestrators/run_standards_integrity.py` or the meta orchestrator instead of the shim. Historical…,2281,2025-12-11T01:51:15.211609+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/run_standards_index_cli.md,h2,Testing,testing,runstandardsindexclipy-retired-shim,The legacy CLI wrapper was removed during Phase 8 of the orchestrator rollout. All automation should now invoke `command_center/scripts/orchestrators/run_standards_integrity.py` or the meta orchestrator instead of the shim. Historical…,2281,2025-12-11T01:51:15.211609+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/run_standards_index_cli.md,h2,Operational Notes,operational-notes,runstandardsindexclipy-retired-shim,The legacy CLI wrapper was removed during Phase 8 of the orchestrator rollout. All automation should now invoke `command_center/scripts/orchestrators/run_standards_integrity.py` or the meta orchestrator instead of the shim. Historical…,2281,2025-12-11T01:51:15.211609+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h1,scan_code_placeholders.py,scancodeplaceholderspy,,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6420,2025-11-25T00:22:28.965573+00:00,,,,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h2,Purpose,purpose,scancodeplaceholderspy,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6420,2025-11-25T00:22:28.965573+00:00,,,,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h2,Invocation,invocation,scancodeplaceholderspy,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6420,2025-11-25T00:22:28.965573+00:00,,,,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h2,Outputs,outputs,scancodeplaceholderspy,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6420,2025-11-25T00:22:28.965573+00:00,,,,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h2,Diagnostics,diagnostics,scancodeplaceholderspy,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6420,2025-11-25T00:22:28.965573+00:00,,,,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h2,Allowlist format,allowlist-format,scancodeplaceholderspy,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6420,2025-11-25T00:22:28.965573+00:00,,,,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h2,Testing,testing,scancodeplaceholderspy,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6420,2025-11-25T00:22:28.965573+00:00,,,,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h2,Operational notes,operational-notes,scancodeplaceholderspy,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6420,2025-11-25T00:22:28.965573+00:00,,,,yes,
-.repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h1,scan_monkey_patches.py,scanmonkeypatchespy,,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5224,2025-11-23T22:11:45.717043+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h2,Purpose,purpose,scanmonkeypatchespy,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5224,2025-11-23T22:11:45.717043+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h2,Invocation,invocation,scanmonkeypatchespy,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5224,2025-11-23T22:11:45.717043+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h2,Outputs,outputs,scanmonkeypatchespy,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5224,2025-11-23T22:11:45.717043+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h2,Diagnostics,diagnostics,scanmonkeypatchespy,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5224,2025-11-23T22:11:45.717043+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h2,Testing,testing,scanmonkeypatchespy,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5224,2025-11-23T22:11:45.717043+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h2,Operational notes,operational-notes,scanmonkeypatchespy,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5224,2025-11-23T22:11:45.717043+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h1,seed_standards_prompts.py,seedstandardspromptspy,,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-11-27T17:20:15.674439+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Purpose,purpose,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-11-27T17:20:15.674439+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Invocation,invocation,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-11-27T17:20:15.674439+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Outputs,outputs,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-11-27T17:20:15.674439+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Diagnostics,diagnostics,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-11-27T17:20:15.674439+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Testing,testing,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-11-27T17:20:15.674439+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Operational notes,operational-notes,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-11-27T17:20:15.674439+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h1,scan_code_placeholders.py,scancodeplaceholderspy,,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6594,2025-12-17T19:43:51.315571+00:00,automation;producers;placeholders,repo_studios_team@rainmakerprotocol.dev,approved,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h2,Purpose,purpose,scancodeplaceholderspy,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6594,2025-12-17T19:43:51.315571+00:00,automation;producers;placeholders,repo_studios_team@rainmakerprotocol.dev,approved,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h2,Invocation,invocation,scancodeplaceholderspy,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6594,2025-12-17T19:43:51.315571+00:00,automation;producers;placeholders,repo_studios_team@rainmakerprotocol.dev,approved,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h2,Outputs,outputs,scancodeplaceholderspy,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6594,2025-12-17T19:43:51.315571+00:00,automation;producers;placeholders,repo_studios_team@rainmakerprotocol.dev,approved,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h2,Diagnostics,diagnostics,scancodeplaceholderspy,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6594,2025-12-17T19:43:51.315571+00:00,automation;producers;placeholders,repo_studios_team@rainmakerprotocol.dev,approved,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h2,Allowlist format,allowlist-format,scancodeplaceholderspy,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6594,2025-12-17T19:43:51.315571+00:00,automation;producers;placeholders,repo_studios_team@rainmakerprotocol.dev,approved,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h2,Testing,testing,scancodeplaceholderspy,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6594,2025-12-17T19:43:51.315571+00:00,automation;producers;placeholders,repo_studios_team@rainmakerprotocol.dev,approved,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/scan_code_placeholders.md,h2,Operational notes,operational-notes,scancodeplaceholderspy,"`scan_code_placeholders.py` inventories debt markers such as TODO, FIXME, and NOTE across the repository. The producer emits structured artifacts so agents can track placeholder volume, identify hot files, and gate builds on unapproved…",6594,2025-12-17T19:43:51.315571+00:00,automation;producers;placeholders,repo_studios_team@rainmakerprotocol.dev,approved,yes,
+.repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h1,scan_monkey_patches.py,scanmonkeypatchespy,,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5247,2025-12-17T23:50:14.347407+00:00,producers;healthview;monkey_patches;pruning;db,repo_studios_team@rainmakerprotocol.dev,approved,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h2,Purpose,purpose,scanmonkeypatchespy,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5247,2025-12-17T23:50:14.347407+00:00,producers;healthview;monkey_patches;pruning;db,repo_studios_team@rainmakerprotocol.dev,approved,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h2,Invocation,invocation,scanmonkeypatchespy,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5247,2025-12-17T23:50:14.347407+00:00,producers;healthview;monkey_patches;pruning;db,repo_studios_team@rainmakerprotocol.dev,approved,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h2,Outputs,outputs,scanmonkeypatchespy,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5247,2025-12-17T23:50:14.347407+00:00,producers;healthview;monkey_patches;pruning;db,repo_studios_team@rainmakerprotocol.dev,approved,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h2,Diagnostics,diagnostics,scanmonkeypatchespy,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5247,2025-12-17T23:50:14.347407+00:00,producers;healthview;monkey_patches;pruning;db,repo_studios_team@rainmakerprotocol.dev,approved,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h2,Testing,testing,scanmonkeypatchespy,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5247,2025-12-17T23:50:14.347407+00:00,producers;healthview;monkey_patches;pruning;db,repo_studios_team@rainmakerprotocol.dev,approved,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h2,Operational notes,operational-notes,scanmonkeypatchespy,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5247,2025-12-17T23:50:14.347407+00:00,producers;healthview;monkey_patches;pruning;db,repo_studios_team@rainmakerprotocol.dev,approved,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/scan_monkey_patches.md,h2,Update Log,update-log,scanmonkeypatchespy,"`scan_monkey_patches.py` inventories monkey patch activity across the repository. It identifies attribute reassignments, `sys.modules` rewrites, import-time side effects, and other high-risk behaviors so automation can monitor drift and…",5247,2025-12-17T23:50:14.347407+00:00,producers;healthview;monkey_patches;pruning;db,repo_studios_team@rainmakerprotocol.dev,approved,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h1,seed_standards_prompts.py,seedstandardspromptspy,,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-12-18T12:22:43.715945+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Purpose,purpose,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-12-18T12:22:43.715945+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Invocation,invocation,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-12-18T12:22:43.715945+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Outputs,outputs,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-12-18T12:22:43.715945+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Diagnostics,diagnostics,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-12-18T12:22:43.715945+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Testing,testing,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-12-18T12:22:43.715945+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/seed_standards_prompts.md,h2,Operational notes,operational-notes,seedstandardspromptspy,"`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can…",3787,2025-12-18T12:22:43.715945+00:00,,,,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/standards-extraction-spec.md,h1,Standards Rule Extraction Specification,standards-rule-extraction-specification,,Defines deterministic heuristic pipeline converting Markdown standards sources into normalized `rule` objects prior to overrides.,6217,2025-10-21T12:02:58.658325+00:00,standards;automation;extraction,repo_studios_ai,draft,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/standards-extraction-spec.md,h2,Goals,goals,standards-rule-extraction-specification,Defines deterministic heuristic pipeline converting Markdown standards sources into normalized `rule` objects prior to overrides.,6217,2025-10-21T12:02:58.658325+00:00,standards;automation;extraction,repo_studios_ai,draft,no,
 .repo_studios/docs/automation,.repo_studios/docs/automation/standards-extraction-spec.md,h2,Input Sources,input-sources,standards-rule-extraction-specification,Defines deterministic heuristic pipeline converting Markdown standards sources into normalized `rule` objects prior to overrides.,6217,2025-10-21T12:02:58.658325+00:00,standards;automation;extraction,repo_studios_ai,draft,no,
@@ -35238,42 +38251,43 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_standards_index_cli_modernization_plan.md,h2,Dependencies & Coordination,dependencies-coordination,run-standards-index-cli-modernization-plan-draft-2025-11-27,"Modernize `.repo_studios/scripts/orchestrators/run_standards_index_cli.py` so standards analysts and tooling receive structured, retainable outputs while preserving its lightweight CLI ergonomics. The refactor will introduce an import-safe…",5220,2025-12-01T21:08:14.310575+00:00,,,,no,
 .repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_standards_index_cli_modernization_plan.md,h2,Acceptance Criteria,acceptance-criteria,run-standards-index-cli-modernization-plan-draft-2025-11-27,"Modernize `.repo_studios/scripts/orchestrators/run_standards_index_cli.py` so standards analysts and tooling receive structured, retainable outputs while preserving its lightweight CLI ergonomics. The refactor will introduce an import-safe…",5220,2025-12-01T21:08:14.310575+00:00,,,,no,
 .repo_studios/docs/automation/traceability,.repo_studios/docs/automation/traceability/run_standards_index_cli_modernization_plan.md,h2,Open Questions,open-questions,run-standards-index-cli-modernization-plan-draft-2025-11-27,"Modernize `.repo_studios/scripts/orchestrators/run_standards_index_cli.py` so standards analysts and tooling receive structured, retainable outputs while preserving its lightweight CLI ergonomics. The refactor will introduce an import-safe…",5220,2025-12-01T21:08:14.310575+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_import_boundaries.md,h1,validate_import_boundaries.py,validateimportboundariespy,,"`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level…",3680,2025-10-23T20:46:06.804068+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_import_boundaries.md,h2,Purpose,purpose,validateimportboundariespy,"`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level…",3680,2025-10-23T20:46:06.804068+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_import_boundaries.md,h2,Invocation,invocation,validateimportboundariespy,"`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level…",3680,2025-10-23T20:46:06.804068+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_import_boundaries.md,h2,Outputs,outputs,validateimportboundariespy,"`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level…",3680,2025-10-23T20:46:06.804068+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_import_boundaries.md,h2,Diagnostics,diagnostics,validateimportboundariespy,"`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level…",3680,2025-10-23T20:46:06.804068+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_import_boundaries.md,h2,Testing,testing,validateimportboundariespy,"`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level…",3680,2025-10-23T20:46:06.804068+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_import_boundaries.md,h2,Operational notes,operational-notes,validateimportboundariespy,"`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level…",3680,2025-10-23T20:46:06.804068+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_inventory.md,h1,Validate Inventory Producer,validate-inventory-producer,,"The `validate_inventory.py` producer walks the inventory catalog, enforces schema conventions, and writes structured validation bundles for downstream tooling.",1882,2025-10-23T11:18:26.650942+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_inventory.md,h2,Invocation,invocation,validate-inventory-producer,"The `validate_inventory.py` producer walks the inventory catalog, enforces schema conventions, and writes structured validation bundles for downstream tooling.",1882,2025-10-23T11:18:26.650942+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_inventory.md,h2,Outputs,outputs,validate-inventory-producer,"The `validate_inventory.py` producer walks the inventory catalog, enforces schema conventions, and writes structured validation bundles for downstream tooling.",1882,2025-10-23T11:18:26.650942+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_inventory.md,h2,Testing,testing,validate-inventory-producer,"The `validate_inventory.py` producer walks the inventory catalog, enforces schema conventions, and writes structured validation bundles for downstream tooling.",1882,2025-10-23T11:18:26.650942+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h1,validate_markdown_anchors.py,validatemarkdownanchorspy,,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3062,2025-11-25T19:39:48.109027+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Purpose,purpose,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3062,2025-11-25T19:39:48.109027+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Invocation,invocation,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3062,2025-11-25T19:39:48.109027+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Outputs,outputs,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3062,2025-11-25T19:39:48.109027+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Status semantics,status-semantics,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3062,2025-11-25T19:39:48.109027+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Testing,testing,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3062,2025-11-25T19:39:48.109027+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Operational notes,operational-notes,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3062,2025-11-25T19:39:48.109027+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_metrics_anchor_stubs.md,h1,validate_metrics_anchor_stubs.py,validatemetricsanchorstubspy,,`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry. The refactor emits structured artifacts…,3140,2025-10-23T23:24:42.780107+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_metrics_anchor_stubs.md,h2,Purpose,purpose,validatemetricsanchorstubspy,`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry. The refactor emits structured artifacts…,3140,2025-10-23T23:24:42.780107+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_metrics_anchor_stubs.md,h2,Invocation,invocation,validatemetricsanchorstubspy,`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry. The refactor emits structured artifacts…,3140,2025-10-23T23:24:42.780107+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_metrics_anchor_stubs.md,h2,Outputs,outputs,validatemetricsanchorstubspy,`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry. The refactor emits structured artifacts…,3140,2025-10-23T23:24:42.780107+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_metrics_anchor_stubs.md,h2,Diagnostics,diagnostics,validatemetricsanchorstubspy,`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry. The refactor emits structured artifacts…,3140,2025-10-23T23:24:42.780107+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_metrics_anchor_stubs.md,h2,Testing,testing,validatemetricsanchorstubspy,`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry. The refactor emits structured artifacts…,3140,2025-10-23T23:24:42.780107+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/validate_metrics_anchor_stubs.md,h2,Operational notes,operational-notes,validatemetricsanchorstubspy,`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry. The refactor emits structured artifacts…,3140,2025-10-23T23:24:42.780107+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/verify_docs_integrity.md,h1,verify_docs_integrity,verifydocsintegrity,,`verify_docs_integrity.py` audits governed documentation JSON blocks to ensure each fenced payload exposes a stable `content_hash`. The script also refreshes the navigation table contained in `docs/standards/docs_index.md` unless `--no-…,2945,2025-11-04T14:45:22.664536+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/verify_docs_integrity.md,h2,Overview,overview,verifydocsintegrity,`verify_docs_integrity.py` audits governed documentation JSON blocks to ensure each fenced payload exposes a stable `content_hash`. The script also refreshes the navigation table contained in `docs/standards/docs_index.md` unless `--no-…,2945,2025-11-04T14:45:22.664536+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/verify_docs_integrity.md,h2,Invocation,invocation,verifydocsintegrity,`verify_docs_integrity.py` audits governed documentation JSON blocks to ensure each fenced payload exposes a stable `content_hash`. The script also refreshes the navigation table contained in `docs/standards/docs_index.md` unless `--no-…,2945,2025-11-04T14:45:22.664536+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/verify_docs_integrity.md,h2,Artifacts,artifacts,verifydocsintegrity,`verify_docs_integrity.py` audits governed documentation JSON blocks to ensure each fenced payload exposes a stable `content_hash`. The script also refreshes the navigation table contained in `docs/standards/docs_index.md` unless `--no-…,2945,2025-11-04T14:45:22.664536+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/verify_docs_integrity.md,h2,Exit semantics,exit-semantics,verifydocsintegrity,`verify_docs_integrity.py` audits governed documentation JSON blocks to ensure each fenced payload exposes a stable `content_hash`. The script also refreshes the navigation table contained in `docs/standards/docs_index.md` unless `--no-…,2945,2025-11-04T14:45:22.664536+00:00,,,,no,
-.repo_studios/docs/automation,.repo_studios/docs/automation/verify_docs_integrity.md,h2,Integration Notes,integration-notes,verifydocsintegrity,`verify_docs_integrity.py` audits governed documentation JSON blocks to ensure each fenced payload exposes a stable `content_hash`. The script also refreshes the navigation table contained in `docs/standards/docs_index.md` unless `--no-…,2945,2025-11-04T14:45:22.664536+00:00,,,,no,
-.repo_studios/docs,.repo_studios/docs/directory_layout.md,h1,Directory Layout Reference,directory-layout-reference,,Last updated: 2025-10-17,2719,2025-12-11T10:50:58.485331+00:00,,,,no,
-.repo_studios/docs,.repo_studios/docs/directory_layout.md,h2,Current Structure,current-structure,directory-layout-reference,Last updated: 2025-10-17,2719,2025-12-11T10:50:58.485331+00:00,,,,no,
-.repo_studios/docs,.repo_studios/docs/directory_layout.md,h2,Legacy Mapping,legacy-mapping,directory-layout-reference,Last updated: 2025-10-17,2719,2025-12-11T10:50:58.485331+00:00,,,,no,
-.repo_studios/docs,.repo_studios/docs/directory_layout.md,h2,Operational Notes,operational-notes,directory-layout-reference,Last updated: 2025-10-17,2719,2025-12-11T10:50:58.485331+00:00,,,,no,
-.repo_studios/docs,.repo_studios/docs/directory_layout.md,h2,Reports Roadmap,reports-roadmap,directory-layout-reference,Last updated: 2025-10-17,2719,2025-12-11T10:50:58.485331+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_import_boundaries.md,h1,validate_import_boundaries.py,validateimportboundariespy,,"`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level…",3680,2025-12-18T12:22:43.716946+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_import_boundaries.md,h2,Purpose,purpose,validateimportboundariespy,"`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level…",3680,2025-12-18T12:22:43.716946+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_import_boundaries.md,h2,Invocation,invocation,validateimportboundariespy,"`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level…",3680,2025-12-18T12:22:43.716946+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_import_boundaries.md,h2,Outputs,outputs,validateimportboundariespy,"`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level…",3680,2025-12-18T12:22:43.716946+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_import_boundaries.md,h2,Diagnostics,diagnostics,validateimportboundariespy,"`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level…",3680,2025-12-18T12:22:43.716946+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_import_boundaries.md,h2,Testing,testing,validateimportboundariespy,"`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level…",3680,2025-12-18T12:22:43.716946+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_import_boundaries.md,h2,Operational notes,operational-notes,validateimportboundariespy,"`validate_import_boundaries.py` enforces the layering contract between the `agents` and `api` packages. It blends static source scanning with the latest import graph snapshot to highlight disallowed edges, cycles, and file-level…",3680,2025-12-18T12:22:43.716946+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_inventory.md,h1,Validate Inventory Producer,validate-inventory-producer,,"The `validate_inventory.py` producer walks the inventory catalog, enforces schema conventions, and writes structured validation bundles for downstream tooling.",1882,2025-12-18T12:22:43.717946+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_inventory.md,h2,Invocation,invocation,validate-inventory-producer,"The `validate_inventory.py` producer walks the inventory catalog, enforces schema conventions, and writes structured validation bundles for downstream tooling.",1882,2025-12-18T12:22:43.717946+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_inventory.md,h2,Outputs,outputs,validate-inventory-producer,"The `validate_inventory.py` producer walks the inventory catalog, enforces schema conventions, and writes structured validation bundles for downstream tooling.",1882,2025-12-18T12:22:43.717946+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_inventory.md,h2,Testing,testing,validate-inventory-producer,"The `validate_inventory.py` producer walks the inventory catalog, enforces schema conventions, and writes structured validation bundles for downstream tooling.",1882,2025-12-18T12:22:43.717946+00:00,,,,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h1,validate_markdown_anchors.py,validatemarkdownanchorspy,,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3707,2025-12-18T12:37:54.373653+00:00,automation;markdown;anchors;links;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Purpose,purpose,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3707,2025-12-18T12:37:54.373653+00:00,automation;markdown;anchors;links;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Invocation,invocation,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3707,2025-12-18T12:37:54.373653+00:00,automation;markdown;anchors;links;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Outputs,outputs,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3707,2025-12-18T12:37:54.373653+00:00,automation;markdown;anchors;links;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Status semantics,status-semantics,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3707,2025-12-18T12:37:54.373653+00:00,automation;markdown;anchors;links;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Testing,testing,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3707,2025-12-18T12:37:54.373653+00:00,automation;markdown;anchors;links;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Operational notes,operational-notes,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3707,2025-12-18T12:37:54.373653+00:00,automation;markdown;anchors;links;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_markdown_anchors.md,h2,Update Log,update-log,validatemarkdownanchorspy,"`validate_markdown_anchors.py` scans curated Markdown files for internal anchor references and cross-file links, verifying that every referenced document exists and that GitHub-style heading slugs resolve. The producer emits JSON and…",3707,2025-12-18T12:37:54.373653+00:00,automation;markdown;anchors;links;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_metrics_anchor_stubs.md,h1,validate_metrics_anchor_stubs.py,validatemetricsanchorstubspy,,"`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry under the ""Legacy Anchor Compatibility"" section.",3681,2025-12-18T16:04:05.596021+00:00,automation;markdown;anchors;metrics;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_metrics_anchor_stubs.md,h2,Purpose,purpose,validatemetricsanchorstubspy,"`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry under the ""Legacy Anchor Compatibility"" section.",3681,2025-12-18T16:04:05.596021+00:00,automation;markdown;anchors;metrics;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_metrics_anchor_stubs.md,h2,Invocation,invocation,validatemetricsanchorstubspy,"`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry under the ""Legacy Anchor Compatibility"" section.",3681,2025-12-18T16:04:05.596021+00:00,automation;markdown;anchors;metrics;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_metrics_anchor_stubs.md,h2,Outputs,outputs,validatemetricsanchorstubspy,"`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry under the ""Legacy Anchor Compatibility"" section.",3681,2025-12-18T16:04:05.596021+00:00,automation;markdown;anchors;metrics;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_metrics_anchor_stubs.md,h2,Diagnostics,diagnostics,validatemetricsanchorstubspy,"`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry under the ""Legacy Anchor Compatibility"" section.",3681,2025-12-18T16:04:05.596021+00:00,automation;markdown;anchors;metrics;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_metrics_anchor_stubs.md,h2,Testing,testing,validatemetricsanchorstubspy,"`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry under the ""Legacy Anchor Compatibility"" section.",3681,2025-12-18T16:04:05.596021+00:00,automation;markdown;anchors;metrics;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/validate_metrics_anchor_stubs.md,h2,Operational notes,operational-notes,validatemetricsanchorstubspy,"`validate_metrics_anchor_stubs.py` scans repository markdown for links into `docs/api/metrics_orchestrator.md` and ensures each referenced anchor has a matching legacy stub entry under the ""Legacy Anchor Compatibility"" section.",3681,2025-12-18T16:04:05.596021+00:00,automation;markdown;anchors;metrics;producer;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/verify_docs_integrity.md,h1,verify_docs_integrity,verifydocsintegrity,,`verify_docs_integrity.py` audits governed documentation JSON blocks to ensure each fenced payload exposes a stable `content_hash`. The script also refreshes the navigation table contained in `docs/standards/docs_index.md` unless `--no-…,3363,2025-12-18T17:36:18.986162+00:00,automation;producer;docs-integrity;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/verify_docs_integrity.md,h2,Overview,overview,verifydocsintegrity,`verify_docs_integrity.py` audits governed documentation JSON blocks to ensure each fenced payload exposes a stable `content_hash`. The script also refreshes the navigation table contained in `docs/standards/docs_index.md` unless `--no-…,3363,2025-12-18T17:36:18.986162+00:00,automation;producer;docs-integrity;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/verify_docs_integrity.md,h2,Invocation,invocation,verifydocsintegrity,`verify_docs_integrity.py` audits governed documentation JSON blocks to ensure each fenced payload exposes a stable `content_hash`. The script also refreshes the navigation table contained in `docs/standards/docs_index.md` unless `--no-…,3363,2025-12-18T17:36:18.986162+00:00,automation;producer;docs-integrity;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/verify_docs_integrity.md,h2,Artifacts,artifacts,verifydocsintegrity,`verify_docs_integrity.py` audits governed documentation JSON blocks to ensure each fenced payload exposes a stable `content_hash`. The script also refreshes the navigation table contained in `docs/standards/docs_index.md` unless `--no-…,3363,2025-12-18T17:36:18.986162+00:00,automation;producer;docs-integrity;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/verify_docs_integrity.md,h2,Exit semantics,exit-semantics,verifydocsintegrity,`verify_docs_integrity.py` audits governed documentation JSON blocks to ensure each fenced payload exposes a stable `content_hash`. The script also refreshes the navigation table contained in `docs/standards/docs_index.md` unless `--no-…,3363,2025-12-18T17:36:18.986162+00:00,automation;producer;docs-integrity;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/automation,.repo_studios/docs/automation/verify_docs_integrity.md,h2,Integration Notes,integration-notes,verifydocsintegrity,`verify_docs_integrity.py` audits governed documentation JSON blocks to ensure each fenced payload exposes a stable `content_hash`. The script also refreshes the navigation table contained in `docs/standards/docs_index.md` unless `--no-…,3363,2025-12-18T17:36:18.986162+00:00,automation;producer;docs-integrity;healthview,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs,.repo_studios/docs/directory_layout.md,h1,Directory Layout Reference,directory-layout-reference,,Last updated: 2025-10-17,2756,2025-12-17T18:23:40.625822+00:00,,,,no,
+.repo_studios/docs,.repo_studios/docs/directory_layout.md,h2,Current Structure,current-structure,directory-layout-reference,Last updated: 2025-10-17,2756,2025-12-17T18:23:40.625822+00:00,,,,no,
+.repo_studios/docs,.repo_studios/docs/directory_layout.md,h2,Legacy Mapping,legacy-mapping,directory-layout-reference,Last updated: 2025-10-17,2756,2025-12-17T18:23:40.625822+00:00,,,,no,
+.repo_studios/docs,.repo_studios/docs/directory_layout.md,h2,Operational Notes,operational-notes,directory-layout-reference,Last updated: 2025-10-17,2756,2025-12-17T18:23:40.625822+00:00,,,,no,
+.repo_studios/docs,.repo_studios/docs/directory_layout.md,h2,Reports Roadmap,reports-roadmap,directory-layout-reference,Last updated: 2025-10-17,2756,2025-12-17T18:23:40.625822+00:00,,,,no,
 .repo_studios/docs/governance,.repo_studios/docs/governance/alignment-ledger.md,h1,Repo Studios Alignment Ledger,repo-studios-alignment-ledger,,"This ledger tracks documentation alignment batches, remediation work, and follow-up actions. Populate entries chronologically with timestamps, owners, scopes, and outstanding notes to maintain an auditable trail.",735,2025-12-11T10:50:58.484324+00:00,,,,no,
 .repo_studios/docs/governance,.repo_studios/docs/governance/alignment-ledger.md,h2,2025-12-10 · Phase 8 Documentation Sweep,2025-12-10-phase-8-documentation-sweep,repo-studios-alignment-ledger,"This ledger tracks documentation alignment batches, remediation work, and follow-up actions. Populate entries chronologically with timestamps, owners, scopes, and outstanding notes to maintain an auditable trail.",735,2025-12-11T10:50:58.484324+00:00,,,,no,
 .repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h1,Documentation Inventory Notes,documentation-inventory-notes,,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11816,2025-11-28T14:18:05.289540+00:00,inventory;notes,repo_studios_ai,draft,yes,
@@ -35283,10 +38297,10 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h2,Concerns,concerns,documentation-inventory-notes,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11816,2025-11-28T14:18:05.289540+00:00,inventory;notes,repo_studios_ai,draft,yes,
 .repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h2,Gaps to Investigate,gaps-to-investigate,documentation-inventory-notes,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11816,2025-11-28T14:18:05.289540+00:00,inventory;notes,repo_studios_ai,draft,yes,
 .repo_studios/docs/inventory,.repo_studios/docs/inventory/inventory-notes.md,h2,Next Steps,next-steps,documentation-inventory-notes,Date: 2025-10-01 | Status: Draft | Phase: Discovery,11816,2025-11-28T14:18:05.289540+00:00,inventory;notes,repo_studios_ai,draft,yes,
-.repo_studios/docs,.repo_studios/docs/inventory_reports.md,h1,Inventory Reports Overview,inventory-reports-overview,,Last updated: 2025-12-10,2875,2025-12-11T01:51:15.211609+00:00,,,,no,
-.repo_studios/docs,.repo_studios/docs/inventory_reports.md,h2,Running the Renderer,running-the-renderer,inventory-reports-overview,Last updated: 2025-12-10,2875,2025-12-11T01:51:15.211609+00:00,,,,no,
-.repo_studios/docs,.repo_studios/docs/inventory_reports.md,h2,Report Layout,report-layout,inventory-reports-overview,Last updated: 2025-12-10,2875,2025-12-11T01:51:15.211609+00:00,,,,no,
-.repo_studios/docs,.repo_studios/docs/inventory_reports.md,h2,CI Consumption Patterns,ci-consumption-patterns,inventory-reports-overview,Last updated: 2025-12-10,2875,2025-12-11T01:51:15.211609+00:00,,,,no,
+.repo_studios/docs,.repo_studios/docs/inventory_reports.md,h1,Inventory Reports Overview,inventory-reports-overview,,Last updated: 2025-12-10,1924,2025-12-17T18:23:40.625822+00:00,,,,no,
+.repo_studios/docs,.repo_studios/docs/inventory_reports.md,h2,Running the Renderer,running-the-renderer,inventory-reports-overview,Last updated: 2025-12-10,1924,2025-12-17T18:23:40.625822+00:00,,,,no,
+.repo_studios/docs,.repo_studios/docs/inventory_reports.md,h2,Report Layout,report-layout,inventory-reports-overview,Last updated: 2025-12-10,1924,2025-12-17T18:23:40.625822+00:00,,,,no,
+.repo_studios/docs,.repo_studios/docs/inventory_reports.md,h2,CI Consumption Patterns,ci-consumption-patterns,inventory-reports-overview,Last updated: 2025-12-10,1924,2025-12-17T18:23:40.625822+00:00,,,,no,
 .repo_studios/docs,.repo_studios/docs/inventory_schema_spec.md,h1,Inventory Schema Specification,inventory-schema-specification,,Last updated: 2025-10-17,5455,2025-10-21T12:02:58.661326+00:00,,,,no,
 .repo_studios/docs,.repo_studios/docs/inventory_schema_spec.md,h2,1. Record Structure,1-record-structure,inventory-schema-specification,Last updated: 2025-10-17,5455,2025-10-21T12:02:58.661326+00:00,,,,no,
 .repo_studios/docs,.repo_studios/docs/inventory_schema_spec.md,h2,2. Enumerations,2-enumerations,inventory-schema-specification,Last updated: 2025-10-17,5455,2025-10-21T12:02:58.661326+00:00,,,,no,
@@ -35320,28 +38334,43 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/pipeline/checkbox_report/outputs,.repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md,h2,Signals & Telemetry,signals-telemetry,checkbox-report,on pending work.,5708,2025-12-12T11:12:43.841224+00:00,checkbox-report;repo-todo,DocumentationOps,active,no,
 .repo_studios/docs/pipeline/checkbox_report/outputs,.repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md,h2,Maintenance Playbook,maintenance-playbook,checkbox-report,on pending work.,5708,2025-12-12T11:12:43.841224+00:00,checkbox-report;repo-todo,DocumentationOps,active,no,
 .repo_studios/docs/pipeline/checkbox_report/outputs,.repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md,h2,Update Log,update-log,checkbox-report,on pending work.,5708,2025-12-12T11:12:43.841224+00:00,checkbox-report;repo-todo,DocumentationOps,active,no,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h1,HealthView Orchestration Pipeline,healthview-orchestration-pipeline,,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,0. Instruction Block for Editors & AI Assistants,0-instruction-block-for-editors-ai-assistants,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,1. 5W1H – Purpose & Context,1-5w1h-purpose-context,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,2. Document Metadata,2-document-metadata,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3. Global Pipeline Overview,3-global-pipeline-overview,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3.3 How to Read This Document,33-how-to-read-this-document,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3.4 HealthView Report Bundle Spine (Shared Backbone),34-healthview-report-bundle-spine-shared-backbone,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3.5 HealthView Orchestration Envelope (Shared Payload),35-healthview-orchestration-envelope-shared-payload,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,"3.6 Orchestrator Lifecycle, Fallback Modes, and Global Controls",36-orchestrator-lifecycle-fallback-modes-and-global-controls,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3.7 HealthView Assumptions & Guarantees,37-healthview-assumptions-guarantees,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,4. Stage 1 – Testing Perspectives,4-stage-1-testing-perspectives,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,5. Stage 2 – Documentation Quality,5-stage-2-documentation-quality,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,6. Stage 3 – Runtime Reliability,6-stage-3-runtime-reliability,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,7. Stage 4 – Dependency Management,7-stage-4-dependency-management,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,8. Stage 5 – Technical Debt Oversight,8-stage-5-technical-debt-oversight,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,9. Stage 6 – Process Governance,9-stage-6-process-governance,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,10. Stage 7 – Running the Complete Suite,10-stage-7-running-the-complete-suite,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,11. Snapshot & Stage Matrix,11-snapshot-stage-matrix,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,12. Contradiction Registry,12-contradiction-registry,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,13. Tier-2 Document Index,13-tier-2-document-index,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,14. Working / Future Notes,14-working-future-notes,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,15. Update Log & Evidence Tracking,15-update-log-evidence-tracking,healthview-orchestration-pipeline,"HealthView orchestrates automated measurement of repository health across six maturity domains (Testing, Documentation, Runtime Reliability, Dependency Management, Technical Debt, Process Governance). Each orchestrator chains producer →…",75286,2025-12-16T16:16:30.917237+00:00,,,,yes,../../../REPORT_NAMING_STANDARDS.md;../../../command_center/scripts/libraries/cli.py;../../../command_center/scripts/orchestrators/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../command_center/scripts/orchestators/scan_duplicates.py;../../../command_center/scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../tier3_index/;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../command_center/scripts/producers/collect_faulthandler_reports.py;../../../command_center/scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../../scripts/README.md;../../../../REPORT_NAMING_STANDARDS.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md,h1,HealthView HOP Alignment (Superseded),healthview-hop-alignment-superseded,,This document is **superseded** by:,2244,2025-12-18T22:42:18.576135+00:00,pipeline;healthview;hop;alignment,repo_studios_team@rainmakerprotocol.dev,superseded,no,hop_implementation.md;tier1_healthview_orchestration_pipeline.md
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md,h2,Goals,goals,healthview-hop-alignment-superseded,This document is **superseded** by:,2244,2025-12-18T22:42:18.576135+00:00,pipeline;healthview;hop;alignment,repo_studios_team@rainmakerprotocol.dev,superseded,no,hop_implementation.md;tier1_healthview_orchestration_pipeline.md
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md,h2,System Context,system-context,healthview-hop-alignment-superseded,This document is **superseded** by:,2244,2025-12-18T22:42:18.576135+00:00,pipeline;healthview;hop;alignment,repo_studios_team@rainmakerprotocol.dev,superseded,no,hop_implementation.md;tier1_healthview_orchestration_pipeline.md
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md,h2,Decisions (Summary),decisions-summary,healthview-hop-alignment-superseded,This document is **superseded** by:,2244,2025-12-18T22:42:18.576135+00:00,pipeline;healthview;hop;alignment,repo_studios_team@rainmakerprotocol.dev,superseded,no,hop_implementation.md;tier1_healthview_orchestration_pipeline.md
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md,h2,Update Log,update-log,healthview-hop-alignment-superseded,This document is **superseded** by:,2244,2025-12-18T22:42:18.576135+00:00,pipeline;healthview;hop;alignment,repo_studios_team@rainmakerprotocol.dev,superseded,no,hop_implementation.md;tier1_healthview_orchestration_pipeline.md
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h1,HealthView HOP Implementation Plan,healthview-hop-implementation-plan,,`tier1_healthview_orchestration_pipeline.md`.,13497,2025-12-19T00:55:23.111707+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,0. Instruction Block for Editors & AI Assistants,0-instruction-block-for-editors-ai-assistants,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13497,2025-12-19T00:55:23.111707+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,1. Goals & Success Criteria,1-goals-success-criteria,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13497,2025-12-19T00:55:23.111707+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,2. System Context,2-system-context,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13497,2025-12-19T00:55:23.111707+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,3. Stage Narratives (Workstreams),3-stage-narratives-workstreams,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13497,2025-12-19T00:55:23.111707+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,4. Signals & Telemetry,4-signals-telemetry,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13497,2025-12-19T00:55:23.111707+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,5. Dependencies & Stop-Gates,5-dependencies-stop-gates,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13497,2025-12-19T00:55:23.111707+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,6. Instruction Block (Required by Tier Rules),6-instruction-block-required-by-tier-rules,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13497,2025-12-19T00:55:23.111707+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,7. Agent Automation Block,7-agent-automation-block,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13497,2025-12-19T00:55:23.111707+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,8. Update Log,8-update-log,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13497,2025-12-19T00:55:23.111707+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h1,HealthView Orchestration Pipeline,healthview-orchestration-pipeline,,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,0. Instruction Block for Editors & AI Assistants,0-instruction-block-for-editors-ai-assistants,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,1. 5W1H – Purpose & Context,1-5w1h-purpose-context,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,2. Document Metadata,2-document-metadata,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3. Global Pipeline Overview,3-global-pipeline-overview,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3.3 How to Read This Document,33-how-to-read-this-document,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3.4 HealthView Report Bundle Spine (Shared Backbone),34-healthview-report-bundle-spine-shared-backbone,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3.5 HealthView Orchestration Envelope (Shared Payload),35-healthview-orchestration-envelope-shared-payload,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,"3.6 Orchestrator Lifecycle, Fallback Modes, and Global Controls",36-orchestrator-lifecycle-fallback-modes-and-global-controls,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3.7 HealthView Assumptions & Guarantees,37-healthview-assumptions-guarantees,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,4. Stage 1 – Testing Perspectives,4-stage-1-testing-perspectives,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,5. Stage 2 – Documentation Quality,5-stage-2-documentation-quality,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,6. Stage 3 – Runtime Reliability,6-stage-3-runtime-reliability,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,7. Stage 4 – Dependency Management,7-stage-4-dependency-management,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,8. Stage 5 – Technical Debt Oversight,8-stage-5-technical-debt-oversight,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,9. Stage 6 – Process Governance,9-stage-6-process-governance,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,10. Stage 7 – Running the Complete Suite,10-stage-7-running-the-complete-suite,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,11. Snapshot & Stage Matrix,11-snapshot-stage-matrix,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,12. Contradiction Registry,12-contradiction-registry,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,13. Tier-2 Document Index,13-tier-2-document-index,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,14. Working / Future Notes,14-working-future-notes,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,15. Update Log & Evidence Tracking,15-update-log-evidence-tracking,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,79580,2025-12-19T01:23:27.973052+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
 .repo_studios/docs/pipeline,.repo_studios/docs/pipeline/pipeline_doc_map.md,h1,Pipeline Documentation Map,pipeline-documentation-map,,1. Land here to confirm which pipeline folder contains the Tier-1 spine you need. 2. Jump to the Tier-2/Tier-3 docs listed below and verify they reciprocally link back. 3. Refresh the doc-index (via the `doc-index` make target or platform-…,6977,2025-12-12T11:11:10.809859+00:00,pipeline;navigation;tier-docs,Docs Guild,draft,no,
 .repo_studios/docs/pipeline,.repo_studios/docs/pipeline/pipeline_doc_map.md,h2,Goals,goals,pipeline-documentation-map,1. Land here to confirm which pipeline folder contains the Tier-1 spine you need. 2. Jump to the Tier-2/Tier-3 docs listed below and verify they reciprocally link back. 3. Refresh the doc-index (via the `doc-index` make target or platform-…,6977,2025-12-12T11:11:10.809859+00:00,pipeline;navigation;tier-docs,Docs Guild,draft,no,
 .repo_studios/docs/pipeline,.repo_studios/docs/pipeline/pipeline_doc_map.md,h2,System Context,system-context,pipeline-documentation-map,1. Land here to confirm which pipeline folder contains the Tier-1 spine you need. 2. Jump to the Tier-2/Tier-3 docs listed below and verify they reciprocally link back. 3. Refresh the doc-index (via the `doc-index` make target or platform-…,6977,2025-12-12T11:11:10.809859+00:00,pipeline;navigation;tier-docs,Docs Guild,draft,no,
@@ -35465,7 +38494,7 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-prompt-library.md,h2,Reference Commands,reference-commands,repo-studios-prompt-library-playbook,Audience: Repo Studios automation | Human collaborators,3166,2025-11-04T14:45:22.667537+00:00,prompts;playbook;ai-ingestion,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,approved,no,
 .repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-prompt-library.md,h2,Governance Notes,governance-notes,repo-studios-prompt-library-playbook,Audience: Repo Studios automation | Human collaborators,3166,2025-11-04T14:45:22.667537+00:00,prompts;playbook;ai-ingestion,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,approved,no,
 .repo_studios/docs/playbooks,.repo_studios/docs/playbooks/playbook-prompt-library.md,h2,Agent Block (Machine-Readable),agent-block-machine-readable,repo-studios-prompt-library-playbook,Audience: Repo Studios automation | Human collaborators,3166,2025-11-04T14:45:22.667537+00:00,prompts;playbook;ai-ingestion,repo_studios_ai;repo_studios_team@rainmakerprotocol.dev,approved,no,
-.repo_studios/docs,.repo_studios/docs/project_tree_overview.md,h1,Project Tree Overview,project-tree-overview,,"This document is refreshed automatically by `run_batch_cleanup.py`. Edits outside the tree block are preserved, but avoid modifying the block between the markers.",8367,2025-12-16T16:16:30.911230+00:00,,,,yes,
+.repo_studios/docs,.repo_studios/docs/project_tree_overview.md,h1,Project Tree Overview,project-tree-overview,,"This document is refreshed automatically by `run_batch_cleanup.py`. Edits outside the tree block are preserved, but avoid modifying the block between the markers.",8379,2025-12-17T01:38:22.483200+00:00,,,,yes,
 .repo_studios/docs,.repo_studios/docs/repo_studios_build_plan.md,h1,Repo Studios Build Plan,repo-studios-build-plan,,_Last updated: 2025-10-17_,7647,2025-10-21T12:02:58.665326+00:00,,,,no,
 .repo_studios/docs,.repo_studios/docs/repo_studios_build_plan.md,h2,Guiding Principles,guiding-principles,repo-studios-build-plan,_Last updated: 2025-10-17_,7647,2025-10-21T12:02:58.665326+00:00,,,,no,
 .repo_studios/docs,.repo_studios/docs/repo_studios_build_plan.md,h2,Phase 0 — Alignment (Complete),phase-0-alignment-complete,repo-studios-build-plan,_Last updated: 2025-10-17_,7647,2025-10-21T12:02:58.665326+00:00,,,,no,
@@ -35672,38 +38701,31 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/monkey_patch/latest,.repo_studios/monkey_patch/latest/report.md,h2,Patched Import Bases,patched-import-bases,monkey-patch-scan-report,,1822,2025-12-11T13:10:18.770236+00:00,,,,no,
 .repo_studios/monkey_patch/latest,.repo_studios/monkey_patch/latest/report.md,h2,Files With Highest Patch Counts,files-with-highest-patch-counts,monkey-patch-scan-report,,1822,2025-12-11T13:10:18.770236+00:00,,,,no,
 .repo_studios/monkey_patch/latest,.repo_studios/monkey_patch/latest/report.md,h2,Next Steps,next-steps,monkey-patch-scan-report,,1822,2025-12-11T13:10:18.770236+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Script Refactoring Prompt Templates (Working Draft),script-refactoring-prompt-templates-working-draft,,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: All tests GREEN,expected-all-tests-green,,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: Coverage ≥ 80%,expected-coverage-80,,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: No errors,expected-no-errors,,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: Exit code 0,expected-exit-code-0,,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Example:,example,,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,make -C .repo_studios studio-collect-test-log-reports,make-c-repostudios-studio-collect-test-log-reports,,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,make -C .repo_studios studio-collect-faulthandler-reports,make-c-repostudios-studio-collect-faulthandler-reports,,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: Exit code 0,expected-exit-code-0,,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: Artifacts written under <reports_root>/<viewer>/<topic>/<YYYYMMDD-HHMM>/,expected-artifacts-written-under-reportsrootviewertopicyyyymmdd-hhmm,,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: At least 1 marker found,expected-at-least-1-marker-found,,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: Storage initialization found,expected-storage-initialization-found,,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: This script appears in output with marker count > 0,expected-this-script-appears-in-output-with-marker-count-0,,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h2,Workflow Overview,workflow-overview,script-refactoring-prompt-templates-working-draft,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h2,Phase 1: Script Analysis Prompt,phase-1-script-analysis-prompt,script-refactoring-prompt-templates-working-draft,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h2,Phase 2: Implementation Plan,phase-2-implementation-plan,script-refactoring-prompt-templates-working-draft,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h2,Phase 3: Implementation Execution Prompt,phase-3-implementation-execution-prompt,script-refactoring-prompt-templates-working-draft,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
-.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h2,Notes Section,notes-section,expected-this-script-appears-in-output-with-marker-count-0,A structured report covering:,17206,2025-12-16T20:43:59.625485+00:00,,,,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Script Refactoring Prompt Templates (Working Draft),script-refactoring-prompt-templates-working-draft,,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: All tests GREEN,expected-all-tests-green,,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Windows note: pytest-cov's --cov=<file.py> is unreliable when the target is,windows-note-pytest-covs-covfilepy-is-unreliable-when-the-target-is,,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,executed via dynamic import (common for scripts under .repo_studios/scripts).,executed-via-dynamic-import-common-for-scripts-under-repostudiosscripts,,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Prefer running coverage directly with a coveragerc that scopes by include=.,prefer-running-coverage-directly-with-a-coveragerc-that-scopes-by-include,,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: Coverage ≥ 80% (for the files listed in the rcfile's include=),expected-coverage-80-for-the-files-listed-in-the-rcfiles-include,,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: No errors,expected-no-errors,,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: Exit code 0,expected-exit-code-0,,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Example:,example,,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,make -C .repo_studios studio-collect-test-log-reports,make-c-repostudios-studio-collect-test-log-reports,,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,make -C .repo_studios studio-collect-faulthandler-reports,make-c-repostudios-studio-collect-faulthandler-reports,,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: Exit code 0,expected-exit-code-0,,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: Artifacts written under <reports_root>/<viewer>/<topic>/<YYYYMMDD-HHMM>/,expected-artifacts-written-under-reportsrootviewertopicyyyymmdd-hhmm,,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: At least 1 marker found,expected-at-least-1-marker-found,,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: Storage initialization found,expected-storage-initialization-found,,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h1,Expected: This script appears in output with marker count > 0,expected-this-script-appears-in-output-with-marker-count-0,,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h2,Workflow Overview,workflow-overview,script-refactoring-prompt-templates-working-draft,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h2,Phase 1: Script Analysis Prompt,phase-1-script-analysis-prompt,script-refactoring-prompt-templates-working-draft,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h2,Phase 2: Implementation Plan,phase-2-implementation-plan,script-refactoring-prompt-templates-working-draft,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h2,Phase 3: Implementation Execution Prompt,phase-3-implementation-execution-prompt,script-refactoring-prompt-templates-working-draft,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios,.repo_studios/script_refactoring_prompt_templates.md,h2,Notes Section,notes-section,expected-this-script-appears-in-output-with-marker-count-0,A structured report covering:,19142,2025-12-18T19:32:41.905765+00:00,scripts;refactor;prompts;coverage,repo_studios_team@rainmakerprotocol.dev,draft,no,
 .repo_studios/scripts,.repo_studios/scripts/README.md,h1,Repo Studios Script Layout,repo-studios-script-layout,,This directory houses the active automation suite for Repo Studios. Scripts are grouped by the role they play in the data and automation pipeline so coding agents can locate the right tool quickly.,2391,2025-11-04T09:50:54.154871+00:00,,,,no,
 .repo_studios/scripts,.repo_studios/scripts/README.md,h2,Category Map,category-map,repo-studios-script-layout,This directory houses the active automation suite for Repo Studios. Scripts are grouped by the role they play in the data and automation pipeline so coding agents can locate the right tool quickly.,2391,2025-11-04T09:50:54.154871+00:00,,,,no,
 .repo_studios/scripts,.repo_studios/scripts/README.md,h2,Operating Notes,operating-notes,repo-studios-script-layout,This directory houses the active automation suite for Repo Studios. Scripts are grouped by the role they play in the data and automation pipeline so coding agents can locate the right tool quickly.,2391,2025-11-04T09:50:54.154871+00:00,,,,no,
 .repo_studios/scripts,.repo_studios/scripts/README.md,h2,Immediate TODOs,immediate-todos,repo-studios-script-layout,This directory houses the active automation suite for Repo Studios. Scripts are grouped by the role they play in the data and automation pipeline so coding agents can locate the right tool quickly.,2391,2025-11-04T09:50:54.154871+00:00,,,,no,
-.repo_studios/scripts/aggregators/aggregators_index,.repo_studios/scripts/aggregators/aggregators_index/aggregators_duplicate_summary-2025-10-28-0942.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,,733,2025-10-28T09:42:56.137074+00:00,,,,no,
-.repo_studios/scripts/aggregators/aggregators_index,.repo_studios/scripts/aggregators/aggregators_index/aggregators_duplicate_summary-2025-10-28-0942.md,h2,Overview,overview,duplicate-scan-summary,,733,2025-10-28T09:42:56.137074+00:00,,,,no,
-.repo_studios/scripts/aggregators/aggregators_index,.repo_studios/scripts/aggregators/aggregators_index/aggregators_duplicate_summary-2025-10-28-0942.md,h2,Inputs,inputs,duplicate-scan-summary,,733,2025-10-28T09:42:56.137074+00:00,,,,no,
-.repo_studios/scripts/aggregators/aggregators_index,.repo_studios/scripts/aggregators/aggregators_index/aggregators_duplicate_summary-2025-10-28-0942.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,,733,2025-10-28T09:42:56.137074+00:00,,,,no,
-.repo_studios/scripts/aggregators/aggregators_index,.repo_studios/scripts/aggregators/aggregators_index/aggregators_duplicate_summary-2025-10-28-0942.md,h2,Next Steps,next-steps,duplicate-scan-summary,,733,2025-10-28T09:42:56.137074+00:00,,,,no,
-.repo_studios/scripts/consumers/consumers_index,.repo_studios/scripts/consumers/consumers_index/consumers_duplicate_summary-2025-10-28-0934.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,1. `main` — 2 duplicate(s),1093,2025-10-28T09:34:22.504107+00:00,,,,no,
-.repo_studios/scripts/consumers/consumers_index,.repo_studios/scripts/consumers/consumers_index/consumers_duplicate_summary-2025-10-28-0934.md,h2,Overview,overview,duplicate-scan-summary,1. `main` — 2 duplicate(s),1093,2025-10-28T09:34:22.504107+00:00,,,,no,
-.repo_studios/scripts/consumers/consumers_index,.repo_studios/scripts/consumers/consumers_index/consumers_duplicate_summary-2025-10-28-0934.md,h2,Inputs,inputs,duplicate-scan-summary,1. `main` — 2 duplicate(s),1093,2025-10-28T09:34:22.504107+00:00,,,,no,
-.repo_studios/scripts/consumers/consumers_index,.repo_studios/scripts/consumers/consumers_index/consumers_duplicate_summary-2025-10-28-0934.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,1. `main` — 2 duplicate(s),1093,2025-10-28T09:34:22.504107+00:00,,,,no,
-.repo_studios/scripts/consumers/consumers_index,.repo_studios/scripts/consumers/consumers_index/consumers_duplicate_summary-2025-10-28-0934.md,h2,Next Steps,next-steps,duplicate-scan-summary,1. `main` — 2 duplicate(s),1093,2025-10-28T09:34:22.504107+00:00,,,,no,
 .repo_studios/scripts,.repo_studios/scripts/legacy_repo_scripts_overview.md,h1,Repo Scripts Tier Overview,repo-scripts-tier-overview,,This document maps the active automation suite under `.repo_studios/scripts/` using the producer → consumer → aggregator → orchestrator → summarizer tier model. Use it as a quick reference when deciding where a script lives or which…,4879,2025-10-21T16:07:43.334091+00:00,,,,yes,
 .repo_studios/scripts,.repo_studios/scripts/legacy_repo_scripts_overview.md,h2,Flowchart,flowchart,repo-scripts-tier-overview,This document maps the active automation suite under `.repo_studios/scripts/` using the producer → consumer → aggregator → orchestrator → summarizer tier model. Use it as a quick reference when deciding where a script lives or which…,4879,2025-10-21T16:07:43.334091+00:00,,,,yes,
 .repo_studios/scripts,.repo_studios/scripts/legacy_repo_scripts_overview.md,h2,Interpretation Notes,interpretation-notes,repo-scripts-tier-overview,This document maps the active automation suite under `.repo_studios/scripts/` using the producer → consumer → aggregator → orchestrator → summarizer tier model. Use it as a quick reference when deciding where a script lives or which…,4879,2025-10-21T16:07:43.334091+00:00,,,,yes,
@@ -35719,45 +38741,24 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/scripts,.repo_studios/scripts/orchestrator_refactor_plan_temp.md,h2,9. Execution Phases (Draft Timeline),9-execution-phases-draft-timeline,orchestrator-refactor-plan-working-notes,in an orchestrator-run pipeline.,9376,2025-12-01T13:19:36.908675+00:00,,,,yes,
 .repo_studios/scripts,.repo_studios/scripts/orchestrator_refactor_plan_temp.md,h2,10. Risks & Open Questions,10-risks-open-questions,orchestrator-refactor-plan-working-notes,in an orchestrator-run pipeline.,9376,2025-12-01T13:19:36.908675+00:00,,,,yes,
 .repo_studios/scripts,.repo_studios/scripts/orchestrator_refactor_plan_temp.md,h2,11. Next Actions,11-next-actions,orchestrator-refactor-plan-working-notes,in an orchestrator-run pipeline.,9376,2025-12-01T13:19:36.908675+00:00,,,,yes,
-.repo_studios/scripts/orchestrators/orchestrators_index,.repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,1. `cmd_list` — 2 duplicate(s),1191,2025-10-28T09:55:41.218181+00:00,,,,no,
-.repo_studios/scripts/orchestrators/orchestrators_index,.repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md,h2,Overview,overview,duplicate-scan-summary,1. `cmd_list` — 2 duplicate(s),1191,2025-10-28T09:55:41.218181+00:00,,,,no,
-.repo_studios/scripts/orchestrators/orchestrators_index,.repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md,h2,Inputs,inputs,duplicate-scan-summary,1. `cmd_list` — 2 duplicate(s),1191,2025-10-28T09:55:41.218181+00:00,,,,no,
-.repo_studios/scripts/orchestrators/orchestrators_index,.repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,1. `cmd_list` — 2 duplicate(s),1191,2025-10-28T09:55:41.218181+00:00,,,,no,
-.repo_studios/scripts/orchestrators/orchestrators_index,.repo_studios/scripts/orchestrators/orchestrators_index/orchestrators_duplicate_summary-2025-10-28-0955.md,h2,Next Steps,next-steps,duplicate-scan-summary,1. `cmd_list` — 2 duplicate(s),1191,2025-10-28T09:55:41.218181+00:00,,,,no,
 .repo_studios/scripts/producers/producers_index,.repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,1. `configure_logging` — 19 duplicate(s),11966,2025-11-05T11:25:43.763687+00:00,,,,yes,
 .repo_studios/scripts/producers/producers_index,.repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md,h2,Overview,overview,duplicate-scan-summary,1. `configure_logging` — 19 duplicate(s),11966,2025-11-05T11:25:43.763687+00:00,,,,yes,
 .repo_studios/scripts/producers/producers_index,.repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md,h2,Inputs,inputs,duplicate-scan-summary,1. `configure_logging` — 19 duplicate(s),11966,2025-11-05T11:25:43.763687+00:00,,,,yes,
 .repo_studios/scripts/producers/producers_index,.repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,1. `configure_logging` — 19 duplicate(s),11966,2025-11-05T11:25:43.763687+00:00,,,,yes,
 .repo_studios/scripts/producers/producers_index,.repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md,h2,Next Steps,next-steps,duplicate-scan-summary,1. `configure_logging` — 19 duplicate(s),11966,2025-11-05T11:25:43.763687+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h1,Script Inventory Architecture,script-inventory-architecture,,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",73172,2025-12-16T20:31:08.019233+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,Document Metadata,document-metadata,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",73172,2025-12-16T20:31:08.019233+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,How to Use This Template,how-to-use-this-template,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",73172,2025-12-16T20:31:08.019233+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,1. Script Producers,1-script-producers,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",73172,2025-12-16T20:31:08.019233+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,2. Script Consumers,2-script-consumers,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",73172,2025-12-16T20:31:08.019233+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,3. Script Aggregators,3-script-aggregators,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",73172,2025-12-16T20:31:08.019233+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,4. Script Orchestrators,4-script-orchestrators,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",73172,2025-12-16T20:31:08.019233+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,5. Script Summarizers,5-script-summarizers,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",73172,2025-12-16T20:31:08.019233+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,6. Script Utilities,6-script-utilities,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",73172,2025-12-16T20:31:08.019233+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,7. Script Undefined / Triage,7-script-undefined-triage,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",73172,2025-12-16T20:31:08.019233+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,Cross-Cutting Follow-Ups,cross-cutting-follow-ups,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",73172,2025-12-16T20:31:08.019233+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,Open Questions,open-questions,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",73172,2025-12-16T20:31:08.019233+00:00,,,,yes,
-.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,Appendix: YAML Mapping Placeholder,appendix-yaml-mapping-placeholder,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",73172,2025-12-16T20:31:08.019233+00:00,,,,yes,
-.repo_studios/scripts/scripts_index,.repo_studios/scripts/scripts_index/scripts_duplicate_summary-2025-10-27.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,1. `prune_old_runs` — 20 duplicate(s),14434,2025-10-27T12:08:34.090771+00:00,,,,yes,
-.repo_studios/scripts/scripts_index,.repo_studios/scripts/scripts_index/scripts_duplicate_summary-2025-10-27.md,h2,Overview,overview,duplicate-scan-summary,1. `prune_old_runs` — 20 duplicate(s),14434,2025-10-27T12:08:34.090771+00:00,,,,yes,
-.repo_studios/scripts/scripts_index,.repo_studios/scripts/scripts_index/scripts_duplicate_summary-2025-10-27.md,h2,Inputs,inputs,duplicate-scan-summary,1. `prune_old_runs` — 20 duplicate(s),14434,2025-10-27T12:08:34.090771+00:00,,,,yes,
-.repo_studios/scripts/scripts_index,.repo_studios/scripts/scripts_index/scripts_duplicate_summary-2025-10-27.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,1. `prune_old_runs` — 20 duplicate(s),14434,2025-10-27T12:08:34.090771+00:00,,,,yes,
-.repo_studios/scripts/scripts_index,.repo_studios/scripts/scripts_index/scripts_duplicate_summary-2025-10-27.md,h2,Next Steps,next-steps,duplicate-scan-summary,1. `prune_old_runs` — 20 duplicate(s),14434,2025-10-27T12:08:34.090771+00:00,,,,yes,
-.repo_studios/scripts/scripts_index,.repo_studios/scripts/scripts_index/scripts_duplicate_summary-20251130-0333.md,h1,Summary,summary,,,11,2025-11-30T03:33:07.215521+00:00,,,,no,
-.repo_studios/scripts/summarizers/summarizers_index,.repo_studios/scripts/summarizers/summarizers_index/summarizers_duplicate_summary-2025-11-04-2010.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,1. `append_table` — 2 duplicate(s),982,2025-11-04T20:10:52.055388+00:00,,,,no,
-.repo_studios/scripts/summarizers/summarizers_index,.repo_studios/scripts/summarizers/summarizers_index/summarizers_duplicate_summary-2025-11-04-2010.md,h2,Overview,overview,duplicate-scan-summary,1. `append_table` — 2 duplicate(s),982,2025-11-04T20:10:52.055388+00:00,,,,no,
-.repo_studios/scripts/summarizers/summarizers_index,.repo_studios/scripts/summarizers/summarizers_index/summarizers_duplicate_summary-2025-11-04-2010.md,h2,Inputs,inputs,duplicate-scan-summary,1. `append_table` — 2 duplicate(s),982,2025-11-04T20:10:52.055388+00:00,,,,no,
-.repo_studios/scripts/summarizers/summarizers_index,.repo_studios/scripts/summarizers/summarizers_index/summarizers_duplicate_summary-2025-11-04-2010.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,1. `append_table` — 2 duplicate(s),982,2025-11-04T20:10:52.055388+00:00,,,,no,
-.repo_studios/scripts/summarizers/summarizers_index,.repo_studios/scripts/summarizers/summarizers_index/summarizers_duplicate_summary-2025-11-04-2010.md,h2,Next Steps,next-steps,duplicate-scan-summary,1. `append_table` — 2 duplicate(s),982,2025-11-04T20:10:52.055388+00:00,,,,no,
-.repo_studios/scripts/utilities/utilities_index,.repo_studios/scripts/utilities/utilities_index/utilities_duplicate_summary-2025-10-28-1344.md,h1,Duplicate Scan Summary,duplicate-scan-summary,,,724,2025-10-28T13:44:35.047795+00:00,,,,no,
-.repo_studios/scripts/utilities/utilities_index,.repo_studios/scripts/utilities/utilities_index/utilities_duplicate_summary-2025-10-28-1344.md,h2,Overview,overview,duplicate-scan-summary,,724,2025-10-28T13:44:35.047795+00:00,,,,no,
-.repo_studios/scripts/utilities/utilities_index,.repo_studios/scripts/utilities/utilities_index/utilities_duplicate_summary-2025-10-28-1344.md,h2,Inputs,inputs,duplicate-scan-summary,,724,2025-10-28T13:44:35.047795+00:00,,,,no,
-.repo_studios/scripts/utilities/utilities_index,.repo_studios/scripts/utilities/utilities_index/utilities_duplicate_summary-2025-10-28-1344.md,h2,Top Duplicate Offenders,top-duplicate-offenders,duplicate-scan-summary,,724,2025-10-28T13:44:35.047795+00:00,,,,no,
-.repo_studios/scripts/utilities/utilities_index,.repo_studios/scripts/utilities/utilities_index/utilities_duplicate_summary-2025-10-28-1344.md,h2,Next Steps,next-steps,duplicate-scan-summary,,724,2025-10-28T13:44:35.047795+00:00,,,,no,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h1,Script Inventory Architecture,script-inventory-architecture,,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",80780,2025-12-18T17:36:18.977162+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,Document Metadata,document-metadata,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",80780,2025-12-18T17:36:18.977162+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,How to Use This Template,how-to-use-this-template,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",80780,2025-12-18T17:36:18.977162+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,1. Script Producers,1-script-producers,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",80780,2025-12-18T17:36:18.977162+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,2. Script Consumers,2-script-consumers,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",80780,2025-12-18T17:36:18.977162+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,3. Script Aggregators,3-script-aggregators,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",80780,2025-12-18T17:36:18.977162+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,4. Script Orchestrators,4-script-orchestrators,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",80780,2025-12-18T17:36:18.977162+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,5. Script Summarizers,5-script-summarizers,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",80780,2025-12-18T17:36:18.977162+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,6. Script Utilities,6-script-utilities,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",80780,2025-12-18T17:36:18.977162+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,7. Script Undefined / Triage,7-script-undefined-triage,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",80780,2025-12-18T17:36:18.977162+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,Cross-Cutting Follow-Ups,cross-cutting-follow-ups,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",80780,2025-12-18T17:36:18.977162+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,Open Questions,open-questions,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",80780,2025-12-18T17:36:18.977162+00:00,,,,yes,
+.repo_studios/scripts,.repo_studios/scripts/script_inventory_architecture.md,h2,Appendix: YAML Mapping Placeholder,appendix-yaml-mapping-placeholder,script-inventory-architecture,"Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent…",80780,2025-12-18T17:36:18.977162+00:00,,,,yes,
 .repo_studios/tmp_manual/automation_dry_run_9f5c157dea2e4b4fbd98dc969cbe2a41/reports/commandview/automation_runs/20251102-1930,.repo_studios/tmp_manual/automation_dry_run_9f5c157dea2e4b4fbd98dc969cbe2a41/reports/commandview/automation_runs/20251102-1930/README.md,h1,Automation Dry-Run Bundle,automation-dry-run-bundle,,dry run bundle,244,2025-11-30T12:23:31.861612+00:00,,,,no,
 .repo_studios/tmp_manual/automation_dry_run_9f5c157dea2e4b4fbd98dc969cbe2a41/reports/commandview/automation_runs/20251102-1930,.repo_studios/tmp_manual/automation_dry_run_9f5c157dea2e4b4fbd98dc969cbe2a41/reports/commandview/automation_runs/20251102-1930/README.md,h2,Notes,notes,automation-dry-run-bundle,dry run bundle,244,2025-11-30T12:23:31.861612+00:00,,,,no,
 .,README.md,h1,About this folder,about-this-folder,,"To reduce confusion with the root-level `README.md`, the detailed guide for AI agents and contributors has been moved to `AGENTS_GUIDE.md` in this same folder.",692,2025-11-30T01:23:50.960100+00:00,,,,no,
@@ -35779,32 +38780,36 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .,alignment_notes_temp.md,h2,Follow-up Questions (round 3),follow-up-questions-round-3,temporary-alignment-notes,This document is a scratch pad for understanding the transplanted tooling. We will delete it once alignment is complete.,29288,2025-11-08T23:03:00.112443+00:00,,,,yes,
 .,alignment_notes_temp.md,h2,Follow-up Questions (round 4),follow-up-questions-round-4,temporary-alignment-notes,This document is a scratch pad for understanding the transplanted tooling. We will delete it once alignment is complete.,29288,2025-11-08T23:03:00.112443+00:00,,,,yes,
 .,alignment_notes_temp.md,h2,Follow-up Questions (round 5),follow-up-questions-round-5,temporary-alignment-notes,This document is a scratch pad for understanding the transplanted tooling. We will delete it once alignment is complete.,29288,2025-11-08T23:03:00.112443+00:00,,,,yes,
+command_center/reports/healthview/inventory_health/20251217-1810,command_center/reports/healthview/inventory_health/20251217-1810/summary.md,h1,Inventory Health Report,inventory-health-report,,Generated (UTC): 2025-12-17T18:10:12.442069+00:00 Summary Path: C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\healthview\inventory_overview Baseline Path:…,500,2025-12-17T18:10:12.443661+00:00,,,,no,
+command_center/reports/healthview/inventory_health/20251217-1810,command_center/reports/healthview/inventory_health/20251217-1810/summary.md,h2,Outcome,outcome,inventory-health-report,Generated (UTC): 2025-12-17T18:10:12.442069+00:00 Summary Path: C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\healthview\inventory_overview Baseline Path:…,500,2025-12-17T18:10:12.443661+00:00,,,,no,
+command_center/reports/healthview/inventory_health/20251217-1810,command_center/reports/healthview/inventory_health/20251217-1810/summary.md,h2,Deltas,deltas,inventory-health-report,Generated (UTC): 2025-12-17T18:10:12.442069+00:00 Summary Path: C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\healthview\inventory_overview Baseline Path:…,500,2025-12-17T18:10:12.443661+00:00,,,,no,
+command_center/reports/healthview/inventory_health/20251217-1810,command_center/reports/healthview/inventory_health/20251217-1810/summary.md,h2,Issues,issues,inventory-health-report,Generated (UTC): 2025-12-17T18:10:12.442069+00:00 Summary Path: C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\healthview\inventory_overview Baseline Path:…,500,2025-12-17T18:10:12.443661+00:00,,,,no,
 .,command_center_script_verification_temp.md,h1,Command Center Script Verification (Temporary),command-center-script-verification-temporary,,This file tracks command center script executions requested on 2025-11-04.,4905,2025-11-08T23:03:02.374057+00:00,,,,no,
-.,db_integration_status.md,h1,Database Integration Status,database-integration-status,,[x] **analyze_standards_index_gaps.py**,2957,2025-12-16T19:03:20.932630+00:00,,,,no,
-.,db_integration_status.md,h2,Producer Scripts,producer-scripts,database-integration-status,[x] **analyze_standards_index_gaps.py**,2957,2025-12-16T19:03:20.932630+00:00,,,,no,
-.,db_integration_status.md,h2,Utility Scripts,utility-scripts,database-integration-status,[x] **analyze_standards_index_gaps.py**,2957,2025-12-16T19:03:20.932630+00:00,,,,no,
-.,db_integration_status.md,h2,Integration Checklist,integration-checklist,database-integration-status,[x] **analyze_standards_index_gaps.py**,2957,2025-12-16T19:03:20.932630+00:00,,,,no,
+.,db_integration_status.md,h1,Database Integration Status,database-integration-status,,[x] **analyze_standards_index_gaps.py**,6594,2025-12-18T17:32:56.481003+00:00,,,,yes,
+.,db_integration_status.md,h2,Producer Scripts,producer-scripts,database-integration-status,[x] **analyze_standards_index_gaps.py**,6594,2025-12-18T17:32:56.481003+00:00,,,,yes,
+.,db_integration_status.md,h2,Utility Scripts,utility-scripts,database-integration-status,[x] **analyze_standards_index_gaps.py**,6594,2025-12-18T17:32:56.481003+00:00,,,,yes,
+.,db_integration_status.md,h2,Integration Checklist,integration-checklist,database-integration-status,[x] **analyze_standards_index_gaps.py**,6594,2025-12-18T17:32:56.481003+00:00,,,,yes,
 docs/automation/examples,docs/automation/examples/healthview_manifest_example.md,h1,Healthview Manifest Schema Example,healthview-manifest-schema-example,,This example captures the canonical layout for Healthview manifest bundles emitted by the topic orchestrators. The JSON mirrors the CommandView schema while relocating artifacts under…,3014,2025-12-04T20:32:15.642145+00:00,healthview;orchestration;examples,repo_studios_ai,draft,no,
 docs/automation/examples,docs/automation/examples/healthview_manifest_example.md,h2,Selector Integration Notes,selector-integration-notes,healthview-manifest-schema-example,This example captures the canonical layout for Healthview manifest bundles emitted by the topic orchestrators. The JSON mirrors the CommandView schema while relocating artifacts under…,3014,2025-12-04T20:32:15.642145+00:00,healthview;orchestration;examples,repo_studios_ai,draft,no,
 docs/automation/examples,docs/automation/examples/healthview_manifest_example.md,h2,Usage Guidance,usage-guidance,healthview-manifest-schema-example,This example captures the canonical layout for Healthview manifest bundles emitted by the topic orchestrators. The JSON mirrors the CommandView schema while relocating artifacts under…,3014,2025-12-04T20:32:15.642145+00:00,healthview;orchestration;examples,repo_studios_ai,draft,no,
-docs/automation,docs/automation/orchestrator_implementation.md,h1,Orchestrator Implementation Plan,orchestrator-implementation-plan,,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
-docs/automation,docs/automation/orchestrator_implementation.md,h2,Context,context,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
-docs/automation,docs/automation/orchestrator_implementation.md,h2,Current Progress (2025-11-30),current-progress-2025-11-30,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
-docs/automation,docs/automation/orchestrator_implementation.md,h2,Implementation Objectives,implementation-objectives,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
-docs/automation,docs/automation/orchestrator_implementation.md,h2,Deliverables,deliverables,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
-docs/automation,docs/automation/orchestrator_implementation.md,h2,Legacy-to-Target Parity Matrix,legacy-to-target-parity-matrix,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
-docs/automation,docs/automation/orchestrator_implementation.md,h2,Legacy Retirement Targets,legacy-retirement-targets,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
-docs/automation,docs/automation/orchestrator_implementation.md,h2,Testing and Fixture Migration Requirements,testing-and-fixture-migration-requirements,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
-docs/automation,docs/automation/orchestrator_implementation.md,h2,Operational Impact Inventory,operational-impact-inventory,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
-docs/automation,docs/automation/orchestrator_implementation.md,h2,Legacy Removal Ticket Backlog (to be opened),legacy-removal-ticket-backlog-to-be-opened,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
-docs/automation,docs/automation/orchestrator_implementation.md,h2,Topic Assignment Validation (2025-11-30),topic-assignment-validation-2025-11-30,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
-docs/automation,docs/automation/orchestrator_implementation.md,h2,Healthview Manifest Mapping (2025-11-30),healthview-manifest-mapping-2025-11-30,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
-docs/automation,docs/automation/orchestrator_implementation.md,h2,Topic Implementation Workstreams,topic-implementation-workstreams,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
-docs/automation,docs/automation/orchestrator_implementation.md,h2,Phase Checklist,phase-checklist,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
-docs/automation,docs/automation/orchestrator_implementation.md,h2,Healthview Viewer Wiring Reference,healthview-viewer-wiring-reference,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
-docs/automation,docs/automation/orchestrator_implementation.md,h2,Report Naming Standard Initiative,report-naming-standard-initiative,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
-docs/automation,docs/automation/orchestrator_implementation.md,h2,Dependencies and Tooling,dependencies-and-tooling,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
-docs/automation,docs/automation/orchestrator_implementation.md,h2,Reporting and Tracking,reporting-and-tracking,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97899,2025-12-11T10:50:58.485331+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h1,Orchestrator Implementation Plan,orchestrator-implementation-plan,,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Context,context,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Current Progress (2025-11-30),current-progress-2025-11-30,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Implementation Objectives,implementation-objectives,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Deliverables,deliverables,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Legacy-to-Target Parity Matrix,legacy-to-target-parity-matrix,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Legacy Retirement Targets,legacy-retirement-targets,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Testing and Fixture Migration Requirements,testing-and-fixture-migration-requirements,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Operational Impact Inventory,operational-impact-inventory,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Legacy Removal Ticket Backlog (to be opened),legacy-removal-ticket-backlog-to-be-opened,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Topic Assignment Validation (2025-11-30),topic-assignment-validation-2025-11-30,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Healthview Manifest Mapping (2025-11-30),healthview-manifest-mapping-2025-11-30,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Topic Implementation Workstreams,topic-implementation-workstreams,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Phase Checklist,phase-checklist,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Healthview Viewer Wiring Reference,healthview-viewer-wiring-reference,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Report Naming Standard Initiative,report-naming-standard-initiative,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Dependencies and Tooling,dependencies-and-tooling,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
+docs/automation,docs/automation/orchestrator_implementation.md,h2,Reporting and Tracking,reporting-and-tracking,orchestrator-implementation-plan,"This plan sequences the work required to deliver topic-oriented orchestrators, shared helpers, and Healthview artifacts so Repo Studios diagnostics can graduate from the RFC to an executable roadmap.",97933,2025-12-17T18:23:40.625822+00:00,automation;orchestrators;command-center,repo_studios_ai,draft,yes,
 docs/automation,docs/automation/orchestrator_legacy_cleanup_checklist.md,h1,Legacy Orchestrator Cleanup Checklist,legacy-orchestrator-cleanup-checklist,,"Provide a single traceable checklist for retiring the legacy orchestration entry points once topic orchestrators and the meta runner become the default. Use this document to coordinate doc updates, Makefile changes, test rewrites, and…",6686,2025-12-11T10:50:58.484324+00:00,,,,yes,
 docs/automation,docs/automation/orchestrator_legacy_cleanup_checklist.md,h2,Purpose,purpose,legacy-orchestrator-cleanup-checklist,"Provide a single traceable checklist for retiring the legacy orchestration entry points once topic orchestrators and the meta runner become the default. Use this document to coordinate doc updates, Makefile changes, test rewrites, and…",6686,2025-12-11T10:50:58.484324+00:00,,,,yes,
 docs/automation,docs/automation/orchestrator_legacy_cleanup_checklist.md,h2,How to Use This Checklist,how-to-use-this-checklist,legacy-orchestrator-cleanup-checklist,"Provide a single traceable checklist for retiring the legacy orchestration entry points once topic orchestrators and the meta runner become the default. Use this document to coordinate doc updates, Makefile changes, test rewrites, and…",6686,2025-12-11T10:50:58.484324+00:00,,,,yes,
@@ -35897,6 +38902,7 @@ docs/standards/project,docs/standards/project/std-project-python-instructions.md
 docs/standards/project,docs/standards/project/std-project-python-instructions.md,h2,Documentation Expectations,documentation-expectations,project-python-instructions,This guide documents the baseline expectations for Python contributors and automation authors.,1867,2025-11-25T11:35:24.181372+00:00,python;documentation;automation,repo_studios_ai,draft,yes,
 docs/standards/project,docs/standards/project/std-project-python-instructions.md,h2,Testing Discipline,testing-discipline,project-python-instructions,This guide documents the baseline expectations for Python contributors and automation authors.,1867,2025-11-25T11:35:24.181372+00:00,python;documentation;automation,repo_studios_ai,draft,yes,
 docs/templates,docs/templates/meta_prompts.md,document,,metaprompts,,,7803,2025-12-08T17:14:43.760939+00:00,,,,no,
+docs/templates,docs/templates/meta_prompts2.md,document,,metaprompts2,,,7728,2025-12-18T22:53:45.479854+00:00,,,,no,
 docs/templates,docs/templates/test_execution_telemetry_summary_template.md,h1,Test Execution Telemetry Summary Template,test-execution-telemetry-summary-template,,Use this template when authoring Healthview Markdown summaries for Test Execution Telemetry runs. Replace bracketed placeholders with the values emitted by the orchestrator (`run_test_execution_telemetry.py`) and remove any sections that…,2092,2025-12-01T03:07:09.755953+00:00,,,,yes,
 docs/templates,docs/templates/test_execution_telemetry_summary_template.md,h2,Run Context,run-context,test-execution-telemetry-summary-template,Use this template when authoring Healthview Markdown summaries for Test Execution Telemetry runs. Replace bracketed placeholders with the values emitted by the orchestrator (`run_test_execution_telemetry.py`) and remove any sections that…,2092,2025-12-01T03:07:09.755953+00:00,,,,yes,
 docs/templates,docs/templates/test_execution_telemetry_summary_template.md,h2,Runtime Metrics,runtime-metrics,test-execution-telemetry-summary-template,Use this template when authoring Healthview Markdown summaries for Test Execution Telemetry runs. Replace bracketed placeholders with the values emitted by the orchestrator (`run_test_execution_telemetry.py`) and remove any sections that…,2092,2025-12-01T03:07:09.755953+00:00,,,,yes,
@@ -35912,6 +38918,15 @@ tmp_cli_probe,tmp_cli_probe/db_integration_status.md,h1,Database Integration Sta
 tmp_cli_probe,tmp_cli_probe/db_integration_status.md,h2,Producer Scripts,producer-scripts,database-integration-status,[x] **analyze_standards_index_gaps.py**,1903,2025-12-15T22:58:29.416925+00:00,,,,no,
 tmp_cli_probe,tmp_cli_probe/db_integration_status.md,h2,Utility Scripts,utility-scripts,database-integration-status,[x] **analyze_standards_index_gaps.py**,1903,2025-12-15T22:58:29.416925+00:00,,,,no,
 tmp_cli_probe,tmp_cli_probe/db_integration_status.md,h2,Integration Checklist,integration-checklist,database-integration-status,[x] **analyze_standards_index_gaps.py**,1903,2025-12-15T22:58:29.416925+00:00,,,,no,
+tmp_cli_probe,tmp_cli_probe/db_markers.md,h1,Database Integration Status,database-integration-status,,[x] **analyze_standards_index_gaps.py**,4793,2025-12-17T13:48:32.384409+00:00,,,,no,
+tmp_cli_probe,tmp_cli_probe/db_markers.md,h2,Producer Scripts,producer-scripts,database-integration-status,[x] **analyze_standards_index_gaps.py**,4793,2025-12-17T13:48:32.384409+00:00,,,,no,
+tmp_cli_probe,tmp_cli_probe/db_markers.md,h2,Utility Scripts,utility-scripts,database-integration-status,[x] **analyze_standards_index_gaps.py**,4793,2025-12-17T13:48:32.384409+00:00,,,,no,
+tmp_cli_probe,tmp_cli_probe/db_markers.md,h2,Integration Checklist,integration-checklist,database-integration-status,[x] **analyze_standards_index_gaps.py**,4793,2025-12-17T13:48:32.384409+00:00,,,,no,
+tmp_cli_probe/producer_reports/healthview/test_coverage_inventory/20251217-1200,tmp_cli_probe/producer_reports/healthview/test_coverage_inventory/20251217-1200/summary.md,h1,Test Coverage Inventory,test-coverage-inventory,,,956,2025-12-17T11:53:32.782624+00:00,,,,no,
+tmp_cli_probe/producer_reports/healthview/test_coverage_inventory/20251217-1200,tmp_cli_probe/producer_reports/healthview/test_coverage_inventory/20251217-1200/summary.md,h2,Files by Coverage,files-by-coverage,test-coverage-inventory,,956,2025-12-17T11:53:32.782624+00:00,,,,no,
+tmp_cli_probe/producer_reports/rawview/standards_index/20251217-1031,tmp_cli_probe/producer_reports/rawview/standards_index/20251217-1031/summary.md,h1,Standards Index Build Report,standards-index-build-report,,,626,2025-12-17T11:25:04.039240+00:00,,,,no,
+tmp_cli_probe/producer_reports/rawview/standards_index/20251217-1031,tmp_cli_probe/producer_reports/rawview/standards_index/20251217-1031/summary.md,h2,Summary,summary,standards-index-build-report,,626,2025-12-17T11:25:04.039240+00:00,,,,no,
+tmp_cli_probe/producer_reports/rawview/standards_index/20251217-1031,tmp_cli_probe/producer_reports/rawview/standards_index/20251217-1031/summary.md,h2,Extraction,extraction,standards-index-build-report,,626,2025-12-17T11:25:04.039240+00:00,,,,no,
 tmp_cli_probe/smoke_dependency_hygiene_reports/healthview/dependency_hygiene/20240301-0000,tmp_cli_probe/smoke_dependency_hygiene_reports/healthview/dependency_hygiene/20240301-0000/summary.md,h1,Dependency Hygiene Report,dependency-hygiene-report,,Generated (UTC): 2024-03-01T00:00:00+00:00 Repo Root: C:\Users\genet\repo_studios,278,2025-12-16T20:11:20.802802+00:00,,,,no,
 tmp_cli_probe/smoke_dependency_hygiene_reports/healthview/dependency_hygiene/20240301-0000,tmp_cli_probe/smoke_dependency_hygiene_reports/healthview/dependency_hygiene/20240301-0000/summary.md,h2,Summary,summary,dependency-hygiene-report,Generated (UTC): 2024-03-01T00:00:00+00:00 Repo Root: C:\Users\genet\repo_studios,278,2025-12-16T20:11:20.802802+00:00,,,,no,
 tmp_cli_probe/smoke_dependency_hygiene_reports/healthview/dependency_hygiene/20240301-0000,tmp_cli_probe/smoke_dependency_hygiene_reports/healthview/dependency_hygiene/20240301-0000/summary.md,h2,Issue Counts,issue-counts,dependency-hygiene-report,Generated (UTC): 2024-03-01T00:00:00+00:00 Repo Root: C:\Users\genet\repo_studios,278,2025-12-16T20:11:20.802802+00:00,,,,no,

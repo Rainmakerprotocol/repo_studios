@@ -36,15 +36,20 @@ Phase 3: Execution      → Apply changes with validation
 ### Prompt Template
 
 ```text
-We are reviewing scripts in:
-`.repo_studios/scripts/producers/`
-to align with positional encoding and database integration standards.
+We are reviewing scripts under:
+`.repo_studios/scripts/`
+to align artifact-producing entry points with positional encoding and database integration standards.
 
 Analyze the following script:
 `<SCRIPT_PATH>`
-`validate_docs_integrity.py`
+`extract_standards_rules.py`
 
 Report the following information:
+
+0. **Script Classification (critical):** Is this a *producer CLI* or a *library/helper module*?
+   - Producer CLI: writes report artifacts to disk and/or has pruning/DB integration.
+   - Helper module: pure functions (returns data), no report artifacts, no pruning, no DB writes.
+   - If helper: identify the *consuming producer* that emits artifacts and should be migrated instead.
 
 1. **Purpose:** What information does this script report/generate?
 
@@ -106,6 +111,7 @@ Report the following information:
 A structured report covering:
 
 - Script purpose and current behavior
+- Producer vs helper classification (and consuming producer if helper)
 - Output paths, artifact names, and formats
 - Timestamp format and legacy pointer status
 - Pruning configuration
@@ -126,8 +132,13 @@ Based on the analysis of:
 `<SCRIPT_PATH>`
 `extract_standards_rules.py`
 
-Generate a detailed implementation plan to align this script with
+Generate a detailed implementation plan to align the *artifact-producing entry point* with
 positional encoding and database integration standards.
+
+If Phase 1 classifies `<SCRIPT_PATH>` as a helper module:
+- Do not force positional encoding / DB markers into the helper.
+- Instead: generate the implementation plan for the consuming producer (or a thin wrapper CLI) that
+   writes the canonical bundle.
 ```
 
 ### Target Standards
@@ -331,9 +342,13 @@ A comprehensive implementation plan including:
 ````text
 Execute the implementation plan for:
 `<SCRIPT_PATH>`
-`validate_docs_integrity.py`
+`extract_standards_rules.py`
 
 Follow the detailed plan from Phase 2.
+
+If `<SCRIPT_PATH>` is a helper module (no report artifacts):
+- Execute Phase 3 against the consuming producer (or wrapper CLI) identified in Phase 1.
+- Keep the helper focused on extraction logic and return values.
 
 ### Execution Requirements
 

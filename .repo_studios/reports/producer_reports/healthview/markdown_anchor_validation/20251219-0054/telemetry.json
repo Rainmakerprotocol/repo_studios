@@ -1,0 +1,297 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2025-12-19T00:54:34.634733+00:00",
+  "status": "fail",
+  "metrics": {
+    "files_scanned": 3,
+    "links_checked": 116,
+    "issue_count": 38,
+    "missing_file_count": 38,
+    "missing_anchor_count": 0
+  },
+  "payload": {
+    "report": {
+      "schema_version": 1,
+      "generated_utc": "2025-12-19T00:54:34.634733+00:00",
+      "status": "fail",
+      "root": "C:\\Users\\genet\\repo_studios",
+      "patterns": [
+        ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/*.md"
+      ],
+      "issue_count": 38,
+      "issues": [
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 263,
+          "kind": "file",
+          "target": "../../../REPORT_NAMING_STANDARDS.md",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 358,
+          "kind": "file",
+          "target": "../../../REPORT_NAMING_STANDARDS.md",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 372,
+          "kind": "file",
+          "target": "../../../command_center/scripts/README.md",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 394,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 395,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 396,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 397,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 398,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 399,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 472,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 473,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 474,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 475,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 476,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 477,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 478,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 479,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 559,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 560,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 561,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 604,
+          "kind": "file",
+          "target": "../../../command_center/scripts/producers/collect_faulthandler_reports.py",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 605,
+          "kind": "file",
+          "target": "../../../command_center/scripts/consumers/generate_fault_artifacts.py",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 606,
+          "kind": "file",
+          "target": "../../../tests/tests_command_center/test_run_fault_diagnostics_overview.py",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 626,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 627,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 628,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 629,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 630,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 707,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 708,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 709,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 710,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 711,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 786,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 787,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 788,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 789,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 790,
+          "kind": "file",
+          "target": "../../tier3_index/",
+          "message": "Target file does not exist"
+        }
+      ],
+      "scanned_files": [
+        ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md",
+        ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md",
+        ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md"
+      ]
+    }
+  }
+}
