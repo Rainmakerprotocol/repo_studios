@@ -13,6 +13,8 @@ import json
 import logging
 import re
 import textwrap
+import importlib.util
+import sys
 from collections import Counter, OrderedDict
 from dataclasses import asdict, dataclass
 from datetime import date, datetime, timezone
@@ -30,6 +32,13 @@ DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
 VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "doc_index"
 DEFAULT_ARTIFACTS_TO_KEEP = 1
+
+CHECKBOX_REPORT_SCRIPT = Path(
+  ".repo_studios/docs/pipeline/checkbox_report/checkbox_report.py"
+)
+TIER3_INDEX_SCRIPT = Path(
+  ".repo_studios/docs/pipeline/tier3_index/generate_tier3_index.py"
+)
 
 EXCLUDED_DIR_NAMES = {
   ".git",
@@ -718,11 +727,78 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     help="Optional database sink identifier (placeholder only; no writes performed)",
   )
   parser.add_argument(
+    "--refresh-checkbox-report",
+    action="store_true",
+    help="Regenerate docs/pipeline checkbox report artifacts before indexing",
+  )
+  parser.add_argument(
+    "--refresh-tier3-index",
+    action="store_true",
+    help="Regenerate docs/pipeline tier3 scripts index before indexing",
+  )
+  parser.add_argument(
     "--log-level",
     default="INFO",
     choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
   )
   return parser.parse_args(argv)
+
+
+def _load_module_from_path(path: Path, module_name: str):
+  spec = importlib.util.spec_from_file_location(module_name, path)
+  if spec is None or spec.loader is None:
+    raise RuntimeError(f"Unable to load module spec for {path}")
+  module = importlib.util.module_from_spec(spec)
+  sys.modules[module_name] = module
+  spec.loader.exec_module(module)
+  return module
+
+
+def _refresh_checkbox_report(repo_root: Path, logger: logging.Logger) -> None:
+  script_path = repo_root / CHECKBOX_REPORT_SCRIPT
+  if not script_path.exists():
+    raise RuntimeError(f"checkbox_report.py not found at {script_path}")
+
+  module = _load_module_from_path(script_path, "repo_studios_checkbox_report")
+  if not hasattr(module, "main"):
+    raise RuntimeError("checkbox_report.py missing main(argv) entrypoint")
+
+  output_dir = repo_root / ".repo_studios/docs/pipeline/checkbox_report/outputs"
+  search_dir = repo_root / ".repo_studios"
+
+  logger.info("Refreshing checkbox report: %s", output_dir)
+  module.main(
+    [
+      "--repo-root",
+      str(repo_root),
+      "--output-dir",
+      str(output_dir),
+      "--search-dir",
+      str(search_dir),
+    ]
+  )
+
+
+def _refresh_tier3_index(repo_root: Path, logger: logging.Logger, log_level: str) -> None:
+  script_path = repo_root / TIER3_INDEX_SCRIPT
+  if not script_path.exists():
+    raise RuntimeError(f"generate_tier3_index.py not found at {script_path}")
+
+  module = _load_module_from_path(script_path, "repo_studios_generate_tier3_index")
+  if not hasattr(module, "run"):
+    raise RuntimeError("generate_tier3_index.py missing run(argv) entrypoint")
+
+  logger.info("Refreshing tier3 scripts index")
+  exit_code = module.run(
+    [
+      "--repo-root",
+      str(repo_root),
+      "--log-level",
+      log_level,
+    ]
+  )
+  if exit_code != 0:
+    raise RuntimeError(f"generate_tier3_index returned exit code {exit_code}")
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
@@ -740,6 +816,11 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
   repo_root = paths.repo_root
   if not repo_root.exists():
     raise SystemExit(f"repo root not found: {repo_root}")
+
+  if args.refresh_checkbox_report:
+    _refresh_checkbox_report(repo_root, logger)
+  if args.refresh_tier3_index:
+    _refresh_tier3_index(repo_root, logger, args.log_level)
 
   records = collect_documents(repo_root)
   generated_ts = _parse_timestamp(args.timestamp)

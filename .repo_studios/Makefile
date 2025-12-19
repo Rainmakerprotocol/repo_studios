@@ -222,6 +222,16 @@ studio-generate-dependency-hygiene:
 studio-generate-doc-index:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/generate_doc_index.py" --repo-root "$(REPO_ROOT)" --output-dir ".repo_studios/reports/producer_reports" --artifacts-to-keep 1 --log-level "$(LOG_LEVEL)"
 
+.PHONY: doc-index
+doc-index:
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/generate_doc_index.py" \
+		--repo-root "$(REPO_ROOT)" \
+		--output-dir ".repo_studios/reports/producer_reports" \
+		--artifacts-to-keep 1 \
+		--refresh-checkbox-report \
+		--refresh-tier3-index \
+		--log-level "$(LOG_LEVEL)"
+
 .PHONY: studio-generate-test-coverage-inventory
 studio-generate-test-coverage-inventory:
 	@echo Running test coverage inventory producer with log level $(LOG_LEVEL).

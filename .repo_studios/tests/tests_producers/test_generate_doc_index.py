@@ -211,3 +211,102 @@ def test_doc_index_retention_keeps_single_run(tmp_path):
     run_dirs = sorted(node.name for node in topic_dir.iterdir() if node.is_dir())
     assert run_dirs == ["20240102-0000"]
     assert not (output_dir / "latest_doc_index.json").exists()
+
+
+def test_doc_index_refreshes_checkbox_report_and_tier3_index(tmp_path):
+    mod = _load_module()
+    repo_root = tmp_path / "workspace"
+    docs_dir = repo_root / "docs"
+    docs_dir.mkdir(parents=True)
+    (docs_dir / "one.md").write_text("# Title\n\nA paragraph.\n", encoding="utf-8")
+
+    checkbox_script = (
+        repo_root
+        / ".repo_studios"
+        / "docs"
+        / "pipeline"
+        / "checkbox_report"
+        / "checkbox_report.py"
+    )
+    checkbox_script.parent.mkdir(parents=True)
+    checkbox_script.write_text(
+        """\
+from __future__ import annotations
+
+from pathlib import Path
+
+
+def main(argv=None):
+    args = list(argv or [])
+    repo_root = Path(args[args.index('--repo-root') + 1]).resolve()
+    output_dir = Path(args[args.index('--output-dir') + 1]).resolve()
+    output_dir.mkdir(parents=True, exist_ok=True)
+    (output_dir / 'checkbox_report.csv').write_text('stub\\n', encoding='utf-8')
+    (output_dir / 'checkbox_report.md').write_text('# Checkbox Report\\n', encoding='utf-8')
+    (repo_root / 'checkbox_invoked.txt').write_text('yes\\n', encoding='utf-8')
+""",
+        encoding="utf-8",
+    )
+
+    tier3_script = (
+        repo_root
+        / ".repo_studios"
+        / "docs"
+        / "pipeline"
+        / "tier3_index"
+        / "generate_tier3_index.py"
+    )
+    tier3_script.parent.mkdir(parents=True)
+    tier3_script.write_text(
+        """\
+from __future__ import annotations
+
+from pathlib import Path
+
+
+def run(argv):
+    args = list(argv)
+    repo_root = Path(args[args.index('--repo-root') + 1]).resolve()
+    output = repo_root / '.repo_studios' / 'docs' / 'pipeline' / 'tier3_index' / 'outputs' / 'tier3_scripts_index.yaml'
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text('version: stub\\n', encoding='utf-8')
+    (repo_root / 'tier3_invoked.txt').write_text('yes\\n', encoding='utf-8')
+    return 0
+""",
+        encoding="utf-8",
+    )
+
+    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports"
+
+    exit_code = mod.main(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--output-dir",
+            str(output_dir),
+            "--timestamp",
+            "2024-01-02T00:00:00+00:00",
+            "--artifacts-to-keep",
+            "1",
+            "--refresh-checkbox-report",
+            "--refresh-tier3-index",
+            "--log-level",
+            "ERROR",
+        ]
+    )
+
+    assert exit_code == 0
+    assert (repo_root / "checkbox_invoked.txt").exists()
+    assert (repo_root / "tier3_invoked.txt").exists()
+
+    checkbox_outputs = repo_root / ".repo_studios" / "docs" / "pipeline" / "checkbox_report" / "outputs"
+    assert (checkbox_outputs / "checkbox_report.csv").exists()
+    assert (checkbox_outputs / "checkbox_report.md").exists()
+
+    tier3_outputs = repo_root / ".repo_studios" / "docs" / "pipeline" / "tier3_index" / "outputs"
+    assert (tier3_outputs / "tier3_scripts_index.yaml").exists()
+
+    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240102-0000"
+    telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
+    filenames = {doc["filename"] for doc in telemetry["payload"]["documents"]}
+    assert ".repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md" in filenames
