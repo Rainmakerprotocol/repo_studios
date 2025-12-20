@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2025-12-20T01:13:31.043422+00:00",
+  "status": "ok",
+  "metrics": {
+    "files_scanned": 1,
+    "links_checked": 14,
+    "issue_count": 0,
+    "missing_file_count": 0,
+    "missing_anchor_count": 0
+  },
+  "payload": {
+    "report": {
+      "schema_version": 1,
+      "generated_utc": "2025-12-20T01:13:31.043422+00:00",
+      "status": "ok",
+      "root": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\pipeline\\healthview_orchestrastion_pipeline",
+      "patterns": [
+        "tier2_roster/tier2_test_execution_telemetry_roster.md"
+      ],
+      "issue_count": 0,
+      "issues": [],
+      "scanned_files": [
+        "tier2_roster/tier2_test_execution_telemetry_roster.md"
+      ]
+    }
+  }
+}

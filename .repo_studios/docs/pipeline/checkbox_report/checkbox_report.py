@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Generate a repo-wide inventory of unchecked Markdown checkboxes.
 
-This script scans Markdown files under ``docs/pipeline`` (configurable
-via ``--search-dir``), collects the unchecked checklist entries, and
+This script scans Markdown files under ``.repo_studios/docs/pipeline``
+(configurable via ``--search-dir``), collects the unchecked checklist
+entries, and
 emits two artifacts:
 
 * ``checkbox_report.csv`` – machine-readable table (file, line number,
@@ -181,7 +182,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     )
     default_root = Path(__file__).resolve().parents[4]
     default_output_dir = Path(__file__).resolve().parent / "outputs"
-    default_search_dir = default_root / ".repo_studios"
+    default_search_dir = default_root / ".repo_studios" / "docs" / "pipeline"
     parser.add_argument(
         "--repo-root",
         type=Path,
@@ -501,11 +502,19 @@ def main(argv: Sequence[str] | None = None) -> None:
     csv_path = (output_dir / args.csv_name).resolve()
     markdown_path = (output_dir / args.markdown_name).resolve()
     script_path = Path(__file__).resolve()
+    allowed_root = (repo_root / ".repo_studios" / "docs" / "pipeline").resolve()
     raw_search_dir = args.search_dir
     if raw_search_dir.is_absolute():
         search_root = raw_search_dir.resolve()
     else:
         search_root = (repo_root / raw_search_dir).resolve()
+
+    try:
+        search_root.relative_to(allowed_root)
+    except ValueError as exc:
+        raise SystemExit(
+            f"Search directory '{search_root}' must be within '{allowed_root}'."
+        ) from exc
     if not search_root.exists():
         raise SystemExit(f"Search directory '{search_root}' does not exist.")
 

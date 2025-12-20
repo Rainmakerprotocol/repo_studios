@@ -764,7 +764,7 @@ def _refresh_checkbox_report(repo_root: Path, logger: logging.Logger) -> None:
     raise RuntimeError("checkbox_report.py missing main(argv) entrypoint")
 
   output_dir = repo_root / ".repo_studios/docs/pipeline/checkbox_report/outputs"
-  search_dir = repo_root / ".repo_studios"
+  search_dir = repo_root / ".repo_studios/docs/pipeline"
 
   logger.info("Refreshing checkbox report: %s", output_dir)
   module.main(

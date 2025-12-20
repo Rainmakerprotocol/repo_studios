@@ -72,7 +72,7 @@ def test_render_markdown_summary_handles_empty_records(tmp_path: Path) -> None:
     markdown_path = outputs / "checkbox_report.md"
     script_path = repo_root / "checkbox_report.py"
     script_path.touch()
-    search_root = repo_root / ".repo_studios"
+    search_root = repo_root / ".repo_studios" / "docs" / "pipeline"
     search_root.mkdir(parents=True)
 
     content = checkbox_report.render_markdown_summary(
@@ -88,4 +88,31 @@ def test_render_markdown_summary_handles_empty_records(tmp_path: Path) -> None:
     assert "All checklists are currently complete." in content
     assert "checkbox_report.csv" in content
     assert "checkbox_report.md" in content
-    assert ".repo_studios" in content
+    assert ".repo_studios/docs/pipeline" in content
+
+
+def test_main_rejects_search_dir_outside_pipeline(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    allowed = repo_root / ".repo_studios" / "docs" / "pipeline"
+    allowed.mkdir(parents=True)
+    (allowed / "ok.md").write_text("# Ok\n", encoding="utf-8")
+
+    outputs = repo_root / "outputs"
+    outputs.mkdir()
+
+    rejected_root = repo_root / ".repo_studios"
+    try:
+        checkbox_report.main(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-dir",
+                str(outputs),
+                "--search-dir",
+                str(rejected_root),
+            ]
+        )
+    except SystemExit as exc:
+        assert "must be within" in str(exc)
+    else:
+        raise AssertionError("Expected checkbox_report to reject search-dir outside pipeline")

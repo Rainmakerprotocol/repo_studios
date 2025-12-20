@@ -100,8 +100,10 @@ analyze trends, and publish timestamped reports.
   `.repo_studios/command_center/reports/healthview/<topic>/<timestamp>/`.
 - **Target contract (HOP hardening):** the canonical HealthView output root becomes
   `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
-- **Bundle invariants:** each HealthView run produces exactly three artifacts:
+- **Target bundle invariant (HOP hardening):** HealthView bundles converge on the base package:
   `manifest.json`, `summary.md`, `telemetry.json`.
+  - **Current evidence is stage-scoped:** during migration, individual stages may be missing base
+    package artifacts and/or emit additional artifacts; see the relevant Tier-2 roster.
 - **No mutable pointers:** HealthView bundles must be discoverable by timestamped directories;
   HealthView does not create `latest_*` / `current_*` aliases.
 - **Retention default (HOP target):** history mode with `keep=5` unless explicitly justified.
@@ -265,8 +267,10 @@ policies, and downstream consumption patterns across all health domains.
 
 **Lifecycle guarantees:**
 
-- Every orchestrator run produces exactly one timestamped bundle with three artifacts:
-  `manifest.json`, `summary.md`, `telemetry.json`
+- **Target lifecycle guarantee (HOP):** each orchestrator publishes a timestamped HealthView bundle
+  with the base package (`manifest.json`, `summary.md`, `telemetry.json`).
+- **Current evidence is stage-scoped:** while migration is in progress, stages may be missing base
+  package artifacts and/or emit additional artifacts; Tier-2 rosters are the source of truth.
 - **Current (repo evidence today):** bundles live at
   `.repo_studios/command_center/reports/healthview/<topic>/<timestamp>/`
 - **Target (HOP contract):** bundles live at
@@ -275,7 +279,8 @@ policies, and downstream consumption patterns across all health domains.
   does not create `latest_*` / `current_*` pointer files.
 - **Retention target default:** history mode with `keep=5` (until code migration lands, scripts may
   continue to expose legacy per-topic keep knobs).
-- Missing artifacts signal orchestrator failure; partial bundles are cleaned up
+- Missing artifacts are treated as a stop-gate for contract compliance; stage-specific failure
+  behavior and cleanup semantics are documented in Tier-2 rosters.
 
 **Why downstream stages assume this:**  
 Aggregators and meta-orchestrators can discover latest reports by scanning directory timestamps
@@ -384,7 +389,10 @@ orchestrators and produces a **composite envelope** showing full-suite status.
 
 **Guarantees:**
 
-- Every orchestrator run produces exactly three artifacts: `manifest.json`, `summary.md`, `telemetry.json`.
+- **Target guarantee (HOP):** HealthView bundles converge on the base package:
+  `manifest.json`, `summary.md`, `telemetry.json`.
+  - **Current evidence is stage-scoped:** see Tier-2 rosters for current completeness and any
+    additional artifacts.
 - **Current (repo evidence today):** bundles are written under
   `.repo_studios/command_center/reports/healthview/<topic>/<timestamp>/`.
 - **Target (HOP contract):** bundles are written under
@@ -422,27 +430,46 @@ orchestrators and produces a **composite envelope** showing full-suite status.
 
 ### 4.1 Stage 1.1: Test Execution Telemetry
 
+_Tier-2 references (depth lives here):_
+
+- [Contract snapshot](tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11) — target vs current, bundle invariants, naming/paths
+- [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates) — verification checks + failure signatures + next actions
+- [Records index](tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1) — per-script inspection index + evidence links (Tier-2 holds proof)
+
+**Stage 1.1 Gate Checklist (Tier-1):**
+
+- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See: [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates)
+- [ ] No pointer artifacts (`latest_*` / `current_*`). See: [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates)
+- [ ] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). See: [Contract snapshot](tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11)
+- [ ] Tier-3 eligible (Stage 1.1 Tier-2 depth captured; ready for Tier-3 extraction). See: [Records index](tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1)
+
+**Target contract (HOP):**
+
+- Output root migrates to `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
+- Base package is present: `manifest.json`, `summary.md`, `telemetry.json`.
+- Discovery is timestamp-based only (no pointer files such as `latest_*`).
+
+**Current evidence (Stage 1.1):**
+
+- Stage 1.1 remains in the “current” HealthView root and is not yet output-root compliant.
+- Base package completeness is a stop-gate (Stage 1.1 bundle is currently missing `summary.md`).
+- Pointer artifacts remain a stop-gate (downstream artifacts include `latest_*`).
+- Details and evidence live in the Stage 1.1 Tier-2 roster:
+  [Current vs Target snapshot](tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11),
+  [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates).
+
 **Overview:**  
-The Test Execution Telemetry orchestrator chains six scripts in producer → consumer → aggregator →
-summarizer pipeline: (1) collect test logs from pytest runs, (2) generate coverage inventory from
-coverage.xml, (3) analyze test hardening (slow/flaky tests), (4) generate health report synthesizing
-log trends, (5) produce churn-complexity heatmap overlaying code churn + cyclomatic complexity +
-test coverage, and (6) summarize all signals into final HealthView bundle. Expect 5-6 minute runtime
-when churn analysis is enabled; pipeline stops on first hard failure.
+The Test Execution Telemetry orchestrator runs a producer → consumer → aggregator → summarizer
+pipeline to synthesize test execution signals into a HealthView topic bundle. Expect 5-6 minute
+runtime when churn analysis is enabled; pipeline stops on first hard failure.
 
 **Orchestrator:**  
 [.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py](../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py)
 
 **Invoked Scripts (6):**
 
-| Script | Category | Purpose | Tier-3 YAML |
-|--------|----------|---------|-------------|
-| `collect_test_log_reports.py` | Producer | Parse pytest logs/JUnit XML, extract test counts, failures, durations, warnings | TBD |
-| `generate_test_coverage_inventory.py` | Producer | Parse coverage.xml, compute line/branch coverage percentages, status flags | TBD |
-| `analyze_test_hardening.py` | Producer | Identify slow tests, compute reliability metrics, flag hardening opportunities | TBD |
-| `generate_test_log_health_report.py` | Consumer | Synthesize test logs into pass/fail trends, warnings summary, regression detection | TBD |
-| `generate_churn_complexity_heatmap.py` | Aggregator | Overlay code churn + cyclomatic complexity + test coverage into risk heatmap | TBD |
-| `summarize_test_execution_telemetry.py` | Summarizer | Aggregate all signals into final HealthView bundle with telemetry.json | TBD |
+- The authoritative Stage 1.1 script inventory (with per-script I/O evidence) lives in the Tier-2
+  roster: [Records index](tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1).
 
 **Inputs:**
 
@@ -453,23 +480,21 @@ when churn analysis is enabled; pipeline stops on first hard failure.
 
 **Outputs:**
 
-- **Healthview bundle:** `.repo_studios/command_center/reports/healthview/test_execution_telemetry/<YYYY-MM-DD>/`
-  - `manifest.json` (orchestrator execution metadata)
-  - `summary.md` (human-readable digest)
-  - `telemetry.json` (time-series metrics)
-- **Intermediate artifacts** (retained per --artifacts-to-keep, default 3-10 depending on script):
-  - Test log reports: `.repo_studios/reports/producer_reports/test_log_reports/test_log_reports-<timestamp>/`
-  - Coverage inventory: `.repo_studios/reports/producer_reports/test_coverage_reports/test_coverage-<timestamp>/`
-  - Hardening analysis: `.repo_studios/reports/producer_reports/test_hardening_reports/test_hardening-<timestamp>/`
-  - Health report: `.repo_studios/reports/consumer_reports/test_log_health_reports/test_log_health-<timestamp>/`
-  - Churn heatmap: `.repo_studios/reports/aggregator_reports/churn_complexity_heatmap/churn_complexity_heatmap-<timestamp>/`
+- **Healthview bundle (current evidence):** `.repo_studios/command_center/reports/healthview/test_execution_telemetry/<timestamp>/`
+  - Base package is a stop-gate for Stage 1.1 (see Tier-2 for current completeness and additional
+    artifacts).
+- **Intermediate artifacts (current evidence):** stage- and script-specific; Tier-1 does not
+  enumerate current per-script output roots.
+  - See Tier-2 Stage 1.1: [Current vs Target snapshot](tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11)
+    and [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates).
 **Status:** `Operational – Partial hardening complete`
 
 **Execution Details:**
 
 - Scripts invoked via dynamic imports using `run(argv)` helpers (not subprocess spawning)
 - Exit code propagation: first non-zero exit stops pipeline, no partial bundles published
-- Artifact retention configurable per script: `--collector-artifacts-to-keep=10`, `--coverage-artifacts-to-keep=10`, `--hardening-artifacts-to-keep=10`, `--heatmap-artifacts-to-keep=10`, `--health-artifacts-to-keep=5`, `--artifacts-to-keep=3` (HealthView bundle)
+- Artifact retention is configurable; Stage 1.1 exposes multiple retention knobs during migration.
+  See Tier-2 Stage 1.1 for the current retention surfaces and pruning evidence.
 - Timestamp override supported via `--timestamp` (ISO 8601 format)
 - Heatmap window configurable via `--heatmap-window=500` (git log depth)
 
@@ -491,13 +516,8 @@ when churn analysis is enabled; pipeline stops on first hard failure.
 - **Orchestrator:** [run_test_execution_telemetry.py]
   (../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py)
   (lines 1-670: pipeline coordination, dynamic imports, artifact retention)
-- **Producer scripts:**
-  - [collect_test_log_reports.py](../../../scripts/producers/collect_test_log_reports.py)
-  - [generate_test_coverage_inventory.py](../../../scripts/producers/generate_test_coverage_inventory.py)
-  - [analyze_test_hardening.py](../../../scripts/producers/analyze_test_hardening.py)
-- **Consumer script:** [generate_test_log_health_report.py](../../../scripts/consumers/generate_test_log_health_report.py)
-- **Aggregator script:** [generate_churn_complexity_heatmap.py](../../../scripts/aggregators/generate_churn_complexity_heatmap.py)
-- **Summarizer script:** [summarize_test_execution_telemetry.py](../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py)
+- **Tier-2 roster (authoritative per-script evidence):**
+  [Stage 1.1 records + stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1)
 - **Tests:** [test_run_test_execution_telemetry.py]
   (../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py)
   (orchestrator integration tests with mocked script execution)
@@ -510,6 +530,12 @@ when churn analysis is enabled; pipeline stops on first hard failure.
 > documentation debt from accumulating silently.
 
 ### 5.1 Stage 2.1: Docs Health Overview
+
+_Tier-2 references (depth lives here):_
+
+- Contract snapshot (TBD) — target vs current, bundle invariants, naming/paths
+- Stop-gates (TBD) — verification checks + failure signatures + next actions
+- Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
 
 **Overview:**  
 The Docs Health Overview orchestrator chains eight scripts in producer → aggregator pipeline: (1)
@@ -604,6 +630,12 @@ anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/a
 
 ### 6.1 Stage 3.1: Fault Diagnostics Overview
 
+_Tier-2 references (depth lives here):_
+
+- Contract snapshot (TBD) — target vs current, bundle invariants, naming/paths
+- Stop-gates (TBD) — verification checks + failure signatures + next actions
+- Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
+
 **Overview:**  
 The Fault Diagnostics Overview orchestrator chains a 3-script pipeline (producer → consumer → summarizer) for end-to-end faulthandler diagnostics. Replaces legacy `run_fault_pipeline.py`. Mirrors output to both HealthView and CommandView locations for backward compatibility. Runtime: 3-5 minutes typical (from docstring, lines 1-25).
 
@@ -670,6 +702,12 @@ The Fault Diagnostics Overview orchestrator chains a 3-script pipeline (producer
 > **Purpose:** Enforce dependency hygiene, import graph health, typecheck compliance, and placeholder tracking to prevent import cycles and type safety regressions.
 
 ### 7.1 Stage 4.1: Dependency & Import Hygiene
+
+_Tier-2 references (depth lives here):_
+
+- Contract snapshot (TBD) — target vs current, bundle invariants, naming/paths
+- Stop-gates (TBD) — verification checks + failure signatures + next actions
+- Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
 
 **Overview:**  
 The Dependency & Import Hygiene orchestrator chains a 5-script pipeline (4 producers + 1 utility) that analyzes dependency hygiene, import graphs, typecheck compliance, code placeholders (TODO/FIXME/HACK), optional batch cleanup dry-run planning, and optional mypy baseline refresh. Replaces legacy `run_batch_cleanup.py` with structured dry-run artifacts. Runtime: 7-11 minutes typical in CI, with linting and mypy dominating when baseline refresh is enabled (from docstring, lines 1-10).
@@ -752,6 +790,12 @@ The Dependency & Import Hygiene orchestrator chains a 5-script pipeline (4 produ
 
 ### 8.1 Stage 5.1: Monkey Patch Oversight
 
+_Tier-2 references (depth lives here):_
+
+- Contract snapshot (TBD) — target vs current, bundle invariants, naming/paths
+- Stop-gates (TBD) — verification checks + failure signatures + next actions
+- Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
+
 **Overview:**  
 The Monkey Patch Oversight orchestrator chains a 4-script pipeline (producer → consumer → aggregator → summarizer) that scans for monkey patches via AST analysis, classifies them by risk category, analyzes historical trends, and generates overview artifacts. Replaces monkey patch stages that previously lived inside `orchestrate_health_suite.py` alongside standalone summarizer invocation. Runtime: 4-7 minutes typical when Git history enrichment is enabled; trend aggregation scales with the configured history window (from docstring, lines 1-11).
 
@@ -830,6 +874,12 @@ The Monkey Patch Oversight orchestrator chains a 4-script pipeline (producer →
 > **Purpose:** Track standards compliance, prompt engineering guidelines, and process integrity to ensure organizational policies are consistently followed.
 
 ### 9.1 Stage 6.1: Standards Integrity
+
+_Tier-2 references (depth lives here):_
+
+- Contract snapshot (TBD) — target vs current, bundle invariants, naming/paths
+- Stop-gates (TBD) — verification checks + failure signatures + next actions
+- Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
 
 **Overview:**  
 The Standards Integrity orchestrator chains five scripts in sequence (index generation → gap analysis → diff → prompt seeding → summarization) that scan standards markdown files, analyze coverage gaps, track changes over time, seed standards prompts for AI agents, and synthesize compliance metrics. Runtime typically lands between 5-8 minutes, with diff scopes and prompt generation driving the upper bound. Supersedes legacy `orchestrators/run_standards_gap_suite.py` and `orchestrators/run_standards_index_cli.py`. (817 lines)
@@ -942,6 +992,12 @@ The Standards Integrity orchestrator chains five scripts in sequence (index gene
 
 > **Purpose:** Execute all HealthView orchestrators sequentially via the meta-orchestrator to generate a full-suite diagnostic snapshot.
 
+_Tier-2 references (depth lives here):_
+
+- Contract snapshot (TBD) — target vs current, bundle invariants, naming/paths
+- Stop-gates (TBD) — verification checks + failure signatures + next actions
+- Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
+
 ### 10.1 Meta-Orchestrator: Full Diagnostic Suite
 
 **Overview:**  
@@ -1040,8 +1096,9 @@ All six maturity domain orchestrators (Stages 1–6) are **operational** and pro
 
 **Meta-orchestrator (Stage 7)** chains all six Stage NN.1 orchestrators sequentially via dynamic imports. Tests exist for Stage 1, Stage 5, and Stage 7; other orchestrators lack dedicated test coverage (marked "tests TBD" in matrix).
 
-**No critical stage-chain contradictions detected.** Structural contract mismatches
-(output roots, retention defaults, timestamp shapes) are tracked in **Section 12**.
+**Stage-chain contradictions are tracked explicitly.** Structural contract mismatches
+(output roots, retention defaults, timestamp shapes, and stage-specific stop-gates) are tracked in
+**Section 12** and the relevant Tier-2 rosters.
 
 All gaps have logical explanations:
 - 5 scripts (easy integrations): related to existing orchestrators but not yet wired
@@ -1053,7 +1110,7 @@ All gaps have logical explanations:
 
 - Orchestrators lack CI/CD integration; currently manual-only execution (invoke via CLI or make target)
 - No automated alerting when health metrics degrade below thresholds (metrics collected but not monitored)
-- Tier-2 roster docs not yet created (blocking per-orchestrator deep dives)
+- Tier-2 rosters are in progress; Stage 1.1 roster exists (other stage rosters pending)
 - Tier-3 YAML docs not yet created (blocking AI agent tool integration)
 - Gap scripts not yet integrated (5 easy integrations identified, awaiting code updates)
 - Sequential meta-orchestrator execution causes 20-30 min full-suite runtimes (parallel mode pending)
@@ -1079,8 +1136,10 @@ All gaps have logical explanations:
 |----|-------------|-------------------|----------------|----------|
 | CR-001 | Tier-1 “current output root” references `.repo_studios/command_center/reports/healthview/...` while HOP target contract requires `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`. | 1.2, 3.1, 3.4, stage I/O bullets | `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md` (locked decision), `REPORT_NAMING_STANDARDS.md`, current orchestrator outputs | Keep Tier-1 explicit about “current vs target” until code migration lands; update Stage 1.1 Tier-2 vertical with per-script “current vs target” output tables. |
 | CR-002 | Retention default is inconsistent: Tier-1 references “7 days” and multiple per-script keep knobs; HOP target default is `keep=5` for HealthView bundles. | 1.6, 3.4, stage retention bullets | HOP locked decision; current orchestrator CLI flags | Declare `keep=5` as the HealthView bundle default for the HOP target contract; track per-script current defaults in Tier-2 vertical docs. |
-| CR-003 | DB dual-write semantics are part of the HOP target contract but are not described (or evidenced) as implemented in the Tier-1 spine. | 1.2, 1.6, global controls | HOP locked decision | Add Tier-1 “target contract” language (done) and treat DB as a stop-gate until code work adds best-effort DB persistence + `DB_INTEGRATION_MARKER:` callsites. |
+| CR-003 | DB dual-write semantics are part of the HOP target contract; current implementation is partial and not end-to-end across all stages. | 1.2, 1.6, global controls | HOP locked decision; stage rosters (Tier-2) | Keep Tier-1 target contract language and treat DB as a stop-gate until best-effort DB persistence is consistently evidenced where required; Tier-2 rosters track current DB marker coverage by stage. |
 | CR-004 | Timestamp directory shape varies across stages (`<YYYY-MM-DD>`, `<YYYYmmdd-HHmm>`, `<timestamp>`), which makes discovery ambiguous. | 1.2, stage output bullets | Stage tables and output examples in this Tier-1 doc | Standardize Tier-1 narrative to use `<timestamp>` consistently; push exact formatting requirements into Tier-2 verticals and Tier-3 artifacts doc. |
+| CR-005 | Stage 1.1 base package is incomplete (missing required `summary.md` in the HealthView bundle). | 4.1 | Stage 1.1 Tier-2 roster | Treat as a stop-gate for Stage 1.1 contract compliance; track closure in Tier-2 stop-gates and update Tier-1 when resolved. |
+| CR-006 | Stage 1.1 emits pointer artifacts (`latest_*`) in downstream outputs (violates “no mutable pointers”). | 4.1 | Stage 1.1 Tier-2 roster | Treat as a stop-gate for Stage 1.1 contract compliance; remove pointers during migration and close the contradiction when Tier-2 evidence confirms. |
 
 ---
 
@@ -1088,7 +1147,7 @@ All gaps have logical explanations:
 
 **Tier-2 (Roster) Documents (per-orchestrator BEGIN → END):**
 
-- [TBD] `tier2_roster/test_execution_telemetry_roster.md` – Stage 1.1 deep dive
+- [tier2_roster/tier2_test_execution_telemetry_roster.md](tier2_roster/tier2_test_execution_telemetry_roster.md) – Stage 1.1 deep dive
 - [TBD] `tier2_roster/docs_health_overview_roster.md` – Stage 2.1 deep dive
 - [TBD] `tier2_roster/fault_diagnostics_overview_roster.md` – Stage 3.1 deep dive
 - [TBD] `tier2_roster/dependency_import_hygiene_roster.md` – Stage 4.1 deep dive
