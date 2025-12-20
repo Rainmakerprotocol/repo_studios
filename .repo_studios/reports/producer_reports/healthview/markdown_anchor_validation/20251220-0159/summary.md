@@ -1,7 +1,7 @@
 # Markdown Anchor Validation Report
 
 Generated (UTC): 2025-12-20T01:59:19.876422+00:00
-Root: C:\Users\genet\repo_studios\.repo_studios\docs\pipeline\healthview_orchestrastion_pipeline
+Root: C:\Users\genet\repo_studios\.repo_studios\docs\pipeline\healthview_orchestration_pipeline
 Patterns: **/*.md
 Issue Count: 0
 

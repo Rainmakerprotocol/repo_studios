@@ -543,13 +543,11 @@ runtime when churn analysis is enabled; pipeline stops on first hard failure.
 
 _Tier-2 references (depth lives here):_
 
-- Contract snapshot (TBD) — target vs current, bundle invariants, naming/paths
-- Stop-gates (TBD) — verification checks + failure signatures + next actions
-- Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
+- [Contract snapshot](tier2_roster/tier2_docs_health_overview_roster.md#23-current-vs-target-contract-snapshot-stage-21) — target vs current, bundle invariants, naming/paths
+- [Stop-gates](tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
+- [Records index](tier2_roster/tier2_docs_health_overview_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
 
-**Stage 2.1 Script Gate Summary (Tier-1) — shim:**
-
-- [ ] <script>.py — pending until Tier-2 DONE is checked. See: <Tier-2 roster record anchor>
+Stage 2.1 script gate checklists are seeded after Tier-2 discovery.
 
 **What Happens (Tier-1) — shim:**
 
@@ -655,13 +653,11 @@ anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/a
 
 _Tier-2 references (depth lives here):_
 
-- Contract snapshot (TBD) — target vs current, bundle invariants, naming/paths
-- Stop-gates (TBD) — verification checks + failure signatures + next actions
-- Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
+- [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md#23-current-vs-target-contract-snapshot-stage-31) — target vs current, bundle invariants, naming/paths
+- [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
+- [Records index](../healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
 
-**Stage 3.1 Script Gate Summary (Tier-1) — shim:**
-
-- [ ] <script>.py — pending until Tier-2 DONE is checked. See: <Tier-2 roster record anchor>
+Stage 3.1 script gate checklists are seeded after Tier-2 discovery.
 
 **What Happens (Tier-1) — shim:**
 
@@ -1237,7 +1233,7 @@ All gaps have logical explanations:
 
 - [tier2_roster/tier2_test_execution_telemetry_roster.md](tier2_roster/tier2_test_execution_telemetry_roster.md) – Stage 1.1 deep dive
 - [TBD] `tier2_roster/docs_health_overview_roster.md` – Stage 2.1 deep dive
-- [TBD] `tier2_roster/fault_diagnostics_overview_roster.md` – Stage 3.1 deep dive
+- [Stage 3.1 roster](../healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md) – Stage 3.1 deep dive
 - [TBD] `tier2_roster/dependency_import_hygiene_roster.md` – Stage 4.1 deep dive
 - [TBD] `tier2_roster/monkey_patch_oversight_roster.md` – Stage 5.1 deep dive
 - [TBD] `tier2_roster/standards_integrity_roster.md` – Stage 6.1 deep dive

@@ -1,6 +1,6 @@
 # Markdown Anchor Validation Report
 
-Generated (UTC): 2025-12-20T03:15:40.768288+00:00
+Generated (UTC): 2025-12-20T03:25:32.583863+00:00
 Root: C:\Users\genet\repo_studios\.repo_studios\docs\pipeline\healthview_orchestration_pipeline
 Patterns: **/*.md
 Issue Count: 0

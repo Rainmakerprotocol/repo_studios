@@ -38,74 +38,83 @@ related_files:
 ## Stage Narratives
 
 Top files with the highest number of unfinished items:
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md`
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md`
+  — 88 unchecked
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md`
   — 86 unchecked
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md`
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+  — 16 unchecked
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_healthview_roster_template.md`
   — 11 unchecked
 * `.repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_howto.md` — 10 unchecked
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md`
-  — 4 unchecked
 * `.repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_template.md` — 4 unchecked
 * `.repo_studios/docs/pipeline/pipeline_templates/tier3_pipeline_template.md` — 3 unchecked
 
 ### Sample Outstanding Tasks
 
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md`
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
   L439 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
+  Execution Telemetry: collect_test_log_reports.py — pending until Tier-2 DONE is checked. See:
+  [Tier-2
+  record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--collect_test_log_reportspy)
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L440 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
+  Execution Telemetry: generate_test_coverage_inventory.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2
+  record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_test_coverage_inventorypy)
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L441 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
+  Execution Telemetry: analyze_test_hardening.py — pending until Tier-2 DONE is checked. See:
+  [Tier-2
+  record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--analyze_test_hardeningpy)
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L442 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
+  Execution Telemetry: generate_test_log_health_report.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2
+  record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_test_log_health_reportpy)
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L443 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
+  Execution Telemetry: generate_churn_complexity_heatmap.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2
+  record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_churn_complexity_heatmappy)
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L444 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
+  Execution Telemetry: summarize_test_execution_telemetry.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2
+  record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--summarize_test_execution_telemetrypy)
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L445 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
+  Execution Telemetry: run_test_execution_telemetry.py — pending until Tier-2 DONE is checked. See:
+  [Tier-2
+  record](tier2_roster/tier2_test_execution_telemetry_roster.md#fixture-example-permanent--run_test_execution_telemetrypy)
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L451 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
   Execution Telemetry: Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See:
   [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates)
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L440 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L452 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
   Execution Telemetry: No pointer artifacts (`latest_*` / `current_*`). See:
   [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates)
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L441 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L453 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
   Execution Telemetry: Output root aligned to HOP contract
   (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). See: [Contract
   snapshot](tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11)
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L442 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
-  Execution Telemetry: Tier-3 eligible (Stage 1.1 Tier-2 depth captured; ready for Tier-3
-  extraction). See: [Records
-  index](tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1)
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md`
-  L299 — Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> > 3. Stage Narrative — <STAGE_ID>
-  <STAGE_NAME> > 3.1 Records & Inspection (v1) > Implementation Workstreams (checkbox-driven) —
-  <script_name>: Inspect outputs + pruning/retention surfaces; record findings
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md`
-  L303 — Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> > 3. Stage Narrative — <STAGE_ID>
-  <STAGE_NAME> > 3.1 Records & Inspection (v1) > Implementation Workstreams (checkbox-driven) —
-  <script_name>: Draft plan to close output-root/base-package stop-gates
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md`
-  L307 — Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> > 3. Stage Narrative — <STAGE_ID>
-  <STAGE_NAME> > 3.1 Records & Inspection (v1) > Implementation Workstreams (checkbox-driven) —
-  <script_name>: Implement accepted plan and update this record + stop-gate status with new evidence
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md`
-  L311 — Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> > 3. Stage Narrative — <STAGE_ID>
-  <STAGE_NAME> > 3.1 Records & Inspection (v1) > Implementation Workstreams (checkbox-driven) —
-  <script_name>: Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md`
-  L312 — Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> > 3. Stage Narrative — <STAGE_ID>
-  <STAGE_NAME> > 3.1 Records & Inspection (v1) > Implementation Workstreams (checkbox-driven) —
-  <script_name>: Inspect Tier-3 template requirements
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md`
-  L313 — Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> > 3. Stage Narrative — <STAGE_ID>
-  <STAGE_NAME> > 3.1 Records & Inspection (v1) > Implementation Workstreams (checkbox-driven) —
-  <script_name>: Draft `tier3_<script_stem>.yaml`
 
 ## Signals & Telemetry
 
-* Total unchecked tasks: 118.
-* Files containing unchecked tasks: 6.
+* Total unchecked tasks: 218.
+* Files containing unchecked tasks: 7.
 
 ### Unchecked Tasks by H1
 
 | H1 | Unchecked |
 | --- | --- |
+| Tier-2 Roster — Stage 2.1 Docs Health Overview | 88 |
 | Stage 1.1 Roster — Test Execution Telemetry | 86 |
+| HealthView Orchestration Pipeline | 16 |
 | Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> | 11 |
 | How-To — Authoring Tier-2 Pipeline Documents | 10 |
-| HealthView Orchestration Pipeline | 4 |
 | Tier-2 Pipeline Document Template | 4 |
 | Tier-3 Horizontal Document Template | 3 |
 

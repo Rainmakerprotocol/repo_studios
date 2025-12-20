@@ -18,7 +18,7 @@ tags:
   - stage-1
   - test-execution-telemetry
 related_files:
-  - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md
+  - .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
   - .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py
   - .repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py
   - .repo_studios/scripts/producers/collect_test_log_reports.py
@@ -157,6 +157,8 @@ scanability.
 
 Agents must treat this section as the authoritative script inventory for Stage 1.1.
 
+Implementation Workstreams are inactive until Discovery (Workstream A) is completed for the script.
+
 **Records index:**
 
 - [Fixture Example (Permanent) — `run_test_execution_telemetry.py`](#fixture-example-permanent--run_test_execution_telemetrypy)
@@ -278,7 +280,7 @@ Workstream B — Plan
 
 Workstream C — Implement
 
-- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+- [ ] Implement accepted plan; update record and stop-gate status with evidence.
 
 Workstream D — Tier-3 YAML
 
@@ -290,8 +292,8 @@ Workstream D — Tier-3 YAML
 Workstream E — QA & Evidence
 
 - [ ] Pytest evidence captured
-- [ ] Mypy evidence captured (or marked N/A in record)
-- [ ] Coverage + doc-index timestamp recorded
+- [ ] Mypy evidence captured or marked N/A (in record)
+- [ ] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
 
 - [ ] DONE — run_test_execution_telemetry.py complete; update Tier-1 Stage 1.1 script gate
 
@@ -354,7 +356,7 @@ Workstream B — Plan
 
 Workstream C — Implement
 
-- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+- [ ] Implement accepted plan; update record and stop-gate status with evidence.
 
 Workstream D — Tier-3 YAML
 
@@ -366,8 +368,8 @@ Workstream D — Tier-3 YAML
 Workstream E — QA & Evidence
 
 - [ ] Pytest evidence captured
-- [ ] Mypy evidence captured (or marked N/A in record)
-- [ ] Coverage + doc-index timestamp recorded
+- [ ] Mypy evidence captured or marked N/A (in record)
+- [ ] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
 
 - [ ] DONE — collect_test_log_reports.py complete; update Tier-1 Stage 1.1 script gate
 
@@ -432,7 +434,7 @@ Workstream B — Plan
 
 Workstream C — Implement
 
-- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+- [ ] Implement accepted plan; update record and stop-gate status with evidence.
 
 Workstream D — Tier-3 YAML
 
@@ -444,8 +446,8 @@ Workstream D — Tier-3 YAML
 Workstream E — QA & Evidence
 
 - [ ] Pytest evidence captured
-- [ ] Mypy evidence captured (or marked N/A in record)
-- [ ] Coverage + doc-index timestamp recorded
+- [ ] Mypy evidence captured or marked N/A (in record)
+- [ ] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
 
 - [ ] DONE — generate_test_coverage_inventory.py complete; update Tier-1 Stage 1.1 script gate
 
@@ -508,7 +510,7 @@ Workstream B — Plan
 
 Workstream C — Implement
 
-- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+- [ ] Implement accepted plan; update record and stop-gate status with evidence.
 
 Workstream D — Tier-3 YAML
 
@@ -520,8 +522,8 @@ Workstream D — Tier-3 YAML
 Workstream E — QA & Evidence
 
 - [ ] Pytest evidence captured
-- [ ] Mypy evidence captured (or marked N/A in record)
-- [ ] Coverage + doc-index timestamp recorded
+- [ ] Mypy evidence captured or marked N/A (in record)
+- [ ] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
 
 - [ ] DONE — analyze_test_hardening.py complete; update Tier-1 Stage 1.1 script gate
 
@@ -584,7 +586,7 @@ Workstream B — Plan
 
 Workstream C — Implement
 
-- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+- [ ] Implement accepted plan; update record and stop-gate status with evidence.
 
 Workstream D — Tier-3 YAML
 
@@ -596,8 +598,8 @@ Workstream D — Tier-3 YAML
 Workstream E — QA & Evidence
 
 - [ ] Pytest evidence captured
-- [ ] Mypy evidence captured (or marked N/A in record)
-- [ ] Coverage + doc-index timestamp recorded
+- [ ] Mypy evidence captured or marked N/A (in record)
+- [ ] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
 
 - [ ] DONE — generate_test_log_health_report.py complete; update Tier-1 Stage 1.1 script gate
 
@@ -662,7 +664,7 @@ Workstream B — Plan
 
 Workstream C — Implement
 
-- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+- [ ] Implement accepted plan; update record and stop-gate status with evidence.
 
 Workstream D — Tier-3 YAML
 
@@ -674,8 +676,8 @@ Workstream D — Tier-3 YAML
 Workstream E — QA & Evidence
 
 - [ ] Pytest evidence captured
-- [ ] Mypy evidence captured (or marked N/A in record)
-- [ ] Coverage + doc-index timestamp recorded
+- [ ] Mypy evidence captured or marked N/A (in record)
+- [ ] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
 
 - [ ] DONE — generate_churn_complexity_heatmap.py complete; update Tier-1 Stage 1.1 script gate
 
@@ -734,7 +736,7 @@ Workstream B — Plan
 
 Workstream C — Implement
 
-- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+- [ ] Implement accepted plan; update record and stop-gate status with evidence.
 
 Workstream D — Tier-3 YAML
 
@@ -746,8 +748,8 @@ Workstream D — Tier-3 YAML
 Workstream E — QA & Evidence
 
 - [ ] Pytest evidence captured
-- [ ] Mypy evidence captured (or marked N/A in record)
-- [ ] Coverage + doc-index timestamp recorded
+- [ ] Mypy evidence captured or marked N/A (in record)
+- [ ] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
 
 - [ ] DONE — summarize_test_execution_telemetry.py complete; update Tier-1 Stage 1.1 script gate
 

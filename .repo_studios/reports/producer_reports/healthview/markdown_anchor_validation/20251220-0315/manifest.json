@@ -6,7 +6,7 @@
   "generated_utc": "2025-12-20T03:15:40.768288+00:00",
   "status": "ok",
   "inputs": {
-    "root": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\pipeline\\healthview_orchestrastion_pipeline",
+    "root": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\pipeline\\healthview_orchestration_pipeline",
     "patterns": [
       "**/*.md"
     ],

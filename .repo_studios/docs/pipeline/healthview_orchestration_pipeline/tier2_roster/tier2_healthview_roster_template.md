@@ -18,7 +18,7 @@ tags:
   - hop
   - tier-2-template
 related_files:
-  - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md
+  - .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
   - .github/instructions/markdown.instructions.md
   - .github/instructions/pipeline_doc_tiers.instructions.md
   - .github/instructions/tier_doc_operating_model.instructions.md

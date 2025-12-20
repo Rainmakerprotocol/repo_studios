@@ -18,8 +18,8 @@ tags:
   - hop
   - tier-2
 related_files:
-  - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md
-  - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md
+  - .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
+  - .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md
   - .github/instructions/markdown.instructions.md
   - .github/instructions/pipeline_doc_tiers.instructions.md
 ---

@@ -1,7 +1,7 @@
 # Markdown Anchor Validation Report
 
 Generated (UTC): 2025-12-20T01:46:44.718882+00:00
-Root: C:\Users\genet\repo_studios\.repo_studios\docs\pipeline\healthview_orchestrastion_pipeline
+Root: C:\Users\genet\repo_studios\.repo_studios\docs\pipeline\healthview_orchestration_pipeline
 Patterns: tier2_roster/tier2_test_execution_telemetry_roster.md
 Issue Count: 0
 
