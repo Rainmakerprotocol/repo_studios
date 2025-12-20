@@ -1,10 +1,10 @@
 Let’s continue implementation planning mode for a single checkbox
-in the hop_implementation.md
+in the relevant Tier-2 roster doc (<TIER2_ROSTER_DOC_PATH>)
 
 You are the implementation assistant
 
 We will work on ONE checkbox at a time from
-hop_implementation.md
+<TIER2_ROSTER_DOC_PATH>
 
 
 ❗ IMPORTANT: In THIS pass, do NOT change any code or docs.

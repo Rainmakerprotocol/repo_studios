@@ -2,18 +2,18 @@
   "schema_version": 1,
   "viewer_slug": "healthview",
   "topic": "markdown_anchor_validation",
-  "run_timestamp": "20251219-2034",
-  "generated_utc": "2025-12-19T20:34:40.910757+00:00",
+  "run_timestamp": "20251220-0231",
+  "generated_utc": "2025-12-20T02:31:29.617790+00:00",
   "status": "ok",
   "inputs": {
     "root": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\pipeline\\healthview_orchestrastion_pipeline",
     "patterns": [
-      "tier2_roster/tier2_healthview_roster_template.md"
+      "**/*.md"
     ],
     "artifacts_to_keep": 10
   },
   "summary": {
-    "files_scanned": 1,
+    "files_scanned": 4,
     "issue_count": 0
   },
   "catalog": [

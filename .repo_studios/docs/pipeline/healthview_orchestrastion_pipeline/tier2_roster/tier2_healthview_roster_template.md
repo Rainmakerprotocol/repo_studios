@@ -19,7 +19,6 @@ tags:
   - tier-2-template
 related_files:
   - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md
-  - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md
   - .github/instructions/markdown.instructions.md
   - .github/instructions/pipeline_doc_tiers.instructions.md
   - .github/instructions/tier_doc_operating_model.instructions.md
@@ -35,7 +34,7 @@ related_files:
 > locked HOP decisions.
 >
 > **Tier-1 source:** `tier1_healthview_orchestration_pipeline.md` (Stage <STAGE_ID>).
-> **Locked decisions source:** `hop_implementation.md`.
+> **Locked decisions source:** Tier-1 spine (`tier1_healthview_orchestration_pipeline.md`) + `REPORT_NAMING_STANDARDS.md`.
 > **Last synced with Tier-1:** <YYYY-MM-DD>.
 >
 > Standards: `.github/instructions/markdown.instructions.md` (reviewed <YYYY-MM-DD>) and
@@ -182,11 +181,11 @@ fields:
     category: "producer|consumer|aggregator|summarizer|utility|orchestrator"
   tier3:
     metadata_block_version: "v1"
-    tier3_yaml: "<tier3_yaml_path_or_placeholder>"
-    tier3_owner: "<owner_or_team>"
-    tier3_outputs_spec: "<tier3_outputs_doc_or_placeholder>"
-    tier3_retention_spec: "<tier3_retention_doc_or_placeholder>"
-    tier3_db_spec: "<tier3_db_doc_or_placeholder>"
+    allowed: false
+    exists: false
+    name: "<tier3_yaml_filename>"
+    meets_template: "NA"
+    last_updated: null
   cli_surfaces:
     run_entrypoint: "run(argv)|main(argv)|other"
     key_flags:
@@ -207,10 +206,15 @@ fields:
           - "summary.md"
           - "telemetry.json"
   retention:
-    knobs:
-      - "<--artifacts-to-keep flag>"
-    current_default: "<value>"
-    target_default: "<target_pruning_target_or_rule>"
+    surfaces:
+      - "<flags / defaults / callsites>"
+    mechanism: "<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>"
+    targets:
+      - "<bundle roots and intermediate roots>"
+    guardrails:
+      - "<current_run_protection / exclusions / atomic_write / other>"
+    evidence:
+      - "<tests / docstrings / fixtures / code_refs>"
   db_integration:
     gated_by: "REPO_STUDIOS_DB_ENABLED"
     marker_required: true
@@ -240,11 +244,11 @@ script:
   category: "producer"
 tier3:
   metadata_block_version: "v1"
-  tier3_yaml: "<tier3_yaml_path_or_placeholder>"
-  tier3_owner: "<owner_or_team>"
-  tier3_outputs_spec: "<tier3_outputs_doc_or_placeholder>"
-  tier3_retention_spec: "<tier3_retention_doc_or_placeholder>"
-  tier3_db_spec: "<tier3_db_doc_or_placeholder>"
+  allowed: false
+  exists: false
+  name: "<tier3_yaml_filename>"
+  meets_template: "NA"
+  last_updated: null
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
@@ -264,10 +268,15 @@ io_contract:
         - "summary.md"
         - "telemetry.json"
 retention:
-  knobs:
-    - "<--artifacts-to-keep flag>"
-  current_default: "<value>"
-  target_default: "<target_pruning_target_or_rule>"
+  surfaces:
+    - "<flags / defaults / callsites>"
+  mechanism: "<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>"
+  targets:
+    - "<bundle roots and intermediate roots>"
+  guardrails:
+    - "<current_run_protection / exclusions / atomic_write / other>"
+  evidence:
+    - "<tests / docstrings / fixtures / code_refs>"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
@@ -282,6 +291,35 @@ evidence:
 notes:
   - "<short note>"
 ```
+
+#### Implementation Workstreams (checkbox-driven) — <script_name>
+
+Workstream A — Discovery
+
+- [ ] Inspect outputs + pruning/retention surfaces; record findings
+
+Workstream B — Plan
+
+- [ ] Draft plan to close output-root/base-package stop-gates
+
+Workstream C — Implement
+
+- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+
+Workstream D — Tier-3 YAML
+
+- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Inspect Tier-3 template requirements
+- [ ] Draft `tier3_<script_stem>.yaml`
+- [ ] Validate Tier-3 YAML
+
+Workstream E — QA & Evidence
+
+- [ ] Pytest evidence captured
+- [ ] Mypy evidence captured (or marked N/A in record)
+- [ ] Coverage + doc-index timestamp recorded
+
+- [ ] DONE — <script_name> complete; update Tier-1 Stage <STAGE_ID> script gate
 
 ### 3.2 Stop-Gates and Implementation Checklists
 
@@ -357,7 +395,8 @@ stage are satisfied and the Tier-2 record set is stable enough to extract reusab
 1. Keep this document’s section order intact.
 1. After adding or moving checkboxes, run `make -C .repo_studios studio-generate-doc-index` and
    record the timestamp in Update Logs.
-1. Keep “Target contract (locked decisions)” and “Current evidence (repo-observed)” explicit; mismatch is treated as a stop-gate.
+1. Keep “Target contract (locked decisions)” and “Current evidence (repo-observed)” explicit;
+    mismatch is treated as a stop-gate.
 
 ---
 

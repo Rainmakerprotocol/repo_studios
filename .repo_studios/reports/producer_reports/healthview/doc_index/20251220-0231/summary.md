@@ -1,9 +1,9 @@
 ---
 schema_version: 1
-generated_utc: 2025-12-19T13:23:51.492552+00:00
-total_documents: 282
-total_headings: 1982
-total_links: 90
+generated_utc: 2025-12-20T02:31:44.135793+00:00
+total_documents: 281
+total_headings: 1978
+total_links: 95
 ---
 
 <!-- markdownlint-disable MD013 -->
@@ -16,14 +16,14 @@ total_links: 90
 
 ## Summary
 
-- documents: 282
-- h1 headings: 285
-- h2 headings: 1697
-- links: 90
+- documents: 281
+- h1 headings: 284
+- h2 headings: 1694
+- links: 95
 
 ## Metrics
 
-- link density: 0.319
+- link density: 0.338
 - duplicate slug groups: 6
 - placeholder documents: 58
 - documents outside docs tree: 159
@@ -14506,253 +14506,42 @@ total_links: 90
           "title": "Stage Narratives"
         },
         {
-          "line": 91,
+          "line": 96,
           "parent_slug": "checkbox-report",
           "parent_title": "Checkbox Report",
           "slug": "signals-telemetry",
           "title": "Signals & Telemetry"
         },
         {
-          "line": 106,
+          "line": 112,
           "parent_slug": "checkbox-report",
           "parent_title": "Checkbox Report",
           "slug": "maintenance-playbook",
           "title": "Maintenance Playbook"
         },
         {
-          "line": 116,
+          "line": 122,
           "parent_slug": "checkbox-report",
           "parent_title": "Checkbox Report",
           "slug": "update-log",
           "title": "Update Log"
         }
       ],
-      "links": [],
-      "modified_utc": "2025-12-19T13:23:50.939120+00:00",
+      "links": [
+        "tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates",
+        "tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11",
+        "tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1"
+      ],
+      "modified_utc": "2025-12-20T02:31:43.655307+00:00",
       "owners": [
         "DocumentationOps"
       ],
-      "size_bytes": 6468,
+      "size_bytes": 7178,
       "slug": "checkbox-report",
       "status": "active",
       "tags": [
         "checkbox-report",
         "repo-todo"
-      ]
-    },
-    {
-      "contains_placeholder": false,
-      "description": "This document is **superseded** by:",
-      "filename": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md",
-      "folder": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline",
-      "frontmatter": {
-        "audience": [
-          "coding_agent",
-          "human_developer"
-        ],
-        "owners": [
-          "repo_studios_team@rainmakerprotocol.dev"
-        ],
-        "related_files": [
-          ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md",
-          ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
-          ".github/instructions/markdown.instructions.md",
-          ".github/instructions/pipeline_doc_tiers.instructions.md"
-        ],
-        "role": [
-          "historical-notes"
-        ],
-        "status": "superseded",
-        "tags": [
-          "pipeline",
-          "healthview",
-          "hop",
-          "alignment"
-        ],
-        "tier": "tier-2",
-        "title": "HealthView HOP Alignment (Superseded)",
-        "updated_at": "2025-12-18",
-        "version": "0.1.0"
-      },
-      "h1_headings": [
-        {
-          "line": 27,
-          "slug": "healthview-hop-alignment-superseded",
-          "title": "HealthView HOP Alignment (Superseded)"
-        }
-      ],
-      "h2_headings": [
-        {
-          "line": 36,
-          "parent_slug": "healthview-hop-alignment-superseded",
-          "parent_title": "HealthView HOP Alignment (Superseded)",
-          "slug": "goals",
-          "title": "Goals"
-        },
-        {
-          "line": 40,
-          "parent_slug": "healthview-hop-alignment-superseded",
-          "parent_title": "HealthView HOP Alignment (Superseded)",
-          "slug": "system-context",
-          "title": "System Context"
-        },
-        {
-          "line": 46,
-          "parent_slug": "healthview-hop-alignment-superseded",
-          "parent_title": "HealthView HOP Alignment (Superseded)",
-          "slug": "decisions-summary",
-          "title": "Decisions (Summary)"
-        },
-        {
-          "line": 57,
-          "parent_slug": "healthview-hop-alignment-superseded",
-          "parent_title": "HealthView HOP Alignment (Superseded)",
-          "slug": "update-log",
-          "title": "Update Log"
-        }
-      ],
-      "links": [
-        "hop_implementation.md",
-        "tier1_healthview_orchestration_pipeline.md"
-      ],
-      "modified_utc": "2025-12-18T22:42:18.576135+00:00",
-      "owners": [
-        "repo_studios_team@rainmakerprotocol.dev"
-      ],
-      "size_bytes": 2244,
-      "slug": "healthview-hop-alignment-superseded",
-      "status": "superseded",
-      "tags": [
-        "pipeline",
-        "healthview",
-        "hop",
-        "alignment"
-      ]
-    },
-    {
-      "contains_placeholder": true,
-      "description": "`tier1_healthview_orchestration_pipeline.md`.",
-      "filename": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md",
-      "folder": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline",
-      "frontmatter": {
-        "audience": [
-          "coding_agent",
-          "human_developer"
-        ],
-        "owners": [
-          "repo_studios_team@rainmakerprotocol.dev"
-        ],
-        "related_files": [
-          ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
-          ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md",
-          ".repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_template.md",
-          ".github/instructions/markdown.instructions.md",
-          ".github/instructions/pipeline_doc_tiers.instructions.md",
-          ".github/instructions/tier_doc_operating_model.instructions.md",
-          "REPORT_NAMING_STANDARDS.md"
-        ],
-        "role": [
-          "implementation-plan"
-        ],
-        "status": "draft",
-        "tags": [
-          "pipeline",
-          "healthview",
-          "hop",
-          "implementation",
-          "refactor"
-        ],
-        "tier": "tier-2",
-        "title": "HealthView HOP Implementation Plan",
-        "updated_at": "2025-12-18",
-        "version": "0.1.0"
-      },
-      "h1_headings": [
-        {
-          "line": 31,
-          "slug": "healthview-hop-implementation-plan",
-          "title": "HealthView HOP Implementation Plan"
-        }
-      ],
-      "h2_headings": [
-        {
-          "line": 42,
-          "parent_slug": "healthview-hop-implementation-plan",
-          "parent_title": "HealthView HOP Implementation Plan",
-          "slug": "0-instruction-block-for-editors-ai-assistants",
-          "title": "0. Instruction Block for Editors & AI Assistants"
-        },
-        {
-          "line": 61,
-          "parent_slug": "healthview-hop-implementation-plan",
-          "parent_title": "HealthView HOP Implementation Plan",
-          "slug": "1-goals-success-criteria",
-          "title": "1. Goals & Success Criteria"
-        },
-        {
-          "line": 80,
-          "parent_slug": "healthview-hop-implementation-plan",
-          "parent_title": "HealthView HOP Implementation Plan",
-          "slug": "2-system-context",
-          "title": "2. System Context"
-        },
-        {
-          "line": 137,
-          "parent_slug": "healthview-hop-implementation-plan",
-          "parent_title": "HealthView HOP Implementation Plan",
-          "slug": "3-stage-narratives-workstreams",
-          "title": "3. Stage Narratives (Workstreams)"
-        },
-        {
-          "line": 211,
-          "parent_slug": "healthview-hop-implementation-plan",
-          "parent_title": "HealthView HOP Implementation Plan",
-          "slug": "4-signals-telemetry",
-          "title": "4. Signals & Telemetry"
-        },
-        {
-          "line": 223,
-          "parent_slug": "healthview-hop-implementation-plan",
-          "parent_title": "HealthView HOP Implementation Plan",
-          "slug": "5-dependencies-stop-gates",
-          "title": "5. Dependencies & Stop-Gates"
-        },
-        {
-          "line": 237,
-          "parent_slug": "healthview-hop-implementation-plan",
-          "parent_title": "HealthView HOP Implementation Plan",
-          "slug": "6-instruction-block-required-by-tier-rules",
-          "title": "6. Instruction Block (Required by Tier Rules)"
-        },
-        {
-          "line": 251,
-          "parent_slug": "healthview-hop-implementation-plan",
-          "parent_title": "HealthView HOP Implementation Plan",
-          "slug": "7-agent-automation-block",
-          "title": "7. Agent Automation Block"
-        },
-        {
-          "line": 281,
-          "parent_slug": "healthview-hop-implementation-plan",
-          "parent_title": "HealthView HOP Implementation Plan",
-          "slug": "8-update-log",
-          "title": "8. Update Log"
-        }
-      ],
-      "links": [],
-      "modified_utc": "2025-12-19T11:25:13.736573+00:00",
-      "owners": [
-        "repo_studios_team@rainmakerprotocol.dev"
-      ],
-      "size_bytes": 13709,
-      "slug": "healthview-hop-implementation-plan",
-      "status": "draft",
-      "tags": [
-        "pipeline",
-        "healthview",
-        "hop",
-        "implementation",
-        "refactor"
       ]
     },
     {
@@ -14769,7 +14558,6 @@ total_links: 90
           "repo_studios_team@rainmakerprotocol.dev"
         ],
         "related_files": [
-          ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md",
           "REPORT_NAMING_STANDARDS.md",
           ".repo_studios/command_center/scripts/libraries/cli.py",
           ".repo_studios/command_center/scripts/orchestrators/",
@@ -14793,154 +14581,154 @@ total_links: 90
       },
       "h1_headings": [
         {
-          "line": 28,
+          "line": 27,
           "slug": "healthview-orchestration-pipeline",
           "title": "HealthView Orchestration Pipeline"
         }
       ],
       "h2_headings": [
         {
-          "line": 36,
+          "line": 35,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "0-instruction-block-for-editors-ai-assistants",
           "title": "0. Instruction Block for Editors & AI Assistants"
         },
         {
-          "line": 65,
+          "line": 64,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "1-5w1h-purpose-context",
           "title": "1. 5W1H \u2013 Purpose & Context"
         },
         {
-          "line": 180,
+          "line": 181,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "2-document-metadata",
           "title": "2. Document Metadata"
         },
         {
-          "line": 203,
+          "line": 204,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "3-global-pipeline-overview",
           "title": "3. Global Pipeline Overview"
         },
         {
-          "line": 241,
+          "line": 242,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "33-how-to-read-this-document",
           "title": "3.3 How to Read This Document"
         },
         {
-          "line": 252,
+          "line": 253,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "34-healthview-report-bundle-spine-shared-backbone",
           "title": "3.4 HealthView Report Bundle Spine (Shared Backbone)"
         },
         {
-          "line": 296,
+          "line": 299,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "35-healthview-orchestration-envelope-shared-payload",
           "title": "3.5 HealthView Orchestration Envelope (Shared Payload)"
         },
         {
-          "line": 346,
+          "line": 349,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "36-orchestrator-lifecycle-fallback-modes-and-global-controls",
           "title": "3.6 Orchestrator Lifecycle, Fallback Modes, and Global Controls"
         },
         {
-          "line": 383,
+          "line": 386,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "37-healthview-assumptions-guarantees",
           "title": "3.7 HealthView Assumptions & Guarantees"
         },
         {
-          "line": 418,
+          "line": 424,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "4-stage-1-testing-perspectives",
           "title": "4. Stage 1 \u2013 Testing Perspectives"
         },
         {
-          "line": 507,
+          "line": 525,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "5-stage-2-documentation-quality",
           "title": "5. Stage 2 \u2013 Documentation Quality"
         },
         {
-          "line": 601,
+          "line": 625,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "6-stage-3-runtime-reliability",
           "title": "6. Stage 3 \u2013 Runtime Reliability"
         },
         {
-          "line": 668,
+          "line": 698,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "7-stage-4-dependency-management",
           "title": "7. Stage 4 \u2013 Dependency Management"
         },
         {
-          "line": 749,
+          "line": 785,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "8-stage-5-technical-debt-oversight",
           "title": "8. Stage 5 \u2013 Technical Debt Oversight"
         },
         {
-          "line": 828,
+          "line": 870,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "9-stage-6-process-governance",
           "title": "9. Stage 6 \u2013 Process Governance"
         },
         {
-          "line": 941,
+          "line": 989,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "10-stage-7-running-the-complete-suite",
           "title": "10. Stage 7 \u2013 Running the Complete Suite"
         },
         {
-          "line": 1023,
+          "line": 1077,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "11-snapshot-stage-matrix",
           "title": "11. Snapshot & Stage Matrix"
         },
         {
-          "line": 1076,
+          "line": 1131,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "12-contradiction-registry",
           "title": "12. Contradiction Registry"
         },
         {
-          "line": 1087,
+          "line": 1144,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "13-tier-2-document-index",
           "title": "13. Tier-2 Document Index"
         },
         {
-          "line": 1124,
+          "line": 1181,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "14-working-future-notes",
           "title": "14. Working / Future Notes"
         },
         {
-          "line": 1154,
+          "line": 1211,
           "parent_slug": "healthview-orchestration-pipeline",
           "parent_title": "HealthView Orchestration Pipeline",
           "slug": "15-update-log-evidence-tracking",
@@ -14949,17 +14737,13 @@ total_links: 90
       ],
       "links": [
         "../../../../REPORT_NAMING_STANDARDS.md",
-        "hop_implementation.md",
         "../../../scripts/README.md",
         "../../../Makefile",
         "../../../tests/tests_command_center/",
+        "tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11",
+        "tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates",
+        "tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1",
         "../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py",
-        "../../../scripts/producers/collect_test_log_reports.py",
-        "../../../scripts/producers/generate_test_coverage_inventory.py",
-        "../../../scripts/producers/analyze_test_hardening.py",
-        "../../../scripts/consumers/generate_test_log_health_report.py",
-        "../../../scripts/aggregators/generate_churn_complexity_heatmap.py",
-        "../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py",
         "../../../command_center/scripts/orchestrators/run_docs_health_overview.py",
         "../../../scripts/producers/generate_doc_index.py",
         "../../../scripts/producers/generate_anchor_inventory.py",
@@ -14987,6 +14771,7 @@ total_links: 90
         "../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py",
         "../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py",
         "../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py",
+        "tier2_roster/tier2_test_execution_telemetry_roster.md",
         "../../standards/global/std-global-python-engineering.md",
         "../../standards/global/std-global-markdown-authoring.md",
         "../../../../.github/instructions/markdown.instructions.md",
@@ -14995,11 +14780,11 @@ total_links: 90
         "../../../tests/tests_consumers/",
         "../../../tests/tests_aggregators/"
       ],
-      "modified_utc": "2025-12-19T13:20:51.172970+00:00",
+      "modified_utc": "2025-12-20T02:22:48.520528+00:00",
       "owners": [
         "repo_studios_team@rainmakerprotocol.dev"
       ],
-      "size_bytes": 81130,
+      "size_bytes": 84389,
       "slug": "healthview-orchestration-pipeline",
       "status": "in-progress",
       "tags": [
@@ -15025,7 +14810,6 @@ total_links: 90
         ],
         "related_files": [
           ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
-          ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md",
           ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md",
           ".github/instructions/markdown.instructions.md",
           ".github/instructions/pipeline_doc_tiers.instructions.md"
@@ -15047,35 +14831,35 @@ total_links: 90
       },
       "h1_headings": [
         {
-          "line": 28,
+          "line": 27,
           "slug": "healthview-hop-tier-2-roster-index",
           "title": "HealthView HOP \u2014 Tier-2 Roster Index"
         }
       ],
       "h2_headings": [
         {
-          "line": 32,
+          "line": 31,
           "parent_slug": "healthview-hop-tier-2-roster-index",
           "parent_title": "HealthView HOP \u2014 Tier-2 Roster Index",
           "slug": "goals",
           "title": "Goals"
         },
         {
-          "line": 37,
+          "line": 36,
           "parent_slug": "healthview-hop-tier-2-roster-index",
           "parent_title": "HealthView HOP \u2014 Tier-2 Roster Index",
           "slug": "system-context",
           "title": "System Context"
         },
         {
-          "line": 42,
+          "line": 41,
           "parent_slug": "healthview-hop-tier-2-roster-index",
           "parent_title": "HealthView HOP \u2014 Tier-2 Roster Index",
           "slug": "roster-documents",
           "title": "Roster Documents"
         },
         {
-          "line": 47,
+          "line": 46,
           "parent_slug": "healthview-hop-tier-2-roster-index",
           "parent_title": "HealthView HOP \u2014 Tier-2 Roster Index",
           "slug": "update-log",
@@ -15083,11 +14867,11 @@ total_links: 90
         }
       ],
       "links": [],
-      "modified_utc": "2025-12-19T13:20:51.171969+00:00",
+      "modified_utc": "2025-12-20T02:00:07.446991+00:00",
       "owners": [
         "repo_studios_team@rainmakerprotocol.dev"
       ],
-      "size_bytes": 1568,
+      "size_bytes": 1478,
       "slug": "healthview-hop-tier-2-roster-index",
       "status": "draft",
       "tags": [
@@ -15095,6 +14879,129 @@ total_links: 90
         "healthview",
         "hop",
         "tier-2"
+      ]
+    },
+    {
+      "contains_placeholder": true,
+      "description": "`tier1_healthview_orchestration_pipeline.md`.",
+      "filename": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md",
+      "folder": ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster",
+      "frontmatter": {
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
+          ".github/instructions/markdown.instructions.md",
+          ".github/instructions/pipeline_doc_tiers.instructions.md",
+          ".github/instructions/tier_doc_operating_model.instructions.md",
+          "REPORT_NAMING_STANDARDS.md"
+        ],
+        "role": [
+          "roster",
+          "stage-vertical"
+        ],
+        "status": "template",
+        "tags": [
+          "pipeline",
+          "healthview",
+          "hop",
+          "tier-2-template"
+        ],
+        "tier": "tier-2",
+        "title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
+        "updated_at": "2025-12-19",
+        "version": "0.1.0"
+      },
+      "h1_headings": [
+        {
+          "line": 29,
+          "slug": "tier-2-roster-template-stageid-stagename",
+          "title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 45,
+          "parent_slug": "tier-2-roster-template-stageid-stagename",
+          "parent_title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
+          "slug": "0-instruction-block-for-editors-ai-assistants",
+          "title": "0. Instruction Block for Editors & AI Assistants"
+        },
+        {
+          "line": 62,
+          "parent_slug": "tier-2-roster-template-stageid-stagename",
+          "parent_title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
+          "slug": "1-goals-success-criteria",
+          "title": "1. Goals & Success Criteria"
+        },
+        {
+          "line": 82,
+          "parent_slug": "tier-2-roster-template-stageid-stagename",
+          "parent_title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
+          "slug": "2-system-context",
+          "title": "2. System Context"
+        },
+        {
+          "line": 147,
+          "parent_slug": "tier-2-roster-template-stageid-stagename",
+          "parent_title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
+          "slug": "3-stage-narrative-stageid-stagename",
+          "title": "3. Stage Narrative \u2014 <STAGE_ID> <STAGE_NAME>"
+        },
+        {
+          "line": 352,
+          "parent_slug": "tier-2-roster-template-stageid-stagename",
+          "parent_title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
+          "slug": "4-signals-telemetry",
+          "title": "4. Signals & Telemetry"
+        },
+        {
+          "line": 370,
+          "parent_slug": "tier-2-roster-template-stageid-stagename",
+          "parent_title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
+          "slug": "5-dependencies-stop-gates",
+          "title": "5. Dependencies & Stop-Gates"
+        },
+        {
+          "line": 391,
+          "parent_slug": "tier-2-roster-template-stageid-stagename",
+          "parent_title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
+          "slug": "6-instruction-block-required-by-tier-rules",
+          "title": "6. Instruction Block (Required by Tier Rules)"
+        },
+        {
+          "line": 402,
+          "parent_slug": "tier-2-roster-template-stageid-stagename",
+          "parent_title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
+          "slug": "7-agent-automation-block",
+          "title": "7. Agent Automation Block"
+        },
+        {
+          "line": 431,
+          "parent_slug": "tier-2-roster-template-stageid-stagename",
+          "parent_title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
+          "slug": "8-update-log",
+          "title": "8. Update Log"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2025-12-20T02:28:59.658173+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 14207,
+      "slug": "tier-2-roster-template-stageid-stagename",
+      "status": "template",
+      "tags": [
+        "pipeline",
+        "healthview",
+        "hop",
+        "tier-2-template"
       ]
     },
     {
@@ -15112,7 +15019,6 @@ total_links: 90
         ],
         "related_files": [
           ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md",
-          ".repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md",
           ".repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py",
           ".repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py",
           ".repo_studios/scripts/producers/collect_test_log_reports.py",
@@ -15134,7 +15040,6 @@ total_links: 90
         "tags": [
           "pipeline",
           "healthview",
-          "hop",
           "stage-1",
           "test-execution-telemetry"
         ],
@@ -15145,88 +15050,102 @@ total_links: 90
       },
       "h1_headings": [
         {
-          "line": 39,
+          "line": 37,
           "slug": "stage-11-roster-test-execution-telemetry",
           "title": "Stage 1.1 Roster \u2014 Test Execution Telemetry"
         }
       ],
       "h2_headings": [
         {
-          "line": 53,
+          "line": 51,
           "parent_slug": "stage-11-roster-test-execution-telemetry",
           "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
           "slug": "0-instruction-block-for-editors-ai-assistants",
           "title": "0. Instruction Block for Editors & AI Assistants"
         },
         {
-          "line": 69,
+          "line": 71,
           "parent_slug": "stage-11-roster-test-execution-telemetry",
           "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
           "slug": "1-goals-success-criteria",
           "title": "1. Goals & Success Criteria"
         },
         {
-          "line": 87,
+          "line": 89,
           "parent_slug": "stage-11-roster-test-execution-telemetry",
           "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
           "slug": "2-system-context",
           "title": "2. System Context"
         },
         {
-          "line": 146,
+          "line": 151,
           "parent_slug": "stage-11-roster-test-execution-telemetry",
           "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
           "slug": "3-stage-narrative-stage-11-test-execution-telemetry",
           "title": "3. Stage Narrative \u2014 Stage 1.1 Test Execution Telemetry"
         },
         {
-          "line": 232,
+          "line": 789,
           "parent_slug": "stage-11-roster-test-execution-telemetry",
           "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
           "slug": "4-signals-telemetry",
           "title": "4. Signals & Telemetry"
         },
         {
-          "line": 250,
+          "line": 807,
           "parent_slug": "stage-11-roster-test-execution-telemetry",
           "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
           "slug": "5-dependencies-stop-gates",
           "title": "5. Dependencies & Stop-Gates"
         },
         {
-          "line": 267,
+          "line": 824,
           "parent_slug": "stage-11-roster-test-execution-telemetry",
           "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
           "slug": "6-instruction-block-required-by-tier-rules",
           "title": "6. Instruction Block (Required by Tier Rules)"
         },
         {
-          "line": 278,
+          "line": 832,
           "parent_slug": "stage-11-roster-test-execution-telemetry",
           "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
           "slug": "7-agent-automation-block",
           "title": "7. Agent Automation Block"
         },
         {
-          "line": 305,
+          "line": 859,
           "parent_slug": "stage-11-roster-test-execution-telemetry",
           "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
-          "slug": "8-update-log",
-          "title": "8. Update Log"
+          "slug": "8-decision-log",
+          "title": "8. Decision Log"
+        },
+        {
+          "line": 872,
+          "parent_slug": "stage-11-roster-test-execution-telemetry",
+          "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
+          "slug": "9-update-log",
+          "title": "9. Update Log"
         }
       ],
-      "links": [],
-      "modified_utc": "2025-12-19T11:18:18.131907+00:00",
+      "links": [
+        "#fixture-example-permanent--run_test_execution_telemetrypy",
+        "#record--collect_test_log_reportspy",
+        "#record--generate_test_coverage_inventorypy",
+        "#record--analyze_test_hardeningpy",
+        "#record--generate_test_log_health_reportpy",
+        "#record--generate_churn_complexity_heatmappy",
+        "#record--summarize_test_execution_telemetrypy"
+      ],
+      "modified_utc": "2025-12-20T02:00:07.446991+00:00",
       "owners": [
         "repo_studios_team@rainmakerprotocol.dev"
       ],
-      "size_bytes": 12634,
+      "size_bytes": 38718,
       "slug": "stage-11-roster-test-execution-telemetry",
       "status": "draft",
       "tags": [
         "pipeline",
         "healthview",
-        "hop",
         "stage-1",
         "test-execution-telemetry"
       ]
@@ -20861,9 +20780,9 @@ total_links: 90
       "h1_headings": [],
       "h2_headings": [],
       "links": [],
-      "modified_utc": "2025-12-18T22:53:45.479854+00:00",
+      "modified_utc": "2025-12-20T02:00:07.447991+00:00",
       "owners": [],
-      "size_bytes": 7728,
+      "size_bytes": 7761,
       "slug": "metaprompts2",
       "status": null,
       "tags": []
@@ -21202,7 +21121,7 @@ total_links: 90
       "tags": []
     }
   ],
-  "generated_utc": "2025-12-19T13:23:51.492552+00:00",
+  "generated_utc": "2025-12-20T02:31:44.135793+00:00",
   "metrics": {
     "documents_missing_description_count": 36,
     "documents_outside_docs_tree_count": 159,
@@ -21291,7 +21210,7 @@ total_links: 90
     "documents_without_h1_count": 16,
     "documents_without_h2_count": 17,
     "duplicate_slug_count": 6,
-    "link_density": 0.3191489361702128,
+    "link_density": 0.33807829181494664,
     "placeholder_documents_count": 58
   },
   "outputs": {
@@ -21324,11 +21243,11 @@ total_links: 90
   },
   "schema_version": 1,
   "summary": {
-    "total_documents": 282,
-    "total_h1": 285,
-    "total_h2": 1697,
-    "total_headings": 1982,
-    "total_links": 90
+    "total_documents": 281,
+    "total_h1": 284,
+    "total_h2": 1694,
+    "total_headings": 1978,
+    "total_links": 95
   }
 }
 ```
@@ -21337,14 +21256,14 @@ total_links: 90
 
 ```yaml
 schema_version: 1
-generated_utc: '2025-12-19T13:23:51.492552+00:00'
+generated_utc: '2025-12-20T02:31:44.135793+00:00'
 repo_root: C:\Users\genet\repo_studios
 summary:
-  total_documents: 282
-  total_h1: 285
-  total_h2: 1697
-  total_headings: 1982
-  total_links: 90
+  total_documents: 281
+  total_h1: 284
+  total_h2: 1694
+  total_headings: 1978
+  total_links: 95
 metrics:
   documents_per_directory:
   - directory: .repo_studios/docs/automation
@@ -21393,7 +21312,7 @@ metrics:
   placeholder_documents_count: 58
   duplicate_slug_count: 6
   documents_outside_docs_tree_count: 159
-  link_density: 0.3191489361702128
+  link_density: 0.33807829181494664
 advisories:
   documents_missing_description:
   - .copilot_todo.md
@@ -32304,23 +32223,26 @@ documents:
     parent_slug: checkbox-report
   - title: Signals & Telemetry
     slug: signals-telemetry
-    line: 91
+    line: 96
     parent_title: Checkbox Report
     parent_slug: checkbox-report
   - title: Maintenance Playbook
     slug: maintenance-playbook
-    line: 106
+    line: 112
     parent_title: Checkbox Report
     parent_slug: checkbox-report
   - title: Update Log
     slug: update-log
-    line: 116
+    line: 122
     parent_title: Checkbox Report
     parent_slug: checkbox-report
-  links: []
+  links:
+  - tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates
+  - tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11
+  - tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1
   description: on pending work.
-  size_bytes: 6468
-  modified_utc: '2025-12-19T13:23:50.939120+00:00'
+  size_bytes: 7178
+  modified_utc: '2025-12-20T02:31:43.655307+00:00'
   tags:
   - checkbox-report
   - repo-todo
@@ -32347,291 +32269,127 @@ documents:
     - .repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md
   contains_placeholder: false
 - folder: .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline
-  filename: .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md
-  slug: healthview-hop-alignment-superseded
-  h1_headings:
-  - title: HealthView HOP Alignment (Superseded)
-    slug: healthview-hop-alignment-superseded
-    line: 27
-  h2_headings:
-  - title: Goals
-    slug: goals
-    line: 36
-    parent_title: HealthView HOP Alignment (Superseded)
-    parent_slug: healthview-hop-alignment-superseded
-  - title: System Context
-    slug: system-context
-    line: 40
-    parent_title: HealthView HOP Alignment (Superseded)
-    parent_slug: healthview-hop-alignment-superseded
-  - title: Decisions (Summary)
-    slug: decisions-summary
-    line: 46
-    parent_title: HealthView HOP Alignment (Superseded)
-    parent_slug: healthview-hop-alignment-superseded
-  - title: Update Log
-    slug: update-log
-    line: 57
-    parent_title: HealthView HOP Alignment (Superseded)
-    parent_slug: healthview-hop-alignment-superseded
-  links:
-  - hop_implementation.md
-  - tier1_healthview_orchestration_pipeline.md
-  description: 'This document is **superseded** by:'
-  size_bytes: 2244
-  modified_utc: '2025-12-18T22:42:18.576135+00:00'
-  tags:
-  - pipeline
-  - healthview
-  - hop
-  - alignment
-  owners:
-  - repo_studios_team@rainmakerprotocol.dev
-  status: superseded
-  frontmatter:
-    title: HealthView HOP Alignment (Superseded)
-    tier: tier-2
-    audience:
-    - coding_agent
-    - human_developer
-    owners:
-    - repo_studios_team@rainmakerprotocol.dev
-    role:
-    - historical-notes
-    status: superseded
-    version: 0.1.0
-    updated_at: '2025-12-18'
-    tags:
-    - pipeline
-    - healthview
-    - hop
-    - alignment
-    related_files:
-    - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md
-    - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md
-    - .github/instructions/markdown.instructions.md
-    - .github/instructions/pipeline_doc_tiers.instructions.md
-  contains_placeholder: false
-- folder: .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline
-  filename: .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md
-  slug: healthview-hop-implementation-plan
-  h1_headings:
-  - title: HealthView HOP Implementation Plan
-    slug: healthview-hop-implementation-plan
-    line: 31
-  h2_headings:
-  - title: 0. Instruction Block for Editors & AI Assistants
-    slug: 0-instruction-block-for-editors-ai-assistants
-    line: 42
-    parent_title: HealthView HOP Implementation Plan
-    parent_slug: healthview-hop-implementation-plan
-  - title: 1. Goals & Success Criteria
-    slug: 1-goals-success-criteria
-    line: 61
-    parent_title: HealthView HOP Implementation Plan
-    parent_slug: healthview-hop-implementation-plan
-  - title: 2. System Context
-    slug: 2-system-context
-    line: 80
-    parent_title: HealthView HOP Implementation Plan
-    parent_slug: healthview-hop-implementation-plan
-  - title: 3. Stage Narratives (Workstreams)
-    slug: 3-stage-narratives-workstreams
-    line: 137
-    parent_title: HealthView HOP Implementation Plan
-    parent_slug: healthview-hop-implementation-plan
-  - title: 4. Signals & Telemetry
-    slug: 4-signals-telemetry
-    line: 211
-    parent_title: HealthView HOP Implementation Plan
-    parent_slug: healthview-hop-implementation-plan
-  - title: 5. Dependencies & Stop-Gates
-    slug: 5-dependencies-stop-gates
-    line: 223
-    parent_title: HealthView HOP Implementation Plan
-    parent_slug: healthview-hop-implementation-plan
-  - title: 6. Instruction Block (Required by Tier Rules)
-    slug: 6-instruction-block-required-by-tier-rules
-    line: 237
-    parent_title: HealthView HOP Implementation Plan
-    parent_slug: healthview-hop-implementation-plan
-  - title: 7. Agent Automation Block
-    slug: 7-agent-automation-block
-    line: 251
-    parent_title: HealthView HOP Implementation Plan
-    parent_slug: healthview-hop-implementation-plan
-  - title: 8. Update Log
-    slug: 8-update-log
-    line: 281
-    parent_title: HealthView HOP Implementation Plan
-    parent_slug: healthview-hop-implementation-plan
-  links: []
-  description: '`tier1_healthview_orchestration_pipeline.md`.'
-  size_bytes: 13709
-  modified_utc: '2025-12-19T11:25:13.736573+00:00'
-  tags:
-  - pipeline
-  - healthview
-  - hop
-  - implementation
-  - refactor
-  owners:
-  - repo_studios_team@rainmakerprotocol.dev
-  status: draft
-  frontmatter:
-    title: HealthView HOP Implementation Plan
-    tier: tier-2
-    audience:
-    - coding_agent
-    - human_developer
-    owners:
-    - repo_studios_team@rainmakerprotocol.dev
-    role:
-    - implementation-plan
-    status: draft
-    version: 0.1.0
-    updated_at: '2025-12-18'
-    tags:
-    - pipeline
-    - healthview
-    - hop
-    - implementation
-    - refactor
-    related_files:
-    - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md
-    - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md
-    - .repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_template.md
-    - .github/instructions/markdown.instructions.md
-    - .github/instructions/pipeline_doc_tiers.instructions.md
-    - .github/instructions/tier_doc_operating_model.instructions.md
-    - REPORT_NAMING_STANDARDS.md
-  contains_placeholder: true
-- folder: .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline
   filename: .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md
   slug: healthview-orchestration-pipeline
   h1_headings:
   - title: HealthView Orchestration Pipeline
     slug: healthview-orchestration-pipeline
-    line: 28
+    line: 27
   h2_headings:
   - title: 0. Instruction Block for Editors & AI Assistants
     slug: 0-instruction-block-for-editors-ai-assistants
-    line: 36
+    line: 35
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: "1. 5W1H \u2013 Purpose & Context"
     slug: 1-5w1h-purpose-context
-    line: 65
+    line: 64
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 2. Document Metadata
     slug: 2-document-metadata
-    line: 180
+    line: 181
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 3. Global Pipeline Overview
     slug: 3-global-pipeline-overview
-    line: 203
+    line: 204
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 3.3 How to Read This Document
     slug: 33-how-to-read-this-document
-    line: 241
+    line: 242
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 3.4 HealthView Report Bundle Spine (Shared Backbone)
     slug: 34-healthview-report-bundle-spine-shared-backbone
-    line: 252
+    line: 253
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 3.5 HealthView Orchestration Envelope (Shared Payload)
     slug: 35-healthview-orchestration-envelope-shared-payload
-    line: 296
+    line: 299
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 3.6 Orchestrator Lifecycle, Fallback Modes, and Global Controls
     slug: 36-orchestrator-lifecycle-fallback-modes-and-global-controls
-    line: 346
+    line: 349
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 3.7 HealthView Assumptions & Guarantees
     slug: 37-healthview-assumptions-guarantees
-    line: 383
+    line: 386
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: "4. Stage 1 \u2013 Testing Perspectives"
     slug: 4-stage-1-testing-perspectives
-    line: 418
+    line: 424
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: "5. Stage 2 \u2013 Documentation Quality"
     slug: 5-stage-2-documentation-quality
-    line: 507
+    line: 525
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: "6. Stage 3 \u2013 Runtime Reliability"
     slug: 6-stage-3-runtime-reliability
-    line: 601
+    line: 625
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: "7. Stage 4 \u2013 Dependency Management"
     slug: 7-stage-4-dependency-management
-    line: 668
+    line: 698
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: "8. Stage 5 \u2013 Technical Debt Oversight"
     slug: 8-stage-5-technical-debt-oversight
-    line: 749
+    line: 785
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: "9. Stage 6 \u2013 Process Governance"
     slug: 9-stage-6-process-governance
-    line: 828
+    line: 870
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: "10. Stage 7 \u2013 Running the Complete Suite"
     slug: 10-stage-7-running-the-complete-suite
-    line: 941
+    line: 989
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 11. Snapshot & Stage Matrix
     slug: 11-snapshot-stage-matrix
-    line: 1023
+    line: 1077
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 12. Contradiction Registry
     slug: 12-contradiction-registry
-    line: 1076
+    line: 1131
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 13. Tier-2 Document Index
     slug: 13-tier-2-document-index
-    line: 1087
+    line: 1144
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 14. Working / Future Notes
     slug: 14-working-future-notes
-    line: 1124
+    line: 1181
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   - title: 15. Update Log & Evidence Tracking
     slug: 15-update-log-evidence-tracking
-    line: 1154
+    line: 1211
     parent_title: HealthView Orchestration Pipeline
     parent_slug: healthview-orchestration-pipeline
   links:
   - ../../../../REPORT_NAMING_STANDARDS.md
-  - hop_implementation.md
   - ../../../scripts/README.md
   - ../../../Makefile
   - ../../../tests/tests_command_center/
+  - tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11
+  - tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates
+  - tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1
   - ../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py
-  - ../../../scripts/producers/collect_test_log_reports.py
-  - ../../../scripts/producers/generate_test_coverage_inventory.py
-  - ../../../scripts/producers/analyze_test_hardening.py
-  - ../../../scripts/consumers/generate_test_log_health_report.py
-  - ../../../scripts/aggregators/generate_churn_complexity_heatmap.py
-  - ../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py
   - ../../../command_center/scripts/orchestrators/run_docs_health_overview.py
   - ../../../scripts/producers/generate_doc_index.py
   - ../../../scripts/producers/generate_anchor_inventory.py
@@ -32659,6 +32417,7 @@ documents:
   - ../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py
   - ../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py
   - ../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py
+  - tier2_roster/tier2_test_execution_telemetry_roster.md
   - ../../standards/global/std-global-python-engineering.md
   - ../../standards/global/std-global-markdown-authoring.md
   - ../../../../.github/instructions/markdown.instructions.md
@@ -32667,8 +32426,8 @@ documents:
   - ../../../tests/tests_consumers/
   - ../../../tests/tests_aggregators/
   description: stage content so evidence capture is ready from the first edit.
-  size_bytes: 81130
-  modified_utc: '2025-12-19T13:20:51.172970+00:00'
+  size_bytes: 84389
+  modified_utc: '2025-12-20T02:22:48.520528+00:00'
   tags:
   - pipeline
   - healthview
@@ -32696,7 +32455,6 @@ documents:
     - hop
     - orchestration
     related_files:
-    - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md
     - REPORT_NAMING_STANDARDS.md
     - .repo_studios/command_center/scripts/libraries/cli.py
     - .repo_studios/command_center/scripts/orchestrators/
@@ -32709,32 +32467,32 @@ documents:
   h1_headings:
   - title: "HealthView HOP \u2014 Tier-2 Roster Index"
     slug: healthview-hop-tier-2-roster-index
-    line: 28
+    line: 27
   h2_headings:
   - title: Goals
     slug: goals
-    line: 32
+    line: 31
     parent_title: "HealthView HOP \u2014 Tier-2 Roster Index"
     parent_slug: healthview-hop-tier-2-roster-index
   - title: System Context
     slug: system-context
-    line: 37
+    line: 36
     parent_title: "HealthView HOP \u2014 Tier-2 Roster Index"
     parent_slug: healthview-hop-tier-2-roster-index
   - title: Roster Documents
     slug: roster-documents
-    line: 42
+    line: 41
     parent_title: "HealthView HOP \u2014 Tier-2 Roster Index"
     parent_slug: healthview-hop-tier-2-roster-index
   - title: Update Log
     slug: update-log
-    line: 47
+    line: 46
     parent_title: "HealthView HOP \u2014 Tier-2 Roster Index"
     parent_slug: healthview-hop-tier-2-roster-index
   links: []
   description: '`../tier1_healthview_orchestration_pipeline.md`'
-  size_bytes: 1568
-  modified_utc: '2025-12-19T13:20:51.171969+00:00'
+  size_bytes: 1478
+  modified_utc: '2025-12-20T02:00:07.446991+00:00'
   tags:
   - pipeline
   - healthview
@@ -32764,72 +32522,173 @@ documents:
     - tier-2
     related_files:
     - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md
-    - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md
     - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md
     - .github/instructions/markdown.instructions.md
     - .github/instructions/pipeline_doc_tiers.instructions.md
   contains_placeholder: false
+- folder: .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster
+  filename: .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md
+  slug: tier-2-roster-template-stageid-stagename
+  h1_headings:
+  - title: "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>"
+    slug: tier-2-roster-template-stageid-stagename
+    line: 29
+  h2_headings:
+  - title: 0. Instruction Block for Editors & AI Assistants
+    slug: 0-instruction-block-for-editors-ai-assistants
+    line: 45
+    parent_title: "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>"
+    parent_slug: tier-2-roster-template-stageid-stagename
+  - title: 1. Goals & Success Criteria
+    slug: 1-goals-success-criteria
+    line: 62
+    parent_title: "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>"
+    parent_slug: tier-2-roster-template-stageid-stagename
+  - title: 2. System Context
+    slug: 2-system-context
+    line: 82
+    parent_title: "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>"
+    parent_slug: tier-2-roster-template-stageid-stagename
+  - title: "3. Stage Narrative \u2014 <STAGE_ID> <STAGE_NAME>"
+    slug: 3-stage-narrative-stageid-stagename
+    line: 147
+    parent_title: "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>"
+    parent_slug: tier-2-roster-template-stageid-stagename
+  - title: 4. Signals & Telemetry
+    slug: 4-signals-telemetry
+    line: 352
+    parent_title: "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>"
+    parent_slug: tier-2-roster-template-stageid-stagename
+  - title: 5. Dependencies & Stop-Gates
+    slug: 5-dependencies-stop-gates
+    line: 370
+    parent_title: "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>"
+    parent_slug: tier-2-roster-template-stageid-stagename
+  - title: 6. Instruction Block (Required by Tier Rules)
+    slug: 6-instruction-block-required-by-tier-rules
+    line: 391
+    parent_title: "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>"
+    parent_slug: tier-2-roster-template-stageid-stagename
+  - title: 7. Agent Automation Block
+    slug: 7-agent-automation-block
+    line: 402
+    parent_title: "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>"
+    parent_slug: tier-2-roster-template-stageid-stagename
+  - title: 8. Update Log
+    slug: 8-update-log
+    line: 431
+    parent_title: "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>"
+    parent_slug: tier-2-roster-template-stageid-stagename
+  links: []
+  description: '`tier1_healthview_orchestration_pipeline.md`.'
+  size_bytes: 14207
+  modified_utc: '2025-12-20T02:28:59.658173+00:00'
+  tags:
+  - pipeline
+  - healthview
+  - hop
+  - tier-2-template
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: template
+  frontmatter:
+    title: "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>"
+    tier: tier-2
+    audience:
+    - coding_agent
+    - human_developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    role:
+    - roster
+    - stage-vertical
+    status: template
+    version: 0.1.0
+    updated_at: '2025-12-19'
+    tags:
+    - pipeline
+    - healthview
+    - hop
+    - tier-2-template
+    related_files:
+    - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md
+    - .github/instructions/markdown.instructions.md
+    - .github/instructions/pipeline_doc_tiers.instructions.md
+    - .github/instructions/tier_doc_operating_model.instructions.md
+    - REPORT_NAMING_STANDARDS.md
+  contains_placeholder: true
 - folder: .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster
   filename: .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md
   slug: stage-11-roster-test-execution-telemetry
   h1_headings:
   - title: "Stage 1.1 Roster \u2014 Test Execution Telemetry"
     slug: stage-11-roster-test-execution-telemetry
-    line: 39
+    line: 37
   h2_headings:
   - title: 0. Instruction Block for Editors & AI Assistants
     slug: 0-instruction-block-for-editors-ai-assistants
-    line: 53
+    line: 51
     parent_title: "Stage 1.1 Roster \u2014 Test Execution Telemetry"
     parent_slug: stage-11-roster-test-execution-telemetry
   - title: 1. Goals & Success Criteria
     slug: 1-goals-success-criteria
-    line: 69
+    line: 71
     parent_title: "Stage 1.1 Roster \u2014 Test Execution Telemetry"
     parent_slug: stage-11-roster-test-execution-telemetry
   - title: 2. System Context
     slug: 2-system-context
-    line: 87
+    line: 89
     parent_title: "Stage 1.1 Roster \u2014 Test Execution Telemetry"
     parent_slug: stage-11-roster-test-execution-telemetry
   - title: "3. Stage Narrative \u2014 Stage 1.1 Test Execution Telemetry"
     slug: 3-stage-narrative-stage-11-test-execution-telemetry
-    line: 146
+    line: 151
     parent_title: "Stage 1.1 Roster \u2014 Test Execution Telemetry"
     parent_slug: stage-11-roster-test-execution-telemetry
   - title: 4. Signals & Telemetry
     slug: 4-signals-telemetry
-    line: 232
+    line: 789
     parent_title: "Stage 1.1 Roster \u2014 Test Execution Telemetry"
     parent_slug: stage-11-roster-test-execution-telemetry
   - title: 5. Dependencies & Stop-Gates
     slug: 5-dependencies-stop-gates
-    line: 250
+    line: 807
     parent_title: "Stage 1.1 Roster \u2014 Test Execution Telemetry"
     parent_slug: stage-11-roster-test-execution-telemetry
   - title: 6. Instruction Block (Required by Tier Rules)
     slug: 6-instruction-block-required-by-tier-rules
-    line: 267
+    line: 824
     parent_title: "Stage 1.1 Roster \u2014 Test Execution Telemetry"
     parent_slug: stage-11-roster-test-execution-telemetry
   - title: 7. Agent Automation Block
     slug: 7-agent-automation-block
-    line: 278
+    line: 832
     parent_title: "Stage 1.1 Roster \u2014 Test Execution Telemetry"
     parent_slug: stage-11-roster-test-execution-telemetry
-  - title: 8. Update Log
-    slug: 8-update-log
-    line: 305
+  - title: 8. Decision Log
+    slug: 8-decision-log
+    line: 859
     parent_title: "Stage 1.1 Roster \u2014 Test Execution Telemetry"
     parent_slug: stage-11-roster-test-execution-telemetry
-  links: []
+  - title: 9. Update Log
+    slug: 9-update-log
+    line: 872
+    parent_title: "Stage 1.1 Roster \u2014 Test Execution Telemetry"
+    parent_slug: stage-11-roster-test-execution-telemetry
+  links:
+  - '#fixture-example-permanent--run_test_execution_telemetrypy'
+  - '#record--collect_test_log_reportspy'
+  - '#record--generate_test_coverage_inventorypy'
+  - '#record--analyze_test_hardeningpy'
+  - '#record--generate_test_log_health_reportpy'
+  - '#record--generate_churn_complexity_heatmappy'
+  - '#record--summarize_test_execution_telemetrypy'
   description: '`tier1_healthview_orchestration_pipeline.md`.'
-  size_bytes: 12634
-  modified_utc: '2025-12-19T11:18:18.131907+00:00'
+  size_bytes: 38718
+  modified_utc: '2025-12-20T02:00:07.446991+00:00'
   tags:
   - pipeline
   - healthview
-  - hop
   - stage-1
   - test-execution-telemetry
   owners:
@@ -32852,12 +32711,10 @@ documents:
     tags:
     - pipeline
     - healthview
-    - hop
     - stage-1
     - test-execution-telemetry
     related_files:
     - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md
-    - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md
     - .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py
     - .repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py
     - .repo_studios/scripts/producers/collect_test_log_reports.py
@@ -37064,8 +36921,8 @@ documents:
   h2_headings: []
   links: []
   description: null
-  size_bytes: 7728
-  modified_utc: '2025-12-18T22:53:45.479854+00:00'
+  size_bytes: 7761
+  modified_utc: '2025-12-20T02:00:07.447991+00:00'
   tags: []
   owners: []
   status: null
@@ -38717,65 +38574,61 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/pipeline,.repo_studios/docs/pipeline/README.md,h2,Human Notes,human-notes,pipeline-documentation-entry-guide,`docs/pipeline/`.,7135,2025-12-19T11:25:13.732059+00:00,pipeline;documentation;onboarding,Docs Guild,draft,no,./pipeline_templates;./checkbox_report;./pipeline_doc_map.md
 .repo_studios/docs/pipeline,.repo_studios/docs/pipeline/README.md,h2,Reference Prompts,reference-prompts,pipeline-documentation-entry-guide,`docs/pipeline/`.,7135,2025-12-19T11:25:13.732059+00:00,pipeline;documentation;onboarding,Docs Guild,draft,no,./pipeline_templates;./checkbox_report;./pipeline_doc_map.md
 .repo_studios/docs/pipeline,.repo_studios/docs/pipeline/README.md,h2,Update Log,update-log,pipeline-documentation-entry-guide,`docs/pipeline/`.,7135,2025-12-19T11:25:13.732059+00:00,pipeline;documentation;onboarding,Docs Guild,draft,no,./pipeline_templates;./checkbox_report;./pipeline_doc_map.md
-.repo_studios/docs/pipeline/checkbox_report/outputs,.repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md,h1,Checkbox Report,checkbox-report,,on pending work.,6468,2025-12-19T13:23:50.939120+00:00,checkbox-report;repo-todo,DocumentationOps,active,no,
-.repo_studios/docs/pipeline/checkbox_report/outputs,.repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md,h2,Goals,goals,checkbox-report,on pending work.,6468,2025-12-19T13:23:50.939120+00:00,checkbox-report;repo-todo,DocumentationOps,active,no,
-.repo_studios/docs/pipeline/checkbox_report/outputs,.repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md,h2,System Context,system-context,checkbox-report,on pending work.,6468,2025-12-19T13:23:50.939120+00:00,checkbox-report;repo-todo,DocumentationOps,active,no,
-.repo_studios/docs/pipeline/checkbox_report/outputs,.repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md,h2,Stage Narratives,stage-narratives,checkbox-report,on pending work.,6468,2025-12-19T13:23:50.939120+00:00,checkbox-report;repo-todo,DocumentationOps,active,no,
-.repo_studios/docs/pipeline/checkbox_report/outputs,.repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md,h2,Signals & Telemetry,signals-telemetry,checkbox-report,on pending work.,6468,2025-12-19T13:23:50.939120+00:00,checkbox-report;repo-todo,DocumentationOps,active,no,
-.repo_studios/docs/pipeline/checkbox_report/outputs,.repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md,h2,Maintenance Playbook,maintenance-playbook,checkbox-report,on pending work.,6468,2025-12-19T13:23:50.939120+00:00,checkbox-report;repo-todo,DocumentationOps,active,no,
-.repo_studios/docs/pipeline/checkbox_report/outputs,.repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md,h2,Update Log,update-log,checkbox-report,on pending work.,6468,2025-12-19T13:23:50.939120+00:00,checkbox-report;repo-todo,DocumentationOps,active,no,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md,h1,HealthView HOP Alignment (Superseded),healthview-hop-alignment-superseded,,This document is **superseded** by:,2244,2025-12-18T22:42:18.576135+00:00,pipeline;healthview;hop;alignment,repo_studios_team@rainmakerprotocol.dev,superseded,no,hop_implementation.md;tier1_healthview_orchestration_pipeline.md
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md,h2,Goals,goals,healthview-hop-alignment-superseded,This document is **superseded** by:,2244,2025-12-18T22:42:18.576135+00:00,pipeline;healthview;hop;alignment,repo_studios_team@rainmakerprotocol.dev,superseded,no,hop_implementation.md;tier1_healthview_orchestration_pipeline.md
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md,h2,System Context,system-context,healthview-hop-alignment-superseded,This document is **superseded** by:,2244,2025-12-18T22:42:18.576135+00:00,pipeline;healthview;hop;alignment,repo_studios_team@rainmakerprotocol.dev,superseded,no,hop_implementation.md;tier1_healthview_orchestration_pipeline.md
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md,h2,Decisions (Summary),decisions-summary,healthview-hop-alignment-superseded,This document is **superseded** by:,2244,2025-12-18T22:42:18.576135+00:00,pipeline;healthview;hop;alignment,repo_studios_team@rainmakerprotocol.dev,superseded,no,hop_implementation.md;tier1_healthview_orchestration_pipeline.md
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_alignment.md,h2,Update Log,update-log,healthview-hop-alignment-superseded,This document is **superseded** by:,2244,2025-12-18T22:42:18.576135+00:00,pipeline;healthview;hop;alignment,repo_studios_team@rainmakerprotocol.dev,superseded,no,hop_implementation.md;tier1_healthview_orchestration_pipeline.md
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h1,HealthView HOP Implementation Plan,healthview-hop-implementation-plan,,`tier1_healthview_orchestration_pipeline.md`.,13709,2025-12-19T11:25:13.736573+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,0. Instruction Block for Editors & AI Assistants,0-instruction-block-for-editors-ai-assistants,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13709,2025-12-19T11:25:13.736573+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,1. Goals & Success Criteria,1-goals-success-criteria,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13709,2025-12-19T11:25:13.736573+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,2. System Context,2-system-context,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13709,2025-12-19T11:25:13.736573+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,3. Stage Narratives (Workstreams),3-stage-narratives-workstreams,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13709,2025-12-19T11:25:13.736573+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,4. Signals & Telemetry,4-signals-telemetry,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13709,2025-12-19T11:25:13.736573+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,5. Dependencies & Stop-Gates,5-dependencies-stop-gates,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13709,2025-12-19T11:25:13.736573+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,6. Instruction Block (Required by Tier Rules),6-instruction-block-required-by-tier-rules,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13709,2025-12-19T11:25:13.736573+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,7. Agent Automation Block,7-agent-automation-block,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13709,2025-12-19T11:25:13.736573+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md,h2,8. Update Log,8-update-log,healthview-hop-implementation-plan,`tier1_healthview_orchestration_pipeline.md`.,13709,2025-12-19T11:25:13.736573+00:00,pipeline;healthview;hop;implementation;refactor,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h1,HealthView Orchestration Pipeline,healthview-orchestration-pipeline,,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,0. Instruction Block for Editors & AI Assistants,0-instruction-block-for-editors-ai-assistants,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,1. 5W1H – Purpose & Context,1-5w1h-purpose-context,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,2. Document Metadata,2-document-metadata,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3. Global Pipeline Overview,3-global-pipeline-overview,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3.3 How to Read This Document,33-how-to-read-this-document,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3.4 HealthView Report Bundle Spine (Shared Backbone),34-healthview-report-bundle-spine-shared-backbone,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3.5 HealthView Orchestration Envelope (Shared Payload),35-healthview-orchestration-envelope-shared-payload,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,"3.6 Orchestrator Lifecycle, Fallback Modes, and Global Controls",36-orchestrator-lifecycle-fallback-modes-and-global-controls,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3.7 HealthView Assumptions & Guarantees,37-healthview-assumptions-guarantees,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,4. Stage 1 – Testing Perspectives,4-stage-1-testing-perspectives,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,5. Stage 2 – Documentation Quality,5-stage-2-documentation-quality,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,6. Stage 3 – Runtime Reliability,6-stage-3-runtime-reliability,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,7. Stage 4 – Dependency Management,7-stage-4-dependency-management,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,8. Stage 5 – Technical Debt Oversight,8-stage-5-technical-debt-oversight,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,9. Stage 6 – Process Governance,9-stage-6-process-governance,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,10. Stage 7 – Running the Complete Suite,10-stage-7-running-the-complete-suite,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,11. Snapshot & Stage Matrix,11-snapshot-stage-matrix,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,12. Contradiction Registry,12-contradiction-registry,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,13. Tier-2 Document Index,13-tier-2-document-index,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,14. Working / Future Notes,14-working-future-notes,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,15. Update Log & Evidence Tracking,15-update-log-evidence-tracking,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,81130,2025-12-19T13:20:51.172970+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;hop_implementation.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../scripts/producers/collect_test_log_reports.py;../../../scripts/producers/generate_test_coverage_inventory.py;../../../scripts/producers/analyze_test_hardening.py;../../../scripts/consumers/generate_test_log_health_report.py;../../../scripts/aggregators/generate_churn_complexity_heatmap.py;../../../command_center/scripts/summarizers/summarize_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/README.md,h1,HealthView HOP — Tier-2 Roster Index,healthview-hop-tier-2-roster-index,,`../tier1_healthview_orchestration_pipeline.md`,1568,2025-12-19T13:20:51.171969+00:00,pipeline;healthview;hop;tier-2,repo_studios_team@rainmakerprotocol.dev,draft,no,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/README.md,h2,Goals,goals,healthview-hop-tier-2-roster-index,`../tier1_healthview_orchestration_pipeline.md`,1568,2025-12-19T13:20:51.171969+00:00,pipeline;healthview;hop;tier-2,repo_studios_team@rainmakerprotocol.dev,draft,no,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/README.md,h2,System Context,system-context,healthview-hop-tier-2-roster-index,`../tier1_healthview_orchestration_pipeline.md`,1568,2025-12-19T13:20:51.171969+00:00,pipeline;healthview;hop;tier-2,repo_studios_team@rainmakerprotocol.dev,draft,no,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/README.md,h2,Roster Documents,roster-documents,healthview-hop-tier-2-roster-index,`../tier1_healthview_orchestration_pipeline.md`,1568,2025-12-19T13:20:51.171969+00:00,pipeline;healthview;hop;tier-2,repo_studios_team@rainmakerprotocol.dev,draft,no,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/README.md,h2,Update Log,update-log,healthview-hop-tier-2-roster-index,`../tier1_healthview_orchestration_pipeline.md`,1568,2025-12-19T13:20:51.171969+00:00,pipeline;healthview;hop;tier-2,repo_studios_team@rainmakerprotocol.dev,draft,no,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h1,Stage 1.1 Roster — Test Execution Telemetry,stage-11-roster-test-execution-telemetry,,`tier1_healthview_orchestration_pipeline.md`.,12634,2025-12-19T11:18:18.131907+00:00,pipeline;healthview;hop;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,0. Instruction Block for Editors & AI Assistants,0-instruction-block-for-editors-ai-assistants,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,12634,2025-12-19T11:18:18.131907+00:00,pipeline;healthview;hop;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,1. Goals & Success Criteria,1-goals-success-criteria,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,12634,2025-12-19T11:18:18.131907+00:00,pipeline;healthview;hop;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,2. System Context,2-system-context,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,12634,2025-12-19T11:18:18.131907+00:00,pipeline;healthview;hop;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,3. Stage Narrative — Stage 1.1 Test Execution Telemetry,3-stage-narrative-stage-11-test-execution-telemetry,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,12634,2025-12-19T11:18:18.131907+00:00,pipeline;healthview;hop;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,4. Signals & Telemetry,4-signals-telemetry,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,12634,2025-12-19T11:18:18.131907+00:00,pipeline;healthview;hop;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,5. Dependencies & Stop-Gates,5-dependencies-stop-gates,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,12634,2025-12-19T11:18:18.131907+00:00,pipeline;healthview;hop;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,6. Instruction Block (Required by Tier Rules),6-instruction-block-required-by-tier-rules,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,12634,2025-12-19T11:18:18.131907+00:00,pipeline;healthview;hop;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,7. Agent Automation Block,7-agent-automation-block,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,12634,2025-12-19T11:18:18.131907+00:00,pipeline;healthview;hop;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,
-.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,8. Update Log,8-update-log,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,12634,2025-12-19T11:18:18.131907+00:00,pipeline;healthview;hop;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,
+.repo_studios/docs/pipeline/checkbox_report/outputs,.repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md,h1,Checkbox Report,checkbox-report,,on pending work.,7178,2025-12-20T02:31:43.655307+00:00,checkbox-report;repo-todo,DocumentationOps,active,no,tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1
+.repo_studios/docs/pipeline/checkbox_report/outputs,.repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md,h2,Goals,goals,checkbox-report,on pending work.,7178,2025-12-20T02:31:43.655307+00:00,checkbox-report;repo-todo,DocumentationOps,active,no,tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1
+.repo_studios/docs/pipeline/checkbox_report/outputs,.repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md,h2,System Context,system-context,checkbox-report,on pending work.,7178,2025-12-20T02:31:43.655307+00:00,checkbox-report;repo-todo,DocumentationOps,active,no,tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1
+.repo_studios/docs/pipeline/checkbox_report/outputs,.repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md,h2,Stage Narratives,stage-narratives,checkbox-report,on pending work.,7178,2025-12-20T02:31:43.655307+00:00,checkbox-report;repo-todo,DocumentationOps,active,no,tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1
+.repo_studios/docs/pipeline/checkbox_report/outputs,.repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md,h2,Signals & Telemetry,signals-telemetry,checkbox-report,on pending work.,7178,2025-12-20T02:31:43.655307+00:00,checkbox-report;repo-todo,DocumentationOps,active,no,tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1
+.repo_studios/docs/pipeline/checkbox_report/outputs,.repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md,h2,Maintenance Playbook,maintenance-playbook,checkbox-report,on pending work.,7178,2025-12-20T02:31:43.655307+00:00,checkbox-report;repo-todo,DocumentationOps,active,no,tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1
+.repo_studios/docs/pipeline/checkbox_report/outputs,.repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md,h2,Update Log,update-log,checkbox-report,on pending work.,7178,2025-12-20T02:31:43.655307+00:00,checkbox-report;repo-todo,DocumentationOps,active,no,tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h1,HealthView Orchestration Pipeline,healthview-orchestration-pipeline,,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,0. Instruction Block for Editors & AI Assistants,0-instruction-block-for-editors-ai-assistants,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,1. 5W1H – Purpose & Context,1-5w1h-purpose-context,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,2. Document Metadata,2-document-metadata,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3. Global Pipeline Overview,3-global-pipeline-overview,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3.3 How to Read This Document,33-how-to-read-this-document,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3.4 HealthView Report Bundle Spine (Shared Backbone),34-healthview-report-bundle-spine-shared-backbone,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3.5 HealthView Orchestration Envelope (Shared Payload),35-healthview-orchestration-envelope-shared-payload,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,"3.6 Orchestrator Lifecycle, Fallback Modes, and Global Controls",36-orchestrator-lifecycle-fallback-modes-and-global-controls,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,3.7 HealthView Assumptions & Guarantees,37-healthview-assumptions-guarantees,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,4. Stage 1 – Testing Perspectives,4-stage-1-testing-perspectives,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,5. Stage 2 – Documentation Quality,5-stage-2-documentation-quality,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,6. Stage 3 – Runtime Reliability,6-stage-3-runtime-reliability,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,7. Stage 4 – Dependency Management,7-stage-4-dependency-management,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,8. Stage 5 – Technical Debt Oversight,8-stage-5-technical-debt-oversight,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,9. Stage 6 – Process Governance,9-stage-6-process-governance,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,10. Stage 7 – Running the Complete Suite,10-stage-7-running-the-complete-suite,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,11. Snapshot & Stage Matrix,11-snapshot-stage-matrix,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,12. Contradiction Registry,12-contradiction-registry,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,13. Tier-2 Document Index,13-tier-2-document-index,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,14. Working / Future Notes,14-working-future-notes,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md,h2,15. Update Log & Evidence Tracking,15-update-log-evidence-tracking,healthview-orchestration-pipeline,stage content so evidence capture is ready from the first edit.,84389,2025-12-20T02:22:48.520528+00:00,pipeline;healthview;hop;orchestration,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,../../../../REPORT_NAMING_STANDARDS.md;../../../scripts/README.md;../../../Makefile;../../../tests/tests_command_center/;tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11;tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates;tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1;../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py;../../../command_center/scripts/orchestrators/run_docs_health_overview.py;../../../scripts/producers/generate_doc_index.py;../../../scripts/producers/generate_anchor_inventory.py;../../../scripts/producers/validate_markdown_anchors.py;../../../scripts/producers/verify_docs_integrity.py;../../../scripts/producers/validate_metrics_anchor_stubs.py;../../../scripts/producers/generate_code_doc_churn_report.py;../../../scripts/producers/generate_undocumented_logic_report.py;../../../scripts/aggregators/aggregate_docs_health_signals.py;../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py;../../../scripts/producers/collect_faulthandler_reports.py;../../../scripts/consumers/generate_fault_artifacts.py;../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py;../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py;../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py;../../../command_center/scripts/orchestrators/run_standards_integrity.py;../../../scripts/producers/generate_standards_index.py;../../../command_center/scripts/producers/analyze_standards_index_gaps.py;../../../scripts/producers/diff_standards_index.py;../../../scripts/producers/seed_standards_prompts.py;../../../scripts/summarizers/summarize_standards.py;../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py;../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py;../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py;../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py;../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py;tier2_roster/tier2_test_execution_telemetry_roster.md;../../standards/global/std-global-python-engineering.md;../../standards/global/std-global-markdown-authoring.md;../../../../.github/instructions/markdown.instructions.md;../../../../.github/instructions/pipeline_doc_tiers.instructions.md;../../../tests/tests_producers/;../../../tests/tests_consumers/;../../../tests/tests_aggregators/
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/README.md,h1,HealthView HOP — Tier-2 Roster Index,healthview-hop-tier-2-roster-index,,`../tier1_healthview_orchestration_pipeline.md`,1478,2025-12-20T02:00:07.446991+00:00,pipeline;healthview;hop;tier-2,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/README.md,h2,Goals,goals,healthview-hop-tier-2-roster-index,`../tier1_healthview_orchestration_pipeline.md`,1478,2025-12-20T02:00:07.446991+00:00,pipeline;healthview;hop;tier-2,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/README.md,h2,System Context,system-context,healthview-hop-tier-2-roster-index,`../tier1_healthview_orchestration_pipeline.md`,1478,2025-12-20T02:00:07.446991+00:00,pipeline;healthview;hop;tier-2,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/README.md,h2,Roster Documents,roster-documents,healthview-hop-tier-2-roster-index,`../tier1_healthview_orchestration_pipeline.md`,1478,2025-12-20T02:00:07.446991+00:00,pipeline;healthview;hop;tier-2,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/README.md,h2,Update Log,update-log,healthview-hop-tier-2-roster-index,`../tier1_healthview_orchestration_pipeline.md`,1478,2025-12-20T02:00:07.446991+00:00,pipeline;healthview;hop;tier-2,repo_studios_team@rainmakerprotocol.dev,draft,no,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md,h1,Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME>,tier-2-roster-template-stageid-stagename,,`tier1_healthview_orchestration_pipeline.md`.,14207,2025-12-20T02:28:59.658173+00:00,pipeline;healthview;hop;tier-2-template,repo_studios_team@rainmakerprotocol.dev,template,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md,h2,0. Instruction Block for Editors & AI Assistants,0-instruction-block-for-editors-ai-assistants,tier-2-roster-template-stageid-stagename,`tier1_healthview_orchestration_pipeline.md`.,14207,2025-12-20T02:28:59.658173+00:00,pipeline;healthview;hop;tier-2-template,repo_studios_team@rainmakerprotocol.dev,template,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md,h2,1. Goals & Success Criteria,1-goals-success-criteria,tier-2-roster-template-stageid-stagename,`tier1_healthview_orchestration_pipeline.md`.,14207,2025-12-20T02:28:59.658173+00:00,pipeline;healthview;hop;tier-2-template,repo_studios_team@rainmakerprotocol.dev,template,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md,h2,2. System Context,2-system-context,tier-2-roster-template-stageid-stagename,`tier1_healthview_orchestration_pipeline.md`.,14207,2025-12-20T02:28:59.658173+00:00,pipeline;healthview;hop;tier-2-template,repo_studios_team@rainmakerprotocol.dev,template,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md,h2,3. Stage Narrative — <STAGE_ID> <STAGE_NAME>,3-stage-narrative-stageid-stagename,tier-2-roster-template-stageid-stagename,`tier1_healthview_orchestration_pipeline.md`.,14207,2025-12-20T02:28:59.658173+00:00,pipeline;healthview;hop;tier-2-template,repo_studios_team@rainmakerprotocol.dev,template,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md,h2,4. Signals & Telemetry,4-signals-telemetry,tier-2-roster-template-stageid-stagename,`tier1_healthview_orchestration_pipeline.md`.,14207,2025-12-20T02:28:59.658173+00:00,pipeline;healthview;hop;tier-2-template,repo_studios_team@rainmakerprotocol.dev,template,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md,h2,5. Dependencies & Stop-Gates,5-dependencies-stop-gates,tier-2-roster-template-stageid-stagename,`tier1_healthview_orchestration_pipeline.md`.,14207,2025-12-20T02:28:59.658173+00:00,pipeline;healthview;hop;tier-2-template,repo_studios_team@rainmakerprotocol.dev,template,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md,h2,6. Instruction Block (Required by Tier Rules),6-instruction-block-required-by-tier-rules,tier-2-roster-template-stageid-stagename,`tier1_healthview_orchestration_pipeline.md`.,14207,2025-12-20T02:28:59.658173+00:00,pipeline;healthview;hop;tier-2-template,repo_studios_team@rainmakerprotocol.dev,template,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md,h2,7. Agent Automation Block,7-agent-automation-block,tier-2-roster-template-stageid-stagename,`tier1_healthview_orchestration_pipeline.md`.,14207,2025-12-20T02:28:59.658173+00:00,pipeline;healthview;hop;tier-2-template,repo_studios_team@rainmakerprotocol.dev,template,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md,h2,8. Update Log,8-update-log,tier-2-roster-template-stageid-stagename,`tier1_healthview_orchestration_pipeline.md`.,14207,2025-12-20T02:28:59.658173+00:00,pipeline;healthview;hop;tier-2-template,repo_studios_team@rainmakerprotocol.dev,template,yes,
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h1,Stage 1.1 Roster — Test Execution Telemetry,stage-11-roster-test-execution-telemetry,,`tier1_healthview_orchestration_pipeline.md`.,38718,2025-12-20T02:00:07.446991+00:00,pipeline;healthview;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,#fixture-example-permanent--run_test_execution_telemetrypy;#record--collect_test_log_reportspy;#record--generate_test_coverage_inventorypy;#record--analyze_test_hardeningpy;#record--generate_test_log_health_reportpy;#record--generate_churn_complexity_heatmappy;#record--summarize_test_execution_telemetrypy
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,0. Instruction Block for Editors & AI Assistants,0-instruction-block-for-editors-ai-assistants,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,38718,2025-12-20T02:00:07.446991+00:00,pipeline;healthview;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,#fixture-example-permanent--run_test_execution_telemetrypy;#record--collect_test_log_reportspy;#record--generate_test_coverage_inventorypy;#record--analyze_test_hardeningpy;#record--generate_test_log_health_reportpy;#record--generate_churn_complexity_heatmappy;#record--summarize_test_execution_telemetrypy
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,1. Goals & Success Criteria,1-goals-success-criteria,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,38718,2025-12-20T02:00:07.446991+00:00,pipeline;healthview;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,#fixture-example-permanent--run_test_execution_telemetrypy;#record--collect_test_log_reportspy;#record--generate_test_coverage_inventorypy;#record--analyze_test_hardeningpy;#record--generate_test_log_health_reportpy;#record--generate_churn_complexity_heatmappy;#record--summarize_test_execution_telemetrypy
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,2. System Context,2-system-context,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,38718,2025-12-20T02:00:07.446991+00:00,pipeline;healthview;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,#fixture-example-permanent--run_test_execution_telemetrypy;#record--collect_test_log_reportspy;#record--generate_test_coverage_inventorypy;#record--analyze_test_hardeningpy;#record--generate_test_log_health_reportpy;#record--generate_churn_complexity_heatmappy;#record--summarize_test_execution_telemetrypy
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,3. Stage Narrative — Stage 1.1 Test Execution Telemetry,3-stage-narrative-stage-11-test-execution-telemetry,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,38718,2025-12-20T02:00:07.446991+00:00,pipeline;healthview;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,#fixture-example-permanent--run_test_execution_telemetrypy;#record--collect_test_log_reportspy;#record--generate_test_coverage_inventorypy;#record--analyze_test_hardeningpy;#record--generate_test_log_health_reportpy;#record--generate_churn_complexity_heatmappy;#record--summarize_test_execution_telemetrypy
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,4. Signals & Telemetry,4-signals-telemetry,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,38718,2025-12-20T02:00:07.446991+00:00,pipeline;healthview;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,#fixture-example-permanent--run_test_execution_telemetrypy;#record--collect_test_log_reportspy;#record--generate_test_coverage_inventorypy;#record--analyze_test_hardeningpy;#record--generate_test_log_health_reportpy;#record--generate_churn_complexity_heatmappy;#record--summarize_test_execution_telemetrypy
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,5. Dependencies & Stop-Gates,5-dependencies-stop-gates,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,38718,2025-12-20T02:00:07.446991+00:00,pipeline;healthview;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,#fixture-example-permanent--run_test_execution_telemetrypy;#record--collect_test_log_reportspy;#record--generate_test_coverage_inventorypy;#record--analyze_test_hardeningpy;#record--generate_test_log_health_reportpy;#record--generate_churn_complexity_heatmappy;#record--summarize_test_execution_telemetrypy
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,6. Instruction Block (Required by Tier Rules),6-instruction-block-required-by-tier-rules,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,38718,2025-12-20T02:00:07.446991+00:00,pipeline;healthview;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,#fixture-example-permanent--run_test_execution_telemetrypy;#record--collect_test_log_reportspy;#record--generate_test_coverage_inventorypy;#record--analyze_test_hardeningpy;#record--generate_test_log_health_reportpy;#record--generate_churn_complexity_heatmappy;#record--summarize_test_execution_telemetrypy
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,7. Agent Automation Block,7-agent-automation-block,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,38718,2025-12-20T02:00:07.446991+00:00,pipeline;healthview;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,#fixture-example-permanent--run_test_execution_telemetrypy;#record--collect_test_log_reportspy;#record--generate_test_coverage_inventorypy;#record--analyze_test_hardeningpy;#record--generate_test_log_health_reportpy;#record--generate_churn_complexity_heatmappy;#record--summarize_test_execution_telemetrypy
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,8. Decision Log,8-decision-log,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,38718,2025-12-20T02:00:07.446991+00:00,pipeline;healthview;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,#fixture-example-permanent--run_test_execution_telemetrypy;#record--collect_test_log_reportspy;#record--generate_test_coverage_inventorypy;#record--analyze_test_hardeningpy;#record--generate_test_log_health_reportpy;#record--generate_churn_complexity_heatmappy;#record--summarize_test_execution_telemetrypy
+.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md,h2,9. Update Log,9-update-log,stage-11-roster-test-execution-telemetry,`tier1_healthview_orchestration_pipeline.md`.,38718,2025-12-20T02:00:07.446991+00:00,pipeline;healthview;stage-1;test-execution-telemetry,repo_studios_team@rainmakerprotocol.dev,draft,yes,#fixture-example-permanent--run_test_execution_telemetrypy;#record--collect_test_log_reportspy;#record--generate_test_coverage_inventorypy;#record--analyze_test_hardeningpy;#record--generate_test_log_health_reportpy;#record--generate_churn_complexity_heatmappy;#record--summarize_test_execution_telemetrypy
 .repo_studios/docs/pipeline,.repo_studios/docs/pipeline/pipeline_doc_map.md,h1,Pipeline Documentation Map,pipeline-documentation-map,,1. Land here to confirm which pipeline folder contains the Tier-1 spine you need. 2. Jump to the Tier-2/Tier-3 docs listed below and verify they reciprocally link back. 3. Refresh the doc-index (via the `doc-index` make target or platform-…,7128,2025-12-19T11:25:13.739572+00:00,pipeline;navigation;tier-docs,Docs Guild,draft,no,
 .repo_studios/docs/pipeline,.repo_studios/docs/pipeline/pipeline_doc_map.md,h2,Goals,goals,pipeline-documentation-map,1. Land here to confirm which pipeline folder contains the Tier-1 spine you need. 2. Jump to the Tier-2/Tier-3 docs listed below and verify they reciprocally link back. 3. Refresh the doc-index (via the `doc-index` make target or platform-…,7128,2025-12-19T11:25:13.739572+00:00,pipeline;navigation;tier-docs,Docs Guild,draft,no,
 .repo_studios/docs/pipeline,.repo_studios/docs/pipeline/pipeline_doc_map.md,h2,System Context,system-context,pipeline-documentation-map,1. Land here to confirm which pipeline folder contains the Tier-1 spine you need. 2. Jump to the Tier-2/Tier-3 docs listed below and verify they reciprocally link back. 3. Refresh the doc-index (via the `doc-index` make target or platform-…,7128,2025-12-19T11:25:13.739572+00:00,pipeline;navigation;tier-docs,Docs Guild,draft,no,
@@ -39307,7 +39160,7 @@ docs/standards/project,docs/standards/project/std-project-python-instructions.md
 docs/standards/project,docs/standards/project/std-project-python-instructions.md,h2,Documentation Expectations,documentation-expectations,project-python-instructions,This guide documents the baseline expectations for Python contributors and automation authors.,1867,2025-11-25T11:35:24.181372+00:00,python;documentation;automation,repo_studios_ai,draft,yes,
 docs/standards/project,docs/standards/project/std-project-python-instructions.md,h2,Testing Discipline,testing-discipline,project-python-instructions,This guide documents the baseline expectations for Python contributors and automation authors.,1867,2025-11-25T11:35:24.181372+00:00,python;documentation;automation,repo_studios_ai,draft,yes,
 docs/templates,docs/templates/meta_prompts.md,document,,metaprompts,,,7803,2025-12-08T17:14:43.760939+00:00,,,,no,
-docs/templates,docs/templates/meta_prompts2.md,document,,metaprompts2,,,7728,2025-12-18T22:53:45.479854+00:00,,,,no,
+docs/templates,docs/templates/meta_prompts2.md,document,,metaprompts2,,,7761,2025-12-20T02:00:07.447991+00:00,,,,no,
 docs/templates,docs/templates/test_execution_telemetry_summary_template.md,h1,Test Execution Telemetry Summary Template,test-execution-telemetry-summary-template,,Use this template when authoring Healthview Markdown summaries for Test Execution Telemetry runs. Replace bracketed placeholders with the values emitted by the orchestrator (`run_test_execution_telemetry.py`) and remove any sections that…,2092,2025-12-01T03:07:09.755953+00:00,,,,yes,
 docs/templates,docs/templates/test_execution_telemetry_summary_template.md,h2,Run Context,run-context,test-execution-telemetry-summary-template,Use this template when authoring Healthview Markdown summaries for Test Execution Telemetry runs. Replace bracketed placeholders with the values emitted by the orchestrator (`run_test_execution_telemetry.py`) and remove any sections that…,2092,2025-12-01T03:07:09.755953+00:00,,,,yes,
 docs/templates,docs/templates/test_execution_telemetry_summary_template.md,h2,Runtime Metrics,runtime-metrics,test-execution-telemetry-summary-template,Use this template when authoring Healthview Markdown summaries for Test Execution Telemetry runs. Replace bracketed placeholders with the values emitted by the orchestrator (`run_test_execution_telemetry.py`) and remove any sections that…,2092,2025-12-01T03:07:09.755953+00:00,,,,yes,

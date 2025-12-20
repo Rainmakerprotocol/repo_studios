@@ -17,7 +17,6 @@ tags:
   - hop
   - orchestration
 related_files:
-  - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md
   - REPORT_NAMING_STANDARDS.md
   - .repo_studios/command_center/scripts/libraries/cli.py
   - .repo_studios/command_center/scripts/orchestrators/
@@ -230,13 +229,13 @@ automated alerting.
 
 ### 3.2 High-Level Stage List
 
-1. **Stage 1 – Testing Perspectives**  
-2. **Stage 2 – Documentation Quality**  
-3. **Stage 3 – Runtime Reliability**  
-4. **Stage 4 – Dependency Management**  
-5. **Stage 5 – Technical Debt Oversight**  
-6. **Stage 6 – Process Governance**  
-7. **Stage 7 – Running the Complete Suite**
+- **Stage 1 – Testing Perspectives**  
+- **Stage 2 – Documentation Quality**  
+- **Stage 3 – Runtime Reliability**  
+- **Stage 4 – Dependency Management**  
+- **Stage 5 – Technical Debt Oversight**  
+- **Stage 6 – Process Governance**  
+- **Stage 7 – Running the Complete Suite**
 
 ---
 
@@ -290,7 +289,6 @@ by iterating timestamp-sorted directories.
 **Evidence:**
 
 - [REPORT_NAMING_STANDARDS.md](../../../../REPORT_NAMING_STANDARDS.md)
-- [HOP Implementation Plan](hop_implementation.md)
 - [.repo_studios/command_center/scripts/libraries/cli.py]
   (../../../command_center/scripts/libraries/cli.py) (bundle writing functions)
 - [.repo_studios/command_center/scripts/orchestrators/]
@@ -352,12 +350,12 @@ orchestrators and produces a **composite envelope** showing full-suite status.
 
 **Session lifecycle:**
 
-1. **Start:** Orchestrator parses CLI args, validates repo root, initializes logging
-2. **Execute:** Scripts run sequentially; each script failure is logged but does not always abort
+- **Start:** Orchestrator parses CLI args, validates repo root, initializes logging
+- **Execute:** Scripts run sequentially; each script failure is logged but does not always abort
   pipeline (configurable)
-3. **Aggregate:** Final script synthesizes outputs from earlier scripts
-4. **Publish:** Bundle written to timestamped directory, history pruned
-5. **End:** Orchestrator exits with aggregated status code (0 = success, non-zero = failure)
+- **Aggregate:** Final script synthesizes outputs from earlier scripts
+- **Publish:** Bundle written to timestamped directory, history pruned
+- **End:** Orchestrator exits with aggregated status code (0 = success, non-zero = failure)
 
 **Fallback modes:**
 
@@ -436,7 +434,19 @@ _Tier-2 references (depth lives here):_
 - [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates) — verification checks + failure signatures + next actions
 - [Records index](tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1) — per-script inspection index + evidence links (Tier-2 holds proof)
 
+**Stage 1.1 Script Gate Summary (Tier-1):**
+
+- [ ] collect_test_log_reports.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--collect_test_log_reportspy)
+- [ ] generate_test_coverage_inventory.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_test_coverage_inventorypy)
+- [ ] analyze_test_hardening.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--analyze_test_hardeningpy)
+- [ ] generate_test_log_health_report.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_test_log_health_reportpy)
+- [ ] generate_churn_complexity_heatmap.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_churn_complexity_heatmappy)
+- [ ] summarize_test_execution_telemetry.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--summarize_test_execution_telemetrypy)
+- [ ] run_test_execution_telemetry.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#fixture-example-permanent--run_test_execution_telemetrypy)
+
 **Stage 1.1 Gate Checklist (Tier-1):**
+
+These are Stage 1.1 readiness gates after all Tier-2 DONE script gates are closed.
 
 - [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See: [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates)
 - [ ] No pointer artifacts (`latest_*` / `current_*`). See: [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates)
@@ -537,6 +547,19 @@ _Tier-2 references (depth lives here):_
 - Stop-gates (TBD) — verification checks + failure signatures + next actions
 - Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
 
+**Stage 2.1 Script Gate Summary (Tier-1) — shim:**
+
+- [ ] <script>.py — pending until Tier-2 DONE is checked. See: <Tier-2 roster record anchor>
+
+**What Happens (Tier-1) — shim:**
+
+- Keep this Stage 2.1 section as a high-level narrative of what the orchestrator does.
+- Do not copy Tier-2 workstreams or per-script evidence into Tier-1.
+
+**Section Order (Tier-1) — shim:**
+
+- Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) → Stage gate checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
+
 **Overview:**  
 The Docs Health Overview orchestrator chains eight scripts in producer → aggregator pipeline: (1)
 generate doc index scanning markdown files for headings/links, (2) build anchor inventory
@@ -636,6 +659,19 @@ _Tier-2 references (depth lives here):_
 - Stop-gates (TBD) — verification checks + failure signatures + next actions
 - Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
 
+**Stage 3.1 Script Gate Summary (Tier-1) — shim:**
+
+- [ ] <script>.py — pending until Tier-2 DONE is checked. See: <Tier-2 roster record anchor>
+
+**What Happens (Tier-1) — shim:**
+
+- Keep this Stage 3.1 section as a high-level narrative of what the orchestrator does.
+- Do not copy Tier-2 workstreams or per-script evidence into Tier-1.
+
+**Section Order (Tier-1) — shim:**
+
+- Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) → Stage gate checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
+
 **Overview:**  
 The Fault Diagnostics Overview orchestrator chains a 3-script pipeline (producer → consumer → summarizer) for end-to-end faulthandler diagnostics. Replaces legacy `run_fault_pipeline.py`. Mirrors output to both HealthView and CommandView locations for backward compatibility. Runtime: 3-5 minutes typical (from docstring, lines 1-25).
 
@@ -708,6 +744,19 @@ _Tier-2 references (depth lives here):_
 - Contract snapshot (TBD) — target vs current, bundle invariants, naming/paths
 - Stop-gates (TBD) — verification checks + failure signatures + next actions
 - Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
+
+**Stage 4.1 Script Gate Summary (Tier-1) — shim:**
+
+- [ ] <script>.py — pending until Tier-2 DONE is checked. See: <Tier-2 roster record anchor>
+
+**What Happens (Tier-1) — shim:**
+
+- Keep this Stage 4.1 section as a high-level narrative of what the orchestrator does.
+- Do not copy Tier-2 workstreams or per-script evidence into Tier-1.
+
+**Section Order (Tier-1) — shim:**
+
+- Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) → Stage gate checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
 
 **Overview:**  
 The Dependency & Import Hygiene orchestrator chains a 5-script pipeline (4 producers + 1 utility) that analyzes dependency hygiene, import graphs, typecheck compliance, code placeholders (TODO/FIXME/HACK), optional batch cleanup dry-run planning, and optional mypy baseline refresh. Replaces legacy `run_batch_cleanup.py` with structured dry-run artifacts. Runtime: 7-11 minutes typical in CI, with linting and mypy dominating when baseline refresh is enabled (from docstring, lines 1-10).
@@ -796,6 +845,19 @@ _Tier-2 references (depth lives here):_
 - Stop-gates (TBD) — verification checks + failure signatures + next actions
 - Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
 
+**Stage 5.1 Script Gate Summary (Tier-1) — shim:**
+
+- [ ] <script>.py — pending until Tier-2 DONE is checked. See: <Tier-2 roster record anchor>
+
+**What Happens (Tier-1) — shim:**
+
+- Keep this Stage 5.1 section as a high-level narrative of what the orchestrator does.
+- Do not copy Tier-2 workstreams or per-script evidence into Tier-1.
+
+**Section Order (Tier-1) — shim:**
+
+- Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) → Stage gate checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
+
 **Overview:**  
 The Monkey Patch Oversight orchestrator chains a 4-script pipeline (producer → consumer → aggregator → summarizer) that scans for monkey patches via AST analysis, classifies them by risk category, analyzes historical trends, and generates overview artifacts. Replaces monkey patch stages that previously lived inside `orchestrate_health_suite.py` alongside standalone summarizer invocation. Runtime: 4-7 minutes typical when Git history enrichment is enabled; trend aggregation scales with the configured history window (from docstring, lines 1-11).
 
@@ -880,6 +942,19 @@ _Tier-2 references (depth lives here):_
 - Contract snapshot (TBD) — target vs current, bundle invariants, naming/paths
 - Stop-gates (TBD) — verification checks + failure signatures + next actions
 - Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
+
+**Stage 6.1 Script Gate Summary (Tier-1) — shim:**
+
+- [ ] <script>.py — pending until Tier-2 DONE is checked. See: <Tier-2 roster record anchor>
+
+**What Happens (Tier-1) — shim:**
+
+- Keep this Stage 6.1 section as a high-level narrative of what the orchestrator does.
+- Do not copy Tier-2 workstreams or per-script evidence into Tier-1.
+
+**Section Order (Tier-1) — shim:**
+
+- Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) → Stage gate checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
 
 **Overview:**  
 The Standards Integrity orchestrator chains five scripts in sequence (index generation → gap analysis → diff → prompt seeding → summarization) that scan standards markdown files, analyze coverage gaps, track changes over time, seed standards prompts for AI agents, and synthesize compliance metrics. Runtime typically lands between 5-8 minutes, with diff scopes and prompt generation driving the upper bound. Supersedes legacy `orchestrators/run_standards_gap_suite.py` and `orchestrators/run_standards_index_cli.py`. (817 lines)
@@ -997,6 +1072,19 @@ _Tier-2 references (depth lives here):_
 - Contract snapshot (TBD) — target vs current, bundle invariants, naming/paths
 - Stop-gates (TBD) — verification checks + failure signatures + next actions
 - Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
+
+**Stage 7 Script Gate Summary (Tier-1) — shim:**
+
+- [ ] <stage_orchestrator>.py — pending until the corresponding Stage NN.1 Tier-2 DONE gates are checked
+
+**What Happens (Tier-1) — shim:**
+
+- Keep Stage 7 as a high-level narrative of how the meta-orchestrator chains Stage NN.1 orchestrators.
+- Do not copy Tier-2 workstreams or per-script evidence into Tier-1.
+
+**Section Order (Tier-1) — shim:**
+
+- Tier-2 references → Script Gate Summary (Stage orchestrators first, meta-orchestrator last) → Overview/Orchestrator/Invoked Orchestrators.
 
 ### 10.1 Meta-Orchestrator: Full Diagnostic Suite
 
@@ -1134,7 +1222,7 @@ All gaps have logical explanations:
 
 | ID | Description | Sections Affected | Reality Source | Next Step |
 |----|-------------|-------------------|----------------|----------|
-| CR-001 | Tier-1 “current output root” references `.repo_studios/command_center/reports/healthview/...` while HOP target contract requires `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`. | 1.2, 3.1, 3.4, stage I/O bullets | `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md` (locked decision), `REPORT_NAMING_STANDARDS.md`, current orchestrator outputs | Keep Tier-1 explicit about “current vs target” until code migration lands; update Stage 1.1 Tier-2 vertical with per-script “current vs target” output tables. |
+| CR-001 | Tier-1 “current output root” references `.repo_studios/command_center/reports/healthview/...` while HOP target contract requires `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`. | 1.2, 3.1, 3.4, stage I/O bullets | `REPORT_NAMING_STANDARDS.md`, current orchestrator outputs | Keep Tier-1 explicit about “current vs target” until code migration lands; update Stage 1.1 Tier-2 vertical with per-script “current vs target” output tables. |
 | CR-002 | Retention default is inconsistent: Tier-1 references “7 days” and multiple per-script keep knobs; HOP target default is `keep=5` for HealthView bundles. | 1.6, 3.4, stage retention bullets | HOP locked decision; current orchestrator CLI flags | Declare `keep=5` as the HealthView bundle default for the HOP target contract; track per-script current defaults in Tier-2 vertical docs. |
 | CR-003 | DB dual-write semantics are part of the HOP target contract; current implementation is partial and not end-to-end across all stages. | 1.2, 1.6, global controls | HOP locked decision; stage rosters (Tier-2) | Keep Tier-1 target contract language and treat DB as a stop-gate until best-effort DB persistence is consistently evidenced where required; Tier-2 rosters track current DB marker coverage by stage. |
 | CR-004 | Timestamp directory shape varies across stages (`<YYYY-MM-DD>`, `<YYYYmmdd-HHmm>`, `<timestamp>`), which makes discovery ambiguous. | 1.2, stage output bullets | Stage tables and output examples in this Tier-1 doc | Standardize Tier-1 narrative to use `<timestamp>` consistently; push exact formatting requirements into Tier-2 verticals and Tier-3 artifacts doc. |

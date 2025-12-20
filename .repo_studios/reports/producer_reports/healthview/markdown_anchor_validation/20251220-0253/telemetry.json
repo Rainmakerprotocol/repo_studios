@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_utc": "2025-12-19T20:34:40.910757+00:00",
+  "generated_utc": "2025-12-20T02:53:53.433092+00:00",
   "status": "ok",
   "metrics": {
-    "files_scanned": 1,
-    "links_checked": 0,
+    "files_scanned": 4,
+    "links_checked": 102,
     "issue_count": 0,
     "missing_file_count": 0,
     "missing_anchor_count": 0
@@ -12,16 +12,19 @@
   "payload": {
     "report": {
       "schema_version": 1,
-      "generated_utc": "2025-12-19T20:34:40.910757+00:00",
+      "generated_utc": "2025-12-20T02:53:53.433092+00:00",
       "status": "ok",
       "root": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\pipeline\\healthview_orchestrastion_pipeline",
       "patterns": [
-        "tier2_roster/tier2_healthview_roster_template.md"
+        "**/*.md"
       ],
       "issue_count": 0,
       "issues": [],
       "scanned_files": [
-        "tier2_roster/tier2_healthview_roster_template.md"
+        "tier1_healthview_orchestration_pipeline.md",
+        "tier2_roster/README.md",
+        "tier2_roster/tier2_healthview_roster_template.md",
+        "tier2_roster/tier2_test_execution_telemetry_roster.md"
       ]
     }
   }

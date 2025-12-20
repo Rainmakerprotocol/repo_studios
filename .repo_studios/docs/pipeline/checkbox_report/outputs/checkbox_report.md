@@ -38,68 +38,74 @@ related_files:
 ## Stage Narratives
 
 Top files with the highest number of unfinished items:
-* `.repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_howto.md` — 10 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md`
-  — 8 unchecked
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md` — 5
-  unchecked
+  — 86 unchecked
+* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md`
+  — 11 unchecked
+* `.repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_howto.md` — 10 unchecked
+* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md`
+  — 4 unchecked
 * `.repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_template.md` — 4 unchecked
 * `.repo_studios/docs/pipeline/pipeline_templates/tier3_pipeline_template.md` — 3 unchecked
 
 ### Sample Outstanding Tasks
 
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md` L180 —
-  HealthView HOP Implementation Plan > 3. Stage Narratives (Workstreams) > 3.C Workstream C —
-  Extract Stage 1.1 Definition Into Tier-2 Vertical: Create the Stage 1.1 Tier-2 doc using the
-  Tier-2 template, including:
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md` L195 —
-  HealthView HOP Implementation Plan > 3. Stage Narratives (Workstreams) > 3.D Workstream D — Seed
-  Remaining Tier-2 Verticals (Tier-1 Order): Create one Tier-2 stub per stage with consistent
-  headings, stop-gates, and update log.
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md` L196 —
-  HealthView HOP Implementation Plan > 3. Stage Narratives (Workstreams) > 3.D Workstream D — Seed
-  Remaining Tier-2 Verticals (Tier-1 Order): Add explicit TODO checklists for “inventory chain”,
-  “confirm output root”, and “validate gates”.
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md` L206 —
-  HealthView HOP Implementation Plan > 3. Stage Narratives (Workstreams) > 3.E Workstream E —
-  Convert Tier-2 Docs → Execution Checklists (Later Code Phase): Define the per-script “definition
-  of done” checklist used by every migration.
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md` L207 —
-  HealthView HOP Implementation Plan > 3. Stage Narratives (Workstreams) > 3.E Workstream E —
-  Convert Tier-2 Docs → Execution Checklists (Later Code Phase): Add “doc-index + regression suite”
-  evidence requirements per completed script.
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md`
-  L215 — Stage 1.1 Roster — Test Execution Telemetry > 3. Stage Narrative — Stage 1.1 Test Execution
-  Telemetry > 3.2 Stop-Gates and Implementation Checklists: Confirm the canonical `<class>/<topic>`
-  tokens for Stage 1.1 under
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md`
-  L217 — Stage 1.1 Roster — Test Execution Telemetry > 3. Stage Narrative — Stage 1.1 Test Execution
-  Telemetry > 3.2 Stop-Gates and Implementation Checklists: Confirm the canonical `<timestamp>`
-  formatting expectation and record it here (do not assume
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md`
-  L222 — Stage 1.1 Roster — Test Execution Telemetry > 3. Stage Narrative — Stage 1.1 Test Execution
-  Telemetry > 3.2 Stop-Gates and Implementation Checklists: Output root migrated to
-  `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md`
-  L223 — Stage 1.1 Roster — Test Execution Telemetry > 3. Stage Narrative — Stage 1.1 Test Execution
-  Telemetry > 3.2 Stop-Gates and Implementation Checklists: Artifact invariant enforced: exactly
-  `manifest.json`, `summary.md`, `telemetry.json`.
-* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md`
-  L224 — Stage 1.1 Roster — Test Execution Telemetry > 3. Stage Narrative — Stage 1.1 Test Execution
-  Telemetry > 3.2 Stop-Gates and Implementation Checklists: No pointer files introduced.
+* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L439 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
+  Execution Telemetry: Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See:
+  [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates)
+* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L440 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
+  Execution Telemetry: No pointer artifacts (`latest_*` / `current_*`). See:
+  [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates)
+* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L441 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
+  Execution Telemetry: Output root aligned to HOP contract
+  (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). See: [Contract
+  snapshot](tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11)
+* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L442 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
+  Execution Telemetry: Tier-3 eligible (Stage 1.1 Tier-2 depth captured; ready for Tier-3
+  extraction). See: [Records
+  index](tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1)
+* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md`
+  L299 — Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> > 3. Stage Narrative — <STAGE_ID>
+  <STAGE_NAME> > 3.1 Records & Inspection (v1) > Implementation Workstreams (checkbox-driven) —
+  <script_name>: Inspect outputs + pruning/retention surfaces; record findings
+* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md`
+  L303 — Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> > 3. Stage Narrative — <STAGE_ID>
+  <STAGE_NAME> > 3.1 Records & Inspection (v1) > Implementation Workstreams (checkbox-driven) —
+  <script_name>: Draft plan to close output-root/base-package stop-gates
+* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md`
+  L307 — Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> > 3. Stage Narrative — <STAGE_ID>
+  <STAGE_NAME> > 3.1 Records & Inspection (v1) > Implementation Workstreams (checkbox-driven) —
+  <script_name>: Implement accepted plan and update this record + stop-gate status with new evidence
+* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md`
+  L311 — Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> > 3. Stage Narrative — <STAGE_ID>
+  <STAGE_NAME> > 3.1 Records & Inspection (v1) > Implementation Workstreams (checkbox-driven) —
+  <script_name>: Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md`
+  L312 — Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> > 3. Stage Narrative — <STAGE_ID>
+  <STAGE_NAME> > 3.1 Records & Inspection (v1) > Implementation Workstreams (checkbox-driven) —
+  <script_name>: Inspect Tier-3 template requirements
+* `.repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier2_roster/tier2_healthview_roster_template.md`
+  L313 — Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> > 3. Stage Narrative — <STAGE_ID>
+  <STAGE_NAME> > 3.1 Records & Inspection (v1) > Implementation Workstreams (checkbox-driven) —
+  <script_name>: Draft `tier3_<script_stem>.yaml`
 
 ## Signals & Telemetry
 
-* Total unchecked tasks: 30.
-* Files containing unchecked tasks: 5.
+* Total unchecked tasks: 118.
+* Files containing unchecked tasks: 6.
 
 ### Unchecked Tasks by H1
 
 | H1 | Unchecked |
 | --- | --- |
+| Stage 1.1 Roster — Test Execution Telemetry | 86 |
+| Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> | 11 |
 | How-To — Authoring Tier-2 Pipeline Documents | 10 |
-| Stage 1.1 Roster — Test Execution Telemetry | 8 |
-| HealthView HOP Implementation Plan | 5 |
+| HealthView Orchestration Pipeline | 4 |
 | Tier-2 Pipeline Document Template | 4 |
 | Tier-3 Horizontal Document Template | 3 |
 

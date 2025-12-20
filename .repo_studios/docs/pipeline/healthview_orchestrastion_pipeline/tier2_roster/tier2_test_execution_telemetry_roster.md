@@ -19,7 +19,6 @@ tags:
   - test-execution-telemetry
 related_files:
   - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/tier1_healthview_orchestration_pipeline.md
-  - .repo_studios/docs/pipeline/healthview_orchestrastion_pipeline/hop_implementation.md
   - .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py
   - .repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py
   - .repo_studios/scripts/producers/collect_test_log_reports.py
@@ -294,7 +293,7 @@ Workstream E — QA & Evidence
 - [ ] Mypy evidence captured (or marked N/A in record)
 - [ ] Coverage + doc-index timestamp recorded
 
-- [ ] DONE — run_test_execution_telemetry.py meets Tier-2 standards and Tier-3 YAML is complete
+- [ ] DONE — run_test_execution_telemetry.py complete; update Tier-1 Stage 1.1 script gate
 
 #### Record — collect_test_log_reports.py
 
@@ -370,7 +369,7 @@ Workstream E — QA & Evidence
 - [ ] Mypy evidence captured (or marked N/A in record)
 - [ ] Coverage + doc-index timestamp recorded
 
-- [ ] DONE — collect_test_log_reports.py meets Tier-2 standards and Tier-3 YAML is complete
+- [ ] DONE — collect_test_log_reports.py complete; update Tier-1 Stage 1.1 script gate
 
 #### Record — generate_test_coverage_inventory.py
 
@@ -448,7 +447,7 @@ Workstream E — QA & Evidence
 - [ ] Mypy evidence captured (or marked N/A in record)
 - [ ] Coverage + doc-index timestamp recorded
 
-- [ ] DONE — generate_test_coverage_inventory.py meets Tier-2 standards and Tier-3 YAML is complete
+- [ ] DONE — generate_test_coverage_inventory.py complete; update Tier-1 Stage 1.1 script gate
 
 #### Record — analyze_test_hardening.py
 
@@ -524,7 +523,7 @@ Workstream E — QA & Evidence
 - [ ] Mypy evidence captured (or marked N/A in record)
 - [ ] Coverage + doc-index timestamp recorded
 
-- [ ] DONE — analyze_test_hardening.py meets Tier-2 standards and Tier-3 YAML is complete
+- [ ] DONE — analyze_test_hardening.py complete; update Tier-1 Stage 1.1 script gate
 
 #### Record — generate_test_log_health_report.py
 
@@ -600,7 +599,7 @@ Workstream E — QA & Evidence
 - [ ] Mypy evidence captured (or marked N/A in record)
 - [ ] Coverage + doc-index timestamp recorded
 
-- [ ] DONE — generate_test_log_health_report.py meets Tier-2 standards and Tier-3 YAML is complete
+- [ ] DONE — generate_test_log_health_report.py complete; update Tier-1 Stage 1.1 script gate
 
 #### Record — generate_churn_complexity_heatmap.py
 
@@ -678,7 +677,7 @@ Workstream E — QA & Evidence
 - [ ] Mypy evidence captured (or marked N/A in record)
 - [ ] Coverage + doc-index timestamp recorded
 
-- [ ] DONE — generate_churn_complexity_heatmap.py meets Tier-2 standards and Tier-3 YAML is complete
+- [ ] DONE — generate_churn_complexity_heatmap.py complete; update Tier-1 Stage 1.1 script gate
 
 #### Record — summarize_test_execution_telemetry.py
 
@@ -750,7 +749,7 @@ Workstream E — QA & Evidence
 - [ ] Mypy evidence captured (or marked N/A in record)
 - [ ] Coverage + doc-index timestamp recorded
 
-- [ ] DONE — summarize_test_execution_telemetry.py meets Tier-2 standards and Tier-3 YAML is complete
+- [ ] DONE — summarize_test_execution_telemetry.py complete; update Tier-1 Stage 1.1 script gate
 
 #### Stage 1.1 Chain Records (Quick Links) — Placeholder Index (Not a Record)
 
