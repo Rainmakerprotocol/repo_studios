@@ -30,7 +30,8 @@ related_files:
 <!-- markdownlint-disable-next-line MD025 -->
 # Tier-2 Roster — Stage 3.1 Fault Diagnostics Overview
 
-> **Purpose:** This Tier-2 vertical deep dive will document Stage 3.1 (Fault Diagnostics Overview) for the
+> **Purpose:** This Tier-2 vertical deep dive will document Stage 3.1 (Fault Diagnostics Overview)
+> for the
 > HealthView pipeline. It will inventory the script chain, capture the “Target contract (locked decisions)”
 > vs “Current evidence (repo-observed)” I/O contract
 > (with evidence), and define stop-gates required before code migrations can claim compliance with
@@ -136,13 +137,13 @@ Authoritative entry points for Tier-1 routing and agent discovery are:
 **Current evidence (repo-observed):**
 
 - Output root currently observed:
-  `<CURRENT_OUTPUT_ROOT>`
+  `.repo_studios/command_center/reports/commandview/fault_diagnostics/<YYYYMMDD-HHMM>/`
 - Timestamp/run slug shape observed:
-  `<CURRENT_TIMESTAMP_SHAPE>`
+  `YYYYMMDD-HHMM`
 - Artifact set observed in current runs:
-  - `<ARTIFACT_1>`
-  - `<ARTIFACT_2>`
-  - `<ARTIFACT_3>`
+  - `manifest.json`
+  - `summary.md`
+  - `telemetry.json`
 
 Mismatch is treated as a stop-gate.
 
@@ -158,19 +159,31 @@ This section will keep the stage’s script-level inspection evidence in Tier-2 
 
 A short index that links to each per-script record block in this document.
 
-- `<record_id>` — `collect_faulthandler_reports.py` — Producer — `<record_anchor>`
-- `<record_id>` — `generate_fault_artifacts.py` — Consumer — `<record_anchor>`
-- `<record_id>` — `summarize_fault_diagnostics_overview.py` — Summarizer — `<record_anchor>`
+- `S31R-001` — `run_fault_diagnostics_overview.py` — Orchestrator — [anchor](#s31r-001-fault-diagnostics-overview-orchestrator)
+- `S31R-002` — `collect_faulthandler_reports.py` — Producer — [anchor](#s31r-002-collect-faulthandler-reports)
+- `S31R-003` — `generate_fault_artifacts.py` — Consumer — [anchor](#s31r-003-generate-fault-artifacts)
+- `S31R-004` — `summarize_fault_diagnostics_overview.py` — Summarizer — [anchor](#s31r-004-summarize-fault-diagnostics-overview)
 
 #### 3.1.2 Pruning Index (mini-block)
 
 A compact, mechanism-oriented summary of pruning surfaces and how pruning is enforced.
 
-- **Pruning surfaces:** `<flags / defaults / callsites>`
-- **Pruning mechanism:** `<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>`
-- **Pruning targets:** `<bundle roots and intermediate roots>`
-- **Pruning guardrails:** `<current_run_protection / exclusions / atomic_write / other>`
-- **Evidence source:** `<tests / docstrings / fixtures>`
+- **Pruning surfaces:**
+  - `--artifacts-to-keep` (orchestrator, producer, consumer, summarizer)
+  - `--producer-artifacts-to-keep`, `--consumer-artifacts-to-keep`,
+    `--summarizer-artifacts-to-keep` (orchestrator)
+- **Pruning mechanism:** keep-budget pruning via `write_report_artifacts(... keep=...)` and `prune_run_directories(...)`
+- **Pruning targets:**
+  - Orchestrator bundle root: `.repo_studios/command_center/reports/commandview/fault_diagnostics/`
+  - Producer bundle root (as invoked by orchestrator defaults):
+    `.repo_studios/reports/producer_reports/faulthandler_reports/rawview/fault_artifacts_producer/`
+  - Consumer bundle root: `.repo_studios/reports/consumer_reports/fault_artifacts/`
+  - Consumer Command Center mirror root: `.repo_studios/command_center/reports/fault_artifacts_consumer/`
+  - Summarizer bundle root: `.repo_studios/reports/summarizer_reports/fault_diagnostics_overview/`
+- **Pruning guardrails:**
+  - `current_run` protection (producer + consumer)
+  - `.keep` sentinel respected (write_report_artifacts)
+- **Evidence source:** orchestrator + delegated script pruning callsites
 
 #### 3.1.3 ScriptInspectionRecordV1 Schema
 
@@ -239,10 +252,131 @@ fields:
 
 Populate one block per script in the chain. Keep each record concise and evidence-backed.
 
-##### <record_id>: collect_faulthandler_reports.py
+##### S31R-001 fault diagnostics overview orchestrator
 
 ```yaml
-record_id: "<record_id>"
+record_id: "S31R-001"
+script:
+  path: ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py"
+  name: "run_fault_diagnostics_overview.py"
+  category: "orchestrator"
+tier3:
+  metadata_block_version: "v1"
+  allowed: false
+  exists: false
+  name: "tier3_run_fault_diagnostics_overview.yaml"
+  meets_template: "NA"
+  last_updated: null
+cli_surfaces:
+  run_entrypoint: "run(argv)"
+  key_flags:
+    - "--repo-root"
+    - "--runs-dir"
+    - "--run-dir"
+    - "--producer-output-dir"
+    - "--producer-command-center-dir"
+    - "--consumer-output-dir"
+    - "--consumer-command-center-dir"
+    - "--summarizer-output-dir"
+    - "--healthview-root"
+    - "--artifacts-to-keep"
+    - "--producer-artifacts-to-keep"
+    - "--consumer-artifacts-to-keep"
+    - "--summarizer-artifacts-to-keep"
+    - "--reuse-report"
+    - "--producer-top-frames"
+    - "--skip-producer"
+    - "--skip-consumer"
+    - "--skip-summarizer"
+    - "--timestamp"
+    - "--log-level"
+io_contract:
+  inputs:
+    - "Raw runs base: .repo_studios/command_center/reports/rawview/fault_diagnostics_runs/ (or --runs-dir / --run-dir)"
+    - "Optional: --reuse-report (producer report JSON override)"
+  outputs:
+    current:
+      root: ".repo_studios/command_center/reports/commandview/fault_diagnostics/YYYYMMDD-HHMM/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+    target:
+      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+retention:
+  surfaces:
+    - "--artifacts-to-keep"
+    - "write_report_artifacts(... keep=options.artifacts_to_keep)"
+  mechanism: "prune_by_keep_budget"
+  targets:
+    - ".repo_studios/command_center/reports/commandview/fault_diagnostics"
+  guardrails:
+    - "topic-dir pruning inside write_report_artifacts(...)"
+    - "write_report_artifacts respects .keep sentinel"
+  evidence:
+    - "write_report_artifacts(viewer/topic layout) + run_slug formatting"
+db_integration:
+  gated_by: "REPO_STUDIOS_DB_ENABLED"
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+evidence:
+  code_refs:
+    - ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py#L51-L79"
+    - ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py#L147-L178"
+    - ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py#L456-L607"
+  tests:
+    - ".repo_studios/tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py"
+  fixtures:
+    - "<fixture path>"
+notes:
+  - "Stop-gate: current output root is under .repo_studios/command_center/reports (not the locked HealthView root)."
+  - "Run slug is YYYYMMDD-HHMM (UTC), via write_report_artifacts viewer/topic layout."
+  - "DB markers: none observed in this orchestrator (no create_storage callsites)."
+  - >-
+    Stop-gate: orchestrator passes --command-center-dir to
+    collect_faulthandler_reports, but that producer does not define this flag.
+  - >-
+    Stop-gate: orchestrator expects producer payload keys (run_dir/report) that
+    are not emitted by the producer's current return payload.
+```
+
+#### Implementation Workstreams (checkbox-driven) — run_fault_diagnostics_overview.py
+
+Workstream A — Discovery
+
+- [ ] Inspect outputs + pruning/retention surfaces; record findings
+
+Workstream B — Plan
+
+- [ ] Draft plan to close output-root/base-package stop-gates
+
+Workstream C — Implement
+
+- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+
+Workstream D — Tier-3 YAML
+
+- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Inspect Tier-3 template requirements
+- [ ] Draft `tier3_run_fault_diagnostics_overview.yaml`
+- [ ] Validate Tier-3 YAML
+
+Workstream E — QA & Evidence
+
+- [ ] Pytest evidence captured
+- [ ] Mypy evidence captured (or marked N/A in record)
+- [ ] Coverage + doc-index timestamp recorded
+
+- [ ] DONE — run_fault_diagnostics_overview.py complete; update Tier-1 Stage 3.1 script gate
+
+##### S31R-002 collect faulthandler reports
+
+```yaml
+record_id: "S31R-002"
 script:
   path: ".repo_studios/scripts/producers/collect_faulthandler_reports.py"
   name: "collect_faulthandler_reports.py"
@@ -257,15 +391,28 @@ tier3:
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
-    - "<--flag>"
+    - "--repo-root"
+    - "--runs-dir"
+    - "--run-dir"
+    - "--output-dir"
+    - "--artifacts-to-keep"
+    - "--timestamp"
+    - "--top-frames"
+    - "--validate-only"
+    - "--log-level"
 io_contract:
   inputs:
-    - "<input description>"
+    - >-
+      Reads raw runs under
+      .repo_studios/command_center/reports/rawview/fault_diagnostics_runs/
+      (or legacy .repo_studios/faulthandler when enabled)
   outputs:
     current:
-      root: "<current root>"
+      root: ".repo_studios/reports/producer_reports/faulthandler_reports/rawview/fault_artifacts_producer/YYYYMMDD-HHMM/"
       artifacts:
-        - "<artifact>"
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
@@ -274,27 +421,35 @@ io_contract:
         - "telemetry.json"
 retention:
   surfaces:
-    - "<flags / defaults / callsites>"
-  mechanism: "<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>"
+    - "--artifacts-to-keep"
+    - "prune_run_directories(... keep=options.artifacts_to_keep, current_run=run_bundle_dir)"
+  mechanism: "prune_by_keep_budget"
   targets:
-    - "<bundle roots and intermediate roots>"
+    - ".repo_studios/reports/producer_reports/faulthandler_reports/rawview/fault_artifacts_producer"
   guardrails:
-    - "<current_run_protection / exclusions / atomic_write / other>"
+    - "current_run protection when pruning"
   evidence:
-    - "<tests / docstrings / fixtures / code_refs>"
+    - "create_storage(...) + prune_run_directories(...)"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - "<path>#Lx-Ly"
+    - ".repo_studios/scripts/producers/collect_faulthandler_reports.py#L24-L35"
+    - ".repo_studios/scripts/producers/collect_faulthandler_reports.py#L86-L121"
+    - ".repo_studios/scripts/producers/collect_faulthandler_reports.py#L387-L441"
   tests:
-    - "<pytest path>"
+    - ".repo_studios/tests/tests_producers/test_collect_faulthandler_reports.py"
   fixtures:
     - "<fixture path>"
 notes:
-  - "<short note>"
+  - "DB markers present for manifest/summary/telemetry writes."
+  - >-
+    Stop-gate: script docstring describes output under
+    .repo_studios/command_center/reports, but orchestrator defaults pass
+    --output-dir .repo_studios/reports/producer_reports/faulthandler_reports.
+  - "Stop-gate: producer does not accept --command-center-dir, but orchestrator passes it."
 ```
 
 #### Implementation Workstreams (checkbox-driven) — collect_faulthandler_reports.py
@@ -326,10 +481,10 @@ Workstream E — QA & Evidence
 
 - [ ] DONE — collect_faulthandler_reports.py complete; update Tier-1 Stage 3.1 script gate
 
-##### <record_id>: generate_fault_artifacts.py
+##### S31R-003 generate fault artifacts
 
 ```yaml
-record_id: "<record_id>"
+record_id: "S31R-003"
 script:
   path: ".repo_studios/scripts/consumers/generate_fault_artifacts.py"
   name: "generate_fault_artifacts.py"
@@ -344,15 +499,27 @@ tier3:
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
-    - "<--flag>"
+    - "--outdir"
+    - "--report"
+    - "--output-dir"
+    - "--command-center-dir"
+    - "--artifacts-to-keep"
+    - "--log-level"
 io_contract:
   inputs:
-    - "<input description>"
+    - "Reads a faulthandler run directory containing stacks.log (explicit via --outdir/FAULT_OUTDIR or auto-discovers latest)"
+    - "Optional --report: reuse legacy producer report JSON; otherwise scan stacks.log"
   outputs:
     current:
-      root: "<current root>"
+      root: ".repo_studios/reports/consumer_reports/fault_artifacts/fault_artifacts-YYYY-MM-DD_HHMMSS-<run_dir_name>/"
       artifacts:
-        - "<artifact>"
+        - "summary.json"
+        - "SUMMARY.md"
+        - "bundle_summary.json"
+        - "latest_summary.json"  # pointer artifact
+        - "latest_SUMMARY.md"    # pointer artifact
+        - "latest_bundle_summary.json"  # pointer artifact
+        - "(run_dir side effects) SUMMARY.md, stacks.csv, dumps/combined.txt"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
@@ -361,27 +528,36 @@ io_contract:
         - "telemetry.json"
 retention:
   surfaces:
-    - "<flags / defaults / callsites>"
-  mechanism: "<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>"
+    - "--artifacts-to-keep"
+    - "prune_run_directories(... keep=keep_count, stem_prefix=CONSUMER_DIR_PREFIX, current_run=bundle_dir)"
+    - "prune_run_directories(... keep=..., stem_prefix=CONSUMER_DIR_PREFIX, current_run=mirror_dir) (Command Center mirror)"
+  mechanism: "prune_by_keep_budget"
   targets:
-    - "<bundle roots and intermediate roots>"
+    - ".repo_studios/reports/consumer_reports/fault_artifacts"
+    - ".repo_studios/command_center/reports/fault_artifacts_consumer"
   guardrails:
-    - "<current_run_protection / exclusions / atomic_write / other>"
+    - "current_run protection when pruning"
   evidence:
-    - "<tests / docstrings / fixtures / code_refs>"
+    - "LATEST_POINTERS + copy_latest_artifact + prune_run_directories"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - "<path>#Lx-Ly"
+    - ".repo_studios/scripts/consumers/generate_fault_artifacts.py#L43-L60"
+    - ".repo_studios/scripts/consumers/generate_fault_artifacts.py#L292-L360"
+    - ".repo_studios/scripts/consumers/generate_fault_artifacts.py#L387-L456"
+    - ".repo_studios/scripts/consumers/generate_fault_artifacts.py#L499-L565"
   tests:
-    - "<pytest path>"
+    - ".repo_studios/tests/tests_consumers/test_generate_fault_artifacts.py"
   fixtures:
     - "<fixture path>"
 notes:
-  - "<short note>"
+  - >-
+    Stop-gate: emits pointer artifacts (latest_*) in both consumer root and
+    command_center mirror, conflicting with the locked 'no pointer files' rule.
+  - "DB markers: none observed in this consumer (no create_storage callsites)."
 ```
 
 #### Implementation Workstreams (checkbox-driven) — generate_fault_artifacts.py
@@ -413,10 +589,10 @@ Workstream E — QA & Evidence
 
 - [ ] DONE — generate_fault_artifacts.py complete; update Tier-1 Stage 3.1 script gate
 
-##### <record_id>: summarize_fault_diagnostics_overview.py
+##### S31R-004 summarize fault diagnostics overview
 
 ```yaml
-record_id: "<record_id>"
+record_id: "S31R-004"
 script:
   path: ".repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py"
   name: "summarize_fault_diagnostics_overview.py"
@@ -431,15 +607,26 @@ tier3:
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
-    - "<--flag>"
+    - "--repo-root"
+    - "--consumer-output-dir"
+    - "--producer-output-dir"
+    - "--output-dir"
+    - "--consumer-summary"
+    - "--consumer-bundle-summary"
+    - "--producer-report"
+    - "--artifacts-to-keep"
+    - "--timestamp"
+    - "--log-level"
 io_contract:
   inputs:
-    - "<input description>"
+    - "Reads consumer summary.json + bundle_summary.json (prefers latest_* pointers when present)"
+    - "Optionally reads producer report.json via override; otherwise attempts latest_report.json pointer"
   outputs:
     current:
-      root: "<current root>"
+      root: ".repo_studios/reports/summarizer_reports/fault_diagnostics_overview/fault_diagnostics_overview-YYYYMMDD_HHMMSS/"
       artifacts:
-        - "<artifact>"
+        - "fault_diagnostics_overview.json"
+        - "fault_diagnostics_overview.md"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
@@ -448,27 +635,37 @@ io_contract:
         - "telemetry.json"
 retention:
   surfaces:
-    - "<flags / defaults / callsites>"
-  mechanism: "<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>"
+    - "--artifacts-to-keep"
+    - "write_report_artifacts(... keep=options.artifacts_to_keep)"
+  mechanism: "prune_by_keep_budget"
   targets:
-    - "<bundle roots and intermediate roots>"
+    - ".repo_studios/reports/summarizer_reports/fault_diagnostics_overview"
   guardrails:
-    - "<current_run_protection / exclusions / atomic_write / other>"
+    - "run pruning via write_report_artifacts (_prune_old_runs)"
+    - "write_report_artifacts respects .keep sentinel"
   evidence:
-    - "<tests / docstrings / fixtures / code_refs>"
+    - "write_report_artifacts non-hierarchical slug format"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - "<path>#Lx-Ly"
+    - ".repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py#L43-L75"
+    - ".repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py#L120-L170"
+    - ".repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py#L316-L460"
+    - ".repo_studios/command_center/scripts/libraries/artifacts.py#L127-L202"
   tests:
-    - "<pytest path>"
+    - ".repo_studios/tests/tests_command_center/fault_diagnostics/test_summarize_fault_diagnostics_overview.py"
   fixtures:
     - "<fixture path>"
 notes:
-  - "<short note>"
+  - "DB markers: none observed in this summarizer (no create_storage callsites)."
+  - >-
+    Stop-gate: summarizer attempts to locate producer report.json via
+    latest_report.json pointer, but the producer emits manifest/summary/telemetry
+    (no report.json) and does not write latest_report.json.
+  - "Stop-gate: summarizer depends on consumer latest_* pointers for discovery by default."
 ```
 
 #### Implementation Workstreams (checkbox-driven) — summarize_fault_diagnostics_overview.py
@@ -612,4 +809,4 @@ checks:
 
 | Date | Change | Author | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
-| 2025-12-19 | Seeded Stage 3.1 Tier-2 roster skeleton (placeholders only). | repo_studios_ai | <doc-index-ts> | <suites> |
+| 2025-12-19 | Seeded Stage 3.1 Tier-2 roster skeleton. | repo_studios_ai | TBD | TBD |

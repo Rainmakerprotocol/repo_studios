@@ -134,13 +134,13 @@ Authoritative entry points for Tier-1 routing and agent discovery are:
 **Current evidence (repo-observed):**
 
 - Output root currently observed:
-  `<CURRENT_OUTPUT_ROOT>`
+  `.repo_studios/command_center/reports/<viewer>/<topic>/<YYYYMMDD-HHMM>/`
 - Timestamp/run slug shape observed:
-  `<CURRENT_TIMESTAMP_SHAPE>`
+  `YYYYMMDD-HHMM` (UTC)
 - Artifact set observed in current runs:
-  - `<ARTIFACT_1>`
-  - `<ARTIFACT_2>`
-  - `<ARTIFACT_3>`
+  - `manifest.json`
+  - `summary.md`
+  - `telemetry.json`
 
 Mismatch is treated as a stop-gate.
 
@@ -156,18 +156,29 @@ This section will keep the stage’s script-level inspection evidence in Tier-2 
 
 A short index that links to each per-script record block in this document.
 
-- `<record_id>` — `<script_name>` — `<role>` — `<record_anchor>`
-- `<record_id>` — `<script_name>` — `<role>` — `<record_anchor>`
+- S7R-001 — orchestrate_full_diagnostic.py — meta-orchestrator — [record](#s7r-001-full-diagnostic-meta-orchestrator)
+- S7R-002 — run_test_execution_telemetry.py — topic orchestrator — [record](#s7r-002-test-execution-telemetry)
+- S7R-003 — run_docs_health_overview.py — topic orchestrator — [record](#s7r-003-docs-health)
+- S7R-004 — run_fault_diagnostics_overview.py — topic orchestrator — [record](#s7r-004-fault-diagnostics)
+- S7R-005 — run_dependency_import_hygiene.py — topic orchestrator — [record](#s7r-005-dependency-import-hygiene)
+- S7R-006 — run_monkey_patch_oversight.py — topic orchestrator — [record](#s7r-006-monkey-patch-oversight)
+- S7R-007 — run_standards_integrity.py — topic orchestrator — [record](#s7r-007-standards-integrity)
 
 #### 3.1.2 Pruning Index (mini-block)
 
 A compact, mechanism-oriented summary of pruning surfaces and how pruning is enforced.
 
 - **Pruning surfaces:** `<flags / defaults / callsites>`
-- **Pruning mechanism:** `<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>`
-- **Pruning targets:** `<bundle roots and intermediate roots>`
-- **Pruning guardrails:** `<current_run_protection / exclusions / atomic_write / other>`
-- **Evidence source:** `<tests / docstrings / fixtures>`
+- **Pruning surfaces:** `--artifacts-to-keep` (meta + each topic), plus per-step `--*-artifacts-to-keep` flags
+- **Pruning mechanism:** `prune_by_keep_budget` (keep most recent N run directories via `write_report_artifacts(... keep=...)`)
+- **Pruning targets:**
+  - `.repo_studios/command_center/reports/<viewer>/<topic>/<YYYYMMDD-HHMM>/` (meta + topic bundles)
+  - `.repo_studios/reports/producer_reports/...` (selected topic intermediates)
+  - `.repo_studios/reports/consumer_reports/...` (selected topic intermediates)
+  - `.repo_studios/reports/aggregator_reports/...` (selected topic intermediates)
+  - `.repo_studios/reports/summarizer_reports/...` (selected topic intermediates)
+- **Pruning guardrails:** naming enforcement present in some topics (Docs Health + Standards Integrity)
+- **Evidence source:** topic orchestrators import and call `write_report_artifacts(...)` with `keep=options.artifacts_to_keep`
 
 #### 3.1.3 ScriptInspectionRecordV1 Schema
 
@@ -238,31 +249,43 @@ Populate one block per script in the chain. Keep each record concise and evidenc
 
 ##### <record_id>: <script_name>
 
+##### S7R-001 full-diagnostic meta-orchestrator
+
 ```yaml
-record_id: "<record_id>"
+record_id: "S7R-001"
 script:
-  path: "<repo-relative path>"
-  name: "<filename>"
-  category: "producer"
+  path: ".repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py"
+  name: "orchestrate_full_diagnostic.py"
+  category: "orchestrator"
 tier3:
   metadata_block_version: "v1"
   allowed: false
   exists: false
-  name: "<tier3_yaml_filename>"
+  name: "tier3_orchestrate_full_diagnostic.yaml"
   meets_template: "NA"
   last_updated: null
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
-    - "<--flag>"
+    - "--repo-root"
+    - "--reports-root"
+    - "--log-level"
+    - "--timestamp"
+    - "--artifacts-to-keep"
+    - "--include"
+    - "--exclude"
+    - "--stop-on-first-failure / --keep-going"
 io_contract:
   inputs:
-    - "<input description>"
+    - "Selects topics from TOPIC_DEFINITIONS; supports include/exclude"
+    - "Forwards --timestamp (ISO-8601) and derives run_slug as YYYYMMDD-HHMM (UTC)"
   outputs:
     current:
-      root: "<current root>"
+      root: ".repo_studios/command_center/reports/healthview/full_diagnostic/YYYYMMDD-HHMM/"
       artifacts:
-        - "<artifact>"
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
@@ -271,30 +294,37 @@ io_contract:
         - "telemetry.json"
 retention:
   surfaces:
-    - "<flags / defaults / callsites>"
-  mechanism: "<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>"
+    - "--artifacts-to-keep"
+    - "write_report_artifacts(... keep=options.artifacts_to_keep)"
+  mechanism: "prune_by_keep_budget"
   targets:
-    - "<bundle roots and intermediate roots>"
+    - ".repo_studios/command_center/reports/healthview/full_diagnostic"
   guardrails:
-    - "<current_run_protection / exclusions / atomic_write / other>"
+    - "Topic record includes artifact_dir when viewer/topic slugs are present"
   evidence:
-    - "<tests / docstrings / fixtures / code_refs>"
+    - "orchestrate_full_diagnostic.py: meta_run_slug formatting + report writer"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - "<path>#Lx-Ly"
+    - ".repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py#L36-L39"
+    - ".repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py#L175-L186"
+    - ".repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py#L320-L371"
+    - ".repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py#L510-L521"
   tests:
     - "<pytest path>"
   fixtures:
     - "<fixture path>"
 notes:
-  - "<short note>"
+  - "Current outputs live under .repo_studios/command_center/reports (not the target HealthView root)."
+  - "This orchestrator computes per-topic artifact_dir from each module's VIEWER_SLUG + HEALTHVIEW_TOPIC/TOPIC_SLUG."
 ```
 
-#### Implementation Workstreams (checkbox-driven) — <script_name>
+###### Implementation Workstreams (checkbox-driven)
+
+Rule: Workstreams are inactive until Discovery Pass A is completed.
 
 Workstream A — Discovery
 
@@ -312,7 +342,7 @@ Workstream D — Tier-3 YAML
 
 - [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
 - [ ] Inspect Tier-3 template requirements
-- [ ] Draft `tier3_<script_stem>.yaml`
+- [ ] Draft `tier3_orchestrate_full_diagnostic.yaml`
 - [ ] Validate Tier-3 YAML
 
 Workstream E — QA & Evidence
@@ -321,7 +351,701 @@ Workstream E — QA & Evidence
 - [ ] Mypy evidence captured (or marked N/A in record)
 - [ ] Coverage + doc-index timestamp recorded
 
-- [ ] DONE — <script_name> complete; update Tier-1 Stage 7 script gate
+- [ ] DONE — orchestrate_full_diagnostic.py complete; update Tier-1 Stage 7 script gate
+
+##### S7R-002 test-execution-telemetry
+
+```yaml
+record_id: "S7R-002"
+script:
+  path: ".repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py"
+  name: "run_test_execution_telemetry.py"
+  category: "orchestrator"
+tier3:
+  metadata_block_version: "v1"
+  allowed: false
+  exists: false
+  name: "tier3_run_test_execution_telemetry.yaml"
+  meets_template: "NA"
+  last_updated: null
+cli_surfaces:
+  run_entrypoint: "run(argv)"
+  key_flags:
+    - "--repo-root"
+    - "--logs-dir"
+    - "--test-log-reports-dir"
+    - "--test-log-health-dir"
+    - "--test-coverage-output-dir"
+    - "--heatmap-output-dir"
+    - "--hardening-output-dir"
+    - "--healthview-root"
+    - "--artifacts-to-keep"
+    - "--collector-artifacts-to-keep"
+    - "--health-artifacts-to-keep"
+    - "--coverage-artifacts-to-keep"
+    - "--heatmap-artifacts-to-keep"
+    - "--hardening-artifacts-to-keep"
+    - "--timestamp"
+io_contract:
+  inputs:
+    - "Consumes logs under .repo_studios/command_center/reports/rawview/test_execution_runs (default)"
+    - "Accepts --timestamp and derives run_slug as YYYYMMDD-HHMM (UTC)"
+  outputs:
+    current:
+      root: ".repo_studios/command_center/reports/healthview/test_execution_telemetry/YYYYMMDD-HHMM/"
+      artifacts:
+        - "manifest.json"
+        - "telemetry.json"
+        - "summary.md (written by summarizer under healthview_root)"
+    target:
+      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+retention:
+  surfaces:
+    - "--artifacts-to-keep"
+    - "write_report_artifacts(... keep=options.artifacts_to_keep)"
+    - "per-step retention flags (collector/health/coverage/heatmap/hardening)"
+  mechanism: "prune_by_keep_budget"
+  targets:
+    - ".repo_studios/command_center/reports/healthview/test_execution_telemetry"
+    - ".repo_studios/reports/producer_reports/test_coverage_reports"
+    - ".repo_studios/reports/consumer_reports/test_log_health_reports"
+    - ".repo_studios/reports/aggregator_reports/churn_complexity_heatmap"
+  guardrails:
+    - "Pipeline stops on first hard failure (docstring)"
+  evidence:
+    - "run_test_execution_telemetry.py: run_slug formatting + report writer"
+db_integration:
+  gated_by: "REPO_STUDIOS_DB_ENABLED"
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+evidence:
+  code_refs:
+    - ".repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py#L51-L52"
+    - ".repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py#L78-L78"
+    - ".repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py#L588-L588"
+    - ".repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py#L625-L635"
+  tests:
+    - "<pytest path>"
+  fixtures:
+    - ".repo_studios/tests/fixtures/test_run_coverage/coverage.xml"
+notes:
+  - "write_report_artifacts emits manifest.json + telemetry.json; summary.md is produced by the summarizer step."
+```
+
+###### Implementation Workstreams (checkbox-driven)
+
+Rule: Workstreams are inactive until Discovery Pass A is completed.
+
+Workstream A — Discovery
+
+- [ ] Inspect outputs + pruning/retention surfaces; record findings
+
+Workstream B — Plan
+
+- [ ] Draft plan to close output-root/base-package stop-gates
+
+Workstream C — Implement
+
+- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+
+Workstream D — Tier-3 YAML
+
+- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Inspect Tier-3 template requirements
+- [ ] Draft `tier3_run_test_execution_telemetry.yaml`
+- [ ] Validate Tier-3 YAML
+
+Workstream E — QA & Evidence
+
+- [ ] Pytest evidence captured
+- [ ] Mypy evidence captured (or marked N/A in record)
+- [ ] Coverage + doc-index timestamp recorded
+
+- [ ] DONE — run_test_execution_telemetry.py complete; update Tier-1 Stage 7 script gate
+
+##### S7R-003 docs-health
+
+```yaml
+record_id: "S7R-003"
+script:
+  path: ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py"
+  name: "run_docs_health_overview.py"
+  category: "orchestrator"
+tier3:
+  metadata_block_version: "v1"
+  allowed: false
+  exists: false
+  name: "tier3_run_docs_health_overview.yaml"
+  meets_template: "NA"
+  last_updated: null
+cli_surfaces:
+  run_entrypoint: "run(argv)"
+  key_flags:
+    - "--repo-root"
+    - "--doc-index-output-dir"
+    - "--anchor-inventory-output-dir"
+    - "--anchor-validation-output-dir"
+    - "--docs-integrity-output-dir"
+    - "--metrics-stub-output-dir"
+    - "--churn-output-dir"
+    - "--undocumented-output-dir"
+    - "--aggregator-output-dir"
+    - "--healthview-root"
+    - "--artifacts-to-keep (default 5)"
+    - "--skip-<step> flags"
+    - "--timestamp"
+io_contract:
+  inputs:
+    - "Runs doc-index + anchor inventory/validation + docs integrity + churn + undocumented logic (unless skipped)"
+    - "Accepts --timestamp and derives run_slug as YYYYMMDD-HHMM (UTC)"
+  outputs:
+    current:
+      root: ".repo_studios/command_center/reports/healthview/docs_health/YYYYMMDD-HHMM/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+    target:
+      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+retention:
+  surfaces:
+    - "--artifacts-to-keep"
+    - "write_report_artifacts(... keep=options.artifacts_to_keep)"
+    - "per-step retention flags (doc-index / anchor inventory / anchor validation / docs integrity / metrics stub / churn / undocumented / aggregator)"
+  mechanism: "prune_by_keep_budget"
+  targets:
+    - ".repo_studios/command_center/reports/healthview/docs_health"
+    - ".repo_studios/reports/producer_reports"
+    - ".repo_studios/reports/aggregator_reports/docs_health_signals"
+  guardrails:
+    - "enforce_report_naming is executed and failures return non-zero"
+  evidence:
+    - "run_docs_health_overview.py: run_slug formatting + report writer + naming audit"
+db_integration:
+  gated_by: "REPO_STUDIOS_DB_ENABLED"
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+evidence:
+  code_refs:
+    - ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py#L53-L54"
+    - ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py#L103-L103"
+    - ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py#L1198-L1200"
+    - ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py#L1338-L1348"
+    - ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py#L1365-L1383"
+  tests:
+    - "<pytest path>"
+  fixtures:
+    - "<fixture path>"
+notes:
+  - "Docstring contains a stray ')' line; behavior evidence comes from code paths and report writer callsites."
+```
+
+###### Implementation Workstreams (checkbox-driven)
+
+Rule: Workstreams are inactive until Discovery Pass A is completed.
+
+Workstream A — Discovery
+
+- [ ] Inspect outputs + pruning/retention surfaces; record findings
+
+Workstream B — Plan
+
+- [ ] Draft plan to close output-root/base-package stop-gates
+
+Workstream C — Implement
+
+- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+
+Workstream D — Tier-3 YAML
+
+- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Inspect Tier-3 template requirements
+- [ ] Draft `tier3_run_docs_health_overview.yaml`
+- [ ] Validate Tier-3 YAML
+
+Workstream E — QA & Evidence
+
+- [ ] Pytest evidence captured
+- [ ] Mypy evidence captured (or marked N/A in record)
+- [ ] Coverage + doc-index timestamp recorded
+
+- [ ] DONE — run_docs_health_overview.py complete; update Tier-1 Stage 7 script gate
+
+##### S7R-004 fault-diagnostics
+
+```yaml
+record_id: "S7R-004"
+script:
+  path: ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py"
+  name: "run_fault_diagnostics_overview.py"
+  category: "orchestrator"
+tier3:
+  metadata_block_version: "v1"
+  allowed: false
+  exists: false
+  name: "tier3_run_fault_diagnostics_overview.yaml"
+  meets_template: "NA"
+  last_updated: null
+cli_surfaces:
+  run_entrypoint: "run(argv)"
+  key_flags:
+    - "--repo-root"
+    - "--runs-dir"
+    - "--run-dir"
+    - "--producer-output-dir"
+    - "--producer-command-center-dir"
+    - "--consumer-output-dir"
+    - "--consumer-command-center-dir"
+    - "--summarizer-output-dir"
+    - "--healthview-root"
+    - "--artifacts-to-keep"
+    - "--producer-artifacts-to-keep"
+    - "--consumer-artifacts-to-keep"
+    - "--summarizer-artifacts-to-keep"
+    - "--reuse-report"
+    - "--timestamp"
+io_contract:
+  inputs:
+    - "Reads faulthandler runs under .repo_studios/command_center/reports/rawview/fault_diagnostics_runs (default)"
+    - "Accepts --timestamp and derives run_slug as YYYYMMDD-HHMM (UTC)"
+  outputs:
+    current:
+      root: ".repo_studios/command_center/reports/commandview/fault_diagnostics/YYYYMMDD-HHMM/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+    target:
+      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+retention:
+  surfaces:
+    - "--artifacts-to-keep"
+    - "write_report_artifacts(... keep=options.artifacts_to_keep)"
+    - "per-step retention flags (producer/consumer/summarizer)"
+  mechanism: "prune_by_keep_budget"
+  targets:
+    - ".repo_studios/command_center/reports/commandview/fault_diagnostics"
+    - ".repo_studios/reports/producer_reports/faulthandler_reports"
+    - ".repo_studios/reports/consumer_reports/fault_artifacts"
+    - ".repo_studios/reports/summarizer_reports/fault_diagnostics_overview"
+  guardrails:
+    - "Summarizer step described as tolerant in docstring"
+  evidence:
+    - "run_fault_diagnostics_overview.py: VIEWER_SLUG=commandview + report writer"
+db_integration:
+  gated_by: "REPO_STUDIOS_DB_ENABLED"
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+evidence:
+  code_refs:
+    - ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py#L52-L53"
+    - ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py#L64-L70"
+    - ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py#L533-L534"
+    - ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py#L577-L587"
+  tests:
+    - "<pytest path>"
+  fixtures:
+    - "<fixture path>"
+notes:
+  - "VIEWER_SLUG is commandview (docstring claims healthview bundle path); treat as Stage 7 stop-gate discrepancy."
+```
+
+###### Implementation Workstreams (checkbox-driven)
+
+Rule: Workstreams are inactive until Discovery Pass A is completed.
+
+Workstream A — Discovery
+
+- [ ] Inspect outputs + pruning/retention surfaces; record findings
+
+Workstream B — Plan
+
+- [ ] Draft plan to close output-root/base-package stop-gates
+
+Workstream C — Implement
+
+- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+
+Workstream D — Tier-3 YAML
+
+- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Inspect Tier-3 template requirements
+- [ ] Draft `tier3_run_fault_diagnostics_overview.yaml`
+- [ ] Validate Tier-3 YAML
+
+Workstream E — QA & Evidence
+
+- [ ] Pytest evidence captured
+- [ ] Mypy evidence captured (or marked N/A in record)
+- [ ] Coverage + doc-index timestamp recorded
+
+- [ ] DONE — run_fault_diagnostics_overview.py complete; update Tier-1 Stage 7 script gate
+
+##### S7R-005 dependency-import-hygiene
+
+```yaml
+record_id: "S7R-005"
+script:
+  path: ".repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py"
+  name: "run_dependency_import_hygiene.py"
+  category: "orchestrator"
+tier3:
+  metadata_block_version: "v1"
+  allowed: false
+  exists: false
+  name: "tier3_run_dependency_import_hygiene.yaml"
+  meets_template: "NA"
+  last_updated: null
+cli_surfaces:
+  run_entrypoint: "run(argv)"
+  key_flags:
+    - "--repo-root"
+    - "--dependency-output-dir"
+    - "--import-graph-output-dir"
+    - "--placeholder-output-dir"
+    - "--batch-cleanup-output-base"
+    - "--typecheck-output-dir"
+    - "--mypy-baselines-output-dir"
+    - "--healthview-root"
+    - "--artifacts-to-keep"
+    - "--dependency-artifacts-to-keep"
+    - "--import-graph-artifacts-to-keep"
+    - "--placeholder-artifacts-to-keep"
+    - "--cleanup-artifacts-to-keep"
+    - "--typecheck-artifacts-to-keep"
+    - "--baseline-artifacts-to-keep"
+    - "--skip-import-graph"
+    - "--skip-typecheck"
+    - "--trigger-batch-cleanup"
+    - "--refresh-mypy-baselines"
+    - "--timestamp"
+io_contract:
+  inputs:
+    - "Runs dependency hygiene + import graph + placeholder scan + optional cleanup/typecheck/baseline refresh"
+    - "Derives run_slug via _timestamp_to_slug(options.run_timestamp) => YYYYMMDD-HHMM (UTC)"
+  outputs:
+    current:
+      root: ".repo_studios/command_center/reports/healthview/dependency_import_hygiene/YYYYMMDD-HHMM/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+    target:
+      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+retention:
+  surfaces:
+    - "--artifacts-to-keep"
+    - "write_report_artifacts(... keep=options.artifacts_to_keep)"
+    - "per-step retention flags (dependency/import_graph/placeholder/cleanup/typecheck/baseline)"
+  mechanism: "prune_by_keep_budget"
+  targets:
+    - ".repo_studios/command_center/reports/healthview/dependency_import_hygiene"
+    - ".repo_studios/reports/producer_reports"
+    - ".repo_studios/command_center/reports/rawview/dependency_import_hygiene_cleanup"
+    - ".repo_studios/command_center/reports/rawview/mypy_baselines"
+  guardrails:
+    - "Return code is 0 iff telemetry.success"
+  evidence:
+    - "run_dependency_import_hygiene.py: _timestamp_to_slug + report writer"
+db_integration:
+  gated_by: "REPO_STUDIOS_DB_ENABLED"
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+evidence:
+  code_refs:
+    - ".repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py#L52-L53"
+    - ".repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py#L419-L420"
+    - ".repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py#L1024-L1025"
+    - ".repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py#L1095-L1105"
+  tests:
+    - "<pytest path>"
+  fixtures:
+    - "<fixture path>"
+notes:
+  - "Current topic bundle root is under .repo_studios/command_center/reports (not target HealthView root)."
+```
+
+###### Implementation Workstreams (checkbox-driven)
+
+Rule: Workstreams are inactive until Discovery Pass A is completed.
+
+Workstream A — Discovery
+
+- [ ] Inspect outputs + pruning/retention surfaces; record findings
+
+Workstream B — Plan
+
+- [ ] Draft plan to close output-root/base-package stop-gates
+
+Workstream C — Implement
+
+- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+
+Workstream D — Tier-3 YAML
+
+- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Inspect Tier-3 template requirements
+- [ ] Draft `tier3_run_dependency_import_hygiene.yaml`
+- [ ] Validate Tier-3 YAML
+
+Workstream E — QA & Evidence
+
+- [ ] Pytest evidence captured
+- [ ] Mypy evidence captured (or marked N/A in record)
+- [ ] Coverage + doc-index timestamp recorded
+
+- [ ] DONE — run_dependency_import_hygiene.py complete; update Tier-1 Stage 7 script gate
+
+##### S7R-006 monkey-patch-oversight
+
+```yaml
+record_id: "S7R-006"
+script:
+  path: ".repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py"
+  name: "run_monkey_patch_oversight.py"
+  category: "orchestrator"
+tier3:
+  metadata_block_version: "v1"
+  allowed: false
+  exists: false
+  name: "tier3_run_monkey_patch_oversight.yaml"
+  meets_template: "NA"
+  last_updated: null
+cli_surfaces:
+  run_entrypoint: "run(argv)"
+  key_flags:
+    - "--repo-root"
+    - "--scan-root"
+    - "--producer-output-dir"
+    - "--consumer-output-dir"
+    - "--aggregator-output-dir"
+    - "--summarizer-output-dir"
+    - "--healthview-root"
+    - "--artifacts-to-keep"
+    - "--producer-artifacts-to-keep"
+    - "--consumer-artifacts-to-keep"
+    - "--aggregator-artifacts-to-keep"
+    - "--summarizer-artifacts-to-keep"
+    - "--producer-with-git"
+    - "--producer-strict"
+    - "--duplicate-matrix"
+    - "--timestamp"
+io_contract:
+  inputs:
+    - "Scans for monkey patches, classifies risk, aggregates trends, and summarizes"
+    - "Accepts --timestamp and derives run_slug as YYYYMMDD-HHMM (UTC)"
+  outputs:
+    current:
+      root: ".repo_studios/command_center/reports/commandview/monkey_patch_oversight/YYYYMMDD-HHMM/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+    target:
+      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+retention:
+  surfaces:
+    - "--artifacts-to-keep"
+    - "write_report_artifacts(... keep=options.artifacts_to_keep)"
+    - "per-step retention flags (producer/consumer/aggregator/summarizer)"
+  mechanism: "prune_by_keep_budget"
+  targets:
+    - ".repo_studios/command_center/reports/commandview/monkey_patch_oversight"
+    - ".repo_studios/reports/producer_reports/monkey_patch_scans"
+    - ".repo_studios/reports/consumer_reports/monkey_patch_risk"
+    - ".repo_studios/reports/aggregator_reports/monkey_patch_trends"
+    - ".repo_studios/reports/summarizer_reports/monkey_patch_overview"
+  guardrails:
+    - "Summarizer raises if status != ok"
+  evidence:
+    - "run_monkey_patch_oversight.py: VIEWER_SLUG=commandview + report writer"
+db_integration:
+  gated_by: "REPO_STUDIOS_DB_ENABLED"
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+evidence:
+  code_refs:
+    - ".repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py#L52-L53"
+    - ".repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py#L72-L72"
+    - ".repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py#L656-L657"
+    - ".repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py#L708-L718"
+  tests:
+    - "<pytest path>"
+  fixtures:
+    - "<fixture path>"
+notes:
+  - "VIEWER_SLUG is commandview (docstring claims healthview bundle path); treat as Stage 7 stop-gate discrepancy."
+```
+
+###### Implementation Workstreams (checkbox-driven)
+
+Rule: Workstreams are inactive until Discovery Pass A is completed.
+
+Workstream A — Discovery
+
+- [ ] Inspect outputs + pruning/retention surfaces; record findings
+
+Workstream B — Plan
+
+- [ ] Draft plan to close output-root/base-package stop-gates
+
+Workstream C — Implement
+
+- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+
+Workstream D — Tier-3 YAML
+
+- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Inspect Tier-3 template requirements
+- [ ] Draft `tier3_run_monkey_patch_oversight.yaml`
+- [ ] Validate Tier-3 YAML
+
+Workstream E — QA & Evidence
+
+- [ ] Pytest evidence captured
+- [ ] Mypy evidence captured (or marked N/A in record)
+- [ ] Coverage + doc-index timestamp recorded
+
+- [ ] DONE — run_monkey_patch_oversight.py complete; update Tier-1 Stage 7 script gate
+
+##### S7R-007 standards-integrity
+
+```yaml
+record_id: "S7R-007"
+script:
+  path: ".repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py"
+  name: "run_standards_integrity.py"
+  category: "orchestrator"
+tier3:
+  metadata_block_version: "v1"
+  allowed: false
+  exists: false
+  name: "tier3_run_standards_integrity.yaml"
+  meets_template: "NA"
+  last_updated: null
+cli_surfaces:
+  run_entrypoint: "run(argv)"
+  key_flags:
+    - "--repo-root"
+    - "--index-output-dir"
+    - "--index-path"
+    - "--categories-path"
+    - "--gap-output-dir"
+    - "--diff-output-dir"
+    - "--prompt-output-dir"
+    - "--pending-path"
+    - "--healthview-root"
+    - "--diff-old-index"
+    - "--diff-fail-on"
+    - "--gap-max-show"
+    - "--prompt-include-warn"
+    - "--prompt-formats"
+    - "--artifacts-to-keep"
+    - "--index-artifacts-to-keep"
+    - "--gap-artifacts-to-keep"
+    - "--diff-artifacts-to-keep"
+    - "--prompt-artifacts-to-keep"
+    - "--timestamp"
+io_contract:
+  inputs:
+    - "Regenerates standards index, runs gap analysis, optional diff, seeds prompts, and runs summarizer"
+    - "Uses run_slug formatting YYYYMMDD-HHMM (UTC)"
+  outputs:
+    current:
+      root: ".repo_studios/command_center/reports/healthview/standards_integrity/YYYYMMDD-HHMM/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+    target:
+      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+retention:
+  surfaces:
+    - "--artifacts-to-keep"
+    - "write_report_artifacts(... keep=options.artifacts_to_keep)"
+    - "per-step retention flags (index/gap/diff/prompt)"
+  mechanism: "prune_by_keep_budget"
+  targets:
+    - ".repo_studios/command_center/reports/healthview/standards_integrity"
+    - ".repo_studios/reports/producer_reports (standards index)"
+    - ".repo_studios/reports/producer_reports/standards_index_diff_reports"
+    - ".repo_studios/reports/producer_reports/standards_prompt_seeds"
+  guardrails:
+    - "enforce_report_naming is executed and failures return non-zero"
+  evidence:
+    - "run_standards_integrity.py: _format_run_slug + report writer + naming audit"
+db_integration:
+  gated_by: "REPO_STUDIOS_DB_ENABLED"
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+evidence:
+  code_refs:
+    - ".repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py#L54-L55"
+    - ".repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py#L85-L88"
+    - ".repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py#L793-L803"
+    - ".repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py#L816-L823"
+  tests:
+    - "<pytest path>"
+  fixtures:
+    - "<fixture path>"
+notes:
+  - "Standards index generation also writes under rawview/standards_index/<run_slug> (see INDEX_VIEWER_SLUG/INDEX_TOPIC_SLUG)."
+```
+
+###### Implementation Workstreams (checkbox-driven)
+
+Rule: Workstreams are inactive until Discovery Pass A is completed.
+
+Workstream A  Discovery
+
+- [ ] Inspect outputs + pruning/retention surfaces; record findings
+
+Workstream B  Plan
+
+- [ ] Draft plan to close output-root/base-package stop-gates
+
+Workstream C  Implement
+
+- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+
+Workstream D  Tier-3 YAML
+
+- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Inspect Tier-3 template requirements
+- [ ] Draft `tier3_run_standards_integrity.yaml`
+- [ ] Validate Tier-3 YAML
+
+Workstream E  QA & Evidence
+
+- [ ] Pytest evidence captured
+- [ ] Mypy evidence captured (or marked N/A in record)
+- [ ] Coverage + doc-index timestamp recorded
+
+- [ ] DONE  run_standards_integrity.py complete; update Tier-1 Stage 7 script gate
 
 ### 3.2 Stop-Gates and Implementation Checklists
 

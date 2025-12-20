@@ -132,16 +132,30 @@ Authoritative entry points for Tier-1 routing and agent discovery are:
 
 **Current evidence (repo-observed):**
 
-- Output root currently observed:
-  `<CURRENT_OUTPUT_ROOT>`
-- Timestamp/run slug shape observed:
-  `<CURRENT_TIMESTAMP_SHAPE>`
-- Artifact set observed in current runs:
-  - `<ARTIFACT_1>`
-  - `<ARTIFACT_2>`
-  - `<ARTIFACT_3>`
+- Output root currently observed (orchestrator HealthView bundle write):
+  `.repo_studios/command_center/reports/commandview/monkey_patch_oversight/<YYYYMMDD-HHMM>/`
+- Timestamp/run slug shape observed (orchestrator HealthView bundle write):
+  `YYYYMMDD-HHMM` (UTC)
+- Artifact set observed in orchestrator HealthView bundle writes:
+  - `manifest.json`
+  - `summary.md`
+  - `telemetry.json`
 
 Mismatch is treated as a stop-gate.
+
+Notes:
+
+- The orchestrator module docstring describes a different root than the actual
+  `viewer/topic/<slug>` layout.
+- The stage currently mixes multiple run slug formats across
+  producer/consumer/aggregator/summarizer outputs.
+- Pointer files (`latest_*`) exist in consumer/aggregator outputs and are consumed by the summarizer.
+
+
+Evidence source (entry points):
+
+- `.repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py`
+- `.repo_studios/command_center/scripts/libraries/artifacts.py`
 
 ---
 
@@ -155,18 +169,43 @@ This section will keep the stage’s script-level inspection evidence in Tier-2 
 
 A short index that links to each per-script record block in this document.
 
-- `<record_id>` — `<script_name>` — `<role>` — `<record_anchor>`
-- `<record_id>` — `<script_name>` — `<role>` — `<record_anchor>`
+- `S51R-001` — `run_monkey_patch_oversight.py` — orchestrator — [S51R-001](#s51r-001-monkey-patch-oversight-orchestrator)
+- `S51R-002` — `scan_monkey_patches.py` — producer — [S51R-002](#s51r-002-monkey-patch-scan-producer)
+- `S51R-003` — `classify_monkey_patches.py` — consumer — [S51R-003](#s51r-003-monkey-patch-risk-consumer)
+- `S51R-004` — `analyze_monkey_patch_trends.py` — aggregator — [S51R-004](#s51r-004-monkey-patch-trend-aggregator)
+- `S51R-005` — `summarize_monkey_patch_overview.py` — summarizer — [S51R-005](#s51r-005-monkey-patch-overview-summarizer)
+- `S51R-006` — `monkey_patch_risk.py` — utility — [S51R-006](#s51r-006-risk-classification-utility)
 
 #### 3.1.2 Pruning Index (mini-block)
 
 A compact, mechanism-oriented summary of pruning surfaces and how pruning is enforced.
 
-- **Pruning surfaces:** `<flags / defaults / callsites>`
-- **Pruning mechanism:** `<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>`
-- **Pruning targets:** `<bundle roots and intermediate roots>`
-- **Pruning guardrails:** `<current_run_protection / exclusions / atomic_write / other>`
-- **Evidence source:** `<tests / docstrings / fixtures>`
+- **Pruning surfaces:**
+  - Orchestrator: `--artifacts-to-keep` + per-step keep budgets forwarded to producer/consumer/aggregator/summarizer.
+  - Producer: `--artifacts-to-keep` (producer keep) applied via `prune_run_directories`.
+  - Consumer: `--artifacts-to-keep` applied via `prune_run_directories`.
+  - Aggregator: `--artifacts-to-keep` applied via `prune_run_directories`.
+  - Summarizer: `--artifacts-to-keep` applied via `write_report_artifacts`.
+- **Pruning mechanism:**
+  - Orchestrator: `write_report_artifacts` hierarchical pruning (`viewer/topic/<YYYYMMDD-HHMM>`).
+  - Producer/consumer/aggregator: `prune_run_directories` on timestamped run dirs.
+  - Summarizer: `write_report_artifacts` non-hierarchical pruning (`<stem>-<YYYYMMDD_%H%M%S>`).
+- **Pruning targets:**
+  - `.repo_studios/command_center/reports/<viewer>/<topic>/` (orchestrator bundle outputs).
+    - `.repo_studios/reports/producer_reports/...` (producer outputs; note orchestrator overrides
+      base dir).
+  - `.repo_studios/reports/consumer_reports/monkey_patch_risk/` (consumer bundles + pointers).
+  - `.repo_studios/reports/aggregator_reports/monkey_patch_trends/` (aggregator bundles + pointers).
+  - `.repo_studios/reports/summarizer_reports/monkey_patch_overview/` (summarizer outputs).
+- **Pruning guardrails:**
+  - Minimum keep is enforced to be at least one in shared pruners.
+  - Current run can be protected explicitly (pruner `current_run` argument).
+  - Directories containing a `.keep` sentinel are not deleted.
+- **Evidence source:**
+  - `.repo_studios/command_center/scripts/libraries/artifacts.py` (hierarchical/non-hierarchical
+    pruning behavior)
+  - `.repo_studios/command_center/scripts/libraries/prune_logs.py` (`prune_run_directories` behavior)
+  - Script-level retention wiring in each per-script record.
 
 #### 3.1.3 ScriptInspectionRecordV1 Schema
 
@@ -237,31 +276,60 @@ Populate one block per script in the chain. Keep each record concise and evidenc
 
 ##### <record_id>: <script_name>
 
+##### S51R-001 monkey patch oversight orchestrator
+
 ```yaml
-record_id: "<record_id>"
+record_id: "S51R-001"
 script:
-  path: "<repo-relative path>"
-  name: "<filename>"
-  category: "producer"
+  path: ".repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py"
+  name: "run_monkey_patch_oversight.py"
+  category: "orchestrator"
 tier3:
   metadata_block_version: "v1"
   allowed: false
   exists: false
-  name: "<tier3_yaml_filename>"
+  name: "tier3_run_monkey_patch_oversight.yaml"
   meets_template: "NA"
   last_updated: null
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
-    - "<--flag>"
+    - "--repo-root"
+    - "--scan-root"
+    - "--producer-output-dir"
+    - "--consumer-output-dir"
+    - "--aggregator-output-dir"
+    - "--summarizer-output-dir"
+    - "--healthview-root"
+    - "--artifacts-to-keep"
+    - "--producer-artifacts-to-keep"
+    - "--consumer-artifacts-to-keep"
+    - "--aggregator-artifacts-to-keep"
+    - "--summarizer-artifacts-to-keep"
+    - "--trend-max-runs"
+    - "--producer-context-lines"
+    - "--producer-with-git"
+    - "--producer-strict"
+    - "--producer-project-packages"
+    - "--producer-exclude-dirs"
+    - "--producer-exclude-globs"
+    - "--duplicate-matrix"
+    - "--skip-producer"
+    - "--skip-consumer"
+    - "--skip-aggregator"
+    - "--skip-summarizer"
+    - "--timestamp"
+    - "--log-level"
 io_contract:
   inputs:
-    - "<input description>"
+    - "repo_root + scan_root + per-step output roots + keep budgets + timestamp + feature flags"
   outputs:
     current:
-      root: "<current root>"
+      root: ".repo_studios/command_center/reports/commandview/monkey_patch_oversight/<YYYYMMDD-HHMM>/"
       artifacts:
-        - "<artifact>"
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
@@ -270,27 +338,399 @@ io_contract:
         - "telemetry.json"
 retention:
   surfaces:
-    - "<flags / defaults / callsites>"
-  mechanism: "<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>"
+    - "--artifacts-to-keep (healthview bundle)"
+    - "--producer-artifacts-to-keep"
+    - "--consumer-artifacts-to-keep"
+    - "--aggregator-artifacts-to-keep"
+    - "--summarizer-artifacts-to-keep"
+  mechanism: "write_report_artifacts hierarchical pruning + per-step delegated pruning"
   targets:
-    - "<bundle roots and intermediate roots>"
+    - ".repo_studios/command_center/reports/commandview/monkey_patch_oversight/<YYYYMMDD-HHMM>/"
   guardrails:
-    - "<current_run_protection / exclusions / atomic_write / other>"
+    - "Minimum keep is enforced"
+    - "Directories with a .keep sentinel are protected"
   evidence:
-    - "<tests / docstrings / fixtures / code_refs>"
+    - ".repo_studios/command_center/scripts/libraries/artifacts.py"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - "<path>#Lx-Ly"
+    - ".repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py#L1-L20"
+    - ".repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py#L49-L76"
+    - ".repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py#L289-L307"
+    - ".repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py#L317-L420"
+    - ".repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py#L656-L735"
+    - ".repo_studios/command_center/scripts/libraries/artifacts.py#L127-L188"
   tests:
-    - "<pytest path>"
-  fixtures:
-    - "<fixture path>"
+    - ".repo_studios/tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py"
+  fixtures: []
 notes:
-  - "<short note>"
+  - "The module docstring describes a healthview output root that does not match the actual viewer/topic layout (see stop-gates)."
+  - "Dynamic module loading sets sys.modules[module_name] = module; track as a monkey patch surface."
+  - "Producer outcome parsing expects run_id/report.json/matches.json; producer emits run_dir + manifest/summary/telemetry."
+```
+
+##### S51R-002 monkey patch scan producer
+
+```yaml
+record_id: "S51R-002"
+script:
+  path: ".repo_studios/scripts/producers/scan_monkey_patches.py"
+  name: "scan_monkey_patches.py"
+  category: "producer"
+tier3:
+  metadata_block_version: "v1"
+  allowed: false
+  exists: false
+  name: "tier3_scan_monkey_patches.yaml"
+  meets_template: "NA"
+  last_updated: null
+cli_surfaces:
+  run_entrypoint: "run(argv)"
+  key_flags:
+    - "--repo-root"
+    - "--root"
+    - "--output-dir"
+    - "--context-lines"
+    - "--artifacts-to-keep"
+    - "--timestamp"
+    - "--with-git"
+    - "--strict"
+    - "--project-packages"
+    - "--exclude-dirs"
+    - "--exclude-globs"
+    - "--log-level"
+    - "--self-test"
+io_contract:
+  inputs:
+    - "repo_root + scan_root + exclusion globs + optional git enrichment + timestamp override"
+  outputs:
+    current:
+      root: "<output_dir>/healthview/monkey_patches/<YYYYMMDD-HHMM>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+    target:
+      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+retention:
+  surfaces:
+    - "--artifacts-to-keep"
+  mechanism: "prune_run_directories"
+  targets:
+    - "<output_dir>/healthview/monkey_patches/<YYYYMMDD-HHMM>/"
+  guardrails:
+    - "Minimum keep is enforced"
+    - "current_run is protected"
+    - "Directories with a .keep sentinel are protected"
+  evidence:
+    - ".repo_studios/command_center/scripts/libraries/prune_logs.py"
+db_integration:
+  gated_by: "REPO_STUDIOS_DB_ENABLED"
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+evidence:
+  code_refs:
+    - ".repo_studios/scripts/producers/scan_monkey_patches.py#L1-L30"
+    - ".repo_studios/scripts/producers/scan_monkey_patches.py#L84-L110"
+    - ".repo_studios/scripts/producers/scan_monkey_patches.py#L867-L880"
+    - ".repo_studios/scripts/producers/scan_monkey_patches.py#L1034-L1075"
+    - ".repo_studios/scripts/producers/scan_monkey_patches.py#L1278-L1335"
+    - ".repo_studios/command_center/scripts/libraries/database_integration.py#L300-L444"
+    - ".repo_studios/command_center/scripts/libraries/prune_logs.py#L16-L150"
+  tests: []
+  fixtures: []
+notes:
+  - "The producer writes via DualWriteStorage (file primary; DB best-effort warn-only when enabled)."
+  - "The producer returns run_dir/run_timestamp but does not return run_id; orchestrator parsing currently expects run_id."
+  - "Topic token mismatches exist across the chain (producer topic monkey_patches; orchestrator defaults monkey_patch_scans)."
+```
+
+##### S51R-003 monkey patch risk consumer
+
+```yaml
+record_id: "S51R-003"
+script:
+  path: ".repo_studios/scripts/consumers/classify_monkey_patches.py"
+  name: "classify_monkey_patches.py"
+  category: "consumer"
+tier3:
+  metadata_block_version: "v1"
+  allowed: false
+  exists: false
+  name: "tier3_classify_monkey_patches.yaml"
+  meets_template: "NA"
+  last_updated: null
+cli_surfaces:
+  run_entrypoint: "run(argv)"
+  key_flags:
+    - "--scan-dir"
+    - "--base-dir"
+    - "--output-base"
+    - "--artifacts-to-keep"
+    - "--log-level"
+    - "--verbose"
+io_contract:
+  inputs:
+    - "scan_dir override OR base_dir roots (structured + legacy)"
+  outputs:
+    current:
+      root: ".repo_studios/reports/consumer_reports/monkey_patch_risk/monkey_patch_risk-<YYYY-MM-DD_HHMMSS>/"
+      artifacts:
+        - "summary.json"
+        - "SUMMARY.md"
+        - "bundle_summary.json"
+        - "latest_summary.json (pointer)"
+        - "latest_SUMMARY.md (pointer)"
+        - "latest_bundle_summary.json (pointer)"
+    target:
+      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+retention:
+  surfaces:
+    - "--artifacts-to-keep"
+  mechanism: "prune_run_directories"
+  targets:
+    - ".repo_studios/reports/consumer_reports/monkey_patch_risk/"
+  guardrails:
+    - "Minimum keep is enforced"
+    - "current_run is protected"
+    - "Directories with a .keep sentinel are protected"
+  evidence:
+    - ".repo_studios/command_center/scripts/libraries/prune_logs.py"
+db_integration:
+  gated_by: "REPO_STUDIOS_DB_ENABLED"
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+evidence:
+  code_refs:
+    - ".repo_studios/scripts/consumers/classify_monkey_patches.py#L1-L70"
+    - ".repo_studios/scripts/consumers/classify_monkey_patches.py#L240-L350"
+    - ".repo_studios/command_center/scripts/libraries/prune_logs.py#L16-L150"
+  tests: []
+  fixtures: []
+notes:
+  - >-
+      The consumer writes latest_* pointer files into the output base; this conflicts with a
+      strict 'no pointer files' policy unless scoped to healthview bundles only.
+  - "The consumer's documented preferred producer layout differs from the current producer's viewer/topic run-dir layout."
+```
+
+##### S51R-004 monkey patch trend aggregator
+
+```yaml
+record_id: "S51R-004"
+script:
+  path: ".repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py"
+  name: "analyze_monkey_patch_trends.py"
+  category: "aggregator"
+tier3:
+  metadata_block_version: "v1"
+  allowed: false
+  exists: false
+  name: "tier3_analyze_monkey_patch_trends.yaml"
+  meets_template: "NA"
+  last_updated: null
+cli_surfaces:
+  run_entrypoint: "run(argv)"
+  key_flags:
+    - "--consumer-base"
+    - "--consumer-summary"
+    - "--producer-base"
+    - "--output-base"
+    - "--artifacts-to-keep"
+    - "--max-runs"
+    - "--log-level"
+    - "--verbose"
+io_contract:
+  inputs:
+    - "consumer bundles (preferred) OR producer fallback"
+  outputs:
+    current:
+      root: ".repo_studios/reports/aggregator_reports/monkey_patch_trends/monkey_patch_trends-<YYYY-MM-DD_HHMMSS>/"
+      artifacts:
+        - "trend.json"
+        - "trend.md"
+        - "bundle_summary.json"
+        - "latest_trend.json (pointer)"
+        - "latest_trend.md (pointer)"
+        - "latest_bundle_summary.json (pointer)"
+        - "TREND_SNAPSHOT.md (copied into latest consumer bundle)"
+    target:
+      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+retention:
+  surfaces:
+    - "--artifacts-to-keep"
+    - "--max-runs"
+  mechanism: "prune_run_directories"
+  targets:
+    - ".repo_studios/reports/aggregator_reports/monkey_patch_trends/"
+  guardrails:
+    - "Minimum keep is enforced"
+    - "current_run is protected"
+    - "Directories with a .keep sentinel are protected"
+  evidence:
+    - ".repo_studios/command_center/scripts/libraries/prune_logs.py"
+db_integration:
+  gated_by: "REPO_STUDIOS_DB_ENABLED"
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+evidence:
+  code_refs:
+    - ".repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py#L1-L80"
+    - ".repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py#L350-L520"
+    - ".repo_studios/command_center/scripts/libraries/prune_logs.py#L16-L150"
+  tests: []
+  fixtures: []
+notes:
+  - >-
+      The aggregator writes latest_* pointer files into the output base; this conflicts with a
+      strict 'no pointer files' policy unless scoped to healthview bundles only.
+  - "The aggregator also mirrors trend markdown into the latest consumer bundle as TREND_SNAPSHOT.md."
+```
+
+##### S51R-005 monkey patch overview summarizer
+
+```yaml
+record_id: "S51R-005"
+script:
+  path: ".repo_studios/command_center/scripts/summarizers/summarize_monkey_patch_overview.py"
+  name: "summarize_monkey_patch_overview.py"
+  category: "summarizer"
+tier3:
+  metadata_block_version: "v1"
+  allowed: false
+  exists: false
+  name: "tier3_summarize_monkey_patch_overview.yaml"
+  meets_template: "NA"
+  last_updated: null
+cli_surfaces:
+  run_entrypoint: "run(argv)"
+  key_flags:
+    - "--repo-root"
+    - "--consumer-output-dir"
+    - "--producer-output-dir"
+    - "--aggregator-output-dir"
+    - "--output-dir"
+    - "--consumer-summary"
+    - "--consumer-bundle-summary"
+    - "--trend-json"
+    - "--trend-markdown"
+    - "--trend-bundle-summary"
+    - "--producer-report"
+    - "--producer-matches"
+    - "--duplicate-matrix"
+    - "--artifacts-to-keep"
+    - "--timestamp"
+    - "--log-level"
+io_contract:
+  inputs:
+    - "consumer + aggregator outputs (explicit overrides OR latest_* pointers OR latest run heuristics)"
+    - "optional duplicate matrix for overlap analysis"
+  outputs:
+    current:
+      root: ".repo_studios/reports/summarizer_reports/monkey_patch_overview/monkey_patch_overview-<YYYYMMDD_%H%M%S>/"
+      artifacts:
+        - "monkey_patch_overview.json"
+        - "monkey_patch_overview.md"
+    target:
+      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+retention:
+  surfaces:
+    - "--artifacts-to-keep"
+  mechanism: "write_report_artifacts non-hierarchical pruning"
+  targets:
+    - ".repo_studios/reports/summarizer_reports/monkey_patch_overview/"
+  guardrails:
+    - "Minimum keep is enforced"
+    - "Directories with a .keep sentinel are protected"
+  evidence:
+    - ".repo_studios/command_center/scripts/libraries/artifacts.py"
+db_integration:
+  gated_by: "REPO_STUDIOS_DB_ENABLED"
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+evidence:
+  code_refs:
+    - ".repo_studios/command_center/scripts/summarizers/summarize_monkey_patch_overview.py#L1-L80"
+    - ".repo_studios/command_center/scripts/summarizers/summarize_monkey_patch_overview.py#L195-L260"
+    - ".repo_studios/command_center/scripts/summarizers/summarize_monkey_patch_overview.py#L310-L380"
+    - ".repo_studios/command_center/scripts/summarizers/summarize_monkey_patch_overview.py#L450-L488"
+    - ".repo_studios/command_center/scripts/libraries/artifacts.py#L127-L188"
+  tests: []
+  fixtures: []
+notes:
+  - "The summarizer consumes latest_* pointers from consumer/aggregator outputs when present."
+  - >-
+      The summarizer expects report.json/matches.json under a non-viewer/topic layout; the
+      producer emits manifest/summary/telemetry under viewer/topic.
+```
+
+##### S51R-006 risk classification utility
+
+```yaml
+record_id: "S51R-006"
+script:
+  path: ".repo_studios/scripts/utilities/monkey_patch_risk.py"
+  name: "monkey_patch_risk.py"
+  category: "utility"
+tier3:
+  metadata_block_version: "v1"
+  allowed: false
+  exists: false
+  name: "tier3_monkey_patch_risk.yaml"
+  meets_template: "NA"
+  last_updated: null
+cli_surfaces:
+  run_entrypoint: "other"
+  key_flags: []
+io_contract:
+  inputs:
+    - "FindingSignals(category, is_test, is_module_scope)"
+  outputs:
+    current:
+      root: "N/A"
+      artifacts: []
+    target:
+      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+retention:
+  surfaces: []
+  mechanism: "N/A"
+  targets: []
+  guardrails: []
+  evidence: []
+db_integration:
+  gated_by: "REPO_STUDIOS_DB_ENABLED"
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+evidence:
+  code_refs:
+    - ".repo_studios/scripts/utilities/monkey_patch_risk.py#L1-L95"
+  tests: []
+  fixtures: []
+notes:
+  - "Defines the risk bucketing used by consumer + aggregator for consistent reporting."
 ```
 
 #### Implementation Workstreams (checkbox-driven) — <script_name>
@@ -348,13 +788,28 @@ stage are satisfied and the Tier-2 record set is stable enough to extract reusab
   `DB_INTEGRATION_MARKER:` at each callsite.
 - Tier-1 stage section is updated and contradiction entries are closed as evidence confirms.
 
+**Discovery stop-gates (repo-observed mismatches to resolve before code-phase claims):**
+
+- Orchestrator bundle docstring root conflicts with actual `viewer/topic/<YYYYMMDD-HHMM>` layout.
+- Orchestrator uses `viewer=commandview` for the HealthView bundle write.
+- Producer/consumer/aggregator/summarizer disagree on producer artifact naming:
+  - `manifest.json` vs `report.json`
+  - `matches.json` expectations vary
+- Producer/consumer/aggregator/summarizer disagree on producer artifact naming:
+  - `manifest.json` vs `report.json`
+  - `matches.json` expectations vary
+- Orchestrator expects producer payload `run_id` and a flat `producer_output_dir/<run_id>/` structure.
+  The producer returns `run_dir` and writes under `output_dir/healthview/monkey_patches/<YYYYMMDD-HHMM>/`.
+- Consumer + aggregator create `latest_*` pointer artifacts; summarizer consumes pointers when present.
+- Stage outputs use multiple timestamp slug formats (`YYYYMMDD-HHMM`, `YYYYMMDD_%H%M%S`, `%Y-%m-%d_%H%M%S`).
+
 ---
 
 ## 4. Signals & Telemetry
 
 **Regression suites (current evidence):**
 
-- `<pytest -q path/to/test_file.py>`
+- `pytest -q .repo_studios/tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py`
 
 **Telemetry outputs:**
 
@@ -434,4 +889,4 @@ checks:
 
 | Date | Change | Author | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
-| 2025-12-20 | Seeded Stage 5.1 Tier-2 roster skeleton (placeholders only). | repo_studios_ai | <doc-index-ts> | <suites> |
+| 2025-12-20 | Discovery Pass A + doc-index. | repo_studios_ai | 2025-12-20 11:07-05:00 | Not run |

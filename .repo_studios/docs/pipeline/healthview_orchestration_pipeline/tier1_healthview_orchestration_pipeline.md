@@ -105,7 +105,8 @@ analyze trends, and publish timestamped reports.
     package artifacts and/or emit additional artifacts; see the relevant Tier-2 roster.
 - **No mutable pointers:** HealthView bundles must be discoverable by timestamped directories;
   HealthView does not create `latest_*` / `current_*` aliases.
-- **Retention default (HOP target):** history mode with `keep=5` unless explicitly justified.
+- **Retention (HOP target):** retention is enforced in code; see Tier-2 rosters for current
+  evidence and pruning surfaces.
 - **DB dual-write (HOP target):** when `REPO_STUDIOS_DB_ENABLED` is enabled, orchestrators may
   best-effort persist bundle metadata to a DB; failures must log at `WARNING` and must not block
   filesystem artifact writing.
@@ -169,7 +170,7 @@ CI/CD workflows.
 4. Each script writes intermediate artifacts (JSON, markdown) to topic-specific directory
 5. Final aggregator/summarizer produces bundle (manifest + summary + telemetry)
 6. Orchestrator prunes stale artifacts, keeping only N most recent timestamped bundles
-  (HOP target default: `keep=5`)
+  (retention is enforced in code; see Tier-2 for current evidence)
 7. Exit code signals success/failure; logs capture execution telemetry
 
 **Stage organization:**  
@@ -276,8 +277,8 @@ policies, and downstream consumption patterns across all health domains.
   `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`
 - **Discovery invariant:** bundles are discovered by scanning timestamped directories; HealthView
   does not create `latest_*` / `current_*` pointer files.
-- **Retention target default:** history mode with `keep=5` (until code migration lands, scripts may
-  continue to expose legacy per-topic keep knobs).
+- **Retention (HOP target):** retention is enforced in code; see Tier-2 rosters for current
+  evidence and pruning surfaces.
 - Missing artifacts are treated as a stop-gate for contract compliance; stage-specific failure
   behavior and cleanup semantics are documented in Tier-2 rosters.
 
@@ -397,8 +398,8 @@ orchestrators and produces a **composite envelope** showing full-suite status.
   `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
 - **Discovery invariant:** bundles are discovered by timestamped directories; HealthView does not
   create mutable pointer files (`latest_*`, `current_*`).
-- **Retention target default:** `keep=5` for HealthView bundles (legacy scripts may still expose
-  topic-specific keep knobs until migration is complete).
+- **Retention (HOP target):** retention is enforced in code; see Tier-2 rosters for current
+  evidence and pruning surfaces.
 - Exit code 0 = success, non-zero = failure (script-level failures propagate to orchestrator level)
 - All artifacts follow [REPORT_NAMING_STANDARDS.md](../../../../REPORT_NAMING_STANDARDS.md) (viewer/topic/timestamp/artifact)
 - Scripts invoked via dynamic imports (`run(argv)` helpers), not subprocess spawning (except where noted)
@@ -453,7 +454,7 @@ These are Stage 1.1 readiness gates after all Tier-2 DONE script gates are close
 - [ ] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). See: [Contract snapshot](tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11)
 - [ ] Tier-3 eligible (Stage 1.1 Tier-2 depth captured; ready for Tier-3 extraction). See: [Records index](tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1)
 
-**Target contract (HOP):**
+**Target contract (locked decisions):**
 
 - Output root migrates to `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
 - Base package is present: `manifest.json`, `summary.md`, `telemetry.json`.
@@ -547,17 +548,41 @@ _Tier-2 references (depth lives here):_
 - [Stop-gates](tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
 - [Records index](tier2_roster/tier2_docs_health_overview_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
 
-Stage 2.1 script gate checklists are seeded after Tier-2 discovery.
+**Stage 2.1 Script Gate Summary (Tier-1):**
 
-**What Happens (Tier-1) — shim:**
+- [ ] generate_doc_index.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-002-generate-doc-index)
+- [ ] generate_anchor_inventory.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-003-generate-anchor-inventory)
+- [ ] validate_markdown_anchors.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-004-validate-markdown-anchors)
+- [ ] verify_docs_integrity.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-005-verify-docs-integrity)
+- [ ] validate_metrics_anchor_stubs.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-006-validate-metrics-anchor-stubs)
+- [ ] generate_code_doc_churn_report.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-007-generate-code-doc-churn-report)
+- [ ] generate_undocumented_logic_report.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-008-generate-undocumented-logic-report)
+- [ ] aggregate_docs_health_signals.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-009-aggregate-docs-health-signals)
+- [ ] run_docs_health_overview.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-001-docs-health-overview-orchestrator)
 
-- Keep this Stage 2.1 section as a high-level narrative of what the orchestrator does.
-- Do not copy Tier-2 workstreams or per-script evidence into Tier-1.
+**Stage 2.1 Gate Checklist (Tier-1):**
 
-**Section Order (Tier-1) — shim:**
+These are Stage 2.1 readiness gates after all Tier-2 DONE script gates are closed.
 
-- Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) → Stage gate
-  checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
+- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See: [Stop-gates](tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] No pointer artifacts (`latest_*` / `current_*`). See: [Stop-gates](tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). See: [Contract snapshot](tier2_roster/tier2_docs_health_overview_roster.md#23-current-vs-target-contract-snapshot-stage-21)
+- [ ] Tier-3 eligible (Stage 2.1 Tier-2 depth captured; ready for Tier-3 extraction). See: [Records index](tier2_roster/tier2_docs_health_overview_roster.md#311-records-index)
+
+**Target contract (HOP):**
+
+- Canonical output root is `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
+- Base package is present: `manifest.json`, `summary.md`, `telemetry.json`.
+- No pointer files such as `latest_*`.
+
+**Current evidence (Stage 2.1):**
+
+- Current output root observed: `.repo_studios/command_center/reports/healthview/docs_health/<YYYYMMDD-HHMM>/`.
+- Base package artifacts observed for current runs: `manifest.json`, `summary.md`, `telemetry.json`.
+- Pointer artifacts remain a stop-gate (`latest_*`), per Stage 2.1 stop-gates.
+- Details and evidence live in the Stage 2.1 Tier-2 roster:
+  [Current vs Target snapshot](tier2_roster/tier2_docs_health_overview_roster.md#23-current-vs-target-contract-snapshot-stage-21),
+  [Stop-gates](tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists).
 
 **Overview:**  
 The Docs Health Overview orchestrator chains eight scripts in producer → aggregator pipeline: (1)
@@ -598,15 +623,10 @@ anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/a
   - `manifest.json` (orchestrator execution metadata)
   - `summary.md` (human-readable digest)
   - `telemetry.json` (time-series metrics)
-- **Intermediate artifacts** (retained per --artifacts-to-keep, default 1-5 depending on script):
-  - Doc index: `.repo_studios/reports/producer_reports/doc_index/doc_index-<timestamp>/`
-  - Anchor inventory: `.repo_studios/reports/producer_reports/healthview/anchor_inventory/<YYYYMMDD-HHMM>/`
-  - Anchor validation: `.repo_studios/reports/producer_reports/markdown_anchor_validation_reports/markdown_anchor_validation-<timestamp>/`
-  - Docs integrity: `.repo_studios/reports/producer_reports/docs_integrity_reports/docs_integrity-<timestamp>/`
-  - Metrics stubs: `.repo_studios/reports/producer_reports/metrics_anchor_stub_reports/metrics_anchor_stub-<timestamp>/`
-  - Churn report: `.repo_studios/reports/producer_reports/code_doc_churn_reports/code_doc_churn-<timestamp>/`
-  - Undocumented logic: `.repo_studios/reports/producer_reports/undocumented_logic_reports/undocumented_logic-<timestamp>/`
-  - Aggregated signals: `.repo_studios/reports/aggregator_reports/docs_health_signals/docs_health_signals-<timestamp>/`
+- **Intermediate artifacts:** Tier-1 does not enumerate intermediate output roots for this stage.
+  See Tier-2 Stage 2.1 for current intermediate roots, retention surfaces, and pruning evidence:
+  [Contract snapshot](tier2_roster/tier2_docs_health_overview_roster.md#23-current-vs-target-contract-snapshot-stage-21),
+  [Stop-gates](tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists).
 
 **Status:** `Operational – Partial hardening complete`
 
@@ -618,14 +638,10 @@ anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/a
 - Optional script skipping supported via CLI flags: `--skip-doc-index`, `--skip-anchor-inventory`,
   `--skip-anchor-validation`, `--skip-docs-integrity`, `--skip-metrics-stub`, `--skip-churn`,
   `--skip-undocumented`, `--skip-aggregator`, `--skip-hygiene-signals`
-- Artifact retention configurable per script: `--doc-index-artifacts-to-keep=1`,
-  `--anchor-inventory-artifacts-to-keep=5`, `--anchor-validation-artifacts-to-keep=5`,
-  `--docs-integrity-artifacts-to-keep=5`, `--metrics-stub-artifacts-to-keep=5`,
-  `--churn-artifacts-to-keep=5`, `--undocumented-artifacts-to-keep=5`,
-  `--aggregator-artifacts-to-keep=5`, `--artifacts-to-keep=5` (HealthView bundle, default)
+- Retention behavior is enforced in code; see Tier-2 Stage 2.1 for current retention surfaces and
+  pruning evidence.
 - Report naming enforced via `enforce_report_naming()` guardrail (raises `GuardrailViolationError`
   if violated)
-- Doc index retention typically 1 (mutable pointer pattern) vs. other producers at 5 (trend analysis)
 
 **Planned Expansions:**
 
@@ -675,21 +691,40 @@ anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/a
 
 _Tier-2 references (depth lives here):_
 
-- [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md#23-current-vs-target-contract-snapshot-stage-31) — target vs current, bundle invariants, naming/paths
-- [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
-- [Records index](../healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
+- [Contract snapshot](tier2_roster/tier2_fault_diagnostics_overview_roster.md#23-current-vs-target-contract-snapshot-stage-31) — target vs current, bundle invariants, naming/paths
+- [Stop-gates](tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
+- [Records index](tier2_roster/tier2_fault_diagnostics_overview_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
 
-Stage 3.1 script gate checklists are seeded after Tier-2 discovery.
+**Stage 3.1 Script Gate Summary (Tier-1):**
 
-**What Happens (Tier-1) — shim:**
+- [ ] collect_faulthandler_reports.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-002-collect-faulthandler-reports)
+- [ ] generate_fault_artifacts.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-003-generate-fault-artifacts)
+- [ ] summarize_fault_diagnostics_overview.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-004-summarize-fault-diagnostics-overview)
+- [ ] run_fault_diagnostics_overview.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-001-fault-diagnostics-overview-orchestrator)
 
-- Keep this Stage 3.1 section as a high-level narrative of what the orchestrator does.
-- Do not copy Tier-2 workstreams or per-script evidence into Tier-1.
+**Stage 3.1 Gate Checklist (Tier-1):**
 
-**Section Order (Tier-1) — shim:**
+These are Stage 3.1 readiness gates after all Tier-2 DONE script gates are closed.
 
-- Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) → Stage gate
-  checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
+- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See: [Stop-gates](tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] No pointer artifacts (`latest_*` / `current_*`). See: [Stop-gates](tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). See: [Contract snapshot](tier2_roster/tier2_fault_diagnostics_overview_roster.md#23-current-vs-target-contract-snapshot-stage-31)
+- [ ] Tier-3 eligible (Stage 3.1 Tier-2 depth captured; ready for Tier-3 extraction). See: [Records index](tier2_roster/tier2_fault_diagnostics_overview_roster.md#311-records-index)
+
+**Target contract (HOP):**
+
+- Output root migrates to `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
+- Base package is present: `manifest.json`, `summary.md`, `telemetry.json`.
+- Discovery is timestamp-based only (no pointer files such as `latest_*`).
+
+**Current evidence (Stage 3.1):**
+
+- Output root currently observed is CommandView-rooted and not yet output-root compliant.
+- Base package files are present in current runs, but the location contract remains a stop-gate.
+- Pointer artifacts remain a stop-gate (default discovery in this stage still depends on `latest_*`).
+- Details and evidence live in the Stage 3.1 Tier-2 roster:
+  [Current vs Target snapshot](tier2_roster/tier2_fault_diagnostics_overview_roster.md#23-current-vs-target-contract-snapshot-stage-31),
+  [Stop-gates](tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists).
 
 **Overview:**  
 The Fault Diagnostics Overview orchestrator chains a 3-script pipeline
@@ -732,7 +767,7 @@ compatibility. Runtime: 3-5 minutes typical (from docstring, lines 1-25).
 - Supports 3 skip flags: `--skip-producer`, `--skip-consumer`, `--skip-summarizer` (lines 206-208)
 - Can reuse existing producer reports via `--reuse-report` flag (lines 211, 343-344)
 - Can override producer frame depth via `--producer-top-frames` (lines 212, 293-294)
-- Artifact retention defaults: HealthView bundle=3, producer/consumer/summarizer=5 (lines 195-201)
+- Retention behavior is enforced in code; see Tier-2 Stage 3.1 for current evidence.
 - Fail-fast: Aborts on summarizer failure, continues if producer/consumer skipped (lines 512-518)
 - Writes orchestrator telemetry to HealthView bundle with metrics (file count, total bytes,
   timestamps, lines 534-543)
@@ -773,21 +808,42 @@ at 3-5 minutes, dual output locations documented, special reuse/override flags c
 
 _Tier-2 references (depth lives here):_
 
-- [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md#23-current-vs-target-contract-snapshot-stage-41) — target vs current, bundle invariants, naming/paths
-- [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
-- [Records index](../healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
+- [Contract snapshot](tier2_roster/tier2_dependency_import_hygiene_roster.md#23-current-vs-target-contract-snapshot-stage-41) — target vs current, bundle invariants, naming/paths
+- [Stop-gates](tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
+- [Records index](tier2_roster/tier2_dependency_import_hygiene_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
 
-Stage 4.1 script gate checklists are seeded after Tier-2 discovery.
+**Stage 4.1 Script Gate Summary (Tier-1):**
 
-**What Happens (Tier-1) — shim:**
+- [ ] generate_dependency_hygiene_report.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-002-generate_dependency_hygiene_reportpy)
+- [ ] generate_import_graph_report.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-003-generate_import_graph_reportpy)
+- [ ] scan_code_placeholders.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-004-scan_code_placeholderspy)
+- [ ] generate_typecheck_report.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-005-generate_typecheck_reportpy)
+- [ ] refresh_mypy_baselines.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-006-refresh_mypy_baselinespy)
+- [ ] run_dependency_import_hygiene.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-001-dependency-import-hygiene-orchestrator)
 
-- Keep this Stage 4.1 section as a high-level narrative of what the orchestrator does.
-- Do not copy Tier-2 workstreams or per-script evidence into Tier-1.
+**Stage 4.1 Gate Checklist (Tier-1):**
 
-**Section Order (Tier-1) — shim:**
+These are Stage 4.1 readiness gates after all Tier-2 DONE script gates are closed.
 
-- Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) → Stage gate
-  checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
+- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See: [Stop-gates](tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] No pointer artifacts (`latest_*` / `current_*`). See: [Stop-gates](tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). See: [Contract snapshot](tier2_roster/tier2_dependency_import_hygiene_roster.md#23-current-vs-target-contract-snapshot-stage-41)
+- [ ] Tier-3 eligible (Stage 4.1 Tier-2 depth captured; ready for Tier-3 extraction). See: [Records index](tier2_roster/tier2_dependency_import_hygiene_roster.md#311-records-index)
+
+**Target contract (locked decisions):**
+
+- Output root migrates to `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
+- Base package is present: `manifest.json`, `summary.md`, `telemetry.json`.
+- Discovery is timestamp-based only (no pointer files such as `latest_*`).
+
+**Current evidence (Stage 4.1):**
+
+- HealthView bundle root is still under `.repo_studios/command_center/reports/healthview/...` (not the canonical target root).
+- Base package artifacts (`manifest.json`, `summary.md`, `telemetry.json`) are observed in current runs.
+- Pointer artifacts remain a stop-gate (cleanup planning and mypy baselines flows write `latest_*` artifacts in rawview roots).
+- Details and evidence live in the Stage 4.1 Tier-2 roster:
+  [Current vs Target snapshot](tier2_roster/tier2_dependency_import_hygiene_roster.md#23-current-vs-target-contract-snapshot-stage-41),
+  [Stop-gates](tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists).
 
 **Overview:**  
 The Dependency & Import Hygiene orchestrator chains a 5-script pipeline (4 producers + 1 utility)
@@ -841,8 +897,7 @@ typical in CI, with linting and mypy dominating when baseline refresh is enabled
   `--trigger-batch-cleanup` (lines 285-289, opt-in), `--refresh-mypy-baselines`
   (lines 290-294, opt-in), dependency patterns via `--dependency-requirements-pattern`
   (lines 256-260), `--dependency-skip-pyproject` (lines 261-262)
-- Artifact retention defaults: HealthView bundle=3, dependency=10, import-graph=10, placeholder=5,
-  cleanup=5, typecheck=10, baselines=5 (lines 247-253)
+- Retention behavior is enforced in code; see Tier-2 Stage 4.1 for current evidence.
 - Fail-tolerant pipeline: `stop_on_failure=False` (line 1005) – continues through failures except
   for cleanup step (line 1003)
 - Batch cleanup dry-run: Generates structured plan without executing commands
@@ -886,20 +941,42 @@ typical in CI, with linting and mypy dominating when baseline refresh is enabled
 
 _Tier-2 references (depth lives here):_
 
-- [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md#23-current-vs-target-contract-snapshot-stage-51) — target vs current, bundle invariants, naming/paths
-- [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
-- [Records index](../healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
+- [Contract snapshot](tier2_roster/tier2_monkey_patch_oversight_roster.md#23-current-vs-target-contract-snapshot-stage-51) — target vs current, bundle invariants, naming/paths
+- [Stop-gates](tier2_roster/tier2_monkey_patch_oversight_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
+- [Records index](tier2_roster/tier2_monkey_patch_oversight_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
 
-Stage 5.1 script gate checklists are seeded after Tier-2 discovery.
+**Stage 5.1 Script Gate Summary (Tier-1):**
 
-**What Happens (Tier-1) — shim:**
+- [ ] scan_monkey_patches.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-002-monkey-patch-scan-producer)
+- [ ] classify_monkey_patches.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-003-monkey-patch-risk-consumer)
+- [ ] analyze_monkey_patch_trends.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-004-monkey-patch-trend-aggregator)
+- [ ] summarize_monkey_patch_overview.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-005-monkey-patch-overview-summarizer)
+- [ ] monkey_patch_risk.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-006-risk-classification-utility)
+- [ ] run_monkey_patch_oversight.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-001-monkey-patch-oversight-orchestrator)
 
-- Keep this Stage 5.1 section as a high-level narrative of what the orchestrator does.
-- Do not copy Tier-2 workstreams or per-script evidence into Tier-1.
+**Stage 5.1 Gate Checklist (Tier-1):**
 
-**Section Order (Tier-1) — shim:**
+These are Stage 5.1 readiness gates after all Tier-2 DONE script gates are closed.
 
-- Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) → Stage gate checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
+- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See: [Stop-gates](tier2_roster/tier2_monkey_patch_oversight_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] No pointer artifacts (`latest_*` / `current_*`). See: [Stop-gates](tier2_roster/tier2_monkey_patch_oversight_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). See: [Contract snapshot](tier2_roster/tier2_monkey_patch_oversight_roster.md#23-current-vs-target-contract-snapshot-stage-51)
+- [ ] Tier-3 eligible (Stage 5.1 Tier-2 depth captured; ready for Tier-3 extraction). See: [Records index](tier2_roster/tier2_monkey_patch_oversight_roster.md#311-records-index)
+
+**Target contract (locked decisions):**
+
+- Output root migrates to `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
+- Base package is present: `manifest.json`, `summary.md`, `telemetry.json`.
+- Discovery is timestamp-based only (no pointer files such as `latest_*`).
+
+**Current evidence (Stage 5.1):**
+
+- Output root currently observed is CommandView-rooted and not yet output-root compliant.
+- Base package artifacts (`manifest.json`, `summary.md`, `telemetry.json`) are observed in orchestrator bundle writes.
+- Pointer artifacts remain a stop-gate (consumer/aggregator outputs include `latest_*` and are consumed by the summarizer).
+- Details and evidence live in the Stage 5.1 Tier-2 roster:
+  [Current vs Target snapshot](tier2_roster/tier2_monkey_patch_oversight_roster.md#23-current-vs-target-contract-snapshot-stage-51),
+  [Stop-gates](tier2_roster/tier2_monkey_patch_oversight_roster.md#32-stop-gates-and-implementation-checklists).
 
 **Overview:**  
 The Monkey Patch Oversight orchestrator chains a 4-script pipeline
@@ -944,7 +1021,7 @@ enabled; trend aggregation scales with the configured history window (from docst
 
 - Dynamic imports via `_load_callable()` for all 4 pipeline scripts (lines 288-298)
 - Supports 4 skip flags: `--skip-producer`, `--skip-consumer`, `--skip-aggregator`, `--skip-summarizer` (lines 229-232)
-- Artifact retention defaults: HealthView bundle=3, producer=10, consumer=10, aggregator=10, summarizer=5 (lines 208-212)
+- Retention behavior is enforced in code; see Tier-2 Stage 5.1 for current evidence.
 - Trend analysis: Configurable history window via `--trend-max-runs` (default=20, lines 217)
 - Git enrichment: Optional producer flag `--producer-with-git` enables Git history analysis (lines 224, 327)
 - Producer configurability: Context lines (default=2), strict mode, project packages, exclude patterns (lines 218-227, 317-337)
@@ -1171,7 +1248,7 @@ The `orchestrate_full_diagnostic.py` meta-orchestrator chains all six Stage NN.1
    - `manifest.json` (composite envelope with per-topic outcomes)
    - `summary.md` (meta-summary showing domain health scores)
    - `telemetry.json` (cross-domain trend metrics)
-6. Prunes old bundles per `--artifacts-to-keep` (default: 3)
+6. Prunes old bundles per `--artifacts-to-keep`
 7. Returns aggregated exit code (0 if all succeeded, first non-zero otherwise)
 
 **Inputs:**
@@ -1196,7 +1273,7 @@ The `orchestrate_full_diagnostic.py` meta-orchestrator chains all six Stage NN.1
 - First orchestrator failure aborts remaining topics (fail-fast strategy)
 - Each topic orchestrator inherits shared `--log-level` for consistent logging verbosity
 - Dynamic imports use `importlib.import_module()`, not subprocess spawning
-- Artifact retention configurable via `--artifacts-to-keep=3` (meta-level bundle retention)
+- Artifact retention configurable via `--artifacts-to-keep` (meta-level bundle retention)
 
 **Known Gaps:**
 
@@ -1272,11 +1349,17 @@ All gaps have logical explanations:
 | ID | Description | Sections Affected | Reality Source | Next Step |
 |----|-------------|-------------------|----------------|----------|
 | CR-001 | Tier-1 “current output root” references `.repo_studios/command_center/reports/healthview/...` while HOP target contract requires `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`. | 1.2, 3.1, 3.4, stage I/O bullets | `REPORT_NAMING_STANDARDS.md`, current orchestrator outputs | Keep Tier-1 explicit about “current vs target” until code migration lands; update Stage 1.1 Tier-2 vertical with per-script “current vs target” output tables. |
-| CR-002 | Retention default is inconsistent: Tier-1 references “7 days” and multiple per-script keep knobs; HOP target default is `keep=5` for HealthView bundles. | 1.6, 3.4, stage retention bullets | HOP locked decision; current orchestrator CLI flags | Declare `keep=5` as the HealthView bundle default for the HOP target contract; track per-script current defaults in Tier-2 vertical docs. |
+| CR-002 | Retention policy language drifts between “days,” per-script knobs, and bundle-level behavior across the pipeline docs. | 1.6, 3.4, stage retention bullets | Tier-2 rosters; current orchestrator CLI flags | Keep Tier-1 contract-level: retention is enforced in code; track current retention surfaces and evidence in Tier-2 rosters until migrations converge. |
 | CR-003 | DB dual-write semantics are part of the HOP target contract; current implementation is partial and not end-to-end across all stages. | 1.2, 1.6, global controls | HOP locked decision; stage rosters (Tier-2) | Keep Tier-1 target contract language and treat DB as a stop-gate until best-effort DB persistence is consistently evidenced where required; Tier-2 rosters track current DB marker coverage by stage. |
 | CR-004 | Timestamp directory shape varies across stages (`<YYYY-MM-DD>`, `<YYYYmmdd-HHmm>`, `<timestamp>`), which makes discovery ambiguous. | 1.2, stage output bullets | Stage tables and output examples in this Tier-1 doc | Standardize Tier-1 narrative to use `<timestamp>` consistently; push exact formatting requirements into Tier-2 verticals and Tier-3 artifacts doc. |
 | CR-005 | Stage 1.1 base package is incomplete (missing required `summary.md` in the HealthView bundle). | 4.1 | Stage 1.1 Tier-2 roster | Treat as a stop-gate for Stage 1.1 contract compliance; track closure in Tier-2 stop-gates and update Tier-1 when resolved. |
 | CR-006 | Stage 1.1 emits pointer artifacts (`latest_*`) in downstream outputs (violates “no mutable pointers”). | 4.1 | Stage 1.1 Tier-2 roster | Treat as a stop-gate for Stage 1.1 contract compliance; remove pointers during migration and close the contradiction when Tier-2 evidence confirms. |
+| CR-007 | Stage 2.1 retains split intermediate output roots (producer/aggregator reports) during migration rather than a single HOP-rooted bundle surface. | 5.1 | Stage 2.1 Tier-2 roster | Treat as a stop-gate until output roots converge; rely on Tier-2 evidence for current roots and close when migrations land. |
+| CR-008 | Stage 2.1 emits pointer artifacts (`latest_*`) in intermediate outputs (violates “no mutable pointers”). | 5.1 | Stage 2.1 Tier-2 roster | Treat as a stop-gate; close via Tier-2 stop-gates when pointers are removed and evidence confirms. |
+| CR-009 | Stage 3.1 current bundle writes land under a CommandView-rooted path (viewer/root mismatch vs HealthView/HOP contract). | 6.1 | Stage 3.1 Tier-2 roster | Treat as a stop-gate; close when Stage 3.1 output roots align to the HOP contract and Tier-2 evidence updates. |
+| CR-010 | Stage 4.1 remains on the current output root (`.repo_studios/command_center/reports/...`) rather than the HOP contract root. | 7.1 | Stage 4.1 Tier-2 roster | Track as a stop-gate in Tier-2; update Tier-1 once output roots align and evidence confirms. |
+| CR-011 | Stage 5.1 mixes run slug formats and uses pointer artifacts (`latest_*`) across pipeline outputs (violates timestamp-only discovery). | 8.1 | Stage 5.1 Tier-2 roster | Treat as a stop-gate; close via Tier-2 once slugs/pointers are removed and evidence confirms. |
+| CR-012 | Stage 6.1 output roots and timestamp formats are inconsistent across the chain (viewer/root split; prompt seed uses a different run id shape). | 9.1 | Stage 6.1 Tier-2 roster | Treat as a stop-gate; close via Tier-2 once outputs converge on the HOP contract and evidence confirms. |
 
 ---
 
@@ -1285,17 +1368,17 @@ All gaps have logical explanations:
 **Tier-2 (Roster) Documents (per-orchestrator BEGIN → END):**
 
 - [tier2_roster/tier2_test_execution_telemetry_roster.md](tier2_roster/tier2_test_execution_telemetry_roster.md) – Stage 1.1 deep dive
-- [TBD] `tier2_roster/docs_health_overview_roster.md` – Stage 2.1 deep dive
-- [Stage 3.1 roster](../healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md) – Stage 3.1 deep dive
-- [Stage 4.1 roster](../healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md) – Stage 4.1 deep dive
-- [TBD] `tier2_roster/monkey_patch_oversight_roster.md` – Stage 5.1 deep dive
-- [TBD] `tier2_roster/standards_integrity_roster.md` – Stage 6.1 deep dive
-- [TBD] `tier2_roster/full_diagnostic_suite_roster.md` – Stage 7 (meta-orchestrator) deep dive
+- [tier2_roster/tier2_docs_health_overview_roster.md](tier2_roster/tier2_docs_health_overview_roster.md) – Stage 2.1 deep dive
+- [tier2_roster/tier2_fault_diagnostics_overview_roster.md](tier2_roster/tier2_fault_diagnostics_overview_roster.md) – Stage 3.1 deep dive
+- [tier2_roster/tier2_dependency_import_hygiene_roster.md](tier2_roster/tier2_dependency_import_hygiene_roster.md) – Stage 4.1 deep dive
+- [tier2_roster/tier2_monkey_patch_oversight_roster.md](tier2_roster/tier2_monkey_patch_oversight_roster.md) – Stage 5.1 deep dive
+- [tier2_roster/tier2_standards_integrity_roster.md](tier2_roster/tier2_standards_integrity_roster.md) – Stage 6.1 deep dive
+- [tier2_roster/tier2_full_suite_overview_roster.md](tier2_roster/tier2_full_suite_overview_roster.md) – Stage 7 (meta-orchestrator) deep dive
 
 **Tier-3 (YAML) Documents (per-script agent tools):**
 
-- [TBD] 28 YAML files for orchestrated scripts (see Stage NN.1 tables above)
-- [TBD] 12 YAML files for gap scripts (as they are integrated)
+- Tier-3 YAMLs are not yet created for this pipeline. Tier-2 rosters define the promotion bar and
+  stop-gates that must be closed before Tier-3 artifacts are drafted.
 
 **Related Architecture Documents:**
 

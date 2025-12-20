@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "healthview",
+  "topic": "doc_index",
+  "run_timestamp": "20251220-1727",
+  "generated_utc": "2025-12-20T17:27:24.209940+00:00",
+  "status": "ok",
+  "catalog": [
+    "scripts.docs.generate_doc_index"
+  ],
+  "inputs": {
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "output_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports",
+    "artifacts_to_keep": 1,
+    "db_target": null,
+    "excluded_names": [
+      ".git",
+      ".hg",
+      ".mypy_cache",
+      ".pytest_cache",
+      ".svn",
+      ".tox",
+      ".venv",
+      "__pycache__",
+      "build",
+      "dist",
+      "node_modules"
+    ],
+    "excluded_prefixes": [
+      ".repo_studios/reports",
+      ".repo_studios/command_center/reports"
+    ],
+    "description_width": 240
+  },
+  "artifacts": [
+    {
+      "name": "manifest.json",
+      "role": "manifest"
+    },
+    {
+      "name": "summary.md",
+      "role": "summary"
+    },
+    {
+      "name": "telemetry.json",
+      "role": "telemetry"
+    },
+    {
+      "name": "doc_index.csv",
+      "role": "csv"
+    }
+  ]
+}

@@ -138,13 +138,18 @@ Authoritative entry points for Tier-1 routing and agent discovery are:
 **Current evidence (repo-observed):**
 
 - Output root currently observed:
-  `.repo_studios/command_center/reports/healthview/docs_health/<YYYY-MM-DD>/`
+  `.repo_studios/command_center/reports/healthview/docs_health/<YYYYMMDD-HHMM>/`
 - Timestamp/run slug shape observed:
-  `<YYYY-MM-DD>`
+  `YYYYMMDD-HHMM` (UTC)
 - Artifact set observed in current runs:
-  - `<ARTIFACT_1>`
-  - `<ARTIFACT_2>`
-  - `<ARTIFACT_3>`
+  - `manifest.json`
+  - `summary.md`
+  - `telemetry.json`
+
+- Intermediate bundle roots currently observed in this stage:
+  - Producers: `.repo_studios/reports/producer_reports/healthview/<topic>/<YYYYMMDD-HHMM>/`
+  - Aggregator:
+    `.repo_studios/reports/aggregator_reports/docs_health_signals/<YYYYMMDD-HHMM>/`
 
 Mismatch is treated as a stop-gate.
 
@@ -162,24 +167,34 @@ Implementation Workstreams are inactive until Discovery (Workstream A) is comple
 
 A short index that links to each per-script record block in this document.
 
-- `<record_id>` — `generate_doc_index.py` — Producer — `<record_anchor>`
-- `<record_id>` — `generate_anchor_inventory.py` — Producer — `<record_anchor>`
-- `<record_id>` — `validate_markdown_anchors.py` — Producer — `<record_anchor>`
-- `<record_id>` — `verify_docs_integrity.py` — Producer — `<record_anchor>`
-- `<record_id>` — `validate_metrics_anchor_stubs.py` — Producer — `<record_anchor>`
-- `<record_id>` — `generate_code_doc_churn_report.py` — Producer — `<record_anchor>`
-- `<record_id>` — `generate_undocumented_logic_report.py` — Producer — `<record_anchor>`
-- `<record_id>` — `aggregate_docs_health_signals.py` — Aggregator — `<record_anchor>`
+- `S21R-001` — `run_docs_health_overview.py` — Orchestrator — [anchor](#s21r-001-docs-health-overview-orchestrator)
+- `S21R-002` — `generate_doc_index.py` — Producer — [anchor](#s21r-002-generate-doc-index)
+- `S21R-003` — `generate_anchor_inventory.py` — Producer — [anchor](#s21r-003-generate-anchor-inventory)
+- `S21R-004` — `validate_markdown_anchors.py` — Producer — [anchor](#s21r-004-validate-markdown-anchors)
+- `S21R-005` — `verify_docs_integrity.py` — Producer — [anchor](#s21r-005-verify-docs-integrity)
+- `S21R-006` — `validate_metrics_anchor_stubs.py` — Producer — [anchor](#s21r-006-validate-metrics-anchor-stubs)
+- `S21R-007` — `generate_code_doc_churn_report.py` — Producer — [anchor](#s21r-007-generate-code-doc-churn-report)
+- `S21R-008` — `generate_undocumented_logic_report.py` — Producer — [anchor](#s21r-008-generate-undocumented-logic-report)
+- `S21R-009` — `aggregate_docs_health_signals.py` — Aggregator — [anchor](#s21r-009-aggregate-docs-health-signals)
 
 #### 3.1.2 Pruning Index (mini-block)
 
 A compact, mechanism-oriented summary of pruning surfaces and how pruning is enforced.
 
-- **Pruning surfaces:** `<flags / defaults / callsites>`
-- **Pruning mechanism:** `<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>`
-- **Pruning targets:** `<bundle roots and intermediate roots>`
-- **Pruning guardrails:** `<current_run_protection / exclusions / atomic_write / other>`
-- **Evidence source:** `<tests / docstrings / fixtures>`
+- **Pruning surfaces:**
+  - `--artifacts-to-keep` (orchestrator + delegated scripts)
+  - orchestrator per-step keep flags
+- **Pruning mechanism:**
+  - `prune_run_directories(... keep=...)`
+  - `write_report_artifacts(... keep=...)`
+- **Pruning targets:**
+  - Orchestrator bundle root: `.repo_studios/command_center/reports/healthview/docs_health/`
+  - Producer bundle roots: `.repo_studios/reports/producer_reports/healthview/<topic>/`
+  - Aggregator bundle root:
+    `.repo_studios/reports/aggregator_reports/docs_health_signals/`
+- **Pruning guardrails:** `current_run` protection when pruning (where supported)
+- **Evidence source:** `run_docs_health_overview.py` + each producer/aggregator bundle
+  writer/pruner callsite
 
 #### 3.1.3 ScriptInspectionRecordV1 Schema
 
@@ -248,10 +263,115 @@ fields:
 
 Populate one block per script in the chain. Keep each record concise and evidence-backed.
 
-##### <record_id>: generate_doc_index.py
+##### S21R-001 docs health overview orchestrator
 
 ```yaml
-record_id: "<record_id>"
+record_id: "S21R-001"
+script:
+  path: ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py"
+  name: "run_docs_health_overview.py"
+  category: "orchestrator"
+tier3:
+  metadata_block_version: "v1"
+  allowed: false
+  exists: false
+  name: "tier3_run_docs_health_overview.yaml"
+  meets_template: "NA"
+  last_updated: null
+cli_surfaces:
+  run_entrypoint: "run(argv)"
+  key_flags:
+    - "--repo-root"
+    - "--log-level"
+    - "--timestamp"
+    - "--artifacts-to-keep"
+    - "--healthview-root"
+    - "--*-output-dir (per-step output roots)"
+    - "--skip-* (per-step skip flags)"
+io_contract:
+  inputs:
+    - "Delegates to producer/aggregator modules and threads per-step output roots + keep budgets"
+    - "Accepts --timestamp (ISO-8601) and derives run_slug as YYYYMMDD-HHMM (UTC)"
+  outputs:
+    current:
+      root: ".repo_studios/command_center/reports/healthview/docs_health/YYYYMMDD-HHMM/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+    target:
+      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+retention:
+  surfaces:
+    - "--artifacts-to-keep"
+    - "write_report_artifacts(... keep=options.artifacts_to_keep)"
+  mechanism: "prune_by_keep_budget"
+  targets:
+    - ".repo_studios/command_center/reports/healthview/docs_health"
+  guardrails:
+    - "Report naming audit via enforce_report_naming(...)"
+  evidence:
+    - "write_report_artifacts(... keep=...) + run_slug formatting"
+db_integration:
+  gated_by: "REPO_STUDIOS_DB_ENABLED"
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+evidence:
+  code_refs:
+    - ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py#L46-L107"
+    - ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py#L331-L463"
+    - ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py#L970-L1005"
+    - ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py#L1198-L1386"
+  tests:
+    - "<pytest path>"
+  fixtures:
+    - "<fixture path>"
+notes:
+  - "Current orchestrator outputs are under .repo_studios/command_center/reports (not the target HealthView root)."
+  - "DB markers: none observed in this orchestrator (it does not call create_storage)."
+  - >-
+    Orchestrator manifest includes undocumented_report pointing at
+    undocumented_outcome.artifacts['report.json'], but the undocumented producer
+    currently emits telemetry.json only (see S21R-008 notes).
+```
+
+#### Implementation Workstreams (checkbox-driven) — run_docs_health_overview.py
+
+Workstream A — Discovery
+
+- [ ] Inspect outputs + pruning/retention surfaces; record findings
+
+Workstream B — Plan
+
+- [ ] Draft plan to close output-root/base-package stop-gates
+
+Workstream C — Implement
+
+- [ ] Implement accepted plan; update record and stop-gate status with evidence.
+
+Workstream D — Tier-3 YAML
+
+- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Inspect Tier-3 template requirements
+- [ ] Draft `tier3_run_docs_health_overview.yaml`
+- [ ] Validate Tier-3 YAML
+
+Workstream E — QA & Evidence
+
+- [ ] Pytest evidence captured
+- [ ] Mypy evidence captured or marked N/A (in record)
+- [ ] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
+
+- [ ] DONE — run_docs_health_overview.py complete; update Tier-1 Stage 2.1 script gate
+
+##### S21R-002 generate doc index
+
+```yaml
+record_id: "S21R-002"
 script:
   path: ".repo_studios/scripts/producers/generate_doc_index.py"
   name: "generate_doc_index.py"
@@ -266,15 +386,25 @@ tier3:
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
-    - "<--flag>"
+    - "--repo-root"
+    - "--output-dir"
+    - "--timestamp"
+    - "--log-level"
+    - "--artifacts-to-keep"
+    - "--refresh-checkbox-report"
+    - "--refresh-tier3-index"
 io_contract:
   inputs:
-    - "<input description>"
+    - "Scans repo documentation and emits a Doc Index payload + CSV"
+    - "Optional: refreshes checkbox report / Tier-3 index before indexing"
   outputs:
     current:
-      root: "<current root>"
+      root: ".repo_studios/reports/producer_reports/healthview/doc_index/YYYYMMDD-HHMM/"
       artifacts:
-        - "<artifact>"
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+        - "doc_index.csv"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
@@ -283,27 +413,31 @@ io_contract:
         - "telemetry.json"
 retention:
   surfaces:
-    - "<flags / defaults / callsites>"
-  mechanism: "<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>"
+    - "--artifacts-to-keep"
+    - "prune_run_directories(... keep=options.artifacts_to_keep)"
+  mechanism: "prune_by_keep_budget"
   targets:
-    - "<bundle roots and intermediate roots>"
+    - ".repo_studios/reports/producer_reports/healthview/doc_index"
   guardrails:
-    - "<current_run_protection / exclusions / atomic_write / other>"
+    - "current_run protection when pruning"
   evidence:
-    - "<tests / docstrings / fixtures / code_refs>"
+    - "create_storage(...) bundle writer + prune_run_directories(...)"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - "<path>#Lx-Ly"
+    - ".repo_studios/scripts/producers/generate_doc_index.py#L32-L34"
+    - ".repo_studios/scripts/producers/generate_doc_index.py#L712-L790"
+    - ".repo_studios/scripts/producers/generate_doc_index.py#L804-L936"
   tests:
     - "<pytest path>"
   fixtures:
     - "<fixture path>"
 notes:
-  - "<short note>"
+  - "DB markers present for manifest/summary/telemetry writes; doc_index.csv write is explicitly marked as no-DB."
+  - "Return payload omits doc_index.csv path even though the file is written into the bundle dir."
 ```
 
 #### Implementation Workstreams (checkbox-driven) — generate_doc_index.py
@@ -335,10 +469,10 @@ Workstream E — QA & Evidence
 
 - [ ] DONE — generate_doc_index.py complete; update Tier-1 Stage 2.1 script gate
 
-##### <record_id>: generate_anchor_inventory.py
+##### S21R-003 generate anchor inventory
 
 ```yaml
-record_id: "<record_id>"
+record_id: "S21R-003"
 script:
   path: ".repo_studios/scripts/producers/generate_anchor_inventory.py"
   name: "generate_anchor_inventory.py"
@@ -353,15 +487,23 @@ tier3:
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
-    - "<--flag>"
+    - "--repo-root"
+    - "--docs-root"
+    - "--additional-docs-root (repeatable)"
+    - "--output-dir"
+    - "--timestamp"
+    - "--log-level"
+    - "--artifacts-to-keep"
 io_contract:
   inputs:
-    - "<input description>"
+    - "Scans documentation roots and inventories heading-derived anchors"
   outputs:
     current:
-      root: "<current root>"
+      root: ".repo_studios/reports/producer_reports/healthview/anchor_inventory/YYYYMMDD-HHMM/"
       artifacts:
-        - "<artifact>"
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
@@ -370,27 +512,30 @@ io_contract:
         - "telemetry.json"
 retention:
   surfaces:
-    - "<flags / defaults / callsites>"
-  mechanism: "<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>"
+    - "--artifacts-to-keep"
+    - "prune_run_directories(... keep=max(1, options.artifacts_to_keep), current_run=bundle_dir)"
+  mechanism: "prune_by_keep_budget"
   targets:
-    - "<bundle roots and intermediate roots>"
+    - ".repo_studios/reports/producer_reports/healthview/anchor_inventory"
   guardrails:
-    - "<current_run_protection / exclusions / atomic_write / other>"
+    - "current_run protection when pruning"
   evidence:
-    - "<tests / docstrings / fixtures / code_refs>"
+    - "create_storage(...) bundle writer + prune_run_directories(...)"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - "<path>#Lx-Ly"
+    - ".repo_studios/scripts/producers/generate_anchor_inventory.py#L21-L23"
+    - ".repo_studios/scripts/producers/generate_anchor_inventory.py#L239-L309"
+    - ".repo_studios/scripts/producers/generate_anchor_inventory.py#L588-L747"
   tests:
     - "<pytest path>"
   fixtures:
     - "<fixture path>"
 notes:
-  - "<short note>"
+  - "DB markers present for manifest/summary/telemetry writes."
 ```
 
 #### Implementation Workstreams (checkbox-driven) — generate_anchor_inventory.py
@@ -422,10 +567,10 @@ Workstream E — QA & Evidence
 
 - [ ] DONE — generate_anchor_inventory.py complete; update Tier-1 Stage 2.1 script gate
 
-##### <record_id>: validate_markdown_anchors.py
+##### S21R-004 validate markdown anchors
 
 ```yaml
-record_id: "<record_id>"
+record_id: "S21R-004"
 script:
   path: ".repo_studios/scripts/producers/validate_markdown_anchors.py"
   name: "validate_markdown_anchors.py"
@@ -438,17 +583,25 @@ tier3:
   meets_template: "NA"
   last_updated: null
 cli_surfaces:
-  run_entrypoint: "run(argv)"
+  run_entrypoint: "main(argv)"
   key_flags:
-    - "<--flag>"
+    - "--repo-root"
+    - "--root"
+    - "--glob (repeatable)"
+    - "--output-dir"
+    - "--timestamp"
+    - "--log-level"
+    - "--artifacts-to-keep"
 io_contract:
   inputs:
-    - "<input description>"
+    - "Scans selected markdown files and validates internal + cross-file anchors"
   outputs:
     current:
-      root: "<current root>"
+      root: ".repo_studios/reports/producer_reports/healthview/markdown_anchor_validation/YYYYMMDD-HHMM/"
       artifacts:
-        - "<artifact>"
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
@@ -457,27 +610,31 @@ io_contract:
         - "telemetry.json"
 retention:
   surfaces:
-    - "<flags / defaults / callsites>"
-  mechanism: "<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>"
+    - "--artifacts-to-keep"
+    - "prune_run_directories(... keep=options.artifacts_to_keep, current_run=run_dir)"
+  mechanism: "prune_by_keep_budget"
   targets:
-    - "<bundle roots and intermediate roots>"
+    - ".repo_studios/reports/producer_reports/healthview/markdown_anchor_validation"
   guardrails:
-    - "<current_run_protection / exclusions / atomic_write / other>"
+    - "current_run protection when pruning"
   evidence:
-    - "<tests / docstrings / fixtures / code_refs>"
+    - "create_storage(...) bundle writer + prune_run_directories(...)"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - "<path>#Lx-Ly"
+    - ".repo_studios/scripts/producers/validate_markdown_anchors.py#L1-L33"
+    - ".repo_studios/scripts/producers/validate_markdown_anchors.py#L365-L406"
+    - ".repo_studios/scripts/producers/validate_markdown_anchors.py#L426-L466"
   tests:
     - "<pytest path>"
   fixtures:
     - "<fixture path>"
 notes:
-  - "<short note>"
+  - "DB markers present for manifest/summary/telemetry writes."
+  - "This producer does not expose a run(argv) helper; orchestrators must invoke main(argv) or shell out."
 ```
 
 #### Implementation Workstreams (checkbox-driven) — validate_markdown_anchors.py
@@ -509,10 +666,10 @@ Workstream E — QA & Evidence
 
 - [ ] DONE — validate_markdown_anchors.py complete; update Tier-1 Stage 2.1 script gate
 
-##### <record_id>: verify_docs_integrity.py
+##### S21R-005 verify docs integrity
 
 ```yaml
-record_id: "<record_id>"
+record_id: "S21R-005"
 script:
   path: ".repo_studios/scripts/producers/verify_docs_integrity.py"
   name: "verify_docs_integrity.py"
@@ -527,15 +684,24 @@ tier3:
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
-    - "<--flag>"
+    - "--repo-root"
+    - "--index"
+    - "--output-dir"
+    - "--update"
+    - "--regen-table"
+    - "--artifacts-to-keep"
+    - "--log-level"
+    - "--exit-codes-hash"
 io_contract:
   inputs:
-    - "<input description>"
+    - "Validates governed JSON blocks and content_hash stability (optionally updates mismatches)"
   outputs:
     current:
-      root: "<current root>"
+      root: ".repo_studios/reports/producer_reports/healthview/docs_integrity_validation/YYYYMMDD-HHMM/"
       artifacts:
-        - "<artifact>"
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
@@ -544,27 +710,31 @@ io_contract:
         - "telemetry.json"
 retention:
   surfaces:
-    - "<flags / defaults / callsites>"
-  mechanism: "<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>"
+    - "--artifacts-to-keep"
+    - "prune_run_directories(... keep=max(options.artifacts_to_keep, 1), current_run=run_dir)"
+  mechanism: "prune_by_keep_budget"
   targets:
-    - "<bundle roots and intermediate roots>"
+    - ".repo_studios/reports/producer_reports/healthview/docs_integrity_validation"
   guardrails:
-    - "<current_run_protection / exclusions / atomic_write / other>"
+    - "current_run protection when pruning"
   evidence:
-    - "<tests / docstrings / fixtures / code_refs>"
+    - "Module docstring describes canonical bundle root + artifacts"
+    - "create_storage(...) bundle writer + prune_run_directories(...)"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - "<path>#Lx-Ly"
+    - ".repo_studios/scripts/producers/verify_docs_integrity.py#L1-L23"
+    - ".repo_studios/scripts/producers/verify_docs_integrity.py#L155-L236"
+    - ".repo_studios/scripts/producers/verify_docs_integrity.py#L579-L688"
   tests:
     - "<pytest path>"
   fixtures:
     - "<fixture path>"
 notes:
-  - "<short note>"
+  - "DB markers present for manifest/summary/telemetry writes."
 ```
 
 #### Implementation Workstreams (checkbox-driven) — verify_docs_integrity.py
@@ -596,10 +766,10 @@ Workstream E — QA & Evidence
 
 - [ ] DONE — verify_docs_integrity.py complete; update Tier-1 Stage 2.1 script gate
 
-##### <record_id>: validate_metrics_anchor_stubs.py
+##### S21R-006 validate metrics anchor stubs
 
 ```yaml
-record_id: "<record_id>"
+record_id: "S21R-006"
 script:
   path: ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py"
   name: "validate_metrics_anchor_stubs.py"
@@ -614,15 +784,22 @@ tier3:
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
-    - "<--flag>"
+    - "--repo-root"
+    - "--output-dir"
+    - "--legacy-file"
+    - "--allowlist-path"
+    - "--artifacts-to-keep"
+    - "--log-level"
 io_contract:
   inputs:
-    - "<input description>"
+    - "Scans markdown for metrics_orchestrator.md#<anchor> links and validates legacy stub headings"
   outputs:
     current:
-      root: "<current root>"
+      root: ".repo_studios/reports/producer_reports/healthview/metrics_anchor_stub_validation/YYYYMMDD-HHMM/"
       artifacts:
-        - "<artifact>"
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
@@ -631,27 +808,32 @@ io_contract:
         - "telemetry.json"
 retention:
   surfaces:
-    - "<flags / defaults / callsites>"
-  mechanism: "<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>"
+    - "--artifacts-to-keep"
+    - "prune_run_directories(... keep=max(keep, 1), current_run=run_dir)"
+  mechanism: "prune_by_keep_budget"
   targets:
-    - "<bundle roots and intermediate roots>"
+    - ".repo_studios/reports/producer_reports/healthview/metrics_anchor_stub_validation"
   guardrails:
-    - "<current_run_protection / exclusions / atomic_write / other>"
+    - "current_run protection when pruning"
   evidence:
-    - "<tests / docstrings / fixtures / code_refs>"
+    - "Module docstring describes canonical bundle root + artifacts"
+    - "create_storage(...) bundle writer + prune_run_directories(...)"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - "<path>#Lx-Ly"
+    - ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py#L1-L27"
+    - ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py#L109-L159"
+    - ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py#L375-L466"
   tests:
     - "<pytest path>"
   fixtures:
     - "<fixture path>"
 notes:
-  - "<short note>"
+  - "DB markers present for manifest/summary/telemetry writes."
+  - "Return payload does not include an artifacts mapping; consumers must infer paths from output_dir + run_timestamp."
 ```
 
 #### Implementation Workstreams (checkbox-driven) — validate_metrics_anchor_stubs.py
@@ -683,10 +865,10 @@ Workstream E — QA & Evidence
 
 - [ ] DONE — validate_metrics_anchor_stubs.py complete; update Tier-1 Stage 2.1 script gate
 
-##### <record_id>: generate_code_doc_churn_report.py
+##### S21R-007 generate code doc churn report
 
 ```yaml
-record_id: "<record_id>"
+record_id: "S21R-007"
 script:
   path: ".repo_studios/scripts/producers/generate_code_doc_churn_report.py"
   name: "generate_code_doc_churn_report.py"
@@ -701,15 +883,26 @@ tier3:
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
-    - "<--flag>"
+    - "--repo-root"
+    - "--output-dir"
+    - "--doc-index"
+    - "--anchor-inventory"
+    - "--allowlist"
+    - "--git-window"
+    - "--git-until"
+    - "--artifacts-to-keep"
+    - "--log-level"
 io_contract:
   inputs:
-    - "<input description>"
+    - "Reads git history for code churn and correlates to doc index candidates"
+    - "Loads doc index + anchor inventory from canonical topic dirs (expects telemetry.json bundles)"
   outputs:
     current:
-      root: "<current root>"
+      root: ".repo_studios/reports/producer_reports/healthview/code_doc_churn/YYYYMMDD-HHMM/"
       artifacts:
-        - "<artifact>"
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
@@ -718,27 +911,30 @@ io_contract:
         - "telemetry.json"
 retention:
   surfaces:
-    - "<flags / defaults / callsites>"
-  mechanism: "<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>"
+    - "--artifacts-to-keep"
+    - "prune_run_directories(... keep=options.artifacts_to_keep, current_run=run_dir)"
+  mechanism: "prune_by_keep_budget"
   targets:
-    - "<bundle roots and intermediate roots>"
+    - ".repo_studios/reports/producer_reports/healthview/code_doc_churn"
   guardrails:
-    - "<current_run_protection / exclusions / atomic_write / other>"
+    - "current_run protection when pruning"
   evidence:
-    - "<tests / docstrings / fixtures / code_refs>"
+    - "create_storage(...) bundle writer + prune_run_directories(...)"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - "<path>#Lx-Ly"
+    - ".repo_studios/scripts/producers/generate_code_doc_churn_report.py#L1-L29"
+    - ".repo_studios/scripts/producers/generate_code_doc_churn_report.py#L165-L216"
+    - ".repo_studios/scripts/producers/generate_code_doc_churn_report.py#L538-L671"
   tests:
     - "<pytest path>"
   fixtures:
     - "<fixture path>"
 notes:
-  - "<short note>"
+  - "DB markers present for manifest/summary/telemetry writes."
 ```
 
 #### Implementation Workstreams (checkbox-driven) — generate_code_doc_churn_report.py
@@ -770,10 +966,10 @@ Workstream E — QA & Evidence
 
 - [ ] DONE — generate_code_doc_churn_report.py complete; update Tier-1 Stage 2.1 script gate
 
-##### <record_id>: generate_undocumented_logic_report.py
+##### S21R-008 generate undocumented logic report
 
 ```yaml
-record_id: "<record_id>"
+record_id: "S21R-008"
 script:
   path: ".repo_studios/scripts/producers/generate_undocumented_logic_report.py"
   name: "generate_undocumented_logic_report.py"
@@ -788,15 +984,26 @@ tier3:
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
-    - "<--flag>"
+    - "--repo-root"
+    - "--output-dir"
+    - "--doc-index"
+    - "--anchor-inventory"
+    - "--allowlist"
+    - "--include-command-center"
+    - "--code-root (repeatable)"
+    - "--artifacts-to-keep"
+    - "--log-level"
 io_contract:
   inputs:
-    - "<input description>"
+    - "Scans automation code for functions/classes lacking docstrings"
+    - "Loads doc index (JSON payload via telemetry.json) + anchor inventory (via loader)"
   outputs:
     current:
-      root: "<current root>"
+      root: ".repo_studios/reports/producer_reports/healthview/undocumented_logic/YYYYMMDD-HHMM/"
       artifacts:
-        - "<artifact>"
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
@@ -805,27 +1012,33 @@ io_contract:
         - "telemetry.json"
 retention:
   surfaces:
-    - "<flags / defaults / callsites>"
-  mechanism: "<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>"
+    - "--artifacts-to-keep"
+    - "prune_run_directories(... keep=options.artifacts_to_keep, current_run=run_dir)"
+  mechanism: "prune_by_keep_budget"
   targets:
-    - "<bundle roots and intermediate roots>"
+    - ".repo_studios/reports/producer_reports/healthview/undocumented_logic"
   guardrails:
-    - "<current_run_protection / exclusions / atomic_write / other>"
+    - "current_run protection when pruning"
   evidence:
-    - "<tests / docstrings / fixtures / code_refs>"
+    - "create_storage(...) bundle writer + prune_run_directories(...)"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - "<path>#Lx-Ly"
+    - ".repo_studios/scripts/producers/generate_undocumented_logic_report.py#L1-L33"
+    - ".repo_studios/scripts/producers/generate_undocumented_logic_report.py#L140-L195"
+    - ".repo_studios/scripts/producers/generate_undocumented_logic_report.py#L580-L731"
   tests:
     - "<pytest path>"
   fixtures:
     - "<fixture path>"
 notes:
-  - "<short note>"
+  - "DB markers present for manifest/summary/telemetry writes."
+  - >-
+    Mismatch: orchestrator references undocumented_outcome.artifacts['report.json'],
+    but this producer returns only manifest/summary/telemetry artifacts.
 ```
 
 #### Implementation Workstreams (checkbox-driven) — generate_undocumented_logic_report.py
@@ -857,10 +1070,10 @@ Workstream E — QA & Evidence
 
 - [ ] DONE — generate_undocumented_logic_report.py complete; update Tier-1 Stage 2.1 script gate
 
-##### <record_id>: aggregate_docs_health_signals.py
+##### S21R-009 aggregate docs health signals
 
 ```yaml
-record_id: "<record_id>"
+record_id: "S21R-009"
 script:
   path: ".repo_studios/scripts/aggregators/aggregate_docs_health_signals.py"
   name: "aggregate_docs_health_signals.py"
@@ -875,15 +1088,37 @@ tier3:
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
-    - "<--flag>"
+    - "--repo-root"
+    - "--output-dir"
+    - "--churn-report"
+    - "--undocumented-report"
+    - "--anchor-inventory"
+    - "--anchor-validation"
+    - "--docs-integrity"
+    - "--metrics-stub"
+    - "--placeholder-report"
+    - "--monkey-patch-report"
+    - "--skip-hygiene"
+    - "--artifacts-to-keep"
+    - "--log-level"
 io_contract:
   inputs:
-    - "<input description>"
+    - "Consumes prior stage bundles (canonical topic dirs or bundle dirs containing telemetry.json; supports legacy report.json)"
+    - "Optionally blends hygiene signals unless --skip-hygiene"
   outputs:
     current:
-      root: "<current root>"
+      root: ".repo_studios/reports/aggregator_reports/docs_health_signals/YYYYMMDD-HHMM/"
       artifacts:
-        - "<artifact>"
+        - "report.json"
+        - "report.md"
+        - "signals.tsv"
+        - "signals.csv"
+        - "bundle_summary.json"
+        - "latest_report.json"  # pointer artifact
+        - "latest_report.md"    # pointer artifact
+        - "latest_signals.tsv"  # pointer artifact
+        - "latest_signals.csv"  # pointer artifact
+        - "latest_bundle_summary.json"  # pointer artifact
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
@@ -892,27 +1127,31 @@ io_contract:
         - "telemetry.json"
 retention:
   surfaces:
-    - "<flags / defaults / callsites>"
-  mechanism: "<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>"
+    - "--artifacts-to-keep"
+    - "write_report_artifacts(... keep=options.artifacts_to_keep)"
+  mechanism: "prune_by_keep_budget"
   targets:
-    - "<bundle roots and intermediate roots>"
+    - ".repo_studios/reports/aggregator_reports/docs_health_signals"
   guardrails:
-    - "<current_run_protection / exclusions / atomic_write / other>"
+    - "keep-budget pruning inside write_report_artifacts(...)"
   evidence:
-    - "<tests / docstrings / fixtures / code_refs>"
+    - "ReportArtifact(pointer=latest_*) definitions + write_report_artifacts(...)"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - "<path>#Lx-Ly"
+    - ".repo_studios/scripts/aggregators/aggregate_docs_health_signals.py#L21-L31"
+    - ".repo_studios/scripts/aggregators/aggregate_docs_health_signals.py#L170-L238"
+    - ".repo_studios/scripts/aggregators/aggregate_docs_health_signals.py#L888-L933"
   tests:
     - "<pytest path>"
   fixtures:
     - "<fixture path>"
 notes:
-  - "<short note>"
+  - "Stop-gate: emits pointer artifacts (latest_*) which conflict with the target contract's 'no pointer files' rule."
+  - "DB markers: none observed in this aggregator (it does not call create_storage)."
 ```
 
 #### Implementation Workstreams (checkbox-driven) — aggregate_docs_health_signals.py
@@ -976,7 +1215,7 @@ stage are satisfied and the Tier-2 record set is stable enough to extract reusab
 
 **Regression suites (current evidence):**
 
-- `<pytest -q path/to/test_file.py>`
+- TBD (pytest invocation(s) for this stage)
 
 **Telemetry outputs:**
 
@@ -1001,10 +1240,10 @@ stage are satisfied and the Tier-2 record set is stable enough to extract reusab
   satisfied; Tier-2 is the promotion bar for creating Tier-3 artifacts.
 
 - **Tier-3 dependencies (placeholders until created):**
-  - Tier-3 placeholder — `<tier3_cli_orchestration_doc>`
-  - Tier-3 placeholder — `<tier3_pruning_retention_doc>`
-  - Tier-3 placeholder — `<tier3_artifacts_contract_doc>`
-  - Tier-3 placeholder — `<tier3_database_integration_doc>`
+  - Tier-3 placeholder — TBD: tier3_cli_orchestration_doc
+  - Tier-3 placeholder — TBD: tier3_pruning_retention_doc
+  - Tier-3 placeholder — TBD: tier3_artifacts_contract_doc
+  - Tier-3 placeholder — TBD: tier3_database_integration_doc
 
 - **Feature flags:**
   - `REPO_STUDIOS_DB_ENABLED` (DB dual-write toggle)
@@ -1045,7 +1284,9 @@ checks:
     title: Records index + per-script records present
     severity: error
   - id: hv-tier2-template-stopgates
-    title: Stop-gates include output root + base package + pointers + retention + DB marker rules
+    title: >-
+      Stop-gates include output root + base package + pointers + retention +
+      DB marker rules
     severity: error
 ```
 <!-- agents:end:healthview_stage_roster_template -->
@@ -1056,4 +1297,4 @@ checks:
 
 | Date | Change | Author | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
-| 2025-12-19 | Seeded Stage 2.1 Tier-2 roster from template (placeholders only). | repo_studios_ai | <doc-index-ts> | <suites> |
+| 2025-12-19 | Seeded Stage 2.1 Tier-2 roster template. | repo_studios_ai | TBD | TBD |

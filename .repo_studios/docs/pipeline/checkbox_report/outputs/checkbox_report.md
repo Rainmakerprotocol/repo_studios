@@ -39,17 +39,17 @@ related_files:
 
 Top files with the highest number of unfinished items:
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md`
-  — 88 unchecked
+  — 99 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md`
   — 86 unchecked
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md`
+  — 77 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md`
   — 55 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md`
-  — 33 unchecked
+  — 44 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
   — 13 unchecked
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md`
-  — 11 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_healthview_roster_template.md`
   — 11 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md`
@@ -111,19 +111,19 @@ Top files with the highest number of unfinished items:
 
 ## Signals & Telemetry
 
-* Total unchecked tasks: 336.
+* Total unchecked tasks: 424.
 * Files containing unchecked tasks: 12.
 
 ### Unchecked Tasks by H1
 
 | H1 | Unchecked |
 | --- | --- |
-| Tier-2 Roster — Stage 2.1 Docs Health Overview | 88 |
+| Tier-2 Roster — Stage 2.1 Docs Health Overview | 99 |
 | Stage 1.1 Roster — Test Execution Telemetry | 86 |
+| Tier-2 Roster — Stage 7 Running the Complete Suite | 77 |
 | Tier-2 Roster — Stage 4.1 Dependency & Import Hygiene | 55 |
-| Tier-2 Roster — Stage 3.1 Fault Diagnostics Overview | 33 |
+| Tier-2 Roster — Stage 3.1 Fault Diagnostics Overview | 44 |
 | HealthView Orchestration Pipeline | 13 |
-| Tier-2 Roster — Stage 7 Running the Complete Suite | 11 |
 | Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> | 11 |
 | Tier-2 Roster — Stage 5.1 Monkey Patch Oversight | 11 |
 | Tier-2 Roster — Stage 6.1 Standards Integrity | 11 |
