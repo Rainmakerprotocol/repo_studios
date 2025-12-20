@@ -8,7 +8,7 @@ owners:
     - DocumentationOps
 status: active
 version: 1.0
-updated_at: 2025-12-19
+updated_at: 2025-12-20
 tags:
     - checkbox-report
     - repo-todo
@@ -42,13 +42,21 @@ Top files with the highest number of unfinished items:
   — 88 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md`
   — 86 unchecked
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md`
+  — 55 unchecked
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md`
+  — 33 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  — 16 unchecked
+  — 13 unchecked
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md`
+  — 11 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_healthview_roster_template.md`
   — 11 unchecked
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md`
+  — 11 unchecked
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_standards_integrity_roster.md`
+  — 11 unchecked
 * `.repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_howto.md` — 10 unchecked
-* `.repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_template.md` — 4 unchecked
-* `.repo_studios/docs/pipeline/pipeline_templates/tier3_pipeline_template.md` — 3 unchecked
 
 ### Sample Outstanding Tasks
 
@@ -103,8 +111,8 @@ Top files with the highest number of unfinished items:
 
 ## Signals & Telemetry
 
-* Total unchecked tasks: 218.
-* Files containing unchecked tasks: 7.
+* Total unchecked tasks: 336.
+* Files containing unchecked tasks: 12.
 
 ### Unchecked Tasks by H1
 
@@ -112,11 +120,14 @@ Top files with the highest number of unfinished items:
 | --- | --- |
 | Tier-2 Roster — Stage 2.1 Docs Health Overview | 88 |
 | Stage 1.1 Roster — Test Execution Telemetry | 86 |
-| HealthView Orchestration Pipeline | 16 |
+| Tier-2 Roster — Stage 4.1 Dependency & Import Hygiene | 55 |
+| Tier-2 Roster — Stage 3.1 Fault Diagnostics Overview | 33 |
+| HealthView Orchestration Pipeline | 13 |
+| Tier-2 Roster — Stage 7 Running the Complete Suite | 11 |
 | Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> | 11 |
+| Tier-2 Roster — Stage 5.1 Monkey Patch Oversight | 11 |
+| Tier-2 Roster — Stage 6.1 Standards Integrity | 11 |
 | How-To — Authoring Tier-2 Pipeline Documents | 10 |
-| Tier-2 Pipeline Document Template | 4 |
-| Tier-3 Horizontal Document Template | 3 |
 
 ## Maintenance Playbook
 
@@ -130,4 +141,4 @@ Top files with the highest number of unfinished items:
 
 ## Update Log
 
-* 2025-12-19 — Report regenerated.
+* 2025-12-20 — Report regenerated.

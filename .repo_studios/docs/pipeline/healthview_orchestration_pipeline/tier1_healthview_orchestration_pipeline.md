@@ -556,7 +556,8 @@ Stage 2.1 script gate checklists are seeded after Tier-2 discovery.
 
 **Section Order (Tier-1) — shim:**
 
-- Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) → Stage gate checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
+- Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) → Stage gate
+  checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
 
 **Overview:**  
 The Docs Health Overview orchestrator chains eight scripts in producer → aggregator pipeline: (1)
@@ -611,35 +612,55 @@ anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/a
 
 **Execution Details:**
 
-- Scripts invoked via dynamic imports using `run(argv)` helpers loaded via `_load_callable()` (not subprocess spawning)
+- Scripts invoked via dynamic imports using `run(argv)` helpers loaded via `_load_callable()`
+  (not subprocess spawning)
 - Shared timestamp propagated to all scripts via `--timestamp` (ISO 8601 format)
-- Optional script skipping supported via CLI flags: `--skip-doc-index`, `--skip-anchor-inventory`, `--skip-anchor-validation`, `--skip-docs-integrity`, `--skip-metrics-stub`, `--skip-churn`, `--skip-undocumented`, `--skip-aggregator`, `--skip-hygiene-signals`
-- Artifact retention configurable per script: `--doc-index-artifacts-to-keep=1`, `--anchor-inventory-artifacts-to-keep=5`, `--anchor-validation-artifacts-to-keep=5`, `--docs-integrity-artifacts-to-keep=5`, `--metrics-stub-artifacts-to-keep=5`, `--churn-artifacts-to-keep=5`, `--undocumented-artifacts-to-keep=5`, `--aggregator-artifacts-to-keep=5`, `--artifacts-to-keep=5` (HealthView bundle, default)
-- Report naming enforced via `enforce_report_naming()` guardrail (raises `GuardrailViolationError` if violated)
+- Optional script skipping supported via CLI flags: `--skip-doc-index`, `--skip-anchor-inventory`,
+  `--skip-anchor-validation`, `--skip-docs-integrity`, `--skip-metrics-stub`, `--skip-churn`,
+  `--skip-undocumented`, `--skip-aggregator`, `--skip-hygiene-signals`
+- Artifact retention configurable per script: `--doc-index-artifacts-to-keep=1`,
+  `--anchor-inventory-artifacts-to-keep=5`, `--anchor-validation-artifacts-to-keep=5`,
+  `--docs-integrity-artifacts-to-keep=5`, `--metrics-stub-artifacts-to-keep=5`,
+  `--churn-artifacts-to-keep=5`, `--undocumented-artifacts-to-keep=5`,
+  `--aggregator-artifacts-to-keep=5`, `--artifacts-to-keep=5` (HealthView bundle, default)
+- Report naming enforced via `enforce_report_naming()` guardrail (raises `GuardrailViolationError`
+  if violated)
 - Doc index retention typically 1 (mutable pointer pattern) vs. other producers at 5 (trend analysis)
 
 **Planned Expansions:**
 
-- **Stage 2.2: Anchor Health Report** – Integrate `generate_anchor_health_report.py` for deeper cross-reference validation and link health scoring (gap identified in coverage analysis)
+- **Stage 2.2: Anchor Health Report** – Integrate `generate_anchor_health_report.py` for deeper
+  cross-reference validation and link health scoring (gap identified in coverage analysis)
 
 **Known Gaps:**
 
 - Undocumented logic report covers Python only; JavaScript/TypeScript support pending
-- Doc-code staleness heuristic uses simple churn ratio; needs adjustment based on module criticality weighting
+- Doc-code staleness heuristic uses simple churn ratio; needs adjustment based on module
+  criticality weighting
 - Metrics stub validation is basic regex matching; does not verify anchor target validity
 - No automated remediation suggestions (e.g., "add docstring here") – reports are diagnostic only
 
 **Evidence Links:**
 
-- **Orchestrator:** [run_docs_health_overview.py](../../../command_center/scripts/orchestrators/run_docs_health_overview.py) (lines 1-1095: pipeline coordination, 8 script execution functions, skip flags, shared timestamp, report naming guardrails)
+- **Orchestrator:** [run_docs_health_overview.py]
+  (../../../command_center/scripts/orchestrators/run_docs_health_overview.py)
+  (lines 1-1095: pipeline coordination, 8 script execution functions, skip flags, shared timestamp,
+  report naming guardrails)
 - **Producer scripts:**
-  - [generate_doc_index.py](../../../scripts/producers/generate_doc_index.py) (lines 394-432: `_execute_doc_index` invocation)
-  - [generate_anchor_inventory.py](../../../scripts/producers/generate_anchor_inventory.py) (lines 433-469: `_execute_anchor_inventory` invocation)
-  - [validate_markdown_anchors.py](../../../scripts/producers/validate_markdown_anchors.py) (lines 470-506: `_execute_anchor_validation` invocation)
-  - [verify_docs_integrity.py](../../../scripts/producers/verify_docs_integrity.py) (lines 507-531: `_execute_docs_integrity` invocation)
-  - [validate_metrics_anchor_stubs.py](../../../scripts/producers/validate_metrics_anchor_stubs.py) (lines 532-556: `_execute_metrics_stub` invocation)
-  - [generate_code_doc_churn_report.py](../../../scripts/producers/generate_code_doc_churn_report.py) (lines 557-584: `_execute_churn` invocation)
-  - [generate_undocumented_logic_report.py](../../../scripts/producers/generate_undocumented_logic_report.py) (lines 585-649: `_execute_undocumented` invocation)
+  - [generate_doc_index.py](../../../scripts/producers/generate_doc_index.py)
+    (lines 394-432: `_execute_doc_index` invocation)
+  - [generate_anchor_inventory.py](../../../scripts/producers/generate_anchor_inventory.py)
+    (lines 433-469: `_execute_anchor_inventory` invocation)
+  - [validate_markdown_anchors.py](../../../scripts/producers/validate_markdown_anchors.py)
+    (lines 470-506: `_execute_anchor_validation` invocation)
+  - [verify_docs_integrity.py](../../../scripts/producers/verify_docs_integrity.py)
+    (lines 507-531: `_execute_docs_integrity` invocation)
+  - [validate_metrics_anchor_stubs.py](../../../scripts/producers/validate_metrics_anchor_stubs.py)
+    (lines 532-556: `_execute_metrics_stub` invocation)
+  - [generate_code_doc_churn_report.py](../../../scripts/producers/generate_code_doc_churn_report.py)
+    (lines 557-584: `_execute_churn` invocation)
+  - [generate_undocumented_logic_report.py](../../../scripts/producers/generate_undocumented_logic_report.py)
+    (lines 585-649: `_execute_undocumented` invocation
 - **Aggregator script:** [aggregate_docs_health_signals.py](../../../scripts/aggregators/aggregate_docs_health_signals.py) (lines 650-710: `_execute_aggregator` invocation)
 - **Tests:** No dedicated orchestrator tests found (marked "tests TBD" in Stage Matrix)
 
@@ -647,7 +668,8 @@ anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/a
 
 ## 6. Stage 3 – Runtime Reliability
 
-> **Purpose:** Track runtime faults, segfaults, and error conditions through faulthandler reports to identify stability risks before production deployment.
+> **Purpose:** Track runtime faults, segfaults, and error conditions through faulthandler reports
+> to identify stability risks before production deployment.
 
 ### 6.1 Stage 3.1: Fault Diagnostics Overview
 
@@ -666,10 +688,14 @@ Stage 3.1 script gate checklists are seeded after Tier-2 discovery.
 
 **Section Order (Tier-1) — shim:**
 
-- Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) → Stage gate checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
+- Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) → Stage gate
+  checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
 
 **Overview:**  
-The Fault Diagnostics Overview orchestrator chains a 3-script pipeline (producer → consumer → summarizer) for end-to-end faulthandler diagnostics. Replaces legacy `run_fault_pipeline.py`. Mirrors output to both HealthView and CommandView locations for backward compatibility. Runtime: 3-5 minutes typical (from docstring, lines 1-25).
+The Fault Diagnostics Overview orchestrator chains a 3-script pipeline
+(producer → consumer → summarizer) for end-to-end faulthandler diagnostics. Replaces legacy
+`run_fault_pipeline.py`. Mirrors output to both HealthView and CommandView locations for backward
+compatibility. Runtime: 3-5 minutes typical (from docstring, lines 1-25).
 
 **Orchestrator:**  
 [.repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py](../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py) (604 lines)
@@ -691,11 +717,14 @@ The Fault Diagnostics Overview orchestrator chains a 3-script pipeline (producer
 
 **Outputs:**
 
-- Producer: `.repo_studios/command_center/<topic>_report_collection/` + `.repo_studios/<topic>_report_collection/` (CommandView mirror, lines 58-59)
+- Producer: `.repo_studios/command_center/<topic>_report_collection/` +
+  `.repo_studios/<topic>_report_collection/` (CommandView mirror, lines 58-59)
 - Consumer HealthView: `.repo_studios/command_center/reports/<topic>_artifact_gen/` (line 60)
-- Consumer CommandView: `.repo_studios/reports/<topic>_artifact_gen/` (backward compatibility, line 61)
+- Consumer CommandView: `.repo_studios/reports/<topic>_artifact_gen/`
+  (backward compatibility, line 61)
 - Summarizer: `.repo_studios/command_center/reports/<topic>_overview/` (line 62)
-- HealthView bundle: `.repo_studios/command_center/viewers/HealthView/<topic>_faultdiag/` (manifest + summary + telemetry, lines 63-64, 589-598)
+- HealthView bundle: `.repo_studios/command_center/viewers/HealthView/<topic>_faultdiag/`
+  (manifest + summary + telemetry, lines 63-64, 589-598)
 
 **Execution Notes:**
 
@@ -705,20 +734,26 @@ The Fault Diagnostics Overview orchestrator chains a 3-script pipeline (producer
 - Can override producer frame depth via `--producer-top-frames` (lines 212, 293-294)
 - Artifact retention defaults: HealthView bundle=3, producer/consumer/summarizer=5 (lines 195-201)
 - Fail-fast: Aborts on summarizer failure, continues if producer/consumer skipped (lines 512-518)
-- Writes orchestrator telemetry to HealthView bundle with metrics (file count, total bytes, timestamps, lines 534-543)
-- Backward compatibility: Continues to write artifacts to CommandView locations so older scripts don't break (lines 58-61)
-- Execution functions: `_execute_producer()` (lines 272-312), `_execute_consumer()` (lines 315-371), `_execute_summarizer()` (lines 374-423)
+- Writes orchestrator telemetry to HealthView bundle with metrics (file count, total bytes,
+  timestamps, lines 534-543)
+- Backward compatibility: Continues to write artifacts to CommandView locations so older scripts
+  don't break (lines 58-61)
+- Execution functions: `_execute_producer()` (lines 272-312), `_execute_consumer()` (lines 315-371),
+  `_execute_summarizer()` (lines 374-423)
 - Script registration via `CatalogRegistry` for downstream discovery (lines 427-431)
 
-**Status:** `Operational (partial hardening)` – Script count corrected from 2 to 3, runtime verified at 3-5 minutes, dual output locations documented, special reuse/override flags confirmed
+**Status:** `Operational (partial hardening)` – Script count corrected from 2 to 3, runtime verified
+at 3-5 minutes, dual output locations documented, special reuse/override flags confirmed
 
 **Planned Expansions:**
 
-- **Stage 3.2: Fault Runtime Utilities** – Integrate `configure_faulthandler_runtime.py`, `dump_faulthandler_snapshot.py`, `fault_run_analysis.py` (gap identified in coverage analysis)
+- **Stage 3.2: Fault Runtime Utilities** – Integrate `configure_faulthandler_runtime.py`,
+  `dump_faulthandler_snapshot.py`, `fault_run_analysis.py` (gap identified in coverage analysis)
 
 **Known Gaps:**
 
-- Faulthandler collection requires explicit environment variable configuration; not all CI/CD runs enable it
+- Faulthandler collection requires explicit environment variable configuration; not all CI/CD runs
+  enable it
 - Crash dump parsing is basic; does not yet extract full stack frames or thread states
 
 **Evidence Links:**
@@ -731,19 +766,18 @@ The Fault Diagnostics Overview orchestrator chains a 3-script pipeline (producer
 
 ## 7. Stage 4 – Dependency Management
 
-> **Purpose:** Enforce dependency hygiene, import graph health, typecheck compliance, and placeholder tracking to prevent import cycles and type safety regressions.
+> **Purpose:** Enforce dependency hygiene, import graph health, typecheck compliance,
+> and placeholder tracking to prevent import cycles and type safety regressions.
 
 ### 7.1 Stage 4.1: Dependency & Import Hygiene
 
 _Tier-2 references (depth lives here):_
 
-- Contract snapshot (TBD) — target vs current, bundle invariants, naming/paths
-- Stop-gates (TBD) — verification checks + failure signatures + next actions
-- Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
+- [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md#23-current-vs-target-contract-snapshot-stage-41) — target vs current, bundle invariants, naming/paths
+- [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
+- [Records index](../healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
 
-**Stage 4.1 Script Gate Summary (Tier-1) — shim:**
-
-- [ ] <script>.py — pending until Tier-2 DONE is checked. See: <Tier-2 roster record anchor>
+Stage 4.1 script gate checklists are seeded after Tier-2 discovery.
 
 **What Happens (Tier-1) — shim:**
 
@@ -752,10 +786,16 @@ _Tier-2 references (depth lives here):_
 
 **Section Order (Tier-1) — shim:**
 
-- Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) → Stage gate checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
+- Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) → Stage gate
+  checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
 
 **Overview:**  
-The Dependency & Import Hygiene orchestrator chains a 5-script pipeline (4 producers + 1 utility) that analyzes dependency hygiene, import graphs, typecheck compliance, code placeholders (TODO/FIXME/HACK), optional batch cleanup dry-run planning, and optional mypy baseline refresh. Replaces legacy `run_batch_cleanup.py` with structured dry-run artifacts. Runtime: 7-11 minutes typical in CI, with linting and mypy dominating when baseline refresh is enabled (from docstring, lines 1-10).
+The Dependency & Import Hygiene orchestrator chains a 5-script pipeline (4 producers + 1 utility)
+that analyzes dependency hygiene, import graphs, typecheck compliance, code placeholders
+(TODO/FIXME/HACK), optional batch cleanup dry-run planning, and optional mypy baseline refresh.
+Replaces legacy `run_batch_cleanup.py` with structured dry-run artifacts. Runtime: 7-11 minutes
+typical in CI, with linting and mypy dominating when baseline refresh is enabled
+(from docstring, lines 1-10).
 
 **Orchestrator:**  
 [.repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py](../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py) (1111 lines)
@@ -779,25 +819,34 @@ The Dependency & Import Hygiene orchestrator chains a 5-script pipeline (4 produ
 - Placeholder allowlist (`.repo_studios/config/placeholder_allowlist.txt`, line 69)
 - Optional: `--dependency-requirements-pattern` (glob patterns for dependency files, lines 256-260)
 - Optional: `--import-owned` (owned package prefixes for import graph, lines 263-267)
-- Optional: `--placeholder-include-ext`, `--placeholder-pattern`, `--placeholder-exclude-prefix` (lines 268-281)
+- Optional: `--placeholder-include-ext`, `--placeholder-pattern`, `--placeholder-exclude-prefix`
+  (lines 268-281)
 
 **Outputs:**
 
 - Dependency: `.repo_studios/reports/producer_reports/dependency_hygiene_reports/` (lines 65)
 - Import Graph: `.repo_studios/reports/producer_reports/import_graph_reports/` (lines 66)
 - Placeholder: `.repo_studios/reports/producer_reports/code_placeholder_scans/` (lines 67)
-- Batch Cleanup: `.repo_studios/command_center/reports/rawview/dependency_import_hygiene_cleanup/` (lines 70-72, dry-run plan only)
+- Batch Cleanup: `.repo_studios/command_center/reports/rawview/dependency_import_hygiene_cleanup/`
+  (lines 70-72, dry-run plan only)
 - Typecheck: `.repo_studios/reports/producer_reports/typecheck_reports/` (lines 73)
 - Mypy Baselines: `.repo_studios/command_center/reports/rawview/mypy_baselines/` (lines 74)
-- HealthView bundle: `.repo_studios/command_center/reports/healthview/dependency_import_hygiene/<timestamp>/` (manifest + summary + telemetry, lines 1082-1091)
+- HealthView bundle: `.repo_studios/command_center/reports/healthview/dependency_import_hygiene/<timestamp>/`
+  (manifest + summary + telemetry, lines 1082-1091)
 
 **Execution Notes:**
 
 - Dynamic imports via `_load_callable()` for all 5 scripts (lines 365-376)
-- Supports 6 skip flags: `--skip-import-graph` (lines 282-283), `--skip-typecheck` (lines 284), `--trigger-batch-cleanup` (lines 285-289, opt-in), `--refresh-mypy-baselines` (lines 290-294, opt-in), dependency patterns via `--dependency-requirements-pattern` (lines 256-260), `--dependency-skip-pyproject` (lines 261-262)
-- Artifact retention defaults: HealthView bundle=3, dependency=10, import-graph=10, placeholder=5, cleanup=5, typecheck=10, baselines=5 (lines 247-253)
-- Fail-tolerant pipeline: `stop_on_failure=False` (line 1005) – continues through failures except for cleanup step (line 1003)
-- Batch cleanup dry-run: Generates structured plan without executing commands (lines 639-711, legacy shim retired)
+- Supports 6 skip flags: `--skip-import-graph` (lines 282-283), `--skip-typecheck` (lines 284),
+  `--trigger-batch-cleanup` (lines 285-289, opt-in), `--refresh-mypy-baselines`
+  (lines 290-294, opt-in), dependency patterns via `--dependency-requirements-pattern`
+  (lines 256-260), `--dependency-skip-pyproject` (lines 261-262)
+- Artifact retention defaults: HealthView bundle=3, dependency=10, import-graph=10, placeholder=5,
+  cleanup=5, typecheck=10, baselines=5 (lines 247-253)
+- Fail-tolerant pipeline: `stop_on_failure=False` (line 1005) – continues through failures except
+  for cleanup step (line 1003)
+- Batch cleanup dry-run: Generates structured plan without executing commands
+  (lines 639-711, legacy shim retired)
 - Mypy baseline refresh: Optional post-typecheck step (lines 765-793)
 - Execution functions: `_dependency_report()` (lines 437-468), `_import_graph_report()` (lines 471-500), `_placeholder_scan()` (lines 503-543), `_batch_cleanup()` (lines 639-711), `_typecheck_report()` (lines 714-742), `_refresh_baselines()` (lines 765-793)
 - Script registration via `CatalogRegistry` for downstream discovery (lines 796-803)
@@ -837,13 +886,11 @@ The Dependency & Import Hygiene orchestrator chains a 5-script pipeline (4 produ
 
 _Tier-2 references (depth lives here):_
 
-- Contract snapshot (TBD) — target vs current, bundle invariants, naming/paths
-- Stop-gates (TBD) — verification checks + failure signatures + next actions
-- Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
+- [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md#23-current-vs-target-contract-snapshot-stage-51) — target vs current, bundle invariants, naming/paths
+- [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
+- [Records index](../healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
 
-**Stage 5.1 Script Gate Summary (Tier-1) — shim:**
-
-- [ ] <script>.py — pending until Tier-2 DONE is checked. See: <Tier-2 roster record anchor>
+Stage 5.1 script gate checklists are seeded after Tier-2 discovery.
 
 **What Happens (Tier-1) — shim:**
 
@@ -855,7 +902,12 @@ _Tier-2 references (depth lives here):_
 - Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) → Stage gate checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
 
 **Overview:**  
-The Monkey Patch Oversight orchestrator chains a 4-script pipeline (producer → consumer → aggregator → summarizer) that scans for monkey patches via AST analysis, classifies them by risk category, analyzes historical trends, and generates overview artifacts. Replaces monkey patch stages that previously lived inside `orchestrate_health_suite.py` alongside standalone summarizer invocation. Runtime: 4-7 minutes typical when Git history enrichment is enabled; trend aggregation scales with the configured history window (from docstring, lines 1-11).
+The Monkey Patch Oversight orchestrator chains a 4-script pipeline
+(producer → consumer → aggregator → summarizer) that scans for monkey patches via AST analysis,
+classifies them by risk category, analyzes historical trends, and generates overview artifacts.
+Replaces monkey patch stages that previously lived inside `orchestrate_health_suite.py` alongside
+standalone summarizer invocation. Runtime: 4-7 minutes typical when Git history enrichment is
+enabled; trend aggregation scales with the configured history window (from docstring, lines 1-11).
 
 **Orchestrator:**  
 [.repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py](../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py) (735 lines)
@@ -935,9 +987,9 @@ The Monkey Patch Oversight orchestrator chains a 4-script pipeline (producer →
 
 _Tier-2 references (depth lives here):_
 
-- Contract snapshot (TBD) — target vs current, bundle invariants, naming/paths
-- Stop-gates (TBD) — verification checks + failure signatures + next actions
-- Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
+- [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_standards_integrity_roster.md#23-current-vs-target-contract-snapshot-stage-61) — target vs current, bundle invariants, naming/paths
+- [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
+- [Records index](../healthview_orchestration_pipeline/tier2_roster/tier2_standards_integrity_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
 
 **Stage 6.1 Script Gate Summary (Tier-1) — shim:**
 
@@ -1065,9 +1117,9 @@ The Standards Integrity orchestrator chains five scripts in sequence (index gene
 
 _Tier-2 references (depth lives here):_
 
-- Contract snapshot (TBD) — target vs current, bundle invariants, naming/paths
-- Stop-gates (TBD) — verification checks + failure signatures + next actions
-- Records index (TBD) — per-script inspection index + evidence links (Tier-2 holds proof)
+- [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#23-current-vs-target-contract-snapshot-stage-7) — target vs current, bundle invariants, naming/paths
+- [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
+- [Records index](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
 
 **Stage 7 Script Gate Summary (Tier-1) — shim:**
 
@@ -1169,6 +1221,7 @@ The `orchestrate_full_diagnostic.py` meta-orchestrator chains all six Stage NN.1
 All six maturity domain orchestrators (Stages 1–6) are **operational** and produce timestamped HealthView bundles. Coverage analysis shows 28/36 scripts (77.8%) orchestrated; 12 gaps identified and documented as "Planned Expansions" within appropriate stage classes.
 
 **Hardening status:**
+
 - **Stage 1 (Test Execution Telemetry):** Pass B complete – code-verified 6-script pipeline, artifact retention, dynamic imports, 5-6 min runtime
 - **Stage 2 (Docs Health Overview):** Pass B complete – code-verified 8-script pipeline, skip flags (9 CLI options), report naming guardrails, 6-8 min runtime
 - **Stage 3 (Fault Diagnostics Overview):** Pass B complete – code-verified 3-script pipeline (corrected from 2), 3-5 min runtime, dual HealthView+CommandView output, special reuse/override flags
@@ -1234,7 +1287,7 @@ All gaps have logical explanations:
 - [tier2_roster/tier2_test_execution_telemetry_roster.md](tier2_roster/tier2_test_execution_telemetry_roster.md) – Stage 1.1 deep dive
 - [TBD] `tier2_roster/docs_health_overview_roster.md` – Stage 2.1 deep dive
 - [Stage 3.1 roster](../healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md) – Stage 3.1 deep dive
-- [TBD] `tier2_roster/dependency_import_hygiene_roster.md` – Stage 4.1 deep dive
+- [Stage 4.1 roster](../healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md) – Stage 4.1 deep dive
 - [TBD] `tier2_roster/monkey_patch_oversight_roster.md` – Stage 5.1 deep dive
 - [TBD] `tier2_roster/standards_integrity_roster.md` – Stage 6.1 deep dive
 - [TBD] `tier2_roster/full_diagnostic_suite_roster.md` – Stage 7 (meta-orchestrator) deep dive

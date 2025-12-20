@@ -1,5 +1,5 @@
 ---
-title: "Tier-2 Roster — Stage 3.1 Fault Diagnostics Overview"
+title: "Tier-2 Roster — Stage 4.1 Dependency & Import Hygiene"
 tier: tier-2
 audience:
   - coding_agent
@@ -10,17 +10,17 @@ role:
   - roster
   - stage-vertical
 status: seeded
-target_stage: "3.1"
+target_stage: "4.1"
 version: 0.1.0
-updated_at: 2025-12-19
+updated_at: 2025-12-20
 tags:
   - pipeline
   - healthview
   - tier-2
-  - stage-3-1
+  - stage-4-1
 related_files:
   - .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
-  - .repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py
+  - .repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py
   - .github/instructions/markdown.instructions.md
   - .github/instructions/pipeline_doc_tiers.instructions.md
   - .github/instructions/tier_doc_operating_model.instructions.md
@@ -28,20 +28,19 @@ related_files:
 ---
 
 <!-- markdownlint-disable-next-line MD025 -->
-# Tier-2 Roster — Stage 3.1 Fault Diagnostics Overview
+# Tier-2 Roster — Stage 4.1 Dependency & Import Hygiene
 
-> **Purpose:** This Tier-2 vertical deep dive will document Stage 3.1 (Fault Diagnostics Overview) for the
-> HealthView pipeline. It will inventory the script chain, capture the “Target contract (locked decisions)”
-> vs “Current evidence (repo-observed)” I/O contract
+> **Purpose:** This Tier-2 vertical deep dive will document Stage 4.1 (Dependency & Import Hygiene) for the
+> HealthView pipeline. It will inventory the script chain, capture the current vs target I/O contract
 > (with evidence), and define stop-gates required before code migrations can claim compliance with
 > locked decisions.
 >
-> **Tier-1 source:** `tier1_healthview_orchestration_pipeline.md` (Stage 3.1).
+> **Tier-1 source:** `tier1_healthview_orchestration_pipeline.md` (Stage 4.1).
 > **Locked decisions source:** Tier-1 spine (`tier1_healthview_orchestration_pipeline.md`) + `REPORT_NAMING_STANDARDS.md`.
-> **Last synced with Tier-1:** 2025-12-19.
+> **Last synced with Tier-1:** 2025-12-20.
 >
-> Standards: `.github/instructions/markdown.instructions.md` (reviewed 2025-12-19) and
-> `.github/instructions/pipeline_doc_tiers.instructions.md` (reviewed 2025-12-19).
+> Standards: `.github/instructions/markdown.instructions.md` (reviewed 2025-12-20) and
+> `.github/instructions/pipeline_doc_tiers.instructions.md` (reviewed 2025-12-20).
 
 ---
 
@@ -57,7 +56,6 @@ related_files:
   - ≥80% coverage on touched modules
   - updated Tier-1/Tier-2 docs
   - clean formatting/lint behavior
-- After meaningful checkbox edits, run `make -C .repo_studios studio-generate-doc-index` and record
 - After meaningful checkbox edits, run `make -C .repo_studios doc-index` and record
   the timestamp in the Update Log.
 
@@ -65,22 +63,21 @@ related_files:
 
 ## 1. Goals & Success Criteria
 
-1. Produce a single authoritative Tier-2 deep dive for Stage 3.1 that engineers and agents can use
-  to implement the Stage 3.1 migration without re-litigating contracts.
+1. Produce a single authoritative Tier-2 deep dive for Stage 4.1 that engineers and agents can use
+  to implement the Stage 4.1 migration without re-litigating contracts.
 1. Make the “current vs target” output and artifact contract explicit, including the canonical
    HealthView root `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
-1. Define stop-gates for Stage 3.1 code work (artifact invariants, pruning mechanisms and targets,
+1. Define stop-gates for Stage 4.1 code work (artifact invariants, pruning mechanisms and targets,
   DB marker discipline, and doc-index evidence).
 
 **Success criteria:**
 
-- Tier-1 links to this doc as the Stage 3.1 Tier-2 roster.
+- Tier-1 links to this doc as the Stage 4.1 Tier-2 roster.
 - This doc contains:
   - a Records index + Pruning index,
   - a ScriptInspectionRecordV1 schema,
   - per-script record blocks (full records),
-  - stop-gates that must be closed before Tier-1 can claim HOP compliance.
-    - stop-gates that must be closed before Tier-1 can claim contract compliance.
+  - stop-gates that must be closed before Tier-1 can claim contract compliance.
 
 ---
 
@@ -88,28 +85,30 @@ related_files:
 
 ### 2.1 Tier Alignment
 
-- **Tier-1 Stage:** Stage 3.1 — Fault Diagnostics Overview
+- **Tier-1 Stage:** Stage 4.1 — Dependency & Import Hygiene
   (`tier1_healthview_orchestration_pipeline.md` → stage section)
-- **Tier-2 scope:** This document will cover Stage 3.1 only.
+- **Tier-2 scope:** This document will cover Stage 4.1 only.
 
-### 2.2 Chain Inventory (Stage 3.1)
+### 2.2 Chain Inventory (Stage 4.1)
 
 **Orchestrator:**
 
-- `.repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py`
+- `.repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py`
 
 **Delegated scripts (expected chain):**
 
-- Producer: `.repo_studios/scripts/producers/collect_faulthandler_reports.py`
-- Consumer: `.repo_studios/scripts/consumers/generate_fault_artifacts.py`
-- Summarizer: `.repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py`
+- Producer: `.repo_studios/scripts/producers/generate_dependency_hygiene_report.py`
+- Producer: `.repo_studios/scripts/producers/generate_import_graph_report.py` (optional)
+- Producer: `.repo_studios/scripts/producers/scan_code_placeholders.py`
+- Producer: `.repo_studios/scripts/producers/generate_typecheck_report.py` (optional)
+- Utility: `.repo_studios/scripts/utilities/refresh_mypy_baselines.py` (optional)
 
 Notes:
 
 - Keep the chain list in the same order as the orchestrator executes it.
 - If the stage includes optional steps, mark them clearly and capture the flag surface.
 
-### 2.3 Current vs Target Contract Snapshot (Stage 3.1)
+### 2.3 Current vs Target Contract Snapshot (Stage 4.1)
 
 This section will be the short, scannable contract summary that Tier-1 routes to.
 
@@ -123,7 +122,6 @@ Authoritative entry points for Tier-1 routing and agent discovery are:
 
 - Canonical HealthView output root:
   `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`
-- Base package (HOP target):
 - Base package (locked target):
   - `manifest.json`
   - `summary.md`
@@ -148,7 +146,7 @@ Mismatch is treated as a stop-gate.
 
 ---
 
-## 3. Stage Narrative — Stage 3.1 Fault Diagnostics Overview
+## 3. Stage Narrative — Stage 4.1 Dependency & Import Hygiene
 
 ### 3.1 Records & Inspection (v1)
 
@@ -158,9 +156,11 @@ This section will keep the stage’s script-level inspection evidence in Tier-2 
 
 A short index that links to each per-script record block in this document.
 
-- `<record_id>` — `collect_faulthandler_reports.py` — Producer — `<record_anchor>`
-- `<record_id>` — `generate_fault_artifacts.py` — Consumer — `<record_anchor>`
-- `<record_id>` — `summarize_fault_diagnostics_overview.py` — Summarizer — `<record_anchor>`
+- `<record_id>` — `generate_dependency_hygiene_report.py` — Producer — `<record_anchor>`
+- `<record_id>` — `generate_import_graph_report.py` — Producer (optional) — `<record_anchor>`
+- `<record_id>` — `scan_code_placeholders.py` — Producer — `<record_anchor>`
+- `<record_id>` — `generate_typecheck_report.py` — Producer (optional) — `<record_anchor>`
+- `<record_id>` — `refresh_mypy_baselines.py` — Utility (optional) — `<record_anchor>`
 
 #### 3.1.2 Pruning Index (mini-block)
 
@@ -239,19 +239,19 @@ fields:
 
 Populate one block per script in the chain. Keep each record concise and evidence-backed.
 
-##### <record_id>: collect_faulthandler_reports.py
+##### <record_id>: generate_dependency_hygiene_report.py
 
 ```yaml
 record_id: "<record_id>"
 script:
-  path: ".repo_studios/scripts/producers/collect_faulthandler_reports.py"
-  name: "collect_faulthandler_reports.py"
+  path: ".repo_studios/scripts/producers/generate_dependency_hygiene_report.py"
+  name: "generate_dependency_hygiene_report.py"
   category: "producer"
 tier3:
   metadata_block_version: "v1"
   allowed: false
   exists: false
-  name: "tier3_collect_faulthandler_reports.yaml"
+  name: "tier3_generate_dependency_hygiene_report.yaml"
   meets_template: "NA"
   last_updated: null
 cli_surfaces:
@@ -297,7 +297,7 @@ notes:
   - "<short note>"
 ```
 
-#### Implementation Workstreams (checkbox-driven) — collect_faulthandler_reports.py
+#### Implementation Workstreams (checkbox-driven) — generate_dependency_hygiene_report.py
 
 Workstream A — Discovery
 
@@ -315,7 +315,7 @@ Workstream D — Tier-3 YAML
 
 - [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
 - [ ] Inspect Tier-3 template requirements
-- [ ] Draft `tier3_collect_faulthandler_reports.yaml`
+- [ ] Draft `tier3_generate_dependency_hygiene_report.yaml`
 - [ ] Validate Tier-3 YAML
 
 Workstream E — QA & Evidence
@@ -324,21 +324,21 @@ Workstream E — QA & Evidence
 - [ ] Mypy evidence captured (or marked N/A in record)
 - [ ] Coverage + doc-index timestamp recorded
 
-- [ ] DONE — collect_faulthandler_reports.py complete; update Tier-1 Stage 3.1 script gate
+- [ ] DONE — generate_dependency_hygiene_report.py complete; update Tier-1 Stage 4.1 script gate
 
-##### <record_id>: generate_fault_artifacts.py
+##### <record_id>: generate_import_graph_report.py
 
 ```yaml
 record_id: "<record_id>"
 script:
-  path: ".repo_studios/scripts/consumers/generate_fault_artifacts.py"
-  name: "generate_fault_artifacts.py"
-  category: "consumer"
+  path: ".repo_studios/scripts/producers/generate_import_graph_report.py"
+  name: "generate_import_graph_report.py"
+  category: "producer"
 tier3:
   metadata_block_version: "v1"
   allowed: false
   exists: false
-  name: "tier3_generate_fault_artifacts.yaml"
+  name: "tier3_generate_import_graph_report.yaml"
   meets_template: "NA"
   last_updated: null
 cli_surfaces:
@@ -384,7 +384,7 @@ notes:
   - "<short note>"
 ```
 
-#### Implementation Workstreams (checkbox-driven) — generate_fault_artifacts.py
+#### Implementation Workstreams (checkbox-driven) — generate_import_graph_report.py
 
 Workstream A — Discovery
 
@@ -402,7 +402,7 @@ Workstream D — Tier-3 YAML
 
 - [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
 - [ ] Inspect Tier-3 template requirements
-- [ ] Draft `tier3_generate_fault_artifacts.yaml`
+- [ ] Draft `tier3_generate_import_graph_report.yaml`
 - [ ] Validate Tier-3 YAML
 
 Workstream E — QA & Evidence
@@ -411,21 +411,21 @@ Workstream E — QA & Evidence
 - [ ] Mypy evidence captured (or marked N/A in record)
 - [ ] Coverage + doc-index timestamp recorded
 
-- [ ] DONE — generate_fault_artifacts.py complete; update Tier-1 Stage 3.1 script gate
+- [ ] DONE — generate_import_graph_report.py complete; update Tier-1 Stage 4.1 script gate
 
-##### <record_id>: summarize_fault_diagnostics_overview.py
+##### <record_id>: scan_code_placeholders.py
 
 ```yaml
 record_id: "<record_id>"
 script:
-  path: ".repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py"
-  name: "summarize_fault_diagnostics_overview.py"
-  category: "summarizer"
+  path: ".repo_studios/scripts/producers/scan_code_placeholders.py"
+  name: "scan_code_placeholders.py"
+  category: "producer"
 tier3:
   metadata_block_version: "v1"
   allowed: false
   exists: false
-  name: "tier3_summarize_fault_diagnostics_overview.yaml"
+  name: "tier3_scan_code_placeholders.yaml"
   meets_template: "NA"
   last_updated: null
 cli_surfaces:
@@ -471,7 +471,7 @@ notes:
   - "<short note>"
 ```
 
-#### Implementation Workstreams (checkbox-driven) — summarize_fault_diagnostics_overview.py
+#### Implementation Workstreams (checkbox-driven) — scan_code_placeholders.py
 
 Workstream A — Discovery
 
@@ -489,7 +489,7 @@ Workstream D — Tier-3 YAML
 
 - [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
 - [ ] Inspect Tier-3 template requirements
-- [ ] Draft `tier3_summarize_fault_diagnostics_overview.yaml`
+- [ ] Draft `tier3_scan_code_placeholders.yaml`
 - [ ] Validate Tier-3 YAML
 
 Workstream E — QA & Evidence
@@ -498,7 +498,181 @@ Workstream E — QA & Evidence
 - [ ] Mypy evidence captured (or marked N/A in record)
 - [ ] Coverage + doc-index timestamp recorded
 
-- [ ] DONE — summarize_fault_diagnostics_overview.py complete; update Tier-1 Stage 3.1 script gate
+- [ ] DONE — scan_code_placeholders.py complete; update Tier-1 Stage 4.1 script gate
+
+##### <record_id>: generate_typecheck_report.py
+
+```yaml
+record_id: "<record_id>"
+script:
+  path: ".repo_studios/scripts/producers/generate_typecheck_report.py"
+  name: "generate_typecheck_report.py"
+  category: "producer"
+tier3:
+  metadata_block_version: "v1"
+  allowed: false
+  exists: false
+  name: "tier3_generate_typecheck_report.yaml"
+  meets_template: "NA"
+  last_updated: null
+cli_surfaces:
+  run_entrypoint: "run(argv)"
+  key_flags:
+    - "<--flag>"
+io_contract:
+  inputs:
+    - "<input description>"
+  outputs:
+    current:
+      root: "<current root>"
+      artifacts:
+        - "<artifact>"
+    target:
+      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+retention:
+  surfaces:
+    - "<flags / defaults / callsites>"
+  mechanism: "<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>"
+  targets:
+    - "<bundle roots and intermediate roots>"
+  guardrails:
+    - "<current_run_protection / exclusions / atomic_write / other>"
+  evidence:
+    - "<tests / docstrings / fixtures / code_refs>"
+db_integration:
+  gated_by: "REPO_STUDIOS_DB_ENABLED"
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+evidence:
+  code_refs:
+    - "<path>#Lx-Ly"
+  tests:
+    - "<pytest path>"
+  fixtures:
+    - "<fixture path>"
+notes:
+  - "<short note>"
+```
+
+#### Implementation Workstreams (checkbox-driven) — generate_typecheck_report.py
+
+Workstream A — Discovery
+
+- [ ] Inspect outputs + pruning/retention surfaces; record findings
+
+Workstream B — Plan
+
+- [ ] Draft plan to close output-root/base-package stop-gates
+
+Workstream C — Implement
+
+- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+
+Workstream D — Tier-3 YAML
+
+- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Inspect Tier-3 template requirements
+- [ ] Draft `tier3_generate_typecheck_report.yaml`
+- [ ] Validate Tier-3 YAML
+
+Workstream E — QA & Evidence
+
+- [ ] Pytest evidence captured
+- [ ] Mypy evidence captured (or marked N/A in record)
+- [ ] Coverage + doc-index timestamp recorded
+
+- [ ] DONE — generate_typecheck_report.py complete; update Tier-1 Stage 4.1 script gate
+
+##### <record_id>: refresh_mypy_baselines.py
+
+```yaml
+record_id: "<record_id>"
+script:
+  path: ".repo_studios/scripts/utilities/refresh_mypy_baselines.py"
+  name: "refresh_mypy_baselines.py"
+  category: "utility"
+tier3:
+  metadata_block_version: "v1"
+  allowed: false
+  exists: false
+  name: "tier3_refresh_mypy_baselines.yaml"
+  meets_template: "NA"
+  last_updated: null
+cli_surfaces:
+  run_entrypoint: "run(argv)"
+  key_flags:
+    - "<--flag>"
+io_contract:
+  inputs:
+    - "<input description>"
+  outputs:
+    current:
+      root: "<current root>"
+      artifacts:
+        - "<artifact>"
+    target:
+      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+retention:
+  surfaces:
+    - "<flags / defaults / callsites>"
+  mechanism: "<prune_by_timestamp / prune_by_rank / prune_by_manifest / other>"
+  targets:
+    - "<bundle roots and intermediate roots>"
+  guardrails:
+    - "<current_run_protection / exclusions / atomic_write / other>"
+  evidence:
+    - "<tests / docstrings / fixtures / code_refs>"
+db_integration:
+  gated_by: "REPO_STUDIOS_DB_ENABLED"
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+evidence:
+  code_refs:
+    - "<path>#Lx-Ly"
+  tests:
+    - "<pytest path>"
+  fixtures:
+    - "<fixture path>"
+notes:
+  - "<short note>"
+```
+
+#### Implementation Workstreams (checkbox-driven) — refresh_mypy_baselines.py
+
+Workstream A — Discovery
+
+- [ ] Inspect outputs + pruning/retention surfaces; record findings
+
+Workstream B — Plan
+
+- [ ] Draft plan to close output-root/base-package stop-gates
+
+Workstream C — Implement
+
+- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+
+Workstream D — Tier-3 YAML
+
+- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Inspect Tier-3 template requirements
+- [ ] Draft `tier3_refresh_mypy_baselines.yaml`
+- [ ] Validate Tier-3 YAML
+
+Workstream E — QA & Evidence
+
+- [ ] Pytest evidence captured
+- [ ] Mypy evidence captured (or marked N/A in record)
+- [ ] Coverage + doc-index timestamp recorded
+
+- [ ] DONE — refresh_mypy_baselines.py complete; update Tier-1 Stage 4.1 script gate
 
 ### 3.2 Stop-Gates and Implementation Checklists
 
@@ -612,4 +786,4 @@ checks:
 
 | Date | Change | Author | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
-| 2025-12-19 | Seeded Stage 3.1 Tier-2 roster skeleton (placeholders only). | repo_studios_ai | <doc-index-ts> | <suites> |
+| 2025-12-20 | Seeded Stage 4.1 Tier-2 roster skeleton (placeholders only). | repo_studios_ai | <doc-index-ts> | <suites> |
