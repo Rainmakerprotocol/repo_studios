@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2025-12-21T03:25:39.174620+00:00",
+  "status": "ok",
+  "metrics": {
+    "files_scanned": 3,
+    "links_checked": 224,
+    "issue_count": 0,
+    "missing_file_count": 0,
+    "missing_anchor_count": 0
+  },
+  "payload": {
+    "report": {
+      "schema_version": 1,
+      "generated_utc": "2025-12-21T03:25:39.174620+00:00",
+      "status": "ok",
+      "root": "C:\\Users\\genet\\repo_studios\\.repo_studios",
+      "patterns": [
+        "docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+        "docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md",
+        "docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_available_scripts_roster.md"
+      ],
+      "issue_count": 0,
+      "issues": [],
+      "scanned_files": [
+        "docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+        "docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_available_scripts_roster.md",
+        "docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md"
+      ]
+    }
+  }
+}

@@ -351,7 +351,7 @@ Workstream E — QA & Evidence
 - [ ] Mypy evidence captured (or marked N/A in record)
 - [ ] Coverage + doc-index timestamp recorded
 
-- [ ] DONE — orchestrate_full_diagnostic.py complete; update Tier-1 Stage 7 script gate
+- [ ] DONE — orchestrate_full_diagnostic.py complete; update Tier-1 Stage 7 stage-gate checklist
 
 ##### S7R-002 test-execution-telemetry
 

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2025-12-21T01:33:34.830219+00:00",
+  "status": "ok",
+  "metrics": {
+    "files_scanned": 1,
+    "links_checked": 12,
+    "issue_count": 0,
+    "missing_file_count": 0,
+    "missing_anchor_count": 0
+  },
+  "payload": {
+    "report": {
+      "schema_version": 1,
+      "generated_utc": "2025-12-21T01:33:34.830219+00:00",
+      "status": "ok",
+      "root": "C:\\Users\\genet\\repo_studios",
+      "patterns": [
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_available_scripts_roster.md"
+      ],
+      "issue_count": 0,
+      "issues": [],
+      "scanned_files": [
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_available_scripts_roster.md"
+      ]
+    }
+  }
+}

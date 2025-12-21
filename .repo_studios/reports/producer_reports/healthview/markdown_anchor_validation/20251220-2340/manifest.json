@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "healthview",
+  "topic": "markdown_anchor_validation",
+  "run_timestamp": "20251220-2340",
+  "generated_utc": "2025-12-20T23:40:29.889368+00:00",
+  "status": "ok",
+  "inputs": {
+    "root": "C:\\Users\\genet\\repo_studios",
+    "patterns": [
+      ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_available_scripts_roster.md"
+    ],
+    "artifacts_to_keep": 10
+  },
+  "summary": {
+    "files_scanned": 1,
+    "issue_count": 0
+  },
+  "catalog": [
+    "scripts.utilities.check_markdown_anchors"
+  ],
+  "provenance": {
+    "requested_by": "cli",
+    "trigger_type": "manual"
+  }
+}

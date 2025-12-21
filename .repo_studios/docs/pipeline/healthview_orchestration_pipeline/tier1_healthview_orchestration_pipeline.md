@@ -44,10 +44,10 @@ related_files:
   Log once evidence (doc-index timestamp + regression suites) is recorded.
 - When hardening, follow the **Pass A / Pass B / Pass C** evidence cycle per stage, as described in
   the how-to guide, and log each doc-index run/regression suite in
-  **Section 13. Update Log & Evidence Tracking**.
+  **Section 16. Update Log & Evidence Tracking**.
 - Before calling any Tier-1 edit complete, refresh the doc-index (via the `doc-index` make target or
   platform-equivalent command), execute the validating regression suites, and only then log the
-  evidence in **Section 13. Update Log & Evidence Tracking**; that section is mandatory and should
+  evidence in **Section 16. Update Log & Evidence Tracking**; that section is mandatory and should
   never be skipped.
 - Editors must follow `.github/instructions/markdown.instructions.md` and `.github/instructions/pipeline_doc_tiers.instructions.md`.
 
@@ -103,8 +103,8 @@ analyze trends, and publish timestamped reports.
   `manifest.json`, `summary.md`, `telemetry.json`.
   - **Current evidence is stage-scoped:** during migration, individual stages may be missing base
     package artifacts and/or emit additional artifacts; see the relevant Tier-2 roster.
-- **No mutable pointers:** HealthView bundles must be discoverable by timestamped directories;
-  HealthView does not create `latest_*` / `current_*` aliases.
+- **No mutable pointers (HOP target):** HealthView bundles must be discoverable by timestamped
+  directories; mutable pointer aliases (`latest_*` / `current_*`) are disallowed by contract.
 - **Retention (HOP target):** retention is enforced in code; see Tier-2 rosters for current
   evidence and pruning surfaces.
 - **DB dual-write (HOP target):** when `REPO_STUDIOS_DB_ENABLED` is enabled, orchestrators may
@@ -118,12 +118,12 @@ Without continuous health measurement, technical debt accumulates silently, docu
 degrades invisibly, and runtime reliability issues surface only during incidents. HealthView
 provides **proactive visibility** into repo health trends before they become critical.
 
-**Guarantees provided:**
+**Design intent (target outcomes):**
 
-- Every orchestrator run produces timestamped, reproducible artifacts
-- Health signals are measured consistently across CI/CD cycles
-- Trend data enables early intervention before metrics degrade critically
-- Gaps between ideal and actual health are surfaced systematically
+- Orchestrator runs are intended to produce timestamped, reproducible artifacts
+- Health signals are intended to remain comparable across execution cycles
+- Trend data is intended to enable early intervention before metrics degrade critically
+- Gaps between ideal and actual health are intended to be surfaced systematically
 
 ### 1.4 Where
 
@@ -223,7 +223,8 @@ full-suite diagnostics.
   `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
 - **Discovery invariant:** HealthView bundles must be discoverable by scanning timestamped
   directories; HealthView does not rely on mutable “latest” pointers.
-- **Retention target default:** history mode with `keep=5`.
+- **Retention (HOP target):** history pruning is enforced in code; see Tier-2 rosters for current
+  evidence and pruning surfaces.
 
 The pipeline is invoked manually via CLI/make targets; future work includes CI/CD integration and
 automated alerting.
@@ -245,16 +246,19 @@ automated alerting.
 - Start with **Sections 1–3** for context and the global map.
 - Read **Stages 1–6** in maturity order to understand each health domain's orchestrators.
 - Use **Stage 7** to understand how the meta-orchestrator chains all domains.
-- Consult the **Snapshot and Stage Matrix (Section 8)** for a quick status overview.
-- Check the **Contradiction Registry (Section 12)** for known inconsistencies.
-- Reference the **Tier-2 Document Index (Section 10)** for implementation details.
+- Consult the **Snapshot and Stage Matrix (Section 12)** for a quick status overview.
+- Check the **Contradiction Registry (Section 13)** for known inconsistencies.
+- Reference the **Tier-2 Document Index (Section 14)** for implementation details.
+- Unchecked Tier-1 gate checkboxes (`[ ]`) are the canonical work queue; follow the linked Tier-2
+  records and stop-gates to pick up the next unit of work.
 
 ---
 
 ## 3.4 HealthView Report Bundle Spine (Shared Backbone)
 
 **What it is:**  
-Every HealthView orchestrator produces a standardized **report bundle** structure consisting of
+Design intent (HOP target): HealthView orchestrators converge on a standardized **report bundle**
+structure consisting of
 three files: `manifest.json` (metadata), `summary.md` (human-readable digest), and `telemetry.json`
 (metrics time series). This shared backbone ensures consistent artifact discovery, retention
 policies, and downstream consumption patterns across all health domains.
@@ -265,7 +269,7 @@ policies, and downstream consumption patterns across all health domains.
 - Shared utilities in `.repo_studios/command_center/scripts/libraries/cli.py` (bundle writing, pruning)
 - Report naming standards enforced by `REPORT_NAMING_STANDARDS.md`
 
-**Lifecycle guarantees:**
+**Lifecycle contract (HOP target, with stage-scoped current evidence):**
 
 - **Target lifecycle guarantee (HOP):** each orchestrator publishes a timestamped HealthView bundle
   with the base package (`manifest.json`, `summary.md`, `telemetry.json`).
@@ -275,8 +279,8 @@ policies, and downstream consumption patterns across all health domains.
   `.repo_studios/command_center/reports/healthview/<topic>/<timestamp>/`
 - **Target (HOP contract):** bundles live at
   `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`
-- **Discovery invariant:** bundles are discovered by scanning timestamped directories; HealthView
-  does not create `latest_*` / `current_*` pointer files.
+- **Discovery invariant (HOP target):** bundles are discovered by scanning timestamped
+  directories; mutable pointer files (`latest_*` / `current_*`) are disallowed by contract.
 - **Retention (HOP target):** retention is enforced in code; see Tier-2 rosters for current
   evidence and pruning surfaces.
 - Missing artifacts are treated as a stop-gate for contract compliance; stage-specific failure
@@ -367,26 +371,24 @@ orchestrators and produces a **composite envelope** showing full-suite status.
 - **Partial-bundle mode:** Orchestrator writes partial manifest noting which scripts completed
   before failure
 
-**Global controls (environment variables & CLI flags):**
+**Global controls (conceptual):**
 
-- `--log-level` / `LOG_LEVEL` – Controls logging verbosity (DEBUG, INFO, WARNING, ERROR)
-- `--repo-root` / `REPO_ROOT` – Overrides repository root path detection
-- `--skip-upstream` – Skips producer scripts, reusing existing artifacts (for debugging aggregators)
-- `--dry-run` – Validates environment and script paths without executing (future: not yet implemented)
-- `PYTHON` – Specifies Python interpreter path (for virtual env coordination)
+- Logging verbosity
+- Repository root override
+- Optional reuse of existing upstream artifacts (debug mode)
+- Dry-run validation (future: not yet implemented)
+- Python interpreter selection (virtual env coordination)
 
 **Evidence:**
 
 - [.repo_studios/command_center/scripts/libraries/cli.py]
   (../../../command_center/scripts/libraries/cli.py) (`build_standard_options` function)
-- [.repo_studios/command_center/scripts/aggregators/scan_duplicates.py]
-  (../../../command_center/scripts/aggregators/scan_duplicates.py) (supports `--skip-upstream`)
 
 ---
 
 ## 3.7 HealthView Assumptions & Guarantees
 
-**Guarantees:**
+**Target contract and design intent:**
 
 - **Target guarantee (HOP):** HealthView bundles converge on the base package:
   `manifest.json`, `summary.md`, `telemetry.json`.
@@ -477,7 +479,7 @@ runtime when churn analysis is enabled; pipeline stops on first hard failure.
 **Orchestrator:**  
 [.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py](../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py)
 
-**Invoked Scripts (6):**
+**Invoked Scripts:**
 
 - The authoritative Stage 1.1 script inventory (with per-script I/O evidence) lives in the Tier-2
   roster: [Records index](tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1).
@@ -506,8 +508,8 @@ runtime when churn analysis is enabled; pipeline stops on first hard failure.
 - Exit code propagation: first non-zero exit stops pipeline, no partial bundles published
 - Artifact retention is configurable; Stage 1.1 exposes multiple retention knobs during migration.
   See Tier-2 Stage 1.1 for the current retention surfaces and pruning evidence.
-- Timestamp override supported via `--timestamp` (ISO 8601 format)
-- Heatmap window configurable via `--heatmap-window=500` (git log depth)
+- Stage-specific configuration (timestamp overrides, optional inputs, tuning knobs) lives in Tier-2;
+  see the Stage 1.1 roster for current evidence.
 
 **Planned Expansions:**
 
@@ -518,15 +520,15 @@ runtime when churn analysis is enabled; pipeline stops on first hard failure.
 
 - Test hardening analysis computes metrics but detailed flaky test reports not yet wired into
   health summary
-- Churn-complexity heatmap gracefully degrades to churn-only mode if `--heatmap-metrics-source` not
-  provided or lizard report unavailable
+- Churn-complexity heatmap gracefully degrades to churn-only mode when optional complexity
+  metrics are unavailable
 - Warnings and slow test counts collected but threshold-based alerting not yet implemented
 
 **Evidence Links:**
 
 - **Orchestrator:** [run_test_execution_telemetry.py]
   (../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py)
-  (lines 1-670: pipeline coordination, dynamic imports, artifact retention)
+  (pipeline coordination, dynamic imports, artifact retention)
 - **Tier-2 roster (authoritative per-script evidence):**
   [Stage 1.1 records + stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1)
 - **Tests:** [test_run_test_execution_telemetry.py]
@@ -634,10 +636,9 @@ anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/a
 
 - Scripts invoked via dynamic imports using `run(argv)` helpers loaded via `_load_callable()`
   (not subprocess spawning)
-- Shared timestamp propagated to all scripts via `--timestamp` (ISO 8601 format)
-- Optional script skipping supported via CLI flags: `--skip-doc-index`, `--skip-anchor-inventory`,
-  `--skip-anchor-validation`, `--skip-docs-integrity`, `--skip-metrics-stub`, `--skip-churn`,
-  `--skip-undocumented`, `--skip-aggregator`, `--skip-hygiene-signals`
+- Shared configuration is threaded through the pipeline (timestamp, repo-root, log-level)
+- Selective step skipping is supported during migration; see Tier-2 Stage 2.1 for the current
+  skip surfaces and evidence
 - Retention behavior is enforced in code; see Tier-2 Stage 2.1 for current retention surfaces and
   pruning evidence.
 - Report naming enforced via `enforce_report_naming()` guardrail (raises `GuardrailViolationError`
@@ -660,8 +661,7 @@ anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/a
 
 - **Orchestrator:** [run_docs_health_overview.py]
   (../../../command_center/scripts/orchestrators/run_docs_health_overview.py)
-  (lines 1-1095: pipeline coordination, 8 script execution functions, skip flags, shared timestamp,
-  report naming guardrails)
+  (pipeline coordination, shared configuration, report naming guardrails)
 - **Producer scripts:**
   - [generate_doc_index.py](../../../scripts/producers/generate_doc_index.py)
     (lines 394-432: `_execute_doc_index` invocation)
@@ -1022,9 +1022,9 @@ enabled; trend aggregation scales with the configured history window (from docst
 - Dynamic imports via `_load_callable()` for all 4 pipeline scripts (lines 288-298)
 - Supports 4 skip flags: `--skip-producer`, `--skip-consumer`, `--skip-aggregator`, `--skip-summarizer` (lines 229-232)
 - Retention behavior is enforced in code; see Tier-2 Stage 5.1 for current evidence.
-- Trend analysis: Configurable history window via `--trend-max-runs` (default=20, lines 217)
-- Git enrichment: Optional producer flag `--producer-with-git` enables Git history analysis (lines 224, 327)
-- Producer configurability: Context lines (default=2), strict mode, project packages, exclude patterns (lines 218-227, 317-337)
+- Trend analysis: Configurable history window (see Tier-2 Stage 5.1 for current surfaces and evidence)
+- Git enrichment: Optional Git history analysis support (see Tier-2 Stage 5.1 for current surfaces and evidence)
+- Producer configurability: Context lines, strict mode, project packages, exclude patterns (see Tier-2 Stage 5.1)
 - Fail-fast: Aborts on summarizer failure (line 665), continues if producer/consumer/aggregator skipped
 - Execution functions: `_execute_producer()` (lines 303-361), `_execute_consumer()` (lines 364-400), `_execute_aggregator()` (lines 403-449), `_execute_summarizer()` (lines 452-515)
 - Script registration via `CatalogRegistry` for downstream discovery, includes utility script (lines 518-524)
@@ -1064,13 +1064,42 @@ enabled; trend aggregation scales with the configured history window (from docst
 
 _Tier-2 references (depth lives here):_
 
-- [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_standards_integrity_roster.md#23-current-vs-target-contract-snapshot-stage-61) — target vs current, bundle invariants, naming/paths
-- [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
-- [Records index](../healthview_orchestration_pipeline/tier2_roster/tier2_standards_integrity_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
+- [Contract snapshot](tier2_roster/tier2_standards_integrity_roster.md#23-current-vs-target-contract-snapshot-stage-61) — target vs current, bundle invariants, naming/paths
+- [Stop-gates](tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
+- [Records index](tier2_roster/tier2_standards_integrity_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
 
-**Stage 6.1 Script Gate Summary (Tier-1) — shim:**
+**Stage 6.1 Script Gate Summary (Tier-1):**
 
-- [ ] <script>.py — pending until Tier-2 DONE is checked. See: <Tier-2 roster record anchor>
+- [ ] generate_standards_index.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-002-standards-index-producer)
+- [ ] analyze_standards_index_gaps.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-003-standards-index-gap-producer)
+- [ ] diff_standards_index.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-004-standards-index-diff-producer)
+- [ ] seed_standards_prompts.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-005-standards-prompt-seed-producer)
+- [ ] summarize_standards.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-006-standards-overview-summarizer)
+- [ ] run_standards_integrity.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-001-standards-integrity-orchestrator)
+
+**Stage 6.1 Gate Checklist (Tier-1):**
+
+These are Stage 6.1 readiness gates after all Tier-2 DONE script gates are closed.
+
+- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See: [Stop-gates](tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] No pointer artifacts (`latest_*` / `current_*`). See: [Stop-gates](tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). See: [Contract snapshot](tier2_roster/tier2_standards_integrity_roster.md#23-current-vs-target-contract-snapshot-stage-61)
+- [ ] Tier-3 eligible (Stage 6.1 Tier-2 depth captured; ready for Tier-3 extraction). See: [Records index](tier2_roster/tier2_standards_integrity_roster.md#311-records-index)
+
+**Target contract (locked decisions):**
+
+- Output root migrates to `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
+- Base package is present: `manifest.json`, `summary.md`, `telemetry.json`.
+- Discovery is timestamp-based only (no pointer files such as `latest_*`).
+
+**Current evidence (Stage 6.1):**
+
+- Orchestrator bundle root is under `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYMMDD-HHMM>/` (not yet the canonical target root).
+- Stage bundles mix multiple output roots and slug formats (notably prompt seeds using `standards_prompt_seed-YYYYMMDD_HHMMSS`).
+- Pointer artifacts exist in prompt seed outputs (`latest/latest_seed.*`) and are a stop-gate.
+- Details and evidence live in the Stage 6.1 Tier-2 roster:
+  [Current vs Target snapshot](tier2_roster/tier2_standards_integrity_roster.md#23-current-vs-target-contract-snapshot-stage-61),
+  [Stop-gates](tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists).
 
 **What Happens (Tier-1) — shim:**
 
@@ -1198,23 +1227,50 @@ _Tier-2 references (depth lives here):_
 - [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
 - [Records index](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
 
-**Stage 7 Script Gate Summary (Tier-1) — shim:**
+**Stage 7 Script Gate Summary (Tier-1):**
 
-- [ ] <stage_orchestrator>.py — pending until the corresponding Stage NN.1 Tier-2 DONE gates are checked
+- [ ] Stage 1.1 — Test execution telemetry — pending until Tier-2 DONE is checked — [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-002-test-execution-telemetry)
+- [ ] Stage 2.1 — Docs health overview — pending until Tier-2 DONE is checked — [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-003-docs-health)
+- [ ] Stage 3.1 — Fault diagnostics overview — pending until Tier-2 DONE is checked — [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-004-fault-diagnostics)
+- [ ] Stage 4.1 — Dependency import hygiene — pending until Tier-2 DONE is checked — [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-005-dependency-import-hygiene)
+- [ ] Stage 5.1 — Monkey patch oversight — pending until Tier-2 DONE is checked — [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-006-monkey-patch-oversight)
+- [ ] Stage 6.1 — Standards integrity — pending until Tier-2 DONE is checked — [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-007-standards-integrity)
 
-**What Happens (Tier-1) — shim:**
+**Stage 7 Stage Gate Checklist (Tier-1):**
 
-- Keep Stage 7 as a high-level narrative of how the meta-orchestrator chains Stage NN.1 orchestrators.
-- Do not copy Tier-2 workstreams or per-script evidence into Tier-1.
+- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`) — pending until Tier-2 DONE is checked — [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#23-current-vs-target-contract-snapshot-stage-7)
+- [ ] No pointer artifacts (`latest_*` / `current_*`) — pending until Tier-2 DONE is checked — [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] Output root aligned to HealthView contract: `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/` — pending until Tier-2 DONE is checked — [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#23-current-vs-target-contract-snapshot-stage-7)
+- [ ] Tier-3 eligible (Tier-2 depth captured; ready for Tier-3 extraction) — pending until Tier-2 DONE is checked — [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#32-stop-gates-and-implementation-checklists)
 
-**Section Order (Tier-1) — shim:**
+**Target contract (locked decisions):**
 
-- Tier-2 references → Script Gate Summary (Stage orchestrators first, meta-orchestrator last) → Overview/Orchestrator/Invoked Orchestrators.
+- Stage 7 is a meta-orchestrator that runs Stages 1.1–6.1 sequentially (fail-fast), producing a full-suite snapshot.
+- All emitted HealthView bundles (meta + delegated topic bundles) converge on the canonical root:
+  `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
+- Base package is stable: `manifest.json`, `summary.md`, `telemetry.json`.
+- Pointer artifacts (`latest_*`, `current_*`) are disallowed.
+
+See Tier-2 for the authoritative contract snapshot and stop-gates:
+`tier2_full_suite_overview_roster.md` → [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#23-current-vs-target-contract-snapshot-stage-7) and
+[Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#32-stop-gates-and-implementation-checklists).
+
+**Current evidence (Stage 7):**
+
+- The Stage 7 chain exists and emits the expected base package.
+- Output root is currently observed under `.repo_studios/command_center/reports/<viewer>/<topic>/<YYYYMMDD-HHMM>/`.
+- The root mismatch vs the canonical HealthView contract is treated as a stop-gate until remediated.
+
+See Tier-2 for the repo-grounded evidence summary:
+[Current vs Target Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#23-current-vs-target-contract-snapshot-stage-7).
 
 ### 10.1 Meta-Orchestrator: Full Diagnostic Suite
 
-**Overview:**  
-The `orchestrate_full_diagnostic.py` meta-orchestrator chains all six Stage NN.1 orchestrators (test execution, docs health, fault diagnostics, dependency hygiene, monkey patch oversight, standards integrity) by dynamically importing each orchestrator's `run(argv)` function and invoking it with shared configuration (`--repo-root`, `--log-level`). Each orchestrator runs to completion before the next begins; first non-zero exit code aborts the full diagnostic. The meta-orchestrator collects execution outcomes into a composite manifest showing per-topic success/failure and writes a meta-level HealthView bundle.
+**Overview:**
+The `orchestrate_full_diagnostic.py` meta-orchestrator runs Stages 1.1–6.1 sequentially by importing
+each topic orchestrator and invoking its `run(argv)` with shared configuration (`--repo-root`,
+`--log-level`). Non-zero exit codes abort the remaining topics (fail-fast). Contract alignment and
+proof live in Tier-2.
 
 **Orchestrator:**  
 [.repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py](../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py)
@@ -1228,28 +1284,11 @@ The `orchestrate_full_diagnostic.py` meta-orchestrator chains all six Stage NN.1
 5. `run_monkey_patch_oversight.py` (Stage 5.1) – topic slug: `monkey-patch-oversight`
 6. `run_standards_integrity.py` (Stage 6.1) – topic slug: `standards-integrity`
 
-**Execution Flow:**
+**Execution Notes:**
 
-1. Meta-orchestrator parses CLI args (`--repo-root`, `--log-level`, `--artifacts-to-keep`, optional `--timestamp`)
-2. Loads topic definitions from hardcoded tuple: `TOPIC_DEFINITIONS` (6 entries with slug, module path, description)
-3. For each topic orchestrator:
-   - Dynamically imports module using `importlib.import_module()`
-   - Retrieves `run(argv)` callable from module namespace
-   - Constructs argv with shared `--repo-root` and `--log-level`
-   - Invokes `run(argv)` synchronously (blocks until orchestrator completes)
-   - Collects exit code and timestamps start/end
-   - Logs progress: `INFO Executing topic: <slug>` → `INFO Topic <slug> completed with exit code N`
-   - If exit code != 0, logs `ERROR Topic <slug> failed` and aborts remaining topics
-4. Aggregates outcomes into composite manifest:
-   - Topic slugs executed
-   - Per-topic exit codes and durations
-   - Overall status ("success" if all 0, "partial_failure" if any non-zero)
-5. Writes meta-level HealthView bundle to `.repo_studios/command_center/reports/healthview/full_diagnostic/<YYYY-MM-DD>/`:
-   - `manifest.json` (composite envelope with per-topic outcomes)
-   - `summary.md` (meta-summary showing domain health scores)
-   - `telemetry.json` (cross-domain trend metrics)
-6. Prunes old bundles per `--artifacts-to-keep`
-7. Returns aggregated exit code (0 if all succeeded, first non-zero otherwise)
+- Sequential execution only; topic orchestrators are invoked directly (dynamic import, no subprocess).
+- Shared `--repo-root` and `--log-level` are threaded through every topic.
+- Output rooting and pruning behavior are treated as contract items and are validated via Tier-2 stop-gates.
 
 **Inputs:**
 
@@ -1259,28 +1298,15 @@ The `orchestrate_full_diagnostic.py` meta-orchestrator chains all six Stage NN.1
 
 **Outputs:**
 
-- **Meta-level HealthView bundle:** `.repo_studios/command_center/reports/healthview/full_diagnostic/<YYYY-MM-DD>/`
-  - `manifest.json` (composite envelope listing all 6 topics with exit codes)
-  - `summary.md` (human-readable digest of full-suite health)
-  - `telemetry.json` (cross-domain metrics for trend analysis)
-- **Indirect outputs:** Each Stage NN.1 orchestrator writes its own HealthView bundle during execution
+- Meta-level HealthView bundle + the six delegated topic bundles.
+- Target vs current bundle roots are tracked in Tier-2 (Stage 7 contract snapshot).
 
 **Status:** `Operational – Partial hardening complete`
 
-**Execution Details:**
-
-- Sequential execution only (no parallelism); average full-suite runtime ~20-30 minutes depending on repo size
-- First orchestrator failure aborts remaining topics (fail-fast strategy)
-- Each topic orchestrator inherits shared `--log-level` for consistent logging verbosity
-- Dynamic imports use `importlib.import_module()`, not subprocess spawning
-- Artifact retention configurable via `--artifacts-to-keep` (meta-level bundle retention)
-
 **Known Gaps:**
 
-- Sequential execution causes slow full-suite runs; parallel orchestrator execution not yet implemented
-- Composite envelope does not yet compute aggregate health score (weighted average across domains)
-- No progress bar or estimated time remaining during long-running diagnostics
-- Partial failure mode does not skip downstream topics; may want configurable "continue on error" strategy
+- Stage 7 still needs contract convergence (output rooting, pruning targets) and checklist closure.
+- Treat all gap details and remediation steps as Tier-2 stop-gates.
 
 **Evidence Links:**
 
@@ -1289,9 +1315,97 @@ The `orchestrate_full_diagnostic.py` meta-orchestrator chains all six Stage NN.1
 
 ---
 
-## 11. Snapshot & Stage Matrix
+## 11. Stage 11 – Available Scripts (Holding Area)
 
-### 11.1 Pipeline Snapshot
+> **Purpose:** Maintain a Tier-1 holding place for scripts that are *available to HealthView* but
+> not yet wired into the orchestrator blast-radius chain (Stages 1.1–7). Promotion into an
+> orchestrator is intended to be a copy/paste wiring step plus a Tier-1 doc update.
+
+### 11.1 Available Scripts
+
+_Tier-2 references (depth lives here):_
+
+- Stage 11.1 Tier-2 roster: [tier2_roster/tier2_available_scripts_roster.md](tier2_roster/tier2_available_scripts_roster.md)
+  - Contract snapshot: [Stage 11.1 contract snapshot](tier2_roster/tier2_available_scripts_roster.md#23-current-vs-target-contract-snapshot-stage-111)
+  - Stop-gates: [Stage 11.1 stop-gates](tier2_roster/tier2_available_scripts_roster.md#32-stop-gates-and-implementation-checklists)
+  - Records index: [Stage 11.1 records index](tier2_roster/tier2_available_scripts_roster.md#311-records-index)
+- Script inventory and provenance: [script_inventory_architecture.md](../../../scripts/script_inventory_architecture.md)
+
+**Stage 11.1 Script Gate Summary (Tier-1):**
+
+- [ ] `generate_anchor_health_report.py` — available; unassigned. See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-001-generate_anchor_health_reportpy)
+- [ ] `configure_faulthandler_runtime.py` — available; unassigned (utility). See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-002-configure_faulthandler_runtimepy)
+- [ ] `dump_faulthandler_snapshot.py` — available; unassigned (utility). See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-003-dump_faulthandler_snapshotpy)
+- [ ] `fault_run_analysis.py` — available; unassigned (utility). See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-004-fault_run_analysispy)
+- [ ] `validate_import_boundaries.py` — available; unassigned. See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-005-validate_import_boundariespy)
+- [ ] `extract_standards_rules.py` — available; unassigned. See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-006-extract_standards_rulespy)
+- [ ] `check_inventory_health.py` — available; unassigned. See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-007-check_inventory_healthpy)
+- [ ] `validate_inventory.py` — available; unassigned. See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-008-validate_inventorypy)
+- [ ] `summarize_health_suite.py` — available; unassigned (legacy candidate). See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-009-summarize_health_suitepy)
+- [ ] `render_inventory_views.py` — available; unassigned (out-of-scope for HealthView today). See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-010-render_inventory_viewspy)
+- [ ] `generate_lizard_report.py` — available; unassigned (out-of-scope for HealthView today). See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-011-generate_lizard_reportpy)
+- [ ] `test_log_analysis.py` — available by design (library). See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-013-test_log_analysispy)
+
+**Stage 11.1 Gate Checklist (Tier-1):**
+
+These are Stage 11.1 promotion gates when a script is picked up by an orchestrator.
+
+- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`) when the script is a
+  bundle-emitting stage participant.
+- [ ] No pointer artifacts (`latest_*` / `current_*`) in the promoted bundle surface.
+- [ ] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`) when the
+  script emits HealthView bundles.
+- [ ] Tier-3 eligible once Tier-2 depth exists (a Tier-2 roster is created for the new vertical).
+
+**Target contract (locked decisions):**
+
+- “Available scripts” are discoverable, stable repo assets that are *eligible* for HealthView use
+  but are not yet part of the orchestrator blast-radius chain.
+- Promotion is performed by wiring the script into an appropriate orchestrator (copy/
+  paste integration) and updating this Tier-1 document to move the reference from Stage 11.1 into
+  the relevant stage narrative/matrix row.
+- Scripts do not move on disk; only the Tier-1 references and orchestrator wiring change.
+
+**Current evidence (Stage 11.1):**
+
+Meaning of “available scripts” (Tier-1 contract):
+
+- The script exists, is discoverable in the repo, and can be invoked directly (CLI) or consumed as
+  a library/utility.
+- The script is **not** part of the current HealthView orchestrator blast-radius chain (Stages
+  1.1–7) and therefore does not contribute to coverage certainty today.
+- When a compiled need emerges, the script should be promoted by **copy/paste wiring** into an
+  appropriate orchestrator, followed by a Tier-1 doc update moving the reference out of
+  this holding area.
+
+Planned orchestrator integrations (compiled need; wrapper pending):
+
+- Stage 2.2: `generate_anchor_health_report.py`
+- Stage 3.2: `configure_faulthandler_runtime.py`, `dump_faulthandler_snapshot.py`, `fault_run_analysis.py`
+- Stage 4.2: `validate_import_boundaries.py`
+- Stage 6.2: `extract_standards_rules.py`
+
+Current inventory candidates without a compiled need (subject to reclassification):
+
+- Questionable: `check_inventory_health.py`, `validate_inventory.py`
+- Legacy / deprecation candidate: `summarize_health_suite.py`
+- Out-of-scope for HealthView today:
+  - `render_inventory_views.py` (CommandView-specific)
+  - `generate_lizard_report.py` (candidate for a future “Engineering Complexity Watch” stage)
+
+Available by design (import-only helpers; not expected to have orchestrator wrappers):
+
+- `test_log_analysis.py` (library)
+
+**Overview:**  
+Stage 11.1 is intentionally a Tier-1 holding area: it exists to preserve discoverability and
+upgrade paths without over-claiming orchestration coverage until an orchestrator vertical is built.
+
+---
+
+## 12. Snapshot & Stage Matrix
+
+### 12.1 Pipeline Snapshot
 
 **Current State (after partial Phase 2 hardening):**  
 
@@ -1312,7 +1426,7 @@ All six maturity domain orchestrators (Stages 1–6) are **operational** and pro
 
 **Stage-chain contradictions are tracked explicitly.** Structural contract mismatches
 (output roots, retention defaults, timestamp shapes, and stage-specific stop-gates) are tracked in
-**Section 12** and the relevant Tier-2 rosters.
+**Section 13** and the relevant Tier-2 rosters.
 
 All gaps have logical explanations:
 - 5 scripts (easy integrations): related to existing orchestrators but not yet wired
@@ -1330,7 +1444,7 @@ All gaps have logical explanations:
 - Sequential meta-orchestrator execution causes 20-30 min full-suite runtimes (parallel mode pending)
 - Test coverage incomplete: only 3 of 7 orchestrators have dedicated integration tests
 
-### 11.2 Stage Matrix
+### 12.2 Stage Matrix
 
 | Stage | Name | Orchestrators | Status | Top Gap | Evidence |
 |-------|------|---------------|--------|---------|----------|
@@ -1344,7 +1458,7 @@ All gaps have logical explanations:
 
 ---
 
-## 12. Contradiction Registry
+## 13. Contradiction Registry
 
 | ID | Description | Sections Affected | Reality Source | Next Step |
 |----|-------------|-------------------|----------------|----------|
@@ -1363,7 +1477,7 @@ All gaps have logical explanations:
 
 ---
 
-## 13. Tier-2 Document Index
+## 14. Tier-2 Document Index
 
 **Tier-2 (Roster) Documents (per-orchestrator BEGIN → END):**
 
@@ -1374,6 +1488,7 @@ All gaps have logical explanations:
 - [tier2_roster/tier2_monkey_patch_oversight_roster.md](tier2_roster/tier2_monkey_patch_oversight_roster.md) – Stage 5.1 deep dive
 - [tier2_roster/tier2_standards_integrity_roster.md](tier2_roster/tier2_standards_integrity_roster.md) – Stage 6.1 deep dive
 - [tier2_roster/tier2_full_suite_overview_roster.md](tier2_roster/tier2_full_suite_overview_roster.md) – Stage 7 (meta-orchestrator) deep dive
+- [tier2_roster/tier2_available_scripts_roster.md](tier2_roster/tier2_available_scripts_roster.md) – Stage 11.1 (holding roster) deep dive
 
 **Tier-3 (YAML) Documents (per-script agent tools):**
 
@@ -1400,7 +1515,7 @@ All gaps have logical explanations:
 
 ---
 
-## 14. Working / Future Notes
+## 15. Working / Future Notes
 
 **Future enhancements (not yet scheduled):**
 
@@ -1415,34 +1530,23 @@ All gaps have logical explanations:
 - When import boundary validation (Stage 4.2) is implemented, update Stage 4 Planned Expansions
   and matrix
 
-**Gap integration tracking:**
-
-- Stage 2.2: `generate_anchor_health_report.py` → needs orchestrator wrapper
-- Stage 3.2: `configure_faulthandler_runtime.py`, `dump_faulthandler_snapshot.py`,
-  `fault_run_analysis.py` → needs orchestrator wrapper
-- Stage 4.2: `validate_import_boundaries.py` → needs orchestrator wrapper
-- Stage 6.2: `analyze_standards_index_gaps.py`, `extract_standards_rules.py` → needs orchestrator wrapper
-- Questionable scripts: `check_inventory_health.py`, `validate_inventory.py` → clarify purpose,
-  then assign to stage or mark out-of-scope
-- Legacy script: `summarize_health_suite.py` → confirm deprecated, retire from inventory
-- Out-of-scope: `render_inventory_views.py` (CommandView-specific), `generate_lizard_report.py`
-  (potential Stage 8: Engineering Complexity Watch)
-
 ---
 
-## 15. Update Log & Evidence Tracking
+## 16. Update Log & Evidence Tracking
 
 | Date | Author / Steward | Change | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
+| 2025-12-20 | GitHub Copilot | Seeded the Stage 11.1 Tier-2 roster and linked it from Tier-1 Stage 11.1 and the Tier-2 index; reran targeted anchor validation. | 20251220-2257 | markdown anchor validation (bundle 20251220-2257) |
+| 2025-12-20 | GitHub Copilot | Introduced Stage 11 (Available Scripts holding area) using the Stage 1.1 gate layout; migrated planned/available script lists into Stage 11.1; renumbered downstream sections and updated internal section references; reran targeted anchor validation. | 20251220-2037 | markdown anchor validation (bundle 20251220-2037) |
 | 2025-12-19 | GitHub Copilot | Replaced non-existent Tier-3 placeholder links with plain `TBD` text and corrected Fault Diagnostics evidence links to point at the actual `.repo_studios/scripts/...` + `.repo_studios/tests/...` locations; reran targeted anchor validation for the HealthView pipeline docs. | 20251219-0124 | markdown anchor validation (bundle 20251219-0123) |
-| 2025-12-18 | GitHub Copilot | Hardened Tier-1 Sections 1–3 to explicitly separate current vs HOP target contract (output roots/discovery, bundle invariants, retention keep=5, DB best-effort dual-write) and populated Contradiction Registry entries. | 20251218-2328 | Doc-index producer; markdown anchor validation (bundle 20251218-2337) |
+| 2025-12-18 | GitHub Copilot | Hardened Tier-1 Sections 1–3 to explicitly separate current vs HOP target contract (output roots/discovery, bundle invariants, retention framing, DB best-effort dual-write) and populated Contradiction Registry entries. | 20251218-2328 | Doc-index producer; markdown anchor validation (bundle 20251218-2337) |
 | 2025-12-12 | Repo Studios Core Team | Initial tier-1 skeleton generated from template (Phase 0 complete) | N/A (draft) | N/A |
 | 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 1 (Test Execution Telemetry) \u2013 updated script count to 6 (added summarizer), verified 5-6 min runtime, artifact retention defaults, dynamic imports, actual input/output paths from orchestrator code inspection | N/A (no doc-index yet) | Verified via code inspection: [run_test_execution_telemetry.py](../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py) lines 1-670, [test_run_test_execution_telemetry.py](../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py) lines 1-362 |
 | 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 7 (Meta-Orchestrator) \u2013 verified sequential execution via dynamic imports, 6-topic chain, fail-fast strategy, composite manifest generation, 20-30 min runtime expectations | N/A (no doc-index yet) | Verified via code inspection: [orchestrate_full_diagnostic.py](../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py) lines 1-554, TOPIC_DEFINITIONS tuple with 6 entries |
-| 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 2 (Docs Health Overview) \u2013 verified 8-script pipeline, 6-8 min runtime, 9 skip flags, report naming guardrails via enforce_report_naming(), artifact retention (doc-index=1 mutable, others=5 trend), execution order confirmed | N/A (no doc-index yet) | Verified via code inspection: [run_docs_health_overview.py](../../../command_center/scripts/orchestrators/run_docs_health_overview.py) lines 1-1095, 8 _execute_* functions (lines 394-710) |
+| 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 2 (Docs Health Overview) \u2013 verified 8-script pipeline, 6-8 min runtime, step skipping support, report naming guardrails via enforce_report_naming(), retention behavior enforced, execution order confirmed | N/A (no doc-index yet) | Verified via code inspection: [run_docs_health_overview.py](../../../command_center/scripts/orchestrators/run_docs_health_overview.py) lines 1-1095, 8 _execute_* functions (lines 394-710) |
 | 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 3 (Fault Diagnostics Overview) \u2013 corrected script count from 2 to 3 (added missing summarizer), verified 3-5 min runtime, dual HealthView+CommandView output, special reuse/override flags (--reuse-report, --producer-top-frames), artifact retention defaults | N/A (no doc-index yet) | Verified via code inspection: [run_fault_diagnostics_overview.py](../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py) lines 1-604, execution functions (lines 272-312, 315-371, 374-423), [test_run_fault_diagnostics_overview.py](../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py) |
 | 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 4 (Dependency & Import Hygiene) \u2013 verified 5-script pipeline (4 producers + 1 utility), 7-11 min runtime, 6 skip flags (import-graph, typecheck, batch-cleanup opt-in, mypy-baselines opt-in, dependency patterns, skip-pyproject), batch cleanup dry-run capability (legacy shim retired), fail-tolerant execution (stop_on_failure=False) | N/A (no doc-index yet) | Verified via code inspection: [run_dependency_import_hygiene.py](../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py) lines 1-1111, execution functions (lines 437-468, 471-500, 503-543, 639-711, 714-742, 765-793), [test_run_dependency_import_hygiene.py](../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py) |
-| 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 5 (Monkey Patch Oversight) \u2013 verified 4-script pipeline (producer \u2192 consumer \u2192 aggregator \u2192 summarizer) + 1 utility, 4-7 min runtime, 4 skip flags, Git enrichment capability (--producer-with-git), trend analysis with configurable history window (--trend-max-runs default=20), producer configurability (context lines, strict mode, project packages, exclude patterns) | N/A (no doc-index yet) | Verified via code inspection: [run_monkey_patch_oversight.py](../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py) lines 1-735, execution functions (lines 303-361, 364-400, 403-449, 452-515), [test_run_monkey_patch_oversight.py](../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py) |
-| 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 6 (Standards Integrity) – corrected script count from 4 to 5 (added missing analyze_standards_index_gaps.py producer), verified 5-8 min runtime, conditional diff skip logic (skipped if --diff-old-index not provided), prompt format configurability (text/yaml/json), artifact retention (HealthView=3, index=5, gap=5, diff=10, prompt=5), 5-step pipeline (index → gap → diff → prompts → summary), fail-fast on summarizer | N/A (no doc-index yet) | Verified via code inspection: [run_standards_integrity.py](../../../command_center/scripts/orchestrators/run_standards_integrity.py) lines 1-817, execution functions (lines 332-361, 364-413, 416-467, 470-512, 515-522), [test_run_standards_integrity.py](../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py) |
+| 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 5 (Monkey Patch Oversight) \u2013 verified 4-script pipeline (producer \u2192 consumer \u2192 aggregator \u2192 summarizer) + 1 utility, 4-7 min runtime, step skipping support, optional Git enrichment, trend analysis support, producer configurability (context lines, strict mode, project packages, exclude patterns) | N/A (no doc-index yet) | Verified via code inspection: [run_monkey_patch_oversight.py](../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py) lines 1-735, execution functions (lines 303-361, 364-400, 403-449, 452-515), [test_run_monkey_patch_oversight.py](../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py) |
+| 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 6 (Standards Integrity) – corrected script count from 4 to 5 (added missing analyze_standards_index_gaps.py producer), verified 5-8 min runtime, conditional diff skip logic, prompt format configurability (text/yaml/json), retention behavior enforced, 5-step pipeline (index → gap → diff → prompts → summary), fail-fast on summarizer | N/A (no doc-index yet) | Verified via code inspection: [run_standards_integrity.py](../../../command_center/scripts/orchestrators/run_standards_integrity.py) lines 1-817, execution functions (lines 332-361, 364-413, 416-467, 470-512, 515-522), [test_run_standards_integrity.py](../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py) |
 | 2025-12-12 | GitHub Copilot | Updated Stage Matrix with accurate test file paths (only 3 of 7 orchestrators have tests), updated Pipeline Snapshot to reflect partial hardening status, Phase 2 Pass B hardening 86% complete (Stages 1-5, 7), incremented version to v0.2.0 | N/A (no doc-index yet) | N/A |
 | 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening 100% complete – all 7 stages code-verified with evidence, incremented version to v0.3.0. Ready for Phase 2 Pass C polish (wording, transitions, cross-references across all stages) | N/A (no doc-index yet) | N/A |

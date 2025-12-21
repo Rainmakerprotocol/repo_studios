@@ -1,0 +1,110 @@
+version: "1.0"
+name: "HealthView Agent Execution Loop"
+scope:
+  root_docs:
+    - ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/"
+  tier1_entry: ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md"
+  allowed_actions:
+    - "read_docs"
+    - "edit_docs"
+    - "edit_code"
+    - "run_make_targets"
+    - "run_tests"
+    - "run_doc_index"
+    - "run_anchor_validation"
+constraints:
+  one_checkbox_at_a_time: true
+  do_not_check_tier1_until_tier2_done: true
+  no_work_outside_checkbox_flow: true
+  no_tier3_before_stop_gates_closed: true
+approval_gates:
+  require_user_approval_for:
+    - "begin_implementation"
+    - "check_done"
+    - "update_tier1"
+    - "create_tier3_yaml"
+workflow:
+  step_0_select_work:
+    description: "Select the next unchecked Tier-1 gate checkbox and route to Tier-2."
+    actions:
+      - "open tier1_entry"
+      - "locate next unchecked checkbox in canonical gate areas"
+      - "follow linked Tier-2 anchor"
+    outputs:
+      - "selected_tier1_checkbox"
+      - "linked_tier2_record_anchor"
+  step_1_discovery:
+    description: "Fill Discovery (A) in Tier-2 record with repo-observed facts."
+    actions:
+      - "confirm CLI surface + flags"
+      - "confirm outputs + output locations"
+      - "confirm naming conventions"
+      - "confirm pruning/retention mechanism surface (no numeric policy edits)"
+      - "confirm DB marker expectations if applicable"
+      - "record evidence pointers in Tier-2"
+    outputs:
+      - "tier2_discovery_completed"
+  step_2_plan:
+    description: "Write Plan (B) in Tier-2 record."
+    actions:
+      - "list files to change"
+      - "list files not to change"
+      - "define expected artifacts and locations"
+      - "define validation plan (make target + output checks + tests + mypy)"
+    outputs:
+      - "tier2_plan_completed"
+    approval_required: "begin_implementation"
+  step_3_implement:
+    description: "Implement (C) approved plan with minimal blast radius."
+    actions:
+      - "implement smallest strict change to satisfy Tier-2 stop-gates and Tier-1 gate intent"
+      - "keep variables as variables (no hardcoding env/repo specifics)"
+      - "avoid unrelated refactors"
+    outputs:
+      - "code_changes_completed"
+  step_4_evidence:
+    description: "Evidence (D): run make targets, verify outputs, run tests, capture proof."
+    actions:
+      - "run make target from repo root"
+      - "verify output location matches contract"
+      - "verify naming convention"
+      - "verify artifacts emitted match Tier-2 record"
+      - "run pytest and capture results"
+      - "run mypy if required; else record N/A with justification"
+      - "run doc-index / anchor validation if required"
+      - "record commands + paths + timestamps in Tier-2"
+    outputs:
+      - "evidence_captured"
+  step_5_promote:
+    description: "Promote (E): create Tier-3 YAML only if allowed."
+    condition: "tier3_allowed == true"
+    actions:
+      - "inspect tier3_agent_pipeline_template.yaml"
+      - "draft tier3_<script>.yaml"
+      - "validate Tier-3 YAML against template"
+    outputs:
+      - "tier3_yaml_completed"
+    approval_required: "create_tier3_yaml"
+  step_6_done:
+    description: "Check DONE in Tier-2 and update Tier-1 gate checkbox."
+    actions:
+      - "verify all workstreams A–E satisfied"
+      - "check Tier-2 DONE checkbox"
+      - "update Tier-1 checkbox wired to this record"
+      - "run anchor validation if links changed"
+    outputs:
+      - "tier2_done_checked"
+      - "tier1_gate_updated"
+    approval_required: "check_done"
+deliverable_each_iteration:
+  - "tier1_checkbox_started"
+  - "tier2_record_anchor"
+  - "files_changed"
+  - "evidence_summary"
+  - "checkboxes_checked"
+  - "remaining_stop_gates"
+stop_conditions:
+  - "checkbox_path_ambiguous"
+  - "missing_make_target_unclear_naming"
+  - "evidence_contradicts_tier2_record"
+  - "change_affects_multiple_stages_without_tier1_routing"
