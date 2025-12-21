@@ -61,6 +61,55 @@ related_files:
 
 ---
 
+## 0.1 Agent Execution Loop (Entry Point)
+
+This section is the canonical entry point for the HealthView checkbox-driven execution loop.
+It is intentionally outside the stage taxonomy and contains no checkboxes.
+
+<!-- agents:begin:healthview_agent_entry_point -->
+```yaml
+entry_point:
+  selector_command: "make -C .repo_studios healthview-agent-next-compact LOG_LEVEL=INFO"
+  workflow_spec: ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/workflows/healthview_agent_execution_loop.v1.yaml"
+  validator_command: "make -C .repo_studios healthview-agent-validate-workflow LOG_LEVEL=INFO"
+  refresh_queue_command: "make -C .repo_studios doc-index LOG_LEVEL=INFO"
+expected_compact_output:
+  - "tier1=<file_path>:<line_number>"
+  - "tier2=<relative_link>#<anchor>"
+approval_gates:
+  require_user_approval_for:
+    - begin_implementation
+    - check_done
+    - update_tier1
+    - create_tier3_yaml
+```
+<!-- agents:end:healthview_agent_entry_point -->
+
+Commands:
+
+```powershell
+make -C .repo_studios healthview-agent-next-compact LOG_LEVEL=INFO
+```
+
+Workflow spec:
+
+- `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/workflows/healthview_agent_execution_loop.v1.yaml`
+
+Tool index (compact):
+
+- **Make targets:**
+  - `make -C .repo_studios healthview-agent-next-compact LOG_LEVEL=INFO`
+  - `make -C .repo_studios healthview-agent-validate-workflow LOG_LEVEL=INFO`
+  - `make -C .repo_studios doc-index LOG_LEVEL=INFO`
+- **Workflow assets:**
+  - Spec: `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/workflows/healthview_agent_execution_loop.v1.yaml`
+  - Schema: `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/workflows/schema/healthview_agent_execution_loop.schema.json`
+  - Validator: `.repo_studios/scripts/utilities/validate_healthview_agent_workflow_spec.py`
+  - Runner: `.repo_studios/scripts/orchestrators/healthview/run_healthview_agent_loop.py`
+  - Tier-3 onboarding template: `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/workflows/tier3_agent_pipeline_template.yaml`
+
+---
+
 ## 1. 5W1H – Purpose & Context
 
 ### 1.1 Who
@@ -1536,6 +1585,7 @@ All gaps have logical explanations:
 
 | Date | Author / Steward | Change | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
+| 2025-12-21 | GitHub Copilot | Phase 5: added compact tool index to Section 0.1 (make targets + spec/schema/validator/runner/template paths); refreshed doc-index to confirm checkbox report remains stable. | 2025-12-21T13:29:43Z | N/A (doc-only; no code changes) |
 | 2025-12-20 | GitHub Copilot | Seeded the Stage 11.1 Tier-2 roster and linked it from Tier-1 Stage 11.1 and the Tier-2 index; reran targeted anchor validation. | 20251220-2257 | markdown anchor validation (bundle 20251220-2257) |
 | 2025-12-20 | GitHub Copilot | Introduced Stage 11 (Available Scripts holding area) using the Stage 1.1 gate layout; migrated planned/available script lists into Stage 11.1; renumbered downstream sections and updated internal section references; reran targeted anchor validation. | 20251220-2037 | markdown anchor validation (bundle 20251220-2037) |
 | 2025-12-19 | GitHub Copilot | Replaced non-existent Tier-3 placeholder links with plain `TBD` text and corrected Fault Diagnostics evidence links to point at the actual `.repo_studios/scripts/...` + `.repo_studios/tests/...` locations; reran targeted anchor validation for the HealthView pipeline docs. | 20251219-0124 | markdown anchor validation (bundle 20251219-0123) |

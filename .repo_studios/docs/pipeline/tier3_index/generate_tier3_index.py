@@ -51,7 +51,11 @@ def setup_logging(level: str = "INFO") -> logging.Logger:
 
 def find_tier3_files(pipeline_dir: Path, log: logging.Logger) -> List[Path]:
     """
-    Find all tier3_*.yaml files in pipeline directory (non-recursive).
+    Find all tier3_*.yaml files under pipeline directory (recursive).
+
+    Excludes generated output directories (at minimum):
+    - **/outputs/
+    - **/reports/
     
     Args:
         pipeline_dir: Path to .repo_studios/docs/pipeline/
@@ -61,12 +65,27 @@ def find_tier3_files(pipeline_dir: Path, log: logging.Logger) -> List[Path]:
         List of Path objects for tier3 YAML files
     """
     pattern = "tier3_*.yaml"
-    tier3_files = sorted(pipeline_dir.glob(pattern))
-    
-    # Filter out files in subdirectories
-    tier3_files = [f for f in tier3_files if f.parent == pipeline_dir]
-    
-    log.info(f"Found {len(tier3_files)} tier3 YAML files matching '{pattern}'")
+    excluded_dirnames = {"outputs", "reports", "pipeline_templates", "tier3_index"}
+
+    tier3_files: list[Path] = []
+    for path in pipeline_dir.rglob(pattern):
+        rel_parts = path.relative_to(pipeline_dir).parts
+        if any(part in excluded_dirnames for part in rel_parts[:-1]):
+            continue
+        tier3_files.append(path)
+
+    tier3_files.sort(
+        key=lambda p: (
+            len(p.relative_to(pipeline_dir).parts),
+            str(p.relative_to(pipeline_dir)),
+        )
+    )
+    log.info(
+        "Found %d tier3 YAML files matching '%s' (recursive; excluding %s)",
+        len(tier3_files),
+        pattern,
+        ", ".join(sorted(excluded_dirnames)),
+    )
     return tier3_files
 
 

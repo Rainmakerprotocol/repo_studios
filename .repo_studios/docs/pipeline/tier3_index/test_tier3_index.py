@@ -7,12 +7,18 @@ Validates tier3 index generation, YAML parsing, validation, and aggregation.
 
 import copy
 import logging
+import sys
 import tempfile
 from pathlib import Path
 from typing import Any, Dict
 
 import pytest
 import yaml
+
+
+THIS_DIR = Path(__file__).resolve().parent
+if str(THIS_DIR) not in sys.path:
+    sys.path.insert(0, str(THIS_DIR))
 
 from generate_tier3_index import (
     REQUIRED_TIER3_KEYS,
@@ -132,17 +138,54 @@ class TestFindTier3Files:
         assert len(files) == 1
         assert files[0].name == "tier3_valid.yaml"
     
-    def test_ignore_subdirectories(self, temp_pipeline_dir, logger):
-        """Should ignore tier3 files in subdirectories."""
+    def test_include_subdirectories(self, temp_pipeline_dir, logger):
+        """Should discover tier3 files in subdirectories."""
         (temp_pipeline_dir / "tier3_root.yaml").touch()
-        
+
         subdir = temp_pipeline_dir / "subdir"
         subdir.mkdir()
         (subdir / "tier3_nested.yaml").touch()
-        
+
         files = find_tier3_files(temp_pipeline_dir, logger)
-        assert len(files) == 1
-        assert files[0].name == "tier3_root.yaml"
+        assert len(files) == 2
+        assert [str(f.relative_to(temp_pipeline_dir)).replace('\\', '/') for f in files] == [
+            "tier3_root.yaml",
+            "subdir/tier3_nested.yaml",
+        ]
+
+    def test_exclude_outputs_and_reports_dirs(self, temp_pipeline_dir, logger):
+        """Should ignore tier3 files under outputs/ and reports/ directories."""
+        (temp_pipeline_dir / "tier3_root.yaml").touch()
+
+        outputs_dir = temp_pipeline_dir / "some_tool" / "outputs"
+        outputs_dir.mkdir(parents=True)
+        (outputs_dir / "tier3_in_outputs.yaml").touch()
+
+        reports_dir = temp_pipeline_dir / "other" / "reports"
+        reports_dir.mkdir(parents=True)
+        (reports_dir / "tier3_in_reports.yaml").touch()
+
+        files = find_tier3_files(temp_pipeline_dir, logger)
+        assert [str(f.relative_to(temp_pipeline_dir)).replace('\\', '/') for f in files] == [
+            "tier3_root.yaml"
+        ]
+
+    def test_exclude_pipeline_templates_and_tier3_index_dirs(self, temp_pipeline_dir, logger):
+        """Should ignore internal template and index directories."""
+        (temp_pipeline_dir / "tier3_root.yaml").touch()
+
+        templates_dir = temp_pipeline_dir / "pipeline_templates"
+        templates_dir.mkdir()
+        (templates_dir / "tier3_template.yaml").touch()
+
+        index_dir = temp_pipeline_dir / "tier3_index"
+        index_dir.mkdir()
+        (index_dir / "tier3_internal.yaml").touch()
+
+        files = find_tier3_files(temp_pipeline_dir, logger)
+        assert [str(f.relative_to(temp_pipeline_dir)).replace('\\', '/') for f in files] == [
+            "tier3_root.yaml"
+        ]
 
 
 class TestValidateTier3Yaml:

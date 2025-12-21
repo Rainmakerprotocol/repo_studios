@@ -2,8 +2,8 @@
   "schema_version": 1,
   "viewer_slug": "healthview",
   "topic": "doc_index",
-  "run_timestamp": "20251220-1727",
-  "generated_utc": "2025-12-20T17:27:24.209940+00:00",
+  "run_timestamp": "20251221-1329",
+  "generated_utc": "2025-12-21T13:29:43.709312+00:00",
   "status": "ok",
   "catalog": [
     "scripts.docs.generate_doc_index"

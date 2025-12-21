@@ -1,16 +1,18 @@
 version: 1.0.0
-generated_at: '2025-12-20T15:33:27.600508+00:00'
+generated_at: '2025-12-21T13:29:43.171054+00:00'
 generator_version: 1.0.0
 repository:
   name: repo_studios
   root: C:\Users\genet\repo_studios
   branch: main
 statistics:
-  total_scripts: 1
+  total_scripts: 2
   categories:
     producer: 1
+    utility: 1
   status:
     active: 1
+    template: 1
 scripts:
 - script_id: generate_commandview_inventory
   name: Generate CommandView Inventory
@@ -31,6 +33,32 @@ scripts:
   status: active
   entry_point: run
   importable: true
+- script_id: healthview_onboarding_template
+  name: HealthView Onboarding Template (Tier-3)
+  category: utility
+  tier3_file: healthview_orchestration_pipeline\workflows\tier3_agent_pipeline_template.yaml
+  script_path: N/A (make target)
+  summary: 'A reusable onboarding execution template invoked from Tier-2 roster records.
+
+
+    Use this template when you need to document how to run a HealthView onboarding task
+
+    (inventory refresh, validations, and evidence capture) via make targets.
+
+
+    This template is not a runnable tool by itself. Instantiate a concrete Tier-3 YAML from it.
+
+    '
+  keywords:
+  - healthview
+  - hop
+  - onboarding
+  - tier3
+  - template
+  - agent-loop
+  status: template
+  entry_point: null
+  importable: false
 by_category:
   producer:
   - generate_commandview_inventory
@@ -38,4 +66,5 @@ by_category:
   aggregator: []
   orchestrator: []
   summarizer: []
-  utility: []
+  utility:
+  - healthview_onboarding_template

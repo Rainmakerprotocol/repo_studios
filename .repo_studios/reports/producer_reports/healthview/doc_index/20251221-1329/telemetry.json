@@ -2,28 +2,28 @@
   "schema_version": 1,
   "viewer_slug": "healthview",
   "topic": "doc_index",
-  "run_timestamp": "20251220-1727",
-  "generated_utc": "2025-12-20T17:27:24.209940+00:00",
+  "run_timestamp": "20251221-1329",
+  "generated_utc": "2025-12-21T13:29:43.709312+00:00",
   "status": "ok",
   "metrics": {
-    "total_documents": 287,
-    "total_headings": 2038,
-    "total_links": 169,
+    "total_documents": 290,
+    "total_headings": 2066,
+    "total_links": 231,
     "duplicate_slug_count": 6,
     "documents_missing_description_count": 36,
-    "placeholder_documents_count": 64,
-    "link_density": 0.5888501742160279
+    "placeholder_documents_count": 65,
+    "link_density": 0.7965517241379311
   },
   "payload": {
     "schema_version": 1,
-    "generated_utc": "2025-12-20T17:27:24.209940+00:00",
+    "generated_utc": "2025-12-21T13:29:43.709312+00:00",
     "repo_root": "C:\\Users\\genet\\repo_studios",
     "summary": {
-      "total_documents": 287,
-      "total_h1": 290,
-      "total_h2": 1748,
-      "total_headings": 2038,
-      "total_links": 169
+      "total_documents": 290,
+      "total_h1": 293,
+      "total_h2": 1773,
+      "total_headings": 2066,
+      "total_links": 231
     },
     "metrics": {
       "documents_per_directory": [
@@ -44,16 +44,16 @@
           "count": 17
         },
         {
+          "directory": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster",
+          "count": 11
+        },
+        {
           "directory": ".repo_studios/docs/standards/global",
           "count": 11
         },
         {
           "directory": ".repo_studios/command_center/docs/phase_7",
           "count": 10
-        },
-        {
-          "directory": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster",
-          "count": 9
         },
         {
           "directory": "docs/standards/global",
@@ -111,10 +111,10 @@
       "documents_missing_description_count": 36,
       "documents_without_h1_count": 16,
       "documents_without_h2_count": 17,
-      "placeholder_documents_count": 64,
+      "placeholder_documents_count": 65,
       "duplicate_slug_count": 6,
       "documents_outside_docs_tree_count": 159,
-      "link_density": 0.5888501742160279
+      "link_density": 0.7965517241379311
     },
     "advisories": {
       "documents_missing_description": [
@@ -14556,21 +14556,21 @@
           {
             "title": "Signals & Telemetry",
             "slug": "signals-telemetry",
-            "line": 112,
+            "line": 113,
             "parent_title": "Checkbox Report",
             "parent_slug": "checkbox-report"
           },
           {
             "title": "Maintenance Playbook",
             "slug": "maintenance-playbook",
-            "line": 132,
+            "line": 133,
             "parent_title": "Checkbox Report",
             "parent_slug": "checkbox-report"
           },
           {
             "title": "Update Log",
             "slug": "update-log",
-            "line": 142,
+            "line": 143,
             "parent_title": "Checkbox Report",
             "parent_slug": "checkbox-report"
           }
@@ -14587,8 +14587,8 @@
           "tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11"
         ],
         "description": "on pending work.",
-        "size_bytes": 8406,
-        "modified_utc": "2025-12-20T15:33:27.587636+00:00",
+        "size_bytes": 8462,
+        "modified_utc": "2025-12-21T13:29:43.149852+00:00",
         "tags": [
           "checkbox-report",
           "repo-todo"
@@ -14609,7 +14609,7 @@
           ],
           "status": "active",
           "version": 1.0,
-          "updated_at": "2025-12-20",
+          "updated_at": "2025-12-21",
           "tags": [
             "checkbox-report",
             "repo-todo"
@@ -14642,142 +14642,156 @@
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
+            "title": "0.1 Agent Execution Loop (Entry Point)",
+            "slug": "01-agent-execution-loop-entry-point",
+            "line": 64,
+            "parent_title": "HealthView Orchestration Pipeline",
+            "parent_slug": "healthview-orchestration-pipeline"
+          },
+          {
             "title": "1. 5W1H \u2013 Purpose & Context",
             "slug": "1-5w1h-purpose-context",
-            "line": 64,
+            "line": 113,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "2. Document Metadata",
             "slug": "2-document-metadata",
-            "line": 181,
+            "line": 231,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "3. Global Pipeline Overview",
             "slug": "3-global-pipeline-overview",
-            "line": 204,
+            "line": 254,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "3.3 How to Read This Document",
             "slug": "33-how-to-read-this-document",
-            "line": 242,
+            "line": 293,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "3.4 HealthView Report Bundle Spine (Shared Backbone)",
             "slug": "34-healthview-report-bundle-spine-shared-backbone",
-            "line": 253,
+            "line": 306,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "3.5 HealthView Orchestration Envelope (Shared Payload)",
             "slug": "35-healthview-orchestration-envelope-shared-payload",
-            "line": 299,
+            "line": 353,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "3.6 Orchestrator Lifecycle, Fallback Modes, and Global Controls",
             "slug": "36-orchestrator-lifecycle-fallback-modes-and-global-controls",
-            "line": 349,
+            "line": 403,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "3.7 HealthView Assumptions & Guarantees",
             "slug": "37-healthview-assumptions-guarantees",
-            "line": 386,
+            "line": 438,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "4. Stage 1 \u2013 Testing Perspectives",
             "slug": "4-stage-1-testing-perspectives",
-            "line": 424,
+            "line": 476,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "5. Stage 2 \u2013 Documentation Quality",
             "slug": "5-stage-2-documentation-quality",
-            "line": 537,
+            "line": 589,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "6. Stage 3 \u2013 Runtime Reliability",
             "slug": "6-stage-3-runtime-reliability",
-            "line": 693,
+            "line": 734,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "7. Stage 4 \u2013 Dependency Management",
             "slug": "7-stage-4-dependency-management",
-            "line": 791,
+            "line": 851,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "8. Stage 5 \u2013 Technical Debt Oversight",
             "slug": "8-stage-5-technical-debt-oversight",
-            "line": 905,
+            "line": 985,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "9. Stage 6 \u2013 Process Governance",
             "slug": "9-stage-6-process-governance",
-            "line": 1006,
+            "line": 1108,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "10. Stage 7 \u2013 Running the Complete Suite",
             "slug": "10-stage-7-running-the-complete-suite",
-            "line": 1138,
+            "line": 1269,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
-            "title": "11. Snapshot & Stage Matrix",
-            "slug": "11-snapshot-stage-matrix",
-            "line": 1239,
+            "title": "11. Stage 11 \u2013 Available Scripts (Holding Area)",
+            "slug": "11-stage-11-available-scripts-holding-area",
+            "line": 1367,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
-            "title": "12. Contradiction Registry",
-            "slug": "12-contradiction-registry",
-            "line": 1294,
+            "title": "12. Snapshot & Stage Matrix",
+            "slug": "12-snapshot-stage-matrix",
+            "line": 1455,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
-            "title": "13. Tier-2 Document Index",
-            "slug": "13-tier-2-document-index",
-            "line": 1307,
+            "title": "13. Contradiction Registry",
+            "slug": "13-contradiction-registry",
+            "line": 1510,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
-            "title": "14. Working / Future Notes",
-            "slug": "14-working-future-notes",
-            "line": 1344,
+            "title": "14. Tier-2 Document Index",
+            "slug": "14-tier-2-document-index",
+            "line": 1529,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
-            "title": "15. Update Log & Evidence Tracking",
-            "slug": "15-update-log-evidence-tracking",
-            "line": 1374,
+            "title": "15. Working / Future Notes",
+            "slug": "15-working-future-notes",
+            "line": 1567,
+            "parent_title": "HealthView Orchestration Pipeline",
+            "parent_slug": "healthview-orchestration-pipeline"
+          },
+          {
+            "title": "16. Update Log & Evidence Tracking",
+            "slug": "16-update-log-evidence-tracking",
+            "line": 1584,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           }
@@ -14819,24 +14833,46 @@
           "../../../scripts/producers/generate_code_doc_churn_report.py",
           "../../../scripts/producers/generate_undocumented_logic_report.py",
           "../../../scripts/aggregators/aggregate_docs_health_signals.py",
-          "../healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md#23-current-vs-target-contract-snapshot-stage-31",
-          "../healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists",
-          "../healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md#311-records-index",
+          "tier2_roster/tier2_fault_diagnostics_overview_roster.md#23-current-vs-target-contract-snapshot-stage-31",
+          "tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists",
+          "tier2_roster/tier2_fault_diagnostics_overview_roster.md#311-records-index",
+          "tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-002-collect-faulthandler-reports",
+          "tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-003-generate-fault-artifacts",
+          "tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-004-summarize-fault-diagnostics-overview",
+          "tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-001-fault-diagnostics-overview-orchestrator",
           "../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py",
           "../../../scripts/producers/collect_faulthandler_reports.py",
           "../../../scripts/consumers/generate_fault_artifacts.py",
           "../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py",
-          "../healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md#23-current-vs-target-contract-snapshot-stage-41",
-          "../healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists",
-          "../healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md#311-records-index",
+          "tier2_roster/tier2_dependency_import_hygiene_roster.md#23-current-vs-target-contract-snapshot-stage-41",
+          "tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists",
+          "tier2_roster/tier2_dependency_import_hygiene_roster.md#311-records-index",
+          "tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-002-generate_dependency_hygiene_reportpy",
+          "tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-003-generate_import_graph_reportpy",
+          "tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-004-scan_code_placeholderspy",
+          "tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-005-generate_typecheck_reportpy",
+          "tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-006-refresh_mypy_baselinespy",
+          "tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-001-dependency-import-hygiene-orchestrator",
           "../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py",
-          "../healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md#23-current-vs-target-contract-snapshot-stage-51",
-          "../healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md#32-stop-gates-and-implementation-checklists",
-          "../healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md#311-records-index",
+          "tier2_roster/tier2_monkey_patch_oversight_roster.md#23-current-vs-target-contract-snapshot-stage-51",
+          "tier2_roster/tier2_monkey_patch_oversight_roster.md#32-stop-gates-and-implementation-checklists",
+          "tier2_roster/tier2_monkey_patch_oversight_roster.md#311-records-index",
+          "tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-002-monkey-patch-scan-producer",
+          "tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-003-monkey-patch-risk-consumer",
+          "tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-004-monkey-patch-trend-aggregator",
+          "tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-005-monkey-patch-overview-summarizer",
+          "tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-006-risk-classification-utility",
+          "tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-001-monkey-patch-oversight-orchestrator",
           "../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py",
-          "../healthview_orchestration_pipeline/tier2_roster/tier2_standards_integrity_roster.md#23-current-vs-target-contract-snapshot-stage-61",
-          "../healthview_orchestration_pipeline/tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists",
-          "../healthview_orchestration_pipeline/tier2_roster/tier2_standards_integrity_roster.md#311-records-index",
+          "tier2_roster/tier2_standards_integrity_roster.md#23-current-vs-target-contract-snapshot-stage-61",
+          "tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists",
+          "tier2_roster/tier2_standards_integrity_roster.md#311-records-index",
+          "tier2_roster/tier2_standards_integrity_roster.md#s61r-002-standards-index-producer",
+          "tier2_roster/tier2_standards_integrity_roster.md#s61r-003-standards-index-gap-producer",
+          "tier2_roster/tier2_standards_integrity_roster.md#s61r-004-standards-index-diff-producer",
+          "tier2_roster/tier2_standards_integrity_roster.md#s61r-005-standards-prompt-seed-producer",
+          "tier2_roster/tier2_standards_integrity_roster.md#s61r-006-standards-overview-summarizer",
+          "tier2_roster/tier2_standards_integrity_roster.md#s61r-001-standards-integrity-orchestrator",
           "../../../command_center/scripts/orchestrators/run_standards_integrity.py",
           "../../../scripts/producers/generate_standards_index.py",
           "../../../command_center/scripts/producers/analyze_standards_index_gaps.py",
@@ -14847,14 +14883,41 @@
           "../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#23-current-vs-target-contract-snapshot-stage-7",
           "../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#32-stop-gates-and-implementation-checklists",
           "../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#311-records-index",
+          "../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-002-test-execution-telemetry",
+          "../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-003-docs-health",
+          "../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-004-fault-diagnostics",
+          "../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-005-dependency-import-hygiene",
+          "../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-006-monkey-patch-oversight",
+          "../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-007-standards-integrity",
           "../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py",
           "../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py",
+          "tier2_roster/tier2_available_scripts_roster.md",
+          "tier2_roster/tier2_available_scripts_roster.md#23-current-vs-target-contract-snapshot-stage-111",
+          "tier2_roster/tier2_available_scripts_roster.md#32-stop-gates-and-implementation-checklists",
+          "tier2_roster/tier2_available_scripts_roster.md#311-records-index",
+          "../../../scripts/script_inventory_architecture.md",
+          "tier2_roster/tier2_available_scripts_roster.md#asr-001-generate_anchor_health_reportpy",
+          "tier2_roster/tier2_available_scripts_roster.md#asr-002-configure_faulthandler_runtimepy",
+          "tier2_roster/tier2_available_scripts_roster.md#asr-003-dump_faulthandler_snapshotpy",
+          "tier2_roster/tier2_available_scripts_roster.md#asr-004-fault_run_analysispy",
+          "tier2_roster/tier2_available_scripts_roster.md#asr-005-validate_import_boundariespy",
+          "tier2_roster/tier2_available_scripts_roster.md#asr-006-extract_standards_rulespy",
+          "tier2_roster/tier2_available_scripts_roster.md#asr-007-check_inventory_healthpy",
+          "tier2_roster/tier2_available_scripts_roster.md#asr-008-validate_inventorypy",
+          "tier2_roster/tier2_available_scripts_roster.md#asr-009-summarize_health_suitepy",
+          "tier2_roster/tier2_available_scripts_roster.md#asr-010-render_inventory_viewspy",
+          "tier2_roster/tier2_available_scripts_roster.md#asr-011-generate_lizard_reportpy",
+          "tier2_roster/tier2_available_scripts_roster.md#asr-013-test_log_analysispy",
           "../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py",
           "../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py",
           "../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py",
           "tier2_roster/tier2_test_execution_telemetry_roster.md",
-          "../healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md",
-          "../healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md",
+          "tier2_roster/tier2_docs_health_overview_roster.md",
+          "tier2_roster/tier2_fault_diagnostics_overview_roster.md",
+          "tier2_roster/tier2_dependency_import_hygiene_roster.md",
+          "tier2_roster/tier2_monkey_patch_oversight_roster.md",
+          "tier2_roster/tier2_standards_integrity_roster.md",
+          "tier2_roster/tier2_full_suite_overview_roster.md",
           "../../standards/global/std-global-python-engineering.md",
           "../../standards/global/std-global-markdown-authoring.md",
           "../../../../.github/instructions/markdown.instructions.md",
@@ -14864,8 +14927,8 @@
           "../../../tests/tests_aggregators/"
         ],
         "description": "stage content so evidence capture is ready from the first edit.",
-        "size_bytes": 94424,
-        "modified_utc": "2025-12-20T17:24:12.828106+00:00",
+        "size_bytes": 113841,
+        "modified_utc": "2025-12-21T13:29:39.353925+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -14991,6 +15054,145 @@
             ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md",
             ".github/instructions/markdown.instructions.md",
             ".github/instructions/pipeline_doc_tiers.instructions.md"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster",
+        "filename": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_available_scripts_roster.md",
+        "slug": "tier-2-roster-stage-111-available-scripts-holding-area",
+        "h1_headings": [
+          {
+            "title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
+            "slug": "tier-2-roster-stage-111-available-scripts-holding-area",
+            "line": 30
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "0. Instruction Block for Editors & AI Assistants",
+            "slug": "0-instruction-block-for-editors-ai-assistants",
+            "line": 50,
+            "parent_title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
+            "parent_slug": "tier-2-roster-stage-111-available-scripts-holding-area"
+          },
+          {
+            "title": "1. Goals & Success Criteria",
+            "slug": "1-goals-success-criteria",
+            "line": 61,
+            "parent_title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
+            "parent_slug": "tier-2-roster-stage-111-available-scripts-holding-area"
+          },
+          {
+            "title": "2. System Context",
+            "slug": "2-system-context",
+            "line": 80,
+            "parent_title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
+            "parent_slug": "tier-2-roster-stage-111-available-scripts-holding-area"
+          },
+          {
+            "title": "3. Stage Narrative \u2014 11.1 Available Scripts",
+            "slug": "3-stage-narrative-111-available-scripts",
+            "line": 147,
+            "parent_title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
+            "parent_slug": "tier-2-roster-stage-111-available-scripts-holding-area"
+          },
+          {
+            "title": "4. Signals & Telemetry",
+            "slug": "4-signals-telemetry",
+            "line": 1273,
+            "parent_title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
+            "parent_slug": "tier-2-roster-stage-111-available-scripts-holding-area"
+          },
+          {
+            "title": "5. Dependencies & Stop-Gates",
+            "slug": "5-dependencies-stop-gates",
+            "line": 1287,
+            "parent_title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
+            "parent_slug": "tier-2-roster-stage-111-available-scripts-holding-area"
+          },
+          {
+            "title": "6. Instruction Block (Required by Repo Markdown Rules)",
+            "slug": "6-instruction-block-required-by-repo-markdown-rules",
+            "line": 1298,
+            "parent_title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
+            "parent_slug": "tier-2-roster-stage-111-available-scripts-holding-area"
+          },
+          {
+            "title": "7. Agent Automation Block",
+            "slug": "7-agent-automation-block",
+            "line": 1307,
+            "parent_title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
+            "parent_slug": "tier-2-roster-stage-111-available-scripts-holding-area"
+          },
+          {
+            "title": "8. Update Log",
+            "slug": "8-update-log",
+            "line": 1336,
+            "parent_title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
+            "parent_slug": "tier-2-roster-stage-111-available-scripts-holding-area"
+          }
+        ],
+        "links": [
+          "#asr-001-generate_anchor_health_reportpy",
+          "#asr-002-configure_faulthandler_runtimepy",
+          "#asr-003-dump_faulthandler_snapshotpy",
+          "#asr-004-fault_run_analysispy",
+          "#asr-005-validate_import_boundariespy",
+          "#asr-006-extract_standards_rulespy",
+          "#asr-007-check_inventory_healthpy",
+          "#asr-008-validate_inventorypy",
+          "#asr-009-summarize_health_suitepy",
+          "#asr-010-render_inventory_viewspy",
+          "#asr-011-generate_lizard_reportpy",
+          "#asr-013-test_log_analysispy"
+        ],
+        "description": "`.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`.",
+        "size_bytes": 58689,
+        "modified_utc": "2025-12-21T03:23:20.084865+00:00",
+        "tags": [
+          "pipeline",
+          "healthview",
+          "hop",
+          "tier-2",
+          "stage-11-1",
+          "available-scripts"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "draft",
+        "frontmatter": {
+          "title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
+          "tier": "tier-2",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "role": [
+            "roster",
+            "stage-vertical"
+          ],
+          "status": "draft",
+          "version": "0.1.0",
+          "updated_at": "2025-12-21",
+          "tags": [
+            "pipeline",
+            "healthview",
+            "hop",
+            "tier-2",
+            "stage-11-1",
+            "available-scripts"
+          ],
+          "related_files": [
+            ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+            ".repo_studios/scripts/script_inventory_architecture.md",
+            ".github/instructions/markdown.instructions.md",
+            "REPORT_NAMING_STANDARDS.md"
           ]
         },
         "contains_placeholder": false
@@ -15473,8 +15675,8 @@
           "#s7r-007-standards-integrity"
         ],
         "description": "`tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 41564,
-        "modified_utc": "2025-12-20T12:57:48.926286+00:00",
+        "size_bytes": 41573,
+        "modified_utc": "2025-12-21T03:23:20.082862+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -15775,6 +15977,124 @@
       },
       {
         "folder": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster",
+        "filename": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_onboarding_tools_roster.md",
+        "slug": "tier-2-roster-onboarding-tools-agent-loop-evidence-contract",
+        "h1_headings": [
+          {
+            "title": "Tier-2 Roster \u2014 Onboarding Tools (Agent Loop Evidence Contract)",
+            "slug": "tier-2-roster-onboarding-tools-agent-loop-evidence-contract",
+            "line": 34
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "0. Instruction Block for Editors & AI Assistants",
+            "slug": "0-instruction-block-for-editors-ai-assistants",
+            "line": 51,
+            "parent_title": "Tier-2 Roster \u2014 Onboarding Tools (Agent Loop Evidence Contract)",
+            "parent_slug": "tier-2-roster-onboarding-tools-agent-loop-evidence-contract"
+          },
+          {
+            "title": "1. Goals & Success Criteria",
+            "slug": "1-goals-success-criteria",
+            "line": 61,
+            "parent_title": "Tier-2 Roster \u2014 Onboarding Tools (Agent Loop Evidence Contract)",
+            "parent_slug": "tier-2-roster-onboarding-tools-agent-loop-evidence-contract"
+          },
+          {
+            "title": "2. System Context",
+            "slug": "2-system-context",
+            "line": 78,
+            "parent_title": "Tier-2 Roster \u2014 Onboarding Tools (Agent Loop Evidence Contract)",
+            "parent_slug": "tier-2-roster-onboarding-tools-agent-loop-evidence-contract"
+          },
+          {
+            "title": "3. Records & Contracts",
+            "slug": "3-records-contracts",
+            "line": 116,
+            "parent_title": "Tier-2 Roster \u2014 Onboarding Tools (Agent Loop Evidence Contract)",
+            "parent_slug": "tier-2-roster-onboarding-tools-agent-loop-evidence-contract"
+          },
+          {
+            "title": "4. Agent Instructions",
+            "slug": "4-agent-instructions",
+            "line": 178,
+            "parent_title": "Tier-2 Roster \u2014 Onboarding Tools (Agent Loop Evidence Contract)",
+            "parent_slug": "tier-2-roster-onboarding-tools-agent-loop-evidence-contract"
+          },
+          {
+            "title": "5. DONE Return Instructions (Tier-2 \u2192 Tier-1)",
+            "slug": "5-done-return-instructions-tier-2-tier-1",
+            "line": 198,
+            "parent_title": "Tier-2 Roster \u2014 Onboarding Tools (Agent Loop Evidence Contract)",
+            "parent_slug": "tier-2-roster-onboarding-tools-agent-loop-evidence-contract"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 213,
+            "parent_title": "Tier-2 Roster \u2014 Onboarding Tools (Agent Loop Evidence Contract)",
+            "parent_slug": "tier-2-roster-onboarding-tools-agent-loop-evidence-contract"
+          }
+        ],
+        "links": [
+          "#onb-001-onboarding-tools-evidence-contract"
+        ],
+        "description": "1. Provide a single, executable onboarding contract that does not require ad-hoc tribal knowledge. 1. Define what counts as \u201conboarded\u201d for a script in HealthView. 1. Capture the explicit exception: onboarding tools may emit outputs\u2026",
+        "size_bytes": 7972,
+        "modified_utc": "2025-12-21T12:49:58.725293+00:00",
+        "tags": [
+          "pipeline",
+          "healthview",
+          "hop",
+          "tier-2",
+          "onboarding",
+          "agent-loop"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "draft",
+        "frontmatter": {
+          "title": "Tier-2 Roster \u2014 Onboarding Tools (Agent Loop Evidence Contract)",
+          "tier": "tier-2",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "role": [
+            "roster",
+            "onboarding"
+          ],
+          "status": "draft",
+          "version": "0.1.0",
+          "updated_at": "2025-12-21",
+          "tags": [
+            "pipeline",
+            "healthview",
+            "hop",
+            "tier-2",
+            "onboarding",
+            "agent-loop"
+          ],
+          "related_files": [
+            ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+            ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/workflows/healthview_agent_execution_loop.v1.yaml",
+            ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/workflows/tier3_agent_pipeline_template.yaml",
+            ".repo_studios/Makefile",
+            ".github/instructions/markdown.instructions.md",
+            ".github/instructions/pipeline_doc_tiers.instructions.md",
+            ".github/instructions/tier_doc_operating_model.instructions.md",
+            "REPORT_NAMING_STANDARDS.md"
+          ]
+        },
+        "contains_placeholder": true
+      },
+      {
+        "folder": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster",
         "filename": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_standards_integrity_roster.md",
         "slug": "tier-2-roster-stage-61-standards-integrity",
         "h1_headings": [
@@ -16049,6 +16369,124 @@
           ]
         },
         "contains_placeholder": true
+      },
+      {
+        "folder": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/workflows",
+        "filename": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/workflows/healthview_agent_loop_implementation_plan.md",
+        "slug": "healthview-agent-execution-loop-implementation-draft-plan",
+        "h1_headings": [
+          {
+            "title": "HealthView Agent Execution Loop \u2014 Implementation Draft Plan",
+            "slug": "healthview-agent-execution-loop-implementation-draft-plan",
+            "line": 35
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 43,
+            "parent_title": "HealthView Agent Execution Loop \u2014 Implementation Draft Plan",
+            "parent_slug": "healthview-agent-execution-loop-implementation-draft-plan"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 51,
+            "parent_title": "HealthView Agent Execution Loop \u2014 Implementation Draft Plan",
+            "parent_slug": "healthview-agent-execution-loop-implementation-draft-plan"
+          },
+          {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 83,
+            "parent_title": "HealthView Agent Execution Loop \u2014 Implementation Draft Plan",
+            "parent_slug": "healthview-agent-execution-loop-implementation-draft-plan"
+          },
+          {
+            "title": "Human Notes",
+            "slug": "human-notes",
+            "line": 121,
+            "parent_title": "HealthView Agent Execution Loop \u2014 Implementation Draft Plan",
+            "parent_slug": "healthview-agent-execution-loop-implementation-draft-plan"
+          },
+          {
+            "title": "Implementation Plan",
+            "slug": "implementation-plan",
+            "line": 184,
+            "parent_title": "HealthView Agent Execution Loop \u2014 Implementation Draft Plan",
+            "parent_slug": "healthview-agent-execution-loop-implementation-draft-plan"
+          },
+          {
+            "title": "Reference Prompts",
+            "slug": "reference-prompts",
+            "line": 262,
+            "parent_title": "HealthView Agent Execution Loop \u2014 Implementation Draft Plan",
+            "parent_slug": "healthview-agent-execution-loop-implementation-draft-plan"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 269,
+            "parent_title": "HealthView Agent Execution Loop \u2014 Implementation Draft Plan",
+            "parent_slug": "healthview-agent-execution-loop-implementation-draft-plan"
+          }
+        ],
+        "links": [],
+        "description": "This document formalizes the agreed design for deterministic, agentic operation of the HealthView pipeline using Tier-1 as the control plane, Tier-2 as the evidence plane, and Tier-3 as runnable execution recipes.",
+        "size_bytes": 11951,
+        "modified_utc": "2025-12-21T13:19:05.984251+00:00",
+        "tags": [
+          "healthview",
+          "orchestration",
+          "workflow",
+          "agent-loop",
+          "onboarding",
+          "doc-index"
+        ],
+        "owners": [
+          "repo_studios_command_center"
+        ],
+        "status": "draft",
+        "frontmatter": {
+          "title": "HealthView Agent Execution Loop \u2014 Implementation Draft Plan",
+          "status": "draft",
+          "version": "2025-12-21",
+          "last_updated": "2025-12-21",
+          "updated_at": "2025-12-21",
+          "owners": [
+            "repo_studios_command_center"
+          ],
+          "role": [
+            "plan",
+            "pipeline-automation",
+            "agentic-ops"
+          ],
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developers"
+          ],
+          "tags": [
+            "healthview",
+            "orchestration",
+            "workflow",
+            "agent-loop",
+            "onboarding",
+            "doc-index"
+          ],
+          "related_files": [
+            ".repo_studios/Makefile",
+            ".repo_studios/scripts/utilities/validate_healthview_agent_workflow_spec.py",
+            ".repo_studios/scripts/orchestrators/healthview/run_healthview_agent_loop.py",
+            ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/workflows/healthview_agent_execution_loop.v1.yaml",
+            ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/workflows/schema/healthview_agent_execution_loop.schema.json",
+            ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+            ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_available_scripts_roster.md",
+            ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md"
+          ]
+        },
+        "contains_placeholder": false
       },
       {
         "folder": ".repo_studios/docs/pipeline",

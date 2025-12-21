@@ -1,9 +1,18 @@
+REPO_ROOT := $(abspath $(CURDIR)/..)
+
 ifeq ($(OS),Windows_NT)
+ifneq ($(wildcard $(REPO_ROOT)/.venv/Scripts/python.exe),)
+PYTHON ?= .venv/Scripts/python.exe
+else
 PYTHON ?= python
+endif
+else
+ifneq ($(wildcard $(REPO_ROOT)/.venv/bin/python),)
+PYTHON ?= .venv/bin/python
 else
 PYTHON ?= python3
 endif
-REPO_ROOT := $(abspath $(CURDIR)/..)
+endif
 LOG_LEVEL ?= INFO
 FAIL_ON ?= any
 
@@ -231,6 +240,32 @@ doc-index:
 		--refresh-checkbox-report \
 		--refresh-tier3-index \
 		--log-level "$(LOG_LEVEL)"
+
+HEALTHVIEW_AGENT_WORKFLOW_SPEC ?= .repo_studios/docs/pipeline/healthview_orchestration_pipeline/workflows/healthview_agent_execution_loop.v1.yaml
+
+.PHONY: healthview-agent-validate-workflow
+healthview-agent-validate-workflow:
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/utilities/validate_healthview_agent_workflow_spec.py" \
+		--spec "$(HEALTHVIEW_AGENT_WORKFLOW_SPEC)" \
+		--log-level "$(LOG_LEVEL)"
+
+.PHONY: healthview-agent-next
+healthview-agent-next: healthview-agent-validate-workflow
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/orchestrators/healthview/run_healthview_agent_loop.py" \
+		--repo-root "$(REPO_ROOT)" \
+		--spec "$(HEALTHVIEW_AGENT_WORKFLOW_SPEC)" \
+		--log-level "$(LOG_LEVEL)"
+
+.PHONY: healthview-agent-next-compact
+healthview-agent-next-compact: healthview-agent-validate-workflow
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/orchestrators/healthview/run_healthview_agent_loop.py" \
+		--repo-root "$(REPO_ROOT)" \
+		--spec "$(HEALTHVIEW_AGENT_WORKFLOW_SPEC)" \
+		--log-level "$(LOG_LEVEL)" \
+		--compact
 
 .PHONY: studio-generate-test-coverage-inventory
 studio-generate-test-coverage-inventory:

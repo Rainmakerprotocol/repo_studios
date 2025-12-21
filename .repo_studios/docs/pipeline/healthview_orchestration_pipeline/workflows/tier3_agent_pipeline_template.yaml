@@ -1,0 +1,151 @@
+# Tier-3: HealthView onboarding pipeline template
+#
+# Purpose:
+# - Provide a reusable Tier-3 YAML template for onboarding workflows invoked from Tier-2 records.
+# - This template does NOT contain selection logic; selection remains in the HealthView agent loop
+#   workflow spec + runner.
+#
+# Source template:
+# - .repo_studios/docs/pipeline/pipeline_templates/tier3_agent_pipeline_template.yaml
+#
+# Naming:
+# - Keep Tier-3 YAML filenames prefixed with "tier3_".
+#
+# Location:
+# - HealthView-local copy, co-located with workflow tooling:
+#   .repo_studios/docs/pipeline/healthview_orchestration_pipeline/workflows/
+
+tool:
+  id: healthview_onboarding_template
+  name: HealthView Onboarding Template (Tier-3)
+  description: |
+    A reusable onboarding execution template invoked from Tier-2 roster records.
+
+    Use this template when you need to document how to run a HealthView onboarding task
+    (inventory refresh, validations, and evidence capture) via make targets.
+
+    This template is not a runnable tool by itself. Instantiate a concrete Tier-3 YAML from it.
+  keywords:
+    - healthview
+    - hop
+    - onboarding
+    - tier3
+    - template
+    - agent-loop
+  use_when:
+    - You are authoring a Tier-2 onboarding or holding roster record that needs a repeatable
+      execution recipe.
+    - You need a consistent evidence capture structure for onboarding tasks.
+  dont_use_when:
+    - You are selecting what to work on next (use the Tier-1 selector).
+    - You are documenting a single stage's executed chain (use the stage-specific Tier-2 roster).
+
+invocation:
+  # This template prefers Make targets (stable operator UX).
+  command_template: |
+    make -C .repo_studios {make_target} LOG_LEVEL={log_level}
+  script_path: "N/A (make target)"
+  importable: false
+  entry_function: null
+  environment:
+    requires_venv: true
+    python_version: ">=3.9"
+    platform:
+      - windows
+      - linux
+      - darwin
+
+parameters:
+  - name: make_target
+    type: enum
+    required: true
+    description: Make target to run for the onboarding step.
+    choices:
+      - doc-index
+      - checkbox-report
+      - healthview-agent-validate-workflow
+      - healthview-agent-next
+      - healthview-agent-next-compact
+    examples:
+      - doc-index
+      - healthview-agent-next-compact
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    description: Logging verbosity.
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+  - name: repo_root
+    type: path
+    required: false
+    default: .
+    description: Repository root directory (where make is invoked).
+    validation:
+      must_exist: true
+      must_be_directory: true
+
+outputs:
+  primary:
+    type: none
+    format: none
+    path_pattern: null
+    description: |
+      This template is a documentation artifact.
+
+      Instantiated Tier-3 YAMLs should declare expected outputs precisely.
+
+  secondary:
+    - type: stdout
+      description: Console output from the invoked make target.
+
+behavior:
+  idempotent: true
+  side_effects:
+    - May refresh generated doc inventory artifacts (doc-index, checkbox report).
+    - May refresh Tier-3 index outputs.
+  duration_estimate: "5-30 seconds (depends on repo size)"
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 2
+      meaning: Make target failed.
+      agent_action: Inspect the command output and fix the underlying doc or script error.
+
+  stderr_patterns:
+    - pattern: "No rule to make target"
+      meaning: Unknown make target.
+      agent_action: Verify the target name and check .repo_studios/Makefile.
+
+    - pattern: "Traceback"
+      meaning: Python tool invoked by make crashed.
+      agent_action: Capture the stack trace in Tier-2 evidence and address the root cause.
+
+integration:
+  typical_workflow:
+    - step: 1
+      action: Run Tier-1 selector
+      command: make -C .repo_studios healthview-agent-next-compact LOG_LEVEL=INFO
+      output: tier1 file:line and tier2 link#anchor
+
+    - step: 2
+      action: Open the Tier-2 record at the returned anchor and follow its checklist
+
+    - step: 3
+      action: Refresh doc-index after an iteration
+      command: make -C .repo_studios doc-index LOG_LEVEL=INFO
+
+  output_consumers:
+    - Tier-2 roster records (evidence plane)
+    - Humans and agents validating queue state
+
+metadata:
+  category: utility
+  tier: tier-3
+  status: template
+  version: 1.0.0
+  last_updated: "2025-12-21"

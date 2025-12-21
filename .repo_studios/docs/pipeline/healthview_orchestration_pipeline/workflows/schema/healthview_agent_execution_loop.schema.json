@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HealthView Agent Execution Loop (v1)",
+  "type": "object",
+  "required": [
+    "version",
+    "name",
+    "scope",
+    "inputs",
+    "selection",
+    "mapping",
+    "constraints",
+    "approval_gates",
+    "workflow",
+    "post_iteration",
+    "deliverable_each_iteration",
+    "stop_conditions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "type": "object",
+      "required": ["root_docs", "tier1_entry", "allowed_actions"],
+      "additionalProperties": false,
+      "properties": {
+        "root_docs": {
+          "type": "array",
+          "items": {"type": "string"},
+          "minItems": 1
+        },
+        "tier1_entry": {"type": "string"},
+        "allowed_actions": {
+          "type": "array",
+          "items": {"type": "string"},
+          "minItems": 1
+        }
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "required": ["checkbox_report_csv", "tier1_gate_files", "doc_index_command"],
+      "additionalProperties": false,
+      "properties": {
+        "checkbox_report_csv": {"type": "string"},
+        "tier1_gate_files": {
+          "type": "array",
+          "items": {"type": "string"},
+          "minItems": 1
+        },
+        "doc_index_command": {
+          "type": "array",
+          "items": {"type": "string"},
+          "minItems": 1
+        }
+      }
+    },
+    "selection": {
+      "type": "object",
+      "required": ["source", "strict_stage_order", "filters", "kind_priority"],
+      "additionalProperties": false,
+      "properties": {
+        "source": {"type": "string"},
+        "strict_stage_order": {"type": "boolean"},
+        "filters": {
+          "type": "object",
+          "required": ["tier", "require_tier2_link", "exclude_placeholders"],
+          "additionalProperties": false,
+          "properties": {
+            "tier": {"type": "string"},
+            "require_tier2_link": {"type": "boolean"},
+            "exclude_placeholders": {"type": "boolean"}
+          }
+        },
+        "kind_priority": {
+          "type": "array",
+          "items": {"type": "string"},
+          "minItems": 1
+        }
+      }
+    },
+    "mapping": {
+      "type": "object",
+      "required": [
+        "extract_tier2_link_from_checkbox_text",
+        "require_link_anchor",
+        "prefer_link_path_prefixes"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "extract_tier2_link_from_checkbox_text": {"type": "boolean"},
+        "require_link_anchor": {"type": "boolean"},
+        "prefer_link_path_prefixes": {
+          "type": "array",
+          "items": {"type": "string"},
+          "minItems": 1
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "required": [
+        "one_checkbox_at_a_time",
+        "do_not_check_tier1_until_tier2_done",
+        "no_work_outside_checkbox_flow",
+        "no_tier3_before_stop_gates_closed"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "one_checkbox_at_a_time": {"type": "boolean"},
+        "do_not_check_tier1_until_tier2_done": {"type": "boolean"},
+        "no_work_outside_checkbox_flow": {"type": "boolean"},
+        "no_tier3_before_stop_gates_closed": {"type": "boolean"}
+      }
+    },
+    "approval_gates": {
+      "type": "object",
+      "required": ["require_user_approval_for"],
+      "additionalProperties": false,
+      "properties": {
+        "require_user_approval_for": {
+          "type": "array",
+          "items": {"type": "string"},
+          "minItems": 1
+        }
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "minProperties": 1
+    },
+    "post_iteration": {
+      "type": "object",
+      "required": ["run_doc_index", "doc_index_command_source", "expected_outputs"],
+      "additionalProperties": false,
+      "properties": {
+        "run_doc_index": {"type": "boolean"},
+        "doc_index_command_source": {"type": "string"},
+        "expected_outputs": {
+          "type": "array",
+          "items": {"type": "string"},
+          "minItems": 1
+        }
+      }
+    },
+    "deliverable_each_iteration": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    },
+    "stop_conditions": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    }
+  }
+}
