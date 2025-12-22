@@ -54,8 +54,15 @@ related_files:
   - ≥80% coverage on touched modules
   - updated Tier-1/Tier-2 docs
   - clean formatting/lint behavior
-- After meaningful checkbox edits, run `make -C .repo_studios studio-generate-doc-index` and record
+- After meaningful checkbox edits, run `make -C .repo_studios doc-index` and record
   the timestamp in the Update Log.
+- Workstream semantics:
+  - Workstream D (Tier-3 YAML) is the reward workstream and is conditional.
+    - If Tier-3 is allowed/required for a record, complete Workstream D and check its checkbox.
+    - If Tier-3 is not allowed/required, do not silently skip D: explicitly record
+      "Deferred: Tier-3 not appropriate" (or similar) in the record notes/evidence.
+  - Tier-2 DONE requires Workstreams A–C + E, plus an explicit Workstream D decision
+    (completed if required, otherwise explicitly deferred).
 
 ---
 
@@ -308,7 +315,7 @@ Workstream C — Implement
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
 - [ ] Inspect Tier-3 template requirements
 - [ ] Draft `tier3_<script_stem>.yaml`
 - [ ] Validate Tier-3 YAML
@@ -362,7 +369,7 @@ stage are satisfied and the Tier-2 record set is stable enough to extract reusab
 
 **Doc evidence workflow:**
 
-- After meaningful edits, run `make -C .repo_studios studio-generate-doc-index` and capture the
+- After meaningful edits, run `make -C .repo_studios doc-index` and capture the
   timestamp in the Update Log.
 
 ---
@@ -393,7 +400,7 @@ stage are satisfied and the Tier-2 record set is stable enough to extract reusab
 1. Editors follow `.github/instructions/markdown.instructions.md` and
    `.github/instructions/pipeline_doc_tiers.instructions.md`.
 1. Keep this document’s section order intact.
-1. After adding or moving checkboxes, run `make -C .repo_studios studio-generate-doc-index` and
+1. After adding or moving checkboxes, run `make -C .repo_studios doc-index` and
    record the timestamp in Update Logs.
 1. Keep “Target contract (locked decisions)” and “Current evidence (repo-observed)” explicit;
     mismatch is treated as a stop-gate.

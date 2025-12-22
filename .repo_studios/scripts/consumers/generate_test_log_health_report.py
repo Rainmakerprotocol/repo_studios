@@ -4,9 +4,11 @@
 Prefers structured bundles emitted by ``collect_test_log_reports.py`` and
 falls back to direct log analysis when no producer artifact is available.
 
-Outputs (under ``--output-base/<ts>/``)
+Outputs (under ``--output-base/<run_slug>/``)
 - ``report.json``
 - ``report.md``
+- ``report.csv``
+- ``bundle_summary.json``
 """
 
 from __future__ import annotations
@@ -23,9 +25,11 @@ from typing import Any, Sequence
 
 LOGS_DIR_DEFAULT = ".repo_studios/command_center/reports/rawview/test_execution_runs"
 LEGACY_LOGS_DIR = ".repo_studios/pytest_logs"
-PRODUCER_REPORTS_ROOT_DEFAULT = ".repo_studios/command_center/reports/rawview/test_log_reports"
-OUTPUT_BASE_DEFAULT = ".repo_studios/reports/consumer_reports/test_log_health_reports"
+PRODUCER_REPORTS_ROOT_DEFAULT = ".repo_studios/reports/healthview/rawview/test_log_reports"
+OUTPUT_BASE_DEFAULT = ".repo_studios/reports/healthview/consumer_reports/test_log_health_reports"
 DEFAULT_ARTIFACTS_TO_KEEP = 5
+
+DEFAULT_TIMESTAMP_FORMAT = "%Y%m%d-%H%M"
 
 SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
 UTILITIES_ROOT = Path(__file__).resolve().parents[2]
@@ -81,12 +85,34 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
         default=DEFAULT_ARTIFACTS_TO_KEEP,
         help="Number of timestamped run directories to retain (including the newest run)",
     )
+    parser.add_argument(
+        "--timestamp",
+        default=None,
+        help="ISO8601 timestamp used to derive the run directory slug (YYYYmmdd-HHMM, UTC)",
+    )
     return parser.parse_args(argv)
 
 
-def _ensure_out(base: Path) -> Path:
-    ts = datetime.now(UTC).strftime("%Y-%m-%d_%H%M")
-    out_dir = base / ts
+def _timestamp_slug_from_iso(value: str) -> str | None:
+    try:
+        parsed = datetime.fromisoformat(value)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=UTC)
+    return parsed.astimezone(UTC).strftime(DEFAULT_TIMESTAMP_FORMAT)
+
+
+def _run_slug(args: argparse.Namespace) -> str:
+    if args.timestamp:
+        slug = _timestamp_slug_from_iso(str(args.timestamp))
+        if slug:
+            return slug
+    return datetime.now(UTC).strftime(DEFAULT_TIMESTAMP_FORMAT)
+
+
+def _ensure_out(base: Path, *, run_slug: str) -> Path:
+    out_dir = base / run_slug
     out_dir.mkdir(parents=True, exist_ok=True)
     return out_dir
 
@@ -544,7 +570,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         markdown = render_markdown(payload)
 
     previous_summary, previous_dir = _load_previous_summary(out_base)
-    out_dir = _ensure_out(out_base)
+    out_dir = _ensure_out(out_base, run_slug=_run_slug(args))
     summary = payload.get("summary") if isinstance(payload, dict) else None
     comparisons = _build_comparisons(summary, previous_summary, previous_dir)
     payload = dict(payload)

@@ -58,9 +58,15 @@ related_files:
   - ≥80% coverage on touched modules
   - updated Tier-1/Tier-2 docs
   - clean formatting/lint behavior
-- After meaningful checkbox edits, run `make -C .repo_studios studio-generate-doc-index` and record
 - After meaningful checkbox edits, run `make -C .repo_studios doc-index` and record
   the timestamp in the Update Log.
+- Workstream semantics:
+  - Workstream D (Tier-3 YAML) is the reward workstream and is conditional.
+    - If Tier-3 is allowed/required for a record, complete Workstream D and check its checkbox.
+    - If Tier-3 is not allowed/required, do not silently skip D: explicitly record
+      "Deferred: Tier-3 not appropriate" (or similar) in the record notes/evidence.
+  - Tier-2 DONE requires Workstreams A–C + E, plus an explicit Workstream D decision
+    (completed if required, otherwise explicitly deferred).
 
 ---
 
@@ -360,7 +366,7 @@ Workstream C — Implement
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
 - [ ] Inspect Tier-3 template requirements
 - [ ] Draft `tier3_run_fault_diagnostics_overview.yaml`
 - [ ] Validate Tier-3 YAML
@@ -468,7 +474,7 @@ Workstream C — Implement
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
 - [ ] Inspect Tier-3 template requirements
 - [ ] Draft `tier3_collect_faulthandler_reports.yaml`
 - [ ] Validate Tier-3 YAML
@@ -576,7 +582,7 @@ Workstream C — Implement
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
 - [ ] Inspect Tier-3 template requirements
 - [ ] Draft `tier3_generate_fault_artifacts.yaml`
 - [ ] Validate Tier-3 YAML
@@ -684,7 +690,7 @@ Workstream C — Implement
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
 - [ ] Inspect Tier-3 template requirements
 - [ ] Draft `tier3_summarize_fault_diagnostics_overview.yaml`
 - [ ] Validate Tier-3 YAML

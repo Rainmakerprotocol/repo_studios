@@ -59,6 +59,13 @@ related_files:
   - clean formatting/lint behavior
 - After meaningful checkbox edits, run `make -C .repo_studios doc-index` and record
   the timestamp in the Update Log.
+- Workstream semantics:
+  - Workstream D (Tier-3 YAML) is the reward workstream and is conditional.
+    - If Tier-3 is allowed/required for a record, complete Workstream D and check its checkbox.
+    - If Tier-3 is not allowed/required, do not silently skip D: explicitly record
+      "Deferred: Tier-3 not appropriate" (or similar) in the record notes/evidence.
+  - Tier-2 DONE requires Workstreams A–C + E, plus an explicit Workstream D decision
+    (completed if required, otherwise explicitly deferred).
 
 ---
 
@@ -464,7 +471,7 @@ Workstream C — Implement
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
 - [ ] Inspect Tier-3 template requirements
 - [ ] Draft `tier3_generate_dependency_hygiene_report.yaml`
 - [ ] Validate Tier-3 YAML
@@ -565,7 +572,7 @@ Workstream C — Implement
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
 - [ ] Inspect Tier-3 template requirements
 - [ ] Draft `tier3_generate_import_graph_report.yaml`
 - [ ] Validate Tier-3 YAML
@@ -671,7 +678,7 @@ Workstream C — Implement
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
 - [ ] Inspect Tier-3 template requirements
 - [ ] Draft `tier3_scan_code_placeholders.yaml`
 - [ ] Validate Tier-3 YAML
@@ -775,7 +782,7 @@ Workstream C — Implement
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
 - [ ] Inspect Tier-3 template requirements
 - [ ] Draft `tier3_generate_typecheck_report.yaml`
 - [ ] Validate Tier-3 YAML
@@ -877,7 +884,7 @@ Workstream C — Implement
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
 - [ ] Inspect Tier-3 template requirements
 - [ ] Draft `tier3_refresh_mypy_baselines.yaml`
 - [ ] Validate Tier-3 YAML

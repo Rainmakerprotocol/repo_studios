@@ -488,10 +488,10 @@ _Tier-2 references (depth lives here):_
 
 **Stage 1.1 Script Gate Summary (Tier-1):**
 
-- [ ] collect_test_log_reports.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--collect_test_log_reportspy)
-- [ ] generate_test_coverage_inventory.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_test_coverage_inventorypy)
-- [ ] analyze_test_hardening.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--analyze_test_hardeningpy)
-- [ ] generate_test_log_health_report.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_test_log_health_reportpy)
+- [x] collect_test_log_reports.py — Tier-2 DONE checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--collect_test_log_reportspy)
+- [x] generate_test_coverage_inventory.py — Tier-2 DONE checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_test_coverage_inventorypy)
+- [x] analyze_test_hardening.py — Tier-2 DONE checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--analyze_test_hardeningpy)
+- [x] generate_test_log_health_report.py — Tier-2 DONE checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_test_log_health_reportpy)
 - [ ] generate_churn_complexity_heatmap.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_churn_complexity_heatmappy)
 - [ ] summarize_test_execution_telemetry.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--summarize_test_execution_telemetrypy)
 - [ ] run_test_execution_telemetry.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#fixture-example-permanent--run_test_execution_telemetrypy)
@@ -562,8 +562,10 @@ runtime when churn analysis is enabled; pipeline stops on first hard failure.
 
 **Planned Expansions:**
 
-- **Stage 1.2: Performance Test Health** – Orchestrator for tracking performance regression tests, benchmarking, profiling (future)
-- **Stage 1.3: Integration Test Coverage** – Orchestrator for end-to-end test suite metrics, external dependency mocking (future)
+- **Stage 1.2: Performance Test Health** – Orchestrator for tracking performance regression tests,
+  benchmarking, profiling (future)
+- **Stage 1.3: Integration Test Coverage** – Orchestrator for end-to-end test suite metrics, external
+  dependency mocking (future)
 
 **Known Gaps:**
 
@@ -595,9 +597,12 @@ runtime when churn analysis is enabled; pipeline stops on first hard failure.
 
 _Tier-2 references (depth lives here):_
 
-- [Contract snapshot](tier2_roster/tier2_docs_health_overview_roster.md#23-current-vs-target-contract-snapshot-stage-21) — target vs current, bundle invariants, naming/paths
-- [Stop-gates](tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
-- [Records index](tier2_roster/tier2_docs_health_overview_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
+- [Contract snapshot](tier2_roster/tier2_docs_health_overview_roster.
+  d#23-current-vs-target-contract-snapshot-stage-21) — target vs current, bundle invariants, naming/paths
+- [Stop-gates](tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists)
+  — verification checks + failure signatures + next actions
+- [Records index](tier2_roster/tier2_docs_health_overview_roster.md#311-records-index) — per-script
+  inspection index + evidence links (Tier-2 holds proof)
 
 **Stage 2.1 Script Gate Summary (Tier-1):**
 
@@ -617,8 +622,10 @@ These are Stage 2.1 readiness gates after all Tier-2 DONE script gates are close
 
 - [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See: [Stop-gates](tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists)
 - [ ] No pointer artifacts (`latest_*` / `current_*`). See: [Stop-gates](tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). See: [Contract snapshot](tier2_roster/tier2_docs_health_overview_roster.md#23-current-vs-target-contract-snapshot-stage-21)
-- [ ] Tier-3 eligible (Stage 2.1 Tier-2 depth captured; ready for Tier-3 extraction). See: [Records index](tier2_roster/tier2_docs_health_overview_roster.md#311-records-index)
+- [ ] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`).
+  See: [Contract snapshot](tier2_roster/tier2_docs_health_overview_roster.md#23-current-vs-target-contract-snapshot-stage-21)
+- [ ] Tier-3 eligible (Stage 2.1 Tier-2 depth captured; ready for Tier-3 extraction). See:
+  [Records index](tier2_roster/tier2_docs_health_overview_roster.md#311-records-index)
 
 **Target contract (HOP):**
 
@@ -1585,6 +1592,9 @@ All gaps have logical explanations:
 
 | Date | Author / Steward | Change | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
+| 2025-12-22 | GitHub Copilot | Closed Stage 1.1 script gate for `generate_test_log_health_report.py` after Tier-2 DONE; refreshed doc-index and confirmed deterministic selector advanced to the next Tier-2 record. | 20251222-0450 | doc-index; healthview-agent-next-compact |
+| 2025-12-22 | GitHub Copilot | Closed Stage 1.1 script gate for `analyze_test_hardening.py` after Tier-2 DONE; refreshed doc-index and confirmed deterministic selector advanced to the next Tier-2 record. | 2025-12-22 | doc-index; healthview-agent-next-compact |
+| 2025-12-22 | GitHub Copilot | Closed Stage 1.1 script gate for `collect_test_log_reports.py` after Tier-2 DONE + Tier-3 YAML draft/validation; refreshed doc-index + tier3 index outputs. | 20251222-0029 | doc-index; pytest tier3_index (28 passed) |
 | 2025-12-21 | GitHub Copilot | Phase 5: added compact tool index to Section 0.1 (make targets + spec/schema/validator/runner/template paths); refreshed doc-index to confirm checkbox report remains stable. | 2025-12-21T13:29:43Z | N/A (doc-only; no code changes) |
 | 2025-12-20 | GitHub Copilot | Seeded the Stage 11.1 Tier-2 roster and linked it from Tier-1 Stage 11.1 and the Tier-2 index; reran targeted anchor validation. | 20251220-2257 | markdown anchor validation (bundle 20251220-2257) |
 | 2025-12-20 | GitHub Copilot | Introduced Stage 11 (Available Scripts holding area) using the Stage 1.1 gate layout; migrated planned/available script lists into Stage 11.1; renumbered downstream sections and updated internal section references; reran targeted anchor validation. | 20251220-2037 | markdown anchor validation (bundle 20251220-2037) |

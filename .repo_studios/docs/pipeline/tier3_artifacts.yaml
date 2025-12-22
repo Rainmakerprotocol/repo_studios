@@ -1,0 +1,162 @@
+# Tier-3 Horizontal: artifacts (HealthView base package + artifact hygiene)
+#
+# This Tier-3 file is a horizontal contract (shared semantics) for artifacts written under
+# timestamped run directories.
+
+metadata:
+  tier: 3
+  kind: horizontal
+  id: artifacts
+  title: HealthView Artifact Contract (Base Package + Hygiene)
+  status: draft
+  version: 0.1.0
+  updated_at: "2025-12-21"
+  audience:
+    - agents
+    - human_developer
+  owners:
+    - repo_studios_team@rainmakerprotocol.dev
+  seed_evidence:
+    # Keep this list intentionally small.
+    # Do NOT enumerate every Tier-2 roster or script that adopts this horizontal contract.
+    tier2_roster_example: .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md
+    script_example: .repo_studios/scripts/producers/collect_test_log_reports.py
+    audit_tool_example: .repo_studios/command_center/scripts/utilities/reports_naming_audit.py
+
+purpose:
+  summary: >-
+    Define the HealthView "base package" artifact set (manifest + summary + telemetry) and
+    repository-wide hygiene rules for report bundles (no pointer artifacts, explicit inventory of
+    additional artifacts, stable naming).
+  why_this_exists:
+    - "Tier-1 stage compliance depends on consistent bundle contents across many scripts."
+    - "Agents/orchestrators need predictable artifact locations and minimal schemas."
+    - "Naming and pointer rules must be explicit to avoid drift."
+
+scope:
+  applies_to:
+    - "Bundles written under .repo_studios/reports/healthview/<viewer>/<topic>/<timestamp>/"
+    - "Any report bundle that claims HealthView base package compliance"
+  non_goals:
+    - "Defining pruning/retention behavior (see tier3_prune_logs.yaml)"
+    - "Defining CLI conventions (see tier3_cli.yaml)"
+    - "Defining DB dual-write semantics and schema (see tier3_database_integration.yaml)"
+
+definitions:
+  viewer: "The first segment under the HealthView root (e.g., rawview)."
+  topic: "The second segment under the HealthView root (e.g., test_log_reports)."
+  run_timestamp: "A UTC slug identifying the run directory (typically YYYYmmdd-HHMM)."
+  bundle_dir: "<healthview_root>/<viewer>/<topic>/<run_timestamp>/"
+  base_package: "The required set of artifacts: manifest.json, summary.md, telemetry.json."
+  pointer_artifact: >-
+    Any file that points at another artifact (e.g., latest.json, latest_summary.md).
+
+layout:
+  canonical_root:
+    path_pattern: ".repo_studios/reports/healthview/<viewer>/<topic>/<run_timestamp>/"
+    notes:
+      - "This is the Tier-1 HealthView output contract for compliant bundles."
+      - "The bundle_dir must be the only authoritative location; do not create 'latest_*' pointers."
+
+base_package_contract:
+  required_files:
+    - filename: manifest.json
+      format: json
+      minimum_required_keys:
+        - schema_version
+        - viewer_slug
+        - topic
+        - run_timestamp
+        - generated_at
+        - status
+        - inputs
+      recommended_keys:
+        - git_sha
+        - repo_root
+        - catalog
+        - provenance
+
+    - filename: summary.md
+      format: markdown
+      minimum_requirements:
+        - "Must be valid UTF-8 text."
+        - "Must start with a single H1 heading."
+      notes:
+        - "The summary is human-readable; keep it factual and short."
+
+    - filename: telemetry.json
+      format: json
+      minimum_required_keys:
+        - schema_version
+        - viewer_slug
+        - topic
+        - run_timestamp
+        - generated_at
+        - status
+        - metrics
+        - inputs
+      recommended_keys:
+        - payload
+
+  status_values:
+    allowed:
+      - ok
+      - warning
+      - error
+    notes:
+      - "Scripts may choose stricter enums, but the base contract expects these to exist."
+
+additional_artifacts:
+  policy:
+    - id: artifacts-001
+      rule: "Additional artifacts are allowed, but must be explicitly listed with a short reason."
+      rationale: "Prevents silent artifact creep and preserves auditability."
+
+    - id: artifacts-002
+      rule: "Do not write pointer_artifacts (e.g., latest_*)."
+      rationale: "Repo policy prefers timestamped bundles; pointers cause drift and cleanup hazards."
+
+    - id: artifacts-003
+      rule: "Artifact filenames are lowercase by default (manifest.json/summary.md/telemetry.json)."
+      rationale: "Reduces cross-platform surprises and matches HealthView contract vocabulary."
+
+  listing_format:
+    description: >-
+      Tier-2 rosters and Tier-3 per-script YAMLs should list any extra files emitted alongside the
+      base package. Each entry must include a factual purpose.
+    example:
+      - filename: "matrix.json"
+        reason: "Machine-readable scoring matrix for downstream aggregator"
+
+naming_and_audit:
+  expected_roles:
+    base_roles:
+      - manifest.json
+      - summary.md
+      - telemetry.json
+    notes:
+      - "The naming audit tool contains a broader allowlist for non-HealthView bundles; HealthView base package uses the roles above."
+  audit_tool:
+    path: .repo_studios/command_center/scripts/utilities/reports_naming_audit.py
+
+integration:
+  storage_abstractions:
+    - "Scripts may write artifacts via a storage helper (e.g., write_manifest/write_summary/write_telemetry)."
+    - "Command Center scripts may materialize artifacts via ReportArtifact + write_report_artifacts (see artifacts.py)."
+
+  tier2_roster_requirements:
+    - "Record the current bundle_dir root and whether it matches canonical_root."
+    - "Record base package compliance with evidence (paths and tests)."
+    - "List any additional artifacts with reasons, or explicitly state none."
+
+adoption_checklist:
+  - "Confirm bundle_dir matches the canonical HealthView root."
+  - "Confirm manifest.json, summary.md, telemetry.json exist for every run."
+  - "Confirm manifest/telemetry contain the minimum keys."
+  - "Confirm no pointer artifacts (latest_*)."
+  - "If additional artifacts exist, list them with reasons in Tier-2 record."
+
+notes:
+  - >-
+    This Tier-3 horizontal should be referenced by per-script Tier-3 YAMLs (tier3_<script>.yaml)
+    and Tier-2 roster "Current artifacts" sections rather than re-stating the base package rules.

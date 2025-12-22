@@ -1,0 +1,149 @@
+# Tier-3 Horizontal: cli (shared CLI builders + conventions)
+#
+# This Tier-3 file is a horizontal contract (shared semantics) for CLI surfaces across Repo Studios
+# scripts. It is not a per-script tool spec.
+
+metadata:
+  tier: 3
+  kind: horizontal
+  id: cli
+  title: CLI Contract (Arguments, Defaults, Importability)
+  status: draft
+  version: 0.1.0
+  updated_at: "2025-12-21"
+  audience:
+    - agents
+    - human_developer
+  owners:
+    - repo_studios_team@rainmakerprotocol.dev
+  seed_evidence:
+    # Keep this list intentionally small.
+    # Do NOT enumerate every script/roster that adopts this horizontal contract.
+    libraries_tests: .repo_studios/tests/tests_library_integration/libraries/test_cli.py
+    libraries_module: .repo_studios/command_center/scripts/libraries/cli.py
+    representative_script: .repo_studios/scripts/summarizers/summarize_health_suite.py
+
+purpose:
+  summary: >-
+    Provide a consistent, discoverable contract for script CLI flags and parsing patterns, so
+    orchestrators and agents can compose tools reliably.
+  why_this_exists:
+    - "Avoid drift in flag names and semantics across ~N scripts."
+    - "Make scripts composable in orchestrators and importable in tests."
+    - "Centralize conventions for repo-root resolution, logging, timestamps, and retention flags."
+
+scope:
+  applies_to:
+    - "Scripts under .repo_studios/scripts/**"
+    - "Command Center scripts under .repo_studios/command_center/scripts/**"
+  non_goals:
+    - "Defining artifact base package schemas (see tier3_artifacts.yaml)"
+    - "Defining pruning/retention algorithm (see tier3_prune_logs.yaml)"
+
+conventions:
+  flag_style:
+    - "Flags use kebab-case (e.g., --repo-root, --log-level, --artifacts-to-keep)."
+    - "Boolean toggles prefer --skip-<feature> or --enable-<feature> with clear defaults."
+
+  exit_codes:
+    expectations:
+      - "0 indicates success."
+      - "Non-zero indicates failure (script-specific codes are allowed but must be documented in Tier-3 per-script YAML)."
+
+  importability:
+    rule: "Scripts should expose a run(argv) helper and a thin main() shim."
+    rationale: "Enables deterministic orchestration and direct imports in tests."
+
+common_flags:
+  repo_root:
+    flag: "--repo-root"
+    type: path
+    required: false
+    default: "(resolved from script origin depth)"
+    contract:
+      - "When provided, repo-root is treated as the repository root for resolving relative paths."
+      - "When omitted, repo-root is resolved by walking ancestor directories from the script origin."
+    implementation:
+      shared_builder: "resolve_repo_root / build_standard_paths"
+
+  log_level:
+    flag: "--log-level"
+    type: enum
+    required: false
+    default: "INFO"
+    allowed_values:
+      - DEBUG
+      - INFO
+      - WARNING
+      - ERROR
+      - CRITICAL
+    contract:
+      - "Must map to logging.basicConfig(level=...)."
+      - "Scripts must not use print for operational logs."
+
+  timestamp:
+    flag: "--timestamp"
+    type: string
+    required: false
+    default: "current UTC"
+    contract:
+      - "Accept ISO-8601 string; naive timestamps are treated as UTC."
+      - "Timestamp is used to seed run directory naming."
+    notes:
+      - "Some scripts use --run-timestamp with a YYYYmmdd-HHMM slug; when both exist, document precedence."
+
+  output_dir:
+    flag: "--output-dir"
+    type: path
+    required: false
+    default: "script-specific"
+    contract:
+      - "When present, output-dir identifies the root directory under which run artifacts are written."
+      - "Within-repo restrictions may be relaxed for report roots; document within_repo behavior in per-script Tier-3 YAML."
+
+  artifacts_to_keep:
+    flag: "--artifacts-to-keep"
+    type: int
+    required: false
+    default: "script-specific (commonly 5)"
+    contract:
+      - "Must be validated to minimum 1 when pruning is enabled."
+      - "May be overridden by environment-based keep rules when using KeepSpec/OptionsConfig."
+
+shared_builders:
+  preferred_pattern:
+    summary: >-
+      Prefer using the shared CLI builders (PathsConfig/OptionsConfig + build_standard_paths/
+      build_standard_options) when adding new scripts or refactoring CLI glue.
+    modules:
+      - .repo_studios/command_center/scripts/libraries/cli.py
+    primitives:
+      - PathsConfig
+      - PathSpec
+      - OptionsConfig
+      - KeepSpec
+      - build_standard_paths
+      - build_standard_options
+
+  expectations:
+    - "Path specs should declare ensure_dir and within_repo intent explicitly."
+    - "Keep specs should declare minimum and any env overrides explicitly."
+    - "Per-script Tier-3 YAML should list the canonical CLI flags for that script (not every possible inherited builder capability)."
+
+observability:
+  logging:
+    required:
+      - "Configure logging via logging.basicConfig (or equivalent) using --log-level."
+      - "Log important decisions: resolved repo_root, resolved output_dir, computed keep counts, parsed timestamp."
+
+adoption_checklist:
+  - "Script exposes run(argv) and main() shim."
+  - "CLI uses kebab-case flag names."
+  - "--log-level supports standard choices."
+  - "If timestamped outputs: --timestamp (ISO-8601) is supported or equivalent is documented."
+  - "If pruning: --artifacts-to-keep is supported and minimum 1 is enforced."
+
+notes:
+  - >-
+    This horizontal defines conventions and shared builders; per-script Tier-3 YAMLs should document
+    script-specific flags and any deviations (e.g., different timestamp slug formats).

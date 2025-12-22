@@ -2,40 +2,42 @@
 
 ## What We Built
 
-A complete **agent-first tool registry system** for Repo Studios that enables AI agents (including LangChain-based systems) to discover, validate, and invoke Command Center scripts through machine-readable YAML contracts.
+A complete **agent-first tool registry system** for Repo Studios that enables AI agents
+(including LangChain-based systems) to discover, validate, and invoke Command Center scripts
+through machine-readable YAML contracts.
 
 ## Architecture
 
 ### Core Components
 
-1. **tier3_agent_pipeline_template.yaml** - Template for documenting scripts as agent tools
-   - 9 comprehensive sections optimized for agent tool calling workflow
-   - Inline comments explaining every field
-   - Location: `.repo_studios/docs/pipeline/pipeline_templates/`
+- **tier3_agent_pipeline_template.yaml** - Template for documenting scripts as agent tools
+  - 9 comprehensive sections optimized for agent tool calling workflow
+  - Inline comments explaining every field
+  - Location: `.repo_studios/docs/pipeline/pipeline_templates/`
 
-2. **tier3_scripts_index_schema.yaml** - Schema for auto-generated aggregate index
-   - Statistics, discovery arrays, category indices, dependency graph
-   - Location: `.repo_studios/docs/pipeline/pipeline_templates/`
+- **tier3_scripts_index_schema.yaml** - Schema for auto-generated aggregate index
+  - Statistics, discovery arrays, category indices, dependency graph
+  - Location: `.repo_studios/docs/pipeline/pipeline_templates/`
 
-3. **generate_tier3_index.py** - Generator script (419 lines)
-   - Scans `tier3_*.yaml` files
-   - Validates structure (optional)
-   - Aggregates into `tier3_scripts_index.yaml`
-   - CLI with --repo-root, --output, --validate, --log-level
-   - Location: `.repo_studios/docs/pipeline/tier3_index/`
+- **generate_tier3_index.py** - Generator script (419 lines)
+  - Scans `tier3_*.yaml` files
+  - Validates structure (optional)
+  - Aggregates into `tier3_scripts_index.yaml`
+  - CLI with --repo-root, --output, --validate, --log-level
+  - Location: `.repo_studios/docs/pipeline/tier3_index/`
 
-4. **test_tier3_index.py** - Comprehensive test suite (457 lines)
-   - 26 tests covering file discovery, validation, indexing, CLI
-   - All tests passing ✅
-   - Location: `.repo_studios/docs/pipeline/tier3_index/`
+- **test_tier3_index.py** - Comprehensive test suite (457 lines)
+  - 26 tests covering file discovery, validation, indexing, CLI
+  - All tests passing ✅
+  - Location: `.repo_studios/docs/pipeline/tier3_index/`
 
-5. **README.md** - Module documentation
-   - Usage examples, integration guides, schema documentation
-   - Location: `.repo_studios/docs/pipeline/tier3_index/`
+- **README.md** - Module documentation
+  - Usage examples, integration guides, schema documentation
+  - Location: `.repo_studios/docs/pipeline/tier3_index/`
 
 ### Folder Structure
 
-```
+``` text
 .repo_studios/docs/pipeline/
 ├── pipeline_templates/
 │   ├── tier3_agent_pipeline_template.yaml (NEW - 320 lines)
@@ -88,19 +90,20 @@ error_handling:
 
 Optimized for agent journey through tool lifecycle:
 
-1. **tool** - Identity & discovery (id, name, description, keywords, use_when, dont_use_when)
-2. **invocation** - Command templates, script paths, environment requirements
-3. **parameters** - Name, type, required, default, validation rules, choices, examples
-4. **outputs** - Primary/secondary outputs with type, format, path_pattern, structure
-5. **behavior** - Idempotent, side_effects, duration_estimate, blocking, mutates flags
-6. **error_handling** - Common exit codes, stderr patterns, agent_action recommendations
-7. **integration** - Typical workflows, output consumers, input producers, sample output
-8. **examples** - Command examples, programmatic invocation (Python, shell)
-9. **metadata** - Category, tier, status, version, dependencies (tier3/tier2/tier1), testing info
+- **tool** - Identity & discovery (id, name, description, keywords, use_when, dont_use_when)
+- **invocation** - Command templates, script paths, environment requirements
+- **parameters** - Name, type, required, default, validation rules, choices, examples
+- **outputs** - Primary/secondary outputs with type, format, path_pattern, structure
+- **behavior** - Idempotent, side_effects, duration_estimate, blocking, mutates flags
+- **error_handling** - Common exit codes, stderr patterns, agent_action recommendations
+- **integration** - Typical workflows, output consumers, input producers, sample output
+- **examples** - Command examples, programmatic invocation (Python, shell)
+- **metadata** - Category, tier, status, version, dependencies (tier3/tier2/tier1), testing info
 
 ## Validation Rules
 
 Generator validates:
+
 - **Required sections**: tool, invocation, parameters, outputs, behavior, metadata
 - **tool.id**, **tool.name**, **tool.description** must exist
 - **metadata.category**: producer, consumer, aggregator, orchestrator, summarizer, utility
@@ -165,7 +168,8 @@ exit_code = generate_tier3(["--repo-root", str(repo_root), "--validate"])
 
 ### Filename Convention Decision
 
-**Chose: Keep "tier3_" prefix**
+- **Chose: Keep "tier3_" prefix**
+
 - Reasons:
   - Human context when browsing filesystem
   - Simple glob pattern: `tier3_*.yaml`
@@ -176,12 +180,14 @@ exit_code = generate_tier3(["--repo-root", str(repo_root), "--validate"])
 ## Proof of Concept
 
 Created first tier3 file:
+
 - **tier3_generate_commandview_inventory.yaml** (180 lines)
 - Fully documented CommandView inventory producer
 - Successfully validated and indexed
 - Demonstrates complete 9-section schema in practice
 
 Generated index shows:
+
 ```yaml
 statistics:
   total_scripts: 1
@@ -198,6 +204,7 @@ scripts:
 ## Documentation Updates
 
 Updated 6 tier documentation files to reference YAML tier3:
+
 - ✅ tier_doc_system_instructions.md
 - ✅ tier2_pipeline_template.md
 - ✅ tier2_pipeline_howto.md
@@ -207,7 +214,8 @@ Updated 6 tier documentation files to reference YAML tier3:
 
 ## Testing
 
-**26 tests - all passing ✅**
+- **26 tests - all passing ✅**
+
 - File discovery (5 tests)
 - YAML validation (6 tests)
 - YAML loading (4 tests)
@@ -219,38 +227,39 @@ Coverage: Scanner, validator, aggregator, CLI, error handling
 
 ## Next Steps
 
-1. **Create remaining tier3 files** (~76 more scripts)
-   - Producers (inventory, metrics, reports)
-   - Consumers (analyzers, validators)
-   - Aggregators (duplicate scan, cross-reference)
-   - Orchestrators (pipelines, workflows)
-   - Summarizers (digest, rollup)
-   - Utilities (slugify, CLI helpers)
+- **Create remaining tier3 files** (~76 more scripts)
+  - Producers (inventory, metrics, reports)
+  - Consumers (analyzers, validators)
+  - Aggregators (duplicate scan, cross-reference)
+  - Orchestrators (pipelines, workflows)
+  - Summarizers (digest, rollup)
+  - Utilities (slugify, CLI helpers)
 
-2. **Integrate with doc_index**
-   - Add tier3 generation as post-hook
-   - Include in `make command-center` targets
+- **Integrate with doc_index**
+  - Add tier3 generation as post-hook
+  - Include in `make command-center` targets
 
-3. **Agent Integration**
-   - Test with LangChain in other repo
-   - Validate tool discovery and invocation patterns
-   - Refine error_handling guidance based on agent feedback
+- **Agent Integration**
+  - Test with LangChain in other repo
+  - Validate tool discovery and invocation patterns
+  - Refine error_handling guidance based on agent feedback
 
-4. **Continuous Updates**
-   - Regenerate index when scripts change
-   - Update tier3 files when CLIs evolve
-   - Keep validation rules aligned with script reality
+- **Continuous Updates**
+  - Regenerate index when scripts change
+  - Update tier3 files when CLIs evolve
+  - Keep validation rules aligned with script reality
 
 ## Design Philosophy
 
-**Agent-first, not documentation-first**
+- **Agent-first, not documentation-first**
 
 - Optimized for programmatic consumption, not human reading
 - Discovery → Invocation → Validation → Integration lifecycle
 - Machine-readable contracts enable autonomous agent workflows
 - Humans use tier1/tier2 markdown; agents use tier3 YAML
 
-This approach diverges strategically from Jarvis (which uses markdown for tier3) to better support the Repo Studios mission of agent orchestration.
+This approach diverges strategically from Jarvis (which uses markdown for tier3) to better support
+the Repo Studios mission of agent orchestration.
 
 ---
 

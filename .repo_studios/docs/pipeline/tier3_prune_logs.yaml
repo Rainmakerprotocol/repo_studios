@@ -1,0 +1,191 @@
+# Tier-3 Horizontal: prune_logs (retention + current_run protection)
+#
+# This Tier-3 file is a horizontal contract (shared semantics) used across many scripts and
+# pipeline stages. It is NOT a per-script “tool spec”; it defines the invariant behavior that
+# per-script Tier-3 YAMLs and Tier-2 rosters should reference.
+
+metadata:
+  tier: 3
+  kind: horizontal
+  id: prune_logs
+  title: Retention + Pruning Contract (Run Directories)
+  status: draft
+  version: 0.1.0
+  updated_at: "2025-12-21"
+  audience:
+    - agents
+    - human_developer
+  owners:
+    - repo_studios_team@rainmakerprotocol.dev
+  seed_evidence:
+    # Keep this list intentionally small.
+    # Do NOT enumerate every Tier-2 roster or script that adopts this horizontal contract.
+    # Instead, link a few representative references (one roster + one test) that demonstrate
+    # the contract is real and exercised.
+    tier2_roster_example: .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md
+    test_example: .repo_studios/tests/tests_command_center/test_prune_logs.py
+  related_code:
+    - .repo_studios/command_center/scripts/libraries/prune_logs.py
+  evidence_tests:
+    - .repo_studios/tests/tests_producers/test_collect_test_log_reports.py
+
+purpose:
+  summary: >-
+    Define shared semantics for pruning timestamped run directories, including invariants that
+    prevent data loss (especially never deleting the current run) and stability rules that make
+    retention behavior auditable.
+  why_this_exists:
+    - Avoid duplicated/contradictory pruning logic across scripts.
+    - Ensure retention behavior is safe, testable, and consistent across platforms.
+    - Provide an explicit contract for Tier-2 “Retention surface” sections.
+
+scope:
+  applies_to:
+    - "Any script that writes timestamped run directories under a topic root and prunes history"
+    - "Any helper that implements keep-N retention semantics"
+  non_goals:
+    - "Defining the full HealthView artifact base package contract (see tier3_artifacts.yaml)"
+    - "Defining CLI flag naming and parsing conventions (see tier3_cli.yaml)"
+
+definitions:
+  base_dir: "Directory containing run directories to be pruned (topic root)."
+  run_dir: "One timestamped output directory representing a single run."
+  current_run: "The run directory created by the current execution; must never be pruned."
+  keep: "The maximum number of historical run directories to keep (excluding keep-marked runs)."
+  keep_marker: >-
+    A filesystem marker named '.keep' placed inside a run directory (or the run directory itself)
+    that indicates the run must not be deleted by pruning.
+  candidate: "A run directory eligible for deletion after applying exclusions and keep rules."
+  mtime_sort: "Ordering run directories by filesystem modification time (st_mtime), not by name."
+
+contract:
+  invariants:
+    - id: prune-001
+      rule: "Never delete the current_run directory."
+      rationale: "Protect the just-written artifacts from accidental data loss."
+
+    - id: prune-002
+      rule: "Honor keep_marker (.keep): keep-marked runs are never deleted."
+      rationale: "Allow operators/tests to pin known-good baselines."
+
+    - id: prune-003
+      rule: >-
+        Keep at most 'keep' non-marked run directories (most recent by mtime) plus all keep-marked
+        run directories.
+      rationale: "Bound storage while keeping pinned baselines."
+
+    - id: prune-004
+      rule: "Pruning uses mtime_sort; directory name is not the source of truth for recency."
+      rationale: "Some workflows may backfill or rename run directories; mtime tracks reality."
+
+    - id: prune-005
+      rule: "If base_dir does not exist, pruning is a no-op."
+      rationale: "First-run behavior should be safe and not error."
+
+    - id: prune-006
+      rule: >-
+        Pruning is best-effort by default: failures must be logged and surfaced in telemetry but
+        should not crash the pipeline unless the caller explicitly gates on pruning.
+      rationale: "Avoid turning retention into an availability risk; preserve signal for audits."
+
+  required_behavior:
+    algorithm:
+      description: >-
+        Compute deletion candidates based on run directories under base_dir, excluding current_run
+        and keep-marked runs, then delete oldest-by-mtime beyond the keep count.
+      steps:
+        - "If base_dir does not exist: return no-op result."
+        - "Enumerate direct children of base_dir; consider directories only."
+        - "Exclude current_run if provided."
+        - "Partition run dirs into keep_marked vs unmarked (based on keep_marker)."
+        - "Sort unmarked by st_mtime ascending (oldest first); break ties by name."
+        - "Compute deletions: delete all but the newest 'keep' unmarked dirs."
+        - "Delete selected dirs recursively; record any errors."
+        - "Return a structured result with counts and deleted paths."
+
+    keep_edge_cases:
+      keep_leq_zero: >-
+        Treat keep <= 0 as a no-op (do not prune). This is intentionally conservative.
+      keep_missing: >-
+        If the caller does not provide keep, the caller must define a default and record it in
+        the Tier-2 roster evidence.
+
+observability:
+  logging:
+    required_events:
+      - event: prune_start
+        fields:
+          - base_dir
+          - keep
+          - current_run
+          - total_dirs
+          - keep_marked_dirs
+          - candidate_dirs
+
+      - event: prune_delete
+        fields:
+          - path
+          - reason
+
+      - event: prune_complete
+        fields:
+          - deleted_count
+          - kept_unmarked_count
+          - kept_marked_count
+          - error_count
+          - duration_ms
+
+    error_policy:
+      - "Log errors with enough context to diagnose permissions/path races."
+      - "Do not silently swallow errors; record in telemetry payload."
+
+  telemetry:
+    required_fields:
+      - key: retention.keep
+        type: int
+      - key: retention.total_dirs
+        type: int
+      - key: retention.deleted_count
+        type: int
+      - key: retention.kept_marked_count
+        type: int
+      - key: retention.error_count
+        type: int
+      - key: retention.duration_ms
+        type: float
+
+integration:
+  expected_call_surfaces:
+    - surface: "Shared helper"
+      name: prune_run_directories
+      contract_notes:
+        - "Implements the invariants and algorithm above."
+        - "Used by multiple producers/consumers/orchestrators." 
+
+    - surface: "Writer helper"
+      name: write_report_artifacts
+      contract_notes:
+        - "May invoke pruning after writing artifacts; must pass current_run."
+
+  tier2_roster_requirements:
+    - "Tier-2 records must state the pruning surface and evidence (callsite + tests)."
+    - "Tier-2 records must state whether pruning is best-effort or gating for that script."
+
+adoption_checklist:
+  - "Confirm helper used is prune_run_directories (or equivalent) and passes current_run."
+  - "Confirm .keep marker behavior is covered by tests or documented as a gap."
+  - "Confirm telemetry/logging includes retention counts and any prune errors."
+
+examples:
+  normative_usage:
+    description: "Example call surface for scripts that write run bundles."
+    pseudo:
+      base_dir: "<output_dir>/<viewer>/<topic>"
+      current_run: "<output_dir>/<viewer>/<topic>/<timestamp>"
+      keep: 5
+      keep_marker: ".keep"
+
+notes:
+  - >-
+    This Tier-3 horizontal should be referenced by per-script Tier-3 YAMLs (tier3_<script>.yaml)
+    and Tier-2 roster "Retention surface" sections rather than re-stating pruning semantics.

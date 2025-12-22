@@ -19,7 +19,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any, Sequence, cast
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
 if str(LIBRARIES_ROOT) not in sys.path:
@@ -69,13 +69,19 @@ SUMMARIZER_SCRIPT = Path(
 SUMMARIZER_MODULE = "command_center.scripts.summarizers.summarize_test_execution_telemetry"
 
 DEFAULT_LOGS_DIR = Path(".repo_studios/command_center/reports/rawview/test_execution_runs")
-DEFAULT_TEST_LOG_REPORTS_DIR = Path(".repo_studios/command_center/reports")
-DEFAULT_TEST_LOG_HEALTH_DIR = Path(".repo_studios/reports/consumer_reports/test_log_health_reports")
-DEFAULT_COVERAGE_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/test_coverage_reports")
+DEFAULT_TEST_LOG_REPORTS_DIR = Path(".repo_studios/reports/healthview")
+DEFAULT_TEST_LOG_HEALTH_DIR = Path(".repo_studios/reports/healthview/consumer_reports/test_log_health_reports")
+DEFAULT_COVERAGE_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
 DEFAULT_COVERAGE_XML = Path(".repo_studios/tests/fixtures/test_run_coverage/coverage.xml")
 DEFAULT_HEATMAP_OUTPUT_DIR = Path(".repo_studios/reports/aggregator_reports/churn_complexity_heatmap")
-DEFAULT_HARDENING_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
+DEFAULT_HARDENING_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
 DEFAULT_HEALTHVIEW_ROOT = Path(".repo_studios/command_center/reports")
+
+COVERAGE_CLASS_SLUG = "producer_reports"
+COVERAGE_TOPIC_SLUG = "test_coverage_inventory"
+
+HARDENING_CLASS_SLUG = "producer_reports"
+HARDENING_TOPIC_SLUG = "test_hardening"
 
 
 @dataclass(frozen=True)
@@ -247,7 +253,7 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
@@ -317,7 +323,7 @@ def _relativize(path: Path | None, repo_root: Path) -> str | None:
 
 def _execute_coverage(paths: Paths, options: Options) -> CoverageOutcome:
     run_callable = _load_run_callable(paths.repo_root / COVERAGE_SCRIPT, COVERAGE_MODULE)
-    before = set(child for child in paths.coverage_output_dir.glob("test_coverage-*") if child.is_dir())
+    run_slug = options.run_timestamp.strftime("%Y%m%d-%H%M")
     argv = [
         "--repo-root",
         str(paths.repo_root),
@@ -325,6 +331,8 @@ def _execute_coverage(paths: Paths, options: Options) -> CoverageOutcome:
         str(paths.coverage_xml),
         "--output-dir",
         str(paths.coverage_output_dir),
+        "--timestamp",
+        options.run_timestamp.isoformat(),
         "--artifacts-to-keep",
         str(options.coverage_keep),
         "--log-level",
@@ -333,19 +341,20 @@ def _execute_coverage(paths: Paths, options: Options) -> CoverageOutcome:
     exit_code = int(run_callable(argv))
     if exit_code != 0:
         raise RuntimeError(f"Coverage inventory exit code {exit_code}")
-    after = set(child for child in paths.coverage_output_dir.glob("test_coverage-*") if child.is_dir())
-    created = sorted(after - before)
-    run_dir = created[-1] if created else _latest_directory(paths.coverage_output_dir, "test_coverage-")
+
+    expected_dir = paths.coverage_output_dir / COVERAGE_CLASS_SLUG / COVERAGE_TOPIC_SLUG / run_slug
+    run_dir: Path | None = expected_dir if expected_dir.exists() else None
+    if run_dir is None:
+        base_dir = paths.coverage_output_dir / COVERAGE_CLASS_SLUG / COVERAGE_TOPIC_SLUG
+        run_dir = _latest_directory(base_dir, "")
+
     summary = None
     if run_dir is not None:
-        report_path = run_dir / "report.json"
-        payload = _read_json(report_path)
-        if isinstance(payload, dict) and isinstance(payload.get("summary"), dict):
-            summary_dict = dict(payload["summary"])
-            status_value = summary_dict.get("status") or payload.get("status")
-            if status_value is not None:
-                summary_dict["status"] = status_value
-            summary = summary_dict
+        telemetry = _read_json(run_dir / "telemetry.json")
+        if isinstance(telemetry, dict):
+            payload = telemetry.get("payload")
+            if isinstance(payload, dict) and isinstance(payload.get("summary"), dict):
+                summary = dict(payload["summary"])
     return CoverageOutcome(report_dir=run_dir, summary=summary)
 
 
@@ -409,6 +418,8 @@ def _execute_hardening(paths: Paths, options: Options) -> HardeningOutcome:
         str(paths.repo_root),
         "--output-dir",
         str(paths.hardening_output_dir),
+        "--timestamp",
+        options.run_timestamp.isoformat(),
         "--artifacts-to-keep",
         str(options.hardening_keep),
         "--log-level",
@@ -424,12 +435,20 @@ def _execute_hardening(paths: Paths, options: Options) -> HardeningOutcome:
         if candidate.exists() and candidate.is_dir():
             run_dir = candidate
     if run_dir is None:
+        timestamp_slug = options.run_timestamp.strftime("%Y%m%d-%H%M")
+        positional_candidate = (
+            paths.hardening_output_dir / HARDENING_CLASS_SLUG / HARDENING_TOPIC_SLUG / timestamp_slug
+        )
+        if positional_candidate.exists():
+            run_dir = positional_candidate.resolve()
+
+    if run_dir is None:
         timestamp = payload.get("timestamp")
         if timestamp:
             try:
                 parsed = datetime.fromisoformat(str(timestamp))
-                slug = parsed.strftime("%Y%m%d_%H%M%S")
-                legacy_candidate = paths.hardening_output_dir / f"test_hardening-{slug}"
+                legacy_slug = parsed.strftime("%Y%m%d-%H%M")
+                legacy_candidate = paths.repo_root / ".repo_studios" / "command_center" / "reports" / "healthview" / "test_hardening" / legacy_slug
                 if legacy_candidate.exists():
                     run_dir = legacy_candidate.resolve()
             except ValueError:
@@ -451,6 +470,8 @@ def _execute_health_report(
         str(paths.test_log_health_dir),
         "--artifacts-to-keep",
         str(options.health_keep),
+        "--timestamp",
+        options.run_timestamp.isoformat(),
         "--log-level",
         options.log_level,
     ]
@@ -651,7 +672,12 @@ def run(argv: Sequence[str] | None = None) -> int:
     if not isinstance(summary_payload, dict) or summary_payload.get("status") != "ok":
         raise RuntimeError("summarize_test_execution_telemetry returned unexpected payload")
 
-    summary_artifacts = summary_payload.get("artifacts") if isinstance(summary_payload.get("artifacts"), dict) else {}
+    summary_artifacts_raw = summary_payload.get("artifacts")
+    summary_artifacts: dict[str, str] = {}
+    if isinstance(summary_artifacts_raw, dict):
+        for name, path_str in summary_artifacts_raw.items():
+            if isinstance(name, str) and isinstance(path_str, str):
+                summary_artifacts[name] = path_str
 
     summary_markdown_path = None
     summary_json_path = None

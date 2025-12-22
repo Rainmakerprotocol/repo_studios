@@ -4,7 +4,7 @@ Auto-generates `tier3_scripts_index.yaml` from individual `tier3_*.yaml` files f
 
 ## Structure
 
-```
+``` text
 tier3_index/
 ├── generate_tier3_index.py  # Generator script
 ├── test_tier3_index.py       # Test suite
@@ -46,11 +46,11 @@ pytest .repo_studios/docs/pipeline/tier3_index/test_tier3_index.py -v
 
 ## How It Works
 
-1. **Scan**: Finds all `tier3_*.yaml` files in `.repo_studios/docs/pipeline/` (non-recursive)
-2. **Load**: Parses each YAML file with optional validation
-3. **Validate** (if `--validate`): Checks required keys, categories, statuses
-4. **Aggregate**: Creates lightweight index entries with statistics and category indices
-5. **Write**: Outputs `tier3_scripts_index.yaml` with metadata
+- **Scan**: Finds all `tier3_*.yaml` files in `.repo_studios/docs/pipeline/` (non-recursive)
+- **Load**: Parses each YAML file with optional validation
+- **Validate** (if `--validate`): Checks required keys, categories, statuses
+- **Aggregate**: Creates lightweight index entries with statistics and category indices
+- **Write**: Outputs `tier3_scripts_index.yaml` with metadata
 
 ## Index Schema
 
@@ -61,7 +61,8 @@ The generated index contains:
 - **generator_version**: Generator script version
 - **repository**: Name, root, branch
 - **statistics**: Total scripts, category counts, status counts
-- **scripts**: Array of lightweight entries (id, name, category, tier3_file, summary, keywords, status, entry_point, importable)
+- **scripts**: Array of lightweight entries (id, name, category, tier3_file, summary, keywords,
+    status, entry_point, importable)
 - **by_category**: Index mapping categories to script IDs
 - **validation** (optional): Errors and warnings from validation
 
@@ -73,7 +74,8 @@ Tier3 files must contain:
 - **tool.id**: Unique identifier
 - **tool.name**: Display name
 - **tool.description**: Summary
-- **metadata.category**: One of: `producer`, `consumer`, `aggregator`, `orchestrator`, `summarizer`, `utility`
+- **metadata.category**: One of: `producer`, `consumer`, `aggregator`, `orchestrator`,
+    `summarizer`, `utility`
 - **metadata.status**: One of: `template`, `draft`, `active`, `deprecated`
 
 ## Integration

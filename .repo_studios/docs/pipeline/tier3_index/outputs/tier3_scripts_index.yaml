@@ -1,18 +1,20 @@
 version: 1.0.0
-generated_at: '2025-12-21T13:29:43.171054+00:00'
+generated_at: '2025-12-22T04:50:03.353757+00:00'
 generator_version: 1.0.0
 repository:
   name: repo_studios
   root: C:\Users\genet\repo_studios
   branch: main
 statistics:
-  total_scripts: 2
+  total_scripts: 6
   categories:
-    producer: 1
+    producer: 4
     utility: 1
+    consumer: 1
   status:
     active: 1
     template: 1
+    draft: 4
 scripts:
 - script_id: generate_commandview_inventory
   name: Generate CommandView Inventory
@@ -59,10 +61,88 @@ scripts:
   status: template
   entry_point: null
   importable: false
+- script_id: analyze_test_hardening
+  name: Analyze Test Hardening
+  category: producer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\test_execution_telemetry\tier3_analyze_test_hardening.yaml
+  script_path: .repo_studios/scripts/producers/analyze_test_hardening.py
+  summary: "Scans repository test files (AST + content heuristics) to flag hardening opportunities\n(missing\
+    \ assertions, long tests, debug code, etc.) and emits a canonical HealthView bundle under:\n\n  .repo_studios/reports/healthview/producer_reports/test_hardening/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n"
+  keywords:
+  - healthview
+  - producer
+  - tests
+  - hardening
+  - telemetry
+  - ast
+  status: draft
+  entry_point: run
+  importable: true
+- script_id: collect_test_log_reports
+  name: Collect Test Log Reports
+  category: producer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\test_execution_telemetry\tier3_collect_test_log_reports.yaml
+  script_path: .repo_studios/scripts/producers/collect_test_log_reports.py
+  summary: "Scans a pytest log run directory (pytest text output + JUnit XML when present) and emits\n\
+    a canonical HealthView bundle under:\n\n  .repo_studios/reports/healthview/rawview/test_log_reports/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n"
+  keywords:
+  - healthview
+  - producer
+  - pytest
+  - logs
+  - telemetry
+  - rawview
+  - junit
+  status: draft
+  entry_point: run
+  importable: true
+- script_id: generate_test_coverage_inventory
+  name: Generate Test Coverage Inventory
+  category: producer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\test_execution_telemetry\tier3_generate_test_coverage_inventory.yaml
+  script_path: .repo_studios/scripts/producers/generate_test_coverage_inventory.py
+  summary: "Ingests a Coverage.py XML report, correlates executed lines with Python functions in the repo,\n\
+    and emits a canonical HealthView bundle under:\n\n  .repo_studios/reports/healthview/producer_reports/test_coverage_inventory/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n"
+  keywords:
+  - healthview
+  - producer
+  - coverage
+  - telemetry
+  - inventory
+  - xml
+  status: draft
+  entry_point: run
+  importable: true
+- script_id: generate_test_log_health_report
+  name: Generate Test Log Health Report
+  category: consumer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\test_execution_telemetry\tier3_generate_test_log_health_report.yaml
+  script_path: .repo_studios/scripts/consumers/generate_test_log_health_report.py
+  summary: "Prefers structured bundles emitted by ``collect_test_log_reports.py`` and falls back to direct\n\
+    log discovery under ``--logs-dir`` to generate a test execution health report under:\n\n  .repo_studios/reports/healthview/consumer_reports/test_log_health_reports/<YYYYMMDD-HHMM>/\n\
+    \nThe run directory includes report.json/report.md/report.csv plus bundle_summary.json.\n"
+  keywords:
+  - healthview
+  - consumer
+  - pytest
+  - logs
+  - telemetry
+  - rawview
+  - report
+  status: draft
+  entry_point: run
+  importable: true
 by_category:
   producer:
   - generate_commandview_inventory
-  consumer: []
+  - analyze_test_hardening
+  - collect_test_log_reports
+  - generate_test_coverage_inventory
+  consumer:
+  - generate_test_log_health_report
   aggregator: []
   orchestrator: []
   summarizer: []

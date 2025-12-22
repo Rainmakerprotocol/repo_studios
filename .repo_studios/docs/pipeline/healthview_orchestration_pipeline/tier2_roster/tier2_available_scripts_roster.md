@@ -55,6 +55,20 @@ related_files:
 - Do not treat “Available Scripts” as orchestration coverage; Stage 11.1 is a holding roster.
 - Do not merge aspirational behavior into “Current evidence”; log it explicitly as a gap or
   stop-gate.
+- When code changes begin for this stage, enforce the repo standards:
+  - code changes + tests
+  - ≥80% coverage on touched modules
+  - updated Tier-1/Tier-2 docs
+  - clean formatting/lint behavior
+- After meaningful checkbox edits, run `make -C .repo_studios doc-index` and record
+  the timestamp in the Update Log.
+- Workstream semantics:
+  - Workstream D (Tier-3 YAML) is the reward workstream and is conditional.
+    - If Tier-3 is allowed/required for a record, complete Workstream D and check its checkbox.
+    - If Tier-3 is not allowed/required, do not silently skip D: explicitly record
+      "Deferred: Tier-3 not appropriate" (or similar) in the record notes/evidence.
+  - Tier-2 DONE requires Workstreams A–C + E, plus an explicit Workstream D decision
+    (completed if required, otherwise explicitly deferred).
 
 ---
 

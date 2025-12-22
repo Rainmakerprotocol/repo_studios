@@ -66,8 +66,8 @@ def test_generate_test_log_health_report_prefers_producer_bundle(tmp_path, monke
     producer_dir = (
         repo
         / ".repo_studios"
-        / "command_center"
         / "reports"
+        / "healthview"
         / "rawview"
         / "test_log_reports"
         / "20250101-0000"
@@ -133,7 +133,9 @@ def test_generate_test_log_health_report_prefers_producer_bundle(tmp_path, monke
     telemetry_path = producer_dir / "telemetry.json"
     telemetry_path.write_text(json.dumps(telemetry_payload), encoding="utf-8")
 
-    output_base = repo / ".repo_studios" / "reports" / "consumer_reports" / "test_log_health_reports"
+    output_base = (
+        repo / ".repo_studios" / "reports" / "healthview" / "consumer_reports" / "test_log_health_reports"
+    )
 
     first_result = consumer_mod.run(
         [
@@ -143,6 +145,8 @@ def test_generate_test_log_health_report_prefers_producer_bundle(tmp_path, monke
             str(output_base),
             "--producer-bundle-dir",
             str(producer_dir),
+            "--timestamp",
+            "2025-01-01T00:00:00+00:00",
             "--log-level",
             "ERROR",
         ]
@@ -190,6 +194,8 @@ def test_generate_test_log_health_report_prefers_producer_bundle(tmp_path, monke
             str(output_base),
             "--producer-bundle-dir",
             str(producer_dir),
+            "--timestamp",
+            "2025-01-01T00:01:00+00:00",
             "--log-level",
             "ERROR",
         ]
@@ -218,7 +224,9 @@ def test_generate_test_log_health_report_falls_back_to_logs(tmp_path, monkeypatc
     _write_junit(run_dir)
     _write_pytest_log(run_dir)
 
-    output_base = repo / ".repo_studios" / "reports" / "consumer_reports" / "test_log_health_reports"
+    output_base = (
+        repo / ".repo_studios" / "reports" / "healthview" / "consumer_reports" / "test_log_health_reports"
+    )
 
     first_result = consumer_mod.run(
         [
@@ -226,6 +234,8 @@ def test_generate_test_log_health_report_falls_back_to_logs(tmp_path, monkeypatc
             str(logs_base),
             "--output-base",
             str(output_base),
+            "--timestamp",
+            "2025-01-01T00:00:00+00:00",
             "--log-level",
             "ERROR",
         ]
@@ -259,6 +269,8 @@ def test_generate_test_log_health_report_falls_back_to_logs(tmp_path, monkeypatc
             str(logs_base),
             "--output-base",
             str(output_base),
+            "--timestamp",
+            "2025-01-01T00:01:00+00:00",
         ]
     )
     second_dir = Path(second_result["output_dir"])
@@ -282,7 +294,9 @@ def test_generate_test_log_health_report_prunes_history(tmp_path, monkeypatch):
     _write_junit(run_dir)
     _write_pytest_log(run_dir)
 
-    output_base = repo / ".repo_studios" / "reports" / "consumer_reports" / "test_log_health_reports"
+    output_base = (
+        repo / ".repo_studios" / "reports" / "healthview" / "consumer_reports" / "test_log_health_reports"
+    )
 
     timestamps = [datetime(2025, 1, 1, 0, minute, tzinfo=consumer_mod.UTC) for minute in range(12)]
 
@@ -316,3 +330,120 @@ def test_generate_test_log_health_report_prunes_history(tmp_path, monkeypatch):
 
     runs = sorted(p for p in output_base.iterdir() if p.is_dir())
     assert len(runs) == 3
+
+
+def test_timestamp_slug_helpers(tmp_path, monkeypatch):
+    consumer_mod = _load_module("generate_test_log_health_report_helpers", _CONSUMER_PATH)
+
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    monkeypatch.chdir(repo)
+
+    assert consumer_mod._timestamp_slug_from_iso("2025-01-01T00:00:00+00:00") == "20250101-0000"
+    assert consumer_mod._timestamp_slug_from_iso("2025-01-01T00:00:00") == "20250101-0000"
+    assert consumer_mod._timestamp_slug_from_iso("not-a-timestamp") is None
+
+    args = consumer_mod._parse_args(["--timestamp", "2025-01-01T00:01:00+00:00"])
+    assert consumer_mod._run_slug(args) == "20250101-0001"
+
+    args = consumer_mod._parse_args(["--timestamp", "invalid"])
+    slug = consumer_mod._run_slug(args)
+    assert len(slug) == 13
+    assert slug[8] == "-"
+    assert (slug[:8] + slug[9:]).isdigit()
+
+
+def test_markdownlint_injection_is_idempotent(tmp_path, monkeypatch):
+    consumer_mod = _load_module("generate_test_log_health_report_markdown", _CONSUMER_PATH)
+
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    monkeypatch.chdir(repo)
+
+    raw = "# Report\n\nBody\n"
+    injected = consumer_mod._inject_markdownlint_exception(raw)
+    assert injected.startswith("<!-- markdownlint-disable MD013 -->")
+    injected_again = consumer_mod._inject_markdownlint_exception(injected)
+    assert injected_again == injected
+
+
+def test_append_delta_markdown_formats_values(tmp_path, monkeypatch):
+    consumer_mod = _load_module("generate_test_log_health_report_delta", _CONSUMER_PATH)
+
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    monkeypatch.chdir(repo)
+
+    markdown = "# Report\n\nBody\n"
+    comparisons = {
+        "previous_run": {
+            "pass_rate": {
+                "current": 66.66,
+                "previous": 33.33,
+                "delta": 33.33,
+            }
+        }
+    }
+    out = consumer_mod._append_delta_markdown(markdown, comparisons)
+    assert "## Pass Rate Delta" in out
+    assert "Previous pass rate: 33.33%" in out
+    assert "Current pass rate: 66.66%" in out
+    assert "Delta: +33.33 percentage points" in out
+
+    comparisons = {"previous_run": {"pass_rate": {"current": None, "previous": None, "delta": None}}}
+    out = consumer_mod._append_delta_markdown(markdown, comparisons)
+    assert "Previous pass rate: N/A" in out
+    assert "Current pass rate: N/A" in out
+    assert "Delta: N/A" in out
+
+
+def test_select_latest_bundle_dir_prefers_latest_slug(tmp_path, monkeypatch):
+    consumer_mod = _load_module("generate_test_log_health_report_bundle", _CONSUMER_PATH)
+
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    monkeypatch.chdir(repo)
+
+    root = repo / "bundles"
+    root.mkdir()
+    (root / "not-a-run").mkdir()
+    (root / "20250101-0000").mkdir()
+    (root / "20250101-0001").mkdir()
+
+    assert consumer_mod._is_timestamp_slug("20250101-0001") is True
+    assert consumer_mod._is_timestamp_slug("2025-01-01_0001") is False
+    latest = consumer_mod._select_latest_bundle_dir(root)
+    assert latest is not None
+    assert latest.name == "20250101-0001"
+
+
+def test_write_csv_emits_expected_rows(tmp_path, monkeypatch):
+    consumer_mod = _load_module("generate_test_log_health_report_csv", _CONSUMER_PATH)
+
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    monkeypatch.chdir(repo)
+
+    out_dir = repo / "out"
+    out_dir.mkdir()
+    payload = {
+        "summary": {
+            "total": 3,
+            "passed": 2,
+            "skipped": 0,
+            "xfailed": 0,
+            "failed": 1,
+            "errors": 0,
+            "warnings_total": 4,
+            "tracebacks": 1,
+        },
+        "slow_tests": [{"seconds": 1.23, "nodeid": "pkg::test_a"}],
+    }
+    comparisons = {"previous_run": {"pass_rate": {"current": 66.66, "previous": None, "delta": None}}}
+    csv_path = consumer_mod._write_csv(out_dir, payload, comparisons)
+    assert csv_path.exists()
+    with csv_path.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.reader(handle))
+    assert rows[0] == ["metric", "value"]
+    assert ["total", "3"] in rows
+    assert ["slow_tests_count", "1"] in rows

@@ -1,0 +1,180 @@
+# Tier-3: collect_test_log_reports.py
+# Producer script that converts raw pytest log runs into a HealthView bundle.
+
+tool:
+  id: collect_test_log_reports
+  name: Collect Test Log Reports
+  description: |
+    Scans a pytest log run directory (pytest text output + JUnit XML when present) and emits
+    a canonical HealthView bundle under:
+
+      .repo_studios/reports/healthview/rawview/test_log_reports/<YYYYMMDD-HHMM>/
+
+    The bundle includes manifest.json, summary.md, and telemetry.json.
+  keywords:
+    - healthview
+    - producer
+    - pytest
+    - logs
+    - telemetry
+    - rawview
+    - junit
+  use_when:
+    - Need a structured HealthView bundle from pytest logs (manifest/summary/telemetry)
+    - Validating Stage 1.1 producer outputs and retention behavior
+    - Refreshing downstream consumers that depend on test_log_reports bundles
+  dont_use_when:
+    - You only need test execution coverage metrics (use generate_test_coverage_inventory)
+    - No pytest logs exist in the configured logs directory
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --logs-dir {logs_dir} \
+      --output-dir {output_dir} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+  script_path: .repo_studios/scripts/producers/collect_test_log_reports.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+    notes:
+      - "Optional env var PYTEST_LOG_REPORTS_ALLOW_LEGACY controls fallback to .repo_studios/pytest_logs."
+
+parameters:
+  - name: logs_dir
+    type: path
+    required: false
+    default: .repo_studios/command_center/reports/rawview/test_execution_runs
+    description: Base directory containing pytest log run folders.
+    validation:
+      must_exist: false
+      must_be_directory: true
+    examples:
+      - .repo_studios/command_center/reports/rawview/test_execution_runs
+
+  - name: logs_run
+    type: path
+    required: false
+    default: null
+    description: Optional explicit pytest log run directory (bypasses discovery).
+    validation:
+      must_exist: false
+      must_be_directory: true
+
+  - name: output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview
+    description: HealthView root where bundles are written.
+    validation:
+      parent_must_exist: false
+
+  - name: run_timestamp
+    type: string
+    required: false
+    default: null
+    description: Override run timestamp slug in UTC (YYYYMMDD-HHMM).
+    validation:
+      pattern: "^\\d{8}-\\d{4}$"
+    examples:
+      - "20251221-2237"
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 10
+    description: Number of historical run directories to retain.
+    validation:
+      min_value: 1
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+outputs:
+  primary:
+    type: directory
+    format: healthview_bundle
+    path_pattern: ".repo_studios/reports/healthview/rawview/test_log_reports/<YYYYMMDD-HHMM>/"
+    description: HealthView bundle directory for a single run.
+    contents:
+      required:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+
+  secondary:
+    - type: stdout
+      format: text
+      description: Logging output describing discovered log run and emitted bundle.
+
+behavior:
+  idempotent: false
+  side_effects:
+    - Reads pytest log run folders under logs_dir (or explicit logs_run)
+    - Writes a timestamped HealthView bundle directory
+    - Prunes older sibling run directories beyond artifacts_to_keep
+  duration_estimate: "< 1 second for typical local pytest logs"
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 0
+      meaning: "No pytest log runs found; script returns without writing artifacts."
+      agent_action: "Confirm logs_dir contains pytest output or pass --logs-run explicitly."
+
+    - exit_code: 1
+      meaning: "Invalid --run-timestamp format (must be YYYYMMDD-HHMM)."
+      agent_action: "Fix timestamp slug format or omit --run-timestamp."
+
+integration:
+  typical_workflow:
+    - step: 1
+      action: Run collect_test_log_reports
+      output: HealthView bundle under rawview/test_log_reports
+    - step: 2
+      action: Run generate_test_log_health_report
+      consumes: test_log_reports bundle
+
+  output_consumers:
+    - .repo_studios/scripts/consumers/generate_test_log_health_report.py
+    - .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py
+
+  input_producers:
+    - pytest runs writing log artifacts into logs_dir
+
+examples:
+  - description: Standard run using defaults
+    command: |
+      python .repo_studios/scripts/producers/collect_test_log_reports.py --log-level INFO
+
+  - description: Deterministic run slug for testing
+    command: |
+      python .repo_studios/scripts/producers/collect_test_log_reports.py \
+        --run-timestamp 20251221-2237 \
+        --log-level DEBUG
+
+metadata:
+  category: producer
+  tier: 3
+  status: draft
+  version: 0.1.0
+  author: Repo Studios Team
+  last_updated: 2025-12-21
+  dependencies_tier3:
+    - tier3_artifacts.yaml
+    - tier3_prune_logs.yaml
+    - tier3_database_integration.yaml
+  tier2_rosters:
+    - healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md
+  tier1_pipelines:
+    - healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
+  testing:
+    test_file: .repo_studios/tests/tests_producers/test_collect_test_log_reports.py

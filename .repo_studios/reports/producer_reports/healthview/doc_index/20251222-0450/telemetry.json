@@ -2,28 +2,28 @@
   "schema_version": 1,
   "viewer_slug": "healthview",
   "topic": "doc_index",
-  "run_timestamp": "20251221-1329",
-  "generated_utc": "2025-12-21T13:29:43.709312+00:00",
+  "run_timestamp": "20251222-0450",
+  "generated_utc": "2025-12-22T04:50:03.915078+00:00",
   "status": "ok",
   "metrics": {
     "total_documents": 290,
-    "total_headings": 2066,
-    "total_links": 231,
+    "total_headings": 2067,
+    "total_links": 236,
     "duplicate_slug_count": 6,
     "documents_missing_description_count": 36,
     "placeholder_documents_count": 65,
-    "link_density": 0.7965517241379311
+    "link_density": 0.8137931034482758
   },
   "payload": {
     "schema_version": 1,
-    "generated_utc": "2025-12-21T13:29:43.709312+00:00",
+    "generated_utc": "2025-12-22T04:50:03.915078+00:00",
     "repo_root": "C:\\Users\\genet\\repo_studios",
     "summary": {
       "total_documents": 290,
       "total_h1": 293,
-      "total_h2": 1773,
-      "total_headings": 2066,
-      "total_links": 231
+      "total_h2": 1774,
+      "total_headings": 2067,
+      "total_links": 236
     },
     "metrics": {
       "documents_per_directory": [
@@ -114,7 +114,7 @@
       "placeholder_documents_count": 65,
       "duplicate_slug_count": 6,
       "documents_outside_docs_tree_count": 159,
-      "link_density": 0.7965517241379311
+      "link_density": 0.8137931034482758
     },
     "advisories": {
       "documents_missing_description": [
@@ -14556,39 +14556,39 @@
           {
             "title": "Signals & Telemetry",
             "slug": "signals-telemetry",
-            "line": 113,
+            "line": 112,
             "parent_title": "Checkbox Report",
             "parent_slug": "checkbox-report"
           },
           {
             "title": "Maintenance Playbook",
             "slug": "maintenance-playbook",
-            "line": 133,
+            "line": 132,
             "parent_title": "Checkbox Report",
             "parent_slug": "checkbox-report"
           },
           {
             "title": "Update Log",
             "slug": "update-log",
-            "line": 143,
+            "line": 142,
             "parent_title": "Checkbox Report",
             "parent_slug": "checkbox-report"
           }
         ],
         "links": [
-          "tier2_roster/tier2_test_execution_telemetry_roster.md#record--collect_test_log_reportspy",
-          "tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_test_coverage_inventorypy",
-          "tier2_roster/tier2_test_execution_telemetry_roster.md#record--analyze_test_hardeningpy",
-          "tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_test_log_health_reportpy",
           "tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_churn_complexity_heatmappy",
           "tier2_roster/tier2_test_execution_telemetry_roster.md#record--summarize_test_execution_telemetrypy",
           "tier2_roster/tier2_test_execution_telemetry_roster.md#fixture-example-permanent--run_test_execution_telemetrypy",
           "tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates",
-          "tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11"
+          "tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11",
+          "tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1",
+          "tier2_roster/tier2_docs_health_overview_roster.md#s21r-002-generate-doc-index",
+          "tier2_roster/tier2_docs_health_overview_roster.md#s21r-003-generate-anchor-inventory",
+          "tier2_roster/tier2_docs_health_overview_roster.md#s21r-004-validate-markdown-anchors"
         ],
         "description": "on pending work.",
-        "size_bytes": 8462,
-        "modified_utc": "2025-12-21T13:29:43.149852+00:00",
+        "size_bytes": 8410,
+        "modified_utc": "2025-12-22T04:50:03.266420+00:00",
         "tags": [
           "checkbox-report",
           "repo-todo"
@@ -14714,84 +14714,84 @@
           {
             "title": "5. Stage 2 \u2013 Documentation Quality",
             "slug": "5-stage-2-documentation-quality",
-            "line": 589,
+            "line": 591,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "6. Stage 3 \u2013 Runtime Reliability",
             "slug": "6-stage-3-runtime-reliability",
-            "line": 734,
+            "line": 741,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "7. Stage 4 \u2013 Dependency Management",
             "slug": "7-stage-4-dependency-management",
-            "line": 851,
+            "line": 858,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "8. Stage 5 \u2013 Technical Debt Oversight",
             "slug": "8-stage-5-technical-debt-oversight",
-            "line": 985,
+            "line": 992,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "9. Stage 6 \u2013 Process Governance",
             "slug": "9-stage-6-process-governance",
-            "line": 1108,
+            "line": 1115,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "10. Stage 7 \u2013 Running the Complete Suite",
             "slug": "10-stage-7-running-the-complete-suite",
-            "line": 1269,
+            "line": 1276,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "11. Stage 11 \u2013 Available Scripts (Holding Area)",
             "slug": "11-stage-11-available-scripts-holding-area",
-            "line": 1367,
+            "line": 1374,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "12. Snapshot & Stage Matrix",
             "slug": "12-snapshot-stage-matrix",
-            "line": 1455,
+            "line": 1462,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "13. Contradiction Registry",
             "slug": "13-contradiction-registry",
-            "line": 1510,
+            "line": 1517,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "14. Tier-2 Document Index",
             "slug": "14-tier-2-document-index",
-            "line": 1529,
+            "line": 1536,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "15. Working / Future Notes",
             "slug": "15-working-future-notes",
-            "line": 1567,
+            "line": 1574,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "16. Update Log & Evidence Tracking",
             "slug": "16-update-log-evidence-tracking",
-            "line": 1584,
+            "line": 1591,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           }
@@ -14812,7 +14812,7 @@
           "tier2_roster/tier2_test_execution_telemetry_roster.md#record--summarize_test_execution_telemetrypy",
           "tier2_roster/tier2_test_execution_telemetry_roster.md#fixture-example-permanent--run_test_execution_telemetrypy",
           "../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py",
-          "tier2_roster/tier2_docs_health_overview_roster.md#23-current-vs-target-contract-snapshot-stage-21",
+          "tier2_roster/tier2_docs_health_overview_roster.\n  d#23-current-vs-target-contract-snapshot-stage-21",
           "tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists",
           "tier2_roster/tier2_docs_health_overview_roster.md#311-records-index",
           "tier2_roster/tier2_docs_health_overview_roster.md#s21r-002-generate-doc-index",
@@ -14824,6 +14824,7 @@
           "tier2_roster/tier2_docs_health_overview_roster.md#s21r-008-generate-undocumented-logic-report",
           "tier2_roster/tier2_docs_health_overview_roster.md#s21r-009-aggregate-docs-health-signals",
           "tier2_roster/tier2_docs_health_overview_roster.md#s21r-001-docs-health-overview-orchestrator",
+          "tier2_roster/tier2_docs_health_overview_roster.md#23-current-vs-target-contract-snapshot-stage-21",
           "../../../command_center/scripts/orchestrators/run_docs_health_overview.py",
           "../../../scripts/producers/generate_doc_index.py",
           "../../../scripts/producers/generate_anchor_inventory.py",
@@ -14927,8 +14928,8 @@
           "../../../tests/tests_aggregators/"
         ],
         "description": "stage content so evidence capture is ready from the first edit.",
-        "size_bytes": 113841,
-        "modified_utc": "2025-12-21T13:29:39.353925+00:00",
+        "size_bytes": 114575,
+        "modified_utc": "2025-12-22T04:50:00.134602+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -15080,56 +15081,56 @@
           {
             "title": "1. Goals & Success Criteria",
             "slug": "1-goals-success-criteria",
-            "line": 61,
+            "line": 75,
             "parent_title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
             "parent_slug": "tier-2-roster-stage-111-available-scripts-holding-area"
           },
           {
             "title": "2. System Context",
             "slug": "2-system-context",
-            "line": 80,
+            "line": 94,
             "parent_title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
             "parent_slug": "tier-2-roster-stage-111-available-scripts-holding-area"
           },
           {
             "title": "3. Stage Narrative \u2014 11.1 Available Scripts",
             "slug": "3-stage-narrative-111-available-scripts",
-            "line": 147,
+            "line": 161,
             "parent_title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
             "parent_slug": "tier-2-roster-stage-111-available-scripts-holding-area"
           },
           {
             "title": "4. Signals & Telemetry",
             "slug": "4-signals-telemetry",
-            "line": 1273,
+            "line": 1287,
             "parent_title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
             "parent_slug": "tier-2-roster-stage-111-available-scripts-holding-area"
           },
           {
             "title": "5. Dependencies & Stop-Gates",
             "slug": "5-dependencies-stop-gates",
-            "line": 1287,
+            "line": 1301,
             "parent_title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
             "parent_slug": "tier-2-roster-stage-111-available-scripts-holding-area"
           },
           {
             "title": "6. Instruction Block (Required by Repo Markdown Rules)",
             "slug": "6-instruction-block-required-by-repo-markdown-rules",
-            "line": 1298,
+            "line": 1312,
             "parent_title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
             "parent_slug": "tier-2-roster-stage-111-available-scripts-holding-area"
           },
           {
             "title": "7. Agent Automation Block",
             "slug": "7-agent-automation-block",
-            "line": 1307,
+            "line": 1321,
             "parent_title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
             "parent_slug": "tier-2-roster-stage-111-available-scripts-holding-area"
           },
           {
             "title": "8. Update Log",
             "slug": "8-update-log",
-            "line": 1336,
+            "line": 1350,
             "parent_title": "Tier-2 Roster \u2014 Stage 11.1 Available Scripts (Holding Area)",
             "parent_slug": "tier-2-roster-stage-111-available-scripts-holding-area"
           }
@@ -15149,8 +15150,8 @@
           "#asr-013-test_log_analysispy"
         ],
         "description": "`.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 58689,
-        "modified_utc": "2025-12-21T03:23:20.084865+00:00",
+        "size_bytes": 59532,
+        "modified_utc": "2025-12-21T23:53:36.810585+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -15219,64 +15220,64 @@
           {
             "title": "1. Goals & Success Criteria",
             "slug": "1-goals-success-criteria",
-            "line": 65,
+            "line": 72,
             "parent_title": "Tier-2 Roster \u2014 Stage 4.1 Dependency & Import Hygiene",
             "parent_slug": "tier-2-roster-stage-41-dependency-import-hygiene"
           },
           {
             "title": "2. System Context",
             "slug": "2-system-context",
-            "line": 85,
+            "line": 92,
             "parent_title": "Tier-2 Roster \u2014 Stage 4.1 Dependency & Import Hygiene",
             "parent_slug": "tier-2-roster-stage-41-dependency-import-hygiene"
           },
           {
             "title": "3. Stage Narrative \u2014 Stage 4.1 Dependency & Import Hygiene",
             "slug": "3-stage-narrative-stage-41-dependency-import-hygiene",
-            "line": 150,
+            "line": 157,
             "parent_title": "Tier-2 Roster \u2014 Stage 4.1 Dependency & Import Hygiene",
             "parent_slug": "tier-2-roster-stage-41-dependency-import-hygiene"
           },
           {
             "title": "4. Signals & Telemetry",
             "slug": "4-signals-telemetry",
-            "line": 921,
+            "line": 928,
             "parent_title": "Tier-2 Roster \u2014 Stage 4.1 Dependency & Import Hygiene",
             "parent_slug": "tier-2-roster-stage-41-dependency-import-hygiene"
           },
           {
             "title": "5. Dependencies & Stop-Gates",
             "slug": "5-dependencies-stop-gates",
-            "line": 939,
+            "line": 946,
             "parent_title": "Tier-2 Roster \u2014 Stage 4.1 Dependency & Import Hygiene",
             "parent_slug": "tier-2-roster-stage-41-dependency-import-hygiene"
           },
           {
             "title": "6. Instruction Block (Required by Tier Rules)",
             "slug": "6-instruction-block-required-by-tier-rules",
-            "line": 960,
+            "line": 967,
             "parent_title": "Tier-2 Roster \u2014 Stage 4.1 Dependency & Import Hygiene",
             "parent_slug": "tier-2-roster-stage-41-dependency-import-hygiene"
           },
           {
             "title": "7. Agent Automation Block",
             "slug": "7-agent-automation-block",
-            "line": 972,
+            "line": 979,
             "parent_title": "Tier-2 Roster \u2014 Stage 4.1 Dependency & Import Hygiene",
             "parent_slug": "tier-2-roster-stage-41-dependency-import-hygiene"
           },
           {
             "title": "8. Update Log",
             "slug": "8-update-log",
-            "line": 1001,
+            "line": 1008,
             "parent_title": "Tier-2 Roster \u2014 Stage 4.1 Dependency & Import Hygiene",
             "parent_slug": "tier-2-roster-stage-41-dependency-import-hygiene"
           }
         ],
         "links": [],
         "description": "`tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 36516,
-        "modified_utc": "2025-12-20T15:38:01.727140+00:00",
+        "size_bytes": 37093,
+        "modified_utc": "2025-12-21T23:53:36.801575+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -15344,56 +15345,56 @@
           {
             "title": "1. Goals & Success Criteria",
             "slug": "1-goals-success-criteria",
-            "line": 65,
+            "line": 72,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "2. System Context",
             "slug": "2-system-context",
-            "line": 85,
+            "line": 92,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "3. Stage Narrative \u2014 Stage 2.1 Docs Health Overview",
             "slug": "3-stage-narrative-stage-21-docs-health-overview",
-            "line": 158,
+            "line": 165,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "4. Signals & Telemetry",
             "slug": "4-signals-telemetry",
-            "line": 1214,
+            "line": 1221,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "5. Dependencies & Stop-Gates",
             "slug": "5-dependencies-stop-gates",
-            "line": 1232,
+            "line": 1239,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "6. Instruction Block (Required by Tier Rules)",
             "slug": "6-instruction-block-required-by-tier-rules",
-            "line": 1253,
+            "line": 1260,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "7. Agent Automation Block",
             "slug": "7-agent-automation-block",
-            "line": 1265,
+            "line": 1272,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "8. Update Log",
             "slug": "8-update-log",
-            "line": 1296,
+            "line": 1303,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           }
@@ -15410,8 +15411,8 @@
           "#s21r-009-aggregate-docs-health-signals"
         ],
         "description": "`tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 43953,
-        "modified_utc": "2025-12-20T13:48:08.691070+00:00",
+        "size_bytes": 44530,
+        "modified_utc": "2025-12-21T23:53:36.809580+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -15481,56 +15482,56 @@
           {
             "title": "1. Goals & Success Criteria",
             "slug": "1-goals-success-criteria",
-            "line": 67,
+            "line": 73,
             "parent_title": "Tier-2 Roster \u2014 Stage 3.1 Fault Diagnostics Overview",
             "parent_slug": "tier-2-roster-stage-31-fault-diagnostics-overview"
           },
           {
             "title": "2. System Context",
             "slug": "2-system-context",
-            "line": 88,
+            "line": 94,
             "parent_title": "Tier-2 Roster \u2014 Stage 3.1 Fault Diagnostics Overview",
             "parent_slug": "tier-2-roster-stage-31-fault-diagnostics-overview"
           },
           {
             "title": "3. Stage Narrative \u2014 Stage 3.1 Fault Diagnostics Overview",
             "slug": "3-stage-narrative-stage-31-fault-diagnostics-overview",
-            "line": 152,
+            "line": 158,
             "parent_title": "Tier-2 Roster \u2014 Stage 3.1 Fault Diagnostics Overview",
             "parent_slug": "tier-2-roster-stage-31-fault-diagnostics-overview"
           },
           {
             "title": "4. Signals & Telemetry",
             "slug": "4-signals-telemetry",
-            "line": 728,
+            "line": 734,
             "parent_title": "Tier-2 Roster \u2014 Stage 3.1 Fault Diagnostics Overview",
             "parent_slug": "tier-2-roster-stage-31-fault-diagnostics-overview"
           },
           {
             "title": "5. Dependencies & Stop-Gates",
             "slug": "5-dependencies-stop-gates",
-            "line": 746,
+            "line": 752,
             "parent_title": "Tier-2 Roster \u2014 Stage 3.1 Fault Diagnostics Overview",
             "parent_slug": "tier-2-roster-stage-31-fault-diagnostics-overview"
           },
           {
             "title": "6. Instruction Block (Required by Tier Rules)",
             "slug": "6-instruction-block-required-by-tier-rules",
-            "line": 767,
+            "line": 773,
             "parent_title": "Tier-2 Roster \u2014 Stage 3.1 Fault Diagnostics Overview",
             "parent_slug": "tier-2-roster-stage-31-fault-diagnostics-overview"
           },
           {
             "title": "7. Agent Automation Block",
             "slug": "7-agent-automation-block",
-            "line": 779,
+            "line": 785,
             "parent_title": "Tier-2 Roster \u2014 Stage 3.1 Fault Diagnostics Overview",
             "parent_slug": "tier-2-roster-stage-31-fault-diagnostics-overview"
           },
           {
             "title": "8. Update Log",
             "slug": "8-update-log",
-            "line": 808,
+            "line": 814,
             "parent_title": "Tier-2 Roster \u2014 Stage 3.1 Fault Diagnostics Overview",
             "parent_slug": "tier-2-roster-stage-31-fault-diagnostics-overview"
           }
@@ -15542,8 +15543,8 @@
           "#s31r-004-summarize-fault-diagnostics-overview"
         ],
         "description": "`tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 29360,
-        "modified_utc": "2025-12-20T15:23:13.741060+00:00",
+        "size_bytes": 29824,
+        "modified_utc": "2025-12-21T23:53:36.801575+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -15611,56 +15612,56 @@
           {
             "title": "1. Goals & Success Criteria",
             "slug": "1-goals-success-criteria",
-            "line": 63,
+            "line": 70,
             "parent_title": "Tier-2 Roster \u2014 Stage 7 Running the Complete Suite",
             "parent_slug": "tier-2-roster-stage-7-running-the-complete-suite"
           },
           {
             "title": "2. System Context",
             "slug": "2-system-context",
-            "line": 83,
+            "line": 90,
             "parent_title": "Tier-2 Roster \u2014 Stage 7 Running the Complete Suite",
             "parent_slug": "tier-2-roster-stage-7-running-the-complete-suite"
           },
           {
             "title": "3. Stage Narrative \u2014 Stage 7 Running the Complete Suite",
             "slug": "3-stage-narrative-stage-7-running-the-complete-suite",
-            "line": 149,
+            "line": 156,
             "parent_title": "Tier-2 Roster \u2014 Stage 7 Running the Complete Suite",
             "parent_slug": "tier-2-roster-stage-7-running-the-complete-suite"
           },
           {
             "title": "4. Signals & Telemetry",
             "slug": "4-signals-telemetry",
-            "line": 1078,
+            "line": 1085,
             "parent_title": "Tier-2 Roster \u2014 Stage 7 Running the Complete Suite",
             "parent_slug": "tier-2-roster-stage-7-running-the-complete-suite"
           },
           {
             "title": "5. Dependencies & Stop-Gates",
             "slug": "5-dependencies-stop-gates",
-            "line": 1096,
+            "line": 1103,
             "parent_title": "Tier-2 Roster \u2014 Stage 7 Running the Complete Suite",
             "parent_slug": "tier-2-roster-stage-7-running-the-complete-suite"
           },
           {
             "title": "6. Instruction Block (Required by Tier Rules)",
             "slug": "6-instruction-block-required-by-tier-rules",
-            "line": 1117,
+            "line": 1124,
             "parent_title": "Tier-2 Roster \u2014 Stage 7 Running the Complete Suite",
             "parent_slug": "tier-2-roster-stage-7-running-the-complete-suite"
           },
           {
             "title": "7. Agent Automation Block",
             "slug": "7-agent-automation-block",
-            "line": 1129,
+            "line": 1136,
             "parent_title": "Tier-2 Roster \u2014 Stage 7 Running the Complete Suite",
             "parent_slug": "tier-2-roster-stage-7-running-the-complete-suite"
           },
           {
             "title": "8. Update Log",
             "slug": "8-update-log",
-            "line": 1158,
+            "line": 1165,
             "parent_title": "Tier-2 Roster \u2014 Stage 7 Running the Complete Suite",
             "parent_slug": "tier-2-roster-stage-7-running-the-complete-suite"
           }
@@ -15675,8 +15676,8 @@
           "#s7r-007-standards-integrity"
         ],
         "description": "`tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 41573,
-        "modified_utc": "2025-12-21T03:23:20.082862+00:00",
+        "size_bytes": 42174,
+        "modified_utc": "2025-12-21T23:53:36.809580+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -15743,64 +15744,64 @@
           {
             "title": "1. Goals & Success Criteria",
             "slug": "1-goals-success-criteria",
-            "line": 62,
+            "line": 69,
             "parent_title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
             "parent_slug": "tier-2-roster-template-stageid-stagename"
           },
           {
             "title": "2. System Context",
             "slug": "2-system-context",
-            "line": 82,
+            "line": 89,
             "parent_title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
             "parent_slug": "tier-2-roster-template-stageid-stagename"
           },
           {
             "title": "3. Stage Narrative \u2014 <STAGE_ID> <STAGE_NAME>",
             "slug": "3-stage-narrative-stageid-stagename",
-            "line": 147,
+            "line": 154,
             "parent_title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
             "parent_slug": "tier-2-roster-template-stageid-stagename"
           },
           {
             "title": "4. Signals & Telemetry",
             "slug": "4-signals-telemetry",
-            "line": 352,
+            "line": 359,
             "parent_title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
             "parent_slug": "tier-2-roster-template-stageid-stagename"
           },
           {
             "title": "5. Dependencies & Stop-Gates",
             "slug": "5-dependencies-stop-gates",
-            "line": 370,
+            "line": 377,
             "parent_title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
             "parent_slug": "tier-2-roster-template-stageid-stagename"
           },
           {
             "title": "6. Instruction Block (Required by Tier Rules)",
             "slug": "6-instruction-block-required-by-tier-rules",
-            "line": 391,
+            "line": 398,
             "parent_title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
             "parent_slug": "tier-2-roster-template-stageid-stagename"
           },
           {
             "title": "7. Agent Automation Block",
             "slug": "7-agent-automation-block",
-            "line": 403,
+            "line": 410,
             "parent_title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
             "parent_slug": "tier-2-roster-template-stageid-stagename"
           },
           {
             "title": "8. Update Log",
             "slug": "8-update-log",
-            "line": 432,
+            "line": 439,
             "parent_title": "Tier-2 Roster Template \u2014 <STAGE_ID> <STAGE_NAME>",
             "parent_slug": "tier-2-roster-template-stageid-stagename"
           }
         ],
         "links": [],
         "description": "`tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 14213,
-        "modified_utc": "2025-12-20T10:41:15.059766+00:00",
+        "size_bytes": 14694,
+        "modified_utc": "2025-12-21T23:53:36.810585+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -15866,56 +15867,56 @@
           {
             "title": "1. Goals & Success Criteria",
             "slug": "1-goals-success-criteria",
-            "line": 63,
+            "line": 70,
             "parent_title": "Tier-2 Roster \u2014 Stage 5.1 Monkey Patch Oversight",
             "parent_slug": "tier-2-roster-stage-51-monkey-patch-oversight"
           },
           {
             "title": "2. System Context",
             "slug": "2-system-context",
-            "line": 83,
+            "line": 90,
             "parent_title": "Tier-2 Roster \u2014 Stage 5.1 Monkey Patch Oversight",
             "parent_slug": "tier-2-roster-stage-51-monkey-patch-oversight"
           },
           {
             "title": "3. Stage Narrative \u2014 Stage 5.1 Monkey Patch Oversight",
             "slug": "3-stage-narrative-stage-51-monkey-patch-oversight",
-            "line": 162,
+            "line": 169,
             "parent_title": "Tier-2 Roster \u2014 Stage 5.1 Monkey Patch Oversight",
             "parent_slug": "tier-2-roster-stage-51-monkey-patch-oversight"
           },
           {
             "title": "4. Signals & Telemetry",
             "slug": "4-signals-telemetry",
-            "line": 808,
+            "line": 815,
             "parent_title": "Tier-2 Roster \u2014 Stage 5.1 Monkey Patch Oversight",
             "parent_slug": "tier-2-roster-stage-51-monkey-patch-oversight"
           },
           {
             "title": "5. Dependencies & Stop-Gates",
             "slug": "5-dependencies-stop-gates",
-            "line": 826,
+            "line": 833,
             "parent_title": "Tier-2 Roster \u2014 Stage 5.1 Monkey Patch Oversight",
             "parent_slug": "tier-2-roster-stage-51-monkey-patch-oversight"
           },
           {
             "title": "6. Instruction Block (Required by Tier Rules)",
             "slug": "6-instruction-block-required-by-tier-rules",
-            "line": 847,
+            "line": 854,
             "parent_title": "Tier-2 Roster \u2014 Stage 5.1 Monkey Patch Oversight",
             "parent_slug": "tier-2-roster-stage-51-monkey-patch-oversight"
           },
           {
             "title": "7. Agent Automation Block",
             "slug": "7-agent-automation-block",
-            "line": 859,
+            "line": 866,
             "parent_title": "Tier-2 Roster \u2014 Stage 5.1 Monkey Patch Oversight",
             "parent_slug": "tier-2-roster-stage-51-monkey-patch-oversight"
           },
           {
             "title": "8. Update Log",
             "slug": "8-update-log",
-            "line": 888,
+            "line": 895,
             "parent_title": "Tier-2 Roster \u2014 Stage 5.1 Monkey Patch Oversight",
             "parent_slug": "tier-2-roster-stage-51-monkey-patch-oversight"
           }
@@ -15929,8 +15930,8 @@
           "#s51r-006-risk-classification-utility"
         ],
         "description": "`tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 32323,
-        "modified_utc": "2025-12-20T16:17:09.035753+00:00",
+        "size_bytes": 32852,
+        "modified_utc": "2025-12-21T23:53:36.801575+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -15997,42 +15998,42 @@
           {
             "title": "1. Goals & Success Criteria",
             "slug": "1-goals-success-criteria",
-            "line": 61,
+            "line": 68,
             "parent_title": "Tier-2 Roster \u2014 Onboarding Tools (Agent Loop Evidence Contract)",
             "parent_slug": "tier-2-roster-onboarding-tools-agent-loop-evidence-contract"
           },
           {
             "title": "2. System Context",
             "slug": "2-system-context",
-            "line": 78,
+            "line": 85,
             "parent_title": "Tier-2 Roster \u2014 Onboarding Tools (Agent Loop Evidence Contract)",
             "parent_slug": "tier-2-roster-onboarding-tools-agent-loop-evidence-contract"
           },
           {
             "title": "3. Records & Contracts",
             "slug": "3-records-contracts",
-            "line": 116,
+            "line": 123,
             "parent_title": "Tier-2 Roster \u2014 Onboarding Tools (Agent Loop Evidence Contract)",
             "parent_slug": "tier-2-roster-onboarding-tools-agent-loop-evidence-contract"
           },
           {
             "title": "4. Agent Instructions",
             "slug": "4-agent-instructions",
-            "line": 178,
+            "line": 185,
             "parent_title": "Tier-2 Roster \u2014 Onboarding Tools (Agent Loop Evidence Contract)",
             "parent_slug": "tier-2-roster-onboarding-tools-agent-loop-evidence-contract"
           },
           {
             "title": "5. DONE Return Instructions (Tier-2 \u2192 Tier-1)",
             "slug": "5-done-return-instructions-tier-2-tier-1",
-            "line": 198,
+            "line": 205,
             "parent_title": "Tier-2 Roster \u2014 Onboarding Tools (Agent Loop Evidence Contract)",
             "parent_slug": "tier-2-roster-onboarding-tools-agent-loop-evidence-contract"
           },
           {
             "title": "Update Log",
             "slug": "update-log",
-            "line": 213,
+            "line": 220,
             "parent_title": "Tier-2 Roster \u2014 Onboarding Tools (Agent Loop Evidence Contract)",
             "parent_slug": "tier-2-roster-onboarding-tools-agent-loop-evidence-contract"
           }
@@ -16040,9 +16041,9 @@
         "links": [
           "#onb-001-onboarding-tools-evidence-contract"
         ],
-        "description": "1. Provide a single, executable onboarding contract that does not require ad-hoc tribal knowledge. 1. Define what counts as \u201conboarded\u201d for a script in HealthView. 1. Capture the explicit exception: onboarding tools may emit outputs\u2026",
-        "size_bytes": 7972,
-        "modified_utc": "2025-12-21T12:49:58.725293+00:00",
+        "description": "\"Deferred: Tier-3 not appropriate\" (or similar) in the record notes/evidence.",
+        "size_bytes": 8489,
+        "modified_utc": "2025-12-21T23:53:36.810585+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -16115,56 +16116,56 @@
           {
             "title": "1. Goals & Success Criteria",
             "slug": "1-goals-success-criteria",
-            "line": 63,
+            "line": 70,
             "parent_title": "Tier-2 Roster \u2014 Stage 6.1 Standards Integrity",
             "parent_slug": "tier-2-roster-stage-61-standards-integrity"
           },
           {
             "title": "2. System Context",
             "slug": "2-system-context",
-            "line": 83,
+            "line": 90,
             "parent_title": "Tier-2 Roster \u2014 Stage 6.1 Standards Integrity",
             "parent_slug": "tier-2-roster-stage-61-standards-integrity"
           },
           {
             "title": "3. Stage Narrative \u2014 Stage 6.1 Standards Integrity",
             "slug": "3-stage-narrative-stage-61-standards-integrity",
-            "line": 178,
+            "line": 185,
             "parent_title": "Tier-2 Roster \u2014 Stage 6.1 Standards Integrity",
             "parent_slug": "tier-2-roster-stage-61-standards-integrity"
           },
           {
             "title": "4. Signals & Telemetry",
             "slug": "4-signals-telemetry",
-            "line": 943,
+            "line": 950,
             "parent_title": "Tier-2 Roster \u2014 Stage 6.1 Standards Integrity",
             "parent_slug": "tier-2-roster-stage-61-standards-integrity"
           },
           {
             "title": "5. Dependencies & Stop-Gates",
             "slug": "5-dependencies-stop-gates",
-            "line": 963,
+            "line": 970,
             "parent_title": "Tier-2 Roster \u2014 Stage 6.1 Standards Integrity",
             "parent_slug": "tier-2-roster-stage-61-standards-integrity"
           },
           {
             "title": "6. Instruction Block (Required by Tier Rules)",
             "slug": "6-instruction-block-required-by-tier-rules",
-            "line": 984,
+            "line": 991,
             "parent_title": "Tier-2 Roster \u2014 Stage 6.1 Standards Integrity",
             "parent_slug": "tier-2-roster-stage-61-standards-integrity"
           },
           {
             "title": "7. Agent Automation Block",
             "slug": "7-agent-automation-block",
-            "line": 996,
+            "line": 1003,
             "parent_title": "Tier-2 Roster \u2014 Stage 6.1 Standards Integrity",
             "parent_slug": "tier-2-roster-stage-61-standards-integrity"
           },
           {
             "title": "8. Update Log",
             "slug": "8-update-log",
-            "line": 1025,
+            "line": 1032,
             "parent_title": "Tier-2 Roster \u2014 Stage 6.1 Standards Integrity",
             "parent_slug": "tier-2-roster-stage-61-standards-integrity"
           }
@@ -16178,8 +16179,8 @@
           "#s61r-006-standards-overview-summarizer"
         ],
         "description": "`tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 34821,
-        "modified_utc": "2025-12-20T17:13:53.216239+00:00",
+        "size_bytes": 35410,
+        "modified_utc": "2025-12-21T23:53:36.802575+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -16246,68 +16247,72 @@
           {
             "title": "1. Goals & Success Criteria",
             "slug": "1-goals-success-criteria",
-            "line": 71,
+            "line": 78,
             "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
             "parent_slug": "stage-11-roster-test-execution-telemetry"
           },
           {
             "title": "2. System Context",
             "slug": "2-system-context",
-            "line": 89,
+            "line": 96,
             "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
             "parent_slug": "stage-11-roster-test-execution-telemetry"
           },
           {
             "title": "3. Stage Narrative \u2014 Stage 1.1 Test Execution Telemetry",
             "slug": "3-stage-narrative-stage-11-test-execution-telemetry",
-            "line": 151,
+            "line": 158,
             "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
             "parent_slug": "stage-11-roster-test-execution-telemetry"
           },
           {
             "title": "4. Signals & Telemetry",
             "slug": "4-signals-telemetry",
-            "line": 791,
+            "line": 954,
             "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
             "parent_slug": "stage-11-roster-test-execution-telemetry"
           },
           {
             "title": "5. Dependencies & Stop-Gates",
             "slug": "5-dependencies-stop-gates",
-            "line": 809,
+            "line": 972,
             "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
             "parent_slug": "stage-11-roster-test-execution-telemetry"
           },
           {
             "title": "6. Instruction Block (Required by Tier Rules)",
             "slug": "6-instruction-block-required-by-tier-rules",
-            "line": 826,
+            "line": 989,
             "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
             "parent_slug": "stage-11-roster-test-execution-telemetry"
           },
           {
             "title": "7. Agent Automation Block",
             "slug": "7-agent-automation-block",
-            "line": 834,
+            "line": 997,
             "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
             "parent_slug": "stage-11-roster-test-execution-telemetry"
           },
           {
             "title": "8. Decision Log",
             "slug": "8-decision-log",
-            "line": 861,
+            "line": 1024,
             "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
             "parent_slug": "stage-11-roster-test-execution-telemetry"
           },
           {
             "title": "9. Update Log",
             "slug": "9-update-log",
-            "line": 874,
+            "line": 1037,
             "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
             "parent_slug": "stage-11-roster-test-execution-telemetry"
           }
         ],
         "links": [
+          "../../tier3_cli.yaml",
+          "../../tier3_prune_logs.yaml",
+          "../../tier3_artifacts.yaml",
+          "../../tier3_database_integration.yaml",
           "#fixture-example-permanent--run_test_execution_telemetrypy",
           "#record--collect_test_log_reportspy",
           "#record--generate_test_coverage_inventorypy",
@@ -16317,8 +16322,8 @@
           "#record--summarize_test_execution_telemetrypy"
         ],
         "description": "`tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 38939,
-        "modified_utc": "2025-12-20T10:41:15.059766+00:00",
+        "size_bytes": 53340,
+        "modified_utc": "2025-12-22T04:49:06.300880+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -16345,7 +16350,7 @@
           ],
           "status": "draft",
           "version": "0.1.0",
-          "updated_at": "2025-12-19",
+          "updated_at": "2025-12-22",
           "tags": [
             "pipeline",
             "healthview",
@@ -16404,38 +16409,45 @@
             "parent_slug": "healthview-agent-execution-loop-implementation-draft-plan"
           },
           {
+            "title": "Reference Prompts",
+            "slug": "reference-prompts",
+            "line": 193,
+            "parent_title": "HealthView Agent Execution Loop \u2014 Implementation Draft Plan",
+            "parent_slug": "healthview-agent-execution-loop-implementation-draft-plan"
+          },
+          {
             "title": "Human Notes",
             "slug": "human-notes",
-            "line": 121,
+            "line": 344,
             "parent_title": "HealthView Agent Execution Loop \u2014 Implementation Draft Plan",
             "parent_slug": "healthview-agent-execution-loop-implementation-draft-plan"
           },
           {
             "title": "Implementation Plan",
             "slug": "implementation-plan",
-            "line": 184,
+            "line": 407,
             "parent_title": "HealthView Agent Execution Loop \u2014 Implementation Draft Plan",
             "parent_slug": "healthview-agent-execution-loop-implementation-draft-plan"
           },
           {
             "title": "Reference Prompts",
             "slug": "reference-prompts",
-            "line": 262,
+            "line": 485,
             "parent_title": "HealthView Agent Execution Loop \u2014 Implementation Draft Plan",
             "parent_slug": "healthview-agent-execution-loop-implementation-draft-plan"
           },
           {
             "title": "Update Log",
             "slug": "update-log",
-            "line": 269,
+            "line": 492,
             "parent_title": "HealthView Agent Execution Loop \u2014 Implementation Draft Plan",
             "parent_slug": "healthview-agent-execution-loop-implementation-draft-plan"
           }
         ],
         "links": [],
         "description": "This document formalizes the agreed design for deterministic, agentic operation of the HealthView pipeline using Tier-1 as the control plane, Tier-2 as the evidence plane, and Tier-3 as runnable execution recipes.",
-        "size_bytes": 11951,
-        "modified_utc": "2025-12-21T13:19:05.984251+00:00",
+        "size_bytes": 22580,
+        "modified_utc": "2025-12-21T22:24:50.923514+00:00",
         "tags": [
           "healthview",
           "orchestration",
@@ -17269,85 +17281,85 @@
           {
             "title": "Architecture",
             "slug": "architecture",
-            "line": 7,
+            "line": 9,
             "parent_title": "Tier3 YAML Agent Tool System - Implementation Summary",
             "parent_slug": "tier3-yaml-agent-tool-system-implementation-summary"
           },
           {
             "title": "Agent Workflow",
             "slug": "agent-workflow",
-            "line": 53,
+            "line": 55,
             "parent_title": "Tier3 YAML Agent Tool System - Implementation Summary",
             "parent_slug": "tier3-yaml-agent-tool-system-implementation-summary"
           },
           {
             "title": "9-Section YAML Schema",
             "slug": "9-section-yaml-schema",
-            "line": 87,
+            "line": 89,
             "parent_title": "Tier3 YAML Agent Tool System - Implementation Summary",
             "parent_slug": "tier3-yaml-agent-tool-system-implementation-summary"
           },
           {
             "title": "Validation Rules",
             "slug": "validation-rules",
-            "line": 101,
+            "line": 103,
             "parent_title": "Tier3 YAML Agent Tool System - Implementation Summary",
             "parent_slug": "tier3-yaml-agent-tool-system-implementation-summary"
           },
           {
             "title": "Usage",
             "slug": "usage",
-            "line": 111,
+            "line": 114,
             "parent_title": "Tier3 YAML Agent Tool System - Implementation Summary",
             "parent_slug": "tier3-yaml-agent-tool-system-implementation-summary"
           },
           {
             "title": "Integration Points",
             "slug": "integration-points",
-            "line": 153,
+            "line": 156,
             "parent_title": "Tier3 YAML Agent Tool System - Implementation Summary",
             "parent_slug": "tier3-yaml-agent-tool-system-implementation-summary"
           },
           {
             "title": "Proof of Concept",
             "slug": "proof-of-concept",
-            "line": 176,
+            "line": 180,
             "parent_title": "Tier3 YAML Agent Tool System - Implementation Summary",
             "parent_slug": "tier3-yaml-agent-tool-system-implementation-summary"
           },
           {
             "title": "Documentation Updates",
             "slug": "documentation-updates",
-            "line": 198,
+            "line": 204,
             "parent_title": "Tier3 YAML Agent Tool System - Implementation Summary",
             "parent_slug": "tier3-yaml-agent-tool-system-implementation-summary"
           },
           {
             "title": "Testing",
             "slug": "testing",
-            "line": 208,
+            "line": 215,
             "parent_title": "Tier3 YAML Agent Tool System - Implementation Summary",
             "parent_slug": "tier3-yaml-agent-tool-system-implementation-summary"
           },
           {
             "title": "Next Steps",
             "slug": "next-steps",
-            "line": 220,
+            "line": 228,
             "parent_title": "Tier3 YAML Agent Tool System - Implementation Summary",
             "parent_slug": "tier3-yaml-agent-tool-system-implementation-summary"
           },
           {
             "title": "Design Philosophy",
             "slug": "design-philosophy",
-            "line": 244,
+            "line": 252,
             "parent_title": "Tier3 YAML Agent Tool System - Implementation Summary",
             "parent_slug": "tier3-yaml-agent-tool-system-implementation-summary"
           }
         ],
         "links": [],
         "description": "A complete **agent-first tool registry system** for Repo Studios that enables AI agents (including LangChain-based systems) to discover, validate, and invoke Command Center scripts through machine-readable YAML contracts.",
-        "size_bytes": 8419,
-        "modified_utc": "2025-12-12T11:15:05.597179+00:00",
+        "size_bytes": 8389,
+        "modified_utc": "2025-12-22T04:47:39.210766+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -17404,36 +17416,36 @@
           {
             "title": "Validation Rules",
             "slug": "validation-rules",
-            "line": 68,
+            "line": 69,
             "parent_title": "Tier3 Index Generator",
             "parent_slug": "tier3-index-generator"
           },
           {
             "title": "Integration",
             "slug": "integration",
-            "line": 79,
+            "line": 81,
             "parent_title": "Tier3 Index Generator",
             "parent_slug": "tier3-index-generator"
           },
           {
             "title": "Exit Codes",
             "slug": "exit-codes",
-            "line": 121,
+            "line": 123,
             "parent_title": "Tier3 Index Generator",
             "parent_slug": "tier3-index-generator"
           },
           {
             "title": "Dependencies",
             "slug": "dependencies",
-            "line": 126,
+            "line": 128,
             "parent_title": "Tier3 Index Generator",
             "parent_slug": "tier3-index-generator"
           }
         ],
         "links": [],
         "description": "Auto-generates `tier3_scripts_index.yaml` from individual `tier3_*.yaml` files for agent tool discovery.",
-        "size_bytes": 3650,
-        "modified_utc": "2025-12-12T11:15:08.496781+00:00",
+        "size_bytes": 3658,
+        "modified_utc": "2025-12-22T04:48:20.717501+00:00",
         "tags": [],
         "owners": [],
         "status": null,

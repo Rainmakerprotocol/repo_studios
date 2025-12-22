@@ -73,7 +73,7 @@ def test_detects_missing_assertions_and_long_test(analyzer_module, repo_root: Pa
     lines.extend(f"    print({idx})" for idx in range(60))
     lines.append("    return value")
     write_test_file(repo_root, "tests/test_big.py", "\n".join(lines) + "\n")
-    output_dir = repo_root / ".repo_studios/command_center/reports"
+    output_dir = repo_root / ".repo_studios/reports/healthview"
     payload = run_analyzer(analyzer_module, repo_root, output_dir)
     assert payload["summary"]["total_files"] == 1
     issues = payload["results"][0]["issues"]
@@ -89,7 +89,7 @@ def test_addition_given_when_then():
     assert 1 + 1 == 2
 """
     write_test_file(repo_root, "tests/test_clean.py", content)
-    output_dir = repo_root / ".repo_studios/command_center/reports"
+    output_dir = repo_root / ".repo_studios/reports/healthview"
     payload = run_analyzer(analyzer_module, repo_root, output_dir)
     assert payload["summary"]["total_issues"] == 0
     assert payload["status"] == "ok"
@@ -103,7 +103,7 @@ def test_sleep():
     time.sleep(1)
     assert True
 """
-    output_dir = repo_root / ".repo_studios/command_center/reports"
+    output_dir = repo_root / ".repo_studios/reports/healthview"
     write_test_file(repo_root, "tests/test_sleep.py", content)
     payload = run_analyzer(analyzer_module, repo_root, output_dir)
     assert payload["summary"]["total_files"] == 1

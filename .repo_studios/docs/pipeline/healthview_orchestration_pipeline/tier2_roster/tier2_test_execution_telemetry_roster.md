@@ -11,7 +11,7 @@ role:
   - stage-vertical
 status: draft
 version: 0.1.0
-updated_at: 2025-12-19
+updated_at: 2025-12-22
 tags:
   - pipeline
   - healthview
@@ -65,6 +65,13 @@ related_files:
   - clean formatting/lint behavior
 - After meaningful checkbox edits, run `make -C .repo_studios doc-index` and record the timestamp in
   the Update Log.
+- Workstream semantics:
+  - Workstream D (Tier-3 YAML) is the reward workstream and is conditional.
+    - If Tier-3 is allowed/required for a record, complete Workstream D and check its checkbox.
+    - If Tier-3 is not allowed/required, do not silently skip D: explicitly record
+      "Deferred: Tier-3 not appropriate" (or similar) in the record notes/evidence.
+  - Tier-2 DONE requires Workstreams A–C + E, plus an explicit Workstream D decision
+    (completed if required, otherwise explicitly deferred).
 
 ---
 
@@ -93,11 +100,11 @@ related_files:
 - **Tier-1 Stage:** Stage 1.1 — Test Execution Telemetry
   (`tier1_healthview_orchestration_pipeline.md` → Stage 1.1 section)
 - **Tier-2 scope:** This doc covers Stage 1.1 only.
-- **Tier-3 dependencies (placeholders):**
-  - Tier-3 placeholder — `tier3_cli.yaml` (shared CLI builders)
-  - Tier-3 placeholder — `tier3_prune_logs.yaml` (retention + current_run protection)
-  - Tier-3 placeholder — `tier3_artifacts.yaml` (base package contract + discovery semantics)
-  - Tier-3 placeholder — `tier3_database_integration.yaml` (DB dual-write semantics + schema)
+- **Tier-3 dependencies:**
+  - [tier3_cli.yaml](../../tier3_cli.yaml) (shared CLI builders)
+  - [tier3_prune_logs.yaml](../../tier3_prune_logs.yaml) (retention + current_run protection)
+  - [tier3_artifacts.yaml](../../tier3_artifacts.yaml) (base package contract + discovery semantics)
+  - [tier3_database_integration.yaml](../../tier3_database_integration.yaml) (DB dual-write semantics + schema)
 
 ### 2.2 Chain Inventory (Stage 1.1)
 
@@ -254,7 +261,7 @@ record.
   - **Base package compliant (manifest + summary + telemetry):** ❌
   - **DB integration:** ❌ (no direct DB callsites observed)
     - Delegated scripts include DB integration markers and/or storage writers.
-  - **Tier-3 allowed:** no (until refactor standards are met)
+  - **Tier-3 appropriate:** not yet (record decision in Workstream D)
   - **Tier-3 YAML exists:** no
   - **Tier-3 YAML name:** `tier3_run_test_execution_telemetry.yaml`
   - **Tier-3 meets template:** NA
@@ -272,7 +279,7 @@ record.
 
 Workstream A — Discovery
 
-- [ ] Inspect outputs + pruning/retention surfaces; record findings
+- [x] Inspect outputs + pruning/retention surfaces; record findings
 
 Workstream B — Plan
 
@@ -284,7 +291,7 @@ Workstream C — Implement
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
 - [ ] Inspect Tier-3 template requirements
 - [ ] Draft `tier3_run_test_execution_telemetry.yaml`
 - [ ] Validate Tier-3 YAML
@@ -305,11 +312,11 @@ Workstream E — QA & Evidence
   - **Key CLI inputs (selected):**
     - `--logs-dir` (default: `.repo_studios/command_center/reports/rawview/test_execution_runs`)
     - `--logs-run` (optional explicit run directory)
-    - `--output-dir` (default: `.repo_studios/command_center/reports`)
+    - `--output-dir` (default: `.repo_studios/reports/healthview`)
     - `--run-timestamp` (UTC slug in `YYYYMMDD-HHMM`)
     - `--artifacts-to-keep`
   - **Current output roots:**
-    - `.repo_studios/command_center/reports/rawview/test_log_reports/<YYYYmmdd-HHMM>/`
+    - `.repo_studios/reports/healthview/rawview/test_log_reports/<YYYYmmdd-HHMM>/`
   - **Current artifacts (observed):**
     - Base package (Tier-1 HealthView contract):
       - `manifest.json` (emitted)
@@ -327,51 +334,101 @@ Workstream E — QA & Evidence
     - `.repo_studios/scripts/producers/collect_test_log_reports.py` (`prune_run_directories`)
     - `.repo_studios/tests/tests_producers/test_collect_test_log_reports.py` (prunes history)
 
-  - **Output root compliant (Tier-1 HealthView contract):** ❌
-    - Default output root is under `.repo_studios/command_center/reports/rawview/...`.
+  - **Output root compliant (Tier-1 HealthView contract):** ✅
   - **Base package compliant (manifest + summary + telemetry):** ✅
   - **DB integration:** ✅
     - `DB_INTEGRATION_MARKER:` callsites present for manifest/summary/telemetry writes.
-  - **Tier-3 allowed:** no (until refactor standards are met)
-  - **Tier-3 YAML exists:** no
+  - **Tier-3 appropriate:** yes (decision: create Tier-3 YAML)
+  - **Tier-3 YAML exists:** yes
   - **Tier-3 YAML name:** `tier3_collect_test_log_reports.yaml`
-  - **Tier-3 meets template:** NA
-  - **Tier-3 last updated:** —
+  - **Tier-3 meets template:** yes (Tier-3 agent pipeline YAML template)
+  - **Tier-3 last updated:** 2025-12-21
   - **Tests:** `.repo_studios/tests/tests_producers/test_collect_test_log_reports.py`
   - **Evidence:**
-    - Defaults: `DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")`,
+    - Defaults: `DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")`,
       `VIEWER_SLUG = "rawview"`, `TOPIC_SLUG = "test_log_reports"`.
     - Bundle paths: `bundle_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp`.
     - Artifact filenames: `manifest.json`, `summary.md`, `telemetry.json`.
+    - Discovery (2025-12-21): this workspace had no existing run directories under
+      `.repo_studios/command_center/reports/rawview/test_log_reports/` or
+      `.repo_studios/command_center/reports/rawview/test_execution_runs/` at time of inspection.
+    - Retention helper:
+      `prune_run_directories(base_dir=output_dir/VIEWER_SLUG/TOPIC_SLUG, current_run=bundle_dir, keep=...)`
+      sorts candidates by filesystem `st_mtime` (not directory name) and deletes beyond `keep`,
+      honoring `.keep`.
+    - Unit test evidence:
+      `.\.venv/Scripts/python.exe -m pytest -q .repo_studios/tests/tests_producers/test_collect_test_log_reports.py`
+      (3 passed).
+    - Focused regression evidence:
+      `.\.venv/Scripts/python.exe -m pytest -q .repo_studios/tests/tests_producers/test_collect_test_log_reports.py .repo_studios/tests/tests_consumers/test_generate_test_log_health_report.py .repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py`
+      (8 passed).
+    - Mypy evidence (2025-12-21):
+      `.\.venv/Scripts/python.exe -m mypy .repo_studios/scripts/producers/collect_test_log_reports.py`
+      (success).
+    - Coverage evidence (2025-12-21):
+      `.\.venv/Scripts/python.exe -m coverage run -m pytest -q .repo_studios/tests/tests_producers/test_collect_test_log_reports.py`
+      + `.\.venv/Scripts/python.exe -m coverage report --include=.repo_studios/scripts/producers/collect_test_log_reports.py --fail-under=80`
+      (84%).
+    - Doc-index evidence (2025-12-21):
+      `make -C .repo_studios doc-index LOG_LEVEL=INFO` (timestamp: 20251221-2237).
+    - Tier-3 YAML evidence (2025-12-21):
+      `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/test_execution_telemetry/tier3_collect_test_log_reports.yaml` validated via
+      `\.\.venv/Scripts/python.exe -m pytest -q .repo_studios/docs/pipeline/tier3_index/test_tier3_index.py`.
+    - Orchestrator wiring:
+      `.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py` passes
+      `--output-dir <test_log_reports_dir>` into this script, where `test_log_reports_dir` is
+      controlled by the orchestrator flag `--test-log-reports-dir` and defaults to
+      `.repo_studios/reports/healthview`.
 
 #### Implementation Workstreams (checkbox-driven) — collect_test_log_reports.py
 
 Workstream A — Discovery
 
-- [ ] Inspect outputs + pruning/retention surfaces; record findings
+- [x] Inspect outputs + pruning/retention surfaces; record findings
 
 Workstream B — Plan
 
-- [ ] Draft plan to migrate outputs into Tier-1 canonical root
+- [x] Draft plan to migrate outputs into Tier-1 canonical root
+
+Plan notes (draft):
+
+- Target output root (Tier-1 HOP contract): write bundles under
+  `.repo_studios/reports/healthview/rawview/test_log_reports/<YYYYmmdd-HHMM>/`.
+- Producer change: update `DEFAULT_OUTPUT_DIR` to `.repo_studios/reports/healthview` (keeping
+  `VIEWER_SLUG="rawview"` and `TOPIC_SLUG="test_log_reports"`).
+- Orchestrator compatibility: because
+  `.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py` always passes
+  `--output-dir` into the producer, we must also either:
+  - update the orchestrator default `--test-log-reports-dir` to `.repo_studios/reports/healthview`,
+    or
+  - keep the orchestrator default as-is for a migration window, but explicitly set
+    `--test-log-reports-dir .repo_studios/reports/healthview` in any HealthView contract runs.
+- Consumer/orchestrator compatibility: update consumers that read producer bundles to prefer the new
+  root but fall back to the legacy root when the new location is empty (migration window).
+  - Example dependent: `.repo_studios/scripts/consumers/generate_test_log_health_report.py`.
+- Tests: update/add coverage so:
+  - default output location is validated,
+  - pruning continues to honor `.keep` and does not delete the current run,
+  - no pointer artifacts are created.
 
 Workstream C — Implement
 
-- [ ] Implement accepted plan; update record and stop-gate status with evidence.
+- [x] Implement accepted plan; update record and stop-gate status with evidence.
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
-- [ ] Inspect Tier-3 template requirements
-- [ ] Draft `tier3_collect_test_log_reports.yaml`
-- [ ] Validate Tier-3 YAML
+- [x] Confirm Tier-3 is appropriate for this script; record decision (create)
+- [x] Inspect Tier-3 template requirements
+- [x] Draft `tier3_collect_test_log_reports.yaml`
+- [x] Validate Tier-3 YAML
 
 Workstream E — QA & Evidence
 
-- [ ] Pytest evidence captured
-- [ ] Mypy evidence captured or marked N/A (in record)
-- [ ] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
+- [x] Pytest evidence captured
+- [x] Mypy evidence captured or marked N/A (in record)
+- [x] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
 
-- [ ] DONE — collect_test_log_reports.py complete; update Tier-1 Stage 1.1 script gate
+- [x] DONE — collect_test_log_reports.py complete; update Tier-1 Stage 1.1 script gate
 
 #### Record — generate_test_coverage_inventory.py
 
@@ -387,7 +444,7 @@ Workstream E — QA & Evidence
     - `--include-empty` (include files with zero detected functions)
     - `--artifacts-to-keep`
   - **Current output roots:**
-    - `.repo_studios/reports/producer_reports/healthview/test_coverage_inventory/<YYYYmmdd-HHMM>/`
+    - `.repo_studios/reports/healthview/producer_reports/test_coverage_inventory/<YYYYmmdd-HHMM>/`
   - **Current artifacts (observed):**
     - Base package (Tier-1 HealthView contract):
       - `manifest.json` (emitted)
@@ -401,55 +458,73 @@ Workstream E — QA & Evidence
   Pruning:
   - Mechanism: shared-helper
   - Surface: callsite `prune_run_directories(base_dir, keep=..., current_run=bundle_dir, ...)`
-  - Target: `--output-dir/healthview/test_coverage_inventory/<YYYYmmdd-HHMM>/`
+  - Target: `--output-dir/producer_reports/test_coverage_inventory/<YYYYmmdd-HHMM>/`
   - Evidence:
     - `.repo_studios/scripts/producers/generate_test_coverage_inventory.py` (`prune_run_directories`)
     - `.repo_studios/tests/tests_producers/test_generate_test_coverage_inventory.py` (prunes history)
 
-  - **Output root compliant (Tier-1 HealthView contract):** ❌
-    - Default output root is under `.repo_studios/reports/producer_reports/healthview/...`.
+  - **Output root compliant (Tier-1 HealthView contract):** ✅
+    - Default output root is under `.repo_studios/reports/healthview/...`.
   - **Base package compliant (manifest + summary + telemetry):** ✅
   - **DB integration:** ✅
     - `DB_INTEGRATION_MARKER:` callsites present for manifest/summary/telemetry writes.
-  - **Tier-3 allowed:** no (until refactor standards are met)
-  - **Tier-3 YAML exists:** no
+  - **Tier-3 appropriate:** yes (decision: create)
+  - **Tier-3 YAML exists:** yes
   - **Tier-3 YAML name:** `tier3_generate_test_coverage_inventory.yaml`
-  - **Tier-3 meets template:** NA
-  - **Tier-3 last updated:** —
+  - **Tier-3 meets template:** yes
+  - **Tier-3 last updated:** 2025-12-21
   - **Tests:** `.repo_studios/tests/tests_producers/test_generate_test_coverage_inventory.py`
   - **Evidence:**
     - Bundle path: `output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp_slug`.
     - Artifacts asserted in tests: `manifest.json`, `summary.md`, `telemetry.json`.
-    - Threshold failure returns non-zero exit code and prunes historical run dirs.
+    - Threshold failure returns non-zero exit code (still writes the bundle) and prunes historical run dirs.
+    - DB marker discipline: manifest/summary/telemetry writes are annotated with `DB_INTEGRATION_MARKER:`.
+    - Orchestrator alignment: Stage 1.1 orchestrator now passes `--timestamp`, discovers the positional
+      bundle under `.../producer_reports/test_coverage_inventory/<YYYYmmdd-HHMM>/`, and reads
+      `telemetry.json` for summary fields.
 
 #### Implementation Workstreams (checkbox-driven) — generate_test_coverage_inventory.py
 
 Workstream A — Discovery
 
-- [ ] Inspect outputs + pruning/retention surfaces; record findings
+- [x] Inspect outputs + pruning/retention surfaces; record findings
 
 Workstream B — Plan
 
-- [ ] Draft plan to migrate outputs into Tier-1 canonical root
+- [x] Draft plan to migrate outputs into Tier-1 canonical root
+  - Update default output root to `.repo_studios/reports/healthview`.
+  - Treat the first path segment after the root as the “class” (`producer_reports`).
+  - Update Stage 1.1 orchestrator coverage discovery to use the positional bundle and a stable timestamp.
+  - Update tests and satisfy the coverage gate.
 
 Workstream C — Implement
 
-- [ ] Implement accepted plan; update record and stop-gate status with evidence.
+- [x] Implement accepted plan; update record and stop-gate status with evidence.
+  - Implemented output-root + class-slug changes in `generate_test_coverage_inventory.py`.
+  - Updated `run_test_execution_telemetry.py` coverage step to pass `--timestamp` and read `telemetry.json`.
+  - Updated producer tests to match the new output layout.
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
-- [ ] Inspect Tier-3 template requirements
-- [ ] Draft `tier3_generate_test_coverage_inventory.yaml`
-- [ ] Validate Tier-3 YAML
+- [x] Confirm Tier-3 is appropriate for this script; record decision (create)
+- [x] Inspect Tier-3 template requirements
+- [x] Draft `tier3_generate_test_coverage_inventory.yaml`
+- [x] Validate Tier-3 YAML
+  - Parsed required sections present; indexed as
+    `healthview_orchestration_pipeline/tier3_scripts/test_execution_telemetry/tier3_generate_test_coverage_inventory.yaml`.
 
 Workstream E — QA & Evidence
 
-- [ ] Pytest evidence captured
-- [ ] Mypy evidence captured or marked N/A (in record)
-- [ ] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
+- [x] Pytest evidence captured
+- [x] Mypy evidence captured or marked N/A (in record)
+- [x] Coverage ≥80% (or exception recorded)
+- [x] Doc-index timestamp recorded
+  - Evidence: `.repo_studios/reports/producer_reports/healthview/doc_index/20251222-0124/`
+  - Pytest: `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_generate_test_coverage_inventory.py -q`
+  - Mypy: `.venv/Scripts/python.exe -m mypy .repo_studios/scripts/producers/generate_test_coverage_inventory.py .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py`
+  - Coverage: `coverage report --include="*/.repo_studios/scripts/producers/generate_test_coverage_inventory.py" --fail-under=80` (observed: 80%)
 
-- [ ] DONE — generate_test_coverage_inventory.py complete; update Tier-1 Stage 1.1 script gate
+- [x] DONE — generate_test_coverage_inventory.py complete; update Tier-1 Stage 1.1 script gate
 
 #### Record — analyze_test_hardening.py
 
@@ -463,7 +538,7 @@ Workstream E — QA & Evidence
     - `--artifacts-to-keep`
     - `--log-level`
   - **Current output roots:**
-    - `.repo_studios/command_center/reports/healthview/test_hardening/<YYYYmmdd-HHMM>/`
+    - `.repo_studios/reports/healthview/producer_reports/test_hardening/<YYYYmmdd-HHMM>/`
   - **Current artifacts (observed):**
     - Base package (Tier-1 HealthView contract):
       - `manifest.json` (emitted)
@@ -477,55 +552,86 @@ Workstream E — QA & Evidence
   Pruning:
   - Mechanism: shared-helper
   - Surface: callsite `prune_run_directories(topic_dir, keep=..., current_run=bundle_dir, ...)`
-  - Target: `--output-dir/healthview/test_hardening/<YYYYmmdd-HHMM>/`
+  - Target: `--output-dir/producer_reports/test_hardening/<YYYYmmdd-HHMM>/`
   - Evidence:
     - `.repo_studios/scripts/producers/analyze_test_hardening.py` (`prune_history`)
     - `.repo_studios/tests/tests_producers/test_analyze_test_hardening.py`
 
-  - **Output root compliant (Tier-1 HealthView contract):** ❌
-    - Default output root is under `.repo_studios/command_center/reports/healthview/...`.
+  - **Output root compliant (Tier-1 HealthView contract):** ✅
+    - Default output root is under `.repo_studios/reports/healthview/...`.
   - **Base package compliant (manifest + summary + telemetry):** ✅
   - **DB integration:** ✅
     - `DB_INTEGRATION_MARKER:` callsites present for manifest/summary/telemetry writes.
-  - **Tier-3 allowed:** no (until refactor standards are met)
-  - **Tier-3 YAML exists:** no
+  - **Tier-3 appropriate:** yes (decision: create)
+  - **Tier-3 YAML exists:** yes
   - **Tier-3 YAML name:** `tier3_analyze_test_hardening.yaml`
-  - **Tier-3 meets template:** NA
-  - **Tier-3 last updated:** —
+  - **Tier-3 meets template:** yes (Tier-3 agent pipeline YAML template)
+  - **Tier-3 last updated:** 2025-12-22
   - **Tests:** `.repo_studios/tests/tests_producers/test_analyze_test_hardening.py`
   - **Evidence:**
     - Bundle path: `paths.output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp_slug`.
     - Artifacts asserted in tests: `manifest.json`, `summary.md`, `telemetry.json`.
     - Exit code derived from payload `exit_code` (high severity issues gate).
+    - Defaults: `DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")`,
+      `VIEWER_SLUG = "producer_reports"`, `TOPIC_SLUG = "test_hardening"`.
+    - Orchestrator wiring:
+      `.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py` defaults
+      `--hardening-output-dir` to `.repo_studios/reports/healthview` and passes `--timestamp` into
+      this producer for deterministic positional bundles.
 
 #### Implementation Workstreams (checkbox-driven) — analyze_test_hardening.py
 
 Workstream A — Discovery
 
-- [ ] Inspect outputs + pruning/retention surfaces; record findings
+- [x] Inspect outputs + pruning/retention surfaces; record findings
 
 Workstream B — Plan
 
-- [ ] Draft plan to migrate outputs into Tier-1 canonical root
+- [x] Draft plan to migrate outputs into Tier-1 canonical root
+
+Plan notes (draft):
+
+- Target output root (Tier-1 HealthView contract): write bundles under
+  `.repo_studios/reports/healthview/producer_reports/test_hardening/<YYYYmmdd-HHMM>/`.
+- Producer change: update `DEFAULT_OUTPUT_DIR` to `.repo_studios/reports/healthview` and set
+  `VIEWER_SLUG="producer_reports"` (keeping `TOPIC_SLUG="test_hardening"`).
+- Orchestrator compatibility: update Stage 1.1 orchestrator defaults so
+  `--hardening-output-dir` defaults to `.repo_studios/reports/healthview`; pass `--timestamp` into
+  the producer so runs are deterministic and discoverable.
+- Tests: update `test_analyze_test_hardening.py` to assert the new default output root and bundle
+  layout; keep pruning behavior unchanged.
 
 Workstream C — Implement
 
-- [ ] Implement accepted plan; update record and stop-gate status with evidence.
+- [x] Implement accepted plan; update record and stop-gate status with evidence.
+  - Updated `analyze_test_hardening.py` defaults to emit bundles under
+    `.repo_studios/reports/healthview/producer_reports/test_hardening/<YYYYmmdd-HHMM>/`.
+  - Updated Stage 1.1 orchestrator to default hardening outputs to `.repo_studios/reports/healthview`
+    and pass `--timestamp` into the producer.
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
-- [ ] Inspect Tier-3 template requirements
-- [ ] Draft `tier3_analyze_test_hardening.yaml`
-- [ ] Validate Tier-3 YAML
+- [x] Confirm Tier-3 is appropriate for this script; record decision (create)
+- [x] Inspect Tier-3 template requirements
+- [x] Draft `tier3_analyze_test_hardening.yaml`
+- [x] Validate Tier-3 YAML
+  - Tier-3 YAML evidence (2025-12-22):
+    `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/test_execution_telemetry/tier3_analyze_test_hardening.yaml` validated via
+    `.\\.venv/Scripts/python.exe -m pytest -q .repo_studios/docs/pipeline/tier3_index/test_tier3_index.py` (28 passed).
 
 Workstream E — QA & Evidence
 
-- [ ] Pytest evidence captured
-- [ ] Mypy evidence captured or marked N/A (in record)
-- [ ] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
+- [x] Pytest evidence captured
+  - `.\.venv/Scripts/python.exe -m pytest -q .repo_studios/tests/tests_producers/test_analyze_test_hardening.py` (3 passed).
+- [x] Mypy evidence captured or marked N/A (in record)
+  - `.\.venv/Scripts/python.exe -m mypy .repo_studios/scripts/producers/analyze_test_hardening.py .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py` (success).
+- [x] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
+  - Coverage:
+    `.\.venv/Scripts/python.exe -m coverage report --include="*/.repo_studios/scripts/producers/analyze_test_hardening.py" --fail-under=80` (observed: 88%).
+  - Doc-index evidence:
+    `make -C .repo_studios doc-index LOG_LEVEL=INFO` (timestamp: 20251222-0250).
 
-- [ ] DONE — analyze_test_hardening.py complete; update Tier-1 Stage 1.1 script gate
+- [x] DONE — analyze_test_hardening.py complete; update Tier-1 Stage 1.1 script gate
 
 #### Record — generate_test_log_health_report.py
 
@@ -535,12 +641,13 @@ Workstream E — QA & Evidence
   - **Key CLI inputs (selected):**
     - `--logs-dir` (primary logs search root)
     - `--output-base` (reports root)
+    - `--timestamp` (ISO 8601; run slug becomes `YYYYmmdd-HHMM` in UTC)
     - `--producer-bundle-dir` (preferred structured input containing `telemetry.json`)
     - `--producer-reports-root` (fallback search root for producer bundles)
     - `--producer-report` (legacy single-file input)
     - `--artifacts-to-keep`
   - **Current output roots:**
-    - `.repo_studios/reports/consumer_reports/test_log_health_reports/<YYYY-MM-DD_HHMM>/`
+    - `.repo_studios/reports/healthview/consumer_reports/test_log_health_reports/<YYYYmmdd-HHMM>/`
   - **Current artifacts (observed):**
     - `report.json` — structured summary payload.
     - `report.md` — human-readable report (includes pass-rate delta + source references).
@@ -553,55 +660,112 @@ Workstream E — QA & Evidence
   Pruning:
   - Mechanism: shared-helper
   - Surface: callsite `prune_run_directories(base, keep=..., current_run=out_dir, ...)`
-  - Target: `--output-base/<YYYY-MM-DD_HHMM>/`
+  - Target: `--output-base/<YYYYmmdd-HHMM>/`
   - Evidence:
     - `.repo_studios/scripts/consumers/generate_test_log_health_report.py` (`_prune_history`)
     - `.repo_studios/tests/tests_consumers/test_generate_test_log_health_report.py` (prunes history)
 
-  - **Output root compliant (Tier-1 HealthView contract):** ❌
-    - Default output root is under `.repo_studios/reports/consumer_reports/...`.
+  - **Output root compliant (Tier-1 HealthView contract):** ✅
+    - Default output root is under `.repo_studios/reports/healthview/...`.
   - **Base package compliant (manifest + summary + telemetry):** N/A
     - This consumer emits `report.*` artifacts; it does not emit a HealthView base package.
   - **DB integration:** ❌ (no DB markers observed)
-  - **Tier-3 allowed:** no (until refactor standards are met)
-  - **Tier-3 YAML exists:** no
+  - **Tier-3 appropriate:** yes (decision: create)
+  - **Tier-3 YAML exists:** yes
   - **Tier-3 YAML name:** `tier3_generate_test_log_health_report.yaml`
-  - **Tier-3 meets template:** NA
-  - **Tier-3 last updated:** —
+  - **Tier-3 meets template:** yes
+  - **Tier-3 last updated:** 2025-12-21
   - **Tests:** `.repo_studios/tests/tests_consumers/test_generate_test_log_health_report.py`
   - **Evidence:**
     - Prefers structured producer bundle (`telemetry.json`) when provided.
     - Falls back to logs scanning when no producer artifact is available.
     - Writes `bundle_summary.json` including comparisons/pass-rate delta.
+    - Tier-3 YAML created + validated (2025-12-21):
+      `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/test_execution_telemetry/tier3_generate_test_log_health_report.yaml`.
 
 #### Implementation Workstreams (checkbox-driven) — generate_test_log_health_report.py
 
 Workstream A — Discovery
 
-- [ ] Inspect outputs + pruning/retention surfaces; record findings
+- [x] Inspect outputs + pruning/retention surfaces; record findings
+  - Output directory naming: `--output-base/<YYYYmmdd-HHMM>/` (UTC), via `--timestamp` when
+    provided, otherwise `datetime.now(UTC).strftime("%Y%m%d-%H%M")`.
+  - Artifacts written per run:
+    - `report.json`
+    - `report.md` (includes markdownlint MD013 disable comment + “Source References” section)
+    - `report.csv`
+    - `bundle_summary.json`
+  - Producer bundle preference:
+    - `--producer-bundle-dir` points at a `collect_test_log_reports` bundle containing
+      `telemetry.json`.
+    - Fallback selects latest bundle under `--producer-reports-root` when its run directories
+      match `YYYYmmdd-HHMM`.
+  - Logs fallback: if no producer artifact is found, scans `--logs-dir` (and optionally
+    `.repo_studios/pytest_logs` when `TEST_LOG_HEALTH_ALLOW_LEGACY` is enabled).
+  - Retention: `_prune_history(...)` calls
+    `prune_run_directories(base, keep=..., current_run=out_dir, ...)`.
+  - DB integration: no `DB_INTEGRATION_MARKER:` callsites present (as expected for this consumer).
 
 Workstream B — Plan
 
-- [ ] Draft plan to migrate outputs into Tier-1 canonical root
+- [x] Draft plan to migrate outputs into Tier-1 canonical root
+
+Plan notes (draft):
+
+- Target output root (Tier-1 HealthView contract): write consumer runs under
+  `.repo_studios/reports/healthview/consumer_reports/test_log_health_reports/<YYYYmmdd-HHMM>/`.
+- Consumer change:
+  - Update `OUTPUT_BASE_DEFAULT` to
+    `.repo_studios/reports/healthview/consumer_reports/test_log_health_reports`.
+  - Add `--timestamp` (ISO 8601, optional) so the consumer can use the orchestrator run timestamp
+    for its run directory slug (`YYYYmmdd-HHMM`, UTC).
+  - Preserve `--output-base` semantics (base directory that receives timestamped run directories).
+- Orchestrator compatibility:
+  - Update Stage 1.1 orchestrator default `--test-log-health-dir` to
+    `.repo_studios/reports/healthview/consumer_reports/test_log_health_reports`.
+  - Pass `--timestamp options.run_timestamp.isoformat()` into the consumer so run-dir naming is
+    deterministic and aligned to the rest of the Stage 1.1 chain.
+- Tests:
+  - Update `.repo_studios/tests/tests_consumers/test_generate_test_log_health_report.py` to pass a
+    fixed `--timestamp` and assert the output run dir is the expected `YYYYmmdd-HHMM`.
+  - Update orchestrator integration tests to match the new default output root and deterministic
+    output run dir.
 
 Workstream C — Implement
 
-- [ ] Implement accepted plan; update record and stop-gate status with evidence.
+- [x] Implement accepted plan; update record and stop-gate status with evidence.
+  - Updated `generate_test_log_health_report.py` default output base to emit runs under
+    `.repo_studios/reports/healthview/consumer_reports/test_log_health_reports/<YYYYmmdd-HHMM>/`.
+  - Added `--timestamp` (ISO 8601) so Stage 1.1 orchestrator can enforce deterministic run slugs.
+  - Updated Stage 1.1 orchestrator to default `--test-log-health-dir` under
+    `.repo_studios/reports/healthview/...` and pass `--timestamp` into this consumer.
+  - Updated consumer + orchestrator tests to match the new output root + slug semantics.
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
-- [ ] Inspect Tier-3 template requirements
-- [ ] Draft `tier3_generate_test_log_health_report.yaml`
-- [ ] Validate Tier-3 YAML
+- [x] Confirm Tier-3 is appropriate for this script; record decision (create)
+- [x] Inspect Tier-3 template requirements
+- [x] Draft `tier3_generate_test_log_health_report.yaml`
+- [x] Validate Tier-3 YAML
+  - Tier-3 YAML evidence (2025-12-21):
+    `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/test_execution_telemetry/tier3_generate_test_log_health_report.yaml` validated via
+    `\.\.venv/Scripts/python.exe .repo_studios/docs/pipeline/tier3_index/generate_tier3_index.py --repo-root . --validate` and
+    `\.\.venv/Scripts/python.exe -m pytest -q .repo_studios/docs/pipeline/tier3_index/test_tier3_index.py` (29 passed).
 
 Workstream E — QA & Evidence
 
-- [ ] Pytest evidence captured
-- [ ] Mypy evidence captured or marked N/A (in record)
-- [ ] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
+- [x] Pytest evidence captured
+  - `./.venv/Scripts/python.exe -m pytest -q .repo_studios/tests/tests_consumers/test_generate_test_log_health_report.py` (8 passed).
+  - `./.venv/Scripts/python.exe -m pytest -q .repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py` (2 passed).
+- [x] Mypy evidence captured or marked N/A (in record)
+  - `./.venv/Scripts/python.exe -m mypy .repo_studios/scripts/consumers/generate_test_log_health_report.py .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py` (success).
+- [x] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
+  - Coverage:
+    `./.venv/Scripts/python.exe -m coverage report --include="*/.repo_studios/scripts/consumers/generate_test_log_health_report.py" --fail-under=80` (observed: 80%; pass).
+  - Doc-index evidence:
+    `make -C .repo_studios doc-index LOG_LEVEL=INFO` (timestamp: 20251222-0450).
 
-- [ ] DONE — generate_test_log_health_report.py complete; update Tier-1 Stage 1.1 script gate
+- [x] DONE — generate_test_log_health_report.py complete; update Tier-1 Stage 1.1 script gate
 
 #### Record — generate_churn_complexity_heatmap.py
 
@@ -641,7 +805,7 @@ Workstream E — QA & Evidence
   - **Base package compliant (manifest + summary + telemetry):** N/A
     - This aggregator emits `heatmap.*` artifacts; it does not emit a HealthView base package.
   - **DB integration:** ❌ (no DB markers observed)
-  - **Tier-3 allowed:** no (until refactor standards are met)
+  - **Tier-3 appropriate:** not yet (record decision in Workstream D)
   - **Tier-3 YAML exists:** no
   - **Tier-3 YAML name:** `tier3_generate_churn_complexity_heatmap.yaml`
   - **Tier-3 meets template:** NA
@@ -668,7 +832,7 @@ Workstream C — Implement
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
 - [ ] Inspect Tier-3 template requirements
 - [ ] Draft `tier3_generate_churn_complexity_heatmap.yaml`
 - [ ] Validate Tier-3 YAML
@@ -712,7 +876,7 @@ Workstream E — QA & Evidence
     - Default output dir is `.repo_studios/command_center/reports`.
   - **Base package compliant (manifest + summary + telemetry):** N/A
   - **DB integration:** ❌ (no DB markers observed in this summarizer)
-  - **Tier-3 allowed:** no (until refactor standards are met)
+  - **Tier-3 appropriate:** not yet (record decision in Workstream D)
   - **Tier-3 YAML exists:** no
   - **Tier-3 YAML name:** `tier3_summarize_test_execution_telemetry.yaml`
   - **Tier-3 meets template:** NA
@@ -740,7 +904,7 @@ Workstream C — Implement
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is allowed for this script (Tier-2 stop-gates closed)
+- [ ] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
 - [ ] Inspect Tier-3 template requirements
 - [ ] Draft `tier3_summarize_test_execution_telemetry.yaml`
 - [ ] Validate Tier-3 YAML
@@ -875,6 +1039,14 @@ checks:
 
 |Date|Change|Author|Doc-index timestamp|Regression suites|
 |---|---|---|---|---|
+|2025-12-22|QA re-run for `analyze_test_hardening.py` (pytest + mypy) and marked record DONE. Doc-index refresh deferred to loop closure (post Tier-1 update).|repo_ai|—|pytest; mypy|
+|2025-12-22|Relocated per-script Tier-3 YAMLs for Stage 1.1 Test Execution Telemetry under `healthview_orchestration_pipeline/tier3_scripts/test_execution_telemetry/`; updated Tier-2 references + refreshed Tier-3 scripts index.|repo_ai|20251222-0222|doc-index|
+|2025-12-22|Completed Workstream A discovery for `analyze_test_hardening.py`; recorded DB marker + pruning surfaces; explicitly deferred Tier-3 pending output-root migration.|repo_ai|20251222-0040|doc-index|
+|2025-12-22|Completed Workstream A discovery for `generate_test_coverage_inventory.py`; recorded positional bundle outputs + pruning + DB markers; explicitly deferred Tier-3 pending output-root + orchestrator alignment.|repo_ai|20251222-0035|doc-index|
+|2025-12-22|Migrated `generate_test_coverage_inventory.py` to Tier-1 compliant output root; aligned Stage 1.1 orchestrator coverage discovery to positional bundles; created + validated `tier3_generate_test_coverage_inventory.yaml`.|repo_ai|20251222-0124|pytest; mypy; coverage; doc-index|
+|2025-12-22|Wired Stage 1.1 Tier-3 dependencies to horizontals; drafted + validated `tier3_collect_test_log_reports.yaml`; closed Workstream D and marked `collect_test_log_reports.py` DONE.|repo_ai|20251222-0029|pytest (tier3_index: 28 passed); doc-index|
+|2025-12-21|Clarified Workstream D semantics (Tier-3 YAML as reward/conditional) and DONE requirements (A–C + E + explicit D decision).|repo_ai|20251221-1527|doc-index|
+|2025-12-21|Migrated `collect_test_log_reports.py` + defaults to canonical `.repo_studios/reports/healthview` root; updated record + tests.|repo_ai|20251221-1827|pytest (8 passed, focused)|
 |2025-12-19|Expanded Stage 1.1 placeholders into full records.|repo_ai|—|—|
 |2025-12-19|Added schema + fixture + Decision Log.|repo_ai|—|—|
 |2025-12-19|Correct doc-index command + evidence.|repo_ai|20251219-1058|doc-index|

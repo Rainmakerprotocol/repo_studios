@@ -1,0 +1,198 @@
+# Tier-3: generate_test_log_health_report.py
+# Consumer script that summarizes pytest telemetry/logs into a deterministic health report.
+
+tool:
+  id: generate_test_log_health_report
+  name: Generate Test Log Health Report
+  description: |
+    Prefers structured bundles emitted by ``collect_test_log_reports.py`` and falls back to direct
+    log discovery under ``--logs-dir`` to generate a test execution health report under:
+
+      .repo_studios/reports/healthview/consumer_reports/test_log_health_reports/<YYYYMMDD-HHMM>/
+
+    The run directory includes report.json/report.md/report.csv plus bundle_summary.json.
+  keywords:
+    - healthview
+    - consumer
+    - pytest
+    - logs
+    - telemetry
+    - rawview
+    - report
+  use_when:
+    - Need a deterministic, timestamped health report derived from pytest runs
+    - Summarizing warning/traceback census and slow tests for review or CI diagnostics
+    - Validating Stage 1.1 consumer outputs and retention behavior for test_log_health_reports
+  dont_use_when:
+    - You need to build the raw test_log_reports bundle first (use collect_test_log_reports)
+    - You only need raw pytest logs without summarization
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --logs-dir {logs_dir} \
+      --output-base {output_base} \
+      --producer-reports-root {producer_reports_root} \
+      --timestamp {timestamp} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+  script_path: .repo_studios/scripts/consumers/generate_test_log_health_report.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+    notes:
+      - "Optional env var TEST_LOG_HEALTH_ALLOW_LEGACY controls fallback to .repo_studios/pytest_logs."
+
+parameters:
+  - name: logs_dir
+    type: path
+    required: false
+    default: .repo_studios/command_center/reports/rawview/test_execution_runs
+    description: Base directory containing pytest log run folders.
+    validation:
+      must_exist: false
+      must_be_directory: true
+
+  - name: output_base
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/consumer_reports/test_log_health_reports
+    description: Base directory where report run subdirectories are written.
+    validation:
+      parent_must_exist: false
+
+  - name: producer_bundle_dir
+    type: path
+    required: false
+    default: null
+    description: Optional explicit collect_test_log_reports bundle dir containing telemetry.json.
+    validation:
+      must_exist: false
+      must_be_directory: true
+
+  - name: producer_reports_root
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/rawview/test_log_reports
+    description: Root directory containing timestamped collect_test_log_reports bundles.
+    validation:
+      must_exist: false
+      must_be_directory: true
+
+  - name: producer_report
+    type: path
+    required: false
+    default: null
+    description: (Legacy) Path to an old-style producer payload file.
+    validation:
+      must_exist: false
+      must_be_file: true
+
+  - name: timestamp
+    type: string
+    required: false
+    default: "current UTC"
+    description: ISO-8601 timestamp used to derive the run directory slug (YYYYMMDD-HHMM, UTC).
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Number of historical run directories to retain.
+    validation:
+      min_value: 1
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+outputs:
+  primary:
+    type: directory
+    format: healthview_report
+    path_pattern: ".repo_studios/reports/healthview/consumer_reports/test_log_health_reports/<YYYYMMDD-HHMM>/"
+    description: Health report directory for a single run.
+    contents:
+      required:
+        - report.json
+        - report.md
+        - report.csv
+        - bundle_summary.json
+
+  secondary:
+    - type: stdout
+      format: text
+      description: Logging output describing the selected input source and emitted report.
+
+behavior:
+  idempotent: false
+  side_effects:
+    - Reads HealthView test_log_reports producer bundles when available
+    - Otherwise reads pytest log artifacts under logs_dir (and optionally legacy .repo_studios/pytest_logs)
+    - Writes a timestamped report run directory
+    - Prunes older sibling run directories beyond artifacts_to_keep
+  duration_estimate: "< 1 second for typical local pytest logs"
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 0
+      meaning: "No pytest log runs found; script returns without writing artifacts."
+      agent_action: "Confirm logs_dir contains pytest output or pass --producer-bundle-dir explicitly."
+
+integration:
+  typical_workflow:
+    - step: 1
+      action: Run collect_test_log_reports
+      output: HealthView bundle under rawview/test_log_reports
+    - step: 2
+      action: Run generate_test_log_health_report
+      consumes: test_log_reports bundle
+
+  input_producers:
+    - .repo_studios/scripts/producers/collect_test_log_reports.py
+
+  output_consumers:
+    - .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py
+
+examples:
+  - description: Standard run using defaults
+    command: |
+      python .repo_studios/scripts/consumers/generate_test_log_health_report.py --log-level INFO
+
+  - description: Deterministic run slug for validation
+    command: |
+      python .repo_studios/scripts/consumers/generate_test_log_health_report.py \
+        --timestamp 2025-12-01T01:01:00+00:00 \
+        --log-level DEBUG
+
+  - description: Explicit producer bundle consumption
+    command: |
+      python .repo_studios/scripts/consumers/generate_test_log_health_report.py \
+        --producer-bundle-dir .repo_studios/reports/healthview/rawview/test_log_reports/20251221-2237 \
+        --log-level INFO
+
+metadata:
+  category: consumer
+  tier: 3
+  status: draft
+  version: 0.1.0
+  author: Repo Studios Team
+  last_updated: 2025-12-21
+  dependencies_tier3:
+    - tier3_artifacts.yaml
+    - tier3_cli.yaml
+    - tier3_prune_logs.yaml
+    - tier3_database_integration.yaml
+  tier2_rosters:
+    - healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md
+  tier1_pipelines:
+    - healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
+  testing:
+    test_file: .repo_studios/tests/tests_consumers/test_generate_test_log_health_report.py

@@ -54,6 +54,8 @@ AssertionError: boom
 def test_collect_test_log_reports_emits_artifacts(tmp_path):
     producer_mod = _load_module("collect_test_log_reports", _PRODUCER_PATH)
 
+    assert producer_mod.DEFAULT_OUTPUT_DIR == Path(".repo_studios/reports/healthview")
+
     repo = tmp_path / "repo"
     run_dir = repo / ".repo_studios" / "pytest_logs" / "smoke" / "2025-01-01_000000"
     run_dir.mkdir(parents=True)
@@ -115,6 +117,8 @@ def test_collect_test_log_reports_emits_artifacts(tmp_path):
 
 def test_collect_test_log_reports_prunes_history(tmp_path):
     producer_mod = _load_module("collect_test_log_reports", _PRODUCER_PATH)
+
+    assert producer_mod.DEFAULT_OUTPUT_DIR == Path(".repo_studios/reports/healthview")
 
     repo = tmp_path / "repo"
     logs_base = repo / ".repo_studios" / "pytest_logs"

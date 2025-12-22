@@ -41,16 +41,16 @@ libraries_root_str = str(LIBRARIES_ROOT)
 if libraries_root_str and libraries_root_str not in sys.path:
     sys.path.insert(0, libraries_root_str)
 
-from libraries import (  # type: ignore[import-not-found]  # noqa: E402
+from libraries import (  # noqa: E402
     TestLogAnalysisResult,
     build_test_log_report,
     prune_run_directories,
 )
-from libraries.database_integration import create_storage  # type: ignore[import-not-found]  # noqa: E402
+from libraries.database_integration import create_storage  # noqa: E402
 
 DEFAULT_LOGS_BASE = Path(".repo_studios/command_center/reports/rawview/test_execution_runs")
 LEGACY_LOGS_BASE = Path(".repo_studios/pytest_logs")
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
 VIEWER_SLUG = "rawview"
 TOPIC_SLUG = "test_log_reports"
 DEFAULT_KEEP = 10

@@ -1,0 +1,144 @@
+# Tier-3: analyze_test_hardening.py
+# Producer script that analyzes repository tests and emits a HealthView hardening bundle.
+
+tool:
+  id: analyze_test_hardening
+  name: Analyze Test Hardening
+  description: |
+    Scans repository test files (AST + content heuristics) to flag hardening opportunities
+    (missing assertions, long tests, debug code, etc.) and emits a canonical HealthView bundle under:
+
+      .repo_studios/reports/healthview/producer_reports/test_hardening/<YYYYMMDD-HHMM>/
+
+    The bundle includes manifest.json, summary.md, and telemetry.json.
+  keywords:
+    - healthview
+    - producer
+    - tests
+    - hardening
+    - telemetry
+    - ast
+  use_when:
+    - Need a deterministic, timestamped hardening analysis bundle (manifest/summary/telemetry)
+    - Validating Stage 1.1 producer outputs and retention behavior for test_hardening
+    - Producing test hardening telemetry for downstream topic orchestrators/summarizers
+  dont_use_when:
+    - You only need raw pytest logs (use collect_test_log_reports)
+    - You only need coverage inventory (use generate_test_coverage_inventory)
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --output-dir {output_dir} \
+      --timestamp {timestamp} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+  script_path: .repo_studios/scripts/producers/analyze_test_hardening.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: "."
+    description: Repository root for resolving repo-relative paths.
+
+  - name: output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview
+    description: HealthView root where bundles are written.
+    validation:
+      parent_must_exist: false
+
+  - name: timestamp
+    type: string
+    required: false
+    default: "current UTC"
+    description: ISO-8601 timestamp (naive timestamps are treated as UTC).
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 10
+    description: Number of historical run directories to retain.
+    validation:
+      min_value: 1
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+outputs:
+  primary:
+    type: directory
+    format: healthview_bundle
+    path_pattern: ".repo_studios/reports/healthview/producer_reports/test_hardening/<YYYYMMDD-HHMM>/"
+    description: HealthView bundle directory for a single run.
+    contents:
+      required:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+
+  secondary:
+    - type: stdout
+      format: text
+      description: Logging output describing test discovery, analysis, and bundle creation.
+
+behavior:
+  idempotent: false
+  side_effects:
+    - Reads repository test files matching configured patterns
+    - Writes a timestamped HealthView bundle directory
+    - Prunes older sibling run directories beyond artifacts_to_keep
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 1
+      meaning: "High severity test hardening issues detected (bundle is still written)."
+      agent_action: "Review summary.md and telemetry.json; remediate high severity findings."
+
+integration:
+  output_consumers:
+    - .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py
+
+examples:
+  - description: Standard run using defaults
+    command: |
+      python .repo_studios/scripts/producers/analyze_test_hardening.py --log-level INFO
+
+  - description: Deterministic run slug for validation
+    command: |
+      python .repo_studios/scripts/producers/analyze_test_hardening.py \
+        --timestamp 2025-12-01T01:01:00+00:00 \
+        --log-level DEBUG
+
+metadata:
+  category: producer
+  tier: 3
+  status: draft
+  version: 0.1.0
+  author: Repo Studios Team
+  last_updated: 2025-12-22
+  dependencies_tier3:
+    - tier3_artifacts.yaml
+    - tier3_cli.yaml
+    - tier3_prune_logs.yaml
+    - tier3_database_integration.yaml
+  tier2_rosters:
+    - healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md
+  tier1_pipelines:
+    - healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
+  testing:
+    test_file: .repo_studios/tests/tests_producers/test_analyze_test_hardening.py

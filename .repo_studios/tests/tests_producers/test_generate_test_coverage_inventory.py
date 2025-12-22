@@ -63,7 +63,7 @@ def test_generates_structured_artifacts(tmp_path: Path):
 
     coverage_xml = _write_coverage_fixture(repo_root)
 
-    output_root = repo_root / ".repo_studios" / "reports" / "producer_reports"
+    output_root = repo_root / ".repo_studios" / "reports" / "healthview"
 
     exit_code = mod.main(
         [
@@ -138,7 +138,7 @@ def test_threshold_enforcement_and_pruning(tmp_path: Path):
 
     coverage_xml = _write_coverage_fixture(repo_root)
 
-    output_root = repo_root / ".repo_studios" / "reports" / "producer_reports"
+    output_root = repo_root / ".repo_studios" / "reports" / "healthview"
     base_dir = output_root / mod.VIEWER_SLUG / mod.TOPIC_SLUG
     base_dir.mkdir(parents=True, exist_ok=True)
 
@@ -185,3 +185,23 @@ def test_threshold_enforcement_and_pruning(tmp_path: Path):
     ]
 
     assert not list(base_dir.glob("latest_*"))
+
+
+def test_helper_timestamp_and_filename_resolution(tmp_path: Path) -> None:
+    mod = _load_module()
+
+    parsed = mod._parse_timestamp("2024-01-01T00:00:00")
+    assert parsed.tzinfo is not None
+    assert mod._timestamp_slug(parsed) == "20240101-0000"
+
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    src_dir = repo_root / "src"
+    src_dir.mkdir()
+    (src_dir / "alpha.py").write_text("print('ok')\n", encoding="utf-8")
+
+    resolved = mod._resolve_filename("src/alpha.py", repo_root=repo_root, sources=[repo_root])
+    assert resolved == (repo_root / "src" / "alpha.py").resolve()
+
+    absolute = mod._resolve_filename(str(resolved), repo_root=repo_root, sources=[])
+    assert absolute == resolved

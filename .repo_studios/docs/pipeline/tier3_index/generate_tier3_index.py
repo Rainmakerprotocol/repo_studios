@@ -180,6 +180,11 @@ def load_tier3_yaml(
         
         if not isinstance(data, dict):
             return None, [f"YAML root must be a dictionary, got {type(data).__name__}"]
+
+        meta = data.get("metadata")
+        if isinstance(meta, dict) and meta.get("kind") == "horizontal":
+            log.debug("%s: skipping horizontal Tier-3 contract", yaml_path.name)
+            return data, []
         
         errors = []
         if validate:
@@ -266,6 +271,10 @@ def generate_index(
         if data is None:
             missing_data.append(str(yaml_path.relative_to(pipeline_dir)))
             validation_errors[yaml_path.name] = errors
+            continue
+
+        meta = data.get("metadata")
+        if isinstance(meta, dict) and meta.get("kind") == "horizontal":
             continue
         
         if errors:

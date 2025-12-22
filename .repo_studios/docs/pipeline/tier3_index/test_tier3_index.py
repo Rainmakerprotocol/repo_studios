@@ -188,6 +188,31 @@ class TestFindTier3Files:
         ]
 
 
+class TestHorizontalTier3Contracts:
+    def test_horizontal_contracts_are_ignored_by_generator(self, temp_pipeline_dir, logger):
+        """Horizontal Tier-3 contracts should not be indexed as tool specs."""
+        horizontal = temp_pipeline_dir / "tier3_horizontal_contract.yaml"
+        write_yaml(
+            horizontal,
+            {
+                "metadata": {
+                    "tier": 3,
+                    "kind": "horizontal",
+                    "id": "contract",
+                    "status": "draft",
+                    "version": "0.1.0",
+                }
+            },
+        )
+
+        files = find_tier3_files(temp_pipeline_dir, logger)
+        assert [f.name for f in files] == ["tier3_horizontal_contract.yaml"]
+
+        index = generate_index(files, temp_pipeline_dir, validate=True, log=logger)
+        assert index["statistics"]["total_scripts"] == 0
+        assert "validation" not in index
+
+
 class TestValidateTier3Yaml:
     """Test tier3 YAML validation."""
     

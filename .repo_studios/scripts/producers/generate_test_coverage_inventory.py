@@ -56,11 +56,11 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when executed directl
     )
     from libraries.database_integration import create_storage
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
 DEFAULT_COVERAGE_XML = Path(".repo_studios/tests/fixtures/test_run_coverage/coverage.xml")
 DEFAULT_ARTIFACTS_TO_KEEP = 5
 SCHEMA_VERSION = 1
-VIEWER_SLUG = "healthview"
+VIEWER_SLUG = "producer_reports"
 TOPIC_SLUG = "test_coverage_inventory"
 
 

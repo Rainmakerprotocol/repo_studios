@@ -80,6 +80,7 @@ workflow:
       - "confirm pruning/retention mechanism surface (no numeric policy edits)"
       - "confirm DB marker expectations if applicable"
       - "record evidence pointers in Tier-2"
+      - "check Tier-2 Workstream A (Discovery) checkbox"
     outputs:
       - "tier2_discovery_completed"
 
@@ -90,6 +91,7 @@ workflow:
       - "list files not to change"
       - "define expected artifacts and locations"
       - "define validation plan (make target + output checks + tests + mypy)"
+      - "check Tier-2 Workstream B (Plan) checkbox"
     outputs:
       - "tier2_plan_completed"
     approval_required: "begin_implementation"
@@ -100,11 +102,12 @@ workflow:
       - "implement smallest strict change to satisfy Tier-2 stop-gates and Tier-1 gate intent"
       - "keep variables as variables (no hardcoding env/repo specifics)"
       - "avoid unrelated refactors"
+      - "check Tier-2 Workstream C (Implement) checkbox"
     outputs:
       - "code_changes_completed"
 
-  step_4_evidence:
-    description: "Evidence (D): run make targets, verify outputs, run tests, capture proof."
+  step_4_qa_evidence:
+    description: "QA & Evidence (E): run make targets, verify outputs, run tests, capture proof."
     actions:
       - "run make target from repo root"
       - "verify output location matches contract"
@@ -114,17 +117,21 @@ workflow:
       - "run mypy if required; else record N/A with justification"
       - "run doc-index / anchor validation if required"
       - "record commands + paths + timestamps in Tier-2"
+      - "check Tier-2 Workstream E (QA & Evidence) checkbox"
     outputs:
       - "evidence_captured"
 
-  step_5_promote:
-    description: "Promote (E): create Tier-3 YAML only if allowed."
+  step_5_tier3_yaml:
+    description: "Tier-3 YAML (D): create Tier-3 YAML only if allowed/required by Tier-1+Tier-2."
     actions:
+      - "decide if Workstream D is required for this record (Tier-2: Tier-3 allowed? Tier-1: Tier-3 eligible?)"
+      - "if Tier-3 is not allowed/required, explicitly leave Workstream D unchecked and record 'Deferred: Tier-3 not allowed' in the Tier-2 record"
       - "confirm Tier-3 promotion is allowed for this vertical (Tier-2 depth exists and Tier-1 says Tier-3 eligible)"
       - "confirm Tier-1 stop-gates for the destination stage are satisfied"
       - "inspect tier3_agent_pipeline_template.yaml"
       - "draft tier3_<script>.yaml"
       - "validate Tier-3 YAML against template"
+      - "check Tier-2 Workstream D (Tier-3 YAML) checkbox"
     outputs:
       - "tier3_yaml_completed"
     approval_required: "create_tier3_yaml"
@@ -132,8 +139,12 @@ workflow:
   step_6_done:
     description: "Check DONE in Tier-2 and update Tier-1 gate checkbox."
     actions:
-      - "verify all workstreams A–E satisfied"
+      - "verify workstreams A–C satisfied"
+      - "verify Workstream E (QA & Evidence) satisfied"
+      - "verify Workstream D (Tier-3 YAML) satisfied only if it is required for this record"
+      - "ask approval: Approve check_done (Stage <stage>, tier2=<path>#<anchor>)? (y/n)"
       - "check Tier-2 DONE checkbox"
+      - "ask approval: Approve update_tier1 (Stage <stage>, tier1=<file>:<line>)? (y/n)"
       - "update Tier-1 checkbox wired to this record"
       - "run anchor validation if links changed"
     outputs:

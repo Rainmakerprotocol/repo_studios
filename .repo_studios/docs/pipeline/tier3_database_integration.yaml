@@ -1,0 +1,177 @@
+# Tier-3 Horizontal: database_integration (DB gating + dual-write semantics)
+#
+# This Tier-3 file is a horizontal contract (shared semantics) for the Repo Studios database
+# integration layer. It is not a per-script tool spec.
+
+metadata:
+  tier: 3
+  kind: horizontal
+  id: database_integration
+  title: Database Integration Contract (Gating + Dual-Write)
+  status: draft
+  version: 0.1.0
+  updated_at: "2025-12-21"
+  audience:
+    - agents
+    - human_developer
+  owners:
+    - repo_studios_team@rainmakerprotocol.dev
+  seed_evidence:
+    # Keep this list intentionally small.
+    # Do NOT enumerate every script/roster that adopts this horizontal contract.
+    libraries_module: .repo_studios/command_center/scripts/libraries/database_integration.py
+    representative_script: .repo_studios/scripts/producers/collect_test_log_reports.py
+    representative_producer: .repo_studios/scripts/producers/generate_doc_index.py
+
+purpose:
+  summary: >-
+    Define the repository-wide contract for optional database integration during the migration
+    period: scripts always write file outputs, and may additionally attempt database writes when
+    enabled, without turning DB availability into a pipeline hard dependency.
+  why_this_exists:
+    - "Make DB integration consistent and safe across many scripts."
+    - "Ensure all DB callsites are explicit and auditable (DB_INTEGRATION_MARKER)."
+    - "Keep file outputs authoritative during migration while DB wiring evolves."
+
+scope:
+  applies_to:
+    - "Scripts that write HealthView bundles via create_storage()"
+    - "Scripts that emit manifest/summary/telemetry and optionally dual-write to DB"
+  non_goals:
+    - "Defining the HealthView base package schema (see tier3_artifacts.yaml)"
+    - "Defining pruning/retention semantics (see tier3_prune_logs.yaml)"
+    - "Defining CLI conventions (see tier3_cli.yaml)"
+
+current_state:
+  implementation_reality: >-
+    The database integration module includes a DatabaseStorage class intended for future wiring.
+    Today, database writes are effectively dormant unless enabled, and even when enabled the
+    connection/persistence is placeholder (log-only). File outputs remain the authoritative output.
+
+entrypoints:
+  factory:
+    function: create_storage
+    module: .repo_studios/command_center/scripts/libraries/database_integration.py
+    returns: DualWriteStorage
+    contract:
+      - "All scripts should obtain storage through create_storage() rather than instantiating storage directly."
+      - "Timestamp defaults to current UTC formatted as YYYYmmdd-HHMM when not provided."
+
+storage_model:
+  file_storage:
+    class: FileSystemStorage
+    authority: primary
+    contract:
+      - "File outputs are always written."
+      - "Bundle directory is <output_dir>/<viewer_slug>/<topic>/<timestamp>/."
+
+  database_storage:
+    class: DatabaseStorage
+    authority: secondary
+    contract:
+      - "DB writes are attempted only when enabled (see gating)."
+      - "DB write failures must not abort the run (warn-only)."
+
+  dual_write:
+    class: DualWriteStorage
+    contract:
+      - "File writes happen first."
+      - "DB writes are wrapped in try/except and logged as warnings on failure."
+
+markers_and_auditability:
+  required_marker: "DB_INTEGRATION_MARKER:"
+  rule: >-
+    Every DB integration callsite in scripts must include a DB_INTEGRATION_MARKER comment
+    immediately above the call. This is used for grep-based auditing and future migration planning.
+  examples:
+    - "# DB_INTEGRATION_MARKER: write manifest.json (report_runs)"
+    - "# DB_INTEGRATION_MARKER: write telemetry.json + extracted metrics (test_metrics)"
+
+configuration_and_gating:
+  enable_conditions:
+    description: >-
+      The database integration layer supports multiple enable signals. Scripts should not invent
+      new gating; rely on create_storage() detection.
+    sources:
+      - source: env
+        key: REPO_STUDIOS_DB_URL
+        meaning: "Presence indicates DB URL is available; enables DB integration."
+      - source: env
+        key: REPO_STUDIOS_DB_ENABLED
+        meaning: "When set to 'true' (case-insensitive), enables DB integration."
+      - source: file
+        path: .repo_studios/db_config.json
+        meaning: "Optional local config; enabled flag is respected."
+      - source: api
+        parameter: enable_db
+        meaning: "Explicit override passed to create_storage(..., enable_db=...)."
+
+  secrets_handling:
+    rules:
+      - "Do not log credentials or full connection strings at INFO level."
+      - "Treat DB config as sensitive; redact user/password if ever surfaced."
+
+error_policy:
+  default_policy: warn_only
+  requirements:
+    - "If DB is disabled, DB calls are no-ops."
+    - "If DB is enabled and a DB write fails, log a warning and continue."
+    - "Do not allow DB connectivity to become a silent hard dependency during migration."
+
+persistence_targets:
+  intent_only_note: >-
+    The following table names and mappings are target intent as documented in the integration
+    module. They are not guaranteed to be fully implemented today.
+  entities:
+    - name: report_runs
+      written_by: write_manifest
+      expected_payloads:
+        - viewer_slug
+        - topic
+        - run_timestamp
+        - status
+        - generated_at
+        - inputs
+        - catalog
+
+    - name: report_artifacts
+      written_by:
+        - write_summary
+        - write_telemetry
+        - write_matrix
+        - write_metrics
+      expected_payloads:
+        - artifact_role
+        - artifact_type
+        - content_json
+        - content_text
+        - checksum
+
+    - name: test_metrics
+      written_by: write_telemetry
+      expected_payloads:
+        - extracted metrics from telemetry
+
+telemetry_and_logging:
+  expectations:
+    - "Scripts should include whether DB integration was enabled in telemetry inputs when practical."
+    - "DB errors should be logged with DB_INTEGRATION_MARKER context and exception info."
+
+integration_requirements_for_scripts:
+  required_steps:
+    - "Obtain storage via create_storage(output_dir, viewer_slug, topic, timestamp=...)."
+    - "Use storage.write_manifest / write_summary / write_telemetry (and write_matrix/write_metrics when applicable)."
+    - "Add DB_INTEGRATION_MARKER comments at each callsite."
+    - "Do not attempt to manage DB connections in script code."
+
+adoption_checklist:
+  - "Script uses create_storage() factory (no bespoke DB wiring)."
+  - "All DB-related callsites are annotated with DB_INTEGRATION_MARKER."
+  - "DB enabled/disabled behavior is safe (warn-only on DB failures)."
+  - "File outputs remain authoritative during migration."
+
+notes:
+  - >-
+    This horizontal defines the safety and gating contract for DB integration. Per-script Tier-3
+    YAMLs should mention whether the script participates in dual-write and which artifact roles it
+    emits, but should not redefine enable logic.

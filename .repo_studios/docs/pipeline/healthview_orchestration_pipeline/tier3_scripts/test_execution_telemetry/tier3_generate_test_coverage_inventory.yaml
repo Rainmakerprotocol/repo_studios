@@ -1,0 +1,167 @@
+# Tier-3: generate_test_coverage_inventory.py
+# Producer script that converts a Coverage.py XML payload into a HealthView bundle.
+
+tool:
+  id: generate_test_coverage_inventory
+  name: Generate Test Coverage Inventory
+  description: |
+    Ingests a Coverage.py XML report, correlates executed lines with Python functions in the repo,
+    and emits a canonical HealthView bundle under:
+
+      .repo_studios/reports/healthview/producer_reports/test_coverage_inventory/<YYYYMMDD-HHMM>/
+
+    The bundle includes manifest.json, summary.md, and telemetry.json.
+  keywords:
+    - healthview
+    - producer
+    - coverage
+    - telemetry
+    - inventory
+    - xml
+  use_when:
+    - Need a deterministic, timestamped coverage inventory bundle (manifest/summary/telemetry)
+    - Validating Stage 1.1 coverage inventory outputs and retention behavior
+    - Producing coverage telemetry for downstream topic orchestrators/summarizers
+  dont_use_when:
+    - You only need overall project coverage gating inside CI (prefer CI-native coverage checks)
+    - You do not have a Coverage.py XML report available
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --coverage-xml {coverage_xml} \
+      --output-dir {output_dir} \
+      --timestamp {timestamp} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+  script_path: .repo_studios/scripts/producers/generate_test_coverage_inventory.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: "."
+    description: Repository root for resolving repo-relative paths.
+
+  - name: coverage_xml
+    type: path
+    required: false
+    default: .repo_studios/tests/fixtures/test_run_coverage/coverage.xml
+    description: Coverage.py XML input payload.
+    validation:
+      must_exist: true
+      must_be_file: true
+
+  - name: output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview
+    description: HealthView root where bundles are written.
+    validation:
+      parent_must_exist: false
+
+  - name: timestamp
+    type: string
+    required: false
+    default: "current UTC"
+    description: ISO-8601 timestamp (naive timestamps are treated as UTC).
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Number of historical run directories to retain.
+    validation:
+      min_value: 1
+
+  - name: min_coverage
+    type: float
+    required: false
+    default: null
+    description: Optional overall coverage threshold gate (0-100).
+
+  - name: include_empty
+    type: bool
+    required: false
+    default: false
+    description: Include files with zero detected functions in the report.
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+outputs:
+  primary:
+    type: directory
+    format: healthview_bundle
+    path_pattern: ".repo_studios/reports/healthview/producer_reports/test_coverage_inventory/<YYYYMMDD-HHMM>/"
+    description: HealthView bundle directory for a single run.
+    contents:
+      required:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+
+  secondary:
+    - type: stdout
+      format: text
+      description: Logging output describing coverage extraction and bundle creation.
+
+behavior:
+  idempotent: false
+  side_effects:
+    - Reads the coverage XML report from coverage_xml
+    - Reads repository source files to build function boundaries
+    - Writes a timestamped HealthView bundle directory
+    - Prunes older sibling run directories beyond artifacts_to_keep
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 1
+      meaning: "Coverage below --min-coverage threshold (bundle is still written)."
+      agent_action: "Review summary.md and telemetry.json; lower the threshold or fix uncovered functions."
+
+integration:
+  output_consumers:
+    - .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py
+
+examples:
+  - description: Standard run using defaults
+    command: |
+      python .repo_studios/scripts/producers/generate_test_coverage_inventory.py --log-level INFO
+
+  - description: Deterministic run slug for validation
+    command: |
+      python .repo_studios/scripts/producers/generate_test_coverage_inventory.py \
+        --timestamp 2025-12-01T01:01:00+00:00 \
+        --log-level DEBUG
+
+metadata:
+  category: producer
+  tier: 3
+  status: draft
+  version: 0.1.0
+  author: Repo Studios Team
+  last_updated: 2025-12-21
+  dependencies_tier3:
+    - tier3_artifacts.yaml
+    - tier3_cli.yaml
+    - tier3_prune_logs.yaml
+    - tier3_database_integration.yaml
+  tier2_rosters:
+    - healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md
+  tier1_pipelines:
+    - healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
+  testing:
+    test_file: .repo_studios/tests/tests_producers/test_generate_test_coverage_inventory.py

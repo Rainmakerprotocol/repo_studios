@@ -13,10 +13,10 @@ import sys
 from collections import Counter
 from dataclasses import dataclass, field, replace
 from pathlib import Path
-from typing import List, Sequence
+from typing import List, Sequence, cast
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
-VIEWER_SLUG = "healthview"
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
+VIEWER_SLUG = "producer_reports"
 TOPIC_SLUG = "test_hardening"
 DEFAULT_ARTIFACTS_TO_KEEP = 10
 SCHEMA_VERSION = 1
@@ -37,7 +37,7 @@ try:
 except ModuleNotFoundError:  # pragma: no cover - fallback when package path isn't configured
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import (  # type: ignore
+    from libraries import (
         KeepSpec,
         PathSpec,
         OptionsConfig,
@@ -52,8 +52,8 @@ try:  # pragma: no cover - prefer import when packaged
 except ModuleNotFoundError:  # pragma: no cover - fallback when running in isolation
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries.database_integration import create_storage  # type: ignore
-    from libraries.prune_logs import prune_run_directories  # type: ignore
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
 
 
 @dataclass(frozen=True)
@@ -152,11 +152,11 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
-    options = build_standard_options(args, OPTIONS_CONFIG)
+    options = cast(Options, build_standard_options(args, OPTIONS_CONFIG))
     return replace(options, log_level=str(args.log_level))
 
 
@@ -468,7 +468,7 @@ def analyze_all(paths: Paths) -> list[TestFileAnalysis]:
 
 
 def compose_payload(paths: Paths, options: Options, results: list[TestFileAnalysis], timestamp: dt.datetime) -> dict:
-    severity_totals = Counter()
+    severity_totals: Counter[str] = Counter()
     total_issues = 0
     for item in results:
         for level, count in item.severity_counts.items():
