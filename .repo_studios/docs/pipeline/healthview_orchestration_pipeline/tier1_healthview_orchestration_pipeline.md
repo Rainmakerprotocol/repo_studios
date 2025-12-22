@@ -213,14 +213,14 @@ CI/CD workflows.
 
 **BEGIN → END flow:**
 
-1. Operator invokes orchestrator (via CLI, make target, or meta-orchestrator)
-2. Orchestrator validates environment (repo root, Python interpreter, dependencies)
-3. Scripts execute sequentially in producer → consumer → aggregator pipeline
-4. Each script writes intermediate artifacts (JSON, markdown) to topic-specific directory
-5. Final aggregator/summarizer produces bundle (manifest + summary + telemetry)
-6. Orchestrator prunes stale artifacts, keeping only N most recent timestamped bundles
+1 Operator invokes orchestrator (via CLI, make target, or meta-orchestrator)
+2 Orchestrator validates environment (repo root, Python interpreter, dependencies)
+3 Scripts execute sequentially in producer → consumer → aggregator pipeline
+4 Each script writes intermediate artifacts (JSON, markdown) to topic-specific directory
+5 Final aggregator/summarizer produces bundle (manifest + summary + telemetry)
+6 Orchestrator prunes stale artifacts, keeping only N most recent timestamped bundles
   (retention is enforced in code; see Tier-2 for current evidence)
-7. Exit code signals success/failure; logs capture execution telemetry
+7 Exit code signals success/failure; logs capture execution telemetry
 
 **Stage organization:**  
 Six maturity domain classes (Stage 1–6), each containing one or more orchestrators.
