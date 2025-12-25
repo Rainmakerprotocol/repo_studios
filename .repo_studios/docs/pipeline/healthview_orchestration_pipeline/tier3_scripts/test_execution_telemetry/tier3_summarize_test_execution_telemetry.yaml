@@ -1,0 +1,174 @@
+# Tier-3: summarize_test_execution_telemetry.py
+# Summarizer script that composes HealthView-ready summaries for a Stage 1.1 Test Execution Telemetry run.
+
+tool:
+  id: summarize_test_execution_telemetry
+  name: Summarize Test Execution Telemetry
+  description: |
+    Renders a compact markdown + JSON summary for a Stage 1.1 Test Execution Telemetry orchestrator run.
+
+    The summarizer consumes the orchestrator ``manifest.json`` + ``telemetry.json`` and emits additional
+    artifacts under:
+
+      .repo_studios/reports/healthview/summarizer_reports/test_execution_telemetry/<YYYYMMDD-HHMM>/
+
+    The run directory includes:
+      - test_execution_telemetry_summary.json
+      - test_execution_telemetry_summary.md
+  keywords:
+    - healthview
+    - summarizer
+    - test
+    - telemetry
+    - orchestrator
+    - summary
+    - stage-1.1
+  use_when:
+    - Need a human-readable summary of the Stage 1.1 pipeline steps and emitted artifacts
+    - Validating Stage 1.1 summarizer output roots and retention behavior
+    - Attaching summary artifacts to a manifest for downstream tooling
+  dont_use_when:
+    - You need to generate the producer/consumer/aggregator artifacts first (run the Stage 1.1 orchestrator)
+    - You do not have a manifest.json + telemetry.json pair available
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --manifest {manifest} \
+      --telemetry {telemetry} \
+      --output-dir {output_dir} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+  script_path: .repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+    notes:
+      - "Expects an orchestrator-produced manifest.json + telemetry.json describing a single Stage 1.1 run."
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: .
+    description: Repository root directory for resolving relative artifact pointers in the manifest/telemetry.
+    validation:
+      must_exist: true
+      must_be_directory: true
+
+  - name: manifest
+    type: path
+    required: true
+    default: null
+    description: Path to the Stage 1.1 orchestrator manifest.json.
+    validation:
+      must_exist: true
+      must_be_file: true
+
+  - name: telemetry
+    type: path
+    required: true
+    default: null
+    description: Path to the Stage 1.1 orchestrator telemetry.json.
+    validation:
+      must_exist: true
+      must_be_file: true
+
+  - name: output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview
+    description: Root directory used to write summary artifacts (viewer/topic/run_slug are appended).
+    validation:
+      parent_must_exist: false
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 3
+    description: Number of historical summary run directories to retain.
+    validation:
+      min_value: 1
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+outputs:
+  primary:
+    type: directory
+    format: test_execution_telemetry_summary
+    path_pattern: .repo_studios/reports/healthview/summarizer_reports/test_execution_telemetry/<YYYYMMDD-HHMM>/
+    description: Summary directory for a single Stage 1.1 run.
+    contents:
+      required:
+        - test_execution_telemetry_summary.json
+        - test_execution_telemetry_summary.md
+
+  secondary:
+    - type: stdout
+      format: text
+      description: Logging output describing inputs, summary status, and pruning.
+
+behavior:
+  idempotent: false
+  side_effects:
+    - Reads the Stage 1.1 manifest.json and telemetry.json files
+    - Resolves relative artifact pointers back to repo_root
+    - Writes a timestamped summary run directory under output_dir
+    - Prunes older sibling run directories beyond artifacts_to_keep
+  duration_estimate: "< 1 second for typical Stage 1.1 runs"
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 1
+      meaning: "Required input files are missing, invalid JSON, or missing required fields."
+      agent_action: "Confirm --manifest/--telemetry point to the orchestrator outputs for a single run."
+
+integration:
+  typical_workflow:
+    - step: 1
+      action: Run Stage 1.1 orchestrator
+      output: manifest.json + telemetry.json plus producer/consumer/aggregator artifacts
+    - step: 2
+      action: Run summarize_test_execution_telemetry
+      output: Summary artifacts under summarizer_reports/test_execution_telemetry
+
+  input_producers:
+    - .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py
+
+  output_consumers:
+    - .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py
+
+examples:
+  - description: Summarize an orchestrator run directory (explicit inputs)
+    command: |
+      python .repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py \
+        --manifest .repo_studios/command_center/reports/healthview/test_execution_telemetry/20251224-1200/manifest.json \
+        --telemetry .repo_studios/command_center/reports/healthview/test_execution_telemetry/20251224-1200/telemetry.json
+
+metadata:
+  category: summarizer
+  tier: 3
+  status: draft
+  version: 0.1.0
+  author: Repo Studios Team
+  last_updated: 2025-12-24
+  dependencies_tier3:
+    - tier3_artifacts.yaml
+    - tier3_cli.yaml
+    - tier3_prune_logs.yaml
+    - tier3_database_integration.yaml
+  tier2_rosters:
+    - healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md
+  tier1_pipelines:
+    - healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
+  testing:
+    test_file: .repo_studios/tests/tests_command_center/test_execution_telemetry/test_summarize_test_execution_telemetry.py

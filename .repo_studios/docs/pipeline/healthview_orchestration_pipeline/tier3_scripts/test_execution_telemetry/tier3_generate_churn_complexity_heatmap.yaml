@@ -1,0 +1,210 @@
+# Tier-3: generate_churn_complexity_heatmap.py
+# Aggregator script that scores churn × complexity × failures into a deterministic heatmap bundle.
+
+tool:
+  id: generate_churn_complexity_heatmap
+  name: Generate Churn × Complexity Heatmap
+  description: |
+    Computes per-file churn (git log window), simple AST branch complexity, and optionally
+    annotates failures (via consumer bundle summary or discovered JUnit XML) to emit a scored
+    heatmap bundle under:
+
+      .repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap/
+        churn_complexity_heatmap-<YYYY-MM-DD_HHMMSS>/
+
+    The run directory includes heatmap.json, heatmap.md, and bundle_summary.json.
+  keywords:
+    - healthview
+    - aggregator
+    - churn
+    - complexity
+    - junit
+    - telemetry
+    - heatmap
+  use_when:
+    - Need a ranked view of Python files combining churn, complexity, and test failures
+    - Validating Stage 1.1 aggregator outputs and retention behavior
+    - Triaging “high change + high complexity + failing tests” hotspots for follow-up work
+  dont_use_when:
+    - You need raw pytest telemetry bundles (use collect_test_log_reports)
+    - You need test-log health summaries (use generate_test_log_health_report)
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --window {window} \
+      --output-base {output_base} \
+      --test-log-summary {test_log_summary} \
+      --logs-dir {logs_dir} \
+      --metrics-source {metrics_source} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+  script_path: .repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+    notes:
+      - "Requires git on PATH to compute churn; will degrade gracefully if git fails."
+      - "Optional env var CHURN_HEATMAP_ALLOW_LEGACY controls fallback to .repo_studios/pytest_logs."
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: .
+    description: Repository root directory for relative path resolution and git churn scanning.
+    validation:
+      must_exist: true
+      must_be_directory: true
+
+  - name: window
+    type: int
+    required: false
+    default: 500
+    description: Number of git commits to scan for churn.
+    validation:
+      min_value: 1
+
+  - name: output_base
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap
+    description: Base directory where timestamped run directories are written.
+    validation:
+      parent_must_exist: false
+
+  - name: test_log_summary
+    type: path
+    required: false
+    default: .repo_studios/reports/consumer_reports/test_log_health_reports
+    description: |
+      Candidate path to a consumer bundle summary (bundle_summary.json) or a directory containing
+      timestamped consumer run directories.
+    validation:
+      must_exist: false
+
+  - name: logs_dir
+    type: path
+    required: false
+    default: .repo_studios/command_center/reports/rawview/test_execution_runs
+    description: Base directory containing pytest log run folders (used when consumer bundle is missing).
+    validation:
+      must_exist: false
+
+  - name: metrics_source
+    type: path
+    required: false
+    default: null
+    description: Optional JSON payload containing precomputed metrics (items list with file/churn/complexity).
+    validation:
+      must_exist: false
+      must_be_file: true
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Number of historical run directories to retain.
+    validation:
+      min_value: 1
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+outputs:
+  primary:
+    type: directory
+    format: heatmap_bundle
+    path_pattern: |
+      .repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap/
+        churn_complexity_heatmap-<YYYY-MM-DD_HHMMSS>/
+    description: Heatmap bundle directory for a single run.
+    contents:
+      required:
+        - heatmap.json
+        - heatmap.md
+        - bundle_summary.json
+
+  secondary:
+    - type: stdout
+      format: text
+      description: Logging output describing inputs, mode (consumer vs logs_fallback), and pruning.
+
+behavior:
+  idempotent: false
+  side_effects:
+    - Reads git history under repo_root to compute churn
+    - Scans Python files under repo_root to compute AST branch complexity
+    - Optionally reads consumer bundle summary (bundle_summary.json) for JUnit hints
+    - Optionally discovers JUnit under logs_dir (or legacy .repo_studios/pytest_logs)
+    - Writes a timestamped run directory under output_base
+    - Prunes older sibling run directories beyond artifacts_to_keep
+  duration_estimate: "< 2 seconds for typical repo windows"
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 0
+      meaning: "Success; bundle written."
+      agent_action: "Inspect output_dir for artifacts."
+
+    - exit_code: 1
+      meaning: "No Python metrics available (no Python files found or metrics_source empty)."
+      agent_action: "Pass --repo-root pointing at a repo with Python files or provide a valid --metrics-source."
+
+integration:
+  typical_workflow:
+    - step: 1
+      action: Run collect_test_log_reports
+      output: HealthView bundle under rawview/test_log_reports
+    - step: 2
+      action: Run generate_test_log_health_report
+      output: HealthView consumer report under consumer_reports/test_log_health_reports
+    - step: 3
+      action: Run generate_churn_complexity_heatmap
+      output: HealthView aggregator heatmap bundle under aggregator_reports/churn_complexity_heatmap
+
+  input_producers:
+    - .repo_studios/scripts/producers/collect_test_log_reports.py
+    - .repo_studios/scripts/consumers/generate_test_log_health_report.py
+
+  output_consumers:
+    - .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py
+
+examples:
+  - description: Standard run using defaults
+    command: |
+      python .repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py --log-level INFO
+
+  - description: Deterministic inputs via consumer run dir
+    command: |
+      python .repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py \
+        --test-log-summary .repo_studios/reports/healthview/consumer_reports/test_log_health_reports/20251224-1200 \
+        --log-level INFO
+
+metadata:
+  category: aggregator
+  tier: 3
+  status: draft
+  version: 0.1.0
+  author: Repo Studios Team
+  last_updated: 2025-12-24
+  dependencies_tier3:
+    - tier3_artifacts.yaml
+    - tier3_cli.yaml
+    - tier3_prune_logs.yaml
+    - tier3_database_integration.yaml
+  tier2_rosters:
+    - healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md
+  tier1_pipelines:
+    - healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
+  testing:
+    test_file: .repo_studios/tests/tests_aggregators/test_generate_churn_complexity_heatmap.py

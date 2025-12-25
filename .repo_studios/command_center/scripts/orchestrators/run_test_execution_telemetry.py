@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Topic orchestrator for test execution telemetry.
 
-Emits Healthview bundles under
-`.repo_studios/command_center/reports/healthview/test_execution_telemetry/<timestamp>/` and replaces
+Emits HealthView bundles under
+`.repo_studios/reports/healthview/orchestrator_reports/test_execution_telemetry/<timestamp>/` and replaces
 the legacy `scripts/orchestrators/run_pytest_log_capture.py` flow by chaining log collection,
 coverage inventory, churn heatmap, hardening analysis, and the health report summarizer. Expect a
 roughly five to six minute runtime in CI when churn analysis is enabled; the pipeline stops on the
@@ -49,7 +49,7 @@ LOGGER = logging.getLogger(__name__)
 
 TOPIC_SLUG = "test-execution-telemetry"
 HEALTHVIEW_TOPIC = "test_execution_telemetry"
-VIEWER_SLUG = "healthview"
+VIEWER_SLUG = "orchestrator_reports"
 SCHEMA_VERSION = 1
 
 COLLECT_SCRIPT = Path(".repo_studios/scripts/producers/collect_test_log_reports.py")
@@ -73,9 +73,9 @@ DEFAULT_TEST_LOG_REPORTS_DIR = Path(".repo_studios/reports/healthview")
 DEFAULT_TEST_LOG_HEALTH_DIR = Path(".repo_studios/reports/healthview/consumer_reports/test_log_health_reports")
 DEFAULT_COVERAGE_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
 DEFAULT_COVERAGE_XML = Path(".repo_studios/tests/fixtures/test_run_coverage/coverage.xml")
-DEFAULT_HEATMAP_OUTPUT_DIR = Path(".repo_studios/reports/aggregator_reports/churn_complexity_heatmap")
+DEFAULT_HEATMAP_OUTPUT_DIR = Path(".repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap")
 DEFAULT_HARDENING_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
-DEFAULT_HEALTHVIEW_ROOT = Path(".repo_studios/command_center/reports")
+DEFAULT_HEALTHVIEW_ROOT = Path(".repo_studios/reports/healthview")
 
 COVERAGE_CLASS_SLUG = "producer_reports"
 COVERAGE_TOPIC_SLUG = "test_coverage_inventory"
@@ -360,11 +360,14 @@ def _execute_coverage(paths: Paths, options: Options) -> CoverageOutcome:
 
 def _execute_collect(paths: Paths, options: Options) -> CollectOutcome:
     run_callable = _load_run_callable(paths.repo_root / COLLECT_SCRIPT, COLLECT_MODULE)
+    run_slug = options.run_timestamp.strftime("%Y%m%d-%H%M")
     argv = [
         "--logs-dir",
         str(paths.logs_dir),
         "--output-dir",
         str(paths.test_log_reports_dir),
+        "--run-timestamp",
+        run_slug,
         "--artifacts-to-keep",
         str(options.collector_keep),
         "--log-level",
@@ -503,6 +506,14 @@ def _register_scripts(registry: CatalogRegistry) -> None:
     registry.register(script_path=str(SUMMARIZER_SCRIPT), topic=TOPIC_SLUG, role="summarizer")
 
 
+def _summarize_steps(result_steps: Sequence[Any]) -> str:
+    lines = ["# Test Execution Telemetry Run", ""]
+    for step in result_steps:
+        detail = f" ({step.detail})" if step.detail else ""
+        lines.append(f"- {step.name}: {step.status}{detail}")
+    return "\n".join(lines) + "\n"
+
+
 def run(argv: Sequence[str] | None = None) -> int:
     args = parse_args(argv)
     paths = build_paths(args)
@@ -639,8 +650,11 @@ def run(argv: Sequence[str] | None = None) -> int:
         "catalog": [entry.__dict__ for entry in registry.all_entries()],
     }
 
+    summary_markdown = _summarize_steps(result.steps)
+
     artifacts = [
         ReportArtifact(filename="manifest.json", kind="json", content=lambda: manifest),
+        ReportArtifact(filename="summary.md", kind="text", content=lambda: summary_markdown),
         ReportArtifact(filename="telemetry.json", kind="json", content=lambda: telemetry_payload),
     ]
     result_artifacts = write_report_artifacts(
@@ -662,7 +676,7 @@ def run(argv: Sequence[str] | None = None) -> int:
         "--telemetry",
         str(result_artifacts.artifacts["telemetry.json"]),
         "--output-dir",
-        str(paths.healthview_root),
+        str(paths.test_log_reports_dir),
         "--artifacts-to-keep",
         str(options.artifacts_to_keep),
         "--log-level",
@@ -714,3 +728,7 @@ def main(argv: Sequence[str] | None = None) -> None:
 
 
 __all__ = ["run", "main", "parse_args", "build_paths", "build_options"]
+
+
+if __name__ == "__main__":
+    main()

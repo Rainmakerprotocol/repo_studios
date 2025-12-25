@@ -102,7 +102,7 @@ def _seed_artifacts(repo_root: Path) -> dict[str, str]:
 def _write_manifest(repo_root: Path, manifest_path: Path, artifacts: dict[str, str], telemetry_payload: dict[str, object]) -> None:
     manifest = {
         "schema_version": 1,
-        "viewer": module.VIEWER_SLUG,
+        "viewer": "healthview",
         "topic": module.TOPIC_SLUG,
         "run_slug": RUN_SLUG,
         "generated_at": RUN_TIMESTAMP,
@@ -120,7 +120,7 @@ def _write_manifest(repo_root: Path, manifest_path: Path, artifacts: dict[str, s
 
 def _write_telemetry(telemetry_path: Path) -> dict[str, object]:
     telemetry_payload = {
-        "viewer": module.VIEWER_SLUG,
+        "viewer": "healthview",
         "topic": "test-execution-telemetry",
         "run_slug": RUN_SLUG,
         "success": True,
@@ -179,7 +179,7 @@ def test_summarizer_generates_summary_bundle(tmp_path: Path) -> None:
     telemetry_payload = _write_telemetry(telemetry_path)
     _write_manifest(repo_root, manifest_path, artifacts, telemetry_payload)
 
-    output_dir = repo_root / ".repo_studios" / "command_center" / "reports"
+    output_dir = repo_root / ".repo_studios" / "reports" / "healthview"
     result = module.run(
         [
             "--repo-root",
@@ -202,6 +202,7 @@ def test_summarizer_generates_summary_bundle(tmp_path: Path) -> None:
 
     run_dir = Path(result["run_dir"])
     assert run_dir.exists()
+    assert run_dir == output_dir / module.VIEWER_SLUG / module.TOPIC_SLUG / RUN_SLUG
     summary_json_path = run_dir / f"{module.SUMMARY_STEM}.json"
     summary_md_path = run_dir / f"{module.SUMMARY_STEM}.md"
     assert summary_json_path.exists()

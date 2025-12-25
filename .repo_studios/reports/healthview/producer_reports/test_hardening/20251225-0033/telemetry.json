@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "producer_reports",
+  "topic": "test_hardening",
+  "run_timestamp": "20251225-0033",
+  "timestamp": "2025-12-25T00:33:46.940649+00:00",
+  "status": "ok",
+  "exit_code": 0,
+  "metrics": {
+    "total_files": 0,
+    "total_test_functions": 0,
+    "total_issues": 0,
+    "severity": {
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "high_priority_files": 0,
+    "clean_files": 0
+  },
+  "components": {
+    "hardening": {
+      "summary": {
+        "total_files": 0,
+        "total_test_functions": 0,
+        "total_issues": 0,
+        "severity_totals": {},
+        "high_priority_files": 0,
+        "clean_files": 0
+      },
+      "top_priority": [],
+      "clean_files": [],
+      "results": []
+    }
+  }
+}

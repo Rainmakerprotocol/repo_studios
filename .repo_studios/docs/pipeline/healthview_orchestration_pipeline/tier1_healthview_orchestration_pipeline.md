@@ -492,9 +492,10 @@ _Tier-2 references (depth lives here):_
 - [x] generate_test_coverage_inventory.py — Tier-2 DONE checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_test_coverage_inventorypy)
 - [x] analyze_test_hardening.py — Tier-2 DONE checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--analyze_test_hardeningpy)
 - [x] generate_test_log_health_report.py — Tier-2 DONE checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_test_log_health_reportpy)
-- [ ] generate_churn_complexity_heatmap.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_churn_complexity_heatmappy)
-- [ ] summarize_test_execution_telemetry.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--summarize_test_execution_telemetrypy)
-- [ ] run_test_execution_telemetry.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#fixture-example-permanent--run_test_execution_telemetrypy)
+- [x] generate_churn_complexity_heatmap.py — Tier-2 DONE checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_churn_complexity_heatmappy)
+- [x] summarize_test_execution_telemetry.py — Tier-2 DONE checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--summarize_test_execution_telemetrypy)
+  - Tier-3: [tier3_summarize_test_execution_telemetry.yaml](tier3_scripts/test_execution_telemetry/tier3_summarize_test_execution_telemetry.yaml)
+- [x] run_test_execution_telemetry.py — Tier-2 DONE checked. See: [Tier-2 record](tier2_roster/tier2_test_execution_telemetry_roster.md#fixture-example-permanent--run_test_execution_telemetrypy)
 
 **Stage 1.1 Gate Checklist (Tier-1):**
 
@@ -513,9 +514,10 @@ These are Stage 1.1 readiness gates after all Tier-2 DONE script gates are close
 
 **Current evidence (Stage 1.1):**
 
-- Stage 1.1 remains in the “current” HealthView root and is not yet output-root compliant.
-- Base package completeness is a stop-gate (Stage 1.1 bundle is currently missing `summary.md`).
-- Pointer artifacts remain a stop-gate (downstream artifacts include `latest_*`).
+- Stage 1.1 output root is aligned to the Tier-1 contract:
+  `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
+- Base package is present (`manifest.json`, `summary.md`, `telemetry.json`).
+- No pointer artifacts (`latest_*` / `current_*`) were observed under `.repo_studios/reports/healthview`.
 - Details and evidence live in the Stage 1.1 Tier-2 roster:
   [Current vs Target snapshot](tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11),
   [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates).
@@ -542,9 +544,9 @@ runtime when churn analysis is enabled; pipeline stops on first hard failure.
 
 **Outputs:**
 
-- **Healthview bundle (current evidence):** `.repo_studios/command_center/reports/healthview/test_execution_telemetry/<timestamp>/`
-  - Base package is a stop-gate for Stage 1.1 (see Tier-2 for current completeness and additional
-    artifacts).
+- **Healthview bundle (current evidence):**
+  `.repo_studios/reports/healthview/orchestrator_reports/test_execution_telemetry/<timestamp>/`
+  - Base package: `manifest.json`, `summary.md`, `telemetry.json`.
 - **Intermediate artifacts (current evidence):** stage- and script-specific; Tier-1 does not
   enumerate current per-script output roots.
   - See Tier-2 Stage 1.1: [Current vs Target snapshot](tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11)
@@ -1592,6 +1594,8 @@ All gaps have logical explanations:
 
 | Date | Author / Steward | Change | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
+| 2025-12-25 | GitHub Copilot | Closed Stage 1.1 script gate for `run_test_execution_telemetry.py` after Tier-2 DONE; validated Make target `studio-orchestrate-test-execution-telemetry` emits canonical HealthView bundles. | 20251225-0517 | make studio-orchestrate-test-execution-telemetry; doc-index |
+| 2025-12-24 | GitHub Copilot | Closed Stage 1.1 script gate for `summarize_test_execution_telemetry.py` after Tier-2 DONE + Tier-3 YAML create/validate; refreshed doc-index. | 20251224-2318 | doc-index; pytest tier3_index (29 passed) |
 | 2025-12-22 | GitHub Copilot | Closed Stage 1.1 script gate for `generate_test_log_health_report.py` after Tier-2 DONE; refreshed doc-index and confirmed deterministic selector advanced to the next Tier-2 record. | 20251222-0450 | doc-index; healthview-agent-next-compact |
 | 2025-12-22 | GitHub Copilot | Closed Stage 1.1 script gate for `analyze_test_hardening.py` after Tier-2 DONE; refreshed doc-index and confirmed deterministic selector advanced to the next Tier-2 record. | 2025-12-22 | doc-index; healthview-agent-next-compact |
 | 2025-12-22 | GitHub Copilot | Closed Stage 1.1 script gate for `collect_test_log_reports.py` after Tier-2 DONE + Tier-3 YAML draft/validation; refreshed doc-index + tier3 index outputs. | 20251222-0029 | doc-index; pytest tier3_index (28 passed) |

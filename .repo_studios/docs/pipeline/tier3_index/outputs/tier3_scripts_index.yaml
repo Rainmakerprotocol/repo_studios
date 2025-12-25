@@ -1,20 +1,22 @@
 version: 1.0.0
-generated_at: '2025-12-22T04:50:03.353757+00:00'
+generated_at: '2025-12-25T05:17:10.168790+00:00'
 generator_version: 1.0.0
 repository:
   name: repo_studios
   root: C:\Users\genet\repo_studios
   branch: main
 statistics:
-  total_scripts: 6
+  total_scripts: 8
   categories:
     producer: 4
     utility: 1
+    aggregator: 1
     consumer: 1
+    summarizer: 1
   status:
     active: 1
     template: 1
-    draft: 4
+    draft: 6
 scripts:
 - script_id: generate_commandview_inventory
   name: Generate CommandView Inventory
@@ -98,6 +100,26 @@ scripts:
   status: draft
   entry_point: run
   importable: true
+- script_id: generate_churn_complexity_heatmap
+  name: Generate Churn × Complexity Heatmap
+  category: aggregator
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\test_execution_telemetry\tier3_generate_churn_complexity_heatmap.yaml
+  script_path: .repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py
+  summary: "Computes per-file churn (git log window), simple AST branch complexity, and optionally\nannotates\
+    \ failures (via consumer bundle summary or discovered JUnit XML) to emit a scored\nheatmap bundle\
+    \ under:\n\n  .repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap/\n    churn_complexity_heatmap-<YYYY-MM-DD_HHMMSS>/\n\
+    \nThe run directory includes heatmap.json, heatmap.md, and bundle_summary.json.\n"
+  keywords:
+  - healthview
+  - aggregator
+  - churn
+  - complexity
+  - junit
+  - telemetry
+  - heatmap
+  status: draft
+  entry_point: run
+  importable: true
 - script_id: generate_test_coverage_inventory
   name: Generate Test Coverage Inventory
   category: producer
@@ -135,6 +157,26 @@ scripts:
   status: draft
   entry_point: run
   importable: true
+- script_id: summarize_test_execution_telemetry
+  name: Summarize Test Execution Telemetry
+  category: summarizer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\test_execution_telemetry\tier3_summarize_test_execution_telemetry.yaml
+  script_path: .repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py
+  summary: "Renders a compact markdown + JSON summary for a Stage 1.1 Test Execution Telemetry orchestrator\
+    \ run.\n\nThe summarizer consumes the orchestrator ``manifest.json`` + ``telemetry.json`` and emits\
+    \ additional\nartifacts under:\n\n  .repo_studios/reports/healthview/summarizer_reports/test_execution_telemetry/<YYYYMMDD-HHMM>/\n\
+    \nThe run directory includes:\n  - test_execution_telemetry_summary.json\n  - test_execution_telemetry_summary.md\n"
+  keywords:
+  - healthview
+  - summarizer
+  - test
+  - telemetry
+  - orchestrator
+  - summary
+  - stage-1.1
+  status: draft
+  entry_point: run
+  importable: true
 by_category:
   producer:
   - generate_commandview_inventory
@@ -143,8 +185,10 @@ by_category:
   - generate_test_coverage_inventory
   consumer:
   - generate_test_log_health_report
-  aggregator: []
+  aggregator:
+  - generate_churn_complexity_heatmap
   orchestrator: []
-  summarizer: []
+  summarizer:
+  - summarize_test_execution_telemetry
   utility:
   - healthview_onboarding_template

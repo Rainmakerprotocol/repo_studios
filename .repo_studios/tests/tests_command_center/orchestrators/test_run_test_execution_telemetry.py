@@ -27,6 +27,9 @@ def _load_module():
     spec = importlib.util.spec_from_file_location("run_test_execution_telemetry", _MODULE_PATH)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
+    libraries_root = str(_MODULE_PATH.resolve().parents[1])
+    while libraries_root in sys.path:
+        sys.path.remove(libraries_root)
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
@@ -35,6 +38,76 @@ def _load_module():
 @pytest.fixture(name="telemetry_module")
 def telemetry_module_fixture():
     return _load_module()
+
+
+def test_parse_timestamp_invalid_raises(telemetry_module) -> None:
+    with pytest.raises(SystemExit, match=r"Invalid --timestamp value"):
+        telemetry_module._parse_timestamp("not-a-timestamp")
+
+
+def test_parse_timestamp_naive_assumes_utc(telemetry_module) -> None:
+    parsed = telemetry_module._parse_timestamp("2025-12-01T01:01:00")
+    assert parsed.tzinfo is not None
+    assert parsed.utcoffset() is not None
+    assert parsed.utcoffset().total_seconds() == 0
+
+
+def test_latest_directory_selects_latest(tmp_path: Path, telemetry_module) -> None:
+    base = tmp_path / "runs"
+    base.mkdir(parents=True)
+    (base / "20251201-0100").mkdir()
+    (base / "20251201-0200").mkdir()
+    latest = telemetry_module._latest_directory(base, "")
+    assert latest is not None
+    assert latest.name == "20251201-0200"
+
+
+def test_read_json_returns_dict_only(tmp_path: Path, telemetry_module) -> None:
+    missing = telemetry_module._read_json(tmp_path / "missing.json")
+    assert missing is None
+
+    not_a_dict_path = tmp_path / "list.json"
+    not_a_dict_path.write_text("[1, 2, 3]", encoding="utf-8")
+    assert telemetry_module._read_json(not_a_dict_path) is None
+
+    dict_path = tmp_path / "payload.json"
+    dict_path.write_text(json.dumps({"a": 1}), encoding="utf-8")
+    assert telemetry_module._read_json(dict_path) == {"a": 1}
+
+
+def test_relativize_handles_outside_repo(tmp_path: Path, telemetry_module) -> None:
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir(parents=True)
+    inside = repo_root / "nested" / "file.json"
+    inside.parent.mkdir(parents=True)
+    inside.write_text("{}", encoding="utf-8")
+
+    outside = tmp_path / "outside.json"
+    outside.write_text("{}", encoding="utf-8")
+
+    assert telemetry_module._relativize(inside, repo_root) == "nested/file.json"
+    assert telemetry_module._relativize(outside, repo_root) == outside.resolve().as_posix()
+
+
+def test_load_run_callable_errors_when_missing_run(tmp_path: Path, telemetry_module) -> None:
+    script_path = tmp_path / "no_run.py"
+    script_path.write_text("VALUE = 1\n", encoding="utf-8")
+    with pytest.raises(AttributeError, match=r"callable run\(\) helper"):
+        telemetry_module._load_run_callable(script_path, "tests.no_run_module")
+
+
+def test_load_run_callable_uses_sys_modules_shortcut(telemetry_module, monkeypatch: pytest.MonkeyPatch) -> None:
+    module_name = "tests.run_callable_module"
+
+    class DummyModule:
+        @staticmethod
+        def run(argv):
+            return 0
+
+    monkeypatch.setitem(sys.modules, module_name, DummyModule)
+    run_callable = telemetry_module._load_run_callable(Path("does_not_matter.py"), module_name)
+    assert callable(run_callable)
+    assert run_callable([]) == 0
 
 
 def test_run_generates_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, telemetry_module) -> None:
@@ -201,16 +274,18 @@ def test_run_generates_healthview_bundle(tmp_path: Path, monkeypatch: pytest.Mon
     exit_code = telemetry_module.run(args)
     assert exit_code == 0
 
-    topic_dir = healthview_root / "healthview" / "test_execution_telemetry"
+    topic_dir = healthview_root / "orchestrator_reports" / "test_execution_telemetry"
     runs = sorted(child for child in topic_dir.iterdir() if child.is_dir())
     assert len(runs) == 1
     run_folder = runs[0]
     manifest_path = run_folder / "manifest.json"
-    summary_path = run_folder / "test_execution_telemetry_summary.md"
-    summary_json_path = run_folder / "test_execution_telemetry_summary.json"
+    summary_path = run_folder / "summary.md"
     telemetry_path = run_folder / "telemetry.json"
 
+    assert summary_path.exists()
+
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["viewer"] == "orchestrator_reports"
     assert manifest["telemetry"]["success"] is True
     step_names = [step["name"] for step in manifest["telemetry"]["steps"]]
     assert step_names == ["collect", "analyse", "summarize"]
@@ -225,8 +300,22 @@ def test_run_generates_healthview_bundle(tmp_path: Path, monkeypatch: pytest.Mon
         "summary_json",
     }
     assert set(manifest["artifacts"].keys()) == expected_artifacts
-    assert manifest["artifacts"]["summary_markdown"].endswith("test_execution_telemetry/20251201-0101/test_execution_telemetry_summary.md")
-    assert manifest["artifacts"]["summary_json"].endswith("test_execution_telemetry/20251201-0101/test_execution_telemetry_summary.json")
+
+    summary_markdown_rel = manifest["artifacts"]["summary_markdown"]
+    summary_json_rel = manifest["artifacts"]["summary_json"]
+    assert summary_markdown_rel.endswith(
+        "summarizer_reports/test_execution_telemetry/20251201-0101/test_execution_telemetry_summary.md"
+    )
+    assert summary_json_rel.endswith(
+        "summarizer_reports/test_execution_telemetry/20251201-0101/test_execution_telemetry_summary.json"
+    )
+
+    summary_path = Path(summary_markdown_rel)
+    if not summary_path.is_absolute():
+        summary_path = (repo_root / summary_path).resolve()
+    summary_json_path = Path(summary_json_rel)
+    if not summary_json_path.is_absolute():
+        summary_json_path = (repo_root / summary_json_path).resolve()
 
     summary_text = summary_path.read_text(encoding="utf-8")
     assert "# Test Execution Telemetry Summary" in summary_text
@@ -247,7 +336,7 @@ def test_run_generates_healthview_bundle(tmp_path: Path, monkeypatch: pytest.Mon
     assert "- summarize: success" in summary_text
 
     summary_json = json.loads(summary_json_path.read_text(encoding="utf-8"))
-    assert summary_json["viewer"] == "healthview"
+    assert summary_json["viewer"] == "summarizer_reports"
     assert summary_json["topic"] == "test_execution_telemetry"
     assert summary_json["metrics"]["pipeline_status"] == "success"
     assert summary_json["metrics"]["slow_tests_over_threshold"] == 1
@@ -354,9 +443,18 @@ def test_run_handles_missing_logs(tmp_path: Path, monkeypatch: pytest.MonkeyPatc
     exit_code = telemetry_module.run(args)
     assert exit_code == 0
 
-    topic_dir = healthview_root / "healthview" / "test_execution_telemetry"
+    topic_dir = healthview_root / "orchestrator_reports" / "test_execution_telemetry"
     runs = sorted(child for child in topic_dir.iterdir() if child.is_dir())
     assert len(runs) == 1
-    summary_text = (runs[0] / "test_execution_telemetry_summary.md").read_text(encoding="utf-8")
+
+    run_folder = runs[0]
+    manifest_path = run_folder / "manifest.json"
+    assert (run_folder / "summary.md").exists()
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    summary_markdown = Path(manifest["artifacts"]["summary_markdown"])
+    if not summary_markdown.is_absolute():
+        summary_markdown = (repo_root / summary_markdown).resolve()
+
+    summary_text = summary_markdown.read_text(encoding="utf-8")
     assert "log_report_available: no" in summary_text
     assert "- summarize: skipped" in summary_text

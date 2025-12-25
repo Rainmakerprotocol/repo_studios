@@ -12,6 +12,7 @@ dependencies, execution contract, and verification tests.
 - **Primary exports:** `TopicContext`, `TopicStep`, `TopicPipeline`, `build_topic_pipeline`,
   `step_success`, `step_skipped`, `step_failed`, `SkipTopicStep`
 - **Usage pattern:**
+
   ```python
   from command_center.scripts.libraries import (
       TopicContext,
@@ -45,6 +46,7 @@ dependencies, execution contract, and verification tests.
   result = pipeline.run(context)
   result.raise_for_failure()
   ```
+
 - **Notes:**
   - `TopicContext` travels across steps; store shared data via `add_metadata`.
   - Prefer `step_success` / `step_failed` over plain dicts so downstream logging stays uniform.
@@ -58,6 +60,7 @@ dependencies, execution contract, and verification tests.
 - **Module:** `.repo_studios/command_center/scripts/libraries/summarizer_runner.py`
 - **Primary exports:** `load_summarizer`, `run_summarizer`, `SummarizerError`
 - **Usage pattern:**
+
   ```python
   from pathlib import Path
   from command_center.scripts.libraries import load_summarizer, run_summarizer
@@ -66,6 +69,7 @@ dependencies, execution contract, and verification tests.
   run_helper = load_summarizer(summarizer_path, module_name="generate_function_analysis")
   run_summarizer(run_helper, argv=["--repo-root", str(repo_root)], name="function_analysis")
   ```
+
 - **Notes:**
   - Always pass a stable `module_name` so repeated runs reuse the import cache across orchestration
     steps.
@@ -80,6 +84,7 @@ dependencies, execution contract, and verification tests.
 - **Module:** `.repo_studios/command_center/scripts/libraries/telemetry_emitters.py`
 - **Primary exports:** `TopicTelemetry`, `build_pipeline_telemetry`
 - **Usage pattern:**
+
   ```python
   from command_center.scripts.libraries import build_pipeline_telemetry
 
@@ -91,6 +96,7 @@ dependencies, execution contract, and verification tests.
   )
   manifest_writer.write_manifest(telemetry.as_dict())
   ```
+
 - **Notes:**
   - Feed the `TopicPipelineResult` returned by `TopicPipeline.run` to capture per-step timings and
     payloads.
@@ -106,6 +112,7 @@ dependencies, execution contract, and verification tests.
 - **Module:** `.repo_studios/command_center/scripts/libraries/catalog_registry.py`
 - **Primary exports:** `CatalogRegistry`, `CatalogEntry`
 - **Usage pattern:**
+
   ```python
   from command_center.scripts.libraries import CatalogRegistry
 
@@ -119,6 +126,7 @@ dependencies, execution contract, and verification tests.
   seen_topics = registry.topics()
   topic_entries = registry.entries_for_topic("test-execution-telemetry")
   ```
+
 - **Notes:**
   - Paths are normalised to POSIX style, so pass repo-relative strings to avoid duplicate keys.
   - `register` raises if the same script is registered with conflicting topic metadata—handle this
@@ -129,15 +137,15 @@ dependencies, execution contract, and verification tests.
 
 ## CLI Integration Checklist
 
-1. Build CLI configs with `command_center.scripts.libraries.cli.build_standard_paths` and
+- Build CLI configs with `command_center.scripts.libraries.cli.build_standard_paths` and
    `build_standard_options` before invoking the helpers above.
-2. Wrap orchestration steps inside `TopicStep` definitions, reuse the shared `TopicPipeline`, and
+- Wrap orchestration steps inside `TopicStep` definitions, reuse the shared `TopicPipeline`, and
    propagate failure state with `TopicPipelineResult.raise_for_failure()` when you need hard exits.
-3. Emit telemetry via `build_pipeline_telemetry(...).as_dict()` and persist with
+- Emit telemetry via `build_pipeline_telemetry(...).as_dict()` and persist with
    `write_report_artifacts` so CommandView and Healthview remain aligned.
-4. When summarizers are part of the pipeline, load the script dynamically and route failures through
+- When summarizers are part of the pipeline, load the script dynamically and route failures through
    `SummarizerError` so a single error path governs retries.
-5. Record helper adoption in documentation or parity matrices by extracting registered entries from
+- Record helper adoption in documentation or parity matrices by extracting registered entries from
    `CatalogRegistry`.
 
 ## References

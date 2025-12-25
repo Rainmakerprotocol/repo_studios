@@ -17,10 +17,10 @@ from pathlib import Path
 from typing import Any, Iterable, Sequence
 
 DEFAULT_REPO_ROOT = Path(".")
-DEFAULT_OUTPUT_BASE = Path(".repo_studios/reports/aggregator_reports/churn_complexity_heatmap")
-DEFAULT_TEST_LOG_SUMMARY = Path(
-    ".repo_studios/reports/consumer_reports/test_log_health_reports/latest/bundle_summary.json"
+DEFAULT_OUTPUT_BASE = Path(
+    ".repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap"
 )
+DEFAULT_TEST_LOG_SUMMARY = Path(".repo_studios/reports/consumer_reports/test_log_health_reports")
 DEFAULT_LOGS_DIR = Path(".repo_studios/command_center/reports/rawview/test_execution_runs")
 LEGACY_LOGS_DIR = Path(".repo_studios/pytest_logs")
 DEFAULT_METRICS_SOURCE: Path | None = None
@@ -208,10 +208,10 @@ def _prepare_metrics(
 ) -> tuple[list[MetricRecord], list[str]]:
     notes: list[str] = []
     if metrics_source is not None and metrics_source.exists():
-        metrics = _load_metrics_from_source(metrics_source, logger)
-        if metrics:
+        preloaded_metrics = _load_metrics_from_source(metrics_source, logger)
+        if preloaded_metrics:
             notes.append(f"Metrics preloaded from {metrics_source}")
-            return metrics, notes
+            return preloaded_metrics, notes
         notes.append(f"Metrics source {metrics_source} was empty; recomputing from repo")
 
     churn = _collect_git_churn(repo_root, window, logger)
@@ -240,9 +240,9 @@ def _load_junit_failures(path: Path | None, repo_root: Path, logger: logging.Log
     if path is None or not path.exists():
         return Counter()
     try:
-        from defusedxml import ElementTree
+        from defusedxml import ElementTree  # type: ignore[import-untyped]
     except ImportError:
-        import xml.etree.ElementTree as ElementTree  # type: ignore
+        import xml.etree.ElementTree as ElementTree
 
         logger.debug("defusedxml unavailable; falling back to xml.etree.ElementTree for junit parse")
     try:
@@ -453,24 +453,6 @@ def _write_json(path: Path, payload: dict[str, Any]) -> Path:
     return path
 
 
-def _update_latest(base: Path, run_dir: Path) -> None:
-    mapping = {
-        HEATMAP_JSON: base / f"latest_{HEATMAP_JSON}",
-        HEATMAP_MD: base / f"latest_{HEATMAP_MD}",
-        BUNDLE_SUMMARY: base / f"latest_{BUNDLE_SUMMARY}",
-    }
-    for name, dest in mapping.items():
-        src = run_dir / name
-        if not src.exists():
-            continue
-        try:
-            if dest.exists() or dest.is_symlink():
-                dest.unlink()
-            dest.hardlink_to(src)
-        except Exception:
-            dest.write_bytes(src.read_bytes())
-
-
 def _prune_history(base: Path, current: Path, keep: int, *, logger: logging.Logger | None) -> list[Path]:
     try:
         keep_count = int(keep)
@@ -597,7 +579,6 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     }
     _write_json(bundle_summary_path, bundle_summary)
 
-    _update_latest(output_base, run_dir)
     pruned = _prune_history(output_base, run_dir, args.artifacts_to_keep, logger=logger)
 
     logger.info(

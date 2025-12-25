@@ -2,28 +2,28 @@
   "schema_version": 1,
   "viewer_slug": "healthview",
   "topic": "doc_index",
-  "run_timestamp": "20251222-0450",
-  "generated_utc": "2025-12-22T04:50:03.915078+00:00",
+  "run_timestamp": "20251225-0517",
+  "generated_utc": "2025-12-25T05:17:10.736446+00:00",
   "status": "ok",
   "metrics": {
     "total_documents": 290,
     "total_headings": 2067,
-    "total_links": 236,
+    "total_links": 237,
     "duplicate_slug_count": 6,
     "documents_missing_description_count": 36,
     "placeholder_documents_count": 65,
-    "link_density": 0.8137931034482758
+    "link_density": 0.8172413793103448
   },
   "payload": {
     "schema_version": 1,
-    "generated_utc": "2025-12-22T04:50:03.915078+00:00",
+    "generated_utc": "2025-12-25T05:17:10.736446+00:00",
     "repo_root": "C:\\Users\\genet\\repo_studios",
     "summary": {
       "total_documents": 290,
       "total_h1": 293,
       "total_h2": 1774,
       "total_headings": 2067,
-      "total_links": 236
+      "total_links": 237
     },
     "metrics": {
       "documents_per_directory": [
@@ -114,7 +114,7 @@
       "placeholder_documents_count": 65,
       "duplicate_slug_count": 6,
       "documents_outside_docs_tree_count": 159,
-      "link_density": 0.8137931034482758
+      "link_density": 0.8172413793103448
     },
     "advisories": {
       "documents_missing_description": [
@@ -1605,57 +1605,57 @@
           {
             "title": "5W1H Snapshot",
             "slug": "5w1h-snapshot",
-            "line": 7,
+            "line": 10,
             "parent_title": "Code Library Integration Status \u2014 2025-11-23",
             "parent_slug": "code-library-integration-status-2025-11-23"
           },
           {
             "title": "Current Assets",
             "slug": "current-assets",
-            "line": 16,
+            "line": 28,
             "parent_title": "Code Library Integration Status \u2014 2025-11-23",
             "parent_slug": "code-library-integration-status-2025-11-23"
           },
           {
             "title": "Progress Recap",
             "slug": "progress-recap",
-            "line": 69,
+            "line": 81,
             "parent_title": "Code Library Integration Status \u2014 2025-11-23",
             "parent_slug": "code-library-integration-status-2025-11-23"
           },
           {
             "title": "Outstanding Work",
             "slug": "outstanding-work",
-            "line": 138,
+            "line": 155,
             "parent_title": "Code Library Integration Status \u2014 2025-11-23",
             "parent_slug": "code-library-integration-status-2025-11-23"
           },
           {
             "title": "Key References",
             "slug": "key-references",
-            "line": 158,
+            "line": 182,
             "parent_title": "Code Library Integration Status \u2014 2025-11-23",
             "parent_slug": "code-library-integration-status-2025-11-23"
           },
           {
             "title": "Suggested Next Actions (for the next contributor)",
             "slug": "suggested-next-actions-for-the-next-contributor",
-            "line": 168,
+            "line": 195,
             "parent_title": "Code Library Integration Status \u2014 2025-11-23",
             "parent_slug": "code-library-integration-status-2025-11-23"
           },
           {
             "title": "Maintenance Tips",
             "slug": "maintenance-tips",
-            "line": 176,
+            "line": 208,
             "parent_title": "Code Library Integration Status \u2014 2025-11-23",
             "parent_slug": "code-library-integration-status-2025-11-23"
           }
         ],
         "links": [],
         "description": "Summarize the current state of Repo Studios\u2019 duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This\u2026",
-        "size_bytes": 14181,
-        "modified_utc": "2025-12-17T01:38:22.486199+00:00",
+        "size_bytes": 14334,
+        "modified_utc": "2025-12-25T00:29:14.501467+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -14556,39 +14556,39 @@
           {
             "title": "Signals & Telemetry",
             "slug": "signals-telemetry",
-            "line": 112,
+            "line": 111,
             "parent_title": "Checkbox Report",
             "parent_slug": "checkbox-report"
           },
           {
             "title": "Maintenance Playbook",
             "slug": "maintenance-playbook",
-            "line": 132,
+            "line": 131,
             "parent_title": "Checkbox Report",
             "parent_slug": "checkbox-report"
           },
           {
             "title": "Update Log",
             "slug": "update-log",
-            "line": 142,
+            "line": 141,
             "parent_title": "Checkbox Report",
             "parent_slug": "checkbox-report"
           }
         ],
         "links": [
-          "tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_churn_complexity_heatmappy",
-          "tier2_roster/tier2_test_execution_telemetry_roster.md#record--summarize_test_execution_telemetrypy",
-          "tier2_roster/tier2_test_execution_telemetry_roster.md#fixture-example-permanent--run_test_execution_telemetrypy",
           "tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates",
           "tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11",
           "tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1",
           "tier2_roster/tier2_docs_health_overview_roster.md#s21r-002-generate-doc-index",
           "tier2_roster/tier2_docs_health_overview_roster.md#s21r-003-generate-anchor-inventory",
-          "tier2_roster/tier2_docs_health_overview_roster.md#s21r-004-validate-markdown-anchors"
+          "tier2_roster/tier2_docs_health_overview_roster.md#s21r-004-validate-markdown-anchors",
+          "tier2_roster/tier2_docs_health_overview_roster.md#s21r-005-verify-docs-integrity",
+          "tier2_roster/tier2_docs_health_overview_roster.md#s21r-006-validate-metrics-anchor-stubs",
+          "tier2_roster/tier2_docs_health_overview_roster.md#s21r-007-generate-code-doc-churn-report"
         ],
         "description": "on pending work.",
-        "size_bytes": 8410,
-        "modified_utc": "2025-12-22T04:50:03.266420+00:00",
+        "size_bytes": 8334,
+        "modified_utc": "2025-12-25T05:17:10.052974+00:00",
         "tags": [
           "checkbox-report",
           "repo-todo"
@@ -14609,7 +14609,7 @@
           ],
           "status": "active",
           "version": 1.0,
-          "updated_at": "2025-12-21",
+          "updated_at": "2025-12-25",
           "tags": [
             "checkbox-report",
             "repo-todo"
@@ -14714,84 +14714,84 @@
           {
             "title": "5. Stage 2 \u2013 Documentation Quality",
             "slug": "5-stage-2-documentation-quality",
-            "line": 591,
+            "line": 593,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "6. Stage 3 \u2013 Runtime Reliability",
             "slug": "6-stage-3-runtime-reliability",
-            "line": 741,
+            "line": 743,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "7. Stage 4 \u2013 Dependency Management",
             "slug": "7-stage-4-dependency-management",
-            "line": 858,
+            "line": 860,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "8. Stage 5 \u2013 Technical Debt Oversight",
             "slug": "8-stage-5-technical-debt-oversight",
-            "line": 992,
+            "line": 994,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "9. Stage 6 \u2013 Process Governance",
             "slug": "9-stage-6-process-governance",
-            "line": 1115,
+            "line": 1117,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "10. Stage 7 \u2013 Running the Complete Suite",
             "slug": "10-stage-7-running-the-complete-suite",
-            "line": 1276,
+            "line": 1278,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "11. Stage 11 \u2013 Available Scripts (Holding Area)",
             "slug": "11-stage-11-available-scripts-holding-area",
-            "line": 1374,
+            "line": 1376,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "12. Snapshot & Stage Matrix",
             "slug": "12-snapshot-stage-matrix",
-            "line": 1462,
+            "line": 1464,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "13. Contradiction Registry",
             "slug": "13-contradiction-registry",
-            "line": 1517,
+            "line": 1519,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "14. Tier-2 Document Index",
             "slug": "14-tier-2-document-index",
-            "line": 1536,
+            "line": 1538,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "15. Working / Future Notes",
             "slug": "15-working-future-notes",
-            "line": 1574,
+            "line": 1576,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "16. Update Log & Evidence Tracking",
             "slug": "16-update-log-evidence-tracking",
-            "line": 1591,
+            "line": 1593,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           }
@@ -14810,6 +14810,7 @@
           "tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_test_log_health_reportpy",
           "tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_churn_complexity_heatmappy",
           "tier2_roster/tier2_test_execution_telemetry_roster.md#record--summarize_test_execution_telemetrypy",
+          "tier3_scripts/test_execution_telemetry/tier3_summarize_test_execution_telemetry.yaml",
           "tier2_roster/tier2_test_execution_telemetry_roster.md#fixture-example-permanent--run_test_execution_telemetrypy",
           "../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py",
           "tier2_roster/tier2_docs_health_overview_roster.\n  d#23-current-vs-target-contract-snapshot-stage-21",
@@ -14928,8 +14929,8 @@
           "../../../tests/tests_aggregators/"
         ],
         "description": "stage content so evidence capture is ready from the first edit.",
-        "size_bytes": 114575,
-        "modified_utc": "2025-12-22T04:50:00.134602+00:00",
+        "size_bytes": 115175,
+        "modified_utc": "2025-12-25T05:17:06.540984+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -16261,49 +16262,49 @@
           {
             "title": "3. Stage Narrative \u2014 Stage 1.1 Test Execution Telemetry",
             "slug": "3-stage-narrative-stage-11-test-execution-telemetry",
-            "line": 158,
+            "line": 156,
             "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
             "parent_slug": "stage-11-roster-test-execution-telemetry"
           },
           {
             "title": "4. Signals & Telemetry",
             "slug": "4-signals-telemetry",
-            "line": 954,
+            "line": 1061,
             "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
             "parent_slug": "stage-11-roster-test-execution-telemetry"
           },
           {
             "title": "5. Dependencies & Stop-Gates",
             "slug": "5-dependencies-stop-gates",
-            "line": 972,
+            "line": 1079,
             "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
             "parent_slug": "stage-11-roster-test-execution-telemetry"
           },
           {
             "title": "6. Instruction Block (Required by Tier Rules)",
             "slug": "6-instruction-block-required-by-tier-rules",
-            "line": 989,
+            "line": 1096,
             "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
             "parent_slug": "stage-11-roster-test-execution-telemetry"
           },
           {
             "title": "7. Agent Automation Block",
             "slug": "7-agent-automation-block",
-            "line": 997,
+            "line": 1104,
             "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
             "parent_slug": "stage-11-roster-test-execution-telemetry"
           },
           {
             "title": "8. Decision Log",
             "slug": "8-decision-log",
-            "line": 1024,
+            "line": 1131,
             "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
             "parent_slug": "stage-11-roster-test-execution-telemetry"
           },
           {
             "title": "9. Update Log",
             "slug": "9-update-log",
-            "line": 1037,
+            "line": 1146,
             "parent_title": "Stage 1.1 Roster \u2014 Test Execution Telemetry",
             "parent_slug": "stage-11-roster-test-execution-telemetry"
           }
@@ -16322,8 +16323,8 @@
           "#record--summarize_test_execution_telemetrypy"
         ],
         "description": "`tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 53340,
-        "modified_utc": "2025-12-22T04:49:06.300880+00:00",
+        "size_bytes": 62810,
+        "modified_utc": "2025-12-25T00:20:53.434246+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -16350,7 +16351,7 @@
           ],
           "status": "draft",
           "version": "0.1.0",
-          "updated_at": "2025-12-22",
+          "updated_at": "2025-12-25",
           "tags": [
             "pipeline",
             "healthview",

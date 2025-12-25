@@ -8,7 +8,7 @@ owners:
     - DocumentationOps
 status: active
 version: 1.0
-updated_at: 2025-12-21
+updated_at: 2025-12-25
 tags:
     - checkbox-report
     - repo-todo
@@ -41,7 +41,7 @@ Top files with the highest number of unfinished items:
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md`
   — 99 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  — 84 unchecked
+  — 81 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md`
   — 77 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_available_scripts_roster.md`
@@ -53,7 +53,7 @@ Top files with the highest number of unfinished items:
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md`
   — 44 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md`
-  — 42 unchecked
+  — 12 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_healthview_roster_template.md`
   — 11 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md`
@@ -62,56 +62,55 @@ Top files with the highest number of unfinished items:
 ### Sample Outstanding Tasks
 
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L495 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
-  Execution Telemetry: generate_churn_complexity_heatmap.py — pending until Tier-2 DONE is checked.
-  See: [Tier-2
-  record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_churn_complexity_heatmappy)
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L496 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
-  Execution Telemetry: summarize_test_execution_telemetry.py — pending until Tier-2 DONE is checked.
-  See: [Tier-2
-  record](tier2_roster/tier2_test_execution_telemetry_roster.md#record--summarize_test_execution_telemetrypy)
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L497 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
-  Execution Telemetry: run_test_execution_telemetry.py — pending until Tier-2 DONE is checked. See:
-  [Tier-2
-  record](tier2_roster/tier2_test_execution_telemetry_roster.md#fixture-example-permanent--run_test_execution_telemetrypy)
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L503 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
+  L504 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
   Execution Telemetry: Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See:
   [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates)
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L504 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
+  L505 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
   Execution Telemetry: No pointer artifacts (`latest_*` / `current_*`). See:
   [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates)
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L505 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
+  L506 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
   Execution Telemetry: Output root aligned to HOP contract
   (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). See: [Contract
   snapshot](tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11)
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L506 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
+  L507 — HealthView Orchestration Pipeline > 4. Stage 1 – Testing Perspectives > 4.1 Stage 1.1: Test
   Execution Telemetry: Tier-3 eligible (Stage 1.1 Tier-2 depth captured; ready for Tier-3
   extraction). See: [Records
   index](tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1)
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L609 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
+  L611 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
   Docs Health Overview: generate_doc_index.py — pending until Tier-2 DONE is checked. See: [Tier-2
   record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-002-generate-doc-index)
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L610 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
+  L612 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
   Docs Health Overview: generate_anchor_inventory.py — pending until Tier-2 DONE is checked. See:
   [Tier-2
   record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-003-generate-anchor-inventory)
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L611 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
+  L613 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
   Docs Health Overview: validate_markdown_anchors.py — pending until Tier-2 DONE is checked. See:
   [Tier-2
   record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-004-validate-markdown-anchors)
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L614 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
+  Docs Health Overview: verify_docs_integrity.py — pending until Tier-2 DONE is checked. See:
+  [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-005-verify-docs-integrity)
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L615 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
+  Docs Health Overview: validate_metrics_anchor_stubs.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2
+  record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-006-validate-metrics-anchor-stubs)
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L616 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
+  Docs Health Overview: generate_code_doc_churn_report.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2
+  record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-007-generate-code-doc-churn-report)
 
 ## Signals & Telemetry
 
-* Total unchecked tasks: 579.
+* Total unchecked tasks: 546.
 * Files containing unchecked tasks: 14.
 
 ### Unchecked Tasks by H1
@@ -119,13 +118,13 @@ Top files with the highest number of unfinished items:
 | H1 | Unchecked |
 | --- | --- |
 | Tier-2 Roster — Stage 2.1 Docs Health Overview | 99 |
-| HealthView Orchestration Pipeline | 84 |
+| HealthView Orchestration Pipeline | 81 |
 | Tier-2 Roster — Stage 7 Running the Complete Suite | 77 |
 | Tier-2 Roster — Stage 11.1 Available Scripts (Holding Area) | 72 |
 | Tier-2 Roster — Stage 6.1 Standards Integrity | 66 |
 | Tier-2 Roster — Stage 4.1 Dependency & Import Hygiene | 55 |
 | Tier-2 Roster — Stage 3.1 Fault Diagnostics Overview | 44 |
-| Stage 1.1 Roster — Test Execution Telemetry | 42 |
+| Stage 1.1 Roster — Test Execution Telemetry | 12 |
 | Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> | 11 |
 | Tier-2 Roster — Stage 5.1 Monkey Patch Oversight | 11 |
 
@@ -141,4 +140,4 @@ Top files with the highest number of unfinished items:
 
 ## Update Log
 
-* 2025-12-21 — Report regenerated.
+* 2025-12-25 — Report regenerated.

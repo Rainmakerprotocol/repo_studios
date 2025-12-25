@@ -10,7 +10,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable, Mapping, Sequence
+from typing import Any, Mapping, Sequence, cast
 
 try:  # pragma: no cover - prefer import when packaged
     from libraries import (
@@ -41,10 +41,10 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running in isola
     )
 
 SUMMARY_STEM = "test_execution_telemetry_summary"
-VIEWER_SLUG = "healthview"
+VIEWER_SLUG = "summarizer_reports"
 TOPIC_SLUG = "test_execution_telemetry"
 SCHEMA_VERSION = 1
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
 
 
 @dataclass(frozen=True)
@@ -153,7 +153,7 @@ OPTIONS_CONFIG = OptionsConfig(
 )
 
 
-def _parse_args(argv: Iterable[str] | None) -> argparse.Namespace:
+def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__ or "")
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument("--manifest", required=True, help="Path to orchestrator manifest.json")
@@ -183,7 +183,7 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
@@ -500,8 +500,15 @@ def _build_inputs_from_files(paths: Paths) -> SummaryInputs:
     step_records = _load_step_records(steps_data)  # type: ignore[arg-type]
 
     collect_record = next((step for step in step_records if step.name == "collect"), None)
-    collect_payload = collect_record.payload if collect_record and isinstance(collect_record.payload, Mapping) else {}
-    log_report_payload = collect_payload.get("log_report") if isinstance(collect_payload.get("log_report"), Mapping) else {}
+    collect_payload: Mapping[str, Any] = (
+        collect_record.payload
+        if collect_record is not None and isinstance(collect_record.payload, Mapping)
+        else {}
+    )
+    raw_log_report_payload = collect_payload.get("log_report")
+    log_report_payload: Mapping[str, Any] = (
+        raw_log_report_payload if isinstance(raw_log_report_payload, Mapping) else {}
+    )
     warnings_total = log_report_payload.get("warnings_total") if isinstance(log_report_payload.get("warnings_total"), int) else None
     slow_tests = log_report_payload.get("slow_tests") if isinstance(log_report_payload.get("slow_tests"), int) else None
     collect_dir = _resolve_artifact(artifacts.get("log_report"), repo_root)
@@ -536,16 +543,21 @@ def _build_inputs_from_files(paths: Paths) -> SummaryInputs:
             heatmap_payload = {"mode": mode}
     heatmap_summary = HeatmapSummary(run_dir=heatmap_dir, payload=heatmap_payload)
 
-    hardening_payload = None
+    hardening_payload: dict[str, Any] | None = None
     hardening_dir = _resolve_artifact(artifacts.get("hardening"), repo_root)
     if hardening_dir is not None:
         telemetry_json = hardening_dir / "telemetry.json"
-        loaded = _read_json(telemetry_json) if telemetry_json.exists() else None
-        if isinstance(loaded, Mapping):
-            components = loaded.get("components") if isinstance(loaded.get("components"), Mapping) else {}
-            hardening_component = components.get("hardening") if isinstance(components.get("hardening"), Mapping) else {}
-            summary = hardening_component.get("summary") if isinstance(hardening_component.get("summary"), Mapping) else None
-            status = loaded.get("status")
+        loaded_telemetry = _read_json(telemetry_json) if telemetry_json.exists() else None
+        if isinstance(loaded_telemetry, Mapping):
+            raw_components = loaded_telemetry.get("components")
+            components = raw_components if isinstance(raw_components, Mapping) else {}
+            raw_hardening_component = components.get("hardening")
+            hardening_component = (
+                raw_hardening_component if isinstance(raw_hardening_component, Mapping) else {}
+            )
+            raw_summary = hardening_component.get("summary")
+            summary = raw_summary if isinstance(raw_summary, Mapping) else None
+            status = loaded_telemetry.get("status")
             payload: dict[str, Any] = {}
             if isinstance(status, str):
                 payload["status"] = status
@@ -555,8 +567,8 @@ def _build_inputs_from_files(paths: Paths) -> SummaryInputs:
                 hardening_payload = payload
     if hardening_payload is None and hardening_dir is not None:
         report_json = hardening_dir / "report.json"
-        loaded = _read_json(report_json)
-        hardening_payload = loaded if isinstance(loaded, Mapping) else None
+        loaded_report = _read_json(report_json)
+        hardening_payload = dict(loaded_report) if isinstance(loaded_report, Mapping) else None
     if hardening_payload is None and isinstance(analyse_payload.get("hardening_status"), str):
         hardening_payload = {"status": analyse_payload.get("hardening_status")}
     hardening_summary = HardeningSummary(run_dir=hardening_dir, payload=hardening_payload)
@@ -567,13 +579,15 @@ def _build_inputs_from_files(paths: Paths) -> SummaryInputs:
     )
     health_dir = _resolve_artifact(artifacts.get("health_report"), repo_root)
     health_bundle = _resolve_artifact(artifacts.get("health_bundle_summary"), repo_root)
-    health_payload: Mapping[str, Any] | None = dict(health_payload_raw) if isinstance(health_payload_raw, Mapping) else None
+    health_payload: dict[str, Any] | None = (
+        dict(health_payload_raw) if isinstance(health_payload_raw, Mapping) else None
+    )
     if health_bundle is not None:
         bundle_loaded = _read_json(health_bundle)
         if isinstance(bundle_loaded, Mapping):
             if health_payload is None:
                 health_payload = {}
-            health_payload.setdefault("bundle_summary", bundle_loaded)
+            health_payload.setdefault("bundle_summary", dict(bundle_loaded))
     health_summary = None
     if any([health_dir, health_bundle, health_payload]):
         health_summary = HealthSummary(run_dir=health_dir, bundle_summary=health_bundle, payload=health_payload)
@@ -593,7 +607,7 @@ def _build_inputs_from_files(paths: Paths) -> SummaryInputs:
     )
 
 
-def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
+def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     args = _parse_args(argv)
     paths = build_paths(args)
     options = build_options(args)
@@ -628,7 +642,7 @@ def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
     }
 
 
-def main(argv: Iterable[str] | None = None) -> None:
+def main(argv: Sequence[str] | None = None) -> None:
     outcome = run(argv)
     raise SystemExit(0 if outcome.get("status") == "ok" else 1)
 

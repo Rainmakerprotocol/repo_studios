@@ -136,7 +136,6 @@ def test_prefers_consumer_bundle(tmp_path):
     items = {item["file"]: item for item in heatmap_json["items"]}
     assert items["pkg/foo.py"]["failures"] == 2
     assert items["pkg/foo.py"]["score"] > items["pkg/bar.py"]["score"]
-    assert (output_base / "latest_heatmap.json").exists()
     assert Path(result["bundle_summary"]).exists()
 
 
@@ -214,3 +213,68 @@ def test_retention_prunes_old_runs(tmp_path):
     assert len(remaining) == 2
     pruned = {Path(p).name for p in result["pruned"]}
     assert "churn_complexity_heatmap-2025-11-20_000000" in pruned
+
+
+def test_main_returns_nonzero_when_no_python_files(tmp_path):
+    aggregator = _load_module("generate_churn_complexity_heatmap", _AGGREGATOR_PATH)
+
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    (repo_root / "logs").mkdir()
+
+    exit_code = aggregator.main(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--output-base",
+            str(tmp_path / "out"),
+            "--logs-dir",
+            str(repo_root / "logs"),
+            "--test-log-summary",
+            str(repo_root / "missing"),
+            "--metrics-source",
+            str(repo_root / "missing_metrics.json"),
+        ]
+    )
+
+    assert exit_code == 1
+
+
+def test_collect_git_churn_handles_oserror(tmp_path, monkeypatch):
+    aggregator = _load_module("generate_churn_complexity_heatmap", _AGGREGATOR_PATH)
+
+    def _boom(*args, **kwargs):
+        raise OSError("no git")
+
+    monkeypatch.setattr(aggregator.subprocess, "run", _boom)
+    logger = aggregator._configure_logging("INFO", False)
+
+    churn = aggregator._collect_git_churn(tmp_path, 5, logger)
+    assert not churn
+
+
+def test_load_junit_failures_uses_classname_when_file_missing(tmp_path):
+    aggregator = _load_module("generate_churn_complexity_heatmap", _AGGREGATOR_PATH)
+
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+
+    junit_path = repo_root / "junit.xml"
+    junit_path.write_text(
+        "\n".join(
+            [
+                "<?xml version='1.0' encoding='utf-8'?>",
+                "<testsuite>",
+                "  <testcase classname='pkg.tests.test_mod' name='test_0'>",
+                "    <failure message='boom'>trace</failure>",
+                "  </testcase>",
+                "</testsuite>",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    logger = aggregator._configure_logging("INFO", False)
+    failures = aggregator._load_junit_failures(junit_path, repo_root, logger)
+
+    assert failures["pkg/tests/test_mod.py"] == 1

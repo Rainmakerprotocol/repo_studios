@@ -2,16 +2,28 @@
 
 ## Purpose
 
-Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so future contributors can quickly understand the existing tooling, documentation, and open work streams before resuming development. This document now also tracks maintenance expectations and crosslinks to the canonical decision records so it can act as the single onboarding handoff.
+Summarize the current state of Repo Studios’ duplicate-remediation and shared-library initiative so
+future contributors can quickly understand the existing tooling, documentation, and open work
+streams before resuming development. This document now also tracks maintenance expectations and
+crosslinks to the canonical decision records so it can act as the single onboarding handoff.
 
 ## 5W1H Snapshot
 
-- **Who**: Command Center maintainers, Repo Studios contributors, and future AI agents responsible for consolidating duplicate logic into a shared library.
-- **What**: A staged program (Phases 1–7) delivering duplicate detection, orchestration, shared helper modules, guardrails, and automation planning that will ultimately promote common code into `.repo_studios/library/`.
-- **When**: Active effort between 2025-10-24 and 2025-11-23; Phase 7.5 (viewer update workflow) recently closed, while Phase 8+ items remain backlog for a v2 release.
-- **Where**: Working assets live under `.repo_studios/command_center/` (scripts, docs, reports, checklists) with mirrored reports in `.repo_studios/command_center/reports/`.
-- **Why**: Reduce maintenance cost and inconsistency by eliminating duplicated helpers, tightening guardrails, and preparing a reusable code library referenced across Command Center tooling.
-- **How**: Execute the phased checklist in `docs/library_integration_checklist.md`, rely on shared helper modules in `scripts/libraries/`, and follow guardrails documented in `docs/guardrails/library_extraction_guardrails.md` before manual or automated refactors.
+- **Who**: Command Center maintainers, Repo Studios contributors, and future AI agents responsible
+   for consolidating duplicate logic into a shared library.
+- **What**: A staged program (Phases 1–7) delivering duplicate detection, orchestration, shared
+   helper modules, guardrails, and automation planning that will ultimately promote common code
+   into `.repo_studios/library/`.
+- **When**: Active effort between 2025-10-24 and 2025-11-23; Phase 7.5 (viewer update workflow)
+   recently closed, while Phase 8+ items remain backlog for a v2 release.
+- **Where**: Working assets live under `.repo_studios/command_center/` (scripts, docs, reports,
+   checklists) with mirrored reports in `.repo_studios/command_center/reports/`.
+- **Why**: Reduce maintenance cost and inconsistency by eliminating duplicated helpers,
+   tightening guardrails, and preparing a reusable code library referenced across
+   Command Center tooling.
+- **How**: Execute the phased checklist in `docs/library_integration_checklist.md`, rely on shared
+   helper modules in `scripts/libraries/`, and follow guardrails documented in
+   `docs/guardrails/library_extraction_guardrails.md` before manual or automated refactors.
 
 ## Current Assets
 
@@ -104,7 +116,8 @@ Navigation tip: ensure new documents under `docs/code_library/` are linked from 
 
 #### Phase 3 — Manual Extraction Validation
 
-- Centralized `_slugify_relative`, `_copy_latest`, and `write_report_artifacts`; dozens of producers now import shared helpers.
+- Centralized `_slugify_relative`, `_copy_latest`, and `write_report_artifacts`; dozens of producers
+   now import shared helpers.
 - Introduced config-driven CLI helpers and migrated all Command Center CLIs to use them.
 - Authored run-folder templates, operator brief, and extraction checklists to keep manual work auditable.
 - Remaining extraction targets (`configure_logging`, specialized writers) are scoped but not yet migrated.
@@ -118,64 +131,87 @@ Navigation tip: ensure new documents under `docs/code_library/` are linked from 
 
 #### Phase 5 — Integration with Repo Studios
 
-- Make target design (`studio-detect-duplicates`, `studio-refactor-duplicates`) drafted with Windows guidance, guardrail surfacing, and CI rehearsal outline.
+- Make target design (`studio-detect-duplicates`, `studio-refactor-duplicates`) drafted with Windows
+   guidance, guardrail surfacing, and CI rehearsal outline.
 - Awaiting developer review before wiring Makefile or CI jobs.
 
 #### Phase 6 — AI Prompt Engineering
 
 - Prompt audit, guardrail matrix, change-control workflow, validation plan, and rollback playbook completed.
-- `repo_prompts.md` updated to version 1.3.0 with command-center guardrails and evidence expectations; validation dry-runs recorded.
+- `repo_prompts.md` updated to version 1.3.0 with command-center guardrails and evidence
+   expectations; validation dry-runs recorded.
 
 #### Phase 7 — Validation and Hardening
 
-- Metric baseline plan, cadence, retention updates, reporting interface, and false-positive workflow documented.
+- Metric baseline plan, cadence, retention updates, reporting interface, and false-positive workflow
+   documented.
 - Baseline ledger populated; first scheduled weekly review pending (target 2025-11-11).
 
 #### Phase 8+ — Future Enhancements
 
-- Scaling to new projects and viewer UX upgrades intentionally postponed; roadmap items captured in `mermaid_viewer.md` and Phase 8 checklist placeholders.
+- Scaling to new projects and viewer UX upgrades intentionally postponed; roadmap items captured in
+   `mermaid_viewer.md` and Phase 8 checklist placeholders.
 
 ## Outstanding Work
 
 1. **Manual Extraction Follow-Ups**
-   - Promote remaining duplicate helpers (`configure_logging`, specialized writers) once staging migrations finish.
+   - Promote remaining duplicate helpers (`configure_logging`, specialized writers) once staging
+      migrations finish.
    - Capture before/after metrics using the weighted briefing template in `docs/metrics/weighted_progress_briefing_template.md`.
 
 2. **Documentation Touch-Ups**
    - Finish orchestrator documentation polish highlighted in the Phase 2.5 checklist (`docs/library_integration_checklist.md#phase-25`).
-   - Link `docs/code_library/` assets (including this status report) from `.repo_studios/command_center/README.md` and `repo_prompts.md` during the next doc sweep.
+   - Link `docs/code_library/` assets (including this status report) from
+   `.repo_studios/command_center/README.md` and `repo_prompts.md` during the next doc sweep.
 
 3. **Automation Readiness**
-   - Meet manual extraction success criteria (duplicate reduction targets, regression-free streak) before enabling automated refactors.
-   - Secure review sign-off on Phase 4 artifacts (PR checklist, helper adoption CLI spec) and Phase 5 Make target design.
+   - Meet manual extraction success criteria (duplicate reduction targets, regression-free streak)
+      before enabling automated refactors.
+   - Secure review sign-off on Phase 4 artifacts (PR checklist, helper adoption CLI spec) and
+      Phase 5 Make target design.
 
 4. **Validation Cadence Execution**
-   - Stand up the weekly metric review rhythm outlined in `docs/phase_7/METRIC_BASELINE_PLAN.md` and log outcomes in `docs/metrics/METRIC_BASELINE_LOG.csv`.
+   - Stand up the weekly metric review rhythm outlined in `docs/phase_7/METRIC_BASELINE_PLAN.md`
+      and log outcomes in `docs/metrics/METRIC_BASELINE_LOG.csv`.
 
 5. **Library Promotion**
-   - Once staging helpers stabilize, plan the `.repo_studios/library/` tree creation, aligning with `docs/naming_conventions.md` and documenting each migration using the templates in `docs/run_log_template.md` and `docs/run_folder_summary_template.md`.
+   - Once staging helpers stabilize, plan the `.repo_studios/library/` tree creation, aligning with
+      `docs/naming_conventions.md` and documenting each migration using the templates in
+      `docs/run_log_template.md` and `docs/run_folder_summary_template.md`.
 
 ## Key References
 
 - `.repo_studios/command_center/README.md` — Protocol overview and orchestrator guidance.
-- `.repo_studios/command_center/docs/library_integration_checklist.md` — Source of phase-by-phase status (latest refresh 2025-10-28 with incremental updates).
+- `.repo_studios/command_center/docs/library_integration_checklist.md` — Source of phase-by-phase
+   status (latest refresh 2025-10-28 with incremental updates).
 - `.repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md` — Non-negotiable safeguards.
-- `.repo_studios/command_center/docs/metrics/` — Weighted briefing template, metrics schema, and baseline logs.
+- `.repo_studios/command_center/docs/metrics/` — Weighted briefing template, metrics schema, and
+   baseline logs.
 - `.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md` — Pending Make target plan.
 - `.repo_studios/command_center/docs/phase_6/` & `phase_7/` — Prompt and validation governance.
-- `.repo_studios/command_center/reports/` — Latest duplicate matrices, automation dry runs, and lizard reports.
+- `.repo_studios/command_center/reports/` — Latest duplicate matrices, automation dry runs, and
+   lizard reports.
 
 ## Suggested Next Actions (for the next contributor)
 
-1. Review `docs/library_integration_checklist.md` to confirm whether Phase 2.5 documentation tasks remain outstanding and capture any deltas in this file’s H1 date stamp.
-2. Prioritize the next manual extraction target from `docs/duplicate_target_mappings.md`, using `docs/manual_extraction_checklist.md` and the run-log template in `docs/run_log_template.md`.
+1. Review `docs/library_integration_checklist.md` to confirm whether Phase 2.5 documentation tasks
+   remain outstanding and capture any deltas in this file’s H1 date stamp.
+2. Prioritize the next manual extraction target from `docs/duplicate_target_mappings.md`, using
+   `docs/manual_extraction_checklist.md` and the run-log template in `docs/run_log_template.md`.
 3. Schedule the first metric review meeting (per Phase 7 cadence) and record outcomes in `docs/metrics/METRIC_BASELINE_LOG.csv`.
-4. Collect feedback on the Phase 5 Make target design (`docs/phase_5/MAKE_TARGET_DESIGN.md`) and approve or revise before implementation begins.
-5. After each major milestone (new extractions, guardrail changes, automation decisions), update this status document and refresh `.repo_studios/command_center/README.md` links to maintain discoverability.
+4. Collect feedback on the Phase 5 Make target design (`docs/phase_5/MAKE_TARGET_DESIGN.md`) and
+   approve or revise before implementation begins.
+5. After each major milestone (new extractions, guardrail changes, automation decisions), update
+   this status document and refresh `.repo_studios/command_center/README.md` links to
+   maintain discoverability.
 
 ## Maintenance Tips
 
 - Update the H1 timestamp whenever materially new progress is recorded.
-- If a referenced artifact moves, edit both the table entry and the Outstanding Work section so broken links surface quickly.
-- Use `pytest tests/tests_command_center/duplicates/test_scan_duplicates.py` after modifying shared helpers to confirm duplicate detection still passes.
-- When scheduling automation rehearsals, archive generated manifests under `.repo_studios/command_center/reports/repo-studios__command-center__automation_run/` and note the run identifier here.
+- If a referenced artifact moves, edit both the table entry and the Outstanding Work section so
+   broken links surface quickly.
+- Use `pytest tests/tests_command_center/duplicates/test_scan_duplicates.py` after modifying shared
+   helpers to confirm duplicate detection still passes.
+- When scheduling automation rehearsals, archive generated manifests under
+   `.repo_studios/command_center/reports/repo-studios__command-center__automation_run/`
+   and note the run identifier here.
