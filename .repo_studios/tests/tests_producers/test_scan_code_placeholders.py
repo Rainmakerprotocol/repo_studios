@@ -20,6 +20,7 @@ def _load_module():
 def test_structured_artifacts(tmp_path: Path) -> None:
     mod = _load_module()
     repo_root = tmp_path / "workspace"
+    (repo_root / ".repo_studios").mkdir(parents=True, exist_ok=True)
     scan_root = repo_root / "src"
     scan_root.mkdir(parents=True, exist_ok=True)
 
@@ -62,6 +63,7 @@ def test_structured_artifacts(tmp_path: Path) -> None:
 def test_pruning_and_allowlist(tmp_path: Path) -> None:
     mod = _load_module()
     repo_root = tmp_path / "workspace"
+    (repo_root / ".repo_studios").mkdir(parents=True, exist_ok=True)
     scan_root = repo_root / "src"
     scan_root.mkdir(parents=True, exist_ok=True)
 
@@ -104,6 +106,7 @@ def test_default_exclusions_skip_virtualenv(tmp_path: Path) -> None:
     mod = _load_module()
     repo_root = tmp_path / "workspace"
     repo_root.mkdir(parents=True, exist_ok=True)
+    (repo_root / ".repo_studios").mkdir(parents=True, exist_ok=True)
 
     (repo_root / "real.py").write_text("# TODO: implement feature\n", encoding="utf-8")
     env_file = repo_root / ".venv" / "lib" / "package.py"
@@ -141,6 +144,7 @@ def test_exclude_prefix_flag_disables_defaults(tmp_path: Path) -> None:
     mod = _load_module()
     repo_root = tmp_path / "workspace"
     repo_root.mkdir(parents=True, exist_ok=True)
+    (repo_root / ".repo_studios").mkdir(parents=True, exist_ok=True)
 
     env_file = repo_root / ".venv" / "lib" / "module.py"
     env_file.parent.mkdir(parents=True, exist_ok=True)
@@ -170,6 +174,7 @@ def test_ignores_title_case_tokens(tmp_path: Path) -> None:
     mod = _load_module()
     repo_root = tmp_path / "workspace"
     repo_root.mkdir(parents=True, exist_ok=True)
+    (repo_root / ".repo_studios").mkdir(parents=True, exist_ok=True)
 
     (repo_root / "doc.md").write_text("# Review heading\n", encoding="utf-8")
     (repo_root / "code.py").write_text("# TODO: follow up\n", encoding="utf-8")

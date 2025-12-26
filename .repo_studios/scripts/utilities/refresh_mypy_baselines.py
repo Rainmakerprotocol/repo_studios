@@ -167,7 +167,14 @@ def build_parser() -> argparse.ArgumentParser:
         description="Refresh mypy baselines and emit structured artifacts",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument("--repo-root", help="Repository root used to resolve paths")
+    parser.add_argument(
+        "--repo-root",
+        default=None,
+        help=(
+            "Repository root used to resolve paths. If omitted, auto-discovers by scanning parents for the "
+            "'.repo_studios' marker directory (origin: this script)."
+        ),
+    )
     parser.add_argument(
         "--output-dir",
         default=str(DEFAULT_OUTPUT_DIR),

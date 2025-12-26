@@ -29,8 +29,7 @@ related_files:
 
 ```bash
 python .repo_studios/scripts/producers/collect_test_log_reports.py \
-  --logs-dir .repo_studios/command_center/reports/rawview/test_execution_runs \
-  --output-dir .repo_studios/command_center/reports \
+  --output-dir .repo_studios/reports/healthview \
   --artifacts-to-keep 10 \
   --log-level INFO
 ```
@@ -42,6 +41,10 @@ From `.repo_studios/`, run `make studio-collect-test-log-reports` to execute the
 - `--logs-dir`: Base directory containing pytest log runs (default `.repo_studios/command_center/reports/rawview/test_execution_runs`; falls back to `.repo_studios/pytest_logs` when the new tree is missing and `PYTEST_LOG_REPORTS_ALLOW_LEGACY` is not set to `0`).
 - `--logs-run`: Explicit run directory; when omitted the newest candidate under `--logs-dir` is selected automatically.
 - `--output-dir`: Base reports directory (default `.repo_studios/command_center/reports`).
+- `--summarize-existing`: Do not run pytest; summarize existing logs (newest under `--logs-dir`, or the explicit `--logs-run`).
+- `--run-pytest` / `--no-run-pytest`: Explicitly control whether the producer runs pytest first. When omitted, the default is:
+  - fresh run (`--run-pytest`) if `--logs-run` is not provided
+  - summarize existing (`--no-run-pytest`) if `--logs-run` is provided
 - `--run-timestamp`: Optional override for the run slug in UTC (`YYYYMMDD-HHMM`). Useful for deterministic CI/test runs.
 - `--artifacts-to-keep`: Number of historical run directories retained after pruning (minimum 1, default 10, enforced by the shared helper).
 - `--log-level`: Logging verbosity (`INFO` default).
@@ -50,7 +53,7 @@ From `.repo_studios/`, run `make studio-collect-test-log-reports` to execute the
 
 Each run produces a bundle under positional encoding:
 
-`.repo_studios/command_center/reports/rawview/test_log_reports/<YYYYMMDD-HHMM>/`
+`<output_dir>/rawview/test_log_reports/<YYYYMMDD-HHMM>/`
 
 The bundle contains exactly:
 
@@ -68,6 +71,8 @@ Key fields:
 - `telemetry.json` contains extracted metrics (`warnings_total`, `slow_tests_count`, `tracebacks`, test totals) plus a compact payload snapshot.
 - `summary.md` is the human-readable digest for quick review.
 
+When the producer runs pytest, both `manifest.json` and `telemetry.json` record `pytest_ran`, `pytest_exit_code`, and `pytest_command` under `inputs` so callers can confirm that the bundle reflects a fresh capture.
+
 `log` output enumerates the run directory, warning count, slow-test count, and artifact destination so CI callers can assert conditions without parsing JSON.
 
 ## Testing
@@ -78,7 +83,9 @@ The suite verifies canonical artifact emission, telemetry metric extraction, pru
 
 ## Operational notes
 
-- Ensure `orchestrators/run_pytest_log_capture.py` (or equivalent) populates `.repo_studios/command_center/reports/rawview/test_execution_runs/<slug>/<timestamp>/` prior to running the producer. Missing runs result in a no-op with an informational log entry. Legacy runs under `.repo_studios/pytest_logs` are still discovered when the environment variable `PYTEST_LOG_REPORTS_ALLOW_LEGACY` is not disabled.
+- The default invocation (no `--logs-run`, no `--summarize-existing`) runs pytest first and stages a new run directory under `--logs-dir`, then emits the canonical report bundle.
+- Use `--summarize-existing` when you want to reuse existing logs (for example when another job already captured raw pytest output).
+- Legacy runs under `.repo_studios/pytest_logs` are still discovered when the environment variable `PYTEST_LOG_REPORTS_ALLOW_LEGACY` is not disabled.
 - Downstream consumer `generate_test_log_health_report.py` is expected to migrate to the canonical bundle (manifest/summary/telemetry). Do not rely on `latest_*` pointers.
 - Adjust `--artifacts-to-keep` based on storage budgets; CI jobs typically run with smaller retention windows (5–10 runs) to preserve auditability while limiting disk usage. The shared pruning helper keeps the current run plus any `.keep`-marked directories regardless of the configured limit to avoid accidental data loss.
 - The producer tolerates absent JUnit or pytest log files by emitting empty tables with zeroed metrics so dashboards can differentiate between “no findings” and “no data.”

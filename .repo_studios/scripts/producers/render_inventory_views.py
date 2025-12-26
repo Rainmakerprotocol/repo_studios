@@ -370,7 +370,14 @@ def _build_parser() -> argparse.ArgumentParser:
         description="Render inventory secondary views and emit structured artifacts",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument("--repo-root", help="Repository root used to resolve relative paths")
+    parser.add_argument(
+        "--repo-root",
+        default=None,
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the '.repo_studios' marker "
+            "directory (origin: this script)."
+        ),
+    )
     parser.add_argument("--schema-root", default=str(DEFAULT_SCHEMA_ROOT), help="Path to inventory schema directory")
     parser.add_argument("--views-dir", default=str(DEFAULT_VIEWS_DIR), help="Legacy compatibility directory for views")
     parser.add_argument("--reports-root", default=str(DEFAULT_REPORTS_ROOT), help="Destination root for topic reports")

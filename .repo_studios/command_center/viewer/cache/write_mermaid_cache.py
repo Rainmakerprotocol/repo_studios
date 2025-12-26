@@ -10,6 +10,12 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
 
+LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / "scripts"
+if str(LIBRARIES_ROOT) not in sys.path:
+    sys.path.insert(0, str(LIBRARIES_ROOT))
+
+from libraries.cli import resolve_repo_root  # noqa: E402
+
 CACHE_DIRECTORY = Path(__file__).resolve().parent
 DEFAULT_CACHE_NAME = "debug_preview"
 DEFAULT_TTL_HOURS = 24
@@ -84,6 +90,12 @@ def evict_stale_files(policy: CachePolicy) -> list[Path]:
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Write Mermaid definitions into the viewer cache for debugging.")
+    parser.add_argument(
+        "--repo-root",
+        type=Path,
+        default=None,
+        help="Repository root (auto-discovered via .repo_studios marker when omitted)",
+    )
     parser.add_argument("--name", default=DEFAULT_CACHE_NAME, help="Cache file stem to use (default: debug_preview).")
     parser.add_argument("--source", type=Path, default=None, help="Optional path to a file containing the definition.")
     parser.add_argument("--log-level", default="INFO", help="Logging level (default: INFO).")
@@ -102,6 +114,9 @@ def _build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     parser = _build_parser()
     args = parser.parse_args(argv)
+
+    # Validate repo root early (shared entrypoint convention).
+    resolve_repo_root(args.repo_root, origin=Path(__file__))
 
     logging.basicConfig(level=args.log_level.upper(), format="%(levelname)s %(message)s")
 

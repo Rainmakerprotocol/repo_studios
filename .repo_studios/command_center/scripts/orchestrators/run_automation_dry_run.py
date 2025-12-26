@@ -14,6 +14,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable, Sequence
 
+try:
+    from libraries import resolve_repo_root  # type: ignore
+except ModuleNotFoundError:  # pragma: no cover - CLI fallback
+    SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
+    if str(SCRIPTS_ROOT) not in sys.path:
+        sys.path.insert(0, str(SCRIPTS_ROOT))
+    from libraries import resolve_repo_root  # type: ignore  # noqa: E402
+
 AUTOMATION_SCRIPT_RELATIVE = Path(".repo_studios/command_center/scripts/aggregators/generate_automation_manifest.py")
 DEFAULT_POST_RUN_MATRIX = Path("que_for_integration/refactor_library/phase_4/POST_RUN_TEST_MATRIX.md")
 
@@ -78,7 +86,10 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__ or "")
-    parser.add_argument("--repo-root", help="Repository root (defaults to script ancestor)")
+    parser.add_argument(
+        "--repo-root",
+        help="Repository root (defaults to marker-based discovery: searches ancestors for .repo_studios)",
+    )
     parser.add_argument("--output-dir", help="Directory for automation run artifacts")
     parser.add_argument("--keep", type=int, help="Number of historical runs to retain (overrides manifest default)")
     parser.add_argument("--timestamp", help="ISO8601 timestamp for run directory naming (UTC if absent)")
@@ -119,7 +130,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[4]
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__).resolve())
     output_dir = _resolve_within_repo(
         repo_root, args.output_dir or ".repo_studios/command_center/reports"
     )

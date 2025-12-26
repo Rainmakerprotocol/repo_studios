@@ -22,6 +22,7 @@ import csv
 import datetime as dt
 import logging
 import re
+import sys
 import textwrap
 from collections import Counter
 from collections.abc import Iterable, Sequence
@@ -35,6 +36,14 @@ CODE_FENCE_PATTERN = re.compile(r"^([`~]{3,})(.*)$")
 
 LOG = logging.getLogger(__name__)
 LOG.addHandler(logging.NullHandler())
+
+
+ROOT = Path(__file__).resolve().parents[4]
+LIBRARIES_ROOT = ROOT / ".repo_studios" / "command_center" / "scripts"
+if str(LIBRARIES_ROOT) not in sys.path:
+    sys.path.insert(0, str(LIBRARIES_ROOT))
+
+from libraries.cli import resolve_repo_root  # noqa: E402
 
 LINE_WIDTH = 100
 
@@ -180,14 +189,16 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Generate a CSV + Markdown report of unchecked Markdown checkboxes."
     )
-    default_root = Path(__file__).resolve().parents[4]
-    default_output_dir = Path(__file__).resolve().parent / "outputs"
-    default_search_dir = default_root / ".repo_studios" / "docs" / "pipeline"
+    default_output_dir = Path(".repo_studios/docs/pipeline/checkbox_report/outputs")
+    default_search_dir = Path(".repo_studios/docs/pipeline")
     parser.add_argument(
         "--repo-root",
         type=Path,
-        default=default_root,
-        help="Root of the Git repository (default: %(default)s)",
+        default=None,
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the '.repo_studios' marker "
+            "directory (origin: this script)."
+        ),
     )
     parser.add_argument(
         "--output-dir",
@@ -497,8 +508,9 @@ def write_markdown_summary(content: str, path: Path) -> None:
 def main(argv: Sequence[str] | None = None) -> None:
     args = parse_args(argv)
     configure_logging(verbose=args.verbose)
-    repo_root = args.repo_root.resolve()
-    output_dir = args.output_dir.resolve()
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
+    raw_output_dir = args.output_dir
+    output_dir = raw_output_dir.resolve() if raw_output_dir.is_absolute() else (repo_root / raw_output_dir).resolve()
     csv_path = (output_dir / args.csv_name).resolve()
     markdown_path = (output_dir / args.markdown_name).resolve()
     script_path = Path(__file__).resolve()

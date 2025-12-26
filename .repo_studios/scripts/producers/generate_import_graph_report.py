@@ -41,6 +41,8 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
 
+from libraries.cli import resolve_path, resolve_repo_root
+
 
 IMPORT_RE = re.compile(r"^(?:from\s+([\w\.]+)\s+import\s+|import\s+([\w\.]+))")
 
@@ -304,7 +306,12 @@ def configure_logging(level: str) -> None:
 
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Generate import graph report")
-    parser.add_argument("--repo-root", default=".", help="Repository root to scan")
+    parser.add_argument(
+        "--repo-root",
+        type=Path,
+        default=None,
+        help="Repository root (auto-discovered via .repo_studios marker when omitted)",
+    )
     parser.add_argument(
         "--output-dir",
         default=str(DEFAULT_OUTPUT_DIR),
@@ -335,10 +342,13 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     configure_logging(args.log_level)
 
-    repo_root = Path(args.repo_root).resolve()
-    output_dir = Path(args.output_dir)
-    if not output_dir.is_absolute():
-        output_dir = (repo_root / output_dir).resolve()
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
+    output_dir = resolve_path(
+        str(args.output_dir),
+        repo_root=repo_root,
+        default=DEFAULT_OUTPUT_DIR,
+        ensure_dir=True,
+    )
 
     owned = set(args.owned) if args.owned else set(OWNED_DEFAULT)
     owned.add(".repo_studios")

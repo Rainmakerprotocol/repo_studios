@@ -15,6 +15,7 @@ import platform
 import sys
 import threading
 import warnings
+import argparse
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -33,6 +34,7 @@ if libraries_root_str and libraries_root_str not in sys.path:
 RAWVIEW_RUNS_BASE = root / ".repo_studios" / "command_center" / "reports" / "rawview" / "fault_diagnostics_runs"
 
 from libraries import prune_run_directories
+from libraries.cli import resolve_repo_root
 
 # Reduce noise from known, non-actionable warnings across all entry points.
 warnings.filterwarnings(
@@ -56,7 +58,14 @@ except Exception:  # pragma: no cover - Windows and other platforms
 def _default_base_dir(allow_legacy: bool) -> Path:
     if allow_legacy:
         return root / ".repo_studios" / "faulthandler"
-    return RAWVIEW_RUNS_BASE
+    return (
+        root
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "rawview"
+        / "fault_diagnostics_runs"
+    )
 
 
 def _is_truthy(value: Optional[str], *, default: bool) -> bool:
@@ -360,13 +369,59 @@ def _auto_bootstrap() -> None:
     except Exception:
         LAST_BOOTSTRAP = {"status": "error"}
 
+def _set_repo_root(repo_root: Path) -> None:
+    global root
+    global root_str
+    global libraries_root
+    global libraries_root_str
+    global RAWVIEW_RUNS_BASE
 
-if not _is_truthy(os.getenv("FAULT_DISABLE"), default=False):
+    resolved = repo_root.resolve()
+    root = resolved
+    root_str = str(resolved)
+    if root_str and root_str not in sys.path:
+        sys.path.insert(0, root_str)
+
+    libraries_root = resolved / ".repo_studios" / "command_center" / "scripts"
+    libraries_root_str = str(libraries_root)
+    if libraries_root_str and libraries_root_str not in sys.path:
+        sys.path.insert(0, libraries_root_str)
+
+    RAWVIEW_RUNS_BASE = (
+        resolved
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "rawview"
+        / "fault_diagnostics_runs"
+    )
+
+
+# When imported by sitecustomize or other modules we keep the historical behavior
+# of bootstrapping at import time. When executed as a script we delay bootstrap
+# until after CLI args (including repo-root discovery) are processed.
+if __name__ != "__main__" and not _is_truthy(os.getenv("FAULT_DISABLE"), default=False):
     _auto_bootstrap()
 
 
 if __name__ == "__main__":
-    payload = LAST_BOOTSTRAP if LAST_BOOTSTRAP is not None else bootstrap()
+    parser = argparse.ArgumentParser(
+        description="Configure faulthandler runtime diagnostics (repo-root aware)."
+    )
+    parser.add_argument(
+        "--repo-root",
+        default=None,
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the "
+            "'.repo_studios' marker directory."
+        ),
+    )
+    args = parser.parse_args()
+
+    resolved_root = resolve_repo_root(explicit=args.repo_root, origin=Path(__file__))
+    _set_repo_root(resolved_root)
+
+    payload = bootstrap()
     try:
         print(json.dumps(payload, indent=2))
     except Exception:

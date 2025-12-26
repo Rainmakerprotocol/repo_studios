@@ -120,7 +120,14 @@ def _ensure_index_path(paths: Paths, logger: logging.Logger) -> Paths:
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__ or "")
-    parser.add_argument("--repo-root", help="Repository root override")
+    parser.add_argument(
+        "--repo-root",
+        default=None,
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the '.repo_studios' marker "
+            "directory (origin: this script)."
+        ),
+    )
     parser.add_argument("--output-dir", help="Directory for structured artifacts")
     parser.add_argument("--index-path", help="Path to repo_standards_index.yaml")
     parser.add_argument("--categories-path", help="Path to standards_categories.yaml")

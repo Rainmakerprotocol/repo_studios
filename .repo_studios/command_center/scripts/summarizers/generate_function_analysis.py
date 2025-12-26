@@ -18,17 +18,21 @@ try:
     from libraries import (  # type: ignore  # noqa: E402
         ReportArtifact,
         WriteReportArtifactsResult,
+        resolve_repo_root,
         slugify_relative,
         write_report_artifacts,
     )
 except ModuleNotFoundError:  # pragma: no cover - CLI fallback
     script_dir = Path(__file__).resolve().parent
     scripts_root = script_dir.parent
-    if str(scripts_root) not in sys.path:
-        sys.path.insert(0, str(scripts_root))
+    repo_studios_root = scripts_root.parents[2]
+    for candidate in (repo_studios_root, scripts_root):
+        if str(candidate) not in sys.path:
+            sys.path.insert(0, str(candidate))
     from libraries import (  # type: ignore  # noqa: E402
         ReportArtifact,
         WriteReportArtifactsResult,
+        resolve_repo_root,
         slugify_relative,
         write_report_artifacts,
     )
@@ -79,7 +83,8 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument(
         "--repo-root",
-        help="Repository root. Defaults to script's grandparent directory.",
+        default=None,
+        help="Repository root (auto-discovered via .repo_studios marker when omitted).",
     )
     parser.add_argument(
         "--reports-root",
@@ -111,7 +116,7 @@ _slugify_relative = slugify_relative
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[4]
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
     target_candidate = Path(args.target)
     target = target_candidate if target_candidate.is_absolute() else (repo_root / target_candidate)
     target = target.resolve()

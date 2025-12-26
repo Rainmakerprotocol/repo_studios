@@ -364,6 +364,7 @@ def _execute_collect(paths: Paths, options: Options) -> CollectOutcome:
     argv = [
         "--logs-dir",
         str(paths.logs_dir),
+        "--summarize-existing",
         "--output-dir",
         str(paths.test_log_reports_dir),
         "--run-timestamp",
@@ -378,6 +379,8 @@ def _execute_collect(paths: Paths, options: Options) -> CollectOutcome:
         raise RuntimeError("collect_test_log_reports returned unexpected payload")
     report_dir = Path(payload["output_dir"]).resolve() if payload.get("output_dir") else None
     producer_bundle_dir = report_dir
+    if payload.get("status") == "no_data":
+        producer_bundle_dir = None
     warnings_total = payload.get("warnings_total") if isinstance(payload.get("warnings_total"), int) else None
     slow_tests = payload.get("slow_tests") if isinstance(payload.get("slow_tests"), int) else None
     return CollectOutcome(

@@ -1167,7 +1167,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--repo-root",
         default=None,
-        help="Repository root directory (defaults to three levels up from this script)",
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the '.repo_studios' marker "
+            "directory (origin: this script)."
+        ),
     )
     parser.add_argument(
         "--root",

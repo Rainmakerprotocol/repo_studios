@@ -145,8 +145,38 @@ def dump_commandview_selector(repo_root: Path) -> str:
 def main(argv: Iterable[str] | None = None) -> int:
     """CLI entry point printing the selector payload to stdout."""
 
-    args = list(argv or [])
-    repo_root = Path(args[0]).resolve() if args else Path.cwd()
+    import argparse
+    import sys
+
+    parser = argparse.ArgumentParser(
+        prog="build_commandview_selector",
+        description="Dump CommandView selector payload as JSON.",
+    )
+    parser.add_argument(
+        "repo_root_positional",
+        nargs="?",
+        help="Deprecated: repo root path. Prefer --repo-root.",
+    )
+    parser.add_argument(
+        "--repo-root",
+        default=None,
+        help="Explicit repo root; defaults to marker-based discovery when omitted.",
+    )
+    parsed = parser.parse_args(list(argv or []))
+
+    if parsed.repo_root_positional and parsed.repo_root:
+        parser.error("Provide either repo_root_positional or --repo-root, not both.")
+
+    scripts_root = Path(__file__).resolve().parents[1]
+    repo_studios_root = scripts_root.parents[2]
+    for candidate in (repo_studios_root, scripts_root):
+        if str(candidate) not in sys.path:
+            sys.path.insert(0, str(candidate))
+
+    from libraries.cli import resolve_repo_root  # noqa: E402
+
+    repo_root_arg = parsed.repo_root or parsed.repo_root_positional
+    repo_root = resolve_repo_root(repo_root_arg, origin=Path(__file__))
     print(dump_commandview_selector(repo_root))
     return 0
 

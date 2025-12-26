@@ -26,6 +26,14 @@ from typing import Any
 import yaml
 
 
+ROOT = Path(__file__).resolve().parents[4]
+LIBRARIES_ROOT = ROOT / ".repo_studios" / "command_center" / "scripts"
+if str(LIBRARIES_ROOT) not in sys.path:
+    sys.path.insert(0, str(LIBRARIES_ROOT))
+
+from libraries.cli import resolve_repo_root  # noqa: E402
+
+
 LOG = logging.getLogger(__name__)
 LOG.addHandler(logging.NullHandler())
 
@@ -369,8 +377,10 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
     args = parse_args(argv)
     _configure_logging(args.log_level)
 
-    repo_root = args.repo_root.resolve()
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
     spec_path = args.spec
+    if not spec_path.is_absolute():
+        spec_path = (repo_root / spec_path).resolve()
 
     validation = _validate_workflow_spec(spec_path)
     if not validation.ok:
@@ -395,8 +405,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--repo-root",
         type=Path,
-        default=Path("."),
-        help="Repository root (default: current directory)",
+        default=None,
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the '.repo_studios' marker "
+            "directory (origin: this script)."
+        ),
     )
     parser.add_argument(
         "--spec",

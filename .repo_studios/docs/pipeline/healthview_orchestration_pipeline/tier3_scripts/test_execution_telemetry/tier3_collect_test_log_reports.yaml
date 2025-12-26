@@ -25,7 +25,7 @@ tool:
     - Refreshing downstream consumers that depend on test_log_reports bundles
   dont_use_when:
     - You only need test execution coverage metrics (use generate_test_coverage_inventory)
-    - No pytest logs exist in the configured logs directory
+    - You cannot run pytest and also do not have existing logs to summarize
 
 invocation:
   command_template: |
@@ -96,6 +96,23 @@ parameters:
     default: INFO
     choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
 
+  - name: summarize_existing
+    type: bool
+    required: false
+    default: false
+    description: Summarize existing log runs without running pytest first.
+
+  - name: run_pytest
+    type: enum
+    required: false
+    default: auto
+    choices: [auto, run, skip]
+    description: |
+      Controls whether pytest is executed before summarizing logs.
+      - auto: run pytest when logs_run is omitted; skip when logs_run is provided
+      - run: force pytest run (equivalent to --run-pytest)
+      - skip: force summarize-only mode (equivalent to --no-run-pytest)
+
 outputs:
   primary:
     type: directory
@@ -119,7 +136,7 @@ behavior:
     - Reads pytest log run folders under logs_dir (or explicit logs_run)
     - Writes a timestamped HealthView bundle directory
     - Prunes older sibling run directories beyond artifacts_to_keep
-  duration_estimate: "< 1 second for typical local pytest logs"
+  duration_estimate: "Varies. Summarize mode is typically < 1 second; fresh mode depends on pytest runtime."
   blocking: true
   mutates_repo: false
   mutates_filesystem: true
@@ -127,8 +144,8 @@ behavior:
 error_handling:
   common_errors:
     - exit_code: 0
-      meaning: "No pytest log runs found; script returns without writing artifacts."
-      agent_action: "Confirm logs_dir contains pytest output or pass --logs-run explicitly."
+      meaning: "No pytest log runs found (summarize-only mode); script returns without writing artifacts."
+      agent_action: "Confirm logs_dir contains pytest output, pass --logs-run explicitly, or run without --summarize-existing to capture fresh logs."
 
     - exit_code: 1
       meaning: "Invalid --run-timestamp format (must be YYYYMMDD-HHMM)."
@@ -154,6 +171,10 @@ examples:
   - description: Standard run using defaults
     command: |
       python .repo_studios/scripts/producers/collect_test_log_reports.py --log-level INFO
+
+  - description: Summarize existing logs (skip pytest)
+    command: |
+      python .repo_studios/scripts/producers/collect_test_log_reports.py --summarize-existing --log-level INFO
 
   - description: Deterministic run slug for testing
     command: |

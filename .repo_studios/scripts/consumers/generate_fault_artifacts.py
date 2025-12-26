@@ -33,17 +33,18 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Sequence, cast
 
-REPO_ROOT = Path(__file__).resolve().parents[4]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 COMMAND_CENTER_SCRIPTS_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 if str(COMMAND_CENTER_SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(COMMAND_CENTER_SCRIPTS_ROOT))
 
 from libraries.artifacts import copy_latest_artifact  # noqa: E402
 from libraries import prune_run_directories  # noqa: E402
-RAWVIEW_RUNS_BASE = REPO_ROOT / ".repo_studios/command_center/reports/rawview/fault_diagnostics_runs"
-LEGACY_RUNS_BASE = REPO_ROOT / ".repo_studios/faulthandler"
-CONSUMER_BASE = REPO_ROOT / ".repo_studios/reports/consumer_reports/fault_artifacts"
-COMMAND_CENTER_BASE = REPO_ROOT / ".repo_studios/command_center/reports/fault_artifacts_consumer"
+from libraries.cli import resolve_repo_root  # noqa: E402
+RAWVIEW_RUNS_BASE = Path(".repo_studios/command_center/reports/rawview/fault_diagnostics_runs")
+LEGACY_RUNS_BASE = Path(".repo_studios/faulthandler")
+CONSUMER_BASE = Path(".repo_studios/reports/consumer_reports/fault_artifacts")
+COMMAND_CENTER_BASE = Path(".repo_studios/command_center/reports/fault_artifacts_consumer")
 CONSUMER_DIR_PREFIX = "fault_artifacts-"
 DEFAULT_ARTIFACTS_TO_KEEP = 5
 
@@ -56,9 +57,12 @@ LATEST_POINTERS = {
     BUNDLE_SUMMARY_NAME: "latest_bundle_summary.json",
 }
 
-UTILITIES_ROOT = Path(__file__).resolve().parents[2]
-if str(UTILITIES_ROOT) not in sys.path:
-    sys.path.insert(0, str(UTILITIES_ROOT))
+SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
+scripts_root_str = str(SCRIPTS_ROOT)
+if scripts_root_str and scripts_root_str in sys.path:
+    sys.path.remove(scripts_root_str)
+if scripts_root_str:
+    sys.path.insert(0, scripts_root_str)
 
 from utilities.fault_run_analysis import (  # noqa: E402
     DEFAULT_TOP_N,
@@ -75,17 +79,23 @@ def _allow_legacy_runs() -> bool:
 
 
 def _resolve_runs_base(logger: logging.Logger | None) -> Path:
-    if RAWVIEW_RUNS_BASE.exists():
-        return RAWVIEW_RUNS_BASE
-    if _allow_legacy_runs() and LEGACY_RUNS_BASE.exists():
+    return _resolve_runs_base_for_repo(REPO_ROOT, logger)
+
+
+def _resolve_runs_base_for_repo(repo_root: Path, logger: logging.Logger | None) -> Path:
+    rawview_runs_base = (repo_root / RAWVIEW_RUNS_BASE).resolve()
+    legacy_runs_base = (repo_root / LEGACY_RUNS_BASE).resolve()
+    if rawview_runs_base.exists():
+        return rawview_runs_base
+    if _allow_legacy_runs() and legacy_runs_base.exists():
         if logger is not None:
             logger.info(
                 "Faulthandler rawview runs directory %s missing; falling back to legacy %s",
-                RAWVIEW_RUNS_BASE,
-                LEGACY_RUNS_BASE,
+                rawview_runs_base,
+                legacy_runs_base,
             )
-        return LEGACY_RUNS_BASE
-    return RAWVIEW_RUNS_BASE
+        return legacy_runs_base
+    return rawview_runs_base
 
 
 def _find_latest_outdir(runs_base: Path) -> Path | None:
@@ -446,6 +456,14 @@ def _prune_history(root: Path, keep: int | None, current: Path, *, logger: loggi
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate fault artifacts for a run directory")
     parser.add_argument(
+        "--repo-root",
+        default=None,
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the '.repo_studios' marker "
+            "directory (origin: this script)."
+        ),
+    )
+    parser.add_argument(
         "--outdir",
         default=None,
         help=(
@@ -491,13 +509,14 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     logging.basicConfig(level=log_level, format="[%(levelname)s] %(message)s", force=True)
     log = logging.getLogger("fault_artifacts")
 
-    runs_base = _resolve_runs_base(log)
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
+    runs_base = _resolve_runs_base_for_repo(repo_root, log)
     outdir = _discover_outdir(args.outdir, runs_base)
     if outdir is None or not outdir.exists() or not outdir.is_dir():
         log.info("No valid FAULT_OUTDIR or runs found; nothing to generate")
         return {"outdir": None, "source_report": None, "signatures": 0}
 
-    outdir = outdir.resolve()
+    outdir = (repo_root / outdir).resolve() if not outdir.is_absolute() else outdir.resolve()
     ensure_manifest(outdir)
 
     payload, payload_path = _load_producer_report(args.report, run_dir=outdir)
@@ -533,8 +552,12 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     _write_stacks_csv(outdir, signatures)
     summary_text = _write_summary(outdir, report, signatures, dumps_dir)
 
-    target_root = Path(args.output_dir) if args.output_dir is not None else CONSUMER_BASE
-    command_center_dir = Path(args.command_center_dir) if args.command_center_dir is not None else COMMAND_CENTER_BASE
+    raw_target_root = Path(args.output_dir) if args.output_dir is not None else CONSUMER_BASE
+    target_root = raw_target_root if raw_target_root.is_absolute() else (repo_root / raw_target_root).resolve()
+    raw_command_center_dir = Path(args.command_center_dir) if args.command_center_dir is not None else COMMAND_CENTER_BASE
+    command_center_dir = (
+        raw_command_center_dir if raw_command_center_dir.is_absolute() else (repo_root / raw_command_center_dir).resolve()
+    )
     artifact_paths = _write_consumer_bundle(
         target_root=target_root,
         run_dir=outdir,

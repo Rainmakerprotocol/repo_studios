@@ -81,6 +81,7 @@ def _inventory_artifacts(directory: Path, slug: str) -> list[Path]:
 
 def test_analysis_detects_duplicate_functions(tmp_path: Path) -> None:
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir(parents=True, exist_ok=True)
     target = repo_root / "sample_pkg"
     _write(target / "__init__.py", "")
     _write(
@@ -154,6 +155,7 @@ def test_analysis_detects_duplicate_functions(tmp_path: Path) -> None:
 
 def test_analysis_errors_without_inventory(tmp_path: Path) -> None:
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir(parents=True, exist_ok=True)
     target = repo_root / "empty_pkg"
     target.mkdir(parents=True, exist_ok=True)
 
@@ -163,6 +165,7 @@ def test_analysis_errors_without_inventory(tmp_path: Path) -> None:
 
 def test_analysis_replaces_existing_outputs(tmp_path: Path) -> None:
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir(parents=True, exist_ok=True)
     target = repo_root / "pkg"
     _write(target / "__init__.py", "")
     _write(target / "mod.py", "def helper():\n    return True\n")

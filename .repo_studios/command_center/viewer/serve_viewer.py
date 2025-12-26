@@ -8,6 +8,7 @@ import http.server
 import socketserver
 from http import HTTPStatus
 from pathlib import Path
+import sys
 
 from command_center.viewer.update_service import (
     UpdateAlreadyRunningError,
@@ -17,7 +18,15 @@ from command_center.viewer.update_service import (
 )
 
 
-REPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent
+_SCRIPT_PATH = Path(__file__).resolve()
+REPO_ROOT = _SCRIPT_PATH.parent.parent.parent.parent
+
+# Import the shared repo-root convention from the command_center scripts library.
+LIBRARIES_ROOT = _SCRIPT_PATH.parent.parent / "scripts"
+if str(LIBRARIES_ROOT) not in sys.path:
+    sys.path.insert(0, str(LIBRARIES_ROOT))
+
+from libraries.cli import resolve_repo_root  # noqa: E402
 UPDATE_ENDPOINTS = {
     "/.repo_studios/command_center/viewer/update",
     "/command-center/viewer/update",
@@ -177,6 +186,12 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Serve the Command Center viewer")
     parser.add_argument(
+        "--repo-root",
+        type=Path,
+        default=None,
+        help="Repository root (auto-discovered via .repo_studios marker when omitted)",
+    )
+    parser.add_argument(
         "--port",
         type=int,
         default=8000,
@@ -195,4 +210,9 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
+
+    # Allow the entrypoint to run from any CWD while consistently resolving the repo root.
+    REPO_ROOT = resolve_repo_root(args.repo_root, origin=_SCRIPT_PATH)  # type: ignore[assignment]
+    UPDATE_MANAGER = UpdateProcessManager(REPO_ROOT)  # type: ignore[assignment]
+
     serve_viewer(port=args.port, directory=args.directory, serve_from_repo_root=not args.ui_only)

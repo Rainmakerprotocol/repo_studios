@@ -144,13 +144,15 @@ COMPLEXITY_NODE_TYPES = (
 )
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
+REPO_STUDIOS_ROOT = LIBRARIES_ROOT.parents[2]
 
 try:
-    from libraries import slugify_relative
+    from libraries import resolve_repo_root, slugify_relative
 except ModuleNotFoundError:  # pragma: no cover - fallback when run as script
-    if str(LIBRARIES_ROOT) not in sys.path:
-        sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import slugify_relative  # type: ignore  # noqa: E402
+    for candidate in (REPO_STUDIOS_ROOT, LIBRARIES_ROOT):
+        if str(candidate) not in sys.path:
+            sys.path.insert(0, str(candidate))
+    from libraries import resolve_repo_root, slugify_relative  # type: ignore  # noqa: E402
 
 
 def _safe_unparse(node: ast.AST | None) -> str | None:
@@ -818,7 +820,8 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument(
         "--repo-root",
-        help="Repository root. Defaults to script's grandparent directory.",
+        default=None,
+        help="Repository root (auto-discovered via .repo_studios marker when omitted).",
     )
     parser.add_argument(
         "--schema-version",
@@ -852,7 +855,7 @@ _slugify_relative = slugify_relative
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[4]
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
     target_candidate = Path(args.target)
     target = target_candidate if target_candidate.is_absolute() else (repo_root / target_candidate)
     target = target.resolve()

@@ -140,7 +140,12 @@ class PlaceholderRecord:
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Scan for placeholder comments and emit structured artifacts")
     parser.add_argument(
-        "--repo-root", default=None, help="Repository root (defaults to three levels up from this script)"
+        "--repo-root",
+        default=None,
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the '.repo_studios' marker "
+            "directory (origin: this script)."
+        ),
     )
     parser.add_argument("--root", default=".", help="Directory to scan (relative to repo root by default)")
     parser.add_argument(

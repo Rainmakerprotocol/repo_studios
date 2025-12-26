@@ -26,6 +26,13 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Literal
 
+
+SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
+if str(SCRIPTS_ROOT) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_ROOT))
+
+from libraries.cli import resolve_repo_root  # noqa: E402
+
 logger = logging.getLogger(__name__)
 
 
@@ -349,8 +356,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--repo-root",
         type=Path,
-        default=Path.cwd(),
-        help="Repository root path (default: current directory)",
+        default=None,
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the '.repo_studios' marker "
+            "directory (origin: this script)."
+        ),
     )
     parser.add_argument(
         "--log-level",
@@ -360,6 +370,8 @@ def main(argv: list[str] | None = None) -> int:
     )
     
     args = parser.parse_args(argv)
+
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
     
     logging.basicConfig(
         level=getattr(logging, args.log_level),
@@ -374,9 +386,12 @@ def main(argv: list[str] | None = None) -> int:
             args.output = Path("db_integration_markers.json")
         else:  # md
             args.output = Path("db_integration_status.md")
+
+    if not args.output.is_absolute():
+        args.output = (repo_root / args.output).resolve()
     
-    logger.info(f"Scanning repository at {args.repo_root}")
-    statuses = scan_repository(args.repo_root)
+    logger.info(f"Scanning repository at {repo_root}")
+    statuses = scan_repository(repo_root)
     
     logger.info(f"Found {len(statuses)} scripts")
     logger.info(

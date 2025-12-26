@@ -57,6 +57,7 @@ def test_structured_artifacts_created(tmp_path):
     mod = _load_module()
     workspace = tmp_path / "workspace"
     workspace.mkdir()
+    (workspace / ".repo_studios").mkdir(parents=True, exist_ok=True)
 
     docs = workspace / "docs"
     docs.mkdir()

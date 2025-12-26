@@ -104,7 +104,8 @@ related_files:
   - [tier3_cli.yaml](../../tier3_cli.yaml) (shared CLI builders)
   - [tier3_prune_logs.yaml](../../tier3_prune_logs.yaml) (retention + current_run protection)
   - [tier3_artifacts.yaml](../../tier3_artifacts.yaml) (base package contract + discovery semantics)
-  - [tier3_database_integration.yaml](../../tier3_database_integration.yaml) (DB dual-write semantics + schema)
+  - [tier3_database_integration.yaml](../../tier3_database_integration.yaml)
+    (DB dual-write semantics + schema)
 
 ### 2.2 Chain Inventory (Stage 1.1)
 

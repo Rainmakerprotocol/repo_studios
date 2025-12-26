@@ -71,6 +71,7 @@ def test_anchor_health_uses_inventory_artifacts(tmp_path):
     os.chdir(repo)
     try:
         result = consumer_mod.run(
+            repo_root=repo,
             inventory_report=topic_dir,
             output_dir=repo
             / ".repo_studios"
@@ -118,6 +119,7 @@ def test_anchor_health_falls_back_to_docs_scan(tmp_path):
     consumer_mod = _load_module("generate_anchor_health_report", _CONSUMER_MODULE_PATH)
 
     repo = tmp_path / "repo"
+    (repo / ".repo_studios").mkdir(parents=True)
     docs = repo / "docs"
     docs.mkdir(parents=True)
     (docs / "alpha.md").write_text("# Intro\n\n## Shared\n", encoding="utf-8")
@@ -134,6 +136,7 @@ def test_anchor_health_falls_back_to_docs_scan(tmp_path):
     os.chdir(repo)
     try:
         result = consumer_mod.run(
+            repo_root=repo,
             output_dir=repo
             / ".repo_studios"
             / "reports"
@@ -161,6 +164,7 @@ def test_anchor_health_prunes_history(tmp_path, monkeypatch):
     consumer_mod = _load_module("generate_anchor_health_report", _CONSUMER_MODULE_PATH)
 
     repo = tmp_path / "repo"
+    (repo / ".repo_studios").mkdir(parents=True)
     docs = repo / "docs"
     docs.mkdir(parents=True)
     (docs / "one.md").write_text("# Shared\n", encoding="utf-8")
@@ -196,6 +200,7 @@ def test_anchor_health_prunes_history(tmp_path, monkeypatch):
     try:
         for _ in range(6):
             consumer_mod.run(
+                repo_root=repo,
                 output_dir=repo
                 / ".repo_studios"
                 / "reports"

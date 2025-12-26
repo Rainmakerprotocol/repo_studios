@@ -6,10 +6,18 @@ import argparse
 import json
 import logging
 import re
+import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable, Sequence
+
+SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
+scripts_root_str = str(SCRIPTS_ROOT)
+if scripts_root_str and scripts_root_str not in sys.path:  # pragma: no cover - import path bootstrap
+    sys.path.insert(0, scripts_root_str)
+
+from libraries.cli import resolve_repo_root  # noqa: E402
 
 _SLUG_PATTERN = re.compile(r"^[a-z0-9]+(?:[-_][a-z0-9]+)*$")
 _TIMESTAMP_PATTERN = re.compile(r"^\d{8}-\d{4}$")
@@ -62,22 +70,33 @@ class AuditEntry:
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Scan report folders for naming compliance.")
     parser.add_argument(
+        "--repo-root",
+        default=None,
+        help=(
+            "Repository root override (auto-detected by scanning ancestors for a .repo_studios/ marker when omitted)"
+        ),
+    )
+    parser.add_argument(
         "--reports-root",
-        default=".repo_studios/command_center/reports",
+        type=Path,
+        default=Path(".repo_studios/command_center/reports"),
         help="Root directory containing report artifacts (default: %(default)s).",
     )
     parser.add_argument(
         "--output-dir",
+        type=Path,
         default=None,
         help="Directory for audit outputs. Defaults to <reports-root>/reports_naming_audit/<timestamp>.",
     )
     parser.add_argument(
         "--json-output",
+        type=Path,
         default=None,
         help="Explicit path for the JSON summary. Overrides --output-dir placement when provided.",
     )
     parser.add_argument(
         "--markdown-output",
+        type=Path,
         default=None,
         help="Explicit path for the Markdown summary. Overrides --output-dir placement when provided.",
     )
@@ -363,7 +382,14 @@ def _write_markdown(path: Path, payload: dict[str, object]) -> None:
 def run(argv: Sequence[str] | None = None) -> dict[str, object]:
     args = _parse_args(argv)
     logging.basicConfig(level=getattr(logging, args.log_level.upper()), format="%(levelname)s %(message)s")
-    reports_root = Path(args.reports_root).expanduser().resolve()
+
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
+    reports_root = args.reports_root.expanduser()
+    if not reports_root.is_absolute():
+        reports_root = (repo_root / reports_root).resolve()
+    else:
+        reports_root = reports_root.resolve()
+
     now = datetime.now(timezone.utc)
     summary = audit_reports(
         reports_root,
@@ -374,11 +400,26 @@ def run(argv: Sequence[str] | None = None) -> dict[str, object]:
     )
     threshold = max(args.fail_threshold, 0)
     summary["fail_threshold"] = threshold
-    output_dir = Path(args.output_dir).expanduser().resolve() if args.output_dir else _default_output_dir(reports_root, now)
-    json_path = Path(args.json_output).expanduser().resolve() if args.json_output else output_dir / "summary.json"
+    output_dir = args.output_dir.expanduser() if args.output_dir else _default_output_dir(reports_root, now)
+    if not output_dir.is_absolute():
+        output_dir = (repo_root / output_dir).resolve()
+    else:
+        output_dir = output_dir.resolve()
+
+    json_path = args.json_output.expanduser() if args.json_output else output_dir / "summary.json"
+    if not json_path.is_absolute():
+        json_path = (repo_root / json_path).resolve()
+    else:
+        json_path = json_path.resolve()
+
     markdown_path = (
-        Path(args.markdown_output).expanduser().resolve() if args.markdown_output else output_dir / "summary.md"
+        args.markdown_output.expanduser() if args.markdown_output else output_dir / "summary.md"
     )
+    if not markdown_path.is_absolute():
+        markdown_path = (repo_root / markdown_path).resolve()
+    else:
+        markdown_path = markdown_path.resolve()
+
     logging.info("Writing JSON summary to %s", json_path)
     _write_json(json_path, summary)
     logging.info("Writing Markdown summary to %s", markdown_path)

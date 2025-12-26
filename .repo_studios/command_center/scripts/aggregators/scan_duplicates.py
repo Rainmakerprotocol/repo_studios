@@ -36,6 +36,7 @@ try:
     from libraries import (  # type: ignore  # noqa: E402
         ReportArtifact,
         WriteReportArtifactsResult,
+        resolve_repo_root,
         slugify_relative,
         write_report_artifacts,
     )
@@ -47,6 +48,7 @@ except ModuleNotFoundError:  # pragma: no cover - CLI fallback
     from libraries import (  # type: ignore  # noqa: E402
         ReportArtifact,
         WriteReportArtifactsResult,
+        resolve_repo_root,
         slugify_relative,
         write_report_artifacts,
     )
@@ -185,7 +187,7 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument(
         "--repo-root",
-        help="Explicit repository root. Defaults to the script's grandparent directory.",
+        help="Explicit repository root. Defaults to marker-based discovery (searches ancestors for .repo_studios).",
     )
     parser.add_argument(
         "--run-root",
@@ -243,7 +245,7 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[4]
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__).resolve())
     target = _resolve_within_repo(repo_root, Path(args.target))
     output_arg = getattr(args, "output_dir", None) or args.run_root
     output_dir = _resolve_within_repo(repo_root, Path(output_arg))

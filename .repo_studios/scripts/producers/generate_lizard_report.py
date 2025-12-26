@@ -47,6 +47,8 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for direct script exe
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
 
+from libraries.cli import resolve_path, resolve_repo_root
+
 LIZARD_JSON_EXTENSION_SOURCE = '''"""JSON output extension for lizard (auto-installed)."""
 
 from __future__ import annotations
@@ -552,7 +554,12 @@ def _append_note(payload: dict[str, Any], message: str) -> None:
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Generate lizard complexity artifacts")
-    parser.add_argument("--repo-root", default=".")
+    parser.add_argument(
+        "--repo-root",
+        type=Path,
+        default=None,
+        help="Repository root (auto-discovered via .repo_studios marker when omitted)",
+    )
     parser.add_argument(
         "--output-dir",
         dest="output_dir",
@@ -612,11 +619,14 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     configure_logging(args.log_level)
 
-    repo_root = Path(args.repo_root).expanduser().resolve()
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
     output_setting = args.output_dir or args.output_base or str(DEFAULT_OUTPUT_DIR)
-    output_dir = Path(output_setting)
-    if not output_dir.is_absolute():
-        output_dir = (repo_root / output_dir).resolve()
+    output_dir = resolve_path(
+        output_setting,
+        repo_root=repo_root,
+        default=DEFAULT_OUTPUT_DIR,
+        ensure_dir=True,
+    )
 
     if output_dir.name == "lizard_reports":
         logging.warning(

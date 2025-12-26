@@ -36,7 +36,7 @@ consumers.
 ## Inputs
 
 - **Structured producer bundle (preferred):**
-  `.repo_studios/command_center/reports/rawview/test_log_reports/<YYYYMMDD-HHMM>/telemetry.json`.
+  `.repo_studios/reports/healthview/rawview/test_log_reports/<YYYYMMDD-HHMM>/telemetry.json`.
 - **Fallback logs directory:** `.repo_studios/command_center/reports/rawview/test_execution_runs/`
   by default; legacy `.repo_studios/pytest_logs/` runs are discovered when
   `TEST_LOG_HEALTH_ALLOW_LEGACY` is not set to `0`.
@@ -47,7 +47,8 @@ consumers.
     remains enabled).
   - `--producer-bundle-dir`: Explicit producer run directory containing `telemetry.json`.
   - `--producer-reports-root`: Root directory containing timestamped producer bundles (default
-    `.repo_studios/command_center/reports/rawview/test_log_reports`).
+    `.repo_studios/command_center/reports/rawview/test_log_reports`; override to
+    `.repo_studios/reports/healthview/rawview/test_log_reports` when using the default producer output root).
   - `--producer-report`: Legacy pointer to old-style `latest_report.json` / `report.json` payloads
     (deprecated; avoid for new callers).
   - `--output-base`: Target directory for timestamped consumer bundles (default `.repo_studios/reports/consumer_reports/test_log_health_reports`).
@@ -79,9 +80,8 @@ so specifying `0` behaves like `1` (current bundle retained, older bundles prune
 
 ## Typical Workflow
 
-1. Capture logs with `run_pytest_log_capture.py` or existing CI suites (the orchestrator now
-  defaults to `.repo_studios/command_center/reports/rawview/test_execution_runs/`).
-1. Run `collect_test_log_reports.py` to build the structured producer bundle.
+1. Run `collect_test_log_reports.py` (default behavior runs pytest first) to build the structured producer bundle.
+1. If you already have logs captured, run `collect_test_log_reports.py --summarize-existing` instead.
 1. Execute `generate_test_log_health_report.py` (or the Make target below) to emit consumer
   artifacts.
 1. Inspect the markdown or CSV, then feed `bundle_summary.json` into downstream aggregators such as

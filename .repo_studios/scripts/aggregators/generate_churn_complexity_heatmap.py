@@ -16,7 +16,6 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Iterable, Sequence
 
-DEFAULT_REPO_ROOT = Path(".")
 DEFAULT_OUTPUT_BASE = Path(
     ".repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap"
 )
@@ -45,6 +44,7 @@ if libraries_root_str and libraries_root_str not in sys.path:
     sys.path.insert(0, libraries_root_str)
 
 from libraries import prune_run_directories  # noqa: E402
+from libraries.cli import resolve_path, resolve_repo_root  # noqa: E402
 
 
 @dataclass(frozen=True)
@@ -59,7 +59,12 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Aggregate churn, complexity, and failure density into a trend heatmap"
     )
-    parser.add_argument("--repo-root", type=Path, default=DEFAULT_REPO_ROOT)
+    parser.add_argument(
+        "--repo-root",
+        type=Path,
+        default=None,
+        help="Repository root (auto-discovered via .repo_studios marker when omitted)",
+    )
     parser.add_argument("--window", type=int, default=DEFAULT_WINDOW)
     parser.add_argument("--output-base", type=Path, default=DEFAULT_OUTPUT_BASE)
     parser.add_argument("--test-log-summary", type=Path, default=DEFAULT_TEST_LOG_SUMMARY)
@@ -69,11 +74,6 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser.add_argument("--log-level", default="INFO")
     parser.add_argument("--verbose", action="store_true")
     return parser.parse_args(argv)
-
-
-def _resolve_path(base: Path, candidate: Path) -> Path:
-    return candidate if candidate.is_absolute() else (base / candidate).resolve()
-
 
 def _configure_logging(level: str, verbose: bool) -> logging.Logger:
     resolved = logging.DEBUG if verbose else getattr(logging, level.upper(), logging.INFO)
@@ -330,7 +330,7 @@ def _choose_logs_dir(repo_root: Path, candidate: Path, logger: logging.Logger) -
     if junit is not None or not _allow_legacy_logs():
         return candidate, junit
 
-    legacy = _resolve_path(repo_root, LEGACY_LOGS_DIR)
+    legacy = (repo_root / LEGACY_LOGS_DIR).resolve()
     legacy_junit = _discover_logs_junit(legacy)
     if legacy_junit is not None:
         logger.info(
@@ -475,18 +475,33 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     args = _parse_args(argv)
     logger = _configure_logging(args.log_level, args.verbose)
 
-    repo_root = _resolve_path(Path.cwd(), args.repo_root)
-    output_base = _resolve_path(repo_root, args.output_base)
-    logs_dir = _resolve_path(repo_root, args.logs_dir)
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
+    output_base = resolve_path(
+        str(args.output_base) if args.output_base else None,
+        repo_root=repo_root,
+        default=DEFAULT_OUTPUT_BASE,
+        ensure_dir=True,
+    )
+    logs_dir = resolve_path(
+        str(args.logs_dir) if args.logs_dir else None,
+        repo_root=repo_root,
+        default=DEFAULT_LOGS_DIR,
+    )
     primary_logs_dir = logs_dir
     metrics_source = args.metrics_source
-    if metrics_source is not None and not metrics_source.is_absolute():
-        metrics_source = (repo_root / metrics_source).resolve()
+    if metrics_source is not None:
+        metrics_source = resolve_path(
+            str(metrics_source),
+            repo_root=repo_root,
+            default=DEFAULT_METRICS_SOURCE or Path("."),
+        )
     summary_candidate = args.test_log_summary
-    if not summary_candidate.is_absolute():
-        summary_candidate = (repo_root / summary_candidate).resolve()
-
-    output_base.mkdir(parents=True, exist_ok=True)
+    if summary_candidate is not None:
+        summary_candidate = resolve_path(
+            str(summary_candidate),
+            repo_root=repo_root,
+            default=DEFAULT_TEST_LOG_SUMMARY,
+        )
 
     metrics, metric_notes = _prepare_metrics(
         repo_root=repo_root,

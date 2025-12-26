@@ -4,7 +4,7 @@
   "writer": "file",
   "retention": {
     "keep": 2,
-    "pruned": 1
+    "pruned": 0
   },
   "flags": {
     "FAULT_ENABLE": "1",

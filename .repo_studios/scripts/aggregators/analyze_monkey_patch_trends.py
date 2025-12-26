@@ -45,6 +45,7 @@ from utilities.monkey_patch_risk import (  # noqa: E402
     classify_monkey_patch,
 )
 from libraries import prune_run_directories  # noqa: E402
+from libraries.cli import resolve_repo_root  # noqa: E402
 
 
 @dataclass(frozen=True)
@@ -64,6 +65,13 @@ class TrendRun:
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=("Blend monkey-patch consumer bundles (or producer fallbacks) into trend artifacts.")
+    )
+    parser.add_argument(
+        "--repo-root",
+        default=None,
+        help=(
+            "Repository root override (auto-detected by scanning ancestors for a .repo_studios/ marker when omitted)"
+        ),
     )
     parser.add_argument(
         "--consumer-base",
@@ -113,8 +121,10 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
-def _resolve_path(path: Path) -> Path:
-    return path if path.is_absolute() else Path.cwd() / path
+def _resolve_repo_path(path: Path, *, repo_root: Path) -> Path:
+    if path.is_absolute():
+        return path.expanduser().resolve()
+    return (repo_root / path).resolve()
 
 
 def _iso_to_datetime(value: str | None) -> datetime | None:
@@ -410,10 +420,14 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     logging.basicConfig(level=log_level, format="[%(levelname)s] %(message)s", force=True)
     logger = logging.getLogger("analyze_monkey_patch_trends")
 
-    consumer_base = _resolve_path(args.consumer_base)
-    consumer_summary = _resolve_path(args.consumer_summary) if args.consumer_summary is not None else None
-    producer_base = _resolve_path(args.producer_base)
-    output_base = _resolve_path(args.output_base)
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
+
+    consumer_base = _resolve_repo_path(args.consumer_base, repo_root=repo_root)
+    consumer_summary = (
+        _resolve_repo_path(args.consumer_summary, repo_root=repo_root) if args.consumer_summary is not None else None
+    )
+    producer_base = _resolve_repo_path(args.producer_base, repo_root=repo_root)
+    output_base = _resolve_repo_path(args.output_base, repo_root=repo_root)
     max_runs = max(int(args.max_runs or 0), 1)
 
     consumer_runs = _load_consumer_runs(consumer_base, consumer_summary, logger)

@@ -26,6 +26,7 @@ def test_reports_written_without_issues(tmp_path):
     mod = _load_module()
     root = tmp_path / "workspace"
     root.mkdir()
+    (root / ".repo_studios").mkdir(parents=True, exist_ok=True)
 
     _write(
         root / "requirements.txt",

@@ -15,6 +15,7 @@ import importlib
 import json
 import os
 import sys
+import argparse
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -36,6 +37,7 @@ if LIBRARIES_ROOT_STR and LIBRARIES_ROOT_STR not in sys.path:
     sys.path.insert(0, LIBRARIES_ROOT_STR)
 
 from libraries import prune_run_directories
+from libraries.cli import resolve_repo_root
 
 
 def _default_base_dir(allow_legacy: bool) -> Path:
@@ -249,7 +251,23 @@ def _write_json(path: Path, payload: Dict[str, object]) -> None:
         pass
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Emit a faulthandler snapshot bundle")
+    parser.add_argument(
+        "--repo-root",
+        default=None,
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the '.repo_studios' marker "
+            "directory (origin: this script)."
+        ),
+    )
+    args = parser.parse_args(argv)
+    resolved_root = resolve_repo_root(explicit=args.repo_root, origin=Path(__file__))
+    if resolved_root != ROOT:
+        raise SystemExit(
+            f"Resolved repo root {resolved_root} does not match script repo root {ROOT}. "
+            "Invoke the script from the intended repo checkout."
+        )
     dump_snapshot()
     return 0
 

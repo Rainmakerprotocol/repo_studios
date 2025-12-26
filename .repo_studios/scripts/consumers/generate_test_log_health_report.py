@@ -38,7 +38,7 @@ root_str = str(ROOT)
 if root_str and root_str not in sys.path:
     sys.path.insert(0, root_str)
 
-LIBRARIES_ROOT = ROOT / "command_center" / "scripts"
+LIBRARIES_ROOT = ROOT / ".repo_studios" / "command_center" / "scripts"
 libraries_root_str = str(LIBRARIES_ROOT)
 if libraries_root_str and libraries_root_str not in sys.path:
     sys.path.insert(0, libraries_root_str)
@@ -53,10 +53,19 @@ from libraries import (  # noqa: E402
     prune_run_directories,
     render_markdown,
 )
+from libraries.cli import resolve_repo_root  # noqa: E402
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate test log health report")
+    parser.add_argument(
+        "--repo-root",
+        default=None,
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the '.repo_studios' marker "
+            "directory (origin: this script)."
+        ),
+    )
     parser.add_argument("--logs-dir", default=LOGS_DIR_DEFAULT)
     parser.add_argument("--output-base", default=OUTPUT_BASE_DEFAULT)
     parser.add_argument(
@@ -495,7 +504,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         format="%(levelname)s %(message)s",
         force=True,
     )
-    repo_root = Path(".").resolve()
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
 
     logs_dir = Path(args.logs_dir)
     if not logs_dir.is_absolute():

@@ -1,4 +1,8 @@
-"""CLI helper utilities shared across Command Center producers."""
+"""CLI helper utilities shared across Command Center producers.
+
+This module also provides the repo-root discovery/validation convention used by Python entrypoints
+across the repository.
+"""
 
 from __future__ import annotations
 
@@ -6,6 +10,9 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Mapping, Type
+
+
+REPO_MARKER_DIR = ".repo_studios"
 
 
 @dataclass(frozen=True)
@@ -51,14 +58,69 @@ def _source_value(source: Any, field: str) -> Any:
     return getattr(source, field, None)
 
 
-def resolve_repo_root(explicit: str | None, *, fallback_depth: int = 3, origin: Path | None = None) -> Path:
+def find_repo_root(origin: Path) -> Path | None:
+    """Return the nearest repo root by scanning parents for the marker directory.
+
+    The repo root is defined as a directory containing a `.repo_studios/` child.
+    """
+
+    cursor = origin.expanduser().resolve()
+    if cursor.is_file():
+        cursor = cursor.parent
+    for parent in (cursor, *cursor.parents):
+        if parent.name == REPO_MARKER_DIR:
+            continue
+        if (parent / REPO_MARKER_DIR).is_dir():
+            return parent
+    return None
+
+
+def validate_repo_root(repo_root: Path) -> Path:
+    """Validate that `repo_root` looks like a Repo Studios repo."""
+
+    repo_root = repo_root.expanduser().resolve()
+    marker = repo_root / REPO_MARKER_DIR
+    if not marker.is_dir():
+        raise ValueError(
+            f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+            "Pass --repo-root pointing at the repository root."
+        )
+    return repo_root
+
+
+def resolve_repo_root(
+    explicit: str | Path | None,
+    *,
+    fallback_depth: int = 3,
+    origin: Path | None = None,
+    require_marker: bool = True,
+) -> Path:
+    """Resolve the repo root from either an explicit override or auto-discovery.
+
+    Auto-discovery scans parents from `origin` looking for `.repo_studios/`. If no marker is found,
+    we fall back to the historical "walk up N parents" behavior.
+    """
+
     if explicit:
-        return Path(explicit).expanduser().resolve()
+        repo_root = Path(explicit).expanduser().resolve()
+        return validate_repo_root(repo_root) if require_marker else repo_root
+
     origin = origin or Path(__file__)
+    discovered = find_repo_root(origin)
+    if discovered is not None:
+        return discovered
+
     cursor = origin.resolve()
     for _ in range(fallback_depth):
         cursor = cursor.parent
-    return cursor
+    return validate_repo_root(cursor) if require_marker else cursor
+
+
+def chdir_repo_root(repo_root: Path) -> None:
+    """Change current working directory to the validated repo root."""
+
+    repo_root = validate_repo_root(repo_root)
+    os.chdir(repo_root)
 
 
 def resolve_path(

@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import logging
 import os
+import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -20,17 +21,34 @@ else:  # pragma: no cover - executed when import succeeds
     YAML_IMPORT_ERROR = None
     yaml = yaml_module
 
-from libraries import (
-    KeepSpec,
-    OptionsConfig,
-    PathSpec,
-    PathsConfig,
-    ReportArtifact,
-    WriteReportArtifactsResult,
-    build_standard_options,
-    build_standard_paths,
-    write_report_artifacts,
-)
+LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
+
+try:  # pragma: no cover - preferred import when executed with packaged path
+    from libraries import (
+        KeepSpec,
+        OptionsConfig,
+        PathSpec,
+        PathsConfig,
+        ReportArtifact,
+        WriteReportArtifactsResult,
+        build_standard_options,
+        build_standard_paths,
+        write_report_artifacts,
+    )
+except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import (
+        KeepSpec,
+        OptionsConfig,
+        PathSpec,
+        PathsConfig,
+        ReportArtifact,
+        WriteReportArtifactsResult,
+        build_standard_options,
+        build_standard_paths,
+        write_report_artifacts,
+    )
 
 DEFAULT_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
 LEGACY_INDEX_PATH = Path(".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml")
@@ -83,7 +101,14 @@ OPTIONS_CONFIG = OptionsConfig(
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__ or "")
-    parser.add_argument("--repo-root", help="Repository root override")
+    parser.add_argument(
+        "--repo-root",
+        default=None,
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the '.repo_studios' marker "
+            "directory (origin: this script)."
+        ),
+    )
     parser.add_argument(
         "--index-path",
         default=os.environ.get("INDEX_PATH", str(DEFAULT_INDEX_PATH)),

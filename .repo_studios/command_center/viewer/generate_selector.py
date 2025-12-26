@@ -7,6 +7,12 @@ import json
 import sys
 from pathlib import Path
 
+LIBRARIES_ROOT = Path(__file__).resolve().parents[2] / "scripts"
+if str(LIBRARIES_ROOT) not in sys.path:
+    sys.path.insert(0, str(LIBRARIES_ROOT))
+
+from libraries.cli import resolve_repo_root  # noqa: E402
+
 try:
     from command_center.viewer.refresh import refresh_selector_payload
 except ModuleNotFoundError:  # pragma: no cover - path fix only for direct script execution
@@ -29,9 +35,9 @@ def generate_selector_json(
         output_path: Where to write selector.json (default: reports/selector.json)
     """
     if repo_root is None:
-        # Auto-detect repo root from this script's location
-        # viewer/generate_selector.py -> viewer -> command_center -> .repo_studios -> repo_root
-        repo_root = Path(__file__).parent.parent.parent.parent
+        repo_root = resolve_repo_root(None, origin=Path(__file__))
+    else:
+        repo_root = resolve_repo_root(repo_root, origin=Path(__file__))
 
     if output_path is None:
         # Default: write to reports directory

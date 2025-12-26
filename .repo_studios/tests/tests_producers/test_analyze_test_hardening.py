@@ -29,6 +29,7 @@ def analyzer_module():
 
 @pytest.fixture
 def repo_root(tmp_path: Path) -> Path:
+    (tmp_path / ".repo_studios").mkdir(parents=True, exist_ok=True)
     (tmp_path / "tests").mkdir()
     return tmp_path
 

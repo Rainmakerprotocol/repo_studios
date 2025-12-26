@@ -1,0 +1,3813 @@
+.....FFFFF...FFFF..FFFFFF.........FFF................FF................. [ 16%]
+........................................................................ [ 32%]
+........................................................................ [ 48%]
+........................................................................ [ 64%]
+...................FF....F..................FF.............F...F..FFF... [ 80%]
+F.F.FFFFFFFFFFFFFF..F.F.F........FFF.........FFFF.F.......FFFF.........F [ 96%]
+FF...............                                                        [100%]
+================================== FAILURES ===================================
+___________________ test_validation_passes_for_valid_entry ____________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_validation_passes_for_val0')
+
+    def test_validation_passes_for_valid_entry(tmp_path: Path):
+        schema_root = tmp_path / "inventory_schema"
+        schema_root.mkdir()
+    
+        enums = {
+            "asset_kind": ["script"],
+            "roles": ["validator"],
+            "maturity": ["legacy"],
+            "consumers": ["coding_agent"],
+            "status": ["needs_review"],
+        }
+        write_yaml(schema_root / "enums.yaml", enums)
+    
+        records = [
+            {
+                "id": "scripts.example",
+                "name": "Example Script",
+                "path": "foo.py",
+                "asset_kind": "script",
+                "roles": ["validator"],
+                "maturity": "legacy",
+                "description": "Example",
+                "consumers": ["coding_agent"],
+                "status": "needs_review",
+                "artifact_type": "py",
+            }
+        ]
+        write_yaml(schema_root / "valid.yaml", records)
+    
+        validator = load_validator(tmp_path)
+        rc, stdout = validator()
+>       assert rc == 0
+E       assert 1 == 0
+
+.repo_studios\tests\schema_validation\test_validate_inventory.py:44: AssertionError
+____________________ test_validation_detects_duplicate_ids ____________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_validation_detects_duplic0')
+
+    def test_validation_detects_duplicate_ids(tmp_path: Path):
+        schema_root = tmp_path / "inventory_schema"
+        schema_root.mkdir()
+    
+        enums = {
+            "asset_kind": ["script"],
+            "roles": ["validator"],
+            "maturity": ["legacy"],
+            "consumers": ["coding_agent"],
+            "status": ["needs_review"],
+        }
+        write_yaml(schema_root / "enums.yaml", enums)
+    
+        duplicate_records = [
+            {
+                "id": "scripts.dup",
+                "name": "Dup1",
+                "path": "dup1.py",
+                "asset_kind": "script",
+                "roles": ["validator"],
+                "maturity": "legacy",
+                "description": "Dup",
+                "consumers": ["coding_agent"],
+                "status": "needs_review",
+                "artifact_type": "py",
+            },
+            {
+                "id": "scripts.dup",
+                "name": "Dup2",
+                "path": "dup2.py",
+                "asset_kind": "script",
+                "roles": ["validator"],
+                "maturity": "legacy",
+                "description": "Dup",
+                "consumers": ["coding_agent"],
+                "status": "needs_review",
+                "artifact_type": "py",
+            },
+        ]
+        write_yaml(schema_root / "dup.yaml", duplicate_records)
+    
+        validator = load_validator(tmp_path)
+        rc, stdout = validator()
+        assert rc == 1
+>       assert "Duplicate id" in stdout
+E       AssertionError: assert 'Duplicate id' in ''
+
+.repo_studios\tests\schema_validation\test_validate_inventory.py:92: AssertionError
+______________________________ test_json_output _______________________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_json_output0')
+
+    def test_json_output(tmp_path: Path):
+        schema_root = tmp_path / "inventory_schema"
+        schema_root.mkdir()
+    
+        enums = {
+            "asset_kind": ["script"],
+            "roles": ["validator"],
+            "maturity": ["legacy"],
+            "consumers": ["coding_agent"],
+            "status": ["needs_review"],
+        }
+        write_yaml(schema_root / "enums.yaml", enums)
+    
+        invalid_records = [
+            {
+                "id": "scripts.invalid",
+                "name": "Invalid",
+                "path": "invalid.py",
+                "asset_kind": "script",
+                "roles": ["validator"],
+                "maturity": "legacy",
+                "description": "Invalid",
+                "consumers": ["coding_agent"],
+                "status": "not_real",
+                "artifact_type": "py",
+            }
+        ]
+        write_yaml(schema_root / "invalid.yaml", invalid_records)
+    
+        validator = load_validator(tmp_path, json_output=True)
+        rc, stdout = validator()
+        assert rc == 1
+>       payload = json.loads(stdout)
+                  ^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\schema_validation\test_validate_inventory.py:127: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\json\__init__.py:346: in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\json\decoder.py:345: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <json.decoder.JSONDecoder object at 0x000001F6A66AB230>, s = '', idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+            obj, end = self.scan_once(s, idx)
+        except StopIteration as err:
+>           raise JSONDecodeError("Expecting value", s, err.value) from None
+E           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+C:\Python313\Lib\json\decoder.py:363: JSONDecodeError
+______________________ test_generates_docs_health_bundle ______________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_generates_docs_health_bun0')
+
+    def test_generates_docs_health_bundle(tmp_path):
+        aggregator = _load_module("aggregate_docs_health_signals", _AGGREGATOR_PATH)
+    
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+    
+        inputs = _build_inputs(repo_root)
+        output_dir = repo_root / "aggregator_output"
+    
+>       result = aggregator.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-dir",
+                str(output_dir),
+                "--churn-report",
+                str(inputs["churn"]),
+                "--undocumented-report",
+                str(inputs["undocumented"]),
+                "--anchor-inventory",
+                str(inputs["anchor_inventory"]),
+                "--anchor-validation",
+                str(inputs["anchor_validation"]),
+                "--docs-integrity",
+                str(inputs["docs_integrity"]),
+                "--metrics-stub",
+                str(inputs["metrics_stub"]),
+                "--placeholder-report",
+                str(inputs["placeholder"]),
+                "--monkey-patch-report",
+                str(inputs["monkey"]),
+                "--artifacts-to-keep",
+                "2",
+            ]
+        )
+
+.repo_studios\tests\tests_aggregators\test_aggregate_docs_health_signals.py:163: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\scripts\aggregators\aggregate_docs_health_signals.py:669: in run
+    paths = build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:186: in build_standard_paths
+    repo_root = resolve_repo_root(
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_generates_docs_health_bun0/repo')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_generates_docs_health_bun0\repo\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+______________________ test_skip_hygiene_omits_category _______________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_skip_hygiene_omits_catego0')
+
+    def test_skip_hygiene_omits_category(tmp_path):
+        aggregator = _load_module("aggregate_docs_health_signals", _AGGREGATOR_PATH)
+    
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+    
+        inputs = _build_inputs(repo_root)
+        output_dir = repo_root / "aggregator_output"
+    
+>       result = aggregator.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-dir",
+                str(output_dir),
+                "--churn-report",
+                str(inputs["churn"]),
+                "--undocumented-report",
+                str(inputs["undocumented"]),
+                "--anchor-inventory",
+                str(inputs["anchor_inventory"]),
+                "--anchor-validation",
+                str(inputs["anchor_validation"]),
+                "--docs-integrity",
+                str(inputs["docs_integrity"]),
+                "--metrics-stub",
+                str(inputs["metrics_stub"]),
+                "--skip-hygiene",
+            ]
+        )
+
+.repo_studios\tests\tests_aggregators\test_aggregate_docs_health_signals.py:218: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\scripts\aggregators\aggregate_docs_health_signals.py:669: in run
+    paths = build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:186: in build_standard_paths
+    repo_root = resolve_repo_root(
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_skip_hygiene_omits_catego0/repo')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_skip_hygiene_omits_catego0\repo\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+________________________ test_prefers_consumer_bundle _________________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_prefers_consumer_bundle0')
+
+    def test_prefers_consumer_bundle(tmp_path):
+        aggregator = _load_module("generate_churn_complexity_heatmap", _AGGREGATOR_PATH)
+    
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        (repo_root / "pkg").mkdir()
+        (repo_root / "pkg" / "foo.py").write_text("print('foo')\n", encoding="utf-8")
+        (repo_root / "pkg" / "bar.py").write_text("print('bar')\n", encoding="utf-8")
+    
+        logs_dir = repo_root / "logs"
+        logs_dir.mkdir()
+        junit_path = _write_junit(logs_dir / "junit_consumer.xml", {"pkg/foo.py": 2})
+    
+        summary_root = repo_root / "consumer_bundle"
+        summary_path = _write_consumer_bundle(
+            summary_root,
+            logs_dir=logs_dir,
+            junit_path=junit_path,
+            generated=datetime(2025, 11, 24, 12, 0, tzinfo=UTC),
+        )
+    
+        metrics_path = _write_metrics(repo_root / "metrics.json")
+        output_base = tmp_path / "aggregator_output"
+    
+>       result = aggregator.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-base",
+                str(output_base),
+                "--test-log-summary",
+                str(summary_path),
+                "--metrics-source",
+                str(metrics_path),
+                "--logs-dir",
+                str(logs_dir),
+                "--artifacts-to-keep",
+                "3",
+            ]
+        )
+
+.repo_studios\tests\tests_aggregators\test_generate_churn_complexity_heatmap.py:116: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\scripts\aggregators\generate_churn_complexity_heatmap.py:478: in run
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_prefers_consumer_bundle0/repo')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_prefers_consumer_bundle0\repo\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+_________________ test_fallback_to_logs_when_summary_missing __________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_fallback_to_logs_when_sum0')
+
+    def test_fallback_to_logs_when_summary_missing(tmp_path):
+        aggregator = _load_module("generate_churn_complexity_heatmap", _AGGREGATOR_PATH)
+    
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        (repo_root / "pkg").mkdir()
+        (repo_root / "pkg" / "foo.py").write_text("print('foo')\n", encoding="utf-8")
+    
+        logs_dir = repo_root / "logs"
+        logs_dir.mkdir()
+        _write_junit(logs_dir / "junit_fallback.xml", {"pkg/foo.py": 1})
+    
+        metrics_path = _write_metrics(repo_root / "metrics.json")
+        output_base = tmp_path / "aggregator_output"
+    
+>       result = aggregator.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-base",
+                str(output_base),
+                "--test-log-summary",
+                str(repo_root / "missing" / "bundle_summary.json"),
+                "--metrics-source",
+                str(metrics_path),
+                "--logs-dir",
+                str(logs_dir),
+            ]
+        )
+
+.repo_studios\tests\tests_aggregators\test_generate_churn_complexity_heatmap.py:157: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\scripts\aggregators\generate_churn_complexity_heatmap.py:478: in run
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_fallback_to_logs_when_sum0/repo')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_fallback_to_logs_when_sum0\repo\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+_______________________ test_retention_prunes_old_runs ________________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_retention_prunes_old_runs1')
+
+    def test_retention_prunes_old_runs(tmp_path):
+        aggregator = _load_module("generate_churn_complexity_heatmap", _AGGREGATOR_PATH)
+    
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        (repo_root / "pkg").mkdir()
+        (repo_root / "pkg" / "foo.py").write_text("print('foo')\n", encoding="utf-8")
+    
+        logs_dir = repo_root / "logs"
+        logs_dir.mkdir()
+        _write_junit(logs_dir / "junit.xml", {"pkg/foo.py": 1})
+        metrics_path = _write_metrics(repo_root / "metrics.json")
+    
+        output_base = tmp_path / "aggregator_output"
+        output_base.mkdir()
+        (output_base / "churn_complexity_heatmap-2025-11-20_000000").mkdir()
+        (output_base / "churn_complexity_heatmap-2025-11-21_000000").mkdir()
+    
+>       result = aggregator.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-base",
+                str(output_base),
+                "--metrics-source",
+                str(metrics_path),
+                "--logs-dir",
+                str(logs_dir),
+                "--artifacts-to-keep",
+                "2",
+            ]
+        )
+
+.repo_studios\tests\tests_aggregators\test_generate_churn_complexity_heatmap.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\scripts\aggregators\generate_churn_complexity_heatmap.py:478: in run
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_retention_prunes_old_runs1/repo')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_retention_prunes_old_runs1\repo\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+_______________ test_main_returns_nonzero_when_no_python_files ________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_main_returns_nonzero_when0')
+
+    def test_main_returns_nonzero_when_no_python_files(tmp_path):
+        aggregator = _load_module("generate_churn_complexity_heatmap", _AGGREGATOR_PATH)
+    
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        (repo_root / "logs").mkdir()
+    
+>       exit_code = aggregator.main(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-base",
+                str(tmp_path / "out"),
+                "--logs-dir",
+                str(repo_root / "logs"),
+                "--test-log-summary",
+                str(repo_root / "missing"),
+                "--metrics-source",
+                str(repo_root / "missing_metrics.json"),
+            ]
+        )
+
+.repo_studios\tests\tests_aggregators\test_generate_churn_complexity_heatmap.py:225: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\scripts\aggregators\generate_churn_complexity_heatmap.py:620: in main
+    run(argv)
+.repo_studios\scripts\aggregators\generate_churn_complexity_heatmap.py:478: in run
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_main_returns_nonzero_when0/repo')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_main_returns_nonzero_when0\repo\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+__________________ test_generate_automation_manifest_bundle ___________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_generate_automation_manif0')
+
+    def test_generate_automation_manifest_bundle(tmp_path: Path) -> None:
+        mod = _load_module()
+    
+        files_payload = {
+            "updated": [
+                {"path": "src/module_a.py", "duplicate_groups": ["dup-1"]},
+                "src/module_b.py",
+            ],
+            "skipped": ["docs/README.md"],
+            "conflicted": [],
+        }
+        files_file = tmp_path / "files.json"
+        files_file.write_text(json.dumps(files_payload), encoding="utf-8")
+    
+        tests_payload = {
+            "library_integration": {
+                "status": "passed",
+                "duration_seconds": 90.0,
+                "artifacts": ["reports/library.xml"],
+            }
+        }
+        tests_file = tmp_path / "tests.json"
+        tests_file.write_text(json.dumps(tests_payload), encoding="utf-8")
+    
+        config_dir = tmp_path / "config"
+        config_dir.mkdir()
+        allowed_targets = config_dir / "allowed_targets.yaml"
+        allowed_targets.write_text("targets: []\n", encoding="utf-8")
+        guardrail_config = config_dir / "automation_config.yaml"
+        guardrail_config.write_text(
+            (
+                "metadata:\n"
+                "  version: 1\n"
+                "allow_list:\n"
+                "  source: allowed_targets.yaml\n"
+                "constraints:\n"
+                "  max_files_per_run: 10\n"
+                "  max_groups_per_run: 5\n"
+                "  require_lock_check: true\n"
+            ),
+            encoding="utf-8",
+        )
+    
+        output_dir = tmp_path / "reports"
+    
+        exit_code = mod.main(
+            [
+                "--repo-root",
+                str(tmp_path),
+                "--output-dir",
+                str(output_dir),
+                "--tests-file",
+                str(tests_file),
+                "--files-file",
+                str(files_file),
+                "--run-id",
+                "2025-11-02T19-30-00Z",
+                "--baseline-sha",
+                "abcdef123456",
+                "--target",
+                "library",
+                "--lines-touched",
+                "120",
+                "--files-changed",
+                "2",
+                "--duplicate-groups-resolved",
+                "1",
+                "--runtime-seconds",
+                "18.5",
+                "--notes",
+                "dry run",
+                "--timestamp",
+                "2025-11-02T19:30:00+00:00",
+                "--operator",
+                "genet",
+                "--dry-run",
+                "--guardrail-config",
+                str(guardrail_config),
+                "--log-level",
+                "ERROR",
+            ]
+        )
+    
+>       assert exit_code == 0
+E       assert 2 == 0
+
+.repo_studios\tests\tests_command_center\aggregators\test_generate_automation_manifest.py:111: AssertionError
+---------------------------- Captured stderr call -----------------------------
+[ERROR] Failed to resolve paths: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_generate_automation_manif0\.repo_studios). Pass --repo-root pointing at the repository root.
+------------------------------ Captured log call ------------------------------
+ERROR    root:generate_automation_manifest.py:269 Failed to resolve paths: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_generate_automation_manif0\.repo_studios). Pass --repo-root pointing at the repository root.
+____________________ test_manifest_files_changed_mismatch _____________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_manifest_files_changed_mi0')
+caplog = <_pytest.logging.LogCaptureFixture object at 0x000001F6A88BA120>
+
+    def test_manifest_files_changed_mismatch(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
+        mod = _load_module()
+    
+        files_payload = {"updated": ["src/module_a.py"], "skipped": [], "conflicted": []}
+        files_file = tmp_path / "files.json"
+        files_file.write_text(json.dumps(files_payload), encoding="utf-8")
+    
+        tests_payload = {
+            "library_integration": {
+                "status": "passed",
+                "duration_seconds": 10.0,
+            }
+        }
+        tests_file = tmp_path / "tests.json"
+        tests_file.write_text(json.dumps(tests_payload), encoding="utf-8")
+    
+        output_dir = tmp_path / "reports"
+    
+        with caplog.at_level("ERROR"):
+            exit_code = mod.main(
+                [
+                    "--repo-root",
+                    str(tmp_path),
+                    "--output-dir",
+                    str(output_dir),
+                    "--tests-file",
+                    str(tests_file),
+                    "--files-file",
+                    str(files_file),
+                    "--run-id",
+                    "run-mismatch",
+                    "--baseline-sha",
+                    "deadbeef",
+                    "--target",
+                    "library",
+                    "--lines-touched",
+                    "10",
+                    "--files-changed",
+                    "2",
+                    "--duplicate-groups-resolved",
+                    "0",
+                    "--runtime-seconds",
+                    "5.0",
+                    "--log-level",
+                    "ERROR",
+                ]
+            )
+    
+>       assert exit_code == 1
+E       assert 2 == 1
+
+.repo_studios\tests\tests_command_center\aggregators\test_generate_automation_manifest.py:181: AssertionError
+---------------------------- Captured stderr call -----------------------------
+[ERROR] Failed to resolve paths: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_manifest_files_changed_mi0\.repo_studios). Pass --repo-root pointing at the repository root.
+------------------------------ Captured log call ------------------------------
+ERROR    root:generate_automation_manifest.py:269 Failed to resolve paths: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_manifest_files_changed_mi0\.repo_studios). Pass --repo-root pointing at the repository root.
+__________________________ test_guardrail_violation ___________________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_guardrail_violation0')
+caplog = <_pytest.logging.LogCaptureFixture object at 0x000001F6A881B250>
+
+    def test_guardrail_violation(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
+        mod = _load_module()
+    
+        files_payload = {
+            "updated": [f"src/module_{idx}.py" for idx in range(6)],
+            "skipped": [],
+            "conflicted": [],
+        }
+        files_file = tmp_path / "files.json"
+        files_file.write_text(json.dumps(files_payload), encoding="utf-8")
+    
+        tests_payload = {
+            "library_integration": {
+                "status": "passed",
+                "duration_seconds": 12.0,
+            }
+        }
+        tests_file = tmp_path / "tests.json"
+        tests_file.write_text(json.dumps(tests_payload), encoding="utf-8")
+    
+        allowed_targets = tmp_path / "allowed_targets.yaml"
+        allowed_targets.write_text("targets: []\n", encoding="utf-8")
+        guardrail_config = tmp_path / "automation_config.yaml"
+        guardrail_config.write_text(
+            (
+                "metadata:\n"
+                "  version: 1\n"
+                "allow_list:\n"
+                "  source: allowed_targets.yaml\n"
+                "constraints:\n"
+                "  max_files_per_run: 5\n"
+                "  max_groups_per_run: 5\n"
+            ),
+            encoding="utf-8",
+        )
+    
+        output_dir = tmp_path / "reports"
+    
+        with caplog.at_level("ERROR"):
+            exit_code = mod.main(
+                [
+                    "--repo-root",
+                    str(tmp_path),
+                    "--output-dir",
+                    str(output_dir),
+                    "--tests-file",
+                    str(tests_file),
+                    "--files-file",
+                    str(files_file),
+                    "--run-id",
+                    "guardrail-violation",
+                    "--baseline-sha",
+                    "deadbeef",
+                    "--target",
+                    "library",
+                    "--lines-touched",
+                    "60",
+                    "--files-changed",
+                    "6",
+                    "--duplicate-groups-resolved",
+                    "0",
+                    "--runtime-seconds",
+                    "10.0",
+                    "--guardrail-config",
+                    str(guardrail_config),
+                    "--log-level",
+                    "ERROR",
+                ]
+            )
+    
+>       assert exit_code == 1
+E       assert 2 == 1
+
+.repo_studios\tests\tests_command_center\aggregators\test_generate_automation_manifest.py:255: AssertionError
+---------------------------- Captured stderr call -----------------------------
+[ERROR] Failed to resolve paths: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_guardrail_violation0\.repo_studios). Pass --repo-root pointing at the repository root.
+------------------------------ Captured log call ------------------------------
+ERROR    root:generate_automation_manifest.py:269 Failed to resolve paths: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_guardrail_violation0\.repo_studios). Pass --repo-root pointing at the repository root.
+__________________________ test_metrics_summary_run ___________________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_metrics_summary_run0')
+
+    def test_metrics_summary_run(tmp_path: Path) -> None:
+        mod = _load_module()
+    
+        tests_payload = {
+            "library_integration": {
+                "status": "passed",
+                "duration_seconds": 90.0,
+                "artifacts": ["reports/library.xml"],
+            },
+            "producer_suite": {
+                "status": "skipped",
+                "duration_seconds": 0,
+                "artifacts": [],
+            },
+        }
+        tests_file = tmp_path / "tests.json"
+        tests_file.write_text(json.dumps(tests_payload), encoding="utf-8")
+    
+        output_dir = tmp_path / "reports"
+    
+        exit_code = mod.main(
+            [
+                "--repo-root",
+                str(tmp_path),
+                "--output-dir",
+                str(output_dir),
+                "--tests-file",
+                str(tests_file),
+                "--schema-version",
+                "1.0",
+                "--run-id",
+                "2025-11-02T19-30-00Z",
+                "--target",
+                "library",
+                "--lines-touched",
+                "42",
+                "--files-changed",
+                "5",
+                "--duplicate-groups-resolved",
+                "2",
+                "--runtime-seconds",
+                "18.5",
+                "--notes",
+                "dry run",
+                "--timestamp",
+                "2025-11-02T19:30:00+00:00",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+    
+>       assert exit_code == 0
+E       assert 2 == 0
+
+.repo_studios\tests\tests_command_center\aggregators\test_generate_metrics_summary.py:73: AssertionError
+---------------------------- Captured stderr call -----------------------------
+[ERROR] Failed to resolve paths: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_metrics_summary_run0\.repo_studios). Pass --repo-root pointing at the repository root.
+------------------------------ Captured log call ------------------------------
+ERROR    root:generate_metrics_summary.py:209 Failed to resolve paths: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_metrics_summary_run0\.repo_studios). Pass --repo-root pointing at the repository root.
+_________________________ test_invalid_tests_payload __________________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_invalid_tests_payload0')
+caplog = <_pytest.logging.LogCaptureFixture object at 0x000001F6A8A411D0>
+
+    def test_invalid_tests_payload(tmp_path: Path, caplog) -> None:
+        mod = _load_module()
+    
+        tests_file = tmp_path / "tests.json"
+        tests_file.write_text("{}", encoding="utf-8")  # Missing required suites
+    
+        output_dir = tmp_path / "reports"
+    
+        with caplog.at_level("ERROR"):
+            exit_code = mod.main(
+                [
+                    "--repo-root",
+                    str(tmp_path),
+                    "--output-dir",
+                    str(output_dir),
+                    "--tests-file",
+                    str(tests_file),
+                    "--run-id",
+                    "2025-11-02T20-00-00Z",
+                    "--target",
+                    "library",
+                    "--lines-touched",
+                    "10",
+                    "--files-changed",
+                    "1",
+                    "--duplicate-groups-resolved",
+                    "0",
+                    "--runtime-seconds",
+                    "5.0",
+                    "--log-level",
+                    "ERROR",
+                ]
+            )
+    
+>       assert exit_code == 1
+E       assert 2 == 1
+
+.repo_studios\tests\tests_command_center\aggregators\test_generate_metrics_summary.py:122: AssertionError
+---------------------------- Captured stderr call -----------------------------
+[ERROR] Failed to resolve paths: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_invalid_tests_payload0\.repo_studios). Pass --repo-root pointing at the repository root.
+------------------------------ Captured log call ------------------------------
+ERROR    root:generate_metrics_summary.py:209 Failed to resolve paths: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_invalid_tests_payload0\.repo_studios). Pass --repo-root pointing at the repository root.
+______________________ test_run_emits_healthview_bundle _______________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_run_emits_healthview_bund0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F6A8A0A9E0>
+hygiene_module = <module 'run_dependency_import_hygiene' from 'C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_dependency_import_hygiene.py'>
+
+    def test_run_emits_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, hygiene_module) -> None:
+        repo_root = Path(__file__).resolve().parents[4]
+    
+        dependency_dir = tmp_path / "dependency"
+        import_dir = tmp_path / "import"
+        placeholder_dir = tmp_path / "placeholder"
+        cleanup_dir = tmp_path / "cleanup"
+        typecheck_dir = tmp_path / "typecheck"
+        baselines_dir = tmp_path / "baselines"
+        healthview_root = tmp_path / "healthview"
+    
+        allowlist = tmp_path / "placeholder_allowlist.txt"
+        allowlist.parent.mkdir(parents=True, exist_ok=True)
+        allowlist.write_text("", encoding="utf-8")
+    
+        timestamp = "2025-12-01T12:34:00+00:00"
+        run_dt = datetime.fromisoformat(timestamp)
+        run_slug = run_dt.strftime("%Y%m%d_%H%M%S")
+    
+        def _fake_loader(script_path: Path, module_name: str, attribute: str):
+            if module_name == hygiene_module.DEPENDENCY_MODULE:
+                def _fake_dependency_main(argv: list[str]) -> int:
+                    report_ts = argv[argv.index("--timestamp") + 1]
+                    slug = datetime.fromisoformat(report_ts).strftime("%Y%m%d_%H%M%S")
+                    run_dir = dependency_dir / f"{hygiene_module.DEPENDENCY_RUN_PREFIX}-{slug}"
+                    run_dir.mkdir(parents=True, exist_ok=True)
+                    payload = {
+                        "generated_utc": report_ts,
+                        "summary": {
+                            "status": "ok",
+                            "issue_count": 2,
+                        },
+                    }
+                    (dependency_dir / "latest_report.json").write_text(json.dumps(payload), encoding="utf-8")
+                    (run_dir / "report.json").write_text(json.dumps(payload), encoding="utf-8")
+                    (run_dir / "report.md").write_text("# Dependency\n", encoding="utf-8")
+                    (run_dir / "log.txt").write_text("status=ok\n", encoding="utf-8")
+                    return 0
+    
+                return _fake_dependency_main
+    
+            if module_name == hygiene_module.IMPORT_GRAPH_MODULE:
+                def _fake_import_main(argv: list[str]) -> int:
+                    report_ts = argv[argv.index("--timestamp") + 1]
+                    slug = datetime.fromisoformat(report_ts).strftime("%Y%m%d_%H%M%S")
+                    run_dir = import_dir / f"{hygiene_module.IMPORT_GRAPH_RUN_PREFIX}-{slug}"
+                    run_dir.mkdir(parents=True, exist_ok=True)
+                    payload = {
+                        "generated_utc": report_ts,
+                        "summary": {
+                            "status": "ok",
+                            "module_count": 10,
+                        },
+                    }
+                    (import_dir / "latest_report.json").write_text(json.dumps(payload), encoding="utf-8")
+                    (run_dir / "report.json").write_text(json.dumps(payload), encoding="utf-8")
+                    (run_dir / "graph.json").write_text(json.dumps({"a": ["b"]}), encoding="utf-8")
+                    (run_dir / "log.txt").write_text("status=ok\n", encoding="utf-8")
+                    return 0
+    
+                return _fake_import_main
+    
+            if module_name == hygiene_module.PLACEHOLDER_MODULE:
+                def _fake_placeholder_run(argv: list[str]) -> dict[str, object]:
+                    run_dir = placeholder_dir / f"{hygiene_module.PLACEHOLDER_RUN_PREFIX}-{run_slug}"
+                    run_dir.mkdir(parents=True, exist_ok=True)
+                    payload = {
+                        "run_id": f"{hygiene_module.PLACEHOLDER_RUN_PREFIX}-{run_slug}",
+                        "total_matches": 5,
+                    }
+                    (run_dir / "report.json").write_text(json.dumps(payload), encoding="utf-8")
+                    (run_dir / "matches.json").write_text(json.dumps([]), encoding="utf-8")
+                    (run_dir / "log.txt").write_text("status=ok\n", encoding="utf-8")
+                    return payload
+    
+                return _fake_placeholder_run
+    
+            if module_name == hygiene_module.TYPECHECK_MODULE:
+                def _fake_typecheck_main(argv: list[str]) -> int:
+                    report_ts = argv[argv.index("--timestamp") + 1]
+                    slug = datetime.fromisoformat(report_ts).strftime("%Y%m%d_%H%M%S")
+                    run_dir = typecheck_dir / f"{hygiene_module.TYPECHECK_RUN_PREFIX}-{slug}"
+                    run_dir.mkdir(parents=True, exist_ok=True)
+                    payload = {
+                        "generated_utc": report_ts,
+                        "status": "ok",
+                        "summary": {
+                            "error_count": 0,
+                            "files_with_issues": 0,
+                        },
+                    }
+                    (typecheck_dir / "latest_report.json").write_text(json.dumps(payload), encoding="utf-8")
+                    (run_dir / "report.json").write_text(json.dumps(payload), encoding="utf-8")
+                    (run_dir / "report.md").write_text("# Typecheck\n", encoding="utf-8")
+                    (run_dir / "log.txt").write_text("status=ok\n", encoding="utf-8")
+                    (run_dir / "raw.txt").write_text("raw", encoding="utf-8")
+                    return 0
+    
+                return _fake_typecheck_main
+    
+            if module_name == hygiene_module.REFRESH_BASELINES_MODULE:
+                def _fake_refresh_run(argv: list[str]) -> dict[str, object]:
+                    slug = run_dt.strftime("%Y%m%d-%H%M%S")
+                    run_dir = baselines_dir / f"{hygiene_module.MYPY_BASELINES_RUN_PREFIX}-{slug.replace('-', '_')}"
+                    run_dir.mkdir(parents=True, exist_ok=True)
+                    summary_path = run_dir / "bundle_summary.json"
+                    summary_path.write_text(json.dumps({"status": "ok"}), encoding="utf-8")
+                    return {
+                        "status": "ok",
+                        "run_slug": slug,
+                        "artifacts": {"bundle_summary.json": str(summary_path)},
+                    }
+    
+                return _fake_refresh_run
+    
+            raise AssertionError(f"Unexpected module request: {module_name}")
+    
+        monkeypatch.setattr(hygiene_module, "_load_callable", _fake_loader)
+    
+        args = [
+            "--repo-root",
+            str(repo_root),
+            "--dependency-output-dir",
+            str(dependency_dir),
+            "--import-graph-output-dir",
+            str(import_dir),
+            "--placeholder-output-dir",
+            str(placeholder_dir),
+            "--batch-cleanup-output-base",
+            str(cleanup_dir),
+            "--typecheck-output-dir",
+            str(typecheck_dir),
+            "--mypy-baselines-output-dir",
+            str(baselines_dir),
+            "--healthview-root",
+            str(healthview_root),
+            "--placeholder-allowlist",
+            str(allowlist),
+            "--dependency-requirements-pattern",
+            "requirements/base.txt",
+            "--dependency-requirements-pattern",
+            "requirements/dev.txt",
+            "--dependency-skip-pyproject",
+            "--import-owned",
+            "package.one",
+            "package.two",
+            "--placeholder-include-ext",
+            ".py",
+            ".md",
+            "--placeholder-pattern",
+            "TODO",
+            "FIXME",
+            "--placeholder-exclude-prefix",
+            "docs/",
+            "--trigger-batch-cleanup",
+            "--refresh-mypy-baselines",
+            "--timestamp",
+            timestamp,
+            "--log-level",
+            "ERROR",
+        ]
+    
+        exit_code = hygiene_module.run(args)
+>       assert exit_code == 0
+E       assert 1 == 0
+
+.repo_studios\tests\tests_command_center\dependency_import_hygiene\test_run_dependency_import_hygiene.py:197: AssertionError
+---------------------------- Captured stderr call -----------------------------
+[INFO] Running dependency hygiene producer
+[INFO] Running import graph producer
+[ERROR] Step import_graph failed: import graph completed
+[INFO] Running placeholder scan producer
+[INFO] Recording batch cleanup dry-run plan
+[INFO] Running typecheck producer
+[INFO] Refreshing mypy baselines
+[ERROR] Pipeline encountered failures
+[INFO] Dependency & Import Hygiene orchestrator complete (slug=20251201-1234)
+------------------------------ Captured log call ------------------------------
+INFO     run_dependency_import_hygiene:run_dependency_import_hygiene.py:438 Running dependency hygiene producer
+INFO     run_dependency_import_hygiene:run_dependency_import_hygiene.py:478 Running import graph producer
+ERROR    libraries.topic_pipeline:topic_pipeline.py:147 Step import_graph failed: import graph completed
+INFO     run_dependency_import_hygiene:run_dependency_import_hygiene.py:517 Running placeholder scan producer
+INFO     run_dependency_import_hygiene:run_dependency_import_hygiene.py:634 Recording batch cleanup dry-run plan
+INFO     run_dependency_import_hygiene:run_dependency_import_hygiene.py:729 Running typecheck producer
+INFO     run_dependency_import_hygiene:run_dependency_import_hygiene.py:763 Refreshing mypy baselines
+ERROR    run_dependency_import_hygiene:run_dependency_import_hygiene.py:1012 Pipeline encountered failures
+INFO     run_dependency_import_hygiene:run_dependency_import_hygiene.py:1117 Dependency & Import Hygiene orchestrator complete (slug=20251201-1234)
+________________ test_run_emits_manifest_and_respects_includes ________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_run_emits_manifest_and_re0')
+
+    def test_run_emits_manifest_and_respects_includes(tmp_path):
+        module = _reload_module()
+        original_definitions = module.TOPIC_DEFINITIONS
+        try:
+            executions: list[str] = []
+            stub_a, name_a = _make_stub(name="topic_a", slug="topic-a", executions=executions)
+            stub_b, name_b = _make_stub(name="topic_b", slug="topic-b", executions=executions)
+            stub_c, name_c = _make_stub(name="topic_c", slug="topic-c")
+            module.TOPIC_DEFINITIONS = (
+                module.TopicDefinition(slug="topic-c", module=name_c),
+                module.TopicDefinition(slug="topic-b", module=name_b),
+                module.TopicDefinition(slug="topic-a", module=name_a),
+            )
+    
+            reports_root = tmp_path / "reports"
+            timestamp = "2025-12-04T12:30:00+00:00"
+>           exit_code = module.run(
+                [
+                    "--repo-root",
+                    str(tmp_path),
+                    "--reports-root",
+                    str(reports_root),
+                    "--timestamp",
+                    timestamp,
+                    "--log-level",
+                    "ERROR",
+                    "--include",
+                    "topic-a",
+                    "--include",
+                    "topic-b",
+                ]
+            )
+
+.repo_studios\tests\tests_command_center\orchestrators\test_orchestrate_full_diagnostic.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\command_center\scripts\orchestrators\orchestrate_full_diagnostic.py:306: in run
+    paths = build_paths(args)
+            ^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\orchestrators\orchestrate_full_diagnostic.py:198: in build_paths
+    return build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:186: in build_standard_paths
+    repo_root = resolve_repo_root(
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_run_emits_manifest_and_re0')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_run_emits_manifest_and_re0\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+_________________ test_stop_on_first_failure_blocks_remaining _________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_stop_on_first_failure_blo0')
+
+    def test_stop_on_first_failure_blocks_remaining(tmp_path):
+        module = _reload_module()
+        original_definitions = module.TOPIC_DEFINITIONS
+        try:
+            failing_stub, failing_name = _make_stub(name="fail", slug="topic-a", exit_code=1)
+            skipped_stub, skipped_name = _make_stub(name="skipped", slug="topic-b")
+            module.TOPIC_DEFINITIONS = (
+                module.TopicDefinition(slug="topic-a", module=failing_name),
+                module.TopicDefinition(slug="topic-b", module=skipped_name),
+            )
+    
+            reports_root = tmp_path / "reports"
+>           exit_code = module.run(
+                [
+                    "--repo-root",
+                    str(tmp_path),
+                    "--reports-root",
+                    str(reports_root),
+                    "--timestamp",
+                    "2025-12-04T12:45:00+00:00",
+                    "--log-level",
+                    "ERROR",
+                ]
+            )
+
+.repo_studios\tests\tests_command_center\orchestrators\test_orchestrate_full_diagnostic.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\command_center\scripts\orchestrators\orchestrate_full_diagnostic.py:306: in run
+    paths = build_paths(args)
+            ^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\orchestrators\orchestrate_full_diagnostic.py:198: in build_paths
+    return build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:186: in build_standard_paths
+    repo_root = resolve_repo_root(
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_stop_on_first_failure_blo0')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_stop_on_first_failure_blo0\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+________________ test_keep_going_runs_all_topics_after_failure ________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_keep_going_runs_all_topic0')
+
+    def test_keep_going_runs_all_topics_after_failure(tmp_path):
+        module = _reload_module()
+        original_definitions = module.TOPIC_DEFINITIONS
+        try:
+            first_stub, first_name = _make_stub(name="first", slug="topic-a", exit_code=1)
+            second_stub, second_name = _make_stub(name="second", slug="topic-b")
+            module.TOPIC_DEFINITIONS = (
+                module.TopicDefinition(slug="topic-a", module=first_name),
+                module.TopicDefinition(slug="topic-b", module=second_name),
+            )
+    
+            reports_root = tmp_path / "reports"
+>           exit_code = module.run(
+                [
+                    "--repo-root",
+                    str(tmp_path),
+                    "--reports-root",
+                    str(reports_root),
+                    "--timestamp",
+                    "2025-12-04T12:50:00+00:00",
+                    "--log-level",
+                    "ERROR",
+                    "--keep-going",
+                ]
+            )
+
+.repo_studios\tests\tests_command_center\orchestrators\test_orchestrate_full_diagnostic.py:152: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\command_center\scripts\orchestrators\orchestrate_full_diagnostic.py:306: in run
+    paths = build_paths(args)
+            ^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\orchestrators\orchestrate_full_diagnostic.py:198: in build_paths
+    return build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:186: in build_standard_paths
+    repo_root = resolve_repo_root(
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_keep_going_runs_all_topic0')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_keep_going_runs_all_topic0\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+___________________ test_inventory_update_validates_target ____________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_inventory_update_validate0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F6A9AD7BD0>
+
+    def test_inventory_update_validates_target(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        repo_root = tmp_path / "repo"
+        disallowed = repo_root / "external"
+        disallowed.mkdir(parents=True, exist_ok=True)
+    
+        monkeypatch.setattr(inventory_update.generate_commandview_inventory, "run", lambda argv=None: 0)
+    
+        with pytest.raises(SystemExit) as excinfo:
+>           inventory_update.run([
+                str(disallowed),
+                "--repo-root",
+                str(repo_root),
+            ])
+
+.repo_studios\tests\tests_command_center\orchestrators\test_run_inventory_update.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\command_center\scripts\orchestrators\run_inventory_update.py:77: in run
+    paths = build_standard_paths(args, PATH_CONFIG, origin=Path(__file__).resolve())
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:186: in build_standard_paths
+    repo_root = resolve_repo_root(
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_inventory_update_validate0/repo')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_inventory_update_validate0\repo\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+______________ test_inventory_update_requires_existing_directory ______________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_inventory_update_requires0')
+
+    def test_inventory_update_requires_existing_directory(tmp_path: Path) -> None:
+        repo_root = tmp_path / "repo"
+        missing = repo_root / ".repo_studios" / "command_center" / "missing"
+    
+        with pytest.raises(SystemExit):
+>           inventory_update.run([
+                str(missing),
+                "--repo-root",
+                str(repo_root),
+            ])
+
+.repo_studios\tests\tests_command_center\orchestrators\test_run_inventory_update.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\command_center\scripts\orchestrators\run_inventory_update.py:77: in run
+    paths = build_standard_paths(args, PATH_CONFIG, origin=Path(__file__).resolve())
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:186: in build_standard_paths
+    repo_root = resolve_repo_root(
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_inventory_update_requires0/repo')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_inventory_update_requires0\repo\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+_______________________ test_resolve_repo_root_explicit _______________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_resolve_repo_root_explici0')
+
+    def test_resolve_repo_root_explicit(tmp_path: Path) -> None:
+        explicit_root = tmp_path / "explicit"
+        explicit_root.mkdir()
+>       result = resolve_repo_root(str(explicit_root))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_library_integration\libraries\test_cli.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_resolve_repo_root_explici0/explicit')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_resolve_repo_root_explici0\explicit\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+_______________________ test_resolve_repo_root_fallback _______________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_resolve_repo_root_fallbac0')
+
+    def test_resolve_repo_root_fallback(tmp_path: Path) -> None:
+        origin = tmp_path / ".repo_studios" / "scripts" / "producers" / "tool.py"
+        origin.parent.mkdir(parents=True)
+        origin.write_text("", encoding="utf-8")
+        result = resolve_repo_root(None, fallback_depth=4, origin=origin)
+>       assert result == tmp_path.resolve()
+E       AssertionError: assert WindowsPath('C:/Users/genet') == WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_resolve_repo_root_fallbac0')
+E        +  where WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_resolve_repo_root_fallbac0') = resolve()
+E        +    where resolve = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_resolve_repo_root_fallbac0').resolve
+
+.repo_studios\tests\tests_library_integration\libraries\test_cli.py:48: AssertionError
+__________________ test_build_standard_paths_wraps_builders ___________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_build_standard_paths_wrap0')
+
+    def test_build_standard_paths_wraps_builders(tmp_path: Path) -> None:
+        origin = tmp_path / ".repo_studios" / "command_center" / "scripts" / "producer.py"
+        origin.parent.mkdir(parents=True)
+        origin.write_text("", encoding="utf-8")
+        config = PathsConfig(
+            dataclass_type=SamplePaths,
+            path_specs={
+                "reports_root": PathSpec(field="reports_root", default=Path("reports"), ensure_dir=True),
+                "output_dir": PathSpec(
+                    field="output_dir",
+                    default=Path("fallback"),
+                    ensure_dir=True,
+                    within_repo=False,
+                ),
+            },
+            repo_root_depth=4,
+        )
+        custom_output = tmp_path / "custom-output"
+        args = SimpleNamespace(repo_root=None, reports_root=None, output_dir=str(custom_output))
+        result = build_standard_paths(args, config, origin=origin)
+        assert isinstance(result, SamplePaths)
+>       assert result.repo_root == tmp_path.resolve()
+E       AssertionError: assert WindowsPath('C:/Users/genet') == WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_build_standard_paths_wrap0')
+E        +  where WindowsPath('C:/Users/genet') = SamplePaths(repo_root=WindowsPath('C:/Users/genet'), reports_root=WindowsPath('C:/Users/genet/reports'), output_dir=WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_build_standard_paths_wrap0/custom-output')).repo_root
+E        +  and   WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_build_standard_paths_wrap0') = resolve()
+E        +    where resolve = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_build_standard_paths_wrap0').resolve
+
+.repo_studios\tests\tests_library_integration\libraries\test_cli.py:134: AssertionError
+____________________ test_generates_helper_adoption_report ____________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_generates_helper_adoption0')
+
+    def test_generates_helper_adoption_report(tmp_path):
+        mod = _load_module()
+        repo_root = tmp_path / "repo"
+        scope_dir = repo_root / "sources"
+        scope_dir.mkdir(parents=True)
+        allowed_targets = repo_root / ".repo_studios" / "command_center" / "docs" / "guardrails" / "allowed_targets.yaml"
+        _write(
+            allowed_targets,
+            "targets:\n  - slug: sample\n    path: sources\n",
+        )
+        _write(scope_dir / "adopted.py", "from libraries import slugify_relative\n")
+        _write(
+            scope_dir / "legacy.py",
+            """
+    
+    def _slugify_relative(value):
+    	return str(value)
+    	""".strip()
+            + "\n",
+        )
+        _write(scope_dir / "ignored.py", "VALUE = 1\n")
+    
+        output_dir = repo_root / ".repo_studios" / "command_center" / "reports" / "helper_adoption"
+    
+        exit_code = mod.main(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-dir",
+                str(output_dir),
+                "--timestamp",
+                "2025-11-03T17:00:00+00:00",
+                "--keep",
+                "5",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+    
+        assert exit_code == 0
+        run_dir = output_dir / f"{mod.RUN_STEM}-20251103_170000"
+>       assert run_dir.is_dir()
+E       AssertionError: assert False
+E        +  where False = is_dir()
+E        +    where is_dir = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_generates_helper_adoption0/repo/.repo_studios/command_center/reports/helper_adoption/helper_adoption-20251103_170000').is_dir
+
+.repo_studios\tests\tests_producers\test_audit_helper_adoption.py:68: AssertionError
+---------------------------- Captured stderr call -----------------------------
+INFO helper=slugify_relative adopted=1 legacy=1 not_applicable=1
+INFO helper=copy_latest_artifact adopted=0 legacy=0 not_applicable=3
+INFO helper=write_report_artifacts adopted=0 legacy=0 not_applicable=3
+INFO helper=build_standard_paths adopted=0 legacy=0 not_applicable=3
+INFO helper=build_standard_options adopted=0 legacy=0 not_applicable=3
+INFO Helper adoption report written to C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_generates_helper_adoption0\repo\.repo_studios\command_center\reports\helper_adoption\commandview\helper_adoption\20251103-1700
+------------------------------ Captured log call ------------------------------
+INFO     root:audit_helper_adoption.py:445 helper=slugify_relative adopted=1 legacy=1 not_applicable=1
+INFO     root:audit_helper_adoption.py:445 helper=copy_latest_artifact adopted=0 legacy=0 not_applicable=3
+INFO     root:audit_helper_adoption.py:445 helper=write_report_artifacts adopted=0 legacy=0 not_applicable=3
+INFO     root:audit_helper_adoption.py:445 helper=build_standard_paths adopted=0 legacy=0 not_applicable=3
+INFO     root:audit_helper_adoption.py:445 helper=build_standard_options adopted=0 legacy=0 not_applicable=3
+INFO     root:audit_helper_adoption.py:452 Helper adoption report written to C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_generates_helper_adoption0\repo\.repo_studios\command_center\reports\helper_adoption\commandview\helper_adoption\20251103-1700
+____________________ test_format_filter_and_custom_helpers ____________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_format_filter_and_custom_0')
+
+    def test_format_filter_and_custom_helpers(tmp_path):
+        mod = _load_module()
+        repo_root = tmp_path / "workspace"
+        scope_dir = repo_root / "targets"
+        scope_dir.mkdir(parents=True)
+        allowed_targets = repo_root / ".repo_studios" / "command_center" / "docs" / "guardrails" / "allowed_targets.yaml"
+        _write(
+            allowed_targets,
+            "targets:\n  - slug: sample\n    path: targets\n",
+        )
+        _write(
+            scope_dir / "producer.py",
+            "from libraries import copy_latest_artifact\n_copy_latest = copy_latest_artifact\n",
+        )
+    
+        output_dir = repo_root / "reports"
+    
+        exit_code = mod.main(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-dir",
+                str(output_dir),
+                "--timestamp",
+                "2025-11-03T17:00:00+00:00",
+                "--keep",
+                "2",
+                "--helper",
+                "copy_latest_artifact",
+                "--format",
+                "json",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+    
+        assert exit_code == 0
+        run_dir = output_dir / f"{mod.RUN_STEM}-20251103_170000"
+>       assert (run_dir / mod.JSON_FILENAME).is_file()
+E       AssertionError: assert False
+E        +  where False = is_file()
+E        +    where is_file = (WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_format_filter_and_custom_0/workspace/reports/helper_adoption-20251103_170000') / 'helper_adoption.json').is_file
+E        +      where 'helper_adoption.json' = <module 'audit_helper_adoption' from 'C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\producers\\audit_helper_adoption.py'>.JSON_FILENAME
+
+.repo_studios\tests\tests_producers\test_audit_helper_adoption.py:132: AssertionError
+---------------------------- Captured stderr call -----------------------------
+INFO helper=copy_latest_artifact adopted=1 legacy=0 not_applicable=0
+INFO Helper adoption report written to C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_format_filter_and_custom_0\workspace\reports\commandview\helper_adoption\20251103-1700
+------------------------------ Captured log call ------------------------------
+INFO     root:audit_helper_adoption.py:445 helper=copy_latest_artifact adopted=1 legacy=0 not_applicable=0
+INFO     root:audit_helper_adoption.py:452 Helper adoption report written to C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_format_filter_and_custom_0\workspace\reports\commandview\helper_adoption\20251103-1700
+_______________ test_diff_detects_changes_and_writes_artifacts ________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_diff_detects_changes_and_0')
+
+    def test_diff_detects_changes_and_writes_artifacts(tmp_path: Path) -> None:
+        mod = _load_module()
+    
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        output_dir = repo_root / ".repo_studios" / "command_center" / "reports"
+    
+        old_index = {
+            "integrity_hash": "abc123",
+            "rules": [
+                {
+                    "id": "STD-001",
+                    "severity": "medium",
+                    "summary": "Old summary",
+                    "rationale": "baseline",
+                    "applies_to": ["python"],
+                    "category_ids": ["lint"],
+                },
+                {
+                    "id": "STD-002",
+                    "severity": "low",
+                    "summary": "Keep",
+                    "rationale": "",
+                    "applies_to": [],
+                    "category_ids": [],
+                },
+            ],
+        }
+        new_index = {
+            "integrity_hash": "def456",
+            "rules": [
+                {
+                    "id": "STD-001",
+                    "severity": "high",
+                    "summary": "New summary",
+                    "rationale": "baseline",
+                    "applies_to": ["python"],
+                    "category_ids": ["lint"],
+                },
+                {
+                    "id": "STD-003",
+                    "severity": "medium",
+                    "summary": "Added",
+                    "rationale": "new",
+                    "applies_to": ["python"],
+                    "category_ids": ["lint"],
+                },
+            ],
+        }
+    
+        old_path = repo_root / "repo_standards_index_old.yaml"
+        new_path = repo_root / "repo_standards_index_new.yaml"
+        _write_index(old_path, old_index)
+        _write_index(new_path, new_index)
+    
+>       exit_code = mod.main(
+            [
+                str(old_path),
+                str(new_path),
+                "--repo-root",
+                str(repo_root),
+                "--output-dir",
+                str(output_dir),
+                "--run-timestamp",
+                "20240101-0000",
+                "--artifacts-to-keep",
+                "5",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+
+.repo_studios\tests\tests_producers\test_diff_standards_index.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\scripts\producers\diff_standards_index.py:481: in main
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_diff_detects_changes_and_0/repo')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_diff_detects_changes_and_0\repo\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+___________________ test_inventory_and_analysis_round_trip ____________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_inventory_and_analysis_ro0')
+
+    def test_inventory_and_analysis_round_trip(tmp_path: Path) -> None:
+        workspace = tmp_path / "workspace"
+        target = workspace / "sample_pkg"
+        shutil.copytree(FIXTURE_ROOT, target)
+    
+>       exit_code = _run_inventory(["--repo-root", str(workspace), str(target)])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_function_inventory_integration.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_function_inventory_integration.py:69: in _run_inventory
+    return INVENTORY_MODULE.run(args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:2950: in run
+    git_churn_summary = attach_git_churn(paths, collected, warnings)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:1025: in attach_git_churn
+    churn = _collect_git_churn(paths.repo_root, repo_relative)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:955: in _collect_git_churn
+    result = _run_git_command(repo_root, args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:931: in _run_git_command
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', '-C', 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-685\\test_inventory_and_analysis_ro0\\workspace', 'log', '--follow', '--numstat', ...],)
+kwargs = {'capture_output': True, 'check': False, 'text': True}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+___________________ test_churn_detects_missing_doc_updates ____________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_churn_detects_missing_doc0')
+
+    def test_churn_detects_missing_doc_updates(tmp_path):
+        module = _load_module("generate_code_doc_churn_report", _CONSUMER_MODULE_PATH)
+    
+        repo = tmp_path / "repo"
+        repo.mkdir()
+>       _init_repo(repo)
+
+.repo_studios\tests\tests_producers\test_generate_code_doc_churn_report.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_code_doc_churn_report.py:39: in _init_repo
+    _git(["init"], cwd=path)
+.repo_studios\tests\tests_producers\test_generate_code_doc_churn_report.py:28: in _git
+    return subprocess.run(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', 'init'],)
+kwargs = {'capture_output': True, 'check': True, 'cwd': WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-6...on.debugpy-2025.18.0-win32-x64\\bundled\\libs\\debugpy', 'CHOCOLATEYINSTALL': 'C:\\ProgramData\\chocolatey', ...}, ...}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+_____________________ test_churn_skips_when_docs_updated ______________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_churn_skips_when_docs_upd0')
+
+    def test_churn_skips_when_docs_updated(tmp_path):
+        module = _load_module("generate_code_doc_churn_report", _CONSUMER_MODULE_PATH)
+    
+        repo = tmp_path / "repo"
+        repo.mkdir()
+>       _init_repo(repo)
+
+.repo_studios\tests\tests_producers\test_generate_code_doc_churn_report.py:152: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_code_doc_churn_report.py:39: in _init_repo
+    _git(["init"], cwd=path)
+.repo_studios\tests\tests_producers\test_generate_code_doc_churn_report.py:28: in _git
+    return subprocess.run(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', 'init'],)
+kwargs = {'capture_output': True, 'check': True, 'cwd': WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-6...on.debugpy-2025.18.0-win32-x64\\bundled\\libs\\debugpy', 'CHOCOLATEYINSTALL': 'C:\\ProgramData\\chocolatey', ...}, ...}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+_________________________ test_churn_honors_allowlist _________________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_churn_honors_allowlist0')
+
+    def test_churn_honors_allowlist(tmp_path):
+        module = _load_module("generate_code_doc_churn_report", _CONSUMER_MODULE_PATH)
+    
+        repo = tmp_path / "repo"
+        repo.mkdir()
+>       _init_repo(repo)
+
+.repo_studios\tests\tests_producers\test_generate_code_doc_churn_report.py:191: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_code_doc_churn_report.py:39: in _init_repo
+    _git(["init"], cwd=path)
+.repo_studios\tests\tests_producers\test_generate_code_doc_churn_report.py:28: in _git
+    return subprocess.run(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', 'init'],)
+kwargs = {'capture_output': True, 'check': True, 'cwd': WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-6...on.debugpy-2025.18.0-win32-x64\\bundled\\libs\\debugpy', 'CHOCOLATEYINSTALL': 'C:\\ProgramData\\chocolatey', ...}, ...}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+__________________ test_doc_index_retention_keeps_single_run __________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_doc_index_retention_keeps0')
+
+    def test_doc_index_retention_keeps_single_run(tmp_path):
+        mod = _load_module()
+        repo_root = tmp_path / "workspace"
+        docs_dir = repo_root / "docs"
+        docs_dir.mkdir(parents=True)
+        (docs_dir / "one.md").write_text("# Title\n", encoding="utf-8")
+    
+        output_dir = repo_root / "out"
+    
+>       mod.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-dir",
+                str(output_dir),
+                "--timestamp",
+                "2024-01-01T00:00:00+00:00",
+                "--artifacts-to-keep",
+                "1",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+
+.repo_studios\tests\tests_producers\test_generate_doc_index.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\scripts\producers\generate_doc_index.py:813: in run
+    paths = build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:186: in build_standard_paths
+    repo_root = resolve_repo_root(
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_doc_index_retention_keeps0/workspace')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_doc_index_retention_keeps0\workspace\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+__________________ test_analysis_detects_duplicate_functions __________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_analysis_detects_duplicat0')
+
+    def test_analysis_detects_duplicate_functions(tmp_path: Path) -> None:
+        repo_root = tmp_path
+        target = repo_root / "sample_pkg"
+        _write(target / "__init__.py", "")
+        _write(
+            target / "alpha.py",
+            "def helper(value):\n" '    """Alpha helpers."""\n' "    return value * 2\n",
+        )
+        _write(
+            target / "beta.py",
+            "def helper(value):\n" '    """Alpha helpers."""\n' "    return value + 2\n",
+        )
+    
+>       assert run_inventory(["--repo-root", str(repo_root), str(target)]) == 0
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_generate_function_analysis.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_function_analysis.py:57: in run_inventory
+    return INVENTORY_MODULE.run(args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:2950: in run
+    git_churn_summary = attach_git_churn(paths, collected, warnings)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:1025: in attach_git_churn
+    churn = _collect_git_churn(paths.repo_root, repo_relative)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:955: in _collect_git_churn
+    result = _run_git_command(repo_root, args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:931: in _run_git_command
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', '-C', 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-685\\test_analysis_detects_duplicat0', 'log', '--follow', '--numstat', ...],)
+kwargs = {'capture_output': True, 'check': False, 'text': True}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+___________________ test_analysis_replaces_existing_outputs ___________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_analysis_replaces_existin0')
+
+    def test_analysis_replaces_existing_outputs(tmp_path: Path) -> None:
+        repo_root = tmp_path
+        target = repo_root / "pkg"
+        _write(target / "__init__.py", "")
+        _write(target / "mod.py", "def helper():\n    return True\n")
+    
+>       assert run_inventory(["--repo-root", str(repo_root), str(target)]) == 0
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_generate_function_analysis.py:170: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_function_analysis.py:57: in run_inventory
+    return INVENTORY_MODULE.run(args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:2950: in run
+    git_churn_summary = attach_git_churn(paths, collected, warnings)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:1025: in attach_git_churn
+    churn = _collect_git_churn(paths.repo_root, repo_relative)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:955: in _collect_git_churn
+    result = _run_git_command(repo_root, args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:931: in _run_git_command
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', '-C', 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-685\\test_analysis_replaces_existin0', 'log', '--follow', '--numstat', ...],)
+kwargs = {'capture_output': True, 'check': False, 'text': True}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+_________________ test_inventory_generates_structured_output __________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_inventory_generates_struc0')
+
+    def test_inventory_generates_structured_output(tmp_path: Path) -> None:
+        repo_root = tmp_path
+        target = repo_root / "sample_pkg"
+        _write(target / "__init__.py", '"""Utility package."""\n')
+        _write(
+            target / "module.py",
+            """
+    class Example:
+        def method_one(self):
+            return True
+    
+    def helper(value):
+        return value * 2
+    """.strip()
+            + "\n",
+        )
+        _write(
+            target / "class_only.py",
+            "class Only:\n    def do(self):\n        return 42\n",
+        )
+    
+>       exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:38: in run_inventory
+    return MODULE.run(args)
+           ^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:2950: in run
+    git_churn_summary = attach_git_churn(paths, collected, warnings)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:1025: in attach_git_churn
+    churn = _collect_git_churn(paths.repo_root, repo_relative)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:955: in _collect_git_churn
+    result = _run_git_command(repo_root, args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:931: in _run_git_command
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', '-C', 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-685\\test_inventory_generates_struc0', 'log', '--follow', '--numstat', ...],)
+kwargs = {'capture_output': True, 'check': False, 'text': True}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+___________________ test_inventory_merges_coverage_reports ____________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_inventory_merges_coverage0')
+
+    def test_inventory_merges_coverage_reports(tmp_path: Path) -> None:
+        repo_root = tmp_path
+        target = repo_root / "pkg"
+        _write(target / "__init__.py", "")
+        _write(
+            target / "module.py",
+            ("def act(value: int) -> int:\n" "    if value > 0:\n" "        return value + 1\n" "    return value - 1\n"),
+        )
+    
+        coverage_payload = {
+            "files": {
+                "pkg/module.py": {
+                    "executed_lines": [1, 2, 3],
+                    "missing_lines": [4],
+                    "contexts": {"tests": [1, 2]},
+                }
+            }
+        }
+        coverage_file = repo_root / "coverage.json"
+        coverage_file.write_text(json.dumps(coverage_payload), encoding="utf-8")
+    
+>       exit_code = run_inventory(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--coverage-json",
+                str(coverage_file),
+                str(target),
+            ]
+        )
+
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:192: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:38: in run_inventory
+    return MODULE.run(args)
+           ^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:2950: in run
+    git_churn_summary = attach_git_churn(paths, collected, warnings)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:1025: in attach_git_churn
+    churn = _collect_git_churn(paths.repo_root, repo_relative)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:955: in _collect_git_churn
+    result = _run_git_command(repo_root, args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:931: in _run_git_command
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', '-C', 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-685\\test_inventory_merges_coverage0', 'log', '--follow', '--numstat', ...],)
+kwargs = {'capture_output': True, 'check': False, 'text': True}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+__________________ test_inventory_includes_git_churn_summary __________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_inventory_includes_git_ch0')
+
+    def test_inventory_includes_git_churn_summary(tmp_path: Path) -> None:
+        repo_root = tmp_path
+>       _git(["init"], repo_root)
+
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:236: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:51: in _git
+    completed = subprocess.run(["git", *args], cwd=str(cwd), capture_output=True, text=True)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', 'init'],)
+kwargs = {'capture_output': True, 'cwd': 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-685\\test_inventory_includes_git_ch0', 'text': True}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+_____________ test_inventory_captures_warnings_for_problem_files ______________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_inventory_captures_warnin0')
+
+    def test_inventory_captures_warnings_for_problem_files(tmp_path: Path) -> None:
+        repo_root = tmp_path
+        target = repo_root / "pkg"
+        _write(target / "good.py", "def ok():\n    return 1\n")
+        _write(target / "bad.py", "def broken(:\n    pass\n")
+    
+>       exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:283: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:38: in run_inventory
+    return MODULE.run(args)
+           ^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:2950: in run
+    git_churn_summary = attach_git_churn(paths, collected, warnings)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:1025: in attach_git_churn
+    churn = _collect_git_churn(paths.repo_root, repo_relative)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:955: in _collect_git_churn
+    result = _run_git_command(repo_root, args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:931: in _run_git_command
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', '-C', 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-685\\test_inventory_captures_warnin0', 'log', '--follow', '--numstat', ...],)
+kwargs = {'capture_output': True, 'check': False, 'text': True}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+_______________ test_inventory_skips_hidden_and_virtualenv_dirs _______________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_inventory_skips_hidden_an0')
+
+    def test_inventory_skips_hidden_and_virtualenv_dirs(tmp_path: Path) -> None:
+        repo_root = tmp_path
+        target = repo_root / "workspace"
+        _write(target / "visible.py", "def run():\n    return True\n")
+        hidden_dir = target / ".hidden"
+        _write(hidden_dir / "should_skip.py", "def nope():\n    return False\n")
+        venv_dir = target / "venv" / "mod.py"
+        _write(venv_dir, "def skip():\n    return False\n")
+    
+>       exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:304: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:38: in run_inventory
+    return MODULE.run(args)
+           ^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:2950: in run
+    git_churn_summary = attach_git_churn(paths, collected, warnings)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:1025: in attach_git_churn
+    churn = _collect_git_churn(paths.repo_root, repo_relative)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:955: in _collect_git_churn
+    result = _run_git_command(repo_root, args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:931: in _run_git_command
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', '-C', 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-685\\test_inventory_skips_hidden_an0', 'log', '--follow', '--numstat', ...],)
+kwargs = {'capture_output': True, 'check': False, 'text': True}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+_________________ test_inventory_removes_preexisting_outputs __________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_inventory_removes_preexis0')
+
+    def test_inventory_removes_preexisting_outputs(tmp_path: Path) -> None:
+        repo_root = tmp_path
+        target = repo_root / "pkg"
+        _write(target / "main.py", "def run():\n    return True\n")
+    
+        output_dir = target / "pkg_index"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        _write(output_dir / "pkg_index.json", "{}")
+        _write(output_dir / "pkg_index-2000-01-01.json", "{}")
+        _write(output_dir / "latest.json", "{}")
+        _write(output_dir / "pkg_screening-2000-01-01.json", "{}")
+        reports_dir = repo_root / ".repo_studios" / "command_center" / "reports" / "index_scan" / "pkg_index"
+        reports_dir.mkdir(parents=True, exist_ok=True)
+        _write(reports_dir / "pkg_index.json", "{}")
+        _write(reports_dir / "pkg_index-1999-12-31.json", "{}")
+        _write(reports_dir / "latest.json", "{}")
+        _write(reports_dir / "pkg_screening-1999-12-31.json", "{}")
+    
+>       exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:335: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:38: in run_inventory
+    return MODULE.run(args)
+           ^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:2950: in run
+    git_churn_summary = attach_git_churn(paths, collected, warnings)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:1025: in attach_git_churn
+    churn = _collect_git_churn(paths.repo_root, repo_relative)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:955: in _collect_git_churn
+    result = _run_git_command(repo_root, args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:931: in _run_git_command
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', '-C', 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-685\\test_inventory_removes_preexis0', 'log', '--follow', '--numstat', ...],)
+kwargs = {'capture_output': True, 'check': False, 'text': True}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+____________ test_screening_score_history_accumulates_across_runs _____________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_screening_score_history_a0')
+
+    def test_screening_score_history_accumulates_across_runs(tmp_path: Path) -> None:
+        repo_root = tmp_path
+        target = repo_root / "pkg"
+        _write(target / "__init__.py", "")
+        _write(
+            target / "module.py",
+            "def run(value: int) -> int:\n    return value\n",
+        )
+    
+>       exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:373: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:38: in run_inventory
+    return MODULE.run(args)
+           ^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:2950: in run
+    git_churn_summary = attach_git_churn(paths, collected, warnings)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:1025: in attach_git_churn
+    churn = _collect_git_churn(paths.repo_root, repo_relative)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:955: in _collect_git_churn
+    result = _run_git_command(repo_root, args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:931: in _run_git_command
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', '-C', 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-685\\test_screening_score_history_a0', 'log', '--follow', '--numstat', ...],)
+kwargs = {'capture_output': True, 'check': False, 'text': True}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+______________ test_call_graph_resolves_local_and_imported_calls ______________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_call_graph_resolves_local0')
+
+    def test_call_graph_resolves_local_and_imported_calls(tmp_path: Path) -> None:
+        repo_root = tmp_path
+        target = repo_root / "sample"
+        _write(target / "__init__.py", "")
+        _write(
+            target / "module.py",
+            (
+                "import json\n"
+                "from math import sqrt\n\n"
+                "def helper(value: int) -> int:\n"
+                "    return value + 1\n\n"
+                "def outer(value: int) -> dict[str, float]:\n"
+                "    total = helper(value)\n"
+                "    encoded = Example.encode({'value': total})\n"
+                "    root = sqrt(total)\n"
+                "    return {'encoded': len(encoded), 'root': root}\n\n"
+                "class Example:\n"
+                "    def method_one(self, payload):\n"
+                "        return self.method_two(payload)\n\n"
+                "    def method_two(self, payload):\n"
+                "        return len(payload)\n\n"
+                "    @staticmethod\n"
+                "    def encode(data):\n"
+                "        return json.dumps(data)\n"
+            ),
+        )
+    
+>       exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:437: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:38: in run_inventory
+    return MODULE.run(args)
+           ^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:2950: in run
+    git_churn_summary = attach_git_churn(paths, collected, warnings)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:1025: in attach_git_churn
+    churn = _collect_git_churn(paths.repo_root, repo_relative)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:955: in _collect_git_churn
+    result = _run_git_command(repo_root, args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:931: in _run_git_command
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', '-C', 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-685\\test_call_graph_resolves_local0', 'log', '--follow', '--numstat', ...],)
+kwargs = {'capture_output': True, 'check': False, 'text': True}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+_____________________ test_inventory_records_class_bases ______________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_inventory_records_class_b0')
+
+    def test_inventory_records_class_bases(tmp_path: Path) -> None:
+        repo_root = tmp_path
+        target = repo_root / "pkg"
+        _write(target / "__init__.py", "")
+        _write(
+            target / "module.py",
+            (
+                "class Base:\n"
+                "    pass\n\n"
+                "class Mixin:\n"
+                "    pass\n\n"
+                "class Derived(Base, Mixin):\n"
+                "    def act(self):\n"
+                "        return super().act() if hasattr(super(), 'act') else None\n"
+            ),
+        )
+    
+>       exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:518: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:38: in run_inventory
+    return MODULE.run(args)
+           ^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:2950: in run
+    git_churn_summary = attach_git_churn(paths, collected, warnings)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:1025: in attach_git_churn
+    churn = _collect_git_churn(paths.repo_root, repo_relative)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:955: in _collect_git_churn
+    result = _run_git_command(repo_root, args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:931: in _run_git_command
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', '-C', 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-685\\test_inventory_records_class_b0', 'log', '--follow', '--numstat', ...],)
+kwargs = {'capture_output': True, 'check': False, 'text': True}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+_________________ test_cyclomatic_complexity_counts_branches __________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_cyclomatic_complexity_cou0')
+
+    def test_cyclomatic_complexity_counts_branches(tmp_path: Path) -> None:
+        repo_root = tmp_path
+        target = repo_root / "work"
+        _write(target / "__init__.py", "")
+        _write(
+            target / "module.py",
+            (
+                "def decision(value):\n"
+                "    total = 0\n"
+                "    for item in value:\n"
+                "        if item and item > 0:\n"
+                "            total += item\n"
+                "        elif item == 0:\n"
+                "            total += 1\n"
+                "        else:\n"
+                "            total -= item\n"
+                "    while total > 10 and any(v < 0 for v in value):\n"
+                "        total -= 1\n"
+                "    return total\n"
+            ),
+        )
+    
+>       exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:554: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:38: in run_inventory
+    return MODULE.run(args)
+           ^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:2950: in run
+    git_churn_summary = attach_git_churn(paths, collected, warnings)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:1025: in attach_git_churn
+    churn = _collect_git_churn(paths.repo_root, repo_relative)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:955: in _collect_git_churn
+    result = _run_git_command(repo_root, args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:931: in _run_git_command
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', '-C', 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-685\\test_cyclomatic_complexity_cou0', 'log', '--follow', '--numstat', ...],)
+kwargs = {'capture_output': True, 'check': False, 'text': True}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+____________________ test_type_hint_coverage_reports_ratio ____________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_type_hint_coverage_report0')
+
+    def test_type_hint_coverage_reports_ratio(tmp_path: Path) -> None:
+        repo_root = tmp_path
+        target = repo_root / "annot"
+        _write(target / "__init__.py", "")
+        _write(
+            target / "module.py",
+            (
+                "def fully_typed(a: int, b: str) -> bool:\n"
+                "    return str(a) == b\n\n"
+                "def partially_typed(a: int, b: str, c, d) -> None:\n"
+                "    return None\n"
+            ),
+        )
+    
+>       exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:581: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:38: in run_inventory
+    return MODULE.run(args)
+           ^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:2950: in run
+    git_churn_summary = attach_git_churn(paths, collected, warnings)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:1025: in attach_git_churn
+    churn = _collect_git_churn(paths.repo_root, repo_relative)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:955: in _collect_git_churn
+    result = _run_git_command(repo_root, args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:931: in _run_git_command
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', '-C', 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-685\\test_type_hint_coverage_report0', 'log', '--follow', '--numstat', ...],)
+kwargs = {'capture_output': True, 'check': False, 'text': True}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+___________ test_function_metadata_persists_effects_and_decorators ____________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_function_metadata_persist0')
+
+    def test_function_metadata_persists_effects_and_decorators(tmp_path: Path) -> None:
+        repo_root = tmp_path
+        target = repo_root / "effects"
+        _write(target / "__init__.py", "")
+        _write(
+            target / "module.py",
+            (
+                "import logging\n\n"
+                "GLOBAL = 0\n\n"
+                "def identity(fn):\n"
+                "    return fn\n\n"
+                "@identity\n"
+                "def decorated_function(path):\n"
+                "    global GLOBAL\n"
+                "    logging.info('start')\n"
+                "    with open(path, 'w+') as handle:\n"
+                "        handle.write('data')\n"
+                "    if GLOBAL < 0:\n"
+                "        raise ValueError('bad state')\n"
+                "    return path\n\n"
+                "@identity\n"
+                "class DecoratedClass:\n"
+                "    @classmethod\n"
+                "    def build(cls, filename):\n"
+                "        global GLOBAL\n"
+                "        logging.error('failure')\n"
+                "        with open(filename) as handle:\n"
+                "            data = handle.read()\n"
+                "        if data:\n"
+                "            return data\n"
+                "        raise RuntimeError('empty file')\n"
+            ),
+        )
+    
+>       exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:628: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:38: in run_inventory
+    return MODULE.run(args)
+           ^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:2950: in run
+    git_churn_summary = attach_git_churn(paths, collected, warnings)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:1025: in attach_git_churn
+    churn = _collect_git_churn(paths.repo_root, repo_relative)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:955: in _collect_git_churn
+    result = _run_git_command(repo_root, args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:931: in _run_git_command
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', '-C', 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-685\\test_function_metadata_persist0', 'log', '--follow', '--numstat', ...],)
+kwargs = {'capture_output': True, 'check': False, 'text': True}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+___________ test_unused_imports_and_unreachable_functions_reported ____________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_unused_imports_and_unreac0')
+
+    def test_unused_imports_and_unreachable_functions_reported(tmp_path: Path) -> None:
+        repo_root = tmp_path
+        target = repo_root / "deadcode"
+        _write(target / "__init__.py", "")
+        _write(
+            target / "module.py",
+            (
+                "import logging\n"
+                "from math import sqrt\n\n"
+                "def used(value):\n"
+                "    return sqrt(value)\n\n"
+                "def execute(value):\n"
+                "    return orchestrate(value)\n\n"
+                "def orchestrate(value):\n"
+                "    helper = Sample()\n"
+                "    return helper.active(value)\n\n"
+                "def unused_helper(value):\n"
+                "    return value + 1\n\n"
+                "class Sample:\n"
+                "    def active(self, value):\n"
+                "        return used(value)\n\n"
+                "    def orphan(self, value):\n"
+                "        return value - 1\n"
+            ),
+        )
+    
+>       exit_code = run_inventory(["--repo-root", str(repo_root), str(target)])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:686: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_function_inventory.py:38: in run_inventory
+    return MODULE.run(args)
+           ^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:2950: in run
+    git_churn_summary = attach_git_churn(paths, collected, warnings)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:1025: in attach_git_churn
+    churn = _collect_git_churn(paths.repo_root, repo_relative)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:955: in _collect_git_churn
+    result = _run_git_command(repo_root, args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\producers\generate_commandview_inventory.py:931: in _run_git_command
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (['git', '-C', 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-685\\test_unused_imports_and_unreac0', 'log', '--follow', '--numstat', ...],)
+kwargs = {'capture_output': True, 'check': False, 'text': True}
+
+    def explode(*args, **kwargs):
+>       raise AssertionError("subprocess.run should not be called in summarize-existing mode")
+E       AssertionError: subprocess.run should not be called in summarize-existing mode
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:294: AssertionError
+_________________________ test_report_with_no_targets _________________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_report_with_no_targets0')
+
+    def test_report_with_no_targets(tmp_path: Path) -> None:
+        mod = _load_module()
+        root = tmp_path / "workspace"
+        root.mkdir()
+    
+        output_dir = root / ".repo_studios" / "reports" / "producer_reports"
+        argv = [
+            "--repo-root",
+            str(root),
+            "--output-dir",
+            str(output_dir),
+            "--timestamp",
+            "2024-01-01T00:00:00+00:00",
+            "--artifacts-to-keep",
+            "3",
+            "--log-level",
+            "ERROR",
+        ]
+    
+>       exit_code = mod.main(argv)
+                    ^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_generate_import_graph_report.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\scripts\producers\generate_import_graph_report.py:345: in main
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_report_with_no_targets0/workspace')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_report_with_no_targets0\workspace\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+______________________ test_structured_artifacts_success ______________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F6A9E2AD60>
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_structured_artifacts_succ0')
+
+    def test_structured_artifacts_success(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
+        mod = _load_module()
+    
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        target_dir = repo_root / "src"
+        target_dir.mkdir()
+    
+        payload = [
+            {
+                "filename": str(target_dir / "module.py"),
+                "function_list": [
+                    {
+                        "name": "complex_fn",
+                        "cyclomatic_complexity": 30,
+                        "length": 120,
+                    },
+                    {
+                        "name": "simple_fn",
+                        "cyclomatic_complexity": 5,
+                        "length": 20,
+                    },
+                ],
+            }
+        ]
+    
+        def fake_run(cmd, capture_output, text):
+            assert cmd[-1] == str(target_dir.resolve())
+            return SimpleNamespace(returncode=0, stdout=json.dumps(payload), stderr="")
+    
+        monkeypatch.setattr(mod.subprocess, "run", fake_run)
+    
+        output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports"
+    
+>       exit_code = mod.main(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-dir",
+                str(output_dir),
+                "--timestamp",
+                "2024-01-01T00:00:00+00:00",
+                "--targets",
+                "src",
+                "--artifacts-to-keep",
+                "5",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+
+.repo_studios\tests\tests_producers\test_generate_lizard_report.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\scripts\producers\generate_lizard_report.py:622: in main
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_structured_artifacts_succ0/repo')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_structured_artifacts_succ0\repo\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+_______________________ test_rejects_newline_arguments ________________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_rejects_newline_arguments0')
+
+    def test_rejects_newline_arguments(tmp_path: Path):
+        mod = _load_module()
+    
+        offender = mod.Offender(
+            path="demo.py",
+            name="fn",
+            cyclomatic_complexity=20,
+            length=200,
+            start_line=10,
+            end_line=20,
+        )
+        payload = offender.to_payload(max_ccn=15, max_length=80, rank=1)
+        assert payload["start_line"] == 10
+        assert payload["end_line"] == 20
+    
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        (repo_root / "src").mkdir()
+    
+        output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports"
+    
+>       exit_code = mod.main(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-dir",
+                str(output_dir),
+                "--timestamp",
+                "2024-03-03T00:00:00+00:00",
+                "--targets",
+                "src",
+                "--extra-args",
+                "bad\narg",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+
+.repo_studios\tests\tests_producers\test_generate_lizard_report.py:204: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\scripts\producers\generate_lizard_report.py:622: in main
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_rejects_newline_arguments0/repo')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_rejects_newline_arguments0\repo\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+___________________________ test_typecheck_failure ____________________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_typecheck_failure0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F6AA2D9630>
+
+    def test_typecheck_failure(tmp_path: Path, monkeypatch):
+        _write_pyproject(tmp_path, ["pkg"])
+        (tmp_path / "pkg").mkdir()
+    
+        error_output = (
+            "pkg/module.py:7: error: Incompatible types [assignment]\n"
+            "pkg/module.py:7: note: Revealed type is 'builtins.str'\n"
+            "Found 1 error in 1 file (checked 1 source file)"
+        )
+    
+        def runner(repo_root: Path, invocation: list[str]):
+            if invocation[-1] == "--version":
+                return "mypy 1.11.0", 0
+            return error_output, 1
+    
+>       module, out_dir, run_dir, slug = _run_with_module(tmp_path, monkeypatch, runner)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_generate_typecheck_report.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_typecheck_report.py:52: in _run_with_module
+    module.main(args)
+.repo_studios\scripts\producers\generate_typecheck_report.py:597: in main
+    paths = build_paths(args)
+            ^^^^^^^^^^^^^^^^^
+.repo_studios\scripts\producers\generate_typecheck_report.py:580: in build_paths
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:186: in build_standard_paths
+    repo_root = resolve_repo_root(
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_typecheck_failure0')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_typecheck_failure0\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+____________________ test_typecheck_skips_when_no_targets _____________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_typecheck_skips_when_no_t0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F6A9E47E00>
+
+    def test_typecheck_skips_when_no_targets(tmp_path: Path, monkeypatch):
+        _write_pyproject(tmp_path, [])
+    
+        def runner(repo_root: Path, invocation: list[str]):
+            raise AssertionError("mypy should not run when no targets are configured")
+    
+>       module, out_dir, run_dir, slug = _run_with_module(tmp_path, monkeypatch, runner)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_generate_typecheck_report.py:136: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_typecheck_report.py:52: in _run_with_module
+    module.main(args)
+.repo_studios\scripts\producers\generate_typecheck_report.py:597: in main
+    paths = build_paths(args)
+            ^^^^^^^^^^^^^^^^^
+.repo_studios\scripts\producers\generate_typecheck_report.py:580: in build_paths
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:186: in build_standard_paths
+    repo_root = resolve_repo_root(
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_typecheck_skips_when_no_t0')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_typecheck_skips_when_no_t0\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+_______________ test_typecheck_missing_target_output_is_skipped _______________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_typecheck_missing_target_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F6A9E281A0>
+
+    def test_typecheck_missing_target_output_is_skipped(tmp_path: Path, monkeypatch):
+        _write_pyproject(tmp_path, ["src"])
+    
+        def runner(repo_root: Path, invocation: list[str]):
+            message = (
+                "usage: mypy [-h] [-v] [-V] [more options; see below]\n"
+                "            [-m MODULE] [-p PACKAGE] [-c PROGRAM_TEXT] [files ...]\n"
+                "mypy: error: Missing target module, package, files, or command.\n"
+            )
+            return message, 2
+    
+>       module, out_dir, run_dir, _slug = _run_with_module(tmp_path, monkeypatch, runner)
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_generate_typecheck_report.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_producers\test_generate_typecheck_report.py:52: in _run_with_module
+    module.main(args)
+.repo_studios\scripts\producers\generate_typecheck_report.py:597: in main
+    paths = build_paths(args)
+            ^^^^^^^^^^^^^^^^^
+.repo_studios\scripts\producers\generate_typecheck_report.py:580: in build_paths
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:186: in build_standard_paths
+    repo_root = resolve_repo_root(
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_typecheck_missing_target_0')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_typecheck_missing_target_0\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+__________________________ test_structured_artifacts __________________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_structured_artifacts1')
+
+    def test_structured_artifacts(tmp_path: Path) -> None:
+        mod = load_scan_producer_module()
+    
+        repo_root = tmp_path / "workspace"
+        src_dir = repo_root / "src"
+        src_dir.mkdir(parents=True, exist_ok=True)
+    
+        (src_dir / "monkey_patch.py").write_text(
+            """
+    import requests
+    requests.adapters.DEFAULT_POOLSIZE = 1
+    
+    import os
+    os.environ[\"EXAMPLE_FLAG\"] = \"1\"
+    """.strip()
+            + "\n",
+            encoding="utf-8",
+        )
+    
+>       payload = mod.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--root",
+                "src",
+                "--context-lines",
+                "1",
+                "--keep",
+                "5",
+                "--timestamp",
+                "20250101-0000",
+            ]
+        )
+
+.repo_studios\tests\tests_producers\test_scan_monkey_patches.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\scripts\producers\scan_monkey_patches.py:1255: in run
+    paths = build_paths(args)
+            ^^^^^^^^^^^^^^^^^
+.repo_studios\scripts\producers\scan_monkey_patches.py:1239: in build_paths
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:186: in build_standard_paths
+    repo_root = resolve_repo_root(
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_structured_artifacts1/workspace')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_structured_artifacts1\workspace\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+_____________________________ test_prune_history ______________________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_prune_history0')
+
+    def test_prune_history(tmp_path: Path) -> None:
+        mod = load_scan_producer_module()
+    
+        repo_root = tmp_path / "workspace"
+        src_dir = repo_root / "src"
+        src_dir.mkdir(parents=True, exist_ok=True)
+    
+        (src_dir / "first.py").write_text(
+            "import builtins\nbuiltins.open = lambda *args, **kwargs: None\n",
+            encoding="utf-8",
+        )
+    
+        base_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "healthview" / "monkey_patches"
+    
+>       mod.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--root",
+                "src",
+                "--keep",
+                "1",
+                "--timestamp",
+                "20250101-0000",
+            ]
+        )
+
+.repo_studios\tests\tests_producers\test_scan_monkey_patches.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\scripts\producers\scan_monkey_patches.py:1255: in run
+    paths = build_paths(args)
+            ^^^^^^^^^^^^^^^^^
+.repo_studios\scripts\producers\scan_monkey_patches.py:1239: in build_paths
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:186: in build_standard_paths
+    repo_root = resolve_repo_root(
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_prune_history0/workspace')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_prune_history0\workspace\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+____________________ test_resolve_run_timestamp_validation ____________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_resolve_run_timestamp_val0')
+
+    def test_resolve_run_timestamp_validation(tmp_path: Path) -> None:
+        mod = load_scan_producer_module()
+    
+        now = datetime(2025, 1, 2, 3, 4, tzinfo=UTC)
+>       assert mod._resolve_run_timestamp(None, now) == "20250102-0304"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: _resolve_run_timestamp() takes 0 positional arguments but 2 were given
+
+.repo_studios\tests\tests_producers\test_scan_monkey_patches.py:143: TypeError
+__________ test_scan_file_detects_multiple_categories_and_git_blame ___________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_scan_file_detects_multipl0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F6AA39EDD0>
+
+    def test_scan_file_detects_multiple_categories_and_git_blame(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        mod = load_scan_producer_module()
+    
+        repo_root = tmp_path / "workspace"
+        src_dir = repo_root / "src"
+        src_dir.mkdir(parents=True, exist_ok=True)
+    
+        target = src_dir / "sample.py"
+        target.write_text(
+            """
+    import builtins
+    import logging
+    import os
+    import sys
+    from unittest.mock import patch
+    
+    import requests
+    
+    sys.modules[\"example\"] = object()
+    del sys.modules[\"example\"]
+    
+    builtins.open = lambda *args, **kwargs: None
+    os.environ[\"FLAG\"] = \"1\"
+    os.environ.update({\"FLAG2\": \"2\"})
+    
+    logging.getLogger = lambda *args, **kwargs: None
+    requests.adapters.DEFAULT_POOLSIZE = 1
+    setattr(requests.adapters, \"DEFAULT_POOLSIZE\", 2)
+    
+    @patch(\"requests.get\")
+    def test_something(mock_get):
+        return None
+    """.strip()
+            + "\n",
+            encoding="utf-8",
+        )
+    
+        def _fake_check_output(argv: list[str], **_kwargs: object) -> bytes:
+            # Minimal blame output: <sha> (<author> <date> <time> <tz> <line>)
+            return b"deadbeef (Test Author 2025-01-01 00:00:00 +0000 1) import builtins\n"
+    
+        monkeypatch.setattr(subprocess, "check_output", _fake_check_output)
+    
+        findings = mod.scan_file(
+            repo_root=repo_root,
+            file_path=target,
+            project_pkgs={"src"},
+            context_lines=1,
+            strict=False,
+        )
+        categories = {f.category for f in findings}
+    
+        assert mod.CATEGORY_SYS_MODULES in categories
+        assert mod.CATEGORY_BUILTINS in categories
+        assert mod.CATEGORY_GLOBAL_ENV in categories
+        assert mod.CATEGORY_SINGLETON_REBIND in categories
+        assert mod.CATEGORY_ATTRIBUTE_REASSIGNMENT in categories
+        assert mod.CATEGORY_SETATTR in categories
+        assert mod.CATEGORY_TEST_PATCH_MISUSE in categories
+    
+        # Git blame parsing should not raise.
+        author, date_str, sha = mod.add_git_blame(repo_root, target, 1)
+>       assert author == "Test Author"
+E       AssertionError: assert None == 'Test Author'
+
+.repo_studios\tests\tests_producers\test_scan_monkey_patches.py:212: AssertionError
+___________ test_compose_manifest_telemetry_and_summary_round_trip ____________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_compose_manifest_telemetr0')
+
+    def test_compose_manifest_telemetry_and_summary_round_trip(tmp_path: Path) -> None:
+        mod = load_scan_producer_module()
+    
+        repo_root = tmp_path / "workspace"
+        repo_root.mkdir(parents=True)
+>       paths = mod.Paths(repo_root=repo_root, output_dir=repo_root / "out")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: Paths.__init__() missing 1 required positional argument: 'scan_root'
+
+.repo_studios\tests\tests_producers\test_scan_monkey_patches.py:241: TypeError
+__________________ test_structured_artifacts_without_missing __________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_structured_artifacts_with0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F6AA3FB770>
+
+    def test_structured_artifacts_without_missing(tmp_path, monkeypatch):
+        mod = _load_module()
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+    
+        _write_legacy_file(
+            repo_root / "docs/api/metrics_orchestrator.md",
+            anchors=["Sample Anchor"],
+        )
+        _write_markdown(
+            repo_root / "docs/example.md",
+            "[Metrics](metrics_orchestrator.md#sample-anchor)\n",
+        )
+    
+        _set_fixed_datetime(
+            monkeypatch,
+            mod,
+            mod.dt.datetime(2025, 1, 1, 12, 0, 0, tzinfo=mod.dt.timezone.utc),
+        )
+    
+>       payload = mod.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--artifacts-to-keep",
+                "2",
+                "--log-level",
+                "DEBUG",
+            ]
+        )
+
+.repo_studios\tests\tests_producers\test_validate_metrics_anchor_stubs.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\scripts\producers\validate_metrics_anchor_stubs.py:379: in run
+    paths = build_paths(args)
+            ^^^^^^^^^^^^^^^^^
+.repo_studios\scripts\producers\validate_metrics_anchor_stubs.py:151: in build_paths
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:186: in build_standard_paths
+    repo_root = resolve_repo_root(
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_structured_artifacts_with0/repo')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_structured_artifacts_with0\repo\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+__________________ test_detects_missing_and_honors_allowlist __________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_detects_missing_and_honor0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F6AA322890>
+
+    def test_detects_missing_and_honors_allowlist(tmp_path, monkeypatch):
+        mod = _load_module()
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+    
+        _write_legacy_file(
+            repo_root / "docs/api/metrics_orchestrator.md",
+            anchors=["Existing Anchor"],
+        )
+        _write_markdown(
+            repo_root / "docs/usage.md",
+            "[Missing](metrics_orchestrator.md#missing-anchor)\n",
+        )
+    
+        _set_fixed_datetime(
+            monkeypatch,
+            mod,
+            mod.dt.datetime(2025, 1, 1, 12, 0, 0, tzinfo=mod.dt.timezone.utc),
+        )
+    
+>       payload_first = mod.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--artifacts-to-keep",
+                "1",
+                "--log-level",
+                "DEBUG",
+            ]
+        )
+
+.repo_studios\tests\tests_producers\test_validate_metrics_anchor_stubs.py:118: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\scripts\producers\validate_metrics_anchor_stubs.py:379: in run
+    paths = build_paths(args)
+            ^^^^^^^^^^^^^^^^^
+.repo_studios\scripts\producers\validate_metrics_anchor_stubs.py:151: in build_paths
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:186: in build_standard_paths
+    repo_root = resolve_repo_root(
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_detects_missing_and_honor0/repo')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_detects_missing_and_honor0\repo\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+_____________________ test_clean_run_generates_artifacts ______________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_clean_run_generates_artif0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F6AA49DFD0>
+
+    def test_clean_run_generates_artifacts(tmp_path, monkeypatch):
+        mod = _load_module()
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        docs_dir = repo_root / "docs/standards/global"
+    
+        _write_doc(
+            mod,
+            docs_dir / "std-docs-integrity-handbook.md",
+            {"doc_id": "docs_integrity_handbook", "revision": 1},
+        )
+    
+        documents = [
+            {
+                "category": "global",
+                "doc_id": "docs_integrity_handbook",
+                "path": "docs/standards/global/std-docs-integrity-handbook.md",
+                "stability": "stable",
+                "json_block": True,
+            }
+        ]
+    
+        _write_index(
+            mod,
+            repo_root / "docs/standards/docs_index.md",
+            documents,
+        )
+    
+        _set_fixed_datetime(
+            monkeypatch,
+            mod,
+            mod.dt.datetime(2025, 1, 1, 12, 0, 0, tzinfo=mod.dt.timezone.utc),
+        )
+    
+>       payload = mod.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-dir",
+                str(repo_root / "artifacts"),
+                "--artifacts-to-keep",
+                "2",
+                "--log-level",
+                "DEBUG",
+            ]
+        )
+
+.repo_studios\tests\tests_producers\test_verify_docs_integrity.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\scripts\producers\verify_docs_integrity.py:606: in run
+    paths = build_paths(args)
+            ^^^^^^^^^^^^^^^^^
+.repo_studios\scripts\producers\verify_docs_integrity.py:208: in build_paths
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:186: in build_standard_paths
+    repo_root = resolve_repo_root(
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_clean_run_generates_artif0/repo')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_clean_run_generates_artif0\repo\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+_____________________ test_detects_mismatches_and_updates _____________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_detects_mismatches_and_up0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F6AA49FC40>
+
+    def test_detects_mismatches_and_updates(tmp_path, monkeypatch):
+        mod = _load_module()
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        docs_dir = repo_root / "docs/standards/global"
+    
+        # Intentionally omit content_hash so the first run reports a mismatch
+        doc_body = [
+            "# Docs Integrity Handbook",
+            "",
+            "```json",
+            json.dumps({"doc_id": "docs_integrity_handbook", "revision": 1}, indent=2, sort_keys=True),
+            "```",
+            "",
+        ]
+        docs_dir.mkdir(parents=True, exist_ok=True)
+        (docs_dir / "std-docs-integrity-handbook.md").write_text("\n".join(doc_body), encoding="utf-8")
+    
+        documents = [
+            {
+                "category": "global",
+                "doc_id": "docs_integrity_handbook",
+                "path": "docs/standards/global/std-docs-integrity-handbook.md",
+                "stability": "stable",
+                "json_block": True,
+            }
+        ]
+    
+        # Index starts with placeholder hash to force mismatch
+        index_lines = [
+            "# Repo Studios Documentation Index",
+            "",
+            "```json",
+            json.dumps(
+                {
+                    "documents": documents,
+                    "content_hash": "placeholder",
+                },
+                indent=2,
+                sort_keys=True,
+            ),
+            "```",
+            "",
+            mod.INDEX_TABLE_BEGIN,
+            "",
+            "| Category | Doc ID | File | Summary | JSON | Stability |",
+            "|----------|--------|------|---------|------|-----------|",
+            "| Global | docs_integrity_handbook | standards/global/std-docs-integrity-handbook.md | docs_integrity_handbo | yes | stable |",
+            "",
+            mod.INDEX_TABLE_END,
+            "",
+        ]
+        index_path = repo_root / "docs/standards/docs_index.md"
+        index_path.parent.mkdir(parents=True, exist_ok=True)
+        index_path.write_text("\n".join(index_lines), encoding="utf-8")
+    
+        _set_fixed_datetime(
+            monkeypatch,
+            mod,
+            mod.dt.datetime(2025, 1, 1, 12, 0, 0, tzinfo=mod.dt.timezone.utc),
+        )
+    
+>       first_payload = mod.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-dir",
+                str(repo_root / "artifacts"),
+                "--log-level",
+                "INFO",
+            ]
+        )
+
+.repo_studios\tests\tests_producers\test_verify_docs_integrity.py:220: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\scripts\producers\verify_docs_integrity.py:606: in run
+    paths = build_paths(args)
+            ^^^^^^^^^^^^^^^^^
+.repo_studios\scripts\producers\verify_docs_integrity.py:208: in build_paths
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.repo_studios\command_center\scripts\libraries\cli.py:186: in build_standard_paths
+    repo_root = resolve_repo_root(
+.repo_studios\command_center\scripts\libraries\cli.py:105: in resolve_repo_root
+    return validate_repo_root(repo_root) if require_marker else repo_root
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+repo_root = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_detects_mismatches_and_up0/repo')
+
+    def validate_repo_root(repo_root: Path) -> Path:
+        """Validate that `repo_root` looks like a Repo Studios repo."""
+    
+        repo_root = repo_root.expanduser().resolve()
+        marker = repo_root / REPO_MARKER_DIR
+        if not marker.is_dir():
+>           raise ValueError(
+                f"Repo root must contain {REPO_MARKER_DIR}/ (missing: {marker}). "
+                "Pass --repo-root pointing at the repository root."
+            )
+E           ValueError: Repo root must contain .repo_studios/ (missing: C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-685\test_detects_mismatches_and_up0\repo\.repo_studios). Pass --repo-root pointing at the repository root.
+
+.repo_studios\command_center\scripts\libraries\cli.py:83: ValueError
+______________________ test_ensure_manifest_creates_file ______________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_ensure_manifest_creates_f0')
+
+    def test_ensure_manifest_creates_file(tmp_path: Path) -> None:
+>       module = _load_module()
+                 ^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_utilities\test_fault_run_analysis.py:22: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_utilities\test_fault_run_analysis.py:17: in _load_module
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:1026: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+.repo_studios\scripts\utilities\fault_run_analysis.py:34: in <module>
+    @dataclass
+     ^^^^^^^^^
+C:\Python313\Lib\dataclasses.py:1305: in dataclass
+    return wrap(cls)
+           ^^^^^^^^^
+C:\Python313\Lib\dataclasses.py:1295: in wrap
+    return _process_class(cls, init, repr, eq, order, unsafe_hash,
+C:\Python313\Lib\dataclasses.py:997: in _process_class
+    and _is_type(type, cls, dataclasses, dataclasses.KW_ONLY,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+annotation = 'str', cls = <class 'fault_run_analysis.FaultSignature'>
+a_module = <module 'dataclasses' from 'C:\\Python313\\Lib\\dataclasses.py'>
+a_type = <dataclasses._KW_ONLY_TYPE object at 0x000001F6A65C1940>
+is_type_predicate = <function _is_kw_only at 0x000001F6A66359E0>
+
+    def _is_type(annotation, cls, a_module, a_type, is_type_predicate):
+        # Given a type annotation string, does it refer to a_type in
+        # a_module?  For example, when checking that annotation denotes a
+        # ClassVar, then a_module is typing, and a_type is
+        # typing.ClassVar.
+    
+        # It's possible to look up a_module given a_type, but it involves
+        # looking in sys.modules (again!), and seems like a waste since
+        # the caller already knows a_module.
+    
+        # - annotation is a string type annotation
+        # - cls is the class that this annotation was found in
+        # - a_module is the module we want to match
+        # - a_type is the type in that module we want to match
+        # - is_type_predicate is a function called with (obj, a_module)
+        #   that determines if obj is of the desired type.
+    
+        # Since this test does not do a local namespace lookup (and
+        # instead only a module (global) lookup), there are some things it
+        # gets wrong.
+    
+        # With string annotations, cv0 will be detected as a ClassVar:
+        #   CV = ClassVar
+        #   @dataclass
+        #   class C0:
+        #     cv0: CV
+    
+        # But in this example cv1 will not be detected as a ClassVar:
+        #   @dataclass
+        #   class C1:
+        #     CV = ClassVar
+        #     cv1: CV
+    
+        # In C1, the code in this function (_is_type) will look up "CV" in
+        # the module and not find it, so it will not consider cv1 as a
+        # ClassVar.  This is a fairly obscure corner case, and the best
+        # way to fix it would be to eval() the string "CV" with the
+        # correct global and local namespaces.  However that would involve
+        # a eval() penalty for every single field of every dataclass
+        # that's defined.  It was judged not worth it.
+    
+        match = _MODULE_IDENTIFIER_RE.match(annotation)
+        if match:
+            ns = None
+            module_name = match.group(1)
+            if not module_name:
+                # No module name, assume the class's module did
+                # "from dataclasses import InitVar".
+>               ns = sys.modules.get(cls.__module__).__dict__
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?
+
+C:\Python313\Lib\dataclasses.py:757: AttributeError
+___________________ test_collect_signatures_groups_threads ____________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_collect_signatures_groups0')
+
+    def test_collect_signatures_groups_threads(tmp_path: Path) -> None:
+>       module = _load_module()
+                 ^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_utilities\test_fault_run_analysis.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_utilities\test_fault_run_analysis.py:17: in _load_module
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:1026: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+.repo_studios\scripts\utilities\fault_run_analysis.py:34: in <module>
+    @dataclass
+     ^^^^^^^^^
+C:\Python313\Lib\dataclasses.py:1305: in dataclass
+    return wrap(cls)
+           ^^^^^^^^^
+C:\Python313\Lib\dataclasses.py:1295: in wrap
+    return _process_class(cls, init, repr, eq, order, unsafe_hash,
+C:\Python313\Lib\dataclasses.py:997: in _process_class
+    and _is_type(type, cls, dataclasses, dataclasses.KW_ONLY,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+annotation = 'str', cls = <class 'fault_run_analysis.FaultSignature'>
+a_module = <module 'dataclasses' from 'C:\\Python313\\Lib\\dataclasses.py'>
+a_type = <dataclasses._KW_ONLY_TYPE object at 0x000001F6A65C1940>
+is_type_predicate = <function _is_kw_only at 0x000001F6A66359E0>
+
+    def _is_type(annotation, cls, a_module, a_type, is_type_predicate):
+        # Given a type annotation string, does it refer to a_type in
+        # a_module?  For example, when checking that annotation denotes a
+        # ClassVar, then a_module is typing, and a_type is
+        # typing.ClassVar.
+    
+        # It's possible to look up a_module given a_type, but it involves
+        # looking in sys.modules (again!), and seems like a waste since
+        # the caller already knows a_module.
+    
+        # - annotation is a string type annotation
+        # - cls is the class that this annotation was found in
+        # - a_module is the module we want to match
+        # - a_type is the type in that module we want to match
+        # - is_type_predicate is a function called with (obj, a_module)
+        #   that determines if obj is of the desired type.
+    
+        # Since this test does not do a local namespace lookup (and
+        # instead only a module (global) lookup), there are some things it
+        # gets wrong.
+    
+        # With string annotations, cv0 will be detected as a ClassVar:
+        #   CV = ClassVar
+        #   @dataclass
+        #   class C0:
+        #     cv0: CV
+    
+        # But in this example cv1 will not be detected as a ClassVar:
+        #   @dataclass
+        #   class C1:
+        #     CV = ClassVar
+        #     cv1: CV
+    
+        # In C1, the code in this function (_is_type) will look up "CV" in
+        # the module and not find it, so it will not consider cv1 as a
+        # ClassVar.  This is a fairly obscure corner case, and the best
+        # way to fix it would be to eval() the string "CV" with the
+        # correct global and local namespaces.  However that would involve
+        # a eval() penalty for every single field of every dataclass
+        # that's defined.  It was judged not worth it.
+    
+        match = _MODULE_IDENTIFIER_RE.match(annotation)
+        if match:
+            ns = None
+            module_name = match.group(1)
+            if not module_name:
+                # No module name, assume the class's module did
+                # "from dataclasses import InitVar".
+>               ns = sys.modules.get(cls.__module__).__dict__
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?
+
+C:\Python313\Lib\dataclasses.py:757: AttributeError
+____________________ test_build_fault_report_emits_summary ____________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-685/test_build_fault_report_emits_0')
+
+    def test_build_fault_report_emits_summary(tmp_path: Path) -> None:
+>       module = _load_module()
+                 ^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_utilities\test_fault_run_analysis.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.repo_studios\tests\tests_utilities\test_fault_run_analysis.py:17: in _load_module
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:1026: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+.repo_studios\scripts\utilities\fault_run_analysis.py:34: in <module>
+    @dataclass
+     ^^^^^^^^^
+C:\Python313\Lib\dataclasses.py:1305: in dataclass
+    return wrap(cls)
+           ^^^^^^^^^
+C:\Python313\Lib\dataclasses.py:1295: in wrap
+    return _process_class(cls, init, repr, eq, order, unsafe_hash,
+C:\Python313\Lib\dataclasses.py:997: in _process_class
+    and _is_type(type, cls, dataclasses, dataclasses.KW_ONLY,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+annotation = 'str', cls = <class 'fault_run_analysis.FaultSignature'>
+a_module = <module 'dataclasses' from 'C:\\Python313\\Lib\\dataclasses.py'>
+a_type = <dataclasses._KW_ONLY_TYPE object at 0x000001F6A65C1940>
+is_type_predicate = <function _is_kw_only at 0x000001F6A66359E0>
+
+    def _is_type(annotation, cls, a_module, a_type, is_type_predicate):
+        # Given a type annotation string, does it refer to a_type in
+        # a_module?  For example, when checking that annotation denotes a
+        # ClassVar, then a_module is typing, and a_type is
+        # typing.ClassVar.
+    
+        # It's possible to look up a_module given a_type, but it involves
+        # looking in sys.modules (again!), and seems like a waste since
+        # the caller already knows a_module.
+    
+        # - annotation is a string type annotation
+        # - cls is the class that this annotation was found in
+        # - a_module is the module we want to match
+        # - a_type is the type in that module we want to match
+        # - is_type_predicate is a function called with (obj, a_module)
+        #   that determines if obj is of the desired type.
+    
+        # Since this test does not do a local namespace lookup (and
+        # instead only a module (global) lookup), there are some things it
+        # gets wrong.
+    
+        # With string annotations, cv0 will be detected as a ClassVar:
+        #   CV = ClassVar
+        #   @dataclass
+        #   class C0:
+        #     cv0: CV
+    
+        # But in this example cv1 will not be detected as a ClassVar:
+        #   @dataclass
+        #   class C1:
+        #     CV = ClassVar
+        #     cv1: CV
+    
+        # In C1, the code in this function (_is_type) will look up "CV" in
+        # the module and not find it, so it will not consider cv1 as a
+        # ClassVar.  This is a fairly obscure corner case, and the best
+        # way to fix it would be to eval() the string "CV" with the
+        # correct global and local namespaces.  However that would involve
+        # a eval() penalty for every single field of every dataclass
+        # that's defined.  It was judged not worth it.
+    
+        match = _MODULE_IDENTIFIER_RE.match(annotation)
+        if match:
+            ns = None
+            module_name = match.group(1)
+            if not module_name:
+                # No module name, assume the class's module did
+                # "from dataclasses import InitVar".
+>               ns = sys.modules.get(cls.__module__).__dict__
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?
+
+C:\Python313\Lib\dataclasses.py:757: AttributeError
+============================== warnings summary ===============================
+.repo_studios\command_center\scripts\libraries\metrics.py:18
+  C:\Users\genet\repo_studios\.repo_studios\command_center\scripts\libraries\metrics.py:18: PytestCollectionWarning: cannot collect test class 'TestRunResult' because it has a __init__ constructor (from: .repo_studios/tests/command_center/libraries/test_manifest.py)
+    @dataclass(frozen=True)
+
+.repo_studios\command_center\scripts\libraries\metrics.py:18
+  C:\Users\genet\repo_studios\.repo_studios\command_center\scripts\libraries\metrics.py:18: PytestCollectionWarning: cannot collect test class 'TestRunResult' because it has a __init__ constructor (from: .repo_studios/tests/command_center/libraries/test_metrics.py)
+    @dataclass(frozen=True)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED .repo_studios/tests/schema_validation/test_validate_inventory.py::test_validation_passes_for_valid_entry
+FAILED .repo_studios/tests/schema_validation/test_validate_inventory.py::test_validation_detects_duplicate_ids
+FAILED .repo_studios/tests/schema_validation/test_validate_inventory.py::test_json_output
+FAILED .repo_studios/tests/tests_aggregators/test_aggregate_docs_health_signals.py::test_generates_docs_health_bundle
+FAILED .repo_studios/tests/tests_aggregators/test_aggregate_docs_health_signals.py::test_skip_hygiene_omits_category
+FAILED .repo_studios/tests/tests_aggregators/test_generate_churn_complexity_heatmap.py::test_prefers_consumer_bundle
+FAILED .repo_studios/tests/tests_aggregators/test_generate_churn_complexity_heatmap.py::test_fallback_to_logs_when_summary_missing
+FAILED .repo_studios/tests/tests_aggregators/test_generate_churn_complexity_heatmap.py::test_retention_prunes_old_runs
+FAILED .repo_studios/tests/tests_aggregators/test_generate_churn_complexity_heatmap.py::test_main_returns_nonzero_when_no_python_files
+FAILED .repo_studios/tests/tests_command_center/aggregators/test_generate_automation_manifest.py::test_generate_automation_manifest_bundle
+FAILED .repo_studios/tests/tests_command_center/aggregators/test_generate_automation_manifest.py::test_manifest_files_changed_mismatch
+FAILED .repo_studios/tests/tests_command_center/aggregators/test_generate_automation_manifest.py::test_guardrail_violation
+FAILED .repo_studios/tests/tests_command_center/aggregators/test_generate_metrics_summary.py::test_metrics_summary_run
+FAILED .repo_studios/tests/tests_command_center/aggregators/test_generate_metrics_summary.py::test_invalid_tests_payload
+FAILED .repo_studios/tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py::test_run_emits_healthview_bundle
+FAILED .repo_studios/tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py::test_run_emits_manifest_and_respects_includes
+FAILED .repo_studios/tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py::test_stop_on_first_failure_blocks_remaining
+FAILED .repo_studios/tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py::test_keep_going_runs_all_topics_after_failure
+FAILED .repo_studios/tests/tests_command_center/orchestrators/test_run_inventory_update.py::test_inventory_update_validates_target
+FAILED .repo_studios/tests/tests_command_center/orchestrators/test_run_inventory_update.py::test_inventory_update_requires_existing_directory
+FAILED .repo_studios/tests/tests_library_integration/libraries/test_cli.py::test_resolve_repo_root_explicit
+FAILED .repo_studios/tests/tests_library_integration/libraries/test_cli.py::test_resolve_repo_root_fallback
+FAILED .repo_studios/tests/tests_library_integration/libraries/test_cli.py::test_build_standard_paths_wraps_builders
+FAILED .repo_studios/tests/tests_producers/test_audit_helper_adoption.py::test_generates_helper_adoption_report
+FAILED .repo_studios/tests/tests_producers/test_audit_helper_adoption.py::test_format_filter_and_custom_helpers
+FAILED .repo_studios/tests/tests_producers/test_diff_standards_index.py::test_diff_detects_changes_and_writes_artifacts
+FAILED .repo_studios/tests/tests_producers/test_function_inventory_integration.py::test_inventory_and_analysis_round_trip
+FAILED .repo_studios/tests/tests_producers/test_generate_code_doc_churn_report.py::test_churn_detects_missing_doc_updates
+FAILED .repo_studios/tests/tests_producers/test_generate_code_doc_churn_report.py::test_churn_skips_when_docs_updated
+FAILED .repo_studios/tests/tests_producers/test_generate_code_doc_churn_report.py::test_churn_honors_allowlist
+FAILED .repo_studios/tests/tests_producers/test_generate_doc_index.py::test_doc_index_retention_keeps_single_run
+FAILED .repo_studios/tests/tests_producers/test_generate_function_analysis.py::test_analysis_detects_duplicate_functions
+FAILED .repo_studios/tests/tests_producers/test_generate_function_analysis.py::test_analysis_replaces_existing_outputs
+FAILED .repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_inventory_generates_structured_output
+FAILED .repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_inventory_merges_coverage_reports
+FAILED .repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_inventory_includes_git_churn_summary
+FAILED .repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_inventory_captures_warnings_for_problem_files
+FAILED .repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_inventory_skips_hidden_and_virtualenv_dirs
+FAILED .repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_inventory_removes_preexisting_outputs
+FAILED .repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_screening_score_history_accumulates_across_runs
+FAILED .repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_call_graph_resolves_local_and_imported_calls
+FAILED .repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_inventory_records_class_bases
+FAILED .repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_cyclomatic_complexity_counts_branches
+FAILED .repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_type_hint_coverage_reports_ratio
+FAILED .repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_function_metadata_persists_effects_and_decorators
+FAILED .repo_studios/tests/tests_producers/test_generate_function_inventory.py::test_unused_imports_and_unreachable_functions_reported
+FAILED .repo_studios/tests/tests_producers/test_generate_import_graph_report.py::test_report_with_no_targets
+FAILED .repo_studios/tests/tests_producers/test_generate_lizard_report.py::test_structured_artifacts_success
+FAILED .repo_studios/tests/tests_producers/test_generate_lizard_report.py::test_rejects_newline_arguments
+FAILED .repo_studios/tests/tests_producers/test_generate_typecheck_report.py::test_typecheck_failure
+FAILED .repo_studios/tests/tests_producers/test_generate_typecheck_report.py::test_typecheck_skips_when_no_targets
+FAILED .repo_studios/tests/tests_producers/test_generate_typecheck_report.py::test_typecheck_missing_target_output_is_skipped
+FAILED .repo_studios/tests/tests_producers/test_scan_monkey_patches.py::test_structured_artifacts
+FAILED .repo_studios/tests/tests_producers/test_scan_monkey_patches.py::test_prune_history
+FAILED .repo_studios/tests/tests_producers/test_scan_monkey_patches.py::test_resolve_run_timestamp_validation
+FAILED .repo_studios/tests/tests_producers/test_scan_monkey_patches.py::test_scan_file_detects_multiple_categories_and_git_blame
+FAILED .repo_studios/tests/tests_producers/test_scan_monkey_patches.py::test_compose_manifest_telemetry_and_summary_round_trip
+FAILED .repo_studios/tests/tests_producers/test_validate_metrics_anchor_stubs.py::test_structured_artifacts_without_missing
+FAILED .repo_studios/tests/tests_producers/test_validate_metrics_anchor_stubs.py::test_detects_missing_and_honors_allowlist
+FAILED .repo_studios/tests/tests_producers/test_verify_docs_integrity.py::test_clean_run_generates_artifacts
+FAILED .repo_studios/tests/tests_producers/test_verify_docs_integrity.py::test_detects_mismatches_and_updates
+FAILED .repo_studios/tests/tests_utilities/test_fault_run_analysis.py::test_ensure_manifest_creates_file
+FAILED .repo_studios/tests/tests_utilities/test_fault_run_analysis.py::test_collect_signatures_groups_threads
+FAILED .repo_studios/tests/tests_utilities/test_fault_run_analysis.py::test_build_fault_report_emits_summary
+64 failed, 385 passed, 2 warnings in 72.73s (0:01:12)

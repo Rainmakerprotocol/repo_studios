@@ -11,6 +11,14 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Iterable
 
+try:
+    from libraries import resolve_repo_root  # type: ignore
+except ModuleNotFoundError:  # pragma: no cover - CLI fallback
+    SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
+    if str(SCRIPTS_ROOT) not in sys.path:
+        sys.path.insert(0, str(SCRIPTS_ROOT))
+    from libraries import resolve_repo_root  # type: ignore  # noqa: E402
+
 
 @dataclass(frozen=True)
 class StepResult:
@@ -46,7 +54,7 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument(
         "--repo-root",
-        help="Repository root. Defaults to this script's grandparent directory.",
+        help="Repository root. Defaults to marker-based discovery (searches ancestors for .repo_studios).",
     )
     parser.add_argument(
         "--log-level",
@@ -76,7 +84,7 @@ def _resolve_within_repo(repo_root: Path, candidate: Path) -> Path:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[4]
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__).resolve())
     raw_target = str(args.target)
     if raw_target.startswith("/."):
         target_candidate = repo_root / raw_target.lstrip("/\\")

@@ -126,11 +126,11 @@ def multi_file_duplicates(slug_map: dict[str, list[str]]) -> dict[str, list[str]
     return dupes
 
 
-def load_baseline() -> dict | None:
-    if not BASELINE_PATH.exists():
+def load_baseline(path: Path) -> dict | None:
+    if not path.exists():
         return None
     try:
-        return json.loads(BASELINE_PATH.read_text(encoding="utf-8"))
+        return json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError:  # pragma: no cover - defensive
         return None
 
@@ -169,8 +169,8 @@ def _clusters_from_inventory(inventory: dict) -> list[Cluster]:
     return clusters
 
 
-def _clusters_from_scan() -> list[Cluster]:
-    strict_map = collect_h1_h2_slugs(GENERIC_ALLOWED)
+def _clusters_from_scan(*, docs_root: Path) -> list[Cluster]:
+    strict_map = collect_h1_h2_slugs(GENERIC_ALLOWED, docs_root=docs_root)
     strict_dupes = multi_file_duplicates(strict_map)
     clusters: list[Cluster] = []
     for slug, locs in strict_dupes.items():
@@ -180,7 +180,13 @@ def _clusters_from_scan() -> list[Cluster]:
     return clusters
 
 
-def build_report(*, inventory: dict | None, inventory_path: Path | None) -> dict:
+def build_report(
+    *,
+    inventory: dict | None,
+    inventory_path: Path | None,
+    baseline_path: Path,
+    docs_root: Path,
+) -> dict:
     if inventory is not None:
         clusters = _clusters_from_inventory(inventory)
         source = "inventory"
@@ -188,12 +194,12 @@ def build_report(*, inventory: dict | None, inventory_path: Path | None) -> dict
         base_summary = inventory.get("summary", {}) if isinstance(inventory, dict) else {}
         cross_file_duplicates = base_summary.get("cross_file_duplicates")
     else:
-        clusters = _clusters_from_scan()
+        clusters = _clusters_from_scan(docs_root=docs_root)
         source = "scan"
         strict_count = len(clusters)
         cross_file_duplicates = None
 
-    baseline = load_baseline()
+    baseline = load_baseline(baseline_path)
     baseline_dupes = baseline.get("summary", {}).get("cross_file_duplicates") if baseline else None
     report = {
         "schema_version": 2,
@@ -228,6 +234,7 @@ if libraries_root_str and libraries_root_str not in sys.path:
     sys.path.insert(0, libraries_root_str)
 
 from libraries import prune_run_directories  # noqa: E402
+from libraries.cli import resolve_repo_root  # noqa: E402
 
 
 def _run_dir(ts: datetime, base: Path = OUTPUT_DIR) -> Path:
@@ -280,7 +287,7 @@ def _build_summary(report: dict[str, Any]) -> dict[str, Any]:
 
 
 def _render_summary_markdown(
-    summary: dict[str, Any], *, generated_at: datetime, bundle_dir: Path
+    summary: dict[str, Any], *, generated_at: datetime, bundle_dir: Path, baseline_path: Path
 ) -> str:
     lines: list[str] = ["# Anchor Health Summary", ""]
     lines.append(f"Generated (UTC): {generated_at.isoformat(timespec='seconds')}")
@@ -329,10 +336,9 @@ def _render_summary_markdown(
         except Exception:
             lines.append(f"- Inventory Report: `{inventory_report}`")
     try:
-        baseline_path = BASELINE_PATH.resolve()
-        lines.append(f"- Baseline File: `{baseline_path}`")
+        lines.append(f"- Baseline File: `{baseline_path.resolve()}`")
     except Exception:
-        lines.append(f"- Baseline File: `{BASELINE_PATH}`")
+        lines.append(f"- Baseline File: `{baseline_path}`")
     lines.append(f"- Consumer Bundle: `{bundle_dir.resolve()}`")
     return "\n".join(lines) + "\n"
 
@@ -352,7 +358,13 @@ def _update_latest_artifacts(base: Path, bundle_dir: Path) -> None:
             dest.write_bytes(src.read_bytes())
 
 
-def write_artifacts(report: dict, ts: datetime | None = None, *, output_dir: Path = OUTPUT_DIR) -> dict[str, Any]:
+def write_artifacts(
+    report: dict,
+    ts: datetime | None = None,
+    *,
+    output_dir: Path,
+    baseline_path: Path,
+) -> dict[str, Any]:
     ts = ts or datetime.now(UTC)
     output_dir.mkdir(parents=True, exist_ok=True)
     run_dir = _run_dir(ts, output_dir)
@@ -364,7 +376,10 @@ def write_artifacts(report: dict, ts: datetime | None = None, *, output_dir: Pat
     summary_path.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
 
     summary_md_path = run_dir / SUMMARY_MD_NAME
-    summary_md_path.write_text(_render_summary_markdown(summary, generated_at=ts, bundle_dir=run_dir), encoding="utf-8")
+    summary_md_path.write_text(
+        _render_summary_markdown(summary, generated_at=ts, bundle_dir=run_dir, baseline_path=baseline_path),
+        encoding="utf-8",
+    )
 
     bundle_summary = {
         "schema_version": 1,
@@ -438,6 +453,13 @@ def write_artifacts(report: dict, ts: datetime | None = None, *, output_dir: Pat
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate anchor health report from inventory artifacts")
     parser.add_argument(
+        "--repo-root",
+        default=None,
+        help=(
+            "Repository root override (auto-detected by scanning ancestors for a .repo_studios/ marker when omitted)"
+        ),
+    )
+    parser.add_argument(
         "--inventory-report", type=Path, default=None, help="Explicit anchor inventory report to consume"
     )
     parser.add_argument(
@@ -462,6 +484,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 def run(
     *,
+    repo_root: str | Path | None = None,
     inventory_report: Path | None = None,
     output_dir: Path | None = None,
     artifacts_to_keep: int | None = None,
@@ -471,21 +494,41 @@ def run(
         args = parse_args(argv)
     else:
         args = argparse.Namespace(
+            repo_root=repo_root,
             inventory_report=inventory_report,
             output_dir=output_dir,
             artifacts_to_keep=artifacts_to_keep if artifacts_to_keep is not None else DEFAULT_ARTIFACTS_TO_KEEP,
             log_level="INFO",
         )
 
+    resolved_repo_root = resolve_repo_root(getattr(args, "repo_root", None), origin=Path(__file__))
+    baseline_path = (resolved_repo_root / BASELINE_PATH).resolve()
+    docs_root = (resolved_repo_root / "docs").resolve()
+
     log_level = getattr(logging, str(args.log_level).upper(), logging.INFO)
     logging.basicConfig(level=log_level, format="%(levelname)s %(message)s", force=True)
 
     log = logging.getLogger("anchor_health")
 
-    inventory_payload, inventory_path = load_inventory_report(args.inventory_report)
-    report = build_report(inventory=inventory_payload, inventory_path=inventory_path)
+    inventory_report_path = args.inventory_report
+    if inventory_report_path is not None and not inventory_report_path.is_absolute():
+        inventory_report_path = (resolved_repo_root / inventory_report_path).resolve()
+
+    inventory_payload, inventory_path = load_inventory_report(inventory_report_path)
+    report = build_report(
+        inventory=inventory_payload,
+        inventory_path=inventory_path,
+        baseline_path=baseline_path,
+        docs_root=docs_root,
+    )
+
     target_output = args.output_dir if args.output_dir is not None else OUTPUT_DIR
-    artifact_info = write_artifacts(report, output_dir=target_output)
+    if not target_output.is_absolute():
+        target_output = (resolved_repo_root / target_output).resolve()
+    else:
+        target_output = target_output.resolve()
+
+    artifact_info = write_artifacts(report, output_dir=target_output, baseline_path=baseline_path)
     pruned = _prune_old_runs(
         target_output,
         keep=args.artifacts_to_keep,

@@ -40,11 +40,13 @@ LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 try:
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.cli import resolve_repo_root
 except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.cli import resolve_repo_root
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
 VIEWER_SLUG = "healthview"
@@ -293,8 +295,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Generate dependency hygiene report (offline)")
     parser.add_argument(
         "--repo-root",
-        default=".",
-        help="Repository root containing requirements files",
+        default=None,
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the '.repo_studios' marker "
+            "directory (origin: this script)."
+        ),
     )
     parser.add_argument(
         "--output-dir",
@@ -332,7 +337,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     configure_logging(args.log_level)
 
-    repo_root = Path(args.repo_root).resolve()
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
     output_dir = Path(args.output_dir)
     if not output_dir.is_absolute():
         output_dir = (repo_root / output_dir).resolve()

@@ -512,6 +512,15 @@ def _build_inputs_from_files(paths: Paths) -> SummaryInputs:
     warnings_total = log_report_payload.get("warnings_total") if isinstance(log_report_payload.get("warnings_total"), int) else None
     slow_tests = log_report_payload.get("slow_tests") if isinstance(log_report_payload.get("slow_tests"), int) else None
     collect_dir = _resolve_artifact(artifacts.get("log_report"), repo_root)
+    if collect_dir is not None:
+        manifest_path = collect_dir / "manifest.json"
+        collector_manifest = _read_json(manifest_path) if manifest_path.exists() else None
+        if not isinstance(collector_manifest, Mapping):
+            collect_dir = None
+        else:
+            collector_status = collector_manifest.get("status")
+            if isinstance(collector_status, str) and collector_status == "no_data":
+                collect_dir = None
     producer_report = collect_dir.joinpath("report.json") if collect_dir else None
     if producer_report is not None and not producer_report.exists():
         producer_report = None

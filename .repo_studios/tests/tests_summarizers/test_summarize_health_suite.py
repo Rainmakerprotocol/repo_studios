@@ -119,6 +119,20 @@ def _seed_health_artifacts(repo_root: Path) -> None:
     anchor_bundle = anchor_dir / f"anchor_health-{TIMESTAMP_SLUG}"
     _write_text(anchor_bundle / "anchor_report.md", "Anchor report placeholder")
 
+    import_graph_dir = (
+        repo_root
+        / ".repo_studios"
+        / "reports"
+        / "producer_reports"
+        / "healthview"
+        / "import_graph"
+        / TIMESTAMP_SLUG
+    )
+    import_graph_dir.mkdir(parents=True, exist_ok=True)
+    (import_graph_dir / "summary.md").write_text("# Import Graph\n\n- ok\n")
+    (import_graph_dir / "manifest.json").write_text("{}")
+    (import_graph_dir / "telemetry.json").write_text("{}")
+
 
 def test_run_emits_healthview_bundle(tmp_path: Path) -> None:
     module = _load_module()

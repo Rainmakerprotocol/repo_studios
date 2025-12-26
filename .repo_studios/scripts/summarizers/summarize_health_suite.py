@@ -15,22 +15,40 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Mapping
 
-from libraries import (
-    KeepSpec,
-    OptionsConfig,
-    PathSpec,
-    PathsConfig,
-    ReportArtifact,
-    WriteReportArtifactsResult,
-    build_standard_options,
-    build_standard_paths,
-    write_report_artifacts,
-)
+LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
+
+try:  # pragma: no cover - preferred import when executed with packaged path
+    from libraries import (
+        KeepSpec,
+        OptionsConfig,
+        PathSpec,
+        PathsConfig,
+        ReportArtifact,
+        WriteReportArtifactsResult,
+        build_standard_options,
+        build_standard_paths,
+        write_report_artifacts,
+    )
+except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries import (
+        KeepSpec,
+        OptionsConfig,
+        PathSpec,
+        PathsConfig,
+        ReportArtifact,
+        WriteReportArtifactsResult,
+        build_standard_options,
+        build_standard_paths,
+        write_report_artifacts,
+    )
 
 SUMMARY_OUTPUT_DEFAULT = Path(".repo_studios/command_center/reports")
 LEGACY_SUMMARY_DIR = Path(".repo_studios/health_suite")
@@ -79,7 +97,14 @@ OPTIONS_CONFIG = OptionsConfig(
 
 def _parse_args(argv: Iterable[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__ or "")
-    parser.add_argument("--repo-root", help="Repository root override")
+    parser.add_argument(
+        "--repo-root",
+        default=None,
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the '.repo_studios' marker "
+            "directory (origin: this script)."
+        ),
+    )
     parser.add_argument(
         "--output-dir",
         default=str(SUMMARY_OUTPUT_DEFAULT),

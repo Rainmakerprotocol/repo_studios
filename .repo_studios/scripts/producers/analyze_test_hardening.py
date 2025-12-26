@@ -127,7 +127,14 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         description=__doc__ or "",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument("--repo-root", help="Repository root directory")
+    parser.add_argument(
+        "--repo-root",
+        default=None,
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the '.repo_studios' marker "
+            "directory (origin: this script)."
+        ),
+    )
     parser.add_argument(
         "--output-dir",
         help="Directory for structured artifacts",

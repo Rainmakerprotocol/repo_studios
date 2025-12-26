@@ -13,12 +13,21 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 import jsonschema
 import yaml
+
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
+if str(LIBRARIES_ROOT) not in sys.path:
+    sys.path.insert(0, str(LIBRARIES_ROOT))
+
+from libraries.cli import resolve_repo_root  # type: ignore
 
 LOG = logging.getLogger(__name__)
 LOG.addHandler(logging.NullHandler())
@@ -44,6 +53,17 @@ def _default_schema_path() -> Path:
         / "workflows"
         / "schema"
         / "healthview_agent_execution_loop.schema.json"
+    )
+
+
+def _default_spec_path() -> Path:
+    return (
+        Path(__file__).resolve().parents[2]
+        / "docs"
+        / "pipeline"
+        / "healthview_orchestration_pipeline"
+        / "workflows"
+        / "healthview_agent_execution_loop.v1.yaml"
     )
 
 
@@ -134,11 +154,17 @@ def validate_workflow_spec(spec_path: Path, schema_path: Path | None = None) -> 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Validate the HealthView agent workflow spec")
     parser.add_argument(
+        "--repo-root",
+        default=None,
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the '.repo_studios' marker "
+            "directory (origin: this script)."
+        ),
+    )
+    parser.add_argument(
         "--spec",
         type=Path,
-        default=Path(
-            ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/workflows/healthview_agent_execution_loop.v1.yaml"
-        ),
+        default=_default_spec_path(),
         help="Path to workflow YAML spec",
     )
     parser.add_argument(
@@ -159,9 +185,17 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     _configure_logging(args.log_level)
 
-    result = validate_workflow_spec(args.spec, args.schema)
+    repo_root = resolve_repo_root(explicit=args.repo_root, origin=Path(__file__))
+    spec_path = args.spec
+    if not spec_path.is_absolute():
+        spec_path = (repo_root / spec_path).resolve()
+    schema_path = args.schema
+    if schema_path is not None and not schema_path.is_absolute():
+        schema_path = (repo_root / schema_path).resolve()
+
+    result = validate_workflow_spec(spec_path, schema_path)
     if result.ok:
-        LOG.info("OK: workflow spec valid: %s", args.spec.as_posix())
+        LOG.info("OK: workflow spec valid: %s", spec_path.as_posix())
         return 0
 
     LOG.error("Workflow spec validation failed (%d issue(s)):", len(result.errors))

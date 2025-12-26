@@ -18,6 +18,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+
+ROOT = Path(__file__).resolve().parents[4]
+LIBRARIES_ROOT = ROOT / ".repo_studios" / "command_center" / "scripts"
+if str(LIBRARIES_ROOT) not in sys.path:
+    sys.path.insert(0, str(LIBRARIES_ROOT))
+
+from libraries.cli import resolve_repo_root  # noqa: E402
+
 try:
     import yaml
 except ImportError:
@@ -378,8 +386,11 @@ def run(argv: List[str]) -> int:
     parser.add_argument(
         "--repo-root",
         type=Path,
-        default=Path("."),
-        help="Repository root directory (default: current directory)"
+        default=None,
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the '.repo_studios' marker "
+            "directory (origin: this script)."
+        ),
     )
     parser.add_argument(
         "--output",
@@ -403,7 +414,7 @@ def run(argv: List[str]) -> int:
     log = setup_logging(args.log_level)
     
     # Resolve paths
-    repo_root = args.repo_root.resolve()
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
     pipeline_dir = repo_root / ".repo_studios" / "docs" / "pipeline"
     
     if not pipeline_dir.exists():
@@ -412,7 +423,10 @@ def run(argv: List[str]) -> int:
     
     # Determine output path
     if args.output:
-        output_path = args.output.resolve()
+        output_path = args.output
+        if not output_path.is_absolute():
+            output_path = (repo_root / output_path)
+        output_path = output_path.resolve()
     else:
         output_path = pipeline_dir / "tier3_index" / "outputs" / "tier3_scripts_index.yaml"
     

@@ -213,11 +213,16 @@ studio-refresh-mypy-baselines:
 
 .PHONY: studio-collect-test-log-reports
 studio-collect-test-log-reports:
-	$(PYTHON) scripts/producers/collect_test_log_reports.py --logs-dir command_center/reports/rawview/test_execution_runs --output-dir command_center/reports --artifacts-to-keep 10 --log-level "$(LOG_LEVEL)"
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/producers/collect_test_log_reports.py" \
+		--repo-root "$(REPO_ROOT)" \
+		--output-dir ".repo_studios/reports/healthview" \
+		--artifacts-to-keep 10 \
+		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-test-log-health-report
 studio-generate-test-log-health-report:
-	$(PYTHON) .repo_studios/scripts/consumers/generate_test_log_health_report.py --logs-dir .repo_studios/command_center/reports/rawview/test_execution_runs --output-base .repo_studios/reports/consumer_reports/test_log_health_reports --producer-reports-root .repo_studios/command_center/reports/rawview/test_log_reports --artifacts-to-keep 5 --log-level INFO
+	$(PYTHON) .repo_studios/scripts/consumers/generate_test_log_health_report.py --logs-dir .repo_studios/command_center/reports/rawview/test_execution_runs --output-base .repo_studios/reports/consumer_reports/test_log_health_reports --producer-reports-root .repo_studios/reports/healthview/rawview/test_log_reports --artifacts-to-keep 5 --log-level INFO
 
 .PHONY: studio-diff-standards-index
 studio-diff-standards-index:

@@ -547,7 +547,11 @@ def build_parser() -> argparse.ArgumentParser:
         description="Validate Repo Studios inventory YAML and emit structured artifacts",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument("--repo-root", default=str(DEFAULT_REPO_ROOT), help="Repository root used to resolve paths")
+    parser.add_argument(
+        "--repo-root",
+        default=None,
+        help="Repository root (auto-discovered via .repo_studios marker when omitted)",
+    )
     parser.add_argument("--schema-root", default=str(DEFAULT_SCHEMA_ROOT), help="Path to inventory schema directory")
     parser.add_argument("--enums-path", default=str(DEFAULT_ENUMS_PATH), help="Path to enums YAML file")
     parser.add_argument(

@@ -56,6 +56,7 @@ from utilities.monkey_patch_risk import (  # noqa: E402
     classify_monkey_patch as classify_monkey_patch_from_signals,
 )
 from libraries import prune_run_directories  # noqa: E402
+from libraries.cli import resolve_repo_root  # noqa: E402
 
 DEFAULT_STRUCTURED_ROOT = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
 LEGACY_ROOT = Path(".repo_studios/monkey_patch")
@@ -341,6 +342,13 @@ def _prune_history(base: Path, *, keep: int | None, current: Path, logger: loggi
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Classify monkey patch risk levels.")
     parser.add_argument(
+        "--repo-root",
+        default=None,
+        help=(
+            "Repository root override (auto-detected by scanning ancestors for a .repo_studios/ marker when omitted)"
+        ),
+    )
+    parser.add_argument(
         "--scan-dir",
         type=Path,
         help="Explicit scan directory containing matches/report artifacts",
@@ -381,10 +389,27 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     logging.basicConfig(level=log_level, format="[%(levelname)s] %(message)s", force=True)
     logger = logging.getLogger("classify_monkey_patches")
 
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
+
+    scan_dir = args.scan_dir
+    if scan_dir is not None:
+        scan_dir = scan_dir.expanduser()
+        scan_dir = scan_dir.resolve() if scan_dir.is_absolute() else (repo_root / scan_dir).resolve()
+
+    base_dir = args.base_dir
+    if base_dir is not None:
+        base_dir = base_dir.expanduser()
+        base_dir = base_dir.resolve() if base_dir.is_absolute() else (repo_root / base_dir).resolve()
+
+    default_roots: list[Path] = []
+    for root in (DEFAULT_STRUCTURED_ROOT, LEGACY_ROOT):
+        root = root.expanduser()
+        default_roots.append(root.resolve() if root.is_absolute() else (repo_root / root).resolve())
+
     scan_dir = _resolve_latest_scan(
-        explicit_scan=args.scan_dir,
-        base_dir=args.base_dir,
-        default_roots=[DEFAULT_STRUCTURED_ROOT, LEGACY_ROOT],
+        explicit_scan=scan_dir,
+        base_dir=base_dir,
+        default_roots=default_roots,
     )
 
     findings, metadata = _load_structured_findings(scan_dir)
@@ -403,7 +428,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
     output_base = args.output_base or DEFAULT_OUTPUT_BASE
     if not output_base.is_absolute():
-        output_base = Path.cwd() / output_base
+        output_base = repo_root / output_base
     producer_report_path = scan_dir / LEGACY_REPORT_NAME
     if not producer_report_path.exists():
         producer_report_path = None

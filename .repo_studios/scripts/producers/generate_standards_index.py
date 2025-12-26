@@ -57,6 +57,8 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
 
+from libraries.cli import resolve_path, resolve_repo_root
+
 
 @dataclass
 class Category:
@@ -639,7 +641,11 @@ def build_parser() -> argparse.ArgumentParser:
         description="Build repo_standards_index.yaml and emit structured artifacts",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument("--repo-root", default=str(DEFAULT_REPO_ROOT), help="Repository root")
+    parser.add_argument(
+        "--repo-root",
+        default=None,
+        help="Repository root (auto-discovered via .repo_studios marker when omitted)",
+    )
     parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR), help="Directory for run artifacts")
     parser.add_argument(
         "--categories-path", default=str(DEFAULT_RELATIVE_CATEGORIES), help="Path to standards_categories.yaml"
@@ -663,16 +669,24 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def _paths_from_args(args: argparse.Namespace) -> Paths:
-    repo_root = Path(args.repo_root).resolve()
-    output_dir = _resolve_path(repo_root, args.output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
+    output_dir = resolve_path(
+        args.output_dir,
+        repo_root=repo_root,
+        default=DEFAULT_OUTPUT_DIR,
+        ensure_dir=True,
+    )
     return Paths(
         repo_root=repo_root,
-        categories_file=_resolve_path(repo_root, args.categories_path),
-        seed_file=_resolve_path(repo_root, args.seed_path),
-        extraction_module=_resolve_path(repo_root, args.extraction_module),
-        output_index=_resolve_path(repo_root, args.index_path),
-        pending_file=_resolve_path(repo_root, args.pending_path),
+        categories_file=resolve_path(args.categories_path, repo_root=repo_root, default=DEFAULT_RELATIVE_CATEGORIES),
+        seed_file=resolve_path(args.seed_path, repo_root=repo_root, default=DEFAULT_RELATIVE_SEED),
+        extraction_module=resolve_path(
+            args.extraction_module,
+            repo_root=repo_root,
+            default=DEFAULT_RELATIVE_EXTRACTION,
+        ),
+        output_index=resolve_path(args.index_path, repo_root=repo_root, default=DEFAULT_RELATIVE_INDEX),
+        pending_file=resolve_path(args.pending_path, repo_root=repo_root, default=DEFAULT_RELATIVE_PENDING),
         output_dir=output_dir,
     )
 

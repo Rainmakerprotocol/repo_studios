@@ -47,11 +47,13 @@ LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 try:
     from libraries import prune_run_directories
+    from libraries.cli import resolve_repo_root
     from libraries.database_integration import create_storage
 except ModuleNotFoundError:  # pragma: no cover - fallback when run as script
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
     from libraries import prune_run_directories
+    from libraries.cli import resolve_repo_root
     from libraries.database_integration import create_storage
 
 
@@ -218,8 +220,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("new", help="New index YAML")
     parser.add_argument(
         "--repo-root",
-        default=".",
-        help="Repository root used to resolve relative paths",
+        default=None,
+        help=(
+            "Repository root. If omitted, auto-discovers by scanning parents for the '.repo_studios' marker "
+            "directory (origin: this script)."
+        ),
     )
     parser.add_argument(
         "--output-dir",
@@ -473,7 +478,7 @@ def main(argv: list[str] | None = None) -> int:
     configure_logging(args.log_level)
     log = logging.getLogger("standards_index_diff")
 
-    repo_root = Path(args.repo_root).resolve()
+    repo_root = resolve_repo_root(args.repo_root, origin=Path(__file__))
     output_dir = _resolve_output_dir(args.output_dir, repo_root)
     _ensure_directory(output_dir)
     timestamp_slug = _resolve_timestamp_slug(args.run_timestamp)

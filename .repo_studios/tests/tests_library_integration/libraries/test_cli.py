@@ -36,6 +36,7 @@ build_standard_options = libraries.build_standard_options
 def test_resolve_repo_root_explicit(tmp_path: Path) -> None:
     explicit_root = tmp_path / "explicit"
     explicit_root.mkdir()
+    (explicit_root / ".repo_studios").mkdir()
     result = resolve_repo_root(str(explicit_root))
     assert result == explicit_root.resolve()
 
