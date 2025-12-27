@@ -75,19 +75,24 @@ def test_run_emits_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyP
         if module_name == hygiene_module.IMPORT_GRAPH_MODULE:
             def _fake_import_main(argv: list[str]) -> int:
                 report_ts = argv[argv.index("--timestamp") + 1]
-                slug = datetime.fromisoformat(report_ts).strftime("%Y%m%d_%H%M%S")
-                run_dir = import_dir / f"{hygiene_module.IMPORT_GRAPH_RUN_PREFIX}-{slug}"
+                # Match format used by orchestrator: %Y%m%d-%H%M (no seconds)
+                ts_slug = datetime.fromisoformat(report_ts).strftime("%Y%m%d-%H%M")
+                # Match expected path structure: healthview/import_graph/timestamp
+                run_dir = import_dir / "healthview" / "import_graph" / ts_slug
                 run_dir.mkdir(parents=True, exist_ok=True)
-                payload = {
+                # telemetry.json must have payload.summary.status for status extraction
+                # and payload.graph for graph_path detection
+                telemetry = {
                     "generated_utc": report_ts,
-                    "summary": {
-                        "status": "ok",
-                        "module_count": 10,
+                    "payload": {
+                        "summary": {
+                            "status": "ok",
+                            "module_count": 10,
+                        },
+                        "graph": {"a": ["b"]},
                     },
                 }
-                (import_dir / "latest_report.json").write_text(json.dumps(payload), encoding="utf-8")
-                (run_dir / "report.json").write_text(json.dumps(payload), encoding="utf-8")
-                (run_dir / "graph.json").write_text(json.dumps({"a": ["b"]}), encoding="utf-8")
+                (run_dir / "telemetry.json").write_text(json.dumps(telemetry), encoding="utf-8")
                 (run_dir / "log.txt").write_text("status=ok\n", encoding="utf-8")
                 return 0
 
@@ -303,6 +308,7 @@ def test_run_respects_skip_flags(tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 def test_batch_cleanup_plan_writes_bundle(tmp_path: Path, hygiene_module) -> None:
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir()
     tree_doc = repo_root / ".repo_studios" / "docs"
     tree_doc.mkdir(parents=True, exist_ok=True)
     (tree_doc / "project_tree_overview.md").write_text("", encoding="utf-8")

@@ -49,6 +49,7 @@ def test_generate_commandview_inventory_emits_extended_metrics(tmp_path: Path) -
     module = _load_module()
 
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir()
     _git(["init"], repo_root)
     _git(["config", "user.email", "ci@example.com"], repo_root)
     _git(["config", "user.name", "CI"], repo_root)
@@ -130,6 +131,7 @@ def test_commandview_inventory_keeps_static_and_dynamic_outputs_in_lockstep(tmp_
     module = _load_module()
 
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir()
     target = repo_root / "pkg"
     _write(target / "__init__.py", "")
     _write(

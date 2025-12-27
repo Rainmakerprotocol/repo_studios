@@ -94,6 +94,7 @@ def test_prefers_consumer_bundle(tmp_path):
 
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir()
     (repo_root / "pkg").mkdir()
     (repo_root / "pkg" / "foo.py").write_text("print('foo')\n", encoding="utf-8")
     (repo_root / "pkg" / "bar.py").write_text("print('bar')\n", encoding="utf-8")
@@ -111,7 +112,7 @@ def test_prefers_consumer_bundle(tmp_path):
     )
 
     metrics_path = _write_metrics(repo_root / "metrics.json")
-    output_base = tmp_path / "aggregator_output"
+    output_base = repo_root / "aggregator_output"
 
     result = aggregator.run(
         [
@@ -144,6 +145,7 @@ def test_fallback_to_logs_when_summary_missing(tmp_path):
 
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir()
     (repo_root / "pkg").mkdir()
     (repo_root / "pkg" / "foo.py").write_text("print('foo')\n", encoding="utf-8")
 
@@ -152,7 +154,7 @@ def test_fallback_to_logs_when_summary_missing(tmp_path):
     _write_junit(logs_dir / "junit_fallback.xml", {"pkg/foo.py": 1})
 
     metrics_path = _write_metrics(repo_root / "metrics.json")
-    output_base = tmp_path / "aggregator_output"
+    output_base = repo_root / "aggregator_output"
 
     result = aggregator.run(
         [
@@ -181,6 +183,7 @@ def test_retention_prunes_old_runs(tmp_path):
 
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir()
     (repo_root / "pkg").mkdir()
     (repo_root / "pkg" / "foo.py").write_text("print('foo')\n", encoding="utf-8")
 
@@ -189,7 +192,7 @@ def test_retention_prunes_old_runs(tmp_path):
     _write_junit(logs_dir / "junit.xml", {"pkg/foo.py": 1})
     metrics_path = _write_metrics(repo_root / "metrics.json")
 
-    output_base = tmp_path / "aggregator_output"
+    output_base = repo_root / "aggregator_output"
     output_base.mkdir()
     (output_base / "churn_complexity_heatmap-2025-11-20_000000").mkdir()
     (output_base / "churn_complexity_heatmap-2025-11-21_000000").mkdir()
@@ -220,6 +223,7 @@ def test_main_returns_nonzero_when_no_python_files(tmp_path):
 
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir()
     (repo_root / "logs").mkdir()
 
     exit_code = aggregator.main(
@@ -227,7 +231,7 @@ def test_main_returns_nonzero_when_no_python_files(tmp_path):
             "--repo-root",
             str(repo_root),
             "--output-base",
-            str(tmp_path / "out"),
+            str(repo_root / "out"),
             "--logs-dir",
             str(repo_root / "logs"),
             "--test-log-summary",

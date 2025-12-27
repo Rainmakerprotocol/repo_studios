@@ -63,6 +63,7 @@ def _screening_files(directory: Path, slug: str) -> list[Path]:
 
 def test_inventory_generates_structured_output(tmp_path: Path) -> None:
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir()
     target = repo_root / "sample_pkg"
     _write(target / "__init__.py", '"""Utility package."""\n')
     _write(
@@ -170,6 +171,7 @@ def helper(value):
 
 def test_inventory_merges_coverage_reports(tmp_path: Path) -> None:
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir()
     target = repo_root / "pkg"
     _write(target / "__init__.py", "")
     _write(
@@ -233,6 +235,7 @@ def test_inventory_merges_coverage_reports(tmp_path: Path) -> None:
 
 def test_inventory_includes_git_churn_summary(tmp_path: Path) -> None:
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir()
     _git(["init"], repo_root)
     _git(["config", "user.email", "ci@example.com"], repo_root)
     _git(["config", "user.name", "CI"], repo_root)
@@ -276,6 +279,7 @@ def test_inventory_includes_git_churn_summary(tmp_path: Path) -> None:
 
 def test_inventory_captures_warnings_for_problem_files(tmp_path: Path) -> None:
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir()
     target = repo_root / "pkg"
     _write(target / "good.py", "def ok():\n    return 1\n")
     _write(target / "bad.py", "def broken(:\n    pass\n")
@@ -294,6 +298,7 @@ def test_inventory_captures_warnings_for_problem_files(tmp_path: Path) -> None:
 
 def test_inventory_skips_hidden_and_virtualenv_dirs(tmp_path: Path) -> None:
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir()
     target = repo_root / "workspace"
     _write(target / "visible.py", "def run():\n    return True\n")
     hidden_dir = target / ".hidden"
@@ -363,6 +368,7 @@ def test_inventory_removes_preexisting_outputs(tmp_path: Path) -> None:
 
 def test_screening_score_history_accumulates_across_runs(tmp_path: Path) -> None:
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir()
     target = repo_root / "pkg"
     _write(target / "__init__.py", "")
     _write(
@@ -409,6 +415,7 @@ def test_screening_score_history_accumulates_across_runs(tmp_path: Path) -> None
 
 def test_call_graph_resolves_local_and_imported_calls(tmp_path: Path) -> None:
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir()
     target = repo_root / "sample"
     _write(target / "__init__.py", "")
     _write(
@@ -500,6 +507,7 @@ def test_call_graph_resolves_local_and_imported_calls(tmp_path: Path) -> None:
 
 def test_inventory_records_class_bases(tmp_path: Path) -> None:
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir()
     target = repo_root / "pkg"
     _write(target / "__init__.py", "")
     _write(
@@ -531,6 +539,7 @@ def test_inventory_records_class_bases(tmp_path: Path) -> None:
 
 def test_cyclomatic_complexity_counts_branches(tmp_path: Path) -> None:
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir()
     target = repo_root / "work"
     _write(target / "__init__.py", "")
     _write(
@@ -566,6 +575,7 @@ def test_cyclomatic_complexity_counts_branches(tmp_path: Path) -> None:
 
 def test_type_hint_coverage_reports_ratio(tmp_path: Path) -> None:
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir()
     target = repo_root / "annot"
     _write(target / "__init__.py", "")
     _write(
@@ -593,6 +603,7 @@ def test_type_hint_coverage_reports_ratio(tmp_path: Path) -> None:
 
 def test_function_metadata_persists_effects_and_decorators(tmp_path: Path) -> None:
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir()
     target = repo_root / "effects"
     _write(target / "__init__.py", "")
     _write(
@@ -659,6 +670,7 @@ def test_function_metadata_persists_effects_and_decorators(tmp_path: Path) -> No
 
 def test_unused_imports_and_unreachable_functions_reported(tmp_path: Path) -> None:
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir()
     target = repo_root / "deadcode"
     _write(target / "__init__.py", "")
     _write(
@@ -712,6 +724,7 @@ def test_inventory_errors_when_no_python_files(tmp_path: Path) -> None:
 
 def test_reports_root_outside_static_scope_rejected(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     repo_root = tmp_path
+    (repo_root / ".repo_studios").mkdir()
     target = repo_root / "pkg"
     _write(target / "__init__.py", "")
 

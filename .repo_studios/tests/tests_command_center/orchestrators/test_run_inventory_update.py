@@ -40,6 +40,7 @@ def test_inventory_update_invokes_producer(tmp_path: Path, monkeypatch: pytest.M
 
 def test_inventory_update_validates_target(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     repo_root = tmp_path / "repo"
+    (repo_root / ".repo_studios").mkdir(parents=True)
     disallowed = repo_root / "external"
     disallowed.mkdir(parents=True, exist_ok=True)
 
@@ -57,6 +58,7 @@ def test_inventory_update_validates_target(tmp_path: Path, monkeypatch: pytest.M
 
 def test_inventory_update_requires_existing_directory(tmp_path: Path) -> None:
     repo_root = tmp_path / "repo"
+    (repo_root / ".repo_studios").mkdir(parents=True)
     missing = repo_root / ".repo_studios" / "command_center" / "missing"
 
     with pytest.raises(SystemExit):

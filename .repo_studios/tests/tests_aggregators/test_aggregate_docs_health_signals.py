@@ -156,6 +156,7 @@ def test_generates_docs_health_bundle(tmp_path):
 
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir()
 
     inputs = _build_inputs(repo_root)
     output_dir = repo_root / "aggregator_output"
@@ -211,6 +212,7 @@ def test_skip_hygiene_omits_category(tmp_path):
 
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir()
 
     inputs = _build_inputs(repo_root)
     output_dir = repo_root / "aggregator_output"

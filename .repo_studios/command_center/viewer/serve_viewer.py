@@ -7,6 +7,7 @@ import json
 import http.server
 import socketserver
 from http import HTTPStatus
+from functools import partial
 from pathlib import Path
 import sys
 
@@ -19,14 +20,14 @@ from command_center.viewer.update_service import (
 
 
 _SCRIPT_PATH = Path(__file__).resolve()
-REPO_ROOT = _SCRIPT_PATH.parent.parent.parent.parent
-
 # Import the shared repo-root convention from the command_center scripts library.
 LIBRARIES_ROOT = _SCRIPT_PATH.parent.parent / "scripts"
 if str(LIBRARIES_ROOT) not in sys.path:
     sys.path.insert(0, str(LIBRARIES_ROOT))
 
 from libraries.cli import resolve_repo_root  # noqa: E402
+
+REPO_ROOT = resolve_repo_root(None, origin=_SCRIPT_PATH)
 UPDATE_ENDPOINTS = {
     "/.repo_studios/command_center/viewer/update",
     "/command-center/viewer/update",
@@ -170,11 +171,8 @@ def serve_viewer(port: int = 8000, directory: str | None = None, serve_from_repo
     print(f"Serving from: {directory}")
     print("Press Ctrl+C to stop the server")
 
-    import os
-
-    os.chdir(directory)
-
-    with ViewerHTTPServer(("", port), ViewerHTTPRequestHandler) as httpd:
+    handler_factory = partial(ViewerHTTPRequestHandler, directory=directory)
+    with ViewerHTTPServer(("", port), handler_factory) as httpd:
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:

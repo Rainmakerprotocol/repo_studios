@@ -44,6 +44,7 @@ def _make_stub(
 
 def test_run_emits_manifest_and_respects_includes(tmp_path):
     module = _reload_module()
+    (tmp_path / ".repo_studios").mkdir()
     original_definitions = module.TOPIC_DEFINITIONS
     try:
         executions: list[str] = []
@@ -101,6 +102,7 @@ def test_run_emits_manifest_and_respects_includes(tmp_path):
 
 def test_stop_on_first_failure_blocks_remaining(tmp_path):
     module = _reload_module()
+    (tmp_path / ".repo_studios").mkdir()
     original_definitions = module.TOPIC_DEFINITIONS
     try:
         failing_stub, failing_name = _make_stub(name="fail", slug="topic-a", exit_code=1)
@@ -139,6 +141,7 @@ def test_stop_on_first_failure_blocks_remaining(tmp_path):
 
 def test_keep_going_runs_all_topics_after_failure(tmp_path):
     module = _reload_module()
+    (tmp_path / ".repo_studios").mkdir()
     original_definitions = module.TOPIC_DEFINITIONS
     try:
         first_stub, first_name = _make_stub(name="first", slug="topic-a", exit_code=1)

@@ -20,16 +20,21 @@ from __future__ import annotations
 import argparse
 import ast
 import logging
+import os
+import subprocess
 import sys
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from tempfile import NamedTemporaryFile
+from tempfile import TemporaryDirectory
+from typing import Any, cast
 from typing import Iterable, Sequence
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
+REPO_STUDIOS_ROOT = REPO_ROOT / ".repo_studios"
 
 try:  # pragma: no cover - import is validated in tests via module load
     from libraries import (
@@ -45,6 +50,8 @@ try:  # pragma: no cover - import is validated in tests via module load
 except ModuleNotFoundError:  # pragma: no cover - fallback when executed directly
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
+    if str(REPO_STUDIOS_ROOT) not in sys.path:
+        sys.path.insert(0, str(REPO_STUDIOS_ROOT))
     from libraries import (
         KeepSpec,
         OptionsConfig,
@@ -74,6 +81,12 @@ class Paths:
 @dataclass(frozen=True)
 class Options:
     artifacts_to_keep: int
+
+
+@dataclass(frozen=True)
+class RefreshResult:
+    exit_code: int
+    suite_results: list[dict[str, Any]]
 
 
 PATHS_CONFIG = PathsConfig(
@@ -141,6 +154,48 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         default=str(DEFAULT_COVERAGE_XML),
     )
     parser.add_argument(
+        "--refresh-coverage-xml",
+        action="store_true",
+        help=(
+            "Regenerate the coverage XML by running pytest with coverage before building the inventory report. "
+            "This is intended for agent-friendly one-shot execution; it requires pytest-cov to be installed."
+        ),
+    )
+    parser.add_argument(
+        "--refresh-tests",
+        nargs="*",
+        default=[".repo_studios/tests"],
+        help=(
+            "Test paths passed to pytest when --refresh-coverage-xml is enabled. "
+            "Defaults to .repo_studios/tests."
+        ),
+    )
+    parser.add_argument(
+        "--refresh-continue-on-error",
+        action="store_true",
+        help=(
+            "When --refresh-coverage-xml is enabled, continue generating coverage even if pytest exits non-zero. "
+            "This is useful when some suites are known to fail but we still want a repo-health coverage snapshot."
+        ),
+    )
+    parser.add_argument(
+        "--refresh-omit-tests",
+        action="store_true",
+        help=(
+            "When --refresh-coverage-xml is enabled, omit */tests/* paths from coverage measurement. "
+            "This does not change which tests are executed; it only changes what is counted in coverage."
+        ),
+    )
+    parser.add_argument(
+        "--refresh-cov-target",
+        action="append",
+        default=[],
+        help=(
+            "Coverage targets passed to pytest-cov via --cov=<target> when --refresh-coverage-xml is enabled. "
+            "Repeat to specify multiple targets. Defaults to .repo_studios when omitted."
+        ),
+    )
+    parser.add_argument(
         "--output-dir",
         help="Reports root for positional bundle outputs",
         default=str(DEFAULT_OUTPUT_DIR),
@@ -170,7 +225,100 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Include files with zero functions in the final report",
     )
+    parser.add_argument(
+        "--refresh-pytest-args",
+        nargs=argparse.REMAINDER,
+        help=(
+            "Additional args passed to pytest when --refresh-coverage-xml is enabled. "
+            "This option must appear last on the command line."
+        ),
+    )
     return parser.parse_args(argv)
+
+
+def _refresh_coverage_xml(
+    *,
+    repo_root: Path,
+    coverage_xml: Path,
+    tests: Sequence[str],
+    cov_targets: Sequence[str],
+    extra_pytest_args: Sequence[str] | None,
+    omit_tests: bool,
+) -> RefreshResult:
+    coverage_xml.parent.mkdir(parents=True, exist_ok=True)
+
+    resolved_cov_targets = list(cov_targets) if cov_targets else [".repo_studios"]
+
+    cov_config_path: str | None = None
+    if omit_tests:
+        with NamedTemporaryFile("w", delete=False, encoding="utf-8", suffix=".ini") as cov_config_file:
+            cov_config_path = cov_config_file.name
+            cov_config_file.write("[run]\n")
+            cov_config_file.write("omit =\n")
+            cov_config_file.write("    */tests/*\n")
+            cov_config_file.flush()
+
+    suite_results: list[dict[str, Any]] = []
+
+    def _run_pytest_suite(*, suite: str, append: bool, coverage_file: Path) -> int:
+        command = [sys.executable, "-m", "pytest", "-q", suite]
+        command.extend([f"--cov={target}" for target in resolved_cov_targets])
+        if cov_config_path:
+            command.append(f"--cov-config={cov_config_path}")
+        if append:
+            command.append("--cov-append")
+        # Disable pytest-cov report generation; we will render XML once at the end.
+        command.append("--cov-report=")
+        if extra_pytest_args:
+            command.extend(list(extra_pytest_args))
+
+        env = dict(os.environ)
+        env["COVERAGE_FILE"] = str(coverage_file)
+
+        logging.debug("coverage refresh suite=%s append=%s", suite, append)
+        logging.debug("coverage refresh command=%s", " ".join(command))
+        result = subprocess.run(command, cwd=str(repo_root), check=False, env=env)
+        return int(result.returncode)
+
+    def _render_final_xml(*, coverage_file: Path) -> None:
+        try:
+            from coverage import Coverage
+            from coverage.exceptions import NoDataError
+        except ModuleNotFoundError as exc:
+            raise RuntimeError("coverage package is required to render combined coverage XML") from exc
+
+        cov = Coverage(config_file=cov_config_path or False, data_file=str(coverage_file))
+        cov.load()
+        try:
+            cov.xml_report(outfile=str(coverage_xml))
+        except NoDataError:
+            raise RuntimeError("No coverage data collected; cannot render coverage XML")
+
+    overall_exit = 0
+    try:
+        logging.info("Refreshing coverage data via pytest-cov")
+        logging.debug("coverage refresh cwd=%s", repo_root)
+
+        # Run each supplied test entry as its own invocation so callers can pass a
+        # mixture of directories and individual test modules.
+        with TemporaryDirectory(prefix="repo_studios_cov_") as tmpdir:
+            coverage_file = Path(tmpdir) / ".coverage"
+            for index, suite in enumerate(tests):
+                exit_code = _run_pytest_suite(suite=str(suite), append=index > 0, coverage_file=coverage_file)
+                suite_results.append({"suite": str(suite), "exit_code": exit_code})
+                if exit_code != 0:
+                    overall_exit = exit_code
+
+            # Always attempt to render a final XML from whatever coverage data was collected.
+            _render_final_xml(coverage_file=coverage_file)
+
+        return RefreshResult(exit_code=overall_exit, suite_results=suite_results)
+    finally:
+        if cov_config_path:
+            try:
+                Path(cov_config_path).unlink(missing_ok=True)
+            except OSError:
+                pass
 
 
 def _within_repo(path: Path, repo_root: Path) -> bool:
@@ -439,6 +587,32 @@ def run(argv: Sequence[str] | None = None) -> int:
         logging.error("--min-coverage must be between 0 and 100")
         return 2
 
+    refresh_exit_code: int | None = None
+    refresh_suite_results: list[dict[str, Any]] | None = None
+    if args.refresh_coverage_xml:
+        fixtures_root = paths.repo_root / ".repo_studios" / "tests" / "fixtures"
+        if _within_repo(paths.coverage_xml, paths.repo_root) and fixtures_root in paths.coverage_xml.parents:
+            logging.warning(
+                "Refreshing coverage XML will overwrite fixture data: %s",
+                _relative_path(paths.coverage_xml, paths.repo_root),
+            )
+        refresh_result = _refresh_coverage_xml(
+            repo_root=paths.repo_root,
+            coverage_xml=paths.coverage_xml,
+            tests=cast(list[str], args.refresh_tests),
+            cov_targets=cast(list[str], args.refresh_cov_target),
+            extra_pytest_args=cast(list[str] | None, args.refresh_pytest_args),
+            omit_tests=bool(args.refresh_omit_tests),
+        )
+        refresh_exit_code = refresh_result.exit_code
+        refresh_suite_results = refresh_result.suite_results
+        if refresh_exit_code != 0:
+            if bool(getattr(args, "refresh_continue_on_error", False)):
+                logging.warning("Coverage refresh had failures (exit=%s); continuing", refresh_exit_code)
+            else:
+                logging.error("Coverage refresh failed (exit=%s)", refresh_exit_code)
+                return refresh_exit_code
+
     if not paths.coverage_xml.exists():
         logging.error("Coverage XML not found: %s", paths.coverage_xml)
         return 1
@@ -522,6 +696,14 @@ def run(argv: Sequence[str] | None = None) -> int:
             "include_empty": bool(summary.get("include_empty", False)),
             "artifacts_to_keep": max(1, options.artifacts_to_keep),
             "timestamp": generated_at.isoformat(),
+            "refresh_coverage_xml": bool(args.refresh_coverage_xml),
+            "refresh_tests": cast(list[str], args.refresh_tests),
+            "refresh_continue_on_error": bool(getattr(args, "refresh_continue_on_error", False)),
+            "refresh_omit_tests": bool(getattr(args, "refresh_omit_tests", False)),
+            "refresh_cov_target": cast(list[str], args.refresh_cov_target),
+            "refresh_pytest_args": cast(list[str] | None, args.refresh_pytest_args),
+            "refresh_exit_code": refresh_exit_code,
+            "refresh_suite_results": refresh_suite_results,
         },
         "catalog": [
             {"artifact": "manifest.json", "path": _relative_path(manifest_path, paths.repo_root)},

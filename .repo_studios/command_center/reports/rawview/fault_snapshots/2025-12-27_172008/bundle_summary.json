@@ -1,0 +1,11 @@
+{
+  "status": "warning",
+  "snapshot_file": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_snapshots\\2025-12-27_172008\\snapshot.txt",
+  "errors": [
+    "import_failed:boom"
+  ],
+  "retention": {
+    "keep": 10,
+    "pruned": 0
+  }
+}

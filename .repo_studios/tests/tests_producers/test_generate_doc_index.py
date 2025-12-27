@@ -20,6 +20,7 @@ def _load_module():
 def test_doc_index_produces_artifacts_and_placeholder(tmp_path):
     mod = _load_module()
     repo_root = tmp_path / "repo"
+    (repo_root / ".repo_studios").mkdir(parents=True)
     docs_dir = repo_root / "docs"
     docs_dir.mkdir(parents=True)
     internal_dir = repo_root / ".repo_studios" / "docs"
@@ -171,6 +172,7 @@ Refer to [Guide](../../docs/guide.md).
 def test_doc_index_retention_keeps_single_run(tmp_path):
     mod = _load_module()
     repo_root = tmp_path / "workspace"
+    (repo_root / ".repo_studios").mkdir(parents=True)
     docs_dir = repo_root / "docs"
     docs_dir.mkdir(parents=True)
     (docs_dir / "one.md").write_text("# Title\n", encoding="utf-8")
@@ -216,6 +218,7 @@ def test_doc_index_retention_keeps_single_run(tmp_path):
 def test_doc_index_refreshes_checkbox_report_and_tier3_index(tmp_path):
     mod = _load_module()
     repo_root = tmp_path / "workspace"
+    (repo_root / ".repo_studios").mkdir(parents=True)
     docs_dir = repo_root / "docs"
     docs_dir.mkdir(parents=True)
     (docs_dir / "one.md").write_text("# Title\n\nA paragraph.\n", encoding="utf-8")

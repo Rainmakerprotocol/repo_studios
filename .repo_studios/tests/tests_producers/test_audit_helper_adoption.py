@@ -27,6 +27,7 @@ def _write(path: Path, content: str) -> None:
 def test_generates_helper_adoption_report(tmp_path):
     mod = _load_module()
     repo_root = tmp_path / "repo"
+    (repo_root / ".repo_studios").mkdir(parents=True)
     scope_dir = repo_root / "sources"
     scope_dir.mkdir(parents=True)
     allowed_targets = repo_root / ".repo_studios" / "command_center" / "docs" / "guardrails" / "allowed_targets.yaml"
@@ -64,7 +65,8 @@ def _slugify_relative(value):
     )
 
     assert exit_code == 0
-    run_dir = output_dir / f"{mod.RUN_STEM}-20251103_170000"
+    # write_report_artifacts now writes to output_dir/viewer/topic/timestamp
+    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20251103-1700"
     assert run_dir.is_dir()
 
     report = json.loads((run_dir / mod.JSON_FILENAME).read_text(encoding="utf-8"))
@@ -87,13 +89,14 @@ def _slugify_relative(value):
     markdown = (run_dir / mod.MARKDOWN_FILENAME).read_text(encoding="utf-8")
     assert "| `slugify_relative` | sample | 1 | 1 | 1 |" in markdown
 
-    assert (output_dir / mod.JSON_POINTER).is_file()
-    assert (output_dir / mod.MARKDOWN_POINTER).is_file()
+    # Artifacts are now organized under viewer/topic hierarchy
+    assert run_dir.is_dir()
 
 
 def test_format_filter_and_custom_helpers(tmp_path):
     mod = _load_module()
     repo_root = tmp_path / "workspace"
+    (repo_root / ".repo_studios").mkdir(parents=True)
     scope_dir = repo_root / "targets"
     scope_dir.mkdir(parents=True)
     allowed_targets = repo_root / ".repo_studios" / "command_center" / "docs" / "guardrails" / "allowed_targets.yaml"
@@ -128,10 +131,10 @@ def test_format_filter_and_custom_helpers(tmp_path):
     )
 
     assert exit_code == 0
-    run_dir = output_dir / f"{mod.RUN_STEM}-20251103_170000"
+    # write_report_artifacts now writes to output_dir/viewer/topic/timestamp
+    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20251103-1700"
     assert (run_dir / mod.JSON_FILENAME).is_file()
     assert not (run_dir / mod.MARKDOWN_FILENAME).exists()
-    assert not (output_dir / mod.MARKDOWN_POINTER).exists()
 
     report = json.loads((run_dir / mod.JSON_FILENAME).read_text(encoding="utf-8"))
     assert [helper["name"] for helper in report["helpers"]] == ["copy_latest_artifact"]

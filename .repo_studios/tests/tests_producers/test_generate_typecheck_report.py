@@ -58,6 +58,7 @@ def _run_with_module(tmp_path: Path, monkeypatch, runner: Callable[[Path, list[s
 
 
 def test_typecheck_success(tmp_path: Path, monkeypatch):
+    (tmp_path / ".repo_studios").mkdir()
     _write_pyproject(tmp_path, ["src"])
     (tmp_path / "src").mkdir()
 
@@ -100,6 +101,7 @@ def test_typecheck_success(tmp_path: Path, monkeypatch):
 
 
 def test_typecheck_failure(tmp_path: Path, monkeypatch):
+    (tmp_path / ".repo_studios").mkdir()
     _write_pyproject(tmp_path, ["pkg"])
     (tmp_path / "pkg").mkdir()
 
@@ -128,6 +130,7 @@ def test_typecheck_failure(tmp_path: Path, monkeypatch):
 
 
 def test_typecheck_skips_when_no_targets(tmp_path: Path, monkeypatch):
+    (tmp_path / ".repo_studios").mkdir()
     _write_pyproject(tmp_path, [])
 
     def runner(repo_root: Path, invocation: list[str]):
@@ -142,6 +145,7 @@ def test_typecheck_skips_when_no_targets(tmp_path: Path, monkeypatch):
 
 
 def test_typecheck_missing_target_output_is_skipped(tmp_path: Path, monkeypatch):
+    (tmp_path / ".repo_studios").mkdir()
     _write_pyproject(tmp_path, ["src"])
 
     def runner(repo_root: Path, invocation: list[str]):

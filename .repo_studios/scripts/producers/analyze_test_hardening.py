@@ -155,6 +155,16 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         "--timestamp",
         help="Override run timestamp (ISO 8601) for deterministic runs",
     )
+    parser.add_argument(
+        "--tests-dir",
+        action="append",
+        default=[],
+        help=(
+            "Explicit test directory to scan (bypasses IGNORED_PARTS for that subtree). "
+            "Repeat to specify multiple directories. When omitted, discovers tests from repo root "
+            "excluding .repo_studios/, .venv/, .git/, __pycache__/."
+        ),
+    )
     return parser.parse_args(argv)
 
 
@@ -227,8 +237,29 @@ def _detect_git_sha(repo_root: Path) -> str | None:
     return value or None
 
 
-def discover_test_files(repo_root: Path) -> list[Path]:
+def discover_test_files(repo_root: Path, tests_dirs: list[Path] | None = None) -> list[Path]:
     results: set[Path] = set()
+
+    # If explicit test directories are provided, scan them without IGNORED_PARTS filtering
+    if tests_dirs:
+        for tests_dir in tests_dirs:
+            if not tests_dir.is_absolute():
+                tests_dir = repo_root / tests_dir
+            if not tests_dir.exists():
+                logging.warning("Tests directory not found: %s", tests_dir)
+                continue
+            for pattern in TEST_PATTERNS:
+                for candidate in tests_dir.rglob(pattern):
+                    if not candidate.is_file():
+                        continue
+                    # Only filter __pycache__ when using explicit dirs
+                    rel_parts = set(candidate.relative_to(repo_root).parts) if candidate.is_relative_to(repo_root) else set()
+                    if "__pycache__" in rel_parts:
+                        continue
+                    results.add(candidate)
+        return sorted(results)
+
+    # Default: discover from repo root with full IGNORED_PARTS filtering
     for pattern in TEST_PATTERNS:
         for candidate in repo_root.rglob(pattern):
             if not candidate.is_file():
@@ -462,8 +493,8 @@ def _check_content_patterns(content: str, analysis: TestFileAnalysis) -> None:
         )
 
 
-def analyze_all(paths: Paths) -> list[TestFileAnalysis]:
-    files = discover_test_files(paths.repo_root)
+def analyze_all(paths: Paths, tests_dirs: list[Path] | None = None) -> list[TestFileAnalysis]:
+    files = discover_test_files(paths.repo_root, tests_dirs=tests_dirs)
     logging.info("Discovered %d candidate test files", len(files))
     results: list[TestFileAnalysis] = []
     for file_path in files:
@@ -568,14 +599,14 @@ def render_markdown_report(payload: dict) -> str:
     lines.append("")
 
     summary_list = [
-        f"* Status: **{payload.get('status', 'unknown')}**",
-        f"* Timestamp: {payload.get('timestamp', '')}",
-        f"* Test files analyzed: {summary.get('total_files', 0)}",
-        f"* Test functions: {summary.get('total_test_functions', 0)}",
-        f"* Total issues: {summary.get('total_issues', 0)}",
-        f"* High severity issues: {severities.get('high', 0)}",
-        f"* High-priority files: {summary.get('high_priority_files', 0)}",
-        f"* Clean files: {summary.get('clean_files', 0)}",
+        f"- Status: **{payload.get('status', 'unknown')}**",
+        f"- Timestamp: {payload.get('timestamp', '')}",
+        f"- Test files analyzed: {summary.get('total_files', 0)}",
+        f"- Test functions: {summary.get('total_test_functions', 0)}",
+        f"- Total issues: {summary.get('total_issues', 0)}",
+        f"- High severity issues: {severities.get('high', 0)}",
+        f"- High-priority files: {summary.get('high_priority_files', 0)}",
+        f"- Clean files: {summary.get('clean_files', 0)}",
     ]
     lines.extend(summary_list)
     lines.append("")
@@ -589,22 +620,22 @@ def render_markdown_report(payload: dict) -> str:
             lines.append("")
             sev = item.get("severity", {})
             details = [
-                f"* Priority score: {item['priority_score']}",
+                f"- Priority score: {item['priority_score']}",
                 (
-                    f"* Issues by severity: high={sev.get('high', 0)}, "
+                    f"- Issues by severity: high={sev.get('high', 0)}, "
                     f"medium={sev.get('medium', 0)}, low={sev.get('low', 0)}"
                 ),
             ]
             lines.extend(details)
             if item.get("issues"):
-                lines.append("* Key findings:")
+                lines.append("- Key findings:")
                 for issue in item["issues"][:5]:
                     line_info = f" (line {issue['line_number']})" if issue.get("line_number") else ""
-                    lines.append(f"  * [{issue['severity'].upper()}] {issue['message']}{line_info}")
+                    lines.append(f"  - [{issue['severity'].upper()}] {issue['message']}{line_info}")
             if item.get("long_tests"):
-                lines.append("* Long tests:")
+                lines.append("- Long tests:")
                 for test in item["long_tests"][:3]:
-                    lines.append(f"  * `{test['name']}` — {test['lines']} lines (starts at {test['start_line']})")
+                    lines.append(f"  - `{test['name']}` — {test['lines']} lines (starts at {test['start_line']})")
             lines.append("")
 
     clean_files = payload.get("clean_files", [])
@@ -612,7 +643,7 @@ def render_markdown_report(payload: dict) -> str:
         lines.append("## Clean Files")
         lines.append("")
         for entry in clean_files[:10]:
-            lines.append(f"* `{entry['path']}` ({entry['test_count']} tests)")
+            lines.append(f"- `{entry['path']}` ({entry['test_count']} tests)")
         lines.append("")
 
     lines.append("## Recommendations")
@@ -639,6 +670,7 @@ def build_manifest(
     timestamp_slug: str,
     status: str,
     exit_code: int,
+    tests_dirs: list[Path] | None = None,
 ) -> dict:
     bundle_dir = paths.output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp_slug
     return {
@@ -664,6 +696,7 @@ def build_manifest(
         "inputs": {
             "test_patterns": list(TEST_PATTERNS),
             "ignored_parts": sorted(IGNORED_PARTS),
+            "tests_dirs": [str(d) for d in tests_dirs] if tests_dirs else None,
             "artifacts_to_keep": options.artifacts_to_keep,
             "log_level": options.log_level,
         },
@@ -740,7 +773,13 @@ def run(argv: Sequence[str] | None = None) -> dict:
     paths.output_dir.mkdir(parents=True, exist_ok=True)
     timestamp = _resolve_timestamp(getattr(args, "timestamp", None))
     timestamp_slug = _timestamp_slug(timestamp)
-    results = analyze_all(paths)
+
+    # Resolve tests_dirs from CLI args
+    tests_dirs: list[Path] | None = None
+    if getattr(args, "tests_dir", None):
+        tests_dirs = [Path(d) for d in args.tests_dir]
+
+    results = analyze_all(paths, tests_dirs=tests_dirs)
     payload = compose_payload(paths, options, results, timestamp)
     bundle_dir = (paths.output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp_slug).resolve()
     storage = create_storage(paths.output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=timestamp_slug)
@@ -751,6 +790,7 @@ def run(argv: Sequence[str] | None = None) -> dict:
         timestamp_slug=timestamp_slug,
         status=str(payload.get("status", "unknown")),
         exit_code=int(payload.get("exit_code", 0)),
+        tests_dirs=tests_dirs,
     )
     summary_md = render_markdown_report(payload)
     telemetry = build_telemetry(payload, timestamp_slug=timestamp_slug)

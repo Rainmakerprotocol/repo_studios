@@ -28,6 +28,7 @@ def test_diff_detects_changes_and_writes_artifacts(tmp_path: Path) -> None:
 
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir()
     output_dir = repo_root / ".repo_studios" / "command_center" / "reports"
 
     old_index = {
@@ -132,6 +133,7 @@ def test_no_changes_returns_zero_and_prunes(tmp_path: Path) -> None:
 
     repo_root = tmp_path / "workspace"
     repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir()
     output_dir = repo_root / ".repo_studios" / "command_center" / "reports"
     output_dir.mkdir(parents=True, exist_ok=True)
 

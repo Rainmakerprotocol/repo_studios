@@ -11,6 +11,11 @@ tool:
       .repo_studios/reports/healthview/producer_reports/test_coverage_inventory/<YYYYMMDD-HHMM>/
 
     The bundle includes manifest.json, summary.md, and telemetry.json.
+
+    This producer can optionally regenerate the coverage XML (pytest + pytest-cov + coverage.py)
+    via --refresh-coverage-xml. The canonical operator/agent entrypoint for this mode is:
+
+      make -C .repo_studios studio-generate-test-coverage-inventory LOG_LEVEL=INFO
   keywords:
     - healthview
     - producer
@@ -41,6 +46,8 @@ invocation:
   environment:
     requires_venv: true
     python_version: ">=3.11"
+    notes:
+      - "--refresh-coverage-xml requires pytest, pytest-cov, and coverage to be installed in the active venv."
 
 parameters:
   - name: repo_root
@@ -57,6 +64,54 @@ parameters:
     validation:
       must_exist: true
       must_be_file: true
+
+  - name: refresh_coverage_xml
+    type: bool
+    required: false
+    default: false
+    description: |
+      Regenerate the coverage XML by running pytest with coverage before building the inventory.
+      This is intended for agent-friendly one-shot execution.
+
+  - name: refresh_tests
+    type: string
+    required: false
+    default: .repo_studios/tests
+    description: |
+      Test suites/paths passed to pytest when refresh_coverage_xml is true.
+      Multiple suites are supported by repeating the CLI flag: --refresh-tests <suite1> <suite2> ...
+
+  - name: refresh_continue_on_error
+    type: bool
+    required: false
+    default: false
+    description: |
+      When refresh_coverage_xml is true, continue generating the bundle even if pytest exits non-zero.
+      Refresh failures are captured in manifest.json inputs (refresh_exit_code, refresh_suite_results).
+
+  - name: refresh_omit_tests
+    type: bool
+    required: false
+    default: false
+    description: |
+      When refresh_coverage_xml is true, omit */tests/* paths from coverage measurement.
+      This does not change which tests are executed.
+
+  - name: refresh_cov_target
+    type: string
+    required: false
+    default: .repo_studios
+    description: |
+      Coverage targets passed to pytest-cov via --cov=<target> when refresh_coverage_xml is true.
+      Multiple targets are supported by repeating the CLI flag.
+
+  - name: refresh_pytest_args
+    type: string
+    required: false
+    default: null
+    description: |
+      Additional args passed to pytest when refresh_coverage_xml is true.
+      This must appear last on the command line (argparse REMAINDER).
 
   - name: output_dir
     type: path
@@ -119,9 +174,11 @@ behavior:
   idempotent: false
   side_effects:
     - Reads the coverage XML report from coverage_xml
+    - When refresh_coverage_xml is enabled, executes pytest (one invocation per refresh_tests entry) and renders a combined coverage XML report
     - Reads repository source files to build function boundaries
     - Writes a timestamped HealthView bundle directory
     - Prunes older sibling run directories beyond artifacts_to_keep
+  duration_estimate: "1-5 seconds for ingestion-only; refresh mode depends on pytest runtime"
   blocking: true
   mutates_repo: false
   mutates_filesystem: true
@@ -129,10 +186,41 @@ behavior:
 error_handling:
   common_errors:
     - exit_code: 1
-      meaning: "Coverage below --min-coverage threshold (bundle is still written)."
-      agent_action: "Review summary.md and telemetry.json; lower the threshold or fix uncovered functions."
+      meaning: "Coverage XML missing, or coverage below --min-coverage threshold (bundle may still be written)."
+      agent_action: "Confirm --coverage-xml exists or run with --refresh-coverage-xml; review summary.md and telemetry.json for details."
+
+    - exit_code: 2
+      meaning: "Invalid CLI inputs (for example, --min-coverage outside 0-100)."
+      agent_action: "Fix the input validation error and retry."
+
+    - exit_code: "non-zero"
+      meaning: "pytest failures during refresh mode when --refresh-continue-on-error is not enabled."
+      agent_action: "Re-run with --refresh-continue-on-error (or use the Make target) and inspect manifest.json inputs.refresh_suite_results."
+
+  stderr_patterns:
+    - pattern: "ModuleNotFoundError"
+      meaning: "Missing runtime dependency (commonly coverage/pytest-cov when using refresh mode)."
+      agent_action: "Ensure the active venv has pytest, pytest-cov, and coverage installed."
+
+    - pattern: "No coverage data collected"
+      meaning: "coverage.py could not render XML (no data recorded)."
+      agent_action: "Verify refresh_tests executes tests and that pytest-cov is configured; re-run without omit-tests to debug."
 
 integration:
+  typical_workflow:
+    - step: 1
+      action: Run the canonical Make target (refresh + bundle)
+      command: make -C .repo_studios studio-generate-test-coverage-inventory LOG_LEVEL=INFO
+      output: HealthView bundle under producer_reports/test_coverage_inventory
+
+    - step: 2
+      action: Review summary.md and telemetry.json
+      consumes: producer_reports/test_coverage_inventory bundle
+
+  input_producers:
+    - Coverage.py XML report generated externally (e.g., CI) OR via this tool's refresh mode
+    - make -C .repo_studios studio-generate-test-coverage-inventory (recommended)
+
   output_consumers:
     - .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py
 
@@ -140,6 +228,24 @@ examples:
   - description: Standard run using defaults
     command: |
       python .repo_studios/scripts/producers/generate_test_coverage_inventory.py --log-level INFO
+
+  - description: Canonical agent/operator entrypoint (refresh coverage + emit bundle)
+    command: |
+      make -C .repo_studios studio-generate-test-coverage-inventory LOG_LEVEL=INFO
+
+  - description: Refresh coverage XML then emit bundle (CLI form)
+    command: |
+      python .repo_studios/scripts/producers/generate_test_coverage_inventory.py \
+        --repo-root . \
+        --coverage-xml .repo_studios/tmp_cli_probe/coverage_repo.xml \
+        --refresh-coverage-xml \
+        --refresh-tests .repo_studios/tests \
+        --refresh-cov-target . \
+        --refresh-omit-tests \
+        --refresh-continue-on-error \
+        --output-dir .repo_studios/reports/healthview \
+        --artifacts-to-keep 5 \
+        --log-level INFO
 
   - description: Deterministic run slug for validation
     command: |
@@ -151,9 +257,9 @@ metadata:
   category: producer
   tier: 3
   status: draft
-  version: 0.1.0
+  version: 0.2.0
   author: Repo Studios Team
-  last_updated: 2025-12-21
+  last_updated: 2025-12-27
   dependencies_tier3:
     - tier3_artifacts.yaml
     - tier3_cli.yaml

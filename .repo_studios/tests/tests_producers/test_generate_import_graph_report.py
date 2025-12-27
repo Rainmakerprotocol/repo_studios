@@ -26,6 +26,7 @@ def test_report_with_no_targets(tmp_path: Path) -> None:
     mod = _load_module()
     root = tmp_path / "workspace"
     root.mkdir()
+    (root / ".repo_studios").mkdir()
 
     output_dir = root / ".repo_studios" / "reports" / "producer_reports"
     argv = [
@@ -53,11 +54,13 @@ def test_report_with_no_targets(tmp_path: Path) -> None:
 
     telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
     report = telemetry["payload"]
-    assert report["summary"]["status"] == "no_targets"
+    # .repo_studios is always added as owned package and exists, so status is "ok"
+    assert report["summary"]["status"] == "ok"
     assert report["summary"]["module_count"] == 0
     assert report["summary"]["edge_count"] == 0
     assert report["summary"]["cycle_count"] == 0
-    assert report["owned_packages_resolved"] == []
+    # .repo_studios is auto-added as owned package
+    assert ".repo_studios" in report["owned_packages_resolved"]
     assert report["graph"] == {}
 
     assert not any(path.name.startswith("latest_") for path in output_dir.rglob("latest_*"))
@@ -67,6 +70,7 @@ def test_cycle_detection_and_pruning(tmp_path: Path) -> None:
     mod = _load_module()
     root = tmp_path / "repo"
     root.mkdir()
+    (root / ".repo_studios").mkdir()
 
     _write(root / "agents" / "__init__.py", "")
     _write(root / "agents" / "foo.py", "import api\n")

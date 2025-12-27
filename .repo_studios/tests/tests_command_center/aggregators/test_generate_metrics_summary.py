@@ -21,6 +21,7 @@ def _load_module():
 
 def test_metrics_summary_run(tmp_path: Path) -> None:
     mod = _load_module()
+    (tmp_path / ".repo_studios").mkdir()
 
     tests_payload = {
         "library_integration": {
@@ -87,6 +88,7 @@ def test_metrics_summary_run(tmp_path: Path) -> None:
 
 def test_invalid_tests_payload(tmp_path: Path, caplog) -> None:
     mod = _load_module()
+    (tmp_path / ".repo_studios").mkdir()
 
     tests_file = tmp_path / "tests.json"
     tests_file.write_text("{}", encoding="utf-8")  # Missing required suites

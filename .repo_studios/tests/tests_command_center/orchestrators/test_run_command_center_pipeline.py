@@ -49,6 +49,7 @@ def _stub_loader(target_dir: Path, inventory_dir: Path, analysis_ts: str, scan_t
 
 def test_pipeline_happy_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     repo_root = tmp_path / "repo"
+    (repo_root / ".repo_studios").mkdir(parents=True)
     target_dir = repo_root / ".reports" / "demo"
     target_dir.mkdir(parents=True, exist_ok=True)
     inventory_dir = target_dir / f"{target_dir.name}_index"
@@ -73,6 +74,7 @@ def test_pipeline_happy_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) ->
 
 def test_pipeline_stops_on_inventory_failure(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     repo_root = tmp_path / "repo"
+    (repo_root / ".repo_studios").mkdir(parents=True)
     target_dir = repo_root / "reports" / "demo"
     target_dir.mkdir(parents=True, exist_ok=True)
 
@@ -136,6 +138,7 @@ def test_pipeline_errors_when_inventory_artifact_missing(tmp_path: Path, monkeyp
 
 def test_pipeline_propagates_analysis_failure(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     repo_root = tmp_path / "repo"
+    (repo_root / ".repo_studios").mkdir(parents=True)
     target_dir = repo_root / "reports" / "demo"
     target_dir.mkdir(parents=True, exist_ok=True)
     inventory_dir = target_dir / f"{target_dir.name}_index"
@@ -245,6 +248,7 @@ def test_build_paths_rejects_outside_repo(tmp_path: Path) -> None:
 
 def test_build_paths_accepts_prefixed_relative_target(tmp_path: Path) -> None:
     repo_root = tmp_path / "repo"
+    (repo_root / ".repo_studios").mkdir(parents=True)
     target_dir = repo_root / "reports" / "demo"
     target_dir.mkdir(parents=True, exist_ok=True)
 

@@ -128,7 +128,13 @@ studio-validate-metrics-anchor-stubs:
 
 .PHONY: studio-analyze-test-hardening
 studio-analyze-test-hardening:
-	$(PYTHON) .repo_studios/scripts/producers/analyze_test_hardening.py --repo-root . --output-dir .repo_studios/command_center/reports
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/producers/analyze_test_hardening.py" \
+		--repo-root "$(REPO_ROOT)" \
+		--output-dir ".repo_studios/reports/healthview" \
+		--tests-dir ".repo_studios/tests" \
+		--artifacts-to-keep 5 \
+		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-verify-docs-integrity
 studio-verify-docs-integrity:
@@ -278,8 +284,14 @@ studio-generate-test-coverage-inventory:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/scripts/producers/generate_test_coverage_inventory.py" \
 		--repo-root "$(REPO_ROOT)" \
-		--coverage-xml ".repo_studios/tests/fixtures/test_run_coverage/coverage.xml" \
-		--output-dir ".repo_studios/reports/producer_reports" \
+		--coverage-xml ".repo_studios/tmp_cli_probe/coverage_repo.xml" \
+		--refresh-coverage-xml \
+		--refresh-continue-on-error \
+		--refresh-omit-tests \
+		--refresh-cov-target "." \
+		--refresh-tests \
+			".repo_studios/tests" \
+		--output-dir ".repo_studios/reports/healthview" \
 		--artifacts-to-keep 5 \
 		--log-level "$(LOG_LEVEL)"
 

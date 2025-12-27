@@ -25,6 +25,7 @@ def test_structured_artifacts_success(monkeypatch: pytest.MonkeyPatch, tmp_path:
 
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir()
     target_dir = repo_root / "src"
     target_dir.mkdir()
 
@@ -120,6 +121,7 @@ def test_no_targets_and_pruning(tmp_path: Path):
 
     repo_root = tmp_path / "workspace"
     repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir()
 
     output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports"
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -197,6 +199,7 @@ def test_rejects_newline_arguments(tmp_path: Path):
 
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir()
     (repo_root / "src").mkdir()
 
     output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports"

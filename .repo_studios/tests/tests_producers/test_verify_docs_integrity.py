@@ -77,7 +77,8 @@ def test_clean_run_generates_artifacts(tmp_path, monkeypatch):
     mod = _load_module()
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
-    docs_dir = repo_root / "docs/standards/global"
+    (repo_root / ".repo_studios").mkdir()
+    docs_dir = repo_root / ".repo_studios/docs/standards/global"
 
     _write_doc(
         mod,
@@ -89,7 +90,7 @@ def test_clean_run_generates_artifacts(tmp_path, monkeypatch):
         {
             "category": "global",
             "doc_id": "docs_integrity_handbook",
-            "path": "docs/standards/global/std-docs-integrity-handbook.md",
+            "path": ".repo_studios/docs/standards/global/std-docs-integrity-handbook.md",
             "stability": "stable",
             "json_block": True,
         }
@@ -97,7 +98,7 @@ def test_clean_run_generates_artifacts(tmp_path, monkeypatch):
 
     _write_index(
         mod,
-        repo_root / "docs/standards/docs_index.md",
+        repo_root / ".repo_studios/docs/standards/docs_index.md",
         documents,
     )
 
@@ -159,7 +160,8 @@ def test_detects_mismatches_and_updates(tmp_path, monkeypatch):
     mod = _load_module()
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
-    docs_dir = repo_root / "docs/standards/global"
+    (repo_root / ".repo_studios").mkdir()
+    docs_dir = repo_root / ".repo_studios/docs/standards/global"
 
     # Intentionally omit content_hash so the first run reports a mismatch
     doc_body = [
@@ -177,7 +179,7 @@ def test_detects_mismatches_and_updates(tmp_path, monkeypatch):
         {
             "category": "global",
             "doc_id": "docs_integrity_handbook",
-            "path": "docs/standards/global/std-docs-integrity-handbook.md",
+            "path": ".repo_studios/docs/standards/global/std-docs-integrity-handbook.md",
             "stability": "stable",
             "json_block": True,
         }
@@ -207,7 +209,7 @@ def test_detects_mismatches_and_updates(tmp_path, monkeypatch):
         mod.INDEX_TABLE_END,
         "",
     ]
-    index_path = repo_root / "docs/standards/docs_index.md"
+    index_path = repo_root / ".repo_studios/docs/standards/docs_index.md"
     index_path.parent.mkdir(parents=True, exist_ok=True)
     index_path.write_text("\n".join(index_lines), encoding="utf-8")
 

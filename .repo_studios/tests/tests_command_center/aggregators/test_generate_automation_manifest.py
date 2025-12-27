@@ -27,6 +27,7 @@ def _load_module():
 
 def test_generate_automation_manifest_bundle(tmp_path: Path) -> None:
     mod = _load_module()
+    (tmp_path / ".repo_studios").mkdir()
 
     files_payload = {
         "updated": [
@@ -132,6 +133,7 @@ def test_generate_automation_manifest_bundle(tmp_path: Path) -> None:
 
 def test_manifest_files_changed_mismatch(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     mod = _load_module()
+    (tmp_path / ".repo_studios").mkdir()
 
     files_payload = {"updated": ["src/module_a.py"], "skipped": [], "conflicted": []}
     files_file = tmp_path / "files.json"
@@ -184,6 +186,7 @@ def test_manifest_files_changed_mismatch(tmp_path: Path, caplog: pytest.LogCaptu
 
 def test_guardrail_violation(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     mod = _load_module()
+    (tmp_path / ".repo_studios").mkdir()
 
     files_payload = {
         "updated": [f"src/module_{idx}.py" for idx in range(6)],

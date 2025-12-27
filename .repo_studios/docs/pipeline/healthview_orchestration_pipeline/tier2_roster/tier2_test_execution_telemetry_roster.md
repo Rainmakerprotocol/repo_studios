@@ -484,6 +484,12 @@ Workstream E — QA & Evidence
     - `--min-coverage` (optional threshold gate)
     - `--include-empty` (include files with zero detected functions)
     - `--artifacts-to-keep`
+    - `--refresh-coverage-xml` (regenerate `--coverage-xml` via pytest + pytest-cov)
+    - `--refresh-tests` (one-or-more pytest suite targets; executed as separate invocations)
+    - `--refresh-cov-target` (coverage source targets; defaults to `.repo_studios`)
+    - `--refresh-continue-on-error` (continue inventory generation even if some suites fail)
+    - `--refresh-omit-tests` (omit `*/tests/*` from coverage measurement)
+    - `--refresh-pytest-args -- <...>` (passthrough args; must appear last)
   - **Current output roots:**
     - `.repo_studios/reports/healthview/producer_reports/test_coverage_inventory/<YYYYmmdd-HHMM>/`
   - **Current artifacts (observed):**
@@ -519,6 +525,13 @@ Workstream E — QA & Evidence
     - Bundle path: `output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp_slug`.
     - Artifacts asserted in tests: `manifest.json`, `summary.md`, `telemetry.json`.
     - Threshold failure returns non-zero exit code (still writes the bundle) and prunes historical run dirs.
+    - Coverage refresh behavior (when `--refresh-coverage-xml` is enabled):
+      - Runs each `--refresh-tests` entry as its own pytest invocation; appends coverage data after the first suite.
+      - Renders the final combined Coverage.py XML via coverage.py (not pytest-cov's per-run XML).
+      - Records `inputs.refresh_exit_code` and `inputs.refresh_suite_results` in `manifest.json`.
+      - With `--refresh-continue-on-error`, a partial refresh (some failing suites) still emits the bundle.
+      - Without `--refresh-continue-on-error`, refresh failures abort before emitting the bundle.
+    - Make entrypoint (default workflow): `.repo_studios/Makefile` target `studio-generate-test-coverage-inventory`.
     - DB marker discipline: manifest/summary/telemetry writes are annotated with `DB_INTEGRATION_MARKER:`.
     - Orchestrator alignment: Stage 1.1 orchestrator now passes `--timestamp`, discovers the positional
       bundle under `.../producer_reports/test_coverage_inventory/<YYYYmmdd-HHMM>/`, and reads
@@ -560,10 +573,10 @@ Workstream E — QA & Evidence
 - [x] Mypy evidence captured or marked N/A (in record)
 - [x] Coverage ≥80% (or exception recorded)
 - [x] Doc-index timestamp recorded
-  - Evidence: `.repo_studios/reports/producer_reports/healthview/doc_index/20251222-0124/`
+  - Evidence: `.repo_studios/reports/producer_reports/healthview/doc_index/20251227-1632/`
   - Pytest: `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_generate_test_coverage_inventory.py -q`
-  - Mypy: `.venv/Scripts/python.exe -m mypy .repo_studios/scripts/producers/generate_test_coverage_inventory.py .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py`
-  - Coverage: `coverage report --include="*/.repo_studios/scripts/producers/generate_test_coverage_inventory.py" --fail-under=80` (observed: 80%)
+  - Mypy: `.venv/Scripts/python.exe -m mypy .repo_studios/scripts/producers/generate_test_coverage_inventory.py`
+  - Coverage: `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_generate_test_coverage_inventory.py --cov=generate_test_coverage_inventory --cov-report=term-missing --cov-fail-under=80 -q` (observed: 85.59%)
 
 - [x] DONE — generate_test_coverage_inventory.py complete; update Tier-1 Stage 1.1 script gate
 

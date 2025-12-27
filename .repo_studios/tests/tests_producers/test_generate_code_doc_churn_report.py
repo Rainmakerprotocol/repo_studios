@@ -104,6 +104,7 @@ def test_churn_detects_missing_doc_updates(tmp_path):
 
     repo = tmp_path / "repo"
     repo.mkdir()
+    (repo / ".repo_studios").mkdir()
     _init_repo(repo)
 
     (repo / "src").mkdir()
@@ -149,6 +150,7 @@ def test_churn_skips_when_docs_updated(tmp_path):
 
     repo = tmp_path / "repo"
     repo.mkdir()
+    (repo / ".repo_studios").mkdir()
     _init_repo(repo)
 
     (repo / "lib").mkdir()
@@ -188,6 +190,7 @@ def test_churn_honors_allowlist(tmp_path):
 
     repo = tmp_path / "repo"
     repo.mkdir()
+    (repo / ".repo_studios").mkdir()
     _init_repo(repo)
 
     (repo / "service").mkdir()

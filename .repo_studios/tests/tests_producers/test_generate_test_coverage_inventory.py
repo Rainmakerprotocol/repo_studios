@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import sys
+import types
 from pathlib import Path
 
 import pytest
@@ -53,6 +54,7 @@ def test_generates_structured_artifacts(tmp_path: Path):
 
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir(parents=True, exist_ok=True)
     src_dir = repo_root / "src"
     src_dir.mkdir()
     module_path = src_dir / "alpha.py"
@@ -205,3 +207,277 @@ def test_helper_timestamp_and_filename_resolution(tmp_path: Path) -> None:
 
     absolute = mod._resolve_filename(str(resolved), repo_root=repo_root, sources=[])
     assert absolute == resolved
+
+
+
+def test_refresh_coverage_xml_continue_on_error_emits_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    mod = _load_module()
+
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir(parents=True, exist_ok=True)
+    src_dir = repo_root / "src"
+    src_dir.mkdir()
+    (src_dir / "alpha.py").write_text(
+        "def covered():\n    return 1\n\n\ndef uncovered():\n    return 2\n",
+        encoding="utf-8",
+    )
+
+    output_root = repo_root / ".repo_studios" / "reports" / "healthview"
+    coverage_xml = repo_root / "coverage.xml"
+
+    calls: list[dict[str, object]] = []
+
+    def _fake_run(argv: list[str], *, cwd: str, check: bool, env: dict[str, str]):
+        calls.append({"argv": list(argv), "cwd": cwd, "env": dict(env)})
+
+        class _Result:
+            def __init__(self, returncode: int) -> None:
+                self.returncode = returncode
+
+        suite = None
+        if "-q" in argv:
+            suite_index = argv.index("-q") + 1
+            if suite_index < len(argv):
+                suite = argv[suite_index]
+        return _Result(1 if str(suite or "").endswith("tests_suite_a") else 0)
+
+    monkeypatch.setattr(mod.subprocess, "run", _fake_run)
+
+    coverage_mod = types.ModuleType("coverage")
+    coverage_exceptions_mod = types.ModuleType("coverage.exceptions")
+
+    class FakeNoDataError(Exception):
+        pass
+
+    class FakeCoverage:
+        def __init__(self, config_file: str | None = None, data_file: str | None = None) -> None:
+            self.config_file = config_file
+            self.data_file = data_file
+
+        def load(self) -> None:
+            return None
+
+        def xml_report(self, outfile: str) -> None:
+            Path(outfile).write_text(
+                """<?xml version=\"1.0\"?>
+<coverage line-rate=\"0\" branch-rate=\"0\" version=\"1\">
+  <sources>
+    <source>{source}</source>
+  </sources>
+  <packages>
+    <package name=\"src\" line-rate=\"0\" branch-rate=\"0\">
+      <classes>
+        <class name=\"alpha\" filename=\"src/alpha.py\" line-rate=\"0\" branch-rate=\"0\">
+          <lines>
+            <line number=\"1\" hits=\"1\"/>
+            <line number=\"2\" hits=\"1\"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>
+""".format(source=repo_root.as_posix()),
+                encoding="utf-8",
+            )
+
+    coverage_mod.Coverage = FakeCoverage
+    coverage_exceptions_mod.NoDataError = FakeNoDataError
+    monkeypatch.setitem(sys.modules, "coverage", coverage_mod)
+    monkeypatch.setitem(sys.modules, "coverage.exceptions", coverage_exceptions_mod)
+
+    exit_code = mod.main(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--coverage-xml",
+            str(coverage_xml),
+            "--output-dir",
+            str(output_root),
+            "--timestamp",
+            "2024-01-01T00:00:00+00:00",
+            "--refresh-coverage-xml",
+            "--refresh-continue-on-error",
+            "--refresh-cov-target",
+            ".",
+            "--refresh-tests",
+            "tests_suite_a",
+            "tests_suite_b",
+            "--log-level",
+            "ERROR",
+        ]
+    )
+
+    assert exit_code == 0
+    assert coverage_xml.exists()
+    assert len(calls) == 2
+    assert "COVERAGE_FILE" in calls[0]["env"]
+    assert calls[0]["env"]["COVERAGE_FILE"] == calls[1]["env"]["COVERAGE_FILE"]
+    assert "--cov-append" not in calls[0]["argv"]
+    assert "--cov-append" in calls[1]["argv"]
+
+    run_dir = output_root / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240101-0000"
+    manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
+    inputs = manifest["inputs"]
+    assert inputs["refresh_coverage_xml"] is True
+    assert inputs["refresh_continue_on_error"] is True
+    assert inputs["refresh_exit_code"] == 1
+    suite_results = inputs["refresh_suite_results"]
+    assert isinstance(suite_results, list)
+    assert [entry["exit_code"] for entry in suite_results] == [1, 0]
+
+
+def test_refresh_coverage_xml_without_continue_on_error_exits_nonzero(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    mod = _load_module()
+
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir(parents=True, exist_ok=True)
+    output_root = repo_root / ".repo_studios" / "reports" / "healthview"
+    coverage_xml = repo_root / "coverage.xml"
+
+    def _fake_run(*_args: object, **_kwargs: object):
+        class _Result:
+            returncode = 5
+
+        return _Result()
+
+    monkeypatch.setattr(mod.subprocess, "run", _fake_run)
+
+    coverage_mod = types.ModuleType("coverage")
+    coverage_exceptions_mod = types.ModuleType("coverage.exceptions")
+
+    class FakeNoDataError(Exception):
+        pass
+
+    class FakeCoverage:
+        def __init__(self, *_args: object, **_kwargs: object) -> None:
+            pass
+
+        def load(self) -> None:
+            return None
+
+        def xml_report(self, outfile: str) -> None:
+            Path(outfile).write_text("<?xml version=\"1.0\"?><coverage></coverage>", encoding="utf-8")
+
+    coverage_mod.Coverage = FakeCoverage
+    coverage_exceptions_mod.NoDataError = FakeNoDataError
+    monkeypatch.setitem(sys.modules, "coverage", coverage_mod)
+    monkeypatch.setitem(sys.modules, "coverage.exceptions", coverage_exceptions_mod)
+
+    exit_code = mod.main(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--coverage-xml",
+            str(coverage_xml),
+            "--output-dir",
+            str(output_root),
+            "--timestamp",
+            "2024-01-01T00:00:00+00:00",
+            "--refresh-coverage-xml",
+            "--refresh-tests",
+            "tests_suite_a",
+            "--log-level",
+            "ERROR",
+        ]
+    )
+
+    assert exit_code == 5
+    assert not (output_root / mod.VIEWER_SLUG / mod.TOPIC_SLUG).exists()
+
+
+def test_refresh_omit_tests_creates_and_removes_cov_config(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    mod = _load_module()
+
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir(parents=True, exist_ok=True)
+    src_dir = repo_root / "src"
+    src_dir.mkdir()
+    (src_dir / "alpha.py").write_text("def covered():\n    return 1\n", encoding="utf-8")
+
+    output_root = repo_root / ".repo_studios" / "reports" / "healthview"
+    coverage_xml = repo_root / "coverage.xml"
+
+    cov_config_paths: list[Path] = []
+
+    def _fake_run(argv: list[str], *, cwd: str, check: bool, env: dict[str, str]):
+        for token in argv:
+            if token.startswith("--cov-config="):
+                cov_config_paths.append(Path(token.split("=", 1)[1]))
+
+        class _Result:
+            returncode = 0
+
+        return _Result()
+
+    monkeypatch.setattr(mod.subprocess, "run", _fake_run)
+
+    coverage_mod = types.ModuleType("coverage")
+    coverage_exceptions_mod = types.ModuleType("coverage.exceptions")
+
+    class FakeNoDataError(Exception):
+        pass
+
+    class FakeCoverage:
+        def __init__(self, *_args: object, **_kwargs: object) -> None:
+            pass
+
+        def load(self) -> None:
+            return None
+
+        def xml_report(self, outfile: str) -> None:
+            Path(outfile).write_text(
+                """<?xml version=\"1.0\"?>
+<coverage line-rate=\"0\" branch-rate=\"0\" version=\"1\">
+  <sources>
+    <source>{source}</source>
+  </sources>
+  <packages>
+    <package name=\"src\" line-rate=\"0\" branch-rate=\"0\">
+      <classes>
+        <class name=\"alpha\" filename=\"src/alpha.py\" line-rate=\"0\" branch-rate=\"0\">
+          <lines>
+            <line number=\"1\" hits=\"1\"/>
+            <line number=\"2\" hits=\"1\"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>
+""".format(source=repo_root.as_posix()),
+                encoding="utf-8",
+            )
+
+    coverage_mod.Coverage = FakeCoverage
+    coverage_exceptions_mod.NoDataError = FakeNoDataError
+    monkeypatch.setitem(sys.modules, "coverage", coverage_mod)
+    monkeypatch.setitem(sys.modules, "coverage.exceptions", coverage_exceptions_mod)
+
+    exit_code = mod.main(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--coverage-xml",
+            str(coverage_xml),
+            "--output-dir",
+            str(output_root),
+            "--timestamp",
+            "2024-01-01T00:00:00+00:00",
+            "--refresh-coverage-xml",
+            "--refresh-omit-tests",
+            "--refresh-tests",
+            "tests_suite_a",
+            "--refresh-cov-target",
+            ".",
+            "--log-level",
+            "ERROR",
+        ]
+    )
+
+    assert exit_code == 0
+    assert cov_config_paths
+    assert all(not path.exists() for path in cov_config_paths)

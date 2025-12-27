@@ -1,0 +1,6 @@
+status=error
+timestamp=20251227_180255
+files_checked=1
+records_checked=1
+errors=1
+warnings=0

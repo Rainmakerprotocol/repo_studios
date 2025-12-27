@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -14,6 +15,8 @@ def _load_module():
     if spec is None or spec.loader is None:
         raise ImportError(f"Unable to load module from {MODULE_PATH}")
     module = importlib.util.module_from_spec(spec)
+    # Register module in sys.modules before exec to support dataclass resolution in Python 3.13+
+    sys.modules["fault_run_analysis"] = module
     spec.loader.exec_module(module)
     return module
 

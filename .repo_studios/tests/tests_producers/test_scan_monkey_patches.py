@@ -4,6 +4,7 @@ import json
 import subprocess
 from datetime import UTC, datetime
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -14,6 +15,7 @@ def test_structured_artifacts(tmp_path: Path) -> None:
     mod = load_scan_producer_module()
 
     repo_root = tmp_path / "workspace"
+    (repo_root / ".repo_studios").mkdir(parents=True)
     src_dir = repo_root / "src"
     src_dir.mkdir(parents=True, exist_ok=True)
 
@@ -92,6 +94,7 @@ def test_prune_history(tmp_path: Path) -> None:
     mod = load_scan_producer_module()
 
     repo_root = tmp_path / "workspace"
+    (repo_root / ".repo_studios").mkdir(parents=True)
     src_dir = repo_root / "src"
     src_dir.mkdir(parents=True, exist_ok=True)
 
@@ -140,17 +143,18 @@ def test_resolve_run_timestamp_validation(tmp_path: Path) -> None:
     mod = load_scan_producer_module()
 
     now = datetime(2025, 1, 2, 3, 4, tzinfo=UTC)
-    assert mod._resolve_run_timestamp(None, now) == "20250102-0304"
-    assert mod._resolve_run_timestamp("20250102-0304", now) == "20250102-0304"
+    assert mod._resolve_run_timestamp(override=None, now=now) == "20250102-0304"
+    assert mod._resolve_run_timestamp(override="20250102-0304", now=now) == "20250102-0304"
 
     with pytest.raises(ValueError):
-        mod._resolve_run_timestamp("2025-01-02", now)
+        mod._resolve_run_timestamp(override="2025-01-02", now=now)
 
 
 def test_scan_file_detects_multiple_categories_and_git_blame(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     mod = load_scan_producer_module()
 
     repo_root = tmp_path / "workspace"
+    (repo_root / ".repo_studios").mkdir(parents=True)
     src_dir = repo_root / "src"
     src_dir.mkdir(parents=True, exist_ok=True)
 
@@ -184,11 +188,25 @@ def test_something(mock_get):
         encoding="utf-8",
     )
 
-    def _fake_check_output(argv: list[str], **_kwargs: object) -> bytes:
-        # Minimal blame output: <sha> (<author> <date> <time> <tz> <line>)
-        return b"deadbeef (Test Author 2025-01-01 00:00:00 +0000 1) import builtins\n"
+    def _fake_run(argv: list[str], **_kwargs: object):
+        # Minimal porcelain blame output
+        stdout = (
+            "deadbeef1234567890abcdef1234567890abcdef 1 1 1\n"
+            "author Test Author\n"
+            "author-mail <test@example.com>\n"
+            "author-time 1735689600\n"
+            "author-tz +0000\n"
+            "committer Test Author\n"
+            "committer-mail <test@example.com>\n"
+            "committer-time 1735689600\n"
+            "committer-tz +0000\n"
+            "summary Initial commit\n"
+            "filename sample.py\n"
+            "\timport builtins\n"
+        )
+        return SimpleNamespace(returncode=0, stdout=stdout, stderr="")
 
-    monkeypatch.setattr(subprocess, "check_output", _fake_check_output)
+    monkeypatch.setattr(subprocess, "run", _fake_run)
 
     findings = mod.scan_file(
         repo_root=repo_root,
@@ -208,16 +226,18 @@ def test_something(mock_get):
     assert mod.CATEGORY_TEST_PATCH_MISUSE in categories
 
     # Git blame parsing should not raise.
-    author, date_str, sha = mod.add_git_blame(repo_root, target, 1)
+    author, commit, date_iso = mod.add_git_blame(repo_root, target, 1)
     assert author == "Test Author"
-    assert date_str == "2025-01-01"
-    assert sha == "deadbeef"
+    # author-time 1735689600 -> 2025-01-01 00:00:00 UTC
+    assert date_iso is not None and date_iso.startswith("2025-01-01")
+    assert commit == "deadbeef1234567890abcdef1234567890abcdef"
 
 
 def test_scan_file_strict_mode_raises_on_parse_error(tmp_path: Path) -> None:
     mod = load_scan_producer_module()
 
     repo_root = tmp_path / "workspace"
+    (repo_root / ".repo_studios").mkdir(parents=True)
     src_dir = repo_root / "src"
     src_dir.mkdir(parents=True, exist_ok=True)
     target = src_dir / "broken.py"
@@ -238,42 +258,40 @@ def test_compose_manifest_telemetry_and_summary_round_trip(tmp_path: Path) -> No
 
     repo_root = tmp_path / "workspace"
     repo_root.mkdir(parents=True)
-    paths = mod.Paths(repo_root=repo_root, output_dir=repo_root / "out")
+    (repo_root / ".repo_studios").mkdir()
+    scan_root = repo_root / "src"
+    scan_root.mkdir(parents=True)
+    paths = mod.Paths(repo_root=repo_root, scan_root=scan_root, output_dir=repo_root / "out")
     run_timestamp = "20250101-0000"
     timestamp = datetime(2025, 1, 1, tzinfo=UTC)
 
-    manifest_path = paths.output_dir / "manifest.json"
-    summary_path = paths.output_dir / "summary.md"
-    telemetry_path = paths.output_dir / "telemetry.json"
+    bundle_dir = paths.output_dir / run_timestamp
+    bundle_dir.mkdir(parents=True, exist_ok=True)
+    manifest_path = bundle_dir / "manifest.json"
+    summary_path = bundle_dir / "summary.md"
+    telemetry_path = bundle_dir / "telemetry.json"
+
+    scan_options = mod.ScanOptions(
+        project_packages=set(),
+        exclude_dirs=set(),
+        exclude_globs=set(),
+        context_lines=1,
+        with_git=False,
+        strict=False,
+        keep=1,
+    )
 
     manifest = mod.compose_manifest(
         paths=paths,
+        options=scan_options,
         run_timestamp=run_timestamp,
         timestamp=timestamp,
-        scan_root_display="src",
-        files_scanned=0,
-        files_with_findings=0,
+        generated_at=timestamp.isoformat(),
+        bundle_dir=bundle_dir,
         findings=[],
+        files_scanned=0,
         parse_errors=0,
         duration_ms=5,
-        manifest_path=manifest_path,
-        summary_path=summary_path,
-        telemetry_path=telemetry_path,
-        options=mod.Options(
-            repo_root=repo_root,
-            root=Path("src"),
-            project_packages=[],
-            exclude_dirs=[],
-            exclude_globs=[],
-            context_lines=1,
-            with_git=False,
-            strict=False,
-            keep=1,
-            timestamp=run_timestamp,
-            log_level="INFO",
-            self_test=False,
-            output_dir=paths.output_dir,
-        ),
     )
 
     assert manifest["viewer_slug"] == "healthview"

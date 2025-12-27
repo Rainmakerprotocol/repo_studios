@@ -98,6 +98,7 @@ def _validate_with_schema(payload: dict, schema_name: str) -> None:
 
 def test_inventory_and_analysis_round_trip(tmp_path: Path) -> None:
     workspace = tmp_path / "workspace"
+    (workspace / ".repo_studios").mkdir(parents=True)
     target = workspace / "sample_pkg"
     shutil.copytree(FIXTURE_ROOT, target)
 
@@ -145,12 +146,15 @@ def test_inventory_and_analysis_round_trip(tmp_path: Path) -> None:
     assert analysis_summary["duplicate_groups"] == 1
     assert analysis_summary["total_duplicate_functions"] == 2
 
-    mirror_dir = reports_root / "index_scan_analysis" / f"{slug}_analysis"
-    mirror_files = sorted(mirror_dir.glob("sample_pkg_analysis-*.json"))
-    assert mirror_files, "Expected mirrored analysis artifact"
-    mirror_payload = _load_json(mirror_files[-1])
+    # Analysis is now written to commandview/function_analysis/<timestamp>/
+    viewer_analysis_base = reports_root / "commandview" / "function_analysis"
+    analysis_runs = sorted(d for d in viewer_analysis_base.iterdir() if d.is_dir()) if viewer_analysis_base.exists() else []
+    assert analysis_runs, "Expected viewer analysis directory"
+    viewer_analysis_files = sorted(analysis_runs[-1].glob("sample_pkg_analysis.json"))
+    assert viewer_analysis_files, "Expected mirrored analysis artifact"
+    mirror_payload = _load_json(viewer_analysis_files[-1])
     assert mirror_payload == analysis_payload
-    assert not (mirror_dir / "latest.json").exists()
+    assert not (analysis_runs[-1] / "latest.json").exists()
 
     finding = analysis_payload["findings"][0]
     assert finding["details"]["signature"].startswith("def duplicate_helper")

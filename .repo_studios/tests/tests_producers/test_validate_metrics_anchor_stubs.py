@@ -50,6 +50,7 @@ def test_structured_artifacts_without_missing(tmp_path, monkeypatch):
     mod = _load_module()
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir()
 
     _write_legacy_file(
         repo_root / "docs/api/metrics_orchestrator.md",
@@ -99,6 +100,7 @@ def test_detects_missing_and_honors_allowlist(tmp_path, monkeypatch):
     mod = _load_module()
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir()
 
     _write_legacy_file(
         repo_root / "docs/api/metrics_orchestrator.md",

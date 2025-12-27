@@ -31,6 +31,15 @@ def _seed_artifacts(repo_root: Path) -> dict[str, str]:
             "slow_tests": 1,
         },
     )
+    # manifest.json is required by the summarizer to validate the collect step
+    _write_json(
+        log_report_dir / "manifest.json",
+        {
+            "status": "ok",
+            "viewer_slug": "healthview",
+            "topic": "test_log_reports",
+        },
+    )
 
     coverage_dir = base_reports / "producer_reports" / "test_coverage_reports" / f"test_coverage-{COLLECT_SLUG}"
     coverage_dir.mkdir(parents=True, exist_ok=True)
@@ -172,6 +181,7 @@ def _write_telemetry(telemetry_path: Path) -> dict[str, object]:
 def test_summarizer_generates_summary_bundle(tmp_path: Path) -> None:
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir()
     artifacts = _seed_artifacts(repo_root)
 
     manifest_path = repo_root / "artifacts" / "manifest.json"

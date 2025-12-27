@@ -205,7 +205,7 @@ def test_collect_test_log_reports_handles_missing_runs(tmp_path):
     assert Path(result["output_dir"]).exists()
 
 
-def test_collect_test_log_reports_can_run_pytest(tmp_path):
+def test_collect_test_log_reports_can_run_pytest(tmp_path, monkeypatch):
     producer_mod = _load_module("collect_test_log_reports", _PRODUCER_PATH)
 
     repo = tmp_path / "repo"
@@ -214,7 +214,7 @@ def test_collect_test_log_reports_can_run_pytest(tmp_path):
     logs_dir = repo / ".repo_studios" / "command_center" / "reports" / "rawview" / "test_execution_runs"
     output_dir = repo / ".repo_studios" / "command_center" / "reports"
 
-    def fake_run(cmd, *, cwd=None, stdout=None, stderr=None, text=None, check=None):
+    def fake_run(cmd, *, cwd=None, stdout=None, stderr=None, text=None, check=None, capture_output=None):
         if "--junitxml" in cmd:
             junit_path = Path(cmd[cmd.index("--junitxml") + 1])
             junit_path.parent.mkdir(parents=True, exist_ok=True)
@@ -239,7 +239,7 @@ def test_collect_test_log_reports_can_run_pytest(tmp_path):
             stdout.write("AssertionError: boom\n")
         return SimpleNamespace(returncode=0)
 
-    producer_mod.subprocess.run = fake_run
+    monkeypatch.setattr(producer_mod.subprocess, "run", fake_run)
 
     result = producer_mod.run(
         [
@@ -278,7 +278,7 @@ def test_collect_test_log_reports_can_run_pytest(tmp_path):
     assert isinstance(telemetry["inputs"]["pytest_command"], list)
 
 
-def test_collect_test_log_reports_summarize_existing_skips_pytest(tmp_path):
+def test_collect_test_log_reports_summarize_existing_skips_pytest(tmp_path, monkeypatch):
     producer_mod = _load_module("collect_test_log_reports", _PRODUCER_PATH)
 
     repo = tmp_path / "repo"
@@ -294,7 +294,7 @@ def test_collect_test_log_reports_summarize_existing_skips_pytest(tmp_path):
     def explode(*args, **kwargs):
         raise AssertionError("subprocess.run should not be called in summarize-existing mode")
 
-    producer_mod.subprocess.run = explode
+    monkeypatch.setattr(producer_mod.subprocess, "run", explode)
 
     output_dir = repo / ".repo_studios" / "reports" / "healthview"
     result = producer_mod.run(

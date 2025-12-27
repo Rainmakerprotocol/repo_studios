@@ -26,6 +26,11 @@ tool:
     - You only need raw pytest logs (use collect_test_log_reports)
     - You only need coverage inventory (use generate_test_coverage_inventory)
 
+  known_limitations:
+    - Tests under .repo_studios/, .venv/, .git/, or __pycache__/ are excluded by default (IGNORED_PARTS).
+    - Use --tests-dir to explicitly scan test directories that would otherwise be excluded.
+    - In repo_studios itself, the Make target uses --tests-dir .repo_studios/tests to discover tests.
+
 invocation:
   command_template: |
     python {script_path} \
@@ -76,6 +81,16 @@ parameters:
     default: INFO
     choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
 
+  - name: tests_dir
+    type: string
+    required: false
+    default: null
+    description: |
+      Explicit test directory to scan (bypasses IGNORED_PARTS for that subtree).
+      Repeat to specify multiple directories. When omitted, discovers tests from repo root
+      excluding .repo_studios/, .venv/, .git/, __pycache__/.
+      In repo_studios itself, use --tests-dir .repo_studios/tests to discover tests.
+
 outputs:
   primary:
     type: directory
@@ -110,6 +125,16 @@ error_handling:
       agent_action: "Review summary.md and telemetry.json; remediate high severity findings."
 
 integration:
+  typical_workflow:
+    - step: 1
+      action: Run the canonical Make target
+      command: make -C .repo_studios studio-analyze-test-hardening LOG_LEVEL=INFO
+      output: HealthView bundle under producer_reports/test_hardening
+
+    - step: 2
+      action: Review summary.md and telemetry.json
+      consumes: producer_reports/test_hardening bundle
+
   output_consumers:
     - .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py
 
@@ -117,6 +142,10 @@ examples:
   - description: Standard run using defaults
     command: |
       python .repo_studios/scripts/producers/analyze_test_hardening.py --log-level INFO
+
+  - description: Canonical agent/operator entrypoint (via Make)
+    command: |
+      make -C .repo_studios studio-analyze-test-hardening LOG_LEVEL=INFO
 
   - description: Deterministic run slug for validation
     command: |
@@ -128,9 +157,9 @@ metadata:
   category: producer
   tier: 3
   status: draft
-  version: 0.1.0
+  version: 0.2.0
   author: Repo Studios Team
-  last_updated: 2025-12-22
+  last_updated: 2025-12-27
   dependencies_tier3:
     - tier3_artifacts.yaml
     - tier3_cli.yaml
