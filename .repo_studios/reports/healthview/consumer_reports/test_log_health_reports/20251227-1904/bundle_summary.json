@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "generated_at": "2025-12-27T19:04:45+00:00",
+  "source": "producer",
+  "producer_bundle_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\rawview\\test_log_reports\\20251226-1811",
+  "producer_telemetry": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\rawview\\test_log_reports\\20251226-1811\\telemetry.json",
+  "producer_report": null,
+  "logs_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\test_execution_runs",
+  "logs_source": null,
+  "artifacts": {
+    "report_json": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\test_log_health_reports\\20251227-1904\\report.json",
+    "report_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\test_log_health_reports\\20251227-1904\\report.md",
+    "report_csv": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\test_log_health_reports\\20251227-1904\\report.csv"
+  },
+  "summary": {
+    "total": 449,
+    "passed": 390,
+    "skipped": 0,
+    "xfailed": 0,
+    "failed": 59,
+    "errors": 0,
+    "warnings_total": 0,
+    "tracebacks": 0
+  },
+  "comparisons": {
+    "previous_run": {
+      "summary_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\test_log_health_reports\\20251225-0033",
+      "pass_rate": {
+        "current": 86.86,
+        "previous": 100.0,
+        "delta": -13.14
+      }
+    }
+  }
+}

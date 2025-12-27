@@ -1,8 +1,8 @@
 # Inventory Validation Report
 
-- generated_utc: 2025-12-27T19:20:42.238634+00:00
+- generated_utc: 2025-12-27T19:06:57.969916+00:00
 - status: error
-- output_dir: C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\validate_inventory\validate_inventory-20251227_192042
+- output_dir: C:\Users\genet\repo_studios\.repo_studios\reports\producer_reports\validate_inventory\validate_inventory-20251227_190657
 
 ## Summary
 

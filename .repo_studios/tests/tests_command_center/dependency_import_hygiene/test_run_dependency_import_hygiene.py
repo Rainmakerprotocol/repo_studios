@@ -54,20 +54,23 @@ def test_run_emits_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyP
         if module_name == hygiene_module.DEPENDENCY_MODULE:
             def _fake_dependency_main(argv: list[str]) -> int:
                 report_ts = argv[argv.index("--timestamp") + 1]
-                slug = datetime.fromisoformat(report_ts).strftime("%Y%m%d_%H%M%S")
-                run_dir = dependency_dir / f"{hygiene_module.DEPENDENCY_RUN_PREFIX}-{slug}"
+                # Match format used by orchestrator: %Y%m%d-%H%M
+                ts_slug = datetime.fromisoformat(report_ts).strftime("%Y%m%d-%H%M")
+                # Match expected path: healthview/dependency_hygiene/timestamp
+                run_dir = dependency_dir / "healthview" / "dependency_hygiene" / ts_slug
                 run_dir.mkdir(parents=True, exist_ok=True)
-                payload = {
+                # telemetry.json with payload structure
+                telemetry = {
                     "generated_utc": report_ts,
-                    "summary": {
-                        "status": "ok",
-                        "issue_count": 2,
+                    "payload": {
+                        "summary": {
+                            "status": "ok",
+                            "issue_count": 2,
+                        },
                     },
                 }
-                (dependency_dir / "latest_report.json").write_text(json.dumps(payload), encoding="utf-8")
-                (run_dir / "report.json").write_text(json.dumps(payload), encoding="utf-8")
-                (run_dir / "report.md").write_text("# Dependency\n", encoding="utf-8")
-                (run_dir / "log.txt").write_text("status=ok\n", encoding="utf-8")
+                (run_dir / "telemetry.json").write_text(json.dumps(telemetry), encoding="utf-8")
+                (run_dir / "summary.md").write_text("# Dependency\n", encoding="utf-8")
                 return 0
 
             return _fake_dependency_main
@@ -212,7 +215,8 @@ def test_run_emits_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyP
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     assert manifest["topic"] == "dependency_import_hygiene"
     artifacts = manifest["artifacts"]
-    assert artifacts["dependency_report"].endswith("report.json")
+    # Dependency report now uses telemetry.json as the report file
+    assert artifacts["dependency_report"].endswith("telemetry.json")
     assert artifacts["typecheck_report"].endswith("report.json")
     assert artifacts["mypy_baseline_summary"].endswith("bundle_summary.json")
 

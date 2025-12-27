@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "generated_at": "2025-01-03T00:09:00+00:00",
+  "source": "scan",
+  "source_report": null,
+  "run_dir": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-809\\test_fault_artifacts_prunes_hi0\\repo\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-03_000000",
+  "summary": {
+    "signature_count": 2,
+    "thread_block_count": 2,
+    "top_frame_limit": 10,
+    "stack_log_exists": true,
+    "stack_text_bytes": 123,
+    "severity_buckets": {
+      "repeat_offender": 0,
+      "multi_hit": 0,
+      "single_hit": 2
+    },
+    "active_signature_count": 2,
+    "first_seen_utc": "2025-12-27T19:20:58+00:00",
+    "last_seen_utc": "2025-12-27T19:20:58+00:00"
+  },
+  "signatures": [
+    {
+      "signature_id": "50ef56fbf16d4669",
+      "count": 1,
+      "top_module": "helper",
+      "top_func": "assist",
+      "top_file": "/svc/helper.py",
+      "top_line": 3,
+      "threads": [
+        "Thread 0x0002:"
+      ],
+      "first_seen_ts": "2025-12-27T19:20:58+00:00",
+      "last_seen_ts": "2025-12-27T19:20:58+00:00"
+    },
+    {
+      "signature_id": "a34ea19ba723d047",
+      "count": 1,
+      "top_module": "worker",
+      "top_func": "work",
+      "top_file": "/svc/worker.py",
+      "top_line": 8,
+      "threads": [
+        "Current thread 0x0001:"
+      ],
+      "first_seen_ts": "2025-12-27T19:20:58+00:00",
+      "last_seen_ts": "2025-12-27T19:20:58+00:00"
+    }
+  ],
+  "artifacts": {
+    "run_summary_md": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-809\\test_fault_artifacts_prunes_hi0\\repo\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-03_000000\\SUMMARY.md",
+    "stacks_csv": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-809\\test_fault_artifacts_prunes_hi0\\repo\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-03_000000\\stacks.csv",
+    "combined_txt": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-809\\test_fault_artifacts_prunes_hi0\\repo\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-03_000000\\dumps\\combined.txt"
+  }
+}

@@ -228,12 +228,19 @@ def test_generate_test_log_health_report_falls_back_to_logs(tmp_path, monkeypatc
         repo / ".repo_studios" / "reports" / "healthview" / "consumer_reports" / "test_log_health_reports"
     )
 
+    # Use a non-existent producer-reports-root so the script falls back to logs
+    producer_reports_root = repo / ".repo_studios" / "reports" / "healthview" / "rawview" / "test_log_reports"
+
     first_result = consumer_mod.run(
         [
+            "--repo-root",
+            str(repo),
             "--logs-dir",
             str(logs_base),
             "--output-base",
             str(output_base),
+            "--producer-reports-root",
+            str(producer_reports_root),
             "--timestamp",
             "2025-01-01T00:00:00+00:00",
             "--log-level",
@@ -269,6 +276,8 @@ def test_generate_test_log_health_report_falls_back_to_logs(tmp_path, monkeypatc
             str(logs_base),
             "--output-base",
             str(output_base),
+            "--producer-reports-root",
+            str(producer_reports_root),
             "--timestamp",
             "2025-01-01T00:01:00+00:00",
         ]

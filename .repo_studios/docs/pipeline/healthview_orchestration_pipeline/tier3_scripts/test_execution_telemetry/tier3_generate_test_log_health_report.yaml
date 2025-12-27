@@ -182,9 +182,9 @@ metadata:
   category: consumer
   tier: 3
   status: draft
-  version: 0.1.0
+  version: 0.2.0
   author: Repo Studios Team
-  last_updated: 2025-12-21
+  last_updated: 2025-12-27
   dependencies_tier3:
     - tier3_artifacts.yaml
     - tier3_cli.yaml
@@ -196,3 +196,14 @@ metadata:
     - healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
   testing:
     test_file: .repo_studios/tests/tests_consumers/test_generate_test_log_health_report.py
+
+known_limitations:
+  - id: bundle_schema_deviation
+    summary: Bundle uses bundle_summary.json and report.md instead of HOP base package
+    description: |
+      The output bundle uses `bundle_summary.json` (metadata), `report.json`/`report.md`/`report.csv`
+      instead of the HOP base package (`manifest.json`, `summary.md`, `telemetry.json`). This is a
+      consumer-stage deviation that predates the HOP contract. Harmonization is deferred until
+      Stage 1.1 hardening completes.
+    workaround: None required; the bundle_summary.json schema is stable and well-tested.
+    severity: info
