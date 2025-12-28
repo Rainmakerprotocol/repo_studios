@@ -34,6 +34,7 @@ related_files:
 > for HealthView use, but are *not yet* wired into the orchestrator blast-radius chain.
 >
 > This roster exists to:
+>
 > - preserve provenance (what scripts are in the holding area, and why),
 > - define promotion stop-gates (what must be true before a script is adopted into an orchestrator),
 > - provide per-script inspection records so adoption work can start without re-discovery.
@@ -116,8 +117,10 @@ related_files:
 - Producer: `.repo_studios/scripts/producers/check_inventory_health.py` (questionable)
 - Producer: `.repo_studios/scripts/producers/validate_inventory.py` (questionable)
 - Summarizer: `.repo_studios/scripts/summarizers/summarize_health_suite.py` (legacy/deprecation candidate)
-- Producer: `.repo_studios/scripts/producers/render_inventory_views.py` (out-of-scope for HealthView today)
-- Producer: `.repo_studios/scripts/producers/generate_lizard_report.py` (out-of-scope for HealthView today)
+- Producer: `.repo_studios/scripts/producers/render_inventory_views.py`
+  (out-of-scope for HealthView today)
+- Producer: `.repo_studios/scripts/producers/generate_lizard_report.py`
+  (out-of-scope for HealthView today)
 - Library: `.repo_studios/command_center/scripts/libraries/test_log_analysis.py` (available by design)
 
 ### 2.3 Current vs Target Contract Snapshot (Stage 11.1)
@@ -508,9 +511,13 @@ notes:
 - Proposed future stage: **3.2** (fault diagnostics / faulthandler vertical)
 - Minimal orchestrator wrapper required: a orchestrator that calls `dump_snapshot()` (or `main()`), then packages the run into the HealthView base bundle (manifest/summary/telemetry) under the stage’s canonical output root
 - Known contract deltas vs target stage:
-  - Current output root defaults under `command_center/reports/rawview/fault_snapshots/...` (rawview) rather than canonical HealthView root
+  - Current output root defaults under
+    `command_center/reports/rawview/fault_snapshots/...` (rawview) rather than
+    canonical HealthView root
   - Artifact naming is mixed (e.g., `MANIFEST.json` + `SUMMARY.md` vs target `manifest.json` + `summary.md`)
-  - Retention is env-driven today; promotion would need the wrapper to expose (or standardize) a stage-level pruning surface consistent with other HealthView stages
+  - Retention is env-driven today; promotion would need the wrapper to expose
+    (or standardize) a stage-level pruning surface consistent with other
+    HealthView stages
 
 #### Implementation Workstreams (checkbox-driven) — dump_faulthandler_snapshot.py
 
@@ -673,9 +680,14 @@ notes:
 - Proposed future stage: **4.2** (import boundary / architectural integrity producer vertical)
 - Minimal orchestrator wrapper required: a orchestrator that invokes `run(argv)` and then emits a single HealthView bundle (manifest/summary/telemetry) under the stage’s canonical output root; wrapper should surface `--strict` and thread through `--artifacts-to-keep`
 - Known contract deltas vs target stage:
-  - Current output root is `producer_reports/import_boundary_reports/<run_id>/` rather than canonical HealthView root
-  - Current outputs include a `latest/` mirror subtree, which violates the pointer-ban expected in promoted HealthView stages
-  - Current artifacts are report-oriented (`report.json`, `violations.json`, logs); promotion would need a consistent mapping into base-package artifacts and clarify how the detailed report payload is represented (telemetry vs additional catalog artifacts)
+  - Current output root is `producer_reports/import_boundary_reports/<run_id>/`
+    rather than canonical HealthView root
+  - Current outputs include a `latest/` mirror subtree, which violates
+    the pointer-ban expected in promoted HealthView stages
+  - Current artifacts are report-oriented (`report.json`, `violations.json`,
+    logs); promotion would need a consistent mapping into base-package
+    artifacts and clarify how the detailed report payload is represented
+    (telemetry vs additional catalog artifacts)
 
 #### Implementation Workstreams (checkbox-driven) — validate_import_boundaries.py
 

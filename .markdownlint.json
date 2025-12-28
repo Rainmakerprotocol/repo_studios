@@ -25,8 +25,8 @@
     "heading_line_length": 120,
     "code_block_line_length": 120,
     "strict": false,
-    "code_blocks": true,
-    "tables": true
+    "code_blocks": false,
+    "tables": false
   },
   "MD018": true,
   "MD022": true,

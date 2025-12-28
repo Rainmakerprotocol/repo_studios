@@ -539,7 +539,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, object]:
                 "full_log": None,
             },
             },
-            markdown="# Test Log Health Report\n\n(no data)\n",
+            markdown="## Test Log Health Report\n\n(no data)\n",
         )
 
         artifacts_dir = _write_artifacts(

@@ -260,11 +260,11 @@ record.
   - **Base package compliant (manifest + summary + telemetry):** ✅
   - **DB integration:** ❌ (no direct DB callsites observed)
     - Delegated scripts include DB integration markers and/or storage writers.
-  - **Tier-3 appropriate:** deferred (delegated scripts have Tier-3 YAML; orchestrator invoked directly)
-  - **Tier-3 YAML exists:** no
+  - **Tier-3 appropriate:** yes (created 2025-12-27 for completeness)
+  - **Tier-3 YAML exists:** yes
   - **Tier-3 YAML name:** `tier3_run_test_execution_telemetry.yaml`
-  - **Tier-3 meets template:** NA
-  - **Tier-3 last updated:** —
+  - **Tier-3 meets template:** ✅
+  - **Tier-3 last updated:** 2025-12-27
   - **Tests:** `.repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py`
   - **Evidence:**
     - Run slug derived from `options.run_timestamp.strftime("%Y%m%d-%H%M")`.
@@ -323,9 +323,11 @@ Workstream D — Tier-3 YAML
 - [x] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
   - Decision (2025-12-25): deferred; orchestrator is invoked directly and does not require a
     Tier-3 YAML recipe for the current HealthView loop.
-- [ ] Inspect Tier-3 template requirements
-- [ ] Draft `tier3_run_test_execution_telemetry.yaml`
-- [ ] Validate Tier-3 YAML
+  - Revised decision (2025-12-27): created Tier-3 YAML for completeness; orchestrator benefits from
+    tool documentation like other Stage 1.1 scripts.
+- [x] Inspect Tier-3 template requirements
+- [x] Draft `tier3_run_test_execution_telemetry.yaml`
+- [x] Validate Tier-3 YAML (2025-12-27)
 
 Workstream E — QA & Evidence
 

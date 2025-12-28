@@ -182,13 +182,18 @@ examples:
         --run-timestamp 20251221-2237 \
         --log-level DEBUG
 
+known_limitations:
+  - Raw logs_dir discovery walks directories recursively; deeply nested structures may be slow
+  - PYTEST_LOG_REPORTS_ALLOW_LEGACY env var enables fallback to legacy .repo_studios/pytest_logs path
+  - Failure samples extracted from JUnit XML are limited to first 25 by default
+
 metadata:
   category: producer
   tier: 3
-  status: draft
-  version: 0.1.0
+  status: active
+  version: 0.2.0
   author: Repo Studios Team
-  last_updated: 2025-12-21
+  last_updated: 2025-12-27
   dependencies_tier3:
     - tier3_artifacts.yaml
     - tier3_prune_logs.yaml

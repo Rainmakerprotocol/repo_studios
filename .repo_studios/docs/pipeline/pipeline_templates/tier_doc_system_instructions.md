@@ -27,16 +27,26 @@ related_files:
 <!-- markdownlint-disable-next-line MD025 -->
 # Instructions — Tier Documentation System (5W1H Onboarding)
 
-> You (new AI coding assistant) must master this tiered documentation system before editing any pipeline files. The guidance below uses the 5W1H method so you understand who owns what, why the tiers exist, where to find them, when to update each, and how to apply the structure.
+> You (new AI coding assistant) must master this tiered documentation system before
+> editing any pipeline files. The guidance below uses the 5W1H method so you understand
+> who owns what, why the tiers exist, where to find them, when to update each, and how
+> to apply the structure.
 
 ---
 
 ## 1. Who
 
-* **Tier-1 Stewards:** Architecture owners responsible for canonical "spine" docs (for example, `<pending_progress>`). They ensure every stage narrative exists, stays chronological, and references Tier-2 verticals.
-* **Tier-2 Authors:** Stage/vertical leads who own implementation plans with actionable checklists (`<pending_progress>`). They encode evidence links, telemetry expectations, and gating tasks.
-* **Tier-3 Custodians:** Horizontal framework owners (shared libraries: prune_logs, database_integration, cli, artifacts). Their docs capture reusable semantics and list dependent Tier-2/Tier-1 files.
-* **AI Coding Assistants:** Copilot and peer agents. You must read the relevant tier doc before touching code, cite it in PRs, and keep statuses synchronized.
+- **Tier-1 Stewards:** Architecture owners responsible for canonical "spine" docs (for
+  example, `<pending_progress>`). They ensure every stage narrative exists, stays
+  chronological, and references Tier-2 verticals.
+- **Tier-2 Authors:** Stage/vertical leads who own implementation plans with actionable
+  checklists (`<pending_progress>`). They encode evidence links, telemetry expectations,
+  and gating tasks.
+- **Tier-3 Custodians:** Horizontal framework owners (shared libraries: prune_logs,
+  database_integration, cli, artifacts). Their docs capture reusable semantics and list
+  dependent Tier-2/Tier-1 files.
+- **AI Coding Assistants:** Copilot and peer agents. You must read the relevant tier doc
+  before touching code, cite it in PRs, and keep statuses synchronized.
 
 ## 2. What
 
@@ -48,47 +58,89 @@ The tier system is a structured documentation hierarchy:
 | Tier-2 | Vertical deep dive | Details a single stage with goals, system context, workstreams, telemetry, dependencies, agent automation, and update logs. |
 | Tier-3 | Horizontal spec (YAML) | Defines reusable semantics and script contracts in YAML format optimized for agent tool calling. Each script gets `tier3_<name>.yaml` with invocation details, parameters, outputs, and examples. |
 
-Templates for Tier-1, Tier-2, and Tier-3 live in `.repo_studios/docs/pipeline/pipeline_templates/` (`tier1_pipeline_template.md`, `tier2_pipeline_template.md`, `tier3_agent_pipeline_template.yaml`, plus supporting how-tos). Use them whenever you create a new doc.
+Templates for Tier-1, Tier-2, and Tier-3 live in `.repo_studios/docs/pipeline/pipeline_templates/`
+(`tier1_pipeline_template.md`, `tier2_pipeline_template.md`, `tier3_agent_pipeline_template.yaml`,
+plus supporting how-tos). Use them whenever you create a new doc.
 
 ## 3. Why
 
-* **Traceability:** Every behavioral change (code, tests, configs) must map back to a stage checklist. Tier docs provide the evidence ledger.
-* **Automation:** `make doc-index` and checkbox reports parse these docs to inform CI gates and AI agent reasoning.
-* **Parity:** Transport/voice parity, telemetry hooks, and guardrail semantics are enforced across tiers. Tier-2/Tier-3 updates propagate to Tier-1 stop-gates so nothing ships half-documented.
-* **Onboarding:** New humans and AI agents can reconstruct the system by following Tier-1 narratives down to Tier-3 specifics without ad hoc tribal knowledge.
+- **Traceability:** Every behavioral change (code, tests, configs) must map back to a
+  stage checklist. Tier docs provide the evidence ledger.
+- **Automation:** `make doc-index` and checkbox reports parse these docs to inform CI
+  gates and AI agent reasoning.
+- **Parity:** Transport/voice parity, telemetry hooks, and guardrail semantics are
+  enforced across tiers. Tier-2/Tier-3 updates propagate to Tier-1 stop-gates so nothing
+  ships half-documented.
+- **Onboarding:** New humans and AI agents can reconstruct the system by following
+  Tier-1 narratives down to Tier-3 specifics without ad hoc tribal knowledge.
 
 ## 4. Where
 
-* **Tier-1/Tier-2:** `.repo_studios/docs/pipeline/<pipeline_name>/`. Example: `<pending_progress>` (Tier-1) and `<pending_progress>` (Tier-2).
-* **Tier-3 (YAML):** `.repo_studios/docs/pipeline/tier3_<script_name>.yaml`. Each of the 77+ scripts gets its own YAML file optimized for agent tool calling. Auto-generated index at `tier3_scripts_index.yaml`.
-* **Templates & How-Tos:** `.repo_studios/docs/pipeline/pipeline_templates/` hosts `tier1_pipeline_template.md`, `tier2_pipeline_template.md`, `tier3_agent_pipeline_template.yaml`, `tier3_scripts_index_schema.yaml`, `tier2_pipeline_howto.md`, and this instruction file. Duplicate the relevant template when starting new docs.
-* **Doc-Index Artifacts:** `.repo_studios/docs/pipeline/checkbox_report/outputs/` stores CSV/MD snapshots generated by checkbox_report.py.
+- **Tier-1/Tier-2:** `.repo_studios/docs/pipeline/<pipeline_name>/`. Example:
+  `<pending_progress>` (Tier-1) and `<pending_progress>` (Tier-2).
+- **Tier-3 (YAML):** `.repo_studios/docs/pipeline/tier3_<script_name>.yaml`. Each of the
+  77+ scripts gets its own YAML file optimized for agent tool calling. Auto-generated
+  index at `tier3_scripts_index.yaml`.
+- **Templates & How-Tos:** `.repo_studios/docs/pipeline/pipeline_templates/` hosts
+  `tier1_pipeline_template.md`, `tier2_pipeline_template.md`,
+  `tier3_agent_pipeline_template.yaml`, `tier3_scripts_index_schema.yaml`,
+  `tier2_pipeline_howto.md`, and this instruction file. Duplicate the relevant template
+  when starting new docs.
+- **Doc-Index Artifacts:** `.repo_studios/docs/pipeline/checkbox_report/outputs/` stores
+  CSV/MD snapshots generated by checkbox_report.py.
 
 ## 5. When
 
-* **Tier-1:** Update whenever a stage’s behavior, status, or linked Tier-2 doc changes. Always reflect new stop-gates or contradictions here first.
-* **Tier-2:** Update as soon as a stage needs a scoped plan or evidence refresh (before coding or while refactoring). Maintain checklists in step with implementation progress.
-* **Tier-3:** Update when new reusable semantics emerge or when Tier-2 work depends on a shared contract (telemetry envelope, guardrail taxonomy). Add placeholders if the horizontal doc doesn’t exist yet.
-* **Doc-Index Runs:** Every Tier doc edit must be followed by running `python .repo_studios/scripts/producers/generate_doc_index.py --repo-root .` (refreshing doc inventory) and the timestamp recorded in the Update Log.
+- **Tier-1:** Update whenever a stage's behavior, status, or linked Tier-2 doc changes.
+  Always reflect new stop-gates or contradictions here first.
+- **Tier-2:** Update as soon as a stage needs a scoped plan or evidence refresh (before
+  coding or while refactoring). Maintain checklists in step with implementation progress.
+- **Tier-3:** Update when new reusable semantics emerge or when Tier-2 work depends on
+  a shared contract (telemetry envelope, guardrail taxonomy). Add placeholders if the
+  horizontal doc doesn't exist yet.
+- **Doc-Index Runs:** Every Tier doc edit must be followed by running
+  `python .repo_studios/scripts/producers/generate_doc_index.py --repo-root .`
+  (refreshing doc inventory) and the timestamp recorded in the Update Log.
 
 ## 6. How (Instruction Checklist)
 
-1. **Before editing code:** Locate the relevant Tier-1 stage and read its linked Tier-2/Tier-3 docs. If a Tier-2 vertical is missing, duplicate the Tier-2 template; if a reusable horizontal is missing, duplicate the Tier-3 template, add a reference in the relevant index, and note the placeholder in dependent Tier-1/Tier-2 sections before proceeding.
-2. **While editing docs:**
-   * Keep YAML front matter + instruction blocks intact (per `.github/instructions/markdown.instructions.md`).
-   * Preserve canonical section order (Goals → System Context → Workstreams/Stages → Signals & Telemetry → Dependencies & Stop-Gates → Instruction Block → Agent Automation → Update Log).
-   * Cite evidence (code paths, tests, telemetry endpoints) for each checklist item.
-   * Explicitly reference Tier-3 dependencies under "Tier Alignment"; add placeholders if pending.
-3. **After editing:**
-   * Refresh the doc-index (via the `doc-index` make target or platform-equivalent command). Mention timestamp + relevant test suites in the Update Log.
-   * Mirror status changes across tiers (Tier-2 progress reflected in Tier-1; Tier-3 updates linked from dependent docs).
-   * If database integration is involved, ensure dual-write placeholders are documented per database_integration.py contract.
-  * Log the doc-index timestamp and test suites in the Update Log columns so the automation block can verify evidence.
-4. **Tier reciprocity checklist:**
-  * When editing Tier-3 docs, list every dependent Tier-1/Tier-2 section (and ensure those docs link back here).
-  * When editing Tier-1 or Tier-2 docs, refresh their dependency notes so readers know which horizontals gate their progress.
-  * Update roster docs (tier2_<role>_roster.md) whenever new scripts are added or status changes.
-5. **When onboarding another AI agent:** Link them to this instruction file, the Tier-1/Tier-2/Tier-3 templates, and the tier how-to guide. Ensure they understand doc-index obligations before contributing.
+1. **Before editing code:** Locate the relevant Tier-1 stage and read its linked
+   Tier-2/Tier-3 docs. If a Tier-2 vertical is missing, duplicate the Tier-2 template;
+   if a reusable horizontal is missing, duplicate the Tier-3 template, add a reference
+   in the relevant index, and note the placeholder in dependent Tier-1/Tier-2 sections
+   before proceeding.
+
+1. **While editing docs:**
+   - Keep YAML front matter + instruction blocks intact (per
+     `.github/instructions/markdown.instructions.md`).
+   - Preserve canonical section order (Goals → System Context → Workstreams/Stages →
+     Signals & Telemetry → Dependencies & Stop-Gates → Instruction Block → Agent
+     Automation → Update Log).
+   - Cite evidence (code paths, tests, telemetry endpoints) for each checklist item.
+   - Explicitly reference Tier-3 dependencies under "Tier Alignment"; add placeholders
+     if pending.
+
+1. **After editing:**
+   - Refresh the doc-index (via the `doc-index` make target or platform-equivalent
+     command). Mention timestamp + relevant test suites in the Update Log.
+   - Mirror status changes across tiers (Tier-2 progress reflected in Tier-1; Tier-3
+     updates linked from dependent docs).
+   - If database integration is involved, ensure dual-write placeholders are documented
+     per database_integration.py contract.
+   - Log the doc-index timestamp and test suites in the Update Log columns so the
+     automation block can verify evidence.
+
+1. **Tier reciprocity checklist:**
+   - When editing Tier-3 docs, list every dependent Tier-1/Tier-2 section (and ensure
+     those docs link back here).
+   - When editing Tier-1 or Tier-2 docs, refresh their dependency notes so readers know
+     which horizontals gate their progress.
+   - Update roster docs (`tier2_<role>_roster.md`) whenever new scripts are added or
+     status changes.
+
+1. **When onboarding another AI agent:** Link them to this instruction file, the
+   Tier-1/Tier-2/Tier-3 templates, and the tier how-to guide. Ensure they understand
+   doc-index obligations before contributing.
 
 ## 7. Agent Automation Block
 

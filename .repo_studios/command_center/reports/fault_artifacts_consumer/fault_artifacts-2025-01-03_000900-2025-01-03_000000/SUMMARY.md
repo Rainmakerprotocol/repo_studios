@@ -10,8 +10,8 @@ Generated (UTC): 2025-01-03T00:08:00+00:00
 - top_frame_limit: 10
 - stack_log_exists: True
 - stack_text_bytes: 123
-- first_seen_utc: 2025-12-27T19:20:58+00:00
-- last_seen_utc: 2025-12-27T19:20:58+00:00
+- first_seen_utc: 2025-12-27T20:13:37+00:00
+- last_seen_utc: 2025-12-27T20:13:37+00:00
 
 ## Severity Buckets
 
@@ -33,8 +33,8 @@ Generated (UTC): 2025-01-03T00:08:00+00:00
 <!-- markdownlint-disable-next-line MD013 -->
 ## Source References
 
-- Run Directory: `C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-809\test_fault_artifacts_prunes_hi0\repo\.repo_studios\command_center\reports\rawview\fault_diagnostics_runs\2025-01-03_000000`
+- Run Directory: `C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-815\test_fault_artifacts_prunes_hi0\repo\.repo_studios\command_center\reports\rawview\fault_diagnostics_runs\2025-01-03_000000`
 - Source Type: scan
-- Run Summary: `C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-809\test_fault_artifacts_prunes_hi0\repo\.repo_studios\command_center\reports\rawview\fault_diagnostics_runs\2025-01-03_000000\SUMMARY.md`
-- Stacks CSV: `C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-809\test_fault_artifacts_prunes_hi0\repo\.repo_studios\command_center\reports\rawview\fault_diagnostics_runs\2025-01-03_000000\stacks.csv`
-- Combined Stack Text: `C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-809\test_fault_artifacts_prunes_hi0\repo\.repo_studios\command_center\reports\rawview\fault_diagnostics_runs\2025-01-03_000000\dumps\combined.txt`
+- Run Summary: `C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-815\test_fault_artifacts_prunes_hi0\repo\.repo_studios\command_center\reports\rawview\fault_diagnostics_runs\2025-01-03_000000\SUMMARY.md`
+- Stacks CSV: `C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-815\test_fault_artifacts_prunes_hi0\repo\.repo_studios\command_center\reports\rawview\fault_diagnostics_runs\2025-01-03_000000\stacks.csv`
+- Combined Stack Text: `C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-815\test_fault_artifacts_prunes_hi0\repo\.repo_studios\command_center\reports\rawview\fault_diagnostics_runs\2025-01-03_000000\dumps\combined.txt`

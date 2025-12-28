@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "producer_reports",
+  "topic": "test_coverage_inventory",
+  "run_timestamp": "20251228-0136",
+  "generated_at": "2025-12-28T01:36:32.587698+00:00",
+  "status": "ok",
+  "git_sha": null,
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "inputs": {
+    "coverage_xml": ".repo_studios/tests/fixtures/test_run_coverage/coverage.xml",
+    "output_dir": ".repo_studios/reports/healthview",
+    "min_coverage": null,
+    "include_empty": false,
+    "artifacts_to_keep": 10,
+    "timestamp": "2025-12-28T01:36:32.547257+00:00",
+    "refresh_coverage_xml": false,
+    "refresh_tests": [
+      ".repo_studios/tests"
+    ],
+    "refresh_continue_on_error": false,
+    "refresh_omit_tests": false,
+    "refresh_cov_target": [],
+    "refresh_pytest_args": null,
+    "refresh_exit_code": null,
+    "refresh_suite_results": null
+  },
+  "catalog": [
+    {
+      "artifact": "manifest.json",
+      "path": ".repo_studios/reports/healthview/producer_reports/test_coverage_inventory/20251228-0136/manifest.json"
+    },
+    {
+      "artifact": "summary.md",
+      "path": ".repo_studios/reports/healthview/producer_reports/test_coverage_inventory/20251228-0136/summary.md"
+    },
+    {
+      "artifact": "telemetry.json",
+      "path": ".repo_studios/reports/healthview/producer_reports/test_coverage_inventory/20251228-0136/telemetry.json"
+    }
+  ],
+  "provenance": {
+    "script": "generate_test_coverage_inventory.py",
+    "trigger": "cli"
+  }
+}

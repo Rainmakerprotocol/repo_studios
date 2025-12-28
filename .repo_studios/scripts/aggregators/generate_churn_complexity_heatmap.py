@@ -19,7 +19,7 @@ from typing import Any, Iterable, Sequence
 DEFAULT_OUTPUT_BASE = Path(
     ".repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap"
 )
-DEFAULT_TEST_LOG_SUMMARY = Path(".repo_studios/reports/consumer_reports/test_log_health_reports")
+DEFAULT_TEST_LOG_SUMMARY = Path(".repo_studios/reports/healthview/consumer_reports/test_log_health_reports")
 DEFAULT_LOGS_DIR = Path(".repo_studios/command_center/reports/rawview/test_execution_runs")
 LEGACY_LOGS_DIR = Path(".repo_studios/pytest_logs")
 DEFAULT_METRICS_SOURCE: Path | None = None
@@ -240,7 +240,7 @@ def _load_junit_failures(path: Path | None, repo_root: Path, logger: logging.Log
     if path is None or not path.exists():
         return Counter()
     try:
-        from defusedxml import ElementTree  # type: ignore[import-untyped]
+        from defusedxml import ElementTree
     except ImportError:
         import xml.etree.ElementTree as ElementTree
 

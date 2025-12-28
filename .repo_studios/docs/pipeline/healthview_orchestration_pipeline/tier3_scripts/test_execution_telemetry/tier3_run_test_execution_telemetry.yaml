@@ -1,0 +1,344 @@
+# Tier-3: run_test_execution_telemetry.py
+# Orchestrator script that chains Stage 1.1 Test Execution Telemetry producers, consumers, aggregators, and summarizers.
+
+tool:
+  id: run_test_execution_telemetry
+  name: Run Test Execution Telemetry Orchestrator
+  description: |
+    Topic orchestrator for Stage 1.1 Test Execution Telemetry. Chains producer → consumer → aggregator
+    → summarizer scripts to emit a HealthView bundle under:
+
+      .repo_studios/reports/healthview/orchestrator_reports/test_execution_telemetry/<YYYYMMDD-HHMM>/
+
+    The orchestrator coordinates:
+      1. collect_test_log_reports.py (producer)
+      2. generate_test_coverage_inventory.py (producer)
+      3. analyze_test_hardening.py (producer)
+      4. generate_churn_complexity_heatmap.py (aggregator)
+      5. generate_test_log_health_report.py (consumer)
+      6. summarize_test_execution_telemetry.py (summarizer)
+
+    Each step is executed via dynamic import (no subprocess spawning) with exit code propagation.
+    The pipeline stops on the first hard failure.
+
+    Expect 5–6 minute runtime when churn analysis is enabled.
+  keywords:
+    - healthview
+    - orchestrator
+    - test
+    - telemetry
+    - coverage
+    - hardening
+    - heatmap
+    - stage-1.1
+  use_when:
+    - Need a full Stage 1.1 Test Execution Telemetry diagnostic run
+    - Refreshing test suite health metrics (coverage, churn, hardening, log health)
+    - Collecting all producer/consumer/aggregator artifacts in a single coordinated pipeline run
+    - Generating orchestrator manifests with artifact cross-references
+  dont_use_when:
+    - Need only a single script's output (call the script directly instead)
+    - Investigating a specific test log (use collect_test_log_reports directly)
+    - Running pytest interactively (the orchestrator invokes pytest via collect_test_log_reports --summarize-existing if logs exist)
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --log-level {log_level}
+  make_target: studio-orchestrate-test-execution-telemetry
+  script_path: .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+    notes:
+      - "Dynamic imports require PYTHONPATH to include .repo_studios"
+      - "Delegated scripts must expose a run(argv) callable"
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: (auto-detected from script location)
+    description: Repository root directory. Used to resolve all relative artifact paths.
+    validation:
+      must_exist: true
+      must_be_directory: true
+
+  - name: logs_dir
+    type: path
+    required: false
+    default: .repo_studios/command_center/reports/rawview/test_execution_runs
+    description: Directory containing pytest log capture subdirectories.
+    validation:
+      must_exist: false
+
+  - name: test_log_reports_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview
+    description: Output base for test log reports (rawview/test_log_reports subdirectory appended).
+    validation:
+      parent_must_exist: false
+
+  - name: test_log_health_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/consumer_reports/test_log_health_reports
+    description: Output base for test log health consumer reports.
+    validation:
+      parent_must_exist: false
+
+  - name: test_coverage_output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview
+    description: Output base for coverage inventory producer reports.
+    validation:
+      parent_must_exist: false
+
+  - name: test_coverage_xml
+    type: path
+    required: false
+    default: .repo_studios/tests/fixtures/test_run_coverage/coverage.xml
+    description: Path to coverage.xml file to analyze.
+    validation:
+      must_exist: false
+
+  - name: heatmap_output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap
+    description: Output base for churn complexity heatmap aggregator reports.
+    validation:
+      parent_must_exist: false
+
+  - name: heatmap_metrics_source
+    type: path
+    required: false
+    default: null
+    description: Optional path to pre-computed Lizard metrics JSON for heatmap enrichment.
+    validation:
+      must_exist: false
+
+  - name: heatmap_window
+    type: int
+    required: false
+    default: 500
+    description: Number of git log commits to scan for churn analysis.
+    validation:
+      min_value: 1
+
+  - name: hardening_output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview
+    description: Output base for test hardening producer reports.
+    validation:
+      parent_must_exist: false
+
+  - name: healthview_root
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview
+    description: Root directory for HealthView artifacts. Orchestrator bundle written here.
+    validation:
+      parent_must_exist: false
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 3
+    description: Number of orchestrator bundle directories to retain.
+    validation:
+      min_value: 1
+
+  - name: collector_artifacts_to_keep
+    type: int
+    required: false
+    default: 10
+    description: Retention window for log report producer runs.
+    validation:
+      min_value: 1
+
+  - name: health_artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Retention window for health report consumer runs.
+    validation:
+      min_value: 1
+
+  - name: coverage_artifacts_to_keep
+    type: int
+    required: false
+    default: 10
+    description: Retention window for coverage inventory producer runs.
+    validation:
+      min_value: 1
+
+  - name: heatmap_artifacts_to_keep
+    type: int
+    required: false
+    default: 10
+    description: Retention window for churn heatmap aggregator runs.
+    validation:
+      min_value: 1
+
+  - name: hardening_artifacts_to_keep
+    type: int
+    required: false
+    default: 10
+    description: Retention window for hardening analysis producer runs.
+    validation:
+      min_value: 1
+
+  - name: timestamp
+    type: string
+    required: false
+    default: (current UTC time)
+    description: ISO 8601 timestamp for the orchestrator run slug (YYYYmmdd-HHMM).
+    validation:
+      format: ISO8601
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+outputs:
+  primary:
+    type: directory
+    format: healthview_bundle
+    path_pattern: .repo_studios/reports/healthview/orchestrator_reports/test_execution_telemetry/<YYYYMMDD-HHMM>/
+    description: HealthView bundle for a single Stage 1.1 orchestrator run.
+    contents:
+      required:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+
+  secondary:
+    - type: directory
+      format: producer_report
+      path_pattern: .repo_studios/reports/healthview/rawview/test_log_reports/<YYYYMMDD-HHMM>/
+      description: Test log reports producer bundle.
+    - type: directory
+      format: producer_report
+      path_pattern: .repo_studios/reports/healthview/producer_reports/test_coverage_inventory/<YYYYMMDD-HHMM>/
+      description: Coverage inventory producer bundle.
+    - type: directory
+      format: producer_report
+      path_pattern: .repo_studios/reports/healthview/producer_reports/test_hardening/<YYYYMMDD-HHMM>/
+      description: Test hardening producer bundle.
+    - type: directory
+      format: aggregator_report
+      path_pattern: .repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap/<slug>/
+      description: Churn complexity heatmap aggregator bundle.
+    - type: directory
+      format: consumer_report
+      path_pattern: .repo_studios/reports/healthview/consumer_reports/test_log_health_reports/<YYYYMMDD-HHMM>/
+      description: Test log health consumer bundle.
+    - type: directory
+      format: summarizer_report
+      path_pattern: .repo_studios/reports/healthview/summarizer_reports/test_execution_telemetry/<YYYYMMDD-HHMM>/
+      description: Final summary artifacts (markdown + JSON).
+    - type: stdout
+      format: text
+      description: Logging output describing step execution and artifact locations.
+
+behavior:
+  idempotent: false
+  side_effects:
+    - Runs coverage inventory producer against coverage.xml
+    - Runs test log collection producer (summarize-existing mode)
+    - Runs test hardening analysis producer
+    - Runs churn complexity heatmap aggregator (may scan git log)
+    - Runs test log health report consumer
+    - Runs summarizer to generate final summary
+    - Writes orchestrator bundle with manifest, summary, and telemetry
+    - Prunes older sibling run directories for each artifact class
+  duration_estimate: "5–6 minutes with churn analysis, < 30 seconds without"
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 1
+      meaning: "Pipeline step failed (producer/consumer/aggregator/summarizer returned non-zero)."
+      agent_action: "Check logs for which step failed; inspect that script's output directory for partial artifacts."
+    - exit_code: 1
+      meaning: "Missing required input files (e.g., coverage.xml not found)."
+      agent_action: "Confirm coverage.xml exists or run pytest with coverage first."
+
+integration:
+  typical_workflow:
+    - step: 1
+      action: (Optional) Run pytest with coverage to generate logs and coverage.xml
+      output: pytest logs + coverage.xml
+    - step: 2
+      action: Run Stage 1.1 orchestrator
+      output: HealthView bundle + all delegated producer/consumer/aggregator/summarizer artifacts
+
+  input_producers:
+    - pytest (test logs)
+    - coverage.py (coverage.xml)
+
+  output_consumers:
+    - Trend dashboards (future)
+    - CI alerting (future)
+    - Meta-orchestrator (orchestrate_full_diagnostic.py)
+
+  invoked_scripts:
+    - .repo_studios/scripts/producers/collect_test_log_reports.py
+    - .repo_studios/scripts/producers/generate_test_coverage_inventory.py
+    - .repo_studios/scripts/producers/analyze_test_hardening.py
+    - .repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py
+    - .repo_studios/scripts/consumers/generate_test_log_health_report.py
+    - .repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py
+
+examples:
+  - description: Run the full Stage 1.1 orchestrator with default settings
+    command: |
+      python .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py \
+        --repo-root . --log-level INFO
+
+  - description: Run via make target
+    command: |
+      make -C .repo_studios studio-orchestrate-test-execution-telemetry LOG_LEVEL=INFO
+
+  - description: Run with a specific timestamp for reproducibility
+    command: |
+      python .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py \
+        --repo-root . --timestamp 2025-12-27T12:00:00Z --log-level DEBUG
+
+known_limitations:
+  - Churn analysis scans git log (may be slow on shallow clones or large histories)
+  - Heatmap gracefully degrades to churn-only mode when Lizard metrics source is unavailable
+  - Pipeline stops on first hard failure; partial artifacts may exist
+  - Retention is per-artifact-class, not unified across the entire run
+
+metadata:
+  category: orchestrator
+  tier: 3
+  status: active
+  version: 0.1.0
+  author: Repo Studios Team
+  last_updated: 2025-12-27
+  dependencies_tier3:
+    - tier3_collect_test_log_reports.yaml
+    - tier3_generate_test_coverage_inventory.yaml
+    - tier3_analyze_test_hardening.yaml
+    - tier3_generate_churn_complexity_heatmap.yaml
+    - tier3_generate_test_log_health_report.yaml
+    - tier3_summarize_test_execution_telemetry.yaml
+  tier2_rosters:
+    - healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md
+  tier1_pipelines:
+    - healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
+  testing:
+    test_file: .repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py

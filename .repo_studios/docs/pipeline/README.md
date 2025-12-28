@@ -32,11 +32,11 @@ related_files:
 
 ## Goals
 
-* Give GitHub Copilot and peer agents a single starting point for everything inside
+- Give GitHub Copilot and peer agents a single starting point for everything inside
   `docs/pipeline/`.
-* Explain how Tier-1, Tier-2, and Tier-3 docs are laid out so contributors can land in the right
+- Explain how Tier-1, Tier-2, and Tier-3 docs are laid out so contributors can land in the right
   template immediately.
-* Capture the automation contract (doc-index + checkbox report) so evidence is logged before
+- Capture the automation contract (doc-index + checkbox report) so evidence is logged before
   pipeline docs change.
 
 ## System Context
@@ -53,23 +53,23 @@ related_files:
 
 ### Template & Instruction Pointers
 
-* Templates live in `pipeline_templates/` (`tier1_pipeline_template.md`,
+- Templates live in `pipeline_templates/` (`tier1_pipeline_template.md`,
   `tier2_pipeline_template.md`, `tier3_pipeline_template.md`, plus the how-to guides). Duplicate
   before drafting so instruction blocks and update logs stay intact.
-* The full 5W1H onboarding walkthrough is in
+- The full 5W1H onboarding walkthrough is in
   `pipeline_templates/tier_doc_system_instructions.md`. It explains when to spawn a
   Tier-2/Tier-3 doc, how to log doc-index runs, and how to keep reciprocity checklists accurate.
-* Use this README for orientation, then pivot to `pipeline_doc_map.md` for matrices,
+- Use this README for orientation, then pivot to `pipeline_doc_map.md` for matrices,
   coverage status, and dependency lookups.
 
 ## Status Board
 
 ### Status Taxonomy
 
-* `Pending` — doc or stage exists but lacks active work.
-* `In Progress` — team or agent is actively editing the stage doc.
-* `Blocked` — upstream dependency or Tier-3 horizontal prevents progress.
-* `Complete` — evidence logged in the stage doc shows the stop-gates closed.
+- `Pending` — doc or stage exists but lacks active work.
+- `In Progress` — team or agent is actively editing the stage doc.
+- `Blocked` — upstream dependency or Tier-3 horizontal prevents progress.
+- `Complete` — evidence logged in the stage doc shows the stop-gates closed.
 
 Update the table below whenever a Tier doc changes so the status board stays aligned with the stage
 matrices. When a stage finishes, mark it `Complete` and cite the Update Log row from that doc.
@@ -89,15 +89,15 @@ matrices. When a stage finishes, mark it `Complete` and cite the Update Log row 
 
 1. **Choose the right entry.** Start with the Tier-1 spine in the relevant folder (when created), then follow its
    "Tier-2 Dependencies" and "Tier-3 Horizontals" subsections before touching code or docs.
-2. **Duplicate templates, not live docs.** New verticals must originate from the Tier-2 template;
+1. **Duplicate templates, not live docs.** New verticals must originate from the Tier-2 template;
    horizontals must come from the Tier-3 template.
-3. **Regenerate automation artifacts.** Refresh the doc-index (via the `doc-index` make target or platform-equivalent command) after editing any pipeline doc. This
+1. **Regenerate automation artifacts.** Refresh the doc-index (via the `doc-index` make target or platform-equivalent command) after editing any pipeline doc. This
    updates `checkbox_report/outputs/`, so capture the timestamp and regression suites
    in every Update Log you touched.
-4. **Cross-link everything.** Whenever you add a Tier-2 or Tier-3 doc, link it from the parent
+1. **Cross-link everything.** Whenever you add a Tier-2 or Tier-3 doc, link it from the parent
    Tier-1 section and ensure the new doc cites its dependents. Reference `pipeline_doc_map.md` to
    verify coverage.
-5. **Script-specific edits.** If you change Command Center scripts, update the relevant Tier-2 roster doc
+1. **Script-specific edits.** If you change Command Center scripts, update the relevant Tier-2 roster doc
    and cite Tier-3 library docs (prune_logs, database_integration, cli, artifacts) where appropriate.
 
 ### Agent Automation Block
@@ -122,18 +122,18 @@ tasks:
 
 ## Human Notes
 
-* This file intentionally stays high level so it rarely changes; use `pipeline_doc_map.md` for
+- This file intentionally stays high level so it rarely changes; use `pipeline_doc_map.md` for
   detailed matrices and keep that doc updated as new tiers are added.
-* If a new pipeline folder is introduced, add it to the table above and ensure its Tier-1 doc links
+- If a new pipeline folder is introduced, add it to the table above and ensure its Tier-1 doc links
   back here and to the instructions noted in the banner.
 
 ## Reference Prompts
 
-* "Copilot, list the Tier-2 roster docs that will document Command Center scripts and confirm
+- "Copilot, list the Tier-2 roster docs that will document Command Center scripts and confirm
   each references the Tier-3 library docs (prune_logs, cli, artifacts, database_integration)."
-* "Summarize which Tier-3 horizontal gates the checkbox report tool and point me to the
+- "Summarize which Tier-3 horizontal gates the checkbox report tool and point me to the
   supporting template."
-* "Draft a new Tier-2 roster doc for producers by duplicating the template and logging
+- "Draft a new Tier-2 roster doc for producers by duplicating the template and logging
   the doc-index evidence per the README instructions."
 
 ## Update Log

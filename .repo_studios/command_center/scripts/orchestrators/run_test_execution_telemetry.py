@@ -517,6 +517,351 @@ def _summarize_steps(result_steps: Sequence[Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def _status_icon(status: str) -> str:
+    return "✅" if status == "success" else "⚠️" if status == "skipped" else "❌"
+
+
+def _section_pipeline_status(result_steps: Sequence[Any]) -> list[str]:
+    lines = [
+        "## Pipeline Status",
+        "",
+        "| Step | Status | Detail |",
+        "| --- | --- | --- |",
+    ]
+    for step in result_steps:
+        icon = _status_icon(step.status)
+        detail = step.detail or ""
+        lines.append(f"| {step.name} | {icon} {step.status} | {detail} |")
+    lines.append("")
+    return lines
+
+
+def _section_test_results(
+    collect_outcome: CollectOutcome,
+    artifact_path: str | None,
+    telemetry: dict[str, Any],
+) -> list[str]:
+    lines = ["## Test Results", ""]
+    if artifact_path:
+        lines.append(f"**Artifact:** `{artifact_path}`")
+        lines.append("")
+
+    # Prefer telemetry data from file, fall back to payload
+    metrics = telemetry.get("metrics", {})
+    payload = telemetry.get("payload", {})
+    payload_summary = payload.get("summary", {})
+
+    total = metrics.get("tests_total") or payload_summary.get("total", 0)
+    passed = metrics.get("tests_passed") or payload_summary.get("passed", 0)
+    failed = metrics.get("tests_failed") or payload_summary.get("failed", 0)
+    warnings = metrics.get("warnings_total") or collect_outcome.warnings_total or 0
+    slow = metrics.get("slow_tests_count") or collect_outcome.slow_tests or 0
+
+    lines.extend([
+        "| Metric | Value |",
+        "| --- | ---:|",
+        f"| Total | {total} |",
+        f"| Passed | {passed} |",
+        f"| Failed | {failed} |",
+        f"| Warnings | {warnings} |",
+        f"| Slow | {slow} |",
+        "",
+    ])
+
+    concerns: list[str] = []
+    if failed > 0:
+        concerns.append(f"❌ {failed} test(s) failed")
+    if warnings > 10:
+        concerns.append(f"⚠️ {warnings} warnings detected")
+
+    if concerns:
+        lines.append("**Concerns:** " + "; ".join(concerns))
+    else:
+        lines.append("**Concerns:** None")
+    lines.append("")
+    return lines
+
+
+def _section_coverage(
+    coverage_outcome: CoverageOutcome,
+    artifact_path: str | None,
+    telemetry: dict[str, Any],
+) -> list[str]:
+    lines = ["## Coverage Analysis", ""]
+    if artifact_path:
+        lines.append(f"**Artifact:** `{artifact_path}`")
+        lines.append("")
+
+    # Prefer telemetry payload from file, fall back to outcome
+    payload = telemetry.get("payload", {})
+    payload_summary = payload.get("summary", {})
+    summary = coverage_outcome.summary or {}
+
+    total_files = payload_summary.get("total_files") or summary.get("total_files", 0)
+    total_functions = payload_summary.get("total_functions") or summary.get("total_functions", 0)
+    covered_functions = payload_summary.get("covered_functions") or summary.get("covered_functions", 0)
+    pct = payload_summary.get("overall_coverage_pct") or summary.get("overall_coverage_pct", 0.0)
+
+    lines.extend([
+        "| Metric | Value |",
+        "| --- | ---:|",
+        f"| Files | {total_files} |",
+        f"| Functions | {total_functions} |",
+        f"| Covered | {covered_functions} |",
+        f"| Coverage % | {pct:.1f} |",
+        "",
+    ])
+
+    concerns: list[str] = []
+    if pct < 50.0:
+        concerns.append(f"⚠️ Coverage at {pct:.1f}% — below 50% threshold")
+
+    if concerns:
+        lines.append("**Concerns:** " + "; ".join(concerns))
+    else:
+        lines.append("**Concerns:** None")
+    lines.append("")
+    return lines
+
+
+def _section_hardening(
+    hardening_outcome: HardeningOutcome,
+    artifact_path: str | None,
+    telemetry: dict[str, Any],
+) -> list[str]:
+    lines = ["## Test Hardening", ""]
+    if artifact_path:
+        lines.append(f"**Artifact:** `{artifact_path}`")
+        lines.append("")
+
+    # Prefer telemetry payload from file
+    payload = telemetry.get("payload", {}) or hardening_outcome.payload or {}
+    files_analyzed = payload.get("files_analyzed", 0)
+    high_severity = payload.get("high_severity", 0)
+    total_issues = payload.get("total_issues", 0)
+
+    lines.extend([
+        "| Metric | Value |",
+        "| --- | ---:|",
+        f"| Files Analyzed | {files_analyzed} |",
+        f"| Total Issues | {total_issues} |",
+        f"| High Severity | {high_severity} |",
+        "",
+    ])
+
+    concerns: list[str] = []
+    if high_severity > 0:
+        concerns.append(f"❌ {high_severity} high-severity issue(s)")
+    if files_analyzed == 0:
+        concerns.append("⚠️ No test files analyzed — check scope configuration")
+
+    if concerns:
+        lines.append("**Concerns:** " + "; ".join(concerns))
+    else:
+        lines.append("**Concerns:** None")
+    lines.append("")
+    return lines
+
+
+def _section_hotspots(
+    heatmap_outcome: HeatmapOutcome,
+    artifact_path: str | None,
+    heatmap_records: list[dict[str, Any]],
+) -> list[str]:
+    lines = ["## Churn × Complexity Hotspots", ""]
+    if artifact_path:
+        lines.append(f"**Artifact:** `{artifact_path}`")
+        lines.append("")
+
+    # Use loaded records from heatmap.json, sorted by score descending
+    top_files = sorted(heatmap_records, key=lambda r: r.get("score", 0), reverse=True)[:5]
+    threshold = 12.0
+
+    if top_files:
+        lines.extend([
+            "| Rank | File | Score |",
+            "| --- | --- | ---:|",
+        ])
+        exceeds_count = 0
+        for i, entry in enumerate(top_files, 1):
+            fname = entry.get("file", "unknown")
+            if "/" in fname or "\\" in fname:
+                fname = fname.replace("\\", "/").rsplit("/", 1)[-1]
+            score = entry.get("score", 0.0)
+            if score > threshold:
+                exceeds_count += 1
+            lines.append(f"| {i} | {fname} | {score:.2f} |")
+        lines.append("")
+
+        if exceeds_count > 0:
+            lines.append(f"**Concerns:** ⚠️ {exceeds_count} file(s) exceed score threshold ({threshold})")
+        else:
+            lines.append("**Concerns:** None")
+    else:
+        lines.append("No hotspot data available.")
+        lines.append("")
+        lines.append("**Concerns:** ⚠️ Heatmap analysis produced no results")
+    lines.append("")
+    return lines
+
+
+def _section_trend(
+    health_outcome: HealthReportOutcome | None,
+    artifact_path: str | None,
+    comparisons: dict[str, Any],
+) -> list[str]:
+    lines = ["## Pass Rate Trend", ""]
+    if artifact_path:
+        lines.append(f"**Artifact:** `{artifact_path}`")
+        lines.append("")
+
+    if health_outcome is None:
+        lines.append("No health report available.")
+        lines.append("")
+        lines.append("**Concerns:** ⚠️ Health report not generated")
+        lines.append("")
+        return lines
+
+    # Use comparisons from bundle_summary.json if available
+    prev_run = comparisons.get("previous_run", {})
+    pass_rate = prev_run.get("pass_rate", {})
+
+    current = pass_rate.get("current", 0.0)
+    previous = pass_rate.get("previous")
+    delta = pass_rate.get("delta")
+
+    lines.extend([
+        "| Metric | Value |",
+        "| --- | ---:|",
+        f"| Current | {current:.1f}% |",
+    ])
+    if previous is not None:
+        lines.append(f"| Previous | {previous:.1f}% |")
+    if delta is not None:
+        sign = "+" if delta >= 0 else ""
+        lines.append(f"| Delta | {sign}{delta:.2f}% |")
+    lines.append("")
+
+    concerns: list[str] = []
+    if delta is not None and delta < 0:
+        concerns.append(f"❌ Pass rate declined by {abs(delta):.2f}%")
+
+    if concerns:
+        lines.append("**Concerns:** " + "; ".join(concerns))
+    else:
+        lines.append("**Concerns:** None — stable or improving")
+    lines.append("")
+    return lines
+
+
+@dataclass
+class EnhancedSummaryContext:
+    run_slug: str
+    completed_at: datetime
+    result_steps: Sequence[Any]
+    collect_outcome: CollectOutcome
+    coverage_outcome: CoverageOutcome
+    heatmap_outcome: HeatmapOutcome
+    hardening_outcome: HardeningOutcome
+    health_outcome: HealthReportOutcome | None
+    artifacts_section: dict[str, Any]
+    repo_root: Path
+
+
+def _load_artifact_telemetry(artifact_dir: Path | None) -> dict[str, Any]:
+    if artifact_dir is None or not artifact_dir.exists():
+        return {}
+    telemetry_path = artifact_dir / "telemetry.json"
+    return _read_json(telemetry_path) or {}
+
+
+def _load_heatmap_data(heatmap_dir: Path | None) -> list[dict[str, Any]]:
+    if heatmap_dir is None or not heatmap_dir.exists():
+        return []
+    heatmap_json = heatmap_dir / "heatmap.json"
+    data = _read_json(heatmap_json)
+    # Heatmap uses "items" key for file records
+    if data and isinstance(data.get("items"), list):
+        items: list[dict[str, Any]] = data["items"]
+        return items
+    return []
+
+
+def _load_health_comparisons(health_dir: Path | None) -> dict[str, Any]:
+    if health_dir is None or not health_dir.exists():
+        return {}
+    bundle_path = health_dir / "bundle_summary.json"
+    data = _read_json(bundle_path) or {}
+    comparisons: dict[str, Any] = data.get("comparisons", {})
+    return comparisons
+
+
+def _build_enhanced_summary(ctx: EnhancedSummaryContext) -> str:
+    lines: list[str] = []
+
+    lines.append("# Test Execution Telemetry Run")
+    lines.append("")
+    lines.append(f"Run: `{ctx.run_slug}` | Completed: {ctx.completed_at.isoformat()}")
+    lines.append("")
+
+    lines.extend(_section_pipeline_status(ctx.result_steps))
+    lines.append("---")
+    lines.append("")
+
+    # Resolve artifact directories for data loading
+    log_report_path = ctx.artifacts_section.get("log_report")
+    log_report_dir = (ctx.repo_root / log_report_path) if log_report_path else None
+
+    coverage_path = ctx.artifacts_section.get("coverage_report")
+    coverage_dir = (ctx.repo_root / coverage_path) if coverage_path else None
+
+    hardening_path = ctx.artifacts_section.get("hardening")
+    hardening_dir = (ctx.repo_root / hardening_path) if hardening_path else None
+
+    heatmap_path = ctx.artifacts_section.get("heatmap")
+    heatmap_dir = (ctx.repo_root / heatmap_path) if heatmap_path else None
+
+    health_path = ctx.artifacts_section.get("health_report")
+    health_dir = (ctx.repo_root / health_path) if health_path else None
+
+    # Load telemetry data from artifacts for richer summaries
+    log_telemetry = _load_artifact_telemetry(log_report_dir)
+    coverage_telemetry = _load_artifact_telemetry(coverage_dir)
+    hardening_telemetry = _load_artifact_telemetry(hardening_dir)
+    heatmap_records = _load_heatmap_data(heatmap_dir)
+    health_comparisons = _load_health_comparisons(health_dir)
+
+    lines.extend(_section_test_results(
+        ctx.collect_outcome, log_report_path, log_telemetry
+    ))
+    lines.append("---")
+    lines.append("")
+
+    lines.extend(_section_coverage(
+        ctx.coverage_outcome, coverage_path, coverage_telemetry
+    ))
+    lines.append("---")
+    lines.append("")
+
+    lines.extend(_section_hardening(
+        ctx.hardening_outcome, hardening_path, hardening_telemetry
+    ))
+    lines.append("---")
+    lines.append("")
+
+    lines.extend(_section_hotspots(
+        ctx.heatmap_outcome, heatmap_path, heatmap_records
+    ))
+    lines.append("---")
+    lines.append("")
+
+    lines.extend(_section_trend(
+        ctx.health_outcome, health_path, health_comparisons
+    ))
+
+    return "\n".join(lines)
+
+
 def run(argv: Sequence[str] | None = None) -> int:
     args = parse_args(argv)
     paths = build_paths(args)
@@ -653,7 +998,19 @@ def run(argv: Sequence[str] | None = None) -> int:
         "catalog": [entry.__dict__ for entry in registry.all_entries()],
     }
 
-    summary_markdown = _summarize_steps(result.steps)
+    summary_ctx = EnhancedSummaryContext(
+        run_slug=run_slug,
+        completed_at=completed_at,
+        result_steps=result.steps,
+        collect_outcome=collect_outcome,
+        coverage_outcome=coverage_outcome,
+        heatmap_outcome=heatmap_outcome,
+        hardening_outcome=hardening_outcome,
+        health_outcome=health_outcome,
+        artifacts_section=artifacts_section,
+        repo_root=paths.repo_root,
+    )
+    summary_markdown = _build_enhanced_summary(summary_ctx)
 
     artifacts = [
         ReportArtifact(filename="manifest.json", kind="json", content=lambda: manifest),

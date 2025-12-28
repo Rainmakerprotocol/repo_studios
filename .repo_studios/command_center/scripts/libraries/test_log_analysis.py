@@ -252,7 +252,7 @@ def build_test_log_report(
 
 def render_markdown(report: dict[str, Any]) -> str:
     lines: list[str] = []
-    lines.append("# Test Log Health Report")
+    lines.append("## Test Log Health Report")
     lines.append("")
     meta = report.get("meta", {})
     lines.append(f"Generated: {meta.get('generated_at', 'unknown')}")

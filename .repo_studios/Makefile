@@ -295,6 +295,10 @@ studio-generate-test-coverage-inventory:
 		--artifacts-to-keep 5 \
 		--log-level "$(LOG_LEVEL)"
 
+.PHONY: studio-generate-churn-complexity-heatmap
+studio-generate-churn-complexity-heatmap:
+	$(PYTHON) .repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py --repo-root . --output-base .repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap --test-log-summary .repo_studios/reports/healthview/consumer_reports/test_log_health_reports --artifacts-to-keep 5 --log-level INFO
+
 .PHONY: studio-generate-code-doc-churn-report
 studio-generate-code-doc-churn-report:
 	$(PYTHON) .repo_studios/scripts/producers/generate_code_doc_churn_report.py --repo-root . --output-dir .repo_studios/reports/producer_reports --git-window "30 days" --artifacts-to-keep 5 --log-level INFO

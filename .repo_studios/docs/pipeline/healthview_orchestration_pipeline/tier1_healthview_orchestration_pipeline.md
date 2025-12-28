@@ -233,7 +233,8 @@ Meta-orchestrator chains all Stage NN.1 orchestrators for full-suite diagnostics
 - **Version:** `v0.3.1`  
 - **Last Updated:** `2025-12-18`  
 - **Owner / Steward:** `Repo Studios Core Team`  
-- **Overall Status:** `In Progress – Phase 2 Pass B complete (all 7 stages code-verified), awaiting Pass C polish`
+- **Overall Status:** `In Progress – Phase 2 Pass B complete (all 7 stages code-verified),
+  awaiting Pass C polish`
 
 **Hardening Progress:**
 
@@ -482,9 +483,12 @@ orchestrators and produces a **composite envelope** showing full-suite status.
 
 _Tier-2 references (depth lives here):_
 
-- [Contract snapshot](tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11) — target vs current, bundle invariants, naming/paths
-- [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates) — verification checks + failure signatures + next actions
-- [Records index](tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1) — per-script inspection index + evidence links (Tier-2 holds proof)
+- [Contract snapshot](tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11)
+  — target vs current, bundle invariants, naming/paths
+- [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates)
+  — verification checks + failure signatures + next actions
+- [Records index](tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1)
+  — per-script inspection index + evidence links (Tier-2 holds proof)
 
 **Stage 1.1 Script Gate Summary (Tier-1):**
 
@@ -501,10 +505,15 @@ _Tier-2 references (depth lives here):_
 
 These are Stage 1.1 readiness gates after all Tier-2 DONE script gates are closed.
 
-- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See: [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates)
-- [ ] No pointer artifacts (`latest_*` / `current_*`). See: [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates)
-- [ ] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). See: [Contract snapshot](tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11)
-- [ ] Tier-3 eligible (Stage 1.1 Tier-2 depth captured; ready for Tier-3 extraction). See: [Records index](tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1)
+- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`).
+  See: [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates)
+- [ ] No pointer artifacts (`latest_*` / `current_*`).
+  See: [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates)
+- [ ] Output root aligned to HOP contract
+  (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`).
+  See: [Contract snapshot](tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11)
+- [ ] Tier-3 eligible (Stage 1.1 Tier-2 depth captured; ready for Tier-3 extraction).
+  See: [Records index](tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1)
 
 **Target contract (locked decisions):**
 
@@ -660,7 +669,7 @@ anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/a
 **Invoked Scripts (8):**
 
 | Script | Category | Purpose | Tier-3 YAML |
-|--------|----------|---------|-------------|
+| ------ | -------- | ------- | ----------- |
 | `generate_doc_index.py` | Producer | Scan repository for markdown files, extract headings, build document inventory | TBD |
 | `generate_anchor_inventory.py` | Producer | Extract markdown anchor IDs, build cross-reference map with duplicates flagged | TBD |
 | `validate_markdown_anchors.py` | Producer | Check for broken internal links, orphaned anchors, cross-file reference errors | TBD |
@@ -735,7 +744,9 @@ anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/a
     (lines 557-584: `_execute_churn` invocation)
   - [generate_undocumented_logic_report.py](../../../scripts/producers/generate_undocumented_logic_report.py)
     (lines 585-649: `_execute_undocumented` invocation
-- **Aggregator script:** [aggregate_docs_health_signals.py](../../../scripts/aggregators/aggregate_docs_health_signals.py) (lines 650-710: `_execute_aggregator` invocation)
+- **Aggregator script:**
+  [aggregate_docs_health_signals.py](../../../scripts/aggregators/aggregate_docs_health_signals.py)
+  (lines 650-710: `_execute_aggregator` invocation)
 - **Tests:** No dedicated orchestrator tests found (marked "tests TBD" in Stage Matrix)
 
 ---
@@ -749,25 +760,37 @@ anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/a
 
 _Tier-2 references (depth lives here):_
 
-- [Contract snapshot](tier2_roster/tier2_fault_diagnostics_overview_roster.md#23-current-vs-target-contract-snapshot-stage-31) — target vs current, bundle invariants, naming/paths
-- [Stop-gates](tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
-- [Records index](tier2_roster/tier2_fault_diagnostics_overview_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
+- [Contract snapshot](tier2_roster/tier2_fault_diagnostics_overview_roster.md#23-current-vs-target-contract-snapshot-stage-31)
+  — target vs current, bundle invariants, naming/paths
+- [Stop-gates](tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists)
+  — verification checks + failure signatures + next actions
+- [Records index](tier2_roster/tier2_fault_diagnostics_overview_roster.md#311-records-index)
+  — per-script inspection index + evidence links (Tier-2 holds proof)
 
 **Stage 3.1 Script Gate Summary (Tier-1):**
 
-- [ ] collect_faulthandler_reports.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-002-collect-faulthandler-reports)
-- [ ] generate_fault_artifacts.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-003-generate-fault-artifacts)
-- [ ] summarize_fault_diagnostics_overview.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-004-summarize-fault-diagnostics-overview)
-- [ ] run_fault_diagnostics_overview.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-001-fault-diagnostics-overview-orchestrator)
+- [ ] collect_faulthandler_reports.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-002-collect-faulthandler-reports)
+- [ ] generate_fault_artifacts.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-003-generate-fault-artifacts)
+- [ ] summarize_fault_diagnostics_overview.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-004-summarize-fault-diagnostics-overview)
+- [ ] run_fault_diagnostics_overview.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-001-fault-diagnostics-overview-orchestrator)
 
 **Stage 3.1 Gate Checklist (Tier-1):**
 
 These are Stage 3.1 readiness gates after all Tier-2 DONE script gates are closed.
 
-- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See: [Stop-gates](tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] No pointer artifacts (`latest_*` / `current_*`). See: [Stop-gates](tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). See: [Contract snapshot](tier2_roster/tier2_fault_diagnostics_overview_roster.md#23-current-vs-target-contract-snapshot-stage-31)
-- [ ] Tier-3 eligible (Stage 3.1 Tier-2 depth captured; ready for Tier-3 extraction). See: [Records index](tier2_roster/tier2_fault_diagnostics_overview_roster.md#311-records-index)
+- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`).
+  See: [Stop-gates](tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] No pointer artifacts (`latest_*` / `current_*`).
+  See: [Stop-gates](tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] Output root aligned to HOP contract
+  (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`).
+  See: [Contract snapshot](tier2_roster/tier2_fault_diagnostics_overview_roster.md#23-current-vs-target-contract-snapshot-stage-31)
+- [ ] Tier-3 eligible (Stage 3.1 Tier-2 depth captured; ready for Tier-3 extraction).
+  See: [Records index](tier2_roster/tier2_fault_diagnostics_overview_roster.md#311-records-index)
 
 **Target contract (HOP):**
 
@@ -790,13 +813,14 @@ The Fault Diagnostics Overview orchestrator chains a 3-script pipeline
 `run_fault_pipeline.py`. Mirrors output to both HealthView and CommandView locations for backward
 compatibility. Runtime: 3-5 minutes typical (from docstring, lines 1-25).
 
-**Orchestrator:**  
-[.repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py](../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py) (604 lines)
+**Orchestrator:**
+[run_fault_diagnostics_overview.py](../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py)
+(604 lines)
 
 **Invoked Scripts (3):**
 
 | Script | Category | Purpose | Tier-3 YAML |
-|--------|----------|---------|-------------|
+| ------ | -------- | ------- | ----------- |
 | `collect_faulthandler_reports.py` | Producer | Scan `.repo_studios/runs` directories for crash reports, parse tracebacks, categorize faults | TBD |
 | `generate_fault_artifacts.py` | Consumer | Process producer output into structured artifacts (CSV, JSON, SUMMARY.md) | TBD |
 | `summarize_fault_diagnostics_overview.py` | Summarizer | Generate HealthView overview bundle with cross-run comparisons | TBD |
@@ -866,9 +890,12 @@ at 3-5 minutes, dual output locations documented, special reuse/override flags c
 
 _Tier-2 references (depth lives here):_
 
-- [Contract snapshot](tier2_roster/tier2_dependency_import_hygiene_roster.md#23-current-vs-target-contract-snapshot-stage-41) — target vs current, bundle invariants, naming/paths
-- [Stop-gates](tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
-- [Records index](tier2_roster/tier2_dependency_import_hygiene_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
+- [Contract snapshot](tier2_roster/tier2_dependency_import_hygiene_roster.md#23-current-vs-target-contract-snapshot-stage-41)
+  — target vs current, bundle invariants, naming/paths
+- [Stop-gates](tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists)
+  — verification checks + failure signatures + next actions
+- [Records index](tier2_roster/tier2_dependency_import_hygiene_roster.md#311-records-index)
+  — per-script inspection index + evidence links (Tier-2 holds proof)
 
 **Stage 4.1 Script Gate Summary (Tier-1):**
 
@@ -876,17 +903,24 @@ _Tier-2 references (depth lives here):_
 - [ ] generate_import_graph_report.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-003-generate_import_graph_reportpy)
 - [ ] scan_code_placeholders.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-004-scan_code_placeholderspy)
 - [ ] generate_typecheck_report.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-005-generate_typecheck_reportpy)
-- [ ] refresh_mypy_baselines.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-006-refresh_mypy_baselinespy)
-- [ ] run_dependency_import_hygiene.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-001-dependency-import-hygiene-orchestrator)
+- [ ] refresh_mypy_baselines.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-006-refresh_mypy_baselinespy)
+- [ ] run_dependency_import_hygiene.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-001-dependency-import-hygiene-orchestrator)
 
 **Stage 4.1 Gate Checklist (Tier-1):**
 
 These are Stage 4.1 readiness gates after all Tier-2 DONE script gates are closed.
 
-- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See: [Stop-gates](tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] No pointer artifacts (`latest_*` / `current_*`). See: [Stop-gates](tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). See: [Contract snapshot](tier2_roster/tier2_dependency_import_hygiene_roster.md#23-current-vs-target-contract-snapshot-stage-41)
-- [ ] Tier-3 eligible (Stage 4.1 Tier-2 depth captured; ready for Tier-3 extraction). See: [Records index](tier2_roster/tier2_dependency_import_hygiene_roster.md#311-records-index)
+- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`).
+  See: [Stop-gates](tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] No pointer artifacts (`latest_*` / `current_*`).
+  See: [Stop-gates](tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] Output root aligned to HOP contract
+  (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`).
+  See: [Contract snapshot](tier2_roster/tier2_dependency_import_hygiene_roster.md#23-current-vs-target-contract-snapshot-stage-41)
+- [ ] Tier-3 eligible (Stage 4.1 Tier-2 depth captured; ready for Tier-3 extraction).
+  See: [Records index](tier2_roster/tier2_dependency_import_hygiene_roster.md#311-records-index)
 
 **Target contract (locked decisions):**
 
@@ -896,9 +930,12 @@ These are Stage 4.1 readiness gates after all Tier-2 DONE script gates are close
 
 **Current evidence (Stage 4.1):**
 
-- HealthView bundle root is still under `.repo_studios/command_center/reports/healthview/...` (not the canonical target root).
-- Base package artifacts (`manifest.json`, `summary.md`, `telemetry.json`) are observed in current runs.
-- Pointer artifacts remain a stop-gate (cleanup planning and mypy baselines flows write `latest_*` artifacts in rawview roots).
+- HealthView bundle root is still under `.repo_studios/command_center/reports/healthview/...`
+  (not the canonical target root).
+- Base package artifacts (`manifest.json`, `summary.md`, `telemetry.json`) are observed
+  in current runs.
+- Pointer artifacts remain a stop-gate (cleanup planning and mypy baselines flows write
+  `latest_*` artifacts in rawview roots).
 - Details and evidence live in the Stage 4.1 Tier-2 roster:
   [Current vs Target snapshot](tier2_roster/tier2_dependency_import_hygiene_roster.md#23-current-vs-target-contract-snapshot-stage-41),
   [Stop-gates](tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists).
@@ -911,13 +948,14 @@ Replaces legacy `run_batch_cleanup.py` with structured dry-run artifacts. Runtim
 typical in CI, with linting and mypy dominating when baseline refresh is enabled
 (from docstring, lines 1-10).
 
-**Orchestrator:**  
-[.repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py](../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py) (1111 lines)
+**Orchestrator:**
+[run_dependency_import_hygiene.py](../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py)
+(1111 lines)
 
 **Invoked Scripts (5):**
 
 | Script | Category | Purpose | Tier-3 YAML |
-|--------|----------|---------|-------------|
+| ------ | -------- | ------- | ----------- |
 | `generate_dependency_hygiene_report.py` | Producer | Analyze `requirements.txt`/`pyproject.toml`, detect unused dependencies, version conflicts | TBD |
 | `generate_import_graph_report.py` | Producer (optional) | Build import graph, detect cycles, compute coupling metrics | TBD |
 | `scan_code_placeholders.py` | Producer | Extract TODO/FIXME/HACK comments from code, track technical debt markers | TBD |
@@ -961,15 +999,22 @@ typical in CI, with linting and mypy dominating when baseline refresh is enabled
 - Batch cleanup dry-run: Generates structured plan without executing commands
   (lines 639-711, legacy shim retired)
 - Mypy baseline refresh: Optional post-typecheck step (lines 765-793)
-- Execution functions: `_dependency_report()` (lines 437-468), `_import_graph_report()` (lines 471-500), `_placeholder_scan()` (lines 503-543), `_batch_cleanup()` (lines 639-711), `_typecheck_report()` (lines 714-742), `_refresh_baselines()` (lines 765-793)
+- Execution functions: `_dependency_report()` (lines 437-468),
+  `_import_graph_report()` (lines 471-500), `_placeholder_scan()` (lines 503-543),
+  `_batch_cleanup()` (lines 639-711), `_typecheck_report()` (lines 714-742),
+  `_refresh_baselines()` (lines 765-793)
 - Script registration via `CatalogRegistry` for downstream discovery (lines 796-803)
-- Pipeline steps: dependency (mandatory), import_graph (optional), placeholders (mandatory), cleanup (opt-in), typecheck (optional), refresh_baselines (opt-in) – lines 999-1006
+- Pipeline steps: dependency (mandatory), import_graph (optional), placeholders (mandatory),
+  cleanup (opt-in), typecheck (optional), refresh_baselines (opt-in) – lines 999-1006
 
-**Status:** `Operational (partial hardening)` – 5-script pipeline verified, 7-11 min runtime confirmed, 6 skip flags documented, batch cleanup dry-run capability validated, fail-tolerant execution confirmed
+**Status:** `Operational (partial hardening)` – 5-script pipeline verified, 7-11 min runtime
+confirmed, 6 skip flags documented, batch cleanup dry-run capability validated,
+fail-tolerant execution confirmed
 
 **Planned Expansions:**
 
-- **Stage 4.2: Import Boundary Validation** – Integrate `validate_import_boundaries.py` to enforce architectural layer boundaries (gap identified in coverage analysis)
+- **Stage 4.2: Import Boundary Validation** – Integrate `validate_import_boundaries.py`
+  to enforce architectural layer boundaries (gap identified in coverage analysis)
 
 **Known Gaps:**
 
@@ -978,12 +1023,15 @@ typical in CI, with linting and mypy dominating when baseline refresh is enabled
 
 **Evidence:**
 
-- Code: `.repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py` (lines 1-1111)
+- Code: `.repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py`
+  (lines 1-1111)
   - Script constants: Lines 51-61 (5 script paths, 5 module names)
   - Default paths: Lines 63-75 (8 output directories)
   - Option parsing: Lines 318-352 (`build_options()`)
   - Dynamic imports: Lines 365-376 (`_load_callable()`)
-  - Execution functions: Lines 437-468 (`_dependency_report()`), 471-500 (`_import_graph_report()`), 503-543 (`_placeholder_scan()`), 639-711 (`_batch_cleanup()` dry-run), 714-742 (`_typecheck_report()`), 765-793 (`_refresh_baselines()`)
+  - Execution functions: Lines 437-468 (`_dependency_report()`), 471-500
+    (`_import_graph_report()`), 503-543 (`_placeholder_scan()`), 639-711 (`_batch_cleanup()`
+    dry-run), 714-742 (`_typecheck_report()`), 765-793 (`_refresh_baselines()`)
   - Pipeline definition: Lines 999-1006 (6-step pipeline with fail-tolerant behavior)
   - Telemetry/manifest: Lines 1033-1072 (telemetry payload, artifacts section, manifest assembly)
   - Report bundle write: Lines 1082-1091 (3 artifacts, HealthView retention)
@@ -993,33 +1041,49 @@ typical in CI, with linting and mypy dominating when baseline refresh is enabled
 
 ## 8. Stage 5 – Technical Debt Oversight
 
-> **Purpose:** Monitor monkey patches, anti-patterns, and technical debt accumulation to surface risks before they metastasize into architectural issues.
+> **Purpose:** Monitor monkey patches, anti-patterns, and technical debt accumulation
+> to surface risks before they metastasize into architectural issues.
 
 ### 8.1 Stage 5.1: Monkey Patch Oversight
 
 _Tier-2 references (depth lives here):_
 
-- [Contract snapshot](tier2_roster/tier2_monkey_patch_oversight_roster.md#23-current-vs-target-contract-snapshot-stage-51) — target vs current, bundle invariants, naming/paths
-- [Stop-gates](tier2_roster/tier2_monkey_patch_oversight_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
-- [Records index](tier2_roster/tier2_monkey_patch_oversight_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
+- [Contract snapshot](tier2_roster/tier2_monkey_patch_oversight_roster.md#23-current-vs-target-contract-snapshot-stage-51)
+  — target vs current, bundle invariants, naming/paths
+- [Stop-gates](tier2_roster/tier2_monkey_patch_oversight_roster.md#32-stop-gates-and-implementation-checklists)
+  — verification checks + failure signatures + next actions
+- [Records index](tier2_roster/tier2_monkey_patch_oversight_roster.md#311-records-index)
+  — per-script inspection index + evidence links (Tier-2 holds proof)
 
 **Stage 5.1 Script Gate Summary (Tier-1):**
 
-- [ ] scan_monkey_patches.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-002-monkey-patch-scan-producer)
+- [ ] scan_monkey_patches.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-002-monkey-patch-scan-producer)
 - [ ] classify_monkey_patches.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-003-monkey-patch-risk-consumer)
-- [ ] analyze_monkey_patch_trends.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-004-monkey-patch-trend-aggregator)
-- [ ] summarize_monkey_patch_overview.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-005-monkey-patch-overview-summarizer)
-- [ ] monkey_patch_risk.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-006-risk-classification-utility)
-- [ ] run_monkey_patch_oversight.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-001-monkey-patch-oversight-orchestrator)
+- [ ] analyze_monkey_patch_trends.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-004-monkey-patch-trend-aggregator)
+- [ ] summarize_monkey_patch_overview.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-005-monkey-patch-overview-summarizer)
+- [ ] monkey_patch_risk.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-006-risk-classification-utility)
+- [ ] run_monkey_patch_oversight.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-001-monkey-patch-oversight-orchestrator)
 
 **Stage 5.1 Gate Checklist (Tier-1):**
 
 These are Stage 5.1 readiness gates after all Tier-2 DONE script gates are closed.
 
-- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See: [Stop-gates](tier2_roster/tier2_monkey_patch_oversight_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] No pointer artifacts (`latest_*` / `current_*`). See: [Stop-gates](tier2_roster/tier2_monkey_patch_oversight_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). See: [Contract snapshot](tier2_roster/tier2_monkey_patch_oversight_roster.md#23-current-vs-target-contract-snapshot-stage-51)
-- [ ] Tier-3 eligible (Stage 5.1 Tier-2 depth captured; ready for Tier-3 extraction). See: [Records index](tier2_roster/tier2_monkey_patch_oversight_roster.md#311-records-index)
+- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`).
+  See: [Stop-gates](tier2_roster/tier2_monkey_patch_oversight_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] No pointer artifacts (`latest_*` / `current_*`).
+  See: [Stop-gates](tier2_roster/tier2_monkey_patch_oversight_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] Output root aligned to HOP contract
+  (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`).
+  See:
+  [Contract snapshot](tier2_roster/tier2_monkey_patch_oversight_roster.md#23-current-vs-target-contract-snapshot-stage-51)
+- [ ] Tier-3 eligible (Stage 5.1 Tier-2 depth captured; ready for Tier-3 extraction).
+  See:
+  [Records index](tier2_roster/tier2_monkey_patch_oversight_roster.md#311-records-index)
 
 **Target contract (locked decisions):**
 
@@ -1030,8 +1094,10 @@ These are Stage 5.1 readiness gates after all Tier-2 DONE script gates are close
 **Current evidence (Stage 5.1):**
 
 - Output root currently observed is CommandView-rooted and not yet output-root compliant.
-- Base package artifacts (`manifest.json`, `summary.md`, `telemetry.json`) are observed in orchestrator bundle writes.
-- Pointer artifacts remain a stop-gate (consumer/aggregator outputs include `latest_*` and are consumed by the summarizer).
+- Base package artifacts (`manifest.json`, `summary.md`, `telemetry.json`) are observed
+  in orchestrator bundle writes.
+- Pointer artifacts remain a stop-gate (consumer/aggregator outputs include `latest_*`
+  and are consumed by the summarizer).
 - Details and evidence live in the Stage 5.1 Tier-2 roster:
   [Current vs Target snapshot](tier2_roster/tier2_monkey_patch_oversight_roster.md#23-current-vs-target-contract-snapshot-stage-51),
   [Stop-gates](tier2_roster/tier2_monkey_patch_oversight_roster.md#32-stop-gates-and-implementation-checklists).
@@ -1044,13 +1110,14 @@ Replaces monkey patch stages that previously lived inside `orchestrate_health_su
 standalone summarizer invocation. Runtime: 4-7 minutes typical when Git history enrichment is
 enabled; trend aggregation scales with the configured history window (from docstring, lines 1-11).
 
-**Orchestrator:**  
-[.repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py](../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py) (735 lines)
+**Orchestrator:**
+[run_monkey_patch_oversight.py](../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py)
+(735 lines)
 
 **Invoked Scripts (5):**
 
 | Script | Category | Purpose | Tier-3 YAML |
-|--------|----------|---------|-------------|
+| ------ | -------- | ------- | ----------- |
 | `scan_monkey_patches.py` | Producer | Detect monkey patches via AST analysis, extract patch locations with Git enrichment | TBD |
 | `classify_monkey_patches.py` | Consumer | Categorize patches (test fixture, workaround, production risk) into risk bundles | TBD |
 | `analyze_monkey_patch_trends.py` | Aggregator | Track patch count over time across multiple runs, identify growth patterns | TBD |
@@ -1073,22 +1140,35 @@ enabled; trend aggregation scales with the configured history window (from docst
 - Consumer: `.repo_studios/reports/consumer_reports/monkey_patch_risk/` (line 64)
 - Aggregator: `.repo_studios/reports/aggregator_reports/monkey_patch_trends/` (line 65)
 - Summarizer: `.repo_studios/reports/summarizer_reports/monkey_patch_overview/` (line 66)
-- HealthView bundle: `.repo_studios/command_center/reports/healthview/monkey_patch_oversight/<timestamp>/` (manifest + summary + telemetry, lines 707-716)
+- HealthView bundle:
+  `.repo_studios/command_center/reports/healthview/monkey_patch_oversight/<timestamp>/`
+  (manifest + summary + telemetry, lines 707-716)
 
 **Execution Notes:**
 
 - Dynamic imports via `_load_callable()` for all 4 pipeline scripts (lines 288-298)
-- Supports 4 skip flags: `--skip-producer`, `--skip-consumer`, `--skip-aggregator`, `--skip-summarizer` (lines 229-232)
+- Supports 4 skip flags: `--skip-producer`, `--skip-consumer`, `--skip-aggregator`,
+  `--skip-summarizer` (lines 229-232)
 - Retention behavior is enforced in code; see Tier-2 Stage 5.1 for current evidence.
-- Trend analysis: Configurable history window (see Tier-2 Stage 5.1 for current surfaces and evidence)
-- Git enrichment: Optional Git history analysis support (see Tier-2 Stage 5.1 for current surfaces and evidence)
-- Producer configurability: Context lines, strict mode, project packages, exclude patterns (see Tier-2 Stage 5.1)
-- Fail-fast: Aborts on summarizer failure (line 665), continues if producer/consumer/aggregator skipped
-- Execution functions: `_execute_producer()` (lines 303-361), `_execute_consumer()` (lines 364-400), `_execute_aggregator()` (lines 403-449), `_execute_summarizer()` (lines 452-515)
-- Script registration via `CatalogRegistry` for downstream discovery, includes utility script (lines 518-524)
-- Pipeline steps: producer, consumer, aggregator, summarizer (4-step sequential with fail-fast on summarizer, lines 658-665)
+- Trend analysis: Configurable history window
+  (see Tier-2 Stage 5.1 for current surfaces and evidence)
+- Git enrichment: Optional Git history analysis support
+  (see Tier-2 Stage 5.1 for current surfaces and evidence)
+- Producer configurability: Context lines, strict mode, project packages, exclude patterns
+  (see Tier-2 Stage 5.1)
+- Fail-fast: Aborts on summarizer failure (line 665), continues if
+  producer/consumer/aggregator skipped
+- Execution functions: `_execute_producer()` (lines 303-361), `_execute_consumer()`
+  (lines 364-400), `_execute_aggregator()` (lines 403-449), `_execute_summarizer()`
+  (lines 452-515)
+- Script registration via `CatalogRegistry` for downstream discovery, includes utility script
+  (lines 518-524)
+- Pipeline steps: producer, consumer, aggregator, summarizer (4-step sequential with fail-fast
+  on summarizer, lines 658-665)
 
-**Status:** `Operational (partial hardening)` – 4-script pipeline verified, 4-7 min runtime confirmed, 4 skip flags documented, Git enrichment capability validated, trend analysis with configurable history window confirmed
+**Status:** `Operational (partial hardening)` – 4-script pipeline verified, 4-7 min runtime
+confirmed, 4 skip flags documented, Git enrichment capability validated,
+trend analysis with configurable history window confirmed
 
 **Planned Expansions:**
 
@@ -1101,12 +1181,15 @@ enabled; trend aggregation scales with the configured history window (from docst
 
 **Evidence:**
 
-- Code: `.repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py` (lines 1-735)
+- Code: `.repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py`
+  (lines 1-735)
   - Script constants: Lines 48-60 (6 script paths including utility and summarizer)
   - Default paths: Lines 63-68 (6 output directories)
   - Option parsing: Lines 254-279 (`build_options()`)
   - Dynamic imports: Lines 288-298 (`_load_callable()`)
-  - Execution functions: Lines 303-361 (`_execute_producer()`), 364-400 (`_execute_consumer()`), 403-449 (`_execute_aggregator()`), 452-515 (`_execute_summarizer()`)
+  - Execution functions: Lines 303-361 (`_execute_producer()`), 364-400
+    (`_execute_consumer()`), 403-449 (`_execute_aggregator()`), 452-515
+    (`_execute_summarizer()`)
   - Pipeline definition: Lines 658-665 (4-step pipeline with fail-fast on summarizer)
   - Telemetry/manifest: Lines 670-691 (telemetry payload, artifacts section, manifest assembly)
   - Report bundle write: Lines 707-716 (3 artifacts, HealthView retention)
@@ -1116,33 +1199,48 @@ enabled; trend aggregation scales with the configured history window (from docst
 
 ## 9. Stage 6 – Process Governance
 
-> **Purpose:** Track standards compliance, prompt engineering guidelines, and process integrity to ensure organizational policies are consistently followed.
+> **Purpose:** Track standards compliance, prompt engineering guidelines, and process
+> integrity to ensure organizational policies are consistently followed.
 
 ### 9.1 Stage 6.1: Standards Integrity
 
 _Tier-2 references (depth lives here):_
 
-- [Contract snapshot](tier2_roster/tier2_standards_integrity_roster.md#23-current-vs-target-contract-snapshot-stage-61) — target vs current, bundle invariants, naming/paths
-- [Stop-gates](tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
-- [Records index](tier2_roster/tier2_standards_integrity_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
+- [Contract snapshot](tier2_roster/tier2_standards_integrity_roster.md#23-current-vs-target-contract-snapshot-stage-61)
+  — target vs current, bundle invariants, naming/paths
+- [Stop-gates](tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists)
+  — verification checks + failure signatures + next actions
+- [Records index](tier2_roster/tier2_standards_integrity_roster.md#311-records-index)
+  — per-script inspection index + evidence links (Tier-2 holds proof)
 
 **Stage 6.1 Script Gate Summary (Tier-1):**
 
-- [ ] generate_standards_index.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-002-standards-index-producer)
-- [ ] analyze_standards_index_gaps.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-003-standards-index-gap-producer)
-- [ ] diff_standards_index.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-004-standards-index-diff-producer)
-- [ ] seed_standards_prompts.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-005-standards-prompt-seed-producer)
-- [ ] summarize_standards.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-006-standards-overview-summarizer)
-- [ ] run_standards_integrity.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-001-standards-integrity-orchestrator)
+- [ ] generate_standards_index.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-002-standards-index-producer)
+- [ ] analyze_standards_index_gaps.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-003-standards-index-gap-producer)
+- [ ] diff_standards_index.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-004-standards-index-diff-producer)
+- [ ] seed_standards_prompts.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-005-standards-prompt-seed-producer)
+- [ ] summarize_standards.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-006-standards-overview-summarizer)
+- [ ] run_standards_integrity.py — pending until Tier-2 DONE is checked.
+  See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-001-standards-integrity-orchestrator)
 
 **Stage 6.1 Gate Checklist (Tier-1):**
 
 These are Stage 6.1 readiness gates after all Tier-2 DONE script gates are closed.
 
-- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See: [Stop-gates](tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] No pointer artifacts (`latest_*` / `current_*`). See: [Stop-gates](tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). See: [Contract snapshot](tier2_roster/tier2_standards_integrity_roster.md#23-current-vs-target-contract-snapshot-stage-61)
-- [ ] Tier-3 eligible (Stage 6.1 Tier-2 depth captured; ready for Tier-3 extraction). See: [Records index](tier2_roster/tier2_standards_integrity_roster.md#311-records-index)
+- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`).
+  See: [Stop-gates](tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] No pointer artifacts (`latest_*` / `current_*`).
+  See: [Stop-gates](tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] Output root aligned to HOP contract
+  (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`).
+  See: [Contract snapshot](tier2_roster/tier2_standards_integrity_roster.md#23-current-vs-target-contract-snapshot-stage-61)
+- [ ] Tier-3 eligible (Stage 6.1 Tier-2 depth captured; ready for Tier-3 extraction).
+  See: [Records index](tier2_roster/tier2_standards_integrity_roster.md#311-records-index)
 
 **Target contract (locked decisions):**
 
@@ -1152,8 +1250,11 @@ These are Stage 6.1 readiness gates after all Tier-2 DONE script gates are close
 
 **Current evidence (Stage 6.1):**
 
-- Orchestrator bundle root is under `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYMMDD-HHMM>/` (not yet the canonical target root).
-- Stage bundles mix multiple output roots and slug formats (notably prompt seeds using `standards_prompt_seed-YYYYMMDD_HHMMSS`).
+- Orchestrator bundle root is under
+  `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYMMDD-HHMM>/`
+  (not yet the canonical target root).
+- Stage bundles mix multiple output roots and slug formats
+  (notably prompt seeds using `standards_prompt_seed-YYYYMMDD_HHMMSS`).
 - Pointer artifacts exist in prompt seed outputs (`latest/latest_seed.*`) and are a stop-gate.
 - Details and evidence live in the Stage 6.1 Tier-2 roster:
   [Current vs Target snapshot](tier2_roster/tier2_standards_integrity_roster.md#23-current-vs-target-contract-snapshot-stage-61),
@@ -1166,18 +1267,25 @@ These are Stage 6.1 readiness gates after all Tier-2 DONE script gates are close
 
 **Section Order (Tier-1) — shim:**
 
-- Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) → Stage gate checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
+- Tier-2 references → Script Gate Summary (leaf scripts first, orchestrator last) →
+  Stage gate checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
 
 **Overview:**  
-The Standards Integrity orchestrator chains five scripts in sequence (index generation → gap analysis → diff → prompt seeding → summarization) that scan standards markdown files, analyze coverage gaps, track changes over time, seed standards prompts for AI agents, and synthesize compliance metrics. Runtime typically lands between 5-8 minutes, with diff scopes and prompt generation driving the upper bound. Supersedes legacy `orchestrators/run_standards_gap_suite.py` and `orchestrators/run_standards_index_cli.py`. (817 lines)
+The Standards Integrity orchestrator chains five scripts in sequence
+(index generation → gap analysis → diff → prompt seeding → summarization) that scan standards
+markdown files, analyze coverage gaps, track changes over time, seed standards prompts for AI
+agents, and synthesize compliance metrics. Runtime typically lands between 5-8 minutes, with
+diff scopes and prompt generation driving the upper bound. Supersedes legacy
+`orchestrators/run_standards_gap_suite.py` and `orchestrators/run_standards_index_cli.py`.
+(817 lines)
 
-**Orchestrator:**  
-[.repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py](../../../command_center/scripts/orchestrators/run_standards_integrity.py)
+**Orchestrator:**
+[run_standards_integrity.py](../../../command_center/scripts/orchestrators/run_standards_integrity.py)
 
 **Invoked Scripts (5):**
 
 | Script | Category | Purpose | Tier-3 YAML |
-|--------|----------|---------|-------------|
+| ------ | -------- | ------- | ----------- |
 | `generate_standards_index.py` | Producer | Scan `docs/standards/`, extract rules, build compliance index with integrity hash | TBD |
 | `analyze_standards_index_gaps.py` | Producer | Identify standards coverage gaps across markdown sources, build gap report with candidate suggestions | TBD |
 | `diff_standards_index.py` | Producer | Compare current vs. baseline index, identify additions/removals/changes, optional fail-on policy | TBD |
@@ -1186,62 +1294,97 @@ The Standards Integrity orchestrator chains five scripts in sequence (index gene
 
 **Inputs:**
 
-- `--index-output-dir` (line 212): Index artifact directory (default: `.repo_studios/reports/producer_reports/standards_index_reports`)
-- `--index-path` (line 213): Latest index pointer path (default: `.repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml`)
-- `--categories-path` (line 214): Standards categories YAML (default: `.repo_studios/scripts/.repo_studios/standards_categories.yaml`)
-- `--gap-output-dir` (line 215): Gap analysis output directory (default: `.repo_studios/command_center/reports`)
-- `--diff-output-dir` (line 216): Diff artifact directory (default: `.repo_studios/reports/producer_reports/standards_index_diff_reports`)
-- `--diff-old-index` (line 219): Baseline index for diff (optional, skips diff step if not provided, line 638)
+- `--index-output-dir` (line 212): Index artifact directory
+  (default: `.repo_studios/reports/producer_reports/standards_index_reports`)
+- `--index-path` (line 213): Latest index pointer path
+  (default: `.repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml`)
+- `--categories-path` (line 214): Standards categories YAML
+  (default: `.repo_studios/scripts/.repo_studios/standards_categories.yaml`)
+- `--gap-output-dir` (line 215): Gap analysis output directory
+  (default: `.repo_studios/command_center/reports`)
+- `--diff-output-dir` (line 216): Diff artifact directory
+  (default: `.repo_studios/reports/producer_reports/standards_index_diff_reports`)
+- `--diff-old-index` (line 219): Baseline index for diff
+  (optional, skips diff step if not provided, line 638)
 - `--diff-fail-on` (line 220): Fail policy forwarded to diff script (default: `any`)
-- `--prompt-output-dir` (line 217): Prompt seed artifact directory (default: `.repo_studios/reports/producer_reports/standards_prompt_seeds`)
+- `--prompt-output-dir` (line 217): Prompt seed artifact directory
+  (default: `.repo_studios/reports/producer_reports/standards_prompt_seeds`)
 - `--prompt-include-warn` (line 222): Include warn-severity rules in prompt seed (line 502)
 - `--prompt-formats` (line 223-227): Artifact formats (text/yaml/json, line 504)
 - `--gap-max-show` (line 221): Maximum gap candidates to log per source (default: 8)
-- `--pending-path` (line 218): Pending standards YAML path (default: `.repo_studios/scripts/repo_standards_pending.yaml`)
+- `--pending-path` (line 218): Pending standards YAML path
+  (default: `.repo_studios/scripts/repo_standards_pending.yaml`)
 
 **Outputs:**
 
-- `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYmmdd-HHmm>/manifest.json` (lines 763-794)
-- `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYmmdd-HHmm>/summary.md` (lines 796-801)
-- `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYmmdd-HHmm>/telemetry.json` (lines 796-801)
-- Index artifacts: `.repo_studios/reports/producer_reports/standards_index_reports/standards_index-<timestamp>/` (lines 63-64)
+- `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYmmdd-HHmm>/manifest.json`
+  (lines 763-794)
+- `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYmmdd-HHmm>/summary.md`
+  (lines 796-801)
+- `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYmmdd-HHmm>/telemetry.json`
+  (lines 796-801)
+- Index artifacts:
+  `.repo_studios/reports/producer_reports/standards_index_reports/standards_index-<timestamp>/`
+  (lines 63-64)
 - Gap artifacts: `.repo_studios/command_center/reports/standards_index_gaps/<slug>/` (lines 65-66)
-- Diff artifacts: `.repo_studios/reports/producer_reports/standards_index_diff_reports/standards_index_diff-<timestamp>/` (lines 67-68)
-- Prompt artifacts: `.repo_studios/reports/producer_reports/standards_prompt_seeds/<run_id>/` (lines 69-70)
+- Diff artifacts:
+  `.repo_studios/reports/producer_reports/standards_index_diff_reports/standards_index_diff-<timestamp>/`
+  (lines 67-68)
+- Prompt artifacts: `.repo_studios/reports/producer_reports/standards_prompt_seeds/<run_id>/`
+  (lines 69-70)
 
 **Execution Notes:**
 
-- **Dynamic imports:** Lines 286-296 (`_load_callable()`) – orchestrator loads each script's `run()` or `main()` helper via importlib, matching the library-integration pattern
+- **Dynamic imports:** Lines 286-296 (`_load_callable()`) – orchestrator loads each script's
+  `run()` or `main()` helper via importlib, matching the library-integration pattern
 - **Pipeline structure:** Lines 730-736 (5-step pipeline: index → gap → diff → prompts → summary)
-- **Conditional diff:** Line 638 (`step_skipped()`) – diff step skipped if `--diff-old-index` not provided, no error raised
-- **Fail-fast on summary:** Line 736 (`continue_on_failure=False`) – pipeline aborts if summarizer fails
-- **Execution functions:** Lines 332-361 (`_execute_index()`), 364-413 (`_execute_gap()`), 416-467 (`_execute_diff()`), 470-512 (`_execute_prompts()`), 515-522 (`_execute_summary()`)
-- **Artifact retention:** HealthView topic=3 (line 259), index=5 (line 250), gap=5 (line 254), diff=10 (line 255), prompt=5 (line 256)
+- **Conditional diff:** Line 638 (`step_skipped()`) – diff step skipped if `--diff-old-index`
+  not provided, no error raised
+- **Fail-fast on summary:** Line 736 (`continue_on_failure=False`) – pipeline aborts if
+  summarizer fails
+- **Execution functions:** Lines 332-361 (`_execute_index()`), 364-413 (`_execute_gap()`),
+  416-467 (`_execute_diff()`), 470-512 (`_execute_prompts()`), 515-522 (`_execute_summary()`)
+- **Artifact retention:** HealthView topic=3 (line 259), index=5 (line 250), gap=5 (line 254),
+  diff=10 (line 255), prompt=5 (line 256)
 - **Script registration:** Lines 525-531 (registers 6 scripts: orchestrator + 5 delegated scripts)
-- **Telemetry assembly:** Lines 739-768 (builds pipeline telemetry, relativizes artifact paths, populates manifest)
-- **Report naming audit:** Lines 803-811 (enforces viewer/topic/timestamp/artifact naming standards)
-- **Timestamp handling:** Lines 257-268 (`_parse_timestamp()`) – accepts ISO8601 via `--timestamp` or defaults to UTC now
-- **Path resolution:** Lines 270-278 (`_resolve_optional_path()`) – handles absolute/relative/repo-relative paths for optional diff baseline
-- **Prompt configurability:** Lines 495-506 (formats deduplication, include-warn flag, artifact format selection)
+- **Telemetry assembly:** Lines 739-768 (builds pipeline telemetry, relativizes artifact paths,
+  populates manifest)
+- **Report naming audit:** Lines 803-811 (enforces viewer/topic/timestamp/artifact naming
+  standards)
+- **Timestamp handling:** Lines 257-268 (`_parse_timestamp()`) – accepts ISO8601 via `--timestamp`
+  or defaults to UTC now
+- **Path resolution:** Lines 270-278 (`_resolve_optional_path()`) – handles
+  absolute/relative/repo-relative paths for optional diff baseline
+- **Prompt configurability:** Lines 495-506 (formats deduplication, include-warn flag, artifact
+  format selection)
 
-**Status:** `Operational (partial hardening)` – 5-script pipeline verified, 5-8 min runtime confirmed, conditional diff skip logic validated, retention defaults documented
+**Status:** `Operational (partial hardening)` – 5-script pipeline verified, 5-8 min runtime
+confirmed, conditional diff skip logic validated, retention defaults documented
 
 **Planned Expansions:**
 
-- **Stage 6.2: Standards Rules Extraction** – Integrate `extract_standards_rules.py` for deeper compliance validation (gap identified in coverage analysis; `analyze_standards_index_gaps.py` now confirmed as part of Stage 6.1 pipeline)
+- **Stage 6.2: Standards Rules Extraction** – Integrate `extract_standards_rules.py`
+  for deeper compliance validation (gap identified in coverage analysis;
+  `analyze_standards_index_gaps.py` now confirmed as part of Stage 6.1 pipeline)
 
 **Known Gaps:**
 
-- Diff step is optional and skipped silently if baseline not provided; may surprise users expecting diffs
-- Prompt formats default to None if not specified; unclear whether all formats should be generated by default
-- Gap analysis logging capped at `--gap-max-show` candidates; complete gap list requires reading artifacts
+- Diff step is optional and skipped silently if baseline not provided;
+  may surprise users expecting diffs
+- Prompt formats default to None if not specified;
+  unclear whether all formats should be generated by default
+- Gap analysis logging capped at `--gap-max-show` candidates;
+  complete gap list requires reading artifacts
 
 **Evidence:**
 
-- Code: `.repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py` (lines 1-817)
-  - Runtime note: Lines 1-11 (docstring: "Runtime typically lands between five and eight minutes, with diff scopes and prompt generation driving the upper bound")
+- Code: `.repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py`
+  (lines 1-817)
+  - Runtime note: Lines 1-11 (docstring: "Runtime typically lands between five and eight
+    minutes, with diff scopes and prompt generation driving the upper bound")
   - Script constants: Lines 56-60 (5 script paths), 62-70 (5 module names)
-  - Default paths: Lines 72-80 (8 path constants including index, gap, diff, prompt, pending, healthview root)
+  - Default paths: Lines 72-80 (8 path constants including index, gap, diff, prompt, pending,
+    healthview root)
   - Run prefixes: Lines 82-84 (3 prefixes for timestamped artifact directories)
   - PathsConfig: Lines 100-125 (8 path specs with ensure_dir flags)
   - KeepParameters: Lines 128-134 (5 retention parameters)
@@ -1254,10 +1397,12 @@ The Standards Integrity orchestrator chains five scripts in sequence (index gene
   - build_paths: Line 266 (delegates to library `build_standard_paths()`)
   - build_options: Lines 269-281 (retention via library, custom diff/prompt config)
   - Dynamic imports: Lines 286-296 (`_load_callable()`)
-  - Execution functions: Lines 332-361 (`_execute_index()`), 364-413 (`_execute_gap()`), 416-467 (`_execute_diff()`), 470-512 (`_execute_prompts()`), 515-522 (`_execute_summary()`)
+  - Execution functions: Lines 332-361 (`_execute_index()`), 364-413 (`_execute_gap()`),
+    416-467 (`_execute_diff()`), 470-512 (`_execute_prompts()`), 515-522 (`_execute_summary()`)
   - Script registration: Lines 525-531 (6 scripts including orchestrator)
   - Markdown summary: Lines 534-578 (`_summarize_markdown()` with step outcomes)
-  - run() function: Lines 581-813 (pipeline execution, telemetry, manifest assembly, report bundle write)
+  - run() function: Lines 581-813 (pipeline execution, telemetry, manifest assembly,
+    report bundle write)
   - Pipeline definition: Lines 730-736 (5 TopicStep definitions, fail-fast on summary)
   - Telemetry assembly: Lines 739-768 (relativized paths, artifact tracking)
   - Report artifacts: Lines 796-801 (3 artifacts: manifest.json, summary.md, telemetry.json)
@@ -1277,40 +1422,61 @@ The Standards Integrity orchestrator chains five scripts in sequence (index gene
 
 ## 10. Stage 7 – Running the Complete Suite
 
-> **Purpose:** Execute all HealthView orchestrators sequentially via the meta-orchestrator to generate a full-suite diagnostic snapshot.
+> **Purpose:** Execute all HealthView orchestrators sequentially via the meta-orchestrator
+> to generate a full-suite diagnostic snapshot.
 
 _Tier-2 references (depth lives here):_
 
-- [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#23-current-vs-target-contract-snapshot-stage-7) — target vs current, bundle invariants, naming/paths
-- [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#32-stop-gates-and-implementation-checklists) — verification checks + failure signatures + next actions
-- [Records index](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#311-records-index) — per-script inspection index + evidence links (Tier-2 holds proof)
+- [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#23-current-vs-target-contract-snapshot-stage-7)
+  — target vs current, bundle invariants, naming/paths
+- [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#32-stop-gates-and-implementation-checklists)
+  — verification checks + failure signatures + next actions
+- [Records index](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#311-records-index)
+  — per-script inspection index + evidence links (Tier-2 holds proof)
 
 **Stage 7 Script Gate Summary (Tier-1):**
 
-- [ ] Stage 1.1 — Test execution telemetry — pending until Tier-2 DONE is checked — [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-002-test-execution-telemetry)
-- [ ] Stage 2.1 — Docs health overview — pending until Tier-2 DONE is checked — [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-003-docs-health)
-- [ ] Stage 3.1 — Fault diagnostics overview — pending until Tier-2 DONE is checked — [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-004-fault-diagnostics)
-- [ ] Stage 4.1 — Dependency import hygiene — pending until Tier-2 DONE is checked — [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-005-dependency-import-hygiene)
-- [ ] Stage 5.1 — Monkey patch oversight — pending until Tier-2 DONE is checked — [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-006-monkey-patch-oversight)
-- [ ] Stage 6.1 — Standards integrity — pending until Tier-2 DONE is checked — [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-007-standards-integrity)
+- [ ] Stage 1.1 — Test execution telemetry — pending until Tier-2 DONE is checked —
+  [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-002-test-execution-telemetry)
+- [ ] Stage 2.1 — Docs health overview — pending until Tier-2 DONE is checked —
+  [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-003-docs-health)
+- [ ] Stage 3.1 — Fault diagnostics overview — pending until Tier-2 DONE is checked —
+  [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-004-fault-diagnostics)
+- [ ] Stage 4.1 — Dependency import hygiene — pending until Tier-2 DONE is checked —
+  [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-005-dependency-import-hygiene)
+- [ ] Stage 5.1 — Monkey patch oversight — pending until Tier-2 DONE is checked —
+  [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-006-monkey-patch-oversight)
+- [ ] Stage 6.1 — Standards integrity — pending until Tier-2 DONE is checked —
+  [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-007-standards-integrity)
 
 **Stage 7 Stage Gate Checklist (Tier-1):**
 
-- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`) — pending until Tier-2 DONE is checked — [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#23-current-vs-target-contract-snapshot-stage-7)
-- [ ] No pointer artifacts (`latest_*` / `current_*`) — pending until Tier-2 DONE is checked — [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] Output root aligned to HealthView contract: `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/` — pending until Tier-2 DONE is checked — [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#23-current-vs-target-contract-snapshot-stage-7)
-- [ ] Tier-3 eligible (Tier-2 depth captured; ready for Tier-3 extraction) — pending until Tier-2 DONE is checked — [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`) — pending until Tier-2
+  DONE is checked —
+  [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#23-current-vs-target-contract-snapshot-stage-7)
+- [ ] No pointer artifacts (`latest_*` / `current_*`) — pending until Tier-2 DONE is checked —
+  [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#32-stop-gates-and-implementation-checklists)
+- [ ] Output root aligned to HealthView contract:
+  `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/` — pending until Tier-2 DONE is
+  checked —
+  [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#23-current-vs-target-contract-snapshot-stage-7)
+- [ ] Tier-3 eligible (Tier-2 depth captured; ready for Tier-3 extraction) — pending until Tier-2
+  DONE is checked —
+  [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#32-stop-gates-and-implementation-checklists)
 
 **Target contract (locked decisions):**
 
-- Stage 7 is a meta-orchestrator that runs Stages 1.1–6.1 sequentially (fail-fast), producing a full-suite snapshot.
+- Stage 7 is a meta-orchestrator that runs Stages 1.1–6.1 sequentially (fail-fast),
+  producing a full-suite snapshot.
 - All emitted HealthView bundles (meta + delegated topic bundles) converge on the canonical root:
   `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
 - Base package is stable: `manifest.json`, `summary.md`, `telemetry.json`.
 - Pointer artifacts (`latest_*`, `current_*`) are disallowed.
 
 See Tier-2 for the authoritative contract snapshot and stop-gates:
-`tier2_full_suite_overview_roster.md` → [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#23-current-vs-target-contract-snapshot-stage-7) and
+`tier2_full_suite_overview_roster.md` →
+[Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#23-current-vs-target-contract-snapshot-stage-7)
+and
 [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#32-stop-gates-and-implementation-checklists).
 
 **Current evidence (Stage 7):**
@@ -1336,11 +1502,11 @@ proof live in Tier-2.
 **Invoked Orchestrators (6):**
 
 1. `run_test_execution_telemetry.py` (Stage 1.1) – topic slug: `test-execution-telemetry`
-2. `run_docs_health_overview.py` (Stage 2.1) – topic slug: `docs-health`
-3. `run_fault_diagnostics_overview.py` (Stage 3.1) – topic slug: `fault-diagnostics`
-4. `run_dependency_import_hygiene.py` (Stage 4.1) – topic slug: `dependency-import-hygiene`
-5. `run_monkey_patch_oversight.py` (Stage 5.1) – topic slug: `monkey-patch-oversight`
-6. `run_standards_integrity.py` (Stage 6.1) – topic slug: `standards-integrity`
+1. `run_docs_health_overview.py` (Stage 2.1) – topic slug: `docs-health`
+1. `run_fault_diagnostics_overview.py` (Stage 3.1) – topic slug: `fault-diagnostics`
+1. `run_dependency_import_hygiene.py` (Stage 4.1) – topic slug: `dependency-import-hygiene`
+1. `run_monkey_patch_oversight.py` (Stage 5.1) – topic slug: `monkey-patch-oversight`
+1. `run_standards_integrity.py` (Stage 6.1) – topic slug: `standards-integrity`
 
 **Execution Notes:**
 
@@ -1368,14 +1534,18 @@ proof live in Tier-2.
 
 **Evidence Links:**
 
-- **Orchestrator:** [orchestrate_full_diagnostic.py](../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py) (lines 1-554: dynamic imports, sequential execution, composite manifest)
-- **Tests:** [test_orchestrate_full_diagnostic.py](../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py) (integration tests with mocked topic orchestrators)
+- **Orchestrator:**
+  [orchestrate_full_diagnostic.py](../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py)
+  (lines 1-554: dynamic imports, sequential execution, composite manifest)
+- **Tests:**
+  [test_orchestrate_full_diagnostic.py](../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py)
+  (integration tests with mocked topic orchestrators)
 
 ---
 
 ## 11. Stage 11 – Available Scripts (Holding Area)
 
-> **Purpose:** Maintain a Tier-1 holding place for scripts that are *available to HealthView* but
+> **Purpose:** Maintain a Tier-1 holding place for scripts that are _available to HealthView_ but
 > not yet wired into the orchestrator blast-radius chain (Stages 1.1–7). Promotion into an
 > orchestrator is intended to be a copy/paste wiring step plus a Tier-1 doc update.
 
@@ -1391,18 +1561,30 @@ _Tier-2 references (depth lives here):_
 
 **Stage 11.1 Script Gate Summary (Tier-1):**
 
-- [ ] `generate_anchor_health_report.py` — available; unassigned. See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-001-generate_anchor_health_reportpy)
-- [ ] `configure_faulthandler_runtime.py` — available; unassigned (utility). See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-002-configure_faulthandler_runtimepy)
-- [ ] `dump_faulthandler_snapshot.py` — available; unassigned (utility). See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-003-dump_faulthandler_snapshotpy)
-- [ ] `fault_run_analysis.py` — available; unassigned (utility). See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-004-fault_run_analysispy)
-- [ ] `validate_import_boundaries.py` — available; unassigned. See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-005-validate_import_boundariespy)
-- [ ] `extract_standards_rules.py` — available; unassigned. See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-006-extract_standards_rulespy)
-- [ ] `check_inventory_health.py` — available; unassigned. See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-007-check_inventory_healthpy)
-- [ ] `validate_inventory.py` — available; unassigned. See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-008-validate_inventorypy)
-- [ ] `summarize_health_suite.py` — available; unassigned (legacy candidate). See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-009-summarize_health_suitepy)
-- [ ] `render_inventory_views.py` — available; unassigned (out-of-scope for HealthView today). See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-010-render_inventory_viewspy)
-- [ ] `generate_lizard_report.py` — available; unassigned (out-of-scope for HealthView today). See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-011-generate_lizard_reportpy)
-- [ ] `test_log_analysis.py` — available by design (library). See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-013-test_log_analysispy)
+- [ ] `generate_anchor_health_report.py` — available; unassigned.
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-001-generate_anchor_health_reportpy)
+- [ ] `configure_faulthandler_runtime.py` — available; unassigned (utility).
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-002-configure_faulthandler_runtimepy)
+- [ ] `dump_faulthandler_snapshot.py` — available; unassigned (utility).
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-003-dump_faulthandler_snapshotpy)
+- [ ] `fault_run_analysis.py` — available; unassigned (utility).
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-004-fault_run_analysispy)
+- [ ] `validate_import_boundaries.py` — available; unassigned.
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-005-validate_import_boundariespy)
+- [ ] `extract_standards_rules.py` — available; unassigned.
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-006-extract_standards_rulespy)
+- [ ] `check_inventory_health.py` — available; unassigned.
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-007-check_inventory_healthpy)
+- [ ] `validate_inventory.py` — available; unassigned.
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-008-validate_inventorypy)
+- [ ] `summarize_health_suite.py` — available; unassigned (legacy candidate).
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-009-summarize_health_suitepy)
+- [ ] `render_inventory_views.py` — available; unassigned (out-of-scope for HealthView today).
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-010-render_inventory_viewspy)
+- [ ] `generate_lizard_report.py` — available; unassigned (out-of-scope for HealthView today).
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-011-generate_lizard_reportpy)
+- [ ] `test_log_analysis.py` — available by design (library).
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-013-test_log_analysispy)
 
 **Stage 11.1 Gate Checklist (Tier-1):**
 
@@ -1411,13 +1593,14 @@ These are Stage 11.1 promotion gates when a script is picked up by an orchestrat
 - [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`) when the script is a
   bundle-emitting stage participant.
 - [ ] No pointer artifacts (`latest_*` / `current_*`) in the promoted bundle surface.
-- [ ] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`) when the
-  script emits HealthView bundles.
+- [ ] Output root aligned to HOP contract
+  (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`)
+  when the script emits HealthView bundles.
 - [ ] Tier-3 eligible once Tier-2 depth exists (a Tier-2 roster is created for the new vertical).
 
 **Target contract (locked decisions):**
 
-- “Available scripts” are discoverable, stable repo assets that are *eligible* for HealthView use
+- “Available scripts” are discoverable, stable repo assets that are _eligible_ for HealthView use
   but are not yet part of the orchestrator blast-radius chain.
 - Promotion is performed by wiring the script into an appropriate orchestrator (copy/
   paste integration) and updating this Tier-1 document to move the reference from Stage 11.1 into
@@ -1467,30 +1650,48 @@ upgrade paths without over-claiming orchestration coverage until an orchestrator
 
 **Current State (after partial Phase 2 hardening):**  
 
-All six maturity domain orchestrators (Stages 1–6) are **operational** and produce timestamped HealthView bundles. Coverage analysis shows 28/36 scripts (77.8%) orchestrated; 12 gaps identified and documented as "Planned Expansions" within appropriate stage classes.
+All six maturity domain orchestrators (Stages 1–6) are **operational** and produce
+timestamped HealthView bundles. Coverage analysis shows 28/36 scripts (77.8%) orchestrated;
+12 gaps identified and documented as "Planned Expansions" within appropriate stage classes.
 
 **Hardening status:**
 
-- **Stage 1 (Test Execution Telemetry):** Pass B complete – code-verified 6-script pipeline, artifact retention, dynamic imports, 5-6 min runtime
-- **Stage 2 (Docs Health Overview):** Pass B complete – code-verified 8-script pipeline, skip flags (9 CLI options), report naming guardrails, 6-8 min runtime
-- **Stage 3 (Fault Diagnostics Overview):** Pass B complete – code-verified 3-script pipeline (corrected from 2), 3-5 min runtime, dual HealthView+CommandView output, special reuse/override flags
-- **Stage 4 (Dependency & Import Hygiene):** Pass B complete – code-verified 5-script pipeline (4 producers + 1 utility), 7-11 min runtime, 6 skip flags, batch cleanup dry-run capability, fail-tolerant execution
-- **Stage 5 (Monkey Patch Oversight):** Pass B complete – code-verified 4-script pipeline (producer → consumer → aggregator → summarizer + 1 utility), 4-7 min runtime, Git enrichment, trend analysis (max 20 runs)
-- **Stage 6 (Standards Integrity):** Pass B complete – code-verified 5-script pipeline (index → gap → diff → prompts → summary), 5-8 min runtime, conditional diff skip, prompt format configurability
-- **Stage 7 (Meta-Orchestrator):** Pass B complete – code-verified sequential execution, fail-fast strategy, composite manifest generation
-- **All stages:** Phase 2 Pass B hardening 100% complete – code validation done, awaiting Pass C polish (wording, transitions, cross-references)
+- **Stage 1 (Test Execution Telemetry):** Pass B complete – code-verified 6-script pipeline,
+  artifact retention, dynamic imports, 5-6 min runtime
+- **Stage 2 (Docs Health Overview):** Pass B complete – code-verified 8-script pipeline,
+  skip flags (9 CLI options), report naming guardrails, 6-8 min runtime
+- **Stage 3 (Fault Diagnostics Overview):** Pass B complete – code-verified 3-script pipeline
+  (corrected from 2), 3-5 min runtime, dual HealthView+CommandView output, special reuse/override
+  flags
+- **Stage 4 (Dependency & Import Hygiene):** Pass B complete – code-verified 5-script pipeline
+  (4 producers + 1 utility), 7-11 min runtime, 6 skip flags, batch cleanup dry-run capability,
+  fail-tolerant execution
+- **Stage 5 (Monkey Patch Oversight):** Pass B complete – code-verified 4-script pipeline
+  (producer → consumer → aggregator → summarizer + 1 utility), 4-7 min runtime, Git enrichment,
+  trend analysis (max 20 runs)
+- **Stage 6 (Standards Integrity):** Pass B complete – code-verified 5-script pipeline
+  (index → gap → diff → prompts → summary), 5-8 min runtime, conditional diff skip,
+  prompt format configurability
+- **Stage 7 (Meta-Orchestrator):** Pass B complete – code-verified sequential execution,
+  fail-fast strategy, composite manifest generation
+- **All stages:** Phase 2 Pass B hardening 100% complete – code validation done, awaiting Pass C
+  polish (wording, transitions, cross-references)
 
-**Meta-orchestrator (Stage 7)** chains all six Stage NN.1 orchestrators sequentially via dynamic imports. Tests exist for Stage 1, Stage 5, and Stage 7; other orchestrators lack dedicated test coverage (marked "tests TBD" in matrix).
+**Meta-orchestrator (Stage 7)** chains all six Stage NN.1 orchestrators sequentially via
+dynamic imports. Tests exist for Stage 1, Stage 5, and Stage 7; other orchestrators lack
+dedicated test coverage (marked "tests TBD" in matrix).
 
 **Stage-chain contradictions are tracked explicitly.** Structural contract mismatches
 (output roots, retention defaults, timestamp shapes, and stage-specific stop-gates) are tracked in
 **Section 13** and the relevant Tier-2 rosters.
 
 All gaps have logical explanations:
+
 - 5 scripts (easy integrations): related to existing orchestrators but not yet wired
 - 2 scripts (questionable): purpose unclear, may be CommandView-specific
 - 1 script (legacy): `summarize_health_suite.py` replaced by per-topic summarizers
-- 4 scripts (out of scope): `render_inventory_views.py` (CommandView), `generate_lizard_report.py` (potential Stage 8)
+- 4 scripts (out of scope): `render_inventory_views.py` (CommandView),
+  `generate_lizard_report.py` (potential Stage 8)
 
 **High-Level Risks:**
 
@@ -1505,7 +1706,7 @@ All gaps have logical explanations:
 ### 12.2 Stage Matrix
 
 | Stage | Name | Orchestrators | Status | Top Gap | Evidence |
-|-------|------|---------------|--------|---------|----------|
+| ----- | ---- | ------------- | ------ | ------- | -------- |
 | 1 | Testing Perspectives | 1.1 Test Execution Telemetry (6 scripts) | Operational (partial hardening) | Flaky test metrics not in health summary | [orchestrator](../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py), [tests](../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py) |
 | 2 | Documentation Quality | 2.1 Docs Health Overview (8 scripts) | Operational (partial hardening) | Anchor health report not integrated | [orchestrator](../../../command_center/scripts/orchestrators/run_docs_health_overview.py), tests TBD |
 | 3 | Runtime Reliability | 3.1 Fault Diagnostics Overview (3 scripts) | Operational (partial hardening) | Runtime utilities not integrated | [orchestrator](../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py), [tests](../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py) |
@@ -1519,7 +1720,7 @@ All gaps have logical explanations:
 ## 13. Contradiction Registry
 
 | ID | Description | Sections Affected | Reality Source | Next Step |
-|----|-------------|-------------------|----------------|----------|
+| -- | ----------- | ----------------- | -------------- | --------- |
 | CR-001 | Tier-1 “current output root” references `.repo_studios/command_center/reports/healthview/...` while HOP target contract requires `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`. | 1.2, 3.1, 3.4, stage I/O bullets | `REPORT_NAMING_STANDARDS.md`, current orchestrator outputs | Keep Tier-1 explicit about “current vs target” until code migration lands; update Stage 1.1 Tier-2 vertical with per-script “current vs target” output tables. |
 | CR-002 | Retention policy language drifts between “days,” per-script knobs, and bundle-level behavior across the pipeline docs. | 1.6, 3.4, stage retention bullets | Tier-2 rosters; current orchestrator CLI flags | Keep Tier-1 contract-level: retention is enforced in code; track current retention surfaces and evidence in Tier-2 rosters until migrations converge. |
 | CR-003 | DB dual-write semantics are part of the HOP target contract; current implementation is partial and not end-to-end across all stages. | 1.2, 1.6, global controls | HOP locked decision; stage rosters (Tier-2) | Keep Tier-1 target contract language and treat DB as a stop-gate until best-effort DB persistence is consistently evidenced where required; Tier-2 rosters track current DB marker coverage by stage. |
@@ -1539,14 +1740,22 @@ All gaps have logical explanations:
 
 **Tier-2 (Roster) Documents (per-orchestrator BEGIN → END):**
 
-- [tier2_roster/tier2_test_execution_telemetry_roster.md](tier2_roster/tier2_test_execution_telemetry_roster.md) – Stage 1.1 deep dive
-- [tier2_roster/tier2_docs_health_overview_roster.md](tier2_roster/tier2_docs_health_overview_roster.md) – Stage 2.1 deep dive
-- [tier2_roster/tier2_fault_diagnostics_overview_roster.md](tier2_roster/tier2_fault_diagnostics_overview_roster.md) – Stage 3.1 deep dive
-- [tier2_roster/tier2_dependency_import_hygiene_roster.md](tier2_roster/tier2_dependency_import_hygiene_roster.md) – Stage 4.1 deep dive
-- [tier2_roster/tier2_monkey_patch_oversight_roster.md](tier2_roster/tier2_monkey_patch_oversight_roster.md) – Stage 5.1 deep dive
-- [tier2_roster/tier2_standards_integrity_roster.md](tier2_roster/tier2_standards_integrity_roster.md) – Stage 6.1 deep dive
-- [tier2_roster/tier2_full_suite_overview_roster.md](tier2_roster/tier2_full_suite_overview_roster.md) – Stage 7 (meta-orchestrator) deep dive
-- [tier2_roster/tier2_available_scripts_roster.md](tier2_roster/tier2_available_scripts_roster.md) – Stage 11.1 (holding roster) deep dive
+- [tier2_test_execution_telemetry_roster.md](tier2_roster/tier2_test_execution_telemetry_roster.md)
+  – Stage 1.1 deep dive
+- [tier2_docs_health_overview_roster.md](tier2_roster/tier2_docs_health_overview_roster.md)
+  – Stage 2.1 deep dive
+- [tier2_fault_diagnostics_overview_roster.md](tier2_roster/tier2_fault_diagnostics_overview_roster.md)
+  – Stage 3.1 deep dive
+- [tier2_dependency_import_hygiene_roster.md](tier2_roster/tier2_dependency_import_hygiene_roster.md)
+  – Stage 4.1 deep dive
+- [tier2_monkey_patch_oversight_roster.md](tier2_roster/tier2_monkey_patch_oversight_roster.md)
+  – Stage 5.1 deep dive
+- [tier2_standards_integrity_roster.md](tier2_roster/tier2_standards_integrity_roster.md)
+  – Stage 6.1 deep dive
+- [tier2_full_suite_overview_roster.md](tier2_roster/tier2_full_suite_overview_roster.md)
+  – Stage 7 (meta-orchestrator) deep dive
+- [tier2_available_scripts_roster.md](tier2_roster/tier2_available_scripts_roster.md)
+  – Stage 11.1 (holding roster) deep dive
 
 **Tier-3 (YAML) Documents (per-script agent tools):**
 
@@ -1555,14 +1764,18 @@ All gaps have logical explanations:
 
 **Related Architecture Documents:**
 
-- [.repo_studios/scripts/README.md](../../../scripts/README.md) – Script tier responsibilities
-  (producers, consumers, aggregators, orchestrators, summarizers)
-- [REPORT_NAMING_STANDARDS.md](../../../../REPORT_NAMING_STANDARDS.md) – Bundle structure
-  conventions (viewer/topic/timestamp/artifact layout)
-- [docs/standards/global/std-global-python-engineering.md](../../standards/global/std-global-python-engineering.md) – Python engineering standards
-- [docs/standards/global/std-global-markdown-authoring.md](../../standards/global/std-global-markdown-authoring.md) – Markdown authoring conventions
-- [.github/instructions/markdown.instructions.md](../../../../.github/instructions/markdown.instructions.md) – Markdown editing instructions for agents
-- [.github/instructions/pipeline_doc_tiers.instructions.md](../../../../.github/instructions/pipeline_doc_tiers.instructions.md) – Tier-1/2/3 documentation requirements
+- [.repo_studios/scripts/README.md](../../../scripts/README.md)
+  – Script tier responsibilities (producers, consumers, aggregators, orchestrators, summarizers)
+- [REPORT_NAMING_STANDARDS.md](../../../../REPORT_NAMING_STANDARDS.md)
+  – Bundle structure conventions (viewer/topic/timestamp/artifact layout)
+- [std-global-python-engineering.md](../../standards/global/std-global-python-engineering.md)
+  – Python engineering standards
+- [std-global-markdown-authoring.md](../../standards/global/std-global-markdown-authoring.md)
+  – Markdown authoring conventions
+- [markdown.instructions.md](../../../../.github/instructions/markdown.instructions.md)
+  – Markdown editing instructions for agents
+- [pipeline_doc_tiers.instructions.md](../../../../.github/instructions/pipeline_doc_tiers.instructions.md)
+  – Tier-1/2/3 documentation requirements
 
 **Validation Suites:**
 

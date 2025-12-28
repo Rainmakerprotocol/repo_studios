@@ -79,7 +79,7 @@ parameters:
   - name: test_log_summary
     type: path
     required: false
-    default: .repo_studios/reports/consumer_reports/test_log_health_reports
+    default: .repo_studios/reports/healthview/consumer_reports/test_log_health_reports
     description: |
       Candidate path to a consumer bundle summary (bundle_summary.json) or a directory containing
       timestamped consumer run directories.
@@ -194,9 +194,9 @@ metadata:
   category: aggregator
   tier: 3
   status: draft
-  version: 0.1.0
+  version: 0.2.0
   author: Repo Studios Team
-  last_updated: 2025-12-24
+  last_updated: 2025-12-27
   dependencies_tier3:
     - tier3_artifacts.yaml
     - tier3_cli.yaml
@@ -208,3 +208,23 @@ metadata:
     - healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
   testing:
     test_file: .repo_studios/tests/tests_aggregators/test_generate_churn_complexity_heatmap.py
+
+known_limitations:
+  - id: bundle_schema_deviation
+    summary: Bundle uses bundle_summary.json and heatmap.md instead of HOP base package
+    description: |
+      The output bundle uses `bundle_summary.json` (metadata), `heatmap.json`/`heatmap.md`
+      instead of the HOP base package (`manifest.json`, `summary.md`, `telemetry.json`). This is an
+      aggregator-stage deviation that predates the HOP contract. Harmonization is deferred until
+      Stage 1.1 hardening completes.
+    workaround: None required; the bundle_summary.json schema is stable and well-tested.
+    severity: info
+  - id: timestamp_format_deviation
+    summary: Run directory uses prefix pattern instead of simple timestamp
+    description: |
+      The run directory uses `churn_complexity_heatmap-YYYY-MM-DD_HHMMSS` prefix pattern instead
+      of the simple `YYYYMMDD-HHMM` format used by other HOP bundles. This is a historical
+      convention that provides clearer artifact identification but deviates from the HOP discovery
+      contract.
+    workaround: Discovery code handles both patterns; no action required.
+    severity: info

@@ -12,11 +12,11 @@
     "thread_block_count": 2
   },
   "artifacts": {
-    "summary_json": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-809\\test_fault_artifacts_prunes_hi0\\repo\\.repo_studios\\reports\\consumer_reports\\fault_artifacts\\fault_artifacts-2025-01-03_000700-2025-01-03_000000\\summary.json",
-    "summary_md": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-809\\test_fault_artifacts_prunes_hi0\\repo\\.repo_studios\\reports\\consumer_reports\\fault_artifacts\\fault_artifacts-2025-01-03_000700-2025-01-03_000000\\SUMMARY.md",
-    "run_summary_md": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-809\\test_fault_artifacts_prunes_hi0\\repo\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-03_000000\\SUMMARY.md",
-    "stacks_csv": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-809\\test_fault_artifacts_prunes_hi0\\repo\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-03_000000\\stacks.csv",
-    "combined_txt": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-809\\test_fault_artifacts_prunes_hi0\\repo\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-03_000000\\dumps\\combined.txt"
+    "summary_json": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-815\\test_fault_artifacts_prunes_hi0\\repo\\.repo_studios\\reports\\consumer_reports\\fault_artifacts\\fault_artifacts-2025-01-03_000700-2025-01-03_000000\\summary.json",
+    "summary_md": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-815\\test_fault_artifacts_prunes_hi0\\repo\\.repo_studios\\reports\\consumer_reports\\fault_artifacts\\fault_artifacts-2025-01-03_000700-2025-01-03_000000\\SUMMARY.md",
+    "run_summary_md": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-815\\test_fault_artifacts_prunes_hi0\\repo\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-03_000000\\SUMMARY.md",
+    "stacks_csv": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-815\\test_fault_artifacts_prunes_hi0\\repo\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-03_000000\\stacks.csv",
+    "combined_txt": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-815\\test_fault_artifacts_prunes_hi0\\repo\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-03_000000\\dumps\\combined.txt"
   },
   "source_report": null
 }

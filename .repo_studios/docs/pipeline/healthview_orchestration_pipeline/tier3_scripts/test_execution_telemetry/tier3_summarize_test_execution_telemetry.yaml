@@ -151,14 +151,19 @@ examples:
   - description: Summarize an orchestrator run directory (explicit inputs)
     command: |
       python .repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py \
-        --manifest .repo_studios/command_center/reports/healthview/test_execution_telemetry/20251224-1200/manifest.json \
-        --telemetry .repo_studios/command_center/reports/healthview/test_execution_telemetry/20251224-1200/telemetry.json
+        --manifest .repo_studios/reports/healthview/orchestrator_reports/test_execution_telemetry/20251225-0033/manifest.json \
+        --telemetry .repo_studios/reports/healthview/orchestrator_reports/test_execution_telemetry/20251225-0033/telemetry.json
+
+known_limitations:
+  - Output artifacts use non-HOP filenames (test_execution_telemetry_summary.json instead of manifest.json)
+  - Requires orchestrator to have run first; no standalone input generation
+  - Pruning behavior tied to summarizer_reports subdirectory, not the source orchestrator_reports
 
 metadata:
   category: summarizer
   tier: 3
-  status: draft
-  version: 0.1.0
+  status: active
+  version: 0.2.0
   author: Repo Studios Team
   last_updated: 2025-12-24
   dependencies_tier3:

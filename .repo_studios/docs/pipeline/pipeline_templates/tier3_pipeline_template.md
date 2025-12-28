@@ -29,13 +29,13 @@ related_files:
 
 ## 0. Instruction Block for Editors & AI Assistants
 
-* Tier-3 docs define **reusable semantics**; do not embed implementation specifics that belong in Tier-2.
-* List every Tier-2/Tier-1 document that *consumes* this horizontal and keep reciprocity: dependents must link back here.
-* Preserve this section order (Goals → System Context → Horizontal Contracts → Signals & Telemetry → Dependencies → Agent Block → Update Log). Add custom subsections under the provided headings only.
-* Every checklist entry must cite evidence (files/tests/docs) *and* call out doc-index obligations ("refresh doc-index after completing this box").
-* Record doc-index timestamps, regression suites, and cross-tier sync status in the Update Log whenever this file changes.
-* When introducing a new reusable concept, refresh the doc-index (via the `doc-index` make target or platform-equivalent command).
-* If this horizontal affects telemetry/history/propagation, reference the relevant implementation files and note which Tier-1 stop-gates are blocked.
+- Tier-3 docs define **reusable semantics**; do not embed implementation specifics that belong in Tier-2.
+- List every Tier-2/Tier-1 document that *consumes* this horizontal and keep reciprocity: dependents must link back here.
+- Preserve this section order (Goals → System Context → Horizontal Contracts → Signals & Telemetry → Dependencies → Agent Block → Update Log). Add custom subsections under the provided headings only.
+- Every checklist entry must cite evidence (files/tests/docs) *and* call out doc-index obligations ("refresh doc-index after completing this box").
+- Record doc-index timestamps, regression suites, and cross-tier sync status in the Update Log whenever this file changes.
+- When introducing a new reusable concept, refresh the doc-index (via the `doc-index` make target or platform-equivalent command).
+- If this horizontal affects telemetry/history/propagation, reference the relevant implementation files and note which Tier-1 stop-gates are blocked.
 
 Add domain-specific editing notes here (for example, "voice transports must cite limiter telemetry files").
 
@@ -46,8 +46,8 @@ Add domain-specific editing notes here (for example, "voice transports must cite
 Explain **why** this horizontal exists and which problems it solves. Provide 3–5 concrete goals tied to adoption evidence.
 
 1. `<Goal statement #1 – e.g., unify limiter telemetry semantics across transports>`
-2. `<Goal statement #2 – e.g., guarantee autonomy maturity gates>`
-3. `<Goal statement #3 – e.g., enforce rollback audit trails>`
+1. `<Goal statement #2 – e.g., guarantee autonomy maturity gates>`
+1. `<Goal statement #3 – e.g., enforce rollback audit trails>`
 
 Add success criteria (Tier-1 checkbox flips, telemetry parity proof, governance acceptance, etc.).
 
@@ -57,9 +57,9 @@ Add success criteria (Tier-1 checkbox flips, telemetry parity proof, governance 
 
 ### 2.1 Audience & Consumers
 
-* **Primary Consumers (Tier-2/Tier-1):** `<List docs + sections>`
-* **Runtime Surfaces:** `<Brief bullets describing APIs/services affected>`
-* **Out-of-Scope:** `<Call out items intentionally excluded>`
+- **Primary Consumers (Tier-2/Tier-1):** `<List docs + sections>`
+- **Runtime Surfaces:** `<Brief bullets describing APIs/services affected>`
+- **Out-of-Scope:** `<Call out items intentionally excluded>`
 
 ### 2.2 Architectural Anchors
 
@@ -67,9 +67,9 @@ Describe the systems, data stores, and telemetry feeds that provide the evidence
 
 ### 2.3 Preconditions & Assumptions
 
-* `<Assumption #1>`
-* `<Assumption #2>`
-* `<Assumption #3>`
+- `<Assumption #1>`
+- `<Assumption #2>`
+- `<Assumption #3>`
 
 ---
 
@@ -97,9 +97,9 @@ Summarize how each dependent transport/stage/adaptor complies with the contract.
 
 Use actionable checklists; keep them close to the relevant subsection rather than in a single blob.
 
-* [ ] `<Checkpoint with evidence + "run make doc-index" reminder>`
-* [ ] `<Checkpoint referencing regression suite>`
-* [ ] `<Checkpoint citing Tier-1 sync requirement>`
+- [ ] `<Checkpoint with evidence + "run make doc-index" reminder>`
+- [ ] `<Checkpoint referencing regression suite>`
+- [ ] `<Checkpoint citing Tier-1 sync requirement>`
 
 Include additional subsections (for example, **Safety Envelope Rules**, **Autonomy Maturity Levels**, **Rollback Semantics**) as the horizontal demands.
 
@@ -107,12 +107,12 @@ Include additional subsections (for example, **Safety Envelope Rules**, **Autono
 
 ## 4. Signals, Telemetry & Validation
 
-* **Regression Suites:**
-  * `pytest -q <path>` – `<behavior validated>`
-  * `<Add suites or smoke harnesses>`
-* **Telemetry / Metrics:** Describe metrics, dashboards, and how they prove compliance.
-* **Manual Harnesses:** CLI scripts or smoke drivers that validate the contract.
-* **Doc-index & Checkbox Evidence:** Note the latest doc-index timestamp (from running the `doc-index` make target or platform-equivalent) and mention if the checkbox report entries were updated.
+- **Regression Suites:**
+  - `pytest -q <path>` – `<behavior validated>`
+  - `<Add suites or smoke harnesses>`
+- **Telemetry / Metrics:** Describe metrics, dashboards, and how they prove compliance.
+- **Manual Harnesses:** CLI scripts or smoke drivers that validate the contract.
+- **Doc-index & Checkbox Evidence:** Note the latest doc-index timestamp (from running the `doc-index` make target or platform-equivalent) and mention if the checkbox report entries were updated.
 
 Note any verification gaps or TODOs if telemetry coverage is incomplete.
 
@@ -124,13 +124,13 @@ Note any verification gaps or TODOs if telemetry coverage is incomplete.
 
 List every Tier-1/Tier-2/TEMP doc relying on this horizontal, with anchors.
 
-* `<Doc path + section>` — `<Dependency description>`
-* `<Another doc>` — `<How this Tier-3 doc blocks it>`
+- `<Doc path + section>` — `<Dependency description>`
+- `<Another doc>` — `<How this Tier-3 doc blocks it>`
 
 ### 5.2 Required Follow-Ups
 
-* `<Describe Tier-1/Tier-2 sync that must happen before considering this contract stable>`
-* `<List feature flags, rollout gates, governance approvals>`
+- `<Describe Tier-1/Tier-2 sync that must happen before considering this contract stable>`
+- `<List feature flags, rollout gates, governance approvals>`
 
 ### 5.3 Placeholder Tracking
 

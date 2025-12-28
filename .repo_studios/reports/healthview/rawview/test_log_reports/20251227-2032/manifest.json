@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "rawview",
+  "topic": "test_log_reports",
+  "run_timestamp": "20251227-2032",
+  "generated_at": "2025-12-27T20:32:45.364346+00:00",
+  "status": "ok",
+  "git_sha": null,
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "inputs": {
+    "logs_dir": ".repo_studios/command_center/reports/rawview/test_execution_runs",
+    "logs_run": ".repo_studios/command_center/reports/rawview/test_execution_runs/pytest_log_capture-2025-12-27_2013",
+    "allow_legacy": "1",
+    "artifacts_to_keep": 10,
+    "run_timestamp": "20251227-2032",
+    "pytest_ran": false,
+    "pytest_exit_code": null,
+    "pytest_command": null
+  },
+  "catalog": [
+    {
+      "artifact": "manifest.json",
+      "path": ".repo_studios/reports/healthview/rawview/test_log_reports/20251227-2032/manifest.json"
+    },
+    {
+      "artifact": "summary.md",
+      "path": ".repo_studios/reports/healthview/rawview/test_log_reports/20251227-2032/summary.md"
+    },
+    {
+      "artifact": "telemetry.json",
+      "path": ".repo_studios/reports/healthview/rawview/test_log_reports/20251227-2032/telemetry.json"
+    }
+  ],
+  "provenance": {
+    "script": "collect_test_log_reports.py",
+    "trigger": "cli"
+  }
+}
