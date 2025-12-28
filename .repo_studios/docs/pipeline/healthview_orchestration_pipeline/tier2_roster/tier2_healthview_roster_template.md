@@ -35,10 +35,10 @@ related_files:
 >
 > **Tier-1 source:** `tier1_healthview_orchestration_pipeline.md` (Stage <STAGE_ID>).
 > **Locked decisions source:** Tier-1 spine (`tier1_healthview_orchestration_pipeline.md`) + `REPORT_NAMING_STANDARDS.md`.
-> **Last synced with Tier-1:** <YYYY-MM-DD>.
+> **Last synced with Tier-1:** `<YYYY-MM-DD>`.
 >
-> Standards: `.github/instructions/markdown.instructions.md` (reviewed <YYYY-MM-DD>) and
-> `.github/instructions/pipeline_doc_tiers.instructions.md` (reviewed <YYYY-MM-DD>).
+> Standards: `.github/instructions/markdown.instructions.md` (reviewed `<YYYY-MM-DD>`) and
+> `.github/instructions/pipeline_doc_tiers.instructions.md` (reviewed `<YYYY-MM-DD>`).
 
 ---
 
@@ -440,4 +440,4 @@ checks:
 
 | Date | Change | Author | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
-| 2025-12-19 | Created Tier-2 roster template seeded from Stage 1.1 structure. | repo_studios_ai | <doc-index-ts> | <suites> |
+| 2025-12-19 | Created Tier-2 roster template seeded from Stage 1.1 structure. | repo_studios_ai | `<doc-index-ts>` | `<suites>` |

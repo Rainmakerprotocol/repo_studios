@@ -23,19 +23,33 @@ related_files:
 <!-- markdownlint-disable-next-line MD025 -->
 # Tier-3 Horizontal Document Template
 
-> **Purpose:** Copy this file when authoring a Tier-3 horizontal (safety envelopes, autonomy guardrails, telemetry horizontals, transport contracts, rollback semantics, etc.). Replace every placeholder, cite concrete evidence, and follow `.github/instructions/markdown.instructions.md`, `.github/instructions/pipeline_doc_tiers.instructions.md`, and `.github/instructions/tier_doc_operating_model.instructions.md` before submitting changes.
+> **Purpose:** Copy this file when authoring a Tier-3 horizontal (safety
+> envelopes, autonomy guardrails, telemetry horizontals, transport contracts,
+> rollback semantics, etc.). Replace every placeholder, cite concrete evidence,
+> and follow `.github/instructions/markdown.instructions.md`,
+> `.github/instructions/pipeline_doc_tiers.instructions.md`, and
+> `.github/instructions/tier_doc_operating_model.instructions.md` before
+> submitting changes.
 
 ---
 
 ## 0. Instruction Block for Editors & AI Assistants
 
-- Tier-3 docs define **reusable semantics**; do not embed implementation specifics that belong in Tier-2.
-- List every Tier-2/Tier-1 document that *consumes* this horizontal and keep reciprocity: dependents must link back here.
-- Preserve this section order (Goals → System Context → Horizontal Contracts → Signals & Telemetry → Dependencies → Agent Block → Update Log). Add custom subsections under the provided headings only.
-- Every checklist entry must cite evidence (files/tests/docs) *and* call out doc-index obligations ("refresh doc-index after completing this box").
-- Record doc-index timestamps, regression suites, and cross-tier sync status in the Update Log whenever this file changes.
-- When introducing a new reusable concept, refresh the doc-index (via the `doc-index` make target or platform-equivalent command).
-- If this horizontal affects telemetry/history/propagation, reference the relevant implementation files and note which Tier-1 stop-gates are blocked.
+- Tier-3 docs define **reusable semantics**; do not embed implementation
+  specifics that belong in Tier-2.
+- List every Tier-2/Tier-1 document that *consumes* this horizontal and keep
+  reciprocity: dependents must link back here.
+- Preserve this section order (Goals → System Context → Horizontal Contracts
+  → Signals & Telemetry → Dependencies → Agent Block → Update Log). Add custom
+  subsections under the provided headings only.
+- Every checklist entry must cite evidence (files/tests/docs) *and* call out
+  doc-index obligations ("refresh doc-index after completing this box").
+- Record doc-index timestamps, regression suites, and cross-tier sync status
+  in the Update Log whenever this file changes.
+- When introducing a new reusable concept, refresh the doc-index (via the
+  `doc-index` make target or platform-equivalent command).
+- If this horizontal affects telemetry/history/propagation, reference the
+  relevant implementation files and note which Tier-1 stop-gates are blocked.
 
 Add domain-specific editing notes here (for example, "voice transports must cite limiter telemetry files").
 
@@ -43,7 +57,8 @@ Add domain-specific editing notes here (for example, "voice transports must cite
 
 ## 1. Mission & Goals
 
-Explain **why** this horizontal exists and which problems it solves. Provide 3–5 concrete goals tied to adoption evidence.
+Explain **why** this horizontal exists and which problems it solves.
+ Provide 3–5 concrete goals tied to adoption evidence.
 
 1. `<Goal statement #1 – e.g., unify limiter telemetry semantics across transports>`
 1. `<Goal statement #2 – e.g., guarantee autonomy maturity gates>`
@@ -63,7 +78,8 @@ Add success criteria (Tier-1 checkbox flips, telemetry parity proof, governance 
 
 ### 2.2 Architectural Anchors
 
-Describe the systems, data stores, and telemetry feeds that provide the evidence for this horizontal. Link to code/tests/ADRs.
+Describe the systems, data stores, and telemetry feeds that provide the
+evidence for this horizontal. Link to code/tests/ADRs.
 
 ### 2.3 Preconditions & Assumptions
 
@@ -75,7 +91,9 @@ Describe the systems, data stores, and telemetry feeds that provide the evidence
 
 ## 3. Horizontal Contracts & Adoption State
 
-Use the subsections below to articulate the reusable logic this Tier-3 doc owns. Duplicate/rename subsections as needed (taxonomies, maturity models, contract tables, matrices, etc.).
+Use the subsections below to articulate the reusable logic this Tier-3 doc
+owns. Duplicate/rename subsections as needed (taxonomies, maturity models,
+contract tables, matrices, etc.).
 
 ### 3.1 Canonical Contract / Taxonomy
 
@@ -101,7 +119,9 @@ Use actionable checklists; keep them close to the relevant subsection rather tha
 - [ ] `<Checkpoint referencing regression suite>`
 - [ ] `<Checkpoint citing Tier-1 sync requirement>`
 
-Include additional subsections (for example, **Safety Envelope Rules**, **Autonomy Maturity Levels**, **Rollback Semantics**) as the horizontal demands.
+Include additional subsections (for example, **Safety Envelope Rules**,
+**Autonomy Maturity Levels**, **Rollback Semantics**) as the horizontal
+demands.
 
 ---
 
@@ -112,7 +132,9 @@ Include additional subsections (for example, **Safety Envelope Rules**, **Autono
   - `<Add suites or smoke harnesses>`
 - **Telemetry / Metrics:** Describe metrics, dashboards, and how they prove compliance.
 - **Manual Harnesses:** CLI scripts or smoke drivers that validate the contract.
-- **Doc-index & Checkbox Evidence:** Note the latest doc-index timestamp (from running the `doc-index` make target or platform-equivalent) and mention if the checkbox report entries were updated.
+- **Doc-index & Checkbox Evidence:** Note the latest doc-index timestamp
+  (from running the `doc-index` make target or platform-equivalent) and
+  mention if the checkbox report entries were updated.
 
 Note any verification gaps or TODOs if telemetry coverage is incomplete.
 
@@ -163,7 +185,9 @@ tasks:
 
 ## 7. Update Log & Evidence Tracking
 
-Record every change, including doc-index timestamps and regression suites. Do not mark Tier-1/Tier-2 stop-gates complete without logging the evidence here.
+Record every change, including doc-index timestamps and regression suites.
+Do not mark Tier-1/Tier-2 stop-gates complete without logging the evidence
+here.
 
 | Date | Change | Author | Doc-index timestamp | Regression suites / telemetry |
 | --- | --- | --- | --- | --- |

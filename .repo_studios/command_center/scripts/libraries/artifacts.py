@@ -3,11 +3,24 @@
 from __future__ import annotations
 
 import json
+import logging
 import shutil
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Iterable, Literal
+
+from .prune_logs import prune_run_directories
+
+
+# Re-export for external consumers that may rely on the shared helper
+__all__ = [
+    "copy_latest_artifact",
+    "ReportArtifact",
+    "WriteReportArtifactsResult",
+    "write_report_artifacts",
+    "prune_run_directories",
+]
 
 
 def copy_latest_artifact(src: Path, dest: Path) -> None:
@@ -97,6 +110,11 @@ def _normalize_timestamp(moment: datetime) -> datetime:
 
 
 def _prune_old_runs(output_dir: Path, *, stem: str, keep: int, current_run: Path) -> None:
+    """Prune old stem-prefixed run directories.
+
+    Uses name-based sorting since directory names encode timestamps in a sortable format
+    (e.g., stem-YYYYMMDD_HHMMSS). This differs from prune_run_directories which uses mtime.
+    """
     keep = max(keep, 1)
     if not output_dir.exists():
         return
@@ -111,6 +129,11 @@ def _prune_old_runs(output_dir: Path, *, stem: str, keep: int, current_run: Path
 
 
 def _prune_topic_runs(topic_dir: Path, *, keep: int) -> None:
+    """Prune old topic run directories.
+
+    Uses name-based sorting since directory names encode timestamps in a sortable format
+    (e.g., YYYYMMDD-HHMM). This differs from prune_run_directories which uses mtime.
+    """
     keep = max(keep, 1)
     if not topic_dir.exists():
         return

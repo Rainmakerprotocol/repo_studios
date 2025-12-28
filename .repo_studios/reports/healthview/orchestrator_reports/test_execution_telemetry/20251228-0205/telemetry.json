@@ -1,0 +1,63 @@
+{
+  "finished_at": "2025-12-28T02:05:54.869937+00:00",
+  "metrics": {
+    "artifact_bytes": 7954,
+    "artifact_files": 3,
+    "runtime_seconds": 5.688665,
+    "step_count": 3,
+    "steps_failed": 0,
+    "steps_skipped": 0,
+    "steps_succeeded": 3
+  },
+  "run_slug": "20251228-0205",
+  "started_at": "2025-12-28T02:05:49.181272+00:00",
+  "steps": [
+    {
+      "detail": "log report captured",
+      "finished_at": "2025-12-28T02:05:49.278195+00:00",
+      "name": "collect",
+      "payload": {
+        "coverage": {
+          "covered_functions": 0,
+          "files_below_threshold": [],
+          "include_empty": false,
+          "overall_coverage_pct": 0.0,
+          "status": "ok",
+          "threshold": null,
+          "total_files": 1,
+          "total_functions": 24
+        },
+        "log_report": {
+          "slow_tests": 0,
+          "warnings_total": 0
+        }
+      },
+      "started_at": "2025-12-28T02:05:49.181279+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "analysis completed",
+      "finished_at": "2025-12-28T02:05:54.848913+00:00",
+      "name": "analyse",
+      "payload": {
+        "hardening_status": "ok",
+        "heatmap_mode": "consumer"
+      },
+      "started_at": "2025-12-28T02:05:49.278208+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "health summary generated",
+      "finished_at": "2025-12-28T02:05:54.869924+00:00",
+      "name": "summarize",
+      "payload": {
+        "source": "producer"
+      },
+      "started_at": "2025-12-28T02:05:54.848928+00:00",
+      "status": "success"
+    }
+  ],
+  "success": true,
+  "topic": "test-execution-telemetry",
+  "viewer": "orchestrator_reports"
+}

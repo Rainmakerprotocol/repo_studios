@@ -29,10 +29,11 @@ related_files:
 <!-- markdownlint-disable-next-line MD025 -->
 # Tier-2 Roster — Stage 7 Running the Complete Suite
 
-> **Purpose:** This Tier-2 vertical deep dive will document Stage 7 (Running the Complete Suite) for the
-> HealthView pipeline. It will inventory the orchestrator chain, capture the current vs target I/O contract
-> (with evidence), and define stop-gates required before code migrations can claim compliance with
-> locked decisions.
+> **Purpose:** This Tier-2 vertical deep dive will document Stage 7
+> (Running the Complete Suite) for the HealthView pipeline. It will
+> inventory the orchestrator chain, capture the current vs target I/O
+> contract (with evidence), and define stop-gates required before code
+> migrations can claim compliance with locked decisions.
 >
 > **Tier-1 source:** `tier1_healthview_orchestration_pipeline.md` (Stage 7).
 > **Locked decisions source:** Tier-1 spine (`tier1_healthview_orchestration_pipeline.md`) + `REPORT_NAMING_STANDARDS.md`.
@@ -176,8 +177,10 @@ A short index that links to each per-script record block in this document.
 A compact, mechanism-oriented summary of pruning surfaces and how pruning is enforced.
 
 - **Pruning surfaces:** `<flags / defaults / callsites>`
-- **Pruning surfaces:** `--artifacts-to-keep` (meta + each topic), plus per-step `--*-artifacts-to-keep` flags
-- **Pruning mechanism:** `prune_by_keep_budget` (keep most recent N run directories via `write_report_artifacts(... keep=...)`)
+- **Pruning surfaces:** `--artifacts-to-keep` (meta + each topic), plus per-step
+  `--*-artifacts-to-keep` flags
+- **Pruning mechanism:** `prune_by_keep_budget` (keep most recent N run
+  directories via `write_report_artifacts(... keep=...)`)
 - **Pruning targets:**
   - `.repo_studios/command_center/reports/<viewer>/<topic>/<YYYYMMDD-HHMM>/` (meta + topic bundles)
   - `.repo_studios/reports/producer_reports/...` (selected topic intermediates)
@@ -1166,4 +1169,4 @@ checks:
 
 | Date | Change | Author | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
-| 2025-12-20 | Seeded Stage 7 Tier-2 roster skeleton (placeholders only). | repo_studios_ai | <doc-index-ts> | <suites> |
+| 2025-12-20 | Seeded Stage 7 Tier-2 roster skeleton (placeholders only). | repo_studios_ai | `<doc-index-ts>` | `<suites>` |

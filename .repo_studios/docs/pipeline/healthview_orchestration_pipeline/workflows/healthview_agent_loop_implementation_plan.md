@@ -482,7 +482,7 @@ Acceptance criteria:
   - list spec/schema/validator/runner paths
 - Ensure doc-index + checkbox report outputs remain clean.
 
-## Reference Prompts
+## Reference Prompts — Implementation Loop
 
 - Start/resume loop:
   - “Open the Tier-1 Agent Execution Loop entry point and run the compact selector. Follow the Tier-2

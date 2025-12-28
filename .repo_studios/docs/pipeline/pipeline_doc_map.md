@@ -47,8 +47,12 @@ related_files:
 
 - **Command Center Pipeline**
   - Tier-1: `<pending_progress>`
-  - Tier-2 (Rosters): `tier2_producers_roster.md`, `tier2_consumers_roster.md`, `tier2_aggregators_roster.md`, `tier2_orchestrators_roster.md`, `tier2_summarizers_roster.md`, `tier2_utilities_roster.md` (all pending)
-  - Tier-3: Script-level docs (77 scripts) + library docs (prune_logs, database_integration, cli, artifacts) — see `.repo_studios/scripts/` structure
+  - Tier-2 (Rosters): `tier2_producers_roster.md`, `tier2_consumers_roster.md`,
+    `tier2_aggregators_roster.md`, `tier2_orchestrators_roster.md`,
+    `tier2_summarizers_roster.md`, `tier2_utilities_roster.md` (all pending)
+  - Tier-3: Script-level docs (77 scripts) + library docs (prune_logs,
+    database_integration, cli, artifacts) — see `.repo_studios/scripts/`
+    structure
 - **Doc Validation Pipeline**
   - Tier-1: `<pending_progress>`
   - Tier-2: Checkbox report vertical, doc-index generation vertical (pending)
@@ -62,7 +66,7 @@ related_files:
   Use these tables to log the current state of each pipeline stage. Update them whenever a Tier doc
   changes so the folder README and instructions reflect reality.
 
-  ### Command Center Pipeline Status
+### Command Center Pipeline Status
 
   | Stage doc | Status | Last evidence | Notes |
   | --- | --- | --- | --- |
@@ -73,7 +77,7 @@ related_files:
   | `tier2_orchestrators_roster.md` | Pending | — | 9 orchestrator scripts to document |
   | `tier2_summarizers_roster.md` | Pending | — | 27 summarizer scripts to document |
 
-  ### Doc Validation Pipeline Status
+### Doc Validation Pipeline Status
 
   | Stage doc | Status | Last evidence | Notes |
   | --- | --- | --- | --- |
@@ -83,20 +87,28 @@ related_files:
 
 ### Horizontal Reference
 
-Tier-3 uses **YAML format** optimized for agent tool calling. Each script gets a `tier3_<script_name>.yaml` file.
+Tier-3 uses **YAML format** optimized for agent tool calling. Each script gets
+a `tier3_<script_name>.yaml` file.
 
-- `tier3_prune_logs.yaml` (pending) — artifact retention and cleanup semantics; used by producers and orchestrators.
-- `tier3_database_integration.yaml` (pending) — PostgreSQL schema and dual-write patterns; used by agents and analysis scripts.
-- `tier3_cli.yaml` (pending) — shared CLI argument patterns and config builders; used by all Command Center scripts.
-- `tier3_artifacts.yaml` (pending) — timestamped artifact naming and discovery conventions; used by all tiers.
-- `tier3_scripts_index.yaml` (auto-generated) — aggregated index of all 77+ scripts for fast agent discovery.
-- Update the pipeline templates when additional Tier-3 horizontals are created so reciprocity links stay current.
+- `tier3_prune_logs.yaml` (pending) — artifact retention and cleanup semantics;
+  used by producers and orchestrators.
+- `tier3_database_integration.yaml` (pending) — PostgreSQL schema and
+  dual-write patterns; used by agents and analysis scripts.
+- `tier3_cli.yaml` (pending) — shared CLI argument patterns and config builders;
+  used by all Command Center scripts.
+- `tier3_artifacts.yaml` (pending) — timestamped artifact naming and discovery
+  conventions; used by all tiers.
+- `tier3_scripts_index.yaml` (auto-generated) — aggregated index of all 77+
+  scripts for fast agent discovery.
+- Update the pipeline templates when additional Tier-3 horizontals are created
+  so reciprocity links stay current.
 
 ### Evidence Workflow Checklist
 
 1. Draft or edit the Tier doc by duplicating the appropriate template from
    `pipeline_templates/`.
-1. Refresh the doc-index (via the `doc-index` make target or platform-equivalent command) to update `checkbox_report/outputs/`.
+1. Refresh the doc-index (via the `doc-index` make target or platform-equivalent
+   command) to update `checkbox_report/outputs/`.
 1. Record the doc-index timestamp and regression suites inside every touched doc's Update Log.
 1. Update reciprocity links: Tier-1 ↔ Tier-2 ↔ Tier-3, ensuring all horizontals are cross-referenced.
 

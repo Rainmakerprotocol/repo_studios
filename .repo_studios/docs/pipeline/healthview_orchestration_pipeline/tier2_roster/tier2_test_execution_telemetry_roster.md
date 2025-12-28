@@ -337,13 +337,16 @@ Workstream E — QA & Evidence
 
 Evidence (2025-12-25):
 
-- Pytest: `.\.venv\Scripts\python.exe -m pytest -q .repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py`
+- Pytest:
+  `.\.venv\Scripts\python.exe -m pytest -q .repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py`
 - Mypy: `\.\.venv\Scripts\python.exe -m mypy .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py`
 - Coverage:
-  - `.\.venv\Scripts\python.exe -m coverage run -m pytest -q .repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py`
-  - `.\.venv\Scripts\python.exe -m coverage report --include=.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py --fail-under=80`
+  - `.\.venv\Scripts\python.exe -m coverage run -m pytest -q`
+    `.repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py`
+  - `.\.venv\Scripts\python.exe -m coverage report`
+    `--include=.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py`
+    `--fail-under=80`
 - Doc-index: `make -C .repo_studios doc-index` (20251225-0011)
-
 
 - [x] DONE — run_test_execution_telemetry.py complete; update Tier-1 Stage 1.1 script gate
 
@@ -403,19 +406,27 @@ Evidence (2025-12-25):
       `.\.venv/Scripts/python.exe -m pytest -q .repo_studios/tests/tests_producers/test_collect_test_log_reports.py`
       (3 passed).
     - Focused regression evidence:
-      `.\.venv/Scripts/python.exe -m pytest -q .repo_studios/tests/tests_producers/test_collect_test_log_reports.py .repo_studios/tests/tests_consumers/test_generate_test_log_health_report.py .repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py`
+      `.\.venv/Scripts/python.exe -m pytest -q`
+      `.repo_studios/tests/tests_producers/test_collect_test_log_reports.py`
+      `.repo_studios/tests/tests_consumers/test_generate_test_log_health_report.py`
+      `.repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py`
       (8 passed).
     - Mypy evidence (2025-12-21):
       `.\.venv/Scripts/python.exe -m mypy .repo_studios/scripts/producers/collect_test_log_reports.py`
       (success).
     - Coverage evidence (2025-12-21):
-      `.\.venv/Scripts/python.exe -m coverage run -m pytest -q .repo_studios/tests/tests_producers/test_collect_test_log_reports.py`
-      + `.\.venv/Scripts/python.exe -m coverage report --include=.repo_studios/scripts/producers/collect_test_log_reports.py --fail-under=80`
+      `.\.venv/Scripts/python.exe -m coverage run -m pytest -q`
+      `.repo_studios/tests/tests_producers/test_collect_test_log_reports.py`
+      - `.\.venv/Scripts/python.exe -m coverage report`
+        `--include=.repo_studios/scripts/producers/collect_test_log_reports.py`
+        `--fail-under=80`
       (84%).
     - Doc-index evidence (2025-12-21):
       `make -C .repo_studios doc-index LOG_LEVEL=INFO` (timestamp: 20251221-2237).
     - Tier-3 YAML evidence (2025-12-21):
-      `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/test_execution_telemetry/tier3_collect_test_log_reports.yaml` validated via
+      `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/`
+      `tier3_scripts/test_execution_telemetry/tier3_collect_test_log_reports.yaml`
+      validated via
       `\.\.venv/Scripts/python.exe -m pytest -q .repo_studios/docs/pipeline/tier3_index/test_tier3_index.py`.
     - Orchestrator wiring:
       `.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py` passes
@@ -526,15 +537,20 @@ Workstream E — QA & Evidence
   - **Evidence:**
     - Bundle path: `output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp_slug`.
     - Artifacts asserted in tests: `manifest.json`, `summary.md`, `telemetry.json`.
-    - Threshold failure returns non-zero exit code (still writes the bundle) and prunes historical run dirs.
+    - Threshold failure returns non-zero exit code (still writes the bundle) and prunes
+      historical run dirs.
     - Coverage refresh behavior (when `--refresh-coverage-xml` is enabled):
-      - Runs each `--refresh-tests` entry as its own pytest invocation; appends coverage data after the first suite.
-      - Renders the final combined Coverage.py XML via coverage.py (not pytest-cov's per-run XML).
+      - Runs each `--refresh-tests` entry as its own pytest invocation; appends coverage
+        data after the first suite.
+      - Renders the final combined Coverage.py XML via coverage.py (not pytest-cov's
+        per-run XML).
       - Records `inputs.refresh_exit_code` and `inputs.refresh_suite_results` in `manifest.json`.
-      - With `--refresh-continue-on-error`, a partial refresh (some failing suites) still emits the bundle.
+      - With `--refresh-continue-on-error`, a partial refresh (some failing suites)
+        still emits the bundle.
       - Without `--refresh-continue-on-error`, refresh failures abort before emitting the bundle.
     - Make entrypoint (default workflow): `.repo_studios/Makefile` target `studio-generate-test-coverage-inventory`.
-    - DB marker discipline: manifest/summary/telemetry writes are annotated with `DB_INTEGRATION_MARKER:`.
+    - DB marker discipline: manifest/summary/telemetry writes are annotated with
+      `DB_INTEGRATION_MARKER:`.
     - Orchestrator alignment: Stage 1.1 orchestrator now passes `--timestamp`, discovers the positional
       bundle under `.../producer_reports/test_coverage_inventory/<YYYYmmdd-HHMM>/`, and reads
       `telemetry.json` for summary fields.
@@ -576,9 +592,17 @@ Workstream E — QA & Evidence
 - [x] Coverage ≥80% (or exception recorded)
 - [x] Doc-index timestamp recorded
   - Evidence: `.repo_studios/reports/producer_reports/healthview/doc_index/20251227-1632/`
-  - Pytest: `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_generate_test_coverage_inventory.py -q`
-  - Mypy: `.venv/Scripts/python.exe -m mypy .repo_studios/scripts/producers/generate_test_coverage_inventory.py`
-  - Coverage: `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_producers/test_generate_test_coverage_inventory.py --cov=generate_test_coverage_inventory --cov-report=term-missing --cov-fail-under=80 -q` (observed: 85.59%)
+  - Pytest:
+    `.venv/Scripts/python.exe -m pytest`
+    `.repo_studios/tests/tests_producers/test_generate_test_coverage_inventory.py -q`
+  - Mypy:
+    `.venv/Scripts/python.exe -m mypy`
+    `.repo_studios/scripts/producers/generate_test_coverage_inventory.py`
+  - Coverage:
+    `.venv/Scripts/python.exe -m pytest`
+    `.repo_studios/tests/tests_producers/test_generate_test_coverage_inventory.py`
+    `--cov=generate_test_coverage_inventory --cov-report=term-missing --cov-fail-under=80 -q`
+    (observed: 85.59%)
 
 - [x] DONE — generate_test_coverage_inventory.py complete; update Tier-1 Stage 1.1 script gate
 
@@ -672,18 +696,27 @@ Workstream D — Tier-3 YAML
 - [x] Draft `tier3_analyze_test_hardening.yaml`
 - [x] Validate Tier-3 YAML
   - Tier-3 YAML evidence (2025-12-22):
-    `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/test_execution_telemetry/tier3_analyze_test_hardening.yaml` validated via
-    `.\\.venv/Scripts/python.exe -m pytest -q .repo_studios/docs/pipeline/tier3_index/test_tier3_index.py` (28 passed).
+    `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/`
+    `tier3_scripts/test_execution_telemetry/tier3_analyze_test_hardening.yaml`
+    validated via
+    `.\.venv/Scripts/python.exe -m pytest -q`
+    `.repo_studios/docs/pipeline/tier3_index/test_tier3_index.py` (28 passed).
 
 Workstream E — QA & Evidence
 
 - [x] Pytest evidence captured
-  - `.\.venv/Scripts/python.exe -m pytest -q .repo_studios/tests/tests_producers/test_analyze_test_hardening.py` (3 passed).
+  - `.\.venv/Scripts/python.exe -m pytest -q`
+    `.repo_studios/tests/tests_producers/test_analyze_test_hardening.py` (3 passed).
 - [x] Mypy evidence captured or marked N/A (in record)
-  - `.\.venv/Scripts/python.exe -m mypy .repo_studios/scripts/producers/analyze_test_hardening.py .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py` (success).
+  - `.\.venv/Scripts/python.exe -m mypy`
+    `.repo_studios/scripts/producers/analyze_test_hardening.py`
+    `.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py`
+    (success).
 - [x] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
   - Coverage:
-    `.\.venv/Scripts/python.exe -m coverage report --include="*/.repo_studios/scripts/producers/analyze_test_hardening.py" --fail-under=80` (observed: 88%).
+    `.\.venv/Scripts/python.exe -m coverage report`
+    `--include="*/.repo_studios/scripts/producers/analyze_test_hardening.py"`
+    `--fail-under=80` (observed: 88%).
   - Doc-index evidence:
     `make -C .repo_studios doc-index LOG_LEVEL=INFO` (timestamp: 20251222-0250).
 
@@ -804,20 +837,33 @@ Workstream D — Tier-3 YAML
 - [x] Draft `tier3_generate_test_log_health_report.yaml`
 - [x] Validate Tier-3 YAML
   - Tier-3 YAML evidence (2025-12-21):
-    `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/test_execution_telemetry/tier3_generate_test_log_health_report.yaml` validated via
-    `\.\.venv/Scripts/python.exe .repo_studios/docs/pipeline/tier3_index/generate_tier3_index.py --repo-root . --validate` and
-    `\.\.venv/Scripts/python.exe -m pytest -q .repo_studios/docs/pipeline/tier3_index/test_tier3_index.py` (29 passed).
+    `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/`
+    `tier3_scripts/test_execution_telemetry/tier3_generate_test_log_health_report.yaml`
+    validated via
+    `.\.venv/Scripts/python.exe`
+    `.repo_studios/docs/pipeline/tier3_index/generate_tier3_index.py --repo-root . --validate`
+    and
+    `.\.venv/Scripts/python.exe -m pytest -q`
+    `.repo_studios/docs/pipeline/tier3_index/test_tier3_index.py` (29 passed).
 
 Workstream E — QA & Evidence
 
 - [x] Pytest evidence captured
-  - `./.venv/Scripts/python.exe -m pytest -q .repo_studios/tests/tests_consumers/test_generate_test_log_health_report.py` (8 passed).
-  - `./.venv/Scripts/python.exe -m pytest -q .repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py` (2 passed).
+  - `./.venv/Scripts/python.exe -m pytest -q`
+    `.repo_studios/tests/tests_consumers/test_generate_test_log_health_report.py` (8 passed).
+  - `./.venv/Scripts/python.exe -m pytest -q`
+    `.repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py`
+    (2 passed).
 - [x] Mypy evidence captured or marked N/A (in record)
-  - `./.venv/Scripts/python.exe -m mypy .repo_studios/scripts/consumers/generate_test_log_health_report.py .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py` (success).
+  - `./.venv/Scripts/python.exe -m mypy`
+    `.repo_studios/scripts/consumers/generate_test_log_health_report.py`
+    `.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py`
+    (success).
 - [x] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
   - Coverage:
-    `./.venv/Scripts/python.exe -m coverage report --include="*/.repo_studios/scripts/consumers/generate_test_log_health_report.py" --fail-under=80` (observed: 80%; pass).
+    `./.venv/Scripts/python.exe -m coverage report`
+    `--include="*/.repo_studios/scripts/consumers/generate_test_log_health_report.py"`
+    `--fail-under=80` (observed: 80%; pass).
   - Doc-index evidence:
     `make -C .repo_studios doc-index LOG_LEVEL=INFO` (timestamp: 20251222-0450).
 
@@ -881,7 +927,8 @@ Workstream A — Discovery
   - Pointer artifacts removed: no `latest_*` files are written.
   - Default `--test-log-summary` no longer points at a `latest/...` path; directory discovery is used.
   - Pytest (evidence):
-    `./.venv/Scripts/python.exe -m pytest -q .repo_studios/tests/tests_aggregators/test_generate_churn_complexity_heatmap.py` (6 passed).
+    `./.venv/Scripts/python.exe -m pytest -q`
+    `.repo_studios/tests/tests_aggregators/test_generate_churn_complexity_heatmap.py` (6 passed).
 
 Workstream B — Plan
 
@@ -904,20 +951,28 @@ Workstream D — Tier-3 YAML
 - [x] Draft `tier3_generate_churn_complexity_heatmap.yaml`
   - Created: `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/test_execution_telemetry/tier3_generate_churn_complexity_heatmap.yaml`.
 - [x] Validate Tier-3 YAML
-  - `./.venv/Scripts/python.exe .repo_studios/docs/pipeline/tier3_index/generate_tier3_index.py --repo-root . --validate` (2025-12-24).
-  - `./.venv/Scripts/python.exe -m pytest -q .repo_studios/docs/pipeline/tier3_index/test_tier3_index.py` (2025-12-24).
+  - `./.venv/Scripts/python.exe`
+    `.repo_studios/docs/pipeline/tier3_index/generate_tier3_index.py --repo-root . --validate`
+    (2025-12-24).
+  - `./.venv/Scripts/python.exe -m pytest -q`
+    `.repo_studios/docs/pipeline/tier3_index/test_tier3_index.py` (2025-12-24).
 
 Workstream E — QA & Evidence
 
 - [x] Pytest evidence captured
-  - `./.venv/Scripts/python.exe -m pytest -q .repo_studios/tests/tests_aggregators/test_generate_churn_complexity_heatmap.py` (6 passed).
+  - `./.venv/Scripts/python.exe -m pytest -q`
+    `.repo_studios/tests/tests_aggregators/test_generate_churn_complexity_heatmap.py` (6 passed).
 - [x] Mypy evidence captured or marked N/A (in record)
-  - `./.venv/Scripts/python.exe -m mypy .repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` (success).
+  - `./.venv/Scripts/python.exe -m mypy`
+    `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py` (success).
 - [x] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
   - Coverage:
-    `./.venv/Scripts/python.exe -m coverage run -m pytest -q .repo_studios/tests/tests_aggregators/test_generate_churn_complexity_heatmap.py`
+    `./.venv/Scripts/python.exe -m coverage run -m pytest -q`
+    `.repo_studios/tests/tests_aggregators/test_generate_churn_complexity_heatmap.py`
     then
-    `./.venv/Scripts/python.exe -m coverage report --include="*/.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py" --fail-under=80` (observed: 81%; pass).
+    `./.venv/Scripts/python.exe -m coverage report`
+    `--include="*/.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py"`
+    `--fail-under=80` (observed: 81%; pass).
   - Doc-index evidence:
     `make -C .repo_studios doc-index LOG_LEVEL=INFO` (timestamp: 20251224-2030).
     Output: `.repo_studios/reports/producer_reports/healthview/doc_index/20251224-2030/doc_index.csv`.
@@ -948,11 +1003,14 @@ Workstream E — QA & Evidence
   - Surface: callsite `write_report_artifacts(..., keep=options.artifacts_to_keep, current_run=<run_dir>)`
   - Target: `--output-dir/summarizer_reports/test_execution_telemetry/<run_slug>/`
   - Evidence:
-    - `.repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py` (`write_report_artifacts`)
-    - `.repo_studios/tests/tests_command_center/test_execution_telemetry/test_summarize_test_execution_telemetry.py`
+    - `.repo_studios/command_center/scripts/summarizers/`
+      `summarize_test_execution_telemetry.py` (`write_report_artifacts`)
+    - `.repo_studios/tests/tests_command_center/test_execution_telemetry/`
+      `test_summarize_test_execution_telemetry.py`
 
   - **Output root compliant (Tier-1 HealthView contract):** ✅
-    - Default output dir is `.repo_studios/reports/healthview` and uses the `summarizer_reports` class token.
+    - Default output dir is `.repo_studios/reports/healthview` and uses the
+      `summarizer_reports` class token.
   - **Base package compliant (manifest + summary + telemetry):** N/A
   - **DB integration:** ❌ (no DB markers observed in this summarizer)
   - **Tier-3 appropriate:** yes (decision: create)
@@ -960,10 +1018,12 @@ Workstream E — QA & Evidence
   - **Tier-3 YAML name:** `tier3_summarize_test_execution_telemetry.yaml`
   - **Tier-3 meets template:** yes (Tier-3 agent pipeline YAML template)
   - **Tier-3 last updated:** 2025-12-24
-  - **Tests:** `.repo_studios/tests/tests_command_center/test_execution_telemetry/test_summarize_test_execution_telemetry.py`
+  - **Tests:**
+    `.repo_studios/tests/tests_command_center/test_execution_telemetry/`
+    `test_summarize_test_execution_telemetry.py`
   - **Evidence:**
-    - Constants: `SUMMARY_STEM = "test_execution_telemetry_summary"`, `VIEWER_SLUG = "summarizer_reports"`,
-      `TOPIC_SLUG = "test_execution_telemetry"`.
+    - Constants: `SUMMARY_STEM = "test_execution_telemetry_summary"`,
+      `VIEWER_SLUG = "summarizer_reports"`, `TOPIC_SLUG = "test_execution_telemetry"`.
     - Artifacts written via `write_report_artifacts(...)` using filenames
       `f"{SUMMARY_STEM}.md"` and `f"{SUMMARY_STEM}.json"`.
 
@@ -976,7 +1036,8 @@ Workstream A — Discovery
     - `DEFAULT_OUTPUT_DIR = .repo_studios/reports/healthview`.
     - `VIEWER_SLUG = "summarizer_reports"`, `TOPIC_SLUG = "test_execution_telemetry"`.
   - Output layout is controlled by `write_report_artifacts(...)`:
-    - Callsite passes `output_dir=<--output-dir>`, `viewer=VIEWER_SLUG`, `topic=TOPIC_SLUG`, `timestamp=<run_slug>`.
+    - Callsite passes `output_dir=<--output-dir>`, `viewer=VIEWER_SLUG`,
+      `topic=TOPIC_SLUG`, `timestamp=<run_slug>`.
     - Resulting run directory is under `--output-dir/<viewer>/<topic>/<timestamp>/`.
   - Artifacts written per run:
     - `test_execution_telemetry_summary.json`
@@ -984,31 +1045,42 @@ Workstream A — Discovery
   - Retention surface:
     - `--artifacts-to-keep` forwarded to `write_report_artifacts(..., keep=...)`.
   - Current compliance status (Stage 1.1 HOP contract): ✅
-    - Defaults emit under `.repo_studios/reports/healthview/summarizer_reports/test_execution_telemetry/<YYYYmmdd-HHMM>/`.
+    - Defaults emit under `.repo_studios/reports/healthview/summarizer_reports/`
+      `test_execution_telemetry/<YYYYmmdd-HHMM>/`.
 
 Workstream B — Plan
 
 - [x] Draft plan to migrate outputs into Tier-1 canonical root
   - Target output root (Stage 1.1 HOP contract):
-    - `.repo_studios/reports/healthview/summarizer_reports/test_execution_telemetry/<YYYYmmdd-HHMM>/`
+    - `.repo_studios/reports/healthview/summarizer_reports/`
+      `test_execution_telemetry/<YYYYmmdd-HHMM>/`
   - Summarizer changes:
     - Change `VIEWER_SLUG` to `"summarizer_reports"` (class token).
     - Keep `TOPIC_SLUG = "test_execution_telemetry"`.
     - Change `DEFAULT_OUTPUT_DIR` to `.repo_studios/reports/healthview`.
   - Orchestrator compatibility:
-    - Update Stage 1.1 orchestrator to pass `--output-dir .repo_studios/reports/healthview` into this summarizer so the run lands in the canonical HealthView root.
-    - Ensure it passes the Stage 1.1 run timestamp consistently (manifest/telemetry already carry run slug).
+    - Update Stage 1.1 orchestrator to pass `--output-dir .repo_studios/reports/healthview`
+      into this summarizer so the run lands in the canonical HealthView root.
+    - Ensure it passes the Stage 1.1 run timestamp consistently
+      (manifest/telemetry already carry run slug).
   - Tests:
-    - Update `.repo_studios/tests/tests_command_center/test_execution_telemetry/test_summarize_test_execution_telemetry.py` to assert the new default class/topic tokens and/or updated output root when `--output-dir` points at `.repo_studios/reports/healthview`.
-    - Update the fixture hardening artifact path to match the current Stage 1.1 producer output layout (post-migration) when required.
+    - Update `.repo_studios/tests/tests_command_center/test_execution_telemetry/`
+      `test_summarize_test_execution_telemetry.py` to assert the new default class/topic
+      tokens and/or updated output root when `--output-dir` points at
+      `.repo_studios/reports/healthview`.
+    - Update the fixture hardening artifact path to match the current Stage 1.1
+      producer output layout (post-migration) when required.
 
 Workstream C — Implement
 
 - [x] Implement accepted plan; update record and stop-gate status with evidence.
-  - Updated `.repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py`:
+  - Updated `.repo_studios/command_center/scripts/summarizers/`
+    `summarize_test_execution_telemetry.py`:
     - Default output root moved to `.repo_studios/reports/healthview`.
     - Class token set via `VIEWER_SLUG = "summarizer_reports"`.
-  - Updated Stage 1.1 orchestrator `.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py` to pass the canonical HealthView root into the summarizer (`--output-dir` wired to `--test-log-reports-dir`).
+  - Updated Stage 1.1 orchestrator `.repo_studios/command_center/scripts/orchestrators/`
+    `run_test_execution_telemetry.py` to pass the canonical HealthView root into
+    the summarizer (`--output-dir` wired to `--test-log-reports-dir`).
   - Updated tests to assert the new summary artifact paths + viewer token.
 
 Workstream D — Tier-3 YAML
@@ -1019,20 +1091,35 @@ Workstream D — Tier-3 YAML
 - [x] Draft `tier3_summarize_test_execution_telemetry.yaml`
   - Created: `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/test_execution_telemetry/tier3_summarize_test_execution_telemetry.yaml`.
 - [x] Validate Tier-3 YAML
-  - `./.venv/Scripts/python.exe .repo_studios/docs/pipeline/tier3_index/generate_tier3_index.py --repo-root . --validate` (2025-12-24).
-  - `./.venv/Scripts/python.exe -m pytest -q .repo_studios/docs/pipeline/tier3_index/test_tier3_index.py` (2025-12-24; 29 passed).
+  - `./.venv/Scripts/python.exe`
+    `.repo_studios/docs/pipeline/tier3_index/generate_tier3_index.py`
+    `--repo-root . --validate` (2025-12-24).
+  - `./.venv/Scripts/python.exe -m pytest -q`
+    `.repo_studios/docs/pipeline/tier3_index/test_tier3_index.py` (2025-12-24; 29 passed).
 
 Workstream E — QA & Evidence
 
 - [x] Pytest evidence captured
-  - `./.venv/Scripts/python.exe -m pytest -q .repo_studios/tests/tests_command_center/test_execution_telemetry/test_summarize_test_execution_telemetry.py .repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py` (3 passed).
+  - `./.venv/Scripts/python.exe -m pytest -q`
+    `.repo_studios/tests/tests_command_center/test_execution_telemetry/`
+    `test_summarize_test_execution_telemetry.py`
+    `.repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py`
+    (3 passed).
 - [x] Mypy evidence captured or marked N/A (in record)
-  - `./.venv/Scripts/python.exe -m mypy .repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py` (success).
+  - `./.venv/Scripts/python.exe -m mypy`
+    `.repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py`
+    `.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py`
+    (success).
 - [x] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
   - Coverage:
-    `./.venv/Scripts/python.exe -m coverage run -m pytest -q .repo_studios/tests/tests_command_center/test_execution_telemetry/test_summarize_test_execution_telemetry.py .repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py`
+    `./.venv/Scripts/python.exe -m coverage run -m pytest -q`
+    `.repo_studios/tests/tests_command_center/test_execution_telemetry/`
+    `test_summarize_test_execution_telemetry.py`
+    `.repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py`
     then
-    `./.venv/Scripts/python.exe -m coverage report --include="*/.repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py" --fail-under=80` (observed: 93%; pass).
+    `./.venv/Scripts/python.exe -m coverage report`
+    `--include="*/.repo_studios/command_center/scripts/summarizers/`
+    `summarize_test_execution_telemetry.py" --fail-under=80` (observed: 93%; pass).
   - Doc-index evidence:
     `make -C .repo_studios doc-index LOG_LEVEL=INFO` (timestamp: 20251224-2314).
     Output: `.repo_studios/reports/producer_reports/healthview/doc_index/20251224-2314/doc_index.csv`.

@@ -158,7 +158,6 @@ Notes:
   producer/consumer/aggregator/summarizer outputs.
 - Pointer files (`latest_*`) exist in consumer/aggregator outputs and are consumed by the summarizer.
 
-
 Evidence source (entry points):
 
 - `.repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py`

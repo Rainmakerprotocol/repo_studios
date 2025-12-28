@@ -509,7 +509,10 @@ notes:
 ##### Promotion Mapping (hypothetical) — dump_faulthandler_snapshot.py
 
 - Proposed future stage: **3.2** (fault diagnostics / faulthandler vertical)
-- Minimal orchestrator wrapper required: a orchestrator that calls `dump_snapshot()` (or `main()`), then packages the run into the HealthView base bundle (manifest/summary/telemetry) under the stage’s canonical output root
+- Minimal orchestrator wrapper required: a orchestrator that calls
+  `dump_snapshot()` (or `main()`), then packages the run into the HealthView
+  base bundle (manifest/summary/telemetry) under the stage's canonical
+  output root
 - Known contract deltas vs target stage:
   - Current output root defaults under
     `command_center/reports/rawview/fault_snapshots/...` (rawview) rather than
@@ -678,7 +681,10 @@ notes:
 ##### Promotion Mapping (hypothetical) — validate_import_boundaries.py
 
 - Proposed future stage: **4.2** (import boundary / architectural integrity producer vertical)
-- Minimal orchestrator wrapper required: a orchestrator that invokes `run(argv)` and then emits a single HealthView bundle (manifest/summary/telemetry) under the stage’s canonical output root; wrapper should surface `--strict` and thread through `--artifacts-to-keep`
+- Minimal orchestrator wrapper required: a orchestrator that invokes
+  `run(argv)` and then emits a single HealthView bundle
+  (manifest/summary/telemetry) under the stage's canonical output root;
+  wrapper should surface `--strict` and thread through `--artifacts-to-keep`
 - Known contract deltas vs target stage:
   - Current output root is `producer_reports/import_boundary_reports/<run_id>/`
     rather than canonical HealthView root

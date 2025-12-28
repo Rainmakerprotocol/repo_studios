@@ -87,18 +87,21 @@ matrices. When a stage finishes, mark it `Complete` and cite the Update Log row 
 
 ## Agent Instructions
 
-1. **Choose the right entry.** Start with the Tier-1 spine in the relevant folder (when created), then follow its
-   "Tier-2 Dependencies" and "Tier-3 Horizontals" subsections before touching code or docs.
+1. **Choose the right entry.** Start with the Tier-1 spine in the relevant
+   folder (when created), then follow its "Tier-2 Dependencies" and
+   "Tier-3 Horizontals" subsections before touching code or docs.
 1. **Duplicate templates, not live docs.** New verticals must originate from the Tier-2 template;
    horizontals must come from the Tier-3 template.
-1. **Regenerate automation artifacts.** Refresh the doc-index (via the `doc-index` make target or platform-equivalent command) after editing any pipeline doc. This
-   updates `checkbox_report/outputs/`, so capture the timestamp and regression suites
-   in every Update Log you touched.
+1. **Regenerate automation artifacts.** Refresh the doc-index (via the
+   `doc-index` make target or platform-equivalent command) after editing any
+   pipeline doc. This updates `checkbox_report/outputs/`, so capture the
+   timestamp and regression suites in every Update Log you touched.
 1. **Cross-link everything.** Whenever you add a Tier-2 or Tier-3 doc, link it from the parent
    Tier-1 section and ensure the new doc cites its dependents. Reference `pipeline_doc_map.md` to
    verify coverage.
-1. **Script-specific edits.** If you change Command Center scripts, update the relevant Tier-2 roster doc
-   and cite Tier-3 library docs (prune_logs, database_integration, cli, artifacts) where appropriate.
+1. **Script-specific edits.** If you change Command Center scripts, update the
+   relevant Tier-2 roster doc and cite Tier-3 library docs (prune_logs,
+   database_integration, cli, artifacts) where appropriate.
 
 ### Agent Automation Block
 <!-- agents:begin:pipeline-guide-entry -->
