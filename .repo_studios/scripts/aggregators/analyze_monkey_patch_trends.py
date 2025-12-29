@@ -15,7 +15,7 @@ from typing import Any, Iterable, Sequence
 DEFAULT_CONSUMER_BASE = Path(".repo_studios/reports/consumer_reports/monkey_patch_risk")
 DEFAULT_PRODUCER_BASE = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
 DEFAULT_OUTPUT_BASE = Path(".repo_studios/reports/aggregator_reports/monkey_patch_trends")
-DEFAULT_ARTIFACTS_TO_KEEP = 5
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("analyze_monkey_patch_trends")
 DEFAULT_MAX_RUNS = 20
 
 CONSUMER_BUNDLE_PREFIX = "monkey_patch_risk-"
@@ -46,6 +46,7 @@ from utilities.monkey_patch_risk import (  # noqa: E402
 )
 from libraries import prune_run_directories  # noqa: E402
 from libraries.cli import resolve_repo_root  # noqa: E402
+from libraries.retention_policy import get_keep  # noqa: E402
 
 
 @dataclass(frozen=True)

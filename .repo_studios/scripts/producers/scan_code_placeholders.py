@@ -23,7 +23,7 @@ from pathlib import Path
 from typing import Any, Iterable, NamedTuple, cast
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
-DEFAULT_ARTIFACTS_TO_KEEP = 5
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("scan_code_placeholders")
 SCHEMA_VERSION = 1
 VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "code_placeholders"
@@ -54,6 +54,7 @@ try:
         prune_run_directories,
     )
     from libraries.database_integration import create_storage
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
@@ -67,6 +68,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
         prune_run_directories,
     )
     from libraries.database_integration import create_storage
+    from libraries.retention_policy import get_keep
 
 
 @dataclass(frozen=True)

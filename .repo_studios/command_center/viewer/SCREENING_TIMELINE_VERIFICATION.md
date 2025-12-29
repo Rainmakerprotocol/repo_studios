@@ -1,8 +1,12 @@
 # Screening Signal Timeline - Verification Guide
 
+<!-- markdownlint-disable MD013 -->
+<!-- Technical verification guide with inline implementation details; line length exempt -->
+
 ## ✅ Feature Status: IMPLEMENTED · Multi-View Coexistence Verified (2025-11-08)
 
-The Screening Signal Timeline feature has been implemented and regression tests are passing. This guide will help you verify the end-to-end functionality in the browser.
+The Screening Signal Timeline feature has been implemented and regression tests are passing.
+This guide will help you verify the end-to-end functionality in the browser.
 
 ---
 
@@ -14,13 +18,13 @@ The Screening Signal Timeline feature has been implemented and regression tests 
    .venv\Scripts\python.exe .repo_studios\command_center\viewer\serve_viewer.py
    ```
 
-2. **Selector Data Generated**: Ensure `selector.json` exists with screening artifacts
+1. **Selector Data Generated**: Ensure `selector.json` exists with screening artifacts
 
    ```bash
    .venv\Scripts\python.exe .repo_studios\command_center\viewer\generate_selector.py --repo-root .
    ```
 
-3. **Screening Data Available**: At least one CommandView artifact must have screening history data
+1. **Screening Data Available**: At least one CommandView artifact must have screening history data
 
 ---
 
@@ -28,7 +32,7 @@ The Screening Signal Timeline feature has been implemented and regression tests 
 
 ### Step 1: Open the Viewer
 
-Navigate to: **http://localhost:8000/.repo_studios/command_center/viewer/ui/**
+Navigate to: **<http://localhost:8000/.repo_studios/command_center/viewer/ui/>**
 
 ### Step 2: Select a Screening Artifact
 
@@ -63,8 +67,8 @@ Scroll down in the left sidebar to **"View Packs"** section:
 If the button is enabled:
 
 1. Click **"Screening Signal Timeline"**
-2. A new tab should appear at the top showing "Health · Screening Signal Timeline"
-3. The main diagram area should display a Mermaid timeline diagram
+1. A new tab should appear at the top showing "Health · Screening Signal Timeline"
+1. The main diagram area should display a Mermaid timeline diagram
 
 ### Step 5: Verify Timeline Content
 
@@ -72,8 +76,9 @@ The timeline should display:
 
 **Title Section:**
 
-```
+```text
 [Artifact Name] Screening Scores
+
 ```
 
 **Pack Sections:**
@@ -92,15 +97,16 @@ Each screening pack should have its own section with events showing:
 
 **Example Event:**
 
-```
+```text
 2025-11-06 10h14Z : [OK] score 85.0 delta +5.0 thresholds warn>=70 fail>=50 docs 42/50 missing 8
+
 ```
 
 ### Step 6: Confirm Multi-View Coexistence
 
 1. With the timeline tab active, select another available view (for example, **Code Flow · Function Call Graph**).
-2. Verify the newly selected view renders immediately without triggering a fresh data load.
-3. Click back on **Health · Screening Signal Timeline** in the tab header.
+1. Verify the newly selected view renders immediately without triggering a fresh data load.
+1. Click back on **Health · Screening Signal Timeline** in the tab header.
 
 **Expected Outcome:** The original timeline diagram remains in place with identical status messaging and pack/event counts—no flicker, spinner, or reset to the empty state. This confirms that multi-view toggles preserve in-memory diagrams.
 
@@ -115,9 +121,10 @@ Each screening pack should have its own section with events showing:
 **Solutions**:
 
 1. Try selecting a different artifact from the sidebar
-2. Check if screening data was generated for this artifact:
+1. Check if screening data was generated for this artifact:
    - Look for `*_commandview_screening_*.json` files in reports
-3. Generate new screening data if needed
+
+1. Generate new screening data if needed
 
 ### Issue 2: Button Shows "View wiring pending implementation"
 
@@ -127,6 +134,7 @@ Each screening pack should have its own section with events showing:
 
 ```javascript
 screeningSignalTimelineView: buildScreeningSignalTimelineViewDefinition
+
 ```
 
 ### Issue 3: Timeline Shows "No screening history events"
@@ -136,8 +144,8 @@ screeningSignalTimelineView: buildScreeningSignalTimelineViewDefinition
 **Check**:
 
 1. Open browser DevTools (F12)
-2. Look for console logs: `[loadCommandViewPayloads] Screening payload load failed`
-3. Verify the screening JSON file exists and has valid data
+1. Look for console logs: `[loadCommandViewPayloads] Screening payload load failed`
+1. Verify the screening JSON file exists and has valid data
 
 ### Issue 4: Diagram Doesn't Render
 
@@ -147,6 +155,7 @@ screeningSignalTimelineView: buildScreeningSignalTimelineViewDefinition
 // Look for errors like:
 [buildScreeningSignalTimelineViewDefinition] ...
 [buildScreeningTimelineDiagram] ...
+
 ```
 
 **Common Issues**:
@@ -190,6 +199,7 @@ The screening payload should contain:
     }
   ]
 }
+
 ```
 
 ---
@@ -199,12 +209,12 @@ The screening payload should contain:
 ### What the Timeline Shows
 
 1. **Chronological Events**: All screening events sorted by timestamp
-2. **Per-Pack Sections**: Separate timeline section for each screening pack
-3. **Score Progression**: Shows how scores change over time
-4. **Severity Transitions**: Highlights when severity levels change
-5. **Threshold Context**: Displays warning/failure thresholds
-6. **Documentation Metrics**: Shows function documentation stats
-7. **Delta Calculations**: Automatic calculation of score changes
+1. **Per-Pack Sections**: Separate timeline section for each screening pack
+1. **Score Progression**: Shows how scores change over time
+1. **Severity Transitions**: Highlights when severity levels change
+1. **Threshold Context**: Displays warning/failure thresholds
+1. **Documentation Metrics**: Shows function documentation stats
+1. **Delta Calculations**: Automatic calculation of score changes
 
 ### Interactive Features
 
@@ -220,9 +230,9 @@ The screening payload should contain:
 ### Files Involved
 
 1. **Builder**: `.repo_studios/command_center/viewer/ui/builders/screening_signal_timeline.js`
-2. **View Definition**: `buildScreeningSignalTimelineViewDefinition()` in `viewer.js`
-3. **Data Normalization**: `buildScreeningHistory()` in `viewer.js`
-4. **Requirement Check**: `findViewRequirementIssue()` case "screeningHistory"
+1. **View Definition**: `buildScreeningSignalTimelineViewDefinition()` in `viewer.js`
+1. **Data Normalization**: `buildScreeningHistory()` in `viewer.js`
+1. **Requirement Check**: `findViewRequirementIssue()` case "screeningHistory"
 
 ### Key Functions
 
@@ -262,11 +272,11 @@ The screening payload should contain:
 The feature is working correctly if:
 
 1. ✅ Timeline renders as a Mermaid diagram
-2. ✅ All screening packs have their own sections
-3. ✅ Events are chronologically ordered
-4. ✅ Event details include score, delta, thresholds, and metrics
-5. ✅ Severity transitions are highlighted
-6. ✅ Status message shows pack and event counts
+1. ✅ All screening packs have their own sections
+1. ✅ Events are chronologically ordered
+1. ✅ Event details include score, delta, thresholds, and metrics
+1. ✅ Severity transitions are highlighted
+1. ✅ Status message shows pack and event counts
 
 ---
 

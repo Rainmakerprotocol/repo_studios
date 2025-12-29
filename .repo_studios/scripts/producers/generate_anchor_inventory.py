@@ -22,7 +22,6 @@ VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "anchor_inventory"
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
-DEFAULT_ARTIFACTS_TO_KEEP = 5
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
@@ -37,6 +36,7 @@ try:  # pragma: no cover - import guard for standalone execution
     )
     from libraries.database_integration import create_storage  # type: ignore import
     from libraries.prune_logs import prune_run_directories  # type: ignore import
+    from libraries.retention_policy import get_keep  # type: ignore import
 except ModuleNotFoundError:  # pragma: no cover - fallback when script is run directly
     import sys
 
@@ -52,6 +52,9 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when script is run di
     )
     from libraries.database_integration import create_storage  # type: ignore import
     from libraries.prune_logs import prune_run_directories  # type: ignore import
+    from libraries.retention_policy import get_keep  # type: ignore import
+
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_anchor_inventory")
 
 
 @dataclass(frozen=True)

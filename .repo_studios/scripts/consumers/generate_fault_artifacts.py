@@ -41,12 +41,13 @@ if str(COMMAND_CENTER_SCRIPTS_ROOT) not in sys.path:
 from libraries.artifacts import copy_latest_artifact  # noqa: E402
 from libraries import prune_run_directories  # noqa: E402
 from libraries.cli import resolve_repo_root  # noqa: E402
+from libraries.retention_policy import get_keep  # noqa: E402
 RAWVIEW_RUNS_BASE = Path(".repo_studios/command_center/reports/rawview/fault_diagnostics_runs")
 LEGACY_RUNS_BASE = Path(".repo_studios/faulthandler")
 CONSUMER_BASE = Path(".repo_studios/reports/consumer_reports/fault_artifacts")
 COMMAND_CENTER_BASE = Path(".repo_studios/command_center/reports/fault_artifacts_consumer")
 CONSUMER_DIR_PREFIX = "fault_artifacts-"
-DEFAULT_ARTIFACTS_TO_KEEP = 5
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_fault_artifacts")
 
 SUMMARY_JSON_NAME = "summary.json"
 SUMMARY_MD_NAME = "SUMMARY.md"

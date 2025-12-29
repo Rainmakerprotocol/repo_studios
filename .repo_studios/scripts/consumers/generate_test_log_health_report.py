@@ -27,7 +27,7 @@ LOGS_DIR_DEFAULT = ".repo_studios/command_center/reports/rawview/test_execution_
 LEGACY_LOGS_DIR = ".repo_studios/pytest_logs"
 PRODUCER_REPORTS_ROOT_DEFAULT = ".repo_studios/reports/healthview/rawview/test_log_reports"
 OUTPUT_BASE_DEFAULT = ".repo_studios/reports/healthview/consumer_reports/test_log_health_reports"
-DEFAULT_ARTIFACTS_TO_KEEP = 5
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_test_log_health_report")
 
 DEFAULT_TIMESTAMP_FORMAT = "%Y%m%d-%H%M"
 
@@ -54,6 +54,7 @@ from libraries import (  # noqa: E402
     render_markdown,
 )
 from libraries.cli import resolve_repo_root  # noqa: E402
+from libraries.retention_policy import get_keep  # noqa: E402
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:

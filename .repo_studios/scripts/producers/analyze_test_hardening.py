@@ -18,7 +18,7 @@ from typing import List, Sequence, cast
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
 VIEWER_SLUG = "producer_reports"
 TOPIC_SLUG = "test_hardening"
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("analyze_test_hardening")
 SCHEMA_VERSION = 1
 TEST_PATTERNS = ("test_*.py", "*_test.py", "test*.py")
 IGNORED_PARTS = {".git", ".repo_studios", ".venv", "__pycache__"}
@@ -34,6 +34,7 @@ try:
         build_standard_options,
         build_standard_paths,
     )
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when package path isn't configured
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
@@ -45,6 +46,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when package path isn
         build_standard_options,
         build_standard_paths,
     )
+    from libraries.retention_policy import get_keep
 
 try:  # pragma: no cover - prefer import when packaged
     from libraries.database_integration import create_storage

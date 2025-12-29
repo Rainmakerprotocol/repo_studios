@@ -46,11 +46,11 @@ studio-check-inventory-health: studio-render-views
 
 .PHONY: studio-validate-markdown-anchors
 studio-validate-markdown-anchors:
-	$(PYTHON) scripts/producers/validate_markdown_anchors.py --repo-root .. --root . --output-dir .repo_studios/reports/producer_reports --log-level "$(LOG_LEVEL)"
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/validate_markdown_anchors.py" --repo-root "$(REPO_ROOT)" --output-dir ".repo_studios/reports/producer_reports" --log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-anchor-inventory
 studio-generate-anchor-inventory:
-	$(PYTHON) .repo_studios/scripts/producers/generate_anchor_inventory.py --docs-root docs --output-dir .repo_studios/reports/producer_reports
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/generate_anchor_inventory.py" --repo-root "$(REPO_ROOT)" --docs-root docs --output-dir ".repo_studios/reports/producer_reports" --log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-analyze-standards-index-gaps
 studio-analyze-standards-index-gaps:
@@ -301,15 +301,30 @@ studio-generate-churn-complexity-heatmap:
 
 .PHONY: studio-generate-code-doc-churn-report
 studio-generate-code-doc-churn-report:
-	$(PYTHON) .repo_studios/scripts/producers/generate_code_doc_churn_report.py --repo-root . --output-dir .repo_studios/reports/producer_reports --git-window "30 days" --artifacts-to-keep 5 --log-level INFO
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/producers/generate_code_doc_churn_report.py" \
+		--repo-root "$(REPO_ROOT)" \
+		--output-dir ".repo_studios/reports/producer_reports" \
+		--git-window "30 days" \
+		--artifacts-to-keep 5 \
+		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-undocumented-logic-report
 studio-generate-undocumented-logic-report:
-	$(PYTHON) "$(REPO_ROOT)/.repo_studios/scripts/producers/generate_undocumented_logic_report.py" --repo-root "$(REPO_ROOT)" --output-dir "$(REPO_ROOT)/.repo_studios/reports/producer_reports" --include-command-center --log-level INFO
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/producers/generate_undocumented_logic_report.py" \
+		--repo-root "$(REPO_ROOT)" \
+		--output-dir ".repo_studios/reports/producer_reports" \
+		--include-command-center \
+		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-aggregate-docs-health
 studio-aggregate-docs-health:
-	$(PYTHON) "$(REPO_ROOT)/.repo_studios/scripts/aggregators/aggregate_docs_health_signals.py" --repo-root "$(REPO_ROOT)" --output-dir "$(REPO_ROOT)/.repo_studios/reports/aggregator_reports/docs_health_signals" --log-level INFO
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/aggregators/aggregate_docs_health_signals.py" \
+		--repo-root "$(REPO_ROOT)" \
+		--output-dir ".repo_studios/reports/aggregator_reports/docs_health_signals" \
+		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-function-index
 studio-generate-function-index:

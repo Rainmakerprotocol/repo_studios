@@ -23,7 +23,7 @@ from typing import Any
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
 VIEWER_SLUG = "healthview"
 TOPIC = "import_graph"
-DEFAULT_ARTIFACTS_TO_KEEP = 5
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_import_graph_report")
 OWNED_DEFAULT = {
     ".repo_studios",
     "legacy",
@@ -35,11 +35,13 @@ LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 try:
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.retention_policy import get_keep
 
 from libraries.cli import resolve_path, resolve_repo_root
 

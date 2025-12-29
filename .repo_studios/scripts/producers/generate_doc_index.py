@@ -31,7 +31,6 @@ CODE_FENCE_RE = re.compile(r"^(```|~~~)")
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
 VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "doc_index"
-DEFAULT_ARTIFACTS_TO_KEEP = 1
 
 CHECKBOX_REPORT_SCRIPT = Path(
   ".repo_studios/docs/pipeline/checkbox_report/checkbox_report.py"
@@ -74,6 +73,7 @@ try:  # pragma: no cover - import guard for standalone execution
   )
   from libraries.database_integration import create_storage
   from libraries.prune_logs import prune_run_directories
+  from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when script is run directly
   import sys
 
@@ -89,6 +89,9 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when script is run di
   )
   from libraries.database_integration import create_storage
   from libraries.prune_logs import prune_run_directories
+  from libraries.retention_policy import get_keep
+
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_doc_index")
 
 
 @dataclass(frozen=True)

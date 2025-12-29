@@ -28,6 +28,7 @@ try:  # pragma: no cover - prefer import when packaged
     )
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when running in isolation
     LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -42,6 +43,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running in isola
     )
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.retention_policy import get_keep
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
 VIEWER_SLUG = "commandview"
@@ -51,7 +53,7 @@ LEGACY_INDEX_PATH = Path(
     ".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml"
 )
 DEFAULT_CATEGORIES_PATH = Path(".repo_studios/scripts/.repo_studios/standards_categories.yaml")
-DEFAULT_ARTIFACTS_TO_KEEP = 5
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("analyze_standards_index_gaps")
 RUN_STEM = "standards_index_gap"
 RUN_PREFIX = RUN_STEM
 SCHEMA_VERSION = 1

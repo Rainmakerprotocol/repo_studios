@@ -47,6 +47,7 @@ try:  # pragma: no cover - import is validated in tests via module load
         prune_run_directories,
     )
     from libraries.database_integration import create_storage
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when executed directly
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
@@ -62,10 +63,11 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when executed directl
         prune_run_directories,
     )
     from libraries.database_integration import create_storage
+    from libraries.retention_policy import get_keep
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
 DEFAULT_COVERAGE_XML = Path(".repo_studios/tests/fixtures/test_run_coverage/coverage.xml")
-DEFAULT_ARTIFACTS_TO_KEEP = 5
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_test_coverage_inventory")
 SCHEMA_VERSION = 1
 VIEWER_SLUG = "producer_reports"
 TOPIC_SLUG = "test_coverage_inventory"

@@ -17,6 +17,9 @@ related_files:
 
 # DB Integration — Import Graph (healthview/import_graph)
 
+<!-- markdownlint-disable MD013 -->
+<!-- Technical doc; line length exempt -->
+
 ## Goals
 
 Define the database-facing contract for the Import Graph producer so dual-write storage can persist the run metadata,

@@ -26,6 +26,7 @@ try:
         write_metrics_summary,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - CLI fallback for script execution
     SCRIPTS_ROOT = Path(__file__).resolve().parent.parent
     if str(SCRIPTS_ROOT) not in sys.path:
@@ -43,11 +44,12 @@ except ModuleNotFoundError:  # pragma: no cover - CLI fallback for script execut
         write_metrics_summary,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep  # type: ignore  # noqa: E402
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
 VIEWER_SLUG = "commandview"
 TOPIC_SLUG = "automation_metrics"
-DEFAULT_KEEP = 3
+DEFAULT_KEEP = get_keep("generate_metrics_summary")
 RUN_STEM = "metrics_summary"
 SUMMARY_FILENAME = "metrics_summary.json"
 DEFAULT_SCHEMA_VERSION = "1.0"

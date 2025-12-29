@@ -36,6 +36,7 @@ try:
         prune_run_directories,
     )
     from libraries.database_integration import create_storage  # type: ignore
+    from libraries.retention_policy import get_keep  # type: ignore
 except ModuleNotFoundError:  # pragma: no cover - fallback during standalone execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
@@ -49,6 +50,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback during standalone exe
         prune_run_directories,
     )
     from libraries.database_integration import create_storage  # type: ignore
+    from libraries.retention_policy import get_keep  # type: ignore
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SUMMARY_PATH = Path(".repo_studios/reports/producer_reports/healthview/inventory_overview")
@@ -62,7 +64,7 @@ THRESHOLD_PATH = ROOT / DEFAULT_THRESHOLDS_PATH
 
 DEFAULT_OUTPUT_DIR = DEFAULT_OUTPUT_PATH
 RUN_PREFIX = "inventory_health"
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("check_inventory_health")
 
 VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "inventory_health"

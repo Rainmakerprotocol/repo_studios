@@ -1,17 +1,22 @@
 # Database Integration Documentation Template
 
+<!-- markdownlint-disable MD013 MD036 -->
+<!-- Template document with markers and inline examples; line length and emphasis-as-heading exempt -->
+
 **DB_INTEGRATION_MARKER: Use this template for each script's per-tier documentation**
 
-This template captures the database schema requirements, output mappings, and integration notes for scripts undergoing refactoring. Each script should have a corresponding documentation file following this structure.
+This template captures the database schema requirements, output mappings,
+and integration notes for scripts undergoing refactoring.
+Each script should have a corresponding documentation file following this structure.
 
 ---
 
 ## Script: `[script_name].py`
 
-**Tier:** [producer | consumer | aggregator | orchestrator | summarizer | utility]  
-**Viewer:** [healthview | commandview | rawview | jarvis | vscode]  
-**Topic:** [topic slug from REPORT_NAMING_STANDARDS.md]  
-**Last Updated:** YYYY-MM-DD  
+**Tier:** [producer | consumer | aggregator | orchestrator | summarizer | utility]
+**Viewer:** [healthview | commandview | rawview | jarvis | vscode]
+**Topic:** [topic slug from REPORT_NAMING_STANDARDS.md]
+**Last Updated:** YYYY-MM-DD
 **Schema Version:** [semantic version]
 
 ---
@@ -19,14 +24,17 @@ This template captures the database schema requirements, output mappings, and in
 ## Purpose & Scope
 
 ### What This Script Does
+
 [1-3 sentences describing the script's role in the pipeline]
 
 ### Inputs
+
 - **File-based:** [List expected input files/directories]
 - **Configuration:** [CLI args, env vars, config files]
 - **Dependencies:** [Other scripts that must run first]
 
 ### Outputs (Current)
+
 - **File artifacts:** [List all JSON/MD files written, with paths]
 - **Logs:** [Where logs are written]
 - **Side effects:** [Any mutations, deletions, external calls]
@@ -38,6 +46,7 @@ This template captures the database schema requirements, output mappings, and in
 ### DB_INTEGRATION_MARKER: Schema Requirements
 
 #### Primary Table(s)
+
 List the main database table(s) this script writes to:
 
 ```sql
@@ -53,9 +62,11 @@ CREATE TABLE report_runs (
     inputs JSONB,
     catalog JSONB
 );
+
 ```
 
 #### Secondary/Related Tables
+
 List any additional tables that receive data from this script:
 
 ```sql
@@ -66,6 +77,7 @@ CREATE TABLE report_artifacts (
     artifact_role VARCHAR(50),
     content_json JSONB
 );
+
 ```
 
 ### Data Mapping
@@ -85,17 +97,20 @@ If this script produces time-series or queryable metrics, document the extractio
 
 ```python
 # Example: Extract test metrics from telemetry
+
 {
     "coverage_pct": data["metrics"]["coverage_status"],
     "total_tests": data["components"]["coverage"]["summary"]["total_functions"],
     "failed_tests": data["failures"]["detected"],
     # ... more fields
 }
+
 ```
 
 **Target Table:** `test_metrics`
 
 **Extraction Logic:**
+
 - `coverage_pct` ← `data['metrics']['coverage_status']`
 - `total_tests` ← `data['components']['coverage']['summary']['total_functions']`
 - [additional mappings]
@@ -105,11 +120,13 @@ If this script produces time-series or queryable metrics, document the extractio
 **Is this a time-series report?** [Yes | No]
 
 If Yes:
+
 - **Retention Policy:** [How long to keep records in DB vs files]
 - **Aggregation Windows:** [Daily, weekly, monthly rollups needed?]
 - **Query Patterns:** [What queries will agents run against this data?]
 
 **Example queries:**
+
 ```sql
 -- Show test coverage trends over last 30 days
 SELECT DATE_TRUNC('day', run_timestamp) as date,
@@ -120,6 +137,7 @@ WHERE rr.topic = 'test_execution_telemetry'
   AND rr.run_timestamp > NOW() - INTERVAL '30 days'
 GROUP BY date
 ORDER BY date;
+
 ```
 
 ---
@@ -131,12 +149,14 @@ ORDER BY date;
 Document where DB writes are inserted in the script:
 
 1. **Import section:**
+
    ```python
    # Line ~XX
    from libraries.database_integration import create_storage
    ```
 
-2. **Storage initialization:**
+1. **Storage initialization:**
+
    ```python
    # Line ~XXX in main() or run()
    storage = create_storage(
@@ -146,27 +166,31 @@ Document where DB writes are inserted in the script:
    )
    ```
 
-3. **Write operations:**
+1. **Write operations:**
+
    ```python
    # Line ~XXX - write manifest
    storage.write_manifest(manifest_data)
-   
+
    # Line ~XXX - write telemetry
    storage.write_telemetry(telemetry_data)
-   
+
    # [Additional writes...]
    ```
 
 ### Configuration Dependencies
 
 **Environment Variables:**
+
 - `REPO_STUDIOS_DB_URL` - PostgreSQL connection string
 - `REPO_STUDIOS_DB_ENABLED` - Explicit enable/disable flag
 
 **Config Files:**
+
 - `.repo_studios/db_config.json` - Local air-gapped DB config
 
 **Example config:**
+
 ```json
 {
     "host": "localhost",
@@ -176,6 +200,7 @@ Document where DB writes are inserted in the script:
     "password": "[secure]",
     "enabled": true
 }
+
 ```
 
 ---
@@ -185,18 +210,21 @@ Document where DB writes are inserted in the script:
 ### DB_INTEGRATION_MARKER: Test Strategy
 
 #### File Output Validation
+
 - [ ] File artifacts written to expected paths
 - [ ] JSON schema validation passes
 - [ ] Markdown formatting follows standards
 - [ ] Timestamps properly formatted
 
 #### DB Write Validation (when enabled)
+
 - [ ] `report_runs` record created with correct foreign keys
 - [ ] All artifact writes succeed without exceptions
 - [ ] Extracted metrics match source data
 - [ ] DB failures logged but don't abort script
 
 #### Idempotency Checks
+
 - [ ] Rerunning script with same timestamp doesn't corrupt data
 - [ ] DB UNIQUE constraints prevent duplicate records
 - [ ] File overwrites are safe
@@ -205,13 +233,17 @@ Document where DB writes are inserted in the script:
 
 ```bash
 # Run with DB disabled (current behavior)
+
 python script.py --repo-root . --log-level DEBUG
 
 # Run with DB enabled (dual-write mode)
+
 REPO_STUDIOS_DB_ENABLED=true python script.py --repo-root . --log-level DEBUG
 
 # Verify no file behavior changes
+
 diff <old_output_dir> <new_output_dir>
+
 ```
 
 ---
@@ -244,12 +276,15 @@ diff <old_output_dir> <new_output_dir>
 ## Notes & Caveats
 
 ### Known Limitations
+
 [List any constraints, edge cases, or gotchas]
 
 ### Dependencies
+
 [List scripts that depend on this one's output]
 
 ### Performance Considerations
+
 [Note any scalability concerns, large datasets, etc.]
 
 ### Agent Query Examples
@@ -260,23 +295,24 @@ Document the types of questions AI agents should be able to answer using this da
    - **Tables:** `report_runs`, `test_metrics`
    - **Key fields:** `run_timestamp`, `coverage_pct`
 
-2. **Query:** "Which tests are failing most frequently?"
+1. **Query:** "Which tests are failing most frequently?"
    - **Tables:** `test_metrics`, `report_artifacts`
    - **Key fields:** `failed_tests`, `content_json`
 
-3. [Additional agent query patterns...]
+1. [Additional agent query patterns...]
 
 ---
 
 ## Contact & Ownership
 
-**Primary Maintainer:** [Name/Team]  
-**Last Reviewed:** YYYY-MM-DD  
-**Next Review:** YYYY-MM-DD  
+**Primary Maintainer:** [Name/Team]
+**Last Reviewed:** YYYY-MM-DD
+**Next Review:** YYYY-MM-DD
 
 ---
 
 **DB_INTEGRATION_MARKER Legend:**
+
 - `DB_INTEGRATION_MARKER:` - Denotes integration points for future DB wiring
 - Search codebase: `grep -r "DB_INTEGRATION_MARKER" .` to find all integration points
 - Generate CSV: `python scripts/utilities/list_db_markers.py > db_integration_status.csv`

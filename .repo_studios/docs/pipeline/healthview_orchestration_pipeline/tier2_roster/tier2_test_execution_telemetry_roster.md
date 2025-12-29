@@ -1141,19 +1141,29 @@ The chain records below must be promoted into full ScriptInspectionRecordV1 entr
 
 **Stage 1.1 Tier-2 authoring stop-gates (docs-first):**
 
-- [ ] Confirm the canonical `<class>/<topic>` tokens for Stage 1.1 under
+- [x] Confirm the canonical `<class>/<topic>` tokens for Stage 1.1 under
   `.repo_studios/reports/healthview/`.
-- [ ] Confirm the canonical `<timestamp>` formatting expectation and record it here (do not assume
+  - Evidence (2025-12-28):
+    - `<class>` tokens observed: `orchestrator_reports`, `summarizer_reports`, `producer_reports`
+      (under `.repo_studios/reports/healthview/`).
+    - `<topic>` token observed for Stage 1.1: `test_execution_telemetry`.
+- [x] Confirm the canonical `<timestamp>` formatting expectation and record it here (do not assume
   `YYYY-MM-DD` or `YYYYmmdd-HHmm` without evidence and an explicit decision).
+  - Evidence (2025-12-28):
+    - Timestamp/run slug folders observed: `YYYYmmdd-HHmm` (example: `20251228-0205`).
 
 **Stage 1.1 Tier-1 contract migration stop-gates (code-phase, later):**
 
-- [ ] Output root migrated to `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
-- [ ] Base package required: `manifest.json`, `summary.md`, `telemetry.json` (current: Stage 1.1
-  orchestrator bundle is missing `summary.md`).
+- [x] Output root migrated to `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
+  - Evidence (2025-12-28):
+    - Example: `.repo_studios/reports/healthview/orchestrator_reports/test_execution_telemetry/20251228-0205/`
+- [x] Base package required: `manifest.json`, `summary.md`, `telemetry.json`.
+  - Evidence (2025-12-28):
+    - Example: `.repo_studios/reports/healthview/orchestrator_reports/test_execution_telemetry/20251228-0205/`
+      contains all three.
 - [ ] Additional artifacts (if any) are listed with a short, factual reason.
-- [ ] No pointer files remain (current: `generate_churn_complexity_heatmap.py` writes
-  `latest_*`).
+- [x] No pointer files remain (checked under `.repo_studios/reports/healthview/`).
+  - Evidence (2025-12-28): `latest_*` and `current_*` not found under the HealthView report root.
 - [ ] Retention behavior verified via pruning mechanism + evidence.
 - [ ] If DB writes are added: gate behind `REPO_STUDIOS_DB_ENABLED`, warn-only failures, and include
   `DB_INTEGRATION_MARKER:` at each callsite.

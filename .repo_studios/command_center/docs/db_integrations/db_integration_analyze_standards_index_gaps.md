@@ -15,6 +15,9 @@ related_files:
 
 # DB Integration — analyze_standards_index_gaps
 
+<!-- markdownlint-disable MD013 -->
+<!-- Technical doc; line length exempt -->
+
 ## Goals
 
 - Describe how the standards gap producer writes positional-encoded artifacts.

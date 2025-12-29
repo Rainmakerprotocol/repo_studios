@@ -42,7 +42,7 @@ GENERIC_ALLOWED = {"overview", "introduction", "faq", "notes"}
 BASELINE_PATH = Path("tests/docs/anchor_slug_baseline.json")
 # Permanent root for anchor health artifacts (contains latest + historical runs)
 OUTPUT_DIR = Path(".repo_studios/reports/consumer_reports/anchor_health_reports")
-DEFAULT_ARTIFACTS_TO_KEEP = 5
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_anchor_health_report")
 
 # Subfolder naming pattern: anchor_health-YYYY-MM-DD_hhmm
 RUN_PREFIX = "anchor_health-"
@@ -235,6 +235,7 @@ if libraries_root_str and libraries_root_str not in sys.path:
 
 from libraries import prune_run_directories  # noqa: E402
 from libraries.cli import resolve_repo_root  # noqa: E402
+from libraries.retention_policy import get_keep  # noqa: E402
 
 
 def _run_dir(ts: datetime, base: Path = OUTPUT_DIR) -> Path:

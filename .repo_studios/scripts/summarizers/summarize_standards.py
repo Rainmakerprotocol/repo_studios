@@ -35,6 +35,7 @@ try:  # pragma: no cover - preferred import when executed with packaged path
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
@@ -49,6 +50,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep
 
 DEFAULT_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
 LEGACY_INDEX_PATH = Path(".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml")
@@ -58,7 +60,7 @@ SUMMARY_STEM = "standards_overview"
 VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "standards_overview"
 SCHEMA_VERSION = 1
-DEFAULT_ARTIFACTS_TO_KEEP = 5
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("summarize_standards")
 
 
 @dataclass(frozen=True)

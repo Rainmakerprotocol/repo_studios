@@ -47,7 +47,6 @@ DEFAULT_PLACEHOLDER_REPORT = Path(
 DEFAULT_MONKEY_PATCH_REPORT = Path(
     ".repo_studios/reports/producer_reports/monkey_patch_scans/latest/latest_report.json"
 )
-DEFAULT_ARTIFACTS_TO_KEEP = 5
 RUN_STEM = "docs_health_signals"
 SCHEMA_VERSION = 1
 
@@ -66,6 +65,7 @@ try:  # pragma: no cover - prefer import when packaged
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
     import sys
 
@@ -81,6 +81,9 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep
+
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("aggregate_docs_health_signals")
 
 
 @dataclass(frozen=True)

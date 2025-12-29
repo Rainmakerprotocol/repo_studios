@@ -1,5 +1,8 @@
 # Mermaid Decision Log
 
+<!-- markdownlint-disable MD013 -->
+<!-- Decision log with detailed context entries; line length exempt -->
+
 ## 2025-11-22
 
 - **Decision:** Introduced Update header button styling for the viewer refresh workflow.
@@ -382,4 +385,3 @@
 - **Context:** Demonstrates the view pack interaction model while mapping the Code Flow pack to the newly emitted call graph edges without requiring a page reload.
 - **Owner:** GitHub Copilot implementation assistant.
 - **Evidence:** `.repo_studios/command_center/viewer/ui/viewer.js` now enables the Code Flow button, computes module-level call graph diagrams, and routes selections through `renderActiveView`; documentation in `.repo_studios/command_center/docs/mermaid/mermaid_viewer.md` records the partial Phase 7 completion.
-

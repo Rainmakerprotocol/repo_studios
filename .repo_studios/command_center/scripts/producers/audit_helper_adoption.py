@@ -25,6 +25,7 @@ try:
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when running as script
     LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -39,6 +40,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running as scrip
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep  # type: ignore  # noqa: E402
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
 VIEWER_SLUG = "commandview"
@@ -54,7 +56,7 @@ DEFAULT_HELPERS: tuple[str, ...] = (
 RUN_STEM = "helper_adoption"
 JSON_FILENAME = "helper_adoption.json"
 MARKDOWN_FILENAME = "helper_adoption.md"
-DEFAULT_KEEP = 3
+DEFAULT_KEEP = get_keep("audit_helper_adoption")
 DEFAULT_SCHEMA_VERSION = "1.0"
 STATUSES: tuple[str, ...] = ("adopted", "legacy", "not_applicable")
 LEGACY_NAMES: dict[str, frozenset[str]] = {

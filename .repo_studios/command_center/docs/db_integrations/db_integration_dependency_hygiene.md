@@ -19,6 +19,9 @@ related_files:
 
 # Dependency Hygiene — DB Integration Mapping
 
+<!-- markdownlint-disable MD013 -->
+<!-- Technical integration spec with inline code mappings; line length exempt -->
+
 ## Goals
 
 * Define how the Dependency Hygiene producer maps its canonical bundle outputs into DB-ready shapes.

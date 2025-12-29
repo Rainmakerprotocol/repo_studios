@@ -17,6 +17,9 @@ related_files:
 
 # DB Integration — Docs Integrity Validation (healthview/docs_integrity_validation)
 
+<!-- markdownlint-disable MD013 -->
+<!-- Technical doc; line length exempt -->
+
 ## Goals
 
 Define the database-facing contract for the docs integrity validation producer so dual-write storage can persist run

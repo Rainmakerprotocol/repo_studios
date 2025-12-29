@@ -15,6 +15,9 @@ related_files:
 
 # DB Integration — generate_churn_complexity_heatmap.py
 
+<!-- markdownlint-disable MD013 -->
+<!-- Technical doc; line length exempt -->
+
 ## Goals
 
 - Document the database integration markers and intended table mappings for the churn-complexity heatmap aggregator.

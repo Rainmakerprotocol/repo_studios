@@ -22,6 +22,7 @@ try:
         slugify_relative,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep  # type: ignore  # noqa: E402
 except ModuleNotFoundError:  # pragma: no cover - CLI fallback
     script_dir = Path(__file__).resolve().parent
     scripts_root = script_dir.parent
@@ -36,11 +37,12 @@ except ModuleNotFoundError:  # pragma: no cover - CLI fallback
         slugify_relative,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep  # type: ignore  # noqa: E402
 
 DEFAULT_SCHEMA_VERSION = 1
 ANALYSIS_VERSION = "1.0.0"
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
-DEFAULT_KEEP_RUNS = 1
+DEFAULT_KEEP_RUNS = get_keep("generate_function_analysis")
 VIEWER_SLUG = "commandview"
 TOPIC_SLUG = "function_analysis"
 

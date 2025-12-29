@@ -16,7 +16,7 @@ import subprocess
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports/rawview/mypy_baselines")
-DEFAULT_ARTIFACTS_TO_KEEP = 5
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("refresh_mypy_baselines")
 RUN_STEM = "mypy_baselines"
 SCHEMA_VERSION = 1
 
@@ -34,6 +34,7 @@ try:  # pragma: no cover - preferred import when executed via orchestrators
         copy_latest_artifact,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep  # type: ignore
 except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
@@ -48,6 +49,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
         copy_latest_artifact,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep  # type: ignore
 
 
 @dataclass(frozen=True)

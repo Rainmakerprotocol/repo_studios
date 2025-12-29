@@ -1,5 +1,8 @@
 # Phase 4 Automation Planning Notes
 
+<!-- markdownlint-disable MD013 -->
+<!-- Planning doc with detailed inline annotations; line length exempt -->
+
 **Status:** Draft (2025-10-31)
 
 **Purpose:** Capture design inputs, guardrail follow-ups, and implementation sequencing for future automated extractions. This working doc bridges the approved Phase 3 guardrails with the automation work that will kick off once manual validation completes.
@@ -129,8 +132,6 @@ jobs:
 
 ### 2025-11-02 Implementation Update
 
-
-
 ```yaml
 # .repo_studios/command_center/docs/guardrails/automation_config.yaml (draft)
 allowed_targets:
@@ -145,7 +146,6 @@ constraints:
   max_groups_per_run: 5
 ```
 
-
 - Count files slated for modification before emitting patches.
 - Fail pre-flight if the number exceeds `max_files_per_run` unless `--allow-override` is passed.
 - Emit a summary in the automation manifest noting the configured limit and actual count.
@@ -153,7 +153,6 @@ constraints:
 
 - Guardrail doc: add subsection explaining the cap, override process, and rationale (keeps PRs reviewable).
 - Checklist template: include checkbox confirming the file count was reviewed and within bounds.
-
 
 ### 2025-11-03 Implementation Update
 
@@ -171,7 +170,6 @@ constraints:
 - Ran expanded rehearsal `dryrun-probe-02` (timestamp `2025-11-03T17:00:00Z`) covering multi-target metrics, guardrail helper updates, and the library integration pytest suite; artifacts live at `automation_manifest-20251103_170000/` with copied inputs and README.
 - Developer reviewed both bundles on 2025-11-03; dry-run step now marked complete in the master checklist.
 - Post-run test matrix refreshed with PowerShell commands, `--maxfail`/`--durations` flags, and orchestrator coverage so operators have exact commands prior to tooling integration.
-
 
 ### Automation Success Criteria (Accepted 2025-11-03)
 
@@ -226,15 +224,15 @@ Deliver a vetted blueprint for automated duplicate extraction that adheres to Ph
 
    - Annotated allow-list with `max_files_per_run` entry.
    - CI lock status check design doc (GitHub workflow snippet + failure modes).
-2. **Automation Workflow Spec**
+1. **Automation Workflow Spec**
 
    - Step-by-step flow (dry-run, staging worktree, tests, PR draft).
    - Updated rollback bundle schema (`manifest.json`, `metrics_summary.json`, `README.md`).
-3. **Testing Matrix**
+1. **Testing Matrix**
 
    - Mandatory test commands (library integration, producer suites, future automation smoke).
    - Manual verification checklist (file diff spot checks, docs updates).
-4. **Reporting & Telemetry Plan**
+1. **Reporting & Telemetry Plan**
 
    - Metrics capture/export process (weekly in-repo, monthly aggregate).
    - Weighted progress briefing template draft.
@@ -260,9 +258,9 @@ Deliver a vetted blueprint for automated duplicate extraction that adheres to Ph
 ## Sequencing Roadmap (Manual)
 
 1. **Planning Sprint** – Expand this document into a full automation design brief, capture success criteria, and confirm dependency readiness (fresh inventories, test coverage, library slots).
-2. **Configuration Sprint** – Implement the CI lock status prototype, introduce `max_files_per_run`, and update allow-list/metrics storage configuration.
-3. **Tooling Sprint** – Design the helper adoption CLI spec, extend the manifest with `metrics_summary.json`, and draft the weighted briefing template.
-4. **Dry-Run Sprint** – Execute a scripted dry-run using disposable worktrees, capture rollback bundles, run required tests, and iterate on the PR checklist template before any real code mods. Document the `run_automation_dry_run.py` invocation (command, timestamp slug, bundle path) rather than wiring it into other orchestrators until the manual process is fully approved.
+1. **Configuration Sprint** – Implement the CI lock status prototype, introduce `max_files_per_run`, and update allow-list/metrics storage configuration.
+1. **Tooling Sprint** – Design the helper adoption CLI spec, extend the manifest with `metrics_summary.json`, and draft the weighted briefing template.
+1. **Dry-Run Sprint** – Execute a scripted dry-run using disposable worktrees, capture rollback bundles, run required tests, and iterate on the PR checklist template before any real code mods. Document the `run_automation_dry_run.py` invocation (command, timestamp slug, bundle path) rather than wiring it into other orchestrators until the manual process is fully approved.
 
 Each sprint remains manual: tasks may use scripts, but operators review, commit, and document outputs.
 

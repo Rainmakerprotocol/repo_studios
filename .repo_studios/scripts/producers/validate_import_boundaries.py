@@ -18,7 +18,7 @@ DEFAULT_RELATIVE_GRAPH_DIR = Path(".repo_studios/reports/producer_reports/health
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/import_boundary_reports")
 DEFAULT_ALLOWLIST = Path(".repo_studios/scripts/producers/import_rules_allowlist.json")
 RUN_PREFIX = "import_boundary_check"
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("validate_import_boundaries")
 SCHEMA_VERSION = 1
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
@@ -33,6 +33,7 @@ try:
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
@@ -45,6 +46,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.retention_policy import get_keep  # type: ignore
 
 
 @dataclass(frozen=True)

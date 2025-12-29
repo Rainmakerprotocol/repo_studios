@@ -24,7 +24,7 @@ DEFAULT_LOGS_DIR = Path(".repo_studios/command_center/reports/rawview/test_execu
 LEGACY_LOGS_DIR = Path(".repo_studios/pytest_logs")
 DEFAULT_METRICS_SOURCE: Path | None = None
 DEFAULT_WINDOW = 500
-DEFAULT_ARTIFACTS_TO_KEEP = 5
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_churn_complexity_heatmap")
 
 RUN_PREFIX = "churn_complexity_heatmap-"
 HEATMAP_JSON = "heatmap.json"
@@ -45,6 +45,7 @@ if libraries_root_str and libraries_root_str not in sys.path:
 
 from libraries import prune_run_directories  # noqa: E402
 from libraries.cli import resolve_path, resolve_repo_root  # noqa: E402
+from libraries.retention_policy import get_keep  # noqa: E402
 
 
 @dataclass(frozen=True)

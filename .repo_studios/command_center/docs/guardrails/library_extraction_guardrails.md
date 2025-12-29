@@ -1,5 +1,8 @@
 # Library Extraction Guardrails
 
+<!-- markdownlint-disable MD013 -->
+<!-- Guardrail specifications with inline rationales; line length exempt -->
+
 **Status:** Draft (2025-10-30)
 
 ## Purpose
@@ -33,18 +36,18 @@ These guardrails apply to any automation that modifies source files based on dup
    - Implement a `--dry-run` flag returning a diff bundle (`*.patch`) and machine-readable summary (JSON). Consumers can inspect the artifacts and rerun without the flag once approved.
    - Highlight how the diff aligns with duplicate scan groups by embedding group IDs in the summary.
 
-2. **Baseline freshness**
+1. **Baseline freshness**
    - Wrap automation with the command center orchestrator: `run_command_center_pipeline.py <target> --repo-root . --log-level INFO --skip-scan 0` (future flag) or explicitly run the three producers before automation kicks in.
    - Validate timestamps by parsing the freshly written `*-duplicate_summary-YYYY-MM-DD.md` files. Abort if the timestamp delta exceeds the configured threshold.
 
-3. **Allow-list management**
+1. **Allow-list management**
    - Store the allow-list as `.repo_studios/command_center/docs/guardrails/allowed_targets.yaml` containing slug IDs, paths, and owner notes.
    - Require a checklist entry documenting updates to this file prior to each automated run.
 
-4. **Worktree isolation**
+1. **Worktree isolation**
    - Automation creates a temporary worktree (e.g., `.repo_studios/tmp/worktrees/library-refactor-<slug>`). Clean up on success or failure and include the cleanup status in the log stream.
 
-5. **Rollback bundle contents**
+1. **Rollback bundle contents**
    - `originals/` – copies of files before modification.
    - `patches/changes.patch` – unified diff generated post-run.
    - `pytest_results.json` – structured report of executed tests.
@@ -53,25 +56,25 @@ These guardrails apply to any automation that modifies source files based on dup
    - `README.md` – instructions to apply the patch or restore originals.
    - Store bundles under `.repo_studios/command_center/reports/repo-studios__command-center__automation_run/` with mirrored `latest_automation_manifest.json` and `latest_metrics_summary.json` pointers for reviewers.
 
-6. **Logging & telemetry**
+1. **Logging & telemetry**
    - Use the shared logging helper once it moves into the library (`configure_basic_logging`) and integrate with the command center retention utilities so logs are pruned to the latest three runs.
    - Include run metadata (`run_id`, `targets`, `dry_run`, `git_branch`, `lock_file`) in the first log entries for quick traceability.
 
-7. **CI lock enforcement**
+1. **CI lock enforcement**
    - Publish a reusable GitHub Actions workflow (draft lives in `phase_4/AUTOMATION_PLANNING_NOTES.md`) at `.github/workflows/verify-command-center-locks.yaml`.
    - Require dependent automation jobs to invoke the workflow via `workflow_call` before any destructive step and block merges when it fails.
    - Allow manual overrides only when `allow-ignore: true` is passed alongside a checklist entry referencing who approved the bypass and why.
    - Store lock files in `.repo_studios/command_center/run_locks/` with descriptive names (`<slug>-automation.lock`) and capture snapshots as CI artifacts on failure for auditing.
    - Workflow landed 2025-10-31; `Command Center Automation Guardrails` (`.github/workflows/command-center-automation.yml`, added 2025-11-03) now invokes `verify-command-center-locks` so branch protection can require the lock check status before automation steps execute.
 
-8. **Run size cap enforcement**
+1. **Run size cap enforcement**
    - Define `constraints.max_files_per_run` inside `.repo_studios/command_center/docs/guardrails/automation_config.yaml`; default budget set to 15 files until phased review increases the cap.
    - Extend pre-flight validation to count targeted files before patch emission. Abort the run if the budget is exceeded unless `--allow-override` is supplied, in which case log the approving reviewer.
    - Emit the configured limit, actual file count, and override state in the automation manifest and run log header so reviewers can confirm compliance.
    - Helper reference: `.repo_studios/command_center/scripts/libraries/guardrails.py` exposes `load_guardrail_config` and `enforce_run_size_limit` for Phase 4 tooling and includes integration tests under `tests/tests_library_integration/libraries/test_guardrails.py`.
       - `generate_automation_manifest.py` (2025-11-03) now calls `enforce_run_size_limit` before writing artifacts, rejecting over-budget runs and carrying the enforced counts into manifest guardrail snapshots.
 
-9. **Post-run validation**
+1. **Post-run validation**
    - Mandatory pytest commands:
 
       ```powershell
@@ -81,7 +84,7 @@ These guardrails apply to any automation that modifies source files based on dup
 
    - Capture exit codes and durations; include them in the manifest.
 
-10. **Artifact retention policy**
+1. **Artifact retention policy**
     - Use the shared `write_report_artifacts` helper for all automation outputs; default `keep=3` ensures a short, reviewable history while avoiding report sprawl.
     - To retain more runs, drop a `.keep` sentinel inside the relevant directory or document an override in the guardrail log; monitor overrides during retrospectives.
     - Ensure retention expectations are mirrored in the command center README and automation checklist so operators know when additional pruning is required.
@@ -89,8 +92,8 @@ These guardrails apply to any automation that modifies source files based on dup
 ## Review & Sign-off Process
 
 1. **Distribute draft:** Share this document with the command center steward(s), producer owners, and QA liaison via the `#repo-studios-command-center` channel and attach it to the Phase 3 checklist entry.
-2. **Collect feedback:** Allow a two-business-day comment window. Track questions or requested amendments in the checklist so the next revision is discoverable.
-3. **Record approvals:** Update the table below as reviewers sign off. A minimum of one steward and one QA representative must approve before automation planning proceeds.
+1. **Collect feedback:** Allow a two-business-day comment window. Track questions or requested amendments in the checklist so the next revision is discoverable.
+1. **Record approvals:** Update the table below as reviewers sign off. A minimum of one steward and one QA representative must approve before automation planning proceeds.
 
 | Role | Reviewer | Status | Notes |
 | --- | --- | --- | --- |
@@ -116,6 +119,6 @@ These guardrails apply to any automation that modifies source files based on dup
 ## Next Steps
 
 1. Review and approve these guardrails with the steward(s) of the command center workflow.
-2. Backfill the allow-list and rollback directory structure so manual dry-runs can rehearse the process.
-3. Update `.repo_studios/command_center/README.md` with a summary and pointer to this document once approved.
-4. Enforce these requirements in the future automation design brief (Phase 4) before any implementation begins.
+1. Backfill the allow-list and rollback directory structure so manual dry-runs can rehearse the process.
+1. Update `.repo_studios/command_center/README.md` with a summary and pointer to this document once approved.
+1. Enforce these requirements in the future automation design brief (Phase 4) before any implementation begins.

@@ -21,7 +21,7 @@ LEGACY_INDEX_PATH = Path(
 )
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_prompt_seeds")
 RUN_PREFIX = "standards_prompt_seed"
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("seed_standards_prompts")
 FORMAT_CHOICES = ("text", "yaml", "json")
 SCHEMA_VERSION = 1
 
@@ -39,6 +39,7 @@ try:
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
@@ -51,6 +52,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.retention_policy import get_keep
 
 
 @dataclass(frozen=True)

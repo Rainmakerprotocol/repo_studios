@@ -24,6 +24,7 @@ try:  # pragma: no cover - prefer import when packaged
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when running in isolation
     LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -39,6 +40,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running in isola
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep
 
 SUMMARY_STEM = "test_execution_telemetry_summary"
 VIEWER_SLUG = "summarizer_reports"
@@ -166,7 +168,7 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser.add_argument(
         "--artifacts-to-keep",
         type=int,
-        default=3,
+        default=get_keep("summarize_test_execution_telemetry"),
         help="Retention window for generated summary artifacts",
     )
     parser.add_argument(
@@ -188,7 +190,7 @@ def build_paths(args: argparse.Namespace) -> Paths:
 
 def build_options(args: argparse.Namespace) -> Options:
     keep_values = build_standard_options(args, OPTIONS_CONFIG)
-    artifacts_to_keep = max(int(getattr(keep_values, "artifacts_to_keep", 3)), 1)
+    artifacts_to_keep = max(int(getattr(keep_values, "artifacts_to_keep", get_keep("summarize_test_execution_telemetry"))), 1)
     return Options(log_level=str(args.log_level), artifacts_to_keep=artifacts_to_keep)
 
 

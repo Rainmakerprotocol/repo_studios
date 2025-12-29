@@ -38,6 +38,7 @@ from libraries.cli import (  # noqa: E402
     build_standard_paths,
 )
 from libraries.database_integration import create_storage  # noqa: E402
+from libraries.retention_policy import get_keep  # noqa: E402
 from libraries.prune_logs import prune_run_directories  # noqa: E402
 from utilities.fault_run_analysis import (  # noqa: E402
     FaultAnalysisResult,
@@ -49,7 +50,7 @@ LEGACY_RUNS_RELATIVE = Path(".repo_studios/faulthandler")
 DEFAULT_OUTPUT_RELATIVE = Path(".repo_studios/command_center/reports")
 VIEWER_SLUG = "rawview"
 TOPIC_SLUG = "fault_artifacts_producer"
-DEFAULT_KEEP = 5
+DEFAULT_KEEP = get_keep("collect_faulthandler_reports")
 SCHEMA_VERSION = 1
 
 

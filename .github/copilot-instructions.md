@@ -26,6 +26,7 @@
 - Report artifacts must follow `REPORT_NAMING_STANDARDS.md` (viewer/topic/timestamp/artifact layout). Invoke `reports_naming_audit.py` after emitting new bundles and do not add new `latest_*` aliases.
 - Shared helpers live under `.repo_studios/command_center/scripts/libraries/` as a staging area; import `slugify_relative`, `copy_latest_artifact`, `write_report_artifacts`, and `cli` utilities from there rather than duplicating inline helpers. The CLI module now exposes config-driven builders (`PathsConfig`, `OptionsConfig`, `build_standard_paths`, `build_standard_options`) and every Command Center producer already consumes them—mirror that pattern whenever you touch CLI glue. These modules must stay compliant with the library naming rules captured in `que_for_integration/refactor_library/phase_1/naming_conventions.md` (training copy at `.repo_studios/command_center/docs/naming_conventions.md`), so name new functions `verb_noun`, keep depth ≤3 levels when the real `.repo_studios/library/` tree is created, and document staging locations when helpers have not yet moved.
 - Keep new helpers in ASCII and add explanatory comments only where the flow is non-obvious, per repository editing guidance.
+- Update docstrings during implementation phases
 
 ## Testing & Validation
 - Pytest suites live under `.repo_studios/tests`; target a subpackage when iterating (e.g. `pytest tests/tests_producers/test_generate_commandview_inventory.py`).

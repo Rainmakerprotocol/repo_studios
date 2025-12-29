@@ -37,7 +37,6 @@ REPORTS_ROOT = Path(".repo_studios/reports/producer_reports")
 DEFAULT_OUTPUT_DIR = REPORTS_ROOT
 DEFAULT_LEGACY_FILE = Path("docs/api/metrics_orchestrator.md")
 DEFAULT_ALLOWLIST_PATH = Path(".repo_studios/scripts/producers/metrics_anchor_allowlist.json")
-DEFAULT_ARTIFACTS_TO_KEEP = 10
 SCHEMA_VERSION = 1
 VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "metrics_anchor_stub_validation"
@@ -54,6 +53,7 @@ try:
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback for script execution without package path
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
@@ -66,6 +66,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for script execution 
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.retention_policy import get_keep
 
 try:
     from libraries.database_integration import create_storage
@@ -73,6 +74,9 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for script execution 
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
     from libraries.database_integration import create_storage
+
+# Must be after import block where get_keep is defined
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("validate_metrics_anchor_stubs")
 
 
 @dataclass(frozen=True)

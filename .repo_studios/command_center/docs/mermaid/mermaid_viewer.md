@@ -1,5 +1,8 @@
 # Progressive Detail Mermaid Viewer — Implementation Checklist
 
+<!-- markdownlint-disable MD013 -->
+<!-- Design checklist with detailed inline annotations; line length exempt -->
+
 ## Phase 0 · Charter & Success Measures
 
 - [x] Reconfirm viewer purpose: deliver progressive wiring diagrams that solve clutter and exploration pain points.
@@ -376,6 +379,6 @@ Additionally, the Risk & Assurance Test Coverage Mapping view now renders throug
     - Direct CLI: `C:/Users/genet/repo_studios/.venv/Scripts/python.exe .repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py .repo_studios/command_center/scripts --repo-root . --log-level INFO`.
     - Viewer Update launcher: `C:/Users/genet/repo_studios/.venv/Scripts/python.exe .repo_studios/command_center/scripts/orchestrators/run_inventory_update.py .repo_studios/command_center/scripts --repo-root . --log-level INFO` (used by the Update button backend).
 
-2. **Invoke viewer refresh backend** (present):call `refresh_selector_with_context(repo_root, active_relative_path=..., active_slug=...)` to rebuild selector state while preserving operator context.
+1. **Invoke viewer refresh backend** (present):call `refresh_selector_with_context(repo_root, active_relative_path=..., active_slug=...)` to rebuild selector state while preserving operator context.
 
-3. **Launch UI prototype** (future): upcoming HTML shell will call the helper to hydrate controls; document updates will follow once the UI wiring step completes.
+1. **Launch UI prototype** (future): upcoming HTML shell will call the helper to hydrate controls; document updates will follow once the UI wiring step completes.

@@ -21,7 +21,7 @@ DEFAULT_TEMPLATE_PATH = DEFAULT_SCHEMA_ROOT / "inventory_entry_template.yaml"
 DEFAULT_CONFIG_PATH = DEFAULT_SCHEMA_ROOT / "validator_config.yaml"
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/validate_inventory")
 RUN_PREFIX = "validate_inventory"
-DEFAULT_ARTIFACTS_TO_KEEP = 5
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("validate_inventory")
 SCHEMA_VERSION = 1
 
 LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
@@ -38,6 +38,7 @@ try:
         prune_run_directories,
         resolve_path,
     )
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when executed as script
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
@@ -52,6 +53,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when executed as scri
         prune_run_directories,
         resolve_path,
     )
+    from libraries.retention_policy import get_keep  # type: ignore
 
 REQUIRED_FIELDS = {
     "id",

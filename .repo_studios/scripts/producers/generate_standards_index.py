@@ -37,7 +37,7 @@ DEFAULT_REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
 VIEWER_SLUG = "rawview"
 TOPIC_SLUG = "standards_index"
-DEFAULT_ARTIFACTS_TO_KEEP = 5
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_standards_index")
 SCHEMA_VERSION = 1
 
 DEFAULT_RELATIVE_CATEGORIES = Path(".repo_studios/scripts/.repo_studios/standards_categories.yaml")
@@ -51,11 +51,13 @@ LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scrip
 try:
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.retention_policy import get_keep
 
 from libraries.cli import resolve_path, resolve_repo_root
 

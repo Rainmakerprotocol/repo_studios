@@ -1,5 +1,8 @@
 # Library Integration Alignment Plan
 
+<!-- markdownlint-disable MD013 -->
+<!-- Planning checklist with detailed inline annotations; line length exempt -->
+
 **Status:** Active alignment (refreshed 2025-10-28)
 
 **Purpose:** Mirror the process used for `integration_checklist.md` by capturing phase-by-phase intentions, current evidence, and open decisions before any implementation work begins. All statuses reflect planning only.
@@ -155,16 +158,16 @@ Notes: Completing this phase delivers the single-trigger workflow users can poin
 **Next actions:**
 
 1. Completed automation design brief and dependency review (2025-10-31 to 2025-11-03; see `phase_4/AUTOMATION_PLANNING_NOTES.md`).
-2. Completed configuration sprint guardrail updates, including lock workflow and `max_files_per_run` enforcement (2025-11-03; see `.github/workflows/verify-command-center-locks.yaml` and `.repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md`).
-3. In progress: Developer review of the Phase 5 Make target design (`.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md`) to confirm naming, flags, and artifact messaging.
-4. Completed: Windows `make` availability guidance documented 2025-11-04 with install/fallback instructions (see design draft Windows Tooling Validation).
-5. Completed: Make target contract, guardrail surfacing, and CI rehearsal plan documented 2025-11-04 within the design draft; pending developer approval before implementation.
-6. Upcoming: Summarize health suite orchestrator impacts and update documentation cross-links once the targets are approved.
-7. Completed: Phase 6 prompt guardrail matrix, instruction deltas, change-control workflow, validation plan, rollback playbook, and dry-run execution documented 2025-11-04; guardrail-aware updates published in `repo_prompts.md` v1.3.0 with PASS validation results.
-8. Completed: Phase 7 baseline dataset recorded 2025-11-04 in `phase_7/METRIC_BASELINE_LOG.csv`, aligning duplicate matrices with automation metrics for weekly briefings.
-9. Completed: Validation cadence documented 2025-11-04 in `phase_7/METRIC_BASELINE_PLAN.md` with weekly, monthly, and quarterly review duties plus ledger tagging guidance.
-10. In progress: Prepare the first scheduled weekly review (target 2025-11-11) by staging updated duplicate scans and automation manifest snapshots.
-11. Upcoming: Monitor prompt usage for drift and schedule the next validation rerun at the next prompt version change or quarterly checkpoint.
+1. Completed configuration sprint guardrail updates, including lock workflow and `max_files_per_run` enforcement (2025-11-03; see `.github/workflows/verify-command-center-locks.yaml` and `.repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md`).
+1. In progress: Developer review of the Phase 5 Make target design (`.repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md`) to confirm naming, flags, and artifact messaging.
+1. Completed: Windows `make` availability guidance documented 2025-11-04 with install/fallback instructions (see design draft Windows Tooling Validation).
+1. Completed: Make target contract, guardrail surfacing, and CI rehearsal plan documented 2025-11-04 within the design draft; pending developer approval before implementation.
+1. Upcoming: Summarize health suite orchestrator impacts and update documentation cross-links once the targets are approved.
+1. Completed: Phase 6 prompt guardrail matrix, instruction deltas, change-control workflow, validation plan, rollback playbook, and dry-run execution documented 2025-11-04; guardrail-aware updates published in `repo_prompts.md` v1.3.0 with PASS validation results.
+1. Completed: Phase 7 baseline dataset recorded 2025-11-04 in `phase_7/METRIC_BASELINE_LOG.csv`, aligning duplicate matrices with automation metrics for weekly briefings.
+1. Completed: Validation cadence documented 2025-11-04 in `phase_7/METRIC_BASELINE_PLAN.md` with weekly, monthly, and quarterly review duties plus ledger tagging guidance.
+1. In progress: Prepare the first scheduled weekly review (target 2025-11-11) by staging updated duplicate scans and automation manifest snapshots.
+1. Upcoming: Monitor prompt usage for drift and schedule the next validation rerun at the next prompt version change or quarterly checkpoint.
 
 Notes: Rollout remains manual; automation explicitly deferred until manual validation succeeds.
 
@@ -230,9 +233,9 @@ Notes: Rollout remains manual; automation explicitly deferred until manual valid
   - Optional `build_paths_from_config(config: PathsConfig, args: argparse.Namespace) -> dataclass` helper that maps config entries (`field -> default relative path`) to resolved absolute `Path` objects so producers can keep their existing `Paths` dataclass but delegate the resolution mechanics.
 - **Migration sequence:**
   1. Introduce helper module + unit tests under `tests/tests_library_integration/libraries/test_cli.py` covering repo-root detection, default fallbacks, relative/absolute inputs, and error handling.
-  2. Update a pilot producer (e.g., `validate_metrics_anchor_stubs.py`) to consume the helper while preserving the existing `Paths` dataclass; extend its tests to assert equivalence.
-  3. Sweep remaining producers family-by-family, replacing duplicated `build_paths`/`build_options` logic with calls into the helper while keeping script-specific semantics (e.g., `STRICT` environment guard) centralized in the library when feasible.
-  4. Backfill orchestrator or smoke tests if they rely on these helpers indirectly, ensuring repo-root resolution stays deterministic on Windows paths.
+  1. Update a pilot producer (e.g., `validate_metrics_anchor_stubs.py`) to consume the helper while preserving the existing `Paths` dataclass; extend its tests to assert equivalence.
+  1. Sweep remaining producers family-by-family, replacing duplicated `build_paths`/`build_options` logic with calls into the helper while keeping script-specific semantics (e.g., `STRICT` environment guard) centralized in the library when feasible.
+  1. Backfill orchestrator or smoke tests if they rely on these helpers indirectly, ensuring repo-root resolution stays deterministic on Windows paths.
 - **Documentation & comms:** Once the first migration lands, document usage in `.repo_studios/command_center/README.md` and update the Copilot instructions to point at the new CLI helper utilities. Capture any producer-specific overrides in the runbook.
 
 ## Phase 4 – Automated Extraction
@@ -280,9 +283,9 @@ Notes: Rollout remains manual; automation explicitly deferred until manual valid
 ### Sequencing Roadmap (Manual Team)
 
 1. **Planning sprint:** Finalize success criteria and dependency checklist; align on risks and acceptance criteria.
-2. **Configuration sprint:** Deliver CI lock check design, `max_files_per_run` configuration, and updated allow-list/metrics storage docs.
-3. **Tooling sprint:** Produce helper audit CLI spec, manifest schema updates, and weighted reporting template draft.
-4. **Dry-run sprint:** Execute rehearsal in a disposable worktree, capture bundle/test results, and iterate on the PR checklist template.
+1. **Configuration sprint:** Deliver CI lock check design, `max_files_per_run` configuration, and updated allow-list/metrics storage docs.
+1. **Tooling sprint:** Produce helper audit CLI spec, manifest schema updates, and weighted reporting template draft.
+1. **Dry-run sprint:** Execute rehearsal in a disposable worktree, capture bundle/test results, and iterate on the PR checklist template.
 
 Notes: Phase 4 work remains in planning while manual extraction continues, but artifacts above must be completed before implementing any code-mod automation.
 
@@ -362,13 +365,13 @@ Notes: Will proceed only after library structure and extraction workflow stabili
 ## Outstanding Considerations
 
 1. **Library Structure Diff** – Baseline comparison complete (no existing tree); continue using the blueprint as a guide and document each new folder as it lands in reports.
-2. **Schema Compatibility** – Aggregation and translation rules live in `docs/duplicate_detection_schema_alignment.md`; next step is wiring derived summaries into health-suite outputs so dashboards stay in sync with richer scanner data.
-3. **Data Consolidation** – Latest matrix resides at `reports/duplicates_scan/repo-studios__command-center__scripts_duplicate_scan/scripts_duplicate_matrix-2025-10-27.json`; rerun when additional targets are scanned.
-4. **Testing Footprint** – Library tests will live alongside the library in a mirrored branch structure (per reference bundle); current integration coverage validates the slugged pipeline on Windows and asserts helper alias reuse.
-5. **Tooling Cross-Platform** – Manual scripts and test commands must succeed on Windows, Linux, and macOS; add validation steps for each target shell.
-6. **Governance Alignment** – Single approver confirmed (you). Capture this in rollout notes so future contributors know who signs off.
-7. **Report Retention & Pruning** – `scan_duplicates.py` and the shared `write_report_artifacts` helper enforce retention (default keep three runs); guardrail overview now documents the policy (Implementation Note 10). Capture protocol README updates and extend adoption across remaining report producers.
-8. **Orchestrator Contract** – Finalise argument handling, exit codes, and documentation expectations before implementing the Phase 2.5 runner.
+1. **Schema Compatibility** – Aggregation and translation rules live in `docs/duplicate_detection_schema_alignment.md`; next step is wiring derived summaries into health-suite outputs so dashboards stay in sync with richer scanner data.
+1. **Data Consolidation** – Latest matrix resides at `reports/duplicates_scan/repo-studios__command-center__scripts_duplicate_scan/scripts_duplicate_matrix-2025-10-27.json`; rerun when additional targets are scanned.
+1. **Testing Footprint** – Library tests will live alongside the library in a mirrored branch structure (per reference bundle); current integration coverage validates the slugged pipeline on Windows and asserts helper alias reuse.
+1. **Tooling Cross-Platform** – Manual scripts and test commands must succeed on Windows, Linux, and macOS; add validation steps for each target shell.
+1. **Governance Alignment** – Single approver confirmed (you). Capture this in rollout notes so future contributors know who signs off.
+1. **Report Retention & Pruning** – `scan_duplicates.py` and the shared `write_report_artifacts` helper enforce retention (default keep three runs); guardrail overview now documents the policy (Implementation Note 10). Capture protocol README updates and extend adoption across remaining report producers.
+1. **Orchestrator Contract** – Finalise argument handling, exit codes, and documentation expectations before implementing the Phase 2.5 runner.
 
 ---
 

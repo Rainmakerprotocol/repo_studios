@@ -20,17 +20,17 @@ layer (6-12 months), simply flip the flag to activate writes.
 ### Key Principles
 
 1. **Positional Encoding:** Filesystem paths mirror database schema (viewer/topic/timestamp = columns)
-2. **Dual-Write Pattern:** All scripts write to files AND database simultaneously (when enabled)
-3. **Graceful Degradation:** Database failures are logged but don't abort scripts
-4. **Marker-Based Tracking:** All integration points tagged with `DB_INTEGRATION_MARKER`
-5. **Per-Script Documentation:** Each script gets a dedicated DB schema doc
-6. **Provenance Metadata:** Track WHO (requested_by) and WHY (trigger_type) outside filesystem paths
+1. **Dual-Write Pattern:** All scripts write to files AND database simultaneously (when enabled)
+1. **Graceful Degradation:** Database failures are logged but don't abort scripts
+1. **Marker-Based Tracking:** All integration points tagged with `DB_INTEGRATION_MARKER`
+1. **Per-Script Documentation:** Each script gets a dedicated DB schema doc
+1. **Provenance Metadata:** Track WHO (requested_by) and WHY (trigger_type) outside filesystem paths
 
 ---
 
 ## Architecture Overview
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │  Main Repo (Air-Gapped)                                      │
 │  ┌────────────────┐         ┌──────────────────────┐        │
@@ -85,7 +85,7 @@ position. This approach:
 
 ### Path Contract
 
-```
+```text
 <reports_root>/<viewer_slug>/<topic>/<timestamp>/<artifact>
      ↓              ↓           ↓         ↓          ↓
   Position 0   Position 1  Position 2  Position 3  Position 4
@@ -140,6 +140,7 @@ encoding. The database stores them for audit/debugging without cluttering file p
 ### Core Tables
 
 #### 1. `report_runs`
+
 Main orchestrator run records with metadata.
 
 **Purpose:** Track every script execution with viewer, topic, timestamp, and git context.
@@ -233,8 +234,8 @@ Duplicate function groups from scan reports.
 Pre-computed aggregations for fast AI agent queries:
 
 1. **`test_coverage_trends`** - Daily coverage rollups
-2. **`top_duplicates`** - Most frequently duplicated functions
-3. **`high_risk_files`** - Files with high complexity + churn
+1. **`top_duplicates`** - Most frequently duplicated functions
+1. **`high_risk_files`** - Files with high complexity + churn
 
 ---
 
@@ -324,13 +325,13 @@ template in [db_integration_template.md](db_integration_template.md).
 ### Documentation Structure
 
 1. **Purpose & Scope** - What the script does, inputs, outputs
-2. **Database Integration Plan** - Target tables, field mappings
-3. **Data Mapping** - Current files → DB tables
-4. **Extracted Metrics** - Time-series metric extraction logic
-5. **Integration Points** - Exact line numbers where DB writes occur
-6. **Validation & Testing** - Test strategy and commands
-7. **Migration Checklist** - Tracking integration status
-8. **Agent Query Examples** - Sample queries AI agents will run
+1. **Database Integration Plan** - Target tables, field mappings
+1. **Data Mapping** - Current files → DB tables
+1. **Extracted Metrics** - Time-series metric extraction logic
+1. **Integration Points** - Exact line numbers where DB writes occur
+1. **Validation & Testing** - Test strategy and commands
+1. **Migration Checklist** - Tracking integration status
+1. **Agent Query Examples** - Sample queries AI agents will run
 
 ### Example Documentation
 
@@ -346,8 +347,8 @@ a complete reference implementation.
 **Usage:** Every integration point should include this comment so we can:
 
 1. Grep for all integration locations
-2. Generate CSV tracking reports
-3. Ensure no orphaned code during migration
+1. Generate CSV tracking reports
+1. Ensure no orphaned code during migration
 
 **Examples:**
 
@@ -393,43 +394,45 @@ python .repo_studios/command_center/scripts/utilities/list_db_markers.py \
 ### Phase 1: Prepare (Per Script)
 
 1. Read the script and understand current outputs
-2. Copy template: `cp db_integration_template.md db_integration_<script_name>.md`
-3. Fill in documentation:
+1. Copy template: `cp db_integration_template.md db_integration_<script_name>.md`
+1. Fill in documentation:
    - Purpose & scope
    - Current outputs
    - Target DB tables
    - Data mapping
    - Metric extraction (if time-series)
-4. Review with team
+1. Review with team
 
 ### Phase 2: Implement (Per Script)
 
 1. Add import: `from libraries.database_integration import create_storage`
-2. Initialize storage: `storage = create_storage(...)`
-3. Replace each file write:
+1. Initialize storage: `storage = create_storage(...)`
+1. Replace each file write:
+
    ```python
    # OLD: path.write_text(json.dumps(data))
    # NEW: storage.write_manifest(data)  # DB_INTEGRATION_MARKER
    ```
-4. Add markers at each integration point
-5. Test with DB disabled (verify no functional change)
-6. Test with DB enabled (verify dual-writes work)
+
+1. Add markers at each integration point
+1. Test with DB disabled (verify no functional change)
+1. Test with DB enabled (verify dual-writes work)
 
 ### Phase 3: Validate (Per Script)
 
 1. Run script with `--log-level DEBUG`
-2. Check for `DB_INTEGRATION_MARKER` in logs
-3. Verify file outputs unchanged: `diff -r old/ new/`
-4. Enable DB and verify writes don't crash
-5. Update migration checklist in doc
-6. Commit with message: `feat(db): Add DB integration to <script_name>`
+1. Check for `DB_INTEGRATION_MARKER` in logs
+1. Verify file outputs unchanged: `diff -r old/ new/`
+1. Enable DB and verify writes don't crash
+1. Update migration checklist in doc
+1. Commit with message: `feat(db): Add DB integration to <script_name>`
 
 ### Phase 4: Track Progress
 
 1. Run marker tracking script weekly
-2. Update CSV with completion status
-3. Monitor for regressions in file outputs
-4. Document any schema changes in `db_schema.sql`
+1. Update CSV with completion status
+1. Monitor for regressions in file outputs
+1. Document any schema changes in `db_schema.sql`
 
 ---
 
@@ -638,12 +641,12 @@ diff -r <old_reports> <new_reports>
 ## Open Questions & Decisions Needed
 
 1. **Connection Pooling:** Should we use asyncpg for async writes or stick with synchronous psycopg2?
-2. **Retry Logic:** Do DB writes need retries, or is fire-and-forget acceptable?
-3. **Schema Evolution:** How do we handle `schema_version` migrations in reports?
-4. **Agent Interface:** REST API, GraphQL, or direct SQL access for agents?
-5. **File Phase-Out:** When can we safely remove file outputs? Need agent training timeline.
-6. **TimescaleDB:** Worth the added complexity for time-series optimization?
-7. **Backup Strategy:** How often to backup DB? What's the retention policy?
+1. **Retry Logic:** Do DB writes need retries, or is fire-and-forget acceptable?
+1. **Schema Evolution:** How do we handle `schema_version` migrations in reports?
+1. **Agent Interface:** REST API, GraphQL, or direct SQL access for agents?
+1. **File Phase-Out:** When can we safely remove file outputs? Need agent training timeline.
+1. **TimescaleDB:** Worth the added complexity for time-series optimization?
+1. **Backup Strategy:** How often to backup DB? What's the retention policy?
 
 ---
 
@@ -652,11 +655,11 @@ diff -r <old_reports> <new_reports>
 ### Files Created
 
 1. `.repo_studios/command_center/scripts/libraries/database_integration.py` - Core integration library
-2. `.repo_studios/command_center/docs/db_integration_template.md` - Per-script doc template
-3. `.repo_studios/command_center/docs/db_integration_test_execution_telemetry.md` - Reference example
-4. `.repo_studios/db_schema.sql` - PostgreSQL schema
-5. `.repo_studios/command_center/scripts/utilities/list_db_markers.py` - Marker tracking utility
-6. This file - Comprehensive integration guide
+1. `.repo_studios/command_center/docs/db_integration_template.md` - Per-script doc template
+1. `.repo_studios/command_center/docs/db_integration_test_execution_telemetry.md` - Reference example
+1. `.repo_studios/db_schema.sql` - PostgreSQL schema
+1. `.repo_studios/command_center/scripts/utilities/list_db_markers.py` - Marker tracking utility
+1. This file - Comprehensive integration guide
 
 ### Key Commands
 
@@ -679,12 +682,12 @@ grep -r "DB_INTEGRATION_MARKER" .repo_studios/command_center/scripts/
 ## Next Steps
 
 1. **Review this guide** with the team
-2. **Deploy database schema** to main repo's PostgreSQL instance
-3. **Choose first script** to refactor (recommend starting with an orchestrator)
-4. **Create per-script documentation** using the template
-5. **Implement dual-write pattern** following the reference example
-6. **Test thoroughly** with DB enabled/disabled
-7. **Track progress** using the marker utility
+1. **Deploy database schema** to main repo's PostgreSQL instance
+1. **Choose first script** to refactor (recommend starting with an orchestrator)
+1. **Create per-script documentation** using the template
+1. **Implement dual-write pattern** following the reference example
+1. **Test thoroughly** with DB enabled/disabled
+1. **Track progress** using the marker utility
 
 ---
 

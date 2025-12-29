@@ -16,6 +16,9 @@ related_files:
 
 # DB Integration — Doc Index (healthview/doc_index)
 
+<!-- markdownlint-disable MD013 -->
+<!-- Technical doc; line length exempt -->
+
 ## Goals
 
 Define the database-facing contract for the Doc Index producer so dual-write storage can persist the run metadata,

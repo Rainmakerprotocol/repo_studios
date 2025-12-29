@@ -22,7 +22,6 @@ from utilities.anchor_inventory_loader import load_anchor_inventory  # noqa: E40
 logger = logging.getLogger(__name__)
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
-DEFAULT_ARTIFACTS_TO_KEEP = 5
 VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "undocumented_logic"
 
@@ -41,6 +40,7 @@ try:  # pragma: no cover - import guard when executed via package
     )
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
     import sys
 
@@ -56,6 +56,9 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
     )
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.retention_policy import get_keep
+
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_undocumented_logic_report")
 
 
 @dataclass(frozen=True)

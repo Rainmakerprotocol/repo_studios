@@ -1,0 +1,211 @@
+# Retention Policy Configuration
+# Controls artifact retention counts for all pruning-enabled scripts.
+#
+# Override precedence (highest to lowest):
+#   1. CLI argument (e.g., --artifacts-to-keep 3)
+#   2. Environment variable (e.g., RETENTION_scan_monkey_patches=5)
+#   3. This config file
+#   4. Hardcoded fallback (5)
+#
+# Environment variable format: RETENTION_<script_key>=<count>
+#   Example: RETENTION_scan_monkey_patches=10
+#
+# To validate this config:
+#   python -m .repo_studios.command_center.scripts.libraries.retention_policy --validate
+#
+version: "1.0.0"
+
+# Global default for any script not explicitly listed
+default_keep: 5
+
+# Orchestrators and their managed scripts
+orchestrators:
+  # ============================================================================
+  # run_test_execution_telemetry
+  # Manages test coverage, health, hardening, and churn analysis
+  # ============================================================================
+  run_test_execution_telemetry:
+    # Orchestrator's own summary artifacts
+    artifacts_to_keep: 3
+    scripts:
+      collect_test_log_reports:
+        keep: 5
+        description: "Raw pytest log collection"
+      generate_test_coverage_inventory:
+        keep: 5
+        description: "Coverage inventory producer"
+      analyze_test_hardening:
+        keep: 5
+        description: "Test hardening analysis"
+      generate_test_log_health_report:
+        keep: 3
+        description: "Health metrics consumer"
+      generate_churn_complexity_heatmap:
+        keep: 5
+        description: "Churn/complexity aggregator"
+      summarize_test_execution_telemetry:
+        keep: 3
+        description: "Final telemetry summarizer"
+
+  # ============================================================================
+  # run_standards_integrity
+  # Manages standards index, gap analysis, diff, and prompt generation
+  # ============================================================================
+  run_standards_integrity:
+    artifacts_to_keep: 3
+    scripts:
+      generate_standards_index:
+        keep: 5
+        description: "Standards index producer"
+      analyze_standards_index_gaps:
+        keep: 5
+        description: "Gap analysis producer"
+      diff_standards_index:
+        keep: 5
+        description: "Diff producer"
+      seed_standards_prompts:
+        keep: 5
+        description: "Prompt seed generator"
+      summarize_standards:
+        keep: 3
+        description: "Standards summarizer"
+
+  # ============================================================================
+  # run_monkey_patch_oversight
+  # Manages monkey patch scanning, classification, and trend analysis
+  # ============================================================================
+  run_monkey_patch_oversight:
+    artifacts_to_keep: 3
+    scripts:
+      scan_monkey_patches:
+        keep: 5
+        description: "Monkey patch scanner producer"
+      classify_monkey_patches:
+        keep: 5
+        description: "Classification consumer"
+      analyze_monkey_patch_trends:
+        keep: 5
+        description: "Trend aggregator"
+      summarize_health_suite:
+        keep: 3
+        description: "Health suite summarizer"
+
+  # ============================================================================
+  # run_fault_diagnostics_overview
+  # Manages faulthandler collection and fault artifact generation
+  # ============================================================================
+  run_fault_diagnostics_overview:
+    artifacts_to_keep: 3
+    scripts:
+      collect_faulthandler_reports:
+        keep: 5
+        description: "Faulthandler report collector"
+      generate_fault_artifacts:
+        keep: 5
+        description: "Fault artifact consumer"
+
+  # ============================================================================
+  # run_docs_health_overview
+  # Manages doc index, anchor inventory, and docs health signals
+  # ============================================================================
+  run_docs_health_overview:
+    artifacts_to_keep: 3
+    scripts:
+      generate_doc_index:
+        keep: 1
+        description: "Doc index producer (single latest)"
+      generate_anchor_inventory:
+        keep: 5
+        description: "Anchor inventory producer"
+      generate_anchor_health_report:
+        keep: 5
+        description: "Anchor health consumer"
+      aggregate_docs_health_signals:
+        keep: 5
+        description: "Docs health aggregator"
+      validate_markdown_anchors:
+        keep: 5
+        description: "Markdown anchor and link validator"
+
+  # ============================================================================
+  # run_dependency_import_hygiene
+  # Manages dependency hygiene and import validation
+  # ============================================================================
+  run_dependency_import_hygiene:
+    artifacts_to_keep: 3
+    scripts:
+      generate_dependency_hygiene_report:
+        keep: 5
+        description: "Dependency hygiene producer"
+      validate_import_boundaries:
+        keep: 5
+        description: "Import boundary validator"
+      generate_import_graph_report:
+        keep: 5
+        description: "Import graph producer"
+
+  # ============================================================================
+  # run_inventory_update
+  # Manages inventory validation and health checks
+  # ============================================================================
+  run_inventory_update:
+    artifacts_to_keep: 3
+    scripts:
+      validate_inventory:
+        keep: 5
+        description: "Inventory validator"
+      check_inventory_health:
+        keep: 5
+        description: "Inventory health checker"
+
+# ============================================================================
+# Standalone scripts (not orchestrated or shared across orchestrators)
+# ============================================================================
+standalone:
+  # Producers
+  generate_lizard_report:
+    keep: 5
+    description: "Lizard complexity producer"
+  generate_typecheck_report:
+    keep: 5
+    description: "Mypy typecheck producer"
+  generate_undocumented_logic_report:
+    keep: 5
+    description: "Undocumented logic scanner"
+  scan_code_placeholders:
+    keep: 5
+    description: "Code placeholder scanner"
+  validate_metrics_anchor_stubs:
+    keep: 5
+    description: "Metrics anchor stub validator"
+  verify_docs_integrity:
+    keep: 5
+    description: "Docs integrity verifier"
+  generate_code_doc_churn_report:
+    keep: 5
+    description: "Code/doc churn producer"
+
+  # Utilities
+  refresh_mypy_baselines:
+    keep: 5
+    description: "Mypy baseline refresher"
+
+  # Command Center scripts
+  scan_duplicates:
+    keep: 3
+    description: "Duplicate function scanner"
+  generate_automation_manifest:
+    keep: 3
+    description: "Automation manifest generator"
+  generate_metrics_summary:
+    keep: 3
+    description: "Metrics summary generator"
+  generate_function_analysis:
+    keep: 1
+    description: "Function analysis summarizer"
+  audit_helper_adoption:
+    keep: 3
+    description: "Helper adoption auditor"
+  analyze_standards_index_gaps_cc:
+    keep: 5
+    description: "Command center gap analyzer"

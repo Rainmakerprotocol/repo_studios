@@ -17,6 +17,9 @@ related_files:
 
 # DB Integration — Markdown Anchor Validation (healthview/markdown_anchor_validation)
 
+<!-- markdownlint-disable MD013 -->
+<!-- Technical doc; line length exempt -->
+
 ## Goals
 
 Define the database-facing contract for the markdown anchor validation producer so dual-write storage can persist run

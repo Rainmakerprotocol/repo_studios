@@ -40,7 +40,7 @@ TOLERATE_DIFF_KEYS = {"last_updated"}
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
 VIEWER_SLUG = "rawview"
 TOPIC_SLUG = "standards_index_diff"
-DEFAULT_ARTIFACTS_TO_KEEP = 10
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("diff_standards_index")
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
@@ -49,12 +49,14 @@ try:
     from libraries import prune_run_directories
     from libraries.cli import resolve_repo_root
     from libraries.database_integration import create_storage
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when run as script
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
     from libraries import prune_run_directories
     from libraries.cli import resolve_repo_root
     from libraries.database_integration import create_storage
+    from libraries.retention_policy import get_keep
 
 
 class DiffError(Exception):

@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2025-12-28T22:55:07.789228+00:00",
+  "status": "ok",
+  "metrics": {
+    "files_checked": 34,
+    "anchors_referenced": 0,
+    "legacy_stub_count": 0,
+    "missing_count": 0,
+    "allowlisted_count": 0
+  },
+  "payload": {
+    "report": {
+      "schema_version": 1,
+      "generated_utc": "2025-12-28T22:55:07.789228+00:00",
+      "status": "ok",
+      "repo_root": "C:\\Users\\genet\\repo_studios",
+      "legacy_file": "C:\\Users\\genet\\repo_studios\\docs\\api\\metrics_orchestrator.md",
+      "allowlist_path": null,
+      "options": {
+        "artifacts_to_keep": 10
+      },
+      "summary": {
+        "files_checked": 34,
+        "anchors_referenced": 0,
+        "legacy_stub_count": 0,
+        "missing_count": 0,
+        "allowlisted_count": 0
+      },
+      "missing": [],
+      "referenced_anchors": [],
+      "legacy_anchors": [],
+      "allowlisted_anchors": []
+    }
+  }
+}

@@ -1,5 +1,8 @@
 # Phase 5 Make Target Design
 
+<!-- markdownlint-disable MD013 -->
+<!-- Design document with detailed specifications; line length exempt -->
+
 ## Purpose
 
 Outline the proposed `make` targets that will eventually wrap the command center orchestration and automation rehearsals without implementing any code changes yet. This design preserves auditability, mirrors the reference plan naming (`studio-detect-duplicates`, `studio-refactor-duplicates`), and documents operator expectations ahead of Phase 5 development.
@@ -106,11 +109,11 @@ Key notes:
 - **Matrix:** `os: [ubuntu-latest, windows-latest]` to guarantee parity; Windows job installs GNU `make` via Chocolatey.
 - **Steps (per OS):**
     1. Checkout repository with depth 0 for accurate timestamps.
-    2. Set up Python using `actions/setup-python` (3.11) and restore `.venv` via `pip install -r requirements.txt`.
-    3. Install GNU `make` on Windows (`choco install make`) and verify with `make --version`.
-    4. Run `make -C . studio-detect-duplicates TARGET=.repo_studios/scripts --dry-run` (dry-run flag to confirm wiring once implemented).
-    5. Run `make -C . studio-refactor-duplicates TARGET=.repo_studios/scripts RUN_STAMP=${{ steps.timestamp.outputs.value }}` pointing at a deterministic timestamp; capture manifest/metrics paths as artifacts.
-    6. Execute post-run pytest smoke suites (`pytest .repo_studios/tests/tests_command_center/orchestrators/test_run_automation_dry_run.py`).
+    1. Set up Python using `actions/setup-python` (3.11) and restore `.venv` via `pip install -r requirements.txt`.
+    1. Install GNU `make` on Windows (`choco install make`) and verify with `make --version`.
+    1. Run `make -C . studio-detect-duplicates TARGET=.repo_studios/scripts --dry-run` (dry-run flag to confirm wiring once implemented).
+    1. Run `make -C . studio-refactor-duplicates TARGET=.repo_studios/scripts RUN_STAMP=${{ steps.timestamp.outputs.value }}` pointing at a deterministic timestamp; capture manifest/metrics paths as artifacts.
+    1. Execute post-run pytest smoke suites (`pytest .repo_studios/tests/tests_command_center/orchestrators/test_run_automation_dry_run.py`).
 - **Artifacts:** Upload automation bundle directories from both OS runs for inspection.
 - **Guardrail reporting:** Summarize lock check status and `max_files_per_run` results in the job output, failing the job if violations occur.
 - **Next steps:** Finalize the workflow once Make targets exist; until then, document this plan so CI integration is ready when development begins.
@@ -142,6 +145,6 @@ Key notes:
 ## Next Steps
 
 1. Review this design with the developer to confirm target naming, flag defaults, and artifact messaging.
-2. Extend the design with post-run test hooks referencing `phase_4/POST_RUN_TEST_MATRIX.md` once automation readiness is confirmed.
-3. Document the PowerShell fallback script skeleton in the repository tooling guide before wiring Make targets.
-4. Implement the Makefile changes in Phase 5 after approval, ensuring CI and local workflows stay consistent.
+1. Extend the design with post-run test hooks referencing `phase_4/POST_RUN_TEST_MATRIX.md` once automation readiness is confirmed.
+1. Document the PowerShell fallback script skeleton in the repository tooling guide before wiring Make targets.
+1. Implement the Makefile changes in Phase 5 after approval, ensuring CI and local workflows stay consistent.

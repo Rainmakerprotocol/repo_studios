@@ -72,6 +72,7 @@ try:
         prune_run_directories,
     )
     from libraries.database_integration import create_storage
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
@@ -85,10 +86,11 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
         prune_run_directories,
     )
     from libraries.database_integration import create_storage
+    from libraries.retention_policy import get_keep
 
 # Defaults (repo-root-relative)
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
-DEFAULT_KEEP = 5
+DEFAULT_KEEP = get_keep("scan_monkey_patches")
 SCHEMA_VERSION = 1
 VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "monkey_patches"

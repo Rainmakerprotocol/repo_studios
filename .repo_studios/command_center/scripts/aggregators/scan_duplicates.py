@@ -40,6 +40,7 @@ try:
         slugify_relative,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep  # type: ignore  # noqa: E402
 except ModuleNotFoundError:  # pragma: no cover - CLI fallback
     SCRIPT_DIR = Path(__file__).resolve().parent
     SCRIPTS_ROOT = SCRIPT_DIR.parent
@@ -52,10 +53,11 @@ except ModuleNotFoundError:  # pragma: no cover - CLI fallback
         slugify_relative,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep  # type: ignore  # noqa: E402
 
 DEFAULT_SIMILARITY_THRESHOLD = 0.85
 DEFAULT_MIN_LINES = 3
-DEFAULT_KEEP_RUNS = 3
+DEFAULT_KEEP_RUNS = get_keep("scan_duplicates")
 DEFAULT_TARGET_RELATIVE = Path(".repo_studios/command_center/scripts/producers")
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
 

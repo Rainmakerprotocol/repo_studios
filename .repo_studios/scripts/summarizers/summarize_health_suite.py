@@ -35,6 +35,7 @@ try:  # pragma: no cover - preferred import when executed with packaged path
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
@@ -49,6 +50,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.retention_policy import get_keep
 
 SUMMARY_OUTPUT_DEFAULT = Path(".repo_studios/command_center/reports")
 LEGACY_SUMMARY_DIR = Path(".repo_studios/health_suite")
@@ -56,7 +58,7 @@ SUMMARY_STEM = "health_suite_summary"
 VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "health_suite_overview"
 SCHEMA_VERSION = 1
-DEFAULT_ARTIFACTS_TO_KEEP = 5
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("summarize_health_suite")
 
 
 @dataclass(frozen=True)

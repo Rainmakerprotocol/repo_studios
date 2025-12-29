@@ -2,26 +2,31 @@
 
 ## Executive Summary
 
-This document captures the strategic groundwork being laid in **Repo Studios** for future database integration with the air-gapped main repository. The plan encompasses the dual-write pattern, positional encoding philosophy, and the transition from file-centric to database-centric AI agent workflows.
+This document captures the strategic groundwork being laid in **Repo Studios** for future
+database integration with the air-gapped main repository. The plan encompasses the dual-write
+pattern, positional encoding philosophy, and the transition from file-centric to
+database-centric AI agent workflows.
 
-**Status:** Groundwork phase - inserting dormant connectors NOW during script refactoring for future activation.
+**Status:** Groundwork phase - inserting dormant connectors NOW during script refactoring
+for future activation.
 
-**Timeline Horizon:** Database becomes primary when main repo adds agent orchestration layer (6-12 months estimated).
+**Timeline Horizon:** Database becomes primary when main repo adds agent orchestration layer
+(6-12 months estimated).
 
 ---
 
 ## Table of Contents
 
 1. [Architectural Context](#architectural-context)
-2. [Positional Encoding: The Cornerstone](#positional-encoding-the-cornerstone)
-3. [Dual-Write Strategy](#dual-write-strategy)
-4. [Database Schema Design](#database-schema-design)
-5. [Integration Mechanics](#integration-mechanics)
-6. [File Outputs Phase-Out Plan](#file-outputs-phase-out-plan)
-7. [Agent Consumption Patterns](#agent-consumption-patterns)
-8. [Marker Convention](#marker-convention)
-9. [Timeline and Migration Phases](#timeline-and-migration-phases)
-10. [Validation Checkpoints](#validation-checkpoints)
+1. [Positional Encoding: The Cornerstone](#positional-encoding-the-cornerstone)
+1. [Dual-Write Strategy](#dual-write-strategy)
+1. [Database Schema Design](#database-schema-design)
+1. [Integration Mechanics](#integration-mechanics)
+1. [File Outputs Phase-Out Plan](#file-outputs-phase-out-plan)
+1. [Agent Consumption Patterns](#agent-consumption-patterns)
+1. [Marker Convention](#marker-convention)
+1. [Timeline and Migration Phases](#timeline-and-migration-phases)
+1. [Validation Checkpoints](#validation-checkpoints)
 
 ---
 
@@ -31,19 +36,22 @@ This document captures the strategic groundwork being laid in **Repo Studios** f
 
 **Repo Studios** is a diagnostic automation suite designed to integrate with an air-gapped main repository:
 
-- **Repo Studios Role:** Generate test reports, analysis artifacts, and diagnostic outputs
+- **Repo Studios Role:** Generate test reports, analysis artifacts, and diagnostic
+  outputs
 - **File Outputs:** Currently the ONLY consumer interface (673 report files as of Dec 2024)
-- **Main Repo Role:** Will consume reports via autonomous AI agents for issue detection, trend analysis, and fix proposals
+- **Main Repo Role:** Will consume reports via autonomous AI agents for issue detection,
+  trend analysis, and fix proposals
 - **Air-Gap Constraint:** Local PostgreSQL only, no external connectivity
 
 ### Future State: Database-Centric Agent Workflows
 
 When the main repo adds its agent orchestration layer:
 
-1. **Agents query database directly** for complex correlation queries (e.g., "Which files have both high complexity AND low test coverage AND recent duplicate increases?")
-2. **File outputs continue** for human review and legacy tooling compatibility
-3. **Parallel writes maintained** until agents prove trustworthy and file outputs become redundant
-4. **Phase-out timeline** determined by agent maturity, not calendar deadlines
+1. **Agents query database directly** for complex correlation queries (e.g., "Which files
+   have both high complexity AND low test coverage AND recent duplicate increases?")
+1. **File outputs continue** for human review and legacy tooling compatibility
+1. **Parallel writes maintained** until agents prove trustworthy and file outputs become redundant
+1. **Phase-out timeline** determined by agent maturity, not calendar deadlines
 
 ### Why Insert Database Connectors NOW
 
@@ -51,7 +59,8 @@ When the main repo adds its agent orchestration layer:
 - **Future-Proof Instrumentation:** Avoid revisiting every script later when database activates
 - **Marker-Driven Tracking:** `DB_INTEGRATION_MARKER` tags enable grep-based progress audits
 - **Zero Operational Impact:** Dormant writes controlled by `REPO_STUDIOS_DB_ENABLED=false` default
-- **Agent Training Alignment:** Positional encoding in filesystem prepares agents for DB schema mirroring
+- **Agent Training Alignment:** Positional encoding in filesystem prepares agents for DB
+  schema mirroring
 
 ---
 
@@ -59,7 +68,8 @@ When the main repo adds its agent orchestration layer:
 
 ### Philosophy
 
-**Positional encoding** means each segment of a file path encodes specific metadata in a fixed position. This creates a self-documenting filesystem structure that:
+**Positional encoding** means each segment of a file path encodes specific metadata in a
+fixed position. This creates a self-documenting filesystem structure that:
 
 - **Eliminates parsing ambiguity** for AI agents and scripts
 - **Mirrors database schema** (viewer_slug, topic, run_timestamp columns match path positions)
@@ -68,7 +78,7 @@ When the main repo adds its agent orchestration layer:
 
 ### Path Contract
 
-```
+```text
 <reports_root>/<viewer_slug>/<topic>/<timestamp>/<artifact>
      ↓              ↓           ↓         ↓          ↓
   Position 0   Position 1  Position 2  Position 3  Position 4
@@ -104,8 +114,10 @@ CREATE TABLE report_runs (
 
 **Agent Query Benefits:**
 
-- Simple questions use filesystem: "What's the latest healthview duplicate scan?" → glob `healthview/duplicate_scan/*` and sort
-- Complex questions use database: "Show test failure trends across all topics for the last 30 days grouped by viewer" → SQL JOIN + aggregation
+- Simple questions use filesystem: "What's the latest healthview duplicate scan?" →
+  glob `healthview/duplicate_scan/*` and sort
+- Complex questions use database: "Show test failure trends across all topics for the
+  last 30 days grouped by viewer" → SQL JOIN + aggregation
 
 ### Timestamp Format Contract
 
@@ -130,8 +142,8 @@ CREATE TABLE report_runs (
 During the transition period, all report-generating scripts will:
 
 1. **Write to filesystem** (existing behavior, remains source of truth)
-2. **Write to database** (dormant stub, controlled by `REPO_STUDIOS_DB_ENABLED` env var)
-3. **Orchestrate via DualWriteStorage** class that delegates to both backends
+1. **Write to database** (dormant stub, controlled by `REPO_STUDIOS_DB_ENABLED` env var)
+1. **Orchestrate via DualWriteStorage** class that delegates to both backends
 
 ### Implementation
 
@@ -222,9 +234,11 @@ CREATE TABLE report_runs (
 );
 ```
 
-**Positional Columns:** `viewer_slug`, `topic`, `run_timestamp` mirror path positions 1-3.
+**Positional Columns:** `viewer_slug`, `topic`, `run_timestamp` mirror path positions
+1-3.
 
-**Provenance Columns:** `requested_by`, `trigger_type`, `request_id` capture WHO and WHY (not encoded in paths).
+**Provenance Columns:** `requested_by`, `trigger_type`, `request_id` capture WHO and WHY
+(not encoded in paths).
 
 #### `report_artifacts` - JSONB Storage for Flexible Reports
 
@@ -337,10 +351,10 @@ ORDER BY (AVG(f.complexity) * COUNT(DISTINCT dg.group_id)) DESC;
 Each report-generating script follows this pattern:
 
 1. **Import storage factory:** `from command_center.scripts.libraries.database_integration import create_storage`
-2. **Create storage instance:** `storage = create_storage()`
-3. **Replace file writes:** `storage.write_manifest(data)` instead of `json.dump(...)`
-4. **Add DB_INTEGRATION_MARKER:** `# DB_INTEGRATION_MARKER: Dual-write to filesystem + database`
-5. **Document schema mapping:** Create `db_integration_<script_name>.md` in `command_center/docs/`
+1. **Create storage instance:** `storage = create_storage()`
+1. **Replace file writes:** `storage.write_manifest(data)` instead of `json.dump(...)`
+1. **Add DB_INTEGRATION_MARKER:** `# DB_INTEGRATION_MARKER: Dual-write to filesystem + database`
+1. **Document schema mapping:** Create `db_integration_<script_name>.md` in `command_center/docs/`
 
 ### Schema Documentation Template
 
@@ -351,10 +365,10 @@ Every script with DB writes gets a companion doc:
 **Sections:**
 
 1. **Script Overview:** Purpose, inputs, outputs
-2. **Database Tables:** Which tables receive writes (report_runs, report_artifacts, etc.)
-3. **Data Extraction Logic:** Python code showing how manifest.json maps to INSERT columns
-4. **Integration Points:** Line numbers where `storage.write_*()` calls occur
-5. **Example Queries:** SQL that agents might use to consume this data
+1. **Database Tables:** Which tables receive writes (report_runs, report_artifacts, etc.)
+1. **Data Extraction Logic:** Python code showing how manifest.json maps to INSERT columns
+1. **Integration Points:** Line numbers where `storage.write_*()` calls occur
+1. **Example Queries:** SQL that agents might use to consume this data
 
 **Reference Example:** `.repo_studios/command_center/docs/db_integration_test_execution_telemetry.md`
 
@@ -408,17 +422,17 @@ File outputs will be phased out based on **agent maturity milestones**, not arbi
    - Action: Set `REPO_STUDIOS_DB_ENABLED=true`
    - Result: Parallel writes to files + database
 
-2. **Milestone 2: Agent Validation** (6-12 weeks after activation)
+1. **Milestone 2: Agent Validation** (6-12 weeks after activation)
    - Trigger: Agents demonstrate correct query patterns in production
    - Action: Monitor agent error rates, query latencies, data accuracy
    - Result: Confidence that agents prefer database over file parsing
 
-3. **Milestone 3: File Redundancy** (3-6 months after validation)
+1. **Milestone 3: File Redundancy** (3-6 months after validation)
    - Trigger: Zero agent file reads observed for 30 consecutive days
    - Action: Deprecate file writes for agent-consumed reports (keep human-facing summaries)
    - Result: Database becomes primary interface, files become optional exports
 
-4. **Milestone 4: Full Database Primary** (6-12 months after validation)
+1. **Milestone 4: Full Database Primary** (6-12 months after validation)
    - Trigger: All consumers (agents + humans) query database or use on-demand exports
    - Action: Remove `FileSystemStorage` from `DualWriteStorage` orchestrator
    - Result: File generation only on explicit request (e.g., CI artifacts, audit logs)
@@ -446,7 +460,8 @@ latest_manifest = glob("healthview/test_execution_telemetry/*/manifest.json")[-1
 data = json.load(open(latest_manifest))
 ```
 
-**Why Filesystem Works:** Positional encoding + glob + sort is faster than SQL connection for single-file reads.
+**Why Filesystem Works:** Positional encoding + glob + sort is faster than SQL connection
+for single-file reads.
 
 ### Complex Queries (Database API)
 
@@ -467,7 +482,8 @@ GROUP BY rr.run_timestamp, rr.topic
 ORDER BY failures DESC;
 ```
 
-**Why Database Required:** Joining test_metrics with report_runs across 30 days of runs requires index scans and aggregation that filesystems cannot provide.
+**Why Database Required:** Joining test_metrics with report_runs across 30 days of runs
+requires index scans and aggregation that filesystems cannot provide.
 
 ### Materialized View Usage
 
@@ -482,7 +498,8 @@ ORDER BY (avg_complexity * duplicate_group_count) DESC
 LIMIT 20;
 ```
 
-**Refresh Strategy:** Materialized views refreshed after each orchestrator run via `REFRESH MATERIALIZED VIEW` in DatabaseStorage.
+**Refresh Strategy:** Materialized views refreshed after each orchestrator run via
+`REFRESH MATERIALIZED VIEW` in DatabaseStorage.
 
 ---
 
@@ -550,7 +567,8 @@ LIMIT 20;
 - Optimize slow queries (add indexes, tune JSONB GIN indexes)
 - Document common agent query patterns in `db_integration_guide.md`
 
-**Success Criteria:** Agents confidently consume database for complex queries without reverting to file parsing.
+**Success Criteria:** Agents confidently consume database for complex queries without
+reverting to file parsing.
 
 ### Phase 4: File Deprecation (Validation + 3-6 months)
 
@@ -715,7 +733,7 @@ def parse_report_path(path: str) -> dict:
 
 ### D. Common Agent SQL Queries
 
-**1. High-Risk Files (Complexity × Duplicates)**
+#### 1. High-Risk Files (Complexity × Duplicates)
 
 ```sql
 SELECT f.file_path, AVG(f.complexity) AS avg_complexity, COUNT(DISTINCT dg.group_id) AS dup_count
@@ -727,7 +745,7 @@ ORDER BY (AVG(f.complexity) * COUNT(DISTINCT dg.group_id)) DESC
 LIMIT 20;
 ```
 
-**2. Test Coverage Trends (Last 30 Days)**
+#### 2. Test Coverage Trends (Last 30 Days)
 
 ```sql
 SELECT 
@@ -741,7 +759,7 @@ GROUP BY day
 ORDER BY day DESC;
 ```
 
-**3. Recent Test Failures by Topic**
+#### 3. Recent Test Failures by Topic
 
 ```sql
 SELECT rr.topic, SUM((tm.metric_value)::int) AS total_failures
@@ -757,13 +775,17 @@ ORDER BY total_failures DESC;
 
 ## Conclusion
 
-This groundwork phase establishes the foundation for a seamless transition from file-centric to database-centric AI agent workflows:
+This groundwork phase establishes the foundation for a seamless transition from file-centric
+to database-centric AI agent workflows:
 
-1. **Positional encoding** creates a self-documenting filesystem that mirrors the database schema
-2. **Dual-write pattern** enables parallel file and database outputs with zero operational risk
-3. **Marker convention** provides grep-based tracking of integration readiness across 77 scripts
-4. **Provenance columns** capture WHO and WHY without polluting filesystem paths
-5. **Milestone-driven phase-out** ensures file outputs remain until agents prove trustworthy
+1. **Positional encoding** creates a self-documenting filesystem that mirrors the database
+   schema
+1. **Dual-write pattern** enables parallel file and database outputs with zero operational
+   risk
+1. **Marker convention** provides grep-based tracking of integration readiness across
+   77 scripts
+1. **Provenance columns** capture WHO and WHY without polluting filesystem paths
+1. **Milestone-driven phase-out** ensures file outputs remain until agents prove trustworthy
 
 **Next Actions:**
 
@@ -772,7 +794,8 @@ This groundwork phase establishes the foundation for a seamless transition from 
 - Run marker audit to verify 100% script coverage
 - Freeze filesystem structure for agent training alignment
 
-**Future Activation:** When main repo deploys agent orchestration layer, set `REPO_STUDIOS_DB_ENABLED=true` and begin Phase 2 (Activation + Validation).
+**Future Activation:** When main repo deploys agent orchestration layer, set
+`REPO_STUDIOS_DB_ENABLED=true` and begin Phase 2 (Activation + Validation).
 
 ---
 

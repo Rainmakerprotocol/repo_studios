@@ -17,6 +17,9 @@ related_files:
 
 # DB Integration — Inventory Overview (healthview/inventory_overview)
 
+<!-- markdownlint-disable MD013 -->
+<!-- Technical doc; line length exempt -->
+
 ## Goals
 
 Define the database-facing contract for the Inventory Overview producer so dual-write storage can persist run metadata,

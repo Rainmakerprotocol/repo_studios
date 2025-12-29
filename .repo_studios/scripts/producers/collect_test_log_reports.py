@@ -49,13 +49,14 @@ from libraries import (  # noqa: E402
 )
 from libraries.cli import resolve_repo_root  # noqa: E402
 from libraries.database_integration import create_storage  # noqa: E402
+from libraries.retention_policy import get_keep  # noqa: E402
 
 DEFAULT_LOGS_BASE = Path(".repo_studios/command_center/reports/rawview/test_execution_runs")
 LEGACY_LOGS_BASE = Path(".repo_studios/pytest_logs")
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
 VIEWER_SLUG = "rawview"
 TOPIC_SLUG = "test_log_reports"
-DEFAULT_KEEP = 10
+DEFAULT_KEEP = get_keep("collect_test_log_reports")
 
 
 def _load_element_tree():

@@ -52,6 +52,7 @@ try:
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback during standalone execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
@@ -64,6 +65,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback during standalone exe
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.retention_policy import get_keep
 
 try:
     from libraries.database_integration import create_storage
@@ -79,10 +81,10 @@ REPORTS_ROOT = Path(".repo_studios/reports/producer_reports")
 DEFAULT_OUTPUT_DIR = REPORTS_ROOT
 VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "markdown_anchor_validation"
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("validate_markdown_anchors")
 DEFAULT_PATTERNS = [
-    "README.md",
-    "docs/agents/config_quickstart.md",
-    "docs/agents/step5_agent_config_system.md",
+    "docs/**/*.md",
+    ".repo_studios/docs/**/*.md",
 ]
 
 
@@ -379,7 +381,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--artifacts-to-keep",
         type=int,
-        default=10,
+        default=DEFAULT_ARTIFACTS_TO_KEEP,
         help="Number of historical artifact folders to retain (min 1)",
     )
     parser.add_argument(

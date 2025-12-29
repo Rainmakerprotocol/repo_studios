@@ -23,6 +23,9 @@ related_files:
 
 # DB Integration — generate_standards_index
 
+<!-- markdownlint-disable MD013 -->
+<!-- Technical doc; line length exempt -->
+
 See `.github/instructions/markdown.instructions.md` for repo-wide rules.
 
 ## Goals

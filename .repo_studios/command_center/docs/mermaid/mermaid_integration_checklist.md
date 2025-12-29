@@ -1,52 +1,56 @@
 # Mermaid Integration Checklist (Draft)
 
+<!-- markdownlint-disable MD013 -->
+<!-- Design checklist with detailed descriptions; line length exempt -->
+
 ## Candidate Mermaid Packs Derived From `generate_commandview_inventory.py`
 
 - **Health Pack**
   1. `function_inventory_overview.mmd` — flowchart summarizing per-module function counts, docstring coverage, and annotation ratios for a quick health read.
-  2. `screening_signal_timeline.mmd` — timeline chart outlining when screening scores crossed thresholds, supporting release planning discussions.
+  1. `screening_signal_timeline.mmd` — timeline chart outlining when screening scores crossed thresholds, supporting release planning discussions.
 - **Dependency Pack**
-  3. `module_dependency_graph.mmd` — import dependency graph showing which files import which files to highlight hotspots and orphan modules (data available via dependency summaries).
-  4. `export_contract_matrix.mmd` — class diagram portraying public exports and their categories (functions, classes) to validate API boundaries.
-  5. `circular_import_detection.mmd` — graph emphasizing import cycles that could cause module loading issues; cycles can be derived from the existing dependency graph output.
-  6. `layer_architecture_validation.mmd` — layered diagram validating Producers → Consumers → Aggregators → Orchestrators → Summarizers wiring; relies on file paths already present in inventory, plus a static tier map in the renderer.
-  7. `external_vs_internal_dependency_map.mmd` — dependency map separating standard library, third-party, and local modules to surface external attack surfaces. *Needs inventory enhancement: extend `dependency_summary` in `generate_commandview_inventory.py` to emit counts keyed by `standard_library`, `third_party`, and `internal` modules before this view is viable.*
+  1. `module_dependency_graph.mmd` — import dependency graph showing which files import which files to highlight hotspots and orphan modules (data available via dependency summaries).
+  1. `export_contract_matrix.mmd` — class diagram portraying public exports and their categories (functions, classes) to validate API boundaries.
+  1. `circular_import_detection.mmd` — graph emphasizing import cycles that could cause module loading issues; cycles can be derived from the existing dependency graph output.
+  1. `layer_architecture_validation.mmd` — layered diagram validating Producers → Consumers → Aggregators → Orchestrators → Summarizers wiring; relies on file paths already present in inventory, plus a static tier map in the renderer.
+  1. `external_vs_internal_dependency_map.mmd` — dependency map separating standard library, third-party, and local modules to surface external attack surfaces. *Needs inventory enhancement: extend `dependency_summary` in `generate_commandview_inventory.py` to emit counts keyed by `standard_library`, `third_party`, and `internal` modules before this view is viable.*
 - **Event Dynamics Pack**
-  8. `callback_registration_map.mmd` — sequence or state-style diagram tracing detected callback registrations to their emitters for reviewing event-driven surfaces.
-  9. `dynamic_code_watchlist.mmd` — block diagram flagging modules where dynamic execution was detected, linking to the responsible constructs for audit follow-up.
+  1. `callback_registration_map.mmd` — sequence or state-style diagram tracing detected callback registrations to their emitters for reviewing event-driven surfaces.
+  1. `dynamic_code_watchlist.mmd` — block diagram flagging modules where dynamic execution was detected, linking to the responsible constructs for audit follow-up.
 - **Code Flow Pack**
-  10. `function_call_graph.mmd` — directed graph of which functions call which functions; *requires new inventory emission capturing inter-function call data during AST walk.*
-  11. `entrypoint_trace_diagram.mmd` — flow diagram expanding from CLI entrypoints (e.g., `main()` or `run()`) to all reachable functions; *depends on the same call graph data plus a curated list of entrypoint functions.*
-  12. `class_inheritance_hierarchy.mmd` — class diagram showing inheritance relationships; *needs inventory augmentation to list base classes per class definition.*
-  13. `method_call_chain.mmd` — sequence diagram highlighting object method call chains (Object.method1 → Object.method2 → Object.method3); *requires richer call tracing including bound method targets not currently tracked in the inventory.*
+  1. `function_call_graph.mmd` — directed graph of which functions call which functions; *requires new inventory emission capturing inter-function call data during AST walk.*
+  1. `entrypoint_trace_diagram.mmd` — flow diagram expanding from CLI entrypoints (e.g., `main()` or `run()`) to all reachable functions; *depends on the same call graph data plus a curated list of entrypoint functions.*
+  1. `class_inheritance_hierarchy.mmd` — class diagram showing inheritance relationships; *needs inventory augmentation to list base classes per class definition.*
+  1. `method_call_chain.mmd` — sequence diagram highlighting object method call chains (Object.method1 → Object.method2 → Object.method3); *requires richer call tracing including bound method targets not currently tracked in the inventory.*
 - **State Effects Pack**
-  14. `global_variable_usage_map.mmd` — bipartite or flow diagram showing which functions read or write specific globals, leveraging the existing `used_globals` signals to surface shared state.
-  15. `io_effects_diagram.mmd` — annotated graph mapping functions to file/network/environment interactions, driven by the `io_effects` metadata already emitted by the inventory.
-  16. `exception_flow_map.mmd` — flow visualization of which functions raise which exceptions, using the existing `raises` collection to highlight error propagation paths.
+  1. `global_variable_usage_map.mmd` — bipartite or flow diagram showing which functions read or write specific globals, leveraging the existing `used_globals` signals to surface shared state.
+  1. `io_effects_diagram.mmd` — annotated graph mapping functions to file/network/environment interactions, driven by the `io_effects` metadata already emitted by the inventory.
+  1. `exception_flow_map.mmd` — flow visualization of which functions raise which exceptions, using the existing `raises` collection to highlight error propagation paths.
 - **Quality Metrics Pack**
-  17. `complexity_heatmap.mmd` — heatmap-style visualization coloring functions by derived complexity scores (combine `line_count`, branch counts, and call counts already available in the inventory).
-  18. `logging_flow.mmd` — diagram showing which functions emit logs at which levels, powered by the existing `logging_calls` dataset to gauge observability coverage.
-  19. `decorator_usage_map.mmd` — graph clustering functions by decorator usage (`@dataclass`, `@property`, etc.), leveraging the decorator metadata already captured during AST analysis.
-  20. `public_vs_private_api.mmd` — interface map contrasting externally exposed functions/classes versus internal helpers using the `is_private` signal for API surface assessment.
-  21. `cyclomatic_complexity_map.mmd` — visualization using industry-standard McCabe complexity; *needs inventory enhancement to calculate and emit `cyclomatic_complexity` per function within `generate_commandview_inventory.py`.*
-  22. `type_coverage_map.mmd` — chart highlighting which functions include type hints, using the existing annotation ratio metrics to surface gaps in static typing adoption.
-  23. `documentation_coverage_map.mmd` — diagram portraying docstring presence and quality scores, leveraging the docstring coverage data already emitted in the screening summary.
+  1. `complexity_heatmap.mmd` — heatmap-style visualization coloring functions by derived complexity scores (combine `line_count`, branch counts, and call counts already available in the inventory).
+  1. `logging_flow.mmd` — diagram showing which functions emit logs at which levels, powered by the existing `logging_calls` dataset to gauge observability coverage.
+  1. `decorator_usage_map.mmd` — graph clustering functions by decorator usage (`@dataclass`, `@property`, etc.), leveraging the decorator metadata already captured during AST analysis.
+  1. `public_vs_private_api.mmd` — interface map contrasting externally exposed functions/classes versus internal helpers using the `is_private` signal for API surface assessment.
+  1. `cyclomatic_complexity_map.mmd` — visualization using industry-standard McCabe complexity; *needs inventory enhancement to calculate and emit `cyclomatic_complexity` per function within `generate_commandview_inventory.py`.*
+  1. `type_coverage_map.mmd` — chart highlighting which functions include type hints, using the existing annotation ratio metrics to surface gaps in static typing adoption.
+  1. `documentation_coverage_map.mmd` — diagram portraying docstring presence and quality scores, leveraging the docstring coverage data already emitted in the screening summary.
 - **Coupling Insight Pack**
-  24. `cross_module_function_references.mmd` — edge map showing when functions in one file call functions in another, highlighting inter-module coupling; *requires the planned function call graph data plus module association for each node.*
-  25. `import_chain_depth.mmd` — layered view illustrating import hop counts from the standard library through third-party packages into project modules; *once dependency classification enhancement (standard_library vs third_party vs internal) lands, derive depth metrics during rendering.*
+  1. `cross_module_function_references.mmd` — edge map showing when functions in one file call functions in another, highlighting inter-module coupling; *requires the planned function call graph data plus module association for each node.*
+  1. `import_chain_depth.mmd` — layered view illustrating import hop counts from the standard library through third-party packages into project modules; *once dependency classification enhancement (standard_library vs third_party vs internal) lands, derive depth metrics during rendering.*
+
 - **Risk & Assurance Pack**
- 26. `test_coverage_mapping.mmd` — bipartite graph connecting tests in `tests/` to exercised functions; coverage ingestion via `generate_commandview_inventory.py --coverage-json` now populates `coverage_signals` and per-function metrics, enabling the viewer builder documented in `view_specs/test_coverage_mapping.md`.
-   27. `git_churn_risk_map.mmd` — risk heatmap combining git change frequency with complexity signals; git churn metrics now flow through CommandView (`git_churn` blocks and `statistics.git_churn`), enabling view wiring once builder logic lands (see `view_specs/git_churn_risk_map.md`).
-  28. `dead_code_detection.mmd` — diagram isolating functions never invoked and unused imports; *depends on the future call graph emission plus additional usage analysis to mark unreachable code paths.*
+  1. `test_coverage_mapping.mmd` — bipartite graph connecting tests in `tests/` to exercised functions; coverage ingestion via `generate_commandview_inventory.py --coverage-json` now populates `coverage_signals` and per-function metrics, enabling the viewer builder documented in `view_specs/test_coverage_mapping.md`.
+  1. `git_churn_risk_map.mmd` — risk heatmap combining git change frequency with complexity signals; git churn metrics now flow through CommandView (`git_churn` blocks and `statistics.git_churn`), enabling view wiring once builder logic lands (see `view_specs/git_churn_risk_map.md`).
+  1. `dead_code_detection.mmd` — diagram isolating functions never invoked and unused imports; *depends on the future call graph emission plus additional usage analysis to mark unreachable code paths.*
 
 ## Draft Checklist Spine
 
 1. Confirm the latest inventory and screening JSON artifacts (target and central mirrors) are in place.
-2. Select the `.mmd` variant(s) required for the review cycle and capture input parameters.
-3. Transform the relevant JSON metrics into Mermaid-ready node and edge sets.
-4. Render the Mermaid diagram locally for visual inspection.
-5. Store the generated `.mmd` file alongside the run metadata for traceability.
-6. Log outstanding visualization gaps for the next refinement pass.
+1. Select the `.mmd` variant(s) required for the review cycle and capture input parameters.
+1. Transform the relevant JSON metrics into Mermaid-ready node and edge sets.
+1. Render the Mermaid diagram locally for visual inspection.
+1. Store the generated `.mmd` file alongside the run metadata for traceability.
+1. Log outstanding visualization gaps for the next refinement pass.
 
 ## Open Items for Future Passes
 
