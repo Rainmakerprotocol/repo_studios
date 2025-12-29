@@ -1,22 +1,23 @@
 version: 1.0.0
-generated_at: '2025-12-25T05:17:10.168790+00:00'
+generated_at: '2025-12-29T13:35:31.099640+00:00'
 generator_version: 1.0.0
 repository:
   name: repo_studios
   root: C:\Users\genet\repo_studios
   branch: main
 statistics:
-  total_scripts: 8
+  total_scripts: 9
   categories:
     producer: 4
     utility: 1
     aggregator: 1
     consumer: 1
+    orchestrator: 1
     summarizer: 1
   status:
-    active: 1
+    active: 4
     template: 1
-    draft: 6
+    draft: 4
 scripts:
 - script_id: generate_commandview_inventory
   name: Generate CommandView Inventory
@@ -97,7 +98,7 @@ scripts:
   - telemetry
   - rawview
   - junit
-  status: draft
+  status: active
   entry_point: run
   importable: true
 - script_id: generate_churn_complexity_heatmap
@@ -127,7 +128,10 @@ scripts:
   script_path: .repo_studios/scripts/producers/generate_test_coverage_inventory.py
   summary: "Ingests a Coverage.py XML report, correlates executed lines with Python functions in the repo,\n\
     and emits a canonical HealthView bundle under:\n\n  .repo_studios/reports/healthview/producer_reports/test_coverage_inventory/<YYYYMMDD-HHMM>/\n\
-    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n"
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n\nThis producer can optionally\
+    \ regenerate the coverage XML (pytest + pytest-cov + coverage.py)\nvia --refresh-coverage-xml. The\
+    \ canonical operator/agent entrypoint for this mode is:\n\n  make -C .repo_studios studio-generate-test-coverage-inventory\
+    \ LOG_LEVEL=INFO\n"
   keywords:
   - healthview
   - producer
@@ -157,6 +161,31 @@ scripts:
   status: draft
   entry_point: run
   importable: true
+- script_id: run_test_execution_telemetry
+  name: Run Test Execution Telemetry Orchestrator
+  category: orchestrator
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\test_execution_telemetry\tier3_run_test_execution_telemetry.yaml
+  script_path: .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py
+  summary: "Topic orchestrator for Stage 1.1 Test Execution Telemetry. Chains producer → consumer → aggregator\n\
+    → summarizer scripts to emit a HealthView bundle under:\n\n  .repo_studios/reports/healthview/orchestrator_reports/test_execution_telemetry/<YYYYMMDD-HHMM>/\n\
+    \nThe orchestrator coordinates:\n  1. generate_test_coverage_inventory.py (producer)\n  2. collect_test_log_reports.py\
+    \ (producer)\n  3. generate_churn_complexity_heatmap.py (aggregator)\n  4. analyze_test_hardening.py\
+    \ (producer)\n  5. generate_test_log_health_report.py (consumer)\n  6. summarize_test_execution_telemetry.py\
+    \ (summarizer)\n\nEach step is executed via dynamic import (no subprocess spawning) with exit code\
+    \ propagation.\nThe pipeline stops on the first hard failure.\n\nExpect 5–6 minute runtime when churn\
+    \ analysis is enabled.\n"
+  keywords:
+  - healthview
+  - orchestrator
+  - test
+  - telemetry
+  - coverage
+  - hardening
+  - heatmap
+  - stage-1.1
+  status: active
+  entry_point: run
+  importable: true
 - script_id: summarize_test_execution_telemetry
   name: Summarize Test Execution Telemetry
   category: summarizer
@@ -174,7 +203,7 @@ scripts:
   - orchestrator
   - summary
   - stage-1.1
-  status: draft
+  status: active
   entry_point: run
   importable: true
 by_category:
@@ -187,7 +216,8 @@ by_category:
   - generate_test_log_health_report
   aggregator:
   - generate_churn_complexity_heatmap
-  orchestrator: []
+  orchestrator:
+  - run_test_execution_telemetry
   summarizer:
   - summarize_test_execution_telemetry
   utility:

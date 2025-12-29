@@ -92,10 +92,10 @@ DEFAULT_METRICS_STUB_OUTPUT = Path(".repo_studios/reports/producer_reports")
 DEFAULT_CHURN_OUTPUT = Path(".repo_studios/reports/producer_reports")
 DEFAULT_UNDOCUMENTED_OUTPUT = Path(".repo_studios/reports/producer_reports")
 DEFAULT_PLACEHOLDER_OUTPUT = Path(
-    ".repo_studios/reports/producer_reports/code_placeholder_scans"
+    ".repo_studios/reports/producer_reports/healthview/code_placeholders"
 )
 DEFAULT_MONKEY_PATCH_OUTPUT = Path(
-    ".repo_studios/reports/producer_reports/monkey_patch_scans"
+    ".repo_studios/reports/producer_reports/healthview/monkey_patches"
 )
 DEFAULT_AGGREGATOR_OUTPUT = Path(
     ".repo_studios/reports/aggregator_reports/docs_health_signals"
@@ -842,11 +842,11 @@ def _latest_undocumented(paths: Paths) -> Path:
 
 
 def _latest_placeholder(paths: Paths) -> Path:
-    return paths.placeholder_output_dir / "latest" / "latest_report.json"
+    return paths.placeholder_output_dir
 
 
 def _latest_monkey_patch(paths: Paths) -> Path:
-    return paths.monkey_patch_output_dir / "latest" / "latest_report.json"
+    return paths.monkey_patch_output_dir
 
 
 def _execute_aggregator(paths: Paths, options: Options) -> AggregatorOutcome:

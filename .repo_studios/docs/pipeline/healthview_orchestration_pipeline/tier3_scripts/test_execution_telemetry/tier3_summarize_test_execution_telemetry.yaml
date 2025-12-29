@@ -34,6 +34,7 @@ tool:
 invocation:
   command_template: |
     python {script_path} \
+      --repo-root {repo_root} \
       --manifest {manifest} \
       --telemetry {telemetry} \
       --output-dir {output_dir} \

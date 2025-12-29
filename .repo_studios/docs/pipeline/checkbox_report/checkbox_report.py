@@ -33,6 +33,7 @@ CHECKBOX_PATTERN = re.compile(r"^\s*(?:[-*+]|(?:\d+[.)]))\s+\[\s\]\s*(.*)")
 HEADING_PATTERN = re.compile(r"^(#{1,6})\s+(.*\S)\s*$")
 SETEXT_PATTERN = re.compile(r"^[=-]{3,}\s*$")
 CODE_FENCE_PATTERN = re.compile(r"^([`~]{3,})(.*)$")
+LINK_PATTERN = re.compile(r"\[([^\]]+)\]\([^)]+\)")
 
 LOG = logging.getLogger(__name__)
 LOG.addHandler(logging.NullHandler())
@@ -417,6 +418,11 @@ def _format_headings_table(top_h1: Sequence[tuple[str, int]]) -> str:
     return "\n".join(lines)
 
 
+def _strip_markdown_links(text: str) -> str:
+    """Replace markdown links with their display text."""
+    return LINK_PATTERN.sub(r"\1", text)
+
+
 def _format_sample_section(records: Sequence[CheckboxRecord], limit: int = 10) -> str:
     sample_records = records[:limit]
     lines: list[str] = []
@@ -428,8 +434,9 @@ def _format_sample_section(records: Sequence[CheckboxRecord], limit: int = 10) -
             record.heading_h4,
         ]
         heading_chain = " > ".join([h for h in headings if h]) or "(no heading context)"
+        clean_text = _strip_markdown_links(record.text)
         bullet_text = (
-            f"`{record.relative_path.as_posix()}` L{record.line_number} — {heading_chain}: {record.text}"
+            f"`{record.relative_path.as_posix()}` L{record.line_number} — {heading_chain}: {clean_text}"
         )
         lines.append(_format_bullet_line(bullet_text))
     if not lines:

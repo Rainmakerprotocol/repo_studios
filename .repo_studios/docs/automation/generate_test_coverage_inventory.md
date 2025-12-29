@@ -130,5 +130,5 @@ XML files.
 
 ## References
 
-See [../../.github/instructions/markdown.instructions.md](../../.github/instructions/markdown.instructions.md)
+See [../../../.github/instructions/markdown.instructions.md](../../../.github/instructions/markdown.instructions.md)
 for repo-wide Markdown rules.

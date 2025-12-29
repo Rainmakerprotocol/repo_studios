@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "healthview",
+  "topic": "markdown_anchor_validation",
+  "run_timestamp": "20251229-0732",
+  "generated_utc": "2025-12-29T07:32:59.384148+00:00",
+  "status": "ok",
+  "inputs": {
+    "root": "C:\\Users\\genet\\repo_studios",
+    "patterns": [
+      "docs/**/*.md",
+      ".repo_studios/docs/**/*.md"
+    ],
+    "artifacts_to_keep": 5
+  },
+  "summary": {
+    "files_scanned": 132,
+    "issue_count": 0
+  },
+  "catalog": [
+    "scripts.utilities.check_markdown_anchors"
+  ],
+  "provenance": {
+    "requested_by": "cli",
+    "trigger_type": "manual"
+  }
+}

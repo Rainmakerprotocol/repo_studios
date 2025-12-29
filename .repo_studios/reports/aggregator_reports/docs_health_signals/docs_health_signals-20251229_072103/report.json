@@ -1,0 +1,264 @@
+{
+  "generated_utc": "2025-12-29T07:21:03.721948+00:00",
+  "provenance": {
+    "coverage": {
+      "inputs": [
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\healthview\\undocumented_logic"
+      ],
+      "schema_versions": {
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\healthview\\undocumented_logic": 1
+      },
+      "score": 13.35,
+      "status": "critical"
+    },
+    "freshness": {
+      "inputs": [
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\healthview\\code_doc_churn"
+      ],
+      "schema_versions": {
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\healthview\\code_doc_churn": 1
+      },
+      "score": 33.33333333333333,
+      "status": "critical"
+    },
+    "hygiene": {
+      "inputs": [
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\code_placeholder_scans\\latest\\latest_report.json",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\monkey_patch_scans\\latest\\latest_report.json"
+      ],
+      "schema_versions": {
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\code_placeholder_scans\\latest\\latest_report.json": null,
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\monkey_patch_scans\\latest\\latest_report.json": null
+      },
+      "score": null,
+      "status": "unknown"
+    },
+    "integrity": {
+      "inputs": [
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\healthview\\docs_integrity_validation",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\healthview\\metrics_anchor_stub_validation"
+      ],
+      "schema_versions": {
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\healthview\\docs_integrity_validation": 1,
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\healthview\\metrics_anchor_stub_validation": 1
+      },
+      "score": 100.0,
+      "status": "healthy"
+    },
+    "structure": {
+      "inputs": [
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\healthview\\anchor_inventory\\20251229-0720\\telemetry.json",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\healthview\\markdown_anchor_validation"
+      ],
+      "schema_versions": {
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\healthview\\anchor_inventory\\20251229-0720\\telemetry.json": 1,
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\healthview\\markdown_anchor_validation": 1
+      },
+      "score": 38.04766190904806,
+      "status": "critical"
+    }
+  },
+  "schema_version": 1,
+  "signals": {
+    "coverage": {
+      "metrics": {
+        "docstring_coverage_percent": 13.35,
+        "entities_missing_docs": 766,
+        "entities_scanned": 884,
+        "modules_scanned": 83,
+        "modules_with_findings": 69
+      },
+      "notes": [
+        "87% of scanned entities lack docstrings."
+      ],
+      "score": 13.35,
+      "status": "critical",
+      "title": "Coverage",
+      "top_findings": [
+        {
+          "coverage_percent": 5.88,
+          "doc_candidates": [
+            ".repo_studios/docs/automation/scan_monkey_patches.md",
+            ".copilot_todo.md",
+            ".github/architect.chatmode.md",
+            ".github/ask.chatmode.md",
+            ".github/code.chatmode.md"
+          ],
+          "missing_entities": 48,
+          "module_path": ".repo_studios/scripts/producers/scan_monkey_patches.py"
+        },
+        {
+          "coverage_percent": 2.94,
+          "doc_candidates": [
+            ".repo_studios/docs/automation/validate_inventory.md",
+            ".copilot_todo.md",
+            ".github/architect.chatmode.md",
+            ".github/ask.chatmode.md",
+            ".github/code.chatmode.md"
+          ],
+          "missing_entities": 33,
+          "module_path": ".repo_studios/scripts/producers/validate_inventory.py"
+        },
+        {
+          "coverage_percent": 0.0,
+          "doc_candidates": [
+            ".repo_studios/docs/automation/generate_anchor_inventory.md",
+            ".copilot_todo.md",
+            ".github/architect.chatmode.md",
+            ".github/ask.chatmode.md",
+            ".github/code.chatmode.md"
+          ],
+          "missing_entities": 25,
+          "module_path": ".repo_studios/scripts/producers/generate_anchor_inventory.py"
+        },
+        {
+          "coverage_percent": 25.81,
+          "doc_candidates": [
+            ".copilot_todo.md",
+            ".github/architect.chatmode.md",
+            ".github/ask.chatmode.md",
+            ".github/code.chatmode.md",
+            ".github/copilot-instructions.md"
+          ],
+          "missing_entities": 23,
+          "module_path": ".repo_studios/command_center/scripts/aggregators/scan_duplicates.py"
+        },
+        {
+          "coverage_percent": 0.0,
+          "doc_candidates": [
+            ".repo_studios/docs/automation/seed_standards_prompts.md",
+            ".copilot_todo.md",
+            ".github/architect.chatmode.md",
+            ".github/ask.chatmode.md",
+            ".github/code.chatmode.md"
+          ],
+          "missing_entities": 21,
+          "module_path": ".repo_studios/scripts/producers/seed_standards_prompts.py"
+        }
+      ]
+    },
+    "freshness": {
+      "metrics": {
+        "allowlisted_modules": [],
+        "modules_with_code_churn": 3,
+        "modules_with_doc_updates": 1,
+        "modules_without_doc_updates": 2
+      },
+      "notes": [],
+      "score": 33.33333333333333,
+      "status": "critical",
+      "title": "Freshness",
+      "top_findings": [
+        {
+          "code_paths": [
+            "tmp_fix_lines.py"
+          ],
+          "doc_candidates": [],
+          "last_commit_utc": "2025-12-28T12:37:12-05:00",
+          "module": "tmp_fix_lines.py"
+        },
+        {
+          "code_paths": [
+            "tmp_generate_lizard_report_new.py"
+          ],
+          "doc_candidates": [],
+          "last_commit_utc": "2025-12-26T13:22:21-05:00",
+          "module": "tmp_generate_lizard_report_new.py"
+        }
+      ]
+    },
+    "hygiene": {
+      "metrics": {},
+      "notes": [
+        "Hygiene signals unavailable."
+      ],
+      "score": null,
+      "status": "unknown",
+      "title": "Hygiene",
+      "top_findings": []
+    },
+    "integrity": {
+      "metrics": {
+        "anchors_referenced": 0,
+        "docs_integrity_status": "ok",
+        "documents_processed": 1,
+        "json_blocks_checked": 2,
+        "mismatched_blocks": 0,
+        "missing_metrics_stubs": 0
+      },
+      "notes": [],
+      "score": 100.0,
+      "status": "healthy",
+      "title": "Integrity",
+      "top_findings": []
+    },
+    "structure": {
+      "metrics": {
+        "anchor_validation_issue_count": 0,
+        "anchor_validation_status": "ok",
+        "cross_file_duplicates": 72,
+        "documents_missing_h1": 7,
+        "documents_missing_h2": 3,
+        "documents_with_cross_file_duplicates": 102,
+        "documents_with_repeated_anchors": 0,
+        "total_documents": 132,
+        "total_slugs": 707
+      },
+      "notes": [],
+      "score": 38.04766190904806,
+      "status": "critical",
+      "title": "Structure",
+      "top_findings": [
+        {
+          "documents": 110,
+          "root": ".repo_studios"
+        },
+        {
+          "documents": 12,
+          "root": "standards"
+        },
+        {
+          "documents": 5,
+          "root": "automation"
+        },
+        {
+          "documents": 4,
+          "root": "templates"
+        },
+        {
+          "documents": 1,
+          "root": "db_integrations"
+        }
+      ]
+    }
+  },
+  "summary": {
+    "category_scores": {
+      "coverage": 13.35,
+      "freshness": 33.33333333333333,
+      "hygiene": null,
+      "integrity": 100.0,
+      "structure": 38.04766190904806
+    },
+    "overall_score": 33.73,
+    "status_counts": {
+      "critical": 3,
+      "healthy": 1,
+      "unknown": 1
+    },
+    "statuses": {
+      "coverage": "critical",
+      "freshness": "critical",
+      "hygiene": "unknown",
+      "integrity": "healthy",
+      "structure": "critical"
+    },
+    "weights": {
+      "coverage": 0.35,
+      "freshness": 0.35,
+      "hygiene": 0.05,
+      "integrity": 0.1,
+      "structure": 0.15
+    }
+  }
+}

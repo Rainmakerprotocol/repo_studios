@@ -505,15 +505,12 @@ _Tier-2 references (depth lives here):_
 
 These are Stage 1.1 readiness gates after all Tier-2 DONE script gates are closed.
 
-- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`).
+- [x] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`).
   See: [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates)
-- [ ] No pointer artifacts (`latest_*` / `current_*`).
+- [x] No pointer artifacts (`latest_*` / `current_*`).
   See: [Stop-gates](tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates)
-- [ ] Output root aligned to HOP contract
-  (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`).
-  See: [Contract snapshot](tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11)
-- [ ] Tier-3 eligible (Stage 1.1 Tier-2 depth captured; ready for Tier-3 extraction).
-  See: [Records index](tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1)
+- [x] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). See: [Contract snapshot](tier2_roster/tier2_test_execution_telemetry_roster.md#23-current-vs-target-contract-snapshot-stage-11)
+- [x] Tier-3 eligible (Stage 1.1 Tier-2 depth captured; ready for Tier-3 extraction). See: [Records index](tier2_roster/tier2_test_execution_telemetry_roster.md#31-per-script-inspection-table-v1)
 
 **Target contract (locked decisions):**
 

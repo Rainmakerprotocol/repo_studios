@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "rawview",
+  "topic": "fault_artifacts_producer",
+  "run_timestamp": "20251229-1342",
+  "generated_utc": "2025-12-29T13:42:53+00:00",
+  "status": "ok",
+  "metrics": {
+    "signature_count": 0,
+    "active_signature_count": 0,
+    "thread_block_count": 0,
+    "stack_text_bytes": 0,
+    "repeat_offender_signatures": 0
+  },
+  "components": {
+    "faulthandler": {
+      "summary": {
+        "signature_count": 0,
+        "thread_block_count": 0,
+        "top_frame_limit": 10,
+        "stack_log_exists": true,
+        "stack_text_bytes": 0,
+        "severity_buckets": {
+          "repeat_offender": 0,
+          "multi_hit": 0,
+          "single_hit": 0
+        },
+        "active_signature_count": 0,
+        "first_seen_utc": null,
+        "last_seen_utc": null
+      },
+      "signatures": [],
+      "manifest": {
+        "ts": "2025-01-02T03:04:00+00:00",
+        "pid": 47764,
+        "python": "3.13.3",
+        "platform": "Windows-11-10.0.26200-SP0",
+        "flags": {
+          "FAULT_ENABLE": "1",
+          "FAULT_OUTDIR": "",
+          "FAULT_BASE_DIR": "",
+          "FAULT_MIN_INTERVAL_SEC": "60",
+          "FAULT_DUMP_TIMEOUT": "300",
+          "FAULT_MAX_DUMPS_PER_RUN": "5",
+          "FAULT_DUMP_LATER": "1",
+          "FAULT_REDACT_PATHS": "0",
+          "FAULT_TEE_STDERR": "0",
+          "FAULT_ARTIFACTS_TO_KEEP": "2",
+          "FAULT_LOGS_ALLOW_LEGACY": "0"
+        },
+        "resolved": {
+          "outdir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-02_0304",
+          "base_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs",
+          "tee_stderr": false,
+          "artifacts_to_keep": 2,
+          "derived_outdir": true,
+          "allow_legacy": false
+        },
+        "faulthandler": {
+          "activated": true,
+          "writer": "file",
+          "registered_sigusr1": false,
+          "dump_later": true,
+          "errors": []
+        },
+        "retention": {
+          "keep": 2,
+          "pruned": 0
+        }
+      }
+    }
+  }
+}

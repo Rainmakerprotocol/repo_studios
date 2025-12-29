@@ -11,10 +11,10 @@ tool:
       .repo_studios/reports/healthview/orchestrator_reports/test_execution_telemetry/<YYYYMMDD-HHMM>/
 
     The orchestrator coordinates:
-      1. collect_test_log_reports.py (producer)
-      2. generate_test_coverage_inventory.py (producer)
-      3. analyze_test_hardening.py (producer)
-      4. generate_churn_complexity_heatmap.py (aggregator)
+      1. generate_test_coverage_inventory.py (producer)
+      2. collect_test_log_reports.py (producer)
+      3. generate_churn_complexity_heatmap.py (aggregator)
+      4. analyze_test_hardening.py (producer)
       5. generate_test_log_health_report.py (consumer)
       6. summarize_test_execution_telemetry.py (summarizer)
 
@@ -45,6 +45,23 @@ invocation:
   command_template: |
     python {script_path} \
       --repo-root {repo_root} \
+      --logs-dir {logs_dir} \
+      --test-log-reports-dir {test_log_reports_dir} \
+      --test-log-health-dir {test_log_health_dir} \
+      --test-coverage-output-dir {test_coverage_output_dir} \
+      --test-coverage-xml {test_coverage_xml} \
+      --heatmap-output-dir {heatmap_output_dir} \
+      --heatmap-metrics-source {heatmap_metrics_source} \
+      --heatmap-window {heatmap_window} \
+      --hardening-output-dir {hardening_output_dir} \
+      --healthview-root {healthview_root} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --collector-artifacts-to-keep {collector_artifacts_to_keep} \
+      --health-artifacts-to-keep {health_artifacts_to_keep} \
+      --coverage-artifacts-to-keep {coverage_artifacts_to_keep} \
+      --heatmap-artifacts-to-keep {heatmap_artifacts_to_keep} \
+      --hardening-artifacts-to-keep {hardening_artifacts_to_keep} \
+      --timestamp {timestamp} \
       --log-level {log_level}
   make_target: studio-orchestrate-test-execution-telemetry
   script_path: .repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py
@@ -236,7 +253,7 @@ outputs:
       description: Test hardening producer bundle.
     - type: directory
       format: aggregator_report
-      path_pattern: .repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap/<slug>/
+      path_pattern: .repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap/churn_complexity_heatmap-<YYYY-MM-DD_HHMMSS>/
       description: Churn complexity heatmap aggregator bundle.
     - type: directory
       format: consumer_report

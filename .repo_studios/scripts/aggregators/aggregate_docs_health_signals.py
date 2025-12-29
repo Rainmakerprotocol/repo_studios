@@ -42,10 +42,10 @@ DEFAULT_METRICS_STUB = Path(
     ".repo_studios/reports/producer_reports/healthview/metrics_anchor_stub_validation"
 )
 DEFAULT_PLACEHOLDER_REPORT = Path(
-    ".repo_studios/reports/producer_reports/code_placeholder_scans/latest/latest_report.json"
+    ".repo_studios/reports/producer_reports/healthview/code_placeholders"
 )
 DEFAULT_MONKEY_PATCH_REPORT = Path(
-    ".repo_studios/reports/producer_reports/monkey_patch_scans/latest/latest_report.json"
+    ".repo_studios/reports/producer_reports/healthview/monkey_patches"
 )
 RUN_STEM = "docs_health_signals"
 SCHEMA_VERSION = 1
@@ -284,6 +284,12 @@ def _load_json(path: Path, label: str, logger: logging.Logger) -> dict[str, Any]
         if isinstance(nested_report, dict):
             return nested_report
         return payload
+    # Handle healthview telemetry format: promote metrics to top level
+    metrics = data.get("metrics")
+    if isinstance(metrics, dict):
+        for key, value in metrics.items():
+            if key not in data:
+                data[key] = value
     return data
 
 
@@ -535,7 +541,10 @@ def _compute_hygiene(
         metrics["placeholder_total_matches"] = total_matches
         metrics["placeholder_status"] = placeholder_report.get("status")
         score = max(0.0, score - min(40.0, total_matches * 5.0))
+        # Check both legacy and healthview telemetry formats
         by_pattern = placeholder_report.get("summary", {}).get("by_pattern", {})
+        if not by_pattern:
+            by_pattern = placeholder_report.get("summary", {}).get("summary", {}).get("by_pattern", {})
         if isinstance(by_pattern, dict) and by_pattern:
             findings.append(
                 {"placeholder_by_pattern": dict(list(by_pattern.items())[:5])}
@@ -547,7 +556,10 @@ def _compute_hygiene(
         metrics["monkey_patch_total_findings"] = total_findings
         metrics["monkey_patch_status"] = monkey_report.get("status")
         score = max(0.0, score - min(40.0, float(total_findings)))
+        # Check both legacy and healthview telemetry formats
         by_category = monkey_report.get("summary", {}).get("by_category", {})
+        if not by_category:
+            by_category = monkey_report.get("findings_by_category", {})
         if isinstance(by_category, dict) and by_category:
             findings.append(
                 {"monkey_patch_by_category": dict(list(by_category.items())[:5])}
