@@ -1,0 +1,265 @@
+# Tier-3: validate_markdown_anchors.py
+# Producer script that validates markdown internal links and cross-file anchors.
+
+tool:
+  id: validate_markdown_anchors
+  name: Validate Markdown Anchors
+  description: |
+    Scans selected markdown files for internal document anchors and cross-file
+    relative links, validating that target files and anchors exist.
+
+    Emits a canonical HealthView bundle under:
+
+      .repo_studios/reports/healthview/healthview/markdown_anchor_validation/<YYYYMMDD-HHMM>/
+
+    The bundle includes manifest.json, summary.md, and telemetry.json.
+
+    This producer identifies broken anchor references, missing target files,
+    and invalid heading-derived slugs across the documentation tree.
+
+    Slug generation follows GitHub-style simplification (lowercase, spaces -> dashes,
+    strip non-alphanumeric except dashes) and collapses consecutive dashes.
+
+    Exit codes:
+      0 - success, no issues
+      1 - issues found (broken anchors/links)
+  keywords:
+    - healthview
+    - producer
+    - anchor
+    - validation
+    - markdown
+    - links
+    - broken
+    - integrity
+  use_when:
+    - Need to validate all markdown anchor references are resolvable
+    - Checking for broken internal links before documentation releases
+    - Verifying cross-file link integrity after refactoring
+    - Producing validation telemetry for downstream aggregators
+  dont_use_when:
+    - You only need to inventory anchors (use generate_anchor_inventory.py instead)
+    - You need to read a single markdown file (use read_file instead)
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --root {root} \
+      --output-dir {output_dir} \
+      --timestamp {timestamp} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level} \
+      [--glob {glob}]
+  script_path: .repo_studios/scripts/producers/validate_markdown_anchors.py
+  importable: false
+  entry_function: main
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+    notes:
+      - "Uses shared libraries from .repo_studios/command_center/scripts/libraries/"
+      - "Entry point is main(argv), not run(argv) — orchestrators must use main() or shell out"
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: null
+    description: Repository root override (defaults to project root resolution).
+    validation:
+      must_exist: true
+      must_be: directory
+
+  - name: root
+    type: path
+    required: false
+    default: "."
+    description: Base directory for glob pattern resolution.
+    validation:
+      must_exist: true
+      must_be: directory
+
+  - name: output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview
+    description: |
+      Base output directory. The producer appends healthview/markdown_anchor_validation/timestamp to form the bundle path:
+        {output_dir}/healthview/markdown_anchor_validation/<YYYYMMDD-HHMM>/
+    validation:
+      must_exist: false
+
+  - name: timestamp
+    type: string
+    required: false
+    default: null
+    description: |
+      Override timestamp for the run slug (ISO 8601). If not provided, uses current UTC time.
+      Primarily for tests.
+    example: "2024-01-01T00:00:00"
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 10
+    description: Number of timestamped bundle directories to retain after pruning.
+    validation:
+      min_value: 1
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices:
+      - DEBUG
+      - INFO
+      - WARNING
+      - ERROR
+      - CRITICAL
+    description: Logging verbosity level.
+
+  - name: glob
+    type: string
+    required: false
+    default: null
+    repeatable: true
+    description: |
+      Glob pattern for markdown files to scan (repeatable flag).
+      Defaults to curated patterns: docs/**/*.md, .repo_studios/docs/**/*.md
+
+outputs:
+  primary:
+    type: file
+    format: json
+    path_pattern: "{output_dir}/healthview/markdown_anchor_validation/<YYYYMMDD-HHMM>/manifest.json"
+    description: Run manifest with inputs, catalog, and artifact list.
+    structure:
+      root_type: object
+      required_keys:
+        - schema_version
+        - viewer_slug
+        - topic
+        - run_timestamp
+        - generated_at
+        - status
+        - catalog
+        - inputs
+
+  secondary:
+    - type: file
+      format: md
+      path_pattern: "{output_dir}/healthview/markdown_anchor_validation/<YYYYMMDD-HHMM>/summary.md"
+      description: Human-readable summary with validation results and issue counts.
+
+    - type: file
+      format: json
+      path_pattern: "{output_dir}/healthview/markdown_anchor_validation/<YYYYMMDD-HHMM>/telemetry.json"
+      description: Metrics and full payload including validation details and issue list.
+
+behavior:
+  idempotent: true
+  side_effects:
+    - Creates timestamped bundle directory under output_dir
+    - Prunes older bundle directories beyond artifacts_to_keep
+  duration_estimate: "5-30 seconds depending on documentation size"
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 1
+      meaning: Broken anchors or missing link targets found
+      agent_action: Review telemetry.json for specific issues and fix documentation
+
+    - exit_code: 1
+      meaning: Root directory not found or invalid path
+      agent_action: Verify --root exists and is a directory
+
+  stderr_patterns:
+    - pattern: "Broken anchor"
+      meaning: Internal anchor reference points to non-existent heading
+      agent_action: Update the link to reference a valid heading slug
+
+    - pattern: "Missing file"
+      meaning: Cross-file link references a file that doesn't exist
+      agent_action: Correct the file path or create the missing file
+
+integration:
+  typical_workflow:
+    - Run generate_anchor_inventory.py first to get anchor baseline
+    - Run validate_markdown_anchors.py to check link integrity
+    - Review summary.md for issues and fix broken references
+
+  output_consumers:
+    - aggregate_docs_health_signals.py
+    - verify_docs_integrity.py
+
+  input_producers:
+    - generate_anchor_inventory.py
+
+  sample_output: |
+    {
+      "schema_version": 1,
+      "viewer_slug": "healthview",
+      "topic": "markdown_anchor_validation",
+      "run_timestamp": "20251229-2155",
+      "generated_at": "2025-12-29T21:55:00+00:00",
+      "status": "ok",
+      "catalog": [
+        {"artifact": "manifest.json", "path": "..."},
+        {"artifact": "summary.md", "path": "..."},
+        {"artifact": "telemetry.json", "path": "..."}
+      ],
+      "inputs": { ... }
+    }
+
+examples:
+  - description: Basic run with defaults (scans docs/**/*.md)
+    command: |
+      python .repo_studios/scripts/producers/validate_markdown_anchors.py \
+        --root . --log-level INFO
+    expected_output: |
+      INFO All checked markdown anchors OK (files: ...)
+      INFO Artifacts written to .repo_studios/reports/healthview/healthview/markdown_anchor_validation/20251229-2155
+
+  - description: Full run with explicit paths and HOP output
+    command: |
+      python .repo_studios/scripts/producers/validate_markdown_anchors.py \
+        --repo-root . \
+        --root . \
+        --output-dir .repo_studios/reports/healthview \
+        --glob "docs/**/*.md" \
+        --glob ".repo_studios/docs/**/*.md" \
+        --artifacts-to-keep 1 \
+        --log-level INFO
+    expected_output: |
+      INFO All checked markdown anchors OK (files: ...)
+
+  - description: Programmatic invocation from Python
+    code: |
+      from validate_markdown_anchors import main
+      exit_code = main([
+          "--root", ".",
+          "--output-dir", ".repo_studios/reports/healthview",
+          "--artifacts-to-keep", "1",
+          "--log-level", "INFO",
+      ])
+      print(f"Exit code: {exit_code}")
+
+metadata:
+  category: producer
+  tier: tier-3
+  status: active
+  version: 1.0.0
+  last_updated: "2025-12-29"
+  author: repo_studios_team
+  dependencies_tier3:
+    - tier3_cli.yaml
+    - tier3_artifacts.yaml
+    - tier3_prune_logs.yaml
+  tier2_rosters:
+    - tier2_docs_health_overview_roster.md
+  tier1_pipelines:
+    - tier1_healthview_orchestration_pipeline.md

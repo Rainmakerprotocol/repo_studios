@@ -28,8 +28,8 @@ HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 LINK_RE = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 CODE_FENCE_RE = re.compile(r"^(```|~~~)")
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
-VIEWER_SLUG = "healthview"
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
+VIEWER_SLUG = "producer_reports"
 TOPIC_SLUG = "doc_index"
 
 CHECKBOX_REPORT_SCRIPT = Path(
@@ -63,7 +63,7 @@ GENERIC_DESCRIPTION_WIDTH = 240
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
 try:  # pragma: no cover - import guard for standalone execution
-  from libraries import (  # type: ignore import
+  from libraries import (
     KeepSpec,
     OptionsConfig,
     PathSpec,
@@ -79,7 +79,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when script is run di
 
   if str(LIBRARIES_ROOT) not in sys.path:
     sys.path.insert(0, str(LIBRARIES_ROOT))
-  from libraries import (  # type: ignore import
+  from libraries import (
     KeepSpec,
     OptionsConfig,
     PathSpec,
@@ -223,7 +223,7 @@ def _extract_description(lines: list[str], start_index: int) -> str | None:
 
 
 def _collect_links(text: str) -> list[str]:
-  ordered = OrderedDict()
+  ordered: "OrderedDict[str, None]" = OrderedDict()
   for match in LINK_RE.finditer(text):
     target = match.group(1).strip()
     if target and target not in ordered:
@@ -544,15 +544,15 @@ def build_csv(documents: Sequence[DocumentRecord]) -> str:
             links_value,
           ]
         )
-      for heading in doc.h2_headings:
+      for sub_heading in doc.h2_headings:
         writer.writerow(
           [
             doc.folder,
             doc.filename,
             "h2",
-            heading.title,
-            heading.slug,
-            heading.parent_slug,
+            sub_heading.title,
+            sub_heading.slug,
+            sub_heading.parent_slug,
             description,
             doc.size_bytes,
             doc.modified_utc,

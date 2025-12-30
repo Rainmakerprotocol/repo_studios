@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Sequence
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports")
 RUN_PREFIX = "code_doc_churn"
 DEFAULT_GIT_WINDOW = "14 days"
 ALLOWED_CODE_EXTENSIONS = {
@@ -96,7 +96,7 @@ PATH_SPECS: dict[str, PathSpec] = {
     ),
     "doc_index": PathSpec(
         field="doc_index",
-        default=Path(".repo_studios/reports/producer_reports/healthview/doc_index"),
+        default=Path(".repo_studios/reports/healthview/producer_reports/doc_index"),
         ensure_dir=False,
         within_repo=True,
     ),

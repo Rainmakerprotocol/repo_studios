@@ -1,0 +1,302 @@
+# Tier-3: verify_docs_integrity.py
+# Producer script that validates governed documentation JSON blocks for content_hash stability.
+
+tool:
+  id: verify_docs_integrity
+  name: Verify Docs Integrity
+  description: |
+    Validates governed documentation JSON blocks to ensure each fenced payload exposes
+    a stable `content_hash`. Optionally updates mismatched blocks in place (`--update`)
+    and regenerates the navigation table in `docs/standards/docs_index.md`.
+
+    Emits a canonical HealthView bundle under:
+
+      .repo_studios/reports/healthview/docs_integrity_validation/<YYYYMMDD-HHMM>/
+
+    The bundle includes manifest.json, summary.md, and telemetry.json.
+
+    This producer identifies JSON blocks with stale or missing content_hash values,
+    ensuring documentation governance blocks remain cryptographically stable.
+
+    Exit codes:
+      0 - clean or updated (when --update supplied)
+      1 - mismatches detected (without --update) OR missing inputs/errors
+
+    Special flag `--exit-codes-hash` prints the legacy hash of exit_code_stability_policy.md
+    and exits without writing artifacts.
+  keywords:
+    - healthview
+    - producer
+    - integrity
+    - validation
+    - docs
+    - content_hash
+    - json
+    - governance
+  use_when:
+    - Need to validate documentation JSON blocks have stable content_hash values
+    - Checking for stale governance blocks before documentation releases
+    - Updating content_hash values after intentional documentation changes
+    - Producing validation telemetry for downstream aggregators
+  dont_use_when:
+    - You only need to validate markdown anchor links (use validate_markdown_anchors.py)
+    - You need to inventory documentation (use generate_doc_index.py instead)
+    - You need to read a single markdown file (use read_file instead)
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --output-dir {output_dir} \
+      --index {index_path} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level} \
+      [--update] \
+      [--no-table] \
+      [--exit-codes-hash]
+  script_path: .repo_studios/scripts/producers/verify_docs_integrity.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+    notes:
+      - "Uses shared libraries from .repo_studios/command_center/scripts/libraries/"
+      - "Entry point is run(argv) — orchestrators can import and call directly"
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: null
+    description: Repository root override (defaults to project root resolution).
+    validation:
+      must_exist: true
+      must_be: directory
+
+  - name: output_dir
+    type: path
+    required: false
+    default: ".repo_studios/reports"
+    description: |
+      Base directory for HOP bundle output. The script appends
+      healthview/docs_integrity_validation/<timestamp>/ automatically.
+    validation:
+      must_exist: false
+      will_create: true
+
+  - name: index
+    type: path
+    required: false
+    default: ".repo_studios/docs/standards/docs_index.md"
+    description: Path to the docs index markdown file containing governed JSON blocks.
+    validation:
+      must_exist: true
+      must_be: file
+
+  - name: artifacts_to_keep
+    type: integer
+    required: false
+    default: 1
+    description: Number of historical run directories to retain after pruning.
+    validation:
+      minimum: 1
+
+  - name: update
+    type: boolean
+    required: false
+    default: false
+    description: |
+      When true, writes back computed content_hash values to source documents.
+      Converts exit code 1 (mismatches detected) to 0 after successful update.
+
+  - name: no_table
+    type: boolean
+    required: false
+    default: false
+    description: Skip regeneration of the navigation table in docs_index.md.
+
+  - name: exit_codes_hash
+    type: boolean
+    required: false
+    default: false
+    description: |
+      Print the legacy hash of docs/standards/exit_code_stability_policy.md and exit.
+      Does not write any artifacts when this flag is set.
+
+  - name: log_level
+    type: string
+    required: false
+    default: "INFO"
+    description: Logging verbosity level.
+    validation:
+      allowed_values:
+        - DEBUG
+        - INFO
+        - WARNING
+        - ERROR
+        - CRITICAL
+
+io_contract:
+  inputs:
+    - name: docs_index
+      source: filesystem
+      path_pattern: ".repo_studios/docs/standards/docs_index.md"
+      description: Primary input file containing governed JSON blocks to validate.
+      required: true
+
+    - name: exit_code_doc
+      source: filesystem
+      path_pattern: "docs/standards/exit_code_stability_policy.md"
+      description: Legacy exit code policy document for hash computation.
+      required: false
+
+  outputs:
+    - artifact: manifest.json
+      path_pattern: ".repo_studios/reports/healthview/docs_integrity_validation/<YYYYMMDD-HHMM>/manifest.json"
+      format: json
+      schema_version: 1
+      description: Run metadata including inputs, outputs catalog, and status.
+
+    - artifact: summary.md
+      path_pattern: ".repo_studios/reports/healthview/docs_integrity_validation/<YYYYMMDD-HHMM>/summary.md"
+      format: markdown
+      description: Human-readable summary of validation results.
+
+    - artifact: telemetry.json
+      path_pattern: ".repo_studios/reports/healthview/docs_integrity_validation/<YYYYMMDD-HHMM>/telemetry.json"
+      format: json
+      description: Structured telemetry for downstream aggregators.
+
+  side_effects:
+    - type: file_modification
+      description: |
+        When --update is specified, source documents are modified in place
+        to update stale content_hash values.
+      conditional: true
+      condition: "--update flag is specified"
+
+    - type: file_modification
+      description: |
+        When --no-table is NOT specified, docs_index.md navigation table
+        is regenerated.
+      conditional: true
+      condition: "--no-table flag is NOT specified"
+
+    - type: directory_pruning
+      description: |
+        Historical run directories beyond artifacts_to_keep are removed
+        from the topic directory.
+
+behavior:
+  exit_codes:
+    - exit_code: 0
+      meaning: Clean run (no mismatches) or successful update (--update flag)
+      agent_action: Report success, optionally inspect summary.md for details
+
+    - exit_code: 1
+      meaning: Mismatches detected (without --update) OR missing inputs/errors
+      agent_action: Review summary.md for mismatch details, consider running with --update
+
+  stderr_patterns:
+    - pattern: "Mismatch"
+      meaning: content_hash in JSON block does not match computed value
+      agent_action: Run with --update to fix, or manually update the content_hash
+
+    - pattern: "Index file not found"
+      meaning: The specified --index file does not exist
+      agent_action: Verify the index path is correct
+
+integration:
+  typical_workflow:
+    - Run verify_docs_integrity.py to check for stale content_hash values
+    - If mismatches found, run with --update to fix them
+    - Review summary.md for validation details
+    - Check manifest.json for run metadata
+
+  output_consumers:
+    - aggregate_docs_health_signals.py
+
+  input_producers: []
+
+  sample_output: |
+    {
+      "schema_version": 1,
+      "viewer_slug": "healthview",
+      "topic": "docs_integrity_validation",
+      "run_timestamp": "20251230-0326",
+      "generated_at": "2025-12-30T03:26:00+00:00",
+      "status": "ok",
+      "catalog": [
+        {"artifact": "manifest.json", "path": "..."},
+        {"artifact": "summary.md", "path": "..."},
+        {"artifact": "telemetry.json", "path": "..."}
+      ],
+      "inputs": {
+        "index_path": ".repo_studios/docs/standards/docs_index.md"
+      }
+    }
+
+examples:
+  - description: Basic validation run (check only, no updates)
+    command: |
+      python .repo_studios/scripts/producers/verify_docs_integrity.py \
+        --log-level INFO
+    expected_output: |
+      INFO Repo root: /path/to/repo
+      INFO Index path: /path/to/repo/.repo_studios/docs/standards/docs_index.md
+      INFO Output directory: /path/to/repo/.repo_studios/reports
+
+  - description: Validation with auto-update of mismatched hashes
+    command: |
+      python .repo_studios/scripts/producers/verify_docs_integrity.py \
+        --update \
+        --log-level INFO
+    expected_output: |
+      INFO Updated content_hash in ...
+      INFO Artifacts written to .repo_studios/reports/healthview/docs_integrity_validation/...
+
+  - description: Skip table regeneration
+    command: |
+      python .repo_studios/scripts/producers/verify_docs_integrity.py \
+        --no-table \
+        --log-level INFO
+
+  - description: Programmatic invocation from Python
+    code: |
+      from verify_docs_integrity import run
+      exit_code = run([
+          "--output-dir", ".repo_studios/reports",
+          "--artifacts-to-keep", "1",
+          "--log-level", "INFO",
+      ])
+      print(f"Exit code: {exit_code}")
+
+  - description: Legacy exit codes hash mode
+    command: |
+      python .repo_studios/scripts/producers/verify_docs_integrity.py \
+        --exit-codes-hash
+    expected_output: |
+      <sha256_hash_of_exit_code_doc>
+
+tier3:
+  allowed: true
+  reason: |
+    Mature producer with stable CLI, HOP-compliant output, and well-defined
+    io_contract. Safe for agent-driven execution in validation workflows.
+
+metadata:
+  category: producer
+  tier: tier-3
+  status: active
+  version: 1.0.0
+  last_updated: "2025-12-30"
+  author: repo_studios_team
+  dependencies_tier3:
+    - tier3_cli.yaml
+    - tier3_artifacts.yaml
+    - tier3_prune_logs.yaml
+  tier2_rosters:
+    - tier2_docs_health_overview_roster.md
+  tier1_pipelines:
+    - tier1_healthview_orchestration_pipeline.md

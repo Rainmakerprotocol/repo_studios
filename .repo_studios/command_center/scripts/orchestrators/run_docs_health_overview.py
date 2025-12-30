@@ -84,7 +84,7 @@ ORCHESTRATOR_SCRIPT = Path(
     ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py"
 )
 
-DEFAULT_DOC_INDEX_OUTPUT = Path(".repo_studios/reports/producer_reports")
+DEFAULT_DOC_INDEX_OUTPUT = Path(".repo_studios/reports/healthview")
 DEFAULT_ANCHOR_INVENTORY_OUTPUT = Path(".repo_studios/reports/producer_reports")
 DEFAULT_ANCHOR_VALIDATION_OUTPUT = Path(".repo_studios/reports/producer_reports")
 DEFAULT_DOCS_INTEGRITY_OUTPUT = Path(".repo_studios/reports/producer_reports")

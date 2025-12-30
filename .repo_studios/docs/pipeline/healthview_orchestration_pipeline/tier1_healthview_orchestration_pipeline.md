@@ -614,13 +614,13 @@ _Tier-2 references (depth lives here):_
 
 **Stage 2.1 Script Gate Summary (Tier-1):**
 
-- [ ] generate_doc_index.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-002-generate-doc-index)
-- [ ] generate_anchor_inventory.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-003-generate-anchor-inventory)
-- [ ] validate_markdown_anchors.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-004-validate-markdown-anchors)
-- [ ] verify_docs_integrity.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-005-verify-docs-integrity)
-- [ ] validate_metrics_anchor_stubs.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-006-validate-metrics-anchor-stubs)
-- [ ] generate_code_doc_churn_report.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-007-generate-code-doc-churn-report)
-- [ ] generate_undocumented_logic_report.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-008-generate-undocumented-logic-report)
+- [x] generate_doc_index.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-002-generate-doc-index)
+- [x] generate_anchor_inventory.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-003-generate-anchor-inventory)
+- [x] validate_markdown_anchors.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-004-validate-markdown-anchors)
+- [x] verify_docs_integrity.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-005-verify-docs-integrity)
+- [x] validate_metrics_anchor_stubs.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-006-validate-metrics-anchor-stubs)
+- [x] generate_code_doc_churn_report.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-007-generate-code-doc-churn-report)
+- [x] generate_undocumented_logic_report.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-008-generate-undocumented-logic-report)
 - [ ] aggregate_docs_health_signals.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-009-aggregate-docs-health-signals)
 - [ ] run_docs_health_overview.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-001-docs-health-overview-orchestrator)
 

@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "viewer_slug": "healthview",
+  "viewer_slug": "producer_reports",
   "topic": "doc_index",
-  "run_timestamp": "20251229-1335",
-  "generated_utc": "2025-12-29T13:35:31.733247+00:00",
+  "run_timestamp": "20251230-0321",
+  "generated_utc": "2025-12-30T03:21:35.770761+00:00",
   "status": "ok",
   "metrics": {
     "total_documents": 294,
-    "total_headings": 2097,
+    "total_headings": 2098,
     "total_links": 228,
     "duplicate_slug_count": 6,
     "documents_missing_description_count": 38,
@@ -16,13 +16,13 @@
   },
   "payload": {
     "schema_version": 1,
-    "generated_utc": "2025-12-29T13:35:31.733247+00:00",
+    "generated_utc": "2025-12-30T03:21:35.770761+00:00",
     "repo_root": "C:\\Users\\genet\\repo_studios",
     "summary": {
       "total_documents": 294,
       "total_h1": 297,
-      "total_h2": 1800,
-      "total_headings": 2097,
+      "total_h2": 1801,
+      "total_headings": 2098,
       "total_links": 228
     },
     "metrics": {
@@ -11427,52 +11427,59 @@
             "parent_slug": "generatedocindexpy"
           },
           {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 31,
+            "parent_title": "generate_doc_index.py",
+            "parent_slug": "generatedocindexpy"
+          },
+          {
             "title": "Output Contract",
             "slug": "output-contract",
-            "line": 31,
+            "line": 37,
             "parent_title": "generate_doc_index.py",
             "parent_slug": "generatedocindexpy"
           },
           {
             "title": "Data Shape",
             "slug": "data-shape",
-            "line": 44,
+            "line": 50,
             "parent_title": "generate_doc_index.py",
             "parent_slug": "generatedocindexpy"
           },
           {
             "title": "CLI Reference",
             "slug": "cli-reference",
-            "line": 60,
+            "line": 66,
             "parent_title": "generate_doc_index.py",
             "parent_slug": "generatedocindexpy"
           },
           {
             "title": "Implementation Summary",
             "slug": "implementation-summary",
-            "line": 69,
+            "line": 75,
             "parent_title": "generate_doc_index.py",
             "parent_slug": "generatedocindexpy"
           },
           {
             "title": "Notes for AI Consumers",
             "slug": "notes-for-ai-consumers",
-            "line": 75,
+            "line": 81,
             "parent_title": "generate_doc_index.py",
             "parent_slug": "generatedocindexpy"
           },
           {
             "title": "Update Log",
             "slug": "update-log",
-            "line": 80,
+            "line": 86,
             "parent_title": "generate_doc_index.py",
             "parent_slug": "generatedocindexpy"
           }
         ],
         "links": [],
         "description": "`generate_doc_index.py` emits a repo-wide inventory of Markdown documents so AI agents and operators can locate content, follow cross-links, and understand section structure without rescanning the filesystem.",
-        "size_bytes": 3469,
-        "modified_utc": "2025-12-16T21:14:26.601426+00:00",
+        "size_bytes": 3946,
+        "modified_utc": "2025-12-29T14:35:06.464209+00:00",
         "tags": [
           "docs",
           "producer",
@@ -11498,7 +11505,7 @@
           ],
           "status": "live",
           "version": "2.0.0",
-          "updated": "2025-12-16",
+          "updated": "2025-12-29",
           "tags": [
             "docs",
             "producer",
@@ -14859,29 +14866,29 @@
           {
             "title": "Signals & Telemetry",
             "slug": "signals-telemetry",
-            "line": 104,
+            "line": 103,
             "parent_title": "Checkbox Report",
             "parent_slug": "checkbox-report"
           },
           {
             "title": "Maintenance Playbook",
             "slug": "maintenance-playbook",
-            "line": 124,
+            "line": 123,
             "parent_title": "Checkbox Report",
             "parent_slug": "checkbox-report"
           },
           {
             "title": "Update Log",
             "slug": "update-log",
-            "line": 134,
+            "line": 133,
             "parent_title": "Checkbox Report",
             "parent_slug": "checkbox-report"
           }
         ],
         "links": [],
         "description": "on pending work.",
-        "size_bytes": 7385,
-        "modified_utc": "2025-12-29T13:35:30.947201+00:00",
+        "size_bytes": 7372,
+        "modified_utc": "2025-12-30T03:21:35.141690+00:00",
         "tags": [
           "checkbox-report",
           "repo-todo"
@@ -15222,8 +15229,8 @@
           "../../../tests/tests_aggregators/"
         ],
         "description": "stage content so evidence capture is ready from the first edit.",
-        "size_bytes": 115682,
-        "modified_utc": "2025-12-29T13:34:42.499761+00:00",
+        "size_bytes": 115598,
+        "modified_utc": "2025-12-30T03:21:30.399595+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -15660,35 +15667,35 @@
           {
             "title": "4. Signals & Telemetry",
             "slug": "4-signals-telemetry",
-            "line": 1221,
+            "line": 1373,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "5. Dependencies & Stop-Gates",
             "slug": "5-dependencies-stop-gates",
-            "line": 1239,
+            "line": 1391,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "6. Instruction Block (Required by Tier Rules)",
             "slug": "6-instruction-block-required-by-tier-rules",
-            "line": 1260,
+            "line": 1412,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "7. Agent Automation Block",
             "slug": "7-agent-automation-block",
-            "line": 1272,
+            "line": 1424,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "8. Update Log",
             "slug": "8-update-log",
-            "line": 1303,
+            "line": 1455,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           }
@@ -15705,8 +15712,8 @@
           "#s21r-009-aggregate-docs-health-signals"
         ],
         "description": "`tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 44530,
-        "modified_utc": "2025-12-29T07:17:17.478084+00:00",
+        "size_bytes": 54433,
+        "modified_utc": "2025-12-30T03:21:30.374931+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -20797,7 +20804,7 @@
         "links": [],
         "description": "Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent\u2026",
         "size_bytes": 80886,
-        "modified_utc": "2025-12-26T17:24:30.709222+00:00",
+        "modified_utc": "2025-12-29T14:35:02.986948+00:00",
         "tags": [],
         "owners": [],
         "status": null,

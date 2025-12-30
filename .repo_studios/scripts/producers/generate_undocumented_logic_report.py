@@ -21,7 +21,7 @@ from utilities.anchor_inventory_loader import load_anchor_inventory  # noqa: E40
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports")
 VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "undocumented_logic"
 
@@ -86,14 +86,14 @@ PATH_CONFIG = PathsConfig(
         ),
         "doc_index": PathSpec(
             field="doc_index",
-            default=Path(".repo_studios/reports/producer_reports/healthview/doc_index"),
+            default=Path(".repo_studios/reports/healthview/doc_index"),
             ensure_dir=False,
             within_repo=True,
         ),
         "anchor_inventory": PathSpec(
             field="anchor_inventory",
             default=Path(
-                ".repo_studios/reports/producer_reports/healthview/anchor_inventory"
+                ".repo_studios/reports/healthview/anchor_inventory"
             ),
             ensure_dir=False,
             within_repo=True,

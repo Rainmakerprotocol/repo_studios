@@ -21,12 +21,12 @@ HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "anchor_inventory"
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
 try:  # pragma: no cover - import guard for standalone execution
-    from libraries import (  # type: ignore import
+    from libraries import (
         KeepSpec,
         OptionsConfig,
         PathSpec,
@@ -34,15 +34,15 @@ try:  # pragma: no cover - import guard for standalone execution
         build_standard_options,
         build_standard_paths,
     )
-    from libraries.database_integration import create_storage  # type: ignore import
-    from libraries.prune_logs import prune_run_directories  # type: ignore import
-    from libraries.retention_policy import get_keep  # type: ignore import
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when script is run directly
     import sys
 
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import (  # type: ignore import
+    from libraries import (
         KeepSpec,
         OptionsConfig,
         PathSpec,
@@ -50,9 +50,9 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when script is run di
         build_standard_options,
         build_standard_paths,
     )
-    from libraries.database_integration import create_storage  # type: ignore import
-    from libraries.prune_logs import prune_run_directories  # type: ignore import
-    from libraries.retention_policy import get_keep  # type: ignore import
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
+    from libraries.retention_policy import get_keep
 
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_anchor_inventory")
 
@@ -278,7 +278,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def extract_test_allowlist_size(test_file: Path) -> int | None:
-    if not test_file or not test_file.exists():  # type: ignore[arg-type]
+    if not test_file or not test_file.exists():
         return None
     text = test_file.read_text(encoding="utf-8", errors="replace")
     allowed_block: list[str] = []

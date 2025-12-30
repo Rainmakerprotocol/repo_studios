@@ -1,0 +1,285 @@
+# Tier-3: generate_anchor_inventory.py
+# Producer script that inventories heading-derived anchors across documentation.
+
+tool:
+  id: generate_anchor_inventory
+  name: Generate Anchor Inventory
+  description: |
+    Scans documentation directories for Markdown files, extracts H1/H2 headings,
+    converts them to slug-based anchors, and emits a canonical HealthView bundle under:
+
+      .repo_studios/reports/healthview/healthview/anchor_inventory/<YYYYMMDD-HHMM>/
+
+    The bundle includes manifest.json, summary.md, and telemetry.json.
+
+    This producer identifies duplicate anchors across files, tracks cross-file
+    membership patterns, and provides telemetry for downstream validation scripts.
+
+    The canonical operator/agent entrypoint is:
+
+      python .repo_studios/scripts/producers/generate_anchor_inventory.py \
+        --repo-root . --output-dir .repo_studios/reports/healthview --log-level INFO
+  keywords:
+    - healthview
+    - producer
+    - anchor
+    - inventory
+    - documentation
+    - markdown
+    - headings
+    - duplicates
+    - slugs
+  use_when:
+    - Need a deterministic, timestamped anchor inventory bundle (manifest/summary/telemetry)
+    - Identifying duplicate heading slugs across documentation files
+    - Producing anchor telemetry for downstream validators (validate_markdown_anchors.py)
+    - Verifying Stage 2.1 anchor inventory outputs and retention behavior
+  dont_use_when:
+    - You only need to read a single markdown file (use read_file instead)
+    - You need to validate anchor link targets (use validate_markdown_anchors.py instead)
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --docs-root {docs_root} \
+      --output-dir {output_dir} \
+      --timestamp {timestamp} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level} \
+      [--additional-docs-root {additional_docs_root}] \
+      [--allow-file {allow_file}] \
+      [--test-file {test_file}] \
+      [--json-out {json_out}]
+  script_path: .repo_studios/scripts/producers/generate_anchor_inventory.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+    notes:
+      - "Uses shared libraries from .repo_studios/command_center/scripts/libraries/"
+      - "Automatically includes .repo_studios/docs as an additional docs root"
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: null
+    description: Repository root override (defaults to script-relative resolution).
+    validation:
+      must_exist: true
+      must_be: directory
+
+  - name: docs_root
+    type: path
+    required: false
+    default: docs
+    description: Primary documentation directory to scan for Markdown files.
+    validation:
+      must_exist: true
+      must_be: directory
+
+  - name: output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview
+    description: |
+      Base output directory. The producer appends healthview/anchor_inventory/timestamp to form the bundle path:
+        {output_dir}/healthview/anchor_inventory/<YYYYMMDD-HHMM>/
+    validation:
+      must_exist: false
+
+  - name: timestamp
+    type: string
+    required: false
+    default: null
+    description: |
+      Override timestamp for the run slug (ISO 8601). If not provided, uses current UTC time.
+    example: "2025-12-29T00:00:00"
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Number of timestamped bundle directories to retain after pruning.
+    validation:
+      min_value: 1
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices:
+      - DEBUG
+      - INFO
+      - WARNING
+      - ERROR
+      - CRITICAL
+    description: Logging verbosity level.
+
+  - name: additional_docs_root
+    type: path
+    required: false
+    default: null
+    repeatable: true
+    description: |
+      Additional documentation directories to scan (repeatable flag).
+      The script automatically adds .repo_studios/docs as an additional root.
+
+  - name: allow_file
+    type: path
+    required: false
+    default: null
+    description: |
+      Optional file containing generic allowlist (one slug per line).
+      Used to suppress known duplicates from warnings.
+
+  - name: test_file
+    type: path
+    required: false
+    default: null
+    description: |
+      Path to test_global_anchors.py for ALLOWED baseline extraction.
+      Used to compare current inventory against test expectations.
+
+  - name: json_out
+    type: path
+    required: false
+    default: null
+    description: |
+      Optional legacy JSON mirror path. Writes a copy of the report JSON
+      to this location for backward compatibility.
+
+outputs:
+  primary:
+    type: file
+    format: json
+    path_pattern: "{output_dir}/healthview/anchor_inventory/<YYYYMMDD-HHMM>/manifest.json"
+    description: Run manifest with inputs, catalog, and artifact list.
+    structure:
+      root_type: object
+      required_keys:
+        - schema_version
+        - viewer_slug
+        - topic
+        - run_timestamp
+        - generated_utc
+        - status
+        - catalog
+        - inputs
+        - artifacts
+
+  secondary:
+    - type: file
+      format: md
+      path_pattern: "{output_dir}/healthview/anchor_inventory/<YYYYMMDD-HHMM>/summary.md"
+      description: Human-readable summary with duplicate statistics and cross-file patterns.
+
+    - type: file
+      format: json
+      path_pattern: "{output_dir}/healthview/anchor_inventory/<YYYYMMDD-HHMM>/telemetry.json"
+      description: Metrics and full payload including slug stats and document inventory.
+
+behavior:
+  idempotent: true
+  side_effects:
+    - Creates timestamped bundle directory under output_dir
+    - Prunes older bundle directories beyond artifacts_to_keep
+    - Optionally writes legacy JSON mirror to --json-out path
+  duration_estimate: "2-10 seconds depending on documentation size"
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 1
+      meaning: Docs root not found or invalid path
+      agent_action: Verify --docs-root exists and is a directory
+
+    - exit_code: 1
+      meaning: Repository root resolution failed
+      agent_action: Provide explicit --repo-root or run from repository root
+
+  stderr_patterns:
+    - pattern: "docs root not found"
+      meaning: The provided --docs-root does not exist
+      agent_action: Correct the path or create the documentation directory
+
+integration:
+  typical_workflow:
+    - Run generate_anchor_inventory.py to produce anchor telemetry
+    - Downstream validators (validate_markdown_anchors.py) consume telemetry.json
+    - Human reviewers inspect summary.md for duplicate patterns
+
+  output_consumers:
+    - validate_markdown_anchors.py
+    - aggregate_docs_health_signals.py
+
+  input_producers: []
+
+  sample_output: |
+    {
+      "schema_version": 1,
+      "viewer_slug": "healthview",
+      "topic": "anchor_inventory",
+      "run_timestamp": "20251229-2120",
+      "generated_utc": "2025-12-29T21:20:00+00:00",
+      "status": "ok",
+      "catalog": ["scripts.producers.generate_anchor_inventory"],
+      "inputs": { ... },
+      "artifacts": [
+        {"name": "manifest.json", "role": "manifest"},
+        {"name": "summary.md", "role": "summary"},
+        {"name": "telemetry.json", "role": "telemetry"}
+      ]
+    }
+
+examples:
+  - description: Basic run with defaults
+    command: |
+      python .repo_studios/scripts/producers/generate_anchor_inventory.py \
+        --docs-root docs --log-level INFO
+    expected_output: |
+      INFO Documents scanned=132 missing_h1=7 missing_h2=3 repeated=0 cross_file_members=102
+
+  - description: Full run with explicit paths and HOP output
+    command: |
+      python .repo_studios/scripts/producers/generate_anchor_inventory.py \
+        --repo-root . \
+        --docs-root docs \
+        --output-dir .repo_studios/reports/healthview \
+        --artifacts-to-keep 1 \
+        --log-level INFO
+    expected_output: |
+      INFO Including additional documentation roots: .repo_studios/docs
+      INFO Documents scanned=132 missing_h1=7 missing_h2=3 repeated=0 cross_file_members=102
+
+  - description: Programmatic invocation from Python
+    code: |
+      from generate_anchor_inventory import run
+      result = run([
+          "--repo-root", ".",
+          "--docs-root", "docs",
+          "--output-dir", ".repo_studios/reports/healthview",
+          "--artifacts-to-keep", "1",
+          "--log-level", "INFO",
+      ])
+      print(result["total_slugs"], "slugs inventoried")
+
+metadata:
+  category: producer
+  tier: tier-3
+  status: active
+  version: 1.0.0
+  last_updated: "2025-12-29"
+  author: repo_studios_team
+  dependencies_tier3:
+    - tier3_cli.yaml
+    - tier3_artifacts.yaml
+    - tier3_prune_logs.yaml
+  tier2_rosters:
+    - tier2_docs_health_overview_roster.md
+  tier1_pipelines:
+    - tier1_healthview_orchestration_pipeline.md

@@ -55,7 +55,7 @@ Refer to [Guide](../../docs/guide.md).
 
     (repo_root / ".venv" / "ignore.md").write_text("# Ignore\n", encoding="utf-8")
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports"
+    output_dir = repo_root / ".repo_studios" / "reports" / "healthview"
 
     exit_code = mod.main(
         [
@@ -279,7 +279,7 @@ def run(argv):
         encoding="utf-8",
     )
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports"
+    output_dir = repo_root / ".repo_studios" / "reports" / "healthview"
 
     exit_code = mod.main(
         [

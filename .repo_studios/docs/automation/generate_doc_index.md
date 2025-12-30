@@ -5,7 +5,7 @@ role: [Operational-Doc]
 owners: [repo_studios_team@rainmakerprotocol.dev]
 status: live
 version: 2.0.0
-updated: 2025-12-16
+updated: 2025-12-29
 tags: [docs, producer, healthview, doc-index]
 related_files:
   - .repo_studios/scripts/producers/generate_doc_index.py
@@ -25,12 +25,18 @@ content, follow cross-links, and understand section structure without rescanning
 ## System Context
 
 - Producer script: `.repo_studios/scripts/producers/generate_doc_index.py`
-- Viewer/topic: `healthview/doc_index`
-- Output base: `.repo_studios/reports/producer_reports/`
+- Viewer/topic: `producer_reports/doc_index`
+- Output base: `.repo_studios/reports/healthview/`
+
+## Agent Instructions
+
+- Prefer `make -C .repo_studios doc-index` for normal refreshes (also refreshes checkbox report + Tier-3 index).
+- Canonical bundle location: `.repo_studios/reports/healthview/producer_reports/doc_index/<YYYYMMDD-HHMM>/`.
+- For structured ingestion, read `telemetry.json` and use `payload` as the authoritative JSON.
 
 ## Output Contract
 
-- Writes a positional bundle under `.repo_studios/reports/producer_reports/healthview/doc_index/<YYYYMMDD-HHMM>/`.
+- Writes a positional bundle under `.repo_studios/reports/healthview/producer_reports/doc_index/<YYYYMMDD-HHMM>/`.
 - Each run directory contains:
   - `manifest.json`
   - `summary.md`
@@ -60,7 +66,7 @@ Each document entry (in `telemetry.json` → `payload` → `documents`) includes
 ## CLI Reference
 
 - `--repo-root`: override repository root discovery (defaults to script location depth traversal).
-- `--output-dir`: base reports directory (default: `.repo_studios/reports/producer_reports`).
+- `--output-dir`: base reports directory (default: `.repo_studios/reports/healthview`).
 - `--artifacts-to-keep`: retention count (defaults to `1`).
 - `--timestamp`: ISO-8601 timestamp override for deterministic tests.
 - `--db-target`: optional sink identifier; recorded as placeholder metadata.
@@ -81,3 +87,4 @@ Each document entry (in `telemetry.json` → `payload` → `documents`) includes
 
 - 2025-12-16: Migrated to positional bundle contract (`manifest.json`, `summary.md`, `telemetry.json`) and removed
   legacy `latest_*` pointers.
+- 2025-12-29: Migrated output root to the HealthView HOP layout (`.repo_studios/reports/healthview/producer_reports/doc_index/<ts>/`).

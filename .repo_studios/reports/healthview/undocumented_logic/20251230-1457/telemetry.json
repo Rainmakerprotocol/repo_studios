@@ -1,0 +1,3642 @@
+{
+  "viewer_slug": "healthview",
+  "topic": "undocumented_logic",
+  "run_timestamp": "20251230-1457",
+  "generated_utc": "2025-12-30T14:57:08.679117+00:00",
+  "metrics": {
+    "modules_scanned": 44,
+    "modules_with_findings": 39,
+    "entities_missing_docs": 460,
+    "docstring_coverage_percent": 3.97
+  },
+  "payload": {
+    "schema_version": 1,
+    "generated_utc": "2025-12-30T14:57:08.679117+00:00",
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "summary": {
+      "modules_scanned": 44,
+      "modules_with_findings": 39,
+      "entities_scanned": 479,
+      "entities_missing_docs": 460,
+      "docstring_coverage_percent": 3.97
+    },
+    "modules": [
+      {
+        "module_path": ".repo_studios/scripts/producers/scan_monkey_patches.py",
+        "module_name": ".repo_studios.scripts.producers.scan_monkey_patches",
+        "total_entities": 51,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.Paths",
+            "line": 147,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.Options",
+            "line": 154,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "ScanOptions",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.ScanOptions",
+            "line": 159,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Finding",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.Finding",
+            "line": 170,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "Finding.to_dict",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.Finding.to_dict",
+            "line": 187,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ImportResolver.__init__",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.ImportResolver.__init__",
+            "line": 220,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ImportResolver.visit_Import",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.ImportResolver.visit_Import",
+            "line": 225,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ImportResolver.visit_ImportFrom",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.ImportResolver.visit_ImportFrom",
+            "line": 233,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ScopeTracker.__init__",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.ScopeTracker.__init__",
+            "line": 247,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ScopeTracker.current",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.ScopeTracker.current",
+            "line": 250,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ScopeTracker.visit_FunctionDef",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.ScopeTracker.visit_FunctionDef",
+            "line": 260,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ScopeTracker.visit_AsyncFunctionDef",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.ScopeTracker.visit_AsyncFunctionDef",
+            "line": 265,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ScopeTracker.visit_ClassDef",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.ScopeTracker.visit_ClassDef",
+            "line": 270,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "read_lines",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.read_lines",
+            "line": 276,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "get_context",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.get_context",
+            "line": 283,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "get_nearby_comment",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.get_nearby_comment",
+            "line": 290,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "is_path_in_tests",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.is_path_in_tests",
+            "line": 309,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "top_level_packages_default",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.top_level_packages_default",
+            "line": 318,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "base_module_name",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.base_module_name",
+            "line": 337,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "dotted_name_from_attribute",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.dotted_name_from_attribute",
+            "line": 343,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "is_alias_external",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.is_alias_external",
+            "line": 356,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "classify_intent",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.classify_intent",
+            "line": 365,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "add_git_blame",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.add_git_blame",
+            "line": 383,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "MonkeyPatchScanner",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner",
+            "line": 421,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "MonkeyPatchScanner.__init__",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.__init__",
+            "line": 422,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "MonkeyPatchScanner.generic_visit",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.generic_visit",
+            "line": 441,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "MonkeyPatchScanner.visit_Assign",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_Assign",
+            "line": 449,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "MonkeyPatchScanner.visit_AnnAssign",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_AnnAssign",
+            "line": 453,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "MonkeyPatchScanner.visit_AugAssign",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_AugAssign",
+            "line": 457,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "MonkeyPatchScanner.visit_Call",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_Call",
+            "line": 461,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "MonkeyPatchScanner.visit_Delete",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_Delete",
+            "line": 523,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "MonkeyPatchScanner.visit_FunctionDef",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_FunctionDef",
+            "line": 538,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "MonkeyPatchScanner.visit_ClassDef",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_ClassDef",
+            "line": 554,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "scan_file",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.scan_file",
+            "line": 751,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "iter_python_files",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.iter_python_files",
+            "line": 810,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "augment_findings_with_git",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.augment_findings_with_git",
+            "line": 836,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "summarize_findings",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.summarize_findings",
+            "line": 852,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compose_manifest",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.compose_manifest",
+            "line": 881,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compose_telemetry",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.compose_telemetry",
+            "line": 957,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_summary_markdown",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.render_summary_markdown",
+            "line": 986,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "write_bundle",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.write_bundle",
+            "line": 1035,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "scan_repository",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.scan_repository",
+            "line": 1066,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run_self_test",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.run_self_test",
+            "line": 1094,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_args",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.parse_args",
+            "line": 1165,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "configure_logging",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.configure_logging",
+            "line": 1236,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_paths",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.build_paths",
+            "line": 1240,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.run",
+            "line": 1244,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.scan_monkey_patches.main",
+            "line": 1340,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 5.88,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/validate_inventory.py",
+        "module_name": ".repo_studios.scripts.producers.validate_inventory",
+        "total_entities": 34,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "ValidationIssue",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.ValidationIssue",
+            "line": 85,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ValidationIssue.to_dict",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.ValidationIssue.to_dict",
+            "line": 91,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "ValidationReport",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.ValidationReport",
+            "line": 105,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ValidationReport.add",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.ValidationReport.add",
+            "line": 108,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ValidationReport.errors",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.ValidationReport.errors",
+            "line": 112,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ValidationReport.warnings",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.ValidationReport.warnings",
+            "line": 116,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ValidationReport.to_json",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.ValidationReport.to_json",
+            "line": 119,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "ValidationStats",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.ValidationStats",
+            "line": 124,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ValidationStats.to_dict",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.ValidationStats.to_dict",
+            "line": 128,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "EnumRegistry",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.EnumRegistry",
+            "line": 136,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "EnumRegistry.load",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.EnumRegistry.load",
+            "line": 140,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "EnumRegistry.ensure",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.EnumRegistry.ensure",
+            "line": 148,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "ValidatorConfig",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.ValidatorConfig",
+            "line": 169,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ValidatorConfig.load",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.ValidatorConfig.load",
+            "line": 176,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ValidatorConfig.is_suppressed",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.ValidatorConfig.is_suppressed",
+            "line": 195,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "update_latest_artifacts",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.update_latest_artifacts",
+            "line": 231,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "prune_history",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.prune_history",
+            "line": 242,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "iterate_inventory_files",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.iterate_inventory_files",
+            "line": 283,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "validate_record",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.validate_record",
+            "line": 395,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "validate_file",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.validate_file",
+            "line": 411,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_markdown",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.render_markdown",
+            "line": 451,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_log",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.render_log",
+            "line": 470,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "write_run_artifacts",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.write_run_artifacts",
+            "line": 488,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compose_payload",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.compose_payload",
+            "line": 495,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compose_raw_payload",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.compose_raw_payload",
+            "line": 533,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_parser",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.build_parser",
+            "line": 547,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.Paths",
+            "line": 576,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "BasePaths",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.BasePaths",
+            "line": 585,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.Options",
+            "line": 592,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "KeepOptions",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.KeepOptions",
+            "line": 627,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_paths",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.build_paths",
+            "line": 652,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_options",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.build_options",
+            "line": 690,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.validate_inventory.main",
+            "line": 700,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 2.94,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/generate_anchor_inventory.py",
+        "module_name": ".repo_studios.scripts.producers.generate_anchor_inventory",
+        "total_entities": 25,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.Paths",
+            "line": 61,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.Options",
+            "line": 68,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "slugify",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.slugify",
+            "line": 95,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "iter_markdown_files",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.iter_markdown_files",
+            "line": 104,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "SlugStat",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.SlugStat",
+            "line": 112,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "DocumentSummary",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.DocumentSummary",
+            "line": 124,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "DocumentSummary.heading_count",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.DocumentSummary.heading_count",
+            "line": 130,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "DocumentSummary.unique_slugs",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.DocumentSummary.unique_slugs",
+            "line": 133,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "DocumentSummary.duplicate_slugs",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.DocumentSummary.duplicate_slugs",
+            "line": 136,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "DocumentSummary.missing_h1",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.DocumentSummary.missing_h1",
+            "line": 139,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "DocumentSummary.missing_h2",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.DocumentSummary.missing_h2",
+            "line": 142,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "collect",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.collect",
+            "line": 212,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_args",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.parse_args",
+            "line": 242,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "extract_test_allowlist_size",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.extract_test_allowlist_size",
+            "line": 280,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_summary",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.build_summary",
+            "line": 300,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_cross_file_duplicates",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.build_cross_file_duplicates",
+            "line": 331,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_cross_file_membership",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.build_cross_file_membership",
+            "line": 337,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_document_payload",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.build_document_payload",
+            "line": 347,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_report",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.build_report",
+            "line": 372,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_markdown",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.render_markdown",
+            "line": 402,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "emit_summary_log",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.emit_summary_log",
+            "line": 503,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "load_allow_set",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.load_allow_set",
+            "line": 547,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "maybe_write_legacy_json",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.maybe_write_legacy_json",
+            "line": 583,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.run",
+            "line": 591,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.generate_anchor_inventory.main",
+            "line": 753,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/seed_standards_prompts.py",
+        "module_name": ".repo_studios.scripts.producers.seed_standards_prompts",
+        "total_entities": 21,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.Paths",
+            "line": 59,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.Options",
+            "line": 66,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "KeepOptions",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.KeepOptions",
+            "line": 97,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_args",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.parse_args",
+            "line": 107,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "configure_logging",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.configure_logging",
+            "line": 155,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_paths",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.build_paths",
+            "line": 159,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_options",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.build_options",
+            "line": 174,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "load_index",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.load_index",
+            "line": 188,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_seed",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.build_seed",
+            "line": 196,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "summarize_seed",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.summarize_seed",
+            "line": 221,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_seed",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.render_seed",
+            "line": 249,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "ensure_run_directory",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.ensure_run_directory",
+            "line": 266,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "write_seed_files",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.write_seed_files",
+            "line": 272,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_markdown_report",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.render_markdown_report",
+            "line": 287,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_log",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.render_log",
+            "line": 319,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "write_artifacts",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.write_artifacts",
+            "line": 352,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "prune_history",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.prune_history",
+            "line": 374,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "emit_legacy_output",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.emit_legacy_output",
+            "line": 391,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compose_payload",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.compose_payload",
+            "line": 404,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.run",
+            "line": 429,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.seed_standards_prompts.main",
+            "line": 481,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/analyze_test_hardening.py",
+        "module_name": ".repo_studios.scripts.producers.analyze_test_hardening",
+        "total_entities": 20,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.Paths",
+            "line": 62,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.Options",
+            "line": 68,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "TestIssue",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.TestIssue",
+            "line": 96,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "TestFileAnalysis",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.TestFileAnalysis",
+            "line": 104,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "TestFileAnalysis.severity_counts",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.TestFileAnalysis.severity_counts",
+            "line": 113,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "TestFileAnalysis.priority_score",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.TestFileAnalysis.priority_score",
+            "line": 121,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_args",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.parse_args",
+            "line": 126,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_paths",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.build_paths",
+            "line": 173,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_options",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.build_options",
+            "line": 177,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "configure_logging",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.configure_logging",
+            "line": 182,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "discover_test_files",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.discover_test_files",
+            "line": 242,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "analyze_file",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.analyze_file",
+            "line": 276,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "analyze_all",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.analyze_all",
+            "line": 498,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compose_payload",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.compose_payload",
+            "line": 510,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_markdown_report",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.render_markdown_report",
+            "line": 595,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_manifest",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.build_manifest",
+            "line": 667,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_telemetry",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.build_telemetry",
+            "line": 712,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "prune_history",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.prune_history",
+            "line": 746,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.run",
+            "line": 769,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.analyze_test_hardening.main",
+            "line": 824,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/scan_code_placeholders.py",
+        "module_name": ".repo_studios.scripts.producers.scan_code_placeholders",
+        "total_entities": 19,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.Paths",
+            "line": 75,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "ScanOptions",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.ScanOptions",
+            "line": 82,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.Options",
+            "line": 92,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "PlaceholderRecord",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.PlaceholderRecord",
+            "line": 125,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "PlaceholderRecord.to_dict",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.PlaceholderRecord.to_dict",
+            "line": 132,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_args",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.parse_args",
+            "line": 142,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_paths",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.build_paths",
+            "line": 199,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "load_allowlist",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.load_allowlist",
+            "line": 203,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "normalize_patterns",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.normalize_patterns",
+            "line": 227,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "normalize_extensions",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.normalize_extensions",
+            "line": 234,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "normalize_exclude_prefixes",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.normalize_exclude_prefixes",
+            "line": 244,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compile_pattern_regex",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.compile_pattern_regex",
+            "line": 270,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "scan_placeholders",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.scan_placeholders",
+            "line": 277,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compose_payload",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.compose_payload",
+            "line": 342,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_markdown_report",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.render_markdown_report",
+            "line": 382,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_log",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.render_log",
+            "line": 412,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "configure_logging",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.configure_logging",
+            "line": 490,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.run",
+            "line": 494,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.scan_code_placeholders.main",
+            "line": 569,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/verify_docs_integrity.py",
+        "module_name": ".repo_studios.scripts.producers.verify_docs_integrity",
+        "total_entities": 19,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "JsonBlockResult",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.JsonBlockResult",
+            "line": 87,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.Paths",
+            "line": 95,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.Options",
+            "line": 102,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "DocumentProcessingResult",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.DocumentProcessingResult",
+            "line": 137,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "VerificationOutcome",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.VerificationOutcome",
+            "line": 147,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_args",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.parse_args",
+            "line": 159,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "configure_logging",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.configure_logging",
+            "line": 203,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_paths",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.build_paths",
+            "line": 211,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_options",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.build_options",
+            "line": 215,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compute_exit_codes_hash",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.compute_exit_codes_hash",
+            "line": 240,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "process_file",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.process_file",
+            "line": 269,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "regenerate_index_table",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.regenerate_index_table",
+            "line": 296,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "verify_all",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.verify_all",
+            "line": 380,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compose_payload",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.compose_payload",
+            "line": 431,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compose_manifest",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.compose_manifest",
+            "line": 506,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compose_telemetry",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.compose_telemetry",
+            "line": 529,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_summary_markdown",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.render_summary_markdown",
+            "line": 552,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.run",
+            "line": 583,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.verify_docs_integrity.main",
+            "line": 693,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/generate_doc_index.py",
+        "module_name": ".repo_studios.scripts.producers.generate_doc_index",
+        "total_entities": 18,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.Paths",
+            "line": 98,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.Options",
+            "line": 104,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Heading",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.Heading",
+            "line": 109,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "SubHeading",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.SubHeading",
+            "line": 116,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "DocumentRecord",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.DocumentRecord",
+            "line": 125,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "slugify",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.slugify",
+            "line": 164,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "iter_markdown_files",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.iter_markdown_files",
+            "line": 185,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_markdown_document",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.parse_markdown_document",
+            "line": 312,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "collect_documents",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.collect_documents",
+            "line": 388,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_metrics",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.build_metrics",
+            "line": 396,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_database_placeholder",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.build_database_placeholder",
+            "line": 447,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_payload",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.build_payload",
+            "line": 456,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_csv",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.build_csv",
+            "line": 501,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_bundle",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.render_bundle",
+            "line": 586,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "handle_database_placeholder",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.handle_database_placeholder",
+            "line": 708,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_args",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.parse_args",
+            "line": 715,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.run",
+            "line": 807,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.generate_doc_index.main",
+            "line": 953,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py",
+        "module_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs",
+        "total_entities": 18,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.Paths",
+            "line": 83,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.Options",
+            "line": 91,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_args",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.parse_args",
+            "line": 113,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "configure_logging",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.configure_logging",
+            "line": 150,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_paths",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.build_paths",
+            "line": 154,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_options",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.build_options",
+            "line": 158,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "iter_markdown_files",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.iter_markdown_files",
+            "line": 172,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "collect_referenced_anchors",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.collect_referenced_anchors",
+            "line": 182,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "collect_legacy_stub_anchors",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.collect_legacy_stub_anchors",
+            "line": 195,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "load_allowlist",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.load_allowlist",
+            "line": 220,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "summarize_missing",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.summarize_missing",
+            "line": 231,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_report",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.build_report",
+            "line": 248,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compose_manifest",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.compose_manifest",
+            "line": 286,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compose_telemetry",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.compose_telemetry",
+            "line": 311,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_summary_markdown",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.render_summary_markdown",
+            "line": 330,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "prune_history",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.prune_history",
+            "line": 363,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.run",
+            "line": 379,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.validate_metrics_anchor_stubs.main",
+            "line": 465,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/render_inventory_views.py",
+        "module_name": ".repo_studios.scripts.producers.render_inventory_views",
+        "total_entities": 17,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "ViewBundle",
+            "qualified_name": ".repo_studios.scripts.producers.render_inventory_views.ViewBundle",
+            "line": 51,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "load_inventory",
+            "qualified_name": ".repo_studios.scripts.producers.render_inventory_views.load_inventory",
+            "line": 89,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "docs_view",
+            "qualified_name": ".repo_studios.scripts.producers.render_inventory_views.docs_view",
+            "line": 108,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "scripts_view",
+            "qualified_name": ".repo_studios.scripts.producers.render_inventory_views.scripts_view",
+            "line": 128,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "tests_view",
+            "qualified_name": ".repo_studios.scripts.producers.render_inventory_views.tests_view",
+            "line": 149,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "summary_view",
+            "qualified_name": ".repo_studios.scripts.producers.render_inventory_views.summary_view",
+            "line": 167,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "summary_dashboard",
+            "qualified_name": ".repo_studios.scripts.producers.render_inventory_views.summary_dashboard",
+            "line": 201,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_views",
+            "qualified_name": ".repo_studios.scripts.producers.render_inventory_views.build_views",
+            "line": 219,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "write_stub",
+            "qualified_name": ".repo_studios.scripts.producers.render_inventory_views.write_stub",
+            "line": 242,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compose_report_payload",
+            "qualified_name": ".repo_studios.scripts.producers.render_inventory_views.compose_report_payload",
+            "line": 263,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_markdown",
+            "qualified_name": ".repo_studios.scripts.producers.render_inventory_views.render_markdown",
+            "line": 321,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_log",
+            "qualified_name": ".repo_studios.scripts.producers.render_inventory_views.render_log",
+            "line": 351,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.render_inventory_views.Paths",
+            "line": 392,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.render_inventory_views.Options",
+            "line": 400,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_paths",
+            "qualified_name": ".repo_studios.scripts.producers.render_inventory_views.build_paths",
+            "line": 425,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_options",
+            "qualified_name": ".repo_studios.scripts.producers.render_inventory_views.build_options",
+            "line": 429,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.render_inventory_views.main",
+            "line": 437,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/orchestrators/healthview/run_healthview_agent_loop.py",
+        "module_name": ".repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop",
+        "total_entities": 16,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "StageKey",
+            "qualified_name": ".repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.StageKey",
+            "line": 49,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "StageKey.sort_key",
+            "qualified_name": ".repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.StageKey.sort_key",
+            "line": 53,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "StageKey.label",
+            "qualified_name": ".repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.StageKey.label",
+            "line": 58,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "CheckboxCandidate",
+            "qualified_name": ".repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.CheckboxCandidate",
+            "line": 63,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "load_yaml",
+            "qualified_name": ".repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.load_yaml",
+            "line": 81,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_stage_key",
+            "qualified_name": ".repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.parse_stage_key",
+            "line": 191,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "classify_tier1_kind",
+            "qualified_name": ".repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.classify_tier1_kind",
+            "line": 204,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "extract_tier2_link",
+            "qualified_name": ".repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.extract_tier2_link",
+            "line": 212,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "is_placeholder",
+            "qualified_name": ".repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.is_placeholder",
+            "line": 233,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "read_checkbox_csv",
+            "qualified_name": ".repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.read_checkbox_csv",
+            "line": 237,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "select_next_candidate",
+            "qualified_name": ".repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.select_next_candidate",
+            "line": 243,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "resolve_tier2_target",
+            "qualified_name": ".repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.resolve_tier2_target",
+            "line": 317,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_action_packet",
+            "qualified_name": ".repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.build_action_packet",
+            "line": 356,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.run",
+            "line": 376,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_args",
+            "qualified_name": ".repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.parse_args",
+            "line": 401,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.main",
+            "line": 441,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/check_inventory_health.py",
+        "module_name": ".repo_studios.scripts.producers.check_inventory_health",
+        "total_entities": 15,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.check_inventory_health.Paths",
+            "line": 75,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.check_inventory_health.Options",
+            "line": 83,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "load_json",
+            "qualified_name": ".repo_studios.scripts.producers.check_inventory_health.load_json",
+            "line": 142,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compute_deltas",
+            "qualified_name": ".repo_studios.scripts.producers.check_inventory_health.compute_deltas",
+            "line": 172,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "check_thresholds",
+            "qualified_name": ".repo_studios.scripts.producers.check_inventory_health.check_thresholds",
+            "line": 183,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "evaluate",
+            "qualified_name": ".repo_studios.scripts.producers.check_inventory_health.evaluate",
+            "line": 207,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_timestamp",
+            "qualified_name": ".repo_studios.scripts.producers.check_inventory_health.parse_timestamp",
+            "line": 214,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_manifest",
+            "qualified_name": ".repo_studios.scripts.producers.check_inventory_health.build_manifest",
+            "line": 230,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_telemetry",
+            "qualified_name": ".repo_studios.scripts.producers.check_inventory_health.build_telemetry",
+            "line": 257,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_report",
+            "qualified_name": ".repo_studios.scripts.producers.check_inventory_health.build_report",
+            "line": 291,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "write_markdown",
+            "qualified_name": ".repo_studios.scripts.producers.check_inventory_health.write_markdown",
+            "line": 327,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "configure_logging",
+            "qualified_name": ".repo_studios.scripts.producers.check_inventory_health.configure_logging",
+            "line": 368,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_paths",
+            "qualified_name": ".repo_studios.scripts.producers.check_inventory_health.build_paths",
+            "line": 373,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_options",
+            "qualified_name": ".repo_studios.scripts.producers.check_inventory_health.build_options",
+            "line": 377,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.check_inventory_health.main",
+            "line": 385,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/validate_markdown_anchors.py",
+        "module_name": ".repo_studios.scripts.producers.validate_markdown_anchors",
+        "total_entities": 15,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Issue",
+            "qualified_name": ".repo_studios.scripts.producers.validate_markdown_anchors.Issue",
+            "line": 91,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.validate_markdown_anchors.Paths",
+            "line": 99,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.validate_markdown_anchors.Options",
+            "line": 105,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_report",
+            "qualified_name": ".repo_studios.scripts.producers.validate_markdown_anchors.build_report",
+            "line": 145,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compose_manifest",
+            "qualified_name": ".repo_studios.scripts.producers.validate_markdown_anchors.compose_manifest",
+            "line": 196,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compose_telemetry",
+            "qualified_name": ".repo_studios.scripts.producers.validate_markdown_anchors.compose_telemetry",
+            "line": 218,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_summary_markdown",
+            "qualified_name": ".repo_studios.scripts.producers.validate_markdown_anchors.render_summary_markdown",
+            "line": 239,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "slugify",
+            "qualified_name": ".repo_studios.scripts.producers.validate_markdown_anchors.slugify",
+            "line": 262,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "collect_anchors",
+            "qualified_name": ".repo_studios.scripts.producers.validate_markdown_anchors.collect_anchors",
+            "line": 273,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "iter_files",
+            "qualified_name": ".repo_studios.scripts.producers.validate_markdown_anchors.iter_files",
+            "line": 283,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_links",
+            "qualified_name": ".repo_studios.scripts.producers.validate_markdown_anchors.parse_links",
+            "line": 292,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "check_file",
+            "qualified_name": ".repo_studios.scripts.producers.validate_markdown_anchors.check_file",
+            "line": 298,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_paths",
+            "qualified_name": ".repo_studios.scripts.producers.validate_markdown_anchors.build_paths",
+            "line": 351,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_options",
+            "qualified_name": ".repo_studios.scripts.producers.validate_markdown_anchors.build_options",
+            "line": 355,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.validate_markdown_anchors.main",
+            "line": 366,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/validate_import_boundaries.py",
+        "module_name": ".repo_studios.scripts.producers.validate_import_boundaries",
+        "total_entities": 14,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.validate_import_boundaries.Paths",
+            "line": 53,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.validate_import_boundaries.Options",
+            "line": 61,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Violation",
+            "qualified_name": ".repo_studios.scripts.producers.validate_import_boundaries.Violation",
+            "line": 95,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_args",
+            "qualified_name": ".repo_studios.scripts.producers.validate_import_boundaries.parse_args",
+            "line": 101,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "configure_logging",
+            "qualified_name": ".repo_studios.scripts.producers.validate_import_boundaries.configure_logging",
+            "line": 144,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_paths",
+            "qualified_name": ".repo_studios.scripts.producers.validate_import_boundaries.build_paths",
+            "line": 148,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_options",
+            "qualified_name": ".repo_studios.scripts.producers.validate_import_boundaries.build_options",
+            "line": 165,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_markdown_report",
+            "qualified_name": ".repo_studios.scripts.producers.validate_import_boundaries.render_markdown_report",
+            "line": 330,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_log",
+            "qualified_name": ".repo_studios.scripts.producers.validate_import_boundaries.render_log",
+            "line": 366,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "write_artifacts",
+            "qualified_name": ".repo_studios.scripts.producers.validate_import_boundaries.write_artifacts",
+            "line": 397,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "prune_history",
+            "qualified_name": ".repo_studios.scripts.producers.validate_import_boundaries.prune_history",
+            "line": 417,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "compose_payload",
+            "qualified_name": ".repo_studios.scripts.producers.validate_import_boundaries.compose_payload",
+            "line": 434,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.producers.validate_import_boundaries.run",
+            "line": 464,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.validate_import_boundaries.main",
+            "line": 529,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/generate_code_doc_churn_report.py",
+        "module_name": ".repo_studios.scripts.producers.generate_code_doc_churn_report",
+        "total_entities": 12,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.generate_code_doc_churn_report.Paths",
+            "line": 77,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.generate_code_doc_churn_report.Options",
+            "line": 86,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "ModuleActivity",
+            "qualified_name": ".repo_studios.scripts.producers.generate_code_doc_churn_report.ModuleActivity",
+            "line": 131,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ModuleActivity.to_payload",
+            "qualified_name": ".repo_studios.scripts.producers.generate_code_doc_churn_report.ModuleActivity.to_payload",
+            "line": 139,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "GitMetadata",
+            "qualified_name": ".repo_studios.scripts.producers.generate_code_doc_churn_report.GitMetadata",
+            "line": 152,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "GitMetadata.to_payload",
+            "qualified_name": ".repo_studios.scripts.producers.generate_code_doc_churn_report.GitMetadata.to_payload",
+            "line": 158,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_args",
+            "qualified_name": ".repo_studios.scripts.producers.generate_code_doc_churn_report.parse_args",
+            "line": 168,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_report",
+            "qualified_name": ".repo_studios.scripts.producers.generate_code_doc_churn_report.build_report",
+            "line": 398,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_markdown",
+            "qualified_name": ".repo_studios.scripts.producers.generate_code_doc_churn_report.render_markdown",
+            "line": 440,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "render_tsv",
+            "qualified_name": ".repo_studios.scripts.producers.generate_code_doc_churn_report.render_tsv",
+            "line": 504,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.producers.generate_code_doc_churn_report.run",
+            "line": 541,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.generate_code_doc_churn_report.main",
+            "line": 668,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/generate_standards_index.py",
+        "module_name": ".repo_studios.scripts.producers.generate_standards_index",
+        "total_entities": 11,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Category",
+            "qualified_name": ".repo_studios.scripts.producers.generate_standards_index.Category",
+            "line": 66,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Source",
+            "qualified_name": ".repo_studios.scripts.producers.generate_standards_index.Source",
+            "line": 74,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.generate_standards_index.Paths",
+            "line": 80,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "BuildStats",
+            "qualified_name": ".repo_studios.scripts.producers.generate_standards_index.BuildStats",
+            "line": 91,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "ExtractDiagnostics",
+            "qualified_name": ".repo_studios.scripts.producers.generate_standards_index.ExtractDiagnostics",
+            "line": 103,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_index",
+            "qualified_name": ".repo_studios.scripts.producers.generate_standards_index.build_index",
+            "line": 339,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "write_index",
+            "qualified_name": ".repo_studios.scripts.producers.generate_standards_index.write_index",
+            "line": 400,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "write_artifacts",
+            "qualified_name": ".repo_studios.scripts.producers.generate_standards_index.write_artifacts",
+            "line": 565,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "configure_logging",
+            "qualified_name": ".repo_studios.scripts.producers.generate_standards_index.configure_logging",
+            "line": 636,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_parser",
+            "qualified_name": ".repo_studios.scripts.producers.generate_standards_index.build_parser",
+            "line": 641,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.generate_standards_index.main",
+            "line": 696,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/consumers/generate_anchor_health_report.py",
+        "module_name": ".repo_studios.scripts.consumers.generate_anchor_health_report",
+        "total_entities": 13,
+        "findings": [
+          {
+            "kind": "method",
+            "name": "Cluster.__init__",
+            "qualified_name": ".repo_studios.scripts.consumers.generate_anchor_health_report.Cluster.__init__",
+            "line": 79,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "Cluster.file_count",
+            "qualified_name": ".repo_studios.scripts.consumers.generate_anchor_health_report.Cluster.file_count",
+            "line": 85,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "collect_h1_h2_slugs",
+            "qualified_name": ".repo_studios.scripts.consumers.generate_anchor_health_report.collect_h1_h2_slugs",
+            "line": 99,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "multi_file_duplicates",
+            "qualified_name": ".repo_studios.scripts.consumers.generate_anchor_health_report.multi_file_duplicates",
+            "line": 120,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "load_baseline",
+            "qualified_name": ".repo_studios.scripts.consumers.generate_anchor_health_report.load_baseline",
+            "line": 129,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_report",
+            "qualified_name": ".repo_studios.scripts.consumers.generate_anchor_health_report.build_report",
+            "line": 183,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "write_artifacts",
+            "qualified_name": ".repo_studios.scripts.consumers.generate_anchor_health_report.write_artifacts",
+            "line": 362,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_args",
+            "qualified_name": ".repo_studios.scripts.consumers.generate_anchor_health_report.parse_args",
+            "line": 454,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.consumers.generate_anchor_health_report.run",
+            "line": 486,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.consumers.generate_anchor_health_report.main",
+            "line": 552,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 23.08,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/collect_faulthandler_reports.py",
+        "module_name": ".repo_studios.scripts.producers.collect_faulthandler_reports",
+        "total_entities": 10,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.collect_faulthandler_reports.Paths",
+            "line": 58,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.collect_faulthandler_reports.Options",
+            "line": 65,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_args",
+            "qualified_name": ".repo_studios.scripts.producers.collect_faulthandler_reports.parse_args",
+            "line": 96,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_paths",
+            "qualified_name": ".repo_studios.scripts.producers.collect_faulthandler_reports.build_paths",
+            "line": 136,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_options",
+            "qualified_name": ".repo_studios.scripts.producers.collect_faulthandler_reports.build_options",
+            "line": 140,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "configure_logging",
+            "qualified_name": ".repo_studios.scripts.producers.collect_faulthandler_reports.configure_logging",
+            "line": 151,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_manifest",
+            "qualified_name": ".repo_studios.scripts.producers.collect_faulthandler_reports.build_manifest",
+            "line": 290,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_telemetry",
+            "qualified_name": ".repo_studios.scripts.producers.collect_faulthandler_reports.build_telemetry",
+            "line": 325,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.producers.collect_faulthandler_reports.run",
+            "line": 373,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.collect_faulthandler_reports.main",
+            "line": 441,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/utilities/refresh_mypy_baselines.py",
+        "module_name": ".repo_studios.scripts.utilities.refresh_mypy_baselines",
+        "total_entities": 10,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "TargetSpec",
+            "qualified_name": ".repo_studios.scripts.utilities.refresh_mypy_baselines.TargetSpec",
+            "line": 56,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.utilities.refresh_mypy_baselines.Paths",
+            "line": 68,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.utilities.refresh_mypy_baselines.Options",
+            "line": 73,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "TargetOutcome",
+            "qualified_name": ".repo_studios.scripts.utilities.refresh_mypy_baselines.TargetOutcome",
+            "line": 108,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "TargetOutcome.succeeded",
+            "qualified_name": ".repo_studios.scripts.utilities.refresh_mypy_baselines.TargetOutcome.succeeded",
+            "line": 116,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_parser",
+            "qualified_name": ".repo_studios.scripts.utilities.refresh_mypy_baselines.build_parser",
+            "line": 167,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_paths",
+            "qualified_name": ".repo_studios.scripts.utilities.refresh_mypy_baselines.build_paths",
+            "line": 214,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_options",
+            "qualified_name": ".repo_studios.scripts.utilities.refresh_mypy_baselines.build_options",
+            "line": 218,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.utilities.refresh_mypy_baselines.run",
+            "line": 402,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.utilities.refresh_mypy_baselines.main",
+            "line": 461,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/diff_standards_index.py",
+        "module_name": ".repo_studios.scripts.producers.diff_standards_index",
+        "total_entities": 10,
+        "findings": [
+          {
+            "kind": "function",
+            "name": "load",
+            "qualified_name": ".repo_studios.scripts.producers.diff_standards_index.load",
+            "line": 134,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "index_rules",
+            "qualified_name": ".repo_studios.scripts.producers.diff_standards_index.index_rules",
+            "line": 143,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "classify",
+            "qualified_name": ".repo_studios.scripts.producers.diff_standards_index.classify",
+            "line": 147,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "generate_diff",
+            "qualified_name": ".repo_studios.scripts.producers.diff_standards_index.generate_diff",
+            "line": 195,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_parser",
+            "qualified_name": ".repo_studios.scripts.producers.diff_standards_index.build_parser",
+            "line": 216,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "should_fail",
+            "qualified_name": ".repo_studios.scripts.producers.diff_standards_index.should_fail",
+            "line": 269,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "write_artifacts",
+            "qualified_name": ".repo_studios.scripts.producers.diff_standards_index.write_artifacts",
+            "line": 374,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "configure_logging",
+            "qualified_name": ".repo_studios.scripts.producers.diff_standards_index.configure_logging",
+            "line": 471,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.diff_standards_index.main",
+            "line": 476,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 10.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/generate_import_graph_report.py",
+        "module_name": ".repo_studios.scripts.producers.generate_import_graph_report",
+        "total_entities": 9,
+        "findings": [
+          {
+            "kind": "function",
+            "name": "iter_py_files",
+            "qualified_name": ".repo_studios.scripts.producers.generate_import_graph_report.iter_py_files",
+            "line": 52,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_imports",
+            "qualified_name": ".repo_studios.scripts.producers.generate_import_graph_report.parse_imports",
+            "line": 59,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_graph",
+            "qualified_name": ".repo_studios.scripts.producers.generate_import_graph_report.build_graph",
+            "line": 100,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "fan_metrics",
+            "qualified_name": ".repo_studios.scripts.producers.generate_import_graph_report.fan_metrics",
+            "line": 129,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "find_cycles",
+            "qualified_name": ".repo_studios.scripts.producers.generate_import_graph_report.find_cycles",
+            "line": 138,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_report",
+            "qualified_name": ".repo_studios.scripts.producers.generate_import_graph_report.build_report",
+            "line": 184,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "write_markdown",
+            "qualified_name": ".repo_studios.scripts.producers.generate_import_graph_report.write_markdown",
+            "line": 260,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "configure_logging",
+            "qualified_name": ".repo_studios.scripts.producers.generate_import_graph_report.configure_logging",
+            "line": 304,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.generate_import_graph_report.main",
+            "line": 309,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/generate_typecheck_report.py",
+        "module_name": ".repo_studios.scripts.producers.generate_typecheck_report",
+        "total_entities": 9,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "ErrorSample",
+            "qualified_name": ".repo_studios.scripts.producers.generate_typecheck_report.ErrorSample",
+            "line": 69,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "BuildStats",
+            "qualified_name": ".repo_studios.scripts.producers.generate_typecheck_report.BuildStats",
+            "line": 77,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "configure_logging",
+            "qualified_name": ".repo_studios.scripts.producers.generate_typecheck_report.configure_logging",
+            "line": 514,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_parser",
+            "qualified_name": ".repo_studios.scripts.producers.generate_typecheck_report.build_parser",
+            "line": 518,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.generate_typecheck_report.Paths",
+            "line": 547,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.generate_typecheck_report.Options",
+            "line": 552,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_paths",
+            "qualified_name": ".repo_studios.scripts.producers.generate_typecheck_report.build_paths",
+            "line": 581,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_options",
+            "qualified_name": ".repo_studios.scripts.producers.generate_typecheck_report.build_options",
+            "line": 585,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.generate_typecheck_report.main",
+            "line": 596,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/generate_test_coverage_inventory.py",
+        "module_name": ".repo_studios.scripts.producers.generate_test_coverage_inventory",
+        "total_entities": 8,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.generate_test_coverage_inventory.Paths",
+            "line": 77,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.generate_test_coverage_inventory.Options",
+            "line": 84,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "RefreshResult",
+            "qualified_name": ".repo_studios.scripts.producers.generate_test_coverage_inventory.RefreshResult",
+            "line": 89,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "FunctionStat",
+            "qualified_name": ".repo_studios.scripts.producers.generate_test_coverage_inventory.FunctionStat",
+            "line": 122,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "FileCoverage",
+            "qualified_name": ".repo_studios.scripts.producers.generate_test_coverage_inventory.FileCoverage",
+            "line": 129,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_args",
+            "qualified_name": ".repo_studios.scripts.producers.generate_test_coverage_inventory.parse_args",
+            "line": 150,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.producers.generate_test_coverage_inventory.run",
+            "line": 578,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.generate_test_coverage_inventory.main",
+            "line": 779,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/generate_undocumented_logic_report.py",
+        "module_name": ".repo_studios.scripts.producers.generate_undocumented_logic_report",
+        "total_entities": 8,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.producers.generate_undocumented_logic_report.Paths",
+            "line": 65,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.producers.generate_undocumented_logic_report.Options",
+            "line": 74,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "EntityFinding",
+            "qualified_name": ".repo_studios.scripts.producers.generate_undocumented_logic_report.EntityFinding",
+            "line": 118,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "ModuleScan",
+            "qualified_name": ".repo_studios.scripts.producers.generate_undocumented_logic_report.ModuleScan",
+            "line": 127,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ModuleScan.coverage",
+            "qualified_name": ".repo_studios.scripts.producers.generate_undocumented_logic_report.ModuleScan.coverage",
+            "line": 133,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_args",
+            "qualified_name": ".repo_studios.scripts.producers.generate_undocumented_logic_report.parse_args",
+            "line": 143,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.producers.generate_undocumented_logic_report.run",
+            "line": 583,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.generate_undocumented_logic_report.main",
+            "line": 729,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/summarizers/summarize_health_suite.py",
+        "module_name": ".repo_studios.scripts.summarizers.summarize_health_suite",
+        "total_entities": 8,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.summarizers.summarize_health_suite.Paths",
+            "line": 65,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.summarizers.summarize_health_suite.Options",
+            "line": 82,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "KeepValues",
+            "qualified_name": ".repo_studios.scripts.summarizers.summarize_health_suite.KeepValues",
+            "line": 90,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "configure_logging",
+            "qualified_name": ".repo_studios.scripts.summarizers.summarize_health_suite.configure_logging",
+            "line": 173,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_paths",
+            "qualified_name": ".repo_studios.scripts.summarizers.summarize_health_suite.build_paths",
+            "line": 177,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_options",
+            "qualified_name": ".repo_studios.scripts.summarizers.summarize_health_suite.build_options",
+            "line": 181,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.summarizers.summarize_health_suite.run",
+            "line": 729,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.summarizers.summarize_health_suite.main",
+            "line": 943,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/summarizers/summarize_standards.py",
+        "module_name": ".repo_studios.scripts.summarizers.summarize_standards",
+        "total_entities": 9,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.summarizers.summarize_standards.Paths",
+            "line": 67,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.summarizers.summarize_standards.Options",
+            "line": 86,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "KeepValues",
+            "qualified_name": ".repo_studios.scripts.summarizers.summarize_standards.KeepValues",
+            "line": 94,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "configure_logging",
+            "qualified_name": ".repo_studios.scripts.summarizers.summarize_standards.configure_logging",
+            "line": 161,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_paths",
+            "qualified_name": ".repo_studios.scripts.summarizers.summarize_standards.build_paths",
+            "line": 165,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_options",
+            "qualified_name": ".repo_studios.scripts.summarizers.summarize_standards.build_options",
+            "line": 169,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.summarizers.summarize_standards.run",
+            "line": 273,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.summarizers.summarize_standards.main",
+            "line": 375,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 11.11,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/utilities/validate_healthview_agent_workflow_spec.py",
+        "module_name": ".repo_studios.scripts.utilities.validate_healthview_agent_workflow_spec",
+        "total_entities": 8,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "ValidationResult",
+            "qualified_name": ".repo_studios.scripts.utilities.validate_healthview_agent_workflow_spec.ValidationResult",
+            "line": 37,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "load_yaml",
+            "qualified_name": ".repo_studios.scripts.utilities.validate_healthview_agent_workflow_spec.load_yaml",
+            "line": 70,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "load_schema",
+            "qualified_name": ".repo_studios.scripts.utilities.validate_healthview_agent_workflow_spec.load_schema",
+            "line": 77,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "validate_schema",
+            "qualified_name": ".repo_studios.scripts.utilities.validate_healthview_agent_workflow_spec.validate_schema",
+            "line": 84,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "validate_semantics",
+            "qualified_name": ".repo_studios.scripts.utilities.validate_healthview_agent_workflow_spec.validate_semantics",
+            "line": 94,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "validate_workflow_spec",
+            "qualified_name": ".repo_studios.scripts.utilities.validate_healthview_agent_workflow_spec.validate_workflow_spec",
+            "line": 136,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_args",
+            "qualified_name": ".repo_studios.scripts.utilities.validate_healthview_agent_workflow_spec.parse_args",
+            "line": 154,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.utilities.validate_healthview_agent_workflow_spec.main",
+            "line": 184,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/aggregators/aggregate_docs_health_signals.py",
+        "module_name": ".repo_studios.scripts.aggregators.aggregate_docs_health_signals",
+        "total_entities": 6,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Paths",
+            "qualified_name": ".repo_studios.scripts.aggregators.aggregate_docs_health_signals.Paths",
+            "line": 90,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "Options",
+            "qualified_name": ".repo_studios.scripts.aggregators.aggregate_docs_health_signals.Options",
+            "line": 104,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "class",
+            "name": "SignalResult",
+            "qualified_name": ".repo_studios.scripts.aggregators.aggregate_docs_health_signals.SignalResult",
+            "line": 161,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "parse_args",
+            "qualified_name": ".repo_studios.scripts.aggregators.aggregate_docs_health_signals.parse_args",
+            "line": 173,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.aggregators.aggregate_docs_health_signals.run",
+            "line": 679,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.aggregators.aggregate_docs_health_signals.main",
+            "line": 962,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/consumers/classify_monkey_patches.py",
+        "module_name": ".repo_studios.scripts.consumers.classify_monkey_patches",
+        "total_entities": 7,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Finding",
+            "qualified_name": ".repo_studios.scripts.consumers.classify_monkey_patches.Finding",
+            "line": 131,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "Finding.from_obj",
+            "qualified_name": ".repo_studios.scripts.consumers.classify_monkey_patches.Finding.from_obj",
+            "line": 140,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "classify",
+            "qualified_name": ".repo_studios.scripts.consumers.classify_monkey_patches.classify",
+            "line": 177,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "aggregate",
+            "qualified_name": ".repo_studios.scripts.consumers.classify_monkey_patches.aggregate",
+            "line": 187,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.consumers.classify_monkey_patches.run",
+            "line": 387,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.consumers.classify_monkey_patches.main",
+            "line": 461,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 14.29,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/generate_dependency_hygiene_report.py",
+        "module_name": ".repo_studios.scripts.producers.generate_dependency_hygiene_report",
+        "total_entities": 6,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Issue",
+            "qualified_name": ".repo_studios.scripts.producers.generate_dependency_hygiene_report.Issue",
+            "line": 65,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "build_report",
+            "qualified_name": ".repo_studios.scripts.producers.generate_dependency_hygiene_report.build_report",
+            "line": 171,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "write_markdown",
+            "qualified_name": ".repo_studios.scripts.producers.generate_dependency_hygiene_report.write_markdown",
+            "line": 203,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "write_log",
+            "qualified_name": ".repo_studios.scripts.producers.generate_dependency_hygiene_report.write_log",
+            "line": 239,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "configure_logging",
+            "qualified_name": ".repo_studios.scripts.producers.generate_dependency_hygiene_report.configure_logging",
+            "line": 267,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.generate_dependency_hygiene_report.main",
+            "line": 296,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/generate_lizard_report.py",
+        "module_name": ".repo_studios.scripts.producers.generate_lizard_report",
+        "total_entities": 4,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "Offender",
+            "qualified_name": ".repo_studios.scripts.producers.generate_lizard_report.Offender",
+            "line": 112,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "Offender.to_payload",
+            "qualified_name": ".repo_studios.scripts.producers.generate_lizard_report.Offender.to_payload",
+            "line": 120,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "configure_logging",
+            "qualified_name": ".repo_studios.scripts.producers.generate_lizard_report.configure_logging",
+            "line": 614,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.generate_lizard_report.main",
+            "line": 619,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py",
+        "module_name": ".repo_studios.scripts.aggregators.analyze_monkey_patch_trends",
+        "total_entities": 3,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "TrendRun",
+            "qualified_name": ".repo_studios.scripts.aggregators.analyze_monkey_patch_trends.TrendRun",
+            "line": 53,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.aggregators.analyze_monkey_patch_trends.run",
+            "line": 418,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.aggregators.analyze_monkey_patch_trends.main",
+            "line": 530,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py",
+        "module_name": ".repo_studios.scripts.aggregators.generate_churn_complexity_heatmap",
+        "total_entities": 3,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "MetricRecord",
+            "qualified_name": ".repo_studios.scripts.aggregators.generate_churn_complexity_heatmap.MetricRecord",
+            "line": 52,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.aggregators.generate_churn_complexity_heatmap.run",
+            "line": 475,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.aggregators.generate_churn_complexity_heatmap.main",
+            "line": 619,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/extract_standards_rules.py",
+        "module_name": ".repo_studios.scripts.producers.extract_standards_rules",
+        "total_entities": 3,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "ParsedRule",
+            "qualified_name": ".repo_studios.scripts.producers.extract_standards_rules.ParsedRule",
+            "line": 76,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "method",
+            "name": "ParsedRule.to_dict",
+            "qualified_name": ".repo_studios.scripts.producers.extract_standards_rules.ParsedRule.to_dict",
+            "line": 87,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "extract_rules",
+            "qualified_name": ".repo_studios.scripts.producers.extract_standards_rules.extract_rules",
+            "line": 105,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/utilities/dump_faulthandler_snapshot.py",
+        "module_name": ".repo_studios.scripts.utilities.dump_faulthandler_snapshot",
+        "total_entities": 3,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "SnapshotSettings",
+            "qualified_name": ".repo_studios.scripts.utilities.dump_faulthandler_snapshot.SnapshotSettings",
+            "line": 70,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "dump_snapshot",
+            "qualified_name": ".repo_studios.scripts.utilities.dump_faulthandler_snapshot.dump_snapshot",
+            "line": 122,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.utilities.dump_faulthandler_snapshot.main",
+            "line": 254,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/consumers/generate_fault_artifacts.py",
+        "module_name": ".repo_studios.scripts.consumers.generate_fault_artifacts",
+        "total_entities": 2,
+        "findings": [
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.consumers.generate_fault_artifacts.run",
+            "line": 507,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.consumers.generate_fault_artifacts.main",
+            "line": 607,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/consumers/generate_test_log_health_report.py",
+        "module_name": ".repo_studios.scripts.consumers.generate_test_log_health_report",
+        "total_entities": 2,
+        "findings": [
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.consumers.generate_test_log_health_report.run",
+            "line": 501,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.consumers.generate_test_log_health_report.main",
+            "line": 624,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/collect_test_log_reports.py",
+        "module_name": ".repo_studios.scripts.producers.collect_test_log_reports",
+        "total_entities": 2,
+        "findings": [
+          {
+            "kind": "function",
+            "name": "run",
+            "qualified_name": ".repo_studios.scripts.producers.collect_test_log_reports.run",
+            "line": 472,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "main",
+            "qualified_name": ".repo_studios.scripts.producers.collect_test_log_reports.main",
+            "line": 609,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/utilities/configure_faulthandler_runtime.py",
+        "module_name": ".repo_studios.scripts.utilities.configure_faulthandler_runtime",
+        "total_entities": 2,
+        "findings": [
+          {
+            "kind": "class",
+            "name": "FaultSettings",
+            "qualified_name": ".repo_studios.scripts.utilities.configure_faulthandler_runtime.FaultSettings",
+            "line": 94,
+            "reason": "missing docstring"
+          },
+          {
+            "kind": "function",
+            "name": "bootstrap",
+            "qualified_name": ".repo_studios.scripts.utilities.configure_faulthandler_runtime.bootstrap",
+            "line": 274,
+            "reason": "missing docstring"
+          }
+        ],
+        "coverage_percent": 0.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/producers/analyze_standards_index_gaps.py",
+        "module_name": ".repo_studios.scripts.producers.analyze_standards_index_gaps",
+        "total_entities": 0,
+        "findings": [],
+        "coverage_percent": null,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/utilities/anchor_inventory_loader.py",
+        "module_name": ".repo_studios.scripts.utilities.anchor_inventory_loader",
+        "total_entities": 1,
+        "findings": [],
+        "coverage_percent": 100.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/utilities/fault_run_analysis.py",
+        "module_name": ".repo_studios.scripts.utilities.fault_run_analysis",
+        "total_entities": 6,
+        "findings": [],
+        "coverage_percent": 100.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/utilities/monkey_patch_risk.py",
+        "module_name": ".repo_studios.scripts.utilities.monkey_patch_risk",
+        "total_entities": 2,
+        "findings": [],
+        "coverage_percent": 100.0,
+        "doc_candidates": []
+      },
+      {
+        "module_path": ".repo_studios/scripts/utilities/test_log_analysis.py",
+        "module_name": ".repo_studios.scripts.utilities.test_log_analysis",
+        "total_entities": 0,
+        "findings": [],
+        "coverage_percent": null,
+        "doc_candidates": []
+      }
+    ],
+    "doc_index_path": null,
+    "anchor_inventory_path": null,
+    "code_roots": [
+      "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts"
+    ]
+  }
+}

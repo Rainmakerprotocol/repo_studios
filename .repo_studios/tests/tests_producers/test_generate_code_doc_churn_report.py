@@ -60,7 +60,6 @@ def _write_doc_index_telemetry(repo_root: Path, payload: dict, *, timestamp: str
         repo_root
         / ".repo_studios"
         / "reports"
-        / "producer_reports"
         / "healthview"
         / "doc_index"
         / timestamp
@@ -130,7 +129,7 @@ def test_churn_detects_missing_doc_updates(tmp_path):
                 "--git-window",
                 "30 days",
                 "--output-dir",
-                str(repo / ".repo_studios" / "reports" / "producer_reports"),
+                str(repo / ".repo_studios" / "reports"),
             ]
         )
     finally:
@@ -175,7 +174,7 @@ def test_churn_skips_when_docs_updated(tmp_path):
                 "--git-window",
                 "30 days",
                 "--output-dir",
-                str(repo / ".repo_studios" / "reports" / "producer_reports"),
+                str(repo / ".repo_studios" / "reports"),
             ]
         )
     finally:
@@ -214,7 +213,7 @@ def test_churn_honors_allowlist(tmp_path):
                 "--git-window",
                 "30 days",
                 "--output-dir",
-                str(repo / ".repo_studios" / "reports" / "producer_reports"),
+                str(repo / ".repo_studios" / "reports"),
                 "--allowlist",
                 str(allowlist_path),
             ]

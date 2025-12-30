@@ -1,0 +1,267 @@
+# Tier-3: generate_doc_index.py
+# Producer script that indexes all Markdown documents in the repository.
+
+tool:
+  id: generate_doc_index
+  name: Generate Doc Index
+  description: |
+    Scans the entire repository for Markdown files, extracts headings, links, front matter,
+    and descriptions, and emits a canonical HealthView bundle under:
+
+      .repo_studios/reports/healthview/producer_reports/doc_index/<YYYYMMDD-HHMM>/
+
+    The bundle includes manifest.json, summary.md, telemetry.json, and doc_index.csv.
+
+    This producer can optionally refresh the checkbox report and Tier-3 scripts index
+    before building the doc index. The canonical operator/agent entrypoint is:
+
+      make -C .repo_studios doc-index LOG_LEVEL=INFO
+  keywords:
+    - healthview
+    - producer
+    - doc-index
+    - documentation
+    - markdown
+    - inventory
+    - csv
+    - checkbox
+    - tier3
+  use_when:
+    - Need a deterministic, timestamped documentation inventory bundle (manifest/summary/telemetry + CSV)
+    - Refreshing the checkbox report for pipeline governance visibility
+    - Refreshing the Tier-3 scripts index before indexing
+    - Producing doc inventory telemetry for downstream consumers or aggregators
+    - Verifying Stage 2.1 doc-index outputs and retention behavior
+  dont_use_when:
+    - You only need to read a single markdown file (use read_file instead)
+    - You need real-time document parsing without persistence
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --output-dir {output_dir} \
+      --timestamp {timestamp} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level} \
+      [--refresh-checkbox-report] \
+      [--refresh-tier3-index] \
+      [--db-target {db_target}]
+  script_path: .repo_studios/scripts/producers/generate_doc_index.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+    notes:
+      - "Uses shared libraries from .repo_studios/command_center/scripts/libraries/"
+      - "Checkbox report refresh invokes .repo_studios/docs/pipeline/checkbox_report/checkbox_report.py"
+      - "Tier-3 index refresh invokes .repo_studios/docs/pipeline/tier3_index/generate_tier3_index.py"
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: "."
+    description: Repository root for resolving repo-relative paths.
+    validation:
+      must_exist: true
+      must_be: directory
+
+  - name: output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview
+    description: |
+      Base output directory. The producer appends viewer_slug/topic/timestamp to form the bundle path:
+        {output_dir}/producer_reports/doc_index/<YYYYMMDD-HHMM>/
+    validation:
+      must_exist: false
+
+  - name: timestamp
+    type: string
+    required: false
+    default: null
+    description: |
+      Override timestamp for the run slug (YYYYMMDD-HHMM). If not provided, uses current UTC time.
+    example: "20251229-1200"
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Number of timestamped bundle directories to retain after pruning.
+    validation:
+      min_value: 1
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices:
+      - DEBUG
+      - INFO
+      - WARNING
+      - ERROR
+      - CRITICAL
+    description: Logging verbosity level.
+
+  - name: refresh_checkbox_report
+    type: bool
+    required: false
+    default: false
+    description: |
+      Refresh the checkbox report before building the doc index.
+      Invokes .repo_studios/docs/pipeline/checkbox_report/checkbox_report.py.
+
+  - name: refresh_tier3_index
+    type: bool
+    required: false
+    default: false
+    description: |
+      Refresh the Tier-3 scripts index before building the doc index.
+      Invokes .repo_studios/docs/pipeline/tier3_index/generate_tier3_index.py.
+
+  - name: db_target
+    type: string
+    required: false
+    default: null
+    description: |
+      Placeholder for future database integration. Currently logs a warning and performs no DB writes.
+
+outputs:
+  primary:
+    type: file
+    format: json
+    path_pattern: "{output_dir}/producer_reports/doc_index/<YYYYMMDD-HHMM>/manifest.json"
+    description: Run manifest with inputs, catalog, and artifact list.
+    structure:
+      root_type: object
+      required_keys:
+        - schema_version
+        - viewer_slug
+        - topic
+        - run_timestamp
+        - generated_utc
+        - status
+        - catalog
+        - inputs
+        - artifacts
+
+  secondary:
+    - type: file
+      format: md
+      path_pattern: "{output_dir}/producer_reports/doc_index/<YYYYMMDD-HHMM>/summary.md"
+      description: Human-readable summary with embedded JSON/YAML/CSV renderings.
+
+    - type: file
+      format: json
+      path_pattern: "{output_dir}/producer_reports/doc_index/<YYYYMMDD-HHMM>/telemetry.json"
+      description: Metrics and full payload for downstream consumers.
+
+    - type: file
+      format: csv
+      path_pattern: "{output_dir}/producer_reports/doc_index/<YYYYMMDD-HHMM>/doc_index.csv"
+      description: Flat CSV of all indexed documents and headings.
+
+behavior:
+  idempotent: true
+  side_effects:
+    - Creates timestamped bundle directory under output_dir
+    - Optionally refreshes checkbox_report.md and checkbox_report.csv
+    - Optionally refreshes tier3_scripts_index.yaml
+    - Prunes older bundle directories beyond artifacts_to_keep
+  duration_estimate: "5-30 seconds depending on repository size"
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 1
+      meaning: Repository root not found or invalid path
+      agent_action: Verify --repo-root exists and is a directory
+
+    - exit_code: 1
+      meaning: Checkbox report or Tier-3 index refresh failed
+      agent_action: Check logs for subprocess errors; ensure dependent scripts are valid
+
+  stderr_patterns:
+    - pattern: "repo root not found"
+      meaning: The provided --repo-root does not exist
+      agent_action: Correct the path or omit to use current working directory
+
+integration:
+  typical_workflow:
+    - Run generate_doc_index.py (optionally with --refresh-checkbox-report --refresh-tier3-index)
+    - Downstream aggregators or summarizers consume telemetry.json
+    - Human reviewers inspect summary.md or doc_index.csv
+
+  output_consumers:
+    - aggregate_docs_health_signals.py
+    - generate_code_doc_churn_report.py
+    - generate_undocumented_logic_report.py
+
+  input_producers: []
+
+  sample_output: |
+    {
+      "schema_version": 1,
+      "viewer_slug": "producer_reports",
+      "topic": "doc_index",
+      "run_timestamp": "20251229-1651",
+      "generated_utc": "2025-12-29T16:51:00+00:00",
+      "status": "ok",
+      "catalog": ["scripts.docs.generate_doc_index"],
+      "inputs": { ... },
+      "artifacts": [
+        {"name": "manifest.json", "role": "manifest"},
+        {"name": "summary.md", "role": "summary"},
+        {"name": "telemetry.json", "role": "telemetry"},
+        {"name": "doc_index.csv", "role": "csv"}
+      ]
+    }
+
+examples:
+  - description: Basic run with defaults (current directory as repo root)
+    command: |
+      python .repo_studios/scripts/producers/generate_doc_index.py
+    expected_output: |
+      INFO Indexed 294 documents (2098 headings, 228 links)
+
+  - description: Full run with checkbox and Tier-3 refresh (canonical Make target)
+    command: |
+      make -C .repo_studios doc-index LOG_LEVEL=INFO
+    expected_output: |
+      INFO Refreshing checkbox report...
+      INFO Refreshing tier3 scripts index
+      INFO Indexed 294 documents (2098 headings, 228 links)
+
+  - description: Programmatic invocation from Python
+    code: |
+      from generate_doc_index import run
+      result = run([
+          "--repo-root", ".",
+          "--output-dir", ".repo_studios/reports/healthview",
+          "--artifacts-to-keep", "1",
+          "--refresh-checkbox-report",
+          "--refresh-tier3-index",
+          "--log-level", "INFO",
+      ])
+      print(result["summary"]["total_documents"])
+
+metadata:
+  category: producer
+  tier: tier-3
+  status: active
+  version: 1.0.0
+  last_updated: "2025-12-29"
+  author: repo_studios_team
+  dependencies_tier3:
+    - tier3_cli.yaml
+    - tier3_artifacts.yaml
+    - tier3_prune_logs.yaml
+  tier2_rosters:
+    - tier2_docs_health_overview_roster.md
+  tier1_pipelines:
+    - tier1_healthview_orchestration_pipeline.md

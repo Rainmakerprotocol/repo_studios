@@ -1,21 +1,21 @@
 version: 1.0.0
-generated_at: '2025-12-29T13:35:31.099640+00:00'
+generated_at: '2025-12-30T14:57:00+00:00'
 generator_version: 1.0.0
 repository:
   name: repo_studios
   root: C:\Users\genet\repo_studios
   branch: main
 statistics:
-  total_scripts: 9
+  total_scripts: 14
   categories:
-    producer: 4
+    producer: 9
     utility: 1
     aggregator: 1
     consumer: 1
     orchestrator: 1
     summarizer: 1
   status:
-    active: 4
+    active: 9
     template: 1
     draft: 4
 scripts:
@@ -64,6 +64,100 @@ scripts:
   status: template
   entry_point: null
   importable: false
+- script_id: generate_anchor_inventory
+  name: Generate Anchor Inventory
+  category: producer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\docs_health_overview\tier3_generate_anchor_inventory.yaml
+  script_path: .repo_studios/scripts/producers/generate_anchor_inventory.py
+  summary: "Scans documentation directories for Markdown files, extracts H1/H2 headings,\nconverts them\
+    \ to slug-based anchors, and emits a canonical HealthView bundle under:\n\n  .repo_studios/reports/healthview/healthview/anchor_inventory/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n\nThis producer identifies duplicate\
+    \ anchors across files, tracks cross-file\nmembership patterns, and provides telemetry for downstream\
+    \ validation scripts.\n\nThe canonical operator/agent entrypoint is:\n\n  python .repo_studios/scripts/producers/generate_anchor_inventory.py\
+    \ \\\n    --repo-root . --output-dir .repo_studios/reports/healthview --log-level INFO\n"
+  keywords:
+  - healthview
+  - producer
+  - anchor
+  - inventory
+  - documentation
+  - markdown
+  - headings
+  - duplicates
+  - slugs
+  status: active
+  entry_point: run
+  importable: true
+- script_id: generate_doc_index
+  name: Generate Doc Index
+  category: producer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\docs_health_overview\tier3_generate_doc_index.yaml
+  script_path: .repo_studios/scripts/producers/generate_doc_index.py
+  summary: "Scans the entire repository for Markdown files, extracts headings, links, front matter,\n\
+    and descriptions, and emits a canonical HealthView bundle under:\n\n  .repo_studios/reports/healthview/producer_reports/doc_index/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, telemetry.json, and doc_index.csv.\n\nThis producer\
+    \ can optionally refresh the checkbox report and Tier-3 scripts index\nbefore building the doc index.\
+    \ The canonical operator/agent entrypoint is:\n\n  make -C .repo_studios doc-index LOG_LEVEL=INFO\n"
+  keywords:
+  - healthview
+  - producer
+  - doc-index
+  - documentation
+  - markdown
+  - inventory
+  - csv
+  - checkbox
+  - tier3
+  status: active
+  entry_point: run
+  importable: true
+- script_id: validate_markdown_anchors
+  name: Validate Markdown Anchors
+  category: producer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\docs_health_overview\tier3_validate_markdown_anchors.yaml
+  script_path: .repo_studios/scripts/producers/validate_markdown_anchors.py
+  summary: "Scans selected markdown files for internal document anchors and cross-file\nrelative links,\
+    \ validating that target files and anchors exist.\n\nEmits a canonical HealthView bundle under:\n\n\
+    \  .repo_studios/reports/healthview/healthview/markdown_anchor_validation/<YYYYMMDD-HHMM>/\n\nThe\
+    \ bundle includes manifest.json, summary.md, and telemetry.json.\n\nThis producer identifies broken\
+    \ anchor references, missing target files,\nand invalid heading-derived slugs across the documentation\
+    \ tree.\n\nSlug generation follows GitHub-style simplification (lowercase, spaces -> dashes,\nstrip\
+    \ non-alphanumeric except dashes) and collapses consecutive dashes.\n\nExit codes:\n  0 - success,\
+    \ no issues\n  1 - issues found (broken anchors/links)\n"
+  keywords:
+  - healthview
+  - producer
+  - anchor
+  - validation
+  - markdown
+  - links
+  - broken
+  - integrity
+  status: active
+  entry_point: main
+  importable: false
+- script_id: generate_undocumented_logic_report
+  name: Generate Undocumented Logic Report
+  category: producer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\docs_health_overview\tier3_generate_undocumented_logic_report.yaml
+  script_path: .repo_studios/scripts/producers/generate_undocumented_logic_report.py
+  summary: "Scans automation code for functions, classes, and methods lacking docstrings.\nCorrelates\
+    \ findings against the doc index and anchor inventory to identify\ncode that lacks both inline documentation\
+    \ and external documentation references.\n\nEmits a canonical HealthView bundle under:\n\n  .repo_studios/reports/healthview/undocumented_logic/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n"
+  keywords:
+  - healthview
+  - producer
+  - docstrings
+  - documentation
+  - coverage
+  - analysis
+  - modules
+  - functions
+  - classes
+  status: active
+  entry_point: run
+  importable: true
 - script_id: analyze_test_hardening
   name: Analyze Test Hardening
   category: producer
@@ -209,6 +303,10 @@ scripts:
 by_category:
   producer:
   - generate_commandview_inventory
+  - generate_anchor_inventory
+  - generate_doc_index
+  - validate_markdown_anchors
+  - generate_undocumented_logic_report
   - analyze_test_hardening
   - collect_test_log_reports
   - generate_test_coverage_inventory

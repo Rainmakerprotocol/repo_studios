@@ -24,7 +24,7 @@ def test_reports_written_with_issues(tmp_path):
         "# Title\n\nMissing anchor [bad](#missing)\n",
         encoding="utf-8",
     )
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports"
+    output_dir = root / ".repo_studios" / "reports" / "healthview"
 
     exit_code = mod.main(
         [
@@ -69,7 +69,7 @@ def test_pruning_keeps_newest_run(tmp_path):
     docs = root / "docs"
     docs.mkdir(parents=True)
     (docs / "good.md").write_text("# Title\n\n[Self](#title)\n", encoding="utf-8")
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports"
+    output_dir = root / ".repo_studios" / "reports" / "healthview"
     topic_dir = output_dir / "healthview" / "markdown_anchor_validation"
     topic_dir.mkdir(parents=True, exist_ok=True)
 

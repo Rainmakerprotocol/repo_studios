@@ -1,0 +1,305 @@
+# Tier-3: generate_code_doc_churn_report.py
+# Producer script that detects code changes without corresponding documentation updates.
+
+tool:
+  id: generate_code_doc_churn_report
+  name: Generate Code Doc Churn Report
+  description: |
+    Analyzes git history to detect code modules with recent changes that lack
+    corresponding documentation updates. Correlates code churn against the
+    doc index and anchor inventory to identify documentation gaps.
+
+    Emits a canonical HealthView bundle under:
+
+      .repo_studios/reports/healthview/code_doc_churn/<YYYYMMDD-HHMM>/
+
+    The bundle includes manifest.json, summary.md, and telemetry.json.
+
+    This producer helps maintain documentation currency by flagging modules
+    where code has changed but related documentation has not been updated.
+
+    Exit codes:
+      0 - success (report generated, may contain findings)
+      1 - error (missing inputs or git failures)
+  keywords:
+    - healthview
+    - producer
+    - churn
+    - documentation
+    - git
+    - analysis
+    - coverage
+    - modules
+  use_when:
+    - Need to detect code changes lacking documentation updates
+    - Checking documentation currency before releases
+    - Identifying stale documentation after refactoring
+    - Producing churn telemetry for downstream aggregators
+  dont_use_when:
+    - You only need to inventory documentation (use generate_doc_index.py)
+    - You need to validate documentation structure (use verify_docs_integrity.py)
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --output-dir {output_dir} \
+      --doc-index {doc_index} \
+      --anchor-inventory {anchor_inventory} \
+      --allowlist {allowlist} \
+      --git-window {git_window} \
+      --git-until {git_until} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+  script_path: .repo_studios/scripts/producers/generate_code_doc_churn_report.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+    notes:
+      - "Uses shared libraries from .repo_studios/command_center/scripts/libraries/"
+      - "Entry point is run(argv) — orchestrators can import and call directly"
+      - "Requires git to be available in PATH"
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: null
+    description: Repository root override (defaults to project root resolution).
+    validation:
+      must_exist: true
+      must_be: directory
+
+  - name: output_dir
+    type: path
+    required: false
+    default: ".repo_studios/reports"
+    description: |
+      Base directory for HOP bundle output. The script appends
+      healthview/code_doc_churn/<timestamp>/ automatically.
+    validation:
+      must_exist: false
+      will_create: true
+
+  - name: doc_index
+    type: path
+    required: false
+    default: ".repo_studios/reports/healthview/doc_index"
+    description: |
+      Path to latest doc index telemetry directory. The script will find
+      the most recent telemetry.json within this topic directory.
+    validation:
+      must_exist: false
+
+  - name: anchor_inventory
+    type: path
+    required: false
+    default: ".repo_studios/reports/healthview/anchor_inventory"
+    description: |
+      Path to latest anchor inventory telemetry directory. The script will
+      find the most recent telemetry.json within this topic directory.
+    validation:
+      must_exist: false
+
+  - name: allowlist
+    type: path
+    required: false
+    default: ".repo_studios/config/code_doc_churn_allowlist.txt"
+    description: |
+      Path to module allowlist file (one module per line). Modules in
+      this list will be excluded from churn reporting.
+    validation:
+      must_exist: false
+
+  - name: git_window
+    type: string
+    required: false
+    default: "14 days"
+    description: |
+      Git log window for churn detection, passed to git --since.
+      Examples: "14 days", "1 week", "2025-01-01"
+
+  - name: git_until
+    type: string
+    required: false
+    default: null
+    description: |
+      Optional git --until value to cap the analysis window.
+      Useful for historical analysis or reproducible reports.
+
+  - name: artifacts_to_keep
+    type: integer
+    required: false
+    default: 1
+    description: Number of historical run directories to retain after pruning.
+    validation:
+      minimum: 1
+
+  - name: log_level
+    type: string
+    required: false
+    default: "INFO"
+    description: Logging verbosity level.
+    validation:
+      allowed_values:
+        - DEBUG
+        - INFO
+        - WARNING
+        - ERROR
+        - CRITICAL
+
+io_contract:
+  inputs:
+    - name: doc_index_telemetry
+      source: filesystem
+      path_pattern: ".repo_studios/reports/healthview/doc_index/<latest>/telemetry.json"
+      description: Doc index telemetry with document inventory.
+      required: false
+
+    - name: anchor_inventory_telemetry
+      source: filesystem
+      path_pattern: ".repo_studios/reports/healthview/anchor_inventory/<latest>/telemetry.json"
+      description: Anchor inventory telemetry with heading anchors.
+      required: false
+
+    - name: git_history
+      source: git
+      description: Git commit history within the specified window.
+      required: true
+
+    - name: allowlist
+      source: filesystem
+      path_pattern: ".repo_studios/config/code_doc_churn_allowlist.txt"
+      description: Optional module allowlist for exclusions.
+      required: false
+
+  outputs:
+    - artifact: manifest.json
+      path_pattern: ".repo_studios/reports/healthview/code_doc_churn/<YYYYMMDD-HHMM>/manifest.json"
+      format: json
+      schema_version: 1
+      description: Run metadata including inputs, outputs catalog, and status.
+
+    - artifact: summary.md
+      path_pattern: ".repo_studios/reports/healthview/code_doc_churn/<YYYYMMDD-HHMM>/summary.md"
+      format: markdown
+      description: Human-readable summary of churn findings.
+
+    - artifact: telemetry.json
+      path_pattern: ".repo_studios/reports/healthview/code_doc_churn/<YYYYMMDD-HHMM>/telemetry.json"
+      format: json
+      description: Structured telemetry for downstream aggregators.
+
+  side_effects:
+    - type: directory_pruning
+      description: |
+        Historical run directories beyond artifacts_to_keep are removed
+        from the topic directory.
+
+behavior:
+  exit_codes:
+    - exit_code: 0
+      meaning: Success, report generated (may contain churn findings)
+      agent_action: Review summary.md for modules needing documentation updates
+
+    - exit_code: 1
+      meaning: Error (missing inputs, git failures, or invalid configuration)
+      agent_action: Check error messages and verify prerequisites
+
+  stderr_patterns:
+    - pattern: "Modules missing doc updates"
+      meaning: Some code modules changed without corresponding doc updates
+      agent_action: Review listed modules and update documentation
+
+    - pattern: "git command failed"
+      meaning: Git operation failed
+      agent_action: Verify git is available and repo is valid
+
+integration:
+  typical_workflow:
+    - Run generate_doc_index.py to create doc index telemetry
+    - Run generate_anchor_inventory.py to create anchor inventory
+    - Run generate_code_doc_churn_report.py to analyze churn
+    - Review summary.md for modules needing documentation attention
+
+  output_consumers:
+    - aggregate_docs_health_signals.py
+
+  input_producers:
+    - generate_doc_index.py
+    - generate_anchor_inventory.py
+
+  sample_output: |
+    {
+      "schema_version": 1,
+      "viewer_slug": "healthview",
+      "topic": "code_doc_churn",
+      "run_timestamp": "20251230-1302",
+      "generated_at": "2025-12-30T13:02:00+00:00",
+      "status": "ok",
+      "summary": {
+        "commits_examined": 8,
+        "modules_without_doc_updates": 2
+      },
+      "catalog": [
+        {"artifact": "manifest.json", "path": "..."},
+        {"artifact": "summary.md", "path": "..."},
+        {"artifact": "telemetry.json", "path": "..."}
+      ]
+    }
+
+examples:
+  - description: Basic churn analysis with 7-day window
+    command: |
+      python .repo_studios/scripts/producers/generate_code_doc_churn_report.py \
+        --git-window "7 days" \
+        --log-level INFO
+    expected_output: |
+      INFO Commits examined: 8
+      INFO Modules missing doc updates: 2
+
+  - description: Full run with explicit paths
+    command: |
+      python .repo_studios/scripts/producers/generate_code_doc_churn_report.py \
+        --repo-root . \
+        --output-dir .repo_studios/reports \
+        --git-window "14 days" \
+        --artifacts-to-keep 1 \
+        --log-level INFO
+
+  - description: Programmatic invocation from Python
+    code: |
+      from generate_code_doc_churn_report import run
+      result = run([
+          "--git-window", "7 days",
+          "--output-dir", ".repo_studios/reports",
+          "--log-level", "INFO",
+      ])
+      print(f"Status: {result['status']}")
+      print(f"Modules missing docs: {result['summary']['modules_without_doc_updates']}")
+
+tier3:
+  allowed: true
+  reason: |
+    Mature producer with stable CLI, HOP-compliant output, and well-defined
+    io_contract. Safe for agent-driven execution in documentation analysis workflows.
+
+metadata:
+  category: producer
+  tier: tier-3
+  status: active
+  version: 1.0.0
+  last_updated: "2025-12-30"
+  author: repo_studios_team
+  dependencies_tier3:
+    - tier3_cli.yaml
+    - tier3_artifacts.yaml
+    - tier3_prune_logs.yaml
+    - tier3_generate_doc_index.yaml
+    - tier3_generate_anchor_inventory.yaml
+  tier2_rosters:
+    - tier2_docs_health_overview_roster.md
+  tier1_pipelines:
+    - tier1_healthview_orchestration_pipeline.md

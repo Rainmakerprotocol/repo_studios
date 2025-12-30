@@ -240,13 +240,13 @@ studio-generate-dependency-hygiene:
 
 .PHONY: studio-generate-doc-index
 studio-generate-doc-index:
-	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/generate_doc_index.py" --repo-root "$(REPO_ROOT)" --output-dir ".repo_studios/reports/producer_reports" --artifacts-to-keep 1 --log-level "$(LOG_LEVEL)"
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/generate_doc_index.py" --repo-root "$(REPO_ROOT)" --output-dir ".repo_studios/reports/healthview" --artifacts-to-keep 1 --log-level "$(LOG_LEVEL)"
 
 .PHONY: doc-index
 doc-index:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/generate_doc_index.py" \
 		--repo-root "$(REPO_ROOT)" \
-		--output-dir ".repo_studios/reports/producer_reports" \
+		--output-dir ".repo_studios/reports/healthview" \
 		--artifacts-to-keep 1 \
 		--refresh-checkbox-report \
 		--refresh-tier3-index \

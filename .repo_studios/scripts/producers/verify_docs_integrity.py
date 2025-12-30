@@ -39,7 +39,7 @@ INDEX_TABLE_BEGIN = "<!-- BEGIN:DOCS_INDEX_TABLE -->"
 INDEX_TABLE_END = "<!-- END:DOCS_INDEX_TABLE -->"
 
 DEFAULT_INDEX_PATH = Path(".repo_studios/docs/standards/docs_index.md")
-REPORTS_ROOT = Path(".repo_studios/reports/producer_reports")
+REPORTS_ROOT = Path(".repo_studios/reports")
 DEFAULT_OUTPUT_DIR = REPORTS_ROOT
 VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "docs_integrity_validation"

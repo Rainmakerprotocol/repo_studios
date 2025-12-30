@@ -33,7 +33,7 @@ from typing import Any, Iterable, cast
 RE_MD_LINK = re.compile(r"metrics_orchestrator\.md#([a-zA-Z0-9\-._]+)")
 RE_HEADING = re.compile(r"^(#{2,6})\s+(.*)$")
 
-REPORTS_ROOT = Path(".repo_studios/reports/producer_reports")
+REPORTS_ROOT = Path(".repo_studios/reports")
 DEFAULT_OUTPUT_DIR = REPORTS_ROOT
 DEFAULT_LEGACY_FILE = Path("docs/api/metrics_orchestrator.md")
 DEFAULT_ALLOWLIST_PATH = Path(".repo_studios/scripts/producers/metrics_anchor_allowlist.json")

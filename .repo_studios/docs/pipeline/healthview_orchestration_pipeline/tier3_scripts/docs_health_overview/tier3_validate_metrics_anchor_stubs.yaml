@@ -1,0 +1,267 @@
+# Tier-3: validate_metrics_anchor_stubs.py
+# Producer script that validates metrics_orchestrator.md anchor references.
+
+tool:
+  id: validate_metrics_anchor_stubs
+  name: Validate Metrics Anchor Stubs
+  description: |
+    Scans repository markdown for links to `metrics_orchestrator.md#<anchor>` and
+    validates that each referenced anchor has a corresponding legacy stub heading
+    under the "Legacy Anchor Compatibility" section of the legacy doc.
+
+    Emits a canonical HealthView bundle under:
+
+      .repo_studios/reports/healthview/metrics_anchor_stub_validation/<YYYYMMDD-HHMM>/
+
+    The bundle includes manifest.json, summary.md, and telemetry.json.
+
+    This producer identifies missing legacy stub headings for referenced anchors,
+    ensuring backward compatibility for metrics documentation links.
+
+    Exit codes:
+      0 - success, no missing legacy stubs
+      1 - missing anchors detected (artifacts still emitted)
+  keywords:
+    - healthview
+    - producer
+    - metrics
+    - anchor
+    - validation
+    - legacy
+    - stubs
+    - compatibility
+  use_when:
+    - Need to validate metrics anchor references have corresponding legacy stubs
+    - Checking for broken metrics documentation links before releases
+    - Producing validation telemetry for downstream aggregators
+  dont_use_when:
+    - You only need to validate general markdown anchors (use validate_markdown_anchors.py)
+    - You need to inventory anchors (use generate_anchor_inventory.py instead)
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --output-dir {output_dir} \
+      --legacy-file {legacy_file} \
+      --allowlist-path {allowlist_path} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+  script_path: .repo_studios/scripts/producers/validate_metrics_anchor_stubs.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+    notes:
+      - "Uses shared libraries from .repo_studios/command_center/scripts/libraries/"
+      - "Entry point is run(argv) — orchestrators can import and call directly"
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: null
+    description: Repository root override (defaults to project root resolution).
+    validation:
+      must_exist: true
+      must_be: directory
+
+  - name: output_dir
+    type: path
+    required: false
+    default: ".repo_studios/reports"
+    description: |
+      Base directory for HOP bundle output. The script appends
+      healthview/metrics_anchor_stub_validation/<timestamp>/ automatically.
+    validation:
+      must_exist: false
+      will_create: true
+
+  - name: legacy_file
+    type: path
+    required: false
+    default: "docs/api/metrics_orchestrator.md"
+    description: |
+      Path to the metrics orchestrator markdown file containing the
+      "Legacy Anchor Compatibility" section with stub headings.
+    validation:
+      must_exist: true
+      must_be: file
+
+  - name: allowlist_path
+    type: path
+    required: false
+    default: ".repo_studios/scripts/producers/metrics_anchor_allowlist.json"
+    description: |
+      JSON file containing anchors to allow even if missing.
+      Format: {"anchors": ["anchor-name-1", "anchor-name-2"]}
+    validation:
+      must_exist: false
+      format: json
+
+  - name: artifacts_to_keep
+    type: integer
+    required: false
+    default: 1
+    description: Number of historical run directories to retain after pruning.
+    validation:
+      minimum: 1
+
+  - name: log_level
+    type: string
+    required: false
+    default: "INFO"
+    description: Logging verbosity level.
+    validation:
+      allowed_values:
+        - DEBUG
+        - INFO
+        - WARNING
+        - ERROR
+        - CRITICAL
+
+io_contract:
+  inputs:
+    - name: legacy_file
+      source: filesystem
+      path_pattern: "docs/api/metrics_orchestrator.md"
+      description: Metrics orchestrator markdown with legacy stub section.
+      required: true
+
+    - name: allowlist
+      source: filesystem
+      path_pattern: ".repo_studios/scripts/producers/metrics_anchor_allowlist.json"
+      description: Optional JSON allowlist for anchors to skip validation.
+      required: false
+
+    - name: markdown_files
+      source: filesystem
+      path_pattern: "**/*.md"
+      description: All markdown files in repository scanned for metrics_orchestrator.md links.
+      required: true
+
+  outputs:
+    - artifact: manifest.json
+      path_pattern: ".repo_studios/reports/healthview/metrics_anchor_stub_validation/<YYYYMMDD-HHMM>/manifest.json"
+      format: json
+      schema_version: 1
+      description: Run metadata including inputs, outputs catalog, and status.
+
+    - artifact: summary.md
+      path_pattern: ".repo_studios/reports/healthview/metrics_anchor_stub_validation/<YYYYMMDD-HHMM>/summary.md"
+      format: markdown
+      description: Human-readable summary of validation results.
+
+    - artifact: telemetry.json
+      path_pattern: ".repo_studios/reports/healthview/metrics_anchor_stub_validation/<YYYYMMDD-HHMM>/telemetry.json"
+      format: json
+      description: Structured telemetry for downstream aggregators.
+
+  side_effects:
+    - type: directory_pruning
+      description: |
+        Historical run directories beyond artifacts_to_keep are removed
+        from the topic directory.
+
+behavior:
+  exit_codes:
+    - exit_code: 0
+      meaning: Success, no missing legacy stubs
+      agent_action: Report success, optionally inspect summary.md for details
+
+    - exit_code: 1
+      meaning: Missing anchors detected (artifacts still emitted)
+      agent_action: Review summary.md for missing anchor details, add stubs or update allowlist
+
+  stderr_patterns:
+    - pattern: "Missing anchor"
+      meaning: Referenced anchor has no corresponding legacy stub heading
+      agent_action: Add stub heading to legacy file or add anchor to allowlist
+
+    - pattern: "Legacy file not found"
+      meaning: The specified --legacy-file does not exist
+      agent_action: Verify the legacy file path is correct
+
+integration:
+  typical_workflow:
+    - Run validate_metrics_anchor_stubs.py to check for missing legacy stubs
+    - If missing anchors found, add stub headings to metrics_orchestrator.md
+    - Or add anchors to allowlist if intentionally unmatched
+    - Review summary.md for validation details
+
+  output_consumers:
+    - aggregate_docs_health_signals.py
+
+  input_producers: []
+
+  sample_output: |
+    {
+      "schema_version": 1,
+      "viewer_slug": "healthview",
+      "topic": "metrics_anchor_stub_validation",
+      "run_timestamp": "20251230-1134",
+      "generated_at": "2025-12-30T11:34:00+00:00",
+      "status": "ok",
+      "summary": {
+        "missing_count": 0,
+        "anchors_referenced": 5
+      },
+      "catalog": [
+        {"artifact": "manifest.json", "path": "..."},
+        {"artifact": "summary.md", "path": "..."},
+        {"artifact": "telemetry.json", "path": "..."}
+      ]
+    }
+
+examples:
+  - description: Basic validation run with defaults
+    command: |
+      python .repo_studios/scripts/producers/validate_metrics_anchor_stubs.py \
+        --log-level INFO
+    expected_output: |
+      INFO Repo root: /path/to/repo
+      INFO Output directory: /path/to/repo/.repo_studios/reports
+      INFO [metrics-anchor-stubs] OK — no missing anchors detected
+
+  - description: Full run with explicit paths
+    command: |
+      python .repo_studios/scripts/producers/validate_metrics_anchor_stubs.py \
+        --repo-root . \
+        --output-dir .repo_studios/reports \
+        --legacy-file docs/api/metrics_orchestrator.md \
+        --artifacts-to-keep 1 \
+        --log-level INFO
+
+  - description: Programmatic invocation from Python
+    code: |
+      from validate_metrics_anchor_stubs import run
+      payload = run([
+          "--output-dir", ".repo_studios/reports",
+          "--artifacts-to-keep", "1",
+          "--log-level", "INFO",
+      ])
+      print(f"Status: {payload['status']}")
+      print(f"Missing: {payload['summary']['missing_count']}")
+
+tier3:
+  allowed: true
+  reason: |
+    Mature producer with stable CLI, HOP-compliant output, and well-defined
+    io_contract. Safe for agent-driven execution in validation workflows.
+
+metadata:
+  category: producer
+  tier: tier-3
+  status: active
+  version: 1.0.0
+  last_updated: "2025-12-30"
+  author: repo_studios_team
+  dependencies_tier3:
+    - tier3_cli.yaml
+    - tier3_artifacts.yaml
+    - tier3_prune_logs.yaml
+  tier2_rosters:
+    - tier2_docs_health_overview_roster.md
+  tier1_pipelines:
+    - tier1_healthview_orchestration_pipeline.md

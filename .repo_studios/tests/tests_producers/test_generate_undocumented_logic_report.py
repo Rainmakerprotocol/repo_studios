@@ -30,7 +30,6 @@ def _write_doc_index_telemetry(repo_root: Path, payload: dict, *, timestamp: str
         repo_root
         / ".repo_studios"
         / "reports"
-        / "producer_reports"
         / "healthview"
         / "doc_index"
         / timestamp
@@ -110,7 +109,6 @@ def test_detects_missing_docstrings(tmp_path):
         repo
         / ".repo_studios"
         / "reports"
-        / "producer_reports"
         / "healthview"
         / "anchor_inventory"
         / "20250101-0000"
@@ -132,7 +130,7 @@ def test_detects_missing_docstrings(tmp_path):
             "--repo-root",
             str(repo),
             "--output-dir",
-            str(repo / ".repo_studios" / "reports" / "producer_reports"),
+            str(repo / ".repo_studios" / "reports"),
         ]
     )
 
@@ -178,7 +176,7 @@ def test_allowlist_skips_module(tmp_path):
             "--allowlist",
             str(allowlist_path),
             "--output-dir",
-            str(repo / ".repo_studios" / "reports" / "producer_reports"),
+            str(repo / ".repo_studios" / "reports"),
         ]
     )
 
@@ -201,7 +199,7 @@ def test_handles_missing_metadata(tmp_path):
             "--repo-root",
             str(repo),
             "--output-dir",
-            str(repo / ".repo_studios" / "reports" / "producer_reports"),
+            str(repo / ".repo_studios" / "reports"),
         ]
     )
 

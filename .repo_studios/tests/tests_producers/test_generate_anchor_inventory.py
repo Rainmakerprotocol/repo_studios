@@ -32,7 +32,7 @@ def test_reports_written_with_duplicates(tmp_path):
         encoding="utf-8",
     )
 
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports"
+    output_dir = root / ".repo_studios" / "reports" / "healthview"
 
     json_out = root / "baseline.json"
 
@@ -99,7 +99,7 @@ def test_pruning_keeps_newest_run(tmp_path):
     docs = root / "docs"
     docs.mkdir(parents=True)
     (docs / "alpha.md").write_text("# Alpha\n", encoding="utf-8")
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports"
+    output_dir = root / ".repo_studios" / "reports" / "healthview"
     topic_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG
     topic_dir.mkdir(parents=True, exist_ok=True)
 

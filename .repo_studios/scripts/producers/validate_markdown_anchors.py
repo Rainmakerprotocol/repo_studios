@@ -77,7 +77,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback during standalone exe
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")  # capture link target
 
-REPORTS_ROOT = Path(".repo_studios/reports/producer_reports")
+REPORTS_ROOT = Path(".repo_studios/reports/healthview")
 DEFAULT_OUTPUT_DIR = REPORTS_ROOT
 VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "markdown_anchor_validation"

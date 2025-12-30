@@ -38,16 +38,16 @@ related_files:
 ## Stage Narratives
 
 Top files with the highest number of unfinished items:
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md`
-  — 99 unchecked
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  — 77 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md`
   — 77 unchecked
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+  — 74 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_available_scripts_roster.md`
   — 72 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_standards_integrity_roster.md`
   — 66 unchecked
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md`
+  — 65 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md`
   — 55 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md`
@@ -60,18 +60,6 @@ Top files with the highest number of unfinished items:
 
 ### Sample Outstanding Tasks
 
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L617 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
-  Docs Health Overview: generate_doc_index.py — pending until Tier-2 DONE is checked. See: Tier-2
-  record
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L618 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
-  Docs Health Overview: generate_anchor_inventory.py — pending until Tier-2 DONE is checked. See:
-  Tier-2 record
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L619 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
-  Docs Health Overview: validate_markdown_anchors.py — pending until Tier-2 DONE is checked. See:
-  Tier-2 record
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
   L620 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
   Docs Health Overview: verify_docs_integrity.py — pending until Tier-2 DONE is checked. See: Tier-2
@@ -100,21 +88,32 @@ Top files with the highest number of unfinished items:
   L631 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
   Docs Health Overview: Base package complete (`manifest.json`, `summary.md`, `telemetry.json`).
   See: Stop-gates
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L632 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
+  Docs Health Overview: No pointer artifacts (`latest_*` / `current_*`). See: Stop-gates
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L633 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
+  Docs Health Overview: Output root aligned to HOP contract
+  (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`).
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+  L635 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
+  Docs Health Overview: Tier-3 eligible (Stage 2.1 Tier-2 depth captured; ready for Tier-3
+  extraction). See:
 
 ## Signals & Telemetry
 
-* Total unchecked tasks: 534.
+* Total unchecked tasks: 497.
 * Files containing unchecked tasks: 14.
 
 ### Unchecked Tasks by H1
 
 | H1 | Unchecked |
 | --- | --- |
-| Tier-2 Roster — Stage 2.1 Docs Health Overview | 99 |
-| HealthView Orchestration Pipeline | 77 |
 | Tier-2 Roster — Stage 7 Running the Complete Suite | 77 |
+| HealthView Orchestration Pipeline | 74 |
 | Tier-2 Roster — Stage 11.1 Available Scripts (Holding Area) | 72 |
 | Tier-2 Roster — Stage 6.1 Standards Integrity | 66 |
+| Tier-2 Roster — Stage 2.1 Docs Health Overview | 65 |
 | Tier-2 Roster — Stage 4.1 Dependency & Import Hygiene | 55 |
 | Tier-2 Roster — Stage 3.1 Fault Diagnostics Overview | 44 |
 | Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> | 11 |

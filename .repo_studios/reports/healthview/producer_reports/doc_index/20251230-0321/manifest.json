@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
-  "viewer_slug": "healthview",
+  "viewer_slug": "producer_reports",
   "topic": "doc_index",
-  "run_timestamp": "20251229-1335",
-  "generated_utc": "2025-12-29T13:35:31.733247+00:00",
+  "run_timestamp": "20251230-0321",
+  "generated_utc": "2025-12-30T03:21:35.770761+00:00",
   "status": "ok",
   "catalog": [
     "scripts.docs.generate_doc_index"
   ],
   "inputs": {
     "repo_root": "C:\\Users\\genet\\repo_studios",
-    "output_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports",
+    "output_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview",
     "artifacts_to_keep": 1,
     "db_target": null,
     "excluded_names": [
