@@ -1,0 +1,201 @@
+# Tier-3: generate_fault_artifacts.py
+# Consumer script that processes faulthandler runs into HOP-compliant artifacts.
+
+tool:
+  id: generate_fault_artifacts
+  name: Generate Fault Artifacts
+  description: |
+    Processes raw faulthandler stack dumps and producer reports to emit HOP-compliant
+    HealthView artifacts for downstream summarization.
+
+    Output is written to:
+      .repo_studios/reports/healthview/consumer_reports/fault_artifacts/<YYYYMMDD-HHMM>/
+
+    The bundle includes manifest.json, summary.md, and telemetry.json.
+
+    This consumer can either reuse an existing producer report (--report) or perform
+    a fresh scan of the run directory's stacks.log file to extract signatures.
+  keywords:
+    - healthview
+    - consumer
+    - faulthandler
+    - stack
+    - crash
+    - artifacts
+    - telemetry
+  use_when:
+    - Need to generate structured fault artifacts from raw stack dumps
+    - Processing producer output into consumable HealthView bundles
+    - Validating Stage 3.1 consumer outputs and retention behavior
+    - Creating CSV exports and human-readable summaries from fault data
+  dont_use_when:
+    - You only need raw faulthandler report collection (use collect_faulthandler_reports)
+    - You need the final Stage 3.1 summary (use summarize_fault_diagnostics_overview)
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --outdir {outdir} \
+      --output-dir {output_dir} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+    # Optional:
+    #   --report {report}             # Reuse existing producer report JSON
+  script_path: .repo_studios/scripts/consumers/generate_fault_artifacts.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.10"
+    notes:
+      - "Uses build_topic_path() for HOP-compliant output paths."
+      - "Optional env var FAULT_OUTDIR for run directory discovery."
+      - "Optional env var FAULT_TOP_FRAMES_N to override frame depth (default: 10)."
+      - "Optional env var FAULT_LOGS_ALLOW_LEGACY controls fallback to legacy paths."
+
+parameters:
+  - name: outdir
+    type: path
+    required: false
+    default: null
+    description: Run directory containing stacks.log. Defaults to latest discovered run.
+    validation:
+      must_exist: false
+      must_be_directory: true
+    examples:
+      - .repo_studios/command_center/reports/rawview/fault_diagnostics_runs/2025-01-01_0000
+
+  - name: report
+    type: path
+    required: false
+    default: null
+    description: Explicit producer report JSON to reuse (skips fresh scan).
+    validation:
+      must_exist: false
+    examples:
+      - .repo_studios/reports/healthview/producer_reports/faulthandler_reports/20251231-1730/telemetry.json
+
+  - name: output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/consumer_reports/fault_artifacts
+    description: Consumer output root where bundles are written.
+    validation:
+      parent_must_exist: false
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 10
+    description: Number of historical run directories to retain.
+    validation:
+      min_value: 1
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+outputs:
+  primary:
+    type: directory
+    format: healthview_bundle
+    path_pattern: ".repo_studios/reports/healthview/consumer_reports/fault_artifacts/<YYYYMMDD-HHMM>/"
+    description: HealthView bundle directory for a single run.
+    contents:
+      required:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+
+  secondary:
+    - type: file
+      format: csv
+      path_pattern: "<run_dir>/stacks.csv"
+      description: Parsed signature table with thread and location data.
+    - type: file
+      format: markdown
+      path_pattern: "<run_dir>/SUMMARY.md"
+      description: Human-readable summary written to the run directory.
+    - type: file
+      format: text
+      path_pattern: "<run_dir>/dumps/combined.txt"
+      description: Raw copy of stacks.log for archival.
+    - type: stdout
+      format: text
+      description: Log messages indicating processing progress.
+
+exit_codes:
+  - code: 0
+    meaning: Success; bundle written.
+  - code: 1
+    meaning: Error during processing.
+
+retention:
+  mechanism: keep_budget
+  default_keep: 10
+  flag: --artifacts-to-keep
+  pruning_function: prune_run_directories
+  guardrails:
+    - current_run protection (excludes active bundle from pruning)
+
+db_integration:
+  gated_by: REPO_STUDIOS_DB_ENABLED
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+  callsites: []
+
+dependencies:
+  internal:
+    - libraries.cli (resolve_repo_root)
+    - libraries.prune_run_directories
+    - libraries.retention_policy (get_keep)
+    - libraries.report_paths (build_topic_path)
+    - utilities.fault_run_analysis (FaultSignature, build_fault_report, ensure_manifest, read_stacks_text)
+  external:
+    - Python 3.10+ standard library
+
+examples:
+  - name: Basic invocation (auto-discover run)
+    command: |
+      python .repo_studios/scripts/consumers/generate_fault_artifacts.py \
+        --log-level INFO
+
+  - name: Process specific run directory
+    command: |
+      python .repo_studios/scripts/consumers/generate_fault_artifacts.py \
+        --outdir .repo_studios/command_center/reports/rawview/fault_diagnostics_runs/2025-01-01_0000 \
+        --log-level DEBUG
+
+  - name: Reuse producer report
+    command: |
+      python .repo_studios/scripts/consumers/generate_fault_artifacts.py \
+        --outdir .repo_studios/faulthandler/2025-01-01_0000 \
+        --report .repo_studios/reports/healthview/producer_reports/faulthandler_reports/20251231-1730/telemetry.json
+
+related_scripts:
+  - script_id: collect_faulthandler_reports
+    relationship: upstream_producer
+    description: Produces faulthandler reports that this consumer can reuse via --report.
+  - script_id: summarize_fault_diagnostics_overview
+    relationship: downstream_summarizer
+    description: Consumes this consumer's output for final Stage 3.1 summary.
+  - script_id: run_fault_diagnostics_overview
+    relationship: orchestrator
+    description: Stage 3.1 orchestrator that invokes this consumer.
+
+pipeline_context:
+  stage: "3.1"
+  stage_name: Fault Diagnostics Overview
+  position: 2
+  role: consumer
+  tier1_reference: tier1_healthview_orchestration_pipeline.md#stage-31-fault-diagnostics-overview
+  tier2_reference: tier2_fault_diagnostics_overview_roster.md#s31r-003-generate-fault-artifacts
+
+metadata:
+  schema_version: 1
+  created_at: "2025-12-31T18:00:00Z"
+  updated_at: "2025-12-31T18:00:00Z"
+  author: agent
+  status: active

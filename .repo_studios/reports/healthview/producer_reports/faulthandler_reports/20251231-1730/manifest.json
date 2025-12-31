@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "healthview",
+  "topic": "faulthandler_reports",
+  "run_timestamp": "20251231-1730",
+  "generated_at": "2025-12-31T17:30:19.040762+00:00",
+  "git_sha": "17852ec8e215bb31caf4749bdb6e2199f51a6f1e",
+  "status": "ok",
+  "catalog": [
+    {
+      "script_path": ".repo_studios\\scripts\\producers\\collect_faulthandler_reports.py",
+      "role": "producer"
+    }
+  ],
+  "paths": {
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "reports_root": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\faulthandler_reports",
+    "bundle_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\faulthandler_reports\\20251231-1730"
+  },
+  "inputs": {
+    "runs_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs",
+    "run_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-01_0000",
+    "top_frames": null,
+    "artifacts_to_keep": 5,
+    "allow_legacy_runs": true
+  },
+  "provenance": {
+    "trigger_type": "cli",
+    "requested_by": "genet"
+  }
+}

@@ -766,14 +766,18 @@ _Tier-2 references (depth lives here):_
 
 **Stage 3.1 Script Gate Summary (Tier-1):**
 
-- [ ] collect_faulthandler_reports.py — pending until Tier-2 DONE is checked.
+- [x] collect_faulthandler_reports.py — complete.
   See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-002-collect-faulthandler-reports)
-- [ ] generate_fault_artifacts.py — pending until Tier-2 DONE is checked.
+  Tier-3: [tier3_collect_faulthandler_reports.yaml](tier3_scripts/fault_diagnostics_overview/tier3_collect_faulthandler_reports.yaml)
+- [x] generate_fault_artifacts.py — complete.
   See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-003-generate-fault-artifacts)
-- [ ] summarize_fault_diagnostics_overview.py — pending until Tier-2 DONE is checked.
+  Tier-3: [tier3_generate_fault_artifacts.yaml](tier3_scripts/fault_diagnostics_overview/tier3_generate_fault_artifacts.yaml)
+- [x] summarize_fault_diagnostics_overview.py — complete.
   See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-004-summarize-fault-diagnostics-overview)
-- [ ] run_fault_diagnostics_overview.py — pending until Tier-2 DONE is checked.
+  Tier-3: [tier3_summarize_fault_diagnostics_overview.yaml](tier3_scripts/fault_diagnostics_overview/tier3_summarize_fault_diagnostics_overview.yaml)
+- [x] run_fault_diagnostics_overview.py — complete.
   See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-001-fault-diagnostics-overview-orchestrator)
+  Tier-3: [tier3_run_fault_diagnostics_overview.yaml](tier3_scripts/fault_diagnostics_overview/tier3_run_fault_diagnostics_overview.yaml)
 
 **Stage 3.1 Gate Checklist (Tier-1):**
 
@@ -818,7 +822,7 @@ compatibility. Runtime: 3-5 minutes typical (from docstring, lines 1-25).
 
 | Script | Category | Purpose | Tier-3 YAML |
 | ------ | -------- | ------- | ----------- |
-| `collect_faulthandler_reports.py` | Producer | Scan `.repo_studios/runs` directories for crash reports, parse tracebacks, categorize faults | TBD |
+| `collect_faulthandler_reports.py` | Producer | Scan `.repo_studios/runs` directories for crash reports, parse tracebacks, categorize faults | [tier3_collect_faulthandler_reports.yaml](tier3_scripts/fault_diagnostics_overview/tier3_collect_faulthandler_reports.yaml) |
 | `generate_fault_artifacts.py` | Consumer | Process producer output into structured artifacts (CSV, JSON, SUMMARY.md) | TBD |
 | `summarize_fault_diagnostics_overview.py` | Summarizer | Generate HealthView overview bundle with cross-run comparisons | TBD |
 

@@ -1,0 +1,268 @@
+# Tier-3: summarize_fault_diagnostics_overview.py
+# Summarizer script that generates the Stage 3.1 HealthView overview bundle.
+
+tool:
+  id: summarize_fault_diagnostics_overview
+  name: Summarize Fault Diagnostics Overview
+  description: |
+    Consumes fault artifact bundles from the consumer stage and produces a
+    consolidated overview with baseline comparison for HealthView.
+
+    Output is written to:
+      .repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview/<stem>-YYYYMMDD_HHMMSS/
+
+    The bundle includes fault_diagnostics_overview.json and fault_diagnostics_overview.md.
+
+    This summarizer discovers the latest consumer bundle via timestamp-sorted directory
+    listing (no pointer files per HOP contract) and compares current metrics against
+    the previous bundle to generate baseline deltas.
+  keywords:
+    - healthview
+    - summarizer
+    - faulthandler
+    - fault_diagnostics
+    - overview
+    - baseline
+    - telemetry
+  use_when:
+    - Need the final Stage 3.1 overview with baseline comparison
+    - Generating consolidated fault diagnostics for HealthView dashboards
+    - Comparing current fault signatures against previous runs
+    - Creating human-readable overview markdown from consumer artifacts
+  dont_use_when:
+    - You need raw faulthandler collection (use collect_faulthandler_reports)
+    - You need consumer-level artifact processing (use generate_fault_artifacts)
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --consumer-output-dir {consumer_output_dir} \
+      --producer-output-dir {producer_output_dir} \
+      --output-dir {output_dir} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+    # Optional overrides:
+    #   --consumer-telemetry {path}    # Explicit telemetry.json
+    #   --consumer-manifest {path}     # Explicit manifest.json
+    #   --producer-report {path}       # Explicit producer report.json
+    #   --timestamp {iso8601}          # Override artifact timestamp
+  script_path: .repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.10"
+    notes:
+      - "Uses build_topic_path() for HOP-compliant output paths."
+      - "Discovers latest consumer bundle via timestamp sort (no pointer files)."
+      - "Uses write_report_artifacts library for output and pruning."
+
+parameters:
+  - name: consumer_output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/consumer_reports/fault_artifacts
+    description: Consumer bundle location for input discovery.
+    validation:
+      must_exist: false
+      must_be_directory: true
+
+  - name: producer_output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/producer_reports/faulthandler_reports
+    description: Producer report location for optional severity enrichment.
+    validation:
+      must_exist: false
+      must_be_directory: true
+
+  - name: output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview
+    description: Summarizer output root where overview bundles are written.
+    validation:
+      parent_must_exist: false
+
+  - name: consumer_telemetry
+    type: path
+    required: false
+    default: null
+    description: Explicit consumer telemetry.json path override (bypasses discovery).
+    validation:
+      must_exist: false
+
+  - name: consumer_manifest
+    type: path
+    required: false
+    default: null
+    description: Explicit consumer manifest.json path override (bypasses discovery).
+    validation:
+      must_exist: false
+
+  - name: producer_report
+    type: path
+    required: false
+    default: null
+    description: Explicit producer report.json path override.
+    validation:
+      must_exist: false
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Number of historical overview bundles to retain.
+    validation:
+      min_value: 1
+
+  - name: timestamp
+    type: string
+    required: false
+    default: null
+    description: ISO-8601 timestamp override for the emitted artifacts.
+    validation:
+      format: iso8601
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+outputs:
+  - type: directory
+    path_pattern: .repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview/<stem>-YYYYMMDD_HHMMSS/
+    description: Timestamped overview bundle directory.
+    contents:
+      - fault_diagnostics_overview.json
+      - fault_diagnostics_overview.md
+
+  - type: json
+    filename: fault_diagnostics_overview.json
+    description: Machine-readable overview with metrics, severity buckets, and baseline comparison.
+    schema:
+      schema_version: int
+      viewer: str
+      topic: str
+      generated_at: str
+      metrics:
+        signature_count: int
+        active_signature_count: int
+        thread_block_count: int
+      severity_buckets:
+        repeat_offender: int
+        multi_hit: int
+        single_hit: int
+      baseline: object|null
+      artifacts: object
+      producer_repeat_offender: int|null
+      notes: list[str]
+
+  - type: markdown
+    filename: fault_diagnostics_overview.md
+    description: Human-readable overview with severity breakdown and baseline summary.
+
+retention:
+  mechanism: prune_by_keep_budget
+  surfaces:
+    - "--artifacts-to-keep"
+    - "write_report_artifacts(... keep=options.artifacts_to_keep)"
+  targets:
+    - .repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview
+  guardrails:
+    - "write_report_artifacts internal _prune_old_runs respects .keep sentinel"
+    - "Current run is protected during pruning"
+  evidence:
+    - ".repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py#L658-L666"
+
+db_integration:
+  enabled: false
+  gated_by: null
+  notes:
+    - "No create_storage callsites; DB integration not implemented for this summarizer."
+
+dependencies:
+  required:
+    - description: Consumer fault artifacts
+      path: .repo_studios/reports/healthview/consumer_reports/fault_artifacts
+      producer: generate_fault_artifacts.py
+
+  optional:
+    - description: Producer faulthandler reports
+      path: .repo_studios/reports/healthview/producer_reports/faulthandler_reports
+      producer: collect_faulthandler_reports.py
+
+error_handling:
+  on_missing_consumer:
+    behavior: add_note
+    exit_code: 0
+    message: "Consumer telemetry not located; ensure generate_fault_artifacts has been refreshed."
+
+  on_missing_producer:
+    behavior: add_note
+    exit_code: 0
+    message: "Producer report unavailable; repeat offender counts may be stale."
+
+  on_no_baseline:
+    behavior: skip_baseline
+    exit_code: 0
+    notes: "Baseline comparison skipped when only one consumer bundle exists."
+
+examples:
+  basic_run:
+    description: Generate overview using default HOP paths
+    command: |
+      python .repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py
+
+  with_retention:
+    description: Generate overview and keep only 3 historical bundles
+    command: |
+      python .repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py \
+        --artifacts-to-keep 3
+
+  debug_mode:
+    description: Generate overview with debug logging
+    command: |
+      python .repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py \
+        --log-level DEBUG
+
+  with_explicit_consumer:
+    description: Use specific consumer bundle for input
+    command: |
+      python .repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py \
+        --consumer-telemetry .repo_studios/reports/healthview/consumer_reports/fault_artifacts/20251231-1754/telemetry.json \
+        --consumer-manifest .repo_studios/reports/healthview/consumer_reports/fault_artifacts/20251231-1754/manifest.json
+
+testing:
+  test_file: .repo_studios/tests/tests_command_center/fault_diagnostics/test_summarize_fault_diagnostics_overview.py
+  test_count: 1
+  coverage_status: partial
+  notes:
+    - "Test validates overview generation with consumer/producer fixtures."
+    - "Verifies baseline comparison logic and artifact output."
+
+related_scripts:
+  - id: collect_faulthandler_reports
+    role: producer
+    path: .repo_studios/scripts/producers/collect_faulthandler_reports.py
+
+  - id: generate_fault_artifacts
+    role: consumer
+    path: .repo_studios/scripts/consumers/generate_fault_artifacts.py
+
+  - id: run_fault_diagnostics_overview
+    role: orchestrator
+    path: .repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py
+
+metadata:
+  tier: 3
+  stage: 3.1
+  record_id: S31R-004
+  category: summarizer
+  hop_compliant: true
+  hop_notes:
+    - "Output root is HOP-compliant via build_topic_path('summarizer', TOPIC_SLUG)."
+    - "Artifact naming is legacy pattern (<stem>.json, <stem>.md); base package migration deferred."
+  last_validated: "2025-12-31"
+  author: repo_studios_ai

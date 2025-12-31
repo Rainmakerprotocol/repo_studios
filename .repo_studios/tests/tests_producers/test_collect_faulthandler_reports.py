@@ -43,7 +43,7 @@ def test_collect_faulthandler_reports_emits_artifacts(tmp_path):
     run_dir.mkdir(parents=True)
     (run_dir / "stacks.log").write_text(_sample_stacks(), encoding="utf-8")
 
-    output_dir = repo / ".repo_studios" / "reports" / "producer_reports" / "faulthandler_reports"
+    output_dir = repo / ".repo_studios" / "reports" / "healthview" / "producer_reports" / "faulthandler_reports"
 
     result = producer_mod.run(
         [

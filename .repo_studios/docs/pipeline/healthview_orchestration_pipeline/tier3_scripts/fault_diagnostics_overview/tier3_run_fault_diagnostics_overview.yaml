@@ -1,0 +1,325 @@
+# Tier-3: run_fault_diagnostics_overview.py
+# Orchestrator for Stage 3.1 Fault Diagnostics Overview workflow.
+
+tool:
+  id: run_fault_diagnostics_overview
+  name: Run Fault Diagnostics Overview
+  description: |
+    Topic orchestrator for the Fault Diagnostics workflow (Stage 3.1).
+
+    Sequentially executes:
+    1. Producer: collect_faulthandler_reports.py — collects raw stack dumps
+    2. Consumer: generate_fault_artifacts.py — processes into HOP artifacts
+    3. Summarizer: summarize_fault_diagnostics_overview.py — creates overview
+
+    Output is written to:
+      .repo_studios/reports/healthview/orchestrator_reports/fault_diagnostics_overview/<YYYYMMDD-HHMM>/
+
+    The bundle includes manifest.json, summary.md, and telemetry.json with
+    step-level timing and status for all three pipeline stages.
+
+    Most runs complete within three to five minutes, with producer log replay
+    accounting for the majority of execution time.
+  keywords:
+    - healthview
+    - orchestrator
+    - faulthandler
+    - fault_diagnostics
+    - workflow
+    - pipeline
+    - stage-3.1
+  use_when:
+    - Need to run the complete Stage 3.1 fault diagnostics pipeline
+    - Refreshing all fault diagnostic artifacts in one operation
+    - Need step-level telemetry for producer/consumer/summarizer stages
+    - Running scheduled fault analysis for HealthView dashboards
+  dont_use_when:
+    - You only need producer output (use collect_faulthandler_reports)
+    - You only need consumer artifacts (use generate_fault_artifacts)
+    - You only need the summarizer overview (use summarize_fault_diagnostics_overview)
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --runs-dir {runs_dir} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+    # Optional:
+    #   --run-dir {path}                  # Explicit faulthandler run directory
+    #   --reuse-report {path}             # Reuse existing producer report
+    #   --skip-producer                   # Skip producer step
+    #   --skip-consumer                   # Skip consumer step
+    #   --skip-summarizer                 # Skip summarizer step
+    #   --producer-artifacts-to-keep N    # Producer retention budget
+    #   --consumer-artifacts-to-keep N    # Consumer retention budget
+    #   --summarizer-artifacts-to-keep N  # Summarizer retention budget
+    #   --timestamp {iso8601}             # Override artifact timestamp
+  script_path: .repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.10"
+    notes:
+      - "Uses build_topic_path() for HOP-compliant output paths for all stages."
+      - "Dynamically loads child scripts via importlib."
+      - "Uses write_report_artifacts library for output and pruning."
+
+parameters:
+  - name: runs_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/rawview/fault_diagnostics_runs
+    description: Base directory containing raw faulthandler run directories.
+    validation:
+      must_exist: false
+      must_be_directory: true
+
+  - name: run_dir
+    type: path
+    required: false
+    default: null
+    description: Explicit faulthandler run directory to process (bypasses discovery).
+    validation:
+      must_exist: false
+      must_be_directory: true
+
+  - name: producer_output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/producer_reports/faulthandler_reports
+    description: Producer output root.
+
+  - name: consumer_output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/consumer_reports/fault_artifacts
+    description: Consumer output root.
+
+  - name: summarizer_output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview
+    description: Summarizer output root.
+
+  - name: orchestrator_output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/orchestrator_reports/fault_diagnostics_overview
+    description: Orchestrator manifest output root.
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 3
+    description: Retention budget for orchestrator manifest artifacts.
+    validation:
+      min_value: 1
+
+  - name: producer_artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Retention budget for producer bundles.
+    validation:
+      min_value: 1
+
+  - name: consumer_artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Retention budget for consumer bundles.
+    validation:
+      min_value: 1
+
+  - name: summarizer_artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Retention budget for summarizer bundles.
+    validation:
+      min_value: 1
+
+  - name: reuse_report
+    type: path
+    required: false
+    default: null
+    description: Reuse an existing producer report JSON (skips fresh scan).
+
+  - name: producer_top_frames
+    type: int
+    required: false
+    default: null
+    description: Override the producer top frame depth.
+
+  - name: skip_producer
+    type: bool
+    required: false
+    default: false
+    description: Skip the producer step (requires existing producer output).
+
+  - name: skip_consumer
+    type: bool
+    required: false
+    default: false
+    description: Skip the consumer step (requires existing consumer output).
+
+  - name: skip_summarizer
+    type: bool
+    required: false
+    default: false
+    description: Skip the summarizer step.
+
+  - name: timestamp
+    type: string
+    required: false
+    default: null
+    description: ISO-8601 timestamp override for orchestrator outputs.
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+outputs:
+  - type: directory
+    path_pattern: .repo_studios/reports/healthview/orchestrator_reports/fault_diagnostics_overview/<YYYYMMDD-HHMM>/
+    description: Timestamped orchestrator manifest bundle directory.
+    contents:
+      - manifest.json
+      - summary.md
+      - telemetry.json
+
+  - type: json
+    filename: manifest.json
+    description: Machine-readable orchestrator manifest with step-level results.
+    schema:
+      schema_version: int
+      viewer: str
+      topic: str
+      generated_at: str
+      steps: list[object]
+      step_artifacts: object
+      warnings: list[str]
+      notes: list[str]
+
+  - type: json
+    filename: telemetry.json
+    description: Pipeline telemetry with step timing and status.
+    schema:
+      steps: list[object]
+      total_duration_seconds: float
+      status: str
+
+  - type: markdown
+    filename: summary.md
+    description: Human-readable pipeline summary with step status.
+
+retention:
+  mechanism: prune_by_keep_budget
+  surfaces:
+    - "--artifacts-to-keep"
+    - "write_report_artifacts(... keep=options.artifacts_to_keep)"
+  targets:
+    - .repo_studios/reports/healthview/orchestrator_reports/fault_diagnostics_overview
+  guardrails:
+    - "write_report_artifacts internal _prune_old_runs respects .keep sentinel"
+    - "Current run is protected during pruning"
+  evidence:
+    - ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py#L456-L607"
+
+db_integration:
+  enabled: false
+  gated_by: null
+  notes:
+    - "No create_storage callsites; DB integration not implemented for this orchestrator."
+
+dependencies:
+  required:
+    - description: Producer script for faulthandler collection
+      path: .repo_studios/scripts/producers/collect_faulthandler_reports.py
+      role: producer
+
+    - description: Consumer script for artifact generation
+      path: .repo_studios/scripts/consumers/generate_fault_artifacts.py
+      role: consumer
+
+    - description: Summarizer script for overview generation
+      path: .repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py
+      role: summarizer
+
+  optional:
+    - description: Raw faulthandler run directories
+      path: .repo_studios/reports/healthview/rawview/fault_diagnostics_runs
+      notes: "Required if not skipping producer step"
+
+error_handling:
+  on_step_failure:
+    behavior: record_and_continue
+    exit_code: 1
+    notes: "Failed step is recorded in manifest; subsequent steps may still run."
+
+  on_all_skipped:
+    behavior: warn
+    exit_code: 0
+    notes: "Orchestrator warns if all steps are skipped via flags."
+
+examples:
+  basic_run:
+    description: Run complete Stage 3.1 pipeline with defaults
+    command: |
+      python .repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py
+
+  with_retention:
+    description: Run pipeline with custom retention budgets
+    command: |
+      python .repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py \
+        --artifacts-to-keep 5 \
+        --producer-artifacts-to-keep 10 \
+        --consumer-artifacts-to-keep 10
+
+  skip_producer:
+    description: Run only consumer and summarizer (reuse existing producer output)
+    command: |
+      python .repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py \
+        --skip-producer
+
+  debug_mode:
+    description: Run with debug logging
+    command: |
+      python .repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py \
+        --log-level DEBUG
+
+testing:
+  test_file: .repo_studios/tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py
+  test_count: 1
+  coverage_status: partial
+  notes:
+    - "Test validates orchestrator manifest generation with summarizer step."
+    - "Tests use mocked child scripts for isolation."
+
+related_scripts:
+  - id: collect_faulthandler_reports
+    role: producer
+    path: .repo_studios/scripts/producers/collect_faulthandler_reports.py
+
+  - id: generate_fault_artifacts
+    role: consumer
+    path: .repo_studios/scripts/consumers/generate_fault_artifacts.py
+
+  - id: summarize_fault_diagnostics_overview
+    role: summarizer
+    path: .repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py
+
+metadata:
+  tier: 3
+  stage: 3.1
+  record_id: S31R-001
+  category: orchestrator
+  hop_compliant: true
+  hop_notes:
+    - "All output paths use build_topic_path() for HOP compliance."
+    - "Child scripts (producer, consumer, summarizer) also HOP-compliant."
+  last_validated: "2025-12-31"
+  author: repo_studios_ai

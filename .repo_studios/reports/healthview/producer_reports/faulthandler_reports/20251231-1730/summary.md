@@ -1,6 +1,7 @@
-# Fault Diagnostics Summary
+# Faulthandler Report Summary
 
-Generated (UTC): 2025-12-31T17:54:36+00:00
+Generated (UTC): 2025-12-31T17:30:19+00:00
+Source Run Dir: C:\Users\genet\repo_studios\.repo_studios\command_center\reports\rawview\fault_diagnostics_runs\2025-01-01_0000
 
 ## Summary
 
@@ -18,12 +19,4 @@ Generated (UTC): 2025-12-31T17:54:36+00:00
 - repeat_offender: 0
 - multi_hit: 0
 - single_hit: 0
-
-## Dumps
-
-- combined.txt
-
-## Top Signatures
-
-(none)
 

@@ -1,0 +1,236 @@
+# Tier-3: collect_faulthandler_reports.py
+# Producer script that collects faulthandler runs and emits a HealthView bundle.
+
+tool:
+  id: collect_faulthandler_reports
+  name: Collect Faulthandler Reports
+  description: |
+    Scans faulthandler run directories (stack dumps from Python faulthandler module) and emits
+    a canonical HealthView bundle under:
+
+      .repo_studios/reports/healthview/producer_reports/faulthandler_reports/<YYYYMMDD-HHMM>/
+
+    The bundle includes manifest.json, summary.md, and telemetry.json.
+
+    This producer converts raw faulthandler captures (stacks.log, thread dumps) into structured
+    analysis with signature extraction, severity bucketing, and repeat-offender detection.
+  keywords:
+    - healthview
+    - producer
+    - faulthandler
+    - stack
+    - crash
+    - diagnostics
+    - telemetry
+  use_when:
+    - Need a structured HealthView bundle from faulthandler captures (manifest/summary/telemetry)
+    - Validating Stage 3.1 producer outputs and retention behavior
+    - Refreshing downstream consumers that depend on faulthandler_reports bundles
+    - Analyzing thread states and stack traces from Python processes
+  dont_use_when:
+    - You need to generate the raw faulthandler captures (use configure_faulthandler_runtime utility)
+    - You only need pytest log analysis (use collect_test_log_reports)
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --runs-dir {runs_dir} \
+      --output-dir {output_dir} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+    # Optional:
+    #   --run-dir {run_dir}           # Explicit run directory
+    #   --timestamp {timestamp}       # Override run timestamp
+    #   --top-frames {top_frames}     # Limit frames per signature
+    #   --validate-only               # Validate existing bundle without writing
+  script_path: .repo_studios/scripts/producers/collect_faulthandler_reports.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.10"
+    notes:
+      - "Uses build_topic_path() for HOP-compliant output paths."
+      - "Optional env var FAULT_LOGS_ALLOW_LEGACY controls fallback to .repo_studios/faulthandler."
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: null
+    description: Repository root override. If omitted, auto-discovers by scanning parent directories.
+    validation:
+      must_exist: false
+
+  - name: runs_dir
+    type: path
+    required: false
+    default: .repo_studios/command_center/reports/rawview/fault_diagnostics_runs
+    description: Base directory containing faulthandler run folders.
+    validation:
+      must_exist: false
+      must_be_directory: true
+    examples:
+      - .repo_studios/command_center/reports/rawview/fault_diagnostics_runs
+      - .repo_studios/faulthandler
+
+  - name: run_dir
+    type: path
+    required: false
+    default: null
+    description: Optional explicit faulthandler run directory (bypasses discovery).
+    validation:
+      must_exist: false
+      must_be_directory: true
+
+  - name: output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/producer_reports/faulthandler_reports
+    description: HealthView root where bundles are written.
+    validation:
+      parent_must_exist: false
+
+  - name: timestamp
+    type: string
+    required: false
+    default: null
+    description: Override run timestamp (ISO 8601 or YYYYMMDD-HHMM; UTC assumed when absent).
+    validation:
+      pattern: "^(\\d{8}-\\d{4}|\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2})?Z?)$"
+    examples:
+      - "20251231-1730"
+      - "2025-12-31T17:30:00Z"
+
+  - name: top_frames
+    type: int
+    required: false
+    default: null
+    description: Override the number of frames captured per signature (limits stack depth).
+    validation:
+      min_value: 1
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 10
+    description: Number of historical run directories to retain.
+    validation:
+      min_value: 1
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+  - name: validate_only
+    type: bool
+    required: false
+    default: false
+    description: Validate the latest report.json schema without writing new artifacts.
+
+outputs:
+  primary:
+    type: directory
+    format: healthview_bundle
+    path_pattern: ".repo_studios/reports/healthview/producer_reports/faulthandler_reports/<YYYYMMDD-HHMM>/"
+    description: HealthView bundle directory for a single run.
+    contents:
+      required:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+
+  secondary:
+    - type: stdout
+      format: text
+      description: Log messages indicating processing progress and signature counts.
+
+exit_codes:
+  - code: 0
+    meaning: Success; bundle written or validation passed.
+  - code: 1
+    meaning: Error during processing or validation failure.
+
+retention:
+  mechanism: keep_budget
+  default_keep: 10
+  flag: --artifacts-to-keep
+  pruning_function: prune_run_directories
+  guardrails:
+    - current_run protection (excludes active bundle from pruning)
+
+db_integration:
+  gated_by: REPO_STUDIOS_DB_ENABLED
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+  callsites:
+    - storage.write_manifest(manifest)
+    - storage.write_summary({"markdown": markdown}, format="md")
+    - storage.write_telemetry(telemetry)
+
+dependencies:
+  internal:
+    - libraries.cli (PathsConfig, OptionsConfig, build_standard_paths, build_standard_options)
+    - libraries.database_integration (create_storage)
+    - libraries.retention_policy (get_keep)
+    - libraries.prune_logs (prune_run_directories)
+    - libraries.report_paths (build_topic_path)
+    - utilities.fault_run_analysis (FaultAnalysisResult, build_fault_report)
+  external:
+    - Python 3.10+ standard library
+
+examples:
+  - name: Basic invocation (auto-discover runs)
+    command: |
+      python .repo_studios/scripts/producers/collect_faulthandler_reports.py \
+        --repo-root . \
+        --log-level INFO
+
+  - name: Process specific run directory
+    command: |
+      python .repo_studios/scripts/producers/collect_faulthandler_reports.py \
+        --repo-root . \
+        --run-dir .repo_studios/faulthandler/20251231-1700 \
+        --log-level DEBUG
+
+  - name: Validate existing bundle
+    command: |
+      python .repo_studios/scripts/producers/collect_faulthandler_reports.py \
+        --repo-root . \
+        --validate-only
+
+  - name: Override timestamp and limit frames
+    command: |
+      python .repo_studios/scripts/producers/collect_faulthandler_reports.py \
+        --repo-root . \
+        --timestamp 20251231-1800 \
+        --top-frames 10
+
+related_scripts:
+  - script_id: generate_fault_artifacts
+    relationship: downstream_consumer
+    description: Consumes faulthandler reports to generate detailed fault artifact analysis.
+  - script_id: summarize_fault_diagnostics_overview
+    relationship: downstream_summarizer
+    description: Synthesizes faulthandler reports into Stage 3.1 summary.
+  - script_id: run_fault_diagnostics_overview
+    relationship: orchestrator
+    description: Stage 3.1 orchestrator that invokes this producer as part of the fault diagnostics pipeline.
+
+pipeline_context:
+  stage: "3.1"
+  stage_name: Fault Diagnostics Overview
+  position: 1
+  role: producer
+  tier1_reference: tier1_healthview_orchestration_pipeline.md#stage-31-fault-diagnostics-overview
+  tier2_reference: tier2_fault_diagnostics_overview_roster.md#s31r-002-collect-faulthandler-reports
+
+metadata:
+  schema_version: 1
+  created_at: "2025-12-31T18:00:00Z"
+  updated_at: "2025-12-31T18:00:00Z"
+  author: agent
+  status: active

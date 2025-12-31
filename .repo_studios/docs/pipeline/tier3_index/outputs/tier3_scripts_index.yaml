@@ -1,21 +1,21 @@
 version: 1.0.0
-generated_at: '2025-12-30T15:15:00+00:00'
+generated_at: '2025-12-31T18:00:00+00:00'
 generator_version: 1.0.0
 repository:
   name: repo_studios
   root: C:\Users\genet\repo_studios
   branch: main
 statistics:
-  total_scripts: 16
+  total_scripts: 20
   categories:
-    producer: 9
+    producer: 10
     utility: 1
     aggregator: 2
-    consumer: 1
-    orchestrator: 2
-    summarizer: 1
+    consumer: 2
+    orchestrator: 3
+    summarizer: 2
   status:
-    active: 11
+    active: 15
     template: 1
     draft: 4
 scripts:
@@ -64,6 +64,27 @@ scripts:
   status: template
   entry_point: null
   importable: false
+- script_id: collect_faulthandler_reports
+  name: Collect Faulthandler Reports
+  category: producer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\fault_diagnostics_overview\tier3_collect_faulthandler_reports.yaml
+  script_path: .repo_studios/scripts/producers/collect_faulthandler_reports.py
+  summary: "Scans faulthandler run directories (stack dumps from Python faulthandler module) and emits\n\
+    a canonical HealthView bundle under:\n\n  .repo_studios/reports/healthview/producer_reports/faulthandler_reports/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n\nThis producer converts raw\
+    \ faulthandler captures (stacks.log, thread dumps) into structured\nanalysis with signature extraction,\
+    \ severity bucketing, and repeat-offender detection.\n"
+  keywords:
+  - healthview
+  - producer
+  - faulthandler
+  - stack
+  - crash
+  - diagnostics
+  - telemetry
+  status: active
+  entry_point: run
+  importable: true
 - script_id: generate_anchor_inventory
   name: Generate Anchor Inventory
   category: producer
@@ -337,9 +358,68 @@ scripts:
   status: active
   entry_point: run
   importable: true
+- script_id: generate_fault_artifacts
+  name: Generate Fault Artifacts
+  category: consumer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\fault_diagnostics_overview\tier3_generate_fault_artifacts.yaml
+  script_path: .repo_studios/scripts/consumers/generate_fault_artifacts.py
+  summary: "Processes raw faulthandler stack dumps and producer reports to emit HOP-compliant\n\
+    HealthView artifacts for downstream summarization.\n\nOutput is written to:\n\n  .repo_studios/reports/healthview/consumer_reports/fault_artifacts/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n"
+  keywords:
+  - healthview
+  - consumer
+  - faulthandler
+  - stack
+  - crash
+  - artifacts
+  - telemetry
+  status: active
+  entry_point: run
+  importable: true
+- script_id: summarize_fault_diagnostics_overview
+  name: Summarize Fault Diagnostics Overview
+  category: summarizer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\fault_diagnostics_overview\tier3_summarize_fault_diagnostics_overview.yaml
+  script_path: .repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py
+  summary: "Consumes fault artifact bundles from the consumer stage and produces a\n\
+    consolidated overview with baseline comparison for HealthView.\n\nOutput is written to:\n\n  .repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview/<stem>-YYYYMMDD_HHMMSS/\n\
+    \nThe bundle includes fault_diagnostics_overview.json and fault_diagnostics_overview.md.\n"
+  keywords:
+  - healthview
+  - summarizer
+  - faulthandler
+  - fault_diagnostics
+  - overview
+  - baseline
+  - telemetry
+  status: active
+  entry_point: run
+  importable: true
+- script_id: run_fault_diagnostics_overview
+  name: Run Fault Diagnostics Overview
+  category: orchestrator
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\fault_diagnostics_overview\tier3_run_fault_diagnostics_overview.yaml
+  script_path: .repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py
+  summary: "Topic orchestrator for the Fault Diagnostics workflow (Stage 3.1).\n\n\
+    Sequentially executes producer, consumer, and summarizer steps.\n\nOutput is written to:\n\n\
+    \  .repo_studios/reports/healthview/orchestrator_reports/fault_diagnostics_overview/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n"
+  keywords:
+  - healthview
+  - orchestrator
+  - faulthandler
+  - fault_diagnostics
+  - workflow
+  - pipeline
+  - stage-3.1
+  status: active
+  entry_point: run
+  importable: true
 by_category:
   producer:
   - generate_commandview_inventory
+  - collect_faulthandler_reports
   - generate_anchor_inventory
   - generate_doc_index
   - validate_markdown_anchors
@@ -349,13 +429,16 @@ by_category:
   - generate_test_coverage_inventory
   consumer:
   - generate_test_log_health_report
+  - generate_fault_artifacts
   aggregator:
   - generate_churn_complexity_heatmap
   - aggregate_docs_health_signals
   orchestrator:
   - run_test_execution_telemetry
   - run_docs_health_overview
+  - run_fault_diagnostics_overview
   summarizer:
   - summarize_test_execution_telemetry
+  - summarize_fault_diagnostics_overview
   utility:
   - healthview_onboarding_template
