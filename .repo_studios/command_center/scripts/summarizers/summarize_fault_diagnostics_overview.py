@@ -59,7 +59,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable, Mapping
+from typing import Any, Mapping, Sequence
 
 try:  # pragma: no cover - prefer import when packaged
     from libraries import (
@@ -173,7 +173,14 @@ OPTIONS_CONFIG = OptionsConfig(
 )
 
 
-def _parse_args(argv: Iterable[str] | None) -> argparse.Namespace:
+def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
+    """Parse command-line arguments for summarizer.
+
+    :param argv: Command-line arguments; defaults to sys.argv[1:].
+    :type argv: Sequence[str] | None
+    :returns: Parsed argument namespace.
+    :rtype: argparse.Namespace
+    """
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0] if __doc__ else "")
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument("--consumer-output-dir", default=str(DEFAULT_CONSUMER_OUTPUT_DIR))
@@ -197,6 +204,14 @@ def _parse_args(argv: Iterable[str] | None) -> argparse.Namespace:
 
 
 def _parse_timestamp(raw: str | None) -> datetime:
+    """Parse ISO-8601 timestamp or return current UTC time.
+
+    :param raw: ISO-8601 timestamp string or None.
+    :type raw: str | None
+    :returns: Parsed datetime in UTC.
+    :rtype: datetime
+    :raises SystemExit: If timestamp format is invalid.
+    """
     if not raw:
         return datetime.now(timezone.utc)
     try:
@@ -209,6 +224,15 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def _resolve_optional_path(repo_root: Path, raw: str | None) -> Path | None:
+    """Resolve optional path relative to repo root.
+
+    :param repo_root: Repository root for relative resolution.
+    :type repo_root: Path
+    :param raw: Raw path string or None.
+    :type raw: str | None
+    :returns: Resolved Path or None.
+    :rtype: Path | None
+    """
     if not raw:
         return None
     candidate = Path(raw).expanduser()
@@ -218,7 +242,15 @@ def _resolve_optional_path(repo_root: Path, raw: str | None) -> Path | None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+    """Construct Paths dataclass from parsed CLI arguments.
+
+    :param args: Parsed argument namespace from _parse_args().
+    :type args: argparse.Namespace
+    :returns: Resolved path configuration.
+    :rtype: Paths
+    """
+    result = build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+    return Paths(**{f.name: getattr(result, f.name) for f in result.__dataclass_fields__.values()})
 
 
 def build_options(args: argparse.Namespace, *, paths: Paths) -> Options:
@@ -247,10 +279,22 @@ def build_options(args: argparse.Namespace, *, paths: Paths) -> Options:
 
 
 def configure_logging(level: str) -> None:
+    """Configure root logger with specified level.
+
+    :param level: Logging level name (e.g., "DEBUG", "INFO").
+    :type level: str
+    """
     logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
 
 
 def _load_json(path: Path | None) -> Any | None:
+    """Load JSON file or return None on failure.
+
+    :param path: Path to JSON file or None.
+    :type path: Path | None
+    :returns: Parsed JSON content or None.
+    :rtype: Any | None
+    """
     if path is None or not path.exists():
         return None
     try:
@@ -260,6 +304,15 @@ def _load_json(path: Path | None) -> Any | None:
 
 
 def _normalize_relative(path: Path | None, repo_root: Path) -> str | None:
+    """Normalize path to repo-relative POSIX string.
+
+    :param path: Path to normalize or None.
+    :type path: Path | None
+    :param repo_root: Repository root for relative resolution.
+    :type repo_root: Path
+    :returns: Relative POSIX path string or None.
+    :rtype: str | None
+    """
     if path is None:
         return None
     try:
@@ -325,6 +378,13 @@ def _find_previous_bundle(base: Path, current_bundle: str | None) -> Path | None
 
 
 def _extract_metrics(bundle_summary: Mapping[str, Any] | None) -> dict[str, int | None]:
+    """Extract metrics from consumer manifest payload.
+
+    :param bundle_summary: Consumer manifest payload.
+    :type bundle_summary: Mapping[str, Any] | None
+    :returns: Dict of metric keys to integer values or None.
+    :rtype: dict[str, int | None]
+    """
     metrics: Mapping[str, Any] | None = None
     if isinstance(bundle_summary, Mapping):
         raw = bundle_summary.get("metrics")
@@ -341,6 +401,15 @@ def _extract_metrics(bundle_summary: Mapping[str, Any] | None) -> dict[str, int 
 
 
 def _coerce_int(payload: Mapping[str, Any] | None, key: str) -> int | None:
+    """Coerce payload value to int or return None.
+
+    :param payload: Mapping containing the key.
+    :type payload: Mapping[str, Any] | None
+    :param key: Key to extract.
+    :type key: str
+    :returns: Integer value or None.
+    :rtype: int | None
+    """
     if not isinstance(payload, Mapping):
         return None
     value = payload.get(key)
@@ -352,6 +421,13 @@ def _coerce_int(payload: Mapping[str, Any] | None, key: str) -> int | None:
 
 
 def _extract_severity(summary_payload: Mapping[str, Any] | None) -> dict[str, int | None]:
+    """Extract severity buckets from telemetry payload.
+
+    :param summary_payload: Consumer telemetry payload.
+    :type summary_payload: Mapping[str, Any] | None
+    :returns: Dict of severity bucket keys to integer values.
+    :rtype: dict[str, int | None]
+    """
     severity: Mapping[str, Any] | None = None
     summary = summary_payload.get("summary") if isinstance(summary_payload, Mapping) else None
     if isinstance(summary, Mapping):
@@ -366,6 +442,13 @@ def _extract_severity(summary_payload: Mapping[str, Any] | None) -> dict[str, in
 
 
 def _collect_signature_ids(summary_payload: Mapping[str, Any] | None) -> set[str]:
+    """Collect signature IDs from telemetry payload.
+
+    :param summary_payload: Telemetry payload with signatures list.
+    :type summary_payload: Mapping[str, Any] | None
+    :returns: Set of signature ID strings.
+    :rtype: set[str]
+    """
     if not isinstance(summary_payload, Mapping):
         return set()
     signatures = summary_payload.get("signatures")
@@ -381,6 +464,13 @@ def _collect_signature_ids(summary_payload: Mapping[str, Any] | None) -> set[str
 
 
 def _extract_producer_repeat_offender(payload: Mapping[str, Any] | None) -> int | None:
+    """Extract repeat_offender count from producer report.
+
+    :param payload: Producer report payload.
+    :type payload: Mapping[str, Any] | None
+    :returns: Repeat offender count or None.
+    :rtype: int | None
+    """
     if not isinstance(payload, Mapping):
         return None
     summary = payload.get("summary")
@@ -398,6 +488,21 @@ def _build_markdown(
     baseline: Mapping[str, Any] | None,
     notes: list[str],
 ) -> str:
+    """Build Markdown overview summary.
+
+    :param generated_at: Timestamp for generated header.
+    :type generated_at: datetime
+    :param metrics: Current metrics snapshot.
+    :type metrics: Mapping[str, int | None]
+    :param severity: Severity bucket counts.
+    :type severity: Mapping[str, int | None]
+    :param baseline: Baseline comparison data or None.
+    :type baseline: Mapping[str, Any] | None
+    :param notes: Notes to append to summary.
+    :type notes: list[str]
+    :returns: Formatted Markdown content.
+    :rtype: str
+    """
     lines: list[str] = ["# Fault Diagnostics Overview", ""]
     lines.append(f"Generated (UTC): {generated_at.isoformat(timespec='seconds')}")
     lines.append("")
@@ -439,7 +544,7 @@ def _build_markdown(
     return "\n".join(lines).rstrip() + "\n"
 
 
-def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
+def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     """Execute the summarizer and write HOP-compliant artifacts.
 
     Loads consumer telemetry/manifest artifacts, producer report, compares
@@ -577,7 +682,12 @@ def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
     }
 
 
-def main(argv: Iterable[str] | None = None) -> None:
+def main(argv: Sequence[str] | None = None) -> None:
+    """CLI entry point for fault diagnostics overview summarizer.
+
+    :param argv: Command-line arguments; defaults to sys.argv[1:].
+    :type argv: Sequence[str] | None
+    """
     raise SystemExit(0 if run(argv).get("status") == "ok" else 1)
 
 

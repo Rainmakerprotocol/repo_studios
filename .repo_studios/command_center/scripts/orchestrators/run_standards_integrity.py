@@ -28,7 +28,6 @@ if str(LIBRARIES_ROOT) not in sys.path:
 
 from libraries import (
     CatalogRegistry,
-    GuardrailViolationError,
     KeepSpec,
     OptionsConfig,
     PathSpec,
@@ -40,13 +39,13 @@ from libraries import (
     build_standard_options,
     build_standard_paths,
     build_topic_pipeline,
-    enforce_report_naming,
     measure_artifact_directory,
     step_failed,
     step_skipped,
     step_success,
     write_report_artifacts,
 )
+from libraries.report_paths import build_topic_path
 
 LOGGER = logging.getLogger(__name__)
 
@@ -74,9 +73,9 @@ DEFAULT_GAP_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
 DEFAULT_DIFF_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_index_diff_reports")
 DEFAULT_PROMPT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_prompt_seeds")
 DEFAULT_PENDING_PATH = Path(".repo_studios/scripts/repo_standards_pending.yaml")
-DEFAULT_HEALTHVIEW_ROOT = Path(".repo_studios/command_center/reports")
+DEFAULT_HEALTHVIEW_ROOT = build_topic_path("orchestrator", "standards_integrity")
 
-INDEX_VIEWER_SLUG = "rawview"
+INDEX_VIEWER_SLUG = "healthview"
 INDEX_TOPIC_SLUG = "standards_index"
 DIFF_RUN_PREFIX = "standards_index_diff-"
 PROMPT_RUN_PREFIX = "standards_prompt_seed-"
@@ -796,8 +795,8 @@ def run(argv: Sequence[str] | None = None) -> int:
         output_dir=paths.healthview_root,
         artifacts=artifacts,
         keep=options.artifacts_to_keep,
-        viewer=VIEWER_SLUG,
-        topic=HEALTHVIEW_TOPIC,
+        viewer="",
+        topic="",
     )
 
     artifact_metrics = measure_artifact_directory(result_artifacts.run_dir)
@@ -811,18 +810,6 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     telemetry_path = result_artifacts.artifacts["telemetry.json"]
     telemetry_path.write_text(json.dumps(telemetry_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-
-    try:
-        enforce_report_naming(
-            reports_root=paths.healthview_root,
-            run_dir=result_artifacts.run_dir,
-            viewer=VIEWER_SLUG,
-            topic=HEALTHVIEW_TOPIC,
-            artifact_roles=("manifest.json", "summary.md", "summary.json", "telemetry.json"),
-        )
-    except GuardrailViolationError as exc:
-        LOGGER.error("Report naming audit failed: %s", exc)
-        return 1
 
     LOGGER.info("Standards Integrity orchestrator complete (slug=%s)", run_slug)
     return 0

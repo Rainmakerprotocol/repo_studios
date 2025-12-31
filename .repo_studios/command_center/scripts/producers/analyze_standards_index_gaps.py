@@ -28,6 +28,7 @@ try:  # pragma: no cover - prefer import when packaged
     )
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when running in isolation
     LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
@@ -43,10 +44,12 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running in isola
     )
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
-VIEWER_SLUG = "commandview"
+# Constants after imports to resolve dependency on get_keep() and build_topic_path()
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", "standards_index_gaps")
+VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "standards_index_gaps"
 DEFAULT_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
 LEGACY_INDEX_PATH = Path(
@@ -226,7 +229,7 @@ def _detect_git_sha(repo_root: Path) -> str | None:
 def build_manifest(*, generated_ts: datetime, repo_root: Path, inputs: dict[str, Any]) -> dict[str, Any]:
     return {
         "schema_version": SCHEMA_VERSION,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer": VIEWER_SLUG,
         "topic": TOPIC_SLUG,
         "run_timestamp": _timestamp_slug(generated_ts),
         "generated_utc": generated_ts.astimezone(timezone.utc).isoformat(),
@@ -258,7 +261,7 @@ def build_telemetry(
     return {
         "schema_version": SCHEMA_VERSION,
         "metric_timestamp": generated_ts.astimezone(timezone.utc).isoformat(),
-        "viewer_slug": VIEWER_SLUG,
+        "viewer": VIEWER_SLUG,
         "topic": TOPIC_SLUG,
         "metrics": {
             "total_candidates": summary.get("total_candidates"),
@@ -505,7 +508,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     )
 
     timestamp_slug = _timestamp_slug(generated_ts)
-    run_dir = (paths.output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp_slug).resolve()
+    run_dir = (paths.output_dir / timestamp_slug).resolve()
 
     inputs = {
         "repo_root": str(paths.repo_root),
@@ -518,7 +521,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     telemetry = build_telemetry(report=report, generated_ts=generated_ts, inputs=inputs)
     summary_md = render_markdown(report).replace("# Standards Index Gap Report", "# Standards Index Gaps")
 
-    storage = create_storage(paths.output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=timestamp_slug)
+    storage = create_storage(paths.output_dir, "", "", timestamp=timestamp_slug)
 
     # DB_INTEGRATION_MARKER: standards index gaps manifest write
     storage.write_manifest(manifest)
@@ -527,7 +530,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     # DB_INTEGRATION_MARKER: standards index gaps telemetry write
     storage.write_telemetry(telemetry)
 
-    topic_dir = (paths.output_dir / VIEWER_SLUG / TOPIC_SLUG).resolve()
+    topic_dir = paths.output_dir.resolve()
     prune_run_directories(topic_dir, keep=options.artifacts_to_keep, current_run=run_dir, logger=logger)
 
     emit_runtime_log(logger, report, max_show=options.max_show)

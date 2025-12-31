@@ -22,11 +22,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, NamedTuple, cast
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
-DEFAULT_ARTIFACTS_TO_KEEP = get_keep("scan_code_placeholders")
-SCHEMA_VERSION = 1
-VIEWER_SLUG = "healthview"
-TOPIC_SLUG = "code_placeholders"
 DEFAULT_EXTENSIONS = (
     ".py",
     ".md",
@@ -54,6 +49,7 @@ try:
         prune_run_directories,
     )
     from libraries.database_integration import create_storage
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -68,7 +64,13 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
         prune_run_directories,
     )
     from libraries.database_integration import create_storage
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
+
+SCHEMA_VERSION = 1
+TOPIC_SLUG = "code_placeholders"
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("scan_code_placeholders")
 
 
 @dataclass(frozen=True)
@@ -354,7 +356,7 @@ def compose_payload(
     bundle_rel = _relativize(bundle_dir, paths.repo_root)
     payload = {
         "schema_version": SCHEMA_VERSION,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer": "healthview",
         "topic": TOPIC_SLUG,
         "status": "ok",
         "timestamp": generated_at.isoformat(),
@@ -473,7 +475,7 @@ def _build_telemetry(
     total_matches = int(payload.get("total_matches", 0) or 0)
     allowlist_size = int(payload.get("allowlist_size", 0) or 0)
     return {
-        "viewer_slug": payload.get("viewer_slug"),
+        "viewer": payload.get("viewer"),
         "topic": payload.get("topic"),
         "run_timestamp": payload.get("run_timestamp"),
         "generated_utc": payload.get("generated_utc"),
@@ -525,8 +527,8 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
 
     generated_at = _parse_timestamp(args.timestamp)
     run_slug = _timestamp_slug(generated_at)
-    topic_dir = paths.output_dir / VIEWER_SLUG / TOPIC_SLUG
-    storage = create_storage(paths.output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=run_slug)
+    topic_dir = paths.output_dir
+    storage = create_storage(paths.output_dir, "", "", timestamp=run_slug)
     bundle_dir = storage.file_storage.bundle_dir
 
     records = scan_placeholders(paths, options, compiled_patterns)

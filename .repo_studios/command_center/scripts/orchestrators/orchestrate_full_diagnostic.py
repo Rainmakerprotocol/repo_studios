@@ -29,6 +29,7 @@ from libraries import (
     build_standard_paths,
     write_report_artifacts,
 )
+from libraries.report_paths import build_topic_path
 
 LOGGER = logging.getLogger(__name__)
 
@@ -36,7 +37,7 @@ SCHEMA_VERSION = 1
 META_VIEWER = "healthview"
 META_TOPIC = "full_diagnostic"
 
-DEFAULT_REPORTS_ROOT = Path(".repo_studios/command_center/reports")
+DEFAULT_REPORTS_ROOT = build_topic_path("orchestrator", "full_diagnostic")
 
 
 @dataclass(frozen=True)
@@ -260,15 +261,14 @@ def _build_topic_record(
     started_at: datetime | None,
     finished_at: datetime | None,
     run_slug: str | None,
-    reports_root: Path,
     argv: tuple[str, ...],
     message: str | None,
 ) -> TopicRunRecord:
     viewer_slug = getattr(module, "VIEWER_SLUG", None)
     topic_slug = getattr(module, "HEALTHVIEW_TOPIC", getattr(module, "TOPIC_SLUG", None))
     artifact_dir: Path | None = None
-    if run_slug and viewer_slug and topic_slug:
-        artifact_dir = reports_root / viewer_slug / topic_slug / run_slug
+    if run_slug and topic_slug:
+        artifact_dir = build_topic_path("orchestrator", topic_slug) / run_slug
     return TopicRunRecord(
         slug=definition.slug,
         module=definition.module,
@@ -365,7 +365,6 @@ def run(argv: Sequence[str] | None = None) -> int:
             started_at=start,
             finished_at=end,
             run_slug=meta_run_slug,
-            reports_root=paths.reports_root,
             argv=tuple(topic_args_list),
             message=message,
         )
@@ -396,7 +395,6 @@ def run(argv: Sequence[str] | None = None) -> int:
             started_at=None,
             finished_at=None,
             run_slug=None,
-            reports_root=paths.reports_root,
             argv=tuple(),
             message=message,
         )
@@ -517,8 +515,8 @@ def run(argv: Sequence[str] | None = None) -> int:
             ReportArtifact(filename="telemetry.json", kind="json", content=lambda: telemetry_payload),
         ],
         keep=options.artifacts_to_keep,
-        viewer=META_VIEWER,
-        topic=META_TOPIC,
+        viewer="",
+        topic="",
     )
 
     meta_artifact_metrics = measure_artifact_directory(report_artifacts.run_dir)

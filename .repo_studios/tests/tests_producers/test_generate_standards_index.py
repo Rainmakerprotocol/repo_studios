@@ -78,7 +78,7 @@ def test_structured_artifacts_success(tmp_path: Path) -> None:
     docs_dir.mkdir()
     (docs_dir / "rule_source.md").write_text("# Rules\n", encoding="utf-8")
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports"
+    output_dir = repo_root / mod.DEFAULT_OUTPUT_DIR
 
     exit_code = mod.main(
         [
@@ -95,7 +95,7 @@ def test_structured_artifacts_success(tmp_path: Path) -> None:
 
     assert exit_code == 0
 
-    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240101-0000"
+    run_dir = output_dir / "20240101-0000"
     assert run_dir.is_dir()
 
     canonical_index_path = repo_root / ".repo_studios" / "scripts" / "repo_standards_index.yaml"
@@ -125,12 +125,12 @@ def test_failure_path_writes_artifacts_and_prunes(tmp_path: Path) -> None:
     repo_root = tmp_path / "workspace"
     repo_root.mkdir()
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports"
-    (output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG).mkdir(parents=True, exist_ok=True)
+    output_dir = repo_root / mod.DEFAULT_OUTPUT_DIR
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     stale_dirs = [
-        output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20231231-2359",
-        output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240101-0001",
+        output_dir / "20231231-2359",
+        output_dir / "20240101-0001",
     ]
     for path in stale_dirs:
         path.mkdir(parents=True, exist_ok=True)
@@ -155,7 +155,7 @@ def test_failure_path_writes_artifacts_and_prunes(tmp_path: Path) -> None:
 
     assert exit_code == 1
 
-    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240102-0000"
+    run_dir = output_dir / "20240102-0000"
     assert run_dir.is_dir()
 
     telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
@@ -166,7 +166,7 @@ def test_failure_path_writes_artifacts_and_prunes(tmp_path: Path) -> None:
 
     remaining_dirs = sorted(
         path.name
-        for path in (output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG).iterdir()
+        for path in output_dir.iterdir()
         if path.is_dir()
     )
     assert remaining_dirs == ["20240102-0000"]
@@ -220,7 +220,7 @@ def test_missing_source_file_reports_error(tmp_path: Path) -> None:
         },
     )
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports"
+    output_dir = repo_root / mod.DEFAULT_OUTPUT_DIR
 
     exit_code = mod.main(
         [
@@ -237,7 +237,7 @@ def test_missing_source_file_reports_error(tmp_path: Path) -> None:
 
     assert exit_code == 1
 
-    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240103-0000"
+    run_dir = output_dir / "20240103-0000"
     telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
     assert telemetry["metrics"]["status"] == "error"
     assert "Missing source files" in telemetry["payload"]["notes"]
@@ -323,7 +323,7 @@ def extract_rules(path: Path, categories: list[str], seed_ids: set[str], today: 
     monkeypatch.setenv("ENABLE_STANDARDS_EXTRACTION", "1")
     monkeypatch.setenv("AUTO_ACCEPT_EXTRACTED", "0")
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports"
+    output_dir = repo_root / mod.DEFAULT_OUTPUT_DIR
 
     exit_code = mod.main(
         [
@@ -340,7 +340,7 @@ def extract_rules(path: Path, categories: list[str], seed_ids: set[str], today: 
 
     assert exit_code == 0
 
-    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240104-0000"
+    run_dir = output_dir / "20240104-0000"
     telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
     assert telemetry["metrics"]["status"] == "pending_extractions"
     assert telemetry["metrics"]["pending_written"] is True

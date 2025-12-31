@@ -47,7 +47,7 @@ def test_structured_artifacts(tmp_path: Path) -> None:
     )
 
     topic_dir = (
-        repo_root / ".repo_studios" / "reports" / "producer_reports" / "healthview" / "code_placeholders"
+        repo_root / ".repo_studios" / "reports" / "healthview" / "producer_reports" / "code_placeholders"
     )
     run_dir = topic_dir / "20250101-0000"
     assert (run_dir / "manifest.json").exists()
@@ -91,7 +91,7 @@ def test_pruning_and_allowlist(tmp_path: Path) -> None:
         )
 
     topic_dir = (
-        repo_root / ".repo_studios" / "reports" / "producer_reports" / "healthview" / "code_placeholders"
+        repo_root / ".repo_studios" / "reports" / "healthview" / "producer_reports" / "code_placeholders"
     )
     run_dirs = [p for p in topic_dir.iterdir() if p.is_dir()]
     assert len(run_dirs) == 1
@@ -132,7 +132,7 @@ def test_default_exclusions_skip_virtualenv(tmp_path: Path) -> None:
     assert payload["exclude_segments"] == ["site-packages"]
 
     topic_dir = (
-        repo_root / ".repo_studios" / "reports" / "producer_reports" / "healthview" / "code_placeholders"
+        repo_root / ".repo_studios" / "reports" / "healthview" / "producer_reports" / "code_placeholders"
     )
     run_dir = topic_dir / "20250101-0000"
     manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
@@ -195,7 +195,7 @@ def test_ignores_title_case_tokens(tmp_path: Path) -> None:
 
     assert payload["total_matches"] == 1
     topic_dir = (
-        repo_root / ".repo_studios" / "reports" / "producer_reports" / "healthview" / "code_placeholders"
+        repo_root / ".repo_studios" / "reports" / "healthview" / "producer_reports" / "code_placeholders"
     )
     run_dir = topic_dir / "20250101-0000"
     manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))

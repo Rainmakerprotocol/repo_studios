@@ -72,6 +72,7 @@ try:
         prune_run_directories,
     )
     from libraries.database_integration import create_storage
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -86,13 +87,13 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
         prune_run_directories,
     )
     from libraries.database_integration import create_storage
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 
 # Defaults (repo-root-relative)
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", "monkey_patches")
 DEFAULT_KEEP = get_keep("scan_monkey_patches")
 SCHEMA_VERSION = 1
-VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "monkey_patches"
 DEFAULT_EXCLUDES = {
     ".git",
@@ -908,7 +909,7 @@ def compose_manifest(
 
     manifest: dict[str, object] = {
         "schema_version": SCHEMA_VERSION,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer": "healthview",
         "topic": TOPIC_SLUG,
         "run_timestamp": run_timestamp,
         "generated_at": generated_at,
@@ -973,7 +974,7 @@ def compose_telemetry(
     }
     return {
         "schema_version": SCHEMA_VERSION,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer": "healthview",
         "topic": TOPIC_SLUG,
         "run_timestamp": run_timestamp,
         "generated_at": generated_at,
@@ -1042,8 +1043,8 @@ def write_bundle(
     keep: int,
     logger: logging.Logger,
 ) -> Path:
-    storage = create_storage(output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=run_timestamp)
-    bundle_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG / run_timestamp
+    storage = create_storage(output_dir, "", "", timestamp=run_timestamp)
+    bundle_dir = output_dir / run_timestamp
 
     # DB_INTEGRATION_MARKER: Persist manifest bundle (report_runs + report_artifacts)
     storage.write_manifest(manifest)
@@ -1052,7 +1053,7 @@ def write_bundle(
     # DB_INTEGRATION_MARKER: Persist telemetry payload + extracted metrics (report_artifacts + test_metrics)
     storage.write_telemetry(telemetry)
 
-    base_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG
+    base_dir = output_dir
     prune_run_directories(
         base_dir,
         keep=max(1, keep),
@@ -1288,7 +1289,7 @@ def run(argv: list[str] | None = None) -> dict[str, object]:
 
     now = dt.datetime.now(dt.UTC)
     run_timestamp = _resolve_run_timestamp(override=args.timestamp, now=now)
-    bundle_dir = paths.output_dir / VIEWER_SLUG / TOPIC_SLUG / run_timestamp
+    bundle_dir = paths.output_dir / run_timestamp
     generated_at = now.isoformat()
 
     manifest = compose_manifest(
@@ -1329,7 +1330,7 @@ def run(argv: list[str] | None = None) -> dict[str, object]:
     return {
         "schema_version": SCHEMA_VERSION,
         "status": manifest.get("status", "unknown"),
-        "viewer_slug": VIEWER_SLUG,
+        "viewer": "healthview",
         "topic": TOPIC_SLUG,
         "run_timestamp": run_timestamp,
         "run_dir": str(run_dir),

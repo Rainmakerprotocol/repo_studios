@@ -127,8 +127,8 @@ def test_validate_inventory_success_and_pruning(tmp_path):
     assert report_json["summary"]["files_checked"] == 1
     assert (run_dir / "raw.json").is_file()
 
-    latest = json.loads((output_dir / "latest_report.json").read_text(encoding="utf-8"))
-    assert latest["timestamp"] == "20250101_000000"
+    # HOP compliance: no pointer files should exist
+    assert not (output_dir / "latest_report.json").exists(), "HOP forbids pointer files"
 
     # Second run introduces an error and prunes the first run when keep=1.
     _write_inventory_record(
@@ -176,6 +176,5 @@ def test_validate_inventory_success_and_pruning(tmp_path):
     assert errors
     assert "does not exist" in errors[0]["message"]
 
-    latest = json.loads((output_dir / "latest_report.json").read_text(encoding="utf-8"))
-    assert latest["timestamp"] == "20250102_000000"
-    assert latest["status"] == "error"
+    # HOP compliance: no pointer files should exist after second run either
+    assert not (output_dir / "latest_report.json").exists(), "HOP forbids pointer files"

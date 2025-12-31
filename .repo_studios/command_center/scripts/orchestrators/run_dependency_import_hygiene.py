@@ -45,6 +45,7 @@ from libraries import (
     step_success,
     write_report_artifacts,
 )
+from libraries.report_paths import build_topic_path
 
 LOGGER = logging.getLogger(__name__)
 
@@ -65,14 +66,14 @@ PLACEHOLDER_MODULE = "scripts.producers.scan_code_placeholders"
 TYPECHECK_MODULE = "scripts.producers.generate_typecheck_report"
 REFRESH_BASELINES_MODULE = "scripts.utilities.refresh_mypy_baselines"
 
-DEFAULT_DEPENDENCY_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
-DEFAULT_IMPORT_GRAPH_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
-DEFAULT_PLACEHOLDER_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/code_placeholder_scans")
+DEFAULT_DEPENDENCY_OUTPUT_DIR = build_topic_path("producer", "dependency_hygiene")
+DEFAULT_IMPORT_GRAPH_OUTPUT_DIR = build_topic_path("producer", "import_graph")
+DEFAULT_PLACEHOLDER_OUTPUT_DIR = build_topic_path("producer", "code_placeholders")
 DEFAULT_PLACEHOLDER_ALLOWLIST = Path(".repo_studios/config/placeholder_allowlist.txt")
 DEFAULT_BATCH_CLEANUP_OUTPUT_BASE = Path(
     ".repo_studios/command_center/reports/rawview/dependency_import_hygiene_cleanup"
 )
-DEFAULT_TYPECHECK_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/typecheck_reports")
+DEFAULT_TYPECHECK_OUTPUT_DIR = build_topic_path("producer", "typecheck_report")
 DEFAULT_MYPY_BASELINES_OUTPUT_DIR = Path(".repo_studios/command_center/reports/rawview/mypy_baselines")
 DEFAULT_HEALTHVIEW_ROOT = Path(".repo_studios/command_center/reports")
 
@@ -456,7 +457,7 @@ def _dependency_report(paths: Paths, options: Options) -> DependencyOutcome:
     exit_code = _invoke_main(main_callable, argv)
     timestamp = options.run_timestamp.strftime("%Y%m%d-%H%M")
     run_dir = (
-        paths.dependency_output_dir / VIEWER_SLUG / "dependency_hygiene" / timestamp
+        paths.dependency_output_dir / timestamp
     ).resolve()
     telemetry_path = run_dir / "telemetry.json" if run_dir.exists() else None
     telemetry = _read_json(telemetry_path) if telemetry_path else None
@@ -493,7 +494,7 @@ def _import_graph_report(paths: Paths, options: Options) -> ImportGraphOutcome:
         argv.extend(["--owned", *options.import_owned])
     _invoke_main(main_callable, argv)
     timestamp = options.run_timestamp.strftime("%Y%m%d-%H%M")
-    run_dir = (paths.import_graph_output_dir / VIEWER_SLUG / "import_graph" / timestamp).resolve()
+    run_dir = (paths.import_graph_output_dir / timestamp).resolve()
     telemetry_path = run_dir / "telemetry.json" if run_dir.exists() else None
     telemetry = _read_json(telemetry_path) if telemetry_path else None
     payload = telemetry.get("payload") if isinstance(telemetry, dict) else None
@@ -741,14 +742,14 @@ def _typecheck_report(paths: Paths, options: Options) -> TypecheckOutcome:
         options.run_timestamp.isoformat(),
     ]
     _invoke_main(main_callable, argv)
-    latest_report = paths.typecheck_output_dir / "latest_report.json"
-    payload = _read_json(latest_report)
-    timestamp = payload.get("generated_utc") if isinstance(payload, dict) else None
-    run_dir = _iso_to_run_dir(TYPECHECK_RUN_PREFIX, paths.typecheck_output_dir, timestamp)
-    report_json = run_dir / "report.json" if run_dir and (run_dir / "report.json").exists() else None
-    report_md = run_dir / "report.md" if run_dir and (run_dir / "report.md").exists() else None
-    log_path = run_dir / "log.txt" if run_dir and (run_dir / "log.txt").exists() else None
-    raw_output = run_dir / "raw.txt" if run_dir and (run_dir / "raw.txt").exists() else None
+    timestamp = options.run_timestamp.strftime("%Y%m%d-%H%M")
+    run_dir = (paths.typecheck_output_dir / timestamp).resolve()
+    telemetry_path = run_dir / "telemetry.json" if run_dir.exists() else None
+    payload = _read_json(telemetry_path) if telemetry_path else None
+    report_json = run_dir / "telemetry.json" if run_dir and run_dir.exists() else None
+    report_md = run_dir / "summary.md" if run_dir and (run_dir / "summary.md").exists() else None
+    log_path = None
+    raw_output = run_dir / "manifest.json" if run_dir and (run_dir / "manifest.json").exists() else None
     return TypecheckOutcome(
         run_dir=run_dir,
         report_json=report_json,

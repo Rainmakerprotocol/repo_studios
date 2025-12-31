@@ -102,18 +102,18 @@ def test_structured_artifacts_created(tmp_path):
     )
 
     run_dir = Path(result["run_dir"])
-    assert run_dir == output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240101-0000"
+    assert run_dir == output_dir / "20240101-0000"
     assert run_dir.is_dir()
 
     manifest = json.loads(Path(result["manifest_json"]).read_text(encoding="utf-8"))
-    assert manifest["viewer_slug"] == mod.VIEWER_SLUG
+    assert manifest["viewer"] == mod.VIEWER_SLUG
     assert manifest["topic"] == mod.TOPIC_SLUG
     assert manifest["run_timestamp"] == "20240101-0000"
     assert "catalog" in manifest
     assert "inputs" in manifest
 
     telemetry = json.loads(Path(result["telemetry_json"]).read_text(encoding="utf-8"))
-    assert telemetry["viewer_slug"] == mod.VIEWER_SLUG
+    assert telemetry["viewer"] == mod.VIEWER_SLUG
     assert telemetry["topic"] == mod.TOPIC_SLUG
     assert "metrics" in telemetry
 
@@ -156,7 +156,7 @@ def test_pruning_keeps_recent_runs(tmp_path):
     _write_categories(categories_path, [doc])
 
     output_root = workspace / ".repo_studios" / "reports" / "producer_reports" / "standards_gap_reports"
-    topic_dir = output_root / mod.VIEWER_SLUG / mod.TOPIC_SLUG
+    topic_dir = output_root
     topic_dir.mkdir(parents=True, exist_ok=True)
 
     stale_dirs = [

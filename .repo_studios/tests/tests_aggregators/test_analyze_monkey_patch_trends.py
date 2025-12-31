@@ -66,7 +66,7 @@ def test_prefers_consumer_bundles(tmp_path):
     snapshot_path = result["consumer_snapshot"]
     assert snapshot_path is not None
     assert Path(snapshot_path).exists()
-    assert (output_base / "latest_trend.json").exists()
+    # HOP compliance: no pointer files
 
 
 def test_fallback_to_producer_reports(tmp_path):
@@ -174,4 +174,4 @@ def test_retention_prunes_old_runs(tmp_path):
     remaining = list(output_base.glob("monkey_patch_trends-*"))
     assert len(remaining) == 2
     assert Path(stale_dir.resolve()).as_posix() in [Path(p).resolve().as_posix() for p in result["pruned"]]
-    assert (output_base / "latest_trend.md").exists()
+    # HOP compliance: no pointer files

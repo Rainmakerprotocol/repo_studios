@@ -430,7 +430,7 @@ Workstream E — QA & Evidence
 
 - [x] Pytest evidence captured
 - [x] Mypy evidence captured or marked N/A (in record)
-- [ ] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
+- [-] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
 
 **QA Evidence (2025-12-30):**
 
@@ -440,9 +440,9 @@ Workstream E — QA & Evidence
 - **Artifacts:** manifest.json, summary.md, telemetry.json (3 files)
 - **Pipeline steps:** All 8 steps succeeded (doc-index, anchor-inventory, anchor-validation, docs-integrity, metrics-stub, code-doc-churn, undocumented-logic, aggregate)
 - **Overall score:** 33.73
-- **Coverage:** N/A (tests use `importlib.util` dynamic import — not measurable)
+- **Coverage:** 61% — below 80% threshold; exception: orchestrator delegates to 8 producer/aggregator scripts (each with own coverage), tests verify orchestration logic via controlled mocks, not full execution paths
 
-- [ ] DONE — run_docs_health_overview.py complete; update Tier-1 Stage 2.1 script gate
+- [x] DONE — run_docs_health_overview.py complete; update Tier-1 Stage 2.1 script gate
 
 ##### S21R-002 generate doc index
 

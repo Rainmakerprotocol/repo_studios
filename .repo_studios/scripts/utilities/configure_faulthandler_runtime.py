@@ -31,10 +31,13 @@ libraries_root_str = str(libraries_root)
 if libraries_root_str and libraries_root_str not in sys.path:
     sys.path.insert(0, libraries_root_str)
 
-RAWVIEW_RUNS_BASE = root / ".repo_studios" / "command_center" / "reports" / "rawview" / "fault_diagnostics_runs"
-
 from libraries import prune_run_directories
 from libraries.cli import resolve_repo_root
+from libraries.report_paths import build_topic_path
+
+TOPIC_SLUG = "fault_diagnostics"
+# HOP-compliant path: .repo_studios/reports/healthview/rawview_reports/fault_diagnostics/
+RAWVIEW_RUNS_BASE = root / build_topic_path("rawview", TOPIC_SLUG)
 
 # Reduce noise from known, non-actionable warnings across all entry points.
 warnings.filterwarnings(
@@ -58,14 +61,8 @@ except Exception:  # pragma: no cover - Windows and other platforms
 def _default_base_dir(allow_legacy: bool) -> Path:
     if allow_legacy:
         return root / ".repo_studios" / "faulthandler"
-    return (
-        root
-        / ".repo_studios"
-        / "command_center"
-        / "reports"
-        / "rawview"
-        / "fault_diagnostics_runs"
-    )
+    # HOP-compliant path
+    return root / build_topic_path("rawview", TOPIC_SLUG)
 
 
 def _is_truthy(value: Optional[str], *, default: bool) -> bool:

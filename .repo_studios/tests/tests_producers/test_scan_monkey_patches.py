@@ -48,7 +48,7 @@ os.environ[\"EXAMPLE_FLAG\"] = \"1\"
     assert payload["status"] == "ok"
     assert payload["run_timestamp"] == "20250101-0000"
 
-    base_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "healthview" / "monkey_patches"
+    base_dir = repo_root / ".repo_studios" / "reports" / "healthview" / "producer_reports" / "monkey_patches"
     run_dir = base_dir / "20250101-0000"
     assert run_dir.exists()
 
@@ -60,7 +60,7 @@ os.environ[\"EXAMPLE_FLAG\"] = \"1\"
     assert telemetry_path.exists()
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    assert manifest["viewer_slug"] == "healthview"
+    assert manifest["viewer"] == "healthview"
     assert manifest["topic"] == "monkey_patches"
     assert manifest["run_timestamp"] == "20250101-0000"
     assert manifest["status"] == "ok"
@@ -78,7 +78,7 @@ os.environ[\"EXAMPLE_FLAG\"] = \"1\"
     assert int(by_category.get("attribute_reassignment_on_import", 0) or 0) >= 1
 
     telemetry = json.loads(telemetry_path.read_text(encoding="utf-8"))
-    assert telemetry["viewer_slug"] == "healthview"
+    assert telemetry["viewer"] == "healthview"
     assert telemetry["topic"] == "monkey_patches"
     assert telemetry["run_timestamp"] == "20250101-0000"
     metrics = telemetry.get("metrics", {})
@@ -103,7 +103,7 @@ def test_prune_history(tmp_path: Path) -> None:
         encoding="utf-8",
     )
 
-    base_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "healthview" / "monkey_patches"
+    base_dir = repo_root / ".repo_studios" / "reports" / "healthview" / "producer_reports" / "monkey_patches"
 
     mod.run(
         [
@@ -294,7 +294,7 @@ def test_compose_manifest_telemetry_and_summary_round_trip(tmp_path: Path) -> No
         duration_ms=5,
     )
 
-    assert manifest["viewer_slug"] == "healthview"
+    assert manifest["viewer"] == "healthview"
     assert manifest["topic"] == "monkey_patches"
     assert manifest["run_timestamp"] == run_timestamp
     assert manifest["status"] == "ok"

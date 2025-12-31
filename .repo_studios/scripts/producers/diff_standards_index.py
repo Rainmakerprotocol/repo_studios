@@ -37,11 +37,6 @@ CHANGE_KINDS = {
 
 TOLERATE_DIFF_KEYS = {"last_updated"}
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
-VIEWER_SLUG = "rawview"
-TOPIC_SLUG = "standards_index_diff"
-DEFAULT_ARTIFACTS_TO_KEEP = get_keep("diff_standards_index")
-
 REPO_ROOT = Path(__file__).resolve().parents[3]
 LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
@@ -49,6 +44,7 @@ try:
     from libraries import prune_run_directories
     from libraries.cli import resolve_repo_root
     from libraries.database_integration import create_storage
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when run as script
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -56,7 +52,14 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when run as script
     from libraries import prune_run_directories
     from libraries.cli import resolve_repo_root
     from libraries.database_integration import create_storage
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
+
+# Constants moved after imports to resolve dependency on get_keep()
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", "standards_index_diff")
+VIEWER_SLUG = "healthview"
+TOPIC_SLUG = "standards_index_diff"
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("diff_standards_index")
 
 
 class DiffError(Exception):
@@ -128,7 +131,7 @@ def _rel_to_repo(path: Path, repo_root: Path) -> str:
 
 
 def _bundle_dir(output_dir: Path, *, timestamp: str) -> Path:
-    return output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp
+    return output_dir / timestamp
 
 
 def load(path: Path) -> dict[str, Any]:
@@ -381,7 +384,7 @@ def write_artifacts(
     logger: logging.Logger,
 ) -> Path:
     bundle_dir = _bundle_dir(output_dir, timestamp=timestamp)
-    storage = create_storage(output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=timestamp)
+    storage = create_storage(output_dir, "", "", timestamp=timestamp)
 
     now_iso = payload["generated_at"]
     repo_root = Path(payload["repo_root"]).resolve()
@@ -392,7 +395,7 @@ def write_artifacts(
 
     manifest: dict[str, object] = {
         "schema_version": 1,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer": VIEWER_SLUG,
         "topic": TOPIC_SLUG,
         "run_timestamp": timestamp,
         "generated_at": now_iso,
@@ -457,7 +460,7 @@ def write_artifacts(
     # DB_INTEGRATION_MARKER: standards index diff telemetry write
     storage.write_telemetry(telemetry)
 
-    base_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG
+    base_dir = output_dir
     prune_run_directories(
         base_dir,
         keep=max(1, keep),

@@ -27,13 +27,7 @@ except Exception:  # pragma: no cover - fallback if unavailable
 
 
 DEFAULT_REPO_ROOT = Path(__file__).resolve().parents[3]
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
 RUN_PREFIX = "typecheck"  # legacy label; run directories now live under viewer/topic.
-DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_typecheck_report")
-SCHEMA_VERSION = 1
-
-VIEWER_SLUG = "healthview"
-TOPIC_SLUG = "typecheck_report"
 
 LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
@@ -48,6 +42,7 @@ try:
         prune_run_directories,
     )
     from libraries.database_integration import create_storage
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when executed directly
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -62,7 +57,13 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when executed directl
         prune_run_directories,
     )
     from libraries.database_integration import create_storage
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
+
+SCHEMA_VERSION = 1
+TOPIC_SLUG = "typecheck_report"
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_typecheck_report")
 
 
 @dataclass
@@ -360,7 +361,7 @@ def _compose_payload(
     ]
     return {
         "schema_version": SCHEMA_VERSION,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer": "healthview",
         "topic": TOPIC_SLUG,
         "status": status,
         "run_timestamp": run_slug,
@@ -489,7 +490,7 @@ def _build_telemetry(
             except Exception:
                 extra_metrics[f"files_checked_{safe_label}"] = 0
     return {
-        "viewer_slug": payload.get("viewer_slug"),
+        "viewer": payload.get("viewer"),
         "topic": payload.get("topic"),
         "run_timestamp": payload.get("run_timestamp"),
         "generated_utc": payload.get("generated_utc"),
@@ -615,7 +616,7 @@ def main(argv: list[str] | None = None) -> int:
         generated_at = _current_utc()
 
     run_slug = _format_slug(generated_at)
-    topic_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG
+    topic_dir = output_dir
 
     explicit_targets: list[str] | None = None
     all_mode = bool(getattr(args, "all", False))
@@ -749,7 +750,7 @@ def main(argv: list[str] | None = None) -> int:
         samples=samples,
     )
 
-    storage = create_storage(output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=run_slug)
+    storage = create_storage(output_dir, "", "", timestamp=run_slug)
     bundle_dir = storage.file_storage.bundle_dir
 
     payload = _compose_payload(

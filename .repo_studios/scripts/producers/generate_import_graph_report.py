@@ -20,30 +20,31 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
-VIEWER_SLUG = "healthview"
-TOPIC = "import_graph"
-DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_import_graph_report")
-OWNED_DEFAULT = {
-    ".repo_studios",
-    "legacy",
-}
-
 REPO_ROOT = Path(__file__).resolve().parents[3]
 LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 try:
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 
 from libraries.cli import resolve_path, resolve_repo_root
+
+TOPIC_SLUG = "import_graph"
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_import_graph_report")
+OWNED_DEFAULT = {
+    ".repo_studios",
+    "legacy",
+}
 
 
 IMPORT_RE = re.compile(r"^(?:from\s+([\w\.]+)\s+import\s+|import\s+([\w\.]+))")
@@ -236,8 +237,8 @@ def _build_manifest(*, report: dict[str, Any], repo_root: Path, inputs: dict[str
     status = summary.get("status") if isinstance(summary, dict) else None
     return {
         "schema_version": 1,
-        "viewer_slug": VIEWER_SLUG,
-        "topic": TOPIC,
+        "viewer": "healthview",
+        "topic": TOPIC_SLUG,
         "run_timestamp": inputs.get("run_timestamp"),
         "git_sha": None,
         "status": "ok" if status in {"ok", "no_targets"} else "failed",
@@ -379,8 +380,8 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     manifest = _build_manifest(report=report, repo_root=repo_root, inputs=inputs)
     telemetry: dict[str, Any] = {
-        "viewer_slug": VIEWER_SLUG,
-        "topic": TOPIC,
+        "viewer": "healthview",
+        "topic": TOPIC_SLUG,
         "run_timestamp": timestamp,
         "generated_utc": report.get("generated_utc"),
         "metrics": {
@@ -396,8 +397,8 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     storage = create_storage(
         output_dir=output_dir,
-        viewer_slug=VIEWER_SLUG,
-        topic=TOPIC,
+        viewer_slug="",
+        topic="",
         timestamp=timestamp,
     )
 

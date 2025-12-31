@@ -14,8 +14,6 @@ from typing import Any, Iterable, Sequence
 
 DEFAULT_CONSUMER_BASE = Path(".repo_studios/reports/consumer_reports/monkey_patch_risk")
 DEFAULT_PRODUCER_BASE = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
-DEFAULT_OUTPUT_BASE = Path(".repo_studios/reports/aggregator_reports/monkey_patch_trends")
-DEFAULT_ARTIFACTS_TO_KEEP = get_keep("analyze_monkey_patch_trends")
 DEFAULT_MAX_RUNS = 20
 
 CONSUMER_BUNDLE_PREFIX = "monkey_patch_risk-"
@@ -46,7 +44,12 @@ from utilities.monkey_patch_risk import (  # noqa: E402
 )
 from libraries import prune_run_directories  # noqa: E402
 from libraries.cli import resolve_repo_root  # noqa: E402
+from libraries.report_paths import build_topic_path  # noqa: E402
 from libraries.retention_policy import get_keep  # noqa: E402
+
+# Defaults that depend on imported functions
+DEFAULT_OUTPUT_BASE = build_topic_path("aggregator", "monkey_patch_trends")
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("analyze_monkey_patch_trends")
 
 
 @dataclass(frozen=True)
@@ -495,11 +498,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     }
     trend_bundle_summary_path.write_text(json.dumps(trend_bundle_summary, indent=2) + "\n", encoding="utf-8")
 
-    _update_latest(
-        output_base,
-        bundle_dir,
-        [TREND_JSON_NAME, TREND_MD_NAME, AGGREGATOR_BUNDLE_SUMMARY_NAME],
-    )
+    # HOP compliance: no pointer files - removed _update_latest call
     pruned = _prune_history(output_base, bundle_dir, args.artifacts_to_keep, logger=logger)
 
     consumer_snapshot = None

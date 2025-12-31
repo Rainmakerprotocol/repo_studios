@@ -1,0 +1,9 @@
+{
+  "status": "ok",
+  "snapshot_file": ".repo_studios\\reports\\healthview\\rawview\\fault_snapshot\\2025-11-28_130000\\snapshot.txt",
+  "errors": [],
+  "retention": {
+    "keep": 2,
+    "pruned": 1
+  }
+}

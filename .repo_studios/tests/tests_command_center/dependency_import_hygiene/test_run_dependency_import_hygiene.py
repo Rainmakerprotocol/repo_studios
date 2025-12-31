@@ -56,8 +56,8 @@ def test_run_emits_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyP
                 report_ts = argv[argv.index("--timestamp") + 1]
                 # Match format used by orchestrator: %Y%m%d-%H%M
                 ts_slug = datetime.fromisoformat(report_ts).strftime("%Y%m%d-%H%M")
-                # Match expected path: healthview/dependency_hygiene/timestamp
-                run_dir = dependency_dir / "healthview" / "dependency_hygiene" / ts_slug
+                # HOP-compliant path: output_dir/timestamp (no viewer/topic)
+                run_dir = dependency_dir / ts_slug
                 run_dir.mkdir(parents=True, exist_ok=True)
                 # telemetry.json with payload structure
                 telemetry = {
@@ -80,8 +80,8 @@ def test_run_emits_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyP
                 report_ts = argv[argv.index("--timestamp") + 1]
                 # Match format used by orchestrator: %Y%m%d-%H%M (no seconds)
                 ts_slug = datetime.fromisoformat(report_ts).strftime("%Y%m%d-%H%M")
-                # Match expected path structure: healthview/import_graph/timestamp
-                run_dir = import_dir / "healthview" / "import_graph" / ts_slug
+                # HOP-compliant path: output_dir/timestamp (no viewer/topic)
+                run_dir = import_dir / ts_slug
                 run_dir.mkdir(parents=True, exist_ok=True)
                 # telemetry.json must have payload.summary.status for status extraction
                 # and payload.graph for graph_path detection
@@ -103,10 +103,12 @@ def test_run_emits_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyP
 
         if module_name == hygiene_module.PLACEHOLDER_MODULE:
             def _fake_placeholder_run(argv: list[str]) -> dict[str, object]:
-                run_dir = placeholder_dir / f"{hygiene_module.PLACEHOLDER_RUN_PREFIX}-{run_slug}"
+                # HOP-compliant: run_id is just timestamp slug
+                ts_slug = run_dt.strftime("%Y%m%d-%H%M")
+                run_dir = placeholder_dir / ts_slug
                 run_dir.mkdir(parents=True, exist_ok=True)
                 payload = {
-                    "run_id": f"{hygiene_module.PLACEHOLDER_RUN_PREFIX}-{run_slug}",
+                    "run_id": ts_slug,
                     "total_matches": 5,
                 }
                 (run_dir / "report.json").write_text(json.dumps(payload), encoding="utf-8")
@@ -119,8 +121,9 @@ def test_run_emits_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyP
         if module_name == hygiene_module.TYPECHECK_MODULE:
             def _fake_typecheck_main(argv: list[str]) -> int:
                 report_ts = argv[argv.index("--timestamp") + 1]
-                slug = datetime.fromisoformat(report_ts).strftime("%Y%m%d_%H%M%S")
-                run_dir = typecheck_dir / f"{hygiene_module.TYPECHECK_RUN_PREFIX}-{slug}"
+                # HOP-compliant: just YYYYMMDD-HHMM
+                ts_slug = datetime.fromisoformat(report_ts).strftime("%Y%m%d-%H%M")
+                run_dir = typecheck_dir / ts_slug
                 run_dir.mkdir(parents=True, exist_ok=True)
                 payload = {
                     "generated_utc": report_ts,
@@ -130,11 +133,9 @@ def test_run_emits_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyP
                         "files_with_issues": 0,
                     },
                 }
-                (typecheck_dir / "latest_report.json").write_text(json.dumps(payload), encoding="utf-8")
-                (run_dir / "report.json").write_text(json.dumps(payload), encoding="utf-8")
-                (run_dir / "report.md").write_text("# Typecheck\n", encoding="utf-8")
-                (run_dir / "log.txt").write_text("status=ok\n", encoding="utf-8")
-                (run_dir / "raw.txt").write_text("raw", encoding="utf-8")
+                (run_dir / "telemetry.json").write_text(json.dumps(payload), encoding="utf-8")
+                (run_dir / "summary.md").write_text("# Typecheck\n", encoding="utf-8")
+                (run_dir / "manifest.json").write_text(json.dumps(payload), encoding="utf-8")
                 return 0
 
             return _fake_typecheck_main
@@ -217,7 +218,7 @@ def test_run_emits_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyP
     artifacts = manifest["artifacts"]
     # Dependency report now uses telemetry.json as the report file
     assert artifacts["dependency_report"].endswith("telemetry.json")
-    assert artifacts["typecheck_report"].endswith("report.json")
+    assert artifacts["typecheck_report"].endswith("telemetry.json")
     assert artifacts["mypy_baseline_summary"].endswith("bundle_summary.json")
 
     summary_text = summary_path.read_text(encoding="utf-8")

@@ -48,7 +48,7 @@ dependencies = [
         + "\n",
     )
 
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports"
+    output_dir = root / ".repo_studios" / "reports" / "healthview" / "producer_reports" / "dependency_hygiene"
 
     exit_code = mod.main(
         [
@@ -66,11 +66,11 @@ dependencies = [
     )
 
     assert exit_code == 0
-    run_dir = output_dir / "healthview" / "dependency_hygiene" / "20240101-0000"
+    run_dir = output_dir / "20240101-0000"
     assert run_dir.is_dir()
 
     manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
-    assert manifest["viewer_slug"] == "healthview"
+    assert manifest["viewer"] == "healthview"
     assert manifest["topic"] == "dependency_hygiene"
 
     telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
@@ -94,7 +94,7 @@ def test_threshold_breach_and_pruning(tmp_path):
     root = tmp_path / "project"
     root.mkdir()
 
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports" / "healthview" / "dependency_hygiene"
+    output_dir = root / ".repo_studios" / "reports" / "healthview" / "producer_reports" / "dependency_hygiene"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     stale_names = [
@@ -130,7 +130,7 @@ fastapi = "0.110"
             "--repo-root",
             str(root),
             "--output-dir",
-            str(root / ".repo_studios" / "reports" / "producer_reports"),
+            str(root / ".repo_studios" / "reports" / "healthview" / "producer_reports" / "dependency_hygiene"),
             "--timestamp",
             "2024-02-03T00:00:00+00:00",
             "--artifacts-to-keep",

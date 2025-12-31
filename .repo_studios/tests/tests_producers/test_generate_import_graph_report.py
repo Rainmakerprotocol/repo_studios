@@ -28,7 +28,7 @@ def test_report_with_no_targets(tmp_path: Path) -> None:
     root.mkdir()
     (root / ".repo_studios").mkdir()
 
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports"
+    output_dir = root / ".repo_studios" / "reports" / "healthview" / "producer_reports" / "import_graph"
     argv = [
         "--repo-root",
         str(root),
@@ -45,7 +45,7 @@ def test_report_with_no_targets(tmp_path: Path) -> None:
     exit_code = mod.main(argv)
     assert exit_code == 0
 
-    run_dir = output_dir / "healthview" / "import_graph" / "20240101-0000"
+    run_dir = output_dir / "20240101-0000"
     assert run_dir.is_dir()
 
     assert (run_dir / "manifest.json").is_file()
@@ -77,8 +77,8 @@ def test_cycle_detection_and_pruning(tmp_path: Path) -> None:
     _write(root / "api" / "__init__.py", "")
     _write(root / "api" / "bar.py", "import agents\n")
 
-    output_dir = root / ".repo_studios" / "reports" / "producer_reports"
-    topic_dir = output_dir / "healthview" / "import_graph"
+    output_dir = root / ".repo_studios" / "reports" / "healthview" / "producer_reports" / "import_graph"
+    topic_dir = output_dir
     topic_dir.mkdir(parents=True, exist_ok=True)
 
     stale_one = topic_dir / "20240101-0000"
@@ -92,7 +92,7 @@ def test_cycle_detection_and_pruning(tmp_path: Path) -> None:
         "--repo-root",
         str(root),
         "--output-dir",
-        str(output_dir),
+        str(topic_dir),
         "--owned",
         "agents",
         "api",

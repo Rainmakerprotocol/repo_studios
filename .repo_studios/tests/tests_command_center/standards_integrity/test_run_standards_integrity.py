@@ -209,7 +209,7 @@ def test_orchestrator_emits_healthview_bundle(tmp_path: Path) -> None:
 
     assert exit_code == 0
 
-    manifest_paths = list(healthview_root.glob("healthview/standards_integrity/*/manifest.json"))
+    manifest_paths = list(healthview_root.glob("*/manifest.json"))
     assert manifest_paths
     manifest_path = manifest_paths[0]
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))

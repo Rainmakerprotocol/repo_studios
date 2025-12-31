@@ -29,7 +29,7 @@ def test_diff_detects_changes_and_writes_artifacts(tmp_path: Path) -> None:
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
     (repo_root / ".repo_studios").mkdir()
-    output_dir = repo_root / ".repo_studios" / "command_center" / "reports"
+    output_dir = repo_root / mod.DEFAULT_OUTPUT_DIR
 
     old_index = {
         "integrity_hash": "abc123",
@@ -98,11 +98,11 @@ def test_diff_detects_changes_and_writes_artifacts(tmp_path: Path) -> None:
 
     assert exit_code == 1
 
-    bundle_dir = output_dir / "rawview" / "standards_index_diff" / "20240101-0000"
+    bundle_dir = output_dir / "20240101-0000"
     assert bundle_dir.is_dir()
 
     manifest = json.loads((bundle_dir / "manifest.json").read_text(encoding="utf-8"))
-    assert manifest["viewer_slug"] == "rawview"
+    assert manifest["viewer"] == "healthview"
     assert manifest["topic"] == "standards_index_diff"
     assert manifest["run_timestamp"] == "20240101-0000"
     assert manifest["status"] == "ok"
@@ -134,10 +134,10 @@ def test_no_changes_returns_zero_and_prunes(tmp_path: Path) -> None:
     repo_root = tmp_path / "workspace"
     repo_root.mkdir()
     (repo_root / ".repo_studios").mkdir()
-    output_dir = repo_root / ".repo_studios" / "command_center" / "reports"
+    output_dir = repo_root / mod.DEFAULT_OUTPUT_DIR
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    base_dir = output_dir / "rawview" / "standards_index_diff"
+    base_dir = output_dir
     stale_dir = base_dir / "20231231-2359"
     stale_dir.mkdir(parents=True, exist_ok=True)
     (stale_dir / "manifest.json").write_text("{}\n", encoding="utf-8")
@@ -180,7 +180,7 @@ def test_no_changes_returns_zero_and_prunes(tmp_path: Path) -> None:
 
     assert exit_code == 0
 
-    run_dir = output_dir / "rawview" / "standards_index_diff" / "20240201-1200"
+    run_dir = output_dir / "20240201-1200"
     assert run_dir.is_dir()
     assert not stale_dir.exists()
 

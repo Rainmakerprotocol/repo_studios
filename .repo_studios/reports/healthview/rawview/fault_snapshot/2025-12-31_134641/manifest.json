@@ -1,0 +1,30 @@
+{
+  "ts": "2025-12-31T13:46:41+00:00",
+  "snapshot_file": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\rawview\\fault_snapshot\\2025-12-31_134641\\snapshot.txt",
+  "faulthandler": {
+    "imported": false,
+    "enabled_before": false,
+    "enabled_after": false,
+    "dumped": false,
+    "errors": [
+      "import_failed:boom"
+    ]
+  },
+  "resolved": {
+    "outdir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\rawview\\fault_snapshot\\2025-12-31_134641",
+    "base_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\rawview\\fault_snapshot",
+    "derived_outdir": true,
+    "allow_legacy": false,
+    "artifacts_to_keep": 10
+  },
+  "retention": {
+    "keep": 10,
+    "pruned": 0
+  },
+  "environment": {
+    "FAULT_SNAPSHOT_BASE_DIR": "",
+    "FAULT_SNAPSHOT_OUTDIR": "",
+    "FAULT_SNAPSHOT_TO_KEEP": "",
+    "FAULT_LOGS_ALLOW_LEGACY": "0"
+  }
+}

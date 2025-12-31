@@ -59,7 +59,11 @@ def test_anchor_health_uses_inventory_artifacts(tmp_path):
     )
     assert exit_code == 0
 
-    topic_dir = inventory_output / inventory_mod.VIEWER_SLUG / inventory_mod.TOPIC_SLUG
+    # The inventory producer writes to output_dir/YYYYMMDD-HHMM/ with HOP structure
+    # Find the timestamped run directory (there should be exactly one after the run)
+    run_dirs = [d for d in inventory_output.iterdir() if d.is_dir()]
+    assert len(run_dirs) == 1, f"Expected 1 run dir, found {len(run_dirs)}: {run_dirs}"
+    topic_dir = run_dirs[0]  # The timestamped run directory
     assert topic_dir.exists()
 
     # Remove docs to ensure we do not fall back to rescan
@@ -106,13 +110,14 @@ def test_anchor_health_uses_inventory_artifacts(tmp_path):
     assert (bundle_dir / "anchor_report.md").exists()
     assert (bundle_dir / "clusters.tsv").exists()
 
+    # HOP compliance: pointer files are banned, only timestamped run directories exist
     output_dir = bundle_dir.parent
-    assert (output_dir / "latest_summary.json").exists()
-    assert (output_dir / "latest_SUMMARY.md").exists()
-    assert (output_dir / "latest_bundle_summary.json").exists()
-    assert (output_dir / "anchor_report_latest.json").exists()
-    assert (output_dir / "anchor_report_latest.md").exists()
-    assert (output_dir / "clusters_latest.tsv").exists()
+    assert not (output_dir / "latest_summary.json").exists()
+    assert not (output_dir / "latest_SUMMARY.md").exists()
+    assert not (output_dir / "latest_bundle_summary.json").exists()
+    assert not (output_dir / "anchor_report_latest.json").exists()
+    assert not (output_dir / "anchor_report_latest.md").exists()
+    assert not (output_dir / "clusters_latest.tsv").exists()
 
 
 def test_anchor_health_falls_back_to_docs_scan(tmp_path):

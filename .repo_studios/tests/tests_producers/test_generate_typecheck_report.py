@@ -39,7 +39,7 @@ def _run_with_module(tmp_path: Path, monkeypatch, runner: Callable[[Path, list[s
         "--repo-root",
         str(tmp_path),
         "--output-dir",
-        str(Path(".repo_studios/reports/producer_reports")),
+        str(Path(".repo_studios/reports/healthview/producer_reports/typecheck_report")),
         "--timestamp",
         "2025-10-22T12:34:56+00:00",
         "--artifacts-to-keep",
@@ -52,7 +52,7 @@ def _run_with_module(tmp_path: Path, monkeypatch, runner: Callable[[Path, list[s
     module.main(args)
 
     slug = "20251022-1234"
-    out_dir = tmp_path / ".repo_studios" / "reports" / "producer_reports" / "healthview" / "typecheck_report"
+    out_dir = tmp_path / ".repo_studios" / "reports" / "healthview" / "producer_reports" / "typecheck_report"
     run_dir = out_dir / slug
     return module, out_dir, run_dir, slug
 
@@ -62,7 +62,7 @@ def test_typecheck_success(tmp_path: Path, monkeypatch):
     _write_pyproject(tmp_path, ["src"])
     (tmp_path / "src").mkdir()
 
-    topic_dir = tmp_path / ".repo_studios" / "reports" / "producer_reports" / "healthview" / "typecheck_report"
+    topic_dir = tmp_path / ".repo_studios" / "reports" / "healthview" / "producer_reports" / "typecheck_report"
     topic_dir.mkdir(parents=True, exist_ok=True)
     older = topic_dir / "20251020-0101"
     oldest = topic_dir / "20251019-0101"
@@ -85,7 +85,7 @@ def test_typecheck_success(tmp_path: Path, monkeypatch):
     assert all(path.exists() for path in (manifest_path, summary_path, telemetry_path))
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    assert manifest["viewer_slug"] == "healthview"
+    assert manifest["viewer"] == "healthview"
     assert manifest["topic"] == "typecheck_report"
     assert manifest["status"] == "ok"
     assert manifest["summary"]["error_count"] == 0

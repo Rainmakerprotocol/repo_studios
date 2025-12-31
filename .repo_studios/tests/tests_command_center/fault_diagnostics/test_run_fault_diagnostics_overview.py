@@ -64,11 +64,9 @@ def test_orchestrator_writes_manifest_with_summarizer(tmp_path: Path) -> None:
     producer_dir = tmp_path / "producer"
     summarizer_dir = tmp_path / "summaries"
     runs_dir = tmp_path / "runs"
-    healthview_root = tmp_path / "healthview"
-    producer_cc_dir = tmp_path / "cc_producer"
-    consumer_cc_dir = tmp_path / "cc_consumer"
+    orchestrator_dir = tmp_path / "orchestrator"
 
-    for directory in (consumer_dir, producer_dir, summarizer_dir, runs_dir, healthview_root, producer_cc_dir, consumer_cc_dir):
+    for directory in (consumer_dir, producer_dir, summarizer_dir, runs_dir, orchestrator_dir):
         directory.mkdir(parents=True, exist_ok=True)
 
     _seed_fault_artifacts(consumer_dir)
@@ -82,16 +80,12 @@ def test_orchestrator_writes_manifest_with_summarizer(tmp_path: Path) -> None:
             str(runs_dir),
             "--producer-output-dir",
             str(producer_dir),
-            "--producer-command-center-dir",
-            str(producer_cc_dir),
             "--consumer-output-dir",
             str(consumer_dir),
-            "--consumer-command-center-dir",
-            str(consumer_cc_dir),
             "--summarizer-output-dir",
             str(summarizer_dir),
-            "--healthview-root",
-            str(healthview_root),
+            "--orchestrator-output-dir",
+            str(orchestrator_dir),
             "--artifacts-to-keep",
             "2",
             "--producer-artifacts-to-keep",
@@ -111,12 +105,12 @@ def test_orchestrator_writes_manifest_with_summarizer(tmp_path: Path) -> None:
 
     assert exit_code == 0
 
-    manifest_paths = list(healthview_root.glob("commandview/fault_diagnostics/*/manifest.json"))
+    manifest_paths = list(orchestrator_dir.glob("*/manifest.json"))
     assert manifest_paths
     manifest_path = manifest_paths[0]
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    assert manifest["viewer"] == "commandview"
-    assert manifest["topic"] == "fault_diagnostics"
+    assert manifest["viewer"] == "healthview"
+    assert manifest["topic"] == "fault_diagnostics_overview"
     statuses = {step["status"] for step in manifest["telemetry"]["steps"]}
     assert statuses == {"skipped", "success"}
     summarizer_step = next(step for step in manifest["telemetry"]["steps"] if step["name"] == "summarizer")

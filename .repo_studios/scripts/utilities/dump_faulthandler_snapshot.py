@@ -38,19 +38,16 @@ if LIBRARIES_ROOT_STR and LIBRARIES_ROOT_STR not in sys.path:
 
 from libraries import prune_run_directories
 from libraries.cli import resolve_repo_root
+from libraries.report_paths import build_topic_path
+
+TOPIC_SLUG = "fault_snapshot"
 
 
 def _default_base_dir(allow_legacy: bool) -> Path:
     if allow_legacy:
         return ROOT / ".repo_studios" / "faulthandler"
-    return (
-        ROOT
-        / ".repo_studios"
-        / "command_center"
-        / "reports"
-        / "rawview"
-        / "fault_snapshots"
-    )
+    # HOP-compliant path: .repo_studios/reports/healthview/rawview_reports/fault_snapshot/
+    return ROOT / build_topic_path("rawview", TOPIC_SLUG)
 
 
 def _is_truthy(value: Optional[str], *, default: bool = False) -> bool:
@@ -227,7 +224,7 @@ def _write_bundle(
         "retention": {"keep": settings.artifacts_to_keep, "pruned": pruned},
     }
 
-    _write_json(settings.outdir / "MANIFEST.json", manifest)
+    _write_json(settings.outdir / "manifest.json", manifest)
     _write_json(settings.outdir / "bundle_summary.json", bundle_summary)
 
     summary_lines = [

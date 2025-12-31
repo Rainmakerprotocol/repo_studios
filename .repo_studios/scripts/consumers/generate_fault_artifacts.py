@@ -117,15 +117,36 @@ def _timestamp_slug() -> str:
 
 
 def _allow_legacy_runs() -> bool:
+    """Check if legacy faulthandler run paths are permitted.
+
+    :returns: True if FAULT_LOGS_ALLOW_LEGACY env var is not disabled.
+    :rtype: bool
+    """
     flag = os.getenv("FAULT_LOGS_ALLOW_LEGACY", "1").strip().lower()
     return flag not in {"0", "false", "no", "off"}
 
 
 def _resolve_runs_base(logger: logging.Logger | None) -> Path:
+    """Resolve faulthandler runs base directory using repo root.
+
+    :param logger: Logger for fallback notices.
+    :type logger: logging.Logger | None
+    :returns: Resolved runs base path.
+    :rtype: Path
+    """
     return _resolve_runs_base_for_repo(REPO_ROOT, logger)
 
 
 def _resolve_runs_base_for_repo(repo_root: Path, logger: logging.Logger | None) -> Path:
+    """Resolve faulthandler runs base directory with legacy fallback.
+
+    :param repo_root: Repository root path.
+    :type repo_root: Path
+    :param logger: Logger for fallback notices.
+    :type logger: logging.Logger | None
+    :returns: Rawview runs base or legacy fallback path.
+    :rtype: Path
+    """
     rawview_runs_base = (repo_root / RAWVIEW_RUNS_BASE).resolve()
     legacy_runs_base = (repo_root / LEGACY_RUNS_BASE).resolve()
     if rawview_runs_base.exists():
@@ -142,6 +163,13 @@ def _resolve_runs_base_for_repo(repo_root: Path, logger: logging.Logger | None) 
 
 
 def _find_latest_outdir(runs_base: Path) -> Path | None:
+    """Find most recent run directory by mtime.
+
+    :param runs_base: Base directory containing run subdirectories.
+    :type runs_base: Path
+    :returns: Path to latest run directory or None.
+    :rtype: Path | None
+    """
     try:
         if not runs_base.exists():
             return None
@@ -153,6 +181,15 @@ def _find_latest_outdir(runs_base: Path) -> Path | None:
 
 
 def _discover_outdir(explicit: str | None, runs_base: Path) -> Path | None:
+    """Discover run directory from explicit arg, env, or latest scan.
+
+    :param explicit: Explicit outdir path from CLI.
+    :type explicit: str | None
+    :param runs_base: Base directory for run discovery.
+    :type runs_base: Path
+    :returns: Resolved run directory or None.
+    :rtype: Path | None
+    """
     if explicit:
         return Path(explicit)
     env = os.getenv("FAULT_OUTDIR")
@@ -169,6 +206,13 @@ def _is_compatible_producer_report(payload: dict[str, Any]) -> bool:
 
 
 def _load_json(path: Path) -> dict[str, Any] | None:
+    """Load JSON file into dict or return None on failure.
+
+    :param path: Path to JSON file.
+    :type path: Path
+    :returns: Parsed dict or None.
+    :rtype: dict[str, Any] | None
+    """
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
         if isinstance(payload, dict):
@@ -179,6 +223,15 @@ def _load_json(path: Path) -> dict[str, Any] | None:
 
 
 def _load_producer_report(explicit: Path | None, *, run_dir: Path | None) -> tuple[dict[str, Any] | None, Path | None]:
+    """Load producer report if explicitly provided.
+
+    :param explicit: Explicit producer report path.
+    :type explicit: Path | None
+    :param run_dir: Run directory for context (unused but reserved).
+    :type run_dir: Path | None
+    :returns: Tuple of (payload dict, resolved path) or (None, None).
+    :rtype: tuple[dict[str, Any] | None, Path | None]
+    """
     if explicit is not None:
         payload = _load_json(explicit)
         if payload is not None and _is_compatible_producer_report(payload):
@@ -188,6 +241,11 @@ def _load_producer_report(explicit: Path | None, *, run_dir: Path | None) -> tup
 
 
 def _top_n_from_env() -> int:
+    """Get top frame count from FAULT_TOP_FRAMES_N env var.
+
+    :returns: Frame count clamped to [1, 100].
+    :rtype: int
+    """
     try:
         n = int(os.getenv("FAULT_TOP_FRAMES_N", str(DEFAULT_TOP_N)) or DEFAULT_TOP_N)
         return max(1, min(n, 100))
@@ -196,6 +254,15 @@ def _top_n_from_env() -> int:
 
 
 def _decode_signatures(payload: dict[str, Any], *, default_top_line: int = 0) -> list[FaultSignature]:
+    """Decode signatures list from producer report payload.
+
+    :param payload: Producer report dict containing 'signatures' key.
+    :type payload: dict[str, Any]
+    :param default_top_line: Default line number if missing.
+    :type default_top_line: int
+    :returns: List of FaultSignature objects sorted by count descending.
+    :rtype: list[FaultSignature]
+    """
     signatures: list[FaultSignature] = []
     for entry in payload.get("signatures", []):
         try:
@@ -231,6 +298,13 @@ def _decode_signatures(payload: dict[str, Any], *, default_top_line: int = 0) ->
 
 
 def _write_stacks_csv(outdir: Path, signatures: Sequence[FaultSignature]) -> None:
+    """Write signatures to CSV file in run directory.
+
+    :param outdir: Run directory for output.
+    :type outdir: Path
+    :param signatures: Fault signatures to serialize.
+    :type signatures: Sequence[FaultSignature]
+    """
     csv_path = outdir / "stacks.csv"
     try:
         with csv_path.open("w", newline="", encoding="utf-8") as fh:
@@ -268,6 +342,19 @@ def _write_stacks_csv(outdir: Path, signatures: Sequence[FaultSignature]) -> Non
 
 
 def _write_summary(outdir: Path, report: dict[str, Any], signatures: Sequence[FaultSignature], dumps_dir: Path) -> str:
+    """Write run-level SUMMARY.md and return content.
+
+    :param outdir: Run directory for output.
+    :type outdir: Path
+    :param report: Fault analysis report dict.
+    :type report: dict[str, Any]
+    :param signatures: Fault signatures for table.
+    :type signatures: Sequence[FaultSignature]
+    :param dumps_dir: Directory containing dump files.
+    :type dumps_dir: Path
+    :returns: Generated Markdown content.
+    :rtype: str
+    """
     lines: list[str] = []
     lines.append("# Fault Diagnostics Summary")
     lines.append("")
@@ -326,6 +413,13 @@ def _write_summary(outdir: Path, report: dict[str, Any], signatures: Sequence[Fa
 
 
 def _serialize_signatures(signatures: Sequence[FaultSignature]) -> list[dict[str, Any]]:
+    """Convert FaultSignature objects to serializable dicts.
+
+    :param signatures: Fault signatures to serialize.
+    :type signatures: Sequence[FaultSignature]
+    :returns: List of signature dictionaries.
+    :rtype: list[dict[str, Any]]
+    """
     return [
         {
             "signature_id": sig.signature_id,
@@ -506,6 +600,13 @@ def _prune_history(root: Path, keep: int | None, current: Path, *, logger: loggi
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
+    """Parse command-line arguments for fault artifact generation.
+
+    :param argv: Command-line arguments; defaults to sys.argv[1:].
+    :type argv: Sequence[str] | None
+    :returns: Parsed argument namespace.
+    :rtype: argparse.Namespace
+    """
     parser = argparse.ArgumentParser(description="Generate fault artifacts for a run directory")
     parser.add_argument(
         "--repo-root",
@@ -550,6 +651,20 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    """Execute fault artifact generation pipeline.
+
+    Processes rawview run directory, decodes signatures, and writes
+    HOP-compliant consumer artifacts.
+
+    :param argv: Command-line arguments; defaults to sys.argv[1:].
+    :type argv: Sequence[str] | None
+    :returns: Execution result with outdir, source, signatures count, etc.
+    :rtype: dict[str, Any]
+
+    .. note::
+        Output is written to
+        ``.repo_studios/reports/healthview/consumer_reports/fault_artifacts/<YYYYMMDD-HHMM>/``.
+    """
     args = _parse_args(argv)
     log_level = getattr(logging, str(args.log_level).upper(), logging.INFO)
     logging.basicConfig(level=log_level, format="[%(levelname)s] %(message)s", force=True)
@@ -642,6 +757,13 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """CLI entry point for fault artifact generation.
+
+    :param argv: Command-line arguments; defaults to sys.argv[1:].
+    :type argv: Sequence[str] | None
+    :returns: Exit code (0 for success).
+    :rtype: int
+    """
     run(argv)
     return 0
 

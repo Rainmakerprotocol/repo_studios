@@ -42,6 +42,7 @@ try:
     from libraries.prune_logs import prune_run_directories
     from libraries.cli import resolve_repo_root
     from libraries.retention_policy import get_keep
+    from libraries.report_paths import build_topic_path
 except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
@@ -49,10 +50,10 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
     from libraries.prune_logs import prune_run_directories
     from libraries.cli import resolve_repo_root
     from libraries.retention_policy import get_keep
+    from libraries.report_paths import build_topic_path
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
-VIEWER_SLUG = "healthview"
-TOPIC = "dependency_hygiene"
+TOPIC_SLUG = "dependency_hygiene"
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_dependency_hygiene_report")
 DEFAULT_REQ_PATTERNS: tuple[str, ...] = (
     "requirements.txt",
@@ -272,8 +273,8 @@ def configure_logging(level: str) -> None:
 def _build_manifest(*, report: dict[str, Any], repo_root: Path, inputs: dict[str, Any]) -> dict[str, Any]:
     return {
         "schema_version": 1,
-        "viewer_slug": VIEWER_SLUG,
-        "topic": TOPIC,
+        "viewer": "healthview",
+        "topic": TOPIC_SLUG,
         "run_timestamp": report.get("generated_utc"),
         "git_sha": None,
         "status": "ok" if report.get("summary", {}).get("status") == "passed" else "failed",
@@ -371,8 +372,8 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     manifest = _build_manifest(report=report, repo_root=repo_root, inputs=inputs)
     telemetry: dict[str, Any] = {
-        "viewer_slug": VIEWER_SLUG,
-        "topic": TOPIC,
+        "viewer": "healthview",
+        "topic": TOPIC_SLUG,
         "run_timestamp": timestamp,
         "generated_utc": report.get("generated_utc"),
         "metrics": {
@@ -387,8 +388,8 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     storage = create_storage(
         output_dir=output_dir,
-        viewer_slug=VIEWER_SLUG,
-        topic=TOPIC,
+        viewer_slug="",
+        topic="",
         timestamp=timestamp,
     )
 

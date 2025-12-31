@@ -15,16 +15,6 @@ from typing import Any, NamedTuple, cast
 
 import yaml
 
-DEFAULT_RELATIVE_INDEX = Path(".repo_studios/scripts/repo_standards_index.yaml")
-LEGACY_INDEX_PATH = Path(
-    ".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml"
-)
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_prompt_seeds")
-RUN_PREFIX = "standards_prompt_seed"
-DEFAULT_ARTIFACTS_TO_KEEP = get_keep("seed_standards_prompts")
-FORMAT_CHOICES = ("text", "yaml", "json")
-SCHEMA_VERSION = 1
-
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[2]
@@ -39,6 +29,7 @@ try:
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -52,7 +43,19 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
+
+# Constants moved after imports to resolve dependency on get_keep()
+DEFAULT_RELATIVE_INDEX = Path(".repo_studios/scripts/repo_standards_index.yaml")
+LEGACY_INDEX_PATH = Path(
+    ".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml"
+)
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", "standards_prompt_seeds")
+RUN_PREFIX = "standards_prompt_seed"
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("seed_standards_prompts")
+FORMAT_CHOICES = ("text", "yaml", "json")
+SCHEMA_VERSION = 1
 
 
 @dataclass(frozen=True)
@@ -332,23 +335,6 @@ def render_log(payload: dict[str, Any]) -> str:
     return "\n".join(entries) + "\n"
 
 
-def _write_latest_artifacts(run_dir: Path, output_dir: Path) -> None:
-    latest_dir = output_dir / "latest"
-    latest_dir.mkdir(parents=True, exist_ok=True)
-    mapping = {
-        "report.json": latest_dir / "latest_report.json",
-        "report.md": latest_dir / "latest_report.md",
-        "log.txt": latest_dir / "latest_log.txt",
-        "seed.json": latest_dir / "latest_seed.json",
-        "seed.yaml": latest_dir / "latest_seed.yaml",
-        "seed.txt": latest_dir / "latest_seed.txt",
-    }
-    for source_name, target_path in mapping.items():
-        src = run_dir / source_name
-        if src.exists():
-            target_path.write_bytes(src.read_bytes())
-
-
 def write_artifacts(
     *,
     run_dir: Path,
@@ -368,7 +354,6 @@ def write_artifacts(
     (run_dir / "report.md").write_text(render_markdown_report(payload), encoding="utf-8")
     (run_dir / "log.txt").write_text(render_log(payload), encoding="utf-8")
     write_seed_files(run_dir, seed, formats)
-    _write_latest_artifacts(run_dir, output_dir)
 
 
 def prune_history(

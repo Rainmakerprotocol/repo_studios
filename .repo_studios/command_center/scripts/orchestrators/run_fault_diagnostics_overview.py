@@ -19,7 +19,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, Sequence
+from typing import Any, Callable, Sequence, cast
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
 if str(LIBRARIES_ROOT) not in sys.path:
@@ -136,6 +136,13 @@ class Options:
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+    """Parse command-line arguments for orchestrator.
+
+    :param argv: Command-line arguments; defaults to sys.argv[1:].
+    :type argv: Sequence[str] | None
+    :returns: Parsed argument namespace.
+    :rtype: argparse.Namespace
+    """
     parser = argparse.ArgumentParser(description=__doc__ or "")
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument("--runs-dir", default=str(DEFAULT_RUNS_DIR))
@@ -164,6 +171,14 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def _parse_timestamp(raw: str | None) -> datetime:
+    """Parse ISO-8601 timestamp or return current UTC time.
+
+    :param raw: ISO-8601 timestamp string or None.
+    :type raw: str | None
+    :returns: Parsed datetime in UTC.
+    :rtype: datetime
+    :raises SystemExit: If timestamp format is invalid.
+    """
     if not raw:
         return datetime.now(timezone.utc)
     try:
@@ -176,6 +191,15 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def _resolve_path(repo_root: Path, raw: str | None) -> Path | None:
+    """Resolve optional path relative to repo root.
+
+    :param repo_root: Repository root for relative resolution.
+    :type repo_root: Path
+    :param raw: Raw path string or None.
+    :type raw: str | None
+    :returns: Resolved Path or None.
+    :rtype: Path | None
+    """
     if not raw:
         return None
     candidate = Path(raw).expanduser()
@@ -185,10 +209,27 @@ def _resolve_path(repo_root: Path, raw: str | None) -> Path | None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+    """Construct Paths dataclass from parsed CLI arguments.
+
+    :param args: Parsed argument namespace from parse_args().
+    :type args: argparse.Namespace
+    :returns: Resolved path configuration.
+    :rtype: Paths
+    """
+    result = build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+    return Paths(**{f.name: getattr(result, f.name) for f in result.__dataclass_fields__.values()})
 
 
 def build_options(args: argparse.Namespace, *, paths: Paths) -> Options:
+    """Construct Options from parsed CLI arguments.
+
+    :param args: Parsed argument namespace from parse_args().
+    :type args: argparse.Namespace
+    :param paths: Resolved Paths instance.
+    :type paths: Paths
+    :returns: Fully resolved Options instance.
+    :rtype: Options
+    """
     keep_values = build_standard_options(args, OPTIONS_CONFIG)
     return Options(
         log_level=str(args.log_level),
@@ -207,10 +248,28 @@ def build_options(args: argparse.Namespace, *, paths: Paths) -> Options:
 
 
 def configure_logging(level: str) -> None:
+    """Configure root logger with specified level.
+
+    :param level: Logging level name (e.g., "DEBUG", "INFO").
+    :type level: str
+    """
     logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
 
 
 def _load_callable(script_path: Path, module_name: str, attribute: str) -> Callable[[Sequence[str] | None], Any]:
+    """Dynamically load a callable from a script module.
+
+    :param script_path: Path to the Python script.
+    :type script_path: Path
+    :param module_name: Module name for sys.modules registration.
+    :type module_name: str
+    :param attribute: Name of the callable attribute to retrieve.
+    :type attribute: str
+    :returns: Loaded callable.
+    :rtype: Callable[[Sequence[str] | None], Any]
+    :raises ImportError: If module cannot be loaded.
+    :raises AttributeError: If callable not found.
+    """
     script_abs = script_path.resolve()
     if module_name in sys.modules:
         module = sys.modules[module_name]
@@ -220,14 +279,23 @@ def _load_callable(script_path: Path, module_name: str, attribute: str) -> Calla
             raise ImportError(f"Unable to load module from {script_abs}")
         module = importlib.util.module_from_spec(spec)
         sys.modules[module_name] = module
-        spec.loader.exec_module(module)  # type: ignore[call-arg]
+        spec.loader.exec_module(module)
     func = getattr(module, attribute, None)
     if not callable(func):
         raise AttributeError(f"Module {module_name} missing callable {attribute}()")
-    return func
+    return cast(Callable[[Sequence[str] | None], Any], func)
 
 
 def _relativize(path: Path | None, repo_root: Path) -> str | None:
+    """Convert path to repo-relative POSIX string.
+
+    :param path: Path to relativize or None.
+    :type path: Path | None
+    :param repo_root: Repository root for relative resolution.
+    :type repo_root: Path
+    :returns: Relative POSIX path string or None.
+    :rtype: str | None
+    """
     if path is None:
         return None
     try:
@@ -265,6 +333,16 @@ class SummarizerOutcome:
 
 
 def _execute_producer(paths: Paths, options: Options) -> ProducerOutcome:
+    """Execute faulthandler report producer step.
+
+    :param paths: Resolved path configuration.
+    :type paths: Paths
+    :param options: Runtime options.
+    :type options: Options
+    :returns: Producer execution outcome.
+    :rtype: ProducerOutcome
+    :raises RuntimeError: If producer returns unexpected payload.
+    """
     run_callable = _load_callable(paths.repo_root / PRODUCER_SCRIPT, PRODUCER_MODULE, "run")
     argv: list[str] = [
         "--repo-root",
@@ -307,6 +385,18 @@ def _execute_producer(paths: Paths, options: Options) -> ProducerOutcome:
 
 
 def _execute_consumer(paths: Paths, options: Options, producer: ProducerOutcome | None) -> ConsumerOutcome:
+    """Execute fault artifact consumer step.
+
+    :param paths: Resolved path configuration.
+    :type paths: Paths
+    :param options: Runtime options.
+    :type options: Options
+    :param producer: Producer outcome for chaining, or None.
+    :type producer: ProducerOutcome | None
+    :returns: Consumer execution outcome.
+    :rtype: ConsumerOutcome
+    :raises RuntimeError: If consumer returns unexpected payload.
+    """
     run_callable = _load_callable(paths.repo_root / CONSUMER_SCRIPT, CONSUMER_MODULE, "run")
     argv: list[str] = [
         "--output-dir",
@@ -365,6 +455,20 @@ def _execute_summarizer(
     producer: ProducerOutcome | None,
     consumer: ConsumerOutcome | None,
 ) -> SummarizerOutcome:
+    """Execute fault diagnostics summarizer step.
+
+    :param paths: Resolved path configuration.
+    :type paths: Paths
+    :param options: Runtime options.
+    :type options: Options
+    :param producer: Producer outcome for artifact references, or None.
+    :type producer: ProducerOutcome | None
+    :param consumer: Consumer outcome for artifact references, or None.
+    :type consumer: ConsumerOutcome | None
+    :returns: Summarizer execution outcome.
+    :rtype: SummarizerOutcome
+    :raises RuntimeError: If summarizer returns unexpected payload or fails.
+    """
     run_callable = _load_callable(paths.repo_root / SUMMARIZER_SCRIPT, SUMMARIZER_MODULE, "run")
     argv: list[str] = [
         "--repo-root",
@@ -409,6 +513,11 @@ def _execute_summarizer(
 
 
 def _register_scripts(registry: CatalogRegistry) -> None:
+    """Register topic scripts in catalog registry.
+
+    :param registry: CatalogRegistry instance to populate.
+    :type registry: CatalogRegistry
+    """
     registry.register(script_path=str(PRODUCER_SCRIPT), topic=TOPIC_SLUG, role="producer")
     registry.register(script_path=str(CONSUMER_SCRIPT), topic=TOPIC_SLUG, role="consumer")
     registry.register(script_path=str(SUMMARIZER_SCRIPT), topic=TOPIC_SLUG, role="summarizer")
@@ -416,6 +525,13 @@ def _register_scripts(registry: CatalogRegistry) -> None:
 
 
 def _summarize_steps(result_steps: Sequence[Any]) -> str:
+    """Generate Markdown summary of pipeline step results.
+
+    :param result_steps: Sequence of step result objects.
+    :type result_steps: Sequence[Any]
+    :returns: Markdown summary content.
+    :rtype: str
+    """
     lines = ["# Fault Diagnostics Run", ""]
     for step in result_steps:
         detail = f" ({step.detail})" if step.detail else ""
@@ -424,6 +540,20 @@ def _summarize_steps(result_steps: Sequence[Any]) -> str:
 
 
 def run(argv: Sequence[str] | None = None) -> int:
+    """Execute fault diagnostics orchestrator pipeline.
+
+    Chains producer → consumer → summarizer steps and writes
+    HOP-compliant orchestrator artifacts.
+
+    :param argv: Command-line arguments; defaults to sys.argv[1:].
+    :type argv: Sequence[str] | None
+    :returns: Exit code (0 for success, 1 for failure).
+    :rtype: int
+
+    .. note::
+        Output is written to
+        ``.repo_studios/reports/healthview/orchestrator_reports/fault_diagnostics_overview/<YYYYMMDD-HHMM>/``.
+    """
     args = parse_args(argv)
     paths = build_paths(args)
     options = build_options(args, paths=paths)
@@ -586,6 +716,11 @@ def run(argv: Sequence[str] | None = None) -> int:
 
 
 def main(argv: Sequence[str] | None = None) -> None:
+    """CLI entry point for fault diagnostics orchestrator.
+
+    :param argv: Command-line arguments; defaults to sys.argv[1:].
+    :type argv: Sequence[str] | None
+    """
     raise SystemExit(run(argv))
 
 

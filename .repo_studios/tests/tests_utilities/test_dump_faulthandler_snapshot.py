@@ -60,33 +60,33 @@ def test_dump_snapshot_happy_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatc
     fake = FakeFaulthandler()
     monkeypatch.setitem(sys.modules, "faulthandler", fake)
 
-    module.ROOT = tmp_path
+    # HOP-compliant path: .repo_studios/reports/healthview/rawview/fault_snapshot/
+    base_dir = (
+        tmp_path
+        / ".repo_studios"
+        / "reports"
+        / "healthview"
+        / "rawview"
+        / "fault_snapshot"
+    )
     now_value = datetime(2025, 11, 28, 12, 0, 0, tzinfo=UTC)
     result = module.dump_snapshot(
-        env={"FAULT_ENABLE": "1"},
+        env={"FAULT_ENABLE": "1", "FAULT_SNAPSHOT_BASE_DIR": str(base_dir)},
         now_factory=lambda: now_value,
     )
 
     assert result["status"] == "ok"
-    outdir = (
-        tmp_path
-        / ".repo_studios"
-        / "command_center"
-        / "reports"
-        / "rawview"
-        / "fault_snapshots"
-        / "2025-11-28_120000"
-    )
+    outdir = base_dir / "2025-11-28_120000"
     assert outdir.exists()
     snapshot_file = outdir / "snapshot.txt"
-    manifest_file = outdir / "MANIFEST.json"
+    manifest_file = outdir / "manifest.json"  # lowercase per HOP
     bundle_file = outdir / "bundle_summary.json"
 
     assert snapshot_file.read_text() == "fake traceback"
     assert manifest_file.exists()
     assert bundle_file.exists()
 
-    manifest = json.loads((outdir / "MANIFEST.json").read_text())
+    manifest = json.loads((outdir / "manifest.json").read_text())
     assert manifest["faulthandler"]["dumped"] is True
     summary = json.loads(bundle_file.read_text())
     assert summary["status"] == "ok"
@@ -96,13 +96,14 @@ def test_dump_snapshot_prunes_history(tmp_path: Path, monkeypatch: pytest.Monkey
     module = _load_module(monkeypatch)
     monkeypatch.setitem(sys.modules, "faulthandler", FakeFaulthandler())
 
+    # HOP-compliant path: .repo_studios/reports/healthview/rawview/fault_snapshot/
     base_dir = (
         tmp_path
         / ".repo_studios"
-        / "command_center"
         / "reports"
+        / "healthview"
         / "rawview"
-        / "fault_snapshots"
+        / "fault_snapshot"
     )
     base_dir.mkdir(parents=True)
     for idx in range(4):
@@ -110,9 +111,8 @@ def test_dump_snapshot_prunes_history(tmp_path: Path, monkeypatch: pytest.Monkey
         run_dir.mkdir()
         os.utime(run_dir, (idx, idx))
 
-    module.ROOT = tmp_path
     result = module.dump_snapshot(
-        env={"FAULT_SNAPSHOT_TO_KEEP": "2"},
+        env={"FAULT_SNAPSHOT_TO_KEEP": "2", "FAULT_SNAPSHOT_BASE_DIR": str(base_dir)},
         now_factory=lambda: datetime(2025, 11, 28, 13, 0, 0, tzinfo=UTC),
     )
 

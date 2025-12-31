@@ -66,8 +66,8 @@ def test_collect_faulthandler_reports_emits_artifacts(tmp_path):
     manifest_path = produced_run / "manifest.json"
     assert manifest_path.exists()
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    assert manifest["viewer_slug"] == "rawview"
-    assert manifest["topic"] == "fault_artifacts_producer"
+    assert manifest["viewer_slug"] == "healthview"
+    assert manifest["topic"] == "faulthandler_reports"
 
     summary_path = produced_run / "summary.md"
     assert summary_path.exists()

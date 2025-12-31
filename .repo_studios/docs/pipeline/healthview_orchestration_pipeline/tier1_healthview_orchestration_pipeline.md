@@ -622,17 +622,17 @@ _Tier-2 references (depth lives here):_
 - [x] generate_code_doc_churn_report.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-007-generate-code-doc-churn-report)
 - [x] generate_undocumented_logic_report.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-008-generate-undocumented-logic-report)
 - [x] aggregate_docs_health_signals.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-009-aggregate-docs-health-signals)
-- [ ] run_docs_health_overview.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-001-docs-health-overview-orchestrator)
+- [x] run_docs_health_overview.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-001-docs-health-overview-orchestrator)
 
 **Stage 2.1 Gate Checklist (Tier-1):**
 
 These are Stage 2.1 readiness gates after all Tier-2 DONE script gates are closed.
 
-- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See: [Stop-gates](tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] No pointer artifacts (`latest_*` / `current_*`). See: [Stop-gates](tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`).
+- [x] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`). See: [Stop-gates](tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists)
+- [x] No pointer artifacts (`latest_*` / `current_*`). See: [Stop-gates](tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists)
+- [x] Output root aligned to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`).
   See: [Contract snapshot](tier2_roster/tier2_docs_health_overview_roster.md#23-current-vs-target-contract-snapshot-stage-21)
-- [ ] Tier-3 eligible (Stage 2.1 Tier-2 depth captured; ready for Tier-3 extraction). See:
+- [x] Tier-3 eligible (Stage 2.1 Tier-2 depth captured; ready for Tier-3 extraction). See:
   [Records index](tier2_roster/tier2_docs_health_overview_roster.md#311-records-index)
 
 **Target contract (HOP):**

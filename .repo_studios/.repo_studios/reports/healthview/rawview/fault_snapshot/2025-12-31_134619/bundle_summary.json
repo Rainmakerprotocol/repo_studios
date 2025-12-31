@@ -1,0 +1,11 @@
+{
+  "status": "warning",
+  "snapshot_file": ".repo_studios\\reports\\healthview\\rawview\\fault_snapshot\\2025-12-31_134619\\snapshot.txt",
+  "errors": [
+    "import_failed:boom"
+  ],
+  "retention": {
+    "keep": 10,
+    "pruned": 0
+  }
+}

@@ -78,7 +78,7 @@ def test_structured_artifacts(tmp_path: Path) -> None:
         "warn": 1,
     }
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "standards_prompt_seeds"
+    output_dir = repo_root / mod.DEFAULT_OUTPUT_DIR
     run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith("standards_prompt_seed-")]
     assert len(run_dirs) == 1
     run_dir = run_dirs[0]
@@ -96,16 +96,9 @@ def test_structured_artifacts(tmp_path: Path) -> None:
     seed_data = json.loads((run_dir / "seed.json").read_text(encoding="utf-8"))
     assert set(seed_data["categories"].keys()) == {"cat.core", "cat.doc"}
 
+    # HOP compliance: no pointer files
     latest_dir = output_dir / "latest"
-    for filename in [
-        "latest_report.json",
-        "latest_report.md",
-        "latest_log.txt",
-        "latest_seed.json",
-        "latest_seed.yaml",
-        "latest_seed.txt",
-    ]:
-        assert (latest_dir / filename).exists()
+    assert not latest_dir.exists()
 
     assert legacy_out.exists()
     legacy_text = legacy_out.read_text(encoding="utf-8")
@@ -118,7 +111,7 @@ def test_prune_history(tmp_path: Path, monkeypatch) -> None:
     repo_root = tmp_path / "workspace"
     _write_index(repo_root)
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports" / "standards_prompt_seeds"
+    output_dir = repo_root / mod.DEFAULT_OUTPUT_DIR
 
     class _FakeDateTime(_dt.datetime):
         _counter = 0
@@ -150,6 +143,6 @@ def test_prune_history(tmp_path: Path, monkeypatch) -> None:
     run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith("standards_prompt_seed-")]
     assert len(run_dirs) == 1
 
+    # HOP compliance: no pointer files
     latest_dir = output_dir / "latest"
-    assert (latest_dir / "latest_report.json").exists()
-    assert (latest_dir / "latest_seed.json").exists()
+    assert not latest_dir.exists()

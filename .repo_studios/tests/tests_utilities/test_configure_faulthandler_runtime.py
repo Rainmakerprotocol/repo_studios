@@ -76,13 +76,14 @@ def test_bootstrap_writes_artifacts(tmp_path: Path, monkeypatch: pytest.MonkeyPa
 
     assert result["status"] in {"enabled", "warning"}
 
+    # HOP-compliant path: .repo_studios/reports/healthview/rawview/fault_diagnostics/
     base_dir = (
         tmp_path
         / ".repo_studios"
-        / "command_center"
         / "reports"
+        / "healthview"
         / "rawview"
-        / "fault_diagnostics_runs"
+        / "fault_diagnostics"
     )
     outdir = base_dir / "2025-01-02_0304"
 
@@ -113,13 +114,14 @@ def test_bootstrap_prunes_old_runs(tmp_path: Path, monkeypatch: pytest.MonkeyPat
     module.ACTIVE_WRITER = None
     module.LAST_BOOTSTRAP = None
 
+    # HOP-compliant path: .repo_studios/reports/healthview/rawview_reports/fault_diagnostics/
     base_dir = (
         tmp_path
         / ".repo_studios"
-        / "command_center"
         / "reports"
-        / "rawview"
-        / "fault_diagnostics_runs"
+        / "healthview"
+        / "rawview_reports"
+        / "fault_diagnostics"
     )
     base_dir.mkdir(parents=True)
     for index in range(3):
@@ -130,6 +132,7 @@ def test_bootstrap_prunes_old_runs(tmp_path: Path, monkeypatch: pytest.MonkeyPat
     monkeypatch.setenv("FAULT_DISABLE", "0")
     monkeypatch.setenv("FAULT_ENABLE", "1")
     monkeypatch.setenv("FAULT_ARTIFACTS_TO_KEEP", "2")
+    monkeypatch.setenv("FAULT_BASE_DIR", str(base_dir))  # Use env var to override
 
     result = module.bootstrap(env=dict(os.environ), now_factory=lambda: datetime(2025, 1, 1, tzinfo=UTC))
 

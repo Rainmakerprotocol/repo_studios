@@ -57,13 +57,14 @@ from utilities.monkey_patch_risk import (  # noqa: E402
 )
 from libraries import prune_run_directories  # noqa: E402
 from libraries.cli import resolve_repo_root  # noqa: E402
+from libraries.report_paths import build_topic_path  # noqa: E402
 from libraries.retention_policy import get_keep  # noqa: E402
 
 DEFAULT_STRUCTURED_ROOT = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
 LEGACY_ROOT = Path(".repo_studios/monkey_patch")
 LEGACY_REPORT_NAME = "report.json"
 STRUCTURED_MATCHES_NAME = "matches.json"
-DEFAULT_OUTPUT_BASE = Path(".repo_studios/reports/consumer_reports/monkey_patch_risk")
+DEFAULT_OUTPUT_BASE = build_topic_path("consumer", "monkey_patch_risk")
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("classify_monkey_patches")
 BUNDLE_PREFIX = "monkey_patch_risk-"
 
@@ -303,7 +304,7 @@ def _write_consumer_bundle(
     bundle_summary_path = bundle_dir / "bundle_summary.json"
     bundle_summary_path.write_text(json.dumps(bundle_summary, indent=2) + "\n", encoding="utf-8")
 
-    _update_latest(output_base, bundle_dir, ["summary.json", "SUMMARY.md", "bundle_summary.json"])
+    # HOP compliance: no pointer files - removed _update_latest call
     pruned = _prune_history(output_base, keep=keep, current=bundle_dir, logger=logger)
     return bundle_dir, bundle_summary_path, pruned
 

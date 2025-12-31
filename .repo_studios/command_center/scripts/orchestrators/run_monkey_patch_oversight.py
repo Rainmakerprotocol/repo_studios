@@ -45,12 +45,13 @@ from libraries import (
     step_success,
     write_report_artifacts,
 )
+from libraries.report_paths import build_topic_path
 
 LOGGER = logging.getLogger(__name__)
 
 TOPIC_SLUG = "monkey-patch-oversight"
 HEALTHVIEW_TOPIC = "monkey_patch_oversight"
-VIEWER_SLUG = "commandview"
+VIEWER_SLUG = "healthview"
 SCHEMA_VERSION = 1
 
 PRODUCER_SCRIPT = Path(".repo_studios/scripts/producers/scan_monkey_patches.py")
@@ -69,7 +70,7 @@ DEFAULT_PRODUCER_OUTPUT = Path(".repo_studios/reports/producer_reports/monkey_pa
 DEFAULT_CONSUMER_OUTPUT = Path(".repo_studios/reports/consumer_reports/monkey_patch_risk")
 DEFAULT_AGGREGATOR_OUTPUT = Path(".repo_studios/reports/aggregator_reports/monkey_patch_trends")
 DEFAULT_SUMMARIZER_OUTPUT = Path(".repo_studios/reports/summarizer_reports/monkey_patch_overview")
-DEFAULT_HEALTHVIEW_ROOT = Path(".repo_studios/command_center/reports")
+DEFAULT_HEALTHVIEW_ROOT = build_topic_path("orchestrator", "monkey_patch_oversight")
 
 
 @dataclass(frozen=True)
@@ -711,8 +712,8 @@ def run(argv: Sequence[str] | None = None) -> int:
         output_dir=paths.healthview_root,
         artifacts=artifacts,
         keep=options.artifacts_to_keep,
-        viewer=VIEWER_SLUG,
-        topic=HEALTHVIEW_TOPIC,
+        viewer="",
+        topic="",
     )
 
     artifact_metrics = measure_artifact_directory(result_artifacts.run_dir)

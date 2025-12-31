@@ -24,6 +24,7 @@ try:  # pragma: no cover - prefer import when packaged
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.report_paths import build_topic_path
 except ModuleNotFoundError:  # pragma: no cover - fallback when running in isolation
     LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -39,13 +40,14 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running in isola
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.report_paths import build_topic_path
 
 DEFAULT_CONSUMER_OUTPUT_DIR = Path(".repo_studios/reports/consumer_reports/monkey_patch_risk")
 DEFAULT_PRODUCER_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
 DEFAULT_AGGREGATOR_OUTPUT_DIR = Path(".repo_studios/reports/aggregator_reports/monkey_patch_trends")
-DEFAULT_SUMMARIZER_OUTPUT_DIR = Path(".repo_studios/reports/summarizer_reports/monkey_patch_overview")
+DEFAULT_SUMMARIZER_OUTPUT_DIR = build_topic_path("summarizer", "monkey_patch_overview")
 SUMMARY_STEM = "monkey_patch_overview"
-VIEWER_SLUG = "commandview"
+VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "monkey_patch_overview"
 SCHEMA_VERSION = 1
 

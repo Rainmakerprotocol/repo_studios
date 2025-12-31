@@ -35,6 +35,7 @@ try:  # pragma: no cover - preferred import when executed with packaged path
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -50,12 +51,13 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 
 DEFAULT_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
 LEGACY_INDEX_PATH = Path(".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml")
 DEFAULT_PENDING_PATH = Path(".repo_studios/scripts/repo_standards_pending.yaml")
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
+DEFAULT_OUTPUT_DIR = build_topic_path("summarizer", "standards_overview")
 SUMMARY_STEM = "standards_overview"
 VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "standards_overview"
@@ -357,8 +359,8 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         output_dir=paths.output_dir,
         artifacts=artifacts,
         keep=options.artifacts_to_keep,
-        viewer=VIEWER_SLUG,
-        topic=TOPIC_SLUG,
+        viewer="",
+        topic="",
     )
 
     logger.info("Standards overview artifacts written to %s (slug=%s)", result.run_dir, result.slug)

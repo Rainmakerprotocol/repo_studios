@@ -15,10 +15,10 @@ from pathlib import Path
 from typing import Any
 
 DEFAULT_RELATIVE_GRAPH_DIR = Path(".repo_studios/reports/producer_reports/healthview/import_graph")
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/import_boundary_reports")
+# HOP-compliant output root - set after imports
+TOPIC_SLUG = "import_boundary"
 DEFAULT_ALLOWLIST = Path(".repo_studios/scripts/producers/import_rules_allowlist.json")
 RUN_PREFIX = "import_boundary_check"
-DEFAULT_ARTIFACTS_TO_KEEP = get_keep("validate_import_boundaries")
 SCHEMA_VERSION = 1
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
@@ -33,6 +33,7 @@ try:
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -46,7 +47,12 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.report_paths import build_topic_path  # type: ignore
     from libraries.retention_policy import get_keep  # type: ignore
+
+# HOP-compliant default output directory (set after imports)
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("validate_import_boundaries")
 
 
 @dataclass(frozen=True)
@@ -379,21 +385,6 @@ def render_log(payload: dict[str, Any]) -> str:
     return "\n".join(entries) + "\n"
 
 
-def _write_latest_artifacts(run_dir: Path, output_dir: Path) -> None:
-    latest_dir = output_dir / "latest"
-    latest_dir.mkdir(parents=True, exist_ok=True)
-    mapping = {
-        "report.json": latest_dir / "latest_report.json",
-        "report.md": latest_dir / "latest_report.md",
-        "log.txt": latest_dir / "latest_log.txt",
-        "violations.json": latest_dir / "latest_violations.json",
-    }
-    for source, target in mapping.items():
-        src_path = run_dir / source
-        if src_path.exists():
-            target.write_bytes(src_path.read_bytes())
-
-
 def write_artifacts(
     *,
     run_dir: Path,
@@ -411,7 +402,6 @@ def write_artifacts(
         json.dumps(payload.get("violations", []), indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    _write_latest_artifacts(run_dir, output_dir)
 
 
 def prune_history(

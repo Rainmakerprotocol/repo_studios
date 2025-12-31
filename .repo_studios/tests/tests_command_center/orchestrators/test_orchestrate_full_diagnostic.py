@@ -82,7 +82,8 @@ def test_run_emits_manifest_and_respects_includes(tmp_path):
         assert executions == ["topic-a", "topic-b"]
 
         run_slug = "20251204-1230"
-        manifest_path = reports_root / module.META_VIEWER / module.META_TOPIC / run_slug / "manifest.json"
+        # With HOP, reports_root is the full path; manifest is at reports_root/run_slug/
+        manifest_path = reports_root / run_slug / "manifest.json"
         assert manifest_path.is_file()
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         statuses = {entry["slug"]: entry["status"] for entry in manifest["topics"]}
@@ -91,6 +92,7 @@ def test_run_emits_manifest_and_respects_includes(tmp_path):
             entry["slug"]: entry["artifact_dir"] for entry in manifest["topics"] if entry["artifact_dir"]
         }
         assert "topic-a" in artifact_dirs
+        # artifact_dir now uses HOP path: orchestrator_reports/<topic>/<run_slug>
         assert artifact_dirs["topic-a"].endswith(str(Path(stub_a.HEALTHVIEW_TOPIC) / run_slug))  # type: ignore[attr-defined]
         summary_path = manifest_path.with_name("summary.md")
         assert summary_path.is_file()

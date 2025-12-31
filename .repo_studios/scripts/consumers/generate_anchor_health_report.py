@@ -40,9 +40,8 @@ from utilities.anchor_inventory_loader import load_anchor_inventory  # noqa: E40
 HEADING_RE = re.compile(r"^(#{1,2})\s+(.*)$")
 GENERIC_ALLOWED = {"overview", "introduction", "faq", "notes"}
 BASELINE_PATH = Path("tests/docs/anchor_slug_baseline.json")
-# Permanent root for anchor health artifacts (contains latest + historical runs)
-OUTPUT_DIR = Path(".repo_studios/reports/consumer_reports/anchor_health_reports")
-DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_anchor_health_report")
+# HOP-compliant output root for anchor health artifacts
+TOPIC_SLUG = "anchor_health"
 
 # Subfolder naming pattern: anchor_health-YYYY-MM-DD_hhmm
 RUN_PREFIX = "anchor_health-"
@@ -54,14 +53,6 @@ BUNDLE_SUMMARY_NAME = "bundle_summary.json"
 LEGACY_JSON_NAME = "anchor_report.json"
 LEGACY_MD_NAME = "anchor_report.md"
 CLUSTERS_TSV_NAME = "clusters.tsv"
-LATEST_POINTERS = {
-    SUMMARY_JSON_NAME: "latest_summary.json",
-    SUMMARY_MD_NAME: "latest_SUMMARY.md",
-    BUNDLE_SUMMARY_NAME: "latest_bundle_summary.json",
-    LEGACY_JSON_NAME: "anchor_report_latest.json",
-    LEGACY_MD_NAME: "anchor_report_latest.md",
-    CLUSTERS_TSV_NAME: "clusters_latest.tsv",
-}
 
 
 def _slugify(raw: str) -> str:
@@ -235,7 +226,12 @@ if libraries_root_str and libraries_root_str not in sys.path:
 
 from libraries import prune_run_directories  # noqa: E402
 from libraries.cli import resolve_repo_root  # noqa: E402
+from libraries.report_paths import build_topic_path  # noqa: E402
 from libraries.retention_policy import get_keep  # noqa: E402
+
+# HOP-compliant default output directory
+OUTPUT_DIR = build_topic_path("consumer", TOPIC_SLUG)
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_anchor_health_report")
 
 
 def _run_dir(ts: datetime, base: Path = OUTPUT_DIR) -> Path:
@@ -344,21 +340,6 @@ def _render_summary_markdown(
     return "\n".join(lines) + "\n"
 
 
-def _update_latest_artifacts(base: Path, bundle_dir: Path) -> None:
-    base.mkdir(parents=True, exist_ok=True)
-    for src_name, dest_name in LATEST_POINTERS.items():
-        src = bundle_dir / src_name
-        if not src.exists():
-            continue
-        dest = base / dest_name
-        try:
-            if dest.exists() or dest.is_symlink():
-                dest.unlink()
-            dest.hardlink_to(src)
-        except Exception:
-            dest.write_bytes(src.read_bytes())
-
-
 def write_artifacts(
     report: dict,
     ts: datetime | None = None,
@@ -435,8 +416,6 @@ def write_artifacts(
         locations_joined = ";".join(cluster.get("locations", []))
         tsv_lines.append(f"{cluster['slug']}\t{cluster['file_count']}\t{files_joined}\t{locations_joined}")
     (run_dir / CLUSTERS_TSV_NAME).write_text("\n".join(tsv_lines) + "\n", encoding="utf-8")
-
-    _update_latest_artifacts(output_dir, run_dir)
 
     log_line = f"{ts.isoformat()} duplicates={report['strict_duplicate_count']} baseline={report['baseline_cross_file_duplicates']}"
     with (output_dir / "runs.log").open("a", encoding="utf-8") as fh:

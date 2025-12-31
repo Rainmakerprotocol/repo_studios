@@ -19,9 +19,8 @@ DEFAULT_SCHEMA_ROOT = Path(".repo_studios/inventory_schema")
 DEFAULT_ENUMS_PATH = DEFAULT_SCHEMA_ROOT / "enums.yaml"
 DEFAULT_TEMPLATE_PATH = DEFAULT_SCHEMA_ROOT / "inventory_entry_template.yaml"
 DEFAULT_CONFIG_PATH = DEFAULT_SCHEMA_ROOT / "validator_config.yaml"
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/validate_inventory")
 RUN_PREFIX = "validate_inventory"
-DEFAULT_ARTIFACTS_TO_KEEP = get_keep("validate_inventory")
+TOPIC_SLUG = "validate_inventory"
 SCHEMA_VERSION = 1
 
 LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
@@ -39,6 +38,7 @@ try:
         resolve_path,
     )
     from libraries.retention_policy import get_keep
+    from libraries.report_paths import build_topic_path
 except ModuleNotFoundError:  # pragma: no cover - fallback when executed as script
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
@@ -54,6 +54,11 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when executed as scri
         resolve_path,
     )
     from libraries.retention_policy import get_keep  # type: ignore
+    from libraries.report_paths import build_topic_path  # type: ignore
+
+# HOP-compliant output path
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("validate_inventory")
 
 REQUIRED_FIELDS = {
     "id",
@@ -223,20 +228,6 @@ def _prepare_run_dir(output_dir: Path, slug: str) -> Path:
     run_dir = output_dir / f"{RUN_PREFIX}-{_sanitize_slug(slug)}"
     run_dir.mkdir(parents=True, exist_ok=True)
     return run_dir
-
-
-_copy_latest = copy_latest_artifact
-
-
-def update_latest_artifacts(run_dir: Path, output_dir: Path) -> None:
-    mapping = {
-        "latest_report.json": run_dir / "report.json",
-        "latest_report.md": run_dir / "report.md",
-        "latest_report.log": run_dir / "log.txt",
-        "latest_raw.json": run_dir / "raw.json",
-    }
-    for filename, src in mapping.items():
-        _copy_latest(src, output_dir / filename)
 
 
 def prune_history(
@@ -750,7 +741,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     raw_payload = compose_raw_payload(report_payload, report, paths.repo_root)
 
     write_run_artifacts(run_dir, report_payload, raw_payload)
-    update_latest_artifacts(run_dir, paths.output_dir)
+    # HOP compliance: no pointer files created
     removed_runs = prune_history(
         paths.output_dir,
         keep=options.artifacts_to_keep,

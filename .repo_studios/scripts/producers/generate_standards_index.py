@@ -34,8 +34,26 @@ except Exception as exc:  # pragma: no cover - dependency issue surfaced early
 
 
 DEFAULT_REPO_ROOT = Path(__file__).resolve().parents[3]
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
-VIEWER_SLUG = "rawview"
+LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
+
+try:
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
+    from libraries.report_paths import build_topic_path
+    from libraries.retention_policy import get_keep
+except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
+    if str(LIBRARIES_ROOT) not in sys.path:
+        sys.path.insert(0, str(LIBRARIES_ROOT))
+    from libraries.database_integration import create_storage
+    from libraries.prune_logs import prune_run_directories
+    from libraries.report_paths import build_topic_path
+    from libraries.retention_policy import get_keep
+
+from libraries.cli import resolve_path, resolve_repo_root
+
+# Constants moved after imports to resolve dependency on get_keep()
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", "standards_index")
+VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "standards_index"
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_standards_index")
 SCHEMA_VERSION = 1
@@ -45,21 +63,6 @@ DEFAULT_RELATIVE_SEED = Path(".repo_studios/scripts/.repo_studios/standards_seed
 DEFAULT_RELATIVE_EXTRACTION = Path(".repo_studios/scripts/.repo_studios/standards_extraction.py")
 DEFAULT_RELATIVE_INDEX = Path(".repo_studios/scripts/repo_standards_index.yaml")
 DEFAULT_RELATIVE_PENDING = Path(".repo_studios/scripts/repo_standards_pending.yaml")
-
-LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
-
-try:
-    from libraries.database_integration import create_storage
-    from libraries.prune_logs import prune_run_directories
-    from libraries.retention_policy import get_keep
-except ModuleNotFoundError:  # pragma: no cover - fallback for script execution
-    if str(LIBRARIES_ROOT) not in sys.path:
-        sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries.database_integration import create_storage
-    from libraries.prune_logs import prune_run_directories
-    from libraries.retention_policy import get_keep
-
-from libraries.cli import resolve_path, resolve_repo_root
 
 
 @dataclass
@@ -603,7 +606,7 @@ def write_artifacts(
 
     manifest = {
         "schema_version": SCHEMA_VERSION,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer": VIEWER_SLUG,
         "topic": TOPIC_SLUG,
         "run_timestamp": run_slug,
         "git_sha": None,
@@ -704,8 +707,8 @@ def main(argv: list[str] | None = None) -> int:
 
     storage = create_storage(
         paths.output_dir,
-        VIEWER_SLUG,
-        TOPIC_SLUG,
+        "",
+        "",
         timestamp=run_slug,
     )
     bundle_dir = storage.file_storage.bundle_dir
@@ -727,7 +730,7 @@ def main(argv: list[str] | None = None) -> int:
             notes=notes,
         )
         prune_run_directories(
-            paths.output_dir / VIEWER_SLUG / TOPIC_SLUG,
+            paths.output_dir,
             keep=keep,
             current_run=bundle_dir,
             logger=logging.getLogger(__name__),
@@ -749,7 +752,7 @@ def main(argv: list[str] | None = None) -> int:
         notes=notes,
     )
     prune_run_directories(
-        paths.output_dir / VIEWER_SLUG / TOPIC_SLUG,
+        paths.output_dir,
         keep=keep,
         current_run=bundle_dir,
         logger=logging.getLogger(__name__),

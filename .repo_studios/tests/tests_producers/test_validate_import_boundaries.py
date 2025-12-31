@@ -70,11 +70,9 @@ def test_emits_structured_artifacts_without_violations(tmp_path, monkeypatch):
     assert (run_dir / "log.txt").exists()
     assert (run_dir / "violations.json").exists()
 
+    # HOP compliance: pointer files are banned; latest/ directory must NOT exist
     latest_dir = output_dir / "latest"
-    assert (latest_dir / "latest_report.json").exists()
-    assert (latest_dir / "latest_report.md").exists()
-    assert (latest_dir / "latest_log.txt").exists()
-    assert (latest_dir / "latest_violations.json").exists()
+    assert not latest_dir.exists(), "HOP forbids latest/ directory"
 
 
 def test_detects_violations_and_honors_allowlist(tmp_path, monkeypatch):
