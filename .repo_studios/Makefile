@@ -150,7 +150,7 @@ studio-collect-faulthandler-reports:
 
 .PHONY: studio-generate-fault-artifacts
 studio-generate-fault-artifacts:
-	$(PYTHON) .repo_studios/scripts/consumers/generate_fault_artifacts.py --output-dir .repo_studios/reports/consumer_reports/fault_artifacts --command-center-dir .repo_studios/command_center/reports/fault_artifacts_consumer --artifacts-to-keep 10 --log-level INFO
+	$(PYTHON) scripts/consumers/generate_fault_artifacts.py --output-dir reports/healthview/consumer_reports/fault_artifacts --artifacts-to-keep 10 --log-level INFO
 
 .PHONY: studio-orchestrate-fault-diagnostics
 studio-orchestrate-fault-diagnostics:
@@ -323,7 +323,7 @@ studio-aggregate-docs-health:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/scripts/aggregators/aggregate_docs_health_signals.py" \
 		--repo-root "$(REPO_ROOT)" \
-		--output-dir ".repo_studios/reports/aggregator_reports/docs_health_signals" \
+		--output-dir ".repo_studios/reports/healthview/aggregator_reports/docs_health_signals" \
 		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-function-index

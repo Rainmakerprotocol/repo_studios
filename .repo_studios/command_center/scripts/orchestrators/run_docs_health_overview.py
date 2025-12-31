@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Topic orchestrator for the Docs Health workflow.
 
-Exports Healthview bundles to `.repo_studios/command_center/reports/healthview/docs_health/<timestamp>/`
+Exports Healthview bundles to `.repo_studios/reports/healthview/orchestrator_reports/docs_health/<timestamp>/`
 and replaces the legacy docs inventory/anchor/analysis chain that previously ran ad hoc. The
-)
 pipeline regenerates the doc index, validates anchors, aggregates health signals, and publishes the
 summary bundle that feeds both CommandView and Healthview. Typical runs span roughly six to eight
 minutes depending on anchor validation and churn aggregation time.
@@ -46,12 +45,20 @@ from libraries import (  # noqa: E402
     step_success,
     write_report_artifacts,
 )
+from libraries.report_paths import (  # noqa: E402
+    AGGREGATOR_REPORTS,
+    HEALTHVIEW_ROOT,
+    ORCHESTRATOR_REPORTS,
+    PRODUCER_REPORTS,
+    build_topic_path,
+)
 
 LOGGER = logging.getLogger(__name__)
 
 TOPIC_SLUG = "docs-health"
 HEALTHVIEW_TOPIC = "docs_health"
-VIEWER_SLUG = "healthview"
+# VIEWER_SLUG is the tier class for HOP path structure: healthview_root/viewer/topic/timestamp
+VIEWER_SLUG = "orchestrator_reports"
 SCHEMA_VERSION = 1
 
 DOC_INDEX_SCRIPT = Path(".repo_studios/scripts/producers/generate_doc_index.py")
@@ -84,23 +91,17 @@ ORCHESTRATOR_SCRIPT = Path(
     ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py"
 )
 
-DEFAULT_DOC_INDEX_OUTPUT = Path(".repo_studios/reports/healthview")
-DEFAULT_ANCHOR_INVENTORY_OUTPUT = Path(".repo_studios/reports/producer_reports")
-DEFAULT_ANCHOR_VALIDATION_OUTPUT = Path(".repo_studios/reports/producer_reports")
-DEFAULT_DOCS_INTEGRITY_OUTPUT = Path(".repo_studios/reports/producer_reports")
-DEFAULT_METRICS_STUB_OUTPUT = Path(".repo_studios/reports/producer_reports")
-DEFAULT_CHURN_OUTPUT = Path(".repo_studios/reports/producer_reports")
-DEFAULT_UNDOCUMENTED_OUTPUT = Path(".repo_studios/reports/producer_reports")
-DEFAULT_PLACEHOLDER_OUTPUT = Path(
-    ".repo_studios/reports/producer_reports/healthview/code_placeholders"
-)
-DEFAULT_MONKEY_PATCH_OUTPUT = Path(
-    ".repo_studios/reports/producer_reports/healthview/monkey_patches"
-)
-DEFAULT_AGGREGATOR_OUTPUT = Path(
-    ".repo_studios/reports/aggregator_reports/docs_health_signals"
-)
-DEFAULT_HEALTHVIEW_ROOT = Path(".repo_studios/command_center/reports")
+DEFAULT_DOC_INDEX_OUTPUT = build_topic_path("producer", "doc_index")
+DEFAULT_ANCHOR_INVENTORY_OUTPUT = build_topic_path("producer", "anchor_inventory")
+DEFAULT_ANCHOR_VALIDATION_OUTPUT = build_topic_path("producer", "markdown_anchor_validation")
+DEFAULT_DOCS_INTEGRITY_OUTPUT = build_topic_path("producer", "docs_integrity_validation")
+DEFAULT_METRICS_STUB_OUTPUT = build_topic_path("producer", "metrics_anchor_stub_validation")
+DEFAULT_CHURN_OUTPUT = build_topic_path("producer", "code_doc_churn")
+DEFAULT_UNDOCUMENTED_OUTPUT = build_topic_path("producer", "undocumented_logic")
+DEFAULT_PLACEHOLDER_OUTPUT = build_topic_path("producer", "code_placeholders")
+DEFAULT_MONKEY_PATCH_OUTPUT = build_topic_path("producer", "monkey_patches")
+DEFAULT_AGGREGATOR_OUTPUT = build_topic_path("aggregator", "docs_health_signals")
+DEFAULT_HEALTHVIEW_ROOT = HEALTHVIEW_ROOT
 
 ANCHOR_VALIDATION_TOPIC = "markdown_anchor_validation"
 DOCS_INTEGRITY_TOPIC = "docs_integrity_validation"
@@ -818,27 +819,33 @@ def _latest_pointer(paths: Paths, *, name: str) -> Path:
 
 
 def _latest_anchor_inventory(paths: Paths) -> Path:
-    return paths.anchor_inventory_output_dir / "healthview" / "anchor_inventory"
+    # Output dir already contains full topic path via report_paths
+    return paths.anchor_inventory_output_dir
 
 
 def _latest_anchor_validation(paths: Paths) -> Path:
-    return paths.anchor_validation_output_dir / "healthview" / ANCHOR_VALIDATION_TOPIC
+    # Output dir already contains full topic path via report_paths
+    return paths.anchor_validation_output_dir
 
 
 def _latest_docs_integrity(paths: Paths) -> Path:
-    return paths.docs_integrity_output_dir / "healthview" / DOCS_INTEGRITY_TOPIC
+    # Output dir already contains full topic path via report_paths
+    return paths.docs_integrity_output_dir
 
 
 def _latest_metrics_stub(paths: Paths) -> Path:
-    return paths.metrics_stub_output_dir / "healthview" / METRICS_STUB_TOPIC
+    # Output dir already contains full topic path via report_paths
+    return paths.metrics_stub_output_dir
 
 
 def _latest_churn(paths: Paths) -> Path:
-    return paths.churn_output_dir / "healthview" / "code_doc_churn"
+    # Output dir already contains full topic path via report_paths
+    return paths.churn_output_dir
 
 
 def _latest_undocumented(paths: Paths) -> Path:
-    return paths.undocumented_output_dir / "healthview" / "undocumented_logic"
+    # Output dir already contains full topic path via report_paths
+    return paths.undocumented_output_dir
 
 
 def _latest_placeholder(paths: Paths) -> Path:

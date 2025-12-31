@@ -621,7 +621,7 @@ _Tier-2 references (depth lives here):_
 - [x] validate_metrics_anchor_stubs.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-006-validate-metrics-anchor-stubs)
 - [x] generate_code_doc_churn_report.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-007-generate-code-doc-churn-report)
 - [x] generate_undocumented_logic_report.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-008-generate-undocumented-logic-report)
-- [ ] aggregate_docs_health_signals.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-009-aggregate-docs-health-signals)
+- [x] aggregate_docs_health_signals.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-009-aggregate-docs-health-signals)
 - [ ] run_docs_health_overview.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-001-docs-health-overview-orchestrator)
 
 **Stage 2.1 Gate Checklist (Tier-1):**

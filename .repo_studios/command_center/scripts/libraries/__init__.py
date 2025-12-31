@@ -70,6 +70,26 @@ from .telemetry_emitters import (
 )
 from .catalog_registry import CatalogEntry, CatalogRegistry
 from .prune_logs import PruneResult, prune_run_directories
+from .report_paths import (
+    AGGREGATOR_REPORTS,
+    CONSUMER_REPORTS,
+    HEALTHVIEW_ROOT,
+    ORCHESTRATOR_REPORTS,
+    PRODUCER_REPORTS,
+    RAWVIEW,
+    REPORTS_ROOT,
+    REPO_STUDIOS_ROOT,
+    SUMMARIZER_REPORTS,
+    VALID_TIER_CLASSES,
+    TierClass,
+    build_absolute_topic_path,
+    build_topic_path,
+    get_all_class_roots,
+    get_class_root,
+    get_default_output_dir,
+    infer_class_from_script,
+    validate_output_path,
+)
 from .test_log_analysis import (
     TestHealth,
     TestLogAnalysisResult,
@@ -138,6 +158,26 @@ __all__ = [
     "CatalogRegistry",
     "PruneResult",
     "prune_run_directories",
+    # report_paths
+    "REPO_STUDIOS_ROOT",
+    "REPORTS_ROOT",
+    "HEALTHVIEW_ROOT",
+    "AGGREGATOR_REPORTS",
+    "CONSUMER_REPORTS",
+    "ORCHESTRATOR_REPORTS",
+    "PRODUCER_REPORTS",
+    "RAWVIEW",
+    "SUMMARIZER_REPORTS",
+    "VALID_TIER_CLASSES",
+    "TierClass",
+    "get_class_root",
+    "build_topic_path",
+    "build_absolute_topic_path",
+    "infer_class_from_script",
+    "get_default_output_dir",
+    "validate_output_path",
+    "get_all_class_roots",
+    # test_log_analysis
     "TestHealth",
     "TestLogAnalysisResult",
     "select_junit_artifact",

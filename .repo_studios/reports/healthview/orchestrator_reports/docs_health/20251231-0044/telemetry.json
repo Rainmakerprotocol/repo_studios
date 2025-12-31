@@ -1,0 +1,121 @@
+{
+  "finished_at": "2025-12-31T00:44:32.598911+00:00",
+  "metrics": {
+    "artifact_bytes": 14646,
+    "artifact_files": 3,
+    "runtime_seconds": 3.734101,
+    "step_count": 8,
+    "steps_failed": 0,
+    "steps_skipped": 0,
+    "steps_succeeded": 8
+  },
+  "run_slug": "20251231-0044",
+  "started_at": "2025-12-31T00:44:28.864810+00:00",
+  "steps": [
+    {
+      "detail": "docs=296, headings=2113",
+      "finished_at": "2025-12-31T00:44:30.084060+00:00",
+      "name": "doc-index",
+      "payload": {
+        "run_dir": ".repo_studios/reports/healthview/producer_reports/doc_index/producer_reports/doc_index/20251231-0044",
+        "slug": "20251231-0044"
+      },
+      "started_at": "2025-12-31T00:44:28.864817+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "slugs=722, duplicates=73",
+      "finished_at": "2025-12-31T00:44:30.163099+00:00",
+      "name": "anchor-inventory",
+      "payload": {
+        "run_dir": ".repo_studios/reports/healthview/producer_reports/anchor_inventory/healthview/anchor_inventory/20251231-0044",
+        "slug": "20251231-0044"
+      },
+      "started_at": "2025-12-31T00:44:30.084080+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "status=ok, issues=0",
+      "finished_at": "2025-12-31T00:44:30.425251+00:00",
+      "name": "anchor-validation",
+      "payload": {
+        "issues": 0,
+        "report": ".repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/healthview/markdown_anchor_validation/20251231-0044/telemetry.json",
+        "status": "ok"
+      },
+      "started_at": "2025-12-31T00:44:30.163114+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "status=ok, mismatches=0",
+      "finished_at": "2025-12-31T00:44:30.440336+00:00",
+      "name": "docs-integrity",
+      "payload": {
+        "mismatches": 0,
+        "run_dir": ".repo_studios/reports/healthview/producer_reports/docs_integrity_validation/healthview/docs_integrity_validation/20251231-0044",
+        "status": "ok"
+      },
+      "started_at": "2025-12-31T00:44:30.425259+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "status=ok, missing=0",
+      "finished_at": "2025-12-31T00:44:30.619598+00:00",
+      "name": "metrics-stub",
+      "payload": {
+        "missing": 0,
+        "run_dir": null,
+        "status": "ok"
+      },
+      "started_at": "2025-12-31T00:44:30.440344+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "missing_docs=2",
+      "finished_at": "2025-12-31T00:44:32.256961+00:00",
+      "name": "code-doc-churn",
+      "payload": {
+        "run_dir": ".repo_studios/reports/healthview/producer_reports/code_doc_churn/healthview/code_doc_churn/20251231-0044",
+        "summary": {
+          "allowlisted_modules": [],
+          "modules_with_code_churn": 3,
+          "modules_with_doc_updates": 1,
+          "modules_without_doc_updates": 2
+        }
+      },
+      "started_at": "2025-12-31T00:44:30.619606+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "modules_with_findings=69",
+      "finished_at": "2025-12-31T00:44:32.570525+00:00",
+      "name": "undocumented-logic",
+      "payload": {
+        "run_dir": ".repo_studios/reports/healthview/producer_reports/undocumented_logic/healthview/undocumented_logic/20251231-0044",
+        "summary": {
+          "docstring_coverage_percent": 14.48,
+          "entities_missing_docs": 762,
+          "entities_scanned": 891,
+          "modules_scanned": 84,
+          "modules_with_findings": 69
+        }
+      },
+      "started_at": "2025-12-31T00:44:32.256973+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "aggregated signals",
+      "finished_at": "2025-12-31T00:44:32.598902+00:00",
+      "name": "aggregate",
+      "payload": {
+        "overall_score": null,
+        "run_dir": ".repo_studios/reports/healthview/aggregator_reports/docs_health_signals/docs_health_signals-20251231_004432"
+      },
+      "started_at": "2025-12-31T00:44:32.570533+00:00",
+      "status": "success"
+    }
+  ],
+  "success": true,
+  "topic": "docs_health",
+  "viewer": "orchestrator_reports"
+}

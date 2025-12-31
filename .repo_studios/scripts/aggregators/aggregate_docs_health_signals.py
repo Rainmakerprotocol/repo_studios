@@ -20,33 +20,21 @@ if str(SCRIPTS_ROOT) not in sys.path:  # pragma: no cover - import path bootstra
 
 from utilities.anchor_inventory_loader import load_anchor_inventory  # noqa: E402
 
-DEFAULT_OUTPUT_DIR = Path(
-    ".repo_studios/reports/aggregator_reports/docs_health_signals"
-)
-DEFAULT_CHURN_REPORT = Path(
-    ".repo_studios/reports/producer_reports/healthview/code_doc_churn"
-)
-DEFAULT_UNDOCUMENTED_REPORT = Path(
-    ".repo_studios/reports/producer_reports/healthview/undocumented_logic"
-)
-DEFAULT_ANCHOR_INVENTORY = Path(
-    ".repo_studios/reports/producer_reports/healthview/anchor_inventory"
-)
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports")
+DEFAULT_CHURN_REPORT = Path(".repo_studios/reports/healthview/code_doc_churn")
+DEFAULT_UNDOCUMENTED_REPORT = Path(".repo_studios/reports/healthview/undocumented_logic")
+DEFAULT_ANCHOR_INVENTORY = Path(".repo_studios/reports/healthview/anchor_inventory")
 DEFAULT_ANCHOR_VALIDATION = Path(
-    ".repo_studios/reports/producer_reports/healthview/markdown_anchor_validation"
+    ".repo_studios/reports/healthview/markdown_anchor_validation"
 )
 DEFAULT_DOCS_INTEGRITY = Path(
-    ".repo_studios/reports/producer_reports/healthview/docs_integrity_validation"
+    ".repo_studios/reports/healthview/docs_integrity_validation"
 )
 DEFAULT_METRICS_STUB = Path(
-    ".repo_studios/reports/producer_reports/healthview/metrics_anchor_stub_validation"
+    ".repo_studios/reports/healthview/metrics_anchor_stub_validation"
 )
-DEFAULT_PLACEHOLDER_REPORT = Path(
-    ".repo_studios/reports/producer_reports/healthview/code_placeholders"
-)
-DEFAULT_MONKEY_PATCH_REPORT = Path(
-    ".repo_studios/reports/producer_reports/healthview/monkey_patches"
-)
+DEFAULT_PLACEHOLDER_REPORT = Path(".repo_studios/reports/healthview/code_placeholders")
+DEFAULT_MONKEY_PATCH_REPORT = Path(".repo_studios/reports/healthview/monkey_patches")
 RUN_STEM = "docs_health_signals"
 SCHEMA_VERSION = 1
 

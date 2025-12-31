@@ -1,11 +1,60 @@
 #!/usr/bin/env python3
-"""Generate healthview-ready Fault Diagnostics overview artifacts."""
+"""
+Generate HealthView Fault Diagnostics overview bundle.
+
+This summarizer consumes fault artifact bundles from the consumer stage
+and produces a consolidated overview with baseline comparison.
+
+Input Path Contract
+-------------------
+Consumer artifacts from:
+``.repo_studios/reports/healthview/consumer_reports/fault_artifacts/<YYYYMMDD-HHMM>/``
+
+Expected consumer artifacts:
+
+- ``manifest.json`` — bundle metadata
+- ``telemetry.json`` — metrics and signatures
+- ``summary.md`` — human-readable digest
+
+Output Path Contract (HOP)
+--------------------------
+``.repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview/<YYYYMMDD-HHMM>/``
+
+Base Package
+------------
+- ``manifest.json`` — overview metadata
+- ``summary.md`` — consolidated digest with baseline comparison
+- ``telemetry.json`` — aggregated metrics
+
+CLI Arguments
+-------------
+--consumer-output-dir
+    Consumer bundle location. Defaults to HOP path.
+--consumer-telemetry
+    Explicit telemetry.json path override.
+--consumer-manifest
+    Explicit manifest.json path override.
+--output-dir
+    Summarizer output root. Defaults to HOP path.
+--artifacts-to-keep
+    Retention budget for timestamped bundles.
+
+Notes
+-----
+- Discovers latest consumer bundle via timestamp-sorted directory listing.
+- No pointer files (``latest_*``) are used for discovery per HOP contract.
+- Compares current run against previous bundle for baseline delta.
+
+.. seealso::
+    :doc:`REPORT_NAMING_STANDARDS` for HOP path contract.
+"""
 
 from __future__ import annotations
 
 import argparse
 import json
 import logging
+import re
 import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -40,19 +89,34 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running in isola
         write_report_artifacts,
     )
 
-DEFAULT_CONSUMER_OUTPUT_DIR = Path(".repo_studios/reports/consumer_reports/fault_artifacts")
+DEFAULT_CONSUMER_OUTPUT_DIR = Path(".repo_studios/reports/healthview/consumer_reports/fault_artifacts")
 DEFAULT_PRODUCER_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/faulthandler_reports")
-DEFAULT_SUMMARIZER_OUTPUT_DIR = Path(".repo_studios/reports/summarizer_reports/fault_diagnostics_overview")
+DEFAULT_SUMMARIZER_OUTPUT_DIR = Path(".repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview")
 SUMMARY_STEM = "fault_diagnostics_overview"
-VIEWER_SLUG = "commandview"
+VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "fault_diagnostics_overview"
 SCHEMA_VERSION = 1
-CONSUMER_DIR_PREFIX = "fault_artifacts-"
-PRODUCER_RUN_PREFIX = "faulthandler_report-"
+
+# HOP consumer artifact names
+CONSUMER_MANIFEST_NAME = "manifest.json"
+CONSUMER_TELEMETRY_NAME = "telemetry.json"
+CONSUMER_SUMMARY_NAME = "summary.md"
+
+# HOP timestamp pattern: YYYYMMDD-HHMM (13 chars)
+HOP_TIMESTAMP_PATTERN = re.compile(r"^\d{8}-\d{4}$")
 
 
 @dataclass(frozen=True)
 class Paths:
+    """
+    Resolved path configuration for summarizer execution.
+
+    :ivar repo_root: Repository root directory.
+    :ivar consumer_output_dir: Consumer artifact location.
+    :ivar producer_output_dir: Producer report location.
+    :ivar output_dir: Summarizer output root.
+    """
+
     repo_root: Path
     consumer_output_dir: Path
     producer_output_dir: Path
@@ -76,11 +140,22 @@ PATHS_CONFIG = PathsConfig(
 
 @dataclass(frozen=True)
 class Options:
+    """
+    Runtime options for summarizer execution.
+
+    :ivar artifacts_to_keep: Retention budget for output bundles.
+    :ivar log_level: Logging verbosity level.
+    :ivar run_timestamp: UTC timestamp for artifact generation.
+    :ivar consumer_telemetry_override: Explicit telemetry.json path.
+    :ivar consumer_manifest_override: Explicit manifest.json path.
+    :ivar producer_report_override: Explicit producer report path.
+    """
+
     artifacts_to_keep: int
     log_level: str
     run_timestamp: datetime
-    consumer_summary_override: Path | None
-    consumer_bundle_summary_override: Path | None
+    consumer_telemetry_override: Path | None
+    consumer_manifest_override: Path | None
     producer_report_override: Path | None
 
 
@@ -96,13 +171,13 @@ OPTIONS_CONFIG = OptionsConfig(
 
 
 def _parse_args(argv: Iterable[str] | None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description=__doc__ or "")
+    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0] if __doc__ else "")
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument("--consumer-output-dir", default=str(DEFAULT_CONSUMER_OUTPUT_DIR))
     parser.add_argument("--producer-output-dir", default=str(DEFAULT_PRODUCER_OUTPUT_DIR))
     parser.add_argument("--output-dir", default=str(DEFAULT_SUMMARIZER_OUTPUT_DIR))
-    parser.add_argument("--consumer-summary", help="Explicit consumer summary.json path override")
-    parser.add_argument("--consumer-bundle-summary", help="Explicit consumer bundle_summary.json path override")
+    parser.add_argument("--consumer-telemetry", help="Explicit consumer telemetry.json path override")
+    parser.add_argument("--consumer-manifest", help="Explicit consumer manifest.json path override")
     parser.add_argument("--producer-report", help="Explicit producer report.json override")
     parser.add_argument("--artifacts-to-keep", type=int, default=5, help="Retention budget for overview artifacts")
     parser.add_argument(
@@ -144,14 +219,25 @@ def build_paths(args: argparse.Namespace) -> Paths:
 
 
 def build_options(args: argparse.Namespace, *, paths: Paths) -> Options:
+    """Construct Options from parsed CLI arguments.
+
+    :param args: Parsed argument namespace from _parse_args().
+    :type args: argparse.Namespace
+    :param paths: Resolved Paths instance.
+    :type paths: Paths
+    :returns: Fully resolved Options instance.
+    :rtype: Options
+    """
     keep_values = build_standard_options(args, OPTIONS_CONFIG)
     return Options(
         artifacts_to_keep=max(int(getattr(keep_values, "artifacts_to_keep", 1)), 1),
         log_level=str(args.log_level),
         run_timestamp=_parse_timestamp(getattr(args, "timestamp", None)),
-        consumer_summary_override=_resolve_optional_path(paths.repo_root, getattr(args, "consumer_summary", None)),
-        consumer_bundle_summary_override=_resolve_optional_path(
-            paths.repo_root, getattr(args, "consumer_bundle_summary", None)
+        consumer_telemetry_override=_resolve_optional_path(
+            paths.repo_root, getattr(args, "consumer_telemetry", None)
+        ),
+        consumer_manifest_override=_resolve_optional_path(
+            paths.repo_root, getattr(args, "consumer_manifest", None)
         ),
         producer_report_override=_resolve_optional_path(paths.repo_root, getattr(args, "producer_report", None)),
     )
@@ -179,15 +265,29 @@ def _normalize_relative(path: Path | None, repo_root: Path) -> str | None:
         return path.resolve().as_posix()
 
 
-def _ensure_path(source: Path | None, *, base: Path, pointer_name: str, stem: str, filename: str) -> Path | None:
+def _ensure_path(source: Path | None, *, base: Path, filename: str) -> Path | None:
+    """Resolve artifact path from override or latest HOP timestamp directory.
+
+    Locates the most recent HOP-compliant timestamp directory (YYYYMMDD-HHMM)
+    under *base* and returns the path to *filename* within it.
+
+    :param source: Explicit override path (returned if exists).
+    :type source: Path | None
+    :param base: Base directory containing timestamp directories.
+    :type base: Path
+    :param filename: Artifact filename to locate within timestamp directory.
+    :type filename: str
+    :returns: Resolved path to artifact, or None if not found.
+    :rtype: Path | None
+    """
     if source and source.exists():
         return source
-    pointer = base / pointer_name
-    if pointer.exists():
-        return pointer.resolve()
     if not base.exists():
         return None
-    candidates = [child for child in base.iterdir() if child.is_dir() and child.name.startswith(stem)]
+    candidates = [
+        child for child in base.iterdir()
+        if child.is_dir() and HOP_TIMESTAMP_PATTERN.match(child.name)
+    ]
     if not candidates:
         return None
     candidates.sort(key=lambda node: node.name)
@@ -196,9 +296,24 @@ def _ensure_path(source: Path | None, *, base: Path, pointer_name: str, stem: st
 
 
 def _find_previous_bundle(base: Path, current_bundle: str | None) -> Path | None:
+    """Find the most recent HOP bundle directory excluding the current one.
+
+    Scans *base* for HOP-compliant timestamp directories (YYYYMMDD-HHMM)
+    and returns the newest one that is not *current_bundle*.
+
+    :param base: Base directory containing timestamp directories.
+    :type base: Path
+    :param current_bundle: Name of current bundle directory to exclude.
+    :type current_bundle: str | None
+    :returns: Path to previous bundle directory, or None if not found.
+    :rtype: Path | None
+    """
     if not base.exists():
         return None
-    candidates = [child for child in base.iterdir() if child.is_dir() and child.name.startswith(CONSUMER_DIR_PREFIX)]
+    candidates = [
+        child for child in base.iterdir()
+        if child.is_dir() and HOP_TIMESTAMP_PATTERN.match(child.name)
+    ]
     candidates.sort(key=lambda node: node.name)
     for node in reversed(candidates):
         if node.name != current_bundle:
@@ -322,57 +437,66 @@ def _build_markdown(
 
 
 def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
+    """Execute the summarizer and write HOP-compliant artifacts.
+
+    Loads consumer telemetry/manifest artifacts, producer report, compares
+    against previous bundles, and writes a summary overview bundle.
+
+    :param argv: CLI arguments (uses sys.argv if None).
+    :type argv: Iterable[str] | None
+    :returns: Execution result with status, run_dir, slug, and artifacts.
+    :rtype: dict[str, Any]
+    """
     args = _parse_args(argv)
     paths = build_paths(args)
     options = build_options(args, paths=paths)
     configure_logging(options.log_level)
     logger = logging.getLogger("summarize_fault_diagnostics_overview")
 
-    consumer_summary_path = _ensure_path(
-        options.consumer_summary_override,
+    consumer_telemetry_path = _ensure_path(
+        options.consumer_telemetry_override,
         base=paths.consumer_output_dir,
-        pointer_name="latest_summary.json",
-        stem=CONSUMER_DIR_PREFIX,
-        filename="summary.json",
+        filename=CONSUMER_TELEMETRY_NAME,
     )
-    consumer_bundle_summary_path = _ensure_path(
-        options.consumer_bundle_summary_override,
+    consumer_manifest_path = _ensure_path(
+        options.consumer_manifest_override,
         base=paths.consumer_output_dir,
-        pointer_name="latest_bundle_summary.json",
-        stem=CONSUMER_DIR_PREFIX,
-        filename="bundle_summary.json",
+        filename=CONSUMER_MANIFEST_NAME,
+    )
+    consumer_summary_md_path = _ensure_path(
+        None,
+        base=paths.consumer_output_dir,
+        filename=CONSUMER_SUMMARY_NAME,
     )
     producer_report_path = _ensure_path(
         options.producer_report_override,
         base=paths.producer_output_dir,
-        pointer_name="latest_report.json",
-        stem=PRODUCER_RUN_PREFIX,
         filename="report.json",
     )
 
-    consumer_summary_payload = _load_json(consumer_summary_path)
-    consumer_bundle_payload = _load_json(consumer_bundle_summary_path)
+    consumer_telemetry_payload = _load_json(consumer_telemetry_path)
+    consumer_manifest_payload = _load_json(consumer_manifest_path)
     producer_payload = _load_json(producer_report_path)
 
-    metrics = _extract_metrics(consumer_bundle_payload if isinstance(consumer_bundle_payload, Mapping) else None)
-    severity = _extract_severity(consumer_summary_payload if isinstance(consumer_summary_payload, Mapping) else None)
+    metrics = _extract_metrics(consumer_manifest_payload if isinstance(consumer_manifest_payload, Mapping) else None)
+    severity = _extract_severity(consumer_telemetry_payload if isinstance(consumer_telemetry_payload, Mapping) else None)
 
     bundle_name = None
-    if isinstance(consumer_bundle_payload, Mapping):
-        raw_bundle = consumer_bundle_payload.get("bundle")
+    if isinstance(consumer_manifest_payload, Mapping):
+        raw_bundle = consumer_manifest_payload.get("bundle")
         if isinstance(raw_bundle, str):
             bundle_name = raw_bundle
 
     previous_bundle_dir = _find_previous_bundle(paths.consumer_output_dir, bundle_name)
-    previous_bundle_payload = _load_json(previous_bundle_dir / "bundle_summary.json") if previous_bundle_dir else None
-    previous_summary_payload = _load_json(previous_bundle_dir / "summary.json") if previous_bundle_dir else None
+    previous_manifest_payload = _load_json(previous_bundle_dir / CONSUMER_MANIFEST_NAME) if previous_bundle_dir else None
+    previous_telemetry_payload = _load_json(previous_bundle_dir / CONSUMER_TELEMETRY_NAME) if previous_bundle_dir else None
 
     baseline_summary = None
-    if previous_bundle_dir and isinstance(previous_bundle_payload, Mapping):
-        previous_metrics = _extract_metrics(previous_bundle_payload)
-        previous_severity = _extract_severity(previous_summary_payload if isinstance(previous_summary_payload, Mapping) else None)
-        current_signatures = _collect_signature_ids(consumer_summary_payload if isinstance(consumer_summary_payload, Mapping) else None)
-        previous_signatures = _collect_signature_ids(previous_summary_payload if isinstance(previous_summary_payload, Mapping) else None)
+    if previous_bundle_dir and isinstance(previous_manifest_payload, Mapping):
+        previous_metrics = _extract_metrics(previous_manifest_payload)
+        previous_severity = _extract_severity(previous_telemetry_payload if isinstance(previous_telemetry_payload, Mapping) else None)
+        current_signatures = _collect_signature_ids(consumer_telemetry_payload if isinstance(consumer_telemetry_payload, Mapping) else None)
+        previous_signatures = _collect_signature_ids(previous_telemetry_payload if isinstance(previous_telemetry_payload, Mapping) else None)
         new_signatures = sorted(current_signatures - previous_signatures)
         retired_signatures = sorted(previous_signatures - current_signatures)
         baseline_summary = {
@@ -386,16 +510,17 @@ def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
         }
 
     notes: list[str] = []
-    if consumer_summary_path is None:
-        notes.append("Consumer summary not located; ensure generate_fault_artifacts has been refreshed.")
-    if consumer_bundle_summary_path is None:
-        notes.append("Consumer bundle summary missing; baseline comparison may be incomplete.")
+    if consumer_telemetry_path is None:
+        notes.append("Consumer telemetry not located; ensure generate_fault_artifacts has been refreshed.")
+    if consumer_manifest_path is None:
+        notes.append("Consumer manifest missing; baseline comparison may be incomplete.")
     if producer_report_path is None:
         notes.append("Producer report unavailable; repeat offender counts may be stale.")
 
     artifacts_section = {
-        "consumer_summary": _normalize_relative(consumer_summary_path, paths.repo_root),
-        "consumer_bundle_summary": _normalize_relative(consumer_bundle_summary_path, paths.repo_root),
+        "consumer_telemetry": _normalize_relative(consumer_telemetry_path, paths.repo_root),
+        "consumer_manifest": _normalize_relative(consumer_manifest_path, paths.repo_root),
+        "consumer_summary": _normalize_relative(consumer_summary_md_path, paths.repo_root),
         "producer_report": _normalize_relative(producer_report_path, paths.repo_root),
         "previous_bundle": _normalize_relative(previous_bundle_dir, paths.repo_root) if previous_bundle_dir else None,
     }

@@ -1,0 +1,368 @@
+# Tier-3: aggregate_docs_health_signals.py
+# Aggregator script that blends producer signals into a unified docs health report.
+
+tool:
+  id: aggregate_docs_health_signals
+  name: Aggregate Docs Health Signals
+  description: |
+    Consumes telemetry from multiple docs health producers and blends them into
+    a unified documentation health report with weighted scoring.
+
+    Input sources include:
+    - Code-doc churn analysis (generate_code_doc_churn_report.py)
+    - Undocumented logic findings (generate_undocumented_logic_report.py)
+    - Anchor inventory (generate_anchor_inventory.py)
+    - Markdown anchor validation (validate_markdown_anchors.py)
+    - Docs integrity validation (verify_docs_integrity.py)
+    - Metrics anchor stub validation (validate_metrics_anchor_stubs.py)
+    - Code placeholders (optional hygiene signal)
+    - Monkey patches (optional hygiene signal)
+
+    Emits a docs health bundle under:
+
+      .repo_studios/reports/docs_health_signals-<YYYYMMDD-HHMM>/
+
+    The bundle includes report.json, report.md, signals.tsv, signals.csv,
+    and bundle_summary.json.
+
+    Exit codes:
+      0 - success (report generated)
+      1 - error (missing required inputs or processing failures)
+  keywords:
+    - healthview
+    - aggregator
+    - documentation
+    - health
+    - signals
+    - scoring
+    - churn
+    - undocumented
+    - anchors
+  use_when:
+    - Need to generate a unified docs health score
+    - Blending multiple producer signals into a single report
+    - Producing docs health telemetry for orchestrators
+  dont_use_when:
+    - You only need individual producer reports (run specific producers)
+    - You need to run the full docs health pipeline (use run_docs_health_overview.py)
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --output-dir {output_dir} \
+      --churn-report {churn_report} \
+      --undocumented-report {undocumented_report} \
+      --anchor-inventory {anchor_inventory} \
+      --anchor-validation {anchor_validation} \
+      --docs-integrity {docs_integrity} \
+      --metrics-stub {metrics_stub} \
+      --placeholder-report {placeholder_report} \
+      --monkey-patch-report {monkey_patch_report} \
+      --skip-hygiene \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+  script_path: .repo_studios/scripts/aggregators/aggregate_docs_health_signals.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+    notes:
+      - "Uses shared libraries from .repo_studios/command_center/scripts/libraries/"
+      - "Entry point is run(argv) — orchestrators can import and call directly"
+      - "Supports both topic dirs (finds latest) and specific bundle dirs"
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: null
+    description: Repository root override (defaults to project root resolution).
+    validation:
+      must_exist: true
+      must_be: directory
+
+  - name: output_dir
+    type: path
+    required: false
+    default: ".repo_studios/reports"
+    description: |
+      Base directory for aggregator output. The script appends
+      docs_health_signals-<timestamp>/ automatically via write_report_artifacts().
+    validation:
+      must_exist: false
+      will_create: true
+
+  - name: churn_report
+    type: path
+    required: false
+    default: ".repo_studios/reports/healthview/code_doc_churn"
+    description: |
+      Path to code-doc churn telemetry (topic dir or specific bundle dir).
+      The script will find the most recent telemetry.json if a topic dir is given.
+    validation:
+      must_exist: false
+
+  - name: undocumented_report
+    type: path
+    required: false
+    default: ".repo_studios/reports/healthview/undocumented_logic"
+    description: |
+      Path to undocumented logic telemetry (topic dir or specific bundle dir).
+    validation:
+      must_exist: false
+
+  - name: anchor_inventory
+    type: path
+    required: false
+    default: ".repo_studios/reports/healthview/anchor_inventory"
+    description: |
+      Path to anchor inventory telemetry (topic dir or specific bundle dir).
+    validation:
+      must_exist: false
+
+  - name: anchor_validation
+    type: path
+    required: false
+    default: ".repo_studios/reports/healthview/markdown_anchor_validation"
+    description: |
+      Path to markdown anchor validation telemetry (topic dir or specific bundle dir).
+    validation:
+      must_exist: false
+
+  - name: docs_integrity
+    type: path
+    required: false
+    default: ".repo_studios/reports/healthview/docs_integrity_validation"
+    description: |
+      Path to docs integrity validation telemetry (topic dir or specific bundle dir).
+    validation:
+      must_exist: false
+
+  - name: metrics_stub
+    type: path
+    required: false
+    default: ".repo_studios/reports/healthview/metrics_anchor_stub_validation"
+    description: |
+      Path to metrics anchor stub validation telemetry (topic dir or specific bundle dir).
+    validation:
+      must_exist: false
+
+  - name: placeholder_report
+    type: path
+    required: false
+    default: ".repo_studios/reports/healthview/code_placeholders"
+    description: |
+      Path to code placeholders telemetry (optional hygiene signal).
+    validation:
+      must_exist: false
+
+  - name: monkey_patch_report
+    type: path
+    required: false
+    default: ".repo_studios/reports/healthview/monkey_patches"
+    description: |
+      Path to monkey patches telemetry (optional hygiene signal).
+    validation:
+      must_exist: false
+
+  - name: skip_hygiene
+    type: boolean
+    required: false
+    default: false
+    description: |
+      When set, skips loading hygiene signals (placeholders, monkey patches).
+      Useful for faster runs when hygiene analysis is not needed.
+
+  - name: artifacts_to_keep
+    type: integer
+    required: false
+    default: 1
+    description: Number of historical run directories to retain after pruning.
+    validation:
+      minimum: 1
+
+  - name: log_level
+    type: string
+    required: false
+    default: "INFO"
+    description: Logging verbosity level.
+    validation:
+      allowed_values:
+        - DEBUG
+        - INFO
+        - WARNING
+        - ERROR
+        - CRITICAL
+
+io_contract:
+  inputs:
+    - name: churn_telemetry
+      source: filesystem
+      path_pattern: ".repo_studios/reports/healthview/code_doc_churn/<latest>/telemetry.json"
+      description: Code-doc churn telemetry from generate_code_doc_churn_report.py.
+      required: false
+
+    - name: undocumented_telemetry
+      source: filesystem
+      path_pattern: ".repo_studios/reports/healthview/undocumented_logic/<latest>/telemetry.json"
+      description: Undocumented logic telemetry from generate_undocumented_logic_report.py.
+      required: false
+
+    - name: anchor_inventory_telemetry
+      source: filesystem
+      path_pattern: ".repo_studios/reports/healthview/anchor_inventory/<latest>/telemetry.json"
+      description: Anchor inventory telemetry from generate_anchor_inventory.py.
+      required: false
+
+    - name: anchor_validation_telemetry
+      source: filesystem
+      path_pattern: ".repo_studios/reports/healthview/markdown_anchor_validation/<latest>/telemetry.json"
+      description: Markdown anchor validation telemetry from validate_markdown_anchors.py.
+      required: false
+
+    - name: docs_integrity_telemetry
+      source: filesystem
+      path_pattern: ".repo_studios/reports/healthview/docs_integrity_validation/<latest>/telemetry.json"
+      description: Docs integrity validation telemetry from verify_docs_integrity.py.
+      required: false
+
+    - name: metrics_stub_telemetry
+      source: filesystem
+      path_pattern: ".repo_studios/reports/healthview/metrics_anchor_stub_validation/<latest>/telemetry.json"
+      description: Metrics anchor stub validation telemetry from validate_metrics_anchor_stubs.py.
+      required: false
+
+  outputs:
+    - artifact: report.json
+      path_pattern: ".repo_studios/reports/docs_health_signals-<YYYYMMDD-HHMM>/report.json"
+      format: json
+      description: Full aggregated docs health report with all signals.
+
+    - artifact: report.md
+      path_pattern: ".repo_studios/reports/docs_health_signals-<YYYYMMDD-HHMM>/report.md"
+      format: markdown
+      description: Human-readable summary of docs health signals.
+
+    - artifact: signals.tsv
+      path_pattern: ".repo_studios/reports/docs_health_signals-<YYYYMMDD-HHMM>/signals.tsv"
+      format: tsv
+      description: Tab-separated signal values for further analysis.
+
+    - artifact: signals.csv
+      path_pattern: ".repo_studios/reports/docs_health_signals-<YYYYMMDD-HHMM>/signals.csv"
+      format: csv
+      description: Comma-separated signal values for spreadsheet import.
+
+    - artifact: bundle_summary.json
+      path_pattern: ".repo_studios/reports/docs_health_signals-<YYYYMMDD-HHMM>/bundle_summary.json"
+      format: json
+      description: Bundle metadata and artifact catalog.
+
+  side_effects:
+    - type: directory_pruning
+      description: |
+        Historical run directories beyond artifacts_to_keep are removed
+        via write_report_artifacts() pruning.
+
+behavior:
+  exit_codes:
+    - exit_code: 0
+      meaning: Success, aggregated report generated
+      agent_action: Review report.md for docs health summary
+
+    - exit_code: 1
+      meaning: Error (missing required inputs or processing failures)
+      agent_action: Check error messages and verify producer bundles exist
+
+  stderr_patterns:
+    - pattern: "Docs health overall score"
+      meaning: Aggregation completed with computed score
+      agent_action: Review score and individual signal breakdowns
+
+    - pattern: "Missing input"
+      meaning: Required producer telemetry not found
+      agent_action: Run missing producer scripts first
+
+integration:
+  typical_workflow:
+    - Run all producer scripts (churn, undocumented, anchors, etc.)
+    - Run aggregate_docs_health_signals.py to blend signals
+    - Review report.md for documentation health summary
+    - Use signals.csv for trend analysis
+
+  output_consumers:
+    - run_docs_health_overview.py (orchestrator)
+
+  input_producers:
+    - generate_code_doc_churn_report.py
+    - generate_undocumented_logic_report.py
+    - generate_anchor_inventory.py
+    - validate_markdown_anchors.py
+    - verify_docs_integrity.py
+    - validate_metrics_anchor_stubs.py
+
+  sample_output: |
+    {
+      "overall_score": 85.2,
+      "signals": {
+        "churn_score": 90.0,
+        "docstring_coverage": 75.0,
+        "anchor_validity": 95.0,
+        "docs_integrity": 88.0
+      },
+      "summary": "Documentation health is GOOD with minor gaps in docstring coverage."
+    }
+
+examples:
+  - description: Basic aggregation with defaults
+    command: |
+      python .repo_studios/scripts/aggregators/aggregate_docs_health_signals.py \
+        --log-level INFO
+    expected_output: |
+      INFO Docs health overall score: 85.2
+
+  - description: Aggregation skipping hygiene signals
+    command: |
+      python .repo_studios/scripts/aggregators/aggregate_docs_health_signals.py \
+        --skip-hygiene \
+        --log-level INFO
+
+  - description: Programmatic invocation from Python
+    code: |
+      from aggregate_docs_health_signals import run
+      result = run([
+          "--output-dir", ".repo_studios/reports",
+          "--skip-hygiene",
+          "--log-level", "INFO",
+      ])
+      print(f"Overall score: {result['summary']['overall_score']}")
+
+tier3:
+  allowed: true
+  reason: |
+    Mature aggregator with stable CLI, well-defined io_contract, and clear
+    input/output dependencies. Safe for agent-driven execution in docs health workflows.
+
+metadata:
+  category: aggregator
+  tier: tier-3
+  status: active
+  version: 1.0.0
+  last_updated: "2025-12-30"
+  author: repo_studios_team
+  dependencies_tier3:
+    - tier3_cli.yaml
+    - tier3_artifacts.yaml
+    - tier3_prune_logs.yaml
+    - tier3_generate_code_doc_churn_report.yaml
+    - tier3_generate_undocumented_logic_report.yaml
+    - tier3_generate_anchor_inventory.yaml
+    - tier3_validate_markdown_anchors.yaml
+    - tier3_verify_docs_integrity.yaml
+    - tier3_validate_metrics_anchor_stubs.yaml
+  tier2_rosters:
+    - tier2_docs_health_overview_roster.md
+  tier1_pipelines:
+    - tier1_healthview_orchestration_pipeline.md

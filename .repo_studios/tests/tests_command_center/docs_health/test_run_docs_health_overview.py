@@ -175,11 +175,11 @@ def test_orchestrator_writes_healthview_manifest(tmp_path: Path) -> None:
 
     assert exit_code == 0
 
-    manifest_paths = list(healthview_root.glob("healthview/docs_health/*/manifest.json"))
+    manifest_paths = list(healthview_root.glob("orchestrator_reports/docs_health/*/manifest.json"))
     assert manifest_paths
     manifest_path = manifest_paths[0]
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    assert manifest["viewer"] == "healthview"
+    assert manifest["viewer"] == "orchestrator_reports"
     assert manifest["topic"] == "docs_health"
     assert manifest["summary"]["overall_score"] is not None
     telemetry_steps = {step["name"]: step for step in manifest["telemetry"]["steps"]}
@@ -198,7 +198,7 @@ def test_orchestrator_blocks_invalid_topic_alias(tmp_path: Path) -> None:
     _seed_aggregator_inputs(aggregator_inputs)
 
     healthview_root = tmp_path / "healthview"
-    alias_dir = healthview_root / "healthview" / "docs_health"
+    alias_dir = healthview_root / "orchestrator_reports" / "docs_health"
     alias_dir.mkdir(parents=True, exist_ok=True)
     (alias_dir / "latest_summary.md").write_text("stub", encoding="utf-8")
 

@@ -1,21 +1,21 @@
 version: 1.0.0
-generated_at: '2025-12-30T14:57:00+00:00'
+generated_at: '2025-12-30T15:15:00+00:00'
 generator_version: 1.0.0
 repository:
   name: repo_studios
   root: C:\Users\genet\repo_studios
   branch: main
 statistics:
-  total_scripts: 14
+  total_scripts: 16
   categories:
     producer: 9
     utility: 1
-    aggregator: 1
+    aggregator: 2
     consumer: 1
-    orchestrator: 1
+    orchestrator: 2
     summarizer: 1
   status:
-    active: 9
+    active: 11
     template: 1
     draft: 4
 scripts:
@@ -158,6 +158,27 @@ scripts:
   status: active
   entry_point: run
   importable: true
+- script_id: aggregate_docs_health_signals
+  name: Aggregate Docs Health Signals
+  category: aggregator
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\docs_health_overview\tier3_aggregate_docs_health_signals.yaml
+  script_path: .repo_studios/scripts/aggregators/aggregate_docs_health_signals.py
+  summary: "Consumes telemetry from multiple docs health producers and blends them into\na unified documentation\
+    \ health report with weighted scoring.\n\nEmits a docs health bundle under:\n\n  .repo_studios/reports/docs_health_signals-<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes report.json, report.md, signals.tsv, signals.csv,\nand bundle_summary.json.\n"
+  keywords:
+  - healthview
+  - aggregator
+  - documentation
+  - health
+  - signals
+  - scoring
+  - churn
+  - undocumented
+  - anchors
+  status: active
+  entry_point: run
+  importable: true
 - script_id: analyze_test_hardening
   name: Analyze Test Hardening
   category: producer
@@ -280,6 +301,22 @@ scripts:
   status: active
   entry_point: run
   importable: true
+- script_id: run_docs_health_overview
+  name: Run Docs Health Overview Orchestrator
+  category: orchestrator
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\docs_health_overview\tier3_run_docs_health_overview.yaml
+  script_path: .repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py
+  summary: "Topic orchestrator for Stage 2.1 Docs Health Overview. Chains producer scripts\nand the aggregator to generate a comprehensive documentation health report.\n\nEmits a HealthView bundle under:\n\n  .repo_studios/command_center/reports/healthview/docs_health/<YYYYMMDD-HHMM>/\n\nThe orchestrator coordinates:\n  1. generate_doc_index.py (producer)\n  2. generate_anchor_inventory.py (producer)\n  3. validate_markdown_anchors.py (producer)\n  4. verify_docs_integrity.py (producer)\n  5. validate_metrics_anchor_stubs.py (producer)\n  6. generate_code_doc_churn_report.py (producer)\n  7. generate_undocumented_logic_report.py (producer)\n  8. aggregate_docs_health_signals.py (aggregator)\n\nEach step is executed via dynamic import (no subprocess spawning) with exit code propagation.\nThe pipeline stops on the first hard failure.\n"
+  keywords:
+  - healthview
+  - orchestrator
+  - documentation
+  - health
+  - pipeline
+  - stage-2.1
+  status: active
+  entry_point: run
+  importable: true
 - script_id: summarize_test_execution_telemetry
   name: Summarize Test Execution Telemetry
   category: summarizer
@@ -314,8 +351,10 @@ by_category:
   - generate_test_log_health_report
   aggregator:
   - generate_churn_complexity_heatmap
+  - aggregate_docs_health_signals
   orchestrator:
   - run_test_execution_telemetry
+  - run_docs_health_overview
   summarizer:
   - summarize_test_execution_telemetry
   utility:

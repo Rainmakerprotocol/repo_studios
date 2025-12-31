@@ -1,0 +1,316 @@
+# Tier-3: run_docs_health_overview.py
+# Orchestrator script that chains docs health producers and aggregator.
+
+tool:
+  id: run_docs_health_overview
+  name: Run Docs Health Overview Orchestrator
+  description: |
+    Topic orchestrator for Stage 2.1 Docs Health Overview. Chains producer scripts
+    and the aggregator to generate a comprehensive documentation health report.
+
+    Pipeline steps:
+    1. generate_doc_index.py (producer) — document inventory
+    2. generate_anchor_inventory.py (producer) — heading anchor extraction
+    3. validate_markdown_anchors.py (producer) — anchor link validation
+    4. verify_docs_integrity.py (producer) — docs integrity checks
+    5. validate_metrics_anchor_stubs.py (producer) — metrics stub validation
+    6. generate_code_doc_churn_report.py (producer) — code/doc churn analysis
+    7. generate_undocumented_logic_report.py (producer) — docstring coverage
+    8. aggregate_docs_health_signals.py (aggregator) — signal blending
+
+    Emits a HealthView bundle under:
+
+      .repo_studios/command_center/reports/healthview/docs_health/<YYYYMMDD-HHMM>/
+
+    The bundle includes manifest.json, summary.md, and telemetry.json.
+
+    Each step is executed via dynamic import (no subprocess spawning) with exit
+    code propagation. The pipeline stops on the first hard failure.
+
+    Exit codes:
+      0 - success (all steps completed)
+      1 - error (step failure or configuration error)
+  keywords:
+    - healthview
+    - orchestrator
+    - documentation
+    - health
+    - pipeline
+    - stage-2.1
+  use_when:
+    - Need to run the complete docs health pipeline
+    - Generating comprehensive documentation health reports
+    - Refreshing all docs health signals in sequence
+  dont_use_when:
+    - You only need individual producer reports (run specific producers)
+    - You need to run a single step (use the specific script)
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --timestamp {timestamp} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --skip-hygiene \
+      --log-level {log_level}
+  script_path: .repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+    notes:
+      - "Uses shared libraries from .repo_studios/command_center/scripts/libraries/"
+      - "Entry point is run(argv) — can be imported and called directly"
+      - "Each step is dynamically imported and executed"
+      - "Expect 2-3 minute runtime for full pipeline"
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: null
+    description: Repository root override (defaults to project root resolution).
+    validation:
+      must_exist: true
+      must_be: directory
+
+  - name: timestamp
+    type: string
+    required: false
+    default: null
+    description: |
+      ISO-8601 timestamp for the run. If not provided, uses current UTC time.
+      The run slug is derived as YYYYMMDD-HHMM.
+
+  - name: healthview_root
+    type: path
+    required: false
+    default: ".repo_studios/command_center/reports"
+    description: |
+      Base directory for orchestrator output. The script appends
+      healthview/docs_health/<timestamp>/ automatically.
+    validation:
+      must_exist: false
+      will_create: true
+
+  - name: skip_hygiene
+    type: boolean
+    required: false
+    default: false
+    description: |
+      When set, skips loading hygiene signals (placeholders, monkey patches)
+      in the aggregator step.
+
+  - name: artifacts_to_keep
+    type: integer
+    required: false
+    default: 1
+    description: Number of historical run directories to retain after pruning.
+    validation:
+      minimum: 1
+
+  - name: log_level
+    type: string
+    required: false
+    default: "INFO"
+    description: Logging verbosity level.
+    validation:
+      allowed_values:
+        - DEBUG
+        - INFO
+        - WARNING
+        - ERROR
+        - CRITICAL
+
+io_contract:
+  inputs:
+    - name: repository_documentation
+      source: filesystem
+      path_pattern: "docs/**/*.md, .repo_studios/docs/**/*.md"
+      description: Markdown documentation files to analyze.
+      required: true
+
+    - name: automation_code
+      source: filesystem
+      path_pattern: ".repo_studios/scripts/**/*.py"
+      description: Python automation code for docstring analysis.
+      required: true
+
+    - name: git_history
+      source: git
+      description: Git commit history for churn analysis.
+      required: true
+
+  outputs:
+    - artifact: manifest.json
+      path_pattern: ".repo_studios/command_center/reports/healthview/docs_health/<YYYYMMDD-HHMM>/manifest.json"
+      format: json
+      schema_version: 1
+      description: Run metadata with step outcomes and artifact catalog.
+
+    - artifact: summary.md
+      path_pattern: ".repo_studios/command_center/reports/healthview/docs_health/<YYYYMMDD-HHMM>/summary.md"
+      format: markdown
+      description: Human-readable summary of all pipeline steps.
+
+    - artifact: telemetry.json
+      path_pattern: ".repo_studios/command_center/reports/healthview/docs_health/<YYYYMMDD-HHMM>/telemetry.json"
+      format: json
+      description: Structured telemetry for downstream consumers.
+
+  side_effects:
+    - type: directory_pruning
+      description: |
+        Historical run directories beyond artifacts_to_keep are removed
+        via write_report_artifacts() pruning.
+
+    - type: producer_outputs
+      description: |
+        Each producer step creates its own bundle under .repo_studios/reports/healthview/<topic>/
+
+behavior:
+  exit_codes:
+    - exit_code: 0
+      meaning: Success, all pipeline steps completed
+      agent_action: Review summary.md for docs health overview
+
+    - exit_code: 1
+      meaning: Error (step failure or configuration error)
+      agent_action: Check error messages and review failed step
+
+  stderr_patterns:
+    - pattern: "Docs Health orchestrator complete"
+      meaning: Pipeline finished successfully
+      agent_action: Review the generated bundle
+
+    - pattern: "step failed"
+      meaning: A pipeline step encountered an error
+      agent_action: Check the specific step's error output
+
+integration:
+  typical_workflow:
+    - Run run_docs_health_overview.py to execute full pipeline
+    - Review summary.md for step outcomes
+    - Check aggregate report for overall docs health score
+    - Address any failed steps or health issues
+
+  output_consumers:
+    - HealthView dashboard
+    - CI/CD quality gates
+
+  input_producers:
+    - None (orchestrator is the entry point)
+
+  pipeline_steps:
+    - step: 1
+      script: generate_doc_index.py
+      category: producer
+      output: ".repo_studios/reports/healthview/doc_index/<timestamp>/"
+
+    - step: 2
+      script: generate_anchor_inventory.py
+      category: producer
+      output: ".repo_studios/reports/healthview/anchor_inventory/<timestamp>/"
+
+    - step: 3
+      script: validate_markdown_anchors.py
+      category: producer
+      output: ".repo_studios/reports/healthview/markdown_anchor_validation/<timestamp>/"
+
+    - step: 4
+      script: verify_docs_integrity.py
+      category: producer
+      output: ".repo_studios/reports/healthview/docs_integrity_validation/<timestamp>/"
+
+    - step: 5
+      script: validate_metrics_anchor_stubs.py
+      category: producer
+      output: ".repo_studios/reports/healthview/metrics_anchor_stub_validation/<timestamp>/"
+
+    - step: 6
+      script: generate_code_doc_churn_report.py
+      category: producer
+      output: ".repo_studios/reports/healthview/code_doc_churn/<timestamp>/"
+
+    - step: 7
+      script: generate_undocumented_logic_report.py
+      category: producer
+      output: ".repo_studios/reports/healthview/undocumented_logic/<timestamp>/"
+
+    - step: 8
+      script: aggregate_docs_health_signals.py
+      category: aggregator
+      output: ".repo_studios/reports/docs_health_signals-<timestamp>/"
+
+  sample_output: |
+    {
+      "schema_version": 1,
+      "viewer_slug": "healthview",
+      "topic": "docs_health",
+      "run_timestamp": "20251230-1743",
+      "generated_at": "2025-12-30T17:43:00+00:00",
+      "status": "ok",
+      "steps": {
+        "doc_index": {"status": "success", "docs": 294},
+        "anchor_inventory": {"status": "success", "slugs": 707},
+        "aggregate": {"status": "success", "overall_score": 33.73}
+      }
+    }
+
+examples:
+  - description: Run full docs health pipeline
+    command: |
+      python .repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py \
+        --log-level INFO
+    expected_output: |
+      INFO Indexed 294 documents (2098 headings, 228 links)
+      INFO Documents scanned=132 missing_h1=7 missing_h2=3
+      INFO Docs health overall score: 33.73
+      INFO Docs Health orchestrator complete (slug=20251230-1743)
+
+  - description: Run with hygiene signals skipped
+    command: |
+      python .repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py \
+        --skip-hygiene \
+        --log-level INFO
+
+  - description: Programmatic invocation from Python
+    code: |
+      from run_docs_health_overview import run
+      result = run([
+          "--skip-hygiene",
+          "--log-level", "INFO",
+      ])
+      print(f"Status: {result['status']}")
+      print(f"Run dir: {result['run_dir']}")
+
+tier3:
+  allowed: true
+  reason: |
+    Mature orchestrator with stable CLI, well-defined pipeline steps, and
+    comprehensive io_contract. Safe for agent-driven execution in docs health workflows.
+
+metadata:
+  category: orchestrator
+  tier: tier-3
+  status: active
+  version: 1.0.0
+  last_updated: "2025-12-30"
+  author: repo_studios_team
+  dependencies_tier3:
+    - tier3_cli.yaml
+    - tier3_artifacts.yaml
+    - tier3_prune_logs.yaml
+    - tier3_generate_doc_index.yaml
+    - tier3_generate_anchor_inventory.yaml
+    - tier3_validate_markdown_anchors.yaml
+    - tier3_verify_docs_integrity.yaml
+    - tier3_validate_metrics_anchor_stubs.yaml
+    - tier3_generate_code_doc_churn_report.yaml
+    - tier3_generate_undocumented_logic_report.yaml
+    - tier3_aggregate_docs_health_signals.yaml
+  tier2_rosters:
+    - tier2_docs_health_overview_roster.md
+  tier1_pipelines:
+    - tier1_healthview_orchestration_pipeline.md

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "generated_at": "2025-12-30T22:58:36+00:00",
+  "source": "scan",
+  "source_report": null,
+  "run_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-01_0000",
+  "summary": {
+    "signature_count": 0,
+    "thread_block_count": 0,
+    "top_frame_limit": 10,
+    "stack_log_exists": true,
+    "stack_text_bytes": 0,
+    "severity_buckets": {
+      "repeat_offender": 0,
+      "multi_hit": 0,
+      "single_hit": 0
+    },
+    "active_signature_count": 0,
+    "first_seen_utc": null,
+    "last_seen_utc": null
+  },
+  "signatures": [],
+  "rawview_artifacts": {
+    "run_summary_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-01_0000\\SUMMARY.md",
+    "stacks_csv": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-01_0000\\stacks.csv",
+    "combined_txt": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\fault_diagnostics_runs\\2025-01-01_0000\\dumps\\combined.txt"
+  }
+}

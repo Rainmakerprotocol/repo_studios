@@ -1,23 +1,56 @@
 """
 Generate structured fault artifacts for a faulthandler run directory.
 
-Inputs (env / discovery):
-    - --outdir or FAULT_OUTDIR: target run dir. If unset, auto-pick the latest under
-        ./.repo_studios/command_center/reports/rawview/fault_diagnostics_runs/<ts>/.
+This consumer processes raw faulthandler stack dumps and producer reports
+to emit HOP-compliant HealthView artifacts for downstream summarization.
 
-Outputs (within FAULT_OUTDIR):
-  - MANIFEST.json (best-effort: create minimal if missing)
-  - dumps/combined.txt (raw copy of stacks.log)
-  - stacks.csv (schema below)
-  - SUMMARY.md (human-readable summary)
+Output Path Contract (HOP)
+--------------------------
+``.repo_studios/reports/healthview/consumer_reports/fault_artifacts/<YYYYMMDD-HHMM>/``
 
-CSV schema (headers):
-  signature_id,count,top_module,top_func,top_file,top_line,threads,first_seen_ts,last_seen_ts
+Base Package
+------------
+- ``manifest.json`` — bundle metadata and artifact registry
+- ``summary.md`` — human-readable digest
+- ``telemetry.json`` — machine-readable metrics and signatures
 
-Notes:
-  - Parser is best-effort against stdlib faulthandler format. If segmentation
-    is unreliable, we still emit dumps/combined.txt and aggregate across the file.
-  - Timestamps default to current UTC when per-observation times are unavailable.
+Rawview Artifacts (within run_dir)
+----------------------------------
+- ``MANIFEST.json`` — best-effort run manifest
+- ``dumps/combined.txt`` — raw copy of stacks.log
+- ``stacks.csv`` — parsed signature table
+
+CSV Schema
+----------
+``signature_id,count,top_module,top_func,top_file,top_line,threads,first_seen_ts,last_seen_ts``
+
+CLI Arguments
+-------------
+--outdir
+    Run directory containing stacks.log. Defaults to latest under
+    ``.repo_studios/command_center/reports/rawview/fault_diagnostics_runs/``.
+--report
+    Explicit producer report JSON to reuse (skips fresh scan).
+--output-dir
+    Consumer output root. Defaults to HOP path.
+--artifacts-to-keep
+    Retention budget for timestamped bundles.
+
+Environment Variables
+---------------------
+FAULT_OUTDIR
+    Alternative to ``--outdir`` CLI argument.
+FAULT_TOP_FRAMES_N
+    Override frame depth for signature extraction (default: 10).
+
+Notes
+-----
+- Parser is best-effort against stdlib faulthandler format.
+- Timestamps default to current UTC when unavailable.
+- No pointer files (``latest_*``) are emitted per HOP contract.
+
+.. seealso::
+    :doc:`REPORT_NAMING_STANDARDS` for HOP path contract.
 """
 
 from __future__ import annotations
@@ -27,7 +60,6 @@ import csv
 import json
 import logging
 import os
-import shutil
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -38,25 +70,22 @@ COMMAND_CENTER_SCRIPTS_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "
 if str(COMMAND_CENTER_SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(COMMAND_CENTER_SCRIPTS_ROOT))
 
-from libraries.artifacts import copy_latest_artifact  # noqa: E402
 from libraries import prune_run_directories  # noqa: E402
 from libraries.cli import resolve_repo_root  # noqa: E402
 from libraries.retention_policy import get_keep  # noqa: E402
+
 RAWVIEW_RUNS_BASE = Path(".repo_studios/command_center/reports/rawview/fault_diagnostics_runs")
 LEGACY_RUNS_BASE = Path(".repo_studios/faulthandler")
-CONSUMER_BASE = Path(".repo_studios/reports/consumer_reports/fault_artifacts")
-COMMAND_CENTER_BASE = Path(".repo_studios/command_center/reports/fault_artifacts_consumer")
-CONSUMER_DIR_PREFIX = "fault_artifacts-"
+CONSUMER_BASE = Path(".repo_studios/reports/healthview/consumer_reports/fault_artifacts")
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_fault_artifacts")
 
-SUMMARY_JSON_NAME = "summary.json"
-SUMMARY_MD_NAME = "SUMMARY.md"
-BUNDLE_SUMMARY_NAME = "bundle_summary.json"
-LATEST_POINTERS = {
-    SUMMARY_JSON_NAME: "latest_summary.json",
-    SUMMARY_MD_NAME: "latest_SUMMARY.md",
-    BUNDLE_SUMMARY_NAME: "latest_bundle_summary.json",
-}
+# HOP artifact names (REPORT_NAMING_STANDARDS.md)
+MANIFEST_NAME = "manifest.json"
+SUMMARY_NAME = "summary.md"
+TELEMETRY_NAME = "telemetry.json"
+VIEWER_SLUG = "healthview"
+TOPIC_SLUG = "fault_artifacts"
+SCHEMA_VERSION = 1
 
 SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
 scripts_root_str = str(SCRIPTS_ROOT)
@@ -72,6 +101,19 @@ from utilities.fault_run_analysis import (  # noqa: E402
     ensure_manifest,
     read_stacks_text,
 )
+
+
+def _timestamp_slug() -> str:
+    """
+    Generate HOP-compliant timestamp slug.
+
+    :returns: UTC timestamp in ``YYYYMMDD-HHMM`` format (13 characters).
+    :rtype: str
+
+    .. note::
+        Format is lexicographically sortable and matches REPORT_NAMING_STANDARDS.md.
+    """
+    return datetime.now(UTC).strftime("%Y%m%d-%H%M")
 
 
 def _allow_legacy_runs() -> bool:
@@ -309,12 +351,42 @@ def _write_consumer_bundle(
     summary_text: str,
     source: str,
     source_report: Path | None,
+    ts_slug: str,
 ) -> dict[str, Path]:
+    """
+    Write HOP-compliant consumer bundle to timestamped directory.
+
+    :param target_root: Base output directory for consumer bundles.
+    :type target_root: Path
+    :param run_dir: Source rawview run directory.
+    :type run_dir: Path
+    :param report: Parsed fault report payload.
+    :type report: dict[str, Any]
+    :param signatures: Extracted fault signatures.
+    :type signatures: Sequence[FaultSignature]
+    :param summary_text: Pre-rendered summary markdown.
+    :type summary_text: str
+    :param source: Data source label (``"producer"`` or ``"scan"``).
+    :type source: str
+    :param source_report: Path to producer report if used.
+    :type source_report: Path | None
+    :param ts_slug: HOP timestamp slug (``YYYYMMDD-HHMM``).
+    :type ts_slug: str
+    :returns: Mapping of artifact names to paths.
+    :rtype: dict[str, Path]
+
+    Output Structure
+    ----------------
+    ::
+
+        <target_root>/<ts_slug>/
+            manifest.json
+            summary.md
+            telemetry.json
+    """
     generated_at = datetime.now(UTC)
     target_root.mkdir(parents=True, exist_ok=True)
-    slug = run_dir.name
-    bundle_name = f"{CONSUMER_DIR_PREFIX}{generated_at.strftime('%Y-%m-%d_%H%M%S')}-{slug}"
-    bundle_dir = target_root / bundle_name
+    bundle_dir = target_root / ts_slug
     bundle_dir.mkdir(parents=True, exist_ok=True)
 
     run_summary_path = (run_dir / "SUMMARY.md").resolve()
@@ -323,24 +395,28 @@ def _write_consumer_bundle(
 
     source_report_path = source_report.resolve() if source_report else None
 
-    summary_payload = {
-        "schema_version": 1,
+    # Build rawview artifact references
+    rawview_artifacts = {
+        "run_summary_md": str(run_summary_path) if run_summary_path.exists() else None,
+        "stacks_csv": str(stacks_csv_path) if stacks_csv_path.exists() else None,
+        "combined_txt": str(combined_txt_path) if combined_txt_path.exists() else None,
+    }
+
+    # Build telemetry.json (machine-readable metrics and signatures)
+    telemetry_payload = {
+        "schema_version": SCHEMA_VERSION,
         "generated_at": generated_at.isoformat(timespec="seconds"),
         "source": source,
         "source_report": str(source_report_path) if source_report_path else None,
         "run_dir": str(run_dir.resolve()),
         "summary": report.get("summary") if isinstance(report, dict) else None,
         "signatures": _serialize_signatures(signatures),
-        "artifacts": {
-            "run_summary_md": str(run_summary_path) if run_summary_path.exists() else None,
-            "stacks_csv": str(stacks_csv_path) if stacks_csv_path.exists() else None,
-            "combined_txt": str(combined_txt_path) if combined_txt_path.exists() else None,
-        },
+        "rawview_artifacts": rawview_artifacts,
     }
+    telemetry_path = bundle_dir / TELEMETRY_NAME
+    telemetry_path.write_text(json.dumps(telemetry_payload, indent=2) + "\n", encoding="utf-8")
 
-    summary_json_path = bundle_dir / SUMMARY_JSON_NAME
-    summary_json_path.write_text(json.dumps(summary_payload, indent=2) + "\n", encoding="utf-8")
-
+    # Build summary.md (human-readable digest)
     base_lines = summary_text.rstrip("\n").splitlines()
     base_lines.append("")
     base_lines.append("<!-- markdownlint-disable-next-line MD013 -->")
@@ -357,16 +433,19 @@ def _write_consumer_bundle(
     if combined_txt_path.exists():
         base_lines.append(f"- Combined Stack Text: `{combined_txt_path}`")
     consumer_summary = "\n".join(base_lines) + "\n"
-    summary_md_path = bundle_dir / SUMMARY_MD_NAME
-    summary_md_path.write_text(consumer_summary, encoding="utf-8")
+    summary_path = bundle_dir / SUMMARY_NAME
+    summary_path.write_text(consumer_summary, encoding="utf-8")
 
-    summary_data = summary_payload.get("summary") if isinstance(summary_payload, dict) else None
+    # Build manifest.json (bundle metadata and artifact registry)
+    summary_data = telemetry_payload.get("summary") if isinstance(telemetry_payload, dict) else None
     severity = summary_data.get("severity_buckets") if isinstance(summary_data, dict) else {}
-    bundle_summary_payload = {
-        "schema_version": 1,
-        "bundle": bundle_dir.name,
-        "generated_at": summary_payload["generated_at"],
+    manifest_payload = {
+        "schema_version": SCHEMA_VERSION,
+        "viewer": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "generated_at": generated_at.isoformat(timespec="seconds"),
         "source": source,
+        "run_dir": str(run_dir.resolve()),
         "metrics": {
             "signature_count": summary_data.get("signature_count") if isinstance(summary_data, dict) else None,
             "active_signature_count": summary_data.get("active_signature_count") if isinstance(summary_data, dict) else None,
@@ -376,65 +455,37 @@ def _write_consumer_bundle(
             "thread_block_count": summary_data.get("thread_block_count") if isinstance(summary_data, dict) else None,
         },
         "artifacts": {
-            "summary_json": str(summary_json_path.resolve()),
-            "summary_md": str(summary_md_path.resolve()),
-            "run_summary_md": str(run_summary_path) if run_summary_path.exists() else None,
-            "stacks_csv": str(stacks_csv_path) if stacks_csv_path.exists() else None,
-            "combined_txt": str(combined_txt_path) if combined_txt_path.exists() else None,
+            "telemetry": TELEMETRY_NAME,
+            "summary": SUMMARY_NAME,
         },
-        "source_report": summary_payload.get("source_report"),
+        "source_report": str(source_report_path) if source_report_path else None,
     }
-    bundle_summary_path = bundle_dir / BUNDLE_SUMMARY_NAME
-    bundle_summary_path.write_text(json.dumps(bundle_summary_payload, indent=2) + "\n", encoding="utf-8")
+    manifest_path = bundle_dir / MANIFEST_NAME
+    manifest_path.write_text(json.dumps(manifest_payload, indent=2) + "\n", encoding="utf-8")
 
     return {
         "bundle_dir": bundle_dir,
-        "summary_json_path": summary_json_path,
-        "summary_md_path": summary_md_path,
-        "bundle_summary_path": bundle_summary_path,
+        "manifest": manifest_path,
+        "telemetry": telemetry_path,
+        "summary": summary_path,
     }
 
 
-def _update_latest_pointers(bundle_dir: Path, target_root: Path) -> None:
-    target_root.mkdir(parents=True, exist_ok=True)
-    for filename, pointer in LATEST_POINTERS.items():
-        src = bundle_dir / filename
-        if not src.exists():
-            continue
-        copy_latest_artifact(src, target_root / pointer)
-
-
-def _mirror_to_command_center(
-    *,
-    bundle_dir: Path,
-    command_center_dir: Path,
-    keep: int,
-    logger: logging.Logger | None,
-) -> None:
-    command_center_dir.mkdir(parents=True, exist_ok=True)
-    mirror_dir = command_center_dir / bundle_dir.name
-    if mirror_dir.exists():
-        shutil.rmtree(mirror_dir, ignore_errors=True)
-    mirror_dir.mkdir(parents=True, exist_ok=True)
-
-    for name in (SUMMARY_JSON_NAME, SUMMARY_MD_NAME, BUNDLE_SUMMARY_NAME):
-        src = bundle_dir / name
-        if not src.exists():
-            continue
-        dest = mirror_dir / name
-        dest.write_bytes(src.read_bytes())
-        copy_latest_artifact(src, command_center_dir / f"latest_{name}")
-
-    prune_run_directories(
-        command_center_dir,
-        keep=max(1, keep),
-        stem_prefix=CONSUMER_DIR_PREFIX,
-        current_run=mirror_dir,
-        logger=logger,
-    )
-
-
 def _prune_history(root: Path, keep: int | None, current: Path, *, logger: logging.Logger | None) -> list[Path]:
+    """
+    Prune old bundle directories to enforce retention budget.
+
+    :param root: Base directory containing timestamped bundles.
+    :type root: Path
+    :param keep: Number of bundles to retain.
+    :type keep: int | None
+    :param current: Current run directory (excluded from pruning).
+    :type current: Path
+    :param logger: Logger instance for debug output.
+    :type logger: logging.Logger | None
+    :returns: List of removed directory paths.
+    :rtype: list[Path]
+    """
     if keep is None:
         return []
     try:
@@ -447,7 +498,7 @@ def _prune_history(root: Path, keep: int | None, current: Path, *, logger: loggi
     result = prune_run_directories(
         root,
         keep=keep_count,
-        stem_prefix=CONSUMER_DIR_PREFIX,
+        stem_prefix="",  # HOP uses bare timestamp directories
         current_run=current,
         logger=logger,
     )
@@ -482,13 +533,7 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
         "--output-dir",
         type=Path,
         default=None,
-        help="Directory to store consumer summaries (defaults to .repo_studios/reports/consumer_reports/fault_artifacts)",
-    )
-    parser.add_argument(
-        "--command-center-dir",
-        type=Path,
-        default=None,
-        help="Directory to mirror summaries for Command Center discovery",
+        help="Consumer output root (defaults to .repo_studios/reports/healthview/consumer_reports/fault_artifacts)",
     )
     parser.add_argument(
         "--artifacts-to-keep",
@@ -555,10 +600,8 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
     raw_target_root = Path(args.output_dir) if args.output_dir is not None else CONSUMER_BASE
     target_root = raw_target_root if raw_target_root.is_absolute() else (repo_root / raw_target_root).resolve()
-    raw_command_center_dir = Path(args.command_center_dir) if args.command_center_dir is not None else COMMAND_CENTER_BASE
-    command_center_dir = (
-        raw_command_center_dir if raw_command_center_dir.is_absolute() else (repo_root / raw_command_center_dir).resolve()
-    )
+
+    ts_slug = _timestamp_slug()
     artifact_paths = _write_consumer_bundle(
         target_root=target_root,
         run_dir=outdir,
@@ -567,15 +610,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         summary_text=summary_text,
         source=source_label,
         source_report=source_path,
+        ts_slug=ts_slug,
     )
     bundle_dir = artifact_paths["bundle_dir"]
-    _update_latest_pointers(bundle_dir, target_root)
-    _mirror_to_command_center(
-        bundle_dir=bundle_dir,
-        command_center_dir=command_center_dir,
-        keep=args.artifacts_to_keep,
-        logger=log,
-    )
     pruned = _prune_history(target_root, args.artifacts_to_keep, bundle_dir, logger=log)
 
     source_report_log = str(source_path) if source_path else "scan"
@@ -599,7 +636,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         "consumer_report": str(bundle_dir.resolve()),
         "artifacts_root": str(target_root.resolve()),
         "signatures": len(signatures),
-        "bundle_summary": str(artifact_paths["bundle_summary_path"].resolve()),
+        "manifest": str(artifact_paths["manifest"].resolve()),
         "repeat_offender_signatures": repeat_offender,
     }
 

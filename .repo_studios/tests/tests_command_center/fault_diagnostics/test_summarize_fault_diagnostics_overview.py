@@ -1,17 +1,43 @@
 from __future__ import annotations
 
+"""Tests for the summarize_fault_diagnostics_overview summarizer.
+
+Validates HOP-compliant artifact consumption and generation including:
+- Consumer artifacts: telemetry.json, manifest.json, summary.md
+- HOP timestamp directory format (YYYYMMDD-HHMM)
+- No pointer file dependencies
+"""
 import json
+import re
 from pathlib import Path
 
 from command_center.scripts.summarizers import summarize_fault_diagnostics_overview as module
 
+# HOP timestamp pattern: YYYYMMDD-HHMM
+HOP_TIMESTAMP_PATTERN = re.compile(r"^\d{8}-\d{4}$")
 
-def _write_bundle(root: Path, name: str, summary_payload: dict[str, object], bundle_summary: dict[str, object]) -> Path:
+
+def _write_bundle(
+    root: Path,
+    name: str,
+    telemetry_payload: dict[str, object],
+    manifest_payload: dict[str, object],
+) -> Path:
+    """Write HOP-compliant consumer bundle with telemetry.json and manifest.json."""
     bundle_dir = root / name
     bundle_dir.mkdir(parents=True, exist_ok=True)
-    (bundle_dir / "summary.json").write_text(json.dumps(summary_payload), encoding="utf-8")
-    (bundle_dir / "bundle_summary.json").write_text(json.dumps(bundle_summary), encoding="utf-8")
+    (bundle_dir / "telemetry.json").write_text(json.dumps(telemetry_payload), encoding="utf-8")
+    (bundle_dir / "manifest.json").write_text(json.dumps(manifest_payload), encoding="utf-8")
+    (bundle_dir / "summary.md").write_text("# Summary\n", encoding="utf-8")
     return bundle_dir
+
+
+def _write_producer_run(root: Path, name: str, report_payload: dict[str, object]) -> Path:
+    """Write HOP-compliant producer run with report.json."""
+    run_dir = root / name
+    run_dir.mkdir(parents=True, exist_ok=True)
+    (run_dir / "report.json").write_text(json.dumps(report_payload), encoding="utf-8")
+    return run_dir
 
 
 def test_summarizer_generates_overview(tmp_path: Path) -> None:
@@ -22,10 +48,13 @@ def test_summarizer_generates_overview(tmp_path: Path) -> None:
     producer_dir.mkdir(parents=True, exist_ok=True)
     summarizer_dir.mkdir(parents=True, exist_ok=True)
 
-    current_name = "fault_artifacts-20240102_000001-run"
-    previous_name = "fault_artifacts-20240101_000001-old"
+    # HOP timestamp format: YYYYMMDD-HHMM
+    current_name = "20240102-0001"
+    previous_name = "20240101-0001"
+    producer_run_name = "20240102-0000"
 
-    current_summary = {
+    # Telemetry contains signatures and severity (from old summary.json)
+    current_telemetry = {
         "summary": {
             "signature_count": 3,
             "active_signature_count": 2,
@@ -42,7 +71,8 @@ def test_summarizer_generates_overview(tmp_path: Path) -> None:
             {"signature_id": "sig-c"},
         ],
     }
-    current_bundle_summary = {
+    # Manifest contains metrics (from old bundle_summary.json)
+    current_manifest = {
         "bundle": current_name,
         "metrics": {
             "signature_count": 3,
@@ -53,7 +83,7 @@ def test_summarizer_generates_overview(tmp_path: Path) -> None:
             "thread_block_count": 1,
         },
     }
-    previous_summary = {
+    previous_telemetry = {
         "summary": {
             "signature_count": 2,
             "active_signature_count": 2,
@@ -69,7 +99,7 @@ def test_summarizer_generates_overview(tmp_path: Path) -> None:
             {"signature_id": "sig-b"},
         ],
     }
-    previous_bundle_summary = {
+    previous_manifest = {
         "bundle": previous_name,
         "metrics": {
             "signature_count": 2,
@@ -81,12 +111,10 @@ def test_summarizer_generates_overview(tmp_path: Path) -> None:
         },
     }
 
-    _write_bundle(consumer_dir, previous_name, previous_summary, previous_bundle_summary)
-    latest_bundle = _write_bundle(consumer_dir, current_name, current_summary, current_bundle_summary)
+    _write_bundle(consumer_dir, previous_name, previous_telemetry, previous_manifest)
+    _write_bundle(consumer_dir, current_name, current_telemetry, current_manifest)
 
-    (consumer_dir / "latest_summary.json").write_text(json.dumps(current_summary), encoding="utf-8")
-    (consumer_dir / "latest_bundle_summary.json").write_text(json.dumps(current_bundle_summary), encoding="utf-8")
-
+    # Producer report in HOP format (no pointer files)
     producer_report = {
         "summary": {
             "severity_buckets": {
@@ -96,7 +124,7 @@ def test_summarizer_generates_overview(tmp_path: Path) -> None:
             }
         }
     }
-    (producer_dir / "latest_report.json").write_text(json.dumps(producer_report), encoding="utf-8")
+    _write_producer_run(producer_dir, producer_run_name, producer_report)
 
     result = module.run(
         [

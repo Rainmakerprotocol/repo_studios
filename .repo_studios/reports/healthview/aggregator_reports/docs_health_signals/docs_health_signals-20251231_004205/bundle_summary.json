@@ -1,0 +1,17 @@
+{
+  "category_scores": {
+    "coverage": null,
+    "freshness": null,
+    "hygiene": null,
+    "integrity": null,
+    "structure": null
+  },
+  "overall_score": null,
+  "statuses": {
+    "coverage": "unknown",
+    "freshness": "unknown",
+    "hygiene": "unknown",
+    "integrity": "unknown",
+    "structure": "unknown"
+  }
+}
