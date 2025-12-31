@@ -8,7 +8,7 @@ tool:
     Scans documentation directories for Markdown files, extracts H1/H2 headings,
     converts them to slug-based anchors, and emits a canonical HealthView bundle under:
 
-      .repo_studios/reports/healthview/healthview/anchor_inventory/<YYYYMMDD-HHMM>/
+      .repo_studios/reports/healthview/producer_reports/anchor_inventory/<YYYYMMDD-HHMM>/
 
     The bundle includes manifest.json, summary.md, and telemetry.json.
 
@@ -18,7 +18,7 @@ tool:
     The canonical operator/agent entrypoint is:
 
       python .repo_studios/scripts/producers/generate_anchor_inventory.py \
-        --repo-root . --output-dir .repo_studios/reports/healthview --log-level INFO
+        --repo-root . --output-dir .repo_studios/reports/healthview/producer_reports/anchor_inventory --log-level INFO
   keywords:
     - healthview
     - producer
@@ -83,10 +83,10 @@ parameters:
   - name: output_dir
     type: path
     required: false
-    default: .repo_studios/reports/healthview
+    default: .repo_studios/reports/healthview/producer_reports/anchor_inventory
     description: |
-      Base output directory. The producer appends healthview/anchor_inventory/timestamp to form the bundle path:
-        {output_dir}/healthview/anchor_inventory/<YYYYMMDD-HHMM>/
+      HOP-compliant output directory. The producer appends timestamp to form the bundle path:
+        {output_dir}/<YYYYMMDD-HHMM>/
     validation:
       must_exist: false
 
@@ -155,7 +155,7 @@ outputs:
   primary:
     type: file
     format: json
-    path_pattern: "{output_dir}/healthview/anchor_inventory/<YYYYMMDD-HHMM>/manifest.json"
+    path_pattern: "{output_dir}/<YYYYMMDD-HHMM>/manifest.json"
     description: Run manifest with inputs, catalog, and artifact list.
     structure:
       root_type: object
@@ -173,12 +173,12 @@ outputs:
   secondary:
     - type: file
       format: md
-      path_pattern: "{output_dir}/healthview/anchor_inventory/<YYYYMMDD-HHMM>/summary.md"
+      path_pattern: "{output_dir}/<YYYYMMDD-HHMM>/summary.md"
       description: Human-readable summary with duplicate statistics and cross-file patterns.
 
     - type: file
       format: json
-      path_pattern: "{output_dir}/healthview/anchor_inventory/<YYYYMMDD-HHMM>/telemetry.json"
+      path_pattern: "{output_dir}/<YYYYMMDD-HHMM>/telemetry.json"
       description: Metrics and full payload including slug stats and document inventory.
 
 behavior:

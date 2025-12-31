@@ -47,6 +47,7 @@ try:  # pragma: no cover - import is validated in tests via module load
         prune_run_directories,
     )
     from libraries.database_integration import create_storage
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when executed directly
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -63,14 +64,14 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when executed directl
         prune_run_directories,
     )
     from libraries.database_integration import create_storage
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
+TOPIC_SLUG = "test_coverage_inventory"
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
 DEFAULT_COVERAGE_XML = Path(".repo_studios/tests/fixtures/test_run_coverage/coverage.xml")
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_test_coverage_inventory")
 SCHEMA_VERSION = 1
-VIEWER_SLUG = "producer_reports"
-TOPIC_SLUG = "test_coverage_inventory"
 
 
 @dataclass(frozen=True)
@@ -669,8 +670,8 @@ def run(argv: Sequence[str] | None = None) -> int:
     status = str(summary.get("status", "error"))
 
     output_dir = paths.output_dir
-    storage = create_storage(output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=timestamp_slug)
-    bundle_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp_slug
+    storage = create_storage(output_dir, "", "", timestamp=timestamp_slug)
+    bundle_dir = output_dir / timestamp_slug
 
     manifest_path = bundle_dir / "manifest.json"
     summary_path = bundle_dir / "summary.md"
@@ -684,7 +685,7 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     manifest: dict[str, Any] = {
         "schema_version": 1,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer_slug": "producer_reports",
         "topic": TOPIC_SLUG,
         "run_timestamp": timestamp_slug,
         "generated_at": now_iso,
@@ -720,7 +721,7 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     telemetry: dict[str, Any] = {
         "schema_version": 1,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer_slug": "producer_reports",
         "topic": TOPIC_SLUG,
         "run_timestamp": timestamp_slug,
         "generated_at": now_iso,
@@ -751,9 +752,8 @@ def run(argv: Sequence[str] | None = None) -> int:
     # DB_INTEGRATION_MARKER: Persist telemetry payload + extracted metrics (report_artifacts + test_metrics)
     storage.write_telemetry(telemetry)
 
-    base_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG
     prune_run_directories(
-        base_dir,
+        output_dir,
         keep=max(1, options.artifacts_to_keep),
         current_run=bundle_dir,
         logger=logging.getLogger(__name__),

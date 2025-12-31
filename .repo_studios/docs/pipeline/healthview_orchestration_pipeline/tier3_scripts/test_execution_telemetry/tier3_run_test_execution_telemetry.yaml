@@ -95,8 +95,8 @@ parameters:
   - name: test_log_reports_dir
     type: path
     required: false
-    default: .repo_studios/reports/healthview
-    description: Output base for test log reports (rawview/test_log_reports subdirectory appended).
+    default: .repo_studios/reports/healthview/rawview/test_log_reports
+    description: Output base for test log reports.
     validation:
       parent_must_exist: false
 
@@ -111,7 +111,7 @@ parameters:
   - name: test_coverage_output_dir
     type: path
     required: false
-    default: .repo_studios/reports/healthview
+    default: .repo_studios/reports/healthview/producer_reports/test_coverage_inventory
     description: Output base for coverage inventory producer reports.
     validation:
       parent_must_exist: false
@@ -151,7 +151,7 @@ parameters:
   - name: hardening_output_dir
     type: path
     required: false
-    default: .repo_studios/reports/healthview
+    default: .repo_studios/reports/healthview/producer_reports/test_hardening
     description: Output base for test hardening producer reports.
     validation:
       parent_must_exist: false
@@ -159,8 +159,16 @@ parameters:
   - name: healthview_root
     type: path
     required: false
-    default: .repo_studios/reports/healthview
-    description: Root directory for HealthView artifacts. Orchestrator bundle written here.
+    default: .repo_studios/reports/healthview/orchestrator_reports/test_execution_telemetry
+    description: Output base for orchestrator HealthView bundle.
+    validation:
+      parent_must_exist: false
+
+  - name: summarizer_output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/summarizer_reports/test_execution_telemetry
+    description: Output base for summarizer HealthView bundle.
     validation:
       parent_must_exist: false
 

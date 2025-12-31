@@ -39,9 +39,6 @@ INDEX_TABLE_BEGIN = "<!-- BEGIN:DOCS_INDEX_TABLE -->"
 INDEX_TABLE_END = "<!-- END:DOCS_INDEX_TABLE -->"
 
 DEFAULT_INDEX_PATH = Path(".repo_studios/docs/standards/docs_index.md")
-REPORTS_ROOT = Path(".repo_studios/reports")
-DEFAULT_OUTPUT_DIR = REPORTS_ROOT
-VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "docs_integrity_validation"
 SCHEMA_VERSION = 1
 
@@ -57,6 +54,7 @@ try:
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -70,6 +68,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 
 try:
@@ -81,6 +80,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
 
 # Must be after import block where get_keep is defined
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("verify_docs_integrity")
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
 
 
 @dataclass
@@ -506,7 +506,7 @@ def compose_payload(
 def compose_manifest(*, report: dict[str, Any], run_timestamp: str, inputs: dict[str, Any]) -> dict[str, Any]:
     return {
         "schema_version": SCHEMA_VERSION,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer_slug": "producer_reports",
         "topic": TOPIC_SLUG,
         "run_timestamp": run_timestamp,
         "generated_utc": report.get("timestamp"),
@@ -530,7 +530,7 @@ def compose_telemetry(*, report: dict[str, Any], run_timestamp: str) -> dict[str
     summary = report.get("summary", {}) if isinstance(report.get("summary"), dict) else {}
     return {
         "schema_version": 1,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer_slug": "producer_reports",
         "topic": TOPIC_SLUG,
         "run_timestamp": run_timestamp,
         "generated_utc": report.get("timestamp"),
@@ -612,9 +612,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
     if paths.output_dir.name == "docs_integrity_reports":
         logger.warning(
-            "Deprecated output dir detected (%s). Use %s as the reports root.",
+            "Deprecated output dir detected (%s). Use build_topic_path('producer', '%s') instead.",
             paths.output_dir,
-            REPORTS_ROOT,
+            TOPIC_SLUG,
         )
         paths = replace(paths, output_dir=paths.output_dir.parent)
 
@@ -644,8 +644,8 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
     storage = create_storage(
         output_dir=paths.output_dir,
-        viewer_slug=VIEWER_SLUG,
-        topic=TOPIC_SLUG,
+        viewer_slug="",  # output_dir already contains full topic path
+        topic="",  # output_dir already contains full topic path
         timestamp=run_timestamp,
     )
 
@@ -676,7 +676,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     result = dict(report)
     result.update(
         {
-            "viewer_slug": VIEWER_SLUG,
+            "viewer_slug": "producer_reports",
             "topic": TOPIC_SLUG,
             "run_timestamp": run_timestamp,
             "run_dir": str(run_dir),

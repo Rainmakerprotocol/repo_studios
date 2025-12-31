@@ -4,7 +4,7 @@
 This producer converts raw faulthandler run directories into positional-encoded
 artifacts under:
 
-`.repo_studios/command_center/reports/rawview/fault_artifacts_producer/<YYYYMMDD-HHMM>/`
+`.repo_studios/reports/healthview/producer_reports/faulthandler_reports/<YYYYMMDD-HHMM>/`
 
 It emits the canonical artifact trio:
 
@@ -40,6 +40,7 @@ from libraries.cli import (  # noqa: E402
 from libraries.database_integration import create_storage  # noqa: E402
 from libraries.retention_policy import get_keep  # noqa: E402
 from libraries.prune_logs import prune_run_directories  # noqa: E402
+from libraries.report_paths import build_topic_path  # noqa: E402
 from utilities.fault_run_analysis import (  # noqa: E402
     FaultAnalysisResult,
     build_fault_report,
@@ -47,9 +48,8 @@ from utilities.fault_run_analysis import (  # noqa: E402
 
 DEFAULT_RUNS_RELATIVE = Path(".repo_studios/command_center/reports/rawview/fault_diagnostics_runs")
 LEGACY_RUNS_RELATIVE = Path(".repo_studios/faulthandler")
-DEFAULT_OUTPUT_RELATIVE = Path(".repo_studios/command_center/reports")
-VIEWER_SLUG = "rawview"
-TOPIC_SLUG = "fault_artifacts_producer"
+TOPIC_SLUG = "faulthandler_reports"
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
 DEFAULT_KEEP = get_keep("collect_faulthandler_reports")
 SCHEMA_VERSION = 1
 
@@ -76,7 +76,7 @@ PATH_CONFIG = PathsConfig(
         "runs_dir": PathSpec(field="runs_dir", default=DEFAULT_RUNS_RELATIVE, ensure_dir=False, within_repo=False),
         "output_dir": PathSpec(
             field="output_dir",
-            default=DEFAULT_OUTPUT_RELATIVE,
+            default=DEFAULT_OUTPUT_DIR,
             ensure_dir=True,
             within_repo=False,
         ),
@@ -288,10 +288,10 @@ def _render_markdown(report: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 def build_manifest(*, paths: Paths, options: Options, analysis: FaultAnalysisResult, run_slug: str) -> dict[str, Any]:
-    bundle_dir = paths.output_dir / VIEWER_SLUG / TOPIC_SLUG / run_slug
+    bundle_dir = paths.output_dir / run_slug
     return {
         "schema_version": SCHEMA_VERSION,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer_slug": "healthview",
         "topic": TOPIC_SLUG,
         "run_timestamp": run_slug,
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -329,7 +329,7 @@ def build_telemetry(*, analysis: FaultAnalysisResult, run_slug: str) -> dict[str
     severity = cast(dict[str, Any], raw_severity) if isinstance(raw_severity, dict) else {}
     return {
         "schema_version": SCHEMA_VERSION,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer_slug": "healthview",
         "topic": TOPIC_SLUG,
         "run_timestamp": run_slug,
         "generated_utc": analysis.report.get("generated_utc"),
@@ -352,7 +352,7 @@ def build_telemetry(*, analysis: FaultAnalysisResult, run_slug: str) -> dict[str
 
 
 def _validate_latest(paths: Paths, log: logging.Logger) -> dict[str, Any]:
-    topic_dir = paths.output_dir / VIEWER_SLUG / TOPIC_SLUG
+    topic_dir = paths.output_dir
     if not topic_dir.exists():
         return {"status": "fail", "issues": [f"missing topic dir: {topic_dir}"], "bundle_dir": None}
     candidates = [p for p in topic_dir.iterdir() if p.is_dir()]
@@ -396,7 +396,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     analysis = build_fault_report(run_dir, now=now, top_n=options.top_frames or 0) if options.top_frames else build_fault_report(run_dir, now=now)
     run_slug = _timestamp_slug(now)
 
-    storage = create_storage(paths.output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=run_slug)
+    storage = create_storage(paths.output_dir, "", "", timestamp=run_slug)
     manifest = build_manifest(paths=paths, options=options, analysis=analysis, run_slug=run_slug)
     telemetry = build_telemetry(analysis=analysis, run_slug=run_slug)
     markdown = _render_markdown(analysis.report)
@@ -412,7 +412,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
     run_bundle_dir = storage.file_storage.bundle_dir
     prune_run_directories(
-        paths.output_dir / VIEWER_SLUG / TOPIC_SLUG,
+        paths.output_dir,
         keep=options.artifacts_to_keep,
         current_run=run_bundle_dir,
         logger=log,

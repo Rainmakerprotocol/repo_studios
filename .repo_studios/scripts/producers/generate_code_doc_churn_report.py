@@ -13,8 +13,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Sequence
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports")
 RUN_PREFIX = "code_doc_churn"
+TOPIC_SLUG = "code_doc_churn"
 DEFAULT_GIT_WINDOW = "14 days"
 ALLOWED_CODE_EXTENSIONS = {
     ".py",
@@ -54,6 +54,7 @@ try:  # pragma: no cover - import guard for standalone execution
     )
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when script is run directly
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -68,9 +69,11 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when script is run di
     )
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_code_doc_churn_report")
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
 
 
 @dataclass(frozen=True)
@@ -574,16 +577,15 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         anchor_inventory_path=paths.anchor_inventory,
     )
 
-    viewer_slug = "healthview"
-    topic = RUN_PREFIX
+    # output_dir already contains full topic path - use empty viewer/topic for create_storage
     timestamp = generated_ts.strftime("%Y%m%d-%H%M")
 
     markdown = render_markdown(report)
     summary_metrics = _bundle_summary(report)
 
     manifest: dict[str, Any] = {
-        "viewer_slug": viewer_slug,
-        "topic": topic,
+        "viewer_slug": "producer_reports",
+        "topic": TOPIC_SLUG,
         "run_timestamp": timestamp,
         "generated_utc": report.get("generated_utc"),
         "git_sha": report.get("git", {}).get("head_commit"),
@@ -609,8 +611,8 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     }
 
     telemetry: dict[str, Any] = {
-        "viewer_slug": viewer_slug,
-        "topic": topic,
+        "viewer_slug": "producer_reports",
+        "topic": TOPIC_SLUG,
         "run_timestamp": timestamp,
         "generated_utc": report.get("generated_utc"),
         "metrics": {
@@ -620,10 +622,11 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         "payload": report,
     }
 
+    # output_dir already contains full topic path - use empty viewer/topic
     storage = create_storage(
         output_dir=paths.output_dir,
-        viewer_slug=viewer_slug,
-        topic=topic,
+        viewer_slug="",
+        topic="",
         timestamp=timestamp,
     )
 
@@ -635,9 +638,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     storage.write_telemetry(telemetry)
 
     run_dir = storage.file_storage.bundle_dir
-    topic_dir = run_dir.parent
+    # output_dir already contains full topic path
     prune_result = prune_run_directories(
-        topic_dir,
+        paths.output_dir,
         keep=options.artifacts_to_keep,
         current_run=run_dir,
         logger=logger,

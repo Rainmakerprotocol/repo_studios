@@ -23,14 +23,6 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Sequence
 
-LOGS_DIR_DEFAULT = ".repo_studios/command_center/reports/rawview/test_execution_runs"
-LEGACY_LOGS_DIR = ".repo_studios/pytest_logs"
-PRODUCER_REPORTS_ROOT_DEFAULT = ".repo_studios/reports/healthview/rawview/test_log_reports"
-OUTPUT_BASE_DEFAULT = ".repo_studios/reports/healthview/consumer_reports/test_log_health_reports"
-DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_test_log_health_report")
-
-DEFAULT_TIMESTAMP_FORMAT = "%Y%m%d-%H%M"
-
 SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
 UTILITIES_ROOT = Path(__file__).resolve().parents[2]
 ROOT = Path(__file__).resolve().parents[3]
@@ -54,7 +46,17 @@ from libraries import (  # noqa: E402
     render_markdown,
 )
 from libraries.cli import resolve_repo_root  # noqa: E402
+from libraries.report_paths import build_topic_path  # noqa: E402
 from libraries.retention_policy import get_keep  # noqa: E402
+
+LOGS_DIR_DEFAULT = ".repo_studios/command_center/reports/rawview/test_execution_runs"
+LEGACY_LOGS_DIR = ".repo_studios/pytest_logs"
+TOPIC_SLUG = "test_log_health_reports"
+PRODUCER_REPORTS_ROOT_DEFAULT = ".repo_studios/reports/healthview/rawview/test_log_reports"
+OUTPUT_BASE_DEFAULT = build_topic_path("consumer", TOPIC_SLUG)
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_test_log_health_report")
+
+DEFAULT_TIMESTAMP_FORMAT = "%Y%m%d-%H%M"
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:

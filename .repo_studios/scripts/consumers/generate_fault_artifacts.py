@@ -73,18 +73,18 @@ if str(COMMAND_CENTER_SCRIPTS_ROOT) not in sys.path:
 from libraries import prune_run_directories  # noqa: E402
 from libraries.cli import resolve_repo_root  # noqa: E402
 from libraries.retention_policy import get_keep  # noqa: E402
+from libraries.report_paths import build_topic_path  # noqa: E402
 
 RAWVIEW_RUNS_BASE = Path(".repo_studios/command_center/reports/rawview/fault_diagnostics_runs")
 LEGACY_RUNS_BASE = Path(".repo_studios/faulthandler")
-CONSUMER_BASE = Path(".repo_studios/reports/healthview/consumer_reports/fault_artifacts")
+TOPIC_SLUG = "fault_artifacts"
+DEFAULT_OUTPUT_DIR = build_topic_path("consumer", TOPIC_SLUG)
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_fault_artifacts")
 
 # HOP artifact names (REPORT_NAMING_STANDARDS.md)
 MANIFEST_NAME = "manifest.json"
 SUMMARY_NAME = "summary.md"
 TELEMETRY_NAME = "telemetry.json"
-VIEWER_SLUG = "healthview"
-TOPIC_SLUG = "fault_artifacts"
 SCHEMA_VERSION = 1
 
 SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
@@ -441,7 +441,7 @@ def _write_consumer_bundle(
     severity = summary_data.get("severity_buckets") if isinstance(summary_data, dict) else {}
     manifest_payload = {
         "schema_version": SCHEMA_VERSION,
-        "viewer": VIEWER_SLUG,
+        "viewer": "healthview",
         "topic": TOPIC_SLUG,
         "generated_at": generated_at.isoformat(timespec="seconds"),
         "source": source,
@@ -598,7 +598,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     _write_stacks_csv(outdir, signatures)
     summary_text = _write_summary(outdir, report, signatures, dumps_dir)
 
-    raw_target_root = Path(args.output_dir) if args.output_dir is not None else CONSUMER_BASE
+    raw_target_root = Path(args.output_dir) if args.output_dir is not None else DEFAULT_OUTPUT_DIR
     target_root = raw_target_root if raw_target_root.is_absolute() else (repo_root / raw_target_root).resolve()
 
     ts_slug = _timestamp_slug()

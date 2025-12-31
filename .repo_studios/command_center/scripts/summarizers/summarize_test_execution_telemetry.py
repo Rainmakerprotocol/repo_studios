@@ -24,6 +24,7 @@ try:  # pragma: no cover - prefer import when packaged
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when running in isolation
     LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
@@ -40,13 +41,13 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running in isola
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 
 SUMMARY_STEM = "test_execution_telemetry_summary"
-VIEWER_SLUG = "summarizer_reports"
 TOPIC_SLUG = "test_execution_telemetry"
 SCHEMA_VERSION = 1
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
+DEFAULT_OUTPUT_DIR = build_topic_path("summarizer", TOPIC_SLUG)
 
 
 @dataclass(frozen=True)
@@ -330,7 +331,7 @@ def build_summary(inputs: SummaryInputs) -> SummaryResult:
 
     summary_payload = {
         "schema_version": SCHEMA_VERSION,
-        "viewer": VIEWER_SLUG,
+        "viewer": "summarizer_reports",
         "topic": TOPIC_SLUG,
         "generated_at": completed_iso,
         "run_slug": inputs.run_slug,
@@ -639,8 +640,8 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         output_dir=paths.output_dir,
         artifacts=artifacts,
         keep=options.artifacts_to_keep,
-        viewer=VIEWER_SLUG,
-        topic=TOPIC_SLUG,
+        viewer="",
+        topic="",
     )
 
     logger.info("Test Execution Telemetry summary artifacts written to %s (slug=%s)", result.run_dir, result.slug)

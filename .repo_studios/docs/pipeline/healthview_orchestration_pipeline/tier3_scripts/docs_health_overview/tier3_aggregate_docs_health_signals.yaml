@@ -20,7 +20,7 @@ tool:
 
     Emits a docs health bundle under:
 
-      .repo_studios/reports/docs_health_signals-<YYYYMMDD-HHMM>/
+      .repo_studios/reports/healthview/aggregator_reports/docs_health_signals/<YYYYMMDD-HHMM>/
 
     The bundle includes report.json, report.md, signals.tsv, signals.csv,
     and bundle_summary.json.
@@ -86,10 +86,9 @@ parameters:
   - name: output_dir
     type: path
     required: false
-    default: ".repo_studios/reports"
+    default: .repo_studios/reports/healthview/aggregator_reports/docs_health_signals
     description: |
-      Base directory for aggregator output. The script appends
-      docs_health_signals-<timestamp>/ automatically via write_report_artifacts().
+      HOP-compliant output directory. The aggregator appends <timestamp>/ automatically.
     validation:
       must_exist: false
       will_create: true
@@ -97,7 +96,7 @@ parameters:
   - name: churn_report
     type: path
     required: false
-    default: ".repo_studios/reports/healthview/code_doc_churn"
+    default: ".repo_studios/reports/healthview/producer_reports/code_doc_churn"
     description: |
       Path to code-doc churn telemetry (topic dir or specific bundle dir).
       The script will find the most recent telemetry.json if a topic dir is given.
@@ -107,7 +106,7 @@ parameters:
   - name: undocumented_report
     type: path
     required: false
-    default: ".repo_studios/reports/healthview/undocumented_logic"
+    default: ".repo_studios/reports/healthview/producer_reports/undocumented_logic"
     description: |
       Path to undocumented logic telemetry (topic dir or specific bundle dir).
     validation:
@@ -116,7 +115,7 @@ parameters:
   - name: anchor_inventory
     type: path
     required: false
-    default: ".repo_studios/reports/healthview/anchor_inventory"
+    default: ".repo_studios/reports/healthview/producer_reports/anchor_inventory"
     description: |
       Path to anchor inventory telemetry (topic dir or specific bundle dir).
     validation:
@@ -125,7 +124,7 @@ parameters:
   - name: anchor_validation
     type: path
     required: false
-    default: ".repo_studios/reports/healthview/markdown_anchor_validation"
+    default: ".repo_studios/reports/healthview/producer_reports/markdown_anchor_validation"
     description: |
       Path to markdown anchor validation telemetry (topic dir or specific bundle dir).
     validation:
@@ -134,7 +133,7 @@ parameters:
   - name: docs_integrity
     type: path
     required: false
-    default: ".repo_studios/reports/healthview/docs_integrity_validation"
+    default: ".repo_studios/reports/healthview/producer_reports/docs_integrity_validation"
     description: |
       Path to docs integrity validation telemetry (topic dir or specific bundle dir).
     validation:
@@ -143,7 +142,7 @@ parameters:
   - name: metrics_stub
     type: path
     required: false
-    default: ".repo_studios/reports/healthview/metrics_anchor_stub_validation"
+    default: ".repo_studios/reports/healthview/producer_reports/metrics_anchor_stub_validation"
     description: |
       Path to metrics anchor stub validation telemetry (topic dir or specific bundle dir).
     validation:
@@ -152,7 +151,7 @@ parameters:
   - name: placeholder_report
     type: path
     required: false
-    default: ".repo_studios/reports/healthview/code_placeholders"
+    default: ".repo_studios/reports/healthview/producer_reports/code_placeholders"
     description: |
       Path to code placeholders telemetry (optional hygiene signal).
     validation:
@@ -161,7 +160,7 @@ parameters:
   - name: monkey_patch_report
     type: path
     required: false
-    default: ".repo_studios/reports/healthview/monkey_patches"
+    default: ".repo_studios/reports/healthview/producer_reports/monkey_patches"
     description: |
       Path to monkey patches telemetry (optional hygiene signal).
     validation:
@@ -200,43 +199,43 @@ io_contract:
   inputs:
     - name: churn_telemetry
       source: filesystem
-      path_pattern: ".repo_studios/reports/healthview/code_doc_churn/<latest>/telemetry.json"
+      path_pattern: ".repo_studios/reports/healthview/producer_reports/code_doc_churn/<latest>/telemetry.json"
       description: Code-doc churn telemetry from generate_code_doc_churn_report.py.
       required: false
 
     - name: undocumented_telemetry
       source: filesystem
-      path_pattern: ".repo_studios/reports/healthview/undocumented_logic/<latest>/telemetry.json"
+      path_pattern: ".repo_studios/reports/healthview/producer_reports/undocumented_logic/<latest>/telemetry.json"
       description: Undocumented logic telemetry from generate_undocumented_logic_report.py.
       required: false
 
     - name: anchor_inventory_telemetry
       source: filesystem
-      path_pattern: ".repo_studios/reports/healthview/anchor_inventory/<latest>/telemetry.json"
+      path_pattern: ".repo_studios/reports/healthview/producer_reports/anchor_inventory/<latest>/telemetry.json"
       description: Anchor inventory telemetry from generate_anchor_inventory.py.
       required: false
 
     - name: anchor_validation_telemetry
       source: filesystem
-      path_pattern: ".repo_studios/reports/healthview/markdown_anchor_validation/<latest>/telemetry.json"
+      path_pattern: ".repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/<latest>/telemetry.json"
       description: Markdown anchor validation telemetry from validate_markdown_anchors.py.
       required: false
 
     - name: docs_integrity_telemetry
       source: filesystem
-      path_pattern: ".repo_studios/reports/healthview/docs_integrity_validation/<latest>/telemetry.json"
+      path_pattern: ".repo_studios/reports/healthview/producer_reports/docs_integrity_validation/<latest>/telemetry.json"
       description: Docs integrity validation telemetry from verify_docs_integrity.py.
       required: false
 
     - name: metrics_stub_telemetry
       source: filesystem
-      path_pattern: ".repo_studios/reports/healthview/metrics_anchor_stub_validation/<latest>/telemetry.json"
+      path_pattern: ".repo_studios/reports/healthview/producer_reports/metrics_anchor_stub_validation/<latest>/telemetry.json"
       description: Metrics anchor stub validation telemetry from validate_metrics_anchor_stubs.py.
       required: false
 
   outputs:
     - artifact: report.json
-      path_pattern: ".repo_studios/reports/docs_health_signals-<YYYYMMDD-HHMM>/report.json"
+      path_pattern: ".repo_studios/reports/healthview/aggregator_reports/docs_health_signals/<YYYYMMDD-HHMM>/report.json"
       format: json
       description: Full aggregated docs health report with all signals.
 

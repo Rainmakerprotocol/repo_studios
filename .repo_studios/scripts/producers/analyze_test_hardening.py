@@ -15,14 +15,6 @@ from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import List, Sequence, cast
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
-VIEWER_SLUG = "producer_reports"
-TOPIC_SLUG = "test_hardening"
-DEFAULT_ARTIFACTS_TO_KEEP = get_keep("analyze_test_hardening")
-SCHEMA_VERSION = 1
-TEST_PATTERNS = ("test_*.py", "*_test.py", "test*.py")
-IGNORED_PARTS = {".git", ".repo_studios", ".venv", "__pycache__"}
-
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
 try:
@@ -34,6 +26,7 @@ try:
         build_standard_options,
         build_standard_paths,
     )
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when package path isn't configured
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -46,6 +39,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when package path isn
         build_standard_options,
         build_standard_paths,
     )
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 
 try:  # pragma: no cover - prefer import when packaged
@@ -56,6 +50,13 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running in isola
         sys.path.insert(0, str(LIBRARIES_ROOT))
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+
+TOPIC_SLUG = "test_hardening"
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("analyze_test_hardening")
+SCHEMA_VERSION = 1
+TEST_PATTERNS = ("test_*.py", "*_test.py", "test*.py")
+IGNORED_PARTS = {".git", ".repo_studios", ".venv", "__pycache__"}
 
 
 @dataclass(frozen=True)
@@ -674,10 +675,10 @@ def build_manifest(
     exit_code: int,
     tests_dirs: list[Path] | None = None,
 ) -> dict:
-    bundle_dir = paths.output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp_slug
+    bundle_dir = paths.output_dir / timestamp_slug
     return {
         "schema_version": SCHEMA_VERSION,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer_slug": "producer_reports",
         "topic": TOPIC_SLUG,
         "run_timestamp": timestamp_slug,
         "generated_at": timestamp.astimezone(dt.timezone.utc).isoformat(),
@@ -714,7 +715,7 @@ def build_telemetry(payload: dict, *, timestamp_slug: str) -> dict:
     severities = summary.get("severity_totals", {})
     return {
         "schema_version": SCHEMA_VERSION,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer_slug": "producer_reports",
         "topic": TOPIC_SLUG,
         "run_timestamp": timestamp_slug,
         "timestamp": payload.get("timestamp"),
@@ -783,8 +784,8 @@ def run(argv: Sequence[str] | None = None) -> dict:
 
     results = analyze_all(paths, tests_dirs=tests_dirs)
     payload = compose_payload(paths, options, results, timestamp)
-    bundle_dir = (paths.output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp_slug).resolve()
-    storage = create_storage(paths.output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=timestamp_slug)
+    bundle_dir = (paths.output_dir / timestamp_slug).resolve()
+    storage = create_storage(paths.output_dir, "", "", timestamp=timestamp_slug)
     manifest = build_manifest(
         paths=paths,
         options=options,
@@ -804,9 +805,8 @@ def run(argv: Sequence[str] | None = None) -> dict:
     # DB_INTEGRATION_MARKER: test hardening telemetry write
     storage.write_telemetry(telemetry)
 
-    topic_dir = (paths.output_dir / VIEWER_SLUG / TOPIC_SLUG).resolve()
     removed = prune_history(
-        topic_dir,
+        paths.output_dir,
         options.artifacts_to_keep,
         current_run=bundle_dir,
         logger=logger,
@@ -814,7 +814,7 @@ def run(argv: Sequence[str] | None = None) -> dict:
     if removed:
         logger.debug("Pruned test hardening runs: %s", ", ".join(sorted(path.name for path in removed)))
 
-    payload["viewer_slug"] = VIEWER_SLUG
+    payload["viewer_slug"] = "producer_reports"
     payload["topic"] = TOPIC_SLUG
     payload["run_timestamp"] = timestamp_slug
     payload["output_dir"] = str(bundle_dir)

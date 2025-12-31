@@ -20,21 +20,21 @@ if str(SCRIPTS_ROOT) not in sys.path:  # pragma: no cover - import path bootstra
 
 from utilities.anchor_inventory_loader import load_anchor_inventory  # noqa: E402
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports")
-DEFAULT_CHURN_REPORT = Path(".repo_studios/reports/healthview/code_doc_churn")
-DEFAULT_UNDOCUMENTED_REPORT = Path(".repo_studios/reports/healthview/undocumented_logic")
-DEFAULT_ANCHOR_INVENTORY = Path(".repo_studios/reports/healthview/anchor_inventory")
+TOPIC_SLUG = "docs_health_signals"
+DEFAULT_CHURN_REPORT = Path(".repo_studios/reports/healthview/producer_reports/code_doc_churn")
+DEFAULT_UNDOCUMENTED_REPORT = Path(".repo_studios/reports/healthview/producer_reports/undocumented_logic")
+DEFAULT_ANCHOR_INVENTORY = Path(".repo_studios/reports/healthview/producer_reports/anchor_inventory")
 DEFAULT_ANCHOR_VALIDATION = Path(
-    ".repo_studios/reports/healthview/markdown_anchor_validation"
+    ".repo_studios/reports/healthview/producer_reports/markdown_anchor_validation"
 )
 DEFAULT_DOCS_INTEGRITY = Path(
-    ".repo_studios/reports/healthview/docs_integrity_validation"
+    ".repo_studios/reports/healthview/producer_reports/docs_integrity_validation"
 )
 DEFAULT_METRICS_STUB = Path(
-    ".repo_studios/reports/healthview/metrics_anchor_stub_validation"
+    ".repo_studios/reports/healthview/producer_reports/metrics_anchor_stub_validation"
 )
-DEFAULT_PLACEHOLDER_REPORT = Path(".repo_studios/reports/healthview/code_placeholders")
-DEFAULT_MONKEY_PATCH_REPORT = Path(".repo_studios/reports/healthview/monkey_patches")
+DEFAULT_PLACEHOLDER_REPORT = Path(".repo_studios/reports/healthview/producer_reports/code_placeholders")
+DEFAULT_MONKEY_PATCH_REPORT = Path(".repo_studios/reports/healthview/producer_reports/monkey_patches")
 RUN_STEM = "docs_health_signals"
 SCHEMA_VERSION = 1
 
@@ -53,6 +53,7 @@ try:  # pragma: no cover - prefer import when packaged
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
     import sys
@@ -69,9 +70,11 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("aggregate_docs_health_signals")
+DEFAULT_OUTPUT_DIR = build_topic_path("aggregator", TOPIC_SLUG)
 
 
 @dataclass(frozen=True)
@@ -890,42 +893,45 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     artifacts = [
         ReportArtifact(
             filename="report.json",
-            pointer="latest_report.json",
+            pointer=None,  # HOP layout - no legacy pointers
             kind="json",
             content=report_payload,
         ),
         ReportArtifact(
             filename="report.md",
-            pointer="latest_report.md",
+            pointer=None,  # HOP layout - no legacy pointers
             kind="text",
             content=markdown_payload,
         ),
         ReportArtifact(
             filename="signals.tsv",
-            pointer="latest_signals.tsv",
+            pointer=None,  # HOP layout - no legacy pointers
             kind="text",
             content=tsv_payload,
         ),
         ReportArtifact(
             filename="signals.csv",
-            pointer="latest_signals.csv",
+            pointer=None,  # HOP layout - no legacy pointers
             kind="text",
             content=csv_payload,
         ),
         ReportArtifact(
             filename="bundle_summary.json",
-            pointer="latest_bundle_summary.json",
+            pointer=None,  # HOP layout - no legacy pointers
             kind="json",
             content=bundle_summary,
         ),
     ]
 
+    # output_dir already contains full topic path - use hierarchical layout with empty viewer/topic
     write_result = write_report_artifacts(
         stem=RUN_STEM,
         timestamp=generated_at,
         output_dir=paths.output_dir,
         artifacts=artifacts,
         keep=options.artifacts_to_keep,
+        viewer="",  # output_dir already contains full topic path
+        topic="",  # output_dir already contains full topic path
     )
 
     overall_score_value = summary_payload.get("overall_score")

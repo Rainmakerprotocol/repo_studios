@@ -1,0 +1,178 @@
+{
+  "artifacts": {
+    "coverage_report": null,
+    "hardening": ".repo_studios/reports/healthview/producer_reports/test_hardening/20251231-0317",
+    "health_bundle_summary": ".repo_studios/reports/healthview/consumer_reports/test_log_health_reports/20251231-0317/bundle_summary.json",
+    "health_report": ".repo_studios/reports/healthview/consumer_reports/test_log_health_reports/20251231-0317",
+    "heatmap": ".repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap/churn_complexity_heatmap-2025-12-31_031758",
+    "log_report": ".repo_studios/reports/healthview/rawview/test_log_reports/20251231-0317"
+  },
+  "components": {
+    "collect": {
+      "producer_report": null,
+      "report_dir": ".repo_studios/reports/healthview/rawview/test_log_reports/20251231-0317",
+      "slow_tests_over_threshold": 0,
+      "warnings_total": 0
+    },
+    "coverage": {
+      "report_dir": null,
+      "summary": {}
+    },
+    "hardening": {
+      "payload": {
+        "status": "ok",
+        "summary": {
+          "clean_files": 0,
+          "high_priority_files": 0,
+          "severity_totals": {},
+          "total_files": 0,
+          "total_issues": 0,
+          "total_test_functions": 0
+        }
+      },
+      "run_dir": ".repo_studios/reports/healthview/producer_reports/test_hardening/20251231-0317"
+    },
+    "health": {
+      "bundle_summary": ".repo_studios/reports/healthview/consumer_reports/test_log_health_reports/20251231-0317/bundle_summary.json",
+      "payload": {
+        "bundle_summary": {
+          "artifacts": {
+            "report_csv": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\test_log_health_reports\\20251231-0317\\report.csv",
+            "report_json": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\test_log_health_reports\\20251231-0317\\report.json",
+            "report_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\test_log_health_reports\\20251231-0317\\report.md"
+          },
+          "comparisons": {
+            "previous_run": {
+              "pass_rate": {
+                "current": 100.0,
+                "delta": 0.0,
+                "previous": 100.0
+              },
+              "summary_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\test_log_health_reports\\20251231-0317"
+            }
+          },
+          "generated_at": "2025-12-31T03:17:58+00:00",
+          "logs_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\test_execution_runs",
+          "logs_source": null,
+          "producer_bundle_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\rawview\\test_log_reports\\20251231-0317",
+          "producer_report": null,
+          "producer_telemetry": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\rawview\\test_log_reports\\20251231-0317\\telemetry.json",
+          "schema_version": 1,
+          "source": "producer",
+          "summary": {
+            "errors": 0,
+            "failed": 0,
+            "passed": 452,
+            "skipped": 0,
+            "total": 452,
+            "tracebacks": 0,
+            "warnings_total": 0,
+            "xfailed": 0
+          }
+        },
+        "source": "producer"
+      },
+      "run_dir": ".repo_studios/reports/healthview/consumer_reports/test_log_health_reports/20251231-0317"
+    },
+    "heatmap": {
+      "payload": {
+        "artifacts": {
+          "heatmap_json": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\aggregator_reports\\churn_complexity_heatmap\\churn_complexity_heatmap-2025-12-31_031758\\heatmap.json",
+          "heatmap_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\aggregator_reports\\churn_complexity_heatmap\\churn_complexity_heatmap-2025-12-31_031758\\heatmap.md"
+        },
+        "generated_at": "2025-12-31T03:17:58+00:00",
+        "git_sha": "0648a2d715cd9f52d12025dbd64be012ec1a9fb3",
+        "inputs": {
+          "junit": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\test_execution_runs\\pytest_log_capture-2025-12-27_2013\\junit_2025-12-27_2013.xml",
+          "logs_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\test_execution_runs",
+          "metrics_source": null,
+          "test_log_summary": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\test_log_health_reports\\20251231-0317\\bundle_summary.json"
+        },
+        "mode": "consumer",
+        "notes": [],
+        "repo_root": "C:\\Users\\genet\\repo_studios",
+        "schema_version": 1,
+        "summary_source": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\test_log_health_reports\\20251231-0317\\bundle_summary.json",
+        "window": 500
+      },
+      "run_dir": ".repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap/churn_complexity_heatmap-2025-12-31_031758"
+    }
+  },
+  "failures": {
+    "detected": 0,
+    "examples": []
+  },
+  "generated_at": "2025-12-31T03:17:58+00:00",
+  "metrics": {
+    "coverage_status": null,
+    "hardening_high_severity": null,
+    "hardening_status": "ok",
+    "health_report_source": "producer",
+    "heatmap_mode": "consumer",
+    "log_report_available": true,
+    "pipeline_status": "success",
+    "slow_tests_over_threshold": 0,
+    "warnings_total": 0
+  },
+  "run_slug": "20251231-0317",
+  "runtime_metrics": [
+    {
+      "detail": "log report captured",
+      "duration_seconds": 0.089,
+      "name": "collect",
+      "status": "success"
+    },
+    {
+      "detail": "analysis completed",
+      "duration_seconds": 4.904,
+      "name": "analyse",
+      "status": "success"
+    },
+    {
+      "detail": "health summary generated",
+      "duration_seconds": 0.012,
+      "name": "summarize",
+      "status": "success"
+    }
+  ],
+  "schema_version": 1,
+  "steps": [
+    {
+      "detail": "log report captured",
+      "finished_at": "2025-12-31T03:17:54.053635+00:00",
+      "name": "collect",
+      "payload": {
+        "coverage": {},
+        "log_report": {
+          "slow_tests": 0,
+          "warnings_total": 0
+        }
+      },
+      "started_at": "2025-12-31T03:17:53.964269+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "analysis completed",
+      "finished_at": "2025-12-31T03:17:58.957881+00:00",
+      "name": "analyse",
+      "payload": {
+        "hardening_status": "ok",
+        "heatmap_mode": "consumer"
+      },
+      "started_at": "2025-12-31T03:17:54.053646+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "health summary generated",
+      "finished_at": "2025-12-31T03:17:58.970191+00:00",
+      "name": "summarize",
+      "payload": {
+        "source": "producer"
+      },
+      "started_at": "2025-12-31T03:17:58.957894+00:00",
+      "status": "success"
+    }
+  ],
+  "topic": "test_execution_telemetry",
+  "viewer": "summarizer_reports"
+}

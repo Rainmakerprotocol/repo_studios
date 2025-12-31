@@ -16,9 +16,23 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Iterable, Sequence
 
-DEFAULT_OUTPUT_BASE = Path(
-    ".repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap"
-)
+ROOT = Path(__file__).resolve().parents[3]
+root_str = str(ROOT)
+if root_str and root_str not in sys.path:
+    sys.path.insert(0, root_str)
+
+LIBRARIES_ROOT = ROOT / "command_center" / "scripts"
+libraries_root_str = str(LIBRARIES_ROOT)
+if libraries_root_str and libraries_root_str not in sys.path:
+    sys.path.insert(0, libraries_root_str)
+
+from libraries import prune_run_directories  # noqa: E402
+from libraries.cli import resolve_path, resolve_repo_root  # noqa: E402
+from libraries.report_paths import build_topic_path  # noqa: E402
+from libraries.retention_policy import get_keep  # noqa: E402
+
+TOPIC_SLUG = "churn_complexity_heatmap"
+DEFAULT_OUTPUT_BASE = build_topic_path("aggregator", TOPIC_SLUG)
 DEFAULT_TEST_LOG_SUMMARY = Path(".repo_studios/reports/healthview/consumer_reports/test_log_health_reports")
 DEFAULT_LOGS_DIR = Path(".repo_studios/command_center/reports/rawview/test_execution_runs")
 LEGACY_LOGS_DIR = Path(".repo_studios/pytest_logs")
@@ -32,20 +46,6 @@ HEATMAP_MD = "heatmap.md"
 BUNDLE_SUMMARY = "bundle_summary.json"
 
 PY_EXT = ".py"
-
-ROOT = Path(__file__).resolve().parents[3]
-root_str = str(ROOT)
-if root_str and root_str not in sys.path:
-    sys.path.insert(0, root_str)
-
-LIBRARIES_ROOT = ROOT / "command_center" / "scripts"
-libraries_root_str = str(LIBRARIES_ROOT)
-if libraries_root_str and libraries_root_str not in sys.path:
-    sys.path.insert(0, libraries_root_str)
-
-from libraries import prune_run_directories  # noqa: E402
-from libraries.cli import resolve_path, resolve_repo_root  # noqa: E402
-from libraries.retention_policy import get_keep  # noqa: E402
 
 
 @dataclass(frozen=True)

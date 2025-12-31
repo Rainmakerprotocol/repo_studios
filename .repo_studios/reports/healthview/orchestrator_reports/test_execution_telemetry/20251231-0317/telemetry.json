@@ -1,0 +1,54 @@
+{
+  "finished_at": "2025-12-31T03:17:58.970202+00:00",
+  "metrics": {
+    "artifact_bytes": 7176,
+    "artifact_files": 3,
+    "runtime_seconds": 5.005939,
+    "step_count": 3,
+    "steps_failed": 0,
+    "steps_skipped": 0,
+    "steps_succeeded": 3
+  },
+  "run_slug": "20251231-0317",
+  "started_at": "2025-12-31T03:17:53.964263+00:00",
+  "steps": [
+    {
+      "detail": "log report captured",
+      "finished_at": "2025-12-31T03:17:54.053635+00:00",
+      "name": "collect",
+      "payload": {
+        "coverage": {},
+        "log_report": {
+          "slow_tests": 0,
+          "warnings_total": 0
+        }
+      },
+      "started_at": "2025-12-31T03:17:53.964269+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "analysis completed",
+      "finished_at": "2025-12-31T03:17:58.957881+00:00",
+      "name": "analyse",
+      "payload": {
+        "hardening_status": "ok",
+        "heatmap_mode": "consumer"
+      },
+      "started_at": "2025-12-31T03:17:54.053646+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "health summary generated",
+      "finished_at": "2025-12-31T03:17:58.970191+00:00",
+      "name": "summarize",
+      "payload": {
+        "source": "producer"
+      },
+      "started_at": "2025-12-31T03:17:58.957894+00:00",
+      "status": "success"
+    }
+  ],
+  "success": true,
+  "topic": "test-execution-telemetry",
+  "viewer": "orchestrator_reports"
+}

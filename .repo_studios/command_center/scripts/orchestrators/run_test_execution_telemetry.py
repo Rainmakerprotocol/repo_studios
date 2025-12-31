@@ -44,12 +44,12 @@ from libraries import (
     step_success,
     write_report_artifacts,
 )
+from libraries.report_paths import build_topic_path
 
 LOGGER = logging.getLogger(__name__)
 
 TOPIC_SLUG = "test-execution-telemetry"
 HEALTHVIEW_TOPIC = "test_execution_telemetry"
-VIEWER_SLUG = "orchestrator_reports"
 SCHEMA_VERSION = 1
 
 COLLECT_SCRIPT = Path(".repo_studios/scripts/producers/collect_test_log_reports.py")
@@ -69,13 +69,14 @@ SUMMARIZER_SCRIPT = Path(
 SUMMARIZER_MODULE = "command_center.scripts.summarizers.summarize_test_execution_telemetry"
 
 DEFAULT_LOGS_DIR = Path(".repo_studios/command_center/reports/rawview/test_execution_runs")
-DEFAULT_TEST_LOG_REPORTS_DIR = Path(".repo_studios/reports/healthview")
-DEFAULT_TEST_LOG_HEALTH_DIR = Path(".repo_studios/reports/healthview/consumer_reports/test_log_health_reports")
-DEFAULT_COVERAGE_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
+DEFAULT_TEST_LOG_REPORTS_DIR = build_topic_path("rawview", "test_log_reports")
+DEFAULT_TEST_LOG_HEALTH_DIR = build_topic_path("consumer", "test_log_health_reports")
+DEFAULT_COVERAGE_OUTPUT_DIR = build_topic_path("producer", "test_coverage_inventory")
 DEFAULT_COVERAGE_XML = Path(".repo_studios/tests/fixtures/test_run_coverage/coverage.xml")
-DEFAULT_HEATMAP_OUTPUT_DIR = Path(".repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap")
-DEFAULT_HARDENING_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
-DEFAULT_HEALTHVIEW_ROOT = Path(".repo_studios/reports/healthview")
+DEFAULT_HEATMAP_OUTPUT_DIR = build_topic_path("aggregator", "churn_complexity_heatmap")
+DEFAULT_HARDENING_OUTPUT_DIR = build_topic_path("producer", "test_hardening")
+DEFAULT_HEALTHVIEW_ROOT = build_topic_path("orchestrator", HEALTHVIEW_TOPIC)
+DEFAULT_SUMMARIZER_OUTPUT_DIR = build_topic_path("summarizer", HEALTHVIEW_TOPIC)
 
 COVERAGE_CLASS_SLUG = "producer_reports"
 COVERAGE_TOPIC_SLUG = "test_coverage_inventory"
@@ -95,6 +96,7 @@ class Paths:
     heatmap_output_dir: Path
     hardening_output_dir: Path
     healthview_root: Path
+    summarizer_output_dir: Path
 
 
 PATHS_CONFIG = PathsConfig(
@@ -121,6 +123,9 @@ PATHS_CONFIG = PathsConfig(
         ),
         "healthview_root": PathSpec(
             field="healthview_root", default=DEFAULT_HEALTHVIEW_ROOT, ensure_dir=True, within_repo=False
+        ),
+        "summarizer_output_dir": PathSpec(
+            field="summarizer_output_dir", default=DEFAULT_SUMMARIZER_OUTPUT_DIR, ensure_dir=True, within_repo=False
         ),
     },
     repo_root_depth=4,
@@ -966,7 +971,7 @@ def run(argv: Sequence[str] | None = None) -> int:
     health_outcome = health_outcome_holder.get("value")
 
     run_slug = options.run_timestamp.strftime("%Y%m%d-%H%M")
-    telemetry = build_pipeline_telemetry(result, viewer=VIEWER_SLUG, topic=TOPIC_SLUG, run_slug=run_slug)
+    telemetry = build_pipeline_telemetry(result, viewer="orchestrator_reports", topic=TOPIC_SLUG, run_slug=run_slug)
     completed_at = datetime.now(timezone.utc)
 
     artifacts_section: dict[str, Any] = {
@@ -984,7 +989,7 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     manifest = {
         "schema_version": SCHEMA_VERSION,
-        "viewer": VIEWER_SLUG,
+        "viewer": "orchestrator_reports",
         "topic": HEALTHVIEW_TOPIC,
         "run_slug": run_slug,
         "generated_at": completed_at.isoformat(),
@@ -1023,8 +1028,8 @@ def run(argv: Sequence[str] | None = None) -> int:
         output_dir=paths.healthview_root,
         artifacts=artifacts,
         keep=options.artifacts_to_keep,
-        viewer=VIEWER_SLUG,
-        topic=HEALTHVIEW_TOPIC,
+        viewer="",
+        topic="",
     )
 
     summarizer_run = _load_run_callable(paths.repo_root / SUMMARIZER_SCRIPT, SUMMARIZER_MODULE)
@@ -1036,7 +1041,7 @@ def run(argv: Sequence[str] | None = None) -> int:
         "--telemetry",
         str(result_artifacts.artifacts["telemetry.json"]),
         "--output-dir",
-        str(paths.test_log_reports_dir),
+        str(paths.summarizer_output_dir),
         "--artifacts-to-keep",
         str(options.artifacts_to_keep),
         "--log-level",

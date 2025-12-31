@@ -18,10 +18,7 @@ from typing import Any
 
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 
-VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "anchor_inventory"
-
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
@@ -36,6 +33,7 @@ try:  # pragma: no cover - import guard for standalone execution
     )
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when script is run directly
     import sys
@@ -52,7 +50,10 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when script is run di
     )
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
+
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
 
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_anchor_inventory")
 
@@ -653,8 +654,8 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
     storage = create_storage(
         paths.output_dir,
-        VIEWER_SLUG,
-        TOPIC_SLUG,
+        "",  # viewer_slug empty - output_dir already contains full topic path
+        "",  # topic empty - output_dir already contains full topic path
         timestamp=run_timestamp,
     )
     bundle_dir = storage.file_storage.bundle_dir
@@ -665,7 +666,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
     manifest: dict[str, object] = {
         "schema_version": 1,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer_slug": "producer_reports",
         "topic": TOPIC_SLUG,
         "run_timestamp": run_timestamp,
         "generated_at": now_iso,
@@ -694,7 +695,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     summary = report.get("summary", {}) if isinstance(report, dict) else {}
     telemetry: dict[str, object] = {
         "schema_version": 1,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer_slug": "producer_reports",
         "topic": TOPIC_SLUG,
         "run_timestamp": run_timestamp,
         "generated_at": now_iso,
@@ -725,9 +726,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     # DB_INTEGRATION_MARKER: anchor inventory telemetry write
     storage.write_telemetry(telemetry)
 
-    base_dir = paths.output_dir / VIEWER_SLUG / TOPIC_SLUG
+    # output_dir already contains full topic path - prune directly
     prune_run_directories(
-        base_dir,
+        paths.output_dir,
         keep=max(1, options.artifacts_to_keep),
         current_run=bundle_dir,
         logger=logger,

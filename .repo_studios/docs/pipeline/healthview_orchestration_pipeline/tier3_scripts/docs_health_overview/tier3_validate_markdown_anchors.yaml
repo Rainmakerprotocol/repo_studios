@@ -10,7 +10,7 @@ tool:
 
     Emits a canonical HealthView bundle under:
 
-      .repo_studios/reports/healthview/healthview/markdown_anchor_validation/<YYYYMMDD-HHMM>/
+      .repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/<YYYYMMDD-HHMM>/
 
     The bundle includes manifest.json, summary.md, and telemetry.json.
 
@@ -83,10 +83,10 @@ parameters:
   - name: output_dir
     type: path
     required: false
-    default: .repo_studios/reports/healthview
+    default: .repo_studios/reports/healthview/producer_reports/markdown_anchor_validation
     description: |
-      Base output directory. The producer appends healthview/markdown_anchor_validation/timestamp to form the bundle path:
-        {output_dir}/healthview/markdown_anchor_validation/<YYYYMMDD-HHMM>/
+      HOP-compliant output directory. The producer appends timestamp to form the bundle path:
+        {output_dir}/<YYYYMMDD-HHMM>/
     validation:
       must_exist: false
 
@@ -222,7 +222,7 @@ examples:
         --root . --log-level INFO
     expected_output: |
       INFO All checked markdown anchors OK (files: ...)
-      INFO Artifacts written to .repo_studios/reports/healthview/healthview/markdown_anchor_validation/20251229-2155
+      INFO Artifacts written to .repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/20251229-2155
 
   - description: Full run with explicit paths and HOP output
     command: |

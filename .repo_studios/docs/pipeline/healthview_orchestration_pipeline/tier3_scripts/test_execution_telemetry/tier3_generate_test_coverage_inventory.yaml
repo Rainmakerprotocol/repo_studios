@@ -116,7 +116,7 @@ parameters:
   - name: output_dir
     type: path
     required: false
-    default: .repo_studios/reports/healthview
+    default: .repo_studios/reports/healthview/producer_reports/test_coverage_inventory
     description: HealthView root where bundles are written.
     validation:
       parent_must_exist: false

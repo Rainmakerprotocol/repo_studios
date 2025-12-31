@@ -11,7 +11,7 @@ tool:
 
     Emits a canonical HealthView bundle under:
 
-      .repo_studios/reports/healthview/undocumented_logic/<YYYYMMDD-HHMM>/
+      .repo_studios/reports/healthview/producer_reports/undocumented_logic/<YYYYMMDD-HHMM>/
 
     The bundle includes manifest.json, summary.md, and telemetry.json.
 
@@ -76,10 +76,9 @@ parameters:
   - name: output_dir
     type: path
     required: false
-    default: ".repo_studios/reports"
+    default: .repo_studios/reports/healthview/producer_reports/undocumented_logic
     description: |
-      Base directory for HOP bundle output. The script appends
-      healthview/undocumented_logic/<timestamp>/ automatically.
+      HOP-compliant output directory. The producer appends <timestamp>/ automatically.
     validation:
       must_exist: false
       will_create: true
@@ -87,7 +86,7 @@ parameters:
   - name: doc_index
     type: path
     required: false
-    default: ".repo_studios/reports/healthview/doc_index"
+    default: ".repo_studios/reports/healthview/producer_reports/doc_index"
     description: |
       Path to latest doc index telemetry directory. The script will find
       the most recent telemetry.json within this topic directory.
@@ -97,7 +96,7 @@ parameters:
   - name: anchor_inventory
     type: path
     required: false
-    default: ".repo_studios/reports/healthview/anchor_inventory"
+    default: ".repo_studios/reports/healthview/producer_reports/anchor_inventory"
     description: |
       Path to latest anchor inventory telemetry directory. The script will
       find the most recent telemetry.json within this topic directory.
@@ -156,13 +155,13 @@ io_contract:
   inputs:
     - name: doc_index_telemetry
       source: filesystem
-      path_pattern: ".repo_studios/reports/healthview/doc_index/<latest>/telemetry.json"
+      path_pattern: ".repo_studios/reports/healthview/producer_reports/doc_index/<latest>/telemetry.json"
       description: Doc index telemetry with document inventory.
       required: false
 
     - name: anchor_inventory_telemetry
       source: filesystem
-      path_pattern: ".repo_studios/reports/healthview/anchor_inventory/<latest>/telemetry.json"
+      path_pattern: ".repo_studios/reports/healthview/producer_reports/anchor_inventory/<latest>/telemetry.json"
       description: Anchor inventory telemetry with heading anchors.
       required: false
 
@@ -180,18 +179,18 @@ io_contract:
 
   outputs:
     - artifact: manifest.json
-      path_pattern: ".repo_studios/reports/healthview/undocumented_logic/<YYYYMMDD-HHMM>/manifest.json"
+      path_pattern: "{output_dir}/<YYYYMMDD-HHMM>/manifest.json"
       format: json
       schema_version: 1
       description: Run metadata including inputs, outputs catalog, and status.
 
     - artifact: summary.md
-      path_pattern: ".repo_studios/reports/healthview/undocumented_logic/<YYYYMMDD-HHMM>/summary.md"
+      path_pattern: "{output_dir}/<YYYYMMDD-HHMM>/summary.md"
       format: markdown
       description: Human-readable summary of undocumented logic findings.
 
     - artifact: telemetry.json
-      path_pattern: ".repo_studios/reports/healthview/undocumented_logic/<YYYYMMDD-HHMM>/telemetry.json"
+      path_pattern: "{output_dir}/<YYYYMMDD-HHMM>/telemetry.json"
       format: json
       description: Structured telemetry for downstream aggregators.
 

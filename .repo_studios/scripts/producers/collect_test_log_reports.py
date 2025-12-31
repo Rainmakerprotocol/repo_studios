@@ -49,13 +49,13 @@ from libraries import (  # noqa: E402
 )
 from libraries.cli import resolve_repo_root  # noqa: E402
 from libraries.database_integration import create_storage  # noqa: E402
+from libraries.report_paths import build_topic_path  # noqa: E402
 from libraries.retention_policy import get_keep  # noqa: E402
 
 DEFAULT_LOGS_BASE = Path(".repo_studios/command_center/reports/rawview/test_execution_runs")
 LEGACY_LOGS_BASE = Path(".repo_studios/pytest_logs")
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
-VIEWER_SLUG = "rawview"
 TOPIC_SLUG = "test_log_reports"
+DEFAULT_OUTPUT_DIR = build_topic_path("rawview", TOPIC_SLUG)
 DEFAULT_KEEP = get_keep("collect_test_log_reports")
 
 
@@ -359,8 +359,8 @@ def _write_artifacts(
     elif pytest_exit_code not in (None, 0):
         status = "warn"
 
-    storage = create_storage(output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=timestamp)
-    bundle_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp
+    storage = create_storage(output_dir, "", "", timestamp=timestamp)
+    bundle_dir = output_dir / timestamp
 
     manifest_path = bundle_dir / "manifest.json"
     summary_path = bundle_dir / "summary.md"
@@ -370,7 +370,7 @@ def _write_artifacts(
 
     manifest: dict[str, object] = {
         "schema_version": 1,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer_slug": "rawview",
         "topic": TOPIC_SLUG,
         "run_timestamp": timestamp,
         "generated_at": now_iso,
@@ -400,7 +400,7 @@ def _write_artifacts(
 
     telemetry: dict[str, object] = {
         "schema_version": 1,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer_slug": "rawview",
         "topic": TOPIC_SLUG,
         "run_timestamp": timestamp,
         "generated_at": now_iso,
@@ -458,9 +458,8 @@ def _write_artifacts(
     # DB_INTEGRATION_MARKER: Persist telemetry payload + extracted metrics (report_artifacts + test_metrics)
     storage.write_telemetry(telemetry)
 
-    base_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG
     prune_run_directories(
-        base_dir,
+        output_dir,
         keep=max(1, keep),
         current_run=bundle_dir,
         logger=logger,

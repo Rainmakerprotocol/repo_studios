@@ -2,10 +2,9 @@
 """Topic orchestrator for the Fault Diagnostics workflow.
 
 Writes manifest, summary, and telemetry bundles to
-`.repo_studios/command_center/reports/healthview/fault_diagnostics/<timestamp>/` while mirroring the
-CommandView compatibility set. This runner replaces `scripts/orchestrators/run_fault_pipeline.py`
-and sequentially executes faulthandler collection, artifact generation, and summary emission. Most
-runs complete within three to five minutes, with producer log replay accounting for the majority of
+`.repo_studios/reports/healthview/orchestrator_reports/fault_diagnostics_overview/<YYYYMMDD-HHMM>/`.
+This runner sequentially executes faulthandler collection, artifact generation, and summary emission.
+Most runs complete within three to five minutes, with producer log replay accounting for the majority of
 execution time; the summarizer step is tolerant so investigations continue even when only warnings
 are raised.
 """
@@ -45,12 +44,14 @@ from libraries import (
     step_success,
     write_report_artifacts,
 )
+from libraries.report_paths import build_topic_path, HEALTHVIEW_ROOT
 
 LOGGER = logging.getLogger(__name__)
 
-TOPIC_SLUG = "fault-diagnostics"
-HEALTHVIEW_TOPIC = "fault_diagnostics"
-VIEWER_SLUG = "commandview"
+TOPIC_SLUG = "fault_diagnostics_overview"
+PRODUCER_TOPIC_SLUG = "faulthandler_reports"
+CONSUMER_TOPIC_SLUG = "fault_artifacts"
+SUMMARIZER_TOPIC_SLUG = "fault_diagnostics_overview"
 SCHEMA_VERSION = 1
 
 PRODUCER_SCRIPT = Path(".repo_studios/scripts/producers/collect_faulthandler_reports.py")
@@ -61,13 +62,11 @@ SUMMARIZER_SCRIPT = Path(".repo_studios/command_center/scripts/summarizers/summa
 SUMMARIZER_MODULE = "command_center.scripts.summarizers.summarize_fault_diagnostics_overview"
 ORCHESTRATOR_SCRIPT = Path(".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py")
 
-DEFAULT_RUNS_DIR = Path(".repo_studios/command_center/reports/rawview/fault_diagnostics_runs")
-DEFAULT_PRODUCER_OUTPUT = Path(".repo_studios/reports/producer_reports/faulthandler_reports")
-DEFAULT_PRODUCER_CC = Path(".repo_studios/command_center/reports/fault_artifacts_producer")
-DEFAULT_CONSUMER_OUTPUT = Path(".repo_studios/reports/consumer_reports/fault_artifacts")
-DEFAULT_CONSUMER_CC = Path(".repo_studios/command_center/reports/fault_artifacts_consumer")
-DEFAULT_SUMMARIZER_OUTPUT = Path(".repo_studios/reports/summarizer_reports/fault_diagnostics_overview")
-DEFAULT_HEALTHVIEW_ROOT = Path(".repo_studios/command_center/reports")
+DEFAULT_RUNS_DIR = build_topic_path("rawview", "fault_diagnostics_runs")
+DEFAULT_PRODUCER_OUTPUT = build_topic_path("producer", PRODUCER_TOPIC_SLUG)
+DEFAULT_CONSUMER_OUTPUT = build_topic_path("consumer", CONSUMER_TOPIC_SLUG)
+DEFAULT_SUMMARIZER_OUTPUT = build_topic_path("summarizer", SUMMARIZER_TOPIC_SLUG)
+DEFAULT_ORCHESTRATOR_OUTPUT = build_topic_path("orchestrator", TOPIC_SLUG)
 
 
 @dataclass(frozen=True)
@@ -75,11 +74,9 @@ class Paths:
     repo_root: Path
     runs_dir: Path
     producer_output_dir: Path
-    producer_command_center_dir: Path
     consumer_output_dir: Path
-    consumer_command_center_dir: Path
     summarizer_output_dir: Path
-    healthview_root: Path
+    orchestrator_output_dir: Path
 
 
 PATHS_CONFIG = PathsConfig(
@@ -89,20 +86,14 @@ PATHS_CONFIG = PathsConfig(
         "producer_output_dir": PathSpec(
             field="producer_output_dir", default=DEFAULT_PRODUCER_OUTPUT, ensure_dir=True, within_repo=False
         ),
-        "producer_command_center_dir": PathSpec(
-            field="producer_command_center_dir", default=DEFAULT_PRODUCER_CC, ensure_dir=True, within_repo=False
-        ),
         "consumer_output_dir": PathSpec(
             field="consumer_output_dir", default=DEFAULT_CONSUMER_OUTPUT, ensure_dir=True, within_repo=False
-        ),
-        "consumer_command_center_dir": PathSpec(
-            field="consumer_command_center_dir", default=DEFAULT_CONSUMER_CC, ensure_dir=True, within_repo=False
         ),
         "summarizer_output_dir": PathSpec(
             field="summarizer_output_dir", default=DEFAULT_SUMMARIZER_OUTPUT, ensure_dir=True, within_repo=False
         ),
-        "healthview_root": PathSpec(
-            field="healthview_root", default=DEFAULT_HEALTHVIEW_ROOT, ensure_dir=True, within_repo=False
+        "orchestrator_output_dir": PathSpec(
+            field="orchestrator_output_dir", default=DEFAULT_ORCHESTRATOR_OUTPUT, ensure_dir=True, within_repo=False
         ),
     },
     repo_root_depth=4,
@@ -150,11 +141,9 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--runs-dir", default=str(DEFAULT_RUNS_DIR))
     parser.add_argument("--run-dir", help="Explicit faulthandler run directory to process")
     parser.add_argument("--producer-output-dir", default=str(DEFAULT_PRODUCER_OUTPUT))
-    parser.add_argument("--producer-command-center-dir", default=str(DEFAULT_PRODUCER_CC))
     parser.add_argument("--consumer-output-dir", default=str(DEFAULT_CONSUMER_OUTPUT))
-    parser.add_argument("--consumer-command-center-dir", default=str(DEFAULT_CONSUMER_CC))
     parser.add_argument("--summarizer-output-dir", default=str(DEFAULT_SUMMARIZER_OUTPUT))
-    parser.add_argument("--healthview-root", default=str(DEFAULT_HEALTHVIEW_ROOT))
+    parser.add_argument("--orchestrator-output-dir", default=str(DEFAULT_ORCHESTRATOR_OUTPUT))
     parser.add_argument("--artifacts-to-keep", type=int, default=3, help="Retention budget for manifest artifacts")
     parser.add_argument("--producer-artifacts-to-keep", type=int, default=5)
     parser.add_argument("--consumer-artifacts-to-keep", type=int, default=5)
@@ -284,8 +273,6 @@ def _execute_producer(paths: Paths, options: Options) -> ProducerOutcome:
         str(paths.runs_dir),
         "--output-dir",
         str(paths.producer_output_dir),
-        "--command-center-dir",
-        str(paths.producer_command_center_dir),
         "--artifacts-to-keep",
         str(options.producer_keep),
         "--log-level",
@@ -324,8 +311,6 @@ def _execute_consumer(paths: Paths, options: Options, producer: ProducerOutcome 
     argv: list[str] = [
         "--output-dir",
         str(paths.consumer_output_dir),
-        "--command-center-dir",
-        str(paths.consumer_command_center_dir),
         "--artifacts-to-keep",
         str(options.consumer_keep),
         "--log-level",
@@ -531,7 +516,7 @@ def run(argv: Sequence[str] | None = None) -> int:
     summarizer_outcome = summarizer_holder.get("value")
 
     run_slug = options.run_timestamp.strftime("%Y%m%d-%H%M")
-    telemetry = build_pipeline_telemetry(result, viewer=VIEWER_SLUG, topic=HEALTHVIEW_TOPIC, run_slug=run_slug)
+    telemetry = build_pipeline_telemetry(result, viewer="healthview", topic=TOPIC_SLUG, run_slug=run_slug)
     completed_at = datetime.now(timezone.utc)
     telemetry_payload = telemetry.as_dict()
 
@@ -549,8 +534,8 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     manifest = {
         "schema_version": SCHEMA_VERSION,
-        "viewer": VIEWER_SLUG,
-        "topic": HEALTHVIEW_TOPIC,
+        "viewer": "healthview",
+        "topic": TOPIC_SLUG,
         "run_slug": run_slug,
         "generated_at": completed_at.isoformat(),
         "telemetry": telemetry_payload,
@@ -575,13 +560,13 @@ def run(argv: Sequence[str] | None = None) -> int:
         ReportArtifact(filename="telemetry.json", kind="json", content=lambda: telemetry_payload),
     ]
     result_artifacts = write_report_artifacts(
-        stem=HEALTHVIEW_TOPIC,
+        stem=TOPIC_SLUG,
         timestamp=options.run_timestamp,
-        output_dir=paths.healthview_root,
+        output_dir=paths.orchestrator_output_dir,
         artifacts=artifacts,
         keep=options.artifacts_to_keep,
-        viewer=VIEWER_SLUG,
-        topic=HEALTHVIEW_TOPIC,
+        viewer="",
+        topic="",
     )
 
     artifact_metrics = measure_artifact_directory(result_artifacts.run_dir)

@@ -20,7 +20,7 @@ tool:
 
     Emits a HealthView bundle under:
 
-      .repo_studios/command_center/reports/healthview/docs_health/<YYYYMMDD-HHMM>/
+      .repo_studios/reports/healthview/orchestrator_reports/docs_health/<YYYYMMDD-HHMM>/
 
     The bundle includes manifest.json, summary.md, and telemetry.json.
 
@@ -86,10 +86,10 @@ parameters:
   - name: healthview_root
     type: path
     required: false
-    default: ".repo_studios/command_center/reports"
+    default: .repo_studios/reports/healthview
     description: |
-      Base directory for orchestrator output. The script appends
-      healthview/docs_health/<timestamp>/ automatically.
+      HOP-compliant HealthView root. The orchestrator appends
+      orchestrator_reports/docs_health/<timestamp>/ automatically.
     validation:
       must_exist: false
       will_create: true
@@ -144,18 +144,18 @@ io_contract:
 
   outputs:
     - artifact: manifest.json
-      path_pattern: ".repo_studios/command_center/reports/healthview/docs_health/<YYYYMMDD-HHMM>/manifest.json"
+      path_pattern: "{healthview_root}/orchestrator_reports/docs_health/<YYYYMMDD-HHMM>/manifest.json"
       format: json
       schema_version: 1
       description: Run metadata with step outcomes and artifact catalog.
 
     - artifact: summary.md
-      path_pattern: ".repo_studios/command_center/reports/healthview/docs_health/<YYYYMMDD-HHMM>/summary.md"
+      path_pattern: "{healthview_root}/orchestrator_reports/docs_health/<YYYYMMDD-HHMM>/summary.md"
       format: markdown
       description: Human-readable summary of all pipeline steps.
 
     - artifact: telemetry.json
-      path_pattern: ".repo_studios/command_center/reports/healthview/docs_health/<YYYYMMDD-HHMM>/telemetry.json"
+      path_pattern: "{healthview_root}/orchestrator_reports/docs_health/<YYYYMMDD-HHMM>/telemetry.json"
       format: json
       description: Structured telemetry for downstream consumers.
 
@@ -206,42 +206,42 @@ integration:
     - step: 1
       script: generate_doc_index.py
       category: producer
-      output: ".repo_studios/reports/healthview/doc_index/<timestamp>/"
+      output: ".repo_studios/reports/healthview/producer_reports/doc_index/<timestamp>/"
 
     - step: 2
       script: generate_anchor_inventory.py
       category: producer
-      output: ".repo_studios/reports/healthview/anchor_inventory/<timestamp>/"
+      output: ".repo_studios/reports/healthview/producer_reports/anchor_inventory/<timestamp>/"
 
     - step: 3
       script: validate_markdown_anchors.py
       category: producer
-      output: ".repo_studios/reports/healthview/markdown_anchor_validation/<timestamp>/"
+      output: ".repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/<timestamp>/"
 
     - step: 4
       script: verify_docs_integrity.py
       category: producer
-      output: ".repo_studios/reports/healthview/docs_integrity_validation/<timestamp>/"
+      output: ".repo_studios/reports/healthview/producer_reports/docs_integrity_validation/<timestamp>/"
 
     - step: 5
       script: validate_metrics_anchor_stubs.py
       category: producer
-      output: ".repo_studios/reports/healthview/metrics_anchor_stub_validation/<timestamp>/"
+      output: ".repo_studios/reports/healthview/producer_reports/metrics_anchor_stub_validation/<timestamp>/"
 
     - step: 6
       script: generate_code_doc_churn_report.py
       category: producer
-      output: ".repo_studios/reports/healthview/code_doc_churn/<timestamp>/"
+      output: ".repo_studios/reports/healthview/producer_reports/code_doc_churn/<timestamp>/"
 
     - step: 7
       script: generate_undocumented_logic_report.py
       category: producer
-      output: ".repo_studios/reports/healthview/undocumented_logic/<timestamp>/"
+      output: ".repo_studios/reports/healthview/producer_reports/undocumented_logic/<timestamp>/"
 
     - step: 8
       script: aggregate_docs_health_signals.py
       category: aggregator
-      output: ".repo_studios/reports/docs_health_signals-<timestamp>/"
+      output: ".repo_studios/reports/healthview/aggregator_reports/docs_health_signals/<timestamp>/"
 
   sample_output: |
     {

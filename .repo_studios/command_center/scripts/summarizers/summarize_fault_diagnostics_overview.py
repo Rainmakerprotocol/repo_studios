@@ -73,6 +73,7 @@ try:  # pragma: no cover - prefer import when packaged
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.report_paths import build_topic_path
 except ModuleNotFoundError:  # pragma: no cover - fallback when running in isolation
     LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -88,13 +89,15 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running in isola
         build_standard_paths,
         write_report_artifacts,
     )
+    from libraries.report_paths import build_topic_path
 
-DEFAULT_CONSUMER_OUTPUT_DIR = Path(".repo_studios/reports/healthview/consumer_reports/fault_artifacts")
-DEFAULT_PRODUCER_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/faulthandler_reports")
-DEFAULT_SUMMARIZER_OUTPUT_DIR = Path(".repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview")
-SUMMARY_STEM = "fault_diagnostics_overview"
-VIEWER_SLUG = "healthview"
+CONSUMER_TOPIC_SLUG = "fault_artifacts"
+PRODUCER_TOPIC_SLUG = "faulthandler_reports"
 TOPIC_SLUG = "fault_diagnostics_overview"
+DEFAULT_CONSUMER_OUTPUT_DIR = build_topic_path("consumer", CONSUMER_TOPIC_SLUG)
+DEFAULT_PRODUCER_OUTPUT_DIR = build_topic_path("producer", PRODUCER_TOPIC_SLUG)
+DEFAULT_SUMMARIZER_OUTPUT_DIR = build_topic_path("summarizer", TOPIC_SLUG)
+SUMMARY_STEM = "fault_diagnostics_overview"
 SCHEMA_VERSION = 1
 
 # HOP consumer artifact names
@@ -527,7 +530,7 @@ def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
 
     overview_payload = {
         "schema_version": SCHEMA_VERSION,
-        "viewer": VIEWER_SLUG,
+        "viewer": "healthview",
         "topic": TOPIC_SLUG,
         "generated_at": options.run_timestamp.isoformat(timespec="seconds"),
         "metrics": metrics,

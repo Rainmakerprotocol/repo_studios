@@ -33,12 +33,9 @@ from typing import Any, Iterable, cast
 RE_MD_LINK = re.compile(r"metrics_orchestrator\.md#([a-zA-Z0-9\-._]+)")
 RE_HEADING = re.compile(r"^(#{2,6})\s+(.*)$")
 
-REPORTS_ROOT = Path(".repo_studios/reports")
-DEFAULT_OUTPUT_DIR = REPORTS_ROOT
 DEFAULT_LEGACY_FILE = Path("docs/api/metrics_orchestrator.md")
 DEFAULT_ALLOWLIST_PATH = Path(".repo_studios/scripts/producers/metrics_anchor_allowlist.json")
 SCHEMA_VERSION = 1
-VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "metrics_anchor_stub_validation"
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
@@ -53,6 +50,7 @@ try:
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback for script execution without package path
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -66,6 +64,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for script execution 
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 
 try:
@@ -77,6 +76,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for script execution 
 
 # Must be after import block where get_keep is defined
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("validate_metrics_anchor_stubs")
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
 
 
 @dataclass(frozen=True)
@@ -287,7 +287,7 @@ def compose_manifest(*, report: dict[str, Any], run_timestamp: str, inputs: dict
     summary = report.get("summary", {})
     return {
         "schema_version": 1,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer_slug": "producer_reports",
         "topic": TOPIC_SLUG,
         "run_timestamp": run_timestamp,
         "generated_utc": report.get("generated_utc"),
@@ -422,7 +422,8 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
     summary_md = render_summary_markdown(report=report, run_timestamp=run_timestamp)
 
     output_dir = paths.output_dir
-    storage = create_storage(output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=run_timestamp)
+    # output_dir already contains full topic path - pass empty viewer/topic
+    storage = create_storage(output_dir, "", "", timestamp=run_timestamp)
 
     # DB_INTEGRATION_MARKER: metrics anchor stub validation manifest
     storage.write_manifest(manifest)
@@ -431,9 +432,10 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
     # DB_INTEGRATION_MARKER: metrics anchor stub validation telemetry
     storage.write_telemetry(telemetry)
 
-    run_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG / run_timestamp
+    # output_dir already contains full topic path
+    run_dir = output_dir / run_timestamp
     removed = prune_history(
-        run_dir.parent,
+        output_dir,
         options.artifacts_to_keep,
         current_run=run_dir,
         logger=logger,
@@ -453,7 +455,7 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
 
     return {
         "status": report.get("status", "ok"),
-        "viewer_slug": VIEWER_SLUG,
+        "viewer_slug": "producer_reports",
         "topic": TOPIC_SLUG,
         "run_timestamp": run_timestamp,
         "output_dir": str(output_dir),

@@ -11,7 +11,7 @@ tool:
 
     Emits a canonical HealthView bundle under:
 
-      .repo_studios/reports/healthview/metrics_anchor_stub_validation/<YYYYMMDD-HHMM>/
+      .repo_studios/reports/healthview/producer_reports/metrics_anchor_stub_validation/<YYYYMMDD-HHMM>/
 
     The bundle includes manifest.json, summary.md, and telemetry.json.
 
@@ -70,10 +70,9 @@ parameters:
   - name: output_dir
     type: path
     required: false
-    default: ".repo_studios/reports"
+    default: .repo_studios/reports/healthview/producer_reports/metrics_anchor_stub_validation
     description: |
-      Base directory for HOP bundle output. The script appends
-      healthview/metrics_anchor_stub_validation/<timestamp>/ automatically.
+      HOP-compliant output directory. The producer appends <timestamp>/ automatically.
     validation:
       must_exist: false
       will_create: true
@@ -143,18 +142,18 @@ io_contract:
 
   outputs:
     - artifact: manifest.json
-      path_pattern: ".repo_studios/reports/healthview/metrics_anchor_stub_validation/<YYYYMMDD-HHMM>/manifest.json"
+      path_pattern: "{output_dir}/<YYYYMMDD-HHMM>/manifest.json"
       format: json
       schema_version: 1
       description: Run metadata including inputs, outputs catalog, and status.
 
     - artifact: summary.md
-      path_pattern: ".repo_studios/reports/healthview/metrics_anchor_stub_validation/<YYYYMMDD-HHMM>/summary.md"
+      path_pattern: "{output_dir}/<YYYYMMDD-HHMM>/summary.md"
       format: markdown
       description: Human-readable summary of validation results.
 
     - artifact: telemetry.json
-      path_pattern: ".repo_studios/reports/healthview/metrics_anchor_stub_validation/<YYYYMMDD-HHMM>/telemetry.json"
+      path_pattern: "{output_dir}/<YYYYMMDD-HHMM>/telemetry.json"
       format: json
       description: Structured telemetry for downstream aggregators.
 

@@ -28,8 +28,6 @@ HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 LINK_RE = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 CODE_FENCE_RE = re.compile(r"^(```|~~~)")
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")
-VIEWER_SLUG = "producer_reports"
 TOPIC_SLUG = "doc_index"
 
 CHECKBOX_REPORT_SCRIPT = Path(
@@ -73,6 +71,7 @@ try:  # pragma: no cover - import guard for standalone execution
   )
   from libraries.database_integration import create_storage
   from libraries.prune_logs import prune_run_directories
+  from libraries.report_paths import build_topic_path
   from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when script is run directly
   import sys
@@ -89,9 +88,11 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when script is run di
   )
   from libraries.database_integration import create_storage
   from libraries.prune_logs import prune_run_directories
+  from libraries.report_paths import build_topic_path
   from libraries.retention_policy import get_keep
 
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_doc_index")
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
 
 
 @dataclass(frozen=True)
@@ -846,7 +847,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
   manifest = {
     "schema_version": 1,
-    "viewer_slug": VIEWER_SLUG,
+    "viewer_slug": "producer_reports",
     "topic": TOPIC_SLUG,
     "run_timestamp": timestamp_slug,
     "generated_utc": generated_ts.isoformat(),
@@ -873,7 +874,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
   metrics_block = payload.get("metrics", {})
   telemetry = {
     "schema_version": 1,
-    "viewer_slug": VIEWER_SLUG,
+    "viewer_slug": "producer_reports",
     "topic": TOPIC_SLUG,
     "run_timestamp": timestamp_slug,
     "generated_utc": payload.get("generated_utc"),
@@ -892,8 +893,8 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
   storage = create_storage(
     output_dir=paths.output_dir,
-    viewer_slug=VIEWER_SLUG,
-    topic=TOPIC_SLUG,
+    viewer_slug="",  # output_dir already contains full topic path
+    topic="",  # output_dir already contains full topic path
     timestamp=timestamp_slug,
   )
 
@@ -909,9 +910,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
   csv_path.write_text(csv_text.rstrip("\n") + "\n", encoding="utf-8")
 
   run_dir = storage.file_storage.bundle_dir
-  topic_dir = run_dir.parent
+  # output_dir already contains full topic path - prune directly from it
   prune_result = prune_run_directories(
-    topic_dir,
+    paths.output_dir,
     keep=options.artifacts_to_keep,
     current_run=run_dir,
     logger=logger,

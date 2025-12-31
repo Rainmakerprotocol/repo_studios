@@ -21,8 +21,6 @@ from utilities.anchor_inventory_loader import load_anchor_inventory  # noqa: E40
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports")
-VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "undocumented_logic"
 
 LIBRARIES_ROOT = (
@@ -40,6 +38,7 @@ try:  # pragma: no cover - import guard when executed via package
     )
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
     import sys
@@ -56,9 +55,11 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
     )
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_undocumented_logic_report")
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
 
 
 @dataclass(frozen=True)
@@ -647,7 +648,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     summary_metrics = _bundle_summary(report)
 
     manifest: dict[str, Any] = {
-        "viewer_slug": VIEWER_SLUG,
+        "viewer_slug": "producer_reports",
         "topic": TOPIC_SLUG,
         "run_timestamp": timestamp,
         "generated_utc": report.get("generated_utc"),
@@ -674,7 +675,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     }
 
     telemetry: dict[str, Any] = {
-        "viewer_slug": VIEWER_SLUG,
+        "viewer_slug": "producer_reports",
         "topic": TOPIC_SLUG,
         "run_timestamp": timestamp,
         "generated_utc": report.get("generated_utc"),
@@ -682,10 +683,11 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         "payload": report,
     }
 
+    # output_dir already contains full topic path - use empty viewer/topic
     storage = create_storage(
         output_dir=paths.output_dir,
-        viewer_slug=VIEWER_SLUG,
-        topic=TOPIC_SLUG,
+        viewer_slug="",
+        topic="",
         timestamp=timestamp,
     )
 
@@ -697,9 +699,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     storage.write_telemetry(telemetry)
 
     run_dir = storage.file_storage.bundle_dir
-    topic_dir = run_dir.parent
+    # output_dir already contains full topic path
     prune_result = prune_run_directories(
-        topic_dir,
+        paths.output_dir,
         keep=options.artifacts_to_keep,
         current_run=run_dir,
         logger=logger,

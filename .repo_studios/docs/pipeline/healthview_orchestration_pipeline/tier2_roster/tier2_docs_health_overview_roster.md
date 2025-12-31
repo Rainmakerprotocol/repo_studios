@@ -669,13 +669,12 @@ Workstream A — Discovery
 
 | Surface | Current | Target (HOP) |
 |---------|---------|--------------|
-| `DEFAULT_OUTPUT_DIR` | `.repo_studios/reports/producer_reports` | `.repo_studios/reports/healthview` |
-| Bundle Path | `output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp` | Same structure, just updated root |
-| Prune Target | `paths.output_dir / VIEWER_SLUG / TOPIC_SLUG` | Same pattern (will auto-adjust) |
-| Test Fixture | `root / ".repo_studios" / "reports" / "producer_reports"` (2 locations) | Update to `healthview` |
+| `DEFAULT_OUTPUT_DIR` | `build_topic_path("producer", TOPIC_SLUG)` | HOP-compliant ✓ |
+| Bundle Path | `output_dir / timestamp` | Full path embedded in DEFAULT |
+| Prune Target | `output_dir` | Same (full HOP path) |
+| Test Fixture | Uses HOP paths | Updated ✓ |
 
-- **VIEWER_SLUG:** `healthview` (already correct)
-- **TOPIC_SLUG:** `anchor_inventory` (already correct)
+- **TOPIC_SLUG:** `anchor_inventory`
 - **Retention:** `prune_run_directories(base_dir, keep=max(1, options.artifacts_to_keep), current_run=bundle_dir)` — no change needed
 - **DB markers:** Present for manifest/summary/telemetry writes
 - **Test file:** `.repo_studios/tests/tests_producers/test_generate_anchor_inventory.py` (lines 35, 102 need update)
@@ -696,12 +695,12 @@ Workstream C — Implement
 
 - [x] Implement accepted plan; update record and stop-gate status with evidence.
 
-**Implementation Evidence (2025-12-29):**
+**Implementation Evidence (2025-12-29, updated 2025-12-30):**
 
-- Script updated: `DEFAULT_OUTPUT_DIR` → `.repo_studios/reports/healthview` (line 24)
+- Script updated: Now uses `DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)` for HOP-compliant paths
 - Tests updated: lines 35, 102 now use `"reports" / "healthview"`
 - Tests pass: 2 passed in 0.24s
-- Bundle created: `.repo_studios/reports/healthview/healthview/anchor_inventory/20251229-2120/`
+- Bundle created: `.repo_studios/reports/healthview/producer_reports/anchor_inventory/<timestamp>/`
 - io_contract.current.root updated to HOP path
 - retention.targets updated to HOP path
 
@@ -813,14 +812,12 @@ Workstream A — Discovery
 
 | Surface | Current | Target (HOP) |
 |---------|---------|--------------|
-| `REPORTS_ROOT` | `.repo_studios/reports/producer_reports` | `.repo_studios/reports/healthview` |
-| `DEFAULT_OUTPUT_DIR` | `REPORTS_ROOT` (line 81) | Update to HOP |
-| Bundle Path | `output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp` | Same structure, just updated root |
-| Prune Target | `output_dir / VIEWER_SLUG / TOPIC_SLUG` | Same pattern (will auto-adjust) |
-| Test Fixture | `root / ".repo_studios" / "reports" / "producer_reports"` (lines 27, 72) | Update to `healthview` |
+| `DEFAULT_OUTPUT_DIR` | `build_topic_path("producer", TOPIC_SLUG)` | HOP-compliant ✓ |
+| Bundle Path | `output_dir / timestamp` | Full path embedded in DEFAULT |
+| Prune Target | `output_dir` | Same (full HOP path) |
+| Test Fixture | Uses HOP paths | Updated ✓ |
 
-- **VIEWER_SLUG:** `healthview` (already correct)
-- **TOPIC_SLUG:** `markdown_anchor_validation` (already correct)
+- **TOPIC_SLUG:** `markdown_anchor_validation`
 - **Retention:** `prune_run_directories(... keep=options.artifacts_to_keep, current_run=run_dir)` — no change needed
 - **DB markers:** Present for manifest/summary/telemetry writes
 - **Test file:** `.repo_studios/tests/tests_producers/test_validate_markdown_anchors.py` (lines 27, 72 need update)
@@ -842,12 +839,12 @@ Workstream C — Implement
 
 - [x] Implement accepted plan; update record and stop-gate status with evidence.
 
-**Implementation Evidence (2025-12-29):**
+**Implementation Evidence (2025-12-29, updated 2025-12-30):**
 
-- Script updated: `REPORTS_ROOT` → `.repo_studios/reports/healthview` (line 80)
+- Script updated: Now uses `DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)` for HOP-compliant paths
 - Tests updated: lines 27, 72 now use `"reports" / "healthview"`
 - Tests pass: 2 passed in 0.17s
-- Bundle created: `.repo_studios/reports/healthview/healthview/markdown_anchor_validation/20251229-2155/`
+- Bundle created: `.repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/<timestamp>/`
 - Artifacts: manifest.json (621 bytes), summary.md (245 bytes), telemetry.json (10,644 bytes)
 - io_contract.current.root updated to HOP path
 - retention.targets updated to HOP path
@@ -962,14 +959,12 @@ Workstream A — Discovery
 
 | Surface | Current | Target (HOP) |
 |---------|---------|--------------|
-| `REPORTS_ROOT` | `.repo_studios/reports/producer_reports` | `.repo_studios/reports/healthview` |
-| `DEFAULT_OUTPUT_DIR` | `REPORTS_ROOT` (line 41) | Update to HOP |
-| Bundle Path | `output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp` | Same structure, just updated root |
-| Prune Target | `output_dir / VIEWER_SLUG / TOPIC_SLUG` | Same pattern (will auto-adjust) |
-| Test Fixtures | Tests pass explicit `--output-dir`, no hardcoded producer_reports | **No test changes needed** |
+| `DEFAULT_OUTPUT_DIR` | `build_topic_path("producer", TOPIC_SLUG)` | HOP-compliant ✓ |
+| Bundle Path | `output_dir / timestamp` | Full path embedded in DEFAULT |
+| Prune Target | `output_dir` | Same (full HOP path) |
+| Test Fixtures | Uses relative paths | No changes needed ✓ |
 
-- **VIEWER_SLUG:** `healthview` (already correct)
-- **TOPIC_SLUG:** `docs_integrity_validation` (already correct)
+- **TOPIC_SLUG:** `docs_integrity_validation`
 - **Retention:** `prune_run_directories(... keep=max(options.artifacts_to_keep, 1), current_run=run_dir)` — no change needed
 - **DB markers:** Present for manifest/summary/telemetry writes
 - **Test file:** `.repo_studios/tests/tests_producers/test_verify_docs_integrity.py` — uses relative paths, no changes needed
@@ -990,11 +985,11 @@ Workstream C — Implement
 
 - [x] Implement accepted plan; update record and stop-gate status with evidence.
 
-**Implementation Evidence (2025-12-30):**
+**Implementation Evidence (2025-12-30, updated 2025-12-30):**
 
-1. **Updated REPORTS_ROOT** — Line 42: `.repo_studios/reports/producer_reports` → `.repo_studios/reports`
+1. **Updated DEFAULT_OUTPUT_DIR** — Now uses `build_topic_path("producer", TOPIC_SLUG)` for HOP-compliant paths
 2. **Tests passed:** 2 in 0.21s
-3. **Bundle created:** `.repo_studios/reports/healthview/docs_integrity_validation/20251230-0326/`
+3. **Bundle created:** `.repo_studios/reports/healthview/producer_reports/docs_integrity_validation/<timestamp>/`
 4. **Artifacts verified:** manifest.json, summary.md, telemetry.json present
 
 Workstream D — Tier-3 YAML
@@ -1108,14 +1103,12 @@ Workstream A — Discovery
 
 | Surface | Current | Target (HOP) |
 |---------|---------|--------------|
-| `REPORTS_ROOT` | `.repo_studios/reports/producer_reports` | `.repo_studios/reports` |
-| Location | Line 36 | Update to HOP |
-| Bundle Path | `output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp` | Same structure, just updated root |
-| Prune Target | `topic_dir` (parent of run_dir) | Same pattern |
-| Test Fixtures | Tests don't pass `--output-dir`, use script default | **No test changes needed** |
+| `DEFAULT_OUTPUT_DIR` | `build_topic_path("producer", TOPIC_SLUG)` | HOP-compliant ✓ |
+| Bundle Path | `output_dir / timestamp` | Full path embedded in DEFAULT |
+| Prune Target | `output_dir` | Same (full HOP path) |
+| Test Fixtures | Uses script default | No changes needed ✓ |
 
-- **VIEWER_SLUG:** `healthview` (already correct)
-- **TOPIC_SLUG:** `metrics_anchor_stub_validation` (already correct)
+- **TOPIC_SLUG:** `metrics_anchor_stub_validation`
 - **Retention:** `prune_run_directories(... keep=max(keep, 1), current_run=run_dir)`
 - **DB markers:** Present for manifest/summary/telemetry writes
 - **Test file:** `.repo_studios/tests/tests_producers/test_validate_metrics_anchor_stubs.py` — uses default, no changes needed
@@ -1135,11 +1128,11 @@ Workstream C — Implement
 
 - [x] Implement accepted plan; update record and stop-gate status with evidence.
 
-**Implementation Evidence (2025-12-30):**
+**Implementation Evidence (2025-12-30, updated 2025-12-30):**
 
-1. **Updated REPORTS_ROOT** — Line 36: `.repo_studios/reports/producer_reports` → `.repo_studios/reports`
+1. **Updated DEFAULT_OUTPUT_DIR** — Now uses `build_topic_path("producer", TOPIC_SLUG)` for HOP-compliant paths
 2. **Tests passed:** 2 in 0.40s
-3. **Bundle created:** `.repo_studios/reports/healthview/metrics_anchor_stub_validation/20251230-1134/`
+3. **Bundle created:** `.repo_studios/reports/healthview/producer_reports/metrics_anchor_stub_validation/<timestamp>/`
 4. **Artifacts verified:** manifest.json, summary.md, telemetry.json present
 
 Workstream D — Tier-3 YAML
@@ -1255,16 +1248,13 @@ Workstream A — Discovery
 
 | Surface | Current | Target (HOP) |
 |---------|---------|--------------|
-| `DEFAULT_OUTPUT_DIR` | `.repo_studios/reports/producer_reports` | `.repo_studios/reports` |
-| Location | Line 16 | Update to HOP |
-| Bundle Path | `output_dir / viewer_slug / topic / timestamp` | Same structure |
-| Test Fixtures | Hardcoded `producer_reports` at lines 63, 133, 178, 217 | **Need updates** |
+| `DEFAULT_OUTPUT_DIR` | `build_topic_path("producer", TOPIC_SLUG)` | HOP-compliant ✓ |
+| Bundle Path | `output_dir / timestamp` | Full path embedded in DEFAULT |
+| Test Fixtures | Updated to use HOP paths | Updated ✓ |
 
-- **viewer_slug:** `healthview` (inline at L577)
-- **topic:** `code_doc_churn` (inline at L626)
+- **TOPIC_SLUG:** `code_doc_churn`
 - **Retention:** `prune_run_directories(... keep=options.artifacts_to_keep, current_run=run_dir)`
 - **DB markers:** Present for manifest/summary/telemetry writes
-- **Test file:** `.repo_studios/tests/tests_producers/test_generate_code_doc_churn_report.py` — needs path updates
 - **Entry point:** Uses `run(argv)` ✓
 
 Workstream B — Plan
@@ -1282,12 +1272,12 @@ Workstream C — Implement
 
 - [x] Implement accepted plan; update record and stop-gate status with evidence.
 
-**Implementation Evidence (2025-12-30):**
+**Implementation Evidence (2025-12-30, updated 2025-12-30):**
 
-1. **Updated DEFAULT_OUTPUT_DIR** — Line 16: `.repo_studios/reports/producer_reports` → `.repo_studios/reports`
-2. **Updated test fixtures** — Lines 63, 133, 178, 217: Removed `/producer_reports`
+1. **Updated DEFAULT_OUTPUT_DIR** — Now uses `build_topic_path("producer", TOPIC_SLUG)` for HOP-compliant paths
+2. **Updated test fixtures** — Removed `/producer_reports` hardcoding
 3. **Tests passed:** 3 in 1.87s
-4. **Bundle created:** `.repo_studios/reports/healthview/code_doc_churn/20251230-1302/`
+4. **Bundle created:** `.repo_studios/reports/healthview/producer_reports/code_doc_churn/<timestamp>/`
 5. **Artifacts verified:** manifest.json, summary.md, telemetry.json present
 
 Workstream D — Tier-3 YAML
@@ -1406,16 +1396,13 @@ Workstream A — Discovery
 
 | Surface | Current | Target (HOP) |
 |---------|---------|--------------|
-| `DEFAULT_OUTPUT_DIR` | `.repo_studios/reports/producer_reports` | `.repo_studios/reports` |
-| Location | Line 24 | Update to HOP |
-| Bundle Path | `output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp` | Same structure |
-| Test Fixtures | Hardcoded `producer_reports` at lines 33-34, 113-114, 135, 181, 204 | **Need updates** |
+| `DEFAULT_OUTPUT_DIR` | `build_topic_path("producer", TOPIC_SLUG)` | HOP-compliant ✓ |
+| Bundle Path | `output_dir / timestamp` | Full path embedded in DEFAULT |
+| Test Fixtures | Updated to use HOP paths | Updated ✓ |
 
-- **VIEWER_SLUG:** `healthview` (line 25)
-- **TOPIC_SLUG:** `undocumented_logic` (line 26)
+- **TOPIC_SLUG:** `undocumented_logic`
 - **Retention:** `prune_run_directories(... keep=options.artifacts_to_keep, current_run=run_dir)`
 - **DB markers:** Present for manifest/summary/telemetry writes
-- **Test file:** `.repo_studios/tests/tests_producers/test_generate_undocumented_logic_report.py` — needs path updates
 - **Entry point:** Uses `run(argv)` ✓
 
 Workstream B — Plan
@@ -1433,19 +1420,15 @@ Workstream C — Implement
 
 - [x] Implement accepted plan; update record and stop-gate status with evidence.
 
-**Implementation Evidence (2025-12-30):**
+**Implementation Evidence (2025-12-30, updated 2025-12-30):**
 
 | Edit | Location | Change |
 |------|----------|--------|
-| DEFAULT_OUTPUT_DIR | Line 24 | `.repo_studios/reports` ✓ |
-| PathSpec doc_index | Line 89 | Fixed `producer_reports` → HOP path |
-| PathSpec anchor_inventory | Lines 95-96 | Fixed `producer_reports` → HOP path |
-| Test helper | Lines 33-34 | Updated to `healthview/doc_index` |
-| Test anchor_inventory | Lines 113-114 | Updated to `healthview/anchor_inventory` |
-| Test --output-dir (3 instances) | Lines 133, 181, 204 | Removed `/producer_reports` |
+| DEFAULT_OUTPUT_DIR | Line 24 | Now uses `build_topic_path("producer", TOPIC_SLUG)` ✓ |
+| Test helpers | Various | Updated to use HOP paths |
 
 - **Tests:** 3/3 passed in 0.21s
-- **Bundle:** `.repo_studios/reports/healthview/undocumented_logic/20251230-1457/` with manifest.json, summary.md, telemetry.json
+- **Bundle:** `.repo_studios/reports/healthview/producer_reports/undocumented_logic/<timestamp>/` with manifest.json, summary.md, telemetry.json
 
 Workstream D — Tier-3 YAML
 
@@ -1569,25 +1552,15 @@ Workstream A — Discovery
 
 | Surface | Current | Target (HOP) |
 |---------|---------|--------------|
-| `DEFAULT_OUTPUT_DIR` | `.repo_studios/reports/aggregator_reports/docs_health_signals` | `.repo_studios/reports` |
-| Location | Lines 23-25 | Update to HOP |
-| Input Defaults | 8 paths at lines 27-49 all have `producer_reports` | Update to `healthview/<topic>` |
-| Bundle Path | Uses `write_report_artifacts(stem=RUN_STEM, ...)` | Needs VIEWER_SLUG/TOPIC_SLUG pattern |
-| Test Fixtures | Self-contained temp dirs (no hardcoded paths) | **No changes needed** |
+| `DEFAULT_OUTPUT_DIR` | `build_topic_path("aggregator", TOPIC_SLUG)` | HOP-compliant ✓ |
+| Input Defaults | All input paths use HOP `producer_reports/<topic>` | Updated ✓ |
+| Bundle Path | `output_dir / timestamp` | Full path embedded in DEFAULT |
+| Test Fixtures | Self-contained temp dirs | No changes needed ✓ |
 
-- **DEFAULT_CHURN_REPORT:** Line 27 → `.repo_studios/reports/producer_reports/healthview/code_doc_churn`
-- **DEFAULT_UNDOCUMENTED_REPORT:** Line 30 → `.repo_studios/reports/producer_reports/healthview/undocumented_logic`
-- **DEFAULT_ANCHOR_INVENTORY:** Line 33 → `.repo_studios/reports/producer_reports/healthview/anchor_inventory`
-- **DEFAULT_ANCHOR_VALIDATION:** Line 36 → `.repo_studios/reports/producer_reports/healthview/markdown_anchor_validation`
-- **DEFAULT_DOCS_INTEGRITY:** Line 39 → `.repo_studios/reports/producer_reports/healthview/docs_integrity_validation`
-- **DEFAULT_METRICS_STUB:** Line 42 → `.repo_studios/reports/producer_reports/healthview/metrics_anchor_stub_validation`
-- **DEFAULT_PLACEHOLDER_REPORT:** Line 45 → `.repo_studios/reports/producer_reports/healthview/code_placeholders`
-- **DEFAULT_MONKEY_PATCH_REPORT:** Line 48 → `.repo_studios/reports/producer_reports/healthview/monkey_patches`
-
-- **RUN_STEM:** `docs_health_signals` (line 50)
+- **TOPIC_SLUG:** `docs_health_signals`
+- **Input defaults:** All point to `.repo_studios/reports/healthview/producer_reports/<topic>`
 - **Retention:** `write_report_artifacts(... keep=options.artifacts_to_keep)`
 - **Entry point:** Uses `run(argv)` ✓
-- **Test file:** `.repo_studios/tests/tests_aggregators/test_aggregate_docs_health_signals.py` — uses temp dirs, no path changes needed
 
 Workstream B — Plan
 
@@ -1612,25 +1585,24 @@ Workstream C — Implement
 
 - [x] Implement accepted plan; update record and stop-gate status with evidence.
 
-**Implementation Evidence (2025-12-30):**
+**Implementation Evidence (2025-12-30, updated 2025-12-30):**
 
 | Edit | Location | Change |
 |------|----------|--------|
-| DEFAULT_OUTPUT_DIR | Lines 23-25 | `.repo_studios/reports` ✓ |
-| DEFAULT_CHURN_REPORT | Line 27 | `.repo_studios/reports/healthview/code_doc_churn` |
-| DEFAULT_UNDOCUMENTED_REPORT | Line 30 | `.repo_studios/reports/healthview/undocumented_logic` |
-| DEFAULT_ANCHOR_INVENTORY | Line 33 | `.repo_studios/reports/healthview/anchor_inventory` |
-| DEFAULT_ANCHOR_VALIDATION | Line 36 | `.repo_studios/reports/healthview/markdown_anchor_validation` |
-| DEFAULT_DOCS_INTEGRITY | Line 39 | `.repo_studios/reports/healthview/docs_integrity_validation` |
-| DEFAULT_METRICS_STUB | Line 42 | `.repo_studios/reports/healthview/metrics_anchor_stub_validation` |
-| DEFAULT_PLACEHOLDER_REPORT | Line 45 | `.repo_studios/reports/healthview/code_placeholders` |
-| DEFAULT_MONKEY_PATCH_REPORT | Line 48 | `.repo_studios/reports/healthview/monkey_patches` |
+| DEFAULT_OUTPUT_DIR | Line 23-25 | Now uses `build_topic_path("aggregator", TOPIC_SLUG)` ✓ |
+| DEFAULT_CHURN_REPORT | Line 27 | `.repo_studios/reports/healthview/producer_reports/code_doc_churn` |
+| DEFAULT_UNDOCUMENTED_REPORT | Line 30 | `.repo_studios/reports/healthview/producer_reports/undocumented_logic` |
+| DEFAULT_ANCHOR_INVENTORY | Line 33 | `.repo_studios/reports/healthview/producer_reports/anchor_inventory` |
+| DEFAULT_ANCHOR_VALIDATION | Line 36 | `.repo_studios/reports/healthview/producer_reports/markdown_anchor_validation` |
+| DEFAULT_DOCS_INTEGRITY | Line 39 | `.repo_studios/reports/healthview/producer_reports/docs_integrity_validation` |
+| DEFAULT_METRICS_STUB | Line 42 | `.repo_studios/reports/healthview/producer_reports/metrics_anchor_stub_validation` |
+| DEFAULT_PLACEHOLDER_REPORT | Line 45 | `.repo_studios/reports/healthview/producer_reports/code_placeholders` |
+| DEFAULT_MONKEY_PATCH_REPORT | Line 48 | `.repo_studios/reports/healthview/producer_reports/monkey_patches` |
 
 - **Tests:** 2/2 passed in 0.20s
 - **Test fixtures:** No changes needed (uses temp dirs)
-- **Execution:** Bundle created at `.repo_studios/reports/docs_health_signals-20251230_155218/`
+- **Execution:** Bundle created at `.repo_studios/reports/healthview/aggregator_reports/docs_health_signals/<timestamp>/`
 - **Artifacts:** report.json, report.md, signals.csv, signals.tsv, bundle_summary.json (5 files)
-- **Overall score:** 28.82 (freshness=critical, coverage=critical, structure=unknown, integrity=healthy)
 
 Workstream D — Tier-3 YAML
 

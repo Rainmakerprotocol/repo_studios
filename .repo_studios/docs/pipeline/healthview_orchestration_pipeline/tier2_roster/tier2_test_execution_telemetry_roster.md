@@ -290,16 +290,13 @@ Plan notes (draft):
 - Target output root (Tier-1 HealthView contract): write the orchestrator base package under
   `.repo_studios/reports/healthview/orchestrator_reports/test_execution_telemetry/<YYYYmmdd-HHMM>/`.
 - Orchestrator change set:
-  - Update `--healthview-root` default to `.repo_studios/reports/healthview`.
-  - Set `VIEWER_SLUG = "orchestrator_reports"` so the bundle path includes the required class
-    segment.
+  - Update all default output paths to use `build_topic_path(tier_class, topic)` pattern.
+  - Use `build_topic_path("orchestrator", HEALTHVIEW_TOPIC)` for base package directory.
   - Add `summary.md` to the base package (alongside `manifest.json` and `telemetry.json`) using a
     small `_summarize_steps(...)` helper consistent with other orchestrators.
   - Pass deterministic timestamp into `collect_test_log_reports.py` (`--run-timestamp
     <YYYYmmdd-HHMM>`) so the producer bundle aligns with the orchestrator run slug.
-  - Update `DEFAULT_HEATMAP_OUTPUT_DIR` to
-    `.repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap` so the
-    orchestrator default matches the aggregator's canonical output root.
+  - Update all producer/consumer/aggregator/summarizer output paths to use `build_topic_path`.
 - Tests:
   - Update `.repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py`
     to assert the new base package directory layout and the presence of `summary.md`.
@@ -308,11 +305,12 @@ Workstream C — Implement
 
 - [x] Implement accepted plan; update record and stop-gate status with evidence.
 
-Implementation evidence (2025-12-25):
+Implementation evidence (2025-12-25, updated 2025-12-31):
 
 - Updated `.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py`:
-  - `DEFAULT_HEALTHVIEW_ROOT` now defaults to `.repo_studios/reports/healthview`.
-  - `VIEWER_SLUG = "orchestrator_reports"`.
+  - All default paths now use `build_topic_path(tier_class, topic)` pattern.
+  - `DEFAULT_ORCHESTRATOR_OUTPUT_DIR = build_topic_path("orchestrator", HEALTHVIEW_TOPIC)`.
+  - Added `DEFAULT_SUMMARIZER_OUTPUT_DIR = build_topic_path("summarizer", HEALTHVIEW_TOPIC)`.
   - Base package now includes `summary.md`.
   - `_execute_collect(...)` forwards `--run-timestamp`.
 - Updated `.repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py`:
@@ -391,15 +389,14 @@ Evidence (2025-12-25):
   - **Tier-3 last updated:** 2025-12-21
   - **Tests:** `.repo_studios/tests/tests_producers/test_collect_test_log_reports.py`
   - **Evidence:**
-    - Defaults: `DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")`,
-      `VIEWER_SLUG = "rawview"`, `TOPIC_SLUG = "test_log_reports"`.
-    - Bundle paths: `bundle_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp`.
+    - Defaults: `DEFAULT_OUTPUT_DIR = build_topic_path("rawview", TOPIC_SLUG)`.
+    - Bundle paths: `bundle_dir = output_dir / timestamp`.
     - Artifact filenames: `manifest.json`, `summary.md`, `telemetry.json`.
     - Discovery (2025-12-21): this workspace had no existing run directories under
       `.repo_studios/command_center/reports/rawview/test_log_reports/` or
       `.repo_studios/command_center/reports/rawview/test_execution_runs/` at time of inspection.
     - Retention helper:
-      `prune_run_directories(base_dir=output_dir/VIEWER_SLUG/TOPIC_SLUG, current_run=bundle_dir, keep=...)`
+      `prune_run_directories(base_dir=output_dir, current_run=bundle_dir, keep=...)`
       sorts candidates by filesystem `st_mtime` (not directory name) and deletes beyond `keep`,
       honoring `.keep`.
     - Unit test evidence:
@@ -448,8 +445,8 @@ Plan notes (draft):
 
 - Target output root (Tier-1 HOP contract): write bundles under
   `.repo_studios/reports/healthview/rawview/test_log_reports/<YYYYmmdd-HHMM>/`.
-- Producer change: update `DEFAULT_OUTPUT_DIR` to `.repo_studios/reports/healthview` (keeping
-  `VIEWER_SLUG="rawview"` and `TOPIC_SLUG="test_log_reports"`).
+- Producer change: update `DEFAULT_OUTPUT_DIR` to use `build_topic_path("rawview", TOPIC_SLUG)`
+  (removes separate `VIEWER_SLUG` constant).
 - Orchestrator compatibility: because
   `.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py` always passes
   `--output-dir` into the producer, we must also either:
@@ -535,7 +532,7 @@ Workstream E — QA & Evidence
   - **Tier-3 last updated:** 2025-12-21
   - **Tests:** `.repo_studios/tests/tests_producers/test_generate_test_coverage_inventory.py`
   - **Evidence:**
-    - Bundle path: `output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp_slug`.
+    - Bundle path: `output_dir / timestamp_slug`.
     - Artifacts asserted in tests: `manifest.json`, `summary.md`, `telemetry.json`.
     - Threshold failure returns non-zero exit code (still writes the bundle) and prunes
       historical run dirs.
@@ -649,14 +646,13 @@ Workstream E — QA & Evidence
   - **Tier-3 last updated:** 2025-12-22
   - **Tests:** `.repo_studios/tests/tests_producers/test_analyze_test_hardening.py`
   - **Evidence:**
-    - Bundle path: `paths.output_dir / VIEWER_SLUG / TOPIC_SLUG / timestamp_slug`.
+    - Bundle path: `paths.output_dir / timestamp_slug`.
     - Artifacts asserted in tests: `manifest.json`, `summary.md`, `telemetry.json`.
     - Exit code derived from payload `exit_code` (high severity issues gate).
-    - Defaults: `DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview")`,
-      `VIEWER_SLUG = "producer_reports"`, `TOPIC_SLUG = "test_hardening"`.
+    - Defaults: `DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)`.
     - Orchestrator wiring:
       `.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py` defaults
-      `--hardening-output-dir` to `.repo_studios/reports/healthview` and passes `--timestamp` into
+      `--hardening-output-dir` to `build_topic_path("producer", "test_hardening")` and passes `--timestamp` into
       this producer for deterministic positional bundles.
 
 #### Implementation Workstreams (checkbox-driven) — analyze_test_hardening.py
@@ -673,8 +669,8 @@ Plan notes (draft):
 
 - Target output root (Tier-1 HealthView contract): write bundles under
   `.repo_studios/reports/healthview/producer_reports/test_hardening/<YYYYmmdd-HHMM>/`.
-- Producer change: update `DEFAULT_OUTPUT_DIR` to `.repo_studios/reports/healthview` and set
-  `VIEWER_SLUG="producer_reports"` (keeping `TOPIC_SLUG="test_hardening"`).
+- Producer change: update `DEFAULT_OUTPUT_DIR` to use `build_topic_path("producer", TOPIC_SLUG)`
+  (removes separate `VIEWER_SLUG` constant).
 - Orchestrator compatibility: update Stage 1.1 orchestrator defaults so
   `--hardening-output-dir` defaults to `.repo_studios/reports/healthview`; pass `--timestamp` into
   the producer so runs are deterministic and discoverable.
@@ -1023,7 +1019,8 @@ Workstream E — QA & Evidence
     `test_summarize_test_execution_telemetry.py`
   - **Evidence:**
     - Constants: `SUMMARY_STEM = "test_execution_telemetry_summary"`,
-      `VIEWER_SLUG = "summarizer_reports"`, `TOPIC_SLUG = "test_execution_telemetry"`.
+      `TOPIC_SLUG = "test_execution_telemetry"`.
+    - Default: `DEFAULT_OUTPUT_DIR = build_topic_path("summarizer", TOPIC_SLUG)`.
     - Artifacts written via `write_report_artifacts(...)` using filenames
       `f"{SUMMARY_STEM}.md"` and `f"{SUMMARY_STEM}.json"`.
 
@@ -1033,12 +1030,10 @@ Workstream A — Discovery
 
 - [x] Inspect outputs + pruning/retention surfaces; record findings
   - Script defaults:
-    - `DEFAULT_OUTPUT_DIR = .repo_studios/reports/healthview`.
-    - `VIEWER_SLUG = "summarizer_reports"`, `TOPIC_SLUG = "test_execution_telemetry"`.
-  - Output layout is controlled by `write_report_artifacts(...)`:
-    - Callsite passes `output_dir=<--output-dir>`, `viewer=VIEWER_SLUG`,
-      `topic=TOPIC_SLUG`, `timestamp=<run_slug>`.
-    - Resulting run directory is under `--output-dir/<viewer>/<topic>/<timestamp>/`.
+    - `DEFAULT_OUTPUT_DIR = build_topic_path("summarizer", TOPIC_SLUG)`.
+    - `TOPIC_SLUG = "test_execution_telemetry"`.
+  - Output layout is controlled by `write_report_artifacts(...)` with `viewer=""`, `topic=""`:
+    - Resulting run directory is under `--output-dir/<timestamp>/`.
   - Artifacts written per run:
     - `test_execution_telemetry_summary.json`
     - `test_execution_telemetry_summary.md`
@@ -1055,33 +1050,30 @@ Workstream B — Plan
     - `.repo_studios/reports/healthview/summarizer_reports/`
       `test_execution_telemetry/<YYYYmmdd-HHMM>/`
   - Summarizer changes:
-    - Change `VIEWER_SLUG` to `"summarizer_reports"` (class token).
+    - Use `build_topic_path("summarizer", TOPIC_SLUG)` for `DEFAULT_OUTPUT_DIR`.
     - Keep `TOPIC_SLUG = "test_execution_telemetry"`.
-    - Change `DEFAULT_OUTPUT_DIR` to `.repo_studios/reports/healthview`.
+    - Pass `viewer=""`, `topic=""` to `write_report_artifacts` since path is pre-built.
   - Orchestrator compatibility:
-    - Update Stage 1.1 orchestrator to pass `--output-dir .repo_studios/reports/healthview`
-      into this summarizer so the run lands in the canonical HealthView root.
+    - Update Stage 1.1 orchestrator to use `build_topic_path("summarizer", TOPIC_SLUG)`
+      for the summarizer output directory.
     - Ensure it passes the Stage 1.1 run timestamp consistently
       (manifest/telemetry already carry run slug).
   - Tests:
     - Update `.repo_studios/tests/tests_command_center/test_execution_telemetry/`
-      `test_summarize_test_execution_telemetry.py` to assert the new default class/topic
-      tokens and/or updated output root when `--output-dir` points at
-      `.repo_studios/reports/healthview`.
-    - Update the fixture hardening artifact path to match the current Stage 1.1
-      producer output layout (post-migration) when required.
+      `test_summarize_test_execution_telemetry.py` to assert the new default output path
+      when `--output-dir` points at the HOP-compliant location.
 
 Workstream C — Implement
 
 - [x] Implement accepted plan; update record and stop-gate status with evidence.
   - Updated `.repo_studios/command_center/scripts/summarizers/`
     `summarize_test_execution_telemetry.py`:
-    - Default output root moved to `.repo_studios/reports/healthview`.
-    - Class token set via `VIEWER_SLUG = "summarizer_reports"`.
+    - Default output now uses `build_topic_path("summarizer", TOPIC_SLUG)`.
+    - Calls `write_report_artifacts` with `viewer=""`, `topic=""`.
   - Updated Stage 1.1 orchestrator `.repo_studios/command_center/scripts/orchestrators/`
-    `run_test_execution_telemetry.py` to pass the canonical HealthView root into
-    the summarizer (`--output-dir` wired to `--test-log-reports-dir`).
-  - Updated tests to assert the new summary artifact paths + viewer token.
+    `run_test_execution_telemetry.py` to use `build_topic_path("summarizer", ...)` for
+    the summarizer output directory via new `--summarizer-output-dir` parameter.
+  - Updated tests to assert the new summary artifact paths.
 
 Workstream D — Tier-3 YAML
 

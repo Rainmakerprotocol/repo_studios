@@ -80,8 +80,8 @@ parameters:
   - name: output_dir
     type: path
     required: false
-    default: .repo_studios/reports/healthview
-    description: Root directory used to write summary artifacts (viewer/topic/run_slug are appended).
+    default: .repo_studios/reports/healthview/summarizer_reports/test_execution_telemetry
+    description: Root directory used to write summary artifacts.
     validation:
       parent_must_exist: false
 

@@ -52,6 +52,7 @@ try:
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback during standalone execution
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -65,6 +66,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback during standalone exe
         build_standard_paths,
         prune_run_directories,
     )
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 
 try:
@@ -77,10 +79,8 @@ except ModuleNotFoundError:  # pragma: no cover - fallback during standalone exe
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")  # capture link target
 
-REPORTS_ROOT = Path(".repo_studios/reports/healthview")
-DEFAULT_OUTPUT_DIR = REPORTS_ROOT
-VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "markdown_anchor_validation"
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("validate_markdown_anchors")
 DEFAULT_PATTERNS = [
     "docs/**/*.md",
@@ -113,7 +113,7 @@ PATH_SPECS: dict[str, PathSpec] = {
     "scan_root": PathSpec(field="root", default=Path("."), within_repo=False),
     "output_dir": PathSpec(
         field="output_dir",
-        default=REPORTS_ROOT,
+        default=DEFAULT_OUTPUT_DIR,
         ensure_dir=True,
         within_repo=False,
     ),
@@ -197,7 +197,7 @@ def compose_manifest(*, report: dict, run_timestamp: str, inputs: dict) -> dict:
     status = report.get("status", "ok")
     return {
         "schema_version": 1,
-        "viewer_slug": VIEWER_SLUG,
+        "viewer_slug": "producer_reports",
         "topic": TOPIC_SLUG,
         "run_timestamp": run_timestamp,
         "generated_utc": report.get("generated_utc"),
@@ -425,7 +425,8 @@ def main(argv: list[str] | None = None) -> int:
         scanned_files=scanned_files,
         ts=ts,
     )
-    storage = create_storage(output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=run_timestamp)
+    # output_dir already contains full topic path - pass empty viewer/topic
+    storage = create_storage(output_dir, "", "", timestamp=run_timestamp)
 
     inputs = {
         "root": str(root),
@@ -443,9 +444,10 @@ def main(argv: list[str] | None = None) -> int:
     # DB_INTEGRATION_MARKER: markdown anchor validation telemetry
     storage.write_telemetry(telemetry)
 
-    run_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG / run_timestamp
+    # output_dir already contains full topic path
+    run_dir = output_dir / run_timestamp
     prune_result = prune_run_directories(
-        run_dir.parent,
+        output_dir,
         keep=options.artifacts_to_keep,
         current_run=run_dir,
         logger=logger,
