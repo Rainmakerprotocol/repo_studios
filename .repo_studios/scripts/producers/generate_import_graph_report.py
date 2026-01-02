@@ -6,6 +6,11 @@ Artifacts (default):
         - `manifest.json`
         - `summary.md`
         - `telemetry.json`
+
+Enhanced features:
+    - File/line provenance tracking for cycle diagnosis
+    - --scan-all flag to scan entire repo (not just owned packages)
+    - --exclude flag to skip directories (default: .venv, __pycache__, .git, node_modules)
 """
 
 from __future__ import annotations
@@ -16,6 +21,7 @@ import re
 import sys
 from collections import defaultdict
 from collections.abc import Iterable, Sequence
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -46,31 +52,96 @@ OWNED_DEFAULT = {
     "legacy",
 }
 
+DEFAULT_EXCLUDE = {
+    ".venv",
+    "__pycache__",
+    ".git",
+    "node_modules",
+    "site-packages",
+    ".tox",
+    ".nox",
+    ".mypy_cache",
+    ".pytest_cache",
+}
+
+
+@dataclass
+class ImportEdge:
+    """Represents a single import statement with file/line provenance."""
+
+    source_file: Path
+    line_number: int
+    import_statement: str
+    target_module: str
+
 
 IMPORT_RE = re.compile(r"^(?:from\s+([\w\.]+)\s+import\s+|import\s+([\w\.]+))")
 
 
-def iter_py_files(root: Path, owned: set[str]) -> Iterable[Path]:
+def iter_py_files(
+    root: Path,
+    owned: set[str] | None,
+    exclude: set[str] | None = None,
+) -> Iterable[Path]:
+    """Iterate over Python files in the repository.
+
+    Args:
+        root: Repository root path.
+        owned: Set of top-level directories to scan. If None, scan all.
+        exclude: Set of directory names to skip (e.g., .venv, __pycache__).
+
+    Yields:
+        Path objects for each .py file found.
+    """
+    exclude_set = exclude if exclude is not None else DEFAULT_EXCLUDE
     for path in root.rglob("*.py"):
         rel = path.relative_to(root)
-        if rel.parts and rel.parts[0] in owned:
+        # Skip excluded directories
+        if any(part in exclude_set for part in rel.parts):
+            continue
+        # If owned is None (scan-all mode), yield all non-excluded files
+        if owned is None:
+            yield path
+        elif rel.parts and rel.parts[0] in owned:
             yield path
 
 
-def parse_imports(path: Path) -> set[str]:
-    imports: set[str] = set()
+def parse_imports(path: Path) -> list[ImportEdge]:
+    """Parse import statements from a Python file with line provenance.
+
+    Args:
+        path: Path to the Python file.
+
+    Returns:
+        List of ImportEdge objects with file, line, statement, and target module.
+    """
+    edges: list[ImportEdge] = []
     try:
-        for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
-            match = IMPORT_RE.match(line.strip())
+        lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+        for line_num, line in enumerate(lines, start=1):
+            stripped = line.strip()
+            match = IMPORT_RE.match(stripped)
             if not match:
                 continue
             module = match.group(1) or match.group(2) or ""
             base = module.split(".")[0]
             if base:
-                imports.add(base)
+                edges.append(
+                    ImportEdge(
+                        source_file=path,
+                        line_number=line_num,
+                        import_statement=stripped,
+                        target_module=base,
+                    )
+                )
     except Exception:
-        return imports
-    return imports
+        return edges
+    return edges
+
+
+def parse_imports_simple(path: Path) -> set[str]:
+    """Parse import statements and return just the module names (legacy compatibility)."""
+    return {edge.target_module for edge in parse_imports(path)}
 
 
 def _module_identifier(rel: Path) -> str:
@@ -98,11 +169,36 @@ def _alias_candidates(module_id: str) -> set[str]:
     return {alias for alias in aliases if alias}
 
 
-def build_graph(root: Path, owned: set[str]) -> dict[str, set[str]]:
-    raw_dependencies: dict[str, set[str]] = defaultdict(set)
-    modules: set[str] = set()
+@dataclass
+class GraphResult:
+    """Result of building the import graph with provenance tracking."""
 
-    for py_file in iter_py_files(root, owned):
+    graph: dict[str, set[str]]
+    edge_provenance: dict[tuple[str, str], list[dict[str, Any]]]
+    files_scanned: int
+
+
+def build_graph(
+    root: Path,
+    owned: set[str] | None,
+    exclude: set[str] | None = None,
+) -> GraphResult:
+    """Build import graph with edge provenance tracking.
+
+    Args:
+        root: Repository root path.
+        owned: Set of top-level directories to scan. If None, scan all.
+        exclude: Set of directory names to skip.
+
+    Returns:
+        GraphResult with graph, edge provenance, and file count.
+    """
+    raw_dependencies: dict[str, list[ImportEdge]] = defaultdict(list)
+    modules: set[str] = set()
+    files_scanned = 0
+
+    for py_file in iter_py_files(root, owned, exclude):
+        files_scanned += 1
         try:
             rel = py_file.relative_to(root)
         except Exception:
@@ -111,7 +207,7 @@ def build_graph(root: Path, owned: set[str]) -> dict[str, set[str]]:
         if not source:
             continue
         modules.add(source)
-        raw_dependencies[source].update(parse_imports(py_file))
+        raw_dependencies[source].extend(parse_imports(py_file))
 
     alias_map: dict[str, set[str]] = defaultdict(set)
     for module_id in modules:
@@ -119,12 +215,26 @@ def build_graph(root: Path, owned: set[str]) -> dict[str, set[str]]:
             alias_map[alias].add(module_id)
 
     graph: dict[str, set[str]] = {module_id: set() for module_id in modules}
-    for module_id, imports in raw_dependencies.items():
-        for dep in imports:
-            for target in alias_map.get(dep, ()):
+    edge_provenance: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+
+    for module_id, import_edges in raw_dependencies.items():
+        for edge in import_edges:
+            for target in alias_map.get(edge.target_module, ()):
                 if target != module_id:
                     graph[module_id].add(target)
-    return graph
+                    # Store provenance for this edge
+                    edge_key = (module_id, target)
+                    edge_provenance[edge_key].append({
+                        "file": str(edge.source_file.relative_to(root)),
+                        "line": edge.line_number,
+                        "statement": edge.import_statement,
+                    })
+
+    return GraphResult(
+        graph=graph,
+        edge_provenance=dict(edge_provenance),
+        files_scanned=files_scanned,
+    )
 
 
 def fan_metrics(graph: dict[str, set[str]]) -> tuple[dict[str, int], dict[str, int]]:
@@ -185,27 +295,59 @@ def _serialize_graph(graph: dict[str, set[str]]) -> dict[str, list[str]]:
 def build_report(
     *,
     repo_root: Path,
-    owned_requested: Sequence[str],
+    owned_requested: Sequence[str] | None,
     graph: dict[str, set[str]],
     fan_in: dict[str, int],
     fan_out: dict[str, int],
     cycles: list[list[str]],
+    edge_provenance: dict[tuple[str, str], list[dict[str, Any]]],
+    files_scanned: int,
     generated_ts: datetime,
+    scan_all: bool = False,
 ) -> dict[str, Any]:
+    """Build the report payload with provenance tracking.
+
+    Args:
+        repo_root: Repository root path.
+        owned_requested: Packages requested (None if scan-all mode).
+        graph: Module dependency graph.
+        fan_in: Fan-in metrics per module.
+        fan_out: Fan-out metrics per module.
+        cycles: Detected import cycles.
+        edge_provenance: File/line provenance for each edge.
+        files_scanned: Total number of Python files scanned.
+        generated_ts: Report generation timestamp.
+        scan_all: Whether scan-all mode was used.
+
+    Returns:
+        Report dictionary with all metrics and provenance.
+    """
     graph_serialized = _serialize_graph(graph)
     all_nodes = set(graph_serialized.keys())
     for neighbors in graph_serialized.values():
         all_nodes.update(neighbors)
     edge_count = sum(len(neighbors) for neighbors in graph_serialized.values())
-    owned_requested_set = {pkg for pkg in owned_requested}
-    resolved_packages = sorted(pkg for pkg in owned_requested_set if (repo_root / pkg).exists())
-    missing_packages = sorted(pkg for pkg in owned_requested_set if pkg not in resolved_packages)
-    status = "ok" if resolved_packages else "no_targets"
+
+    if owned_requested is None:
+        owned_requested_set: set[str] = set()
+        resolved_packages: list[str] = []
+        missing_packages: list[str] = []
+    else:
+        owned_requested_set = {pkg for pkg in owned_requested}
+        resolved_packages = sorted(
+            pkg for pkg in owned_requested_set if (repo_root / pkg).exists()
+        )
+        missing_packages = sorted(
+            pkg for pkg in owned_requested_set if pkg not in resolved_packages
+        )
+
+    status = "ok" if scan_all or resolved_packages else "no_targets"
     summary = {
         "status": status,
         "module_count": len(all_nodes),
         "edge_count": edge_count,
         "cycle_count": len(cycles),
+        "files_scanned": files_scanned,
     }
     top_fan_in = [
         {"module": name, "count": count}
@@ -215,20 +357,49 @@ def build_report(
         {"module": name, "count": count}
         for name, count in sorted(fan_out.items(), key=lambda item: (-item[1], item[0]))[:10]
     ]
-    isolated_modules = sorted(name for name in all_nodes if fan_in.get(name, 0) == 0 and fan_out.get(name, 0) == 0)
+    isolated_modules = sorted(
+        name for name in all_nodes if fan_in.get(name, 0) == 0 and fan_out.get(name, 0) == 0
+    )
+
+    # Build cycle provenance - attach file/line info to each cycle edge
+    cycle_provenance: list[dict[str, Any]] = []
+    for cycle in cycles:
+        cycle_edges: list[dict[str, Any]] = []
+        for i in range(len(cycle) - 1):
+            edge_key = (cycle[i], cycle[i + 1])
+            edge_files = edge_provenance.get(edge_key, [])
+            cycle_edges.append({
+                "from": cycle[i],
+                "to": cycle[i + 1],
+                "locations": edge_files[:5],  # Limit to first 5 for readability
+            })
+        cycle_provenance.append({
+            "cycle": cycle,
+            "edges": cycle_edges,
+        })
+
+    # Serialize edge provenance with string keys for JSON
+    edge_provenance_serialized: dict[str, list[dict[str, Any]]] = {
+        f"{src} -> {dst}": locations
+        for (src, dst), locations in sorted(edge_provenance.items())
+    }
+
     return {
-        "schema_version": 1,
+        "schema_version": 2,  # Bumped for provenance addition
         "generated_utc": generated_ts.isoformat(),
         "repo_root": str(repo_root),
-        "owned_packages_requested": sorted(owned_requested_set),
-        "owned_packages_resolved": resolved_packages,
-        "missing_owned_packages": missing_packages,
+        "scan_all": scan_all,
+        "owned_packages_requested": sorted(owned_requested_set) if owned_requested_set else None,
+        "owned_packages_resolved": resolved_packages if resolved_packages else None,
+        "missing_owned_packages": missing_packages if missing_packages else None,
         "summary": summary,
         "top_fan_in": top_fan_in,
         "top_fan_out": top_fan_out,
         "cycles": cycles,
+        "cycle_provenance": cycle_provenance,
         "isolated_modules": isolated_modules,
         "graph": graph_serialized,
+        "edge_provenance": edge_provenance_serialized,
     }
 
 
@@ -259,10 +430,14 @@ def _build_manifest(*, report: dict[str, Any], repo_root: Path, inputs: dict[str
 
 
 def write_markdown(report: dict[str, Any]) -> str:
+    """Generate markdown summary with cycle provenance for diagnostics."""
     summary = report["summary"]
-    owned_requested = report.get("owned_packages_requested", [])
-    owned_resolved = report.get("owned_packages_resolved", [])
-    missing = report.get("missing_owned_packages", [])
+    scan_all = report.get("scan_all", False)
+    owned_requested = report.get("owned_packages_requested") or []
+    owned_resolved = report.get("owned_packages_resolved") or []
+    missing = report.get("missing_owned_packages") or []
+    files_scanned = summary.get("files_scanned", 0)
+
     lines = [
         "# Import Graph Report",
         "",
@@ -271,34 +446,72 @@ def write_markdown(report: dict[str, Any]) -> str:
         "",
         "## Summary",
         "",
-        f"- status: {summary['status']}",
-        f"- module count: {summary['module_count']}",
-        f"- edge count: {summary['edge_count']}",
-        f"- cycle count: {summary['cycle_count']}",
-        f"- owned packages requested: {', '.join(owned_requested) if owned_requested else '(none)'}",
-        f"- owned packages resolved: {', '.join(owned_resolved) if owned_resolved else '(none)'}",
-        f"- missing owned packages: {', '.join(missing) if missing else '(none)'}",
+        f"- Status: {summary['status']}",
+        f"- Files scanned: {files_scanned}",
+        f"- Module count: {summary['module_count']}",
+        f"- Edge count: {summary['edge_count']}",
+        f"- Cycle count: {summary['cycle_count']}",
     ]
+
+    if scan_all:
+        lines.append("- Scan mode: all (entire repository)")
+    else:
+        lines.append(
+            f"- Owned packages requested: {', '.join(owned_requested) if owned_requested else '(none)'}"
+        )
+        lines.append(
+            f"- Owned packages resolved: {', '.join(owned_resolved) if owned_resolved else '(none)'}"
+        )
+        lines.append(
+            f"- Missing owned packages: {', '.join(missing) if missing else '(none)'}"
+        )
+
     isolated = report.get("isolated_modules", [])
-    lines.append(f"- isolated modules: {', '.join(isolated) if isolated else '(none)'}")
-    lines.extend(["", "### Top fan-in (modules most depended on)", ""])
+    if isolated:
+        lines.append("- Isolated modules:")
+        for mod in isolated:
+            lines.append(f"  - {mod}")
+    else:
+        lines.append("- Isolated modules: (none)")
+
+    lines.extend(["", "## Top Fan-In (Modules Most Depended On)", ""])
     if report.get("top_fan_in"):
         for entry in report["top_fan_in"]:
             lines.append(f"- {entry['module']}: {entry['count']}")
     else:
         lines.append("- (none)")
-    lines.extend(["", "### Top fan-out (modules with many dependencies)", ""])
+
+    lines.extend(["", "## Top Fan-Out (Modules With Many Dependencies)", ""])
     if report.get("top_fan_out"):
         for entry in report["top_fan_out"]:
             lines.append(f"- {entry['module']}: {entry['count']}")
     else:
         lines.append("- (none)")
-    lines.extend(["", "### Cycles (first 10)", ""])
-    if report.get("cycles"):
+
+    lines.extend(["", "## Cycles Detected", ""])
+    cycle_provenance = report.get("cycle_provenance", [])
+    if cycle_provenance:
+        for i, cycle_info in enumerate(cycle_provenance[:10], start=1):
+            cycle = cycle_info.get("cycle", [])
+            lines.append(f"### Cycle {i}: {' → '.join(cycle)}")
+            lines.append("")
+            edges = cycle_info.get("edges", [])
+            for edge in edges:
+                lines.append(f"**{edge['from']} → {edge['to']}:**")
+                locations = edge.get("locations", [])
+                if locations:
+                    for loc in locations[:3]:  # Show first 3 locations per edge
+                        lines.append(f"- `{loc['file']}` line {loc['line']}: `{loc['statement']}`")
+                else:
+                    lines.append("- (no location data)")
+                lines.append("")
+    elif report.get("cycles"):
+        # Fallback if no provenance (shouldn't happen with new code)
         for cycle in report["cycles"][:10]:
-            lines.append(f"- {' -> '.join(cycle)}")
+            lines.append(f"- {' → '.join(cycle)}")
     else:
-        lines.append("- (none)")
+        lines.append("No import cycles detected. ✓")
+
     return "\n".join(lines) + "\n"
 
 
@@ -308,7 +521,9 @@ def configure_logging(level: str) -> None:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Generate import graph report")
+    parser = argparse.ArgumentParser(
+        description="Generate import graph report with cycle provenance tracking"
+    )
     parser.add_argument(
         "--repo-root",
         type=Path,
@@ -318,12 +533,23 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument(
         "--output-dir",
         default=str(DEFAULT_OUTPUT_DIR),
-        help="Base directory for generated report bundles (e.g., .repo_studios/reports/producer_reports)",
+        help="Base directory for generated report bundles",
     )
     parser.add_argument(
         "--owned",
         nargs="+",
         help="Owned top-level packages to include (defaults applied if omitted)",
+    )
+    parser.add_argument(
+        "--scan-all",
+        action="store_true",
+        help="Scan entire repository (ignore --owned filter)",
+    )
+    parser.add_argument(
+        "--exclude",
+        nargs="+",
+        default=list(DEFAULT_EXCLUDE),
+        help=f"Directory names to exclude (default: {', '.join(sorted(DEFAULT_EXCLUDE))})",
     )
     parser.add_argument(
         "--artifacts-to-keep",
@@ -353,28 +579,48 @@ def main(argv: Sequence[str] | None = None) -> int:
         ensure_dir=True,
     )
 
-    owned = set(args.owned) if args.owned else set(OWNED_DEFAULT)
-    owned.add(".repo_studios")
+    exclude_set = set(args.exclude)
+
+    # Determine scan mode
+    if args.scan_all:
+        owned: set[str] | None = None
+        logging.info("Scan mode: all (scanning entire repository)")
+    else:
+        owned = set(args.owned) if args.owned else set(OWNED_DEFAULT)
+        owned.add(".repo_studios")
+        logging.info("Scan mode: owned packages (%s)", ", ".join(sorted(owned)))
 
     generated_ts = _parse_timestamp(args.timestamp)
     timestamp = generated_ts.strftime("%Y%m%d-%H%M")
-    graph = build_graph(repo_root, owned)
-    fan_in, fan_out = fan_metrics(graph)
-    cycles = find_cycles(graph)
+
+    # Build graph with provenance tracking
+    graph_result = build_graph(repo_root, owned, exclude_set)
+    logging.info("Scanned %d Python files", graph_result.files_scanned)
+
+    fan_in, fan_out = fan_metrics(graph_result.graph)
+    cycles = find_cycles(graph_result.graph)
+
+    if cycles:
+        logging.warning("Detected %d import cycle(s)", len(cycles))
 
     report = build_report(
         repo_root=repo_root,
-        owned_requested=sorted(owned),
-        graph=graph,
+        owned_requested=sorted(owned) if owned else None,
+        graph=graph_result.graph,
         fan_in=fan_in,
         fan_out=fan_out,
         cycles=cycles,
+        edge_provenance=graph_result.edge_provenance,
+        files_scanned=graph_result.files_scanned,
         generated_ts=generated_ts,
+        scan_all=args.scan_all,
     )
 
     inputs = {
         "run_timestamp": timestamp,
-        "owned_packages_requested": sorted(owned),
+        "scan_all": args.scan_all,
+        "owned_packages_requested": sorted(owned) if owned else None,
+        "exclude_patterns": sorted(exclude_set),
         "artifacts_to_keep": args.artifacts_to_keep,
     }
 
@@ -386,11 +632,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         "generated_utc": report.get("generated_utc"),
         "metrics": {
             "status": report.get("summary", {}).get("status"),
+            "files_scanned": report.get("summary", {}).get("files_scanned"),
             "module_count": report.get("summary", {}).get("module_count"),
             "edge_count": report.get("summary", {}).get("edge_count"),
             "cycle_count": report.get("summary", {}).get("cycle_count"),
-            "owned_packages_requested": report.get("owned_packages_requested", []),
-            "owned_packages_resolved": report.get("owned_packages_resolved", []),
+            "scan_all": args.scan_all,
+            "owned_packages_requested": report.get("owned_packages_requested"),
+            "owned_packages_resolved": report.get("owned_packages_resolved"),
         },
         "payload": report,
     }

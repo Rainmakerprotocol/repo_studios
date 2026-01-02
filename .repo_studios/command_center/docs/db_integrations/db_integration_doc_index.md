@@ -27,7 +27,7 @@ summary markdown, and telemetry payload in a stable schema.
 ## System Context
 
 - Producer: `.repo_studios/scripts/producers/generate_doc_index.py`
-- Output bundle: `.repo_studios/reports/producer_reports/healthview/doc_index/<YYYYMMDD-HHMM>/`
+- Output bundle: `.repo_studios/reports/healthview/producer_reports/doc_index/<YYYYMMDD-HHMM>/`
 - Artifacts: `manifest.json`, `summary.md`, `telemetry.json`
 - Storage facade: `create_storage(...)` from `.repo_studios/command_center/scripts/libraries/database_integration.py`
 
@@ -70,7 +70,7 @@ Intended shape (high-level):
 
 - No `latest_*` pointers are written.
 - Downstream consumers should load the latest run directory from
-  `.repo_studios/reports/producer_reports/healthview/doc_index/` and read `telemetry.json`.
+  `.repo_studios/reports/healthview/producer_reports/doc_index/` and read `telemetry.json`.
 
 ## Update Log
 

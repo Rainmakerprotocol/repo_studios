@@ -28,7 +28,7 @@ summary markdown, and telemetry payloads in a stable schema.
 ## System Context
 
 - Producer: `.repo_studios/scripts/producers/render_inventory_views.py`
-- Output bundle: `.repo_studios/reports/producer_reports/healthview/inventory_overview/<YYYYMMDD-HHMM>/`
+- Output bundle: `.repo_studios/reports/healthview/producer_reports/inventory_overview/<YYYYMMDD-HHMM>/`
 - Artifacts: `manifest.json`, `summary.md`, `telemetry.json`
 - Storage facade: `create_storage(...)` from `.repo_studios/command_center/scripts/libraries/database_integration.py`
 
@@ -74,7 +74,7 @@ Telemetry is designed to support both quick dashboards and downstream validation
 
 - No `latest_*` pointers are written.
 - Compatibility stubs under `.repo_studios/inventory_schema/views/` redirect to the topic directory
-  `reports/producer_reports/healthview/inventory_overview`.
+  `reports/healthview/producer_reports/inventory_overview`.
 - Consumers that need the newest data should scan the timestamp directories under the topic directory and read
   `telemetry.json`.
 

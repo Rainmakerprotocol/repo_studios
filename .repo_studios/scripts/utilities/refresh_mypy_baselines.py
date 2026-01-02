@@ -10,13 +10,12 @@ import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Iterable, NamedTuple, Sequence
+from typing import Any, Iterable, NamedTuple, Sequence
 
 import subprocess
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports/rawview/mypy_baselines")
-DEFAULT_ARTIFACTS_TO_KEEP = get_keep("refresh_mypy_baselines")
 RUN_STEM = "mypy_baselines"
 SCHEMA_VERSION = 1
 
@@ -50,6 +49,8 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
         write_report_artifacts,
     )
     from libraries.retention_policy import get_keep  # type: ignore
+
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("refresh_mypy_baselines")
 
 
 @dataclass(frozen=True)
@@ -275,7 +276,7 @@ def _summary_status(outcomes: Sequence[TargetOutcome]) -> str:
     return "ok" if all(outcome.succeeded for outcome in outcomes) else "error"
 
 
-def _render_markdown(summary: dict[str, object], outcomes: Sequence[TargetOutcome]) -> str:
+def _render_markdown(summary: dict[str, Any], outcomes: Sequence[TargetOutcome]) -> str:
     lines: list[str] = []
     lines.append("# mypy Baseline Refresh\n\n")
     lines.append(f"- generated_utc: {summary['generated_utc']}\n")
@@ -285,7 +286,8 @@ def _render_markdown(summary: dict[str, object], outcomes: Sequence[TargetOutcom
     lines.append("| Label | Mypy Path | Exit Code | Duration (s) | Latest Pointer |\n")
     lines.append("| --- | --- | ---: | ---: | --- |\n")
     for outcome in outcomes:
-        pointer = summary["targets_meta"][outcome.spec.label]["latest_pointer"]
+        targets_meta = summary["targets_meta"]  # type: ignore[index]
+        pointer = targets_meta[outcome.spec.label]["latest_pointer"]
         lines.append(
             f"| {outcome.spec.label} | {outcome.spec.mypy_arg} | {outcome.exit_code} | "
             f"{outcome.duration_seconds:.2f} | {pointer or '(none)'} |\n"
@@ -301,8 +303,8 @@ def _build_summary(
     run_slug: str,
     append_timestamp: bool,
     output_dir: Path,
-) -> dict[str, object]:
-    meta: dict[str, dict[str, object]] = {}
+) -> dict[str, Any]:
+    meta: dict[str, dict[str, Any]] = {}
     for outcome in outcomes:
         pointer_name = f"latest_{outcome.spec.filename}"
         pointer_path = output_dir / pointer_name
@@ -326,7 +328,7 @@ def _build_summary(
     }
 
 
-def _build_status_payload(summary: dict[str, object]) -> dict[str, object]:
+def _build_status_payload(summary: dict[str, Any]) -> dict[str, Any]:
     return {
         "status": summary["status"],
         "generated_utc": summary["generated_utc"],
@@ -338,7 +340,7 @@ def _build_status_payload(summary: dict[str, object]) -> dict[str, object]:
                 "exit_code": data["exit_code"],
                 "latest_pointer": data["latest_pointer"],
             }
-            for label, data in summary["targets_meta"].items()
+            for label, data in summary["targets_meta"].items()  # type: ignore[union-attr]
         ],
     }
 
@@ -346,8 +348,8 @@ def _build_status_payload(summary: dict[str, object]) -> dict[str, object]:
 def _build_artifacts(
     *,
     outcomes: Sequence[TargetOutcome],
-    summary: dict[str, object],
-    status_payload: dict[str, object],
+    summary: dict[str, Any],
+    status_payload: dict[str, Any],
     append_timestamp: bool,
     generated_at: datetime,
 ) -> list[ReportArtifact]:
@@ -399,7 +401,7 @@ def _update_latest_pointers(
         copy_latest_artifact(src, pointer)
 
 
-def run(argv: Sequence[str] | None = None) -> dict[str, object]:
+def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     parser = build_parser()
     args = parser.parse_args(argv)
     paths = build_paths(args)
@@ -449,9 +451,10 @@ def run(argv: Sequence[str] | None = None) -> dict[str, object]:
 
     _update_latest_pointers(outcomes=outcomes, artifact_result=result, output_dir=paths.output_dir)
 
+    targets_meta = summary["targets_meta"]  # type: ignore[index]
     for outcome in outcomes:
         pointer = paths.output_dir / f"latest_{outcome.spec.filename}"
-        summary["targets_meta"][outcome.spec.label]["latest_pointer"] = str(pointer) if pointer.exists() else None
+        targets_meta[outcome.spec.label]["latest_pointer"] = str(pointer) if pointer.exists() else None
 
     summary["run_dir"] = str(result.run_dir)
     summary["artifacts"] = {name: str(path) for name, path in result.artifacts.items()}

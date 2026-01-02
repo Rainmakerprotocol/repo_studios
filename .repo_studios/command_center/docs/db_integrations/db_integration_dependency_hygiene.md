@@ -31,7 +31,7 @@ related_files:
 
 The producer writes canonical positional bundles under:
 
-* `.repo_studios/reports/producer_reports/healthview/dependency_hygiene/<YYYYMMDD-HHMM>/`
+* `.repo_studios/reports/healthview/producer_reports/dependency_hygiene/<YYYYMMDD-HHMM>/`
 
 Each run folder contains exactly:
 

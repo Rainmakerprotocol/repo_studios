@@ -30,7 +30,7 @@ related_files:
 ## System Context
 
 * Producer: `.repo_studios/scripts/producers/scan_monkey_patches.py`
-* Bundle location: `.repo_studios/reports/producer_reports/healthview/monkey_patches/<YYYYMMDD-HHMM>/`
+* Bundle location: `.repo_studios/reports/healthview/producer_reports/monkey_patches/<YYYYMMDD-HHMM>/`
 * Storage facade: `.repo_studios/command_center/scripts/libraries/database_integration.py` (`create_storage`)
 
 ## Agent Instructions

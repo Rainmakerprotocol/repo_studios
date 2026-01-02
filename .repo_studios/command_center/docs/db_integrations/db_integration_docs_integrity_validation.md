@@ -28,7 +28,7 @@ metadata, summary markdown, and telemetry metrics.
 ## System Context
 
 - Producer: `.repo_studios/scripts/producers/verify_docs_integrity.py`
-- Output bundle: `.repo_studios/reports/producer_reports/healthview/docs_integrity_validation/<YYYYMMDD-HHMM>/`
+- Output bundle: `.repo_studios/reports/healthview/producer_reports/docs_integrity_validation/<YYYYMMDD-HHMM>/`
 - Artifacts: `manifest.json`, `summary.md`, `telemetry.json`
 - Storage facade: `create_storage(...)` from `.repo_studios/command_center/scripts/libraries/database_integration.py`
 
@@ -72,7 +72,7 @@ The manifest captures:
 
 - No `latest_*` pointers are written.
 - Downstream consumers should load the latest run directory from
-  `.repo_studios/reports/producer_reports/healthview/docs_integrity_validation/` and read `telemetry.json`.
+  `.repo_studios/reports/healthview/producer_reports/docs_integrity_validation/` and read `telemetry.json`.
 
 ## Update Log
 

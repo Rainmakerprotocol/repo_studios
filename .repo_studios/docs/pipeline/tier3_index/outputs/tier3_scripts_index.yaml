@@ -1,21 +1,21 @@
 version: 1.0.0
-generated_at: '2025-12-31T18:00:00+00:00'
+generated_at: '2026-01-01T00:00:00+00:00'
 generator_version: 1.0.0
 repository:
   name: repo_studios
   root: C:\Users\genet\repo_studios
   branch: main
 statistics:
-  total_scripts: 20
+  total_scripts: 22
   categories:
-    producer: 10
+    producer: 12
     utility: 1
     aggregator: 2
     consumer: 2
     orchestrator: 3
     summarizer: 2
   status:
-    active: 15
+    active: 16
     template: 1
     draft: 4
 scripts:
@@ -416,6 +416,48 @@ scripts:
   status: active
   entry_point: run
   importable: true
+- script_id: generate_dependency_hygiene_report
+  name: Generate Dependency Hygiene Report
+  category: producer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\dependency_import_hygiene\tier3_generate_dependency_hygiene_report.yaml
+  script_path: .repo_studios/scripts/producers/generate_dependency_hygiene_report.py
+  summary: "Scans repository dependency manifests (requirements.txt, pyproject.toml) for risky\n\
+    dependency specifications including unpinned constraints, VCS refs, editable installs,\n\
+    local paths, and duplicates.\n\nEmits a canonical HealthView bundle under:\n\n\
+    \  .repo_studios/reports/healthview/producer_reports/dependency_hygiene/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n"
+  keywords:
+  - healthview
+  - producer
+  - dependency
+  - hygiene
+  - requirements
+  - pyproject
+  - unpinned
+  - stage-4.1
+  status: active
+  entry_point: run
+  importable: true
+- script_id: generate_import_graph_report
+  name: Generate Import Graph Report
+  category: producer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\dependency_import_hygiene\tier3_generate_import_graph_report.yaml
+  script_path: .repo_studios/scripts/producers/generate_import_graph_report.py
+  summary: "Scans Python files for import statements and builds a dependency graph.\n\
+    Detects circular dependencies and external vs internal imports.\n\nEmits a canonical HealthView bundle under:\n\n\
+    \  .repo_studios/reports/healthview/producer_reports/import_graph/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n"
+  keywords:
+  - healthview
+  - producer
+  - import
+  - graph
+  - dependency
+  - circular
+  - stage-4.1
+  status: active
+  entry_point: main
+  importable: true
 by_category:
   producer:
   - generate_commandview_inventory
@@ -427,6 +469,8 @@ by_category:
   - analyze_test_hardening
   - collect_test_log_reports
   - generate_test_coverage_inventory
+  - generate_dependency_hygiene_report
+  - generate_import_graph_report
   consumer:
   - generate_test_log_health_report
   - generate_fault_artifacts

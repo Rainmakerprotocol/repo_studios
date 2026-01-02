@@ -1,0 +1,207 @@
+# Tier-3: generate_dependency_hygiene_report.py
+# Producer script that analyzes dependency specifications and emits a HealthView bundle.
+
+tool:
+  id: generate_dependency_hygiene_report
+  name: Generate Dependency Hygiene Report
+  description: |
+    Scans repository dependency manifests (requirements.txt, pyproject.toml) for risky
+    dependency specifications including unpinned constraints, VCS refs, editable installs,
+    local paths, and duplicates.
+
+    Emits a canonical HealthView bundle under:
+
+      .repo_studios/reports/healthview/producer_reports/dependency_hygiene/<YYYYMMDD-HHMM>/
+
+    The bundle includes manifest.json, summary.md, and telemetry.json.
+
+    This producer identifies dependency hygiene issues that may cause reproducibility problems
+    or security vulnerabilities in the project's dependency tree.
+
+  keywords:
+    - healthview
+    - producer
+    - dependency
+    - hygiene
+    - requirements
+    - pyproject
+    - unpinned
+    - telemetry
+    - stage-4-1
+
+  use_when:
+    - Need a structured HealthView bundle analyzing dependency specifications
+    - Checking for unpinned, VCS, editable, or local path dependencies
+    - Validating Stage 4.1 producer outputs and retention behavior
+    - Auditing dependency manifest hygiene before releases
+
+  dont_use_when:
+    - You need import graph analysis (use generate_import_graph_report)
+    - You need type checking results (use generate_typecheck_report)
+    - You need TODO/FIXME scans (use scan_code_placeholders)
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --output-dir {output_dir} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+    # Optional:
+    #   --requirements-pattern {pattern}  # Glob patterns for requirements files
+    #   --skip-pyproject                  # Skip pyproject.toml scanning
+    #   --timestamp {timestamp}           # Override run timestamp
+
+  script_path: .repo_studios/scripts/producers/generate_dependency_hygiene_report.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.10"
+    notes:
+      - "Uses build_topic_path() for HOP-compliant output paths."
+      - "Requires tomllib (Python 3.11+) for pyproject.toml parsing."
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: null
+    description: Repository root override. If omitted, auto-discovers by scanning parent directories.
+    validation:
+      must_exist: false
+
+  - name: output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/producer_reports/dependency_hygiene
+    description: HealthView root where bundles are written.
+    validation:
+      parent_must_exist: false
+
+  - name: requirements_pattern
+    type: string_list
+    required: false
+    default:
+      - "requirements.txt"
+      - "requirements-dev.txt"
+      - "requirements/*.txt"
+    description: Glob patterns to locate requirements files.
+    validation:
+      min_items: 0
+
+  - name: skip_pyproject
+    type: boolean
+    required: false
+    default: false
+    description: Skip scanning pyproject.toml files.
+
+  - name: artifacts_to_keep
+    type: integer
+    required: false
+    default: 5
+    description: Number of historic bundles to retain (pruning threshold).
+    validation:
+      min: 1
+      max: 100
+
+  - name: timestamp
+    type: string
+    required: false
+    default: null
+    description: Override run timestamp (YYYYMMDD-HHMM format; UTC assumed when absent).
+    validation:
+      pattern: "^\\d{8}-\\d{4}$"
+
+  - name: log_level
+    type: string
+    required: false
+    default: INFO
+    description: Logging verbosity.
+    validation:
+      allowed_values:
+        - DEBUG
+        - INFO
+        - WARNING
+        - ERROR
+
+outputs:
+  bundle_root: .repo_studios/reports/healthview/producer_reports/dependency_hygiene/<YYYYMMDD-HHMM>/
+  artifacts:
+    - name: manifest.json
+      description: Execution metadata (script, timestamp, exit code, duration, artifacts list).
+      schema_version: "1.0"
+
+    - name: summary.md
+      description: Human-readable digest of dependency hygiene issues found.
+
+    - name: telemetry.json
+      description: Structured metrics for trend analysis (issue counts by type, file counts).
+
+exit_codes:
+  0:
+    meaning: success
+    description: No dependency hygiene issues detected.
+  1:
+    meaning: issues_found
+    description: Dependency hygiene issues detected (unpinned, VCS, editable, etc.).
+
+retention:
+  mechanism: prune_by_keep_budget
+  default_keep: 5
+  surfaces:
+    - "--artifacts-to-keep"
+    - "prune_run_directories(... keep=args.artifacts_to_keep, current_run=run_dir)"
+  guardrails:
+    - "prune_run_directories retains current_run"
+    - "prune_run_directories honors .keep sentinel files"
+  targets:
+    - .repo_studios/reports/healthview/producer_reports/dependency_hygiene
+
+db_integration:
+  enabled: true
+  gated_by: REPO_STUDIOS_DB_ENABLED
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+  behavior: best_effort
+  failure_mode: warn_only
+
+dependencies:
+  upstream:
+    - name: requirements.txt
+      path: requirements.txt
+      optional: true
+    - name: requirements-dev.txt
+      path: requirements-dev.txt
+      optional: true
+    - name: pyproject.toml
+      path: pyproject.toml
+      optional: true
+
+  downstream:
+    - name: run_dependency_import_hygiene.py
+      path: .repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py
+      relationship: orchestrator_invokes_producer
+
+testing:
+  test_file: .repo_studios/tests/tests_producers/test_generate_dependency_hygiene_report.py
+  coverage_target: 80
+  last_run:
+    date: "2026-01-01"
+    passed: 2
+    failed: 0
+    duration_seconds: 0.38
+  mypy:
+    status: clean
+    last_verified: "2026-01-01"
+
+metadata:
+  tier: tier-3
+  stage: "4.1"
+  category: producer
+  hop_compliant: true
+  created: "2026-01-01"
+  last_updated: "2026-01-01"
+  version: "1.0.0"
+  authors:
+    - repo_studios_agent

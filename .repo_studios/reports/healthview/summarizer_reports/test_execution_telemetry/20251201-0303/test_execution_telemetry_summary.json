@@ -1,0 +1,118 @@
+{
+  "artifacts": {
+    "coverage_report": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-969/test_run_handles_missing_logs0/telemetry_missing/coverage/test_coverage-20251201_010100",
+    "hardening": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-969/test_run_handles_missing_logs0/telemetry_missing/hardening/test_hardening-20251201_010100",
+    "health_bundle_summary": null,
+    "health_report": null,
+    "heatmap": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-969/test_run_handles_missing_logs0/telemetry_missing/heatmap/churn_complexity_heatmap-20251201_010100",
+    "log_report": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-969/test_run_handles_missing_logs0/telemetry_missing/test_log_reports/20251201-0303"
+  },
+  "components": {
+    "collect": {
+      "producer_report": null,
+      "report_dir": null,
+      "slow_tests_over_threshold": null,
+      "warnings_total": null
+    },
+    "coverage": {
+      "report_dir": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-969/test_run_handles_missing_logs0/telemetry_missing/coverage/test_coverage-20251201_010100",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    "hardening": {
+      "payload": {
+        "status": "ok"
+      },
+      "run_dir": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-969/test_run_handles_missing_logs0/telemetry_missing/hardening/test_hardening-20251201_010100"
+    },
+    "health": {
+      "bundle_summary": null,
+      "payload": null,
+      "run_dir": null
+    },
+    "heatmap": {
+      "payload": {
+        "mode": "fixture"
+      },
+      "run_dir": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-969/test_run_handles_missing_logs0/telemetry_missing/heatmap/churn_complexity_heatmap-20251201_010100"
+    }
+  },
+  "failures": {
+    "detected": 0,
+    "examples": []
+  },
+  "generated_at": "2026-01-02T04:22:58+00:00",
+  "metrics": {
+    "coverage_status": "ok",
+    "hardening_high_severity": null,
+    "hardening_status": "ok",
+    "health_report_source": null,
+    "heatmap_mode": "fixture",
+    "log_report_available": false,
+    "pipeline_status": "success",
+    "slow_tests_over_threshold": null,
+    "warnings_total": null
+  },
+  "run_slug": "20251201-0303",
+  "runtime_metrics": [
+    {
+      "detail": "log report captured",
+      "duration_seconds": 0.007,
+      "name": "collect",
+      "status": "success"
+    },
+    {
+      "detail": "analysis completed",
+      "duration_seconds": 0.001,
+      "name": "analyse",
+      "status": "success"
+    },
+    {
+      "detail": "no structured log report found",
+      "duration_seconds": 0.0,
+      "name": "summarize",
+      "status": "skipped"
+    }
+  ],
+  "schema_version": 1,
+  "steps": [
+    {
+      "detail": "log report captured",
+      "finished_at": "2026-01-02T04:22:58.260331+00:00",
+      "name": "collect",
+      "payload": {
+        "coverage": {
+          "status": "ok"
+        },
+        "log_report": {
+          "slow_tests": null,
+          "warnings_total": null
+        }
+      },
+      "started_at": "2026-01-02T04:22:58.253148+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "analysis completed",
+      "finished_at": "2026-01-02T04:22:58.260909+00:00",
+      "name": "analyse",
+      "payload": {
+        "hardening_status": "ok",
+        "heatmap_mode": "fixture"
+      },
+      "started_at": "2026-01-02T04:22:58.260342+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "no structured log report found",
+      "finished_at": "2026-01-02T04:22:58.260926+00:00",
+      "name": "summarize",
+      "payload": null,
+      "started_at": "2026-01-02T04:22:58.260916+00:00",
+      "status": "skipped"
+    }
+  ],
+  "topic": "test_execution_telemetry",
+  "viewer": "summarizer_reports"
+}

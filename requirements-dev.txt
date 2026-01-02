@@ -1,0 +1,18 @@
+# Development and testing dependencies for Repo Studios
+# Install with: pip install -r requirements-dev.txt
+
+# Include runtime dependencies
+-r requirements.txt
+
+# Testing
+pytest==9.0.1
+pytest-cov==5.0.0
+
+# Type checking
+mypy==1.11.1
+
+# Linting and formatting
+ruff==0.6.3
+
+# Code analysis
+lizard==1.18.0

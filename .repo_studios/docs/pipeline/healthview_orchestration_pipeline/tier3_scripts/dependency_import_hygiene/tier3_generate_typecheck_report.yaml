@@ -1,0 +1,97 @@
+# Tier-3 Script Specification — generate_typecheck_report.py
+# Schema: ScriptInspectionRecordV1
+# Stage: 4.1 — Dependency & Import Hygiene
+# Last verified: 2026-01-02
+
+schema: ScriptInspectionRecordV1
+record_id: S41R-005
+
+script:
+  path: .repo_studios/scripts/producers/generate_typecheck_report.py
+  name: generate_typecheck_report.py
+  category: producer
+  stage: "4.1"
+  stage_name: Dependency & Import Hygiene
+
+tier3:
+  metadata_block_version: v1
+  allowed: true
+  exists: true
+  name: tier3_generate_typecheck_report.yaml
+  meets_template: "yes"
+  last_updated: "2026-01-02"
+
+cli_surfaces:
+  run_entrypoint: main(argv)
+  key_flags:
+    - --repo-root
+    - --output-dir
+    - --timestamp
+    - --artifacts-to-keep
+    - --log-level
+    - --all
+    - --targets
+
+io_contract:
+  inputs:
+    - repo_root — repository root directory
+    - targets — explicit mypy targets (optional, overrides pyproject/env)
+    - all — typecheck all discovered Python files (batched)
+    - timestamp — override bundle timestamp (optional)
+  outputs:
+    current:
+      root: .repo_studios/reports/healthview/producer_reports/typecheck_report/<YYYYMMDD-HHMM>/
+      artifacts:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+    target:
+      root: .repo_studios/reports/healthview/producer_reports/typecheck_report/<YYYYMMDD-HHMM>/
+      artifacts:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+    status: HOP-compliant
+    hop_library: build_topic_path("producer", "typecheck_report")
+    hop_line_ref: L62
+
+retention:
+  surfaces:
+    - --artifacts-to-keep
+    - prune_run_directories(... keep=options.artifacts_to_keep, current_run=bundle_dir)
+  mechanism: prune_by_keep_budget
+  default_keep: 10
+  targets:
+    - .repo_studios/reports/healthview/producer_reports/typecheck_report
+  guardrails:
+    - prune_run_directories retains current_run
+    - prune_run_directories honors .keep sentinel
+
+db_integration:
+  gated_by: REPO_STUDIOS_DB_ENABLED
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+
+evidence:
+  code_refs:
+    - .repo_studios/scripts/producers/generate_typecheck_report.py#L62 — build_topic_path
+    - .repo_studios/scripts/producers/generate_typecheck_report.py#L778 — DB marker manifest
+    - .repo_studios/scripts/producers/generate_typecheck_report.py#L781 — DB marker summary
+    - .repo_studios/scripts/producers/generate_typecheck_report.py#L784 — DB marker telemetry
+  tests:
+    - path: .repo_studios/tests/tests_producers/test_generate_typecheck_report.py
+      result: 4/4 passed
+      duration: 0.20s
+  qa:
+    mypy: "Success: no issues found in 1 source file"
+    pytest: "4 passed in 0.20s"
+    last_verified: "2026-01-02"
+
+notes:
+  - Script uses build_topic_path('producer', 'typecheck_report') — HOP-compliant
+  - Runs mypy and emits structured typecheck artifacts
+  - Supports --all for batched typecheck of all Python files (partitioned by repo, repo_studios, command_center)
+  - Supports --targets for explicit target specification
+  - Target discovery: pyproject.toml [tool.mypy].files or TYPECHECK_TARGETS env
+  - HEALTH_TYPECHECK_FAST env enables fast mode with curated targets
+  - TYPECHECK_STRICT env enables mypy strict mode

@@ -210,7 +210,8 @@ def _current_time() -> datetime:
 
 
 def _format_slug(moment: datetime) -> str:
-    return moment.strftime("%Y%m%d_%H%M%S")
+    # HOP-compliant timestamp format: YYYYMMDD-HHMM
+    return moment.strftime("%Y%m%d-%H%M")
 
 
 def _sanitize_slug(slug: str) -> str:
@@ -225,7 +226,8 @@ def _resolve(repo_root: Path, value: str | Path) -> Path:
 
 
 def _prepare_run_dir(output_dir: Path, slug: str) -> Path:
-    run_dir = output_dir / f"{RUN_PREFIX}-{_sanitize_slug(slug)}"
+    # HOP-compliant: use timestamp-only directory naming (slug is already YYYYMMDD-HHMM)
+    run_dir = output_dir / _sanitize_slug(slug)
     run_dir.mkdir(parents=True, exist_ok=True)
     return run_dir
 
@@ -237,10 +239,10 @@ def prune_history(
     current_run: Path,
     logger: logging.Logger | None,
 ) -> list[Path]:
+    # HOP-compliant pruning: no stem_prefix, uses timestamp-only directories
     result = prune_run_directories(
         base_dir,
         keep=max(keep, 1),
-        stem_prefix=RUN_PREFIX,
         current_run=current_run,
         logger=logger,
     )

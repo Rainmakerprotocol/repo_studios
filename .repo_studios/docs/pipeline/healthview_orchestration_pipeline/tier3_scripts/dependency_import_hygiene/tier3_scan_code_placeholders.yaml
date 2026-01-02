@@ -1,0 +1,102 @@
+# Tier-3 Script Specification — scan_code_placeholders.py
+# Schema: ScriptInspectionRecordV1
+# Stage: 4.1 — Dependency & Import Hygiene
+# Last verified: 2026-01-02
+
+schema: ScriptInspectionRecordV1
+record_id: S41R-004
+
+script:
+  path: .repo_studios/scripts/producers/scan_code_placeholders.py
+  name: scan_code_placeholders.py
+  category: producer
+  stage: "4.1"
+  stage_name: Dependency & Import Hygiene
+
+tier3:
+  metadata_block_version: v1
+  allowed: true
+  exists: true
+  name: tier3_scan_code_placeholders.yaml
+  meets_template: "yes"
+  last_updated: "2026-01-02"
+
+cli_surfaces:
+  run_entrypoint: run(argv)
+  key_flags:
+    - --repo-root
+    - --root
+    - --output-dir
+    - --allowlist-file
+    - --timestamp
+    - --include-ext
+    - --patterns
+    - --artifacts-to-keep
+    - --exclude-prefix
+    - --log-level
+
+io_contract:
+  inputs:
+    - repo_root — repository root directory
+    - root — directory to scan (relative to repo root)
+    - allowlist-file — optional file of <path>:<line> entries to ignore
+    - patterns — placeholder tokens to search for (default: TODO, FIXME, NOTE, XXX, OPTIMIZE, REVIEW)
+    - include-ext — file extensions to include (default: .py, .md, .txt, .js, .ts, .yaml, .yml, .json)
+    - exclude-prefix — directory prefixes to exclude
+    - timestamp — override bundle timestamp (optional)
+  outputs:
+    current:
+      root: .repo_studios/reports/healthview/producer_reports/code_placeholders/<YYYYMMDD-HHMM>/
+      artifacts:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+    target:
+      root: .repo_studios/reports/healthview/producer_reports/code_placeholders/<YYYYMMDD-HHMM>/
+      artifacts:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+    status: HOP-compliant
+    hop_library: build_topic_path("producer", "code_placeholders")
+    hop_line_ref: L68
+
+retention:
+  surfaces:
+    - --artifacts-to-keep
+    - prune_run_directories(... keep=options.artifacts_to_keep, current_run=bundle_dir)
+  mechanism: prune_by_keep_budget
+  default_keep: 10
+  targets:
+    - .repo_studios/reports/healthview/producer_reports/code_placeholders
+  guardrails:
+    - prune_run_directories retains current_run
+    - prune_run_directories honors .keep sentinel
+
+db_integration:
+  gated_by: REPO_STUDIOS_DB_ENABLED
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+
+evidence:
+  code_refs:
+    - .repo_studios/scripts/producers/scan_code_placeholders.py#L68 — build_topic_path
+    - .repo_studios/scripts/producers/scan_code_placeholders.py#L555 — DB marker manifest
+    - .repo_studios/scripts/producers/scan_code_placeholders.py#L558 — DB marker summary
+    - .repo_studios/scripts/producers/scan_code_placeholders.py#L561 — DB marker telemetry
+  tests:
+    - path: .repo_studios/tests/tests_producers/test_scan_code_placeholders.py
+      result: 5/5 passed
+      duration: 0.31s
+  qa:
+    mypy: "Success: no issues found in 1 source file"
+    pytest: "5 passed in 0.31s"
+    last_verified: "2026-01-02"
+
+notes:
+  - Script uses build_topic_path('producer', 'code_placeholders') — HOP-compliant
+  - Scans repo for TODO, FIXME, NOTE, XXX, OPTIMIZE, REVIEW placeholder comments
+  - Supports allowlist file to suppress known matches
+  - Default excludes: .venv/, node_modules/, */site-packages/
+  - Summary shows matches by pattern and by extension
+  - Sample findings table in summary.md (up to 20 entries)

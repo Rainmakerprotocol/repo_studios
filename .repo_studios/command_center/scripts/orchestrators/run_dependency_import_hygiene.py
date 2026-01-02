@@ -780,16 +780,16 @@ def _refresh_baselines(paths: Paths, options: Options) -> BaselineOutcome:
     if isinstance(payload, dict):
         run_slug = payload.get("run_slug")
         if isinstance(run_slug, str):
-            candidate = paths.mypy_baselines_output_dir / f"{MYPY_BASELINES_RUN_PREFIX}-{run_slug.replace('-', '_')}"
-            if candidate.exists():
-                run_dir = candidate.resolve()
+            run_dir_candidate = paths.mypy_baselines_output_dir / f"{MYPY_BASELINES_RUN_PREFIX}-{run_slug.replace('-', '_')}"
+            if run_dir_candidate.exists():
+                run_dir = run_dir_candidate.resolve()
     summary_path = None
     if isinstance(payload, dict):
         artifacts = payload.get("artifacts")
         if isinstance(artifacts, dict):
-            candidate = artifacts.get("bundle_summary.json")
-            if candidate:
-                path = Path(candidate)
+            summary_candidate = artifacts.get("bundle_summary.json")
+            if summary_candidate:
+                path = Path(summary_candidate)
                 if not path.is_absolute():
                     path = (paths.mypy_baselines_output_dir / path).resolve()
                 summary_path = path if path.exists() else None

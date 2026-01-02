@@ -1,0 +1,95 @@
+# Tier-3 Script Specification — refresh_mypy_baselines.py
+# Schema: ScriptInspectionRecordV1
+# Stage: 4.1 — Dependency & Import Hygiene
+# Last verified: 2026-01-02
+
+schema: ScriptInspectionRecordV1
+record_id: S41R-006
+
+script:
+  path: .repo_studios/scripts/utilities/refresh_mypy_baselines.py
+  name: refresh_mypy_baselines.py
+  category: utility
+  stage: "4.1"
+  stage_name: Dependency & Import Hygiene
+
+tier3:
+  metadata_block_version: v1
+  allowed: true
+  exists: true
+  name: tier3_refresh_mypy_baselines.yaml
+  meets_template: "yes"
+  last_updated: "2026-01-02"
+
+cli_surfaces:
+  run_entrypoint: run(argv)
+  key_flags:
+    - --repo-root
+    - --output-dir
+    - --target
+    - --timestamp
+    - --artifacts-to-keep
+    - --append-timestamp
+    - --no-append-timestamp
+    - --log-level
+
+io_contract:
+  inputs:
+    - repo_root — repository root directory
+    - target — override target definition (label=path[:filename])
+    - timestamp — ISO-8601 timestamp for the run (optional)
+    - append-timestamp — append timestamp markers to baseline files
+  outputs:
+    current:
+      root: .repo_studios/command_center/reports/rawview/mypy_baselines/mypy_baselines-<YYYYMMDD_HHMMSS>/
+      artifacts:
+        - bundle_summary.json
+        - status.json
+        - SUMMARY.md
+        - mypy_*.txt (per target)
+    target:
+      root: (utility — no HOP migration planned)
+      artifacts:
+        - bundle_summary.json
+        - status.json
+        - SUMMARY.md
+    status: non-HOP utility
+    note: Uses write_report_artifacts + latest_* pointers; rawview layout is intentional
+
+retention:
+  surfaces:
+    - --artifacts-to-keep
+    - write_report_artifacts(... keep=options.artifacts_to_keep)
+    - ReportArtifact(pointer=latest_*) + copy_latest_artifact
+  mechanism: prune_by_keep_budget
+  default_keep: 10
+  targets:
+    - .repo_studios/command_center/reports/rawview/mypy_baselines
+  guardrails:
+    - write_report_artifacts respects .keep sentinel
+
+db_integration:
+  gated_by: REPO_STUDIOS_DB_ENABLED
+  marker_required: false
+  marker_string: "N/A"
+  note: No DB markers in this utility; uses write_report_artifacts
+
+evidence:
+  code_refs:
+    - .repo_studios/scripts/utilities/refresh_mypy_baselines.py#L53 — DEFAULT_ARTIFACTS_TO_KEEP
+    - .repo_studios/scripts/utilities/refresh_mypy_baselines.py#L379-L390 — write_report_artifacts
+  tests:
+    - path: .repo_studios/tests/tests_utilities/test_refresh_mypy_baselines.py
+      result: 3/3 passed
+      duration: 0.16s
+  qa:
+    mypy: "Success: no issues found in 1 source file"
+    pytest: "3 passed in 0.16s"
+    last_verified: "2026-01-02"
+
+notes:
+  - Utility script — NOT HOP-compliant (uses rawview layout, latest_* pointers)
+  - Refreshes mypy baselines for agents_full and monitoring_full targets by default
+  - Emits baseline .txt files with optional timestamp markers
+  - Default targets: agents, agents/core/monitoring
+  - Fixed bug: get_keep was called at module level before import (2026-01-02)

@@ -83,8 +83,9 @@ def _configure_logging(level: str, verbose: bool) -> logging.Logger:
 
 
 def _ensure_run_dir(base: Path) -> Path:
-    timestamp = datetime.now(UTC).strftime("%Y-%m-%d_%H%M%S")
-    run_dir = base / f"{RUN_PREFIX}{timestamp}"
+    # HOP-compliant: timestamp-only directory naming (YYYYMMDD-HHMM)
+    timestamp = datetime.now(UTC).strftime("%Y%m%d-%H%M")
+    run_dir = base / timestamp
     run_dir.mkdir(parents=True, exist_ok=True)
     return run_dir
 
@@ -462,10 +463,10 @@ def _prune_history(base: Path, current: Path, keep: int, *, logger: logging.Logg
     if keep_count < 0:
         keep_count = DEFAULT_ARTIFACTS_TO_KEEP
     keep_count = max(keep_count, 1)
+    # HOP-compliant pruning: no stem_prefix, uses timestamp-only directories
     result = prune_run_directories(
         base,
         keep=keep_count,
-        stem_prefix=RUN_PREFIX,
         current_run=current,
         logger=logger,
     )

@@ -1,0 +1,103 @@
+# Tier-3 Script Specification — generate_import_graph_report.py
+# Schema: ScriptInspectionRecordV1
+# Stage: 4.1 — Dependency & Import Hygiene
+# Last verified: 2026-01-02
+
+schema: ScriptInspectionRecordV1
+record_id: S41R-003
+
+script:
+  path: .repo_studios/scripts/producers/generate_import_graph_report.py
+  name: generate_import_graph_report.py
+  category: producer
+  stage: "4.1"
+  stage_name: Dependency & Import Hygiene
+
+tier3:
+  metadata_block_version: v1
+  allowed: true
+  exists: true
+  name: tier3_generate_import_graph_report.yaml
+  meets_template: "yes"
+  last_updated: "2026-01-02"
+
+cli_surfaces:
+  run_entrypoint: main(argv)
+  key_flags:
+    - --repo-root
+    - --output-dir
+    - --owned
+    - --scan-all
+    - --exclude
+    - --artifacts-to-keep
+    - --timestamp
+    - --log-level
+
+io_contract:
+  inputs:
+    - repo_root — repository root directory
+    - owned — owned package prefixes for import scanning (optional)
+    - scan-all — scan entire repo ignoring owned filter (optional)
+    - exclude — directory names to skip (default: .venv, __pycache__, .git, node_modules, etc.)
+    - timestamp — override bundle timestamp (optional)
+  outputs:
+    current:
+      root: .repo_studios/reports/healthview/producer_reports/import_graph/<YYYYMMDD-HHMM>/
+      artifacts:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+      enhanced_fields:
+        - edge_provenance (file/line/statement per module edge)
+        - cycle_provenance (file/line for each cycle edge)
+        - files_scanned count
+    target:
+      root: .repo_studios/reports/healthview/producer_reports/import_graph/<YYYYMMDD-HHMM>/
+      artifacts:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+    status: HOP-compliant
+    hop_library: build_topic_path("producer", "import_graph")
+    hop_line_ref: L42
+    schema_version: 2
+
+retention:
+  surfaces:
+    - --artifacts-to-keep
+    - prune_run_directories(... keep=args.artifacts_to_keep, current_run=run_dir)
+  mechanism: prune_by_keep_budget
+  default_keep: 10
+  targets:
+    - .repo_studios/reports/healthview/producer_reports/import_graph
+  guardrails:
+    - prune_run_directories retains current_run
+    - prune_run_directories honors .keep sentinel
+
+db_integration:
+  gated_by: REPO_STUDIOS_DB_ENABLED
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+
+evidence:
+  code_refs:
+    - .repo_studios/scripts/producers/generate_import_graph_report.py#L42 — build_topic_path
+    - .repo_studios/scripts/producers/generate_import_graph_report.py#L60-L70 — ImportEdge dataclass
+    - .repo_studios/scripts/producers/generate_import_graph_report.py#L175-L240 — GraphResult with provenance
+  tests:
+    - path: .repo_studios/tests/tests_producers/test_generate_import_graph_report.py
+      result: 2/2 passed
+      duration: 0.20s
+  qa:
+    mypy: "Success: no issues found in 1 source file"
+    pytest: "2 passed in 0.20s"
+    last_verified: "2026-01-02"
+
+notes:
+  - Script uses build_topic_path('producer', 'import_graph') — HOP-compliant
+  - Scans Python files for import statements and builds dependency graph
+  - Detects circular dependencies with file/line provenance for diagnosis
+  - Enhanced 2026-01-02 with ImportEdge dataclass for provenance tracking
+  - Added --scan-all to scan entire repo (not just owned packages)
+  - Added --exclude for directory exclusions (default .venv, __pycache__, .git, etc.)
+  - Schema version 2 includes edge_provenance and cycle_provenance fields

@@ -28,7 +28,7 @@ related_files:
 
 The lizard producer writes its positional bundle under:
 
-* `.repo_studios/reports/producer_reports/healthview/lizard_report/<YYYYMMDD-HHMM>/`
+* `.repo_studios/reports/healthview/producer_reports/lizard_complexity/<YYYYMMDD-HHMM>/`
 
 The producer obtains a storage backend via `libraries.database_integration.create_storage(...)`, which:
 

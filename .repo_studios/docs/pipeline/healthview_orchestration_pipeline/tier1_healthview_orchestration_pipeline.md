@@ -783,14 +783,14 @@ _Tier-2 references (depth lives here):_
 
 These are Stage 3.1 readiness gates after all Tier-2 DONE script gates are closed.
 
-- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`).
+- [x] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`).
   See: [Stop-gates](tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] No pointer artifacts (`latest_*` / `current_*`).
+- [x] No pointer artifacts (`latest_*` / `current_*`).
   See: [Stop-gates](tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] Output root aligned to HOP contract
+- [x] Output root aligned to HOP contract
   (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`).
   See: [Contract snapshot](tier2_roster/tier2_fault_diagnostics_overview_roster.md#23-current-vs-target-contract-snapshot-stage-31)
-- [ ] Tier-3 eligible (Stage 3.1 Tier-2 depth captured; ready for Tier-3 extraction).
+- [x] Tier-3 eligible (Stage 3.1 Tier-2 depth captured; ready for Tier-3 extraction).
   See: [Records index](tier2_roster/tier2_fault_diagnostics_overview_roster.md#311-records-index)
 
 **Target contract (HOP):**
@@ -801,9 +801,11 @@ These are Stage 3.1 readiness gates after all Tier-2 DONE script gates are close
 
 **Current evidence (Stage 3.1):**
 
-- Output root currently observed is CommandView-rooted and not yet output-root compliant.
-- Base package files are present in current runs, but the location contract remains a stop-gate.
-- Pointer artifacts remain a stop-gate (default discovery in this stage still depends on `latest_*`).
+- Stage 3.1 output root is aligned to the Tier-1 contract:
+  `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
+- Base package is present (`manifest.json`, `summary.md`, `telemetry.json`).
+- No pointer artifacts (`latest_*` / `current_*`) were observed under `.repo_studios/reports/healthview`.
+- All 4 scripts use `build_topic_path()` library for HOP-compliant output paths.
 - Details and evidence live in the Stage 3.1 Tier-2 roster:
   [Current vs Target snapshot](tier2_roster/tier2_fault_diagnostics_overview_roster.md#23-current-vs-target-contract-snapshot-stage-31),
   [Stop-gates](tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists).
@@ -900,8 +902,10 @@ _Tier-2 references (depth lives here):_
 
 **Stage 4.1 Script Gate Summary (Tier-1):**
 
-- [ ] generate_dependency_hygiene_report.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-002-generate_dependency_hygiene_reportpy)
-- [ ] generate_import_graph_report.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-003-generate_import_graph_reportpy)
+- [x] generate_dependency_hygiene_report.py — complete. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-002-generate_dependency_hygiene_reportpy)
+  Tier-3: [tier3_generate_dependency_hygiene_report.yaml](tier3_scripts/dependency_import_hygiene/tier3_generate_dependency_hygiene_report.yaml)
+- [x] generate_import_graph_report.py — complete. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-003-generate_import_graph_reportpy)
+  Tier-3: [tier3_generate_import_graph_report.yaml](tier3_scripts/dependency_import_hygiene/tier3_generate_import_graph_report.yaml)
 - [ ] scan_code_placeholders.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-004-scan_code_placeholderspy)
 - [ ] generate_typecheck_report.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-005-generate_typecheck_reportpy)
 - [ ] refresh_mypy_baselines.py — pending until Tier-2 DONE is checked.
@@ -1437,11 +1441,11 @@ _Tier-2 references (depth lives here):_
 
 **Stage 7 Script Gate Summary (Tier-1):**
 
-- [ ] Stage 1.1 — Test execution telemetry — pending until Tier-2 DONE is checked —
+- [x] Stage 1.1 — Test execution telemetry — complete.
   [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-002-test-execution-telemetry)
-- [ ] Stage 2.1 — Docs health overview — pending until Tier-2 DONE is checked —
+- [x] Stage 2.1 — Docs health overview — complete.
   [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-003-docs-health)
-- [ ] Stage 3.1 — Fault diagnostics overview — pending until Tier-2 DONE is checked —
+- [x] Stage 3.1 — Fault diagnostics overview — complete.
   [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-004-fault-diagnostics)
 - [ ] Stage 4.1 — Dependency import hygiene — pending until Tier-2 DONE is checked —
   [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-005-dependency-import-hygiene)

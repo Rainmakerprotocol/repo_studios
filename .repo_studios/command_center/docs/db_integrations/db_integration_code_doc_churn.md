@@ -31,7 +31,7 @@ related_files:
 
 * Producer script: `.repo_studios/scripts/producers/generate_code_doc_churn_report.py`
 * Bundle location:
-  * `.repo_studios/reports/producer_reports/healthview/code_doc_churn/YYYYMMDD-HHMM/`
+  * `.repo_studios/reports/healthview/producer_reports/code_doc_churn/YYYYMMDD-HHMM/`
 * Storage abstraction:
   * `.repo_studios/command_center/scripts/libraries/database_integration.py` (`create_storage()`)
 

@@ -1,0 +1,117 @@
+# Tier-3 Script Specification — run_dependency_import_hygiene.py
+# Schema: ScriptInspectionRecordV1
+# Stage: 4.1 — Dependency & Import Hygiene
+# Last verified: 2026-01-02
+
+schema: ScriptInspectionRecordV1
+record_id: S41R-001
+
+script:
+  path: .repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py
+  name: run_dependency_import_hygiene.py
+  category: orchestrator
+  stage: "4.1"
+  stage_name: Dependency & Import Hygiene
+
+tier3:
+  metadata_block_version: v1
+  allowed: true
+  exists: true
+  name: tier3_run_dependency_import_hygiene.yaml
+  meets_template: "yes"
+  last_updated: "2026-01-02"
+
+cli_surfaces:
+  run_entrypoint: run(argv)
+  key_flags:
+    - --repo-root
+    - --healthview-root
+    - --dependency-output-dir
+    - --import-graph-output-dir
+    - --placeholder-output-dir
+    - --batch-cleanup-output-base
+    - --typecheck-output-dir
+    - --mypy-baselines-output-dir
+    - --dependency-artifacts-to-keep
+    - --import-graph-artifacts-to-keep
+    - --placeholder-artifacts-to-keep
+    - --cleanup-artifacts-to-keep
+    - --typecheck-artifacts-to-keep
+    - --baseline-artifacts-to-keep
+    - --artifacts-to-keep
+    - --skip-import-graph
+    - --skip-typecheck
+    - --trigger-batch-cleanup
+    - --refresh-mypy-baselines
+    - --timestamp
+    - --log-level
+
+io_contract:
+  inputs:
+    - repo_root — repository root directory
+    - output roots — per-producer output directories
+    - feature flags — skip-import-graph, skip-typecheck, trigger-batch-cleanup, refresh-mypy-baselines
+    - timestamp — ISO8601 timestamp forwarded to producers
+  outputs:
+    current:
+      root: .repo_studios/command_center/reports/healthview/dependency_import_hygiene/<YYYYMMDD-HHMM>/
+      artifacts:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+    target:
+      root: .repo_studios/reports/healthview/orchestrators/dependency_import_hygiene/<YYYYMMDD-HHMM>/
+      artifacts:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+    status: partial HOP — orchestrator layout
+    note: Uses command_center/reports/healthview (not canonical .repo_studios/reports/healthview)
+
+orchestrated_producers:
+  - S41R-002: generate_dependency_hygiene_report.py (HOP-compliant)
+  - S41R-003: generate_import_graph_report.py (HOP-compliant, enhanced)
+  - S41R-004: scan_code_placeholders.py (HOP-compliant)
+  - S41R-005: generate_typecheck_report.py (HOP-compliant)
+  - S41R-006: refresh_mypy_baselines.py (non-HOP utility)
+
+retention:
+  surfaces:
+    - --artifacts-to-keep
+    - write_report_artifacts(... keep=options.artifacts_to_keep)
+    - per-producer keep flags
+  mechanism: prune_by_keep_budget
+  default_keep: 3
+  targets:
+    - .repo_studios/command_center/reports/healthview/dependency_import_hygiene
+    - .repo_studios/command_center/reports/rawview/dependency_import_hygiene_cleanup
+  guardrails:
+    - write_report_artifacts respects .keep sentinel
+    - cleanup pruning skips current bundle
+
+db_integration:
+  gated_by: REPO_STUDIOS_DB_ENABLED
+  marker_required: false
+  marker_string: "N/A"
+  note: No DB markers in orchestrator; delegates to producers
+
+evidence:
+  code_refs:
+    - .repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py#L44 — build_topic_path
+    - .repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py#L55-L62 — producer paths
+    - .repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py#L778 — fixed var shadowing
+  tests:
+    - path: .repo_studios/tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py
+      result: 3/3 passed
+      duration: 0.22s
+  qa:
+    mypy: "Success: no issues found in 1 source file"
+    pytest: "3 passed in 0.22s"
+    last_verified: "2026-01-02"
+
+notes:
+  - Orchestrates dependency hygiene, import graph, placeholder scan, typecheck, and baseline refresh
+  - Calls HOP-compliant producers for most steps (S41R-002 through S41R-005)
+  - Uses non-HOP utility for baseline refresh (S41R-006)
+  - Fixed mypy type error from variable shadowing (2026-01-02)
+  - Typical runs take 7-11 minutes in CI

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "viewer": "healthview",
+  "topic": "dependency_hygiene",
+  "run_timestamp": "2026-01-01T23:30:02.249900+00:00",
+  "git_sha": null,
+  "status": "failed",
+  "catalog": [
+    {
+      "artifact": "manifest.json",
+      "kind": "json"
+    },
+    {
+      "artifact": "summary.md",
+      "kind": "markdown"
+    },
+    {
+      "artifact": "telemetry.json",
+      "kind": "json"
+    }
+  ],
+  "inputs": {
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "requirements_patterns": [
+      "requirements.txt",
+      "requirements-dev.txt",
+      "requirements/*.txt"
+    ],
+    "skip_pyproject": false,
+    "artifacts_to_keep": 5
+  },
+  "provenance": {
+    "trigger_type": "manual"
+  },
+  "summary": {
+    "status": "failed",
+    "issue_count": 5,
+    "requirements_scanned": 2,
+    "pyproject_scanned": true
+  }
+}

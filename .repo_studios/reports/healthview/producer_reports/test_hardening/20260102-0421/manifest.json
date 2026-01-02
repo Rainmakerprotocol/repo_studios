@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "producer_reports",
+  "topic": "test_hardening",
+  "run_timestamp": "20260102-0421",
+  "generated_at": "2026-01-02T04:21:07.318488+00:00",
+  "git_sha": "1a91585847d63ef16c4da31add948b5f6f68698c",
+  "status": "issues-found",
+  "exit_code": 1,
+  "catalog": [
+    {
+      "script_path": ".repo_studios\\scripts\\producers\\analyze_test_hardening.py",
+      "role": "producer"
+    }
+  ],
+  "paths": {
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "reports_root": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\test_hardening",
+    "bundle_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\test_hardening\\20260102-0421"
+  },
+  "inputs": {
+    "test_patterns": [
+      "test_*.py",
+      "*_test.py",
+      "test*.py"
+    ],
+    "ignored_parts": [
+      ".git",
+      ".repo_studios",
+      ".venv",
+      "__pycache__"
+    ],
+    "tests_dirs": [
+      ".repo_studios\\tests"
+    ],
+    "artifacts_to_keep": 5,
+    "log_level": "INFO"
+  },
+  "provenance": {
+    "trigger_type": "make",
+    "requested_by": "genet"
+  }
+}

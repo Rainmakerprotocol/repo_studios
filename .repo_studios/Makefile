@@ -46,22 +46,23 @@ studio-check-inventory-health: studio-render-views
 
 .PHONY: studio-validate-markdown-anchors
 studio-validate-markdown-anchors:
-	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/validate_markdown_anchors.py" --repo-root "$(REPO_ROOT)" --output-dir ".repo_studios/reports/producer_reports" --log-level "$(LOG_LEVEL)"
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/validate_markdown_anchors.py" --repo-root "$(REPO_ROOT)" --log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-anchor-inventory
 studio-generate-anchor-inventory:
-	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/generate_anchor_inventory.py" --repo-root "$(REPO_ROOT)" --docs-root docs --output-dir ".repo_studios/reports/producer_reports" --log-level "$(LOG_LEVEL)"
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/generate_anchor_inventory.py" --repo-root "$(REPO_ROOT)" --docs-root docs --log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-analyze-standards-index-gaps
 studio-analyze-standards-index-gaps:
-	$(PYTHON) .repo_studios/scripts/producers/analyze_standards_index_gaps.py --output-dir .repo_studios/reports/producer_reports/standards_gap_reports
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/producers/analyze_standards_index_gaps.py" \
+		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-scan-code-placeholders
 studio-scan-code-placeholders:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/scripts/producers/scan_code_placeholders.py" \
 		--repo-root . \
-		--output-dir .repo_studios/reports/producer_reports \
 		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-scan-monkey-patches
@@ -69,7 +70,6 @@ studio-scan-monkey-patches:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/scripts/producers/scan_monkey_patches.py" \
 		--repo-root . \
-		--output-dir .repo_studios/reports/producer_reports \
 		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-seed-standards-prompts
@@ -77,7 +77,6 @@ studio-seed-standards-prompts:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/scripts/producers/seed_standards_prompts.py" \
 		--repo-root . \
-		--output-dir .repo_studios/reports/producer_reports \
 		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-validate-import-boundaries
@@ -85,7 +84,6 @@ studio-validate-import-boundaries:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/scripts/producers/validate_import_boundaries.py" \
 		--repo-root . \
-		--output-dir .repo_studios/reports/producer_reports \
 		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-import-graph
@@ -93,7 +91,6 @@ studio-generate-import-graph:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/scripts/producers/generate_import_graph_report.py" \
 		--repo-root . \
-		--output-dir .repo_studios/reports/producer_reports \
 		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-lizard-report
@@ -101,7 +98,6 @@ studio-generate-lizard-report:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/scripts/producers/generate_lizard_report.py" \
 		--repo-root . \
-		--output-dir .repo_studios/reports/producer_reports \
 		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-typecheck-report
@@ -110,7 +106,6 @@ studio-generate-typecheck-report:
 		"scripts/producers/generate_typecheck_report.py" \
 		--repo-root .. \
 		--all \
-		--output-dir .repo_studios/reports/producer_reports \
 		--artifacts-to-keep 10 \
 		--log-level "$(LOG_LEVEL)"
 
@@ -122,7 +117,6 @@ studio-validate-metrics-anchor-stubs:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py" \
 		--repo-root "$(REPO_ROOT)" \
-		--output-dir ".repo_studios/reports/producer_reports" \
 		--artifacts-to-keep 10 \
 		--log-level "$(LOG_LEVEL)"
 
@@ -131,7 +125,6 @@ studio-analyze-test-hardening:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/scripts/producers/analyze_test_hardening.py" \
 		--repo-root "$(REPO_ROOT)" \
-		--output-dir ".repo_studios/reports/healthview" \
 		--tests-dir ".repo_studios/tests" \
 		--artifacts-to-keep 5 \
 		--log-level "$(LOG_LEVEL)"
@@ -141,7 +134,6 @@ studio-verify-docs-integrity:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/scripts/producers/verify_docs_integrity.py" \
 		--repo-root "$(REPO_ROOT)" \
-		--output-dir ".repo_studios/reports/producer_reports" \
 		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-collect-faulthandler-reports
@@ -222,7 +214,6 @@ studio-collect-test-log-reports:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/scripts/producers/collect_test_log_reports.py" \
 		--repo-root "$(REPO_ROOT)" \
-		--output-dir ".repo_studios/reports/healthview" \
 		--artifacts-to-keep 10 \
 		--log-level "$(LOG_LEVEL)"
 
@@ -232,21 +223,23 @@ studio-generate-test-log-health-report:
 
 .PHONY: studio-diff-standards-index
 studio-diff-standards-index:
-	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/diff_standards_index.py" "$(abspath $(old))" "$(abspath $(new))" --repo-root "$(REPO_ROOT)" --output-dir ".repo_studios/command_center/reports" --artifacts-to-keep 10 --fail-on "$(FAIL_ON)" --log-level "$(LOG_LEVEL)"
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/diff_standards_index.py" "$(abspath $(old))" "$(abspath $(new))" --repo-root "$(REPO_ROOT)" --artifacts-to-keep 10 --fail-on "$(FAIL_ON)" --log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-dependency-hygiene
 studio-generate-dependency-hygiene:
-	$(PYTHON) .repo_studios/scripts/producers/generate_dependency_hygiene_report.py --repo-root . --output-dir .repo_studios/reports/producer_reports --log-level INFO
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/scripts/producers/generate_dependency_hygiene_report.py" \
+		--repo-root . \
+		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-doc-index
 studio-generate-doc-index:
-	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/generate_doc_index.py" --repo-root "$(REPO_ROOT)" --output-dir ".repo_studios/reports/healthview" --artifacts-to-keep 1 --log-level "$(LOG_LEVEL)"
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/generate_doc_index.py" --repo-root "$(REPO_ROOT)" --artifacts-to-keep 1 --log-level "$(LOG_LEVEL)"
 
 .PHONY: doc-index
 doc-index:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) ".repo_studios/scripts/producers/generate_doc_index.py" \
 		--repo-root "$(REPO_ROOT)" \
-		--output-dir ".repo_studios/reports/healthview" \
 		--artifacts-to-keep 1 \
 		--refresh-checkbox-report \
 		--refresh-tier3-index \
@@ -291,7 +284,6 @@ studio-generate-test-coverage-inventory:
 		--refresh-cov-target "." \
 		--refresh-tests \
 			".repo_studios/tests" \
-		--output-dir ".repo_studios/reports/healthview" \
 		--artifacts-to-keep 5 \
 		--log-level "$(LOG_LEVEL)"
 
@@ -304,7 +296,6 @@ studio-generate-code-doc-churn-report:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/scripts/producers/generate_code_doc_churn_report.py" \
 		--repo-root "$(REPO_ROOT)" \
-		--output-dir ".repo_studios/reports/producer_reports" \
 		--git-window "30 days" \
 		--artifacts-to-keep 5 \
 		--log-level "$(LOG_LEVEL)"
@@ -314,7 +305,6 @@ studio-generate-undocumented-logic-report:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/scripts/producers/generate_undocumented_logic_report.py" \
 		--repo-root "$(REPO_ROOT)" \
-		--output-dir ".repo_studios/reports/producer_reports" \
 		--include-command-center \
 		--log-level "$(LOG_LEVEL)"
 
@@ -323,7 +313,6 @@ studio-aggregate-docs-health:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/scripts/aggregators/aggregate_docs_health_signals.py" \
 		--repo-root "$(REPO_ROOT)" \
-		--output-dir ".repo_studios/reports/healthview/aggregator_reports/docs_health_signals" \
 		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-function-index

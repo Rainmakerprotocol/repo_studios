@@ -28,7 +28,7 @@ metadata, summary markdown, and telemetry metrics.
 ## System Context
 
 - Producer: `.repo_studios/scripts/producers/validate_markdown_anchors.py`
-- Output bundle: `.repo_studios/reports/producer_reports/healthview/markdown_anchor_validation/<YYYYMMDD-HHMM>/`
+- Output bundle: `.repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/<YYYYMMDD-HHMM>/`
 - Artifacts: `manifest.json`, `summary.md`, `telemetry.json`
 - Storage facade: `create_storage(...)` from `.repo_studios/command_center/scripts/libraries/database_integration.py`
 
@@ -71,7 +71,7 @@ The manifest captures:
 
 - No `latest_*` pointers are written.
 - Downstream consumers should load the latest run directory from
-  `.repo_studios/reports/producer_reports/healthview/markdown_anchor_validation/` and read `telemetry.json`.
+  `.repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/` and read `telemetry.json`.
 
 ## Update Log
 

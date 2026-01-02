@@ -26,7 +26,7 @@ related_files:
 ## System Context
 
 - Aggregator script: `.repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py`
-- Output contract (file system): `.repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap/<stem>-<YYYY-MM-DD_HHMMSS>/{heatmap.json,heatmap.md,bundle_summary.json}`
+- Output contract (file system): `.repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap/<YYYYMMDD-HHMM>/{heatmap.json,heatmap.md,bundle_summary.json}`
 - Storage layer: `.repo_studios/command_center/scripts/libraries/database_integration.py` (`create_storage` → `DualWriteStorage`)
 
 ## Agent Instructions

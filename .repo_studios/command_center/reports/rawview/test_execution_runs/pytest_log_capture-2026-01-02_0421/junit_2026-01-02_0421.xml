@@ -1,0 +1,1307 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="32" skipped="0" tests="554" time="51.501" timestamp="2026-01-01T23:21:17.896045-05:00" hostname="GeneOffice2023"><testcase classname=".repo_studios.tests.command_center.libraries.test_manifest" name="test_build_automation_manifest_round_trip" time="0.007" /><testcase classname=".repo_studios.tests.command_center.libraries.test_manifest" name="test_manifest_rejects_unknown_status" time="0.001" /><testcase classname=".repo_studios.tests.command_center.libraries.test_metrics" name="test_test_run_result_validation" time="0.000" /><testcase classname=".repo_studios.tests.command_center.libraries.test_metrics" name="test_build_metrics_summary_round_trip" time="0.003" /><testcase classname=".repo_studios.tests.command_center.libraries.test_metrics" name="test_metrics_summary_requires_tests" time="0.000" /><testcase classname=".repo_studios.tests.schema_validation.test_validate_inventory" name="test_validation_passes_for_valid_entry" time="0.206" /><testcase classname=".repo_studios.tests.schema_validation.test_validate_inventory" name="test_validation_detects_duplicate_ids" time="0.194" /><testcase classname=".repo_studios.tests.schema_validation.test_validate_inventory" name="test_json_output" time="0.192" /><testcase classname=".repo_studios.tests.tests_aggregators.test_aggregate_docs_health_signals" name="test_generates_docs_health_bundle" time="0.042" /><testcase classname=".repo_studios.tests.tests_aggregators.test_aggregate_docs_health_signals" name="test_skip_hygiene_omits_category" time="0.019" /><testcase classname=".repo_studios.tests.tests_aggregators.test_analyze_monkey_patch_trends" name="test_prefers_consumer_bundles" time="0.035" /><testcase classname=".repo_studios.tests.tests_aggregators.test_analyze_monkey_patch_trends" name="test_fallback_to_producer_reports" time="0.035" /><testcase classname=".repo_studios.tests.tests_aggregators.test_analyze_monkey_patch_trends" name="test_retention_prunes_old_runs" time="0.021" /><testcase classname=".repo_studios.tests.tests_aggregators.test_generate_churn_complexity_heatmap" name="test_prefers_consumer_bundle" time="0.102" /><testcase classname=".repo_studios.tests.tests_aggregators.test_generate_churn_complexity_heatmap" name="test_fallback_to_logs_when_summary_missing" time="0.049" /><testcase classname=".repo_studios.tests.tests_aggregators.test_generate_churn_complexity_heatmap" name="test_retention_prunes_old_runs" time="0.049" /><testcase classname=".repo_studios.tests.tests_aggregators.test_generate_churn_complexity_heatmap" name="test_main_returns_nonzero_when_no_python_files" time="0.057" /><testcase classname=".repo_studios.tests.tests_aggregators.test_generate_churn_complexity_heatmap" name="test_collect_git_churn_handles_oserror" time="0.004" /><testcase classname=".repo_studios.tests.tests_aggregators.test_generate_churn_complexity_heatmap" name="test_load_junit_failures_uses_classname_when_file_missing" time="0.005" /><testcase classname=".repo_studios.tests.tests_command_center.aggregators.test_generate_automation_manifest" name="test_generate_automation_manifest_bundle" time="0.016" /><testcase classname=".repo_studios.tests.tests_command_center.aggregators.test_generate_automation_manifest" name="test_manifest_files_changed_mismatch" time="0.012" /><testcase classname=".repo_studios.tests.tests_command_center.aggregators.test_generate_automation_manifest" name="test_guardrail_violation" time="0.013" /><testcase classname=".repo_studios.tests.tests_command_center.aggregators.test_generate_metrics_summary" name="test_metrics_summary_run" time="0.010" /><testcase classname=".repo_studios.tests.tests_command_center.aggregators.test_generate_metrics_summary" name="test_invalid_tests_payload" time="0.011" /><testcase classname=".repo_studios.tests.tests_command_center.dependency_import_hygiene.test_run_dependency_import_hygiene" name="test_run_emits_healthview_bundle" time="0.052" /><testcase classname=".repo_studios.tests.tests_command_center.dependency_import_hygiene.test_run_dependency_import_hygiene" name="test_run_respects_skip_flags" time="0.027" /><testcase classname=".repo_studios.tests.tests_command_center.dependency_import_hygiene.test_run_dependency_import_hygiene" name="test_batch_cleanup_plan_writes_bundle" time="0.015" /><testcase classname=".repo_studios.tests.tests_command_center.docs_health.test_run_docs_health_overview" name="test_orchestrator_writes_healthview_manifest" time="0.026" /><testcase classname=".repo_studios.tests.tests_command_center.docs_health.test_run_docs_health_overview" name="test_orchestrator_blocks_invalid_topic_alias" time="0.025" /><testcase classname=".repo_studios.tests.tests_command_center.fault_diagnostics.test_run_fault_diagnostics_overview" name="test_orchestrator_writes_manifest_with_summarizer" time="0.021" /><testcase classname=".repo_studios.tests.tests_command_center.fault_diagnostics.test_summarize_fault_diagnostics_overview" name="test_summarizer_generates_overview" time="0.015" /><testcase classname=".repo_studios.tests.tests_command_center.monkey_patch.test_orchestrator_contract" name="test_orchestrator_exposes_run_entrypoint" time="0.001" /><testcase classname=".repo_studios.tests.tests_command_center.monkey_patch.test_summarizer_contract" name="test_summarizer_exposes_run_entrypoint" time="0.000" /><testcase classname=".repo_studios.tests.tests_command_center.monkey_patch.test_summarizer_contract" name="test_summarizer_declares_expected_slugs" time="0.001"><failure message="AssertionError: assert 'healthview' == 'commandview'&#10;  &#10;  - commandview&#10;  + healthview">def test_summarizer_declares_expected_slugs() -&gt; None:
+&gt;       assert getattr(summarizer_module, "VIEWER_SLUG", None) == "commandview"
+E       AssertionError: assert 'healthview' == 'commandview'
+E         
+E         - commandview
+E         + healthview
+
+.repo_studios\tests\tests_command_center\monkey_patch\test_summarizer_contract.py:24: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_orchestrate_full_diagnostic" name="test_run_emits_manifest_and_respects_includes" time="0.027" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_orchestrate_full_diagnostic" name="test_stop_on_first_failure_blocks_remaining" time="0.013" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_orchestrate_full_diagnostic" name="test_keep_going_runs_all_topics_after_failure" time="0.013" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_automation_dry_run" name="test_run_creates_bundle" time="0.033" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_automation_dry_run" name="test_missing_script" time="0.011" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_automation_dry_run" name="test_load_post_run_matrix_missing_sections" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_automation_dry_run" name="test_load_post_run_matrix_handles_malformed_rows" time="0.005" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_pipeline_happy_path" time="0.011" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_pipeline_stops_on_inventory_failure" time="0.005" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_pipeline_rejects_missing_target" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_pipeline_errors_when_inventory_artifact_missing" time="0.005" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_pipeline_propagates_analysis_failure" time="0.006" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_pipeline_detects_missing_scan_artifacts" time="0.005" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_pipeline_rejects_file_target" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_build_paths_rejects_outside_repo" time="0.003" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_build_paths_accepts_prefixed_relative_target" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_load_run_function_requires_existing_script" time="0.002" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_load_run_function_requires_callable_run" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_inventory_update" name="test_inventory_update_invokes_producer" time="0.055" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_inventory_update" name="test_inventory_update_validates_target" time="0.005" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_inventory_update" name="test_inventory_update_requires_existing_directory" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_monkey_patch_oversight" name="test_monkey_patch_oversight_pipeline" time="0.021" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_test_execution_telemetry" name="test_parse_timestamp_invalid_raises" time="0.021" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_test_execution_telemetry" name="test_parse_timestamp_naive_assumes_utc" time="0.015" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_test_execution_telemetry" name="test_latest_directory_selects_latest" time="0.010" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_test_execution_telemetry" name="test_read_json_returns_dict_only" time="0.010" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_test_execution_telemetry" name="test_relativize_handles_outside_repo" time="0.011" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_test_execution_telemetry" name="test_load_run_callable_errors_when_missing_run" time="0.012" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_test_execution_telemetry" name="test_load_run_callable_uses_sys_modules_shortcut" time="0.007" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_test_execution_telemetry" name="test_run_generates_healthview_bundle" time="0.088"><failure message="FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-968\\test_run_generates_healthview_0\\telemetry\\healthview\\orchestrator_reports\\test_execution_telemetry'">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_run_generates_healthview_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000021E06531F10&gt;
+telemetry_module = &lt;module 'run_test_execution_telemetry' from 'C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_test_execution_telemetry.py'&gt;
+
+    def test_run_generates_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, telemetry_module) -&gt; None:
+        repo_root = Path(__file__).resolve().parents[4]
+    
+        scratch = tmp_path / "telemetry"
+        logs_root = scratch / "logs"
+        run_dir = seed_capture_run(
+            logs_root,
+            timestamp=TELEMETRY_TIMESTAMP,
+            log_text=TELEMETRY_LOG,
+            junit_text=TELEMETRY_JUNIT,
+        )
+    
+        coverage_output_dir = scratch / "coverage"
+        hardening_output_dir = scratch / "hardening"
+        heatmap_output_dir = scratch / "heatmap"
+        test_log_reports_dir = scratch / "test_log_reports"
+        test_log_health_dir = scratch / "test_log_health"
+        healthview_root = scratch / "healthview"
+    
+        coverage_output_dir.mkdir(parents=True, exist_ok=True)
+        hardening_output_dir.mkdir(parents=True, exist_ok=True)
+        heatmap_output_dir.mkdir(parents=True, exist_ok=True)
+    
+        metrics_source = scratch / "metrics.json"
+        metrics_source.write_text(
+            json.dumps(
+                {
+                    "items": [
+                        {
+                            "file": "command_center/scripts/libraries/topic_pipeline.py",
+                            "churn": 2,
+                            "complexity": 5,
+                            "failures": 1,
+                        }
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
+    
+        coverage_report_dir = coverage_output_dir / "test_coverage-20251201_010100"
+        hardening_report_dir = hardening_output_dir / "test_hardening-20251201_010100"
+        heatmap_report_dir = heatmap_output_dir / "churn_complexity_heatmap-20251201_010100"
+    
+        def fake_execute_coverage(paths, options):
+            coverage_report_dir.mkdir(parents=True, exist_ok=True)
+            report_path = coverage_report_dir / "report.json"
+            report_path.write_text(
+                json.dumps(
+                    {
+                        "summary": {
+                            "status": "ok",
+                            "overall_coverage_pct": 98.0,
+                            "total_files": 1,
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            return telemetry_module.CoverageOutcome(
+                report_dir=coverage_report_dir,
+                summary={"status": "ok", "overall_coverage_pct": 98.0, "total_files": 1},
+            )
+    
+        def fake_execute_hardening(paths, options):
+            hardening_report_dir.mkdir(parents=True, exist_ok=True)
+            payload = {
+                "status": "ok",
+                "timestamp": "2025-12-01T01:01:00+00:00",
+                "summary": {
+                    "severity_totals": {"high": 0, "medium": 0, "low": 0},
+                    "total_files": 1,
+                    "total_test_functions": 1,
+                    "total_issues": 0,
+                    "high_priority_files": 0,
+                    "clean_files": 1,
+                },
+            }
+            (hardening_report_dir / "report.json").write_text(json.dumps(payload), encoding="utf-8")
+            return telemetry_module.HardeningOutcome(run_dir=hardening_report_dir, payload=payload)
+    
+        def fake_execute_heatmap(paths, options):
+            heatmap_report_dir.mkdir(parents=True, exist_ok=True)
+            bundle_summary = heatmap_report_dir / "bundle_summary.json"
+            bundle_summary.write_text(json.dumps({"mode": "fixture"}), encoding="utf-8")
+            payload = {
+                "mode": "fixture",
+                "output_dir": str(heatmap_report_dir),
+            }
+            return telemetry_module.HeatmapOutcome(run_dir=heatmap_report_dir, payload=payload)
+    
+        monkeypatch.setattr(telemetry_module, "_execute_coverage", fake_execute_coverage)
+        monkeypatch.setattr(telemetry_module, "_execute_hardening", fake_execute_hardening)
+        monkeypatch.setattr(telemetry_module, "_execute_heatmap", fake_execute_heatmap)
+    
+        args = [
+            "--repo-root",
+            str(repo_root),
+            "--logs-dir",
+            str(logs_root),
+            "--test-log-reports-dir",
+            str(test_log_reports_dir),
+            "--test-log-health-dir",
+            str(test_log_health_dir),
+            "--test-coverage-output-dir",
+            str(coverage_output_dir),
+            "--test-coverage-xml",
+            str((scratch / "coverage.xml")),
+            "--heatmap-output-dir",
+            str(heatmap_output_dir),
+            "--heatmap-metrics-source",
+            str(metrics_source),
+            "--heatmap-window",
+            "10",
+            "--hardening-output-dir",
+            str(hardening_output_dir),
+            "--healthview-root",
+            str(healthview_root),
+            "--artifacts-to-keep",
+            "1",
+            "--collector-artifacts-to-keep",
+            "1",
+            "--health-artifacts-to-keep",
+            "1",
+            "--coverage-artifacts-to-keep",
+            "1",
+            "--heatmap-artifacts-to-keep",
+            "1",
+            "--hardening-artifacts-to-keep",
+            "1",
+            "--timestamp",
+            "2025-12-01T01:01:00+00:00",
+            "--log-level",
+            "ERROR",
+        ]
+    
+        coverage_xml = scratch / "coverage.xml"
+        coverage_xml.write_text(
+            """
+    &lt;?xml version="1.0"?&gt;
+    &lt;coverage branch-rate="0" line-rate="1" version="6.5" timestamp="1733014860"&gt;
+      &lt;sources&gt;
+        &lt;source&gt;.&lt;/source&gt;
+      &lt;/sources&gt;
+      &lt;packages&gt;
+        &lt;package name="sample" branch-rate="0" line-rate="1"&gt;
+          &lt;classes&gt;
+            &lt;class name="topic_pipeline" filename=".repo_studios/command_center/scripts/libraries/topic_pipeline.py" line-rate="1" branch-rate="0"&gt;
+              &lt;lines&gt;
+                &lt;line number="1" hits="1"/&gt;
+              &lt;/lines&gt;
+            &lt;/class&gt;
+          &lt;/classes&gt;
+        &lt;/package&gt;
+      &lt;/packages&gt;
+    &lt;/coverage&gt;
+    """.strip()
+            + "\n",
+            encoding="utf-8",
+        )
+    
+        exit_code = telemetry_module.run(args)
+        assert exit_code == 0
+    
+        topic_dir = healthview_root / "orchestrator_reports" / "test_execution_telemetry"
+&gt;       runs = sorted(child for child in topic_dir.iterdir() if child.is_dir())
+                                         ^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_command_center\orchestrators\test_run_test_execution_telemetry.py:278: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_run_generates_healthview_0/telemetry/healthview/orchestrator_reports/test_execution_telemetry')
+
+    def iterdir(self):
+        """Yield path objects of the directory contents.
+    
+        The children are yielded in arbitrary order, and the
+        special entries '.' and '..' are not included.
+        """
+        root_dir = str(self)
+&gt;       with os.scandir(root_dir) as scandir_it:
+             ^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-968\\test_run_generates_healthview_0\\telemetry\\healthview\\orchestrator_reports\\test_execution_telemetry'
+
+C:\Python313\Lib\pathlib\_local.py:575: FileNotFoundError</failure></testcase><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_test_execution_telemetry" name="test_run_handles_missing_logs" time="0.038"><failure message="FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-968\\test_run_handles_missing_logs0\\telemetry_missing\\healthview\\orchestrator_reports\\test_execution_telemetry'">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_run_handles_missing_logs0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000021E06505E90&gt;
+telemetry_module = &lt;module 'run_test_execution_telemetry' from 'C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_test_execution_telemetry.py'&gt;
+
+    def test_run_handles_missing_logs(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, telemetry_module) -&gt; None:
+        repo_root = Path(__file__).resolve().parents[4]
+    
+        scratch = tmp_path / "telemetry_missing"
+        logs_root = scratch / "logs"
+        logs_root.mkdir(parents=True, exist_ok=True)
+    
+        coverage_output_dir = scratch / "coverage"
+        hardening_output_dir = scratch / "hardening"
+        heatmap_output_dir = scratch / "heatmap"
+        test_log_reports_dir = scratch / "test_log_reports"
+        test_log_health_dir = scratch / "test_log_health"
+        healthview_root = scratch / "healthview"
+    
+        coverage_output_dir.mkdir(parents=True, exist_ok=True)
+        hardening_output_dir.mkdir(parents=True, exist_ok=True)
+        heatmap_output_dir.mkdir(parents=True, exist_ok=True)
+    
+        coverage_report_dir = coverage_output_dir / "test_coverage-20251201_010100"
+        hardening_report_dir = hardening_output_dir / "test_hardening-20251201_010100"
+        heatmap_report_dir = heatmap_output_dir / "churn_complexity_heatmap-20251201_010100"
+    
+        def fake_execute_coverage(paths, options):
+            coverage_report_dir.mkdir(parents=True, exist_ok=True)
+            return telemetry_module.CoverageOutcome(report_dir=coverage_report_dir, summary={"status": "ok"})
+    
+        def fake_execute_hardening(paths, options):
+            hardening_report_dir.mkdir(parents=True, exist_ok=True)
+            return telemetry_module.HardeningOutcome(
+                run_dir=hardening_report_dir,
+                payload={"status": "ok", "summary": {"severity_totals": {"high": 0}}},
+            )
+    
+        def fake_execute_heatmap(paths, options):
+            heatmap_report_dir.mkdir(parents=True, exist_ok=True)
+            return telemetry_module.HeatmapOutcome(run_dir=heatmap_report_dir, payload={"mode": "fixture"})
+    
+        monkeypatch.setattr(telemetry_module, "_execute_coverage", fake_execute_coverage)
+        monkeypatch.setattr(telemetry_module, "_execute_hardening", fake_execute_hardening)
+        monkeypatch.setattr(telemetry_module, "_execute_heatmap", fake_execute_heatmap)
+    
+        args = [
+            "--repo-root",
+            str(repo_root),
+            "--logs-dir",
+            str(logs_root),
+            "--test-log-reports-dir",
+            str(test_log_reports_dir),
+            "--test-log-health-dir",
+            str(test_log_health_dir),
+            "--test-coverage-output-dir",
+            str(coverage_output_dir),
+            "--test-coverage-xml",
+            str((scratch / "coverage.xml")),
+            "--heatmap-output-dir",
+            str(heatmap_output_dir),
+            "--hardening-output-dir",
+            str(hardening_output_dir),
+            "--healthview-root",
+            str(healthview_root),
+            "--artifacts-to-keep",
+            "1",
+            "--collector-artifacts-to-keep",
+            "1",
+            "--health-artifacts-to-keep",
+            "1",
+            "--coverage-artifacts-to-keep",
+            "1",
+            "--heatmap-artifacts-to-keep",
+            "1",
+            "--hardening-artifacts-to-keep",
+            "1",
+            "--timestamp",
+            "2025-12-01T03:03:00+00:00",
+            "--log-level",
+            "ERROR",
+        ]
+    
+        coverage_xml = scratch / "coverage.xml"
+        coverage_xml.write_text(
+            """
+    &lt;?xml version="1.0"?&gt;
+    &lt;coverage branch-rate="0" line-rate="1" version="6.5" timestamp="1733014860"&gt;
+      &lt;sources&gt;
+        &lt;source&gt;.&lt;/source&gt;
+      &lt;/sources&gt;
+      &lt;packages /&gt;
+    &lt;/coverage&gt;
+    """.strip()
+            + "\n",
+            encoding="utf-8",
+        )
+    
+        exit_code = telemetry_module.run(args)
+        assert exit_code == 0
+    
+        topic_dir = healthview_root / "orchestrator_reports" / "test_execution_telemetry"
+&gt;       runs = sorted(child for child in topic_dir.iterdir() if child.is_dir())
+                                         ^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_command_center\orchestrators\test_run_test_execution_telemetry.py:447: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_run_handles_missing_logs0/telemetry_missing/healthview/orchestrator_reports/test_execution_telemetry')
+
+    def iterdir(self):
+        """Yield path objects of the directory contents.
+    
+        The children are yielded in arbitrary order, and the
+        special entries '.' and '..' are not included.
+        """
+        root_dir = str(self)
+&gt;       with os.scandir(root_dir) as scandir_it:
+             ^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-968\\test_run_handles_missing_logs0\\telemetry_missing\\healthview\\orchestrator_reports\\test_execution_telemetry'
+
+C:\Python313\Lib\pathlib\_local.py:575: FileNotFoundError</failure></testcase><testcase classname=".repo_studios.tests.tests_command_center.producers.test_generate_function_inventory_command_center" name="test_generate_commandview_inventory_emits_extended_metrics" time="0.776" /><testcase classname=".repo_studios.tests.tests_command_center.producers.test_generate_function_inventory_command_center" name="test_commandview_inventory_keeps_static_and_dynamic_outputs_in_lockstep" time="0.179" /><testcase classname=".repo_studios.tests.tests_command_center.standards_integrity.test_run_standards_integrity" name="test_orchestrator_emits_healthview_bundle" time="0.034" /><testcase classname=".repo_studios.tests.tests_command_center.standards_integrity.test_run_standards_integrity" name="test_orchestrator_fails_on_invalid_topic_alias" time="0.014" /><testcase classname=".repo_studios.tests.tests_command_center.standards_integrity.test_run_standards_integrity_helpers" name="test_relativize_returns_relative_posix" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.standards_integrity.test_run_standards_integrity_helpers" name="test_parse_timestamp_defaults_to_utc_and_handles_naive" time="0.000" /><testcase classname=".repo_studios.tests.tests_command_center.standards_integrity.test_run_standards_integrity_helpers" name="test_resolve_optional_path_handles_relative" time="0.003" /><testcase classname=".repo_studios.tests.tests_command_center.standards_integrity.test_run_standards_integrity_helpers" name="test_read_json_returns_none_for_invalid_json" time="0.003" /><testcase classname=".repo_studios.tests.tests_command_center.standards_integrity.test_run_standards_integrity_helpers" name="test_invoke_main_coerces_return_values" time="0.000" /><testcase classname=".repo_studios.tests.tests_command_center.standards_integrity.test_run_standards_integrity_helpers" name="test_load_callable_reuses_cached_module" time="0.010" /><testcase classname=".repo_studios.tests.tests_command_center.standards_integrity.test_run_standards_integrity_helpers" name="test_load_callable_raises_for_missing_callable" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.test_artifacts" name="test_copy_latest_artifact_falls_back_to_copy" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.test_artifacts" name="test_report_artifact_materialization" time="0.007" /><testcase classname=".repo_studios.tests.tests_command_center.test_artifacts" name="test_write_report_artifacts_prunes_history" time="0.006" /><testcase classname=".repo_studios.tests.tests_command_center.test_artifacts" name="test_write_report_artifacts_hierarchical_layout" time="0.006" /><testcase classname=".repo_studios.tests.tests_command_center.test_build_commandview_selector" name="test_build_commandview_selector_discovers_artifacts" time="0.014" /><testcase classname=".repo_studios.tests.tests_command_center.test_catalog_registry" name="test_catalog_registry_register_and_lookup" time="0.000" /><testcase classname=".repo_studios.tests.tests_command_center.test_catalog_registry" name="test_catalog_registry_prevents_conflicting_registration" time="0.000" /><testcase classname=".repo_studios.tests.tests_command_center.test_catalog_registry" name="test_catalog_registry_extend" time="0.000" /><testcase classname=".repo_studios.tests.tests_command_center.test_execution_telemetry.test_summarize_test_execution_telemetry" name="test_summarizer_generates_summary_bundle" time="0.026"><failure message="AttributeError: module 'command_center.scripts.summarizers.summarize_test_execution_telemetry' has no attribute 'VIEWER_SLUG'">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_summarizer_generates_summ0')
+
+    def test_summarizer_generates_summary_bundle(tmp_path: Path) -&gt; None:
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        (repo_root / ".repo_studios").mkdir()
+        artifacts = _seed_artifacts(repo_root)
+    
+        manifest_path = repo_root / "artifacts" / "manifest.json"
+        telemetry_path = repo_root / "artifacts" / "telemetry.json"
+        telemetry_payload = _write_telemetry(telemetry_path)
+        _write_manifest(repo_root, manifest_path, artifacts, telemetry_payload)
+    
+        output_dir = repo_root / ".repo_studios" / "reports" / "healthview"
+        result = module.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--manifest",
+                str(manifest_path),
+                "--telemetry",
+                str(telemetry_path),
+                "--output-dir",
+                str(output_dir),
+                "--artifacts-to-keep",
+                "2",
+                "--log-level",
+                "DEBUG",
+            ]
+        )
+    
+        assert result["status"] == "ok"
+        assert result["slug"] == RUN_SLUG
+    
+        run_dir = Path(result["run_dir"])
+        assert run_dir.exists()
+&gt;       assert run_dir == output_dir / module.VIEWER_SLUG / module.TOPIC_SLUG / RUN_SLUG
+                                       ^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'command_center.scripts.summarizers.summarize_test_execution_telemetry' has no attribute 'VIEWER_SLUG'
+
+.repo_studios\tests\tests_command_center\test_execution_telemetry\test_summarize_test_execution_telemetry.py:215: AttributeError</failure></testcase><testcase classname=".repo_studios.tests.tests_command_center.test_prune_logs" name="test_prune_respects_keep_and_keep_sentinel" time="0.010" /><testcase classname=".repo_studios.tests.tests_command_center.test_prune_logs" name="test_prune_skips_unmatched_prefix" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.test_reports_naming_audit" name="test_audit_reports_compliance_and_violations" time="0.010" /><testcase classname=".repo_studios.tests.tests_command_center.test_reports_naming_audit" name="test_run_writes_outputs_and_threshold" time="0.010" /><testcase classname=".repo_studios.tests.tests_command_center.test_reports_naming_audit" name="test_main_respects_fail_threshold" time="0.014" /><testcase classname=".repo_studios.tests.tests_command_center.test_summarizer_runner" name="test_load_and_run_summarizer" time="0.010" /><testcase classname=".repo_studios.tests.tests_command_center.test_summarizer_runner" name="test_run_summarizer_raises_on_failure" time="0.010" /><testcase classname=".repo_studios.tests.tests_command_center.test_summarizer_runner" name="test_load_summarizer_without_run" time="0.006" /><testcase classname=".repo_studios.tests.tests_command_center.test_telemetry_emitters" name="test_build_pipeline_telemetry" time="0.001" /><testcase classname=".repo_studios.tests.tests_command_center.test_topic_pipeline" name="test_pipeline_runs_steps_in_order" time="0.000" /><testcase classname=".repo_studios.tests.tests_command_center.test_topic_pipeline" name="test_pipeline_stops_on_failure" time="0.001" /><testcase classname=".repo_studios.tests.tests_command_center.test_topic_pipeline" name="test_pipeline_skips_on_exception" time="0.001" /><testcase classname=".repo_studios.tests.tests_command_center.test_topic_pipeline" name="test_pipeline_honours_continue_on_failure" time="0.001" /><testcase classname=".repo_studios.tests.tests_command_center.test_topic_pipeline" name="test_build_topic_pipeline_requires_steps" time="0.000" /><testcase classname=".repo_studios.tests.tests_command_center.test_topic_pipeline" name="test_pipeline_emits_logging_for_step_outcomes" time="0.002" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_callback_data_normalization" name="test_callback_metadata_normalization" time="0.280" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_callback_registration_map_view" name="test_callback_registration_map_renders_mermaid_definition" time="0.164" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_callback_registration_map_view" name="test_callback_registration_map_returns_message_when_no_data" time="0.129" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_callback_registration_map_view" name="test_callback_registration_map_definition_is_stable" time="0.127" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_callback_registration_map_view" name="test_callback_registration_map_view_falls_back_to_repository_scope" time="0.181" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_circular_import_detection_view" name="test_circular_import_detection_is_deterministic" time="0.169" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_circular_import_detection_view" name="test_circular_import_detection_coexists_with_dependency_view" time="0.174" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_class_inheritance_data_normalization" name="test_class_inheritance_relations_are_normalized_and_resolved" time="0.275" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_class_inheritance_hierarchy_view" name="test_class_inheritance_hierarchy_renders_relationships" time="0.208" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_class_inheritance_hierarchy_view" name="test_class_inheritance_hierarchy_reports_missing_data" time="0.168" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_class_inheritance_view_definition" name="test_class_inheritance_view_definition_scopes_to_module" time="0.259" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_class_inheritance_view_definition" name="test_class_inheritance_view_definition_falls_back_to_repository" time="0.279" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_code_flow_multi_view_coexistence" name="test_code_flow_call_graph_coexists_with_health_overview" time="0.249" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_complexity_heatmap_scope" name="test_scope_filters_to_selected_domain" time="0.189" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_complexity_heatmap_scope" name="test_scope_reports_missing_domain_message" time="0.160" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_complexity_heatmap_view" name="test_complexity_heatmap_requires_functions" time="0.166" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_complexity_heatmap_view" name="test_complexity_heatmap_renders_mermaid_definition" time="0.141" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_complexity_heatmap_view" name="test_complexity_heatmap_definition_is_stable_across_repeated_calls" time="0.169" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_coupling_pack_multi_view_coexistence" name="test_coupling_view_coexists_with_function_call_graph" time="0.205" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_cross_module_function_references_view" name="test_cross_module_references_renders_definition" time="0.191" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_cross_module_function_references_view" name="test_cross_module_references_returns_message_when_empty" time="0.126" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_cross_module_function_references_view" name="test_cross_module_references_focus_filters_edges" time="0.131" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_cyclomatic_complexity_map_view" name="test_cyclomatic_complexity_map_requires_functions" time="0.137" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_cyclomatic_complexity_map_view" name="test_cyclomatic_complexity_map_renders_definition" time="0.128" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dead_code_data_normalization" name="test_dead_code_normalization_sanitizes_unused_imports_and_unreachable_functions" time="0.203" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dead_code_detection_view" name="test_dead_code_detection_requires_modules" time="0.138" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dead_code_detection_view" name="test_dead_code_detection_renders_definition_and_stats" time="0.118" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dead_code_detection_view" name="test_dead_code_detection_is_deterministic" time="0.117" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dead_code_detection_view_definition" name="test_dead_code_detection_requires_dead_code_signals" time="0.187" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dead_code_detection_view_definition" name="test_dead_code_detection_falls_back_to_repository_when_scope_empty" time="0.167" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dead_code_detection_view_definition" name="test_module_has_dead_code_telemetry_detects_signals" time="0.164" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_decorator_data_normalization" name="test_create_function_record_normalizes_decorators" time="0.184" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_decorator_usage_map_view" name="test_decorator_usage_map_requires_functions" time="0.137" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_decorator_usage_map_view" name="test_decorator_usage_map_renders_mermaid_definition" time="0.118" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_decorator_usage_map_view" name="test_decorator_usage_map_definition_is_stable_across_repeated_calls" time="0.117" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_decorator_usage_scope" name="test_scope_filters_to_selected_root" time="0.138" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_decorator_usage_scope" name="test_scope_filters_to_selected_module" time="0.116" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_decorator_usage_scope" name="test_scope_filters_function_neighborhood" time="0.116" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_decorator_usage_scope" name="test_scope_reports_empty_module_message" time="0.116" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dependency_data_normalization" name="test_create_module_record_collects_import_edges" time="0.186" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dependency_pack_multi_view_coexistence" name="test_dependency_pack_view_coexists_with_function_call_graph" time="0.152" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dependency_pack_multi_view_coexistence" name="test_export_contract_matrix_coexists_with_dependency_view" time="0.131" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dependency_pack_multi_view_coexistence" name="test_external_dependency_map_coexists_with_dependency_view" time="0.130" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dependency_pack_multi_view_coexistence" name="test_layer_architecture_validation_coexists_with_dependency_view" time="0.133" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_documentation_coverage_map_view" name="test_documentation_coverage_map_requires_functions" time="0.137" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_documentation_coverage_map_view" name="test_documentation_coverage_map_renders_mermaid_definition" time="0.116" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_documentation_coverage_map_view" name="test_documentation_coverage_map_definition_is_stable_across_repeated_calls" time="0.116" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_documentation_coverage_scope" name="test_scope_filters_to_selected_root" time="0.138" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_documentation_coverage_scope" name="test_scope_filters_to_selected_domain" time="0.116" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_documentation_coverage_scope" name="test_scope_filters_to_selected_module" time="0.117" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_documentation_coverage_scope" name="test_scope_filters_function_neighborhood" time="0.119" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_documentation_coverage_scope" name="test_scope_reports_empty_module" time="0.117" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_documentation_coverage_scope" name="test_scope_reports_missing_module_message" time="0.116" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dynamic_code_data_normalization" name="test_normalize_dynamic_code_extracts_flags_and_events" time="0.196" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dynamic_code_data_normalization" name="test_normalize_dynamic_code_returns_null_when_empty" time="0.164" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dynamic_code_watchlist_view" name="test_dynamic_code_watchlist_renders_mermaid_definition" time="0.149" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dynamic_code_watchlist_view" name="test_dynamic_code_watchlist_returns_message_when_no_data" time="0.116" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dynamic_code_watchlist_view" name="test_dynamic_code_watchlist_definition_is_stable" time="0.128" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_dynamic_code_watchlist_view" name="test_dynamic_code_watchlist_view_falls_back_to_repository_scope" time="0.177" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_entrypoint_data_normalization" name="test_entrypoint_candidates_populated_for_main_guard_and_cli_modules" time="0.184" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_entrypoint_trace_view" name="test_entrypoint_trace_diagram_renders_trace" time="0.149" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_entrypoint_trace_view" name="test_entrypoint_trace_diagram_reports_missing_candidates" time="0.115" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_entrypoint_trace_view" name="test_entrypoint_trace_view_falls_back_to_repository_scope" time="0.164" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_event_dynamics_multi_view_coexistence" name="test_callback_registration_map_coexists_with_function_call_graph_view" time="0.151" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_event_dynamics_multi_view_coexistence" name="test_dynamic_code_watchlist_coexists_with_callback_registration_map" time="0.119" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_exception_flow_map_view" name="test_exception_flow_map_renders_mermaid_definition" time="0.153" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_exception_flow_map_view" name="test_exception_flow_map_returns_message_when_empty" time="0.115" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_exception_flow_map_view" name="test_exception_flow_map_appends_fallback_notice" time="0.115" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_exception_flow_view_definition" name="test_exception_flow_view_respects_module_scope" time="0.198" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_exception_flow_view_definition" name="test_exception_flow_view_falls_back_to_repository_scope" time="0.165" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_export_contract_data_normalization" name="test_module_export_summary_classifies_local_and_reexported_symbols" time="0.184" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_export_contract_data_normalization" name="test_module_export_summary_handles_dynamic_exports" time="0.162" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_export_contract_matrix_view" name="test_export_contract_matrix_renders_mermaid_definition" time="0.148" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_export_contract_matrix_view" name="test_export_contract_matrix_returns_message_when_empty" time="0.116" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_export_contract_matrix_view" name="test_export_contract_matrix_definition_stable_across_calls" time="0.116" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_export_contract_matrix_view" name="test_export_contract_matrix_includes_fallback_notice" time="0.116" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_export_contract_matrix_view" name="test_export_contract_matrix_view_falls_back_to_repository_scope" time="0.165" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_external_dependency_data_normalization" name="test_create_module_record_exposes_dependency_categories" time="0.185" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_external_vs_internal_dependency_map_view" name="test_external_dependency_map_renders_mermaid_definition" time="0.147" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_external_vs_internal_dependency_map_view" name="test_external_dependency_map_returns_message_when_no_modules" time="0.114" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_external_vs_internal_dependency_map_view" name="test_external_dependency_map_definition_is_stable_across_calls" time="0.129" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_external_vs_internal_dependency_map_view" name="test_external_dependency_map_view_falls_back_to_repository_scope" time="0.163" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_function_call_graph_view" name="test_function_call_graph_requires_modules" time="0.134" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_function_call_graph_view" name="test_function_call_graph_renders_mermaid_definition" time="0.114" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_function_call_graph_view" name="test_function_call_graph_definition_is_stable_across_repeated_calls" time="0.114" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_function_inventory_overview_view" name="test_function_inventory_overview_requires_modules" time="0.133" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_function_inventory_overview_view" name="test_function_inventory_overview_renders_mermaid_definition" time="0.113" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_function_inventory_overview_view" name="test_function_inventory_overview_definition_is_stable_across_repeated_calls" time="0.114" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_git_churn_risk_map_view" name="test_git_churn_risk_map_requires_modules" time="0.133" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_git_churn_risk_map_view" name="test_git_churn_risk_map_renders_definition_and_stats" time="0.116" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_git_churn_risk_map_view" name="test_git_churn_risk_map_is_deterministic" time="0.114" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_git_churn_risk_map_view_definition" name="test_git_churn_risk_map_requires_churn_data" time="0.182" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_git_churn_risk_map_view_definition" name="test_git_churn_risk_map_falls_back_to_repository_when_scope_empty" time="0.161" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_git_churn_risk_map_view_definition" name="test_module_has_git_churn_telemetry_detects_metrics" time="0.161" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_global_variable_usage_map_view" name="test_global_variable_usage_map_renders_mermaid_definition" time="0.146" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_global_variable_usage_map_view" name="test_global_variable_usage_map_returns_message_when_no_usage" time="0.113" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_global_variable_usage_map_view" name="test_global_variable_usage_map_appends_fallback_notice" time="0.117" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_global_variable_usage_view_definition" name="test_global_variable_usage_view_respects_module_scope" time="0.198" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_global_variable_usage_view_definition" name="test_global_variable_usage_view_falls_back_to_repository_scope" time="0.164" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_health_pack_multi_view_coexistence" name="test_health_pack_builders_coexist_without_state_reset" time="0.136" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_import_chain_depth_view" name="test_import_chain_depth_requires_modules" time="0.134" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_import_chain_depth_view" name="test_import_chain_depth_renders_definition_and_stats" time="0.125" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_import_chain_depth_view" name="test_import_chain_depth_focus_filters_modules" time="0.127" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_io_effects_diagram_view" name="test_io_effects_diagram_renders_mermaid_definition" time="0.146" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_io_effects_diagram_view" name="test_io_effects_diagram_returns_message_when_no_effects" time="0.112" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_io_effects_diagram_view" name="test_io_effects_diagram_appends_fallback_notice" time="0.113" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_io_effects_view_definition" name="test_io_effects_view_respects_module_scope" time="0.196" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_io_effects_view_definition" name="test_io_effects_view_falls_back_to_repository_scope" time="0.164" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_layer_architecture_data_normalization" name="test_create_module_record_classifies_script_layers" time="0.180" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_layer_architecture_data_normalization" name="test_evaluate_layer_transition_applies_adjacency_defaults" time="0.162" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_layer_architecture_data_normalization" name="test_layer_architecture_validation_view_surfaces_violations" time="0.181" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_layer_architecture_data_normalization" name="test_layer_architecture_validation_view_falls_back_to_repository_scope" time="0.163" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_logging_flow_scope" name="test_scope_filters_to_selected_domain" time="0.136" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_logging_flow_scope" name="test_scope_reports_missing_domain_message" time="0.116" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_logging_flow_view" name="test_logging_flow_requires_functions" time="0.133" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_logging_flow_view" name="test_logging_flow_renders_mermaid_definition" time="0.127" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_logging_flow_view" name="test_logging_flow_definition_is_stable_across_repeated_calls" time="0.115" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_method_call_chain_view" name="test_method_call_chain_renders_sequence_diagram" time="0.146" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_method_call_chain_view" name="test_method_call_chain_reports_missing_methods" time="0.112" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_method_call_chain_view_definition" name="test_method_call_chain_view_uses_scope_selection" time="0.194" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_method_call_chain_view_definition" name="test_method_call_chain_view_falls_back_to_repository_scope" time="0.175" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_module_dependency_graph_view" name="test_module_dependency_graph_requires_modules" time="0.133" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_module_dependency_graph_view" name="test_module_dependency_graph_renders_mermaid_definition" time="0.126" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_module_dependency_graph_view" name="test_module_dependency_graph_definition_is_stable_across_repeated_calls" time="0.126" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_public_private_api_data_normalization" name="test_public_private_api_surface_normalization" time="0.198" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_public_private_api_view" name="test_public_private_api_requires_modules" time="0.137" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_public_private_api_view" name="test_public_private_api_renders_mermaid_definition" time="0.117" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_public_private_api_view_definition" name="test_public_private_api_view_falls_back_to_repository" time="0.198" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_public_private_api_view_definition" name="test_public_private_api_view_scoped_module_renders_without_fallback" time="0.175" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_quality_metrics_multi_view_coexistence" name="test_quality_metrics_views_coexist_without_state_reset" time="0.155" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_refresh" name="test_refresh_selector_state_groups_and_deduplicates" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_refresh" name="test_refresh_selector_state_json_reuses_state_timestamp" time="0.002" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_refresh" name="test_refresh_selector_with_context_preserves_relative_path" time="0.013" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_refresh" name="test_refresh_selector_with_context_falls_back_to_slug" time="0.003" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_risk_assurance_multi_view_coexistence" name="test_risk_assurance_views_coexist" time="0.152" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_screening_signal_timeline_view" name="test_screening_timeline_returns_message_when_history_missing" time="0.135" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_screening_signal_timeline_view" name="test_screening_timeline_renders_mermaid_definition" time="0.126" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_screening_signal_timeline_view" name="test_screening_timeline_definition_is_stable_across_repeated_calls" time="0.125" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_state_effects_multi_view_coexistence" name="test_global_variable_usage_map_coexists_with_io_effects_diagram" time="0.151" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_state_effects_multi_view_coexistence" name="test_exception_flow_map_coexists_with_global_variable_usage_map" time="0.129" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_state_effects_multi_view_coexistence" name="test_exception_flow_map_coexists_with_io_effects_diagram" time="0.129" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_test_coverage_mapping_view" name="test_test_coverage_mapping_requires_modules" time="0.133" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_test_coverage_mapping_view" name="test_test_coverage_mapping_renders_definition_and_stats" time="0.114" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_test_coverage_mapping_view" name="test_test_coverage_mapping_is_deterministic" time="0.117" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_test_coverage_mapping_view_definition" name="test_test_coverage_mapping_requires_coverage_signals" time="0.186" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_test_coverage_mapping_view_definition" name="test_test_coverage_mapping_falls_back_to_repository_when_scope_empty" time="0.165" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_test_coverage_mapping_view_definition" name="test_module_has_coverage_telemetry_detects_signals" time="0.161" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_type_coverage_map_view" name="test_type_coverage_map_requires_functions" time="0.136" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_type_coverage_map_view" name="test_type_coverage_map_renders_mermaid_definition" time="0.113" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_type_coverage_map_view" name="test_type_coverage_map_definition_is_stable_across_repeated_calls" time="0.114" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_type_coverage_scope" name="test_scope_filters_to_selected_root" time="0.136" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_type_coverage_scope" name="test_scope_filters_to_selected_module" time="0.114" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_type_coverage_scope" name="test_scope_reports_empty_module_message" time="0.114" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_update_service" name="test_default_command_factory_uses_inventory_launcher" time="0.001" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_update_service" name="test_cancel_terminates_running_update" time="0.258" /><testcase classname=".repo_studios.tests.tests_command_center.viewer.test_update_service" name="test_successful_update_refreshes_selector" time="0.073" /><testcase classname=".repo_studios.tests.tests_consumers.test_classify_monkey_patches" name="test_classify_matrix[sys_modules_assignment-False-True-HIGH]" time="0.014" /><testcase classname=".repo_studios.tests.tests_consumers.test_classify_monkey_patches" name="test_classify_matrix[sys_modules_assignment-True-True-MODERATE]" time="0.002" /><testcase classname=".repo_studios.tests.tests_consumers.test_classify_monkey_patches" name="test_classify_matrix[import_time_side_effect-False-False-HIGH]" time="0.002" /><testcase classname=".repo_studios.tests.tests_consumers.test_classify_monkey_patches" name="test_classify_matrix[builtins_mutation-True-False-MODERATE]" time="0.002" /><testcase classname=".repo_studios.tests.tests_consumers.test_classify_monkey_patches" name="test_classify_matrix[singleton_rebind-False-False-HIGH]" time="0.002" /><testcase classname=".repo_studios.tests.tests_consumers.test_classify_monkey_patches" name="test_classify_matrix[global_env_mutation-False-True-HIGH]" time="0.002" /><testcase classname=".repo_studios.tests.tests_consumers.test_classify_monkey_patches" name="test_classify_matrix[global_env_mutation-True-False-MODERATE]" time="0.002" /><testcase classname=".repo_studios.tests.tests_consumers.test_classify_monkey_patches" name="test_classify_matrix[attribute_reassignment_on_import-False-False-MODERATE]" time="0.002" /><testcase classname=".repo_studios.tests.tests_consumers.test_classify_monkey_patches" name="test_classify_matrix[attribute_reassignment_on_import-True-False-SAFE]" time="0.002" /><testcase classname=".repo_studios.tests.tests_consumers.test_classify_monkey_patches" name="test_classify_matrix[setattr_on_import_or_class-False-False-MODERATE]" time="0.002" /><testcase classname=".repo_studios.tests.tests_consumers.test_classify_monkey_patches" name="test_classify_matrix[test_patch_misuse-True-True-MODERATE]" time="0.002" /><testcase classname=".repo_studios.tests.tests_consumers.test_classify_monkey_patches" name="test_classify_matrix[other-False-False-SAFE]" time="0.002" /><testcase classname=".repo_studios.tests.tests_consumers.test_classify_monkey_patches" name="test_run_prefers_structured_matches" time="0.014" /><testcase classname=".repo_studios.tests.tests_consumers.test_classify_monkey_patches" name="test_run_falls_back_to_legacy" time="0.013" /><testcase classname=".repo_studios.tests.tests_consumers.test_classify_monkey_patches" name="test_retention_prunes_old_runs" time="0.033" /><testcase classname=".repo_studios.tests.tests_consumers.test_generate_anchor_health_report" name="test_anchor_health_uses_inventory_artifacts" time="0.042" /><testcase classname=".repo_studios.tests.tests_consumers.test_generate_anchor_health_report" name="test_anchor_health_falls_back_to_docs_scan" time="0.014" /><testcase classname=".repo_studios.tests.tests_consumers.test_generate_anchor_health_report" name="test_anchor_health_prunes_history" time="0.062" /><testcase classname=".repo_studios.tests.tests_consumers.test_generate_fault_artifacts" name="test_fault_artifacts_prefers_producer_report" time="0.033" /><testcase classname=".repo_studios.tests.tests_consumers.test_generate_fault_artifacts" name="test_fault_artifacts_scans_without_producer" time="0.104" /><testcase classname=".repo_studios.tests.tests_consumers.test_generate_fault_artifacts" name="test_fault_artifacts_prunes_history" time="0.064" /><testcase classname=".repo_studios.tests.tests_consumers.test_generate_test_log_health_report" name="test_generate_test_log_health_report_prefers_producer_bundle" time="0.024" /><testcase classname=".repo_studios.tests.tests_consumers.test_generate_test_log_health_report" name="test_generate_test_log_health_report_falls_back_to_logs" time="0.026" /><testcase classname=".repo_studios.tests.tests_consumers.test_generate_test_log_health_report" name="test_generate_test_log_health_report_prunes_history" time="0.065" /><testcase classname=".repo_studios.tests.tests_consumers.test_generate_test_log_health_report" name="test_timestamp_slug_helpers" time="0.005" /><testcase classname=".repo_studios.tests.tests_consumers.test_generate_test_log_health_report" name="test_markdownlint_injection_is_idempotent" time="0.003" /><testcase classname=".repo_studios.tests.tests_consumers.test_generate_test_log_health_report" name="test_append_delta_markdown_formats_values" time="0.004" /><testcase classname=".repo_studios.tests.tests_consumers.test_generate_test_log_health_report" name="test_select_latest_bundle_dir_prefers_latest_slug" time="0.005" /><testcase classname=".repo_studios.tests.tests_consumers.test_generate_test_log_health_report" name="test_write_csv_emits_expected_rows" time="0.005" /><testcase classname=".repo_studios.tests.tests_library_integration.duplicates.test_scan_duplicates" name="test_slugify_relative_aliases_library" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.duplicates.test_scan_duplicates.TestFunctionExtraction" name="test_extracts_simple_function" time="0.003" /><testcase classname=".repo_studios.tests.tests_library_integration.duplicates.test_scan_duplicates.TestFunctionExtraction" name="test_extracts_function_with_args" time="0.003" /><testcase classname=".repo_studios.tests.tests_library_integration.duplicates.test_scan_duplicates.TestFunctionExtraction" name="test_extracts_multiple_functions" time="0.002" /><testcase classname=".repo_studios.tests.tests_library_integration.duplicates.test_scan_duplicates.TestFunctionExtraction" name="test_computes_code_hash" time="0.002" /><testcase classname=".repo_studios.tests.tests_library_integration.duplicates.test_scan_duplicates.TestDuplicateDetection" name="test_detects_exact_duplicates" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.duplicates.test_scan_duplicates.TestDuplicateDetection" name="test_ignores_short_functions" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.duplicates.test_scan_duplicates.TestSimilarityScoring" name="test_identical_functions_score_one" time="0.003" /><testcase classname=".repo_studios.tests.tests_library_integration.duplicates.test_scan_duplicates.TestSimilarityScoring" name="test_different_functions_score_low" time="0.003" /><testcase classname=".repo_studios.tests.tests_library_integration.duplicates.test_scan_duplicates.TestLibraryPathReference" name="test_occurrence_structure" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.duplicates.test_scan_duplicates.TestTopOffenders" name="test_extract_top_offenders_includes_location_details" time="0.003" /><testcase classname=".repo_studios.tests.tests_library_integration.duplicates.test_scan_duplicates.TestFileScanning" name="test_skips_hidden_and_ignored_directories" time="0.005" /><testcase classname=".repo_studios.tests.tests_library_integration.duplicates.test_scan_duplicates.TestOutputMirroring" name="test_write_outputs_mirrors_to_slugged_directory" time="0.008" /><testcase classname=".repo_studios.tests.tests_library_integration.duplicates.test_scan_duplicates.TestOutputMirroring" name="test_retention_prunes_old_runs" time="0.018" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_artifacts" name="test_copy_latest_artifact_creates_link" time="0.003" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_artifacts" name="test_copy_latest_artifact_fallback" time="0.004" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_artifacts" name="test_write_report_artifacts_basic_flow" time="0.011" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_artifacts" name="test_write_report_artifacts_with_writer_and_callable_content" time="0.005" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_artifacts" name="test_write_report_artifacts_hierarchical_layout" time="0.007" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_build_commandview_selector" name="test_build_commandview_selector_filters_static_commandview_files" time="0.009" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_build_commandview_selector" name="test_build_commandview_selector_orders_by_slug_and_timestamp" time="0.007" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_build_commandview_selector" name="test_build_commandview_selector_handles_missing_reports_root" time="0.004" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_cli" name="test_resolve_repo_root_explicit" time="0.004" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_cli" name="test_resolve_repo_root_fallback" time="0.004" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_cli" name="test_resolve_path_relative_default_creates_directory" time="0.004" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_cli" name="test_resolve_path_rejects_outside_repo" time="0.003" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_cli" name="test_build_paths_uses_specs" time="0.004" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_cli" name="test_build_keep_counts_respects_env" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_cli" name="test_build_standard_paths_wraps_builders" time="0.005" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_cli" name="test_build_standard_options_wraps_keep_counts" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_guardrails" name="test_load_guardrail_config_normalizes_paths" time="0.005" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_guardrails" name="test_enforce_run_size_limit_raises_when_over_limit" time="0.004" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_guardrails" name="test_enforce_run_size_limit_allows_override" time="0.004" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_guardrails" name="test_load_guardrail_config_requires_max_files" time="0.004" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestConstants" name="test_repo_studios_root_is_path" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestConstants" name="test_repo_studios_root_value" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestConstants" name="test_reports_root_is_child_of_repo_studios" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestConstants" name="test_healthview_root_is_child_of_reports" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestConstants" name="test_aggregator_reports_path" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestConstants" name="test_consumer_reports_path" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestConstants" name="test_orchestrator_reports_path" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestConstants" name="test_producer_reports_path" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestConstants" name="test_rawview_path" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestConstants" name="test_summarizer_reports_path" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestConstants" name="test_valid_tier_classes_is_frozenset" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestConstants" name="test_valid_tier_classes_contains_all_classes" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetClassRoot" name="test_producer_returns_correct_path" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetClassRoot" name="test_consumer_returns_correct_path" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetClassRoot" name="test_aggregator_returns_correct_path" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetClassRoot" name="test_summarizer_returns_correct_path" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetClassRoot" name="test_orchestrator_returns_correct_path" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetClassRoot" name="test_rawview_returns_correct_path" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetClassRoot" name="test_invalid_class_raises_value_error" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetClassRoot" name="test_error_message_lists_valid_classes" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestBuildTopicPath" name="test_producer_anchor_inventory" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestBuildTopicPath" name="test_consumer_fault_artifacts" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestBuildTopicPath" name="test_aggregator_docs_health_signals" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestBuildTopicPath" name="test_summarizer_fault_diagnostics_overview" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestBuildTopicPath" name="test_empty_topic_raises_value_error" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestBuildTopicPath" name="test_none_topic_raises_value_error" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestBuildTopicPath" name="test_invalid_tier_class_propagates_error" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestBuildAbsoluteTopicPath" name="test_builds_absolute_path" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestBuildAbsoluteTopicPath" name="test_windows_style_path" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestBuildAbsoluteTopicPath" name="test_preserves_repo_root_type" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestInferClassFromScript" name="test_producers_folder_returns_producer" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestInferClassFromScript" name="test_consumers_folder_returns_consumer" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestInferClassFromScript" name="test_aggregators_folder_returns_aggregator" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestInferClassFromScript" name="test_summarizers_folder_returns_summarizer" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestInferClassFromScript" name="test_orchestrators_folder_returns_orchestrator" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestInferClassFromScript" name="test_rawview_folder_returns_rawview" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestInferClassFromScript" name="test_unknown_path_returns_none" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestInferClassFromScript" name="test_handles_backslashes" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestInferClassFromScript" name="test_case_insensitive" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestInferClassFromScript" name="test_accepts_path_object" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestInferClassFromScript" name="test_full_absolute_path" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetDefaultOutputDir" name="test_producer_script_returns_producer_reports" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetDefaultOutputDir" name="test_consumer_script_returns_consumer_reports" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetDefaultOutputDir" name="test_aggregator_script_returns_aggregator_reports" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetDefaultOutputDir" name="test_unknown_path_raises_value_error" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetDefaultOutputDir" name="test_error_includes_script_path" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestValidateOutputPath" name="test_valid_producer_path_returns_true" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestValidateOutputPath" name="test_valid_consumer_path_returns_true" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestValidateOutputPath" name="test_valid_aggregator_path_returns_true" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestValidateOutputPath" name="test_valid_rawview_path_returns_true" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestValidateOutputPath" name="test_missing_tier_class_returns_false" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestValidateOutputPath" name="test_missing_healthview_returns_false" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestValidateOutputPath" name="test_random_path_returns_false" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestValidateOutputPath" name="test_absolute_valid_path_returns_true" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetAllClassRoots" name="test_returns_dict" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetAllClassRoots" name="test_contains_all_tier_classes" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetAllClassRoots" name="test_values_are_paths" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetAllClassRoots" name="test_returns_copy_not_reference" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetAllClassRoots" name="test_producer_value_matches_constant" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestGetAllClassRoots" name="test_aggregator_value_matches_constant" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestPathHierarchy" name="test_all_class_roots_under_healthview" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestPathHierarchy" name="test_all_class_roots_are_relative" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_report_paths.TestPathHierarchy" name="test_topic_paths_add_one_level" time="0.000" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetKeep" name="test_returns_int" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetKeep" name="test_returns_positive" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetKeep" name="test_known_script_returns_config_value" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetKeep" name="test_unknown_script_returns_default" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetKeep" name="test_env_override_takes_precedence" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetKeep" name="test_env_override_minimum_is_1" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetKeep" name="test_invalid_env_value_ignored" time="0.002" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetScriptRetention" name="test_returns_dataclass" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetScriptRetention" name="test_includes_key" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetScriptRetention" name="test_includes_source" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetScriptRetention" name="test_config_source_for_known_script" time="0.001"><failure message="AssertionError: assert 'fallback' == 'config'&#10;  &#10;  - config&#10;  + fallback">self = &lt;_repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetScriptRetention object at 0x0000021E05F77E10&gt;
+
+    def test_config_source_for_known_script(self) -&gt; None:
+        """Known scripts report 'config' as source."""
+        result = get_script_retention("collect_test_log_reports")
+&gt;       assert result.source == "config"
+E       AssertionError: assert 'fallback' == 'config'
+E         
+E         - config
+E         + fallback
+
+.repo_studios\tests\tests_library_integration\libraries\test_retention_policy.py:113: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetScriptRetention" name="test_fallback_source_for_unknown_script" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetScriptRetention" name="test_env_source_when_overridden" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetOrchestratorConfig" name="test_known_orchestrator_returns_config" time="0.001"><failure message="assert False&#10; +  where False = isinstance(None, OrchestratorConfig)">self = &lt;_repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetOrchestratorConfig object at 0x0000021E06159950&gt;
+
+    def test_known_orchestrator_returns_config(self) -&gt; None:
+        """Known orchestrators return an OrchestratorConfig."""
+        result = get_orchestrator_config("run_test_execution_telemetry")
+&gt;       assert isinstance(result, OrchestratorConfig)
+E       assert False
+E        +  where False = isinstance(None, OrchestratorConfig)
+
+.repo_studios\tests\tests_library_integration\libraries\test_retention_policy.py:136: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetOrchestratorConfig" name="test_unknown_orchestrator_returns_none" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetOrchestratorConfig" name="test_orchestrator_has_name" time="0.001"><failure message="assert None is not None">self = &lt;_repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetOrchestratorConfig object at 0x0000021E06171CD0&gt;
+
+    def test_orchestrator_has_name(self) -&gt; None:
+        """Orchestrator config includes the name."""
+        result = get_orchestrator_config("run_test_execution_telemetry")
+&gt;       assert result is not None
+E       assert None is not None
+
+.repo_studios\tests\tests_library_integration\libraries\test_retention_policy.py:146: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetOrchestratorConfig" name="test_orchestrator_has_artifacts_to_keep" time="0.001"><failure message="assert None is not None">self = &lt;_repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetOrchestratorConfig object at 0x0000021E06171E00&gt;
+
+    def test_orchestrator_has_artifacts_to_keep(self) -&gt; None:
+        """Orchestrator config includes artifacts_to_keep."""
+        result = get_orchestrator_config("run_test_execution_telemetry")
+&gt;       assert result is not None
+E       assert None is not None
+
+.repo_studios\tests\tests_library_integration\libraries\test_retention_policy.py:152: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetOrchestratorConfig" name="test_orchestrator_has_scripts" time="0.001"><failure message="assert None is not None">self = &lt;_repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetOrchestratorConfig object at 0x0000021E062120F0&gt;
+
+    def test_orchestrator_has_scripts(self) -&gt; None:
+        """Orchestrator config includes managed scripts."""
+        result = get_orchestrator_config("run_test_execution_telemetry")
+&gt;       assert result is not None
+E       assert None is not None
+
+.repo_studios\tests\tests_library_integration\libraries\test_retention_policy.py:159: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetOrchestratorConfig" name="test_orchestrator_scripts_are_retention_objects" time="0.002"><failure message="assert None is not None">self = &lt;_repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestGetOrchestratorConfig object at 0x0000021E061499D0&gt;
+
+    def test_orchestrator_scripts_are_retention_objects(self) -&gt; None:
+        """Orchestrator script values are ScriptRetention objects."""
+        result = get_orchestrator_config("run_test_execution_telemetry")
+&gt;       assert result is not None
+E       assert None is not None
+
+.repo_studios\tests\tests_library_integration\libraries\test_retention_policy.py:166: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestListAllScripts" name="test_returns_list" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestListAllScripts" name="test_list_not_empty" time="0.001"><failure message="assert 0 &gt; 0&#10; +  where 0 = len([])">self = &lt;_repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestListAllScripts object at 0x0000021E06159D10&gt;
+
+    def test_list_not_empty(self) -&gt; None:
+        """list_all_scripts returns non-empty list from real config."""
+        result = list_all_scripts()
+&gt;       assert len(result) &gt; 0
+E       assert 0 &gt; 0
+E        +  where 0 = len([])
+
+.repo_studios\tests\tests_library_integration\libraries\test_retention_policy.py:182: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestListAllScripts" name="test_list_contains_retention_objects" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestListAllScripts" name="test_includes_known_scripts" time="0.001"><failure message="AssertionError: assert 'collect_test_log_reports' in set()">self = &lt;_repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestListAllScripts object at 0x0000021E06172060&gt;
+
+    def test_includes_known_scripts(self) -&gt; None:
+        """list_all_scripts includes scripts from config."""
+        result = list_all_scripts()
+        keys = {s.key for s in result}
+&gt;       assert "collect_test_log_reports" in keys
+E       AssertionError: assert 'collect_test_log_reports' in set()
+
+.repo_studios\tests\tests_library_integration\libraries\test_retention_policy.py:194: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestValidateConfig" name="test_returns_tuple" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestValidateConfig" name="test_real_config_is_valid" time="0.002"><failure message="AssertionError: Config validation failed: ['ERROR: Config file not found or empty']&#10;assert False">self = &lt;_repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestValidateConfig object at 0x0000021E06159F90&gt;
+
+    def test_real_config_is_valid(self) -&gt; None:
+        """The actual retention_policy.yaml should be valid."""
+        is_valid, messages = validate_config()
+        # Print messages for debugging if validation fails
+        if not is_valid:
+            for msg in messages:
+                print(msg)
+&gt;       assert is_valid, f"Config validation failed: {messages}"
+E       AssertionError: Config validation failed: ['ERROR: Config file not found or empty']
+E       assert False
+
+.repo_studios\tests\tests_library_integration\libraries\test_retention_policy.py:214: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestValidateConfig" name="test_messages_are_strings" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestReloadConfig" name="test_clears_cache" time="0.002" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestFindRepoRoot" name="test_finds_repo_root" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestFindRepoRoot" name="test_repo_root_contains_repo_studios" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestCLI" name="test_validate_flag" time="0.002"><failure message="assert 1 == 0">self = &lt;_repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestCLI object at 0x0000021E0615A490&gt;
+
+    def test_validate_flag(self) -&gt; None:
+        """--validate runs without error."""
+        exit_code = main(["--validate"])
+&gt;       assert exit_code == 0
+E       assert 1 == 0
+
+.repo_studios\tests\tests_library_integration\libraries\test_retention_policy.py:260: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestCLI" name="test_list_flag" time="0.002" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestCLI" name="test_get_known_script" time="0.002" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestCLI" name="test_get_unknown_script" time="0.002" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestCLI" name="test_orchestrator_known" time="0.002"><failure message="assert 1 == 0">self = &lt;_repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestCLI object at 0x0000021E06200710&gt;
+
+    def test_orchestrator_known(self) -&gt; None:
+        """--orchestrator for known orchestrator returns 0."""
+        exit_code = main(["--orchestrator", "run_test_execution_telemetry"])
+&gt;       assert exit_code == 0
+E       assert 1 == 0
+
+.repo_studios\tests\tests_library_integration\libraries\test_retention_policy.py:280: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestCLI" name="test_orchestrator_unknown" time="0.002" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestCLI" name="test_no_args_shows_help" time="0.002" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestEdgeCases" name="test_empty_script_key" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestEdgeCases" name="test_special_characters_in_key" time="0.001" /><testcase classname=".repo_studios.tests.tests_library_integration.libraries.test_retention_policy.TestEdgeCases" name="test_negative_env_value" time="0.001" /><testcase classname=".repo_studios.tests.tests_orchestrators.test_command_center_pipeline" name="test_pipeline_smoke_updates_artifacts" time="8.491" /><testcase classname=".repo_studios.tests.tests_orchestrators.test_command_center_pipeline" name="test_pipeline_failure_propagates_exit_code" time="0.002" /><testcase classname=".repo_studios.tests.tests_orchestrators.test_command_center_pipeline" name="test_pipeline_allows_repo_root_prefixed_target" time="7.660" /><testcase classname=".repo_studios.tests.tests_producers.test_analyze_standards_index_gaps" name="test_basic_shim_delegates_to_command_center" time="0.021" /><testcase classname=".repo_studios.tests.tests_producers.test_analyze_standards_index_gaps" name="test_structured_artifacts_created" time="0.015" /><testcase classname=".repo_studios.tests.tests_producers.test_analyze_standards_index_gaps" name="test_pruning_keeps_recent_runs" time="0.019" /><testcase classname=".repo_studios.tests.tests_producers.test_analyze_standards_index_gaps" name="test_command_center_helpers_cover_basic_paths" time="0.004" /><testcase classname=".repo_studios.tests.tests_producers.test_analyze_standards_index_gaps" name="test_command_center_load_index_rejects_missing_file" time="0.003" /><testcase classname=".repo_studios.tests.tests_producers.test_analyze_standards_index_gaps" name="test_command_center_ensure_index_path_prefers_legacy_snapshot" time="0.007" /><testcase classname=".repo_studios.tests.tests_producers.test_analyze_standards_index_gaps" name="test_command_center_detect_git_sha_prefers_env" time="0.003" /><testcase classname=".repo_studios.tests.tests_producers.test_analyze_test_hardening" name="test_detects_missing_assertions_and_long_test" time="0.041" /><testcase classname=".repo_studios.tests.tests_producers.test_analyze_test_hardening" name="test_clean_file_marked_ok" time="0.021" /><testcase classname=".repo_studios.tests.tests_producers.test_analyze_test_hardening" name="test_artifacts_written" time="0.020" /><testcase classname=".repo_studios.tests.tests_producers.test_audit_helper_adoption" name="test_generates_helper_adoption_report" time="0.034" /><testcase classname=".repo_studios.tests.tests_producers.test_audit_helper_adoption" name="test_format_filter_and_custom_helpers" time="0.025" /><testcase classname=".repo_studios.tests.tests_producers.test_check_inventory_health" name="test_default_paths_point_to_repo_root" time="0.007" /><testcase classname=".repo_studios.tests.tests_producers.test_check_inventory_health" name="test_reports_written_without_issues" time="0.020" /><testcase classname=".repo_studios.tests.tests_producers.test_check_inventory_health" name="test_threshold_breach_and_pruning" time="0.017" /><testcase classname=".repo_studios.tests.tests_producers.test_collect_faulthandler_reports" name="test_collect_faulthandler_reports_emits_artifacts" time="0.058" /><testcase classname=".repo_studios.tests.tests_producers.test_collect_faulthandler_reports" name="test_collect_faulthandler_reports_validate_only_missing_topic_dir" time="0.008" /><testcase classname=".repo_studios.tests.tests_producers.test_collect_faulthandler_reports" name="test_collect_faulthandler_reports_returns_no_runs_when_missing" time="0.009" /><testcase classname=".repo_studios.tests.tests_producers.test_collect_faulthandler_reports" name="test_collect_faulthandler_reports_timestamp_parsing_helpers" time="0.005" /><testcase classname=".repo_studios.tests.tests_producers.test_collect_faulthandler_reports" name="test_collect_faulthandler_reports_runs_base_falls_back_to_legacy" time="0.006" /><testcase classname=".repo_studios.tests.tests_producers.test_collect_test_log_reports" name="test_collect_test_log_reports_emits_artifacts" time="0.005"><failure message="AssertionError: assert WindowsPath('.repo_studios/reports/healthview/rawview/test_log_reports') == WindowsPath('.repo_studios/reports/healthview')&#10; +  where WindowsPath('.repo_studios/reports/healthview/rawview/test_log_reports') = &lt;module 'collect_test_log_reports' from 'C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\producers\\collect_test_log_reports.py'&gt;.DEFAULT_OUTPUT_DIR&#10; +  and   WindowsPath('.repo_studios/reports/healthview') = Path('.repo_studios/reports/healthview')">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_collect_test_log_reports_0')
+
+    def test_collect_test_log_reports_emits_artifacts(tmp_path):
+        producer_mod = _load_module("collect_test_log_reports", _PRODUCER_PATH)
+    
+&gt;       assert producer_mod.DEFAULT_OUTPUT_DIR == Path(".repo_studios/reports/healthview")
+E       AssertionError: assert WindowsPath('.repo_studios/reports/healthview/rawview/test_log_reports') == WindowsPath('.repo_studios/reports/healthview')
+E        +  where WindowsPath('.repo_studios/reports/healthview/rawview/test_log_reports') = &lt;module 'collect_test_log_reports' from 'C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\producers\\collect_test_log_reports.py'&gt;.DEFAULT_OUTPUT_DIR
+E        +  and   WindowsPath('.repo_studios/reports/healthview') = Path('.repo_studios/reports/healthview')
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:58: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_producers.test_collect_test_log_reports" name="test_collect_test_log_reports_prunes_history" time="0.005"><failure message="AssertionError: assert WindowsPath('.repo_studios/reports/healthview/rawview/test_log_reports') == WindowsPath('.repo_studios/reports/healthview')&#10; +  where WindowsPath('.repo_studios/reports/healthview/rawview/test_log_reports') = &lt;module 'collect_test_log_reports' from 'C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\producers\\collect_test_log_reports.py'&gt;.DEFAULT_OUTPUT_DIR&#10; +  and   WindowsPath('.repo_studios/reports/healthview') = Path('.repo_studios/reports/healthview')">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_collect_test_log_reports_1')
+
+    def test_collect_test_log_reports_prunes_history(tmp_path):
+        producer_mod = _load_module("collect_test_log_reports", _PRODUCER_PATH)
+    
+&gt;       assert producer_mod.DEFAULT_OUTPUT_DIR == Path(".repo_studios/reports/healthview")
+E       AssertionError: assert WindowsPath('.repo_studios/reports/healthview/rawview/test_log_reports') == WindowsPath('.repo_studios/reports/healthview')
+E        +  where WindowsPath('.repo_studios/reports/healthview/rawview/test_log_reports') = &lt;module 'collect_test_log_reports' from 'C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\producers\\collect_test_log_reports.py'&gt;.DEFAULT_OUTPUT_DIR
+E        +  and   WindowsPath('.repo_studios/reports/healthview') = Path('.repo_studios/reports/healthview')
+
+.repo_studios\tests\tests_producers\test_collect_test_log_reports.py:128: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_producers.test_collect_test_log_reports" name="test_collect_test_log_reports_handles_missing_runs" time="0.011" /><testcase classname=".repo_studios.tests.tests_producers.test_collect_test_log_reports" name="test_collect_test_log_reports_can_run_pytest" time="0.016" /><testcase classname=".repo_studios.tests.tests_producers.test_collect_test_log_reports" name="test_collect_test_log_reports_summarize_existing_skips_pytest" time="0.017" /><testcase classname=".repo_studios.tests.tests_producers.test_diff_standards_index" name="test_diff_detects_changes_and_writes_artifacts" time="0.026" /><testcase classname=".repo_studios.tests.tests_producers.test_diff_standards_index" name="test_no_changes_returns_zero_and_prunes" time="0.016" /><testcase classname=".repo_studios.tests.tests_producers.test_extract_standards_rules" name="test_extract_rules_combines_marker_and_heading" time="0.009" /><testcase classname=".repo_studios.tests.tests_producers.test_extract_standards_rules" name="test_extract_rules_reports_invalid_severity" time="0.010" /><testcase classname=".repo_studios.tests.tests_producers.test_function_inventory_integration" name="test_inventory_and_analysis_round_trip" time="0.268" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_anchor_inventory" name="test_reports_written_with_duplicates" time="0.022"><failure message="AttributeError: module 'generate_anchor_inventory' has no attribute 'VIEWER_SLUG'">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_reports_written_with_dupl0')
+
+    def test_reports_written_with_duplicates(tmp_path):
+        mod = _load_module()
+        root = tmp_path / "workspace"
+        docs = root / "docs"
+        docs.mkdir(parents=True)
+        (docs / "one.md").write_text("# Shared\n", encoding="utf-8")
+        (docs / "two.md").write_text("# Shared\n\n## Details\n\n# Unique\n", encoding="utf-8")
+    
+        allow_file = root / "allow.txt"
+        allow_file.write_text("overview\n", encoding="utf-8")
+        test_file = root / "test_global_anchors.py"
+        test_file.write_text(
+            'ALLOWED = {\n    "foo",\n    "bar",\n}\n',
+            encoding="utf-8",
+        )
+    
+        output_dir = root / ".repo_studios" / "reports" / "healthview"
+    
+        json_out = root / "baseline.json"
+    
+        exit_code = mod.main(
+            [
+                "--docs-root",
+                str(docs),
+                "--output-dir",
+                str(output_dir),
+                "--allow-file",
+                str(allow_file),
+                "--test-file",
+                str(test_file),
+                "--json-out",
+                str(json_out),
+                "--timestamp",
+                "2024-01-01T00:00:00+00:00",
+                "--artifacts-to-keep",
+                "2",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+    
+        assert exit_code == 0
+&gt;       run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240101-0000"
+                               ^^^^^^^^^^^^^^^
+E       AttributeError: module 'generate_anchor_inventory' has no attribute 'VIEWER_SLUG'
+
+.repo_studios\tests\tests_producers\test_generate_anchor_inventory.py:61: AttributeError</failure></testcase><testcase classname=".repo_studios.tests.tests_producers.test_generate_anchor_inventory" name="test_pruning_keeps_newest_run" time="0.007"><failure message="AttributeError: module 'generate_anchor_inventory' has no attribute 'VIEWER_SLUG'">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_pruning_keeps_newest_run0')
+
+    def test_pruning_keeps_newest_run(tmp_path):
+        mod = _load_module()
+        root = tmp_path / "project"
+        docs = root / "docs"
+        docs.mkdir(parents=True)
+        (docs / "alpha.md").write_text("# Alpha\n", encoding="utf-8")
+        output_dir = root / ".repo_studios" / "reports" / "healthview"
+&gt;       topic_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG
+                                 ^^^^^^^^^^^^^^^
+E       AttributeError: module 'generate_anchor_inventory' has no attribute 'VIEWER_SLUG'
+
+.repo_studios\tests\tests_producers\test_generate_anchor_inventory.py:103: AttributeError</failure></testcase><testcase classname=".repo_studios.tests.tests_producers.test_generate_code_doc_churn_report" name="test_churn_detects_missing_doc_updates" time="0.593" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_code_doc_churn_report" name="test_churn_skips_when_docs_updated" time="0.497" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_code_doc_churn_report" name="test_churn_honors_allowlist" time="0.480" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_dependency_hygiene_report" name="test_reports_written_without_issues" time="0.015" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_dependency_hygiene_report" name="test_threshold_breach_and_pruning" time="0.017" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_doc_index" name="test_doc_index_produces_artifacts_and_placeholder" time="0.035"><failure message="AttributeError: module 'generate_doc_index' has no attribute 'VIEWER_SLUG'">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_doc_index_produces_artifa0')
+
+    def test_doc_index_produces_artifacts_and_placeholder(tmp_path):
+        mod = _load_module()
+        repo_root = tmp_path / "repo"
+        (repo_root / ".repo_studios").mkdir(parents=True)
+        docs_dir = repo_root / "docs"
+        docs_dir.mkdir(parents=True)
+        internal_dir = repo_root / ".repo_studios" / "docs"
+        internal_dir.mkdir(parents=True)
+        (repo_root / ".venv").mkdir()
+    
+        (docs_dir / "guide.md").write_text(
+            """\
+    # Guide Title
+    
+    Welcome to the guide. This paragraph should become the description.
+    
+    ## Getting Started
+    
+    See the [internal doc](../.repo_studios/docs/internal.md) for more details.
+    """,
+            encoding="utf-8",
+        )
+    
+        (internal_dir / "internal.md").write_text(
+            """\
+    # Internal Notes
+    
+    Second paragraph lives here.
+    
+    ## Deep Dive
+    
+    Refer to [Guide](../../docs/guide.md).
+    """,
+            encoding="utf-8",
+        )
+    
+        (repo_root / ".venv" / "ignore.md").write_text("# Ignore\n", encoding="utf-8")
+    
+        output_dir = repo_root / ".repo_studios" / "reports" / "healthview"
+    
+        exit_code = mod.main(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-dir",
+                str(output_dir),
+                "--timestamp",
+                "2024-01-02T00:00:00+00:00",
+                "--db-target",
+                "placeholder://inventory",
+                "--artifacts-to-keep",
+                "1",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+    
+        assert exit_code == 0
+&gt;       run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240102-0000"
+                               ^^^^^^^^^^^^^^^
+E       AttributeError: module 'generate_doc_index' has no attribute 'VIEWER_SLUG'
+
+.repo_studios\tests\tests_producers\test_generate_doc_index.py:78: AttributeError</failure></testcase><testcase classname=".repo_studios.tests.tests_producers.test_generate_doc_index" name="test_doc_index_retention_keeps_single_run" time="0.029"><failure message="AttributeError: module 'generate_doc_index' has no attribute 'VIEWER_SLUG'">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_doc_index_retention_keeps0')
+
+    def test_doc_index_retention_keeps_single_run(tmp_path):
+        mod = _load_module()
+        repo_root = tmp_path / "workspace"
+        (repo_root / ".repo_studios").mkdir(parents=True)
+        docs_dir = repo_root / "docs"
+        docs_dir.mkdir(parents=True)
+        (docs_dir / "one.md").write_text("# Title\n", encoding="utf-8")
+    
+        output_dir = repo_root / "out"
+    
+        mod.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-dir",
+                str(output_dir),
+                "--timestamp",
+                "2024-01-01T00:00:00+00:00",
+                "--artifacts-to-keep",
+                "1",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+    
+        mod.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-dir",
+                str(output_dir),
+                "--timestamp",
+                "2024-01-02T00:00:00+00:00",
+                "--artifacts-to-keep",
+                "1",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+    
+&gt;       topic_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG
+                                 ^^^^^^^^^^^^^^^
+E       AttributeError: module 'generate_doc_index' has no attribute 'VIEWER_SLUG'
+
+.repo_studios\tests\tests_producers\test_generate_doc_index.py:212: AttributeError</failure></testcase><testcase classname=".repo_studios.tests.tests_producers.test_generate_doc_index" name="test_doc_index_refreshes_checkbox_report_and_tier3_index" time="0.038"><failure message="AttributeError: module 'generate_doc_index' has no attribute 'VIEWER_SLUG'">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_doc_index_refreshes_check0')
+
+    def test_doc_index_refreshes_checkbox_report_and_tier3_index(tmp_path):
+        mod = _load_module()
+        repo_root = tmp_path / "workspace"
+        (repo_root / ".repo_studios").mkdir(parents=True)
+        docs_dir = repo_root / "docs"
+        docs_dir.mkdir(parents=True)
+        (docs_dir / "one.md").write_text("# Title\n\nA paragraph.\n", encoding="utf-8")
+    
+        checkbox_script = (
+            repo_root
+            / ".repo_studios"
+            / "docs"
+            / "pipeline"
+            / "checkbox_report"
+            / "checkbox_report.py"
+        )
+        checkbox_script.parent.mkdir(parents=True)
+        checkbox_script.write_text(
+            """\
+    from __future__ import annotations
+    
+    from pathlib import Path
+    
+    
+    def main(argv=None):
+        args = list(argv or [])
+        repo_root = Path(args[args.index('--repo-root') + 1]).resolve()
+        output_dir = Path(args[args.index('--output-dir') + 1]).resolve()
+        output_dir.mkdir(parents=True, exist_ok=True)
+        (output_dir / 'checkbox_report.csv').write_text('stub\\n', encoding='utf-8')
+        (output_dir / 'checkbox_report.md').write_text('# Checkbox Report\\n', encoding='utf-8')
+        (repo_root / 'checkbox_invoked.txt').write_text('yes\\n', encoding='utf-8')
+    """,
+            encoding="utf-8",
+        )
+    
+        tier3_script = (
+            repo_root
+            / ".repo_studios"
+            / "docs"
+            / "pipeline"
+            / "tier3_index"
+            / "generate_tier3_index.py"
+        )
+        tier3_script.parent.mkdir(parents=True)
+        tier3_script.write_text(
+            """\
+    from __future__ import annotations
+    
+    from pathlib import Path
+    
+    
+    def run(argv):
+        args = list(argv)
+        repo_root = Path(args[args.index('--repo-root') + 1]).resolve()
+        output = repo_root / '.repo_studios' / 'docs' / 'pipeline' / 'tier3_index' / 'outputs' / 'tier3_scripts_index.yaml'
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text('version: stub\\n', encoding='utf-8')
+        (repo_root / 'tier3_invoked.txt').write_text('yes\\n', encoding='utf-8')
+        return 0
+    """,
+            encoding="utf-8",
+        )
+    
+        output_dir = repo_root / ".repo_studios" / "reports" / "healthview"
+    
+        exit_code = mod.main(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-dir",
+                str(output_dir),
+                "--timestamp",
+                "2024-01-02T00:00:00+00:00",
+                "--artifacts-to-keep",
+                "1",
+                "--refresh-checkbox-report",
+                "--refresh-tier3-index",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+    
+        assert exit_code == 0
+        assert (repo_root / "checkbox_invoked.txt").exists()
+        assert (repo_root / "tier3_invoked.txt").exists()
+    
+        checkbox_outputs = repo_root / ".repo_studios" / "docs" / "pipeline" / "checkbox_report" / "outputs"
+        assert (checkbox_outputs / "checkbox_report.csv").exists()
+        assert (checkbox_outputs / "checkbox_report.md").exists()
+    
+        tier3_outputs = repo_root / ".repo_studios" / "docs" / "pipeline" / "tier3_index" / "outputs"
+        assert (tier3_outputs / "tier3_scripts_index.yaml").exists()
+    
+&gt;       run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240102-0000"
+                               ^^^^^^^^^^^^^^^
+E       AttributeError: module 'generate_doc_index' has no attribute 'VIEWER_SLUG'
+
+.repo_studios\tests\tests_producers\test_generate_doc_index.py:312: AttributeError</failure></testcase><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_analysis" name="test_analysis_detects_duplicate_functions" time="0.179" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_analysis" name="test_analysis_errors_without_inventory" time="0.005" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_analysis" name="test_analysis_replaces_existing_outputs" time="0.124"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len([WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_analysis_replaces_existin0/pkg/pkg_ind.../Local/Temp/pytest-of-genet/pytest-968/test_analysis_replaces_existin0/pkg/pkg_index/pkg_analysis-20260102-0422.json')])">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_analysis_replaces_existin0')
+
+    def test_analysis_replaces_existing_outputs(tmp_path: Path) -&gt; None:
+        repo_root = tmp_path
+        (repo_root / ".repo_studios").mkdir(parents=True, exist_ok=True)
+        target = repo_root / "pkg"
+        _write(target / "__init__.py", "")
+        _write(target / "mod.py", "def helper():\n    return True\n")
+    
+        assert run_inventory(["--repo-root", str(repo_root), str(target)]) == 0
+    
+        index_dir = target / "pkg_index"
+        viewer_base = (
+            repo_root
+            / ".repo_studios"
+            / "command_center"
+            / "reports"
+            / ANALYSIS_MODULE.VIEWER_SLUG
+            / ANALYSIS_MODULE.TOPIC_SLUG
+        )
+        old_file = index_dir / "pkg_analysis-2000-01-01.json"
+        _write(old_file, "{}")
+        legacy_file = index_dir / "pkg_analysis.json"
+        _write(legacy_file, "{}")
+        old_viewer_dir = viewer_base / "19990101-0000"
+        old_viewer_dir.mkdir(parents=True, exist_ok=True)
+        _write(old_viewer_dir / "pkg_analysis.json", "{}")
+    
+        assert run_analysis(["--repo-root", str(repo_root), str(target)]) == 0
+    
+        analysis_files = list(index_dir.glob("pkg_analysis-*.json"))
+&gt;       assert len(analysis_files) == 1
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len([WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_analysis_replaces_existin0/pkg/pkg_ind.../Local/Temp/pytest-of-genet/pytest-968/test_analysis_replaces_existin0/pkg/pkg_index/pkg_analysis-20260102-0422.json')])
+
+.repo_studios\tests\tests_producers\test_generate_function_analysis.py:195: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_inventory" name="test_inventory_generates_structured_output" time="0.182" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_inventory" name="test_inventory_merges_coverage_reports" time="0.121" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_inventory" name="test_inventory_includes_git_churn_summary" time="0.513" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_inventory" name="test_inventory_captures_warnings_for_problem_files" time="0.073" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_inventory" name="test_inventory_skips_hidden_and_virtualenv_dirs" time="0.069" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_inventory" name="test_inventory_removes_preexisting_outputs" time="0.075" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_inventory" name="test_screening_score_history_accumulates_across_runs" time="0.208" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_inventory" name="test_call_graph_resolves_local_and_imported_calls" time="0.125" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_inventory" name="test_inventory_records_class_bases" time="0.126" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_inventory" name="test_cyclomatic_complexity_counts_branches" time="0.126" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_inventory" name="test_type_hint_coverage_reports_ratio" time="0.118" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_inventory" name="test_function_metadata_persists_effects_and_decorators" time="0.122" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_inventory" name="test_unused_imports_and_unreachable_functions_reported" time="0.119" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_inventory" name="test_inventory_errors_when_no_python_files" time="0.004" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_function_inventory" name="test_reports_root_outside_static_scope_rejected" time="0.005" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_import_graph_report" name="test_report_with_no_targets" time="0.017" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_import_graph_report" name="test_cycle_detection_and_pruning" time="0.016" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_lizard_report" name="test_structured_artifacts_success" time="0.021" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_lizard_report" name="test_no_targets_and_pruning" time="0.018" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_lizard_report" name="test_rejects_newline_arguments" time="0.010" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_standards_index" name="test_structured_artifacts_success" time="0.036" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_standards_index" name="test_failure_path_writes_artifacts_and_prunes" time="0.019" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_standards_index" name="test_missing_source_file_reports_error" time="0.017" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_standards_index" name="test_extraction_enabled_writes_pending_file" time="0.029" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_test_coverage_inventory" name="test_generates_structured_artifacts" time="0.033"><failure message="AttributeError: module 'generate_test_coverage_inventory' has no attribute 'VIEWER_SLUG'">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_generates_structured_arti0')
+
+    def test_generates_structured_artifacts(tmp_path: Path):
+        mod = _load_module()
+    
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        (repo_root / ".repo_studios").mkdir(parents=True, exist_ok=True)
+        src_dir = repo_root / "src"
+        src_dir.mkdir()
+        module_path = src_dir / "alpha.py"
+        module_path.write_text(
+            "def covered():\n    return 1\n\n\ndef uncovered():\n    return 2\n",
+            encoding="utf-8",
+        )
+    
+        coverage_xml = _write_coverage_fixture(repo_root)
+    
+        output_root = repo_root / ".repo_studios" / "reports" / "healthview"
+    
+        exit_code = mod.main(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--coverage-xml",
+                str(coverage_xml),
+                "--output-dir",
+                str(output_root),
+                "--timestamp",
+                "2024-01-01T00:00:00+00:00",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+    
+        assert exit_code == 0
+&gt;       run_dir = output_root / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240101-0000"
+                                ^^^^^^^^^^^^^^^
+E       AttributeError: module 'generate_test_coverage_inventory' has no attribute 'VIEWER_SLUG'
+
+.repo_studios\tests\tests_producers\test_generate_test_coverage_inventory.py:86: AttributeError</failure></testcase><testcase classname=".repo_studios.tests.tests_producers.test_generate_test_coverage_inventory" name="test_threshold_enforcement_and_pruning" time="0.008"><failure message="AttributeError: module 'generate_test_coverage_inventory' has no attribute 'VIEWER_SLUG'">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_threshold_enforcement_and0')
+
+    def test_threshold_enforcement_and_pruning(tmp_path: Path):
+        mod = _load_module()
+    
+        repo_root = tmp_path / "workspace"
+        repo_root.mkdir()
+        src_dir = repo_root / "src"
+        src_dir.mkdir()
+        module_path = src_dir / "alpha.py"
+        module_path.write_text(
+            "def covered():\n    return 1\n\n\ndef uncovered():\n    return 2\n",
+            encoding="utf-8",
+        )
+    
+        coverage_xml = _write_coverage_fixture(repo_root)
+    
+        output_root = repo_root / ".repo_studios" / "reports" / "healthview"
+&gt;       base_dir = output_root / mod.VIEWER_SLUG / mod.TOPIC_SLUG
+                                 ^^^^^^^^^^^^^^^
+E       AttributeError: module 'generate_test_coverage_inventory' has no attribute 'VIEWER_SLUG'
+
+.repo_studios\tests\tests_producers\test_generate_test_coverage_inventory.py:144: AttributeError</failure></testcase><testcase classname=".repo_studios.tests.tests_producers.test_generate_test_coverage_inventory" name="test_helper_timestamp_and_filename_resolution" time="0.008" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_test_coverage_inventory" name="test_refresh_coverage_xml_continue_on_error_emits_bundle" time="0.018"><failure message="AttributeError: module 'generate_test_coverage_inventory' has no attribute 'VIEWER_SLUG'">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_refresh_coverage_xml_cont0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000021E0743EF90&gt;
+
+    def test_refresh_coverage_xml_continue_on_error_emits_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -&gt; None:
+        mod = _load_module()
+    
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        (repo_root / ".repo_studios").mkdir(parents=True, exist_ok=True)
+        src_dir = repo_root / "src"
+        src_dir.mkdir()
+        (src_dir / "alpha.py").write_text(
+            "def covered():\n    return 1\n\n\ndef uncovered():\n    return 2\n",
+            encoding="utf-8",
+        )
+    
+        output_root = repo_root / ".repo_studios" / "reports" / "healthview"
+        coverage_xml = repo_root / "coverage.xml"
+    
+        calls: list[dict[str, object]] = []
+    
+        def _fake_run(argv: list[str], *, cwd: str, check: bool, env: dict[str, str]):
+            calls.append({"argv": list(argv), "cwd": cwd, "env": dict(env)})
+    
+            class _Result:
+                def __init__(self, returncode: int) -&gt; None:
+                    self.returncode = returncode
+    
+            suite = None
+            if "-q" in argv:
+                suite_index = argv.index("-q") + 1
+                if suite_index &lt; len(argv):
+                    suite = argv[suite_index]
+            return _Result(1 if str(suite or "").endswith("tests_suite_a") else 0)
+    
+        monkeypatch.setattr(mod.subprocess, "run", _fake_run)
+    
+        coverage_mod = types.ModuleType("coverage")
+        coverage_exceptions_mod = types.ModuleType("coverage.exceptions")
+    
+        class FakeNoDataError(Exception):
+            pass
+    
+        class FakeCoverage:
+            def __init__(self, config_file: str | None = None, data_file: str | None = None) -&gt; None:
+                self.config_file = config_file
+                self.data_file = data_file
+    
+            def load(self) -&gt; None:
+                return None
+    
+            def xml_report(self, outfile: str) -&gt; None:
+                Path(outfile).write_text(
+                    """&lt;?xml version=\"1.0\"?&gt;
+    &lt;coverage line-rate=\"0\" branch-rate=\"0\" version=\"1\"&gt;
+      &lt;sources&gt;
+        &lt;source&gt;{source}&lt;/source&gt;
+      &lt;/sources&gt;
+      &lt;packages&gt;
+        &lt;package name=\"src\" line-rate=\"0\" branch-rate=\"0\"&gt;
+          &lt;classes&gt;
+            &lt;class name=\"alpha\" filename=\"src/alpha.py\" line-rate=\"0\" branch-rate=\"0\"&gt;
+              &lt;lines&gt;
+                &lt;line number=\"1\" hits=\"1\"/&gt;
+                &lt;line number=\"2\" hits=\"1\"/&gt;
+              &lt;/lines&gt;
+            &lt;/class&gt;
+          &lt;/classes&gt;
+        &lt;/package&gt;
+      &lt;/packages&gt;
+    &lt;/coverage&gt;
+    """.format(source=repo_root.as_posix()),
+                    encoding="utf-8",
+                )
+    
+        coverage_mod.Coverage = FakeCoverage
+        coverage_exceptions_mod.NoDataError = FakeNoDataError
+        monkeypatch.setitem(sys.modules, "coverage", coverage_mod)
+        monkeypatch.setitem(sys.modules, "coverage.exceptions", coverage_exceptions_mod)
+    
+        exit_code = mod.main(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--coverage-xml",
+                str(coverage_xml),
+                "--output-dir",
+                str(output_root),
+                "--timestamp",
+                "2024-01-01T00:00:00+00:00",
+                "--refresh-coverage-xml",
+                "--refresh-continue-on-error",
+                "--refresh-cov-target",
+                ".",
+                "--refresh-tests",
+                "tests_suite_a",
+                "tests_suite_b",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+    
+        assert exit_code == 0
+        assert coverage_xml.exists()
+        assert len(calls) == 2
+        assert "COVERAGE_FILE" in calls[0]["env"]
+        assert calls[0]["env"]["COVERAGE_FILE"] == calls[1]["env"]["COVERAGE_FILE"]
+        assert "--cov-append" not in calls[0]["argv"]
+        assert "--cov-append" in calls[1]["argv"]
+    
+&gt;       run_dir = output_root / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240101-0000"
+                                ^^^^^^^^^^^^^^^
+E       AttributeError: module 'generate_test_coverage_inventory' has no attribute 'VIEWER_SLUG'
+
+.repo_studios\tests\tests_producers\test_generate_test_coverage_inventory.py:320: AttributeError</failure></testcase><testcase classname=".repo_studios.tests.tests_producers.test_generate_test_coverage_inventory" name="test_refresh_coverage_xml_without_continue_on_error_exits_nonzero" time="0.010"><failure message="AttributeError: module 'generate_test_coverage_inventory' has no attribute 'VIEWER_SLUG'">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_refresh_coverage_xml_with0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000021E07367620&gt;
+
+    def test_refresh_coverage_xml_without_continue_on_error_exits_nonzero(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -&gt; None:
+        mod = _load_module()
+    
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        (repo_root / ".repo_studios").mkdir(parents=True, exist_ok=True)
+        output_root = repo_root / ".repo_studios" / "reports" / "healthview"
+        coverage_xml = repo_root / "coverage.xml"
+    
+        def _fake_run(*_args: object, **_kwargs: object):
+            class _Result:
+                returncode = 5
+    
+            return _Result()
+    
+        monkeypatch.setattr(mod.subprocess, "run", _fake_run)
+    
+        coverage_mod = types.ModuleType("coverage")
+        coverage_exceptions_mod = types.ModuleType("coverage.exceptions")
+    
+        class FakeNoDataError(Exception):
+            pass
+    
+        class FakeCoverage:
+            def __init__(self, *_args: object, **_kwargs: object) -&gt; None:
+                pass
+    
+            def load(self) -&gt; None:
+                return None
+    
+            def xml_report(self, outfile: str) -&gt; None:
+                Path(outfile).write_text("&lt;?xml version=\"1.0\"?&gt;&lt;coverage&gt;&lt;/coverage&gt;", encoding="utf-8")
+    
+        coverage_mod.Coverage = FakeCoverage
+        coverage_exceptions_mod.NoDataError = FakeNoDataError
+        monkeypatch.setitem(sys.modules, "coverage", coverage_mod)
+        monkeypatch.setitem(sys.modules, "coverage.exceptions", coverage_exceptions_mod)
+    
+        exit_code = mod.main(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--coverage-xml",
+                str(coverage_xml),
+                "--output-dir",
+                str(output_root),
+                "--timestamp",
+                "2024-01-01T00:00:00+00:00",
+                "--refresh-coverage-xml",
+                "--refresh-tests",
+                "tests_suite_a",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+    
+        assert exit_code == 5
+&gt;       assert not (output_root / mod.VIEWER_SLUG / mod.TOPIC_SLUG).exists()
+                                  ^^^^^^^^^^^^^^^
+E       AttributeError: module 'generate_test_coverage_inventory' has no attribute 'VIEWER_SLUG'
+
+.repo_studios\tests\tests_producers\test_generate_test_coverage_inventory.py:388: AttributeError</failure></testcase><testcase classname=".repo_studios.tests.tests_producers.test_generate_test_coverage_inventory" name="test_refresh_omit_tests_creates_and_removes_cov_config" time="0.019" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_typecheck_report" name="test_typecheck_success" time="0.014" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_typecheck_report" name="test_typecheck_failure" time="0.010" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_typecheck_report" name="test_typecheck_skips_when_no_targets" time="0.010" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_typecheck_report" name="test_typecheck_missing_target_output_is_skipped" time="0.010" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_undocumented_logic_report" name="test_detects_missing_docstrings" time="0.038" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_undocumented_logic_report" name="test_allowlist_skips_module" time="0.019" /><testcase classname=".repo_studios.tests.tests_producers.test_generate_undocumented_logic_report" name="test_handles_missing_metadata" time="0.021" /><testcase classname=".repo_studios.tests.tests_producers.test_render_inventory_views" name="test_render_inventory_views_structured_output" time="0.030" /><testcase classname=".repo_studios.tests.tests_producers.test_scan_code_placeholders" name="test_structured_artifacts" time="0.024" /><testcase classname=".repo_studios.tests.tests_producers.test_scan_code_placeholders" name="test_pruning_and_allowlist" time="0.029" /><testcase classname=".repo_studios.tests.tests_producers.test_scan_code_placeholders" name="test_default_exclusions_skip_virtualenv" time="0.020" /><testcase classname=".repo_studios.tests.tests_producers.test_scan_code_placeholders" name="test_exclude_prefix_flag_disables_defaults" time="0.019" /><testcase classname=".repo_studios.tests.tests_producers.test_scan_code_placeholders" name="test_ignores_title_case_tokens" time="0.020" /><testcase classname=".repo_studios.tests.tests_producers.test_scan_monkey_patches" name="test_structured_artifacts" time="0.042" /><testcase classname=".repo_studios.tests.tests_producers.test_scan_monkey_patches" name="test_prune_history" time="0.030" /><testcase classname=".repo_studios.tests.tests_producers.test_scan_monkey_patches" name="test_resolve_run_timestamp_validation" time="0.006" /><testcase classname=".repo_studios.tests.tests_producers.test_scan_monkey_patches" name="test_scan_file_detects_multiple_categories_and_git_blame" time="0.013" /><testcase classname=".repo_studios.tests.tests_producers.test_scan_monkey_patches" name="test_scan_file_strict_mode_raises_on_parse_error" time="0.008" /><testcase classname=".repo_studios.tests.tests_producers.test_scan_monkey_patches" name="test_compose_manifest_telemetry_and_summary_round_trip" time="0.009" /><testcase classname=".repo_studios.tests.tests_producers.test_seed_standards_prompts" name="test_structured_artifacts" time="0.026" /><testcase classname=".repo_studios.tests.tests_producers.test_seed_standards_prompts" name="test_prune_history" time="0.025" /><testcase classname=".repo_studios.tests.tests_producers.test_validate_import_boundaries" name="test_emits_structured_artifacts_without_violations" time="0.025" /><testcase classname=".repo_studios.tests.tests_producers.test_validate_import_boundaries" name="test_detects_violations_and_honors_allowlist" time="0.027" /><testcase classname=".repo_studios.tests.tests_producers.test_validate_inventory" name="test_validate_inventory_success_and_pruning" time="0.032" /><testcase classname=".repo_studios.tests.tests_producers.test_validate_markdown_anchors" name="test_reports_written_with_issues" time="0.020"><failure message="AssertionError: assert False&#10; +  where False = is_dir()&#10; +    where is_dir = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_reports_written_with_issu0/workspace/.repo_studios/reports/healthview/healthview/markdown_anchor_validation/20240101-0000').is_dir">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_reports_written_with_issu0')
+
+    def test_reports_written_with_issues(tmp_path):
+        mod = _load_module()
+        root = tmp_path / "workspace"
+        docs = root / "docs"
+        docs.mkdir(parents=True)
+        (docs / "sample.md").write_text(
+            "# Title\n\nMissing anchor [bad](#missing)\n",
+            encoding="utf-8",
+        )
+        output_dir = root / ".repo_studios" / "reports" / "healthview"
+    
+        exit_code = mod.main(
+            [
+                "--root",
+                str(root),
+                "--glob",
+                "docs/**/*.md",
+                "--output-dir",
+                str(output_dir),
+                "--timestamp",
+                "2024-01-01T00:00:00",
+                "--artifacts-to-keep",
+                "2",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+    
+        assert exit_code == 1
+        run_dir = output_dir / "healthview" / "markdown_anchor_validation" / "20240101-0000"
+&gt;       assert run_dir.is_dir()
+E       AssertionError: assert False
+E        +  where False = is_dir()
+E        +    where is_dir = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_reports_written_with_issu0/workspace/.repo_studios/reports/healthview/healthview/markdown_anchor_validation/20240101-0000').is_dir
+
+.repo_studios\tests\tests_producers\test_validate_markdown_anchors.py:48: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_producers.test_validate_markdown_anchors" name="test_pruning_keeps_newest_run" time="0.011"><failure message="AssertionError: assert {'20230101-00...0230301-0000'} == {'20230301-00...0240203-0000'}&#10;  &#10;  Extra items in the left set:&#10;  '20230101-0000'&#10;  '20230201-0000'&#10;  Extra items in the right set:&#10;  '20240203-0000'&#10;  Use -v to get more diff">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_pruning_keeps_newest_run1')
+
+    def test_pruning_keeps_newest_run(tmp_path):
+        mod = _load_module()
+        root = tmp_path / "project"
+        docs = root / "docs"
+        docs.mkdir(parents=True)
+        (docs / "good.md").write_text("# Title\n\n[Self](#title)\n", encoding="utf-8")
+        output_dir = root / ".repo_studios" / "reports" / "healthview"
+        topic_dir = output_dir / "healthview" / "markdown_anchor_validation"
+        topic_dir.mkdir(parents=True, exist_ok=True)
+    
+        stale_names = [
+            "20230101-0000",
+            "20230201-0000",
+            "20230301-0000",
+        ]
+        for name in stale_names:
+            (topic_dir / name).mkdir()
+    
+        exit_code = mod.main(
+            [
+                "--root",
+                str(root),
+                "--glob",
+                "docs/**/*.md",
+                "--output-dir",
+                str(output_dir),
+                "--timestamp",
+                "2024-02-03T00:00:00",
+                "--artifacts-to-keep",
+                "2",
+                "--log-level",
+                "ERROR",
+            ]
+        )
+    
+        assert exit_code == 0
+        expected_latest = {"20230301-0000", "20240203-0000"}
+        run_dirs = {path.name for path in topic_dir.iterdir() if path.is_dir()}
+&gt;       assert run_dirs == expected_latest
+E       AssertionError: assert {'20230101-00...0230301-0000'} == {'20230301-00...0240203-0000'}
+E         
+E         Extra items in the left set:
+E         '20230101-0000'
+E         '20230201-0000'
+E         Extra items in the right set:
+E         '20240203-0000'
+E         Use -v to get more diff
+
+.repo_studios\tests\tests_producers\test_validate_markdown_anchors.py:104: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_producers.test_validate_metrics_anchor_stubs" name="test_structured_artifacts_without_missing" time="0.022"><failure message="AssertionError: assert 'producer_reports' == 'healthview'&#10;  &#10;  - healthview&#10;  + producer_reports">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_structured_artifacts_with0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000021E06A8FD20&gt;
+
+    def test_structured_artifacts_without_missing(tmp_path, monkeypatch):
+        mod = _load_module()
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        (repo_root / ".repo_studios").mkdir()
+    
+        _write_legacy_file(
+            repo_root / "docs/api/metrics_orchestrator.md",
+            anchors=["Sample Anchor"],
+        )
+        _write_markdown(
+            repo_root / "docs/example.md",
+            "[Metrics](metrics_orchestrator.md#sample-anchor)\n",
+        )
+    
+        _set_fixed_datetime(
+            monkeypatch,
+            mod,
+            mod.dt.datetime(2025, 1, 1, 12, 0, 0, tzinfo=mod.dt.timezone.utc),
+        )
+    
+        payload = mod.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--artifacts-to-keep",
+                "2",
+                "--log-level",
+                "DEBUG",
+            ]
+        )
+    
+        assert payload["status"] == "ok"
+        assert payload["summary"]["missing_count"] == 0
+        assert payload["summary"]["anchors_referenced"] == 1
+    
+        output_dir = Path(payload["output_dir"])
+&gt;       assert payload["viewer_slug"] == "healthview"
+E       AssertionError: assert 'producer_reports' == 'healthview'
+E         
+E         - healthview
+E         + producer_reports
+
+.repo_studios\tests\tests_producers\test_validate_metrics_anchor_stubs.py:86: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_producers.test_validate_metrics_anchor_stubs" name="test_detects_missing_and_honors_allowlist" time="0.021"><failure message="FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-968\\test_detects_missing_and_honor0\\repo\\.repo_studios\\reports\\healthview\\producer_reports\\metrics_anchor_stub_validation\\producer_reports\\metrics_anchor_stub_validation'">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_detects_missing_and_honor0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000021E06A50910&gt;
+
+    def test_detects_missing_and_honors_allowlist(tmp_path, monkeypatch):
+        mod = _load_module()
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        (repo_root / ".repo_studios").mkdir()
+    
+        _write_legacy_file(
+            repo_root / "docs/api/metrics_orchestrator.md",
+            anchors=["Existing Anchor"],
+        )
+        _write_markdown(
+            repo_root / "docs/usage.md",
+            "[Missing](metrics_orchestrator.md#missing-anchor)\n",
+        )
+    
+        _set_fixed_datetime(
+            monkeypatch,
+            mod,
+            mod.dt.datetime(2025, 1, 1, 12, 0, 0, tzinfo=mod.dt.timezone.utc),
+        )
+    
+        payload_first = mod.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--artifacts-to-keep",
+                "1",
+                "--log-level",
+                "DEBUG",
+            ]
+        )
+    
+        assert payload_first["status"] == "fail"
+        assert payload_first["summary"]["missing_count"] == 1
+        assert payload_first["missing"][0]["anchor"] == "missing-anchor"
+    
+        allowlist_path = repo_root / ".repo_studios/scripts/producers/metrics_anchor_allowlist.json"
+        allowlist_path.parent.mkdir(parents=True, exist_ok=True)
+        allowlist_path.write_text(json.dumps({"anchors": ["missing-anchor"]}), encoding="utf-8")
+    
+        _set_fixed_datetime(
+            monkeypatch,
+            mod,
+            mod.dt.datetime(2025, 1, 1, 12, 1, 0, tzinfo=mod.dt.timezone.utc),
+        )
+    
+        payload_second = mod.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--artifacts-to-keep",
+                "1",
+                "--log-level",
+                "DEBUG",
+            ]
+        )
+    
+        assert payload_second["status"] == "ok"
+        assert payload_second["summary"]["missing_count"] == 0
+        assert payload_second["summary"]["allowlisted_count"] == 1
+    
+        output_dir = Path(payload_second["output_dir"])
+        topic_dir = output_dir / payload_second["viewer_slug"] / payload_second["topic"]
+&gt;       run_dirs = [p for p in topic_dir.iterdir() if p.is_dir()]
+                               ^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_producers\test_validate_metrics_anchor_stubs.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_detects_missing_and_honor0/repo/.repo_s...os/reports/healthview/producer_reports/metrics_anchor_stub_validation/producer_reports/metrics_anchor_stub_validation')
+
+    def iterdir(self):
+        """Yield path objects of the directory contents.
+    
+        The children are yielded in arbitrary order, and the
+        special entries '.' and '..' are not included.
+        """
+        root_dir = str(self)
+&gt;       with os.scandir(root_dir) as scandir_it:
+             ^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-968\\test_detects_missing_and_honor0\\repo\\.repo_studios\\reports\\healthview\\producer_reports\\metrics_anchor_stub_validation\\producer_reports\\metrics_anchor_stub_validation'
+
+C:\Python313\Lib\pathlib\_local.py:575: FileNotFoundError</failure></testcase><testcase classname=".repo_studios.tests.tests_producers.test_verify_docs_integrity" name="test_clean_run_generates_artifacts" time="0.103"><failure message="AssertionError: assert WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_clean_run_generates_artif0/repo/artifacts/20250101-1200') == WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_clean_run_generates_artif0/repo/artifacts/healthview/docs_integrity_validation/20250101-1200')&#10; +  where WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_clean_run_generates_artif0/repo/artifacts/20250101-1200') = Path('C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-968\\test_clean_run_generates_artif0\\repo\\artifacts\\20250101-1200')">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_clean_run_generates_artif0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000021E06A8E660&gt;
+
+    def test_clean_run_generates_artifacts(tmp_path, monkeypatch):
+        mod = _load_module()
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        (repo_root / ".repo_studios").mkdir()
+        docs_dir = repo_root / ".repo_studios/docs/standards/global"
+    
+        _write_doc(
+            mod,
+            docs_dir / "std-docs-integrity-handbook.md",
+            {"doc_id": "docs_integrity_handbook", "revision": 1},
+        )
+    
+        documents = [
+            {
+                "category": "global",
+                "doc_id": "docs_integrity_handbook",
+                "path": ".repo_studios/docs/standards/global/std-docs-integrity-handbook.md",
+                "stability": "stable",
+                "json_block": True,
+            }
+        ]
+    
+        _write_index(
+            mod,
+            repo_root / ".repo_studios/docs/standards/docs_index.md",
+            documents,
+        )
+    
+        _set_fixed_datetime(
+            monkeypatch,
+            mod,
+            mod.dt.datetime(2025, 1, 1, 12, 0, 0, tzinfo=mod.dt.timezone.utc),
+        )
+    
+        payload = mod.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--output-dir",
+                str(repo_root / "artifacts"),
+                "--artifacts-to-keep",
+                "2",
+                "--log-level",
+                "DEBUG",
+            ]
+        )
+    
+        assert payload["status"] == "ok"
+        assert payload["exit_code"] == 0
+        assert payload["summary"]["documents_processed"] == 1
+        assert payload["summary"]["json_blocks_checked"] == 2
+        assert payload["summary"]["mismatched_blocks"] == 0
+    
+        output_root = repo_root / "artifacts"
+        expected_run_timestamp = "20250101-1200"
+        expected_run_dir = (
+            output_root / "healthview" / "docs_integrity_validation" / expected_run_timestamp
+        )
+    
+        assert payload["run_timestamp"] == expected_run_timestamp
+&gt;       assert Path(payload["run_dir"]) == expected_run_dir
+E       AssertionError: assert WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_clean_run_generates_artif0/repo/artifacts/20250101-1200') == WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_clean_run_generates_artif0/repo/artifacts/healthview/docs_integrity_validation/20250101-1200')
+E        +  where WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-968/test_clean_run_generates_artif0/repo/artifacts/20250101-1200') = Path('C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-968\\test_clean_run_generates_artif0\\repo\\artifacts\\20250101-1200')
+
+.repo_studios\tests\tests_producers\test_verify_docs_integrity.py:137: AssertionError</failure></testcase><testcase classname=".repo_studios.tests.tests_producers.test_verify_docs_integrity" name="test_detects_mismatches_and_updates" time="0.026" /><testcase classname=".repo_studios.tests.tests_summarizers.test_summarize_health_suite" name="test_run_emits_healthview_bundle" time="0.040" /><testcase classname=".repo_studios.tests.tests_summarizers.test_summarize_standards" name="test_run_emits_healthview_bundle" time="0.023" /><testcase classname=".repo_studios.tests.tests_summarizers.test_summarize_standards" name="test_resolve_index_path_falls_back_to_legacy" time="0.007" /><testcase classname=".repo_studios.tests.tests_utilities.test_configure_faulthandler_runtime" name="test_bootstrap_writes_artifacts" time="0.018" /><testcase classname=".repo_studios.tests.tests_utilities.test_configure_faulthandler_runtime" name="test_bootstrap_prunes_old_runs" time="0.011" /><testcase classname=".repo_studios.tests.tests_utilities.test_configure_faulthandler_runtime" name="test_bootstrap_disabled" time="0.004" /><testcase classname=".repo_studios.tests.tests_utilities.test_dump_faulthandler_snapshot" name="test_dump_snapshot_happy_path" time="0.017" /><testcase classname=".repo_studios.tests.tests_utilities.test_dump_faulthandler_snapshot" name="test_dump_snapshot_prunes_history" time="0.012" /><testcase classname=".repo_studios.tests.tests_utilities.test_dump_faulthandler_snapshot" name="test_dump_snapshot_import_failure" time="0.004" /><testcase classname=".repo_studios.tests.tests_utilities.test_fault_run_analysis" name="test_ensure_manifest_creates_file" time="0.005" /><testcase classname=".repo_studios.tests.tests_utilities.test_fault_run_analysis" name="test_collect_signatures_groups_threads" time="0.005" /><testcase classname=".repo_studios.tests.tests_utilities.test_fault_run_analysis" name="test_build_fault_report_emits_summary" time="0.006" /><testcase classname=".repo_studios.tests.tests_utilities.test_monkey_patch_risk" name="test_classify_high_risk_non_test_module_scope" time="0.001" /><testcase classname=".repo_studios.tests.tests_utilities.test_monkey_patch_risk" name="test_classify_moderate_for_tests_and_attribute_reassignment" time="0.001" /><testcase classname=".repo_studios.tests.tests_utilities.test_monkey_patch_risk" name="test_classify_safe_for_test_attribute_reassignment" time="0.001" /><testcase classname=".repo_studios.tests.tests_utilities.test_monkey_patch_risk" name="test_classify_moderate_for_test_patch_misuse" time="0.001" /><testcase classname=".repo_studios.tests.tests_utilities.test_monkey_patch_risk" name="test_classify_default_safe" time="0.001" /><testcase classname=".repo_studios.tests.tests_utilities.test_refresh_mypy_baselines" name="test_refresh_success" time="0.020" /><testcase classname=".repo_studios.tests.tests_utilities.test_refresh_mypy_baselines" name="test_refresh_failure_skips_pointer" time="0.013" /><testcase classname=".repo_studios.tests.tests_utilities.test_refresh_mypy_baselines" name="test_refresh_custom_target" time="0.012" /><testcase classname=".repo_studios.tests.tests_utilities.test_test_log_analysis" name="test_build_test_log_report_parses_artifacts" time="0.005" /><testcase classname=".repo_studios.tests.tests_utilities.test_test_log_analysis" name="test_select_junit_artifact_skips_internal_only" time="0.004" /><testcase classname=".repo_studios.tests.tests_workflows.test_healthview_agent_loop_runner" name="test_runner_selection_prefers_earliest_stage_then_line" time="0.012" /><testcase classname=".repo_studios.tests.tests_workflows.test_healthview_agent_loop_runner" name="test_runner_filters_placeholders" time="0.012" /><testcase classname=".repo_studios.tests.tests_workflows.test_healthview_agent_loop_runner" name="test_anchor_extraction_matches_existing_roster_links" time="0.005" /><testcase classname=".repo_studios.tests.tests_workflows.test_healthview_workflow_spec_validator" name="test_workflow_spec_validator_accepts_minimal_valid_spec" time="0.016" /><testcase classname=".repo_studios.tests.tests_workflows.test_healthview_workflow_spec_validator" name="test_workflow_spec_validator_rejects_wrong_version" time="0.011" /></testsuite></testsuites>

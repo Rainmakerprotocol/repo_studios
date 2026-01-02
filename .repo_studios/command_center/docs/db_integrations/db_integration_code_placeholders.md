@@ -30,7 +30,7 @@ related_files:
 ## System Context
 
 - Producer: `.repo_studios/scripts/producers/scan_code_placeholders.py`
-- Bundle location: `.repo_studios/reports/producer_reports/healthview/code_placeholders/<YYYYMMDD-HHMM>/`
+- Bundle location: `.repo_studios/reports/healthview/producer_reports/code_placeholders/<YYYYMMDD-HHMM>/`
 - Storage facade: `.repo_studios/command_center/scripts/libraries/database_integration.py` (`create_storage`)
 
 ## Agent Instructions

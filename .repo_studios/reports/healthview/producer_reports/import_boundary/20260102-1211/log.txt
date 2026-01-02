@@ -1,0 +1,4 @@
+status=ok
+timestamp=2026-01-02T12:11:09.371304+00:00
+violations=0
+allowlist_path=C:\Users\genet\repo_studios\.repo_studios\scripts\producers\import_rules_allowlist.json

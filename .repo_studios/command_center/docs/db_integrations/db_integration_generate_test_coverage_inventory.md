@@ -26,7 +26,7 @@ related_files:
 ## System Context
 
 - Producer script: `.repo_studios/scripts/producers/generate_test_coverage_inventory.py`
-- Output contract (file system): `.repo_studios/reports/producer_reports/healthview/test_coverage_inventory/<YYYYMMDD-HHMM>/{manifest.json,summary.md,telemetry.json}`
+- Output contract (file system): `.repo_studios/reports/healthview/producer_reports/test_coverage_inventory/<YYYYMMDD-HHMM>/{manifest.json,summary.md,telemetry.json}`
 - Storage layer: `.repo_studios/command_center/scripts/libraries/database_integration.py` (`create_storage` → `DualWriteStorage`)
 
 ## Agent Instructions

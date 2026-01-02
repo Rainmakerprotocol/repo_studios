@@ -23,7 +23,7 @@ related_files:
 
 The producer emits canonical positional bundles under:
 
-`.repo_studios/reports/producer_reports/healthview/metrics_anchor_stub_validation/<YYYYMMDD-HHMM>/`
+`.repo_studios/reports/healthview/producer_reports/metrics_anchor_stub_validation/<YYYYMMDD-HHMM>/`
 
 Containing exactly:
 

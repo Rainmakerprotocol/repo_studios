@@ -660,12 +660,15 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         ReportArtifact(filename=f"{SUMMARY_STEM}.json", kind="json", content=lambda: overview_payload),
         ReportArtifact(filename=f"{SUMMARY_STEM}.md", kind="text", content=lambda: summary_markdown),
     ]
+    # HOP-compliant: pass viewer="" and topic="" to enable timestamp-only directory naming
     result: WriteReportArtifactsResult = write_report_artifacts(
         stem=SUMMARY_STEM,
         timestamp=options.run_timestamp,
         output_dir=paths.output_dir,
         artifacts=artifacts,
         keep=options.artifacts_to_keep,
+        viewer="",
+        topic="",
     )
 
     logger.info(

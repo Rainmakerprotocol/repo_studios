@@ -2,7 +2,7 @@
 """Lizard Complexity Report generator with positional bundle artifacts.
 
 Artifacts (default):
-    - `.repo_studios/reports/producer_reports/healthview/lizard_report/<YYYYMMDD-HHMM>/`
+    - `.repo_studios/reports/healthview/producer_reports/lizard_complexity/<YYYYMMDD-HHMM>/`
         - `manifest.json`
         - `summary.md`
         - `telemetry.json`
@@ -27,10 +27,7 @@ from pathlib import Path
 from typing import Any, Iterable, Sequence
 
 DEFAULT_TARGETS = (".repo_studios",)
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
-VIEWER_SLUG = "healthview"
-TOPIC = "lizard_report"
-DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_lizard_report")
+TOPIC_SLUG = "lizard_complexity"
 DEFAULT_LIZARD_EXTRA_ARGS = ("-Ejson", "-i", "-1")
 VENDOR_DIR = Path(__file__).resolve().parents[2] / "vendor"
 VENDOR_LIZARD_JSON_PATH = VENDOR_DIR / "lizard_ext" / "lizardjson.py"
@@ -41,13 +38,18 @@ LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 try:
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback for direct script execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
     from libraries.database_integration import create_storage
     from libraries.prune_logs import prune_run_directories
+    from libraries.report_paths import build_topic_path
     from libraries.retention_policy import get_keep
+
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_lizard_report")
 
 from libraries.cli import resolve_path, resolve_repo_root
 
@@ -523,8 +525,8 @@ def _build_manifest(*, report: dict[str, Any], repo_root: Path, inputs: dict[str
     }
     return {
         "schema_version": 1,
-        "viewer_slug": VIEWER_SLUG,
-        "topic": TOPIC,
+        "viewer_slug": "healthview",
+        "topic": TOPIC_SLUG,
         "run_timestamp": inputs.get("run_timestamp"),
         "git_sha": None,
         "status": "ok" if status in {"ok", "issues", "no_targets"} else "failed",
@@ -812,8 +814,8 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     storage = create_storage(
         output_dir,
-        VIEWER_SLUG,
-        TOPIC,
+        "",
+        "",
         timestamp=run_timestamp,
     )
     bundle_dir = storage.file_storage.bundle_dir
@@ -827,7 +829,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     storage.write_telemetry(telemetry)
 
     prune_run_directories(
-        output_dir / VIEWER_SLUG / TOPIC,
+        output_dir,
         keep=max(args.artifacts_to_keep, 1),
         current_run=bundle_dir,
         logger=logging.getLogger(__name__),

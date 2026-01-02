@@ -411,10 +411,10 @@ def prune_history(
     current_run: Path | None,
     logger: logging.Logger | None,
 ) -> list[Path]:
+    # HOP-compliant pruning: no stem_prefix, uses timestamp-only directories
     result = prune_run_directories(
         base_dir,
         keep=max(keep, 1),
-        stem_prefix=RUN_PREFIX,
         current_run=current_run,
         logger=logger,
     )
@@ -429,7 +429,8 @@ def compose_payload(
     violations: list[Violation],
     timestamp: dt.datetime,
 ) -> dict[str, Any]:
-    run_id = f"{RUN_PREFIX}-{timestamp.strftime('%Y%m%d_%H%M%S')}"
+    # HOP-compliant timestamp directory naming (YYYYMMDD-HHMM)
+    run_id = timestamp.strftime("%Y%m%d-%H%M")
     summary = _summarize(violations)
     status = "ok" if summary["violation_count"] == 0 else "violations"
     payload = {
