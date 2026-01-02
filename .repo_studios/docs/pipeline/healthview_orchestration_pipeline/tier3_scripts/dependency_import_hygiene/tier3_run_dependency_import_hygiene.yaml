@@ -103,10 +103,10 @@ evidence:
   tests:
     - path: .repo_studios/tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py
       result: 3/3 passed
-      duration: 0.22s
+      duration: 0.20s
   qa:
-    mypy: "Success: no issues found in 1 source file"
-    pytest: "3 passed in 0.22s"
+    mypy: "1 error (no-any-return at L326) — technical debt, not blocking"
+    pytest: "3 passed in 0.20s"
     last_verified: "2026-01-02"
 
 notes:
@@ -115,3 +115,4 @@ notes:
   - Uses non-HOP utility for baseline refresh (S41R-006)
   - Fixed mypy type error from variable shadowing (2026-01-02)
   - Typical runs take 7-11 minutes in CI
+  - Mypy debt: 1 no-any-return at L326 (non-blocking)

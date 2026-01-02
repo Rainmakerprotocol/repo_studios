@@ -2,31 +2,35 @@
   "schema_version": 1,
   "viewer_slug": "producer_reports",
   "topic": "doc_index",
-  "run_timestamp": "20260102-0422",
-  "generated_utc": "2026-01-02T04:22:20.508037+00:00",
+  "run_timestamp": "20260102-1406",
+  "generated_utc": "2026-01-02T14:06:27.134545+00:00",
   "status": "ok",
   "metrics": {
-    "total_documents": 310,
-    "total_headings": 2186,
-    "total_links": 276,
+    "total_documents": 339,
+    "total_headings": 2442,
+    "total_links": 280,
     "duplicate_slug_count": 7,
-    "documents_missing_description_count": 42,
-    "placeholder_documents_count": 68,
-    "link_density": 0.8903225806451613
+    "documents_missing_description_count": 50,
+    "placeholder_documents_count": 72,
+    "link_density": 0.8259587020648967
   },
   "payload": {
     "schema_version": 1,
-    "generated_utc": "2026-01-02T04:22:20.508037+00:00",
+    "generated_utc": "2026-01-02T14:06:27.134545+00:00",
     "repo_root": "C:\\Users\\genet\\repo_studios",
     "summary": {
-      "total_documents": 310,
-      "total_h1": 313,
-      "total_h2": 1873,
-      "total_headings": 2186,
-      "total_links": 276
+      "total_documents": 339,
+      "total_h1": 342,
+      "total_h2": 2100,
+      "total_headings": 2442,
+      "total_links": 280
     },
     "metrics": {
       "documents_per_directory": [
+        {
+          "directory": ".repo_studios/command_center/docs/db_integrations",
+          "count": 52
+        },
         {
           "directory": ".repo_studios/docs/automation",
           "count": 45
@@ -34,10 +38,6 @@
         {
           "directory": ".repo_studios/command_center/docs/mermaid/view_specs",
           "count": 28
-        },
-        {
-          "directory": ".repo_studios/command_center/docs/db_integrations",
-          "count": 23
         },
         {
           "directory": ".repo_studios/command_center/docs",
@@ -108,13 +108,13 @@
           "count": 5
         }
       ],
-      "documents_missing_description_count": 42,
+      "documents_missing_description_count": 50,
       "documents_without_h1_count": 16,
       "documents_without_h2_count": 20,
-      "placeholder_documents_count": 68,
+      "placeholder_documents_count": 72,
       "duplicate_slug_count": 7,
-      "documents_outside_docs_tree_count": 171,
-      "link_density": 0.8903225806451613
+      "documents_outside_docs_tree_count": 200,
+      "link_density": 0.8259587020648967
     },
     "advisories": {
       "documents_missing_description": [
@@ -125,24 +125,24 @@
         ".repo_studios/.repo_studios/reports/healthview/rawview/fault_snapshot/2025-12-31_134553/SUMMARY.md",
         ".repo_studios/.repo_studios/reports/healthview/rawview/fault_snapshot/2025-12-31_134619/SUMMARY.md",
         ".repo_studios/agent_notes/meta/phase1_foundation_review_2025-10-18_0138.md",
+        ".repo_studios/command_center/docs/db_integrations/db_integration_anchor_inventory.md",
+        ".repo_studios/command_center/docs/db_integrations/db_integration_dependency_import_hygiene.md",
+        ".repo_studios/command_center/docs/db_integrations/db_integration_fault_artifacts.md",
+        ".repo_studios/command_center/docs/db_integrations/db_integration_fault_diagnostics_overview.md",
         ".repo_studios/command_center/docs/db_integrations/db_integration_generate_churn_complexity_heatmap.md",
         ".repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md",
         ".repo_studios/command_center/docs/db_integrations/db_integration_generate_test_log_health_report.md",
+        ".repo_studios/command_center/docs/db_integrations/db_integration_import_boundaries.md",
+        ".repo_studios/command_center/docs/db_integrations/db_integration_monkey_patch_oversight.md",
         ".repo_studios/command_center/docs/db_integrations/db_integration_monkey_patches.md",
+        ".repo_studios/command_center/docs/db_integrations/db_integration_standards_integrity.md",
         ".repo_studios/command_center/docs/db_integrations/db_integration_summarize_test_execution_telemetry.md",
+        ".repo_studios/command_center/docs/db_integrations/db_integration_validate_inventory.md",
         ".repo_studios/command_center/docs/decision_log.md",
         ".repo_studios/command_center/docs/mermaid/decision_log.md",
         ".repo_studios/command_center/docs/mermaid/view_specs/callback_registration_map.md",
         ".repo_studios/command_center/docs/mermaid/view_specs/cyclomatic_complexity_map.md",
-        ".repo_studios/command_center/docs/mermaid/view_specs/dynamic_code_watchlist.md",
-        ".repo_studios/command_center/docs/mermaid/view_specs/entrypoint_trace_diagram.md",
-        ".repo_studios/command_center/docs/mermaid/view_specs/external_vs_internal_dependency_map.md",
-        ".repo_studios/command_center/docs/mermaid/view_specs/function_call_graph.md",
-        ".repo_studios/command_center/docs/mermaid/view_specs/import_chain_depth.md",
-        ".repo_studios/command_center/docs/mermaid/view_specs/public_vs_private_api.md",
-        ".repo_studios/command_center/docs/phase_4/PR_CHECKLIST_TEMPLATE.md",
-        ".repo_studios/command_center/docs/phase_6/PROMPT_DELTA_DRAFTS.md",
-        ".repo_studios/command_center/scripts/script_inventory.md"
+        ".repo_studios/command_center/docs/mermaid/view_specs/dynamic_code_watchlist.md"
       ],
       "documents_without_h1": [
         ".repo_studios/command_center/docs/mermaid/view_specs/callback_registration_map.md",
@@ -192,7 +192,11 @@
         ".repo_studios/command_center/command_center_architecture.md",
         ".repo_studios/command_center/docs/code_library/code_library_status.md",
         ".repo_studios/command_center/docs/db_integration_test_execution_telemetry.md",
+        ".repo_studios/command_center/docs/db_integrations/db_integration_aggregate_docs_health_signals.md",
         ".repo_studios/command_center/docs/db_integrations/db_integration_code_placeholders.md",
+        ".repo_studios/command_center/docs/db_integrations/db_integration_dependency_import_hygiene.md",
+        ".repo_studios/command_center/docs/db_integrations/db_integration_docs_health_overview.md",
+        ".repo_studios/command_center/docs/db_integrations/db_integrations_master_list.md",
         ".repo_studios/command_center/docs/decision_log.md",
         ".repo_studios/command_center/docs/duplicate_target_mappings.md",
         ".repo_studios/command_center/docs/library_integration_checklist.md",
@@ -205,11 +209,7 @@
         ".repo_studios/command_center/docs/orchestrator_migration_notes.md",
         ".repo_studios/command_center/docs/phase_4/POST_RUN_TEST_MATRIX.md",
         ".repo_studios/command_center/docs/phase_4/PR_CHECKLIST_TEMPLATE.md",
-        ".repo_studios/command_center/docs/phase_7/CI_INTEGRATION_STRATEGY.md",
-        ".repo_studios/command_center/docs/phase_7/CI_ROLLOUT_LOG.md",
-        ".repo_studios/command_center/docs/phase_7/PLACEHOLDER_DEBT_PLAN.md",
-        ".repo_studios/command_center/docs/phase_7/REPORTING_INTERFACE_PLAN.md",
-        ".repo_studios/command_center/docs/phase_7/placeholder_scan_blocking_transition_brief.md"
+        ".repo_studios/command_center/docs/phase_7/CI_INTEGRATION_STRATEGY.md"
       ],
       "documents_outside_docs_tree": [
         ".copilot_todo.md",
@@ -2361,6 +2361,126 @@
       },
       {
         "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_aggregate_docs_health_signals.md",
+        "slug": "db-integration-aggregatedocshealthsignalspy",
+        "h1_headings": [
+          {
+            "title": "DB Integration \u2014 aggregate_docs_health_signals.py",
+            "slug": "db-integration-aggregatedocshealthsignalspy",
+            "line": 16
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 21,
+            "parent_title": "DB Integration \u2014 aggregate_docs_health_signals.py",
+            "parent_slug": "db-integration-aggregatedocshealthsignalspy"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 26,
+            "parent_title": "DB Integration \u2014 aggregate_docs_health_signals.py",
+            "parent_slug": "db-integration-aggregatedocshealthsignalspy"
+          },
+          {
+            "title": "Upstream Producer Dependencies",
+            "slug": "upstream-producer-dependencies",
+            "line": 34,
+            "parent_title": "DB Integration \u2014 aggregate_docs_health_signals.py",
+            "parent_slug": "db-integration-aggregatedocshealthsignalspy"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 49,
+            "parent_title": "DB Integration \u2014 aggregate_docs_health_signals.py",
+            "parent_slug": "db-integration-aggregatedocshealthsignalspy"
+          },
+          {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 67,
+            "parent_title": "DB Integration \u2014 aggregate_docs_health_signals.py",
+            "parent_slug": "db-integration-aggregatedocshealthsignalspy"
+          },
+          {
+            "title": "Table Mapping (Intent)",
+            "slug": "table-mapping-intent",
+            "line": 98,
+            "parent_title": "DB Integration \u2014 aggregate_docs_health_signals.py",
+            "parent_slug": "db-integration-aggregatedocshealthsignalspy"
+          },
+          {
+            "title": "Human Notes",
+            "slug": "human-notes",
+            "line": 129,
+            "parent_title": "DB Integration \u2014 aggregate_docs_health_signals.py",
+            "parent_slug": "db-integration-aggregatedocshealthsignalspy"
+          },
+          {
+            "title": "Reference Prompts",
+            "slug": "reference-prompts",
+            "line": 137,
+            "parent_title": "DB Integration \u2014 aggregate_docs_health_signals.py",
+            "parent_slug": "db-integration-aggregatedocshealthsignalspy"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 143,
+            "parent_title": "DB Integration \u2014 aggregate_docs_health_signals.py",
+            "parent_slug": "db-integration-aggregatedocshealthsignalspy"
+          }
+        ],
+        "links": [],
+        "description": "This aggregator consolidates signals from multiple upstream producers:",
+        "size_bytes": 6699,
+        "modified_utc": "2026-01-02T13:11:37.011222+00:00",
+        "tags": [
+          "db-integration",
+          "aggregator",
+          "healthview",
+          "docs-health-signals"
+        ],
+        "owners": [
+          "repo_studios_ai"
+        ],
+        "status": "draft",
+        "frontmatter": {
+          "title": "DB Integration \u2014 aggregate_docs_health_signals.py",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "role": [
+            "DBIntegrationDoc"
+          ],
+          "owners": [
+            "repo_studios_ai"
+          ],
+          "status": "draft",
+          "version": 1,
+          "updated_at": "2025-01-02",
+          "tags": [
+            "db-integration",
+            "aggregator",
+            "healthview",
+            "docs-health-signals"
+          ],
+          "related_files": [
+            ".repo_studios/scripts/aggregators/aggregate_docs_health_signals.py",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py",
+            ".repo_studios/command_center/scripts/utilities/list_db_markers.py"
+          ]
+        },
+        "contains_placeholder": true
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
         "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_analyze_standards_index_gaps.md",
         "slug": "db-integration-analyzestandardsindexgaps",
         "h1_headings": [
@@ -2596,6 +2716,184 @@
       },
       {
         "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_anchor_health_report.md",
+        "slug": "db-integration-anchor-health-report-consumer",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Anchor Health Report Consumer",
+            "slug": "db-integration-anchor-health-report-consumer",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Anchor Health Report Consumer",
+            "parent_slug": "db-integration-anchor-health-report-consumer"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 11,
+            "parent_title": "DB Integration: Anchor Health Report Consumer",
+            "parent_slug": "db-integration-anchor-health-report-consumer"
+          },
+          {
+            "title": "Purpose",
+            "slug": "purpose",
+            "line": 32,
+            "parent_title": "DB Integration: Anchor Health Report Consumer",
+            "parent_slug": "db-integration-anchor-health-report-consumer"
+          },
+          {
+            "title": "Exit Code",
+            "slug": "exit-code",
+            "line": 41,
+            "parent_title": "DB Integration: Anchor Health Report Consumer",
+            "parent_slug": "db-integration-anchor-health-report-consumer"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 46,
+            "parent_title": "DB Integration: Anchor Health Report Consumer",
+            "parent_slug": "db-integration-anchor-health-report-consumer"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 51,
+            "parent_title": "DB Integration: Anchor Health Report Consumer",
+            "parent_slug": "db-integration-anchor-health-report-consumer"
+          }
+        ],
+        "links": [],
+        "description": "Generates machine and human consumable snapshot of top-level (H1/H2) markdown anchor slug duplication. Designed to integrate with AI assistance workflows for:",
+        "size_bytes": 1936,
+        "modified_utc": "2026-01-02T13:59:06.578202+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_anchor_inventory.md",
+        "slug": "db-integration-generateanchorinventorypy",
+        "h1_headings": [
+          {
+            "title": "DB Integration \u2014 generate_anchor_inventory.py",
+            "slug": "db-integration-generateanchorinventorypy",
+            "line": 16
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 21,
+            "parent_title": "DB Integration \u2014 generate_anchor_inventory.py",
+            "parent_slug": "db-integration-generateanchorinventorypy"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 26,
+            "parent_title": "DB Integration \u2014 generate_anchor_inventory.py",
+            "parent_slug": "db-integration-generateanchorinventorypy"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 34,
+            "parent_title": "DB Integration \u2014 generate_anchor_inventory.py",
+            "parent_slug": "db-integration-generateanchorinventorypy"
+          },
+          {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 49,
+            "parent_title": "DB Integration \u2014 generate_anchor_inventory.py",
+            "parent_slug": "db-integration-generateanchorinventorypy"
+          },
+          {
+            "title": "Table Mapping (Intent)",
+            "slug": "table-mapping-intent",
+            "line": 70,
+            "parent_title": "DB Integration \u2014 generate_anchor_inventory.py",
+            "parent_slug": "db-integration-generateanchorinventorypy"
+          },
+          {
+            "title": "Human Notes",
+            "slug": "human-notes",
+            "line": 92,
+            "parent_title": "DB Integration \u2014 generate_anchor_inventory.py",
+            "parent_slug": "db-integration-generateanchorinventorypy"
+          },
+          {
+            "title": "Reference Prompts",
+            "slug": "reference-prompts",
+            "line": 100,
+            "parent_title": "DB Integration \u2014 generate_anchor_inventory.py",
+            "parent_slug": "db-integration-generateanchorinventorypy"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 106,
+            "parent_title": "DB Integration \u2014 generate_anchor_inventory.py",
+            "parent_slug": "db-integration-generateanchorinventorypy"
+          }
+        ],
+        "links": [],
+        "description": null,
+        "size_bytes": 4400,
+        "modified_utc": "2026-01-02T13:11:37.011222+00:00",
+        "tags": [
+          "db-integration",
+          "producer",
+          "healthview",
+          "anchor-inventory"
+        ],
+        "owners": [
+          "repo_studios_ai"
+        ],
+        "status": "draft",
+        "frontmatter": {
+          "title": "DB Integration \u2014 generate_anchor_inventory.py",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "role": [
+            "DBIntegrationDoc"
+          ],
+          "owners": [
+            "repo_studios_ai"
+          ],
+          "status": "draft",
+          "version": 1,
+          "updated_at": "2025-01-02",
+          "tags": [
+            "db-integration",
+            "producer",
+            "healthview",
+            "anchor-inventory"
+          ],
+          "related_files": [
+            ".repo_studios/scripts/producers/generate_anchor_inventory.py",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py",
+            ".repo_studios/command_center/scripts/utilities/list_db_markers.py"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
         "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_check_inventory_health.md",
         "slug": "db-integration-checkinventoryhealth",
         "h1_headings": [
@@ -2770,7 +3068,7 @@
         "links": [],
         "description": "abstraction.",
         "size_bytes": 2569,
-        "modified_utc": "2025-12-16T19:44:14.374027+00:00",
+        "modified_utc": "2026-01-02T12:21:24.126703+00:00",
         "tags": [
           "db-integration",
           "healthview",
@@ -2858,7 +3156,7 @@
         "links": [],
         "description": "`healthview/code_placeholders` producer.",
         "size_bytes": 2820,
-        "modified_utc": "2025-12-25T21:22:39.871709+00:00",
+        "modified_utc": "2026-01-02T12:21:24.122706+00:00",
         "tags": [
           "db",
           "integration",
@@ -3071,7 +3369,7 @@
         "links": [],
         "description": "The producer writes canonical positional bundles under:",
         "size_bytes": 2543,
-        "modified_utc": "2025-12-28T23:46:08.967058+00:00",
+        "modified_utc": "2026-01-02T12:21:24.122706+00:00",
         "tags": [
           "db-integration",
           "healthview",
@@ -3104,6 +3402,92 @@
           ]
         },
         "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_dependency_import_hygiene.md",
+        "slug": "db-integration-dependency-import-hygiene-orchestrator",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Dependency Import Hygiene Orchestrator",
+            "slug": "db-integration-dependency-import-hygiene-orchestrator",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Dependency Import Hygiene Orchestrator",
+            "parent_slug": "db-integration-dependency-import-hygiene-orchestrator"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 11,
+            "parent_title": "DB Integration: Dependency Import Hygiene Orchestrator",
+            "parent_slug": "db-integration-dependency-import-hygiene-orchestrator"
+          },
+          {
+            "title": "Invoked Scripts",
+            "slug": "invoked-scripts",
+            "line": 67,
+            "parent_title": "DB Integration: Dependency Import Hygiene Orchestrator",
+            "parent_slug": "db-integration-dependency-import-hygiene-orchestrator"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 77,
+            "parent_title": "DB Integration: Dependency Import Hygiene Orchestrator",
+            "parent_slug": "db-integration-dependency-import-hygiene-orchestrator"
+          },
+          {
+            "title": "Storage Integration",
+            "slug": "storage-integration",
+            "line": 110,
+            "parent_title": "DB Integration: Dependency Import Hygiene Orchestrator",
+            "parent_slug": "db-integration-dependency-import-hygiene-orchestrator"
+          },
+          {
+            "title": "Invocation Pattern",
+            "slug": "invocation-pattern",
+            "line": 116,
+            "parent_title": "DB Integration: Dependency Import Hygiene Orchestrator",
+            "parent_slug": "db-integration-dependency-import-hygiene-orchestrator"
+          },
+          {
+            "title": "Runtime",
+            "slug": "runtime",
+            "line": 145,
+            "parent_title": "DB Integration: Dependency Import Hygiene Orchestrator",
+            "parent_slug": "db-integration-dependency-import-hygiene-orchestrator"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 150,
+            "parent_title": "DB Integration: Dependency Import Hygiene Orchestrator",
+            "parent_slug": "db-integration-dependency-import-hygiene-orchestrator"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 155,
+            "parent_title": "DB Integration: Dependency Import Hygiene Orchestrator",
+            "parent_slug": "db-integration-dependency-import-hygiene-orchestrator"
+          }
+        ],
+        "links": [],
+        "description": null,
+        "size_bytes": 6876,
+        "modified_utc": "2026-01-02T13:43:58.010748+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": true
       },
       {
         "folder": ".repo_studios/command_center/docs/db_integrations",
@@ -3259,8 +3643,8 @@
         ],
         "links": [],
         "description": "Define the database-facing contract for the Doc Index producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",
-        "size_bytes": 2674,
-        "modified_utc": "2025-12-28T23:09:07.260429+00:00",
+        "size_bytes": 2677,
+        "modified_utc": "2026-01-02T12:21:24.126703+00:00",
         "tags": [
           "db-integration",
           "healthview",
@@ -3302,6 +3686,126 @@
           ]
         },
         "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_docs_health_overview.md",
+        "slug": "db-integration-rundocshealthoverviewpy",
+        "h1_headings": [
+          {
+            "title": "DB Integration \u2014 run_docs_health_overview.py",
+            "slug": "db-integration-rundocshealthoverviewpy",
+            "line": 16
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 21,
+            "parent_title": "DB Integration \u2014 run_docs_health_overview.py",
+            "parent_slug": "db-integration-rundocshealthoverviewpy"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 26,
+            "parent_title": "DB Integration \u2014 run_docs_health_overview.py",
+            "parent_slug": "db-integration-rundocshealthoverviewpy"
+          },
+          {
+            "title": "Invoked Scripts",
+            "slug": "invoked-scripts",
+            "line": 36,
+            "parent_title": "DB Integration \u2014 run_docs_health_overview.py",
+            "parent_slug": "db-integration-rundocshealthoverviewpy"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 51,
+            "parent_title": "DB Integration \u2014 run_docs_health_overview.py",
+            "parent_slug": "db-integration-rundocshealthoverviewpy"
+          },
+          {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 88,
+            "parent_title": "DB Integration \u2014 run_docs_health_overview.py",
+            "parent_slug": "db-integration-rundocshealthoverviewpy"
+          },
+          {
+            "title": "Table Mapping (Intent)",
+            "slug": "table-mapping-intent",
+            "line": 138,
+            "parent_title": "DB Integration \u2014 run_docs_health_overview.py",
+            "parent_slug": "db-integration-rundocshealthoverviewpy"
+          },
+          {
+            "title": "Human Notes",
+            "slug": "human-notes",
+            "line": 172,
+            "parent_title": "DB Integration \u2014 run_docs_health_overview.py",
+            "parent_slug": "db-integration-rundocshealthoverviewpy"
+          },
+          {
+            "title": "Reference Prompts",
+            "slug": "reference-prompts",
+            "line": 181,
+            "parent_title": "DB Integration \u2014 run_docs_health_overview.py",
+            "parent_slug": "db-integration-rundocshealthoverviewpy"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 188,
+            "parent_title": "DB Integration \u2014 run_docs_health_overview.py",
+            "parent_slug": "db-integration-rundocshealthoverviewpy"
+          }
+        ],
+        "links": [],
+        "description": "The orchestrator coordinates execution of the following upstream scripts:",
+        "size_bytes": 9595,
+        "modified_utc": "2026-01-02T13:11:37.011222+00:00",
+        "tags": [
+          "db-integration",
+          "orchestrator",
+          "healthview",
+          "docs-health"
+        ],
+        "owners": [
+          "repo_studios_ai"
+        ],
+        "status": "draft",
+        "frontmatter": {
+          "title": "DB Integration \u2014 run_docs_health_overview.py",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "role": [
+            "DBIntegrationDoc"
+          ],
+          "owners": [
+            "repo_studios_ai"
+          ],
+          "status": "draft",
+          "version": 1,
+          "updated_at": "2025-01-02",
+          "tags": [
+            "db-integration",
+            "orchestrator",
+            "healthview",
+            "docs-health"
+          ],
+          "related_files": [
+            ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py",
+            ".repo_studios/command_center/scripts/utilities/list_db_markers.py"
+          ]
+        },
+        "contains_placeholder": true
       },
       {
         "folder": ".repo_studios/command_center/docs/db_integrations",
@@ -3360,8 +3864,8 @@
         ],
         "links": [],
         "description": "Define the database-facing contract for the docs integrity validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",
-        "size_bytes": 2970,
-        "modified_utc": "2025-12-28T23:09:07.264330+00:00",
+        "size_bytes": 2973,
+        "modified_utc": "2026-01-02T12:21:24.126703+00:00",
         "tags": [
           "db-integration",
           "healthview",
@@ -3403,6 +3907,654 @@
             "REPORT_NAMING_STANDARDS.md"
           ]
         },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_fault_artifacts.md",
+        "slug": "db-integration-generatefaultartifactspy",
+        "h1_headings": [
+          {
+            "title": "DB Integration \u2014 generate_fault_artifacts.py",
+            "slug": "db-integration-generatefaultartifactspy",
+            "line": 16
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 21,
+            "parent_title": "DB Integration \u2014 generate_fault_artifacts.py",
+            "parent_slug": "db-integration-generatefaultartifactspy"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 26,
+            "parent_title": "DB Integration \u2014 generate_fault_artifacts.py",
+            "parent_slug": "db-integration-generatefaultartifactspy"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 35,
+            "parent_title": "DB Integration \u2014 generate_fault_artifacts.py",
+            "parent_slug": "db-integration-generatefaultartifactspy"
+          },
+          {
+            "title": "Environment Variables",
+            "slug": "environment-variables",
+            "line": 45,
+            "parent_title": "DB Integration \u2014 generate_fault_artifacts.py",
+            "parent_slug": "db-integration-generatefaultartifactspy"
+          },
+          {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 53,
+            "parent_title": "DB Integration \u2014 generate_fault_artifacts.py",
+            "parent_slug": "db-integration-generatefaultartifactspy"
+          },
+          {
+            "title": "Table Mapping (Intent)",
+            "slug": "table-mapping-intent",
+            "line": 85,
+            "parent_title": "DB Integration \u2014 generate_fault_artifacts.py",
+            "parent_slug": "db-integration-generatefaultartifactspy"
+          },
+          {
+            "title": "Human Notes",
+            "slug": "human-notes",
+            "line": 110,
+            "parent_title": "DB Integration \u2014 generate_fault_artifacts.py",
+            "parent_slug": "db-integration-generatefaultartifactspy"
+          },
+          {
+            "title": "Reference Prompts",
+            "slug": "reference-prompts",
+            "line": 119,
+            "parent_title": "DB Integration \u2014 generate_fault_artifacts.py",
+            "parent_slug": "db-integration-generatefaultartifactspy"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 125,
+            "parent_title": "DB Integration \u2014 generate_fault_artifacts.py",
+            "parent_slug": "db-integration-generatefaultartifactspy"
+          }
+        ],
+        "links": [],
+        "description": null,
+        "size_bytes": 4633,
+        "modified_utc": "2026-01-02T13:11:37.023673+00:00",
+        "tags": [
+          "db-integration",
+          "consumer",
+          "healthview",
+          "fault-artifacts"
+        ],
+        "owners": [
+          "repo_studios_ai"
+        ],
+        "status": "draft",
+        "frontmatter": {
+          "title": "DB Integration \u2014 generate_fault_artifacts.py",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "role": [
+            "DBIntegrationDoc"
+          ],
+          "owners": [
+            "repo_studios_ai"
+          ],
+          "status": "draft",
+          "version": 1,
+          "updated_at": "2025-01-02",
+          "tags": [
+            "db-integration",
+            "consumer",
+            "healthview",
+            "fault-artifacts"
+          ],
+          "related_files": [
+            ".repo_studios/scripts/consumers/generate_fault_artifacts.py",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py",
+            ".repo_studios/command_center/scripts/utilities/list_db_markers.py"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_fault_diagnostics_overview.md",
+        "slug": "db-integration-summarizefaultdiagnosticsoverviewpy",
+        "h1_headings": [
+          {
+            "title": "DB Integration \u2014 summarize_fault_diagnostics_overview.py",
+            "slug": "db-integration-summarizefaultdiagnosticsoverviewpy",
+            "line": 16
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 21,
+            "parent_title": "DB Integration \u2014 summarize_fault_diagnostics_overview.py",
+            "parent_slug": "db-integration-summarizefaultdiagnosticsoverviewpy"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 26,
+            "parent_title": "DB Integration \u2014 summarize_fault_diagnostics_overview.py",
+            "parent_slug": "db-integration-summarizefaultdiagnosticsoverviewpy"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 35,
+            "parent_title": "DB Integration \u2014 summarize_fault_diagnostics_overview.py",
+            "parent_slug": "db-integration-summarizefaultdiagnosticsoverviewpy"
+          },
+          {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 47,
+            "parent_title": "DB Integration \u2014 summarize_fault_diagnostics_overview.py",
+            "parent_slug": "db-integration-summarizefaultdiagnosticsoverviewpy"
+          },
+          {
+            "title": "Table Mapping (Intent)",
+            "slug": "table-mapping-intent",
+            "line": 69,
+            "parent_title": "DB Integration \u2014 summarize_fault_diagnostics_overview.py",
+            "parent_slug": "db-integration-summarizefaultdiagnosticsoverviewpy"
+          },
+          {
+            "title": "Human Notes",
+            "slug": "human-notes",
+            "line": 91,
+            "parent_title": "DB Integration \u2014 summarize_fault_diagnostics_overview.py",
+            "parent_slug": "db-integration-summarizefaultdiagnosticsoverviewpy"
+          },
+          {
+            "title": "Reference Prompts",
+            "slug": "reference-prompts",
+            "line": 100,
+            "parent_title": "DB Integration \u2014 summarize_fault_diagnostics_overview.py",
+            "parent_slug": "db-integration-summarizefaultdiagnosticsoverviewpy"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 106,
+            "parent_title": "DB Integration \u2014 summarize_fault_diagnostics_overview.py",
+            "parent_slug": "db-integration-summarizefaultdiagnosticsoverviewpy"
+          }
+        ],
+        "links": [],
+        "description": null,
+        "size_bytes": 4565,
+        "modified_utc": "2026-01-02T13:11:37.023673+00:00",
+        "tags": [
+          "db-integration",
+          "summarizer",
+          "healthview",
+          "fault-diagnostics"
+        ],
+        "owners": [
+          "repo_studios_ai"
+        ],
+        "status": "draft",
+        "frontmatter": {
+          "title": "DB Integration \u2014 summarize_fault_diagnostics_overview.py",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "role": [
+            "DBIntegrationDoc"
+          ],
+          "owners": [
+            "repo_studios_ai"
+          ],
+          "status": "draft",
+          "version": 1,
+          "updated_at": "2025-01-02",
+          "tags": [
+            "db-integration",
+            "summarizer",
+            "healthview",
+            "fault-diagnostics"
+          ],
+          "related_files": [
+            ".repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py",
+            ".repo_studios/command_center/scripts/utilities/list_db_markers.py"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_fault_diagnostics_overview_orchestrator.md",
+        "slug": "db-integration-runfaultdiagnosticsoverviewpy",
+        "h1_headings": [
+          {
+            "title": "DB Integration \u2014 run_fault_diagnostics_overview.py",
+            "slug": "db-integration-runfaultdiagnosticsoverviewpy",
+            "line": 16
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 21,
+            "parent_title": "DB Integration \u2014 run_fault_diagnostics_overview.py",
+            "parent_slug": "db-integration-runfaultdiagnosticsoverviewpy"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 26,
+            "parent_title": "DB Integration \u2014 run_fault_diagnostics_overview.py",
+            "parent_slug": "db-integration-runfaultdiagnosticsoverviewpy"
+          },
+          {
+            "title": "Invoked Scripts",
+            "slug": "invoked-scripts",
+            "line": 35,
+            "parent_title": "DB Integration \u2014 run_fault_diagnostics_overview.py",
+            "parent_slug": "db-integration-runfaultdiagnosticsoverviewpy"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 45,
+            "parent_title": "DB Integration \u2014 run_fault_diagnostics_overview.py",
+            "parent_slug": "db-integration-runfaultdiagnosticsoverviewpy"
+          },
+          {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 68,
+            "parent_title": "DB Integration \u2014 run_fault_diagnostics_overview.py",
+            "parent_slug": "db-integration-runfaultdiagnosticsoverviewpy"
+          },
+          {
+            "title": "Table Mapping (Intent)",
+            "slug": "table-mapping-intent",
+            "line": 102,
+            "parent_title": "DB Integration \u2014 run_fault_diagnostics_overview.py",
+            "parent_slug": "db-integration-runfaultdiagnosticsoverviewpy"
+          },
+          {
+            "title": "Human Notes",
+            "slug": "human-notes",
+            "line": 130,
+            "parent_title": "DB Integration \u2014 run_fault_diagnostics_overview.py",
+            "parent_slug": "db-integration-runfaultdiagnosticsoverviewpy"
+          },
+          {
+            "title": "Reference Prompts",
+            "slug": "reference-prompts",
+            "line": 139,
+            "parent_title": "DB Integration \u2014 run_fault_diagnostics_overview.py",
+            "parent_slug": "db-integration-runfaultdiagnosticsoverviewpy"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 145,
+            "parent_title": "DB Integration \u2014 run_fault_diagnostics_overview.py",
+            "parent_slug": "db-integration-runfaultdiagnosticsoverviewpy"
+          }
+        ],
+        "links": [],
+        "description": "The orchestrator coordinates execution of the following upstream scripts:",
+        "size_bytes": 6886,
+        "modified_utc": "2026-01-02T13:11:37.023673+00:00",
+        "tags": [
+          "db-integration",
+          "orchestrator",
+          "healthview",
+          "fault-diagnostics"
+        ],
+        "owners": [
+          "repo_studios_ai"
+        ],
+        "status": "draft",
+        "frontmatter": {
+          "title": "DB Integration \u2014 run_fault_diagnostics_overview.py",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "role": [
+            "DBIntegrationDoc"
+          ],
+          "owners": [
+            "repo_studios_ai"
+          ],
+          "status": "draft",
+          "version": 1,
+          "updated_at": "2025-01-02",
+          "tags": [
+            "db-integration",
+            "orchestrator",
+            "healthview",
+            "fault-diagnostics"
+          ],
+          "related_files": [
+            ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py",
+            ".repo_studios/command_center/scripts/utilities/list_db_markers.py"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_fault_run_analysis.md",
+        "slug": "db-integration-fault-run-analysis-utility",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Fault Run Analysis Utility",
+            "slug": "db-integration-fault-run-analysis-utility",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Fault Run Analysis Utility",
+            "parent_slug": "db-integration-fault-run-analysis-utility"
+          },
+          {
+            "title": "Purpose",
+            "slug": "purpose",
+            "line": 10,
+            "parent_title": "DB Integration: Fault Run Analysis Utility",
+            "parent_slug": "db-integration-fault-run-analysis-utility"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 14,
+            "parent_title": "DB Integration: Fault Run Analysis Utility",
+            "parent_slug": "db-integration-fault-run-analysis-utility"
+          },
+          {
+            "title": "Consumers",
+            "slug": "consumers",
+            "line": 58,
+            "parent_title": "DB Integration: Fault Run Analysis Utility",
+            "parent_slug": "db-integration-fault-run-analysis-utility"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 63,
+            "parent_title": "DB Integration: Fault Run Analysis Utility",
+            "parent_slug": "db-integration-fault-run-analysis-utility"
+          }
+        ],
+        "links": [],
+        "description": "Shared helpers for faulthandler run analysis. Centralizes logic for parsing faulthandler stack dumps so both producer and consumer scripts can reuse the same data model.",
+        "size_bytes": 2002,
+        "modified_utc": "2026-01-02T13:59:06.584832+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_faulthandler_runtime.md",
+        "slug": "db-integration-faulthandler-runtime-configuration",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Faulthandler Runtime Configuration",
+            "slug": "db-integration-faulthandler-runtime-configuration",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Faulthandler Runtime Configuration",
+            "parent_slug": "db-integration-faulthandler-runtime-configuration"
+          },
+          {
+            "title": "Purpose",
+            "slug": "purpose",
+            "line": 11,
+            "parent_title": "DB Integration: Faulthandler Runtime Configuration",
+            "parent_slug": "db-integration-faulthandler-runtime-configuration"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 15,
+            "parent_title": "DB Integration: Faulthandler Runtime Configuration",
+            "parent_slug": "db-integration-faulthandler-runtime-configuration"
+          },
+          {
+            "title": "Library Integration",
+            "slug": "library-integration",
+            "line": 46,
+            "parent_title": "DB Integration: Faulthandler Runtime Configuration",
+            "parent_slug": "db-integration-faulthandler-runtime-configuration"
+          },
+          {
+            "title": "Warning Filters",
+            "slug": "warning-filters",
+            "line": 51,
+            "parent_title": "DB Integration: Faulthandler Runtime Configuration",
+            "parent_slug": "db-integration-faulthandler-runtime-configuration"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 57,
+            "parent_title": "DB Integration: Faulthandler Runtime Configuration",
+            "parent_slug": "db-integration-faulthandler-runtime-configuration"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 61,
+            "parent_title": "DB Integration: Faulthandler Runtime Configuration",
+            "parent_slug": "db-integration-faulthandler-runtime-configuration"
+          }
+        ],
+        "links": [],
+        "description": "Faulthandler bootstrap and runtime configuration helpers. Keeps historical sitecustomize side effects but routes faulthandler setup through testable helpers for safe retention, manifests, and import-time behaviour testing.",
+        "size_bytes": 2034,
+        "modified_utc": "2026-01-02T13:59:06.582150+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_faulthandler_snapshot.md",
+        "slug": "db-integration-faulthandler-snapshot-utility",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Faulthandler Snapshot Utility",
+            "slug": "db-integration-faulthandler-snapshot-utility",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Faulthandler Snapshot Utility",
+            "parent_slug": "db-integration-faulthandler-snapshot-utility"
+          },
+          {
+            "title": "Purpose",
+            "slug": "purpose",
+            "line": 11,
+            "parent_title": "DB Integration: Faulthandler Snapshot Utility",
+            "parent_slug": "db-integration-faulthandler-snapshot-utility"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 15,
+            "parent_title": "DB Integration: Faulthandler Snapshot Utility",
+            "parent_slug": "db-integration-faulthandler-snapshot-utility"
+          },
+          {
+            "title": "Invocation",
+            "slug": "invocation",
+            "line": 38,
+            "parent_title": "DB Integration: Faulthandler Snapshot Utility",
+            "parent_slug": "db-integration-faulthandler-snapshot-utility"
+          },
+          {
+            "title": "Library Integration",
+            "slug": "library-integration",
+            "line": 46,
+            "parent_title": "DB Integration: Faulthandler Snapshot Utility",
+            "parent_slug": "db-integration-faulthandler-snapshot-utility"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 51,
+            "parent_title": "DB Integration: Faulthandler Snapshot Utility",
+            "parent_slug": "db-integration-faulthandler-snapshot-utility"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 55,
+            "parent_title": "DB Integration: Faulthandler Snapshot Utility",
+            "parent_slug": "db-integration-faulthandler-snapshot-utility"
+          }
+        ],
+        "links": [],
+        "description": "Emits structured faulthandler snapshot bundles. Replaces legacy best-effort stderr dump with structured artifacts for downstream tooling to ingest on-demand stack captures.",
+        "size_bytes": 1947,
+        "modified_utc": "2026-01-02T13:59:06.582150+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_full_diagnostic.md",
+        "slug": "db-integration-full-diagnostic-meta-orchestrator",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Full Diagnostic Meta-Orchestrator",
+            "slug": "db-integration-full-diagnostic-meta-orchestrator",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Full Diagnostic Meta-Orchestrator",
+            "parent_slug": "db-integration-full-diagnostic-meta-orchestrator"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 12,
+            "parent_title": "DB Integration: Full Diagnostic Meta-Orchestrator",
+            "parent_slug": "db-integration-full-diagnostic-meta-orchestrator"
+          },
+          {
+            "title": "Topic Definitions",
+            "slug": "topic-definitions",
+            "line": 36,
+            "parent_title": "DB Integration: Full Diagnostic Meta-Orchestrator",
+            "parent_slug": "db-integration-full-diagnostic-meta-orchestrator"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 49,
+            "parent_title": "DB Integration: Full Diagnostic Meta-Orchestrator",
+            "parent_slug": "db-integration-full-diagnostic-meta-orchestrator"
+          },
+          {
+            "title": "Storage Integration",
+            "slug": "storage-integration",
+            "line": 63,
+            "parent_title": "DB Integration: Full Diagnostic Meta-Orchestrator",
+            "parent_slug": "db-integration-full-diagnostic-meta-orchestrator"
+          },
+          {
+            "title": "Invocation Pattern",
+            "slug": "invocation-pattern",
+            "line": 69,
+            "parent_title": "DB Integration: Full Diagnostic Meta-Orchestrator",
+            "parent_slug": "db-integration-full-diagnostic-meta-orchestrator"
+          },
+          {
+            "title": "Execution Behavior",
+            "slug": "execution-behavior",
+            "line": 98,
+            "parent_title": "DB Integration: Full Diagnostic Meta-Orchestrator",
+            "parent_slug": "db-integration-full-diagnostic-meta-orchestrator"
+          },
+          {
+            "title": "Topic Run Record",
+            "slug": "topic-run-record",
+            "line": 105,
+            "parent_title": "DB Integration: Full Diagnostic Meta-Orchestrator",
+            "parent_slug": "db-integration-full-diagnostic-meta-orchestrator"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 120,
+            "parent_title": "DB Integration: Full Diagnostic Meta-Orchestrator",
+            "parent_slug": "db-integration-full-diagnostic-meta-orchestrator"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 125,
+            "parent_title": "DB Integration: Full Diagnostic Meta-Orchestrator",
+            "parent_slug": "db-integration-full-diagnostic-meta-orchestrator"
+          }
+        ],
+        "links": [],
+        "description": "The meta-orchestrator sequentially executes the following topic orchestrators:",
+        "size_bytes": 4898,
+        "modified_utc": "2026-01-02T13:59:06.578202+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
         "contains_placeholder": false
       },
       {
@@ -3462,8 +4614,8 @@
         ],
         "links": [],
         "description": null,
-        "size_bytes": 3543,
-        "modified_utc": "2025-12-28T23:09:07.267341+00:00",
+        "size_bytes": 3535,
+        "modified_utc": "2026-01-02T12:21:24.121698+00:00",
         "tags": [
           "db-integration",
           "aggregator",
@@ -3670,8 +4822,8 @@
         ],
         "links": [],
         "description": null,
-        "size_bytes": 3199,
-        "modified_utc": "2025-12-28T23:09:07.272592+00:00",
+        "size_bytes": 3202,
+        "modified_utc": "2026-01-02T12:21:24.126703+00:00",
         "tags": [
           "db-integration",
           "producer",
@@ -3815,6 +4967,71 @@
       },
       {
         "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_import_boundaries.md",
+        "slug": "db-integration-import-boundaries-validator",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Import Boundaries Validator",
+            "slug": "db-integration-import-boundaries-validator",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Import Boundaries Validator",
+            "parent_slug": "db-integration-import-boundaries-validator"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 12,
+            "parent_title": "DB Integration: Import Boundaries Validator",
+            "parent_slug": "db-integration-import-boundaries-validator"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 42,
+            "parent_title": "DB Integration: Import Boundaries Validator",
+            "parent_slug": "db-integration-import-boundaries-validator"
+          },
+          {
+            "title": "Storage Integration",
+            "slug": "storage-integration",
+            "line": 55,
+            "parent_title": "DB Integration: Import Boundaries Validator",
+            "parent_slug": "db-integration-import-boundaries-validator"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 60,
+            "parent_title": "DB Integration: Import Boundaries Validator",
+            "parent_slug": "db-integration-import-boundaries-validator"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 65,
+            "parent_title": "DB Integration: Import Boundaries Validator",
+            "parent_slug": "db-integration-import-boundaries-validator"
+          }
+        ],
+        "links": [],
+        "description": null,
+        "size_bytes": 2219,
+        "modified_utc": "2026-01-02T13:59:06.586785+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
         "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_import_graph.md",
         "slug": "db-integration-import-graph-healthviewimportgraph",
         "h1_headings": [
@@ -3870,8 +5087,8 @@
         ],
         "links": [],
         "description": "Define the database-facing contract for the Import Graph producer so dual-write storage can persist the run metadata, summary markdown, and telemetry payload in a stable schema.",
-        "size_bytes": 2790,
-        "modified_utc": "2025-12-28T23:53:05.124812+00:00",
+        "size_bytes": 2793,
+        "modified_utc": "2026-01-02T12:21:24.121698+00:00",
         "tags": [
           "db-integration",
           "healthview",
@@ -3972,8 +5189,8 @@
         ],
         "links": [],
         "description": "The lizard producer writes its positional bundle under:",
-        "size_bytes": 1899,
-        "modified_utc": "2025-12-17T00:02:21.821596+00:00",
+        "size_bytes": 1903,
+        "modified_utc": "2026-01-02T12:21:24.121698+00:00",
         "tags": [
           "db-integration",
           "healthview",
@@ -4064,8 +5281,8 @@
         ],
         "links": [],
         "description": "Define the database-facing contract for the markdown anchor validation producer so dual-write storage can persist run metadata, summary markdown, and telemetry metrics.",
-        "size_bytes": 2941,
-        "modified_utc": "2025-12-28T23:53:05.127552+00:00",
+        "size_bytes": 2944,
+        "modified_utc": "2026-01-02T12:21:24.126703+00:00",
         "tags": [
           "db-integration",
           "healthview",
@@ -4167,7 +5384,7 @@
         "links": [],
         "description": "The producer emits canonical positional bundles under:",
         "size_bytes": 2082,
-        "modified_utc": "2025-12-18T16:04:05.596021+00:00",
+        "modified_utc": "2026-01-02T12:21:24.126703+00:00",
         "tags": [
           "db-integration",
           "producer",
@@ -4205,6 +5422,380 @@
             "REPORT_NAMING_STANDARDS.md"
           ]
         },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_monkey_patch_classification.md",
+        "slug": "db-integration-monkey-patch-classification-consumer",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Monkey Patch Classification Consumer",
+            "slug": "db-integration-monkey-patch-classification-consumer",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Monkey Patch Classification Consumer",
+            "parent_slug": "db-integration-monkey-patch-classification-consumer"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 10,
+            "parent_title": "DB Integration: Monkey Patch Classification Consumer",
+            "parent_slug": "db-integration-monkey-patch-classification-consumer"
+          },
+          {
+            "title": "Risk Classification",
+            "slug": "risk-classification",
+            "line": 39,
+            "parent_title": "DB Integration: Monkey Patch Classification Consumer",
+            "parent_slug": "db-integration-monkey-patch-classification-consumer"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 47,
+            "parent_title": "DB Integration: Monkey Patch Classification Consumer",
+            "parent_slug": "db-integration-monkey-patch-classification-consumer"
+          },
+          {
+            "title": "Invocation Pattern",
+            "slug": "invocation-pattern",
+            "line": 58,
+            "parent_title": "DB Integration: Monkey Patch Classification Consumer",
+            "parent_slug": "db-integration-monkey-patch-classification-consumer"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 72,
+            "parent_title": "DB Integration: Monkey Patch Classification Consumer",
+            "parent_slug": "db-integration-monkey-patch-classification-consumer"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 77,
+            "parent_title": "DB Integration: Monkey Patch Classification Consumer",
+            "parent_slug": "db-integration-monkey-patch-classification-consumer"
+          }
+        ],
+        "links": [],
+        "description": "Invoked by `run_monkey_patch_oversight.py` unless `--skip-consumer` is passed.",
+        "size_bytes": 2773,
+        "modified_utc": "2026-01-02T13:43:58.010748+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_monkey_patch_oversight.md",
+        "slug": "db-integration-monkey-patch-oversight-orchestrator",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Monkey Patch Oversight Orchestrator",
+            "slug": "db-integration-monkey-patch-oversight-orchestrator",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Monkey Patch Oversight Orchestrator",
+            "parent_slug": "db-integration-monkey-patch-oversight-orchestrator"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 13,
+            "parent_title": "DB Integration: Monkey Patch Oversight Orchestrator",
+            "parent_slug": "db-integration-monkey-patch-oversight-orchestrator"
+          },
+          {
+            "title": "Invoked Scripts",
+            "slug": "invoked-scripts",
+            "line": 74,
+            "parent_title": "DB Integration: Monkey Patch Oversight Orchestrator",
+            "parent_slug": "db-integration-monkey-patch-oversight-orchestrator"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 87,
+            "parent_title": "DB Integration: Monkey Patch Oversight Orchestrator",
+            "parent_slug": "db-integration-monkey-patch-oversight-orchestrator"
+          },
+          {
+            "title": "Storage Integration",
+            "slug": "storage-integration",
+            "line": 118,
+            "parent_title": "DB Integration: Monkey Patch Oversight Orchestrator",
+            "parent_slug": "db-integration-monkey-patch-oversight-orchestrator"
+          },
+          {
+            "title": "Invocation Pattern",
+            "slug": "invocation-pattern",
+            "line": 124,
+            "parent_title": "DB Integration: Monkey Patch Oversight Orchestrator",
+            "parent_slug": "db-integration-monkey-patch-oversight-orchestrator"
+          },
+          {
+            "title": "Runtime",
+            "slug": "runtime",
+            "line": 144,
+            "parent_title": "DB Integration: Monkey Patch Oversight Orchestrator",
+            "parent_slug": "db-integration-monkey-patch-oversight-orchestrator"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 149,
+            "parent_title": "DB Integration: Monkey Patch Oversight Orchestrator",
+            "parent_slug": "db-integration-monkey-patch-oversight-orchestrator"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 154,
+            "parent_title": "DB Integration: Monkey Patch Oversight Orchestrator",
+            "parent_slug": "db-integration-monkey-patch-oversight-orchestrator"
+          }
+        ],
+        "links": [],
+        "description": null,
+        "size_bytes": 6228,
+        "modified_utc": "2026-01-02T13:43:58.025099+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_monkey_patch_overview.md",
+        "slug": "db-integration-monkey-patch-overview-summarizer",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Monkey Patch Overview Summarizer",
+            "slug": "db-integration-monkey-patch-overview-summarizer",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Monkey Patch Overview Summarizer",
+            "parent_slug": "db-integration-monkey-patch-overview-summarizer"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 12,
+            "parent_title": "DB Integration: Monkey Patch Overview Summarizer",
+            "parent_slug": "db-integration-monkey-patch-overview-summarizer"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 51,
+            "parent_title": "DB Integration: Monkey Patch Overview Summarizer",
+            "parent_slug": "db-integration-monkey-patch-overview-summarizer"
+          },
+          {
+            "title": "Storage Integration",
+            "slug": "storage-integration",
+            "line": 72,
+            "parent_title": "DB Integration: Monkey Patch Overview Summarizer",
+            "parent_slug": "db-integration-monkey-patch-overview-summarizer"
+          },
+          {
+            "title": "Invocation Pattern",
+            "slug": "invocation-pattern",
+            "line": 77,
+            "parent_title": "DB Integration: Monkey Patch Overview Summarizer",
+            "parent_slug": "db-integration-monkey-patch-overview-summarizer"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 91,
+            "parent_title": "DB Integration: Monkey Patch Overview Summarizer",
+            "parent_slug": "db-integration-monkey-patch-overview-summarizer"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 96,
+            "parent_title": "DB Integration: Monkey Patch Overview Summarizer",
+            "parent_slug": "db-integration-monkey-patch-overview-summarizer"
+          }
+        ],
+        "links": [],
+        "description": "Invoked by `run_monkey_patch_oversight.py` unless `--skip-summarizer` is passed.",
+        "size_bytes": 3967,
+        "modified_utc": "2026-01-02T13:43:58.025099+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_monkey_patch_risk.md",
+        "slug": "db-integration-monkey-patch-risk-utility",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Monkey Patch Risk Utility",
+            "slug": "db-integration-monkey-patch-risk-utility",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Monkey Patch Risk Utility",
+            "parent_slug": "db-integration-monkey-patch-risk-utility"
+          },
+          {
+            "title": "Purpose",
+            "slug": "purpose",
+            "line": 10,
+            "parent_title": "DB Integration: Monkey Patch Risk Utility",
+            "parent_slug": "db-integration-monkey-patch-risk-utility"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 14,
+            "parent_title": "DB Integration: Monkey Patch Risk Utility",
+            "parent_slug": "db-integration-monkey-patch-risk-utility"
+          },
+          {
+            "title": "Risk Classification Rules",
+            "slug": "risk-classification-rules",
+            "line": 36,
+            "parent_title": "DB Integration: Monkey Patch Risk Utility",
+            "parent_slug": "db-integration-monkey-patch-risk-utility"
+          },
+          {
+            "title": "Usage Pattern",
+            "slug": "usage-pattern",
+            "line": 57,
+            "parent_title": "DB Integration: Monkey Patch Risk Utility",
+            "parent_slug": "db-integration-monkey-patch-risk-utility"
+          },
+          {
+            "title": "Consumers",
+            "slug": "consumers",
+            "line": 73,
+            "parent_title": "DB Integration: Monkey Patch Risk Utility",
+            "parent_slug": "db-integration-monkey-patch-risk-utility"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 78,
+            "parent_title": "DB Integration: Monkey Patch Risk Utility",
+            "parent_slug": "db-integration-monkey-patch-risk-utility"
+          }
+        ],
+        "links": [],
+        "description": "Shared monkey patch risk classification helpers used by consumers and aggregators to emit consistent severity tiers for scanner findings.",
+        "size_bytes": 2605,
+        "modified_utc": "2026-01-02T13:43:58.025099+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_monkey_patch_trends.md",
+        "slug": "db-integration-monkey-patch-trends-aggregator",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Monkey Patch Trends Aggregator",
+            "slug": "db-integration-monkey-patch-trends-aggregator",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Monkey Patch Trends Aggregator",
+            "parent_slug": "db-integration-monkey-patch-trends-aggregator"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 10,
+            "parent_title": "DB Integration: Monkey Patch Trends Aggregator",
+            "parent_slug": "db-integration-monkey-patch-trends-aggregator"
+          },
+          {
+            "title": "Risk Levels Tracked",
+            "slug": "risk-levels-tracked",
+            "line": 48,
+            "parent_title": "DB Integration: Monkey Patch Trends Aggregator",
+            "parent_slug": "db-integration-monkey-patch-trends-aggregator"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 54,
+            "parent_title": "DB Integration: Monkey Patch Trends Aggregator",
+            "parent_slug": "db-integration-monkey-patch-trends-aggregator"
+          },
+          {
+            "title": "Invocation Pattern",
+            "slug": "invocation-pattern",
+            "line": 68,
+            "parent_title": "DB Integration: Monkey Patch Trends Aggregator",
+            "parent_slug": "db-integration-monkey-patch-trends-aggregator"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 82,
+            "parent_title": "DB Integration: Monkey Patch Trends Aggregator",
+            "parent_slug": "db-integration-monkey-patch-trends-aggregator"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 87,
+            "parent_title": "DB Integration: Monkey Patch Trends Aggregator",
+            "parent_slug": "db-integration-monkey-patch-trends-aggregator"
+          }
+        ],
+        "links": [],
+        "description": "Invoked by `run_monkey_patch_oversight.py` unless `--skip-aggregator` is passed.",
+        "size_bytes": 3088,
+        "modified_utc": "2026-01-02T13:43:58.025099+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
         "contains_placeholder": false
       },
       {
@@ -4258,7 +5849,7 @@
         "links": [],
         "description": null,
         "size_bytes": 2929,
-        "modified_utc": "2025-12-17T23:50:14.347407+00:00",
+        "modified_utc": "2026-01-02T12:21:24.126703+00:00",
         "tags": [
           "db",
           "integration",
@@ -4295,6 +5886,78 @@
             "../../../docs/automation/scan_monkey_patches.md"
           ]
         },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_mypy_baselines.md",
+        "slug": "db-integration-mypy-baselines-utility",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Mypy Baselines Utility",
+            "slug": "db-integration-mypy-baselines-utility",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Mypy Baselines Utility",
+            "parent_slug": "db-integration-mypy-baselines-utility"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 10,
+            "parent_title": "DB Integration: Mypy Baselines Utility",
+            "parent_slug": "db-integration-mypy-baselines-utility"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 35,
+            "parent_title": "DB Integration: Mypy Baselines Utility",
+            "parent_slug": "db-integration-mypy-baselines-utility"
+          },
+          {
+            "title": "Storage Integration",
+            "slug": "storage-integration",
+            "line": 45,
+            "parent_title": "DB Integration: Mypy Baselines Utility",
+            "parent_slug": "db-integration-mypy-baselines-utility"
+          },
+          {
+            "title": "Invocation Pattern",
+            "slug": "invocation-pattern",
+            "line": 51,
+            "parent_title": "DB Integration: Mypy Baselines Utility",
+            "parent_slug": "db-integration-mypy-baselines-utility"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 65,
+            "parent_title": "DB Integration: Mypy Baselines Utility",
+            "parent_slug": "db-integration-mypy-baselines-utility"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 70,
+            "parent_title": "DB Integration: Mypy Baselines Utility",
+            "parent_slug": "db-integration-mypy-baselines-utility"
+          }
+        ],
+        "links": [],
+        "description": "Invoked by `run_dependency_import_hygiene.py` when `--refresh-mypy-baselines` flag is passed.",
+        "size_bytes": 2197,
+        "modified_utc": "2026-01-02T13:43:58.010748+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
         "contains_placeholder": false
       },
       {
@@ -4354,8 +6017,8 @@
         ],
         "links": [],
         "description": "Define the database-facing contract for the Inventory Overview producer so dual-write storage can persist run metadata, summary markdown, and telemetry payloads in a stable schema.",
-        "size_bytes": 3130,
-        "modified_utc": "2025-12-28T23:53:05.130171+00:00",
+        "size_bytes": 3133,
+        "modified_utc": "2026-01-02T12:21:24.126703+00:00",
         "tags": [
           "db-integration",
           "healthview",
@@ -4397,6 +6060,394 @@
             "REPORT_NAMING_STANDARDS.md"
           ]
         },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_standards_integrity.md",
+        "slug": "db-integration-standards-integrity-orchestrator",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Standards Integrity Orchestrator",
+            "slug": "db-integration-standards-integrity-orchestrator",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Standards Integrity Orchestrator",
+            "parent_slug": "db-integration-standards-integrity-orchestrator"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 13,
+            "parent_title": "DB Integration: Standards Integrity Orchestrator",
+            "parent_slug": "db-integration-standards-integrity-orchestrator"
+          },
+          {
+            "title": "Invoked Scripts",
+            "slug": "invoked-scripts",
+            "line": 54,
+            "parent_title": "DB Integration: Standards Integrity Orchestrator",
+            "parent_slug": "db-integration-standards-integrity-orchestrator"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 64,
+            "parent_title": "DB Integration: Standards Integrity Orchestrator",
+            "parent_slug": "db-integration-standards-integrity-orchestrator"
+          },
+          {
+            "title": "Storage Integration",
+            "slug": "storage-integration",
+            "line": 90,
+            "parent_title": "DB Integration: Standards Integrity Orchestrator",
+            "parent_slug": "db-integration-standards-integrity-orchestrator"
+          },
+          {
+            "title": "Invocation Pattern",
+            "slug": "invocation-pattern",
+            "line": 96,
+            "parent_title": "DB Integration: Standards Integrity Orchestrator",
+            "parent_slug": "db-integration-standards-integrity-orchestrator"
+          },
+          {
+            "title": "Runtime",
+            "slug": "runtime",
+            "line": 115,
+            "parent_title": "DB Integration: Standards Integrity Orchestrator",
+            "parent_slug": "db-integration-standards-integrity-orchestrator"
+          },
+          {
+            "title": "Supersedes",
+            "slug": "supersedes",
+            "line": 120,
+            "parent_title": "DB Integration: Standards Integrity Orchestrator",
+            "parent_slug": "db-integration-standards-integrity-orchestrator"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 125,
+            "parent_title": "DB Integration: Standards Integrity Orchestrator",
+            "parent_slug": "db-integration-standards-integrity-orchestrator"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 130,
+            "parent_title": "DB Integration: Standards Integrity Orchestrator",
+            "parent_slug": "db-integration-standards-integrity-orchestrator"
+          }
+        ],
+        "links": [],
+        "description": null,
+        "size_bytes": 5509,
+        "modified_utc": "2026-01-02T13:59:06.578202+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_standards_prompts.md",
+        "slug": "db-integration-standards-prompt-seeds-producer",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Standards Prompt Seeds Producer",
+            "slug": "db-integration-standards-prompt-seeds-producer",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Standards Prompt Seeds Producer",
+            "parent_slug": "db-integration-standards-prompt-seeds-producer"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 11,
+            "parent_title": "DB Integration: Standards Prompt Seeds Producer",
+            "parent_slug": "db-integration-standards-prompt-seeds-producer"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 40,
+            "parent_title": "DB Integration: Standards Prompt Seeds Producer",
+            "parent_slug": "db-integration-standards-prompt-seeds-producer"
+          },
+          {
+            "title": "Storage Integration",
+            "slug": "storage-integration",
+            "line": 54,
+            "parent_title": "DB Integration: Standards Prompt Seeds Producer",
+            "parent_slug": "db-integration-standards-prompt-seeds-producer"
+          },
+          {
+            "title": "Invocation Pattern",
+            "slug": "invocation-pattern",
+            "line": 59,
+            "parent_title": "DB Integration: Standards Prompt Seeds Producer",
+            "parent_slug": "db-integration-standards-prompt-seeds-producer"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 74,
+            "parent_title": "DB Integration: Standards Prompt Seeds Producer",
+            "parent_slug": "db-integration-standards-prompt-seeds-producer"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 79,
+            "parent_title": "DB Integration: Standards Prompt Seeds Producer",
+            "parent_slug": "db-integration-standards-prompt-seeds-producer"
+          }
+        ],
+        "links": [],
+        "description": "Invoked by `run_standards_integrity.py` as part of the standards pipeline.",
+        "size_bytes": 2775,
+        "modified_utc": "2026-01-02T13:59:06.578202+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_standards_rules.md",
+        "slug": "db-integration-standards-rules-extractor",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Standards Rules Extractor",
+            "slug": "db-integration-standards-rules-extractor",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Standards Rules Extractor",
+            "parent_slug": "db-integration-standards-rules-extractor"
+          },
+          {
+            "title": "Purpose",
+            "slug": "purpose",
+            "line": 10,
+            "parent_title": "DB Integration: Standards Rules Extractor",
+            "parent_slug": "db-integration-standards-rules-extractor"
+          },
+          {
+            "title": "Supported Patterns",
+            "slug": "supported-patterns",
+            "line": 14,
+            "parent_title": "DB Integration: Standards Rules Extractor",
+            "parent_slug": "db-integration-standards-rules-extractor"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 44,
+            "parent_title": "DB Integration: Standards Rules Extractor",
+            "parent_slug": "db-integration-standards-rules-extractor"
+          },
+          {
+            "title": "ParsedRule Dataclass",
+            "slug": "parsedrule-dataclass",
+            "line": 67,
+            "parent_title": "DB Integration: Standards Rules Extractor",
+            "parent_slug": "db-integration-standards-rules-extractor"
+          },
+          {
+            "title": "Design Notes",
+            "slug": "design-notes",
+            "line": 83,
+            "parent_title": "DB Integration: Standards Rules Extractor",
+            "parent_slug": "db-integration-standards-rules-extractor"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 89,
+            "parent_title": "DB Integration: Standards Rules Extractor",
+            "parent_slug": "db-integration-standards-rules-extractor"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 93,
+            "parent_title": "DB Integration: Standards Rules Extractor",
+            "parent_slug": "db-integration-standards-rules-extractor"
+          }
+        ],
+        "links": [],
+        "description": "Heuristic standards extraction (Phase v0). Parses structured marker blocks and simple heading-based rule patterns from Markdown source documents to propose standards rules.",
+        "size_bytes": 2239,
+        "modified_utc": "2026-01-02T13:59:06.586785+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_summarize_health_suite.md",
+        "slug": "db-integration-health-suite-summarizer",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Health Suite Summarizer",
+            "slug": "db-integration-health-suite-summarizer",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Health Suite Summarizer",
+            "parent_slug": "db-integration-health-suite-summarizer"
+          },
+          {
+            "title": "Purpose",
+            "slug": "purpose",
+            "line": 13,
+            "parent_title": "DB Integration: Health Suite Summarizer",
+            "parent_slug": "db-integration-health-suite-summarizer"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 22,
+            "parent_title": "DB Integration: Health Suite Summarizer",
+            "parent_slug": "db-integration-health-suite-summarizer"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 46,
+            "parent_title": "DB Integration: Health Suite Summarizer",
+            "parent_slug": "db-integration-health-suite-summarizer"
+          },
+          {
+            "title": "Storage Integration",
+            "slug": "storage-integration",
+            "line": 58,
+            "parent_title": "DB Integration: Health Suite Summarizer",
+            "parent_slug": "db-integration-health-suite-summarizer"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 63,
+            "parent_title": "DB Integration: Health Suite Summarizer",
+            "parent_slug": "db-integration-health-suite-summarizer"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 67,
+            "parent_title": "DB Integration: Health Suite Summarizer",
+            "parent_slug": "db-integration-health-suite-summarizer"
+          }
+        ],
+        "links": [],
+        "description": "Composes a compact summary markdown from multiple producer/aggregator outputs:",
+        "size_bytes": 2421,
+        "modified_utc": "2026-01-02T13:59:06.588793+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_summarize_standards.md",
+        "slug": "db-integration-standards-summarizer",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Standards Summarizer",
+            "slug": "db-integration-standards-summarizer",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Standards Summarizer",
+            "parent_slug": "db-integration-standards-summarizer"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 12,
+            "parent_title": "DB Integration: Standards Summarizer",
+            "parent_slug": "db-integration-standards-summarizer"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 45,
+            "parent_title": "DB Integration: Standards Summarizer",
+            "parent_slug": "db-integration-standards-summarizer"
+          },
+          {
+            "title": "Storage Integration",
+            "slug": "storage-integration",
+            "line": 58,
+            "parent_title": "DB Integration: Standards Summarizer",
+            "parent_slug": "db-integration-standards-summarizer"
+          },
+          {
+            "title": "Invocation Pattern",
+            "slug": "invocation-pattern",
+            "line": 63,
+            "parent_title": "DB Integration: Standards Summarizer",
+            "parent_slug": "db-integration-standards-summarizer"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 77,
+            "parent_title": "DB Integration: Standards Summarizer",
+            "parent_slug": "db-integration-standards-summarizer"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 82,
+            "parent_title": "DB Integration: Standards Summarizer",
+            "parent_slug": "db-integration-standards-summarizer"
+          }
+        ],
+        "links": [],
+        "description": "Invoked by `run_standards_integrity.py` as the final summarization step.",
+        "size_bytes": 2740,
+        "modified_utc": "2026-01-02T13:59:06.578202+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
         "contains_placeholder": false
       },
       {
@@ -4500,6 +6551,198 @@
       },
       {
         "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_test_execution_telemetry.md",
+        "slug": "db-integration-runtestexecutiontelemetrypy",
+        "h1_headings": [
+          {
+            "title": "DB Integration \u2014 run_test_execution_telemetry.py",
+            "slug": "db-integration-runtestexecutiontelemetrypy",
+            "line": 16
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Goals",
+            "slug": "goals",
+            "line": 21,
+            "parent_title": "DB Integration \u2014 run_test_execution_telemetry.py",
+            "parent_slug": "db-integration-runtestexecutiontelemetrypy"
+          },
+          {
+            "title": "System Context",
+            "slug": "system-context",
+            "line": 26,
+            "parent_title": "DB Integration \u2014 run_test_execution_telemetry.py",
+            "parent_slug": "db-integration-runtestexecutiontelemetrypy"
+          },
+          {
+            "title": "Invoked Scripts",
+            "slug": "invoked-scripts",
+            "line": 36,
+            "parent_title": "DB Integration \u2014 run_test_execution_telemetry.py",
+            "parent_slug": "db-integration-runtestexecutiontelemetrypy"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 49,
+            "parent_title": "DB Integration \u2014 run_test_execution_telemetry.py",
+            "parent_slug": "db-integration-runtestexecutiontelemetrypy"
+          },
+          {
+            "title": "Agent Instructions",
+            "slug": "agent-instructions",
+            "line": 73,
+            "parent_title": "DB Integration \u2014 run_test_execution_telemetry.py",
+            "parent_slug": "db-integration-runtestexecutiontelemetrypy"
+          },
+          {
+            "title": "Table Mapping (Intent)",
+            "slug": "table-mapping-intent",
+            "line": 117,
+            "parent_title": "DB Integration \u2014 run_test_execution_telemetry.py",
+            "parent_slug": "db-integration-runtestexecutiontelemetrypy"
+          },
+          {
+            "title": "Human Notes",
+            "slug": "human-notes",
+            "line": 153,
+            "parent_title": "DB Integration \u2014 run_test_execution_telemetry.py",
+            "parent_slug": "db-integration-runtestexecutiontelemetrypy"
+          },
+          {
+            "title": "Reference Prompts",
+            "slug": "reference-prompts",
+            "line": 162,
+            "parent_title": "DB Integration \u2014 run_test_execution_telemetry.py",
+            "parent_slug": "db-integration-runtestexecutiontelemetrypy"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 169,
+            "parent_title": "DB Integration \u2014 run_test_execution_telemetry.py",
+            "parent_slug": "db-integration-runtestexecutiontelemetrypy"
+          }
+        ],
+        "links": [],
+        "description": "The orchestrator coordinates execution of the following upstream scripts:",
+        "size_bytes": 8444,
+        "modified_utc": "2026-01-02T12:53:42.076399+00:00",
+        "tags": [
+          "db-integration",
+          "orchestrator",
+          "healthview",
+          "test-execution-telemetry"
+        ],
+        "owners": [
+          "repo_studios_ai"
+        ],
+        "status": "draft",
+        "frontmatter": {
+          "title": "DB Integration \u2014 run_test_execution_telemetry.py",
+          "audience": [
+            "Copilot",
+            "Agents",
+            "Developer"
+          ],
+          "role": [
+            "DBIntegrationDoc"
+          ],
+          "owners": [
+            "repo_studios_ai"
+          ],
+          "status": "draft",
+          "version": 1,
+          "updated_at": "2025-12-30",
+          "tags": [
+            "db-integration",
+            "orchestrator",
+            "healthview",
+            "test-execution-telemetry"
+          ],
+          "related_files": [
+            ".repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py",
+            ".repo_studios/command_center/scripts/utilities/list_db_markers.py"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_test_log_analysis.md",
+        "slug": "db-integration-test-log-analysis-library",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Test Log Analysis Library",
+            "slug": "db-integration-test-log-analysis-library",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Test Log Analysis Library",
+            "parent_slug": "db-integration-test-log-analysis-library"
+          },
+          {
+            "title": "Purpose",
+            "slug": "purpose",
+            "line": 9,
+            "parent_title": "DB Integration: Test Log Analysis Library",
+            "parent_slug": "db-integration-test-log-analysis-library"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 13,
+            "parent_title": "DB Integration: Test Log Analysis Library",
+            "parent_slug": "db-integration-test-log-analysis-library"
+          },
+          {
+            "title": "Parsing Capabilities",
+            "slug": "parsing-capabilities",
+            "line": 50,
+            "parent_title": "DB Integration: Test Log Analysis Library",
+            "parent_slug": "db-integration-test-log-analysis-library"
+          },
+          {
+            "title": "Consumers",
+            "slug": "consumers",
+            "line": 70,
+            "parent_title": "DB Integration: Test Log Analysis Library",
+            "parent_slug": "db-integration-test-log-analysis-library"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 75,
+            "parent_title": "DB Integration: Test Log Analysis Library",
+            "parent_slug": "db-integration-test-log-analysis-library"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 79,
+            "parent_title": "DB Integration: Test Log Analysis Library",
+            "parent_slug": "db-integration-test-log-analysis-library"
+          }
+        ],
+        "links": [],
+        "description": "Shared helpers for analyzing pytest log bundles. Provides data models and parsers for test health metrics, warnings, and slow test analysis.",
+        "size_bytes": 2089,
+        "modified_utc": "2026-01-02T13:59:06.588793+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
         "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_test_log_reports.md",
         "slug": "database-integration-documentation-test-log-reports",
         "h1_headings": [
@@ -4599,6 +6842,78 @@
       },
       {
         "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_typecheck_report.md",
+        "slug": "db-integration-typecheck-report-producer",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Typecheck Report Producer",
+            "slug": "db-integration-typecheck-report-producer",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Typecheck Report Producer",
+            "parent_slug": "db-integration-typecheck-report-producer"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 10,
+            "parent_title": "DB Integration: Typecheck Report Producer",
+            "parent_slug": "db-integration-typecheck-report-producer"
+          },
+          {
+            "title": "CLI Arguments",
+            "slug": "cli-arguments",
+            "line": 34,
+            "parent_title": "DB Integration: Typecheck Report Producer",
+            "parent_slug": "db-integration-typecheck-report-producer"
+          },
+          {
+            "title": "Storage Integration",
+            "slug": "storage-integration",
+            "line": 45,
+            "parent_title": "DB Integration: Typecheck Report Producer",
+            "parent_slug": "db-integration-typecheck-report-producer"
+          },
+          {
+            "title": "Invocation Pattern",
+            "slug": "invocation-pattern",
+            "line": 50,
+            "parent_title": "DB Integration: Typecheck Report Producer",
+            "parent_slug": "db-integration-typecheck-report-producer"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 65,
+            "parent_title": "DB Integration: Typecheck Report Producer",
+            "parent_slug": "db-integration-typecheck-report-producer"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 70,
+            "parent_title": "DB Integration: Typecheck Report Producer",
+            "parent_slug": "db-integration-typecheck-report-producer"
+          }
+        ],
+        "links": [],
+        "description": "Invoked by `run_dependency_import_hygiene.py` unless `--skip-typecheck` is passed.",
+        "size_bytes": 2574,
+        "modified_utc": "2026-01-02T13:43:58.010748+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
         "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_undocumented_logic.md",
         "slug": "undocumented-logic-db-integration",
         "h1_headings": [
@@ -4655,7 +6970,7 @@
         "links": [],
         "description": "abstraction.",
         "size_bytes": 2596,
-        "modified_utc": "2025-12-17T17:03:35.225241+00:00",
+        "modified_utc": "2026-01-02T12:21:24.126703+00:00",
         "tags": [
           "db-integration",
           "healthview",
@@ -4691,6 +7006,211 @@
           ]
         },
         "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integration_validate_inventory.md",
+        "slug": "db-integration-inventory-validator",
+        "h1_headings": [
+          {
+            "title": "DB Integration: Inventory Validator",
+            "slug": "db-integration-inventory-validator",
+            "line": 1
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Script Identity",
+            "slug": "script-identity",
+            "line": 3,
+            "parent_title": "DB Integration: Inventory Validator",
+            "parent_slug": "db-integration-inventory-validator"
+          },
+          {
+            "title": "I/O Contract",
+            "slug": "io-contract",
+            "line": 12,
+            "parent_title": "DB Integration: Inventory Validator",
+            "parent_slug": "db-integration-inventory-validator"
+          },
+          {
+            "title": "Storage Integration",
+            "slug": "storage-integration",
+            "line": 53,
+            "parent_title": "DB Integration: Inventory Validator",
+            "parent_slug": "db-integration-inventory-validator"
+          },
+          {
+            "title": "ValidationIssue Dataclass",
+            "slug": "validationissue-dataclass",
+            "line": 59,
+            "parent_title": "DB Integration: Inventory Validator",
+            "parent_slug": "db-integration-inventory-validator"
+          },
+          {
+            "title": "Dependencies",
+            "slug": "dependencies",
+            "line": 70,
+            "parent_title": "DB Integration: Inventory Validator",
+            "parent_slug": "db-integration-inventory-validator"
+          },
+          {
+            "title": "Notes",
+            "slug": "notes",
+            "line": 75,
+            "parent_title": "DB Integration: Inventory Validator",
+            "parent_slug": "db-integration-inventory-validator"
+          }
+        ],
+        "links": [],
+        "description": null,
+        "size_bytes": 2432,
+        "modified_utc": "2026-01-02T13:59:06.586785+00:00",
+        "tags": [],
+        "owners": [],
+        "status": null,
+        "frontmatter": null,
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/command_center/docs/db_integrations",
+        "filename": ".repo_studios/command_center/docs/db_integrations/db_integrations_master_list.md",
+        "slug": "db-integrations-master-list",
+        "h1_headings": [
+          {
+            "title": "DB Integrations Master List",
+            "slug": "db-integrations-master-list",
+            "line": 21
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "Overview",
+            "slug": "overview",
+            "line": 23,
+            "parent_title": "DB Integrations Master List",
+            "parent_slug": "db-integrations-master-list"
+          },
+          {
+            "title": "Verification Workflow (Multi-Pass Process)",
+            "slug": "verification-workflow-multi-pass-process",
+            "line": 45,
+            "parent_title": "DB Integrations Master List",
+            "parent_slug": "db-integrations-master-list"
+          },
+          {
+            "title": "Stage 1.1 \u2014 Test Execution Telemetry (7 scripts) \u2705 ALL PASSES COMPLETE",
+            "slug": "stage-11-test-execution-telemetry-7-scripts-all-passes-complete",
+            "line": 115,
+            "parent_title": "DB Integrations Master List",
+            "parent_slug": "db-integrations-master-list"
+          },
+          {
+            "title": "Stage 2.1 \u2014 Docs Health Overview (9 scripts) \u2705 ALL PASSES COMPLETE",
+            "slug": "stage-21-docs-health-overview-9-scripts-all-passes-complete",
+            "line": 133,
+            "parent_title": "DB Integrations Master List",
+            "parent_slug": "db-integrations-master-list"
+          },
+          {
+            "title": "Stage 3.1 \u2014 Fault Diagnostics Overview (4 scripts) \u2705 ALL PASSES COMPLETE",
+            "slug": "stage-31-fault-diagnostics-overview-4-scripts-all-passes-complete",
+            "line": 153,
+            "parent_title": "DB Integrations Master List",
+            "parent_slug": "db-integrations-master-list"
+          },
+          {
+            "title": "Stage 4.1 \u2014 Dependency & Import Hygiene (6 scripts) \u2705 ALL PASSES COMPLETE",
+            "slug": "stage-41-dependency-import-hygiene-6-scripts-all-passes-complete",
+            "line": 168,
+            "parent_title": "DB Integrations Master List",
+            "parent_slug": "db-integrations-master-list"
+          },
+          {
+            "title": "Stage 5.1 \u2014 Monkey Patch Oversight (6 scripts) \u2705 ALL PASSES COMPLETE",
+            "slug": "stage-51-monkey-patch-oversight-6-scripts-all-passes-complete",
+            "line": 185,
+            "parent_title": "DB Integrations Master List",
+            "parent_slug": "db-integrations-master-list"
+          },
+          {
+            "title": "Stage 6.1 \u2014 Standards Integrity (6 scripts) \u2705 ALL PASSES COMPLETE",
+            "slug": "stage-61-standards-integrity-6-scripts-all-passes-complete",
+            "line": 202,
+            "parent_title": "DB Integrations Master List",
+            "parent_slug": "db-integrations-master-list"
+          },
+          {
+            "title": "Stage 7 \u2014 Meta-Orchestrator (1 script) \u2705 ALL PASSES COMPLETE",
+            "slug": "stage-7-meta-orchestrator-1-script-all-passes-complete",
+            "line": 219,
+            "parent_title": "DB Integrations Master List",
+            "parent_slug": "db-integrations-master-list"
+          },
+          {
+            "title": "Stage 11.1 \u2014 Available Scripts (12 scripts) \u2705 ALL PASSES COMPLETE",
+            "slug": "stage-111-available-scripts-12-scripts-all-passes-complete",
+            "line": 231,
+            "parent_title": "DB Integrations Master List",
+            "parent_slug": "db-integrations-master-list"
+          },
+          {
+            "title": "Summary Statistics",
+            "slug": "summary-statistics",
+            "line": 254,
+            "parent_title": "DB Integrations Master List",
+            "parent_slug": "db-integrations-master-list"
+          },
+          {
+            "title": "Verification Log",
+            "slug": "verification-log",
+            "line": 270,
+            "parent_title": "DB Integrations Master List",
+            "parent_slug": "db-integrations-master-list"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 302,
+            "parent_title": "DB Integrations Master List",
+            "parent_slug": "db-integrations-master-list"
+          }
+        ],
+        "links": [],
+        "description": "Each stage undergoes a three-pass verification process with human review stops between passes.",
+        "size_bytes": 17793,
+        "modified_utc": "2026-01-02T13:59:06.578202+00:00",
+        "tags": [
+          "db-integration",
+          "healthview",
+          "pipeline",
+          "verification"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "draft",
+        "frontmatter": {
+          "title": "DB Integrations Master List",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "status": "draft",
+          "version": "1.0.0",
+          "updated": "2025-01-02",
+          "summary": "Central index of all HealthView pipeline scripts with db_integration file verification status. Source: tier1_healthview_orchestration_pipeline.md (Stages 1.1\u20137, 11.1).",
+          "tags": [
+            "db-integration",
+            "healthview",
+            "pipeline",
+            "verification"
+          ]
+        },
+        "contains_placeholder": true
       },
       {
         "folder": ".repo_studios/command_center/docs",
@@ -15276,8 +17796,8 @@
         ],
         "links": [],
         "description": "on pending work.",
-        "size_bytes": 7372,
-        "modified_utc": "2025-12-30T03:21:35.141690+00:00",
+        "size_bytes": 7588,
+        "modified_utc": "2026-01-02T14:06:26.252941+00:00",
         "tags": [
           "checkbox-report",
           "repo-todo"
@@ -15298,7 +17818,7 @@
           ],
           "status": "active",
           "version": 1.0,
-          "updated_at": "2025-12-29",
+          "updated_at": "2026-01-02",
           "tags": [
             "checkbox-report",
             "repo-todo"
@@ -15936,63 +18456,63 @@
           {
             "title": "8. Stage 5 \u2013 Technical Debt Oversight",
             "slug": "8-stage-5-technical-debt-oversight",
-            "line": 1047,
+            "line": 1049,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "9. Stage 6 \u2013 Process Governance",
             "slug": "9-stage-6-process-governance",
-            "line": 1205,
+            "line": 1202,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "10. Stage 7 \u2013 Running the Complete Suite",
             "slug": "10-stage-7-running-the-complete-suite",
-            "line": 1428,
+            "line": 1425,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "11. Stage 11 \u2013 Available Scripts (Holding Area)",
             "slug": "11-stage-11-available-scripts-holding-area",
-            "line": 1551,
+            "line": 1548,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "12. Snapshot & Stage Matrix",
             "slug": "12-snapshot-stage-matrix",
-            "line": 1652,
+            "line": 1649,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "13. Contradiction Registry",
             "slug": "13-contradiction-registry",
-            "line": 1725,
+            "line": 1722,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "14. Tier-2 Document Index",
             "slug": "14-tier-2-document-index",
-            "line": 1744,
+            "line": 1741,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "15. Working / Future Notes",
             "slug": "15-working-future-notes",
-            "line": 1794,
+            "line": 1791,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "16. Update Log & Evidence Tracking",
             "slug": "16-update-log-evidence-tracking",
-            "line": 1811,
+            "line": 1808,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           }
@@ -16059,9 +18579,13 @@
           "tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-003-generate_import_graph_reportpy",
           "tier3_scripts/dependency_import_hygiene/tier3_generate_import_graph_report.yaml",
           "tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-004-scan_code_placeholderspy",
+          "tier3_scripts/dependency_import_hygiene/tier3_scan_code_placeholders.yaml",
           "tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-005-generate_typecheck_reportpy",
+          "tier3_scripts/dependency_import_hygiene/tier3_generate_typecheck_report.yaml",
           "tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-006-refresh_mypy_baselinespy",
+          "tier3_scripts/dependency_import_hygiene/tier3_refresh_mypy_baselines.yaml",
           "tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-001-dependency-import-hygiene-orchestrator",
+          "tier3_scripts/dependency_import_hygiene/tier3_run_dependency_import_hygiene.yaml",
           "../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py",
           "tier2_roster/tier2_monkey_patch_oversight_roster.md#23-current-vs-target-contract-snapshot-stage-51",
           "tier2_roster/tier2_monkey_patch_oversight_roster.md#32-stop-gates-and-implementation-checklists",
@@ -16136,8 +18660,8 @@
           "../../../tests/tests_aggregators/"
         ],
         "description": "stage content so evidence capture is ready from the first edit.",
-        "size_bytes": 116224,
-        "modified_utc": "2026-01-02T02:52:33.700620+00:00",
+        "size_bytes": 116796,
+        "modified_utc": "2026-01-02T14:00:52.402689+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -16449,43 +18973,43 @@
           {
             "title": "4. Signals & Telemetry",
             "slug": "4-signals-telemetry",
-            "line": 1005,
+            "line": 1070,
             "parent_title": "Tier-2 Roster \u2014 Stage 4.1 Dependency & Import Hygiene",
             "parent_slug": "tier-2-roster-stage-41-dependency-import-hygiene"
           },
           {
             "title": "5. Dependencies & Stop-Gates",
             "slug": "5-dependencies-stop-gates",
-            "line": 1023,
+            "line": 1088,
             "parent_title": "Tier-2 Roster \u2014 Stage 4.1 Dependency & Import Hygiene",
             "parent_slug": "tier-2-roster-stage-41-dependency-import-hygiene"
           },
           {
             "title": "6. Instruction Block (Required by Tier Rules)",
             "slug": "6-instruction-block-required-by-tier-rules",
-            "line": 1044,
+            "line": 1109,
             "parent_title": "Tier-2 Roster \u2014 Stage 4.1 Dependency & Import Hygiene",
             "parent_slug": "tier-2-roster-stage-41-dependency-import-hygiene"
           },
           {
             "title": "7. Agent Automation Block",
             "slug": "7-agent-automation-block",
-            "line": 1056,
+            "line": 1121,
             "parent_title": "Tier-2 Roster \u2014 Stage 4.1 Dependency & Import Hygiene",
             "parent_slug": "tier-2-roster-stage-41-dependency-import-hygiene"
           },
           {
             "title": "8. Update Log",
             "slug": "8-update-log",
-            "line": 1085,
+            "line": 1150,
             "parent_title": "Tier-2 Roster \u2014 Stage 4.1 Dependency & Import Hygiene",
             "parent_slug": "tier-2-roster-stage-41-dependency-import-hygiene"
           }
         ],
         "links": [],
         "description": "`tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 41161,
-        "modified_utc": "2026-01-02T03:57:41.012320+00:00",
+        "size_bytes": 44594,
+        "modified_utc": "2026-01-02T12:58:11.286112+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -16574,35 +19098,35 @@
           {
             "title": "4. Signals & Telemetry",
             "slug": "4-signals-telemetry",
-            "line": 1663,
+            "line": 1705,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "5. Dependencies & Stop-Gates",
             "slug": "5-dependencies-stop-gates",
-            "line": 1681,
+            "line": 1723,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "6. Instruction Block (Required by Tier Rules)",
             "slug": "6-instruction-block-required-by-tier-rules",
-            "line": 1702,
+            "line": 1744,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "7. Agent Automation Block",
             "slug": "7-agent-automation-block",
-            "line": 1714,
+            "line": 1756,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "8. Update Log",
             "slug": "8-update-log",
-            "line": 1745,
+            "line": 1787,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           }
@@ -16619,8 +19143,8 @@
           "#s21r-009-aggregate-docs-health-signals"
         ],
         "description": "`tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 70431,
-        "modified_utc": "2025-12-31T17:27:08.142612+00:00",
+        "size_bytes": 70493,
+        "modified_utc": "2026-01-02T13:43:48.641332+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -17096,35 +19620,35 @@
           {
             "title": "4. Signals & Telemetry",
             "slug": "4-signals-telemetry",
-            "line": 814,
+            "line": 844,
             "parent_title": "Tier-2 Roster \u2014 Stage 5.1 Monkey Patch Oversight",
             "parent_slug": "tier-2-roster-stage-51-monkey-patch-oversight"
           },
           {
             "title": "5. Dependencies & Stop-Gates",
             "slug": "5-dependencies-stop-gates",
-            "line": 832,
+            "line": 862,
             "parent_title": "Tier-2 Roster \u2014 Stage 5.1 Monkey Patch Oversight",
             "parent_slug": "tier-2-roster-stage-51-monkey-patch-oversight"
           },
           {
             "title": "6. Instruction Block (Required by Tier Rules)",
             "slug": "6-instruction-block-required-by-tier-rules",
-            "line": 853,
+            "line": 883,
             "parent_title": "Tier-2 Roster \u2014 Stage 5.1 Monkey Patch Oversight",
             "parent_slug": "tier-2-roster-stage-51-monkey-patch-oversight"
           },
           {
             "title": "7. Agent Automation Block",
             "slug": "7-agent-automation-block",
-            "line": 865,
+            "line": 895,
             "parent_title": "Tier-2 Roster \u2014 Stage 5.1 Monkey Patch Oversight",
             "parent_slug": "tier-2-roster-stage-51-monkey-patch-oversight"
           },
           {
             "title": "8. Update Log",
             "slug": "8-update-log",
-            "line": 894,
+            "line": 924,
             "parent_title": "Tier-2 Roster \u2014 Stage 5.1 Monkey Patch Oversight",
             "parent_slug": "tier-2-roster-stage-51-monkey-patch-oversight"
           }
@@ -17138,8 +19662,8 @@
           "#s51r-006-risk-classification-utility"
         ],
         "description": "`tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 32850,
-        "modified_utc": "2025-12-28T17:36:39.744447+00:00",
+        "size_bytes": 35365,
+        "modified_utc": "2026-01-02T14:00:42.545492+00:00",
         "tags": [
           "pipeline",
           "healthview",

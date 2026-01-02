@@ -20,7 +20,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable, Sequence
+from typing import Any, Callable, Iterable, Sequence, cast
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
 if str(LIBRARIES_ROOT) not in sys.path:
@@ -35,6 +35,7 @@ from libraries import (
     ReportArtifact,
     TopicContext,
     TopicStep,
+    TopicStepOutcome,
     build_pipeline_telemetry,
     build_standard_options,
     build_standard_paths,
@@ -323,7 +324,7 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
 
 
 def _normalize_sequence(values: Iterable[str] | None) -> tuple[str, ...]:
@@ -367,7 +368,7 @@ def configure_logging(level: str) -> None:
     logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
 
 
-def _load_callable(script_path: Path, module_name: str, attribute: str):
+def _load_callable(script_path: Path, module_name: str, attribute: str) -> Callable[..., Any]:
     script_path = script_path.resolve()
     if module_name in sys.modules:
         module = sys.modules[module_name]
@@ -381,10 +382,10 @@ def _load_callable(script_path: Path, module_name: str, attribute: str):
     func = getattr(module, attribute, None)
     if not callable(func):
         raise AttributeError(f"Module {module_name} missing callable {attribute}()")
-    return func
+    return cast(Callable[..., Any], func)
 
 
-def _invoke_main(func, argv: Sequence[str]) -> int:
+def _invoke_main(func: Callable[..., Any], argv: Sequence[str]) -> int:
     try:
         result = func(list(argv))
     except SystemExit as exc:  # pragma: no cover - defensive guard for argparse exits
@@ -903,7 +904,7 @@ def run(argv: Sequence[str] | None = None) -> int:
     typecheck_holder: dict[str, TypecheckOutcome | None] = {"value": None}
     baseline_holder: dict[str, BaselineOutcome | None] = {"value": None}
 
-    def dependency_step(ctx: TopicContext):
+    def dependency_step(ctx: TopicContext) -> TopicStepOutcome:
         outcome = _dependency_report(paths, options)
         dependency_holder["value"] = outcome
         ctx.add_metadata("dependency", outcome.payload)
@@ -919,7 +920,7 @@ def run(argv: Sequence[str] | None = None) -> int:
             return step_failed(detail=detail, payload=payload)
         return step_success(detail=detail, payload=payload)
 
-    def import_step(ctx: TopicContext):
+    def import_step(ctx: TopicContext) -> TopicStepOutcome:
         if options.skip_import_graph:
             return step_skipped(detail="import graph step skipped via flag")
         outcome = _import_graph_report(paths, options)
@@ -935,7 +936,7 @@ def run(argv: Sequence[str] | None = None) -> int:
             return step_failed(detail=detail, payload=payload)
         return step_success(detail=detail, payload=payload)
 
-    def placeholder_step(ctx: TopicContext):
+    def placeholder_step(ctx: TopicContext) -> TopicStepOutcome:
         outcome = _placeholder_scan(paths, options)
         placeholder_holder["value"] = outcome
         ctx.add_metadata("placeholder", outcome.payload)
@@ -945,7 +946,7 @@ def run(argv: Sequence[str] | None = None) -> int:
             return step_failed(detail="placeholder payload missing", payload=None)
         return step_success(detail=detail, payload=outcome.payload)
 
-    def cleanup_step(ctx: TopicContext):
+    def cleanup_step(ctx: TopicContext) -> TopicStepOutcome:
         if not options.trigger_batch_cleanup:
             return step_skipped(detail="batch cleanup skipped via flag")
         outcome = _batch_cleanup(paths, options)
@@ -959,7 +960,7 @@ def run(argv: Sequence[str] | None = None) -> int:
             return step_failed(detail=detail, payload=payload)
         return step_success(detail=detail, payload=payload)
 
-    def typecheck_step(ctx: TopicContext):
+    def typecheck_step(ctx: TopicContext) -> TopicStepOutcome:
         if options.skip_typecheck:
             return step_skipped(detail="typecheck skipped via flag")
         outcome = _typecheck_report(paths, options)
@@ -983,7 +984,7 @@ def run(argv: Sequence[str] | None = None) -> int:
             return step_failed(detail=detail, payload=payload)
         return step_success(detail=detail, payload=payload)
 
-    def baselines_step(ctx: TopicContext):
+    def baselines_step(ctx: TopicContext) -> TopicStepOutcome:
         if not options.refresh_mypy_baselines:
             return step_skipped(detail="baseline refresh not requested")
         outcome = _refresh_baselines(paths, options)

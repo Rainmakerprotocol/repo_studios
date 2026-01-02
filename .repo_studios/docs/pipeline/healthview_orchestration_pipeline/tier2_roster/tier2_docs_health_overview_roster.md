@@ -368,7 +368,9 @@ Workstream A — Discovery
 | `DEFAULT_AGGREGATOR_OUTPUT` | `.repo_studios/reports/aggregator_reports/docs_health_signals` | `.repo_studios/reports` |
 | Location | Lines 87-101 | Update to HOP |
 
-- **Test file:** `.repo_studios/tests/tests_command_center/docs_health/test_run_docs_health_overview.py` — no hardcoded legacy paths
+- **Test file:**
+  `.repo_studios/tests/tests_command_center/docs_health/test_run_docs_health_overview.py` —
+  no hardcoded legacy paths
 - **Entry point:** Uses `run(argv)` ✓
 
 Workstream B — Plan
@@ -377,16 +379,23 @@ Workstream B — Plan
 
 **Migration Plan (10 steps):**
 
-1. **Update DEFAULT_ANCHOR_INVENTORY_OUTPUT** — Line 88: Change from `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
-2. **Update DEFAULT_ANCHOR_VALIDATION_OUTPUT** — Line 89: Change from `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
-3. **Update DEFAULT_DOCS_INTEGRITY_OUTPUT** — Line 90: Change from `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
-4. **Update DEFAULT_METRICS_STUB_OUTPUT** — Line 91: Change from `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
-5. **Update DEFAULT_CHURN_OUTPUT** — Line 92: Change from `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
-6. **Update DEFAULT_UNDOCUMENTED_OUTPUT** — Line 93: Change from `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
-7. **Update DEFAULT_PLACEHOLDER_OUTPUT** — Lines 94-96: Remove `producer_reports/` prefix
-8. **Update DEFAULT_MONKEY_PATCH_OUTPUT** — Lines 97-99: Remove `producer_reports/` prefix
-9. **Update DEFAULT_AGGREGATOR_OUTPUT** — Lines 100-102: Change from `.repo_studios/reports/aggregator_reports/docs_health_signals` to `.repo_studios/reports`
-10. **Run tests** — `pytest -v tests/tests_command_center/docs_health/test_run_docs_health_overview.py`
+- **Update DEFAULT_ANCHOR_INVENTORY_OUTPUT** — Line 88: Change from
+  `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
+- **Update DEFAULT_ANCHOR_VALIDATION_OUTPUT** — Line 89: Change from
+  `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
+- **Update DEFAULT_DOCS_INTEGRITY_OUTPUT** — Line 90: Change from
+  `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
+- **Update DEFAULT_METRICS_STUB_OUTPUT** — Line 91: Change from
+  `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
+- **Update DEFAULT_CHURN_OUTPUT** — Line 92: Change from `.repo_studios/reports/producer_reports`
+  to `.repo_studios/reports`
+- **Update DEFAULT_UNDOCUMENTED_OUTPUT** — Line 93: Change from
+  `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
+- **Update DEFAULT_PLACEHOLDER_OUTPUT** — Lines 94-96: Remove `producer_reports/` prefix
+- **Update DEFAULT_MONKEY_PATCH_OUTPUT** — Lines 97-99: Remove `producer_reports/` prefix
+- **Update DEFAULT_AGGREGATOR_OUTPUT** — Lines 100-102: Change from
+  `.repo_studios/reports/aggregator_reports/docs_health_signals` to `.repo_studios/reports`
+- **Run tests** — `pytest -v tests/tests_command_center/docs_health/test_run_docs_health_overview.py`
 
 Note: `DEFAULT_DOC_INDEX_OUTPUT` (line 87) already uses HOP path — no change needed.
 
@@ -438,9 +447,12 @@ Workstream E — QA & Evidence
 - **Mypy:** Clean (no issues)
 - **Execution:** Bundle created at `.repo_studios/command_center/reports/healthview/docs_health/20251230-1743/`
 - **Artifacts:** manifest.json, summary.md, telemetry.json (3 files)
-- **Pipeline steps:** All 8 steps succeeded (doc-index, anchor-inventory, anchor-validation, docs-integrity, metrics-stub, code-doc-churn, undocumented-logic, aggregate)
+- **Pipeline steps:** All 8 steps succeeded (doc-index, anchor-inventory, anchor-validation,
+  docs-integrity, metrics-stub, code-doc-churn, undocumented-logic, aggregate)
 - **Overall score:** 33.73
-- **Coverage:** 61% — below 80% threshold; exception: orchestrator delegates to 8 producer/aggregator scripts (each with own coverage), tests verify orchestration logic via controlled mocks, not full execution paths
+- **Coverage:** 61% — below 80% threshold; exception: orchestrator delegates to 8
+  producer/aggregator scripts (each with own coverage), tests verify orchestration logic via
+  controlled mocks, not full execution paths
 
 - [x] DONE — run_docs_health_overview.py complete; update Tier-1 Stage 2.1 script gate
 
@@ -566,7 +578,8 @@ Workstream D — Tier-3 YAML
 
 - [x] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
 
-Decision: **create** Tier-3 YAML — `generate_doc_index.py` is the most frequently run producer and benefits from agent discoverability.
+Decision: **create** Tier-3 YAML — `generate_doc_index.py` is the most frequently run producer and
+benefits from agent discoverability.
 
 - [x] Inspect Tier-3 template requirements
 - [x] Draft `tier3_generate_doc_index.yaml`
@@ -575,7 +588,8 @@ Decision: **create** Tier-3 YAML — `generate_doc_index.py` is the most frequen
 Evidence (Tier-3):
 
 - Created: `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/docs_health_overview/tier3_generate_doc_index.yaml`
-- Template compliance: follows `tier3_agent_pipeline_template.yaml` structure (tool/invocation/parameters/outputs/behavior/error_handling/integration/examples/metadata sections)
+- Template compliance: follows `tier3_agent_pipeline_template.yaml` structure
+  (tool/invocation/parameters/outputs/behavior/error_handling/integration/examples/metadata sections)
 
 Workstream E — QA & Evidence
 
@@ -585,7 +599,8 @@ Workstream E — QA & Evidence
 
 Evidence (QA):
 
-- Mypy (clean): `.venv/Scripts/python.exe -m mypy .repo_studios/scripts/producers/generate_doc_index.py .repo_studios/scripts/producers/generate_code_doc_churn_report.py .repo_studios/scripts/producers/generate_undocumented_logic_report.py .repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py`
+- Mypy (clean):
+  `.venv/Scripts/python.exe -m mypy .repo_studios/scripts/producers/generate_doc_index.py .repo_studios/scripts/producers/generate_code_doc_churn_report.py .repo_studios/scripts/producers/generate_undocumented_logic_report.py .repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py`
 - Coverage (focused files, pass): `coverage run -m pytest ...` then `coverage report --fail-under=80 --include "*/generate_doc_index.py,*/generate_code_doc_churn_report.py,*/generate_undocumented_logic_report.py"` (TOTAL 86%; per-file 80%/89%/86%)
 
 - [x] DONE — generate_doc_index.py complete; update Tier-1 Stage 2.1 script gate
@@ -675,9 +690,12 @@ Workstream A — Discovery
 | Test Fixture | Uses HOP paths | Updated ✓ |
 
 - **TOPIC_SLUG:** `anchor_inventory`
-- **Retention:** `prune_run_directories(base_dir, keep=max(1, options.artifacts_to_keep), current_run=bundle_dir)` — no change needed
+- **Retention:**
+  `prune_run_directories(base_dir, keep=max(1, options.artifacts_to_keep), current_run=bundle_dir)` —
+    no change needed
 - **DB markers:** Present for manifest/summary/telemetry writes
-- **Test file:** `.repo_studios/tests/tests_producers/test_generate_anchor_inventory.py` (lines 35, 102 need update)
+- **Test file:** `.repo_studios/tests/tests_producers/test_generate_anchor_inventory.py`
+  (lines 35, 102 need update)
 
 Workstream B — Plan
 
@@ -685,11 +703,13 @@ Workstream B — Plan
 
 **Migration Plan (2025-12-29):**
 
-1. **Script change:** Update `DEFAULT_OUTPUT_DIR` from `Path(".repo_studios/reports/producer_reports")` to `Path(".repo_studios/reports/healthview")` (line 24)
-2. **Test fixture updates:** Change `"reports" / "producer_reports"` → `"reports" / "healthview"` at lines 35 and 102
-3. **No dual-write:** Legacy path retired immediately (matches S21R-002 pattern)
-4. **io_contract update:** Update `current.root` to HOP path after implementation
-5. **Validation:** Run `make anchor-inventory` to confirm bundle lands in new location
+- **Script change:** Update `DEFAULT_OUTPUT_DIR` from `Path(".repo_studios/reports/producer_reports")`
+  to `Path(".repo_studios/reports/healthview")` (line 24)
+- **Test fixture updates:** Change `"reports" / "producer_reports"` → `"reports" / "healthview"` at
+  lines 35 and 102
+- **No dual-write:** Legacy path retired immediately (matches S21R-002 pattern)
+- **io_contract update:** Update `current.root` to HOP path after implementation
+- **Validation:** Run `make anchor-inventory` to confirm bundle lands in new location
 
 Workstream C — Implement
 
@@ -697,7 +717,8 @@ Workstream C — Implement
 
 **Implementation Evidence (2025-12-29, updated 2025-12-30):**
 
-- Script updated: Now uses `DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)` for HOP-compliant paths
+- Script updated: Now uses `DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)`
+  for HOP-compliant paths
 - Tests updated: lines 35, 102 now use `"reports" / "healthview"`
 - Tests pass: 2 passed in 0.24s
 - Bundle created: `.repo_studios/reports/healthview/producer_reports/anchor_inventory/<timestamp>/`
@@ -726,7 +747,9 @@ Workstream E — QA & Evidence
 
 **QA Evidence (2025-12-29):**
 
-- Mypy (clean): `.venv/Scripts/python.exe -m mypy .repo_studios/scripts/producers/generate_anchor_inventory.py` → Success: no issues found
+- Mypy (clean):
+  `.venv/Scripts/python.exe -m mypy .repo_studios/scripts/producers/generate_anchor_inventory.py` →
+  Success: no issues found
 - Pytest: 2 passed in 0.22s
 - Coverage: 89% (381 stmts, 42 miss) — exceeds 80% threshold
 
@@ -818,9 +841,11 @@ Workstream A — Discovery
 | Test Fixture | Uses HOP paths | Updated ✓ |
 
 - **TOPIC_SLUG:** `markdown_anchor_validation`
-- **Retention:** `prune_run_directories(... keep=options.artifacts_to_keep, current_run=run_dir)` — no change needed
+- **Retention:** `prune_run_directories(... keep=options.artifacts_to_keep, current_run=run_dir)` —
+  no change needed
 - **DB markers:** Present for manifest/summary/telemetry writes
-- **Test file:** `.repo_studios/tests/tests_producers/test_validate_markdown_anchors.py` (lines 27, 72 need update)
+- **Test file:** `.repo_studios/tests/tests_producers/test_validate_markdown_anchors.py`
+  (lines 27, 72 need update)
 - **Note:** Uses `main(argv)` not `run(argv)` — roster already documents this
 
 Workstream B — Plan
@@ -829,11 +854,13 @@ Workstream B — Plan
 
 **Migration Plan (2025-12-29):**
 
-1. **Script change:** Update `REPORTS_ROOT` from `Path(".repo_studios/reports/producer_reports")` to `Path(".repo_studios/reports/healthview")` (line 80)
-2. **Test fixture updates:** Change `"reports" / "producer_reports"` → `"reports" / "healthview"` at lines 27 and 72
-3. **No dual-write:** Legacy path retired immediately (matches S21R-002/003 pattern)
-4. **io_contract update:** Update `current.root` to HOP path after implementation
-5. **Validation:** Run script directly to confirm bundle lands in new location
+- **Script change:** Update `REPORTS_ROOT` from `Path(".repo_studios/reports/producer_reports")` to
+  `Path(".repo_studios/reports/healthview")` (line 80)
+- **Test fixture updates:** Change `"reports" / "producer_reports"` → `"reports" / "healthview"` at
+  lines 27 and 72
+- **No dual-write:** Legacy path retired immediately (matches S21R-002/003 pattern)
+- **io_contract update:** Update `current.root` to HOP path after implementation
+- **Validation:** Run script directly to confirm bundle lands in new location
 
 Workstream C — Implement
 
@@ -841,7 +868,8 @@ Workstream C — Implement
 
 **Implementation Evidence (2025-12-29, updated 2025-12-30):**
 
-- Script updated: Now uses `DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)` for HOP-compliant paths
+- Script updated: Now uses `DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)`
+  for HOP-compliant paths
 - Tests updated: lines 27, 72 now use `"reports" / "healthview"`
 - Tests pass: 2 passed in 0.17s
 - Bundle created: `.repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/<timestamp>/`
@@ -872,7 +900,9 @@ Workstream E — QA & Evidence
 
 **QA Evidence (2025-12-29):**
 
-- Mypy (clean): `.venv/Scripts/python.exe -m mypy .repo_studios/scripts/producers/validate_markdown_anchors.py` → Success: no issues found
+- Mypy (clean):
+  `.venv/Scripts/python.exe -m mypy .repo_studios/scripts/producers/validate_markdown_anchors.py` →
+  Success: no issues found
 - Pytest: 2 passed in 0.20s
 - Coverage: 90% (194 stmts, 19 miss) — exceeds 80% threshold
 
@@ -965,9 +995,11 @@ Workstream A — Discovery
 | Test Fixtures | Uses relative paths | No changes needed ✓ |
 
 - **TOPIC_SLUG:** `docs_integrity_validation`
-- **Retention:** `prune_run_directories(... keep=max(options.artifacts_to_keep, 1), current_run=run_dir)` — no change needed
+- **Retention:** `prune_run_directories(... keep=max(options.artifacts_to_keep, 1), current_run=run_dir)` —
+  no change needed
 - **DB markers:** Present for manifest/summary/telemetry writes
-- **Test file:** `.repo_studios/tests/tests_producers/test_verify_docs_integrity.py` — uses relative paths, no changes needed
+- **Test file:** `.repo_studios/tests/tests_producers/test_verify_docs_integrity.py` —
+  uses relative paths, no changes needed
 - **Entry point:** Uses `run(argv)` ✓
 
 Workstream B — Plan
@@ -976,10 +1008,11 @@ Workstream B — Plan
 
 **Migration Plan (4 steps):**
 
-1. **Update REPORTS_ROOT** — Line 41: Change from `.repo_studios/reports/producer_reports` to `.repo_studios/reports/healthview`
-2. **Run tests** — `pytest -v tests/tests_producers/test_verify_docs_integrity.py` (should pass without test changes)
-3. **Execute script** — Validate bundle creation at new HOP location
-4. **Inspect bundle** — Confirm manifest.json, summary.md, telemetry.json present
+- **Update REPORTS_ROOT** — Line 41: Change from `.repo_studios/reports/producer_reports` to `.repo_studios/reports/healthview`
+- **Run tests** — `pytest -v tests/tests_producers/test_verify_docs_integrity.py`
+  (should pass without test changes)
+- **Execute script** — Validate bundle creation at new HOP location
+- **Inspect bundle** — Confirm manifest.json, summary.md, telemetry.json present
 
 Workstream C — Implement
 
@@ -987,10 +1020,11 @@ Workstream C — Implement
 
 **Implementation Evidence (2025-12-30, updated 2025-12-30):**
 
-1. **Updated DEFAULT_OUTPUT_DIR** — Now uses `build_topic_path("producer", TOPIC_SLUG)` for HOP-compliant paths
-2. **Tests passed:** 2 in 0.21s
-3. **Bundle created:** `.repo_studios/reports/healthview/producer_reports/docs_integrity_validation/<timestamp>/`
-4. **Artifacts verified:** manifest.json, summary.md, telemetry.json present
+- **Updated DEFAULT_OUTPUT_DIR** — Now uses `build_topic_path("producer", TOPIC_SLUG)`
+  for HOP-compliant paths
+- **Tests passed:** 2 in 0.21s
+- **Bundle created:** `.repo_studios/reports/healthview/producer_reports/docs_integrity_validation/<timestamp>/`
+- **Artifacts verified:** manifest.json, summary.md, telemetry.json present
 
 Workstream D — Tier-3 YAML
 
@@ -1111,7 +1145,8 @@ Workstream A — Discovery
 - **TOPIC_SLUG:** `metrics_anchor_stub_validation`
 - **Retention:** `prune_run_directories(... keep=max(keep, 1), current_run=run_dir)`
 - **DB markers:** Present for manifest/summary/telemetry writes
-- **Test file:** `.repo_studios/tests/tests_producers/test_validate_metrics_anchor_stubs.py` — uses default, no changes needed
+- **Test file:** `.repo_studios/tests/tests_producers/test_validate_metrics_anchor_stubs.py` —
+  uses default, no changes needed
 - **Entry point:** Uses `run(argv)` ✓
 
 Workstream B — Plan
@@ -1120,9 +1155,10 @@ Workstream B — Plan
 
 **Migration Plan (3 steps):**
 
-1. **Update REPORTS_ROOT** — Line 36: Change from `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
-2. **Run tests** — `pytest -v tests/tests_producers/test_validate_metrics_anchor_stubs.py` (should pass without test changes)
-3. **Execute script** — Validate bundle creation at new HOP location
+- **Update REPORTS_ROOT** — Line 36: Change from `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
+- **Run tests** — `pytest -v tests/tests_producers/test_validate_metrics_anchor_stubs.py`
+  (should pass without test changes)
+- **Execute script** — Validate bundle creation at new HOP location
 
 Workstream C — Implement
 
@@ -1130,10 +1166,11 @@ Workstream C — Implement
 
 **Implementation Evidence (2025-12-30, updated 2025-12-30):**
 
-1. **Updated DEFAULT_OUTPUT_DIR** — Now uses `build_topic_path("producer", TOPIC_SLUG)` for HOP-compliant paths
-2. **Tests passed:** 2 in 0.40s
-3. **Bundle created:** `.repo_studios/reports/healthview/producer_reports/metrics_anchor_stub_validation/<timestamp>/`
-4. **Artifacts verified:** manifest.json, summary.md, telemetry.json present
+- **Updated DEFAULT_OUTPUT_DIR** — Now uses `build_topic_path("producer", TOPIC_SLUG)` for
+  HOP-compliant paths
+- **Tests passed:** 2 in 0.40s
+- **Bundle created:** `.repo_studios/reports/healthview/producer_reports/metrics_anchor_stub_validation/<timestamp>/`
+- **Artifacts verified:** manifest.json, summary.md, telemetry.json present
 
 Workstream D — Tier-3 YAML
 
@@ -1263,10 +1300,10 @@ Workstream B — Plan
 
 **Migration Plan (4 steps):**
 
-1. **Update DEFAULT_OUTPUT_DIR** — Line 16: Change from `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
-2. **Update test fixtures** — Lines 63, 133, 178, 217: Remove `/producer_reports` from paths
-3. **Run tests** — `pytest -v tests/tests_producers/test_generate_code_doc_churn_report.py`
-4. **Execute script** — Validate bundle creation at new HOP location
+- **Update DEFAULT_OUTPUT_DIR** — Line 16: Change from `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
+- **Update test fixtures** — Lines 63, 133, 178, 217: Remove `/producer_reports` from paths
+- **Run tests** — `pytest -v tests/tests_producers/test_generate_code_doc_churn_report.py`
+- **Execute script** — Validate bundle creation at new HOP location
 
 Workstream C — Implement
 
@@ -1274,11 +1311,12 @@ Workstream C — Implement
 
 **Implementation Evidence (2025-12-30, updated 2025-12-30):**
 
-1. **Updated DEFAULT_OUTPUT_DIR** — Now uses `build_topic_path("producer", TOPIC_SLUG)` for HOP-compliant paths
-2. **Updated test fixtures** — Removed `/producer_reports` hardcoding
-3. **Tests passed:** 3 in 1.87s
-4. **Bundle created:** `.repo_studios/reports/healthview/producer_reports/code_doc_churn/<timestamp>/`
-5. **Artifacts verified:** manifest.json, summary.md, telemetry.json present
+- **Updated DEFAULT_OUTPUT_DIR** — Now uses `build_topic_path("producer", TOPIC_SLUG)`
+  for HOP-compliant paths
+- **Updated test fixtures** — Removed `/producer_reports` hardcoding
+- **Tests passed:** 3 in 1.87s
+- **Bundle created:** `.repo_studios/reports/healthview/producer_reports/code_doc_churn/<timestamp>/`
+- **Artifacts verified:** manifest.json, summary.md, telemetry.json present
 
 Workstream D — Tier-3 YAML
 
@@ -1411,10 +1449,10 @@ Workstream B — Plan
 
 **Migration Plan (4 steps):**
 
-1. **Update DEFAULT_OUTPUT_DIR** — Line 24: Change from `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
-2. **Update test fixtures** — Lines 33-34, 113-114, 135, 181, 204: Remove `/producer_reports` from paths
-3. **Run tests** — `pytest -v tests/tests_producers/test_generate_undocumented_logic_report.py`
-4. **Execute script** — Validate bundle creation at new HOP location
+- **Update DEFAULT_OUTPUT_DIR** — Line 24: Change from `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
+- **Update test fixtures** — Lines 33-34, 113-114, 135, 181, 204: Remove `/producer_reports` from paths
+- **Run tests** — `pytest -v tests/tests_producers/test_generate_undocumented_logic_report.py`
+- **Execute script** — Validate bundle creation at new HOP location
 
 Workstream C — Implement
 
@@ -1428,7 +1466,8 @@ Workstream C — Implement
 | Test helpers | Various | Updated to use HOP paths |
 
 - **Tests:** 3/3 passed in 0.21s
-- **Bundle:** `.repo_studios/reports/healthview/producer_reports/undocumented_logic/<timestamp>/` with manifest.json, summary.md, telemetry.json
+- **Bundle:** `.repo_studios/reports/healthview/producer_reports/undocumented_logic/<timestamp>/`
+  with manifest.json, summary.md, telemetry.json
 
 Workstream D — Tier-3 YAML
 
@@ -1568,18 +1607,21 @@ Workstream B — Plan
 
 **Migration Plan (10 steps):**
 
-1. **Update DEFAULT_OUTPUT_DIR** — Lines 23-25: Change from `.repo_studios/reports/aggregator_reports/docs_health_signals` to `.repo_studios/reports`
-2. **Update DEFAULT_CHURN_REPORT** — Line 27: Remove `producer_reports/` prefix
-3. **Update DEFAULT_UNDOCUMENTED_REPORT** — Line 30: Remove `producer_reports/` prefix
-4. **Update DEFAULT_ANCHOR_INVENTORY** — Line 33: Remove `producer_reports/` prefix
-5. **Update DEFAULT_ANCHOR_VALIDATION** — Line 36: Remove `producer_reports/` prefix
-6. **Update DEFAULT_DOCS_INTEGRITY** — Line 39: Remove `producer_reports/` prefix
-7. **Update DEFAULT_METRICS_STUB** — Line 42: Remove `producer_reports/` prefix
-8. **Update DEFAULT_PLACEHOLDER_REPORT** — Line 45: Remove `producer_reports/` prefix
-9. **Update DEFAULT_MONKEY_PATCH_REPORT** — Line 48: Remove `producer_reports/` prefix
-10. **Run tests** — `pytest -v tests/tests_aggregators/test_aggregate_docs_health_signals.py`
+- **Update DEFAULT_OUTPUT_DIR** — Lines 23-25: Change from
+  `.repo_studios/reports/aggregator_reports/docs_health_signals` to `.repo_studios/reports`
+- **Update DEFAULT_CHURN_REPORT** — Line 27: Remove `producer_reports/` prefix
+- **Update DEFAULT_UNDOCUMENTED_REPORT** — Line 30: Remove `producer_reports/` prefix
+- **Update DEFAULT_ANCHOR_INVENTORY** — Line 33: Remove `producer_reports/` prefix
+- **Update DEFAULT_ANCHOR_VALIDATION** — Line 36: Remove `producer_reports/` prefix
+- **Update DEFAULT_DOCS_INTEGRITY** — Line 39: Remove `producer_reports/` prefix
+- **Update DEFAULT_METRICS_STUB** — Line 42: Remove `producer_reports/` prefix
+- **Update DEFAULT_PLACEHOLDER_REPORT** — Line 45: Remove `producer_reports/` prefix
+- **Update DEFAULT_MONKEY_PATCH_REPORT** — Line 48: Remove `producer_reports/` prefix
+- **Run tests** — `pytest -v tests/tests_aggregators/test_aggregate_docs_health_signals.py`
 
-Note: This aggregator uses `write_report_artifacts()` with `stem` which creates its own output structure. The HOP migration focuses on aligning the input defaults to match the already-migrated producer paths.
+Note: This aggregator uses `write_report_artifacts()` with `stem` which creates its own output
+structure. The HOP migration focuses on aligning the input defaults to match the
+already-migrated producer paths.
 
 Workstream C — Implement
 

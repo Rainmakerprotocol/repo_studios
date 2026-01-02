@@ -1,0 +1,271 @@
+# Tier-3: summarize_monkey_patch_overview.py
+# Summarizer script that composes HealthView-ready summaries for Stage 5.1 Monkey Patch Oversight.
+
+tool:
+  id: summarize_monkey_patch_overview
+  name: Summarize Monkey Patch Overview
+  description: |
+    Renders a compact markdown + JSON summary for a Stage 5.1 Monkey Patch Oversight pipeline run.
+
+    The summarizer consumes upstream producer, consumer, and aggregator outputs and emits overview
+    artifacts under:
+
+      .repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/<YYYYMMDD-HHMM>/
+
+    The run directory includes:
+      - monkey_patch_overview.json
+      - monkey_patch_overview.md
+  keywords:
+    - healthview
+    - summarizer
+    - monkey-patch
+    - oversight
+    - stage-5.1
+  use_when:
+    - Need a human-readable summary of the Stage 5.1 pipeline steps and emitted artifacts
+    - Validating Stage 5.1 summarizer output roots and retention behavior
+    - Attaching summary artifacts to a manifest for downstream tooling
+  dont_use_when:
+    - You need to generate the producer/consumer/aggregator artifacts first (run the Stage 5.1 orchestrator)
+    - You do not have upstream outputs available from scan/classify/analyze steps
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --consumer-output-dir {consumer_output_dir} \
+      --producer-output-dir {producer_output_dir} \
+      --aggregator-output-dir {aggregator_output_dir} \
+      --output-dir {output_dir} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+  script_path: .repo_studios/command_center/scripts/summarizers/summarize_monkey_patch_overview.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+    notes:
+      - "Expects upstream producer, consumer, and aggregator outputs to exist."
+      - "Reads latest_* pointers from upstream directories when explicit overrides are not provided."
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: .
+    description: Repository root directory for resolving relative artifact paths.
+    validation:
+      must_exist: true
+      must_be_directory: true
+
+  - name: consumer_output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/consumer_reports/monkey_patch_risk
+    description: Root directory containing consumer risk classification outputs.
+    validation:
+      must_exist: false
+
+  - name: producer_output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/producer_reports/monkey_patch_scans
+    description: Root directory containing producer scan outputs.
+    validation:
+      must_exist: false
+
+  - name: aggregator_output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/aggregator_reports/monkey_patch_trends
+    description: Root directory containing aggregator trend outputs.
+    validation:
+      must_exist: false
+
+  - name: output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview
+    description: Root directory used to write summary artifacts.
+    validation:
+      parent_must_exist: false
+
+  - name: consumer_summary
+    type: path
+    required: false
+    default: null
+    description: Explicit consumer summary.json path override.
+    validation:
+      must_exist: true
+      must_be_file: true
+
+  - name: consumer_bundle_summary
+    type: path
+    required: false
+    default: null
+    description: Explicit consumer bundle_summary.json path override.
+    validation:
+      must_exist: true
+      must_be_file: true
+
+  - name: trend_json
+    type: path
+    required: false
+    default: null
+    description: Explicit aggregator trend.json path override.
+    validation:
+      must_exist: true
+      must_be_file: true
+
+  - name: trend_markdown
+    type: path
+    required: false
+    default: null
+    description: Explicit aggregator trend markdown path override.
+    validation:
+      must_exist: true
+      must_be_file: true
+
+  - name: trend_bundle_summary
+    type: path
+    required: false
+    default: null
+    description: Explicit aggregator bundle_summary.json path override.
+    validation:
+      must_exist: true
+      must_be_file: true
+
+  - name: producer_report
+    type: path
+    required: false
+    default: null
+    description: Explicit producer report.json path override.
+    validation:
+      must_exist: true
+      must_be_file: true
+
+  - name: producer_matches
+    type: path
+    required: false
+    default: null
+    description: Explicit producer matches.json path override.
+    validation:
+      must_exist: true
+      must_be_file: true
+
+  - name: duplicate_matrix
+    type: path
+    required: false
+    default: null
+    description: Optional duplicate detection matrix to cross-check overlap findings.
+    validation:
+      must_exist: true
+      must_be_file: true
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Number of historical summary run directories to retain.
+    validation:
+      min_value: 1
+
+  - name: timestamp
+    type: string
+    required: false
+    default: null
+    description: ISO-8601 timestamp for emitted artifacts (defaults to current UTC time).
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+outputs:
+  primary:
+    type: directory
+    format: monkey_patch_overview
+    path_pattern: .repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/<YYYYMMDD-HHMM>/
+    description: Summary directory for a single Stage 5.1 run.
+    contents:
+      required:
+        - monkey_patch_overview.json
+        - monkey_patch_overview.md
+
+  secondary:
+    - type: stdout
+      format: text
+      description: Logging output describing inputs, summary status, and pruning.
+
+behavior:
+  idempotent: false
+  side_effects:
+    - Reads upstream producer, consumer, and aggregator outputs via latest_* pointers or explicit overrides
+    - Writes a timestamped summary run directory under output_dir
+    - Prunes older sibling run directories beyond artifacts_to_keep
+  duration_estimate: "< 1 second for typical Stage 5.1 runs"
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 1
+      meaning: "Required upstream outputs are missing or invalid JSON."
+      agent_action: "Confirm upstream producer/consumer/aggregator outputs exist or use explicit path overrides."
+
+integration:
+  typical_workflow:
+    - step: 1
+      action: Run Stage 5.1 orchestrator (or individual producer/consumer/aggregator steps)
+      output: Producer scans, consumer risk classifications, aggregator trends
+    - step: 2
+      action: Run summarize_monkey_patch_overview
+      output: Summary artifacts under summarizer_reports/monkey_patch_overview
+
+  input_producers:
+    - .repo_studios/scripts/producers/scan_monkey_patches.py
+    - .repo_studios/scripts/consumers/classify_monkey_patches.py
+    - .repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py
+
+  output_consumers:
+    - .repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py
+
+examples:
+  - description: Summarize using default upstream discovery (latest_* pointers)
+    command: |
+      python .repo_studios/command_center/scripts/summarizers/summarize_monkey_patch_overview.py \
+        --log-level INFO
+
+  - description: Summarize with explicit consumer and aggregator overrides
+    command: |
+      python .repo_studios/command_center/scripts/summarizers/summarize_monkey_patch_overview.py \
+        --consumer-summary .repo_studios/reports/consumer_reports/monkey_patch_risk/20260101-1200/summary.json \
+        --trend-json .repo_studios/reports/aggregator_reports/monkey_patch_trends/20260101-1200/trend.json
+
+known_limitations:
+  - Output artifacts use non-HOP filenames (monkey_patch_overview.json instead of manifest.json)
+  - Requires upstream producer/consumer/aggregator outputs; no standalone input generation
+  - Reads latest_* pointers from upstream which may be removed in future HOP migrations
+
+metadata:
+  category: summarizer
+  tier: 3
+  status: active
+  version: 0.1.0
+  author: Repo Studios Team
+  last_updated: 2026-01-02
+  dependencies_tier3:
+    - tier3_artifacts.yaml
+    - tier3_cli.yaml
+    - tier3_prune_logs.yaml
+    - tier3_database_integration.yaml
+  tier2_rosters:
+    - healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md
+  tier1_pipelines:
+    - healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
+  testing:
+    test_file: null
+    notes: "No test file exists for this summarizer."

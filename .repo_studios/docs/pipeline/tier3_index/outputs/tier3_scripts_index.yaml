@@ -1,22 +1,24 @@
 version: 1.0.0
-generated_at: '2026-01-01T00:00:00+00:00'
+generated_at: '2026-01-02T14:06:26.584722+00:00'
 generator_version: 1.0.0
 repository:
   name: repo_studios
   root: C:\Users\genet\repo_studios
   branch: main
 statistics:
-  total_scripts: 22
+  total_scripts: 28
   categories:
     producer: 12
     utility: 1
+    unknown: 7
     aggregator: 2
-    consumer: 2
     orchestrator: 3
     summarizer: 2
+    consumer: 1
   status:
-    active: 16
+    active: 15
     template: 1
+    unknown: 8
     draft: 4
 scripts:
 - script_id: generate_commandview_inventory
@@ -64,24 +66,105 @@ scripts:
   status: template
   entry_point: null
   importable: false
-- script_id: collect_faulthandler_reports
-  name: Collect Faulthandler Reports
+- script_id: generate_dependency_hygiene_report
+  name: Generate Dependency Hygiene Report
   category: producer
-  tier3_file: healthview_orchestration_pipeline\tier3_scripts\fault_diagnostics_overview\tier3_collect_faulthandler_reports.yaml
-  script_path: .repo_studios/scripts/producers/collect_faulthandler_reports.py
-  summary: "Scans faulthandler run directories (stack dumps from Python faulthandler module) and emits\n\
-    a canonical HealthView bundle under:\n\n  .repo_studios/reports/healthview/producer_reports/faulthandler_reports/<YYYYMMDD-HHMM>/\n\
-    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n\nThis producer converts raw\
-    \ faulthandler captures (stacks.log, thread dumps) into structured\nanalysis with signature extraction,\
-    \ severity bucketing, and repeat-offender detection.\n"
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\dependency_import_hygiene\tier3_generate_dependency_hygiene_report.yaml
+  script_path: .repo_studios/scripts/producers/generate_dependency_hygiene_report.py
+  summary: "Scans repository dependency manifests (requirements.txt, pyproject.toml) for risky\ndependency\
+    \ specifications including unpinned constraints, VCS refs, editable installs,\nlocal paths, and duplicates.\n\
+    \nEmits a canonical HealthView bundle under:\n\n  .repo_studios/reports/healthview/producer_reports/dependency_hygiene/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n\nThis producer identifies dependency\
+    \ hygiene issues that may cause reproducibility problems\nor security vulnerabilities in the project's\
+    \ dependency tree.\n"
   keywords:
   - healthview
   - producer
-  - faulthandler
-  - stack
-  - crash
-  - diagnostics
+  - dependency
+  - hygiene
+  - requirements
+  - pyproject
+  - unpinned
   - telemetry
+  - stage-4-1
+  status: unknown
+  entry_point: run
+  importable: true
+- script_id: unknown
+  name: Unknown Tool
+  category: unknown
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\dependency_import_hygiene\tier3_generate_import_graph_report.yaml
+  script_path: unknown
+  summary: No description
+  keywords: []
+  status: unknown
+  entry_point: unknown
+  importable: false
+- script_id: unknown
+  name: Unknown Tool
+  category: unknown
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\dependency_import_hygiene\tier3_generate_typecheck_report.yaml
+  script_path: unknown
+  summary: No description
+  keywords: []
+  status: unknown
+  entry_point: unknown
+  importable: false
+- script_id: unknown
+  name: Unknown Tool
+  category: unknown
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\dependency_import_hygiene\tier3_refresh_mypy_baselines.yaml
+  script_path: unknown
+  summary: No description
+  keywords: []
+  status: unknown
+  entry_point: unknown
+  importable: false
+- script_id: unknown
+  name: Unknown Tool
+  category: unknown
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\dependency_import_hygiene\tier3_run_dependency_import_hygiene.yaml
+  script_path: unknown
+  summary: No description
+  keywords: []
+  status: unknown
+  entry_point: unknown
+  importable: false
+- script_id: unknown
+  name: Unknown Tool
+  category: unknown
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\dependency_import_hygiene\tier3_scan_code_placeholders.yaml
+  script_path: unknown
+  summary: No description
+  keywords: []
+  status: unknown
+  entry_point: unknown
+  importable: false
+- script_id: aggregate_docs_health_signals
+  name: Aggregate Docs Health Signals
+  category: aggregator
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\docs_health_overview\tier3_aggregate_docs_health_signals.yaml
+  script_path: .repo_studios/scripts/aggregators/aggregate_docs_health_signals.py
+  summary: "Consumes telemetry from multiple docs health producers and blends them into\na unified documentation\
+    \ health report with weighted scoring.\n\nInput sources include:\n- Code-doc churn analysis (generate_code_doc_churn_report.py)\n\
+    - Undocumented logic findings (generate_undocumented_logic_report.py)\n- Anchor inventory (generate_anchor_inventory.py)\n\
+    - Markdown anchor validation (validate_markdown_anchors.py)\n- Docs integrity validation (verify_docs_integrity.py)\n\
+    - Metrics anchor stub validation (validate_metrics_anchor_stubs.py)\n- Code placeholders (optional\
+    \ hygiene signal)\n- Monkey patches (optional hygiene signal)\n\nEmits a docs health bundle under:\n\
+    \n  .repo_studios/reports/healthview/aggregator_reports/docs_health_signals/<YYYYMMDD-HHMM>/\n\nThe\
+    \ bundle includes report.json, report.md, signals.tsv, signals.csv,\nand bundle_summary.json.\n\n\
+    Exit codes:\n  0 - success (report generated)\n  1 - error (missing required inputs or processing\
+    \ failures)\n"
+  keywords:
+  - healthview
+  - aggregator
+  - documentation
+  - health
+  - signals
+  - scoring
+  - churn
+  - undocumented
+  - anchors
   status: active
   entry_point: run
   importable: true
@@ -91,11 +174,12 @@ scripts:
   tier3_file: healthview_orchestration_pipeline\tier3_scripts\docs_health_overview\tier3_generate_anchor_inventory.yaml
   script_path: .repo_studios/scripts/producers/generate_anchor_inventory.py
   summary: "Scans documentation directories for Markdown files, extracts H1/H2 headings,\nconverts them\
-    \ to slug-based anchors, and emits a canonical HealthView bundle under:\n\n  .repo_studios/reports/healthview/healthview/anchor_inventory/<YYYYMMDD-HHMM>/\n\
+    \ to slug-based anchors, and emits a canonical HealthView bundle under:\n\n  .repo_studios/reports/healthview/producer_reports/anchor_inventory/<YYYYMMDD-HHMM>/\n\
     \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n\nThis producer identifies duplicate\
     \ anchors across files, tracks cross-file\nmembership patterns, and provides telemetry for downstream\
     \ validation scripts.\n\nThe canonical operator/agent entrypoint is:\n\n  python .repo_studios/scripts/producers/generate_anchor_inventory.py\
-    \ \\\n    --repo-root . --output-dir .repo_studios/reports/healthview --log-level INFO\n"
+    \ \\\n    --repo-root . --output-dir .repo_studios/reports/healthview/producer_reports/anchor_inventory\
+    \ --log-level INFO\n"
   keywords:
   - healthview
   - producer
@@ -106,6 +190,30 @@ scripts:
   - headings
   - duplicates
   - slugs
+  status: active
+  entry_point: run
+  importable: true
+- script_id: generate_code_doc_churn_report
+  name: Generate Code Doc Churn Report
+  category: producer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\docs_health_overview\tier3_generate_code_doc_churn_report.yaml
+  script_path: .repo_studios/scripts/producers/generate_code_doc_churn_report.py
+  summary: "Analyzes git history to detect code modules with recent changes that lack\ncorresponding documentation\
+    \ updates. Correlates code churn against the\ndoc index and anchor inventory to identify documentation\
+    \ gaps.\n\nEmits a canonical HealthView bundle under:\n\n  .repo_studios/reports/healthview/producer_reports/code_doc_churn/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n\nThis producer helps maintain\
+    \ documentation currency by flagging modules\nwhere code has changed but related documentation has\
+    \ not been updated.\n\nExit codes:\n  0 - success (report generated, may contain findings)\n  1 -\
+    \ error (missing inputs or git failures)\n"
+  keywords:
+  - healthview
+  - producer
+  - churn
+  - documentation
+  - git
+  - analysis
+  - coverage
+  - modules
   status: active
   entry_point: run
   importable: true
@@ -132,6 +240,58 @@ scripts:
   status: active
   entry_point: run
   importable: true
+- script_id: generate_undocumented_logic_report
+  name: Generate Undocumented Logic Report
+  category: producer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\docs_health_overview\tier3_generate_undocumented_logic_report.yaml
+  script_path: .repo_studios/scripts/producers/generate_undocumented_logic_report.py
+  summary: "Scans automation code for functions, classes, and methods lacking docstrings.\nCorrelates\
+    \ findings against the doc index and anchor inventory to identify\ncode that lacks both inline documentation\
+    \ and external documentation references.\n\nEmits a canonical HealthView bundle under:\n\n  .repo_studios/reports/healthview/producer_reports/undocumented_logic/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n\nThis producer helps maintain\
+    \ documentation coverage by flagging code entities\nthat are missing docstrings and have no associated\
+    \ documentation anchors.\n\nExit codes:\n  0 - success (report generated, may contain findings)\n\
+    \  1 - error (missing inputs or parsing failures)\n"
+  keywords:
+  - healthview
+  - producer
+  - docstrings
+  - documentation
+  - coverage
+  - analysis
+  - modules
+  - functions
+  - classes
+  status: active
+  entry_point: run
+  importable: true
+- script_id: run_docs_health_overview
+  name: Run Docs Health Overview Orchestrator
+  category: orchestrator
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\docs_health_overview\tier3_run_docs_health_overview.yaml
+  script_path: .repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py
+  summary: "Topic orchestrator for Stage 2.1 Docs Health Overview. Chains producer scripts\nand the aggregator\
+    \ to generate a comprehensive documentation health report.\n\nPipeline steps:\n1. generate_doc_index.py\
+    \ (producer) — document inventory\n2. generate_anchor_inventory.py (producer) — heading anchor extraction\n\
+    3. validate_markdown_anchors.py (producer) — anchor link validation\n4. verify_docs_integrity.py (producer)\
+    \ — docs integrity checks\n5. validate_metrics_anchor_stubs.py (producer) — metrics stub validation\n\
+    6. generate_code_doc_churn_report.py (producer) — code/doc churn analysis\n7. generate_undocumented_logic_report.py\
+    \ (producer) — docstring coverage\n8. aggregate_docs_health_signals.py (aggregator) — signal blending\n\
+    \nEmits a HealthView bundle under:\n\n  .repo_studios/reports/healthview/orchestrator_reports/docs_health/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n\nEach step is executed via\
+    \ dynamic import (no subprocess spawning) with exit\ncode propagation. The pipeline stops on the first\
+    \ hard failure.\n\nExit codes:\n  0 - success (all steps completed)\n  1 - error (step failure or\
+    \ configuration error)\n"
+  keywords:
+  - healthview
+  - orchestrator
+  - documentation
+  - health
+  - pipeline
+  - stage-2.1
+  status: active
+  entry_point: run
+  importable: true
 - script_id: validate_markdown_anchors
   name: Validate Markdown Anchors
   category: producer
@@ -139,8 +299,8 @@ scripts:
   script_path: .repo_studios/scripts/producers/validate_markdown_anchors.py
   summary: "Scans selected markdown files for internal document anchors and cross-file\nrelative links,\
     \ validating that target files and anchors exist.\n\nEmits a canonical HealthView bundle under:\n\n\
-    \  .repo_studios/reports/healthview/healthview/markdown_anchor_validation/<YYYYMMDD-HHMM>/\n\nThe\
-    \ bundle includes manifest.json, summary.md, and telemetry.json.\n\nThis producer identifies broken\
+    \  .repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n\nThis producer identifies broken\
     \ anchor references, missing target files,\nand invalid heading-derived slugs across the documentation\
     \ tree.\n\nSlug generation follows GitHub-style simplification (lowercase, spaces -> dashes,\nstrip\
     \ non-alphanumeric except dashes) and collapses consecutive dashes.\n\nExit codes:\n  0 - success,\
@@ -157,47 +317,140 @@ scripts:
   status: active
   entry_point: main
   importable: false
-- script_id: generate_undocumented_logic_report
-  name: Generate Undocumented Logic Report
+- script_id: validate_metrics_anchor_stubs
+  name: Validate Metrics Anchor Stubs
   category: producer
-  tier3_file: healthview_orchestration_pipeline\tier3_scripts\docs_health_overview\tier3_generate_undocumented_logic_report.yaml
-  script_path: .repo_studios/scripts/producers/generate_undocumented_logic_report.py
-  summary: "Scans automation code for functions, classes, and methods lacking docstrings.\nCorrelates\
-    \ findings against the doc index and anchor inventory to identify\ncode that lacks both inline documentation\
-    \ and external documentation references.\n\nEmits a canonical HealthView bundle under:\n\n  .repo_studios/reports/healthview/undocumented_logic/<YYYYMMDD-HHMM>/\n\
-    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n"
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\docs_health_overview\tier3_validate_metrics_anchor_stubs.yaml
+  script_path: .repo_studios/scripts/producers/validate_metrics_anchor_stubs.py
+  summary: "Scans repository markdown for links to `metrics_orchestrator.md#<anchor>` and\nvalidates that\
+    \ each referenced anchor has a corresponding legacy stub heading\nunder the \"Legacy Anchor Compatibility\"\
+    \ section of the legacy doc.\n\nEmits a canonical HealthView bundle under:\n\n  .repo_studios/reports/healthview/producer_reports/metrics_anchor_stub_validation/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n\nThis producer identifies missing\
+    \ legacy stub headings for referenced anchors,\nensuring backward compatibility for metrics documentation\
+    \ links.\n\nExit codes:\n  0 - success, no missing legacy stubs\n  1 - missing anchors detected (artifacts\
+    \ still emitted)\n"
   keywords:
   - healthview
   - producer
-  - docstrings
-  - documentation
-  - coverage
-  - analysis
-  - modules
-  - functions
-  - classes
+  - metrics
+  - anchor
+  - validation
+  - legacy
+  - stubs
+  - compatibility
   status: active
   entry_point: run
   importable: true
-- script_id: aggregate_docs_health_signals
-  name: Aggregate Docs Health Signals
-  category: aggregator
-  tier3_file: healthview_orchestration_pipeline\tier3_scripts\docs_health_overview\tier3_aggregate_docs_health_signals.yaml
-  script_path: .repo_studios/scripts/aggregators/aggregate_docs_health_signals.py
-  summary: "Consumes telemetry from multiple docs health producers and blends them into\na unified documentation\
-    \ health report with weighted scoring.\n\nEmits a docs health bundle under:\n\n  .repo_studios/reports/docs_health_signals-<YYYYMMDD-HHMM>/\n\
-    \nThe bundle includes report.json, report.md, signals.tsv, signals.csv,\nand bundle_summary.json.\n"
+- script_id: verify_docs_integrity
+  name: Verify Docs Integrity
+  category: producer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\docs_health_overview\tier3_verify_docs_integrity.yaml
+  script_path: .repo_studios/scripts/producers/verify_docs_integrity.py
+  summary: "Validates governed documentation JSON blocks to ensure each fenced payload exposes\na stable\
+    \ `content_hash`. Optionally updates mismatched blocks in place (`--update`)\nand regenerates the\
+    \ navigation table in `docs/standards/docs_index.md`.\n\nEmits a canonical HealthView bundle under:\n\
+    \n  .repo_studios/reports/healthview/producer_reports/docs_integrity_validation/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n\nThis producer identifies JSON\
+    \ blocks with stale or missing content_hash values,\nensuring documentation governance blocks remain\
+    \ cryptographically stable.\n\nExit codes:\n  0 - clean or updated (when --update supplied)\n  1 -\
+    \ mismatches detected (without --update) OR missing inputs/errors\n\nSpecial flag `--exit-codes-hash`\
+    \ prints the legacy hash of exit_code_stability_policy.md\nand exits without writing artifacts.\n"
   keywords:
   - healthview
-  - aggregator
-  - documentation
-  - health
-  - signals
-  - scoring
-  - churn
-  - undocumented
-  - anchors
+  - producer
+  - integrity
+  - validation
+  - docs
+  - content_hash
+  - json
+  - governance
   status: active
+  entry_point: run
+  importable: true
+- script_id: collect_faulthandler_reports
+  name: Collect Faulthandler Reports
+  category: unknown
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\fault_diagnostics_overview\tier3_collect_faulthandler_reports.yaml
+  script_path: .repo_studios/scripts/producers/collect_faulthandler_reports.py
+  summary: "Scans faulthandler run directories (stack dumps from Python faulthandler module) and emits\n\
+    a canonical HealthView bundle under:\n\n  .repo_studios/reports/healthview/producer_reports/faulthandler_reports/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n\nThis producer converts raw\
+    \ faulthandler captures (stacks.log, thread dumps) into structured\nanalysis with signature extraction,\
+    \ severity bucketing, and repeat-offender detection.\n"
+  keywords:
+  - healthview
+  - producer
+  - faulthandler
+  - stack
+  - crash
+  - diagnostics
+  - telemetry
+  status: active
+  entry_point: run
+  importable: true
+- script_id: generate_fault_artifacts
+  name: Generate Fault Artifacts
+  category: unknown
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\fault_diagnostics_overview\tier3_generate_fault_artifacts.yaml
+  script_path: .repo_studios/scripts/consumers/generate_fault_artifacts.py
+  summary: "Processes raw faulthandler stack dumps and producer reports to emit HOP-compliant\nHealthView\
+    \ artifacts for downstream summarization.\n\nOutput is written to:\n  .repo_studios/reports/healthview/consumer_reports/fault_artifacts/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n\nThis consumer can either reuse\
+    \ an existing producer report (--report) or perform\na fresh scan of the run directory's stacks.log\
+    \ file to extract signatures.\n"
+  keywords:
+  - healthview
+  - consumer
+  - faulthandler
+  - stack
+  - crash
+  - artifacts
+  - telemetry
+  status: active
+  entry_point: run
+  importable: true
+- script_id: run_fault_diagnostics_overview
+  name: Run Fault Diagnostics Overview
+  category: orchestrator
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\fault_diagnostics_overview\tier3_run_fault_diagnostics_overview.yaml
+  script_path: .repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py
+  summary: "Topic orchestrator for the Fault Diagnostics workflow (Stage 3.1).\n\nSequentially executes:\n\
+    1. Producer: collect_faulthandler_reports.py — collects raw stack dumps\n2. Consumer: generate_fault_artifacts.py\
+    \ — processes into HOP artifacts\n3. Summarizer: summarize_fault_diagnostics_overview.py — creates\
+    \ overview\n\nOutput is written to:\n  .repo_studios/reports/healthview/orchestrator_reports/fault_diagnostics_overview/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json with\nstep-level timing and status\
+    \ for all three pipeline stages.\n\nMost runs complete within three to five minutes, with producer\
+    \ log replay\naccounting for the majority of execution time.\n"
+  keywords:
+  - healthview
+  - orchestrator
+  - faulthandler
+  - fault_diagnostics
+  - workflow
+  - pipeline
+  - stage-3.1
+  status: unknown
+  entry_point: run
+  importable: true
+- script_id: summarize_fault_diagnostics_overview
+  name: Summarize Fault Diagnostics Overview
+  category: summarizer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\fault_diagnostics_overview\tier3_summarize_fault_diagnostics_overview.yaml
+  script_path: .repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py
+  summary: "Consumes fault artifact bundles from the consumer stage and produces a\nconsolidated overview\
+    \ with baseline comparison for HealthView.\n\nOutput is written to:\n  .repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview/<stem>-YYYYMMDD_HHMMSS/\n\
+    \nThe bundle includes fault_diagnostics_overview.json and fault_diagnostics_overview.md.\n\nThis summarizer\
+    \ discovers the latest consumer bundle via timestamp-sorted directory\nlisting (no pointer files per\
+    \ HOP contract) and compares current metrics against\nthe previous bundle to generate baseline deltas.\n"
+  keywords:
+  - healthview
+  - summarizer
+  - faulthandler
+  - fault_diagnostics
+  - overview
+  - baseline
+  - telemetry
+  status: unknown
   entry_point: run
   importable: true
 - script_id: analyze_test_hardening
@@ -322,22 +575,6 @@ scripts:
   status: active
   entry_point: run
   importable: true
-- script_id: run_docs_health_overview
-  name: Run Docs Health Overview Orchestrator
-  category: orchestrator
-  tier3_file: healthview_orchestration_pipeline\tier3_scripts\docs_health_overview\tier3_run_docs_health_overview.yaml
-  script_path: .repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py
-  summary: "Topic orchestrator for Stage 2.1 Docs Health Overview. Chains producer scripts\nand the aggregator to generate a comprehensive documentation health report.\n\nEmits a HealthView bundle under:\n\n  .repo_studios/command_center/reports/healthview/docs_health/<YYYYMMDD-HHMM>/\n\nThe orchestrator coordinates:\n  1. generate_doc_index.py (producer)\n  2. generate_anchor_inventory.py (producer)\n  3. validate_markdown_anchors.py (producer)\n  4. verify_docs_integrity.py (producer)\n  5. validate_metrics_anchor_stubs.py (producer)\n  6. generate_code_doc_churn_report.py (producer)\n  7. generate_undocumented_logic_report.py (producer)\n  8. aggregate_docs_health_signals.py (aggregator)\n\nEach step is executed via dynamic import (no subprocess spawning) with exit code propagation.\nThe pipeline stops on the first hard failure.\n"
-  keywords:
-  - healthview
-  - orchestrator
-  - documentation
-  - health
-  - pipeline
-  - stage-2.1
-  status: active
-  entry_point: run
-  importable: true
 - script_id: summarize_test_execution_telemetry
   name: Summarize Test Execution Telemetry
   category: summarizer
@@ -358,131 +595,31 @@ scripts:
   status: active
   entry_point: run
   importable: true
-- script_id: generate_fault_artifacts
-  name: Generate Fault Artifacts
-  category: consumer
-  tier3_file: healthview_orchestration_pipeline\tier3_scripts\fault_diagnostics_overview\tier3_generate_fault_artifacts.yaml
-  script_path: .repo_studios/scripts/consumers/generate_fault_artifacts.py
-  summary: "Processes raw faulthandler stack dumps and producer reports to emit HOP-compliant\n\
-    HealthView artifacts for downstream summarization.\n\nOutput is written to:\n\n  .repo_studios/reports/healthview/consumer_reports/fault_artifacts/<YYYYMMDD-HHMM>/\n\
-    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n"
-  keywords:
-  - healthview
-  - consumer
-  - faulthandler
-  - stack
-  - crash
-  - artifacts
-  - telemetry
-  status: active
-  entry_point: run
-  importable: true
-- script_id: summarize_fault_diagnostics_overview
-  name: Summarize Fault Diagnostics Overview
-  category: summarizer
-  tier3_file: healthview_orchestration_pipeline\tier3_scripts\fault_diagnostics_overview\tier3_summarize_fault_diagnostics_overview.yaml
-  script_path: .repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py
-  summary: "Consumes fault artifact bundles from the consumer stage and produces a\n\
-    consolidated overview with baseline comparison for HealthView.\n\nOutput is written to:\n\n  .repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview/<stem>-YYYYMMDD_HHMMSS/\n\
-    \nThe bundle includes fault_diagnostics_overview.json and fault_diagnostics_overview.md.\n"
-  keywords:
-  - healthview
-  - summarizer
-  - faulthandler
-  - fault_diagnostics
-  - overview
-  - baseline
-  - telemetry
-  status: active
-  entry_point: run
-  importable: true
-- script_id: run_fault_diagnostics_overview
-  name: Run Fault Diagnostics Overview
-  category: orchestrator
-  tier3_file: healthview_orchestration_pipeline\tier3_scripts\fault_diagnostics_overview\tier3_run_fault_diagnostics_overview.yaml
-  script_path: .repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py
-  summary: "Topic orchestrator for the Fault Diagnostics workflow (Stage 3.1).\n\n\
-    Sequentially executes producer, consumer, and summarizer steps.\n\nOutput is written to:\n\n\
-    \  .repo_studios/reports/healthview/orchestrator_reports/fault_diagnostics_overview/<YYYYMMDD-HHMM>/\n\
-    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n"
-  keywords:
-  - healthview
-  - orchestrator
-  - faulthandler
-  - fault_diagnostics
-  - workflow
-  - pipeline
-  - stage-3.1
-  status: active
-  entry_point: run
-  importable: true
-- script_id: generate_dependency_hygiene_report
-  name: Generate Dependency Hygiene Report
-  category: producer
-  tier3_file: healthview_orchestration_pipeline\tier3_scripts\dependency_import_hygiene\tier3_generate_dependency_hygiene_report.yaml
-  script_path: .repo_studios/scripts/producers/generate_dependency_hygiene_report.py
-  summary: "Scans repository dependency manifests (requirements.txt, pyproject.toml) for risky\n\
-    dependency specifications including unpinned constraints, VCS refs, editable installs,\n\
-    local paths, and duplicates.\n\nEmits a canonical HealthView bundle under:\n\n\
-    \  .repo_studios/reports/healthview/producer_reports/dependency_hygiene/<YYYYMMDD-HHMM>/\n\
-    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n"
-  keywords:
-  - healthview
-  - producer
-  - dependency
-  - hygiene
-  - requirements
-  - pyproject
-  - unpinned
-  - stage-4.1
-  status: active
-  entry_point: run
-  importable: true
-- script_id: generate_import_graph_report
-  name: Generate Import Graph Report
-  category: producer
-  tier3_file: healthview_orchestration_pipeline\tier3_scripts\dependency_import_hygiene\tier3_generate_import_graph_report.yaml
-  script_path: .repo_studios/scripts/producers/generate_import_graph_report.py
-  summary: "Scans Python files for import statements and builds a dependency graph.\n\
-    Detects circular dependencies and external vs internal imports.\n\nEmits a canonical HealthView bundle under:\n\n\
-    \  .repo_studios/reports/healthview/producer_reports/import_graph/<YYYYMMDD-HHMM>/\n\
-    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n"
-  keywords:
-  - healthview
-  - producer
-  - import
-  - graph
-  - dependency
-  - circular
-  - stage-4.1
-  status: active
-  entry_point: main
-  importable: true
 by_category:
   producer:
   - generate_commandview_inventory
-  - collect_faulthandler_reports
+  - generate_dependency_hygiene_report
   - generate_anchor_inventory
+  - generate_code_doc_churn_report
   - generate_doc_index
-  - validate_markdown_anchors
   - generate_undocumented_logic_report
+  - validate_markdown_anchors
+  - validate_metrics_anchor_stubs
+  - verify_docs_integrity
   - analyze_test_hardening
   - collect_test_log_reports
   - generate_test_coverage_inventory
-  - generate_dependency_hygiene_report
-  - generate_import_graph_report
   consumer:
   - generate_test_log_health_report
-  - generate_fault_artifacts
   aggregator:
-  - generate_churn_complexity_heatmap
   - aggregate_docs_health_signals
+  - generate_churn_complexity_heatmap
   orchestrator:
-  - run_test_execution_telemetry
   - run_docs_health_overview
   - run_fault_diagnostics_overview
+  - run_test_execution_telemetry
   summarizer:
-  - summarize_test_execution_telemetry
   - summarize_fault_diagnostics_overview
+  - summarize_test_execution_telemetry
   utility:
   - healthview_onboarding_template

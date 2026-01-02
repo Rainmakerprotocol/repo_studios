@@ -906,12 +906,14 @@ _Tier-2 references (depth lives here):_
   Tier-3: [tier3_generate_dependency_hygiene_report.yaml](tier3_scripts/dependency_import_hygiene/tier3_generate_dependency_hygiene_report.yaml)
 - [x] generate_import_graph_report.py — complete. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-003-generate_import_graph_reportpy)
   Tier-3: [tier3_generate_import_graph_report.yaml](tier3_scripts/dependency_import_hygiene/tier3_generate_import_graph_report.yaml)
-- [ ] scan_code_placeholders.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-004-scan_code_placeholderspy)
-- [ ] generate_typecheck_report.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-005-generate_typecheck_reportpy)
-- [ ] refresh_mypy_baselines.py — pending until Tier-2 DONE is checked.
-  See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-006-refresh_mypy_baselinespy)
-- [ ] run_dependency_import_hygiene.py — pending until Tier-2 DONE is checked.
-  See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-001-dependency-import-hygiene-orchestrator)
+- [x] scan_code_placeholders.py — complete. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-004-scan_code_placeholderspy)
+  Tier-3: [tier3_scan_code_placeholders.yaml](tier3_scripts/dependency_import_hygiene/tier3_scan_code_placeholders.yaml)
+- [x] generate_typecheck_report.py — complete. See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-005-generate_typecheck_reportpy)
+  Tier-3: [tier3_generate_typecheck_report.yaml](tier3_scripts/dependency_import_hygiene/tier3_generate_typecheck_report.yaml)
+- [x] refresh_mypy_baselines.py — complete (utility, non-HOP). See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-006-refresh_mypy_baselinespy)
+  Tier-3: [tier3_refresh_mypy_baselines.yaml](tier3_scripts/dependency_import_hygiene/tier3_refresh_mypy_baselines.yaml)
+- [x] run_dependency_import_hygiene.py — complete (orchestrator). See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-001-dependency-import-hygiene-orchestrator)
+  Tier-3: [tier3_run_dependency_import_hygiene.yaml](tier3_scripts/dependency_import_hygiene/tier3_run_dependency_import_hygiene.yaml)
 
 **Stage 4.1 Gate Checklist (Tier-1):**
 
@@ -1062,17 +1064,12 @@ _Tier-2 references (depth lives here):_
 
 **Stage 5.1 Script Gate Summary (Tier-1):**
 
-- [ ] scan_monkey_patches.py — pending until Tier-2 DONE is checked.
-  See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-002-monkey-patch-scan-producer)
-- [ ] classify_monkey_patches.py — pending until Tier-2 DONE is checked. See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-003-monkey-patch-risk-consumer)
-- [ ] analyze_monkey_patch_trends.py — pending until Tier-2 DONE is checked.
-  See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-004-monkey-patch-trend-aggregator)
-- [ ] summarize_monkey_patch_overview.py — pending until Tier-2 DONE is checked.
-  See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-005-monkey-patch-overview-summarizer)
-- [ ] monkey_patch_risk.py — pending until Tier-2 DONE is checked.
-  See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-006-risk-classification-utility)
-- [ ] run_monkey_patch_oversight.py — pending until Tier-2 DONE is checked.
-  See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-001-monkey-patch-oversight-orchestrator)
+- [ ] scan_monkey_patches.py — Tier-2 DONE checked. HOP-compliant via `build_topic_path`. pytest: 6 passed. mypy: Success. See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-002-monkey-patch-scan-producer)
+- [ ] classify_monkey_patches.py — Tier-2 DONE checked. HOP-compliant via `build_topic_path`. pytest: 15 passed. mypy: Success. See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-003-monkey-patch-risk-consumer)
+- [ ] analyze_monkey_patch_trends.py — Tier-2 DONE checked. HOP-compliant via `build_topic_path`. pytest: 3 passed. mypy: Success. See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-004-monkey-patch-trend-aggregator)
+- [ ] summarize_monkey_patch_overview.py — Tier-2 DONE checked. HOP-compliant via `build_topic_path` and `write_report_artifacts`. No tests. mypy: Success (8 errors fixed). See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-005-monkey-patch-overview-summarizer)
+- [ ] monkey_patch_risk.py — Tier-2 DONE checked. Pure utility. pytest: 5 passed. mypy: Success. See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-006-risk-classification-utility)
+- [ ] run_monkey_patch_oversight.py — Tier-2 DONE checked. HOP-compliant via `build_topic_path` and `write_report_artifacts`. pytest: 1 passed. mypy: Success (7 errors fixed). See: [Tier-2 record](tier2_roster/tier2_monkey_patch_oversight_roster.md#s51r-001-monkey-patch-oversight-orchestrator)
 
 **Stage 5.1 Gate Checklist (Tier-1):**
 

@@ -10,7 +10,7 @@ import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable, NamedTuple, Sequence
+from typing import Any, Iterable, NamedTuple, Sequence, cast
 
 import subprocess
 
@@ -22,33 +22,35 @@ SCHEMA_VERSION = 1
 LIBRARIES_ROOT = PROJECT_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 try:  # pragma: no cover - preferred import when executed via orchestrators
-    from libraries import (  # type: ignore
+    from libraries import (
         KeepSpec,
         OptionsConfig,
         PathSpec,
         PathsConfig,
         ReportArtifact,
+        WriteReportArtifactsResult,
         build_standard_options,
         build_standard_paths,
         copy_latest_artifact,
         write_report_artifacts,
     )
-    from libraries.retention_policy import get_keep  # type: ignore
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import (  # type: ignore
+    from libraries import (
         KeepSpec,
         OptionsConfig,
         PathSpec,
         PathsConfig,
         ReportArtifact,
+        WriteReportArtifactsResult,
         build_standard_options,
         build_standard_paths,
         copy_latest_artifact,
         write_report_artifacts,
     )
-    from libraries.retention_policy import get_keep  # type: ignore
+    from libraries.retention_policy import get_keep
 
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("refresh_mypy_baselines")
 
@@ -213,7 +215,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
@@ -246,7 +248,7 @@ def _build_invocation(target: TargetSpec) -> list[str]:
 
 def _invoke_mypy(repo_root: Path, command: Sequence[str]) -> tuple[str, int]:
     try:
-        proc = subprocess.run(  # type: ignore[name-defined]
+        proc = subprocess.run(
             list(command),
             cwd=str(repo_root),
             capture_output=True,
@@ -286,7 +288,7 @@ def _render_markdown(summary: dict[str, Any], outcomes: Sequence[TargetOutcome])
     lines.append("| Label | Mypy Path | Exit Code | Duration (s) | Latest Pointer |\n")
     lines.append("| --- | --- | ---: | ---: | --- |\n")
     for outcome in outcomes:
-        targets_meta = summary["targets_meta"]  # type: ignore[index]
+        targets_meta = summary["targets_meta"]
         pointer = targets_meta[outcome.spec.label]["latest_pointer"]
         lines.append(
             f"| {outcome.spec.label} | {outcome.spec.mypy_arg} | {outcome.exit_code} | "
@@ -340,7 +342,7 @@ def _build_status_payload(summary: dict[str, Any]) -> dict[str, Any]:
                 "exit_code": data["exit_code"],
                 "latest_pointer": data["latest_pointer"],
             }
-            for label, data in summary["targets_meta"].items()  # type: ignore[union-attr]
+            for label, data in summary["targets_meta"].items()
         ],
     }
 
@@ -388,7 +390,7 @@ def _build_artifacts(
 def _update_latest_pointers(
     *,
     outcomes: Sequence[TargetOutcome],
-    artifact_result,
+    artifact_result: WriteReportArtifactsResult,
     output_dir: Path,
 ) -> None:
     for outcome in outcomes:
@@ -451,7 +453,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
     _update_latest_pointers(outcomes=outcomes, artifact_result=result, output_dir=paths.output_dir)
 
-    targets_meta = summary["targets_meta"]  # type: ignore[index]
+    targets_meta = summary["targets_meta"]
     for outcome in outcomes:
         pointer = paths.output_dir / f"latest_{outcome.spec.filename}"
         targets_meta[outcome.spec.label]["latest_pointer"] = str(pointer) if pointer.exists() else None

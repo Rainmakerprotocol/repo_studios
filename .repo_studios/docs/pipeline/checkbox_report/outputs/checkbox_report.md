@@ -8,7 +8,7 @@ owners:
     - DocumentationOps
 status: active
 version: 1.0
-updated_at: 2025-12-29
+updated_at: 2026-01-02
 tags:
     - checkbox-report
     - repo-todo
@@ -40,18 +40,18 @@ related_files:
 Top files with the highest number of unfinished items:
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md`
   — 77 unchecked
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  — 74 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_available_scripts_roster.md`
   — 72 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_standards_integrity_roster.md`
   — 66 unchecked
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md`
-  — 65 unchecked
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md`
-  — 55 unchecked
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md`
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
   — 44 unchecked
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_3_1_implementation_plan.md`
+  — 25 unchecked
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_5_1_implementation_plan.md`
+  — 14 unchecked
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_4_1_implementation_plan.md`
+  — 13 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_healthview_roster_template.md`
   — 11 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md`
@@ -60,62 +60,62 @@ Top files with the highest number of unfinished items:
 
 ### Sample Outstanding Tasks
 
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L620 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
-  Docs Health Overview: verify_docs_integrity.py — pending until Tier-2 DONE is checked. See: Tier-2
-  record
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L621 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
-  Docs Health Overview: validate_metrics_anchor_stubs.py — pending until Tier-2 DONE is checked.
-  See: Tier-2 record
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L622 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
-  Docs Health Overview: generate_code_doc_churn_report.py — pending until Tier-2 DONE is checked.
-  See: Tier-2 record
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L623 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
-  Docs Health Overview: generate_undocumented_logic_report.py — pending until Tier-2 DONE is
-  checked. See: Tier-2 record
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L624 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
-  Docs Health Overview: aggregate_docs_health_signals.py — pending until Tier-2 DONE is checked.
-  See: Tier-2 record
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L625 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
-  Docs Health Overview: run_docs_health_overview.py — pending until Tier-2 DONE is checked. See:
-  Tier-2 record
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L631 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
-  Docs Health Overview: Base package complete (`manifest.json`, `summary.md`, `telemetry.json`).
-  See: Stop-gates
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L632 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
-  Docs Health Overview: No pointer artifacts (`latest_*` / `current_*`). See: Stop-gates
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L633 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
-  Docs Health Overview: Output root aligned to HOP contract
-  (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`).
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  L635 — HealthView Orchestration Pipeline > 5. Stage 2 – Documentation Quality > 5.1 Stage 2.1:
-  Docs Health Overview: Tier-3 eligible (Stage 2.1 Tier-2 depth captured; ready for Tier-3
-  extraction). See:
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_3_1_implementation_plan.md`
+  L96 — Stage 3.1 Fault Diagnostics Overview — Implementation Plan > Phase 1: Path & Constants
+  Update > 1.2 Update Remaining Hardcoded Paths: `collect_faulthandler_reports.py` line 49:
+  `DEFAULT_RUNS_RELATIVE` still uses `command_center`
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_3_1_implementation_plan.md`
+  L97 — Stage 3.1 Fault Diagnostics Overview — Implementation Plan > Phase 1: Path & Constants
+  Update > 1.2 Update Remaining Hardcoded Paths: `generate_fault_artifacts.py`: Verify
+  `RAWVIEW_ROOT` and discovery paths
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_3_1_implementation_plan.md`
+  L98 — Stage 3.1 Fault Diagnostics Overview — Implementation Plan > Phase 1: Path & Constants
+  Update > 1.2 Update Remaining Hardcoded Paths: `summarize_fault_diagnostics_overview.py`: Verify
+  input discovery paths
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_3_1_implementation_plan.md`
+  L99 — Stage 3.1 Fault Diagnostics Overview — Implementation Plan > Phase 1: Path & Constants
+  Update > 1.2 Update Remaining Hardcoded Paths: `run_fault_diagnostics_overview.py`: Verify all CLI
+  argument defaults
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_3_1_implementation_plan.md`
+  L126 — Stage 3.1 Fault Diagnostics Overview — Implementation Plan > Phase 2: Discovery Logic
+  Update > 2.1 Timestamp-Based Discovery (No Pointer Files): `collect_faulthandler_reports.py`:
+  `_find_latest_run()` — verify uses directory sorting
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_3_1_implementation_plan.md`
+  L127 — Stage 3.1 Fault Diagnostics Overview — Implementation Plan > Phase 2: Discovery Logic
+  Update > 2.1 Timestamp-Based Discovery (No Pointer Files): `generate_fault_artifacts.py`:
+  `_find_latest_outdir()` — verify uses directory sorting
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_3_1_implementation_plan.md`
+  L128 — Stage 3.1 Fault Diagnostics Overview — Implementation Plan > Phase 2: Discovery Logic
+  Update > 2.1 Timestamp-Based Discovery (No Pointer Files):
+  `summarize_fault_diagnostics_overview.py`: Discovery of consumer bundles
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_3_1_implementation_plan.md`
+  L129 — Stage 3.1 Fault Diagnostics Overview — Implementation Plan > Phase 2: Discovery Logic
+  Update > 2.1 Timestamp-Based Discovery (No Pointer Files): `run_fault_diagnostics_overview.py`:
+  Discovery of upstream artifacts
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_3_1_implementation_plan.md`
+  L227 — Stage 3.1 Fault Diagnostics Overview — Implementation Plan > Phase 4: Docstring Updates
+  (PEP 287 reStructuredText) > 4.1 Module Docstrings: Cross-references using ``:doc:`` and ``:ref:``
+  roles
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_3_1_implementation_plan.md`
+  L380 — Stage 3.1 Fault Diagnostics Overview — Implementation Plan > Phase 5: Test Updates > 5.2
+  Test Cases to Add/Update: Verify output paths match HOP contract
 
 ## Signals & Telemetry
 
-* Total unchecked tasks: 497.
-* Files containing unchecked tasks: 14.
+* Total unchecked tasks: 361.
+* Files containing unchecked tasks: 17.
 
 ### Unchecked Tasks by H1
 
 | H1 | Unchecked |
 | --- | --- |
 | Tier-2 Roster — Stage 7 Running the Complete Suite | 77 |
-| HealthView Orchestration Pipeline | 74 |
 | Tier-2 Roster — Stage 11.1 Available Scripts (Holding Area) | 72 |
 | Tier-2 Roster — Stage 6.1 Standards Integrity | 66 |
-| Tier-2 Roster — Stage 2.1 Docs Health Overview | 65 |
-| Tier-2 Roster — Stage 4.1 Dependency & Import Hygiene | 55 |
-| Tier-2 Roster — Stage 3.1 Fault Diagnostics Overview | 44 |
+| HealthView Orchestration Pipeline | 44 |
+| Stage 3.1 Fault Diagnostics Overview — Implementation Plan | 25 |
+| Stage 5.1 Implementation Plan: Monkey Patch Oversight | 14 |
+| Stage 4.1 Implementation Plan: Dependency & Import Hygiene | 13 |
 | Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> | 11 |
 | Tier-2 Roster — Stage 5.1 Monkey Patch Oversight | 11 |
 | How-To — Authoring Tier-2 Pipeline Documents | 10 |
@@ -132,4 +132,4 @@ Top files with the highest number of unfinished items:
 
 ## Update Log
 
-* 2025-12-29 — Report regenerated.
+* 2026-01-02 — Report regenerated.

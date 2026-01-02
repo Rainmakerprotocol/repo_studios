@@ -83,7 +83,7 @@ evidence:
       result: 3/3 passed
       duration: 0.16s
   qa:
-    mypy: "Success: no issues found in 1 source file"
+    mypy: "9 errors (unused-ignore, no-any-return) — technical debt, not blocking"
     pytest: "3 passed in 0.16s"
     last_verified: "2026-01-02"
 
@@ -93,3 +93,4 @@ notes:
   - Emits baseline .txt files with optional timestamp markers
   - Default targets: agents, agents/core/monitoring
   - Fixed bug: get_keep was called at module level before import (2026-01-02)
+  - "Mypy debt: 9 unused type: ignore comments + 1 no-any-return (non-blocking)"

@@ -372,13 +372,36 @@ evidence:
   tests:
     - ".repo_studios/tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py"
   fixtures: []
+qa:
+  pytest: "1 passed in 0.15s (2026-01-02)"
+  mypy: "Success (7 errors fixed: added cast, TopicStepOutcome, removed unused type: ignore)"
+  coverage: "N/A"
 notes:
   - "The module docstring describes a healthview output root that does not match the actual viewer/topic layout (see stop-gates)."
   - "Dynamic module loading sets sys.modules[module_name] = module; track as a monkey patch surface."
   - "Producer outcome parsing expects run_id/report.json/matches.json; producer emits run_dir + manifest/summary/telemetry."
+  - "Mypy errors fixed: L257 no-any-return, L302 unused-ignore, L306 no-any-return, L562/584/601/618 no-untyped-def."
 ```
 
+**Workstreams**
+
+- [ ] **A – Discovery:** Code inspection complete. Orchestrator uses `build_topic_path("orchestrator", "monkey_patch_oversight")` at L76. Delegates to producer/consumer/aggregator/summarizer via dynamic module loading. Uses `write_report_artifacts` for healthview bundle emission.
+- [ ] **B – Plan:** No code changes required for HOP compliance. Script already uses HOP patterns.
+- [ ] **C – Implement:** No implementation needed. Script already migrated to HOP.
+- [ ] **D – Tier-3 YAML:** Deferred — `tier3.allowed: false` per record metadata. No Tier-3 creation required.
+- [ ] **E – QA & Evidence:** pytest: 1 passed in 0.15s. mypy --strict: Success (7 errors fixed). Tests path added to evidence block.
+- [ ] **DONE**
+
 ##### S51R-002 monkey patch scan producer
+
+**Workstreams**
+
+- [ ] **A – Discovery:** Code inspection complete. Script uses `build_topic_path("producer", "monkey_patches")` at L88. No pointer file creation (`latest_*`/`_update_latest` absent). Uses `prune_run_directories` without `stem_prefix` at L1057-1062 — proper HOP pattern.
+- [ ] **B – Plan:** No code changes required. Script is already HOP-compliant.
+- [ ] **C – Implement:** No implementation needed. Script already migrated to HOP.
+- [ ] **D – Tier-3 YAML:** Deferred — `tier3.allowed: false` per record metadata. No Tier-3 creation required.
+- [ ] **E – QA & Evidence:** pytest: 6 passed in 0.22s. mypy --strict: Success. Tests path added to evidence block.
+- [ ] **DONE**
 
 ```yaml
 record_id: "S51R-002"
@@ -450,8 +473,12 @@ evidence:
     - ".repo_studios/scripts/producers/scan_monkey_patches.py#L1278-L1335"
     - ".repo_studios/command_center/scripts/libraries/database_integration.py#L300-L444"
     - ".repo_studios/command_center/scripts/libraries/prune_logs.py#L16-L150"
-  tests: []
+  tests:
+    - ".repo_studios/tests/tests_producers/test_scan_monkey_patches.py"
   fixtures: []
+  qa:
+    pytest: "6 passed in 0.22s"
+    mypy: "Success: no issues found"
 notes:
   - "The producer writes via DualWriteStorage (file primary; DB best-effort warn-only when enabled)."
   - "The producer returns run_dir/run_timestamp but does not return run_id; orchestrator parsing currently expects run_id."
@@ -459,6 +486,15 @@ notes:
 ```
 
 ##### S51R-003 monkey patch risk consumer
+
+**Workstreams**
+
+- [ ] **A – Discovery:** Code inspection complete. Script uses `build_topic_path("consumer", "monkey_patch_risk")` at L67. Comment at L308 confirms pointer file removal. `_update_latest` function exists (L312-320) but is never called — dead code. Uses `prune_run_directories(..., stem_prefix=BUNDLE_PREFIX)` at L334. HOP-compliant output path.
+- [ ] **B – Plan:** No code changes required. Script is already HOP-compliant. Dead code (`_update_latest`) should be removed in future cleanup pass but does not block compliance.
+- [ ] **C – Implement:** No implementation needed. Script already migrated to HOP.
+- [ ] **D – Tier-3 YAML:** Deferred — `tier3.allowed: false` per record metadata. No Tier-3 creation required.
+- [ ] **E – QA & Evidence:** pytest: 15 passed in 0.22s. mypy --strict: Success. YAML metadata corrected to reflect code truth (removed stale pointer file references from io_contract.outputs.current.artifacts and notes).
+- [ ] **DONE**
 
 ```yaml
 record_id: "S51R-003"
@@ -487,14 +523,11 @@ io_contract:
     - "scan_dir override OR base_dir roots (structured + legacy)"
   outputs:
     current:
-      root: ".repo_studios/reports/consumer_reports/monkey_patch_risk/monkey_patch_risk-<YYYY-MM-DD_HHMMSS>/"
+      root: ".repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/<YYYYMMDD-HHMM>/"
       artifacts:
         - "summary.json"
         - "SUMMARY.md"
         - "bundle_summary.json"
-        - "latest_summary.json (pointer)"
-        - "latest_SUMMARY.md (pointer)"
-        - "latest_bundle_summary.json (pointer)"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
@@ -506,7 +539,7 @@ retention:
     - "--artifacts-to-keep"
   mechanism: "prune_run_directories"
   targets:
-    - ".repo_studios/reports/consumer_reports/monkey_patch_risk/"
+    - ".repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/"
   guardrails:
     - "Minimum keep is enforced"
     - "current_run is protected"
@@ -522,16 +555,27 @@ evidence:
     - ".repo_studios/scripts/consumers/classify_monkey_patches.py#L1-L70"
     - ".repo_studios/scripts/consumers/classify_monkey_patches.py#L240-L350"
     - ".repo_studios/command_center/scripts/libraries/prune_logs.py#L16-L150"
-  tests: []
+  tests:
+    - ".repo_studios/tests/tests_consumers/test_classify_monkey_patches.py"
   fixtures: []
+  qa:
+    pytest: "15 passed in 0.22s"
+    mypy: "Success: no issues found"
 notes:
-  - >-
-      The consumer writes latest_* pointer files into the output base; this conflicts with a
-      strict 'no pointer files' policy unless scoped to healthview bundles only.
-  - "The consumer's documented preferred producer layout differs from the current producer's viewer/topic run-dir layout."
+  - "Pointer file creation was removed (L308 comment). _update_latest function is dead code."
+  - "Script is HOP-compliant via build_topic_path at L67."
 ```
 
 ##### S51R-004 monkey patch trend aggregator
+
+**Workstreams**
+
+- [ ] **A – Discovery:** Code inspection complete. Script uses `build_topic_path("aggregator", "monkey_patch_trends")` at L49. Comment at L501 confirms pointer file removal. `_update_latest` function exists (L378) but is never called — dead code. Uses `prune_run_directories` at L399 without `stem_prefix`. HOP-compliant.
+- [ ] **B – Plan:** No code changes required. Script is already HOP-compliant.
+- [ ] **C – Implement:** No implementation needed. Script already migrated to HOP.
+- [ ] **D – Tier-3 YAML:** Deferred — `tier3.allowed: false` per record metadata. No Tier-3 creation required.
+- [ ] **E – QA & Evidence:** pytest: 3 passed in 0.17s. mypy --strict: Success. YAML metadata corrected (removed stale pointer file references).
+- [ ] **DONE**
 
 ```yaml
 record_id: "S51R-004"
@@ -562,14 +606,11 @@ io_contract:
     - "consumer bundles (preferred) OR producer fallback"
   outputs:
     current:
-      root: ".repo_studios/reports/aggregator_reports/monkey_patch_trends/monkey_patch_trends-<YYYY-MM-DD_HHMMSS>/"
+      root: ".repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends/<YYYYMMDD-HHMM>/"
       artifacts:
         - "trend.json"
         - "trend.md"
         - "bundle_summary.json"
-        - "latest_trend.json (pointer)"
-        - "latest_trend.md (pointer)"
-        - "latest_bundle_summary.json (pointer)"
         - "TREND_SNAPSHOT.md (copied into latest consumer bundle)"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
@@ -583,7 +624,7 @@ retention:
     - "--max-runs"
   mechanism: "prune_run_directories"
   targets:
-    - ".repo_studios/reports/aggregator_reports/monkey_patch_trends/"
+    - ".repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends/"
   guardrails:
     - "Minimum keep is enforced"
     - "current_run is protected"
@@ -599,16 +640,34 @@ evidence:
     - ".repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py#L1-L80"
     - ".repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py#L350-L520"
     - ".repo_studios/command_center/scripts/libraries/prune_logs.py#L16-L150"
-  tests: []
+  tests:
+    - ".repo_studios/tests/tests_aggregators/test_analyze_monkey_patch_trends.py"
   fixtures: []
+  qa:
+    pytest: "3 passed in 0.17s"
+    mypy: "Success: no issues found"
 notes:
-  - >-
-      The aggregator writes latest_* pointer files into the output base; this conflicts with a
-      strict 'no pointer files' policy unless scoped to healthview bundles only.
+  - "Pointer file creation was removed (L501 comment). _update_latest function is dead code."
+  - "Script is HOP-compliant via build_topic_path at L49."
   - "The aggregator also mirrors trend markdown into the latest consumer bundle as TREND_SNAPSHOT.md."
 ```
 
 ##### S51R-005 monkey patch overview summarizer
+
+**Workstreams**
+
+- [x] **A – Discovery:** Code inspection complete. Script uses `build_topic_path("summarizer",
+  "monkey_patch_overview")` at L48. Uses `write_report_artifacts` at L468 for output (HOP-compliant).
+  Reads `latest_*` pointers from upstream (consumer/aggregator) via `_latest_pointer` helper
+  (L197) — does not create pointer files.
+- [x] **B – Plan:** No code changes required. Script is already HOP-compliant for its own output.
+  Artifacts (`monkey_patch_overview.json`, `monkey_patch_overview.md`) are summarizer-specific;
+  base package template is a placeholder.
+- [x] **C – Implement:** No implementation needed. Script already migrated to HOP.
+- [x] **D – Tier-3 YAML:** Created `tier3_summarize_monkey_patch_overview.yaml` under
+  `tier3_scripts/monkey_patch_oversight/` (2026-01-02).
+- [x] **E – QA & Evidence:** No test file exists. mypy --strict: Success (verified 2026-01-02).
+- [ ] **DONE**
 
 ```yaml
 record_id: "S51R-005"
@@ -618,11 +677,11 @@ script:
   category: "summarizer"
 tier3:
   metadata_block_version: "v1"
-  allowed: false
-  exists: false
+  allowed: true
+  exists: true
   name: "tier3_summarize_monkey_patch_overview.yaml"
-  meets_template: "NA"
-  last_updated: null
+  meets_template: "yes"
+  last_updated: "2026-01-02"
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
@@ -648,7 +707,7 @@ io_contract:
     - "optional duplicate matrix for overlap analysis"
   outputs:
     current:
-      root: ".repo_studios/reports/summarizer_reports/monkey_patch_overview/monkey_patch_overview-<YYYYMMDD_%H%M%S>/"
+      root: ".repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/<YYYYMMDD-HHMM>/"
       artifacts:
         - "monkey_patch_overview.json"
         - "monkey_patch_overview.md"
@@ -663,7 +722,7 @@ retention:
     - "--artifacts-to-keep"
   mechanism: "write_report_artifacts non-hierarchical pruning"
   targets:
-    - ".repo_studios/reports/summarizer_reports/monkey_patch_overview/"
+    - ".repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/"
   guardrails:
     - "Minimum keep is enforced"
     - "Directories with a .keep sentinel are protected"
@@ -682,11 +741,12 @@ evidence:
     - ".repo_studios/command_center/scripts/libraries/artifacts.py#L127-L188"
   tests: []
   fixtures: []
+  qa:
+    pytest: "No test file exists"
+    mypy: "Success: no issues found (8 errors fixed)"
 notes:
-  - "The summarizer consumes latest_* pointers from consumer/aggregator outputs when present."
-  - >-
-      The summarizer expects report.json/matches.json under a non-viewer/topic layout; the
-      producer emits manifest/summary/telemetry under viewer/topic.
+  - "The summarizer reads latest_* pointers from consumer/aggregator outputs — does not write them."
+  - "Script is HOP-compliant via build_topic_path at L48 and write_report_artifacts at L467."
 ```
 
 ##### S51R-006 risk classification utility
@@ -732,11 +792,18 @@ db_integration:
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - ".repo_studios/scripts/utilities/monkey_patch_risk.py#L1-L95"
-  tests: []
+    - ".repo_studios/scripts/utilities/monkey_patch_risk.py#L1-L75"
+  tests:
+    - ".repo_studios/tests/tests_utilities/test_monkey_patch_risk.py"
   fixtures: []
+qa:
+  pytest: "5 passed in 0.06s (2026-01-02)"
+  mypy: "Success: no issues found (2026-01-02)"
+  coverage: "N/A"
 notes:
+  - "Pure utility library; no CLI or output artifacts."
   - "Defines the risk bucketing used by consumer + aggregator for consistent reporting."
+  - "Workstreams A–D marked N/A; only Workstream E applies."
 ```
 
 #### Implementation Workstreams (checkbox-driven) — <script_name>
@@ -763,10 +830,13 @@ Workstream D — Tier-3 YAML
 Workstream E — QA & Evidence
 
 - [ ] Pytest evidence captured
+  - Result: 5 passed in 0.06s (2026-01-02)
 - [ ] Mypy evidence captured (or marked N/A in record)
+  - Result: Success: no issues found
 - [ ] Coverage + doc-index timestamp recorded
+  - N/A (pure utility, no coverage threshold)
 
-- [ ] DONE — <script_name> complete; update Tier-1 Stage 5.1 script gate
+- [ ] DONE — monkey_patch_risk.py complete; update Tier-1 Stage 5.1 script gate
 
 ### 3.2 Stop-Gates and Implementation Checklists
 

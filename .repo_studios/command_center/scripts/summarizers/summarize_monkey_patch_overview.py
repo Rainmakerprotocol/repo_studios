@@ -10,7 +10,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable, Mapping
+from typing import Any, Iterable, Mapping, Sequence, cast
 
 try:  # pragma: no cover - prefer import when packaged
     from libraries import (
@@ -105,7 +105,7 @@ OPTIONS_CONFIG = OptionsConfig(
 )
 
 
-def _parse_args(argv: Iterable[str] | None) -> argparse.Namespace:
+def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__ or "")
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument("--consumer-output-dir", default=str(DEFAULT_CONSUMER_OUTPUT_DIR))
@@ -156,7 +156,7 @@ def _resolve_optional_path(repo_root: Path, raw: str | None) -> Path | None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace, *, paths: Paths) -> Options:
@@ -323,7 +323,7 @@ def _build_markdown(
     return "\n".join(lines).rstrip() + "\n"
 
 
-def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
+def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     args = _parse_args(argv)
     paths = build_paths(args)
     options = build_options(args, paths=paths)
@@ -425,23 +425,24 @@ def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
     if not overlap and duplicate_targets:
         notes.append("No overlapping monkey patch files were detected against the supplied duplicate matrix.")
 
-    overview_payload = {
+    artifacts_dict: dict[str, str | None] = {
+        "producer_report": _normalize_relative(producer_report_path, paths.repo_root),
+        "producer_matches": _normalize_relative(producer_matches_path, paths.repo_root),
+        "consumer_summary": _normalize_relative(consumer_summary_path, paths.repo_root),
+        "consumer_bundle_summary": _normalize_relative(consumer_bundle_summary_path, paths.repo_root),
+        "trend_json": _normalize_relative(trend_json_path, paths.repo_root),
+        "trend_markdown": _normalize_relative(trend_markdown_path, paths.repo_root),
+        "trend_bundle_summary": _normalize_relative(trend_bundle_summary_path, paths.repo_root),
+        "duplicate_matrix": _normalize_relative(options.duplicate_matrix, paths.repo_root),
+    }
+    overview_payload: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
         "viewer": VIEWER_SLUG,
         "topic": TOPIC_SLUG,
         "generated_at": options.run_timestamp.isoformat(timespec="seconds"),
         "counts_by_risk": counts,
         "total_findings": total_findings,
-        "artifacts": {
-            "producer_report": _normalize_relative(producer_report_path, paths.repo_root),
-            "producer_matches": _normalize_relative(producer_matches_path, paths.repo_root),
-            "consumer_summary": _normalize_relative(consumer_summary_path, paths.repo_root),
-            "consumer_bundle_summary": _normalize_relative(consumer_bundle_summary_path, paths.repo_root),
-            "trend_json": _normalize_relative(trend_json_path, paths.repo_root),
-            "trend_markdown": _normalize_relative(trend_markdown_path, paths.repo_root),
-            "trend_bundle_summary": _normalize_relative(trend_bundle_summary_path, paths.repo_root),
-            "duplicate_matrix": _normalize_relative(options.duplicate_matrix, paths.repo_root),
-        },
+        "artifacts": artifacts_dict,
         "overlap": overlap,
         "notes": notes,
     }
@@ -450,12 +451,12 @@ def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
         generated_at=options.run_timestamp,
         counts=counts,
         total_findings=total_findings,
-        producer_report=overview_payload["artifacts"].get("producer_report"),
-        producer_matches=overview_payload["artifacts"].get("producer_matches"),
-        consumer_summary=overview_payload["artifacts"].get("consumer_summary"),
-        trend_json=overview_payload["artifacts"].get("trend_json"),
-        trend_markdown=overview_payload["artifacts"].get("trend_markdown"),
-        duplicate_matrix=overview_payload["artifacts"].get("duplicate_matrix"),
+        producer_report=artifacts_dict.get("producer_report"),
+        producer_matches=artifacts_dict.get("producer_matches"),
+        consumer_summary=artifacts_dict.get("consumer_summary"),
+        trend_json=artifacts_dict.get("trend_json"),
+        trend_markdown=artifacts_dict.get("trend_markdown"),
+        duplicate_matrix=artifacts_dict.get("duplicate_matrix"),
         overlap=overlap,
         notes=notes,
     )
@@ -486,7 +487,7 @@ def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
     }
 
 
-def main(argv: Iterable[str] | None = None) -> None:
+def main(argv: Sequence[str] | None = None) -> None:
     raise SystemExit(0 if run(argv).get("status") == "ok" else 1)
 
 

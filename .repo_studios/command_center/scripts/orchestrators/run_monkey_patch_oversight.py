@@ -20,7 +20,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, Sequence
+from typing import Any, Callable, Sequence, cast
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
 if str(LIBRARIES_ROOT) not in sys.path:
@@ -35,6 +35,7 @@ from libraries import (
     ReportArtifact,
     TopicContext,
     TopicStep,
+    TopicStepOutcome,
     build_pipeline_telemetry,
     build_standard_options,
     build_standard_paths,
@@ -254,7 +255,7 @@ def _resolve_optional_path(repo_root: Path, raw: str | None) -> Path | None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace, *, paths: Paths) -> Options:
@@ -299,11 +300,11 @@ def _load_callable(script_path: Path, module_name: str, attribute: str) -> Calla
             raise ImportError(f"Unable to load module from {script_path}")
         module = importlib.util.module_from_spec(spec)
         sys.modules[module_name] = module
-        spec.loader.exec_module(module)  # type: ignore[call-arg]
+        spec.loader.exec_module(module)
     func = getattr(module, attribute, None)
     if not callable(func):
         raise AttributeError(f"Module {module_name} missing callable {attribute}()")
-    return func
+    return cast(Callable[[Sequence[str] | None], Any], func)
 
 
 def _relativize(path: Path | None, repo_root: Path) -> str | None:
@@ -559,7 +560,7 @@ def run(argv: Sequence[str] | None = None) -> int:
     aggregator_holder: dict[str, AggregatorOutcome] = {}
     summarizer_holder: dict[str, SummarizerOutcome] = {}
 
-    def producer_step(_: TopicContext):
+    def producer_step(_: TopicContext) -> TopicStepOutcome:
         if options.skip_producer:
             return step_skipped(detail="producer step skipped by flag")
         try:
@@ -581,7 +582,7 @@ def run(argv: Sequence[str] | None = None) -> int:
         }
         return step_success(detail=detail, payload=step_payload)
 
-    def consumer_step(_: TopicContext):
+    def consumer_step(_: TopicContext) -> TopicStepOutcome:
         if options.skip_consumer:
             return step_skipped(detail="consumer step skipped by flag")
         try:
@@ -598,7 +599,7 @@ def run(argv: Sequence[str] | None = None) -> int:
         }
         return step_success(detail=detail, payload=step_payload)
 
-    def aggregator_step(_: TopicContext):
+    def aggregator_step(_: TopicContext) -> TopicStepOutcome:
         if options.skip_aggregator:
             return step_skipped(detail="aggregator step skipped by flag")
         try:
@@ -615,7 +616,7 @@ def run(argv: Sequence[str] | None = None) -> int:
         }
         return step_success(detail=detail, payload=step_payload)
 
-    def summarizer_step(_: TopicContext):
+    def summarizer_step(_: TopicContext) -> TopicStepOutcome:
         if options.skip_summarizer:
             return step_skipped(detail="summarizer step skipped by flag")
         try:
